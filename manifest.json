@@ -1,0 +1,277 @@
+{
+  "scheme": "country (ISO 3166-1 alpha-2) / level (federal, national, or an ISO 3166-2 subdivision) / corpus",
+  "date_rule": "Root commits are in in-force order; the In-force trailer is authoritative (git cannot store dates before 1970).",
+  "future_rule": "Only laws in force by 2026-10-28 are pinned; laws adopted but not yet in force stay on each corpus's future branch.",
+  "countries": 209,
+  "awaiting_corpus_json": [
+    "ch/bund/swiss-law",
+    "de/bund/grundgesetz",
+    "gb/uk/send"
+  ],
+  "not_pinned": [
+    {
+      "repo": "https://github.com/lexifina/armenia-law.git",
+      "reason": "holds law but has no corpus.json yet"
+    },
+    {
+      "repo": "https://github.com/lexifina/chile-law.git",
+      "reason": "holds law but has no corpus.json yet"
+    },
+    {
+      "repo": "https://github.com/lexifina/georgia-law.git",
+      "reason": "holds law but has no corpus.json yet"
+    },
+    {
+      "repo": "https://github.com/lexifina/paraguay-law.git",
+      "reason": "holds law but has no corpus.json yet"
+    },
+    {
+      "repo": "https://github.com/lexifina/singapore-law.git",
+      "reason": "holds law but has no corpus.json yet"
+    }
+  ],
+  "corpora": [
+    {
+      "path": "ch/bund/swiss-law",
+      "url": "https://github.com/lexifina/swiss-law.git",
+      "name": "Swiss federal law: the Federal Constitution, the Data Protection Act and the Debt Enforcement and Bankruptcy Act",
+      "label": "Switzerland",
+      "language": "de",
+      "coverage": "each act from its first structured version on Fedlex (2019 onward)",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "Consolidated",
+      "correction_trailer": "Corrected",
+      "record_to": "2026-10-28",
+      "record_note": "Three acts, checked against Fedlex on 28 October 2026; the whole Classified Compilation is being built."
+    },
+    {
+      "path": "de/bund/grundgesetz",
+      "url": "https://github.com/lexifina/germany-law.git",
+      "name": "Grundgesetz für die Bundesrepublik Deutschland",
+      "label": "Germany",
+      "language": "de",
+      "coverage": "1949 to the 69th amendment, matching the official text of 28 October 2026",
+      "in_force_trailer": "In-Kraft",
+      "record_to": "2026-10-28",
+      "record_note": "Checked against gesetze-im-internet.de on 28 October 2026."
+    },
+    {
+      "path": "ee/national/acts",
+      "url": "https://github.com/lexifina/estonia-law.git",
+      "name": "Estonian acts: Põhiseadus, Riigikogu valimise seadus, Isikuandmete kaitse seadus",
+      "label": "Estonia",
+      "language": "",
+      "coverage": "from 1992-07-03",
+      "in_force_trailer": "In-force",
+      "history_from": "1992-07-03",
+      "record_to": "2026-10-01",
+      "tool": "tools/seisuga.py",
+      "scope": {
+        "trailer": null,
+        "when_absent": "no scope note is recorded in this history; not a statement that a change reaches every case",
+        "default_reach": {
+          "rule": "no retroactive punishment; otherwise legal certainty",
+          "meaning": "no one may be convicted for an act that was not an offence when committed, and a heavier penalty may not apply retroactively; beyond criminal law, the Supreme Court limits retroactive burdens through the principle of legal certainty",
+          "authority": "Eesti Vabariigi põhiseadus § 23; õiguskindluse põhimõte (§ 10) as applied by the Riigikohus",
+          "decided_here": false
+        }
+      }
+    },
+    {
+      "path": "fi/national/acts",
+      "url": "https://github.com/lexifina/finland-law.git",
+      "name": "Finnish law: Suomen perustuslaki (731/1999)",
+      "label": "Finland",
+      "language": "fi",
+      "coverage": "from 2000-03-01",
+      "in_force_trailer": "In-force",
+      "history_from": "2000-03-01",
+      "record_to": "2026-10-28",
+      "record_note": "731/1999 from its original text (in force 2000-03-01) with the four amending acts replayed to the official consolidation of 2018-10-05; data retrieved 2026-10-28.",
+      "tool": "tools/finlex.py",
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no genuine retroactivity (Constitution 8 §: nullum crimen; legislative practice otherwise)",
+          "meaning": "an act applies from the day it takes effect; the Constitution forbids retroactive criminal liability and penalties (8 §) and no general rule is written beyond that",
+          "authority": "Suomen perustuslaki 731/1999, 8 § (Rikosoikeudellinen laillisuusperiaate); transitional rules are in each amending act's own commencement provision",
+          "decided_here": false
+        }
+      }
+    },
+    {
+      "path": "gb/uk/send",
+      "url": "https://github.com/lexifina/united-kingdom-law.git",
+      "name": "Special educational needs: Children and Families Act 2014 Part 3 and the SEND Regulations 2014 (selected provisions)",
+      "label": "UK",
+      "language": "en",
+      "coverage": "2014 to 2021",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Checked against legislation.gov.uk on 28 October 2026."
+    },
+    {
+      "path": "li/national/acts",
+      "url": "https://github.com/lexifina/liechtenstein-law.git",
+      "name": "Liechtenstein: Verfassung (LV), Volksrechtegesetz (VRG), Staatsgerichtshofgesetz (StGHG)",
+      "label": "Liechtenstein",
+      "language": "",
+      "coverage": "from 1921-10-24",
+      "in_force_trailer": "In-force",
+      "history_from": "1921-10-24",
+      "record_to": "2026-01-01",
+      "tool": "tools/stand_am.py",
+      "scope": {
+        "trailer": null,
+        "when_absent": "no scope note is recorded in this history; not a statement that a change reaches every case",
+        "default_reach": {
+          "rule": "statutes do not act retroactively",
+          "meaning": "a law applies to facts arising after it takes effect unless it says otherwise; criminal penalties never apply retroactively",
+          "authority": "ABGB § 5 (Gesetze wirken nicht zurück); Landesverfassung Art. 33 Abs. 2",
+          "decided_here": false
+        }
+      }
+    },
+    {
+      "path": "lu/national/acts",
+      "url": "https://github.com/lexifina/luxembourg-law.git",
+      "name": "Luxembourg: Constitution and the Covid-19 law of 17 July 2020",
+      "label": "Luxembourg",
+      "language": "",
+      "coverage": "from 1868-10-25",
+      "in_force_trailer": "In-force",
+      "history_from": "1868-10-25",
+      "record_to": "2026-08-29",
+      "tool": "tools/en_vigueur_au.py",
+      "scope": {
+        "trailer": null,
+        "when_absent": "no scope note is recorded in this history; not a statement that a change reaches every case",
+        "default_reach": {
+          "rule": "the law provides only for the future",
+          "meaning": "a law has no retroactive effect unless the legislature expressly provides otherwise; criminal laws may not apply retroactively",
+          "authority": "Code civil, art. 2 (La loi ne dispose que pour l'avenir; elle n'a point d'effet rétroactif)",
+          "decided_here": false
+        }
+      }
+    },
+    {
+      "path": "mc/national/acts",
+      "url": "https://github.com/lexifina/monaco-law.git",
+      "name": "Monaco: Constitution and loi n° 1.362",
+      "label": "Monaco",
+      "language": "",
+      "coverage": "from 1962-12-17",
+      "in_force_trailer": "In-force",
+      "history_from": "1962-12-17",
+      "record_to": "2025-11-22",
+      "tool": "tools/en_vigueur_au.py",
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "no scope note is recorded in this corpus; not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "non-retroactivity of statutes",
+          "meaning": "a law provides only for the future and has no retroactive effect, unless it says otherwise",
+          "authority": "Code civil de Monaco, article 2: « La loi ne dispose que pour l'avenir ; elle n'a point d'effet rétroactif. »",
+          "decided_here": false
+        }
+      }
+    },
+    {
+      "path": "mt/national/malta-law",
+      "url": "https://github.com/lexifina/malta-law.git",
+      "name": "Laws of Malta (Chapters and subsidiary legislation)",
+      "label": "Malta",
+      "language": "en",
+      "coverage": "from 1834-06-28",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "Consolidated",
+      "history_from": "1834-06-28",
+      "record_to": "2026-10-06",
+      "record_note": "Every Chapter (562) and piece of subsidiary legislation (4514) on legislation.mt, from each law's earliest consolidated version to the point in time of 2026-10-06; data built 2026-10-28.",
+      "tool": "tools/in_force_on.py",
+      "scope": {
+        "trailer": "Applies",
+        "groups": "any one line",
+        "conditions": "all of a line",
+        "when_absent": "not extracted for Malta yet; savings and transitional rules are in the amending law at the Source link",
+        "default_reach": {
+          "rule": "presumption against retroactivity",
+          "meaning": "a law is presumed not to affect rights acquired or proceedings pending before it took effect unless it says so; on repeal, see the savings rules of the Interpretation Act",
+          "authority": "Interpretation Act (Cap. 249), article 12",
+          "decided_here": false
+        }
+      }
+    },
+    {
+      "path": "si/national/acts",
+      "url": "https://github.com/lexifina/slovenia-law.git",
+      "name": "Ustava Republike Slovenije in Zakon o volitvah v državni zbor",
+      "label": "Slovenia",
+      "language": "",
+      "coverage": "from 1991-12-23",
+      "in_force_trailer": "In-force",
+      "history_from": "1991-12-23",
+      "record_to": "2025-12-01",
+      "tool": "tools/na_dan.py",
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "no scope note is recorded in this corpus (transitional provisions are kept as text, not parsed); not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "prohibition of retroactive effect",
+          "meaning": "laws, regulations and general acts cannot have retroactive effect; only a law may provide that some of its provisions have retroactive effect, where the public interest requires it and acquired rights are not infringed",
+          "authority": "Ustava Republike Slovenije, 155. člen (Uradni list RS, št. 33/91-I)",
+          "decided_here": false
+        }
+      }
+    },
+    {
+      "path": "sk/national/acts",
+      "url": "https://github.com/lexifina/slovakia-law.git",
+      "name": "Slovak law: Ústava Slovenskej republiky (460/1992 Zb.) and zákon č. 180/2014 Z. z. o podmienkach výkonu volebného práva",
+      "label": "Slovakia",
+      "language": "",
+      "coverage": "from 1992-10-01",
+      "in_force_trailer": "In-force",
+      "history_from": "1992-10-01",
+      "record_to": "2026-06-01",
+      "tool": "tools/ku_dnu.py",
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no genuine retroactivity",
+          "meaning": "an act applies from the day it takes effect and does not attach new legal consequences to facts completed before then; the Constitution states no general rule, and the prohibition is derived from the rule-of-law clause; in criminal law a later act applies only where it is more favourable to the offender",
+          "authority": "Ústava Slovenskej republiky čl. 1 ods. 1 (právny štát); čl. 50 ods. 6 (\"Trestnosť činu sa posudzuje a trest sa ukladá podľa zákona účinného v čase, keď bol čin spáchaný. Neskorší zákon sa použije, ak je to pre páchateľa priaznivejšie.\")",
+          "decided_here": false
+        }
+      }
+    },
+    {
+      "path": "us/federal/usc",
+      "url": "https://github.com/lexifina/united-states-law.git",
+      "name": "United States Code",
+      "label": "United States",
+      "language": "en",
+      "coverage": "from 2018-01-12",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "Consolidated",
+      "history_from": "2018-01-12",
+      "record_to": "2026-10-20",
+      "record_note": "Titles 1, 3, 4, 9, 11, 13, 17, 35, 39, from the 2017 annual editions to release point 119-134 (current through 2026-10-20); data built 2026-10-27.",
+      "scope": {
+        "trailer": null,
+        "groups": "any one line",
+        "conditions": "all of a line",
+        "when_absent": "no scope note found; not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "presumption against retroactivity",
+          "meaning": "a statute is presumed not to attach new legal consequences to events completed before its enactment unless Congress clearly says so; procedural and jurisdictional changes are often applied to pending cases",
+          "authority": "Landgraf v. USI Film Products, 511 U.S. 244 (1994)",
+          "decided_here": false
+        },
+        "note": "This published history has no Applies lines yet; the whole-Code rebuild adds them. Scope notes are in each commit message (\"Applies to ...\")."
+      }
+    }
+  ]
+}
