@@ -1,0 +1,1556 @@
+{
+  "title": "Git for Global Law",
+  "scheme": "country (its English name; the ISO 3166-1 code is `code`) / level (federal, national, or an ISO 3166-2 subdivision) / corpus",
+  "date_rule": "Root commits are in in-force order; the In-force trailer is authoritative (git cannot store dates before 1970).",
+  "future_rule": "Only laws in force by 2026-10-28 are pinned; laws adopted but not yet in force stay on each corpus's future branch.",
+  "countries": 210,
+  "awaiting_corpus_json": [
+    "argentina/national/acts",
+    "bolivia/national/acts",
+    "brazil/national/acts",
+    "chile/national/acts",
+    "colombia/national/acts",
+    "ecuador/national/acts",
+    "guyana/national/acts",
+    "peru/national/acts",
+    "paraguay/national/acts",
+    "suriname/national/acts",
+    "uruguay/national/acts",
+    "venezuela/national/acts",
+    "south-africa/national/acts",
+    "zambia/national/acts"
+  ],
+  "not_pinned": [],
+  "corpora": [
+    {
+      "path": "armenia/national/acts",
+      "url": "https://github.com/lexifina/armenia-law.git",
+      "name": "Laws of the Republic of Armenia (Constitution, codes and laws)",
+      "label": "Armenia",
+      "language": "hy",
+      "coverage": "from 1961-03-07",
+      "in_force_trailer": "In-force",
+      "history_from": "1961-03-07",
+      "record_to": "2026-10-24",
+      "checked_on": "2026-10-28",
+      "record_note": "1388 acts on ARLIS (4 constitutions, 42 codes, 1342 laws), every consolidated text, to the in-force date of 2026-10-24; data built 2026-10-28.",
+      "has_future_branch": true,
+      "tool": "tools/in_force_on.py",
+      "citation": {
+        "file": "((?:constitution|code|law)/[0-9]+)/0*([0-9]+(?:\\.[0-9]+)?)\\.md",
+        "cites": "(^|[^0-9.]){n}(-րդ)? հոդված"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "groups": "any one line",
+        "conditions": "all of a line",
+        "when_absent": "not extracted for Armenia yet; transitional provisions are in the amending act at the Source link",
+        "default_reach": {
+          "rule": "no retroactive effect unless the act says so, and never to worsen a person's position",
+          "meaning": "a legal act applies to relations that arise after it takes effect; it has retroactive force only where the act provides for it, and acts that establish or aggravate liability or worsen a person's legal position have no retroactive force",
+          "authority": "Constitution of the Republic of Armenia (2015), article 73; Law on Normative Legal Acts (ՀՕ-180-Ն, 2018), article 28; on transitional provisions, article 13(6)",
+          "decided_here": false
+        }
+      },
+      "code": "AM",
+      "iso_path": "am/national/acts"
+    },
+    {
+      "path": "argentina/national/acts",
+      "url": "https://github.com/lexifina/argentina-law.git",
+      "name": "Argentina",
+      "label": "Argentina",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: InfoLEG (Ministerio de Justicia de la Nación).",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "AR",
+      "iso_path": "ar/national/acts"
+    },
+    {
+      "path": "austria/bund/acts",
+      "url": "https://github.com/lexifina/austria-law.git",
+      "name": "Austrian federal law (Bundesrecht konsolidiert): B-VG, DSG",
+      "label": "Austria",
+      "language": "de",
+      "coverage": "from 1930-01-03",
+      "in_force_trailer": "In-force",
+      "history_from": "1930-01-03",
+      "record_to": "2026-06-12",
+      "checked_on": "2026-10-28",
+      "record_note": "checked against the RIS OGD data retrieved 2026-10-28",
+      "has_future_branch": false,
+      "history": "in-force",
+      "tool": "tools/stand_am.py",
+      "citation": {
+        "file": "(par|art)-0*([0-9]+[a-z]?)\\.md",
+        "cites": "(§|Art\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "laws do not act retroactively",
+          "meaning": "a law applies to facts from the day it takes effect and does not affect earlier acts or rights acquired before then, unless it says otherwise; in criminal law a later law applies to earlier acts only where it is more favourable to the offender",
+          "authority": "§ 5 ABGB (\"Gesetze wirken nicht zurück und haben daher auf vorhergegangene Handlungen und auf vorher erworbene Rechte keinen Einfluß.\"); § 1 and § 61 StGB; Art. 7 EMRK",
+          "decided_here": false
+        }
+      },
+      "code": "AT",
+      "iso_path": "at/bund/acts"
+    },
+    {
+      "path": "australia/federal/acts",
+      "url": "https://github.com/lexifina/australia-law.git",
+      "name": "Australian (Commonwealth) law: the Commonwealth of Australia Constitution Act and the Privacy Act 1988",
+      "label": "Australia (Commonwealth)",
+      "language": "en",
+      "coverage": "from 1900-01-01",
+      "in_force_trailer": "In-force",
+      "history_from": "1900-01-01",
+      "record_to": "2026-06-04",
+      "checked_on": "2026-10-28",
+      "record_note": "The Constitution from the register's first version (dated 1900-01-01) through its seven compilations to 1977-07-29, and the Privacy Act 1988 from its first registered compilation (1997-06-18) to the last compilation dated on or before 2026-10-28, from the Federal Register of Legislation; data retrieved 2026-10-28. Commits between compilations are dated by the register's version list; only compilation days are checked against official text.",
+      "history": "replayed",
+      "verification": "Verified against official text: every compilation on its compilation day (93 compilations). Changes the register dates between two compilations are credited from the endnotes, and their text on those intermediate days is not independently verified.",
+      "tool": "tools/aulaw.py",
+      "citation": {
+        "file": "([a-z-]+)/s-0*([0-9]+[A-Z]*)\\.md",
+        "cites": "(section|s\\.?) ?{n}([^0-9A-Za-z]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "presumption against retrospective operation; repeal or amendment does not disturb what was done or accrued before",
+          "meaning": "a Commonwealth Act is presumed not to operate retrospectively on substantive rights and liabilities unless it says so; the repeal or amendment of an Act does not affect its previous operation or any right, liability or penalty acquired or incurred under it, unless the contrary intention appears; the Constitution does not forbid retrospective laws, and the High Court has upheld a retrospective criminal law",
+          "authority": "Acts Interpretation Act 1901 (Cth) s 7(2) (effect of repeal or amendment of an Act); Maxwell v Murphy (1957) 96 CLR 261 (common-law presumption); Polyukhovich v Commonwealth (1991) 172 CLR 501 (retrospective criminal law valid); not checked in this corpus",
+          "decided_here": false
+        }
+      },
+      "code": "AU",
+      "iso_path": "au/federal/acts"
+    },
+    {
+      "path": "aland/national/acts",
+      "url": "https://github.com/lexifina/aland-law.git",
+      "name": "Åland law: Landskapslag (2015:68) om hemvårdsstöd",
+      "label": "Åland",
+      "language": "sv",
+      "coverage": "from 2016-01-01",
+      "in_force_trailer": "In-force",
+      "history_from": "2016-01-01",
+      "record_to": "2026-05-01",
+      "checked_on": "2026-10-28",
+      "record_note": "2015:68 from its original text (in force 2016-01-01) with the 7 amending acts replayed to the Ålex consolidation (updated to ÅFS 2026/31); data retrieved 2026-10-28.",
+      "history": "replayed",
+      "verification": "Verified against official text: the original act ÅFS 2015:68 (first commit) and the current Ålex consolidation (end state, 30/30 sections). The 6 intermediate states between are replays of the ÅFS amending acts and are not independently verified.",
+      "tool": "tools/alex.py",
+      "citation": {
+        "file": "([a-z]+)/paragraf-0*([0-9]+[a-z]*)\\.md",
+        "cites": "([^0-9]|^){n} ?§"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "the amending act prints no transitional or retroactive rule in its commencement provision; the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no genuine retroactivity (Constitution of Finland 8 §: nullum crimen; legislative practice otherwise), which binds Åland legislation as well",
+          "meaning": "an act applies from the day it takes effect unless its own commencement provision says otherwise (for instance ÅFS 2023/29, which lets the sibling allowance be granted from 1 August 2022); those provisions are copied verbatim into Applies: trailers",
+          "authority": "Suomen perustuslaki 731/1999, 8 §; Självstyrelselag (1991:71) för Åland; each amending act's commencement provision",
+          "decided_here": false
+        }
+      },
+      "code": "AX",
+      "iso_path": "ax/national/acts"
+    },
+    {
+      "path": "bolivia/national/acts",
+      "url": "https://github.com/lexifina/bolivia-law.git",
+      "name": "Bolivia",
+      "label": "Bolivia",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: Gaceta Oficial del Estado Plurinacional de Bolivia.",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "BO",
+      "iso_path": "bo/national/acts"
+    },
+    {
+      "path": "brazil/national/acts",
+      "url": "https://github.com/lexifina/brazil-law.git",
+      "name": "Brazil",
+      "label": "Brazil",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: Presidência da República, Planalto (Legislação).",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "BR",
+      "iso_path": "br/national/acts"
+    },
+    {
+      "path": "canada/federal/acts",
+      "url": "https://github.com/lexifina/canada-law.git",
+      "name": "Canadian federal law: Personal Information Protection and Electronic Documents Act (P-8.6) and Access to Information Act (A-1)",
+      "label": "Canada (federal)",
+      "language": "en",
+      "coverage": "from 2002-12-31",
+      "in_force_trailer": "In-force",
+      "history_from": "2002-12-31",
+      "record_to": "2026-06-14",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28: every point-in-time version, file by file and word for word. English text only.",
+      "history": "in-force",
+      "tool": "tools/on_date.py",
+      "citation": {
+        "file": "([A-Z]-[0-9.]+)/s-0*([0-9]+(?:\\.[0-9]+)*)\\.md",
+        "cites": "([Ss]ections?|[Ss]ubsections?|[Pp]aragraphs?|ss?\\.) ?{n}([^0-9.]|\\.[^0-9]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "presumption against retrospectivity; immediate application to procedure",
+          "meaning": "an enactment is presumed not to apply to facts completed before it came into force, or to interfere with vested rights, unless Parliament says so expressly or by necessary implication; procedural provisions apply immediately to pending matters; a repeal does not affect rights acquired or proceedings begun under the repealed enactment; in criminal law, no one may be found guilty of an act that was not an offence when committed, and a person found guilty is entitled to the lesser punishment where it was varied between the offence and sentencing",
+          "authority": "Interpretation Act, R.S.C. 1985, c. I-21, s. 43 (effect of repeal) and s. 44 (repeal and substitution); Canadian Charter of Rights and Freedoms, s. 11(g) and 11(i); R. v. Dineley, 2012 SCC 58, [2012] 3 S.C.R. 272; Tran v. Canada (Public Safety and Emergency Preparedness), 2017 SCC 50, [2017] 2 S.C.R. 289",
+          "decided_here": false
+        }
+      },
+      "code": "CA",
+      "iso_path": "ca/federal/acts"
+    },
+    {
+      "path": "switzerland/bund/acts",
+      "url": "https://github.com/lexifina/switzerland-law.git",
+      "name": "Systematische Rechtssammlung des Bundes (Swiss Classified Compilation)",
+      "label": "Switzerland",
+      "language": "de",
+      "coverage": "from 1855-01-20",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "Consolidated",
+      "correction_trailer": "Corrected",
+      "history_from": "1855-01-20",
+      "record_to": "2026-10-28",
+      "record_note": "Every act of the Classified Compilation with a German Akoma Ntoso version on Fedlex, checked against Fedlex on 2026-10-28.",
+      "has_future_branch": true,
+      "tool": "tools/stand_am.py",
+      "citation": {
+        "file": "([0-9.]+[a-z]?|eli-[^/]+)/art-0*([0-9]+[a-z]*)\\.md",
+        "cites": "(Artikel|Art\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "groups": "any one line",
+        "conditions": "all of a line",
+        "when_absent": "no scope note found; not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "presumption against retroactivity (Rückwirkungsverbot)",
+          "meaning": "new law does not attach consequences to facts completed before it took effect unless the law says so; procedural rules generally apply to pending proceedings unless transitional provisions say otherwise",
+          "authority": "Art. 5 and 9 of the Federal Constitution (SR 101), as applied by the Federal Supreme Court",
+          "decided_here": false
+        }
+      },
+      "code": "CH",
+      "iso_path": "ch/bund/acts"
+    },
+    {
+      "path": "chile/national/acts",
+      "url": "https://github.com/lexifina/chile-law.git",
+      "name": "Chile",
+      "label": "Chile",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: Biblioteca del Congreso Nacional (LeyChile).",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "CL",
+      "iso_path": "cl/national/acts"
+    },
+    {
+      "path": "china/national/acts",
+      "url": "https://github.com/lexifina/china-law.git",
+      "name": "Chinese law: 中华人民共和国宪法 (Constitution of the People's Republic of China, 1982, as amended)",
+      "label": "China",
+      "language": "zh",
+      "coverage": "from 1982-12-04",
+      "in_force_trailer": "In-force",
+      "history_from": "1982-12-04",
+      "record_to": "2018-03-21",
+      "checked_on": "2026-10-28",
+      "record_note": "The 1982 text and the 2018 text are checked word for word against the official pages of 中国人大网 on 2026-10-28; the versions between are the 1982 text with each amendment applied.",
+      "history": "in-force",
+      "tool": "tools/on_date.py",
+      "citation": {
+        "file": "([a-z]+)/art-0*([0-9]+)\\.md",
+        "cites": "第{n}条",
+        "numerals": "zh-Hans: {n} is written in Chinese numerals (第一百零三条 = 103), as tools/text.py int_cn() does; with Arabic digits the rule finds nothing"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no retroactivity, unless a special provision better protects rights and interests",
+          "meaning": "laws, administrative regulations, local regulations, autonomous and separate regulations and rules do not apply retroactively, except special provisions made to better protect the rights and interests of citizens, legal persons and other organisations; in criminal law the law at the time of the act applies unless the later law is lighter",
+          "authority": "中华人民共和国立法法第一百零四条 (2023年修正; 2015年文本第九十三条): \"法律、行政法规、地方性法规、自治条例和单行条例、规章不溯及既往，但为了更好地保护公民、法人和其他组织的权利和利益而作的特别规定除外。\"; 中华人民共和国刑法第十二条",
+          "decided_here": false
+        }
+      },
+      "code": "CN",
+      "iso_path": "cn/national/acts"
+    },
+    {
+      "path": "colombia/national/acts",
+      "url": "https://github.com/lexifina/colombia-law.git",
+      "name": "Colombia",
+      "label": "Colombia",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: Secretaría General del Senado (basedoc).",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "CO",
+      "iso_path": "co/national/acts"
+    },
+    {
+      "path": "czechia/national/acts",
+      "url": "https://github.com/lexifina/czechia-law.git",
+      "name": "Czech law: the Sbírka zákonů (Collection of Laws), every act of legislation with consolidated versions, from e-Sbírka's open data",
+      "label": "Czechia",
+      "language": "cs",
+      "coverage": "from 1918-10-28",
+      "in_force_trailer": "In-force",
+      "history_from": "1918-10-28",
+      "record_to": "2026-10-26",
+      "checked_on": "2026-10-28",
+      "record_note": "every consolidated version checked against e-Sbírka's open datasets as published on 2026-10-28 (Last-Modified)",
+      "has_future_branch": true,
+      "tool": "tools/czlaw.py",
+      "citation": {
+        "file": "sb/([0-9]{4})/([0-9a-z]+)\\.md",
+        "cites": "{n}/[0-9]{4} Sb\\."
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no genuine retroactivity",
+          "meaning": "an act applies from the day it takes effect (účinnost) and does not attach new legal consequences to facts completed before then; the prohibition follows from the rule of law (legal certainty and legitimate expectations) and admits genuine retroactivity only exceptionally; in criminal law a later act applies only where it is more favourable to the offender",
+          "authority": "Listina základních práv a svobod čl. 40 odst. 6 (\"Trestnost činu se posuzuje a trest se ukládá podle zákona účinného v době, kdy byl čin spáchán. Pozdějšího zákona se použije, jestliže je to pro pachatele příznivější.\"); Ústava České republiky čl. 1 odst. 1 (demokratický právní stát), from which the Constitutional Court derives the principle of legal certainty",
+          "decided_here": false
+        }
+      },
+      "code": "CZ",
+      "iso_path": "cz/national/acts"
+    },
+    {
+      "path": "germany/bund/acts",
+      "url": "https://github.com/lexifina/germany-law.git",
+      "name": "germany-law",
+      "label": "Germany",
+      "language": "de",
+      "coverage": "from 1949-05-24",
+      "in_force_trailer": "In-Kraft",
+      "baseline_trailer": "Beobachtet",
+      "correction_trailer": "In-Kraft-laut-Fussnote",
+      "history_from": "1949-05-24",
+      "record_to": "2026-10-28",
+      "record_note": "Grundgesetz from 1949 (DocPatch reconciled with the official text, then Gesetze im Internet); all other federal law from 10 June 2019 (Gesetze im Internet via QuantLaw's daily archive). Checked against Gesetze im Internet on the record_to day.",
+      "has_future_branch": false,
+      "tool": "python tools/stand_am.py DATE [ARTICLE ...] | python tools/stand_am.py DATE --gesetz <act>",
+      "citation": {
+        "file": "(grundgesetz/artikel)/0*([0-9]+[a-z]?)\\.md",
+        "cites": "(Artikel|Art\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "scope": {
+        "trailer": null,
+        "groups": null,
+        "conditions": null,
+        "when_absent": "no scope note is recorded in this history (no Applies lines yet); not a statement that a change reaches every case",
+        "default_reach": {
+          "rule": "Rückwirkungsverbot (prohibition of retroactivity)",
+          "meaning": "a law may not attach new burdens to facts already completed before its promulgation (true retroactivity, echte Rückwirkung), save narrow exceptions; it may in principle reach facts that began earlier and are still ongoing (false retroactivity, unechte Rückwirkung), subject to proportionality and legitimate expectations; criminal law is never retroactive (Art. 103(2) GG)",
+          "authority": "Rechtsstaatsprinzip, Art. 20(3) GG, as applied by the Bundesverfassungsgericht (e.g. BVerfGE 135, 1); Art. 103(2) GG",
+          "decided_here": false
+        }
+      },
+      "code": "DE",
+      "iso_path": "de/bund/acts"
+    },
+    {
+      "path": "denmark/national/acts",
+      "url": "https://github.com/lexifina/denmark-law.git",
+      "name": "Danish law: Danmarks Riges Grundlov (1953) and skatteforvaltningsloven (lov nr. 427 af 6. juni 2005, with its consolidations)",
+      "label": "Denmark",
+      "language": "da",
+      "coverage": "from 1953-06-05",
+      "in_force_trailer": "In-force",
+      "history_from": "1953-06-05",
+      "record_to": "2025-10-23",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28.",
+      "history": "replayed",
+      "verification": "Verified against official text: the act as passed and each LBK consolidation on its valid-from day (11 versions). Commits dated between consolidations are reconstructed from the amending acts' items and are not independently verified.",
+      "tool": "tools/paa_dato.py",
+      "citation": {
+        "file": "([a-z]+)/par-0*([0-9]+[a-z]*)\\.md",
+        "cites": "§ ?{n}([^0-9]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no genuine retroactivity in criminal law; no general bar elsewhere",
+          "meaning": "an act applies from the day it takes effect; the Constitution states no general ban on laws with retroactive effect, so in tax and other civil law an act may give itself effect from an earlier day (an amending act may say so: \"har virkning fra og med ...\"); in criminal law a later act applies only where it is no harsher than the act in force when the act was done",
+          "authority": "Straffeloven § 1 (\"Straf kan kun pålægges for et forhold, hvis strafbarhed er hjemlet ved lov, eller som ganske må ligestilles med et sådant.\") and § 3 (the later law applies, \"dog at afgørelsen ikke derved må blive strengere end efter den ældre lov\"), lovbekendtgørelse nr. 1294 af 7. november 2025; Danmarks Riges Grundlov contains no general rule on retroactive legislation",
+          "decided_here": false
+        }
+      },
+      "code": "DK",
+      "iso_path": "dk/national/acts"
+    },
+    {
+      "path": "ecuador/national/acts",
+      "url": "https://github.com/lexifina/ecuador-law.git",
+      "name": "Ecuador",
+      "label": "Ecuador",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: Registro Oficial del Ecuador.",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "EC",
+      "iso_path": "ec/national/acts"
+    },
+    {
+      "path": "estonia/national/acts",
+      "url": "https://github.com/lexifina/estonia-law.git",
+      "name": "Estonian acts: Põhiseadus, Riigikogu valimise seadus, Isikuandmete kaitse seadus",
+      "label": "Estonia",
+      "language": "et",
+      "coverage": "from 1992-07-03",
+      "in_force_trailer": "In-force",
+      "history_from": "1992-07-03",
+      "record_to": "2026-10-01",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28.",
+      "history": "in-force",
+      "tool": "tools/seisuga.py",
+      "citation": {
+        "file": "([a-z]+)/para-0*([0-9]+[a-z0-9]*)\\.md",
+        "cites": "§ ?{n}([^0-9]|$)"
+      },
+      "scope": {
+        "trailer": null,
+        "when_absent": "no scope note is recorded in this history; not a statement that a change reaches every case",
+        "default_reach": {
+          "rule": "no retroactive punishment; otherwise legal certainty",
+          "meaning": "no one may be convicted for an act that was not an offence when committed, and a heavier penalty may not apply retroactively; beyond criminal law, the Supreme Court limits retroactive burdens through the principle of legal certainty",
+          "authority": "Eesti Vabariigi põhiseadus § 23; õiguskindluse põhimõte (§ 10) as applied by the Riigikohus",
+          "decided_here": false
+        }
+      },
+      "code": "EE",
+      "iso_path": "ee/national/acts"
+    },
+    {
+      "path": "spain/national/acts",
+      "url": "https://github.com/lexifina/spain-law.git",
+      "name": "Spanish state law: every consolidated norm of ámbito Estatal (BOE legislación consolidada)",
+      "label": "Spain",
+      "language": "es",
+      "coverage": "from 1835-11-27",
+      "in_force_trailer": "In-force",
+      "history_from": "1835-11-27",
+      "record_to": "2026-10-28",
+      "checked_on": "2026-10-28",
+      "record_note": "BOE consolidated texts of every Estatal norm, retrieved 2026-10-28; versions in force after 2026-10-28 left out.",
+      "has_future_branch": false,
+      "tool": "tools/eslaw.py",
+      "citation": {
+        "file": "estatal/[a-z-]+/\\d{4}/(BOE-A-\\d{4}-\\d+)/([^/]+)\\.md",
+        "cites": "{n}"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no retroactivity unless the law provides otherwise",
+          "meaning": "laws have no retroactive effect unless they so provide; the Constitution guarantees the non-retroactivity of punitive provisions that are unfavourable or that restrict individual rights; in criminal law a later more favourable law applies",
+          "authority": "Código Civil art. 2.3 (\"Las leyes no tendrán efecto retroactivo, si no dispusieren lo contrario.\"); Constitución Española art. 9.3 (\"la irretroactividad de las disposiciones sancionadoras no favorables o restrictivas de derechos individuales\")",
+          "decided_here": false
+        }
+      },
+      "code": "ES",
+      "iso_path": "es/national/acts"
+    },
+    {
+      "path": "finland/national/acts",
+      "url": "https://github.com/lexifina/finland-law.git",
+      "name": "Finnish law: Suomen perustuslaki (731/1999)",
+      "label": "Finland",
+      "language": "fi",
+      "coverage": "from 2000-03-01",
+      "in_force_trailer": "In-force",
+      "history_from": "2000-03-01",
+      "record_to": "2026-10-28",
+      "checked_on": "2026-10-28",
+      "record_note": "731/1999 from its original text (in force 2000-03-01) with the four amending acts replayed to the official consolidation of 2018-10-05; data retrieved 2026-10-28.",
+      "history": "replayed",
+      "verification": "Verified against official text: the original act 731/1999 (first commit) and the consolidation of 2018-10-05 (end state, 131/131 sections). The intermediate states on 2007-06-01, 2007-10-01 and 2012-03-01 are replays of the amending acts and are not independently verified.",
+      "tool": "tools/finlex.py",
+      "citation": {
+        "file": "([a-z]+)/pykala-0*([0-9]+[a-z]*)\\.md",
+        "cites": "([^0-9]|^){n} ?§"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no genuine retroactivity (Constitution 8 §: nullum crimen; legislative practice otherwise)",
+          "meaning": "an act applies from the day it takes effect; the Constitution forbids retroactive criminal liability and penalties (8 §) and no general rule is written beyond that",
+          "authority": "Suomen perustuslaki 731/1999, 8 § (Rikosoikeudellinen laillisuusperiaate); transitional rules are in each amending act's own commencement provision",
+          "decided_here": false
+        }
+      },
+      "code": "FI",
+      "iso_path": "fi/national/acts"
+    },
+    {
+      "path": "fiji/national/acts",
+      "url": "https://github.com/lexifina/fiji-law.git",
+      "name": "Laws of Fiji (consolidated Acts and subsidiary legislation)",
+      "label": "Fiji",
+      "language": "en",
+      "coverage": "from 1928-02-28",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "Consolidated",
+      "history_from": "1928-02-28",
+      "record_to": "2026-10-28",
+      "checked_on": "2026-10-28",
+      "record_note": "laws.gov.fj publishes only the current consolidation, so each law has one version here: the text as of its last-update date. Earlier text is not available; history notes and Tables of Amendments are kept as text and in data/amendments.csv.",
+      "tool": "tools/in_force_on.py",
+      "scope": {
+        "trailer": "Applies",
+        "groups": "any one line",
+        "conditions": "all of a line",
+        "when_absent": "not extracted for Fiji; savings and transitional rules are in the amending laws",
+        "default_reach": {
+          "rule": "presumption against retroactivity",
+          "meaning": "a written law is presumed not to affect rights acquired, or proceedings pending, before it took effect unless it says so; on repeal, see the savings rules of the Interpretation Act",
+          "authority": "common-law presumption; Interpretation Act 1967 (Fiji), section 11 (effect of amendments) and section 18 (effect of repealing written law)",
+          "decided_here": false
+        }
+      },
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "FJ",
+      "iso_path": "fj/national/acts"
+    },
+    {
+      "path": "united-kingdom/uk/legislation",
+      "url": "https://github.com/lexifina/united-kingdom-law.git",
+      "name": "United Kingdom legislation",
+      "label": "United Kingdom",
+      "language": "en",
+      "coverage": "from 2014-03-13",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "In-force",
+      "history_from": "2014-03-13",
+      "record_to": "2026-10-28",
+      "checked_on": "2026-10-28",
+      "record_note": "This history now holds nine provisions on EHC plans (Children and Families Act 2014 ss. 19, 21, 36, 37, 42; SEND Regulations 2014 regs. 6, 11, 12, 13), every point-in-time version legislation.gov.uk published to 2026-10-28. It will be replaced by a rebuild covering all UK legislation (about 199,000 documents), which is being harvested at legislation.gov.uk's crawl delay.",
+      "has_future_branch": false,
+      "tool": "tools/ukhistory.py on <date> <path>",
+      "scope": {
+        "trailer": null,
+        "groups": "any one line",
+        "conditions": "all of a line",
+        "when_absent": "no scope note found; not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "presumption against retrospective effect",
+          "meaning": "legislation is presumed not to change the legal effect of past events or accrued rights unless it says so; a repeal does not affect rights accrued, liabilities incurred or proceedings begun under the repealed provision unless the contrary intention appears",
+          "authority": "Interpretation Act 1978, s. 16; L'Office Cherifien des Phosphates v Yamashita-Shinnihon Steamship Co Ltd [1994] 1 AC 486",
+          "decided_here": false
+        },
+        "note": "This published history has no Applies or Modifies lines; savings and transitional provisions are named in commit messages. The rebuild adds Applies (savings, from the changes register) and Modifies (curated, for modifications made by notice, with kinds modified and ended, marked Curated: yes)."
+      },
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "GB",
+      "iso_path": "gb/uk/legislation"
+    },
+    {
+      "path": "georgia/national/acts",
+      "url": "https://github.com/lexifina/georgia-law.git",
+      "name": "Legislation of Georgia (laws, from Matsne)",
+      "label": "Georgia: laws",
+      "language": "ka",
+      "coverage": "from 1921-02-21",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "In-force",
+      "history_from": "1921-02-21",
+      "record_to": "2026-10-26",
+      "checked_on": "2026-10-28",
+      "record_note": "every main document in Matsne's \"law\" group (Constitution, constitutional and organic laws, codes, laws, autonomous-republic laws), in force or expired; sub-legislative acts not included; changes published but in force after the build day are on the future branch",
+      "has_future_branch": true,
+      "tool": "tools/in_force_on.py",
+      "citation": {
+        "file": "^([a-z-]+/\\d+)/(\\d+)\\.md$",
+        "cites": "(^|[^0-9¹²³⁴⁵⁶⁷⁸⁹⁰])(მუხლი[[:space:]]+{n}([^0-9¹²³⁴⁵⁶⁷⁸⁹⁰]|$)|(მე-)?{n}(-ე)?[[:space:]]+მუხლ)",
+        "note": "forms \"მუხლი N\", \"მე-N მუხლი\", \"N-ე მუხლი\"; articles with a superscript number (file 12-1.md = article 12¹) are not matched by the file rule; the first article is written \"პირველი მუხლი\" and lists (\"120-ე და 121-ე მუხლები\") match only their last number; citations are within the same law"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "groups": "any one line",
+        "conditions": "all of a line",
+        "when_absent": "no scope note extracted for Georgia; transitional provisions are in the amending act at the Source link",
+        "default_reach": {
+          "rule": "no retroactive effect unless the act says so",
+          "meaning": "a normative act has no retroactive force unless it expressly provides so; a law that establishes or aggravates liability never has retroactive force",
+          "authority": "Constitution of Georgia, art. 31(5) (2017 text); Law of Georgia on Normative Acts, art. 24",
+          "decided_here": false
+        }
+      },
+      "code": "GE",
+      "iso_path": "ge/national/acts"
+    },
+    {
+      "path": "gibraltar/national/acts",
+      "url": "https://github.com/lexifina/gibraltar-law.git",
+      "name": "Gibraltar law: the Gibraltar Constitution Order 2006 and the Stamp Duties Act 2005 (2005-73)",
+      "label": "Gibraltar",
+      "language": "en",
+      "coverage": "from 2006-01-12",
+      "in_force_trailer": "In-force",
+      "history_from": "2006-01-12",
+      "record_to": "2024-12-23",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28.",
+      "history": "in-force",
+      "tool": "tools/on_date.py",
+      "citation": {
+        "file": "(.+)/s-0*([0-9]+[A-Za-z]*)\\.md",
+        "cites": "([Ss]ection|s\\.) ?{n}([^0-9A-Za-z]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no retroactive criminal liability; otherwise a general presumption against retroactivity, not a constitutional bar",
+          "meaning": "the Constitution forbids holding a person guilty of an offence for an act that was not an offence when done, and a penalty severer than the maximum then available; for other law the record states no general rule, and an act that says it applies from an earlier day (several here do) is recorded as such",
+          "authority": "Gibraltar Constitution Order 2006, Annex 1, section 8(4): \"No person shall be held to be guilty of a criminal offence on account of any act or omission that did not, at the time it took place, constitute such an offence, and no penalty shall be imposed for a criminal offence that is severer in degree or description than the maximum penalty that might have been imposed for that offence at the time when it was committed.\"",
+          "decided_here": false
+        }
+      },
+      "code": "GI",
+      "iso_path": "gi/national/acts"
+    },
+    {
+      "path": "greenland/national/acts",
+      "url": "https://github.com/lexifina/greenland-law.git",
+      "name": "Greenlandic law: Inatsisartutlov om Kirken (nr. 9 af 19. maj 2010) and Landstingslov om havne- og krydstogtpassagerafgift (nr. 20 af 30. oktober 1992), with their consolidations and amending acts",
+      "label": "Greenland",
+      "language": "da",
+      "coverage": "from 1993-01-01",
+      "in_force_trailer": "In-force",
+      "history_from": "1993-01-01",
+      "record_to": "2026-10-19",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28.",
+      "history": "replayed",
+      "verification": "Verified against official text: each act as passed and each lovbekendtgørelse consolidation (5 versions). Commits dated between them are reconstructed from the amending acts and are not independently verified.",
+      "tool": "tools/paa_dato.py",
+      "citation": {
+        "file": "([a-z]+)/par-0*([0-9]+[a-z]*)\\.md",
+        "cites": "§ ?{n}([^0-9]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "a commit without Applies: records no scope note; the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no retroactive criminal liability; no general bar elsewhere",
+          "meaning": "an act applies from the day it takes effect; an act may give itself effect from an earlier day (an amending act says so: \"har virkning fra ...\"), except that no one is punished for an act that was not punishable by law when it was done",
+          "authority": "Kriminallov for Grønland (lov nr. 306 af 30. april 2008) § 1 (the legality principle) and Article 7 of the European Convention on Human Rights; Danmarks Riges Grundlov, which applies in Greenland, contains no general rule on retroactive legislation. Not quoted here: the wording was not read from an official source in this build",
+          "decided_here": false
+        }
+      },
+      "code": "GL",
+      "iso_path": "gl/national/acts"
+    },
+    {
+      "path": "guyana/national/acts",
+      "url": "https://github.com/lexifina/guyana-law.git",
+      "name": "Guyana",
+      "label": "Guyana",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: Ministry of Legal Affairs, Laws of Guyana.",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "GY",
+      "iso_path": "gy/national/acts"
+    },
+    {
+      "path": "hong-kong/national/acts",
+      "url": "https://github.com/lexifina/hong-kong-law.git",
+      "name": "Hong Kong law: Hong Kong Bill of Rights Ordinance (Cap. 383) and Personal Data (Privacy) Ordinance (Cap. 486)",
+      "label": "Hong Kong",
+      "language": "en",
+      "coverage": "from 1997-07-01",
+      "in_force_trailer": "In-force",
+      "history_from": "1997-07-01",
+      "record_to": "2021-10-08",
+      "checked_on": "2026-10-28",
+      "record_note": "Cap. 383 and Cap. 486 in English, from the text in force on 1 July 1997 to the last version dated on or before 2026-10-28 in the Department of Justice bulk files on DATA.GOV.HK; data retrieved 2026-10-28.",
+      "history": "in-force",
+      "tool": "tools/hkhistory.py",
+      "citation": {
+        "file": "([a-z0-9-]+)/s-0*([0-9]+[A-Z]*)\\.md",
+        "cites": "([Ss]ection|s\\.) ?{n}([^0-9A-Za-z]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "presumption against retrospective operation, and no retrospective criminal liability",
+          "meaning": "an Ordinance is presumed to operate from the day it takes effect and not to attach new legal consequences to events completed before then unless it says so; in criminal matters the Bill of Rights bars holding anyone guilty for an act that was not an offence when it was committed and imposing a heavier penalty than the one then applicable, and a lighter penalty provided later benefits the offender",
+          "authority": "Hong Kong Bill of Rights, Article 12(1) (Cap. 383 s. 8): \"No one shall be held guilty of any criminal offence on account of any act or omission which did not constitute a criminal offence, under Hong Kong or international law, at the time when it was committed. Nor shall a heavier penalty be imposed than the one that was applicable at the time when the criminal offence was committed. If, subsequent to the commission of the offence, provision is made by law for the imposition of a lighter penalty, the offender shall benefit thereby.\"; the general presumption is common law and is not checked in this corpus",
+          "decided_here": false
+        }
+      },
+      "code": "HK",
+      "iso_path": "hk/national/acts"
+    },
+    {
+      "path": "croatia/national/acts",
+      "url": "https://github.com/lexifina/croatia-law.git",
+      "name": "Croatian law: Ustav Republike Hrvatske (NN 56/1990 and its changes)",
+      "label": "Croatia",
+      "language": "hr",
+      "coverage": "from 1990-12-22",
+      "in_force_trailer": "In-force",
+      "history_from": "1990-12-22",
+      "record_to": "2013-12-01",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28.",
+      "history": "in-force",
+      "tool": "tools/ustav.py",
+      "citation": {
+        "file": "([a-z]+)/clanak-0*([0-9]+[a-z]*)\\.md",
+        "cites": "(član(ak|ka|ku|kom)|čl\\.) ?{n}([^0-9]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no retroactivity, with an exception for particular provisions on special grounds",
+          "meaning": "laws and other regulations of state bodies and bodies with public powers cannot have retroactive effect; on specially justified grounds only particular provisions of a law may",
+          "authority": "Ustav Republike Hrvatske, čl. 90. st. 4. i 5. (tekst NN 85/2010): \"Zakoni i drugi propisi državnih tijela i tijela koja imaju javne ovlasti ne mogu imati povratno djelovanje. Iz posebno opravdanih razloga samo pojedine odredbe zakona mogu imati povratno djelovanje.\"",
+          "decided_here": false
+        }
+      },
+      "code": "HR",
+      "iso_path": "hr/national/acts"
+    },
+    {
+      "path": "ireland/national/acts",
+      "url": "https://github.com/lexifina/ireland-law.git",
+      "name": "Irish law: Data Protection Act 2018 (No. 7 of 2018) and Protected Disclosures Act 2014 (No. 14 of 2014), as revised by the Law Reform Commission",
+      "label": "Ireland",
+      "language": "en",
+      "coverage": "from 2018-06-09",
+      "in_force_trailer": "In-force",
+      "history_from": "2018-06-09",
+      "record_to": "2026-07-16",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28.",
+      "history": "in-force",
+      "tool": "tools/on_date.py",
+      "citation": {
+        "file": "([a-z0-9-]+)/section-0*([0-9]+[A-Z]*)\\.md",
+        "cites": "([Ss]ection|s\\.) ?{n}([^0-9A-Za-z]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "presumption against retrospective effect",
+          "meaning": "an enactment is presumed not to affect rights and obligations accrued, or acts done, before it takes effect, unless it says so expressly or by necessary implication; the Oireachtas may not declare acts to be infringements of the law which were not so at the date of their commission",
+          "authority": "Bunreacht na hÉireann, Article 15.5.1° (\"The Oireachtas shall not declare acts to be infringements of the law which were not so at the date of their commission.\"); Interpretation Act 2005, section 27(1) (effect of repeal)",
+          "decided_here": false
+        }
+      },
+      "code": "IE",
+      "iso_path": "ie/national/acts"
+    },
+    {
+      "path": "italy/national/acts",
+      "url": "https://github.com/lexifina/italy-law.git",
+      "name": "Italian law: the Constitution, every legge costituzionale, L. 300/1970, L. 241/1990, D.Lgs. 196/2003 and D.Lgs. 82/2005, from Normattiva's multivigente text",
+      "label": "Italy",
+      "language": "",
+      "coverage": "from 1947-02-22",
+      "in_force_trailer": "In-force",
+      "history_from": "1947-02-22",
+      "record_to": "2026-06-23",
+      "checked_on": "2026-10-28",
+      "tool": "tools/vigente.py",
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no retroactivity",
+          "meaning": "a law provides only for the future and has no retroactive effect, unless it says otherwise (the rule binds ordinary interpretation, not the legislator, except in criminal law, where no one may be punished under a law that was not in force when the act was committed)",
+          "authority": "Disposizioni sulla legge in generale, art. 11 (\"La legge non dispone che per l'avvenire: essa non ha effetto retroattivo.\"); Costituzione, art. 25, secondo comma (\"Nessuno può essere punito se non in forza di una legge che sia entrata in vigore prima del fatto commesso.\")",
+          "decided_here": false
+        }
+      },
+      "warnings": [
+        "corpus.json lacks language (defaults are used)",
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "IT",
+      "iso_path": "it/national/acts"
+    },
+    {
+      "path": "japan/national/acts",
+      "url": "https://github.com/lexifina/japan-law.git",
+      "name": "Japanese law: 日本国憲法 (the Constitution of Japan) and 個人情報の保護に関する法律 (Act on the Protection of Personal Information, 平成十五年法律第五十七号)",
+      "label": "Japan",
+      "language": "ja",
+      "coverage": "from 1947-05-03",
+      "in_force_trailer": "In-force",
+      "history_from": "1947-05-03",
+      "record_to": "2026-10-01",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source (e-Gov 法令検索, Law API v2) on 2026-10-28. e-Gov keeps revisions of the APPI from 2017-03-01 only; the first is a labelled baseline by the publisher, not a law.",
+      "history": "in-force",
+      "tool": "tools/jiten.py",
+      "citation": {
+        "file": "([a-z-]+)/art-0*([0-9]+(?:-[0-9]+)*)\\.md",
+        "cites": "第{n}(?![のノ][一二三四五六七八九十])",
+        "n_format": "kanji-article: {n} is the article number in kanji with 条 and any branch numbers, as the text writes it: 16 -> 十六条, 16-2 -> 十六条の二, 100 -> 百条, 123 -> 百二十三条"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no retroactivity unless the law says so (法律不遡及の原則)",
+          "meaning": "an amendment applies from its enforcement day (施行日); how it treats facts and proceedings from before that day is set by the transitional provisions (経過措置) in the amending law's supplementary provisions (附則), which this record includes as suppl/<law>.md files but does not read as scope data; the Constitution bars retroactive criminal liability, and the general rule outside criminal law is a principle of interpretation, not a constitutional rule",
+          "authority": "日本国憲法 第三十九条 (\"第三十九条　何人も、実行の時に適法であつた行為又は既に無罪とされた行為については、刑事上の責任を問はれない。又、同一の犯罪について、重ねて刑事上の責任を問はれない。\")",
+          "decided_here": false
+        }
+      },
+      "warnings": [
+        "citation.cites is not valid for git grep -E (POSIX extended: no lookbehind, lookahead or \\d): fatal: command line, '第1(?![のノ][一二三四五六七八九十])': Invalid preceding regular expression"
+      ],
+      "code": "JP",
+      "iso_path": "jp/national/acts"
+    },
+    {
+      "path": "kyrgyzstan/national/acts",
+      "url": "https://github.com/lexifina/kyrgyzstan-law.git",
+      "name": "Kyrgyzstan: the Constitution of 1993 (to 2010) and the Constitution of 2021",
+      "label": "Kyrgyzstan",
+      "language": "ru",
+      "coverage": "from 1993-05-05",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "Consolidated",
+      "history_from": "1993-05-05",
+      "record_to": "2023-01-01",
+      "checked_on": "2026-10-28",
+      "record_note": "The Constitution of 5 May 1993 in all its editions until it was replaced on 2 July 2010, and the Constitution of 5 May 2021. The Constitution of 2010 (in force 2010-07-02 to 2021-05-05) is not in the record.",
+      "history": "in-force",
+      "tool": "tools/v_sile_na.py",
+      "citation": {
+        "file": "([a-z0-9-]+)/statya-0*([0-9]+)\\.md",
+        "cites": "([Сс]тать[а-яё]*|ст\\.) ?{n}([^0-9]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "no scope note found; not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "non-retroactivity of laws that impose duties or aggravate liability",
+          "meaning": "a law or other normative legal act that establishes new duties or aggravates liability has no retroactive force",
+          "authority": "Конституция Кыргызской Республики 2021 года, статья 6, часть 5: «Закон или иной нормативный правовой акт, устанавливающий новые обязанности или отягчающий ответственность, обратной силы не имеет.»",
+          "decided_here": false
+        }
+      },
+      "code": "KG",
+      "iso_path": "kg/national/acts"
+    },
+    {
+      "path": "liechtenstein/national/acts",
+      "url": "https://github.com/lexifina/liechtenstein-law.git",
+      "name": "Liechtenstein: Verfassung (LV), Volksrechtegesetz (VRG), Staatsgerichtshofgesetz (StGHG)",
+      "label": "Liechtenstein",
+      "language": "de",
+      "coverage": "from 1921-10-24",
+      "in_force_trailer": "In-force",
+      "history_from": "1921-10-24",
+      "record_to": "2026-01-01",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28.",
+      "history": "in-force",
+      "tool": "tools/stand_am.py",
+      "citation": {
+        "file": "([a-z]+)/art-0*([0-9]+[a-z]*)\\.md",
+        "cites": "(Art\\.|Artikel) ?{n}([^0-9a-z]|$)"
+      },
+      "scope": {
+        "trailer": null,
+        "when_absent": "no scope note is recorded in this history; not a statement that a change reaches every case",
+        "default_reach": {
+          "rule": "statutes do not act retroactively",
+          "meaning": "a law applies to facts arising after it takes effect unless it says otherwise; criminal penalties never apply retroactively",
+          "authority": "ABGB § 5 (Gesetze wirken nicht zurück); Landesverfassung Art. 33 Abs. 2",
+          "decided_here": false
+        }
+      },
+      "code": "LI",
+      "iso_path": "li/national/acts"
+    },
+    {
+      "path": "luxembourg/national/acts",
+      "url": "https://github.com/lexifina/luxembourg-law.git",
+      "name": "Luxembourg: Constitution and the Covid-19 law of 17 July 2020",
+      "label": "Luxembourg",
+      "language": "fr",
+      "coverage": "from 1868-10-25",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "history_from": "1868-10-25",
+      "record_to": "2026-08-29",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28.",
+      "history": "in-force",
+      "tool": "tools/en_vigueur_au.py",
+      "citation": {
+        "file": "(.+)/art_0*([0-9]+[a-z]*)\\.md",
+        "cites": "([Aa]rticle|[Aa]rt\\.) ?{n}([^0-9]|$)"
+      },
+      "scope": {
+        "trailer": null,
+        "when_absent": "no scope note is recorded in this history; not a statement that a change reaches every case",
+        "default_reach": {
+          "rule": "the law provides only for the future",
+          "meaning": "a law has no retroactive effect unless the legislature expressly provides otherwise; criminal laws may not apply retroactively",
+          "authority": "Code civil, art. 2 (La loi ne dispose que pour l'avenir; elle n'a point d'effet rétroactif)",
+          "decided_here": false
+        }
+      },
+      "code": "LU",
+      "iso_path": "lu/national/acts"
+    },
+    {
+      "path": "monaco/national/acts",
+      "url": "https://github.com/lexifina/monaco-law.git",
+      "name": "Monaco: Constitution and loi n° 1.362",
+      "label": "Monaco",
+      "language": "fr",
+      "coverage": "from 1962-12-17",
+      "in_force_trailer": "In-force",
+      "history_from": "1962-12-17",
+      "record_to": "2025-11-22",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28.",
+      "history": "in-force",
+      "tool": "tools/en_vigueur_au.py",
+      "citation": {
+        "file": "([a-z0-9-]+)/article-0*([0-9]+[a-z0-9-]*)\\.md",
+        "cites": "([Aa]rticle|[Aa]rt\\.) ?{n}([^0-9]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "no scope note is recorded in this corpus; not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "non-retroactivity of statutes",
+          "meaning": "a law provides only for the future and has no retroactive effect, unless it says otherwise",
+          "authority": "Code civil de Monaco, article 2: « La loi ne dispose que pour l'avenir ; elle n'a point d'effet rétroactif. »",
+          "decided_here": false
+        }
+      },
+      "code": "MC",
+      "iso_path": "mc/national/acts"
+    },
+    {
+      "path": "madagascar/national/acts",
+      "url": "https://github.com/lexifina/madagascar-law.git",
+      "name": "Malagasy law: the Constitution (1992 Constitution as revised, 1998-2010; Constitution of 2010)",
+      "label": "Madagascar",
+      "language": "fr",
+      "coverage": "from 1998-04-10",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "Consolidated",
+      "history_from": "1998-04-10",
+      "record_to": "2026-10-28",
+      "checked_on": "2026-10-28",
+      "record_note": "From the 1998 revised text (in force 1998-04-10 at the earliest) to the Constitution of 11 December 2010 (in force 2010-12-11); CNLEGIS lists no constitutional act after 2010 on 2026-10-28, the day the data was retrieved and checked.",
+      "has_future_branch": false,
+      "tool": "tools/mglaw.py",
+      "citation": {
+        "file": "(constitution)/article-0*([0-9]+(?:\\.[0-9]+)?)\\.md",
+        "cites": "([Aa]rticle|[Aa]rt\\.) ?{n}([^0-9]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "immediate effect without retroactivity (Ordonnance n° 62-041 du 19 septembre 1962, art. 8); no punishment without a law promulgated and published before the act (Constitution 2010, art. 13)",
+          "meaning": "a new law applies to situations already established when it does not alter the effects already produced by an earlier legal situation; procedural laws apply to pending cases not yet decided on the merits; interpretive laws reach back only where the legislature clearly says so",
+          "authority": "Ordonnance n° 62-041 du 19 septembre 1962 relative aux dispositions générales de droit interne et de droit international privé, art. 8 (CNLEGIS, uploads/O62-041-VF.pdf); Constitution du 11 décembre 2010, art. 13",
+          "decided_here": false
+        }
+      },
+      "code": "MG",
+      "iso_path": "mg/national/acts"
+    },
+    {
+      "path": "malta/national/acts",
+      "url": "https://github.com/lexifina/malta-law.git",
+      "name": "Laws of Malta (Chapters and subsidiary legislation)",
+      "label": "Malta",
+      "language": "en",
+      "coverage": "from 1834-06-28",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "Consolidated",
+      "history_from": "1834-06-28",
+      "record_to": "2026-10-06",
+      "checked_on": "2026-10-28",
+      "record_note": "Every Chapter (562) and piece of subsidiary legislation (4514) on legislation.mt, from each law's earliest consolidated version to the point in time of 2026-10-06; data built 2026-10-28.",
+      "tool": "tools/in_force_on.py",
+      "citation": {
+        "file": "(cap/[0-9]+[A-Z]?|sl/[0-9.]+)/0*([0-9]+[A-Z]*)\\.md",
+        "cites": "([Aa]rticle|[Aa]rt\\.|[Rr]egulation|[Rr]eg\\.|[Rr]ule|[Ss]ection) ?{n}([^0-9A-Z]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "groups": "any one line",
+        "conditions": "all of a line",
+        "when_absent": "not extracted for Malta yet; savings and transitional rules are in the amending law at the Source link",
+        "default_reach": {
+          "rule": "presumption against retroactivity",
+          "meaning": "a law is presumed not to affect rights acquired or proceedings pending before it took effect unless it says so; on repeal, see the savings rules of the Interpretation Act",
+          "authority": "Interpretation Act (Cap. 249), article 12",
+          "decided_here": false
+        }
+      },
+      "code": "MT",
+      "iso_path": "mt/national/acts"
+    },
+    {
+      "path": "peru/national/acts",
+      "url": "https://github.com/lexifina/peru-law.git",
+      "name": "Peru",
+      "label": "Peru",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: Congreso de la República del Perú.",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "PE",
+      "iso_path": "pe/national/acts"
+    },
+    {
+      "path": "poland/national/acts",
+      "url": "https://github.com/lexifina/poland-law.git",
+      "name": "Polish law: Konstytucja Rzeczypospolitej Polskiej (Dz.U. 1997 nr 78 poz. 483) and ustawa o obywatelstwie polskim (Dz.U. 2012 poz. 161)",
+      "label": "Poland",
+      "language": "pl",
+      "coverage": "from 1997-10-17",
+      "in_force_trailer": "In-force",
+      "history_from": "1997-10-17",
+      "record_to": "2025-11-24",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official texts on 2026-10-28: every unified text (tekst jednolity) of the citizenship act and the Sejm's consolidated text of the Constitution.",
+      "history": "in-force",
+      "tool": "tools/na_dzien.py",
+      "citation": {
+        "file": "([a-z]+)/art-0*([0-9]+[a-z]*)\\.md",
+        "cites": "(art\\.|Art\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "lex retro non agit",
+          "meaning": "an act applies from the day it takes effect and does not reach back, unless it says so and the rule of law allows it; acts take effect no earlier than 14 days after publication unless a shorter period is justified; a criminal act applies only to acts that were offences when committed",
+          "authority": "Konstytucja RP art. 2 (demokratyczne państwo prawne) and art. 42 ust. 1; ustawa z dnia 20 lipca 2000 r. o ogłaszaniu aktów normatywnych, art. 4 ust. 1 and art. 5 (\"Przepisy art. 4 nie wyłączają możliwości nadania aktowi normatywnemu wstecznej mocy obowiązującej, jeżeli zasady demokratycznego państwa prawnego nie stoją temu na przeszkodzie.\")",
+          "decided_here": false
+        }
+      },
+      "code": "PL",
+      "iso_path": "pl/national/acts"
+    },
+    {
+      "path": "portugal/national/acts",
+      "url": "https://github.com/lexifina/portugal-law.git",
+      "name": "Portuguese law: Constituição da República Portuguesa, Código Civil (Decreto-Lei n.º 47344) and Código do Trabalho (Lei n.º 7/2009)",
+      "label": "Portugal",
+      "language": "pt",
+      "coverage": "from 1967-06-01",
+      "in_force_trailer": "In-force",
+      "history_from": "1967-06-01",
+      "record_to": "2026-07-01",
+      "checked_on": "2026-10-28",
+      "record_note": "checked against the Diário da República consolidated texts retrieved on 2026-10-28",
+      "has_future_branch": false,
+      "tool": "tools/em_vigor.py",
+      "citation": {
+        "file": "(constituicao|codigo-civil|codigo-do-trabalho)/artigo-0*([0-9]+(-[a-z]+)?)\\.md",
+        "cites": "(artigo|art\\.) ?{n}"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no retroactivity by default",
+          "meaning": "a law provides only for the future; where it is given retroactive effect, effects already produced by the facts it regulates are presumed to be safeguarded; criminal law and laws restricting rights, liberties and guarantees, and tax laws, cannot be retroactive; a later criminal law applies where it is more favourable to the accused",
+          "authority": "Código Civil, artigo 12.º, n.º 1 (\"A lei só dispõe para o futuro; ainda que, lhe seja atribuída eficácia retroactiva, presume-se que ficam ressalvados os efeitos já produzidos pelos factos que a lei se destina a regular.\"); Constituição, artigos 18.º, n.º 3, 29.º e 103.º, n.º 3",
+          "decided_here": false
+        }
+      },
+      "code": "PT",
+      "iso_path": "pt/national/acts"
+    },
+    {
+      "path": "paraguay/national/acts",
+      "url": "https://github.com/lexifina/paraguay-law.git",
+      "name": "Paraguay",
+      "label": "Paraguay",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: Biblioteca y Archivo Central del Congreso Nacional (BACN).",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "PY",
+      "iso_path": "py/national/acts"
+    },
+    {
+      "path": "rwanda/national/acts",
+      "url": "https://github.com/lexifina/rwanda-law.git",
+      "name": "Rwandan law: the Constitution (from its 2015 revision) and the general statute governing public servants",
+      "label": "Rwanda",
+      "language": "en",
+      "coverage": "from 2015-12-24",
+      "in_force_trailer": "In-force",
+      "history_from": "2015-12-24",
+      "record_to": "2026-04-24",
+      "checked_on": "2026-10-28",
+      "record_note": "Constitution from the 2015 revision (2003-2010 texts are scans without a text layer), replaced as a whole by the 2023 revising act; Law n° 017/2020 with three amending laws replayed. English column of the trilingual Official Gazette; data retrieved 2026-10-28.",
+      "history": "replayed",
+      "verification": "constitution/: both versions (2015 revision, 2023 revising act) are official texts. law-2020-017/: the original law is official; the three later states are replays of the amending laws 019/2020, 052/2024 and 017/2026, with no official consolidation to verify against.",
+      "tool": "tools/on_date.py",
+      "citation": {
+        "file": "([a-z0-9-]+)/art-0*([0-9]+)(?:-bis|-ter|-quater)?\\.md",
+        "cites": "[Aa]rticle {n}([^0-9]|$)"
+      },
+      "scope": {
+        "trailer": null,
+        "when_absent": "no scope note is recorded in this history; not a statement that a change reaches every case",
+        "default_reach": {
+          "rule": "laws apply from publication; criminal law is not retroactive",
+          "meaning": "a law cannot enter into force before it is published; no one may be punished for an act that was not an offence when committed. A law may still state an earlier effect (Law n° 019/2020: \"takes effects as of 8 October 2020\")",
+          "authority": "Constitution of the Republic of Rwanda (2023), Article 174(1) and Article 29(1)(d); Article 138(1) (\"the principle of non- retroactivity of criminal law\")",
+          "decided_here": false
+        }
+      },
+      "code": "RW",
+      "iso_path": "rw/national/acts"
+    },
+    {
+      "path": "saudi-arabia/national/acts",
+      "url": "https://github.com/lexifina/saudi-arabia-law.git",
+      "name": "Saudi law: the Basic Law of Governance (1992) and the Labour Law (2005), with their amendments",
+      "label": "Saudi Arabia",
+      "language": "ar",
+      "coverage": "from 1992-03-06",
+      "in_force_trailer": "In-force",
+      "history_from": "1992-03-06",
+      "record_to": "2025-02-19",
+      "checked_on": "2026-10-28",
+      "record_note": "Later versions are replayed from the BOE's amendment notes; no official consolidation exists to check them. Original texts and every amendment note printed by the Bureau of Experts portal (laws.boe.gov.sa, Wayback captures of January 2026), replayed; checked 2026-10-28. Later versions are replays of editorial notes, not official consolidations; 1 note(s) could not be applied exactly and are named in Not-applied trailers. Dates of royal decrees without a stated commencement are the decree day (In-force-basis).",
+      "has_future_branch": false,
+      "history": "in-force",
+      "tool": "tools/salaw.py",
+      "citation": {
+        "file": "([a-z-]+)/article-0*([0-9]+(?:-bis)?)\\.md",
+        "cites": "(المادة|مادة) ?\\(? ?{n} ?\\)?([^0-9]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no retroactive effect of laws; no crime or penalty without a text, and no punishment for acts before the text",
+          "meaning": "a law applies from its in-force day and does not reach back unless it says so; penal provisions never reach acts done before them",
+          "authority": "Basic Law of Governance, art. 38 (\"ولا عقاب إلا على الأعمال اللاحقة للعمل بالنص النظامي\") and art. 71 (laws take effect on publication unless another date is set)",
+          "decided_here": false
+        }
+      },
+      "code": "SA",
+      "iso_path": "sa/national/acts"
+    },
+    {
+      "path": "slovenia/national/acts",
+      "url": "https://github.com/lexifina/slovenia-law.git",
+      "name": "Ustava Republike Slovenije in Zakon o volitvah v državni zbor",
+      "label": "Slovenia",
+      "language": "sl",
+      "coverage": "from 1991-12-23",
+      "in_force_trailer": "In-force",
+      "history_from": "1991-12-23",
+      "record_to": "2025-12-01",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28.",
+      "history": "in-force",
+      "tool": "tools/na_dan.py",
+      "citation": {
+        "file": "([a-z]+)/clen-0*([0-9]+[a-z]*)\\.md",
+        "cites": "([^0-9]|^){n}\\. ?(člen|člena|členu|členom)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "no scope note is recorded in this corpus (transitional provisions are kept as text, not parsed); not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "prohibition of retroactive effect",
+          "meaning": "laws, regulations and general acts cannot have retroactive effect; only a law may provide that some of its provisions have retroactive effect, where the public interest requires it and acquired rights are not infringed",
+          "authority": "Ustava Republike Slovenije, 155. člen (Uradni list RS, št. 33/91-I)",
+          "decided_here": false
+        }
+      },
+      "code": "SI",
+      "iso_path": "si/national/acts"
+    },
+    {
+      "path": "slovakia/national/acts",
+      "url": "https://github.com/lexifina/slovakia-law.git",
+      "name": "Slovak law: Ústava Slovenskej republiky (460/1992 Zb.) and zákon č. 180/2014 Z. z. o podmienkach výkonu volebného práva",
+      "label": "Slovakia",
+      "language": "sk",
+      "coverage": "from 1992-10-01",
+      "in_force_trailer": "In-force",
+      "history_from": "1992-10-01",
+      "record_to": "2026-06-01",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the official source on 2026-10-28.",
+      "history": "in-force",
+      "tool": "tools/ku_dnu.py",
+      "citation": {
+        "file": "([a-z-]+)/(?:cl|par)-0*([0-9]+[a-z]*)\\.md",
+        "cites": "(čl\\.|článk[a-z]*|§) ?{n}([^0-9a-z]|$)"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no genuine retroactivity",
+          "meaning": "an act applies from the day it takes effect and does not attach new legal consequences to facts completed before then; the Constitution states no general rule, and the prohibition is derived from the rule-of-law clause; in criminal law a later act applies only where it is more favourable to the offender",
+          "authority": "Ústava Slovenskej republiky čl. 1 ods. 1 (právny štát); čl. 50 ods. 6 (\"Trestnosť činu sa posudzuje a trest sa ukladá podľa zákona účinného v čase, keď bol čin spáchaný. Neskorší zákon sa použije, ak je to pre páchateľa priaznivejšie.\")",
+          "decided_here": false
+        }
+      },
+      "code": "SK",
+      "iso_path": "sk/national/acts"
+    },
+    {
+      "path": "suriname/national/acts",
+      "url": "https://github.com/lexifina/suriname-law.git",
+      "name": "Suriname",
+      "label": "Suriname",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: Staatsblad van de Republiek Suriname (dna.sr, sris.sr).",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "SR",
+      "iso_path": "sr/national/acts"
+    },
+    {
+      "path": "thailand/national/acts",
+      "url": "https://github.com/lexifina/thailand-law.git",
+      "name": "Thai law: the Constitution of the Kingdom of Thailand B.E. 2560 (2017) and the Labour Protection Act B.E. 2541 (1998)",
+      "label": "Thailand",
+      "language": "th",
+      "coverage": "from 1998-08-19",
+      "in_force_trailer": "In-force",
+      "history_from": "1998-08-19",
+      "record_to": "2025-12-07",
+      "checked_on": "2026-10-28",
+      "record_note": "Checked against the Office of the Council of State (searchlaw.ocs.go.th) on 2026-10-28: every consolidated text (ฉบับปรับปรุง) the OCS publishes for these two acts. One text (Labour Protection Act, 2008-02-28) is rebuilt because the OCS consolidated that amendment out of order; see README.",
+      "has_future_branch": false,
+      "history": "in-force",
+      "tool": "tools/thai.py",
+      "citation": {
+        "file": "([a-z-]+)/s-0*([0-9]+(?:-[0-9]+)?)\\.md",
+        "cites": "มาตรา ?{n}([^0-9/๐-๙]|$)",
+        "n_format": "thai-section: {n} is the section number in Thai digits, with /N for an inserted section: 83 -> ๘๓, 11-1 -> ๑๑/๑"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "this corpus records no scope notes (no commit carries Applies:); the absence is not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no retroactive criminal liability or heavier punishment; otherwise an act applies from the day it takes effect, as its own commencement section (มาตรา ๒) and transitional provisions (บทเฉพาะกาล) set",
+          "meaning": "an amendment applies from its in-force day; how it treats earlier facts is set by the amending act's transitional provisions, which this record reprints in the end/ files but does not read as scope data",
+          "authority": "รัฐธรรมนูญแห่งราชอาณาจักรไทย มาตรา 29 (\"มาตรา ๒๙ บุคคลไม่ต้องรับโทษอาญา เว้นแต่ได้กระทำการอันกฎหมายที่ใช้อยู่ในเวลาที่กระทำนั้นบัญญัติเป็นความผิดและกำหนดโทษไว้ และโทษที่จะลงแก่บุคคลนั้นจะหนักกว่าโทษที่บัญญัติไว้ในกฎหมายที่ใช้อยู่ในเวลาที่กระทำความผิดมิได้\")",
+          "decided_here": false
+        }
+      },
+      "code": "TH",
+      "iso_path": "th/national/acts"
+    },
+    {
+      "path": "timor-leste/national/acts",
+      "url": "https://github.com/lexifina/timor-leste-law.git",
+      "name": "Timor-Leste: the Constitution (2002) and Lei n.º 11/2009, Divisão Administrativa do Território",
+      "label": "Timor-Leste",
+      "language": "pt",
+      "coverage": "from 2002-05-20",
+      "in_force_trailer": "In-force",
+      "history_from": "2002-05-20",
+      "record_to": "2024-01-01",
+      "checked_on": "2026-10-28",
+      "record_note": "The Constitution of 2002 (never amended) and Lei n.º 11/2009 in every version from 2009 to its fourth amendment (Lei n.º 19/2023) and the deferred third (Lei n.º 14/2023, in effect 2024-01-01). Every version of Lei 11/2009 is an official republication.",
+      "history": "in-force",
+      "tool": "tools/em_vigor.py",
+      "citation": {
+        "file": "([a-z0-9-]+)/artigo-0*([0-9]+)(?:-[A-Z])?\\.md",
+        "cites": "([Aa]rtigos?|[Aa]rt\\.º?) ?{n}\\.?º"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "no scope note found; not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "no retroactive restriction of rights; no retroactive criminal law unless more favourable",
+          "meaning": "laws restricting rights, freedoms and guarantees cannot have retroactive effect, and criminal law does not apply retroactively unless the new law benefits the accused",
+          "authority": "Constituição da RDTL, artigo 24.º, n.º 2 (\"não podem ter efeito retroactivo\") and artigo 31.º, n.º 5 (\"A lei penal não se aplica retroactivamente, a menos que a nova lei beneficie o arguido.\")",
+          "decided_here": false
+        }
+      },
+      "code": "TL",
+      "iso_path": "tl/national/acts"
+    },
+    {
+      "path": "turkey/national/acts",
+      "url": "https://github.com/lexifina/turkey-law.git",
+      "name": "Türkiye: laws, decree-laws and presidential decrees in force (Mevzuat Bilgi Sistemi)",
+      "label": "Türkiye",
+      "language": "tr",
+      "coverage": "from 2026-10-28",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "Consolidated",
+      "history_from": "2026-10-28",
+      "record_to": "2026-10-28",
+      "checked_on": "2026-10-28",
+      "record_note": "mevzuat.gov.tr publishes the current consolidated text only, so each act has one version here: the text as published on 2026-10-28. There is no line-by-line history before that day. The publisher's amendment notes (Degisik/Ek/Mulga: date-law/article) stay in the text and are parsed into data/amendments.csv.",
+      "has_future_branch": false,
+      "history": "current-only",
+      "tool": "tools/in_force_on.py",
+      "citation": {
+        "file": "(kanun|osmanli|khk|cbk)/([0-9]+)/[a-z0-9~.-]+\\.md",
+        "cites": "([^0-9]|^){n} sayılı"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "not extracted for Türkiye; transitional rules are in the text (Gecici maddeler)",
+        "default_reach": {
+          "rule": "non-retroactivity of laws (kanunların geriye yürümezliği)",
+          "meaning": "a law applies from its entry into force and does not reach completed facts unless it says so; for criminal law the more favourable law applies",
+          "authority": "Anayasa art. 38 (criminal); Türk Ceza Kanunu art. 7; Türk Medeni Kanunu Yürürlük ve Uygulama Şekli Hakkında Kanun (4722) art. 1",
+          "decided_here": false
+        }
+      },
+      "code": "TR",
+      "iso_path": "tr/national/acts"
+    },
+    {
+      "path": "taiwan/national/acts",
+      "url": "https://github.com/lexifina/taiwan-law.git",
+      "name": "Laws of the Republic of China (Taiwan): Constitution, Additional Articles and three codes (current text)",
+      "label": "Taiwan",
+      "language": "zh",
+      "coverage": "from 1947-01-01",
+      "in_force_trailer": "In-force",
+      "history_from": "1947-01-01",
+      "record_to": "2026-07-22",
+      "checked_on": "2026-10-28",
+      "record_note": "law.moj.gov.tw is used for current text only (its past-version pages and API are disallowed by robots.txt), so each law has one version, dated by the amendment or promulgation date its page states; that date is not a commencement day.",
+      "has_future_branch": false,
+      "history": "current-only",
+      "tool": "tools/on_date.py",
+      "citation": {
+        "file": "([a-z-]+/article)/([0-9]+(?:-[0-9]+)?)\\.md",
+        "cites": "第 ?{n} ?條"
+      },
+      "scope": {
+        "trailer": "Applies",
+        "when_absent": "no scope note found; not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "non-retroactivity of laws (法律不溯及既往原則)",
+          "meaning": "a law governs facts arising after it takes effect unless it says otherwise; in criminal law the law at the time of the act applies unless a later law is more favourable to the offender",
+          "authority": "中央法規標準法 §13, §18; 中華民國刑法 §1, §2; 司法院釋字第525號、第574號 (protection of reliance)",
+          "decided_here": false
+        }
+      },
+      "code": "TW",
+      "iso_path": "tw/national/acts"
+    },
+    {
+      "path": "united-states/federal/usc",
+      "url": "https://github.com/lexifina/united-states-law.git",
+      "name": "United States Code",
+      "label": "United States",
+      "language": "en",
+      "coverage": "from 2018-01-12",
+      "in_force_trailer": "In-force",
+      "baseline_trailer": "Consolidated",
+      "history_from": "2018-01-12",
+      "record_to": "2026-10-20",
+      "checked_on": "2026-10-27",
+      "record_note": "Titles 1, 3, 4, 9, 11, 13, 17, 35, 39, from the 2017 annual editions to release point 119-134 (current through 2026-10-20); data built 2026-10-27.",
+      "scope": {
+        "trailer": null,
+        "groups": "any one line",
+        "conditions": "all of a line",
+        "when_absent": "no scope note found; not a statement that the change reaches every case",
+        "default_reach": {
+          "rule": "presumption against retroactivity",
+          "meaning": "a statute is presumed not to attach new legal consequences to events completed before its enactment unless Congress clearly says so; procedural and jurisdictional changes are often applied to pending cases",
+          "authority": "Landgraf v. USI Film Products, 511 U.S. 244 (1994)",
+          "decided_here": false
+        },
+        "note": "This published history has no Applies lines yet; the whole-Code rebuild adds them. Scope notes are in each commit message (\"Applies to ...\")."
+      },
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "US",
+      "iso_path": "us/federal/usc"
+    },
+    {
+      "path": "uruguay/national/acts",
+      "url": "https://github.com/lexifina/uruguay-law.git",
+      "name": "Uruguay",
+      "label": "Uruguay",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: IMPO (Dirección Nacional de Impresiones y Publicaciones Oficiales).",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "UY",
+      "iso_path": "uy/national/acts"
+    },
+    {
+      "path": "venezuela/national/acts",
+      "url": "https://github.com/lexifina/venezuela-law.git",
+      "name": "Venezuela",
+      "label": "Venezuela",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: Imprenta Nacional y Gaceta Oficial.",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "VE",
+      "iso_path": "ve/national/acts"
+    },
+    {
+      "path": "south-africa/national/acts",
+      "url": "https://github.com/lexifina/south-africa-law.git",
+      "name": "South Africa",
+      "label": "South Africa",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: Government of South Africa (GCIS gov.za; Department of Justice).",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "ZA",
+      "iso_path": "za/national/acts"
+    },
+    {
+      "path": "zambia/national/acts",
+      "url": "https://github.com/lexifina/zambia-law.git",
+      "name": "Zambia",
+      "label": "Zambia",
+      "language": "",
+      "coverage": "",
+      "in_force_trailer": "In-force",
+      "record_to": "2026-10-28",
+      "record_note": "Built to the gitlaw_common contract (data/repo.json); publisher: ZambiaLII.",
+      "has_future_branch": true,
+      "contract": "gitlaw_common",
+      "warnings": [
+        "corpus.json has no citation rule, so citations of this law are not recognised"
+      ],
+      "code": "ZM",
+      "iso_path": "zm/national/acts"
+    }
+  ]
+}
