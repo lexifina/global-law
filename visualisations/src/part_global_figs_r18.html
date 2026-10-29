@@ -1,0 +1,14 @@
+
+  <figure id="cal-sim">
+    <div class="figtext"><span class="eyebrow">All jurisdictions · round 18</span><h2>Which countries keep the same legal calendar</h2>
+      <p id="sim-text"></p></div>
+    <div class="plot"><svg id="f-sim" role="img" aria-label="Matrix of similarity between jurisdictions' monthly in-force profiles"></svg></div>
+    <p class="src">Cosine similarity between each pair of jurisdictions' month-by-month shares of in-force dates (12 values each), for jurisdictions with at least 100 dated acts. Rows are ordered so similar calendars sit together (by the share of law starting in January, then July).</p>
+  </figure>
+
+  <figure id="predictable">
+    <div class="figtext"><span class="eyebrow">All jurisdictions · round 18</span><h2>How predictable is the day new law starts?</h2>
+      <p id="pred-text"></p></div>
+    <div class="plot"><svg id="f-pred" role="img" aria-label="Ranked bars of a calendar predictability score"></svg></div>
+    <p class="src">One minus the normalised entropy of each jurisdiction's day-of-year distribution of in-force dates: 0 if law could start on any of the 366 days with equal chance, 1 if it always started on the same day. Jurisdictions with at least 100 dated acts.</p>
+  </figure>

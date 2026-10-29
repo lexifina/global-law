@@ -1,0 +1,297 @@
+<title>Law in Motion</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a column of findings. Each one leads with its claim as the heading, then the chart that proves it, then where the data came from. */
+:root {
+  --bg: #f5f6f8; --plate: #ffffff; --ink: #1a2230; --muted: #5c6778; --rule: #dce0e7; --ghost: #a9b0bc; --tint: #eceff5;
+  --de: #b5801a; --ch: #c23f38; --gb: #24807c; --us: #3a5fbf; --hi: #c23f38;
+  --display: "Source Serif 4", Georgia, serif; --body: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11151c; --plate: #181e27; --ink: #e6eaf0; --muted: #99a3b3; --rule: #2a323f; --ghost: #5a6474; --tint: #1f2633;
+  --de: #e0aa45; --ch: #ec6b62; --gb: #4fb6b0; --us: #7d9cf0; --hi: #f07c73; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11151c; --plate: #181e27; --ink: #e6eaf0; --muted: #99a3b3; --rule: #2a323f; --ghost: #5a6474; --tint: #1f2633;
+  --de: #e0aa45; --ch: #ec6b62; --gb: #4fb6b0; --us: #7d9cf0; --hi: #f07c73; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 44px 80px; }
+main { max-width: 1000px; margin: 0 auto; display: grid; gap: 28px; }
+header { display: grid; gap: 12px; max-width: 66ch; }
+h1 { font: 600 2.3rem/1.1 var(--display); margin: 0; text-wrap: balance; }
+h2 { font: 600 1.35rem/1.25 var(--display); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.lede { color: var(--muted); font-size: 16px; }
+.eyebrow { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.fact { background: var(--plate); padding: 16px 18px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.fact b { font: 600 1.55rem/1.1 var(--display); font-variant-numeric: tabular-nums; }
+.fact span { color: var(--muted); font-size: 13.5px; }
+.fact a { color: inherit; text-decoration: none; }
+.fact a:hover b, .fact a:focus-visible b { text-decoration: underline; text-underline-offset: 3px; }
+figure { margin: 0; background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; display: grid; min-width: 0; scroll-margin-top: 16px; }
+.figtext { padding: 20px 22px 4px; display: grid; gap: 8px; max-width: 74ch; }
+.figtext p { color: var(--muted); font-size: 14.5px; }
+.figtext p b { color: var(--ink); font-weight: 600; }
+.plot { overflow-x: auto; padding: 6px 10px 6px; }
+.plot svg { display: block; width: 100%; height: auto; min-width: 600px; }
+.src { padding: 6px 22px 18px; font: 12px/1.5 var(--mono); color: var(--muted); }
+.diff { margin: 4px 22px 14px; display: grid; gap: 6px; font: 14px/1.6 var(--display); }
+.diff div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 12px; align-items: baseline; }
+.diff time { font: 12px var(--mono); color: var(--muted); }
+.diff mark { background: color-mix(in srgb, var(--gb) 22%, transparent); color: var(--ink); padding: 0 3px; border-radius: 2px; font-weight: 600; }
+.diff q { quotes: "“" "”"; }
+svg text { font-family: var(--mono); fill: var(--muted); }
+svg .lbl { fill: var(--ink); }
+svg .ser { font-family: var(--display); font-size: 13px; fill: var(--ink); }
+footer { color: var(--muted); font-size: 13px; max-width: 74ch; display: grid; gap: 8px; }
+a:focus-visible { outline: 2px solid var(--us); outline-offset: 2px; }
+</style>
+
+<main>
+  <header>
+    <span class="eyebrow">From the git histories of four bodies of law · 1949 to 2026</span>
+    <h1>Law in motion</h1>
+    <p class="lede">We hold every amendment to the German Basic Law since 1949, eight years of changes to nine US Code titles, the Swiss constitution with its data-protection and debt-collection acts, and the UK's special-educational-needs law. Each change is a dated commit. Read together, they show how law grows, how narrowly it changes, and how often it quietly switches itself off again.</p>
+  </header>
+
+  <div class="facts" id="facts"></div>
+
+  <figure id="growth">
+    <div class="figtext"><span class="eyebrow">Germany</span><h2>The Basic Law has doubled in length, mostly in six afternoons</h2>
+      <p>Words in force, amendment by amendment. Of the 64 amending laws, six account for more than half of everything added. The 1968 emergency constitution alone added more words than the next two put together.</p></div>
+    <div class="plot"><svg id="f-growth" role="img" aria-label="Step chart of the Basic Law's word count from 1949 to 2017"></svg></div>
+    <p class="src">Word count of artikel/*.md at each commit in lexifina/grundgesetz, dated by the In-Kraft trailer.</p>
+  </figure>
+
+  <figure id="hot">
+    <div class="figtext"><span class="eyebrow">Germany</span><h2>The rewriting happens in the money articles</h2>
+      <p>The articles amended most often, with each amendment marked on the timeline. Rights articles barely move. The busy ones divide powers and money between the federation and the Länder. <b>Article 109 began as one sentence of 11 words</b> on separate federal and Land budgets. It now carries the debt brake in 293.</p></div>
+    <div class="plot"><svg id="f-hot" role="img" aria-label="Timeline of amendments to the most-amended articles"></svg></div>
+    <p class="src">Files touched per amending commit; word counts at each article's first version and today.</p>
+  </figure>
+
+  <figure id="votes">
+    <div class="figtext"><span class="eyebrow">Germany</span><h2>Two-thirds is the rule, and it has never been close</h2>
+      <p>The Bundestag's vote on each of the 55 amendments with a recorded tally. Most pass with near-unanimity. The tightest, the 1954 defence amendment, still carried 70% of the votes cast. Bigger reforms draw more opposition: the 2006 federalism reform and the 2009 debt brake are among the five lowest.</p></div>
+    <div class="plot"><svg id="f-votes" role="img" aria-label="Dot chart of yes share per amendment vote"></svg></div>
+    <p class="src">Abstimmung trailer: yes, no and abstentions in the Bundestag. Article 79(2) requires two-thirds of the members of the Bundestag, not of the votes cast, so the line is a guide only.</p>
+  </figure>
+
+  <figure id="sunsets">
+    <div class="figtext"><span class="eyebrow">United States · United Kingdom</span><h2>Emergency law switches itself off, sometimes before anyone is ready</h2>
+      <p>Every temporary provision in our US and UK histories, as it was actually in force. The CARES Act raised the debt limit for small-business bankruptcy to $7.5 million for two years. When it expired on 27 March 2022, Congress had not yet renewed it. <b>For 86 days the old limit applied</b>, until the next act brought $7.5 million back for two more years.</p></div>
+    <div class="plot"><svg id="f-sunsets" role="img" aria-label="Timeline of temporary provisions in force"></svg></div>
+    <div class="diff" aria-label="Text of SEND Regulations 2014, regulation 13(3), over time">
+      <div><time>1 Sep 2015</time><span>The local authority need not comply with the time limit … if it is impractical for any of the reasons set out in regulation 10(4)(a) to <mark>(d)</mark>.</span></div>
+      <div><time>1 May 2020</time><span>… set out in regulation 10(4)(a) to <mark>(e)</mark>.</span></div>
+      <div><time>25 Sep 2020</time><span>… set out in regulation 10(4)(a) to <mark>(d)</mark>.</span></div>
+    </div>
+    <p class="src">US: version history of 11 U.S.C. §§ 109 and 1182 in lexifina/us-code-history, In-force trailers. UK: regulation 13 and section 42 in lexifina/uk-law-history. The UK pandemic change to the 20-week deadline was one letter.</p>
+  </figure>
+
+  <figure id="lag">
+    <div class="figtext"><span class="eyebrow">All four</span><h2>From passed to in force: three days in Britain, over a year in Switzerland</h2>
+      <p>Days from adoption to the day each change took effect. UK instruments typically bite within days of being made, and most US amendments the day they are signed. German constitutional amendments take about two months. Swiss changes wait for the referendum deadline and a set start date. <b>Two US changes applied before they were passed</b>, one of them 179 days earlier.</p></div>
+    <div class="plot"><svg id="f-lag" role="img" aria-label="Strip plot of days from enactment to in force by jurisdiction"></svg></div>
+    <p class="src">Beschlossen / Adopted / Enacted / Made against In-Kraft / In-force trailers, one point per law and in-force date. Points far to the right are delayed or sunset provisions.</p>
+  </figure>
+
+  <figure id="omnibus">
+    <div class="figtext"><span class="eyebrow">United States</span><h2>Copyright law gets changed by defence bills</h2>
+      <p>Each law that amended more than one of our nine US Code titles, with the titles it reached. A pandemic relief act rewrote bankruptcy, copyright and postal law. Defence authorisation acts keep amending copyright (title 17) and the post (title 39). Anyone watching one title has to read every big bill.</p></div>
+    <div class="plot"><svg id="f-omni" role="img" aria-label="Matrix of laws and the US Code titles they amended"></svg></div>
+    <p class="src">Sections touched per Public Law across the 43 commits in lexifina/us-code-history.</p>
+  </figure>
+
+  <figure id="signers">
+    <div class="figtext"><span class="eyebrow">Germany</span><h2>Who put their name to the constitution's changes</h2>
+      <p>Every amendment is countersigned by the president, the chancellor and the ministers responsible. Heinrich Lübke signed the most, in a decade that included the emergency constitution. <b>There are two Gerhard Schröders</b>: the CDU interior minister of the 1950s signed more amendments than the SPD chancellor of 1998–2005.</p></div>
+    <div class="plot"><svg id="f-signers" role="img" aria-label="Bar chart of the most frequent signatories"></svg></div>
+    <p class="src">Unterzeichnet trailers on 64 amending commits, grouped by person and office.</p>
+  </figure>
+
+  <footer>
+    <p>Everything here is computed from the commit metadata and file history of lexifina/grundgesetz, swiss-law, uk-law-history and us-code-history as checked out on 28 October 2026, with no model in the loop. The US Code history begins with the 2017 edition and the Swiss history with 2019, so earlier changes there are not shown.</p>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const S = __DATA__;
+const P = d3.utcParse("%Y-%m-%d");
+const NAME = { de: "Germany", ch: "Switzerland", gb: "United Kingdom", us: "United States" };
+const col = c => `var(--${c})`;
+const axis = (g, a) => g.call(a).call(x => x.selectAll("line,path").attr("stroke", "var(--rule)")).call(x => x.selectAll("text").attr("font-size", 11));
+const fmt = d3.format(",");
+
+// Facts
+{
+  const g = S.growth, low = d3.least(S.votes, v => v.share);
+  const minLag = d3.least(S.lag.us, l => l.days);
+  document.getElementById("facts").innerHTML = [
+    ["#growth", `${fmt(g[0].words)} → ${fmt(g.at(-1).words)}`, "words in the German Basic Law, 1949 to its last amendment in 2017"],
+    ["#votes", `${(low.share * 100).toFixed(1)}%`, `the narrowest yes vote for a constitutional change (${low.date.slice(0, 4)}, ${low.yes} to ${low.no})`],
+    ["#sunsets", "86 days", "the small-business bankruptcy limit lapsed in 2022 before Congress restored it"],
+    ["#lag", `${-minLag.days} days`, "how far back one US change reached: in force before it was enacted"],
+  ].map(([h, b, s]) => `<div class="fact"><a href="${h}"><b>${b}</b></a><span>${s}</span></div>`).join("");
+}
+
+// Growth
+{
+  const W = 960, H = 380, m = { l: 56, r: 20, t: 20, b: 30 };
+  const svg = d3.select("#f-growth").attr("viewBox", `0 0 ${W} ${H}`);
+  const pts = S.growth.map(d => ({ ...d, t: P(d.date) }));
+  const x = d3.scaleUtc([P("1949-01-01"), P("2019-01-01")], [m.l, W - m.r]);
+  const y = d3.scaleLinear([0, 24000], [H - m.b, m.t]);
+  axis(svg.append("g").attr("transform", `translate(0,${H - m.b})`), d3.axisBottom(x).ticks(d3.utcYear.every(10)));
+  axis(svg.append("g").attr("transform", `translate(${m.l},0)`), d3.axisLeft(y).ticks(6).tickFormat(d3.format("~s")).tickSize(-(W - m.l - m.r)))
+    .call(g => g.select(".domain").remove());
+  svg.append("path").datum([...pts, { ...pts.at(-1), t: P("2019-01-01") }]).attr("fill", "color-mix(in srgb, var(--de) 14%, transparent)")
+    .attr("d", d3.area().curve(d3.curveStepAfter).x(d => x(d.t)).y0(y(0)).y1(d => y(d.words)));
+  svg.append("path").datum([...pts, { ...pts.at(-1), t: P("2019-01-01") }]).attr("fill", "none").attr("stroke", "var(--de)").attr("stroke-width", 2)
+    .attr("d", d3.line().curve(d3.curveStepAfter).x(d => x(d.t)).y(d => y(d.words)));
+  const NAMES = { 7: "Defence constitution", 17: "Emergency constitution", 21: "Finance reform", 38: "EU article", 42: "Post-reunification reform", 52: "Federalism reform", 57: "Debt brake", 62: "Federal–state finance reform" };
+  pts.forEach((d, i) => d.delta = i ? d.words - pts[i - 1].words : 0);
+  const PLACE = { 7: [-46, true], 17: [52, true], 21: [-58, true], 42: [-50, false], 52: [-78, false], 57: [52, false] };
+  const top = [...pts].sort((a, b) => b.delta - a.delta).slice(0, 6);
+  top.forEach(d => {
+    const n = +(d.law.match(/^(\d+)\./) || [])[1];
+    const lx = x(d.t), ly = y(d.words);
+    const [dy, right] = PLACE[n] || [-50, lx < W - 220];
+    svg.append("line").attr("x1", lx).attr("x2", lx).attr("y1", ly + (dy < 0 ? -4 : 4)).attr("y2", ly + dy + (dy < 0 ? 6 : -14)).attr("stroke", "var(--ghost)");
+    svg.append("circle").attr("cx", lx).attr("cy", ly).attr("r", 3.5).attr("fill", "var(--de)");
+    svg.append("text").attr("x", lx + (right ? 4 : -4)).attr("y", ly + dy).attr("text-anchor", right ? "start" : "end").attr("class", "ser")
+      .text(`${d.date.slice(0, 4)} · ${NAMES[n] || d.law}`);
+    svg.append("text").attr("x", lx + (right ? 4 : -4)).attr("y", ly + dy + 14).attr("text-anchor", right ? "start" : "end").attr("font-size", 11)
+      .text(`+${fmt(d.delta)} words, ${d.n} articles`);
+  });
+  svg.append("g").selectAll("circle").data(pts).join("circle").attr("cx", d => x(d.t)).attr("cy", d => y(d.words)).attr("r", 7).attr("fill", "transparent")
+    .append("title").text(d => `${d.date} · ${d.law}\n${d.subject}\n${fmt(d.words)} words (${d.delta >= 0 ? "+" : ""}${fmt(d.delta)})`);
+}
+
+// Most-rewritten articles
+{
+  const rows = S.hot.slice(0, 12), W = 960, rowH = 30, m = { l: 80, r: 170, t: 26, b: 26 }, H = rows.length * rowH + m.t + m.b;
+  const svg = d3.select("#f-hot").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleLinear([1949, 2019], [m.l, W - m.r]);
+  axis(svg.append("g").attr("transform", `translate(0,${H - m.b})`), d3.axisBottom(x).ticks(8).tickFormat(d3.format("d")));
+  svg.append("text").attr("x", W - m.r + 16).attr("y", 14).attr("font-size", 11).text("words then → now");
+  rows.forEach((r, i) => {
+    const y = m.t + i * rowH + rowH / 2;
+    svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y).attr("y2", y).attr("stroke", "var(--rule)");
+    svg.append("text").attr("x", m.l - 10).attr("y", y).attr("dy", "0.32em").attr("text-anchor", "end").attr("class", "lbl").attr("font-size", 12.5).text(r.art);
+    r.years.forEach(yr => svg.append("circle").attr("cx", x(+yr)).attr("cy", y).attr("r", 5).attr("fill", "var(--de)").attr("fill-opacity", .8).attr("stroke", "var(--plate)"));
+    svg.append("text").attr("x", W - m.r + 16).attr("y", y).attr("dy", "0.32em").attr("font-size", 12).attr("class", r.w1 > 2 * r.w0 ? "lbl" : "")
+      .text(r.w1 === 0 ? `${r.w0} → repealed` : `${r.w0} → ${r.w1}${r.w1 > 2 * r.w0 ? `  ×${(r.w1 / r.w0).toFixed(1)}` : ""}`);
+  });
+}
+
+// Votes
+{
+  const V = S.votes.map(v => ({ ...v, t: P(v.date) })), W = 960, H = 340, m = { l: 52, r: 20, t: 20, b: 30 };
+  const svg = d3.select("#f-votes").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleUtc([P("1949-01-01"), P("2019-01-01")], [m.l, W - m.r]);
+  const y = d3.scaleLinear([0.62, 1.005], [H - m.b, m.t]);
+  axis(svg.append("g").attr("transform", `translate(0,${H - m.b})`), d3.axisBottom(x).ticks(d3.utcYear.every(10)));
+  axis(svg.append("g").attr("transform", `translate(${m.l},0)`), d3.axisLeft(y).tickValues([.7, .8, .9, 1]).tickFormat(d3.format(".0%")).tickSize(-(W - m.l - m.r)))
+    .call(g => g.select(".domain").remove());
+  svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y(2 / 3)).attr("y2", y(2 / 3)).attr("stroke", "var(--hi)").attr("stroke-dasharray", "5 4");
+  svg.append("text").attr("x", m.l + 6).attr("y", y(2 / 3) + 14).attr("text-anchor", "start").attr("font-size", 11).attr("fill", "var(--hi)").text("two-thirds of votes cast");
+  const r = d3.scaleSqrt([0, 650], [0, 8]);
+  svg.append("g").selectAll("circle").data(V).join("circle").attr("cx", d => x(d.t)).attr("cy", d => y(d.share)).attr("r", d => r(d.yes + d.no + d.abst))
+    .attr("fill", d => d.share < .8 ? "var(--hi)" : "var(--de)").attr("fill-opacity", .75).attr("stroke", "var(--plate)")
+    .append("title").text(d => `${d.date.slice(0, 4)} · ${d.law}\n${d.subject}\n${d.yes} yes, ${d.no} no, ${d.abst} abstentions`);
+  const NAMES = { 4: "1954 defence", 45: "1998 surveillance of homes", 52: "2006 federalism reform", 57: "2009 debt brake", 62: "2017 finance reform", 17: "1968 emergency constitution" };
+  const VPLACE = { 4: [10, 0, "start"], 17: [10, 0, "start"], 45: [10, 0, "start"], 52: [-10, -14, "end"], 57: [-10, 16, "end"] };
+  V.forEach(d => {
+    const n = +(d.law.match(/^(\d+)\./) || [])[1], pl = VPLACE[n];
+    if (!pl) return;
+    svg.append("text").attr("x", x(d.t) + pl[0]).attr("y", y(d.share) + pl[1]).attr("dy", "0.32em").attr("text-anchor", pl[2]).attr("class", "ser").attr("font-size", 12)
+      .attr("paint-order", "stroke").attr("stroke", "var(--plate)").attr("stroke-width", 3).text(`${NAMES[n]} · ${d.yes}–${d.no}`);
+  });
+}
+
+// Sunsets
+{
+  const L = S.sunsets, W = 960, laneH = 66, m = { l: 20, r: 20, t: 16, b: 30 }, H = L.length * laneH + m.t + m.b;
+  const svg = d3.select("#f-sunsets").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleUtc([P("2019-10-01"), P("2025-03-01")], [m.l, W - m.r]);
+  axis(svg.append("g").attr("transform", `translate(0,${H - m.b})`), d3.axisBottom(x).ticks(d3.utcYear.every(1)).tickSize(-(H - m.t - m.b)))
+    .call(g => g.selectAll("line").attr("stroke-dasharray", "2 4"));
+  L.forEach((l, i) => {
+    const y = m.t + i * laneH;
+    svg.append("text").attr("x", m.l).attr("y", y + 12).attr("class", "lbl").attr("font-size", 12).text(l.lane);
+    svg.append("rect").attr("x", m.l).attr("width", W - m.l - m.r).attr("y", y + 22).attr("height", 18).attr("fill", "var(--tint)");
+    l.spans.forEach(s => {
+      const x0 = x(P(s.from)), x1 = x(P(s.to));
+      svg.append("rect").attr("x", x0).attr("width", x1 - x0).attr("y", y + 22).attr("height", 18).attr("fill", col(l.c)).attr("rx", 2)
+        .append("title").text(`${s.from} to ${s.to} · ${s.law}`);
+      if (x1 - x0 > 80) svg.append("text").attr("x", x0 + 6).attr("y", y + 31).attr("dy", "0.32em").attr("font-size", 11).attr("fill", "var(--plate)").attr("font-weight", 500).text(s.label);
+      svg.append("text").attr("x", x1 + 4).attr("y", y + 52).attr("font-size", 10.5).text(`ends ${d3.utcFormat("%-d %b %Y")(P(s.to))}`);
+    });
+    l.gaps.forEach(g => {
+      const x0 = x(P(g.from)), x1 = x(P(g.to));
+      svg.append("rect").attr("x", x0).attr("width", x1 - x0).attr("y", y + 18).attr("height", 26).attr("fill", "none").attr("stroke", "var(--hi)").attr("stroke-width", 1.5);
+      svg.append("text").attr("x", (x0 + x1) / 2).attr("y", y + 12).attr("text-anchor", "middle").attr("font-size", 11).attr("fill", "var(--hi)").text(g.label);
+    });
+  });
+}
+
+// Lag
+{
+  const ORDER = ["gb", "us", "de", "ch"], W = 960, laneH = 70, m = { l: 140, r: 24, t: 10, b: 34 }, H = ORDER.length * laneH + m.t + m.b;
+  const svg = d3.select("#f-lag").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleSymlog([-200, 1300], [m.l, W - m.r]).constant(10);
+  axis(svg.append("g").attr("transform", `translate(0,${H - m.b})`), d3.axisBottom(x).tickValues([-180, -30, 0, 7, 30, 90, 365, 730]).tickFormat(v => v === 0 ? "same day" : v < 0 ? `${-v}d before` : v >= 365 ? `${v / 365} yr` : `${v} d`).tickSize(-(H - m.t - m.b)))
+    .call(g => g.selectAll("line").attr("stroke-dasharray", "2 4"));
+  ORDER.forEach((c, i) => {
+    const y = m.t + i * laneH + laneH / 2, pts = S.lag[c].map(d => ({ ...d, x: x(d.days), y }));
+    d3.forceSimulation(pts).force("x", d3.forceX(d => d.x).strength(1)).force("y", d3.forceY(y).strength(.1)).force("c", d3.forceCollide(4.2)).stop().tick(150);
+    const med = d3.median(S.lag[c], d => d.days);
+    svg.append("text").attr("x", m.l - 14).attr("y", y - 6).attr("text-anchor", "end").attr("class", "lbl").attr("font-size", 12.5).text(NAME[c]);
+    svg.append("text").attr("x", m.l - 14).attr("y", y + 10).attr("text-anchor", "end").attr("font-size", 11).text(`median ${med === 0 ? "same day" : med + " days"}`);
+    svg.append("line").attr("x1", x(med)).attr("x2", x(med)).attr("y1", y - 24).attr("y2", y + 24).attr("stroke", col(c)).attr("stroke-width", 2);
+    svg.append("g").selectAll("circle").data(pts).join("circle").attr("cx", d => d.x).attr("cy", d => Math.max(y - 26, Math.min(y + 26, d.y))).attr("r", 3.6)
+      .attr("fill", d => d.days < 0 ? "var(--hi)" : col(c)).attr("fill-opacity", .75)
+      .append("title").text(d => `${d.law}\nadopted ${d.enacted}, in force ${d.in_force} (${d.days} days)`);
+  });
+}
+
+// Omnibus
+{
+  const TITLE = { 1: "General provisions", 3: "The President", 4: "Flag, seat, States", 9: "Arbitration", 11: "Bankruptcy", 13: "Census", 17: "Copyright", 35: "Patents", 39: "Postal service" };
+  const rows = S.omnibus.filter(o => o.titles.length > 1), cols = [1, 3, 4, 9, 11, 13, 17, 35, 39];
+  const W = 960, rowH = 30, m = { l: 400, r: 130, t: 96, b: 10 }, H = rows.length * rowH + m.t + m.b;
+  const svg = d3.select("#f-omni").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scalePoint(cols, [m.l + 20, W - m.r - 20]);
+  cols.forEach(c => {
+    svg.append("text").attr("transform", `translate(${x(c)},${m.t - 14}) rotate(-40)`).attr("font-size", 11).attr("class", "lbl").text(`${c} · ${TITLE[c]}`);
+  });
+  rows.forEach((o, i) => {
+    const y = m.t + i * rowH + rowH / 2;
+    const name = o.law.replace(/^Pub\. L\. ([\d-]+) \((.*)\)$/, "$2 · $1").replace(/^Pub\. L\. ([\d-]+)$/, "Pub. L. $1");
+    svg.append("text").attr("x", m.l - 12).attr("y", y).attr("dy", "0.32em").attr("text-anchor", "end").attr("class", "ser").attr("font-size", 12.5)
+      .text(name.length > 58 ? name.slice(0, 56) + "…" : name).append("title").text(o.law);
+    svg.append("line").attr("x1", x(o.titles[0])).attr("x2", x(o.titles.at(-1))).attr("y1", y).attr("y2", y).attr("stroke", "var(--us)").attr("stroke-opacity", .35).attr("stroke-width", 2);
+    o.titles.forEach(t => svg.append("circle").attr("cx", x(t)).attr("cy", y).attr("r", 6).attr("fill", "var(--us)"));
+  });
+}
+
+// Signers
+{
+  const rows = S.signers.slice(0, 14), W = 960, rowH = 26, m = { l: 330, r: 50, t: 6, b: 6 }, H = rows.length * rowH + m.t + m.b;
+  const svg = d3.select("#f-signers").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleLinear([0, d3.max(rows, r => r.count)], [m.l, W - m.r]);
+  const roleCol = { President: "var(--de)", Chancellor: "var(--ch)" };
+  rows.forEach((r, i) => {
+    const y = m.t + i * rowH;
+    const twin = r.name.startsWith("Gerhard Schr");
+    svg.append("text").attr("x", m.l - 10).attr("y", y + rowH / 2).attr("dy", "0.32em").attr("text-anchor", "end").attr("class", "ser").attr("font-size", 13)
+      .attr("font-weight", twin ? 600 : 400).text(`${r.name}`);
+    svg.append("text").attr("x", 8).attr("y", y + rowH / 2).attr("dy", "0.32em").attr("font-size", 11).text(r.role);
+    svg.append("rect").attr("x", m.l).attr("y", y + 5).attr("height", rowH - 10).attr("width", x(r.count) - m.l).attr("fill", roleCol[r.role] || "var(--ghost)").attr("rx", 1);
+    svg.append("text").attr("x", x(r.count) + 6).attr("y", y + rowH / 2).attr("dy", "0.32em").attr("font-size", 11.5).attr("class", "lbl").text(r.count);
+  });
+}
+</script>

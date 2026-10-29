@@ -1,0 +1,1009 @@
+{
+ "models": {
+  "gpt-5.4-mini-2026-03-17": 658
+ },
+ "errors": 0,
+ "tokens": [
+  551944,
+  32923
+ ],
+ "rerank": {
+  "constitute": {
+   "n": 103,
+   "emb1": 42,
+   "llm1": 45,
+   "ceiling": 74,
+   "abstain": 1,
+   "emb1_rate": 0.4077669902912621,
+   "llm1_rate": 0.4368932038834951,
+   "ceiling_rate": 0.7184466019417476
+  },
+  "hand": {
+   "n": 51,
+   "emb1": 24,
+   "llm1": 35,
+   "ceiling": 41,
+   "abstain": 0,
+   "emb1_rate": 0.47058823529411764,
+   "llm1_rate": 0.6862745098039216,
+   "ceiling_rate": 0.803921568627451
+  }
+ },
+ "relations": {
+  "equivalent": 22,
+  "analogous": 86,
+  "related": 200,
+  "unrelated": 118
+ },
+ "by_pair": {
+  "ch-gb": {
+   "related": 3,
+   "unrelated": 6
+  },
+  "ch-us": {
+   "equivalent": 12,
+   "analogous": 46,
+   "related": 96,
+   "unrelated": 43
+  },
+  "de-ch": {
+   "equivalent": 10,
+   "analogous": 17,
+   "related": 56,
+   "unrelated": 16
+  },
+  "de-gb": {
+   "unrelated": 9
+  },
+  "de-us": {
+   "analogous": 22,
+   "unrelated": 37,
+   "related": 44
+  },
+  "gb-us": {
+   "related": 1,
+   "analogous": 1,
+   "unrelated": 7
+  }
+ },
+ "calibration": [
+  {
+   "lo": 0.13970587405956217,
+   "hi": 0.2326043015531813,
+   "n": 86,
+   "usable": 0.11627906976744186,
+   "equivalent": 0.0
+  },
+  {
+   "lo": 0.2326043015531813,
+   "hi": 0.2720964621067386,
+   "n": 86,
+   "usable": 0.1744186046511628,
+   "equivalent": 0.011627906976744186
+  },
+  {
+   "lo": 0.2720964621067386,
+   "hi": 0.31250083954315183,
+   "n": 86,
+   "usable": 0.20930232558139536,
+   "equivalent": 0.023255813953488372
+  },
+  {
+   "lo": 0.31250083954315183,
+   "hi": 0.36079943183001034,
+   "n": 86,
+   "usable": 0.32558139534883723,
+   "equivalent": 0.03488372093023256
+  },
+  {
+   "lo": 0.36079943183001034,
+   "hi": 0.6618600048468994,
+   "n": 86,
+   "usable": 0.4418604651162791,
+   "equivalent": 0.18604651162790697
+  }
+ ],
+ "co_changed": 9,
+ "clusters": [
+  {
+   "name": "foreign affairs and cooperation",
+   "counts": {
+    "de": 4,
+    "ch": 36,
+    "gb": 1,
+    "us": 1
+   },
+   "spread": 4
+  },
+  {
+   "name": "statute continuity rules",
+   "counts": {
+    "de": 20,
+    "ch": 2,
+    "gb": 1,
+    "us": 4
+   },
+   "spread": 4
+  },
+  {
+   "name": "executive rulemaking authority",
+   "counts": {
+    "de": 7,
+    "ch": 16,
+    "gb": 1,
+    "us": 3
+   },
+   "spread": 4
+  },
+  {
+   "name": "executive office incompatibility",
+   "counts": {
+    "de": 21,
+    "ch": 8,
+    "gb": 1,
+    "us": 0
+   },
+   "spread": 3
+  },
+  {
+   "name": "federal state cooperation",
+   "counts": {
+    "de": 1,
+    "ch": 23,
+    "gb": 0,
+    "us": 1
+   },
+   "spread": 3
+  },
+  {
+   "name": "official misconduct penalties",
+   "counts": {
+    "de": 2,
+    "ch": 14,
+    "gb": 0,
+    "us": 3
+   },
+   "spread": 3
+  },
+  {
+   "name": "tax powers",
+   "counts": {
+    "de": 5,
+    "ch": 2,
+    "gb": 0,
+    "us": 12
+   },
+   "spread": 3
+  },
+  {
+   "name": "parliamentary committee oversight",
+   "counts": {
+    "de": 6,
+    "ch": 10,
+    "gb": 0,
+    "us": 1
+   },
+   "spread": 3
+  },
+  {
+   "name": "death and deadlines",
+   "counts": {
+    "de": 1,
+    "ch": 13,
+    "gb": 1,
+    "us": 0
+   },
+   "spread": 3
+  },
+  {
+   "name": "postal service organization",
+   "counts": {
+    "de": 1,
+    "ch": 0,
+    "gb": 0,
+    "us": 49
+   },
+   "spread": 2
+  },
+  {
+   "name": "civil liberties",
+   "counts": {
+    "de": 13,
+    "ch": 24,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "statistics collection",
+   "counts": {
+    "de": 0,
+    "ch": 1,
+    "gb": 0,
+    "us": 33
+   },
+   "spread": 2
+  },
+  {
+   "name": "election and appointment",
+   "counts": {
+    "de": 11,
+    "ch": 21,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "public records access",
+   "counts": {
+    "de": 0,
+    "ch": 2,
+    "gb": 0,
+    "us": 29
+   },
+   "spread": 2
+  },
+  {
+   "name": "estate asset liquidation",
+   "counts": {
+    "de": 1,
+    "ch": 29,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "debt collection objections",
+   "counts": {
+    "de": 1,
+    "ch": 27,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "international design filings",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 1,
+    "us": 27
+   },
+   "spread": 2
+  },
+  {
+   "name": "property and insolvency",
+   "counts": {
+    "de": 2,
+    "ch": 24,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "transport infrastructure administration",
+   "counts": {
+    "de": 11,
+    "ch": 15,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "fundamental rights and due process",
+   "counts": {
+    "de": 14,
+    "ch": 11,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "banking and tax rules",
+   "counts": {
+    "de": 1,
+    "ch": 24,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "constitutional amendment process",
+   "counts": {
+    "de": 10,
+    "ch": 14,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "federal invention licensing",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 1,
+    "us": 23
+   },
+   "spread": 2
+  },
+  {
+   "name": "federal workforce protections",
+   "counts": {
+    "de": 1,
+    "ch": 0,
+    "gb": 0,
+    "us": 21
+   },
+   "spread": 2
+  },
+  {
+   "name": "damage remedies",
+   "counts": {
+    "de": 0,
+    "ch": 1,
+    "gb": 0,
+    "us": 21
+   },
+   "spread": 2
+  },
+  {
+   "name": "judicial institution structure",
+   "counts": {
+    "de": 12,
+    "ch": 10,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "trustee appointment",
+   "counts": {
+    "de": 0,
+    "ch": 1,
+    "gb": 0,
+    "us": 21
+   },
+   "spread": 2
+  },
+  {
+   "name": "education and research funding",
+   "counts": {
+    "de": 4,
+    "ch": 16,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "statistical information sharing",
+   "counts": {
+    "de": 1,
+    "ch": 0,
+    "gb": 0,
+    "us": 18
+   },
+   "spread": 2
+  },
+  {
+   "name": "officer compensation and support",
+   "counts": {
+    "de": 0,
+    "ch": 1,
+    "gb": 0,
+    "us": 18
+   },
+   "spread": 2
+  },
+  {
+   "name": "social security funding",
+   "counts": {
+    "de": 2,
+    "ch": 16,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "appeals and review",
+   "counts": {
+    "de": 0,
+    "ch": 10,
+    "gb": 0,
+    "us": 8
+   },
+   "spread": 2
+  },
+  {
+   "name": "special insolvency exceptions",
+   "counts": {
+    "de": 0,
+    "ch": 5,
+    "gb": 0,
+    "us": 13
+   },
+   "spread": 2
+  },
+  {
+   "name": "statutory interpretation rules",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 1,
+    "us": 16
+   },
+   "spread": 2
+  },
+  {
+   "name": "bankruptcy notice procedures",
+   "counts": {
+    "de": 0,
+    "ch": 12,
+    "gb": 0,
+    "us": 3
+   },
+   "spread": 2
+  },
+  {
+   "name": "emergency powers",
+   "counts": {
+    "de": 13,
+    "ch": 1,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "national symbols",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 1,
+    "us": 12
+   },
+   "spread": 2
+  },
+  {
+   "name": "budget and public finance",
+   "counts": {
+    "de": 9,
+    "ch": 4,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "avoidance of fraudulent transfers",
+   "counts": {
+    "de": 0,
+    "ch": 4,
+    "gb": 0,
+    "us": 8
+   },
+   "spread": 2
+  },
+  {
+   "name": "military service protections",
+   "counts": {
+    "de": 4,
+    "ch": 7,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "capital and flag rules",
+   "counts": {
+    "de": 1,
+    "ch": 0,
+    "gb": 0,
+    "us": 10
+   },
+   "spread": 2
+  },
+  {
+   "name": "transitional provisions",
+   "counts": {
+    "de": 2,
+    "ch": 8,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 2
+  },
+  {
+   "name": "direct bankruptcy adjudication",
+   "counts": {
+    "de": 0,
+    "ch": 39,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "patent rights enforcement",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 35
+   },
+   "spread": 1
+  },
+  {
+   "name": "cross-border insolvency",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 34
+   },
+   "spread": 1
+  },
+  {
+   "name": "copyright rights enforcement",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 32
+   },
+   "spread": 1
+  },
+  {
+   "name": "plan modification",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 32
+   },
+   "spread": 1
+  },
+  {
+   "name": "music royalty licensing",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 32
+   },
+   "spread": 1
+  },
+  {
+   "name": "debt restructuring stay",
+   "counts": {
+    "de": 0,
+    "ch": 28,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "composition agreement procedure",
+   "counts": {
+    "de": 0,
+    "ch": 27,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "debt service of process",
+   "counts": {
+    "de": 0,
+    "ch": 26,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "debtor in possession powers",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 26
+   },
+   "spread": 1
+  },
+  {
+   "name": "claims ranking plan",
+   "counts": {
+    "de": 0,
+    "ch": 25,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "arbitration enforcement",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 24
+   },
+   "spread": 1
+  },
+  {
+   "name": "patent office administration",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 24
+   },
+   "spread": 1
+  },
+  {
+   "name": "third-party claim disputes",
+   "counts": {
+    "de": 0,
+    "ch": 23,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "data protection oversight",
+   "counts": {
+    "de": 0,
+    "ch": 22,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "design protection term",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 22
+   },
+   "spread": 1
+  },
+  {
+   "name": "secured asset liquidation",
+   "counts": {
+    "de": 0,
+    "ch": 22,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "restricted mail use",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 22
+   },
+   "spread": 1
+  },
+  {
+   "name": "presidential election procedure",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 21
+   },
+   "spread": 1
+  },
+  {
+   "name": "code publication",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 21
+   },
+   "spread": 1
+  },
+  {
+   "name": "postal rate regulation",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 21
+   },
+   "spread": 1
+  },
+  {
+   "name": "patent correction and reissue",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 21
+   },
+   "spread": 1
+  },
+  {
+   "name": "claims allowance process",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 21
+   },
+   "spread": 1
+  },
+  {
+   "name": "chapter 13 conversion",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 21
+   },
+   "spread": 1
+  },
+  {
+   "name": "data processing rules",
+   "counts": {
+    "de": 0,
+    "ch": 20,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "bankruptcy estate property",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 19
+   },
+   "spread": 1
+  },
+  {
+   "name": "mail transport services",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 18
+   },
+   "spread": 1
+  },
+  {
+   "name": "debtor disclosure duties",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 17
+   },
+   "spread": 1
+  },
+  {
+   "name": "derivatives closeout rights",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 17
+   },
+   "spread": 1
+  },
+  {
+   "name": "data access and transfer",
+   "counts": {
+    "de": 0,
+    "ch": 16,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "customer property distribution",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 16
+   },
+   "spread": 1
+  },
+  {
+   "name": "postal reporting duties",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 16
+   },
+   "spread": 1
+  },
+  {
+   "name": "postal labor relations",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 15
+   },
+   "spread": 1
+  },
+  {
+   "name": "plan confirmation effects",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 14
+   },
+   "spread": 1
+  },
+  {
+   "name": "mask work rights",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 14
+   },
+   "spread": 1
+  },
+  {
+   "name": "automatic bankruptcy stay",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 14
+   },
+   "spread": 1
+  },
+  {
+   "name": "prejudgment asset seizure",
+   "counts": {
+    "de": 0,
+    "ch": 14,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "auction sale procedure",
+   "counts": {
+    "de": 0,
+    "ch": 14,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "congressional franking",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 14
+   },
+   "spread": 1
+  },
+  {
+   "name": "patent review procedure",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 14
+   },
+   "spread": 1
+  },
+  {
+   "name": "debtor asset safekeeping",
+   "counts": {
+    "de": 0,
+    "ch": 13,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "legislative authority allocation",
+   "counts": {
+    "de": 12,
+    "ch": 0,
+    "gb": 0,
+    "us": 0
+   },
+   "spread": 1
+  },
+  {
+   "name": "patent review appeals",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 11
+   },
+   "spread": 1
+  },
+  {
+   "name": "census penalties",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 10
+   },
+   "spread": 1
+  },
+  {
+   "name": "mail seizure powers",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 10
+   },
+   "spread": 1
+  },
+  {
+   "name": "postal debt collection",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 9
+   },
+   "spread": 1
+  },
+  {
+   "name": "telecom taxation rules",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 9
+   },
+   "spread": 1
+  },
+  {
+   "name": "arbitration award review",
+   "counts": {
+    "de": 0,
+    "ch": 0,
+    "gb": 0,
+    "us": 8
+   },
+   "spread": 1
+  }
+ ]
+}

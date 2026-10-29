@@ -1,0 +1,287 @@
+<title>World Law Analysis Agenda</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a ranked shortlist first, then one entry per research strand: the literature on the left, what we should run on the right, with a sketch of the chart. */
+:root {
+  --bg: #f5f6f8; --plate: #ffffff; --ink: #1a2230; --muted: #5c6778; --rule: #dce0e7; --ghost: #a9b0bc; --tint: #eceff5;
+  --accent: #3a5fbf; --now: #24807c; --later: #b5801a;
+  --display: "Source Serif 4", Georgia, serif; --body: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11151c; --plate: #181e27; --ink: #e6eaf0; --muted: #99a3b3; --rule: #2a323f; --ghost: #5a6474; --tint: #1f2633;
+  --accent: #7d9cf0; --now: #4fb6b0; --later: #e0aa45; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11151c; --plate: #181e27; --ink: #e6eaf0; --muted: #99a3b3; --rule: #2a323f; --ghost: #5a6474; --tint: #1f2633;
+  --accent: #7d9cf0; --now: #4fb6b0; --later: #e0aa45; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 44px 80px; }
+main { max-width: 1040px; margin: 0 auto; display: grid; gap: 28px; }
+header { display: grid; gap: 12px; max-width: 68ch; }
+h1 { font: 600 2.2rem/1.1 var(--display); margin: 0; text-wrap: balance; }
+h2 { font: 600 1.3rem/1.25 var(--display); margin: 0; text-wrap: balance; }
+h3 { font: 600 .8rem/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.lede { color: var(--muted); font-size: 16px; }
+.eyebrow { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.plate { background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; min-width: 0; }
+.short { padding: 20px 22px; display: grid; gap: 14px; }
+.short ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; counter-reset: k; }
+.short li { counter-increment: k; display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; gap: 4px 14px; padding: 12px 0; border-top: 1px solid var(--rule); align-items: baseline; }
+.short li::before { content: counter(k); font: 600 1.2rem/1 var(--display); color: var(--muted); }
+.short li b { font-weight: 600; }
+.short li span.why { grid-column: 2; color: var(--muted); font-size: 14px; }
+.short li a { grid-column: 3; grid-row: 1; font-size: 13px; white-space: nowrap; }
+.badge { display: inline-flex; align-items: center; min-height: 22px; padding: 0 7px; border-radius: 3px; font: 500 11px/1 var(--mono); letter-spacing: .03em; border: 1px solid; white-space: nowrap; }
+.badge.now { color: var(--now); border-color: var(--now); }
+.badge.later { color: var(--later); border-color: var(--later); }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+.filters button { font: 13px var(--body); border: 1px solid var(--rule); background: var(--plate); color: var(--muted); padding: 5px 10px; border-radius: 4px; cursor: pointer; min-height: 30px; }
+.filters button[aria-pressed="true"] { background: var(--tint); color: var(--ink); border-color: var(--ghost); font-weight: 500; }
+.strand { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); scroll-margin-top: 16px; }
+.strand > div { padding: 20px 22px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.strand .ours { border-left: 1px solid var(--rule); background: color-mix(in srgb, var(--tint) 45%, transparent); }
+.strand .head { grid-column: 1 / -1; border-bottom: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 16px 22px; }
+.strand .head h2 { flex: 1 1 320px; }
+.lit { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.lit li { display: grid; gap: 2px; }
+.lit .ref { font-size: 14px; }
+.lit .ref b { font-weight: 600; }
+.lit .what { color: var(--muted); font-size: 13.5px; }
+.run { font-size: 14.5px; }
+.add { color: var(--muted); font-size: 14px; }
+.sketch { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 14px; align-items: center; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 4px; background: var(--plate); }
+.sketch svg { width: 112px; height: 64px; display: block; }
+.sketch span { font-size: 13px; color: var(--muted); }
+.needs { font: 12.5px/1.5 var(--mono); color: var(--muted); }
+footer { color: var(--muted); font-size: 13px; max-width: 76ch; display: grid; gap: 8px; }
+@media (max-width: 760px) {
+  .strand { grid-template-columns: minmax(0, 1fr); }
+  .strand .ours { border-left: 0; border-top: 1px solid var(--rule); }
+  .short li { grid-template-columns: 2rem minmax(0, 1fr); }
+  .short li a { grid-column: 2; grid-row: auto; }
+}
+</style>
+
+<main>
+  <header>
+    <span class="eyebrow">Literature review · 28 Oct 2026</span>
+    <h1>What to do with a holistic dataset of law</h1>
+    <p class="lede">Thirteen lines of research that measure or picture legal change, what each one did, and what we could do better. Most published work studies one country, one level or one snapshot. Our dataset is different: every provision, in every jurisdiction, at every in-force date, with the law that changed it. That makes several long-standing questions answerable for the first time.</p>
+  </header>
+
+  <section class="plate short" aria-labelledby="first">
+    <h2 id="first">The six to run first</h2>
+    <ol id="shortlist"></ol>
+  </section>
+
+  <div class="filters" role="group" aria-label="Filter strands">
+    <span>Show</span>
+    <button type="button" data-f="all" aria-pressed="true">All 13 strands</button>
+    <button type="button" data-f="now" aria-pressed="false">Runnable on today's four corpora</button>
+    <button type="button" data-f="later" aria-pressed="false">Needs more jurisdictions</button>
+  </div>
+
+  <div id="strands" style="display:grid;gap:20px"></div>
+
+  <footer>
+    <p>Sources were found by web search on 28 October 2026 and are summarised from abstracts and project pages. Where a figure varied between sources (Constitute's topic count, the Comparative Agendas Project's major topics, Greenleaf's country tallies), the entry says so. Read the papers before quoting their numbers.</p>
+    <p>"Runnable now" means the four histories we hold (German Basic Law 1949–2017, Swiss BV, DSG and SchKG since 2019, UK SEND law 2014–2021, nine US Code titles since 2017) are enough for a first version. "Needs more" means the result only means something once more jurisdictions or bodies of law are loaded.</p>
+  </footer>
+</main>
+
+<script>
+const STRANDS = [
+ { id: "growth", title: "How big law gets, and what drives the growth", tag: "now", sketch: "step",
+   lit: [
+     ["Katz, Coupette, Beckedorf & Hartung (2020), <b>Complex societies and the growth of the law</b>, Scientific Reports 10:18737", "https://pmc.ncbi.nlm.nih.gov/articles/PMC7599339", "US and German federal statutes as time-evolving document networks. Both grew strongly over about 25 years. Clustering provisions by cross-reference points to the welfare state, funded by the tax state, as the main driver."],
+     ["Coupette et al. (2021), <b>Measuring Law Over Time</b>, Frontiers in Physics 9:658463", "https://arxiv.org/abs/2101.11284", "A multi-layer network framework for statutes and regulations in the US and Germany, 1998–2019. US law is increasingly dominated by regulations, while German law is still governed by statutes."],
+     ["Schelker & Lüchinger, <b>Regulation in Swiss Cantons: Data for one Century</b>, CESifo WP 5663 (2015)", "https://www.cesifo.org/en/publications/2015/working-paper/regulation-swiss-cantons-data-one-century", "Swiss cantonal law since 1908 and federal law since 1848. The stock is measured in enactments and characters, activity in changed enactments and pages. Abolishing mandatory referendums raised regulatory activity, and that activity had no growth effect."],
+     ["UK Office of Parliamentary Counsel (2013), <b>When laws become too complex</b>", "https://www.gov.uk/government/publications/when-laws-become-too-complex", "The UK government's review of the causes of complex legislation, the start of its Good Law work. It is often cited for fewer Acts each session but longer ones (a secondhand figure, so check the report)."],
+   ],
+   adds: "They count annual snapshots of whole statutes or pages. We count words in force on any day, provision by provision, across countries, with each increment tied to the law that added it.",
+   run: "A legal stock index per jurisdiction: words and provisions in force by day, broken down by topic and by the amending law. Then test the welfare-and-tax-state finding outside the US and Germany.",
+   chart: "Stacked area of words in force by topic, one panel per country on a shared, normalised time axis",
+   needs: "Runnable now for the German constitution and the US Code. A whole-system comparison needs full federal law per country." },
+
+ { id: "complexity", title: "Structure and complexity: law as a network", tag: "now", sketch: "network",
+   lit: [
+     ["Katz & Bommarito (2014), <b>Measuring the complexity of the law: the United States Code</b>, AI & Law 22:337", "https://papers.ssrn.com/abstract=2307352", "Complexity as the cost of acquiring knowledge: structure (hierarchy depth), language (entropy, word length) and interdependence (citations), scored per title. Code and data are on GitHub."],
+     ["Mazzega, Bourcier & Boulet, <b>The Network of French Legal Codes</b> (2009) and the French Environmental Code network", "https://arxiv.org/abs/1201.1259", "52 French codes linked by cross-citation. Ten codes form a 'rich club' that cites and is cited most, in a 'concentrated world' unlike social small-world graphs."],
+     ["Koniaris, Anagnostopoulos & Vassiliou, <b>Network analysis in the legal domain: EU legal sources</b>, J. Complex Networks (2018)", "https://arxiv.org/abs/1501.05237", "About 250,000 EU documents since 1951 with more than a million typed edges. The network is resilient to random removal but fragile at its hubs, and links grow denser over time."],
+   ],
+   adds: "These papers measure one system at one or a few moments. We have dated citation edges for every version, so we can see a network change with each amendment, and compare networks across countries.",
+   run: "Recompute each corpus's citation network at every in-force date. Track the rich club, the depth of the hierarchy and how far a change ripples (provisions within two hops of what was changed). Then compare the shapes across legal systems.",
+   chart: "Small multiples of each corpus's network at five dates, with a line chart of rich-club size and median ripple reach",
+   needs: "Runnable now on our parsed cross-references. Better reference parsing would make it more reliable (indirect wording is missed today)." },
+
+ { id: "language", title: "Legal language and readability over time", tag: "now", sketch: "lines",
+   lit: [
+     ["Martínez, Mollica & Gibson (2022), <b>Poor writing, not specialized concepts, drives processing difficulty in legal language</b>, Cognition 224:105070", "https://web.mit.edu/tedlab/www/publications.html", "Experiments on contracts. Difficulty comes from how sentences are built (centre-embedding is cited), not from legal concepts."],
+     ["Same group (2024), <b>So much for plain language: an analysis of the accessibility of US federal laws over time</b>, JEP: General", "https://web.mit.edu/tedlab/www/publications.html", "Tracks the features that make US federal law hard to read across decades, despite plain-language mandates."],
+     ["Katz & Bommarito (2014)", "https://papers.ssrn.com/abstract=2307352", "Linguistic entropy and word length per US Code title, as one leg of complexity."],
+   ],
+   adds: "The published work is English-only and mostly at the level of whole documents. We can measure each provision when it was written and each time it was rewritten, in German, French, Italian and English.",
+   run: "For every version of every provision, measure sentence length, centre-embedding depth, nominalisation and the number of cross-references. Is amended text harder to read than original text? Does it depend on the drafting office? Art. 109 of the Basic Law going from 11 words to 293 is the type case.",
+   chart: "Lines of median sentence length by year of drafting per jurisdiction, with original text and amended text drawn separately",
+   needs: "Runnable now. Multilingual parsing, for example spaCy German and English models, is the only new dependency." },
+
+ { id: "survival", title: "How long a rule's wording survives", tag: "now", sketch: "survival",
+   lit: [
+     ["Maltzman & Shipan (2008), <b>Change, Continuity, and the Evolution of the Law</b>, AJPS 52(2):252–267", "https://ideas.repec.org/a/wly/amposc/v52y2008i2p252-267.html", "US laws passed under divided government or by diverse coalitions are amended sooner. Later political conditions and court decisions also matter."],
+     ["Berry, Burden & Howell (2010), <b>After Enactment: The Lives and Deaths of Federal Programs</b>, AJPS 54:1–14", "https://polisci.wisc.edu/publications/After-Enactment-the-Lives-and-Deaths-of-Federal-programs/", "Federal programs, 1971–2003, studied by how long they last."],
+     ["Marco & Vishnubhakat, <b>Survival analysis in intellectual property research</b>", "https://scholarship.law.tamu.edu/facscholar/1491", "Argues that survival methods are underused in empirical legal research where the time between events matters."],
+   ],
+   adds: "That work follows whole laws or programs, coded by hand. Every provision in our data has exact version intervals, and versions still in force are right-censored. That is survival data with no extra coding.",
+   run: "Kaplan–Meier curves for how long a provision's wording lasts, compared across countries, topics and how the provision was born (original text, amendment, emergency). Then Cox models with the conditions at enactment: vote margin and initiative for Germany, divided government for the US, referendum or not for Switzerland.",
+   chart: "Survival curves of provision wording by jurisdiction and topic, with median lifespans marked",
+   needs: "Runnable now. Germany has 68 years of history and the US and Swiss histories are short, so the curves are uneven until more years are loaded." },
+
+ { id: "constitutions", title: "Constitutional amendment: rates, difficulty and culture", tag: "later", sketch: "dots",
+   lit: [
+     ["Elkins, Ginsburg & Melton (2009), <b>The Endurance of National Constitutions</b>, and the Comparative Constitutions Project", "https://www.cambridge.org/core/journals/european-constitutional-law-review/article/determinants-of-constitutional-amendability-amendment-models-or-amendment-culture-z-elkins-et-al-the-endurance-of-national-constitutions-cambridge-university-press2009-t-ginsburg-and-j-melton-does-the-constitutional-amendment-rule-matter-at-all-amendment-cultures-and-the-challenges-of-measuring-amendment-difficulty-133-international-journal-of-constitutional-law-2015-p-686713/E7FD7E150A1AFEACD66730F3630A6C95", "How long constitutions last and why. Ginsburg & Melton (2015) find that 'amendment culture', measured as the previous constitution's amendment rate, explains amendment rates better than formal rules."],
+     ["Lutz's index of amendment difficulty, applied by Pew (2026) to 101 democracies", "https://www.pewresearch.org/short-reads/2026/09/14/the-us-constitution-is-among-the-hardest-in-the-world-to-amend/", "Ranks the US second-hardest to amend. Other studies, such as Garoupa & Botelho (2020), find no link between difficulty and amendment rate."],
+     ["<b>Constitute</b>: about 330 topics tagged at paragraph level across about 200 constitutions (the count varies between sources)", "https://www.constituteproject.org/topics?lang=en", "The shared topic list for comparing constitutions. We already use its tags as an answer key."],
+   ],
+   adds: "Amendment-rate studies count amendments per year. We have the text each amendment changed, the vote on it and the article it touched. So we can ask what kind of change happens under which rule, not only how often.",
+   run: "For each constitution we load: amendments per decade, words changed, articles touched, and Constitute topics touched. Then put it beside the Lutz difficulty score. For Germany alone today: vote margins against article type, showing that the finance and federalism articles draw the narrowest majorities.",
+   chart: "Scatter of amendment difficulty against words changed per decade, one dot per country; small multiples of topics touched",
+   needs: "Germany is runnable now. The comparison needs about 20 constitutions with full amendment histories (Constitute and legalize.dev are the fastest sources)." },
+
+ { id: "diffusion", title: "Who copies whom: text reuse and legal transplants", tag: "later", sketch: "flow",
+   lit: [
+     ["Wilkerson, Smith & Stramp (2015), <b>Tracing the Flow of Policy Ideas in Legislatures: A Text Reuse Approach</b>, AJPS 59(4)", "https://ccs.neu.edu/home/dasmith/wilkerson-smith-stramp-AJPS.pdf", "Plagiarism-style section matching across bills shows enacted law carrying text from bills that died. 'Hitchhiker' provisions give minority members credit."],
+     ["Law & Versteeg (2012), <b>The Declining Influence of the United States Constitution</b>, NYU L. Rev. 87:762", "https://www.iconnectblog.com/the-declining-influence-of-the-united-states-constitution/", "60 years of constitutional content. The US model's pull peaked around the 1970s, while other constitutions converged on a common set of rights."],
+     ["Greenleaf, <b>Global tables of data privacy laws</b>", "https://papers.ssrn.com/abstract=4137418", "Counts countries with data-privacy laws, 76 in 2011 and 157 by March 2022 (tallies vary by source), and judges the GDPR the main influence on recent laws."],
+   ],
+   adds: "Diffusion studies code content by hand or match text within one language. Our multilingual embeddings and judged bridges already link German, Swiss and US provisions. Adding in-force dates lets us direct each edge: who had the rule first.",
+   run: "Turn the bridges into a dated, directed diffusion graph. For every pair of counterpart provisions, which came into force first and how close is the wording. The test case is data protection: load the GDPR and 20 national data-protection acts, then check our model against Greenleaf's account of GDPR influence.",
+   chart: "A flow map with time on the x-axis and countries as rows, and arrows from the first adopter to later ones for a single concept (such as the right to erasure)",
+   needs: "Needs more jurisdictions with the same subject (data-protection acts are the obvious set). The bridge pipeline in scripts/global-law/bridges is ready to scale." },
+
+ { id: "topics", title: "A shared topic list for every provision", tag: "now", sketch: "area",
+   lit: [
+     ["<b>Comparative Agendas Project</b> master codebook: 21 major topics and 220 subtopics (older versions list 19 or 20)", "https://comparativeagendas.net/pages/master-codebook", "Policy topic codes applied to bills, laws and other series in about 30 countries. The codebook warns about 'coding drift' between countries."],
+     ["<b>EuroVoc</b>, the EU multilingual thesaurus in SKOS", "https://op.europa.eu/en/web/eu-vocabularies/dataset/-/resource?uri=http://publications.europa.eu/resource/dataset/eurovoc", "Indexes EUR-Lex. It is the natural concept list once the EU layer is in."],
+     ["<b>Constitute topics</b>", "https://www.constituteproject.org/topics?lang=en", "For the constitutional layer."],
+   ],
+   adds: "CAP codes whole laws by hand. We could code every provision with a model, check the result against CAP's hand-coded laws, and then add up topics over time and across countries on the same footing.",
+   run: "Classify every provision version against CAP's major topics, validated on CAP's coded US public laws. Then draw each country's legal attention over time: what share of words in force, and of words changed, goes to each topic.",
+   chart: "Normalised stacked areas of share of words in force by CAP topic, per country, with a matching chart for words changed per year",
+   needs: "Runnable now as a classifier. It becomes most useful once each country's full federal law is in." },
+
+ { id: "temporary", title: "Temporary and emergency law", tag: "now", sketch: "spans",
+   lit: [
+     ["Gersen (2007), <b>Temporary Legislation</b>, U. Chicago L. Rev.", "https://hls.harvard.edu/bibliography/temporary-legislation", "A positive and normative account of statutes that end on a set date. It argues for using them more against newly recognised risks."],
+     ["Ranchordás (2014), <b>Constitutional Sunsets and Experimental Legislation</b>; Bar-Siman-Tov & Harari-Heit (2019) on the Knesset", "https://papers.ssrn.com/abstract=3394420", "Comparative work (Germany, the Netherlands, the US). In Israel, government bills with sunset clauses passed at a significantly higher rate."],
+     ["<b>Lex-Atlas: Covid-19</b> (UCL / KCL), Oxford Compendium of National Legal Responses", "https://www.kcl.ac.uk/tli/lex-atlas-covid-19", "Around 200 jurists across about 55–60 countries wrote structured country reports on pandemic law (counts vary by source). It launched in April 2021 with a database planned."],
+   ],
+   adds: "Sunset studies count clauses. Our histories show what actually happened on the expiry day: the text reverted, lapsed or was renewed late. The CARES Act limit lapsed for 86 days before it was renewed, and the UK's one-letter change to the plan deadline ran from May to September 2020.",
+   run: "Detect every temporary provision automatically: a version whose successor restores earlier wording on a scheduled date. Then catalogue them by country, what happened at expiry (lapsed, extended, made permanent, renewed late), and how many days of gap. Line the COVID entries up with Lex-Atlas country reports.",
+   chart: "Timeline spans of every temporary provision across countries, with gaps and renewals marked, aligned on 2020-03-11",
+   needs: "Runnable now (the US and UK cases already appear). Cross-country COVID needs those countries' emergency acts." },
+
+ { id: "timing", title: "When law starts to apply, and EU transposition delays", tag: "later", sketch: "strip",
+   lit: [
+     ["Toshkov, transposition datasets (119 directives across 8 member states) and the Leiden thesis on CEE compliance", "https://scholarlypublications.universiteitleiden.nl/access/item%3A2964990/view", "Political preferences and government capacity explain whether directives are transposed on time."],
+     ["Haverland & Romeijn, Public Administration: social directives in five member states", "https://scholar.google.com/scholar?q=Haverland+Romeijn+transposition+social+directives+Public+Administration", "Only 42.7% transposed on time."],
+     ["Event-history analysis of 1,192 directives across nine member states, European Union Politics", "https://www.pollux-fid.de/r/cr-10.1177/1465116509337772", "Timing differs by country and by sector."],
+   ],
+   adds: "Transposition studies record whether a national measure existed by the deadline. We would see the exact provision that carries each directive article, the day it came into force, and how closely its text follows the directive.",
+   run: "With the EU layer and member-state statutes loaded, link each directive article to the national provisions that transpose it (through the bridge pipeline and the transposition references in EUR-Lex). Then measure delay in days, and how closely each provision follows the directive, per country and sector. Today's version is the adoption-to-force lag by system (UK median 3 days, Swiss 381).",
+   chart: "Strip plot of transposition delay in days per member state, with distance from the directive's wording on the second axis",
+   needs: "Needs EUR-Lex plus at least five member states' statutes with point-in-time history (France LEGI, Spain BOE, Austria RIS and Finland Finlex are ready, per our sources register)." },
+
+ { id: "omnibus", title: "Omnibus laws and riders", tag: "now", sketch: "matrix",
+   lit: [
+     ["Krutz (2001), <b>Hitching a Ride: Omnibus Legislating in the U.S. Congress</b>", "https://ohiostatepress.org/books/titles/9780814208700.html", "Omnibus packages get round committee turf wars and veto threats. They are efficient for the institution, whatever else they cost."],
+     ["Sinclair, <b>Unorthodox Lawmaking</b>; Gluck, O'Connell & Po (2015), Columbia L. Rev.", "https://www.columbialawreview.org/wp-content/uploads/2016/03/November-2015-12-GOP.pdf", "Major policy now arrives through omnibus bills and unorthodox procedure, which strains how courts read statutes."],
+     ["Wilkerson et al. (2015) on hitchhiker provisions", "https://ccs.neu.edu/home/dasmith/wilkerson-smith-stramp-AJPS.pdf", "Many enacted ideas ride on someone else's bill."],
+   ],
+   adds: "Omnibus studies count bills and pages. We see which provisions each law actually rewrote, so a law's reach can be measured against its own subject.",
+   run: "Measure each law's subject drift: the topic distance between its title or purpose and the provisions it amended. Rank the laws that amend furthest outside their subject, and test whether those changes are amended or reverted sooner (link to the survival strand). Defence bills that amend copyright are the US example we already have.",
+   chart: "Matrix of laws against topics amended, sorted by subject drift, with a strip of how long each change survived",
+   needs: "Runnable now for the US. Other systems need their amending acts loaded (UK Acts and SIs, Swiss AS entries)." },
+
+ { id: "restrictions", title: "Counting obligations: regulatory restrictions", tag: "later", sketch: "bars",
+   lit: [
+     ["McLaughlin & Sherouse, <b>RegData 2.2</b>, Public Choice 180 (2019); QuantGov", "https://www.mercatus.org/publications/regulation/regdata", "Counts binding words ('shall', 'must', 'may not', 'prohibited', 'required') in US federal regulations, as a panel over time and by industry."],
+     ["Ampaabeng, McLaughlin & Powers, <b>Census of Regulatory Restrictions</b>", "https://mercatus.org/research/research-papers/census-regulatory-restrictions", "Uses the same method to compare the US, Canada and Australia, and their states and provinces."],
+   ],
+   adds: "RegData counts keywords in English. A multilingual model can tag deontic sentences (obligations, prohibitions, permissions) in German and French too, version by version.",
+   run: "Tag every sentence as an obligation, prohibition, permission or definition. Then plot each system's stock of obligations over time, and how much each amending law adds or removes. A first check is to compare our English counts with RegData on the US titles we share.",
+   chart: "Bars of net obligations added per year per country, split into obligations, prohibitions and permissions",
+   needs: "The method is runnable now. Results only mean something across countries once full federal law is in. RegData mostly covers regulations, so we need the CFR or the national equivalents too." },
+
+ { id: "importance", title: "Which provisions matter most", tag: "now", sketch: "hubs",
+   lit: [
+     ["Fowler, Johnson, Spriggs, Jeon & Wahlbeck (2007), <b>Network Analysis and the Law: Measuring the Legal Importance of Precedents</b>, Political Analysis", "https://www.cambridge.org/core/journals/political-analysis/article/network-analysis-and-the-law-measuring-the-legal-importance-of-precedents-at-the-us-supreme-court/D9B2F13BE2594E1527780AAFDD6BF164", "Hub and authority scores on about 26–30k Supreme Court opinions predict later citation better than raw counts. The same pattern was found in Dutch case law."],
+     ["Koniaris et al. on EU sources", "https://arxiv.org/abs/1501.05237", "A few highly connected acts carry the network's fragility."],
+   ],
+   adds: "Precedent networks rank cases. We can rank provisions, and also show what happened when a hub changed.",
+   run: "Compute hub and authority scores for provisions at each date. Then test whether amending a hub causes more follow-up amendments elsewhere within a year (the ripple effect, measured, not guessed). This is the data behind the 'what else changes' feature.",
+   chart: "A scatter of authority score against follow-up amendments within 12 months, with labels on the top hubs (such as 11 U.S.C. § 101 and Art. 74)",
+   needs: "Runnable now on our cross-references. It gets better with case law citing provisions, which isn't loaded yet." },
+
+ { id: "tools", title: "How others picture legal change, and model it", tag: "now", sketch: "tools",
+   lit: [
+     ["<b>La Fabrique de la Loi</b> (France)", "https://www.slaw.ca/2014/06/16/visualizing-law-and-legislation-la-fabrique-de-la-loi/", "Follows a bill's text through each parliamentary stage, showing what each reading changed."],
+     ["<b>Graphie</b>: network interface for UK primary legislation, arXiv 2210.02165; <b>LegiScout</b> (2025), arXiv 2510.01195; <b>VisuaLaws</b> (UBC)", "https://ar5iv.labs.arxiv.org/html/2210.02165", "Force-directed graphs with time sliders over provisions, and side-by-side comparison of versions."],
+     ["Diachronic legal knowledge graphs: <b>LRMoo-based, event-centric norm evolution</b> (arXiv 2506.07853) and <b>SAT-Graph RAG</b> on the Brazilian constitution (arXiv 2505.00039)", "https://arxiv.org/abs/2506.07853", "Each version is its own work, and amendments are first-class events. That is the same split as our commits and blobs, and it aligns with ELI point-in-time URIs."],
+   ],
+   adds: "The existing tools each show one country, mostly one document at a time. None lets you read the same idea across systems at a chosen date.",
+   run: "Map our model to LRMoo/ELI so the graph can be exported and cited. Borrow La Fabrique's stage-by-stage diff for amending laws, and Graphie's time slider for the network.",
+   chart: "No new chart. Use these as interaction patterns for the reader and the admin views.",
+   needs: "Design work, runnable now." },
+];
+
+const SHORT = [
+  ["survival", "How long a rule's wording survives", "Plenty of published hypotheses to test, and our version intervals are survival data as they stand. Germany alone gives 68 years."],
+  ["temporary", "Every temporary provision and what happened when it expired", "Very practical for lawyers, almost no comparable data exists, and we already have the US and UK examples."],
+  ["growth", "Legal stock index by topic", "Directly tests the Scientific Reports finding and extends it beyond the US and Germany. It needs the topic classifier from strand 7."],
+  ["language", "Is amended law harder to read than original law?", "A clean question nobody has answered across languages. Cheap to compute."],
+  ["diffusion", "Who copied whom: data protection as the test case", "The bridges pipeline plus dates gives directed diffusion. Greenleaf's tables give a check against an outside source."],
+  ["timing", "Provision-level EU transposition delay", "The most valuable once the EU layer and five member states are loaded. Plan the data now."],
+];
+
+const SK = {
+  step: `<path d="M4 54 H24 V46 H40 V40 H58 V26 H74 V22 H92 V12 H108" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="M4 54 H24 V46 H40 V40 H58 V26 H74 V22 H92 V12 H108 V60 H4Z" fill="var(--accent)" opacity=".12"/>`,
+  network: [[20,20],[40,40],[60,18],[80,44],[98,24],[52,54],[30,52]].map(([x,y],i,a)=>`<circle cx="${x}" cy="${y}" r="${i===2?6:4}" fill="var(--accent)"/>`).join("") + `<path d="M20 20L40 40L60 18L80 44L98 24M40 40L52 54L80 44M60 18L98 24M30 52L40 40M60 18L52 54" stroke="var(--ghost)" fill="none"/>`,
+  lines: `<path d="M4 50 L30 44 L56 40 L82 30 L108 20" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="M4 54 L30 52 L56 50 L82 47 L108 44" fill="none" stroke="var(--ghost)" stroke-width="2" stroke-dasharray="3 3"/>`,
+  survival: `<path d="M4 8 H22 V18 H40 V26 H60 V36 H84 V42 H108" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="M4 8 H16 V26 H30 V40 H52 V50 H108" fill="none" stroke="var(--later)" stroke-width="2"/>`,
+  dots: [[14,46],[28,38],[40,30],[52,40],[66,22],[80,28],[96,14],[100,32]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4" fill="var(--accent)" opacity=".8"/>`).join("") + `<path d="M6 54 L106 12" stroke="var(--ghost)" stroke-dasharray="3 3"/>`,
+  flow: `<path d="M8 14 C40 14 40 34 70 34" stroke="var(--accent)" fill="none" stroke-width="2"/><path d="M8 14 C46 14 46 54 100 54" stroke="var(--accent)" fill="none" stroke-width="1.5" opacity=".6"/><path d="M70 34 C86 34 90 24 104 24" stroke="var(--later)" fill="none" stroke-width="1.5"/><circle cx="8" cy="14" r="4" fill="var(--accent)"/><circle cx="70" cy="34" r="4" fill="var(--accent)"/><circle cx="100" cy="54" r="4" fill="var(--accent)"/><circle cx="104" cy="24" r="4" fill="var(--later)"/>`,
+  area: `<path d="M4 60 L4 40 Q40 34 60 38 T108 30 L108 60Z" fill="var(--accent)" opacity=".55"/><path d="M4 40 Q40 34 60 38 T108 30 L108 16 Q70 22 50 20 T4 24Z" fill="var(--later)" opacity=".5"/><path d="M4 24 Q30 18 50 20 T108 16 L108 4 L4 4Z" fill="var(--now)" opacity=".4"/>`,
+  spans: `<rect x="10" y="10" width="40" height="8" fill="var(--accent)"/><rect x="58" y="10" width="40" height="8" fill="var(--accent)"/><rect x="50" y="7" width="8" height="14" fill="none" stroke="var(--later)"/><rect x="24" y="28" width="22" height="8" fill="var(--now)"/><rect x="18" y="46" width="70" height="8" fill="var(--now)" opacity=".7"/>`,
+  strip: [8,14,16,18,22,30,36,48,62,70,84,96,104].map((x,i)=>`<circle cx="${x}" cy="${[16,40][i%2]+(i%3)*4}" r="3" fill="${i<4?'var(--now)':'var(--accent)'}"/>`).join("") + `<path d="M40 6V58" stroke="var(--ghost)" stroke-dasharray="2 3"/>`,
+  matrix: Array.from({length:20},(_,k)=>{const r=k%4,c=Math.floor(k/4);return (r*3+c*5)%4?`<circle cx="${14+c*22}" cy="${12+r*14}" r="4" fill="var(--accent)" opacity="${.3+(r+c)%3*.3}"/>`:"";}).join(""),
+  bars: [18,26,14,34,22,40,30].map((h,i)=>`<rect x="${6+i*15}" y="${58-h}" width="10" height="${h}" fill="var(--accent)"/><rect x="${6+i*15}" y="${58-h-8}" width="10" height="6" fill="var(--later)"/>`).join(""),
+  hubs: [[16,48,3],[30,40,4],[44,30,3],[58,36,5],[72,20,7],[90,12,9],[24,52,3],[64,44,3]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="var(--accent)" opacity=".75"/>`).join(""),
+  tools: `<rect x="6" y="8" width="44" height="48" rx="3" fill="none" stroke="var(--ghost)"/><rect x="60" y="8" width="46" height="48" rx="3" fill="none" stroke="var(--ghost)"/><path d="M12 20H44M12 28H38M12 36H44" stroke="var(--ghost)"/><path d="M66 20H100M66 28H92" stroke="var(--ghost)"/><rect x="66" y="34" width="26" height="5" fill="var(--now)" opacity=".5"/><path d="M6 62H106" stroke="var(--accent)" stroke-width="2"/><circle cx="70" cy="62" r="3" fill="var(--accent)"/>`,
+};
+
+const byId = Object.fromEntries(STRANDS.map((s, i) => [s.id, { ...s, n: i + 1 }]));
+document.getElementById("shortlist").innerHTML = SHORT.map(([id, t, why]) => {
+  const s = byId[id];
+  return `<li><b>${t} <span class="badge ${s.tag}">${s.tag === "now" ? "runnable now" : "needs more data"}</span></b><span class="why">${why}</span><a href="#${id}">Strand ${s.n} ↓</a></li>`;
+}).join("");
+
+const host = document.getElementById("strands");
+host.innerHTML = STRANDS.map((s, i) => `
+  <article class="plate strand" id="${s.id}" data-tag="${s.tag}" aria-labelledby="h-${s.id}">
+    <div class="head"><span class="eyebrow">Strand ${i + 1}</span><h2 id="h-${s.id}">${s.title}</h2><span class="badge ${s.tag}">${s.tag === "now" ? "runnable on today's corpora" : "needs more jurisdictions"}</span></div>
+    <div><h3>What exists</h3><ul class="lit">${s.lit.map(([ref, url, what]) => `<li><span class="ref"><a href="${url}" target="_blank" rel="noopener">${ref}</a></span><span class="what">${what}</span></li>`).join("")}</ul></div>
+    <div class="ours"><h3>What our data adds</h3><p class="add">${s.adds}</p>
+      <h3>Analysis to run</h3><p class="run">${s.run}</p>
+      <div class="sketch"><svg viewBox="0 0 112 64" aria-hidden="true">${SK[s.sketch]}</svg><span>${s.chart}</span></div>
+      <p class="needs">${s.needs}</p></div>
+  </article>`).join("");
+
+document.querySelectorAll(".filters button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  const f = b.dataset.f;
+  host.querySelectorAll(".strand").forEach(el => el.hidden = f !== "all" && el.dataset.tag !== f);
+}));
+</script>
