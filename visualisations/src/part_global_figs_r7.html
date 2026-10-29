@@ -1,0 +1,44 @@
+
+  <div class="divider"><span class="eyebrow">Every loaded history · round 7</span><p id="r7-intro">Metadata from every law repository on disk, read in one pass: when each amending act took effect, when it was adopted, and how much law each history holds.</p></div>
+
+  <figure id="bubbles">
+    <div class="figtext"><span class="eyebrow" id="bub-eyebrow">All jurisdictions · round 7</span><h2>The global history of law loaded so far</h2>
+      <p id="bub-text"></p></div>
+    <div class="plot"><svg id="f-bub" role="img" aria-label="World map with a circle per jurisdiction sized by dated acts"></svg></div>
+    <p class="src">One circle per jurisdiction with dated amending acts, sized by the number of acts and coloured by the earliest in-force year. Counts come from commit trailers (In-force, In-Kraft), one per act and date. Snapshots, consolidations and documentation commits are excluded.</p>
+  </figure>
+
+  <figure id="spans">
+    <div class="figtext"><span class="eyebrow">All jurisdictions · round 7</span><h2>How far back each history reaches</h2>
+      <p id="span-text"></p></div>
+    <div class="plot"><svg id="f-span" role="img" aria-label="Spans of in-force years covered by each jurisdiction"></svg></div>
+    <p class="src">Earliest to latest in-force year of a dated act in each history. Shading shows the years with at least one act.</p>
+  </figure>
+
+  <figure id="heat">
+    <div class="figtext"><span class="eyebrow">All jurisdictions · 1990–2026</span><h2>Thirty-seven years of law-making, country by country</h2>
+      <p id="heat-text"></p></div>
+    <div class="plot"><svg id="f-heat" role="img" aria-label="Heatmap of amending acts per year per jurisdiction"></svg></div>
+    <p class="src">Amending acts per in-force year, log colour scale, rows sorted by total acts. Blank cells are years before a history starts or with no dated act.</p>
+  </figure>
+
+  <figure id="lag-all">
+    <div class="figtext"><span class="eyebrow" id="lagall-eyebrow">All jurisdictions with both dates · round 7</span><h2>From adoption to application, every country that records both</h2>
+      <p id="lagall-text"></p></div>
+    <div class="plot"><svg id="f-lagall" role="img" aria-label="Box plots of adoption-to-force delay for every jurisdiction"></svg></div>
+    <p class="src">Adopted, Enacted, Beschlossen, Made, Signed or Promulgated, against the in-force date, one per act. Boxes are the middle half of acts, whiskers the 5th to 95th percentile, and the dark line the median. Log scale.</p>
+  </figure>
+
+  <figure id="weekday">
+    <div class="figtext"><span class="eyebrow">All jurisdictions · round 7</span><h2>Which day of the week law starts</h2>
+      <p id="wd-text"></p></div>
+    <div class="plot"><svg id="f-wd" role="img" aria-label="Heatmap of in-force weekday shares by jurisdiction"></svg></div>
+    <p class="src">Share of each jurisdiction's dated acts by the weekday of their in-force date. Jurisdictions with fewer than 30 dated acts are left out.</p>
+  </figure>
+
+  <figure id="months">
+    <div class="figtext"><span class="eyebrow">All jurisdictions · round 7</span><h2>The legal year: when law takes effect, month by month</h2>
+      <p id="mon-text"></p></div>
+    <div class="plot"><svg id="f-mon" role="img" aria-label="Heatmap of in-force month shares by jurisdiction"></svg></div>
+    <p class="src">Share of each jurisdiction's dated acts by the month of their in-force date. Jurisdictions with fewer than 30 dated acts are left out.</p>
+  </figure>

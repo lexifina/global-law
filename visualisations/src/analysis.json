@@ -1,0 +1,183 @@
+{
+ "eval": {
+  "constitute de->ch raw": {
+   "queries": 45,
+   "hit1": 0.4,
+   "hit5": 0.6222222222222222,
+   "hit10": 0.6888888888888889,
+   "mrr": 0.5005429630634235,
+   "median_rank": 3.0,
+   "pool": 701,
+   "random_hit1": null
+  },
+  "constitute ch->de raw": {
+   "queries": 58,
+   "hit1": 0.41379310344827586,
+   "hit5": 0.5862068965517241,
+   "hit10": 0.7413793103448276,
+   "mrr": 0.511595845008231,
+   "median_rank": 2.0,
+   "pool": 193,
+   "random_hit1": null
+  },
+  "constitute de->ch centred": {
+   "queries": 45,
+   "hit1": 0.3333333333333333,
+   "hit5": 0.5555555555555556,
+   "hit10": 0.6,
+   "mrr": 0.4522152846629105,
+   "median_rank": 3.0,
+   "pool": 701,
+   "random_hit1": null
+  },
+  "constitute ch->de centred": {
+   "queries": 58,
+   "hit1": 0.4482758620689655,
+   "hit5": 0.6379310344827587,
+   "hit10": 0.7413793103448276,
+   "mrr": 0.5488865177575256,
+   "median_rank": 2.0,
+   "pool": 193,
+   "random_hit1": null
+  },
+  "hand raw": {
+   "queries": 52,
+   "hit1": 0.4807692307692308,
+   "hit5": 0.7692307692307693,
+   "hit10": 0.8076923076923077,
+   "mrr": 0.5996667108042573,
+   "median_rank": 2.0,
+   "pool": null
+  },
+  "hand centred": {
+   "queries": 52,
+   "hit1": 0.4807692307692308,
+   "hit5": 0.75,
+   "hit10": 0.8461538461538461,
+   "mrr": 0.6010816439245322,
+   "median_rank": 2.0,
+   "pool": null
+  }
+ },
+ "gap": {
+  "raw": {
+   "de-de": 0.43531683118679126,
+   "de-ch": 0.32910760702153424,
+   "de-gb": 0.19144316153281365,
+   "de-us": 0.1866815916420658,
+   "ch-ch": 0.41930559655103516,
+   "ch-gb": 0.17952363804616656,
+   "ch-us": 0.20483304717454526,
+   "gb-gb": 0.7252667087771275,
+   "gb-us": 0.23632870163195902,
+   "us-us": 0.37075525054485614
+  },
+  "centred": {
+   "de-de": 8.179622881103998e-05,
+   "de-ch": 7.618240748284008e-07,
+   "de-gb": 2.1275662993731393e-05,
+   "de-us": 9.397739695829285e-06,
+   "ch-ch": 0.0001888416115241825,
+   "ch-gb": -2.41163582725968e-05,
+   "ch-us": 7.814734989386956e-06,
+   "gb-gb": 0.0020871419125982264,
+   "gb-us": -7.976600548876417e-06,
+   "us-us": 2.364061525402693e-05
+  }
+ },
+ "isolation": {
+  "de": {
+   "median_best": 0.31661466865324556,
+   "loneliest": [
+    "de|Art. 138",
+    "de|Art. 127",
+    "de|Art. 74",
+    "de|Art. 118",
+    "de|Art. eingangsformel",
+    "de|Art. 143d",
+    "de|Art. 140",
+    "de|Art. 115b"
+   ],
+   "best_connected": [
+    "de|Art. 3",
+    "de|Art. 4",
+    "de|Art. 2",
+    "de|Art. 104",
+    "de|Art. 5",
+    "de|Art. 1",
+    "de|Art. 9",
+    "de|Art. 52"
+   ]
+  },
+  "ch": {
+   "median_best": 0.2916269620358509,
+   "loneliest": [
+    "ch|DSG Art. 22",
+    "ch|BV Art. 118a",
+    "ch|SCHKG Art. 134",
+    "ch|SCHKG Art. 158",
+    "ch|BV Art. 141",
+    "ch|SCHKG Art. 275",
+    "ch|BV Art. 117a",
+    "ch|SCHKG Art. 87"
+   ],
+   "best_connected": [
+    "ch|BV Art. 8",
+    "ch|BV Art. 15",
+    "ch|BV Art. 10",
+    "ch|BV Art. 31",
+    "ch|BV Art. 16",
+    "ch|BV Art. 7",
+    "ch|BV Art. 23",
+    "ch|BV Art. 152"
+   ]
+  },
+  "gb": {
+   "median_best": 0.2242079376010046,
+   "loneliest": [
+    "gb|CFA s.19",
+    "gb|SEND Reg 11",
+    "gb|CFA s.37",
+    "gb|CFA s.36",
+    "gb|CFA s.21",
+    "gb|CFA s.42",
+    "gb|SEND Reg 6",
+    "gb|SEND Reg 13"
+   ],
+   "best_connected": [
+    "gb|SEND Reg 12",
+    "gb|SEND Reg 13",
+    "gb|SEND Reg 6",
+    "gb|CFA s.42",
+    "gb|CFA s.21",
+    "gb|CFA s.36",
+    "gb|CFA s.37",
+    "gb|SEND Reg 11"
+   ]
+  },
+  "us": {
+   "median_best": 0.2582394683950014,
+   "loneliest": [
+    "us|35 USC § 123",
+    "us|35 USC § 372",
+    "us|35 USC § 162",
+    "us|35 USC § 171",
+    "us|17 USC § 103",
+    "us|35 USC § 301",
+    "us|35 USC § 101",
+    "us|17 USC § 1313"
+   ],
+   "best_connected": [
+    "us|13 USC § 214",
+    "us|35 USC § 286",
+    "us|13 USC § 213",
+    "us|13 USC § 224",
+    "us|13 USC § 63",
+    "us|13 USC § 221",
+    "us|11 USC § 1221",
+    "us|11 USC § 705"
+   ]
+  }
+ },
+ "n_candidates": 426
+}

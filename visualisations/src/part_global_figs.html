@@ -1,0 +1,29 @@
+  <div class="divider"><span class="eyebrow">The world view · round 4</span><p>Every jurisdiction in the world law register, and every amendment in the histories loaded so far, drawn on one canvas.</p></div>
+
+  <figure id="world">
+    <div class="figtext"><span class="eyebrow">209 jurisdictions</span><h2>How much of the world's law can become a history today</h2>
+      <p>Each jurisdiction in the world law register, coloured by what its official legal source makes possible. <b>Besides the 16 already loaded (black), 36 publish dated versions of their law fully or in part, 29 have the history online but need scraping, 118 publish only an official gazette, and 10 have no usable official source.</b> For gazette-only countries a history has to be rebuilt by replaying every amending act, the slowest route. Small states are drawn as dots.</p></div>
+    <div class="plot"><svg id="f-world" role="img" aria-label="World map of official legal source readiness"></svg></div>
+    <p class="src">Build status and source capabilities from each jurisdiction's jurisdiction.json and SOURCES.md in world-law-repos (the World Law Sources register, checked 28 October 2026). Shapes: Natural Earth via world-atlas 1:50m.</p>
+  </figure>
+
+  <figure id="europe">
+    <div class="figtext"><span class="eyebrow">Europe</span><h2>Most of what is loaded is European, and much of it small</h2>
+      <p>The same map for Europe, with every loaded jurisdiction named. <b>Fourteen of the 16 loaded histories are European</b>, five of them microstates (Gibraltar, Liechtenstein, Luxembourg, Malta, Monaco). The ready systems not yet loaded include France, Spain, Italy, Austria, the Netherlands and Czechia in Europe, and Canada, Australia, New Zealand, Japan, South Korea and South Africa beyond it. Those are the obvious next loads.</p></div>
+    <div class="plot"><svg id="f-europe" role="img" aria-label="Map of Europe with loaded jurisdictions named"></svg></div>
+    <p class="src">Same data as the world map.</p>
+  </figure>
+
+  <figure id="global-timeline">
+    <div class="figtext"><span class="eyebrow">Fifteen jurisdictions · 1945–2026</span><h2 id="gt-title">Eighty years of amending acts on one timeline</h2>
+      <p id="gt-text"></p></div>
+    <div class="plot"><svg id="f-global" role="img" aria-label="Stacked bars of amending acts per year by jurisdiction"></svg></div>
+    <p class="src">Amending acts per in-force year (an act counts once per year it takes effect), from every loaded history except Malta, whose 300 to 430 instruments a year would flatten the rest. Coverage starts at different dates: Germany 1949, Liechtenstein and Luxembourg earlier, the US 2017, Switzerland 2019.</p>
+  </figure>
+
+  <figure id="lifelines">
+    <div class="figtext"><span class="eyebrow">Eleven constitutions · 1868–2026</span><h2>Constitutional lifelines</h2>
+      <p id="life-text"></p></div>
+    <div class="plot"><svg id="f-life" role="img" aria-label="Lifelines of eleven constitutions with each change marked"></svg></div>
+    <p class="src">Adoption date and every commit that changed a constitutional provision, from each constitution's history.</p>
+  </figure>

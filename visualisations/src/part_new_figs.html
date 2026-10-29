@@ -1,0 +1,92 @@
+  <div class="divider"><span class="eyebrow">Across sixteen jurisdictions · updated every half hour</span><p>Analyses from the research agenda, rerun on everything loaded so far: Germany, Switzerland, the UK, the US, Croatia, Denmark, Estonia, Finland, Gibraltar, Hong Kong, Liechtenstein, Luxembourg, Malta, Monaco, Slovakia and Slovenia. Each round adds the repositories that gained history since the last one. <span id="roundline"></span></p></div>
+
+  <figure id="constitutions">
+    <div class="figtext"><span class="eyebrow">Sixteen constitutions</span><h2>Constitutions grow, at very different speeds</h2>
+      <p>Words in force as a share of the text on adoption day, by years since adoption. <b>Slovakia's 1992 constitution has grown almost as much in 33 years (×1.88) as the German Basic Law in 76 (×2.07).</b> Luxembourg's 1868 constitution took 158 years to grow by 60%, about half of it in the 2023 revision. Croatia's 1990 constitution grew by half (×1.47) through five reforms. Estonia's, Slovenia's and Finland's are within 6% of their adopted length, Denmark's 1953 and Gibraltar's 2006 constitutions have never been amended, and Kyrgyzstan's 2021 constitution has changed once.</p></div>
+    <div class="plot"><svg id="f-const" role="img" aria-label="Line chart of constitution length relative to adoption"></svg></div>
+    <p class="src">Words of each constitution's provision files after every amending commit (artikel/, lv/, constitution/), dated by the in-force trailer.</p>
+  </figure>
+
+  <figure id="halflife">
+    <div class="figtext"><span class="eyebrow">Sixteen constitutions</span><h2>Constitutional wording lasts 7 years in Croatia and 88 in Luxembourg</h2>
+      <p>The share of a constitutional provision's wording still unchanged, by years since it was written (Kaplan–Meier, with versions still in force counted as censored). <b>The median wording lasts about 7 years in Croatia, 8 to 9 in Rwanda, Portugal and Madagascar, 28 in Slovakia, 45 in Germany, 71 in Liechtenstein and 88 in Luxembourg.</b> In Estonia, Slovenia, Monaco, Finland, Italy and Kyrgyzstan fewer than half of the versions have ever been rewritten, and in Denmark and Gibraltar none has, so no median is reached. German text written by amendment changes faster than the 1949 original, because the federal–state finance articles are rewritten again and again.</p></div>
+    <div class="plot"><svg id="f-km" role="img" aria-label="Survival curves of constitutional wording"></svg></div>
+    <p class="src">Every version of every constitutional provision, from its in-force date to the next change of wording or repeal. Changes to metadata only are ignored.</p>
+  </figure>
+
+  <figure id="readability">
+    <div class="figtext"><span class="eyebrow">Four jurisdictions, three languages</span><h2>Amended law is harder to read than the original</h2>
+      <p>Median words per sentence, comparing a provision's first wording with wording written later by amendment. <b>In every system, amendments write longer sentences</b>: a quarter longer in Germany, half again in Luxembourg, and from 55 to 69 words in a US Code sentence. Martínez, Mollica and Gibson found sentence structure, not legal concepts, makes legal text hard. On that measure, the statute book gets harder each time it is amended.</p></div>
+    <div class="plot"><svg id="f-read" role="img" aria-label="Dumbbell chart of words per sentence, original against amended"></svg></div>
+    <p class="src">Sentences split on full stops after protecting abbreviations (Art., Abs., Nr., U.S.C., Sec.). For the US, "original" means sections as they stood in the 2017 edition. Each dot is the median over all versions in that group.</p>
+  </figure>
+
+  <figure id="detector">
+    <div class="figtext"><span class="eyebrow">Six countries</span><h2>Temporary law, found without being told where to look</h2>
+      <p>Every change whose wording was later restored, found by comparing texts alone and grouped into episodes. <b>57 provisions in 13 episodes across six countries.</b> Five are sunsets the law wrote for itself: the CARES Act, the 2021 appropriations act's COVID bankruptcy relief (two episodes), the 2022 threshold act and the UK's one-letter deadline change. Eight were undone by a later act: two inside Luxembourg's COVID-19 law (one after 16 days), two Slovak election-law changes, one in the Slovak constitution, one in Estonia's election act, and two in Croatia's constitution, where the 2010 reform restored 19 articles to their pre-2001 wording.</p></div>
+    <div class="plot"><svg id="f-det" role="img" aria-label="Timeline of automatically detected temporary provisions"></svg></div>
+    <p class="src">Text comparison ignoring punctuation. Edition reconciliations, correction notices and versions whose amending act is not identified (portal consolidations in Monaco, Slovenia, Denmark and Hong Kong) are excluded.</p>
+  </figure>
+
+  <figure id="calendar">
+    <div class="figtext"><span class="eyebrow">Fourteen jurisdictions</span><h2>Switzerland and Denmark start their law on 1 January. Most others start it any day</h2>
+      <p>The day each amending act took effect. <b>Over half of Swiss changes and almost half of Danish ones start on 1 January, and two thirds of Slovak ones on the first of a month.</b> UK commencement orders also favour the first. In the US, Luxembourg, Slovenia and Malta about nine in ten changes start on some other day. A fixed start day is a design choice that makes a firm's monitoring calendar predictable.</p></div>
+    <div class="plot"><svg id="f-cal" role="img" aria-label="Stacked bars of in-force day type by jurisdiction"></svg></div>
+    <p class="src">In-force trailers of every amending commit, one per act and date. Snapshot, consolidated and unexplained commits are excluded, as are jurisdictions with fewer than ten dated acts (Finland and Croatia so far).</p>
+  </figure>
+
+  <figure id="malta">
+    <div class="figtext"><span class="eyebrow">Malta</span><h2>A whole statute book, month by month</h2>
+      <p>Malta is the first jurisdiction loaded in full: 21,303 files of Acts and 45,347 of subsidiary legislation. Its official point-in-time record shows changes from 2021 on. <b>About 300 to 410 amending instruments take effect each year, and 84% are Legal Notices</b> (subsidiary legislation), not Acts of Parliament. January is the busiest month of the year, then July. The largest single change was Act XXXIII of 2024, which touched 323 units at once.</p></div>
+    <div class="plot"><svg id="f-mt" role="img" aria-label="Monthly bars of Maltese amending instruments"></svg></div>
+    <p class="src">Amendment commits in the malta-law repository (Kind: amendment), by in-force month. Consolidations and unexplained changes are excluded.</p>
+  </figure>
+
+  <figure id="elections">
+    <div class="figtext"><span class="eyebrow">Estonia · Slovakia · Slovenia</span><h2>The rules for winning power change faster than the constitution</h2>
+      <p>Amending acts per year for each country's constitution and its parliamentary election act, each counted since that law began. <b>Estonia amends its election act about seven and a half times as often as its constitution, and Slovakia twice as often.</b> Slovenia changes both at the same slow rate. Every mark below is one amending act.</p></div>
+    <div class="plot"><svg id="f-el" role="img" aria-label="Timelines of amendments to constitutions and election acts"></svg></div>
+    <p class="src">Commits touching ps/ and rkvs/ (Estonia), ustava/ and volebny-zakon/ (Slovakia), urs/ and zvdz/ (Slovenia), excluding the commit that first loaded each law.</p>
+  </figure>
+
+  <figure id="obligations">
+    <div class="figtext"><span class="eyebrow">Sixteen jurisdictions · round 2</span><h2>Constitutions forbid, ordinary laws oblige</h2>
+      <p>Binding words per 1,000 words in force today, counted the way RegData counts US regulation, with a word list per language: obligations ("shall", "muss", "doit", "musí", "mora", "peab") and prohibitions ("may not", "darf nicht", "ne peut", "nesmie", "ne sme", "ei tohi"). <b>In all nine countries with both, the constitution has more prohibitions per word than ordinary law</b>, because rights are written as "no one may…". In six of the nine, ordinary law has more obligations. Across languages the counts can't be compared: English and Danish drafting put "shall" or "skal" in almost every rule, so English-language law scores 7–14 and Danish 8–9, where German-language law, drafted in the indicative, scores 0.4–2.3.</p></div>
+    <div class="plot"><svg id="f-obl" role="img" aria-label="Dot chart of obligation and prohibition words per thousand words"></svg></div>
+    <p class="src">Current text of each repository's provision files. Constitution: artikel/, bv/, lv/, constitution/, ustava/, urs/, ps/. Ordinary law: the other acts in each repository (for Malta, all Acts in cap/). Word lists match whole words, case-insensitively.</p>
+  </figure>
+
+  <figure id="malta-hot">
+    <div class="figtext"><span class="eyebrow">Malta · round 2</span><h2>Where Malta's law actually changes</h2>
+      <p>Chapters of the Laws of Malta ranked by amending instruments since 2021, counting each chapter with its subsidiary legislation. <b>Only 222 of 562 chapters changed at all, and the Education Act alone took 316 changes</b>, more than two and a half times the next chapter, employment law. Public health, income tax, investment services and environment follow. The 15 chapters shown account for half of all 2,402 chapter changes.</p></div>
+    <div class="plot"><svg id="f-mth" role="img" aria-label="Bar chart of the most-amended Maltese chapters"></svg></div>
+    <p class="src">Amendment commits in malta-law with an in-force date from 2021. Each law named in the commit subject (Cap. N or S.L. N.x) counts toward chapter N. Units are the provisions changed.</p>
+  </figure>
+
+  <figure id="hubs">
+    <div class="figtext"><span class="eyebrow">Germany · round 3</span><h2>The articles everything points to are the ones that keep changing</h2>
+      <p>Each Basic Law article by how many other articles cite it today, against how many amendments have rewritten it. <b>The 116 articles nobody cites were amended 0.9 times on average. The 12 cited by three or more were amended 3.8 times.</b> The most-cited articles divide legislative power (Art. 72–74) and money (Art. 107, 109, 115), with Art. 23 on the EU. The correlation is weak (Spearman 0.24), but the direction matters for monitoring: a change to a hub reaches every article that cites it.</p></div>
+    <div class="plot"><svg id="f-hub" role="img" aria-label="Scatter of citations against amendments per article"></svg></div>
+    <p class="src">Citations: "Artikel N" references in each article's current text, counted once per citing article. Amendments: commits that changed the article's file, excluding the 1949 text.</p>
+  </figure>
+
+  <figure id="size">
+    <div class="figtext"><span class="eyebrow">Sixteen jurisdictions · round 3</span><h2>Most amending acts change one or two provisions</h2>
+      <p>Provisions changed by each amending act, one dot per act, on a log scale. <b>About half of German, US, Swiss and UK acts change exactly one provision, and two thirds of Luxembourg's.</b> Slovak, Slovenian and Monegasque acts are larger. Croatia's constitutional reforms of 2000, 2001 and 2010 each changed more than 100 articles, while the 2014 referendum changed one. Malta counts units (provisions and sub-provisions), so its scale differs: a median of 4 and a maximum of 323.</p></div>
+    <div class="plot"><svg id="f-size" role="img" aria-label="Strip plot of provisions changed per amending act"></svg></div>
+    <p class="src">Provision files changed per amending act, excluding the commit that first loaded each law and unidentified consolidations. Malta: the unit count in each amendment commit.</p>
+  </figure>
+
+  <figure id="activity">
+    <div class="figtext"><span class="eyebrow">Sixteen jurisdictions · round 4</span><h2>Law changes in bursts</h2>
+      <p>Provisions rewritten or repealed each year, one row per jurisdiction, each row scaled to its own busiest year. Newly added laws are not counted. <b>Much of the activity comes in a few reform years</b>: Croatia's 2010 constitutional reform, Slovakia's 2022 changes and Luxembourg's 2023 constitutional revision each account for a quarter to a third of all the rewrites in their histories. Germany's busiest year, 1968, rewrote 22 articles. The quiet years in between are the norm.</p></div>
+    <div class="plot"><svg id="f-act" role="img" aria-label="Small multiples of provisions changed per year"></svg></div>
+    <p class="src">Provision files modified or deleted by amending commits, by in-force year, excluding the commit that first loaded each law, unidentified consolidations and corrections. Malta counts units from its amendment commits. Its record starts in 2021, so 2021 includes some catch-up.</p>
+  </figure>
+
+  <figure id="coamend">
+    <div class="figtext"><span class="eyebrow">Germany · round 4</span><h2>Articles that are always rewritten together</h2>
+      <p>The 30 most-amended articles of the Basic Law, and how often the same act rewrote both of a pair. <b>Federal finance moves as a block</b>: Art. 106, 107 and 108 (tax shares and administration), 109 and 115 (budgets and borrowing), and 104b with 125c each changed together three times. A lawyer tracking one of these should expect the next reform to touch its neighbours.</p></div>
+    <div class="plot"><svg id="f-co" role="img" aria-label="Matrix of Basic Law articles amended by the same act"></svg></div>
+    <p class="src">Commits in lexifina/grundgesetz that changed two or more of the 30 most-amended articles, excluding the 1949 text.</p>
+  </figure>

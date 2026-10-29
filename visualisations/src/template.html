@@ -1,0 +1,275 @@
+<title>Global Law Graph</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column of figures, each a full-width plate with a numbered caption (figures are referenced by number). */
+:root {
+  --bg: #f6f7f9; --plate: #ffffff; --ink: #1b2330; --muted: #5d6878; --rule: #dde1e8; --ghost: #a6aebb;
+  --de: #c08a1e; --ch: #c8423b; --gb: #2b8a86; --us: #3b62c4;
+  --display: "Source Serif 4", Georgia, serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161d; --plate: #191f28; --ink: #e5e9ef; --muted: #98a2b2; --rule: #2b3340; --ghost: #5b6575;
+  --de: #e0aa45; --ch: #ec6b62; --gb: #4fb6b0; --us: #7b9bf0; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12161d; --plate: #191f28; --ink: #e5e9ef; --muted: #98a2b2; --rule: #2b3340; --ghost: #5b6575;
+  --de: #e0aa45; --ch: #ec6b62; --gb: #4fb6b0; --us: #7b9bf0; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 72px; }
+main { max-width: 1000px; margin: 0 auto; display: grid; gap: 36px; }
+header { display: grid; gap: 10px; max-width: 68ch; }
+h1 { font: 600 2.1rem/1.15 var(--display); margin: 0; text-wrap: balance; }
+h2 { font: 600 1.25rem/1.3 var(--display); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.lede { color: var(--muted); }
+.eyebrow { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.stats { display: flex; flex-wrap: wrap; gap: 8px 24px; font: 13px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.stats b { color: var(--ink); font-weight: 500; }
+figure { margin: 0; background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; display: grid; }
+.figtext { padding: 18px 20px 6px; display: grid; gap: 6px; max-width: 74ch; }
+.figtext p { color: var(--muted); font-size: 14px; }
+.tag { display: inline-block; font: 500 10.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 4px 6px; border-radius: 3px; border: 1px solid var(--rule); color: var(--muted); margin-left: 8px; vertical-align: 3px; }
+.tag.idea { border-style: dashed; }
+.plot { overflow-x: auto; padding: 4px 8px 12px; }
+.plot svg { display: block; width: 100%; min-width: 640px; height: auto; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 0 20px 16px; font: 12px var(--mono); color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.schema { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0; padding: 8px 20px 20px; }
+.schema div { padding: 10px 0; border-top: 1px solid var(--rule); display: grid; gap: 2px; min-width: 0; padding-right: 16px; }
+.schema code { font: 500 13px var(--mono); color: var(--ink); }
+.schema small { color: var(--muted); font-size: 13px; }
+svg text { font-family: var(--mono); fill: var(--muted); }
+svg .lbl { fill: var(--ink); }
+footer { color: var(--muted); font-size: 13px; max-width: 74ch; }
+</style>
+
+<main>
+  <header>
+    <span class="eyebrow">Sketch · built from the four law repos we already publish</span>
+    <h1>What a knowledge graph of global law could look like</h1>
+    <p class="lede">Every node and edge below comes from the Grundgesetz, Swiss, UK SEND and US Code histories in <span style="font-family:var(--mono)">lexifina/global-law</span>: real amending laws, real provisions, real in-force dates, real cross-references. Dashed shapes are ideas for what the graph could add next.</p>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <figure>
+    <div class="figtext"><span class="eyebrow">Figure 1</span><h2>The jurisdiction tree<span class="tag idea">part idea</span></h2>
+      <p>The spine of the graph is the same path the superproject already uses: country, level, corpus. Solid nodes hold law today. Dashed nodes are where the next corpora would hang: the EU above member states, the devolved UK legislatures, US states.</p></div>
+    <div class="plot"><svg id="f1"></svg></div>
+  </figure>
+
+  <figure>
+    <div class="figtext"><span class="eyebrow">Figure 2</span><h2>Every change, by the day it came into force</h2>
+      <p>One dot per amending law, sized by how many provisions it changed. Hollow bars are the starting texts and consolidated snapshots each history begins from. Germany runs back to 1949; the other three start in the last decade.</p></div>
+    <div class="plot"><svg id="f2"></svg></div>
+    <div class="legend" id="lg"></div>
+  </figure>
+
+  <figure>
+    <div class="figtext"><span class="eyebrow">Figure 3</span><h2>Who changed what</h2>
+      <p>Squares are amending laws, dots are the provisions they rewrote. The tight knots are a single statute's hot spots, such as Grundgesetz Art. 74 (amended by 10 laws) or 11 U.S.C. § 101 (6). Starting texts are left out so the amendments show.</p></div>
+    <div class="plot"><svg id="f3"></svg></div>
+  </figure>
+
+  <figure>
+    <div class="figtext"><span class="eyebrow">Figure 4</span><h2>What cites what</h2>
+      <p>Edges are references written into the provisions' own text ("Artikel 79", "section 101 of this title", "Art. 131"). Dashed nodes are targets outside our corpora, mostly other US Code titles. They are the graph's frontier, the next texts worth loading.</p></div>
+    <div class="plot"><svg id="f4"></svg></div>
+  </figure>
+
+  <figure>
+    <div class="figtext"><span class="eyebrow">Figure 5</span><h2>Bridges between legal systems<span class="tag idea">idea · keyword match</span></h2>
+      <p>The cross-border edges a firm would actually use: the same subject in different countries. This version only counts provisions that match a few keywords in English or German, so treat it as a dummy. A real build would tag provisions with a shared topic list and link equivalents, such as US Chapter 11 and the Swiss SchKG.</p></div>
+    <div class="plot"><svg id="f5"></svg></div>
+  </figure>
+
+  <figure>
+    <div class="figtext"><span class="eyebrow">Schema</span><h2>Node and edge types the figures use</h2></div>
+    <div class="schema">
+      <div><code>Jurisdiction</code><small>de, de/bund, us/federal… from the repo's folder tree</small></div>
+      <div><code>Law</code><small>An amending instrument: author of a commit, with enacted and in-force dates</small></div>
+      <div><code>Provision</code><small>An article, section or regulation: one file in a corpus</small></div>
+      <div><code>Version</code><small>A provision's text between two in-force dates: one blob in git</small></div>
+      <div><code>AMENDS</code><small>Law → Provision, dated by the In-force trailer</small></div>
+      <div><code>CITES</code><small>Provision → Provision, parsed from the text</small></div>
+      <div><code>PART_OF</code><small>Provision → Corpus → Jurisdiction</small></div>
+      <div><code>ABOUT</code> <span class="tag idea">idea</span><small>Provision → Concept, for the cross-border bridges</small></div>
+    </div>
+  </figure>
+
+  <footer>Counts are from the local checkouts on 28 Oct 2026. Cross-references are pattern-matched and miss indirect phrasing ("the preceding paragraph"). The UK corpus has no parsed cross-references yet.</footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const KG = __DATA__;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const ORDER = ["de", "ch", "gb", "us"];
+const NAME = { de: "Germany", ch: "Switzerland", gb: "United Kingdom", us: "United States" };
+const col = c => `var(--${c})`;
+const amend = KG.laws.filter(l => !l.baseline);
+
+// Stats line
+{
+  const prov = ORDER.reduce((s, c) => s + KG.corpora[c].provisions, 0);
+  const xr = ORDER.reduce((s, c) => s + (KG.xrefs[c] || []).length, 0);
+  document.getElementById("stats").innerHTML =
+    `<span><b>4</b> jurisdictions</span><span><b>${prov.toLocaleString()}</b> provisions</span><span><b>${amend.length}</b> amending laws</span><span><b>${xr}</b> cross-references</span><span><b>1949–2026</b> in force</span>`;
+  document.getElementById("lg").innerHTML = ORDER.map(c => `<span><i class="sw" style="background:${col(c)}"></i>${NAME[c]}</span>`).join("");
+}
+
+// Figure 1: jurisdiction tree
+{
+  const C = KG.corpora;
+  const leaf = (c, n) => ({ name: n, corpus: c, sub: `${C[c].provisions} provisions · ${C[c].laws} laws` });
+  const tree = { name: "World", children: [
+    { name: "EU", ghost: true, children: [
+      { name: "Germany · de", c: "de", children: [{ name: "Bund", c: "de", children: [leaf("de", "Grundgesetz")] }, { name: "Länder · de/by …", ghost: true }] } ] },
+    { name: "Switzerland · ch", c: "ch", children: [{ name: "Bund", c: "ch", children: [leaf("ch", "BV · DSG · SchKG")] }, { name: "Kantone · ch/zh …", ghost: true }] },
+    { name: "United Kingdom · gb", c: "gb", children: [{ name: "UK Parliament", c: "gb", children: [leaf("gb", "SEND law")] }, { name: "Scotland · Wales · NI", ghost: true }] },
+    { name: "United States · us", c: "us", children: [{ name: "Federal", c: "us", children: [leaf("us", "US Code, 9 titles")] }, { name: "States · us/ca …", ghost: true }] },
+  ]};
+  const root = d3.hierarchy(tree), W = 960, rowH = 34;
+  d3.tree().nodeSize([rowH, 180])(root);
+  const [x0, x1] = d3.extent(root.descendants(), d => d.x);
+  const H = x1 - x0 + 40;
+  const svg = d3.select("#f1").attr("viewBox", `0 0 ${W} ${H}`);
+  const g = svg.append("g").attr("transform", `translate(40,${20 - x0})`);
+  const ink = d => d.data.ghost ? "var(--ghost)" : d.data.c ? col(d.data.c) : (d.data.corpus ? col(d.data.corpus) : "var(--ink)");
+  const cOf = d => d.data.c || d.data.corpus;
+  g.selectAll("path").data(root.links()).join("path")
+    .attr("d", d3.linkHorizontal().x(d => d.y).y(d => d.x))
+    .attr("fill", "none").attr("stroke", d => d.target.data.ghost || d.target.data.name === "EU" ? "var(--ghost)" : (cOf(d.target) ? col(cOf(d.target)) : "var(--rule)"))
+    .attr("stroke-opacity", .55).attr("stroke-dasharray", d => d.target.data.ghost ? "3 4" : null);
+  const n = g.selectAll("g.n").data(root.descendants()).join("g").attr("transform", d => `translate(${d.y},${d.x})`);
+  n.append("circle").attr("r", d => d.data.corpus ? 6 : 4.5)
+    .attr("fill", d => d.data.ghost ? "var(--plate)" : ink(d)).attr("stroke", ink).attr("stroke-width", 1.5)
+    .attr("stroke-dasharray", d => d.data.ghost ? "2 2" : null);
+  n.append("text").attr("x", 10).attr("dy", d => d.data.sub ? "-0.1em" : "0.32em").attr("font-size", 12.5)
+    .attr("class", d => d.data.ghost ? "" : "lbl").text(d => d.data.name);
+  n.filter(d => d.data.sub).append("text").attr("x", 10).attr("dy", "1.15em").attr("font-size", 11).text(d => d.data.sub);
+}
+
+// Figure 2: timeline lanes
+{
+  const W = 960, L = 130, R = 24, laneH = 70, H = ORDER.length * laneH + 40;
+  const svg = d3.select("#f2").attr("viewBox", `0 0 ${W} ${H}`);
+  const parse = d3.utcParse("%Y-%m-%d");
+  const x = d3.scaleUtc([parse("1948-01-01"), parse("2027-01-01")], [L, W - R]);
+  const r = d3.scaleSqrt([1, 40], [2.5, 11]).clamp(true);
+  svg.append("g").attr("transform", `translate(0,${H - 26})`).call(d3.axisBottom(x).ticks(d3.utcYear.every(10)).tickSizeOuter(0))
+    .call(a => a.selectAll("line,path").attr("stroke", "var(--rule)")).call(a => a.selectAll("text").attr("font-size", 11));
+  ORDER.forEach((c, i) => {
+    const y = 14 + i * laneH + laneH / 2;
+    svg.append("line").attr("x1", L).attr("x2", W - R).attr("y1", y).attr("y2", y).attr("stroke", "var(--rule)");
+    svg.append("text").attr("x", 0).attr("y", y).attr("dy", "0.32em").attr("font-size", 12.5).attr("class", "lbl").text(NAME[c]);
+    const ls = KG.laws.filter(l => l.corpus === c);
+    svg.append("g").selectAll("rect").data(ls.filter(l => l.baseline)).join("rect")
+      .attr("x", d => x(parse(d.date)) - 2).attr("width", 4).attr("y", y - 22).attr("height", 44)
+      .attr("fill", "var(--plate)").attr("stroke", col(c)).attr("stroke-width", 1.2)
+      .append("title").text(d => `${d.law} · ${d.date} · starting text, ${d.provisions.length} provisions`);
+    // Jitter dots vertically where they collide
+    const pts = ls.filter(l => !l.baseline).map(l => ({ ...l, x: x(parse(l.date)), y, r: r(l.provisions.length) }));
+    d3.forceSimulation(pts).force("x", d3.forceX(d => d.x).strength(1)).force("y", d3.forceY(y).strength(.08))
+      .force("c", d3.forceCollide(d => d.r + .8)).stop().tick(120);
+    svg.append("g").selectAll("circle").data(pts).join("circle")
+      .attr("cx", d => d.x).attr("cy", d => Math.max(y - 30, Math.min(y + 30, d.y))).attr("r", d => d.r)
+      .attr("fill", col(c)).attr("fill-opacity", .78)
+      .append("title").text(d => `${d.law} · in force ${d.date} · ${d.provisions.length} provision${d.provisions.length > 1 ? "s" : ""}`);
+  });
+}
+
+// Shared force-graph renderer
+function network(sel, nodes, links, { W = 960, H = 620, labelTop = 10 } = {}) {
+  const svg = d3.select(sel).attr("viewBox", `0 0 ${W} ${H}`);
+  const sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.len || 16).strength(.7))
+    .force("charge", d3.forceManyBody().strength(d => d.kind === "law" ? -40 : -14).distanceMax(220))
+    .force("x", d3.forceX(d => d.cx ?? W / 2).strength(.06)).force("y", d3.forceY(H / 2).strength(.08))
+    .force("collide", d3.forceCollide(d => d.r + 1.2)).stop();
+  for (let i = 0; i < 360; i++) sim.tick();
+  nodes.forEach(d => { d.x = Math.max(d.r + 4, Math.min(W - d.r - 4, d.x)); d.y = Math.max(d.r + 4, Math.min(H - d.r - 4, d.y)); });
+  svg.append("g").selectAll("line").data(links).join("line")
+    .attr("x1", d => d.source.x).attr("y1", d => d.source.y).attr("x2", d => d.target.x).attr("y2", d => d.target.y)
+    .attr("stroke", d => col(d.c)).attr("stroke-opacity", .28).attr("stroke-width", d => Math.min(3, .7 + (d.w || 1) * .3));
+  const node = svg.append("g").selectAll("g").data(nodes).join("g").attr("transform", d => `translate(${d.x},${d.y})`);
+  node.filter(d => d.kind === "law").append("rect").attr("x", d => -d.r).attr("y", d => -d.r).attr("width", d => 2 * d.r).attr("height", d => 2 * d.r)
+    .attr("fill", d => col(d.c)).attr("rx", 1);
+  node.filter(d => d.kind !== "law").append("circle").attr("r", d => d.r)
+    .attr("fill", d => d.ghost ? "var(--plate)" : col(d.c)).attr("fill-opacity", d => d.ghost ? 1 : .55)
+    .attr("stroke", d => d.ghost ? "var(--ghost)" : col(d.c)).attr("stroke-dasharray", d => d.ghost ? "2 2" : null).attr("stroke-width", d => d.ghost ? 1.3 : .8);
+  node.append("title").text(d => d.title || d.id);
+  const top = nodes.filter(d => d.label).sort((a, b) => b.deg - a.deg).slice(0, labelTop);
+  svg.append("g").selectAll("text").data(top).join("text")
+    .attr("x", d => d.x + d.r + 4).attr("y", d => d.y).attr("dy", "0.32em").attr("font-size", 11.5).attr("class", "lbl")
+    .attr("paint-order", "stroke").attr("stroke", "var(--plate)").attr("stroke-width", 3).text(d => d.label);
+}
+const lane = { de: 0.16, ch: 0.39, gb: 0.6, us: 0.82 };
+
+// Figure 3: laws → provisions
+{
+  const W = 960, nodes = new Map(), links = [];
+  const pdeg = d3.rollup(amend.flatMap(l => l.provisions.map(p => l.corpus + "|" + p)), v => v.length, d => d);
+  amend.forEach((l, i) => {
+    const id = `L${i}`;
+    nodes.set(id, { id, kind: "law", c: l.corpus, r: 2.5 + Math.sqrt(l.provisions.length) * 1.3, cx: lane[l.corpus] * W, deg: 0, title: `${l.law} · ${l.date}` });
+    l.provisions.forEach(p => {
+      const pid = l.corpus + "|" + p, deg = pdeg.get(pid);
+      if (!nodes.has(pid)) nodes.set(pid, { id: pid, kind: "prov", c: l.corpus, r: 1.8 + Math.sqrt(deg) * 1.1, cx: lane[l.corpus] * W, deg, label: deg >= 4 ? p : null, title: `${p} · amended by ${deg} law${deg > 1 ? "s" : ""}` });
+      links.push({ source: id, target: pid, c: l.corpus });
+    });
+  });
+  network("#f3", [...nodes.values()], links, { W, H: 640, labelTop: 12 });
+}
+
+// Figure 4: cross-references
+{
+  const W = 960, nodes = new Map(), links = [];
+  const deg = new Map();
+  ORDER.forEach(c => (KG.xrefs[c] || []).forEach(([a, b, w]) => { deg.set(c + "|" + b, (deg.get(c + "|" + b) || 0) + w); deg.set(c + "|" + a, (deg.get(c + "|" + a) || 0) + w); }));
+  const xl = { de: 0.2, ch: 0.48, us: 0.8 };
+  ORDER.forEach(c => (KG.xrefs[c] || []).forEach(([a, b, w]) => {
+    [a, b].forEach(p => {
+      const id = c + "|" + p;
+      if (nodes.has(id)) return;
+      const d = deg.get(id), ghost = p.startsWith("title ");
+      nodes.set(id, { id, kind: "prov", c, ghost, r: ghost ? 3 + Math.sqrt(d) * 1.4 : 1.8 + Math.sqrt(d) * .9, cx: xl[c] * W, deg: d, label: p, title: `${NAME[c]} · ${p}${ghost ? " (not in our corpora)" : ""} · ${d} reference${d > 1 ? "s" : ""}` });
+    });
+    links.push({ source: c + "|" + a, target: c + "|" + b, c, w, len: 14 });
+  }));
+  network("#f4", [...nodes.values()], links, { W, H: 640, labelTop: 14 });
+}
+
+// Figure 5: concept bridges (dummy)
+{
+  const W = 960, concepts = Object.keys(KG.concepts.de), H = concepts.length * 54 + 40;
+  const svg = d3.select("#f5").attr("viewBox", `0 0 ${W} ${H}`);
+  const left = ["de", "ch"], right = ["gb", "us"];
+  const cy = d3.scalePoint(concepts, [36, H - 36]);
+  const sy = d3.scalePoint(["de", "ch"], [H * 0.3, H * 0.7]);
+  const pos = { de: [110, sy("de")], ch: [110, sy("ch")], gb: [W - 110, H * 0.3], us: [W - 110, H * 0.7] };
+  const wid = d3.scaleSqrt([1, 350], [0.8, 14]);
+  const mid = W / 2;
+  ORDER.forEach(c => concepts.forEach(k => {
+    const v = KG.concepts[c][k]; if (!v) return;
+    const [px, py] = pos[c], tx = left.includes(c) ? mid - 104 : mid + 104, ty = cy(k);
+    svg.append("path").attr("d", `M${px},${py} C${(px + tx) / 2},${py} ${(px + tx) / 2},${ty} ${tx},${ty}`)
+      .attr("fill", "none").attr("stroke", col(c)).attr("stroke-opacity", .45).attr("stroke-width", wid(v))
+      .append("title").text(`${NAME[c]} · ${k}: ${v} provisions`);
+  }));
+  concepts.forEach(k => {
+    const g = svg.append("g").attr("transform", `translate(${mid},${cy(k)})`);
+    g.append("rect").attr("x", -104).attr("y", -15).attr("width", 208).attr("height", 30).attr("rx", 15)
+      .attr("fill", "var(--plate)").attr("stroke", "var(--ghost)").attr("stroke-dasharray", "3 3");
+    g.append("text").attr("text-anchor", "middle").attr("dy", "0.34em").attr("font-size", 12.5).attr("class", "lbl").text(k);
+  });
+  ORDER.forEach(c => {
+    const [px, py] = pos[c], isL = left.includes(c);
+    svg.append("circle").attr("cx", px).attr("cy", py).attr("r", 7).attr("fill", col(c));
+    svg.append("text").attr("x", isL ? px - 12 : px + 12).attr("y", py).attr("dy", "0.32em").attr("text-anchor", isL ? "end" : "start")
+      .attr("font-size", 12.5).attr("class", "lbl").text(NAME[c].replace("United ", "U. "));
+  });
+}
+</script>
