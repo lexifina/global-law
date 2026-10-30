@@ -136,7 +136,39 @@ def pinned(root_commit: str | None, corpus: str) -> str | None:
     if root_commit is None:
         return None
     line = git('ls-tree', root_commit, '--', corpus).split()
-    return line[2] if len(line) >= 3 and line[1] == 'commit' else None
+    sha = line[2] if len(line) >= 3 and line[1] == 'commit' else None
+    if sha is None or not (ROOT / corpus / '.git').exists() or _has_commit(corpus, sha):
+        return sha
+    return _readable_pin(root_commit, corpus, sha)
+
+
+def _has_commit(corpus: str, sha: str) -> bool:
+    key = ('has', corpus + ':' + sha)
+    if key not in _CACHE:
+        done = subprocess.run(['git', 'cat-file', '-e', sha + '^{commit}'], cwd=ROOT / corpus, capture_output=True)
+        _CACHE[key] = done.returncode == 0
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+def _readable_pin(root_commit: str, corpus: str, missing: str) -> str:
+    """A pin the corpus no longer holds. Rewriting a corpus's history (as on 2026-10-29) gives its documentation
+    commits new ids, while law commits keep theirs; a root commit built before then can pin an id that is gone, and
+    reading through it made every provision look repealed. A documentation commit changes no law text, so the corpus
+    reads the same through the last earlier pin that still exists. A missing law commit has no such stand-in, and
+    stops the read rather than giving a wrong answer."""
+    events = timeline()
+    upto = next((i for i, e in enumerate(events) if e.commit == root_commit), len(events) - 1)
+    for event in reversed(events[:upto + 1]):
+        if event.corpus != corpus:
+            continue
+        if _has_commit(corpus, event.corpus_commit):
+            return event.corpus_commit
+        if event.kind != 'documentation':
+            raise SystemExit(f'{corpus}: the tree pins commit {event.corpus_commit} ({event.law}, in force '
+                             f'{event.in_force}), which this checkout of the corpus does not hold. Fetch it '
+                             f'(git -C {corpus} fetch origin) or update the tree; the text on that date cannot be read.')
+    raise SystemExit(f'{corpus}: the tree pins commit {missing}, which this checkout of the corpus does not hold, '
+                     'and no earlier pin of it exists either. Update the tree and its submodules.')
 
 
 def corpus_dir(corpus: str) -> Path:
