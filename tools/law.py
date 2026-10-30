@@ -97,7 +97,21 @@ def timeline() -> list[Event]:
     return list(_CACHE[key])  # type: ignore[arg-type]
 
 
+def require_full(cwd: Path, name: str) -> None:
+    """Dated reads walk the whole history, of the tree and of each corpus. A shallow clone holds only its newest
+    commits, and reads through it answer wrongly instead of failing: a provision in force today reads as repealed, a
+    past date as having no record. So a shallow clone stops the read."""
+    key = ('full', str(cwd))
+    if key not in _CACHE:
+        _CACHE[key] = git('rev-parse', '--is-shallow-repository', cwd=cwd).strip() != 'true'
+    if not _CACHE[key]:
+        where = '' if cwd == ROOT else f' -C {name}'
+        raise SystemExit(f'{name} is a shallow clone, so dates read from it would be wrong. Fetch its full history '
+                         f'first: git{where} fetch --unshallow')
+
+
 def _timeline() -> list[Event]:
+    require_full(ROOT, 'the tree')
     raw = git('log', '--first-parent', '--reverse', '--format=%H%x1f%s%x1f%B%x1e')
     events = []
     for record in raw.split('\x1e'):
@@ -143,6 +157,7 @@ def corpus_dir(corpus: str) -> Path:
     path = ROOT / corpus
     if not (path / '.git').exists():
         raise SystemExit(f'{corpus} is not checked out; run: git submodule update --init')
+    require_full(path, corpus)
     return path
 
 
