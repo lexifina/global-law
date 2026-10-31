@@ -1844,6 +1844,12 @@ CITATION_FORMS = [
     (re.compile(r'\b(?:art(?:icle|\.)?|s\.|section|reg(?:ulation|\.)?)\s*(\d+[A-Z]?)(?:\(\w+\))*\s*(?:of\s+)?(?:the\s+)?'
                 r'(?:Cap\.?\s*(\d+[A-Z]?)|S\.\s?L\.\s*(\d+)\.0*(\d+))\b', re.I),
      lambda m: f"{malta_corpus() or 'mt/national/malta-law'}/{f'cap/{m.group(2)}' if m.group(2) else f'sl/{m.group(3)}.{m.group(4)}'}/{m.group(1)}.md"),
+    # Australia: the Corporations Regulations 2001 number their regulations chapter.part.number
+    # ("reg 6.10.01", "r 7.1.04", "regulation 1.0.02"), and the dotted form is theirs. A plain
+    # "reg 15" is left alone: every other instrument numbers that way too, so it would need the
+    # instrument named to be resolvable, and guessing would point at the wrong law.
+    (re.compile(r'\b(?:regulations?|regs?\.?|r\.?)\s*(\d+\.\d+(?:\.\d+)*[A-Z]?)(?:\(\w+\))*\b', re.I),
+     lambda m: f"{au_instruments_corpus() or 'au/federal/instruments'}/corporations-regulations-2001/r-{m.group(1)}.md"),
 ]
 MAX_BRIEF = 50_000  # characters of text resolve_citations reads
 # A Maltese Act or instrument named on its own: "Cap. 387", "S.L. 586.08". ("Chapter 11" is left alone: in a US
@@ -1853,6 +1859,13 @@ MALTA_ACT = re.compile(r'\b(?:Cap\.?\s*(\d+[A-Z]?)|S\.\s?L\.\s*(\d+)\.0*(\d+))\b
 
 def malta_folder(m: re.Match) -> str:
     return f"{malta_corpus() or 'mt/national/malta-law'}/{f'cap/{m.group(1)}' if m.group(1) else f'sl/{m.group(2)}.{m.group(3)}'}"
+
+
+def au_instruments_corpus() -> str | None:
+    """Australia's Commonwealth legislative instruments in this tree, found by country code and the corpus's own
+    folder name: the statute book is australia/federal/acts, and the instruments made under it sit beside it."""
+    return next((c['path'] for c in law.manifest()['corpora']
+                 if iso_code(c) == 'au' and c['path'].rsplit('/', 1)[-1] == 'instruments'), None)
 
 
 def malta_corpus() -> str | None:
