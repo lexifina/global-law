@@ -799,6 +799,19 @@ class ScopeRules(unittest.TestCase):
         self.assertTrue(self.m.malta_folder(self.m.MALTA_ACT.search('the Arbitration Act (Cap. 387)')).endswith('/cap/387'))
         self.assertIsNone(self.m.MALTA_ACT.search('a chapter 11 case'))  # US chapters are not Maltese Chapters
 
+    def test_australian_instrument_citation_forms(self):
+        cite = lambda text: [to(m) for rx, to in self.m.CITATION_FORMS for m in rx.finditer(text)]
+        # The Corporations Regulations 2001 number regulations chapter.part.number. The folder the
+        # instruments corpus sits in comes from the manifest, as Malta's does.
+        for text in ('see reg 6.10.01 of the Corporations Regulations 2001', 'r 6.10.01', 'reg. 6.10.01'):
+            self.assertTrue(cite(text)[0].endswith('/corporations-regulations-2001/r-6.10.01.md'), text)
+        self.assertTrue(cite('regulation 7.1.04(2) applies')[0].endswith('/r-7.1.04.md'))
+        # A plain number is not resolvable to one instrument, so it is left alone rather than guessed,
+        # and a regulation of a named foreign instrument still goes to that instrument.
+        self.assertEqual(cite('under reg 15'), [])
+        self.assertTrue(all('corporations-regulations' not in c
+                            for c in cite('reg. 15 of the SEND Regulations 2014')))
+
     def test_page_furniture_is_not_law(self):
         # Malta's consolidations come from print: running heads, page numbers, hyphens at line ends and a symbol
         # font's private-use spaces move whenever a page break does. None of them is a word of the law.
