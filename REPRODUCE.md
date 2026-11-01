@@ -308,7 +308,7 @@ reviewed line by line by a lawyer. For anything that matters, the legislation it
   - `blame` names the law in each jurisdiction, and `words` credits each word: the restored §1182(1) to Pub. L.
     117-151, Art. 79 to both 1949 and 1954, one word of reg. 13(3) to the 2020 coronavirus regulations.
   - Copied tags point at the matching state.
-  - A plain `git ls-tree` and `git show` gives the same text as the tools.
+  - A plain `git ls-tree` and `git show` give the same text as the tools.
   - A date window lists laws from two countries in order.
 
 ## Changes to this repository after it was published
