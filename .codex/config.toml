@@ -1,0 +1,5 @@
+# The global-law MCP server, for Codex in this clone (Codex reads project config in trusted projects).
+# git runs tools/mcp.sh from the top of the clone, which starts tools/mcp_server.py with Python 3.9+.
+[mcp_servers.global-law]
+command = "git"
+args = ["-c", "alias.global-law-mcp=!f() { if [ -f tools/mcp.sh ]; then exec sh tools/mcp.sh; fi; echo 'global-law: start the MCP server inside a clone of lexifina/global-law' >&2; exit 1; }; f", "global-law-mcp"]

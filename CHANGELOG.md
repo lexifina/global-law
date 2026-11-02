@@ -8,6 +8,28 @@ Status words:
 - **Open:** found and reported, not yet fixed.
 - **Checked:** a test that passed.
 
+## 2 November 2026
+
+The MCP server, tested and fixed from 29 October to 2 November.
+
+- **Fixed (all). Dates read from each country's own history.** Since 2 November the tree only moves each country's pin forward, with no dated root commit for each law, and a country's repository may be rebuilt. The tools still read "the law on a date" from the last dated root commit, so for 89 of 107 corpora they used an older pin than HEAD. Where the country was rebuilt, that pin no longer existed: asked about Article 1 of Romania's Constitution, the server said it "was removed on 2003-10-29". A provision on a date is now read from its own history at the pin of HEAD: the commit with the latest in-force date on or before that date, a later commit winning a tie, whatever the order of commits. So an older act appended after a country's tip reads correctly, and a correction commit (`Kind: correction`, `Corrects: <act> <from>..<to>`) replaces the version it corrects for the dates it names, which `read_law` says. The timeline across countries merges the countries' histories. Romania's record now shows 2,105 changes, where the root history held 64. MCP.md, "How a date is read", has the rule.
+- **Fixed (Romania and others).** `find_provision` matches words without diacritics ("Constituția" finds `constitutia/`) and reads "articolul" as naming an article. `list_jurisdictions` no longer prints an empty language or coverage.
+
+- **Fixed (all). One country without the rest.** A clone holding only some countries used to fail. `list_jurisdictions` and `find_provision` gave internal errors, and `laws_between` refused to answer. The server now serves the countries checked out, and `tools/countries.py add romania` downloads one country's history alone. Whatever is left out is named, with the command that adds it, so "nothing found" is never read as nothing in the law. `countries.py only` narrows the server further. MCP.md, "Only some countries", has the commands.
+- **Fixed (all). Starting it in any client, on any platform.**
+  - `.mcp.json` ran `python`, which macOS and most Linux do not have. Every project config now starts `tools/mcp.sh` through git, and the script takes the first of `python3`, `python` and `py` that is Python 3.9 or newer.
+  - The clone now carries configs for Cursor, VS Code and Codex, and an `AGENTS.md` (with `CLAUDE.md` including it) that tells agents to use the server.
+  - The first answer took 7 s. The server now reads the timeline and lists every corpus as it starts, so a first question is usually answered in under half a second. Git now gets an empty stdin: on Windows a child that inherited the server's stdin stalled until the client's first message.
+- **Fixed (all). Long provisions and long calls.**
+  - `read_law` returned a 6.5 MB Spanish order whole, a 13 MB reply of about 1.6 million tokens. Long texts now come in parts of 40,000 characters, each saying which `offset` gives the next. Other answers stop at 60,000 characters and say how to narrow the question.
+  - `who_wrote` on that order ran for over six minutes, because the 120-second limit covered only git and the server answered one request at a time. The limit now covers the server's own work. `who_wrote` credits by line on very long provisions and says so. The server answers `ping` while a call runs, and a cancelled call is stopped.
+  - `list_provisions` read every file under a folder to label the few rows it showed. Listing Spain's 326,000 files took 34 s and now takes 1.6 s.
+  - A client that stopped reading kept the server alive for ever. It now ends.
+- **Checked:**
+  - All 89 server tests passed on a 54-corpus tree on 29 October, and the new ones on Python 3.9 under Linux. After the change to how dates are read (2 November), the tests for choosing countries, starting the server, dating and comparing versions were run again and pass, and a clone of Romania alone was checked by hand: Article 1 of the Constitution in force today, as it stood in 2000, its history and who wrote each word.
+  - Claude Code, in a clone of three countries, was asked about 11 U.S.C. § 362. It said the US Code is not in the clone and gave the command that adds it, rather than answering from memory.
+  - Asked for the last paragraph of a 2.5 MB Czech decree, Claude Code took the length with one cheap call and went straight to the last part.
+
 ## 28 October 2026
 
 - **Open (Armenia).** A letters-and-digits check against ARLIS's raw pages found that capitalised article headings ("ՀՈԴՎԱԾ 58.") were not recognised, so runs of articles were folded into a neighbouring file, and in one law duplicated (0.014% missing and 0.019% extra text over 500 sampled texts). The corpus is being rebuilt; this tree pins the old head until the next build.

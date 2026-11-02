@@ -43,18 +43,29 @@ dates were checked) or `current-only` (today's text only).
 ## Using it from an AI model (MCP)
 
 `tools/mcp_server.py` is a Model Context Protocol server for this tree. It lets Claude or any other MCP client ask the
-law what it said on a date, and every answer states where its record starts and ends. It uses only Python 3.10+ and
+law what it said on a date, and every answer states where its record starts and ends. It uses only Python 3.9+ and
 git, runs on your machine over stdio, reads the repository and changes nothing. It makes no network calls.
 
+You can download one country's law instead of the whole tree, which is several GB. The clone itself is the shared
+index of every country, about 650 MB; Romania then adds about 60 MB:
+
 ```sh
-git clone --recurse-submodules https://github.com/lexifina/global-law && cd global-law
-claude mcp add global-law -- python tools/mcp_server.py      # Claude Code; or approve the project's .mcp.json
+git clone https://github.com/lexifina/global-law && cd global-law
+python3 tools/countries.py add romania      # git downloads Romania's history only
+claude      # or open the folder in Cursor, VS Code or Codex: the server starts on its own
 ```
 
-For other clients (Claude Desktop, Cursor and the like), add this to their MCP settings:
+For every country, clone with `--recurse-submodules` instead. The server serves the countries in your clone and, when
+asked about another, names the command that adds it. [MCP.md](MCP.md#only-some-countries) has the details.
+
+The clone carries the setup for Claude Code (`.mcp.json`), Cursor (`.cursor/mcp.json`), VS Code (`.vscode/mcp.json`)
+and Codex (`.codex/config.toml`, once you trust the project), and an `AGENTS.md` that tells agents to use the server.
+Each starts `tools/mcp.sh` through git, which finds Python 3.9 or newer as `python3`, `python` or `py`, so the same
+files work on macOS, Linux and Windows. For a client elsewhere (Claude Desktop and the like), add this to its MCP
+settings:
 
 ```json
-{ "mcpServers": { "global-law": { "command": "python", "args": ["/path/to/global-law/tools/mcp_server.py"] } } }
+{ "mcpServers": { "global-law": { "command": "git", "args": ["-C", "/path/to/global-law", "-c", "alias.global-law-mcp=!sh tools/mcp.sh", "global-law-mcp"] } } }
 ```
 
 Then ask in plain words, for example:
@@ -108,7 +119,7 @@ second apart, in the right order. The `In-force` trailer is authoritative and th
 
 ```
 git clone https://github.com/lexifina/global-law && cd global-law
-git submodule update --init
+git submodule update --init          # every country; or python3 tools/countries.py add <country> for some
 
 python tools/law.py world 2022-05-01                       what every corpus looked like that day
 python tools/law.py show 2022-05-01 united-states/federal/usc/title-11/1182.md

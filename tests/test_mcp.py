@@ -6,8 +6,10 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
+import time
 import unittest
 from pathlib import Path
 
@@ -31,6 +33,7 @@ def CORPUS(path: str) -> str:
 
 
 USC = P('us/federal/usc/title-11/1182.md')
+STAY = P('us/federal/usc/title-11/362.md')  # the automatic stay: about 40,000 characters, long enough to come in parts
 GG_FOLDER = P('de/bund/grundgesetz')  # a corpus of its own, or the grundgesetz/ folder of all federal law
 GG = P('de/bund/grundgesetz/artikel/{}.md')
 SEND = P('gb/uk/send/uksi/2014/1530/regulation/13.md')
@@ -829,6 +832,322 @@ class ScopeRules(unittest.TestCase):
         ok, assumed = self.m.group_holds([('subset', 'small business')], '2022-01-01')
         self.assertTrue(ok)
         self.assertIn('cannot check', assumed[0])
+
+
+class Launching(unittest.TestCase):
+    """Every client's project config starts the server from any folder of the clone, on any platform."""
+
+    CONFIGS = ('.mcp.json', '.cursor/mcp.json', '.vscode/mcp.json', '.codex/config.toml')
+
+    def entry(self, config: str) -> dict:
+        text = (ROOT / config).read_text(encoding='utf-8')
+        if config.endswith('.toml'):  # flat enough to read without tomllib (Python 3.11+)
+            values = dict(re.findall(r'^(\w+) = (.+)$', text, re.M))
+            return {k: json.loads(v) for k, v in values.items()}
+        data = json.loads(text)
+        return (data.get('mcpServers') or data['servers'])['global-law']
+
+    def test_every_project_config_starts_the_server(self):
+        for config in self.CONFIGS:
+            with self.subTest(config=config):
+                entry = self.entry(config)
+                # The clients' own variables: Claude Code's ${CLAUDE_PROJECT_DIR:-.}, Cursor's and VS Code's ${workspaceFolder}.
+                expand = lambda s: re.sub(r'\$\{(?:CLAUDE_PROJECT_DIR:-\.|workspaceFolder)\}', str(ROOT).replace('\\', '/'), s)  # noqa: E731
+                proc = subprocess.run([expand(entry['command']), *map(expand, entry['args'])], cwd=ROOT / 'tests',
+                                      input=b'{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}\n',
+                                      capture_output=True, timeout=120)
+                reply = json.loads(proc.stdout.decode('utf-8').splitlines()[0])
+                self.assertEqual(reply['result']['serverInfo']['name'], 'global-law', proc.stderr[-300:])
+
+    def test_claude_code_approves_the_server(self):
+        settings = json.loads((ROOT / '.claude/settings.json').read_text(encoding='utf-8'))
+        self.assertIn('global-law', settings['enabledMcpjsonServers'])
+        self.assertIn('mcp__global-law', settings['permissions']['allow'])  # every tool is read-only
+
+    def test_launcher_keeps_lf_line_ends(self):
+        self.assertIn('*.sh text eol=lf', (ROOT / '.gitattributes').read_text(encoding='utf-8'))
+        self.assertNotIn(b'\r', (ROOT / 'tools/mcp.sh').read_bytes())
+
+
+class Warming(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def test_git_never_reads_the_servers_stdin(self):
+        # stdin carries the client's messages; on Windows a child inheriting it also waits on the main thread's read.
+        from unittest import mock
+        with mock.patch.object(self.m.subprocess, 'Popen') as popen:
+            popen.return_value.__enter__.return_value.communicate.return_value = (b'', b'')
+            self.m.git_run(['git', 'rev-parse', 'HEAD'], capture_output=True)
+            self.m.git_run(['git', 'cat-file', '--batch'], input=b'', capture_output=True)
+        self.assertIs(popen.call_args_list[0].kwargs['stdin'], subprocess.DEVNULL)
+        self.assertIs(popen.call_args_list[1].kwargs['stdin'], subprocess.PIPE)  # input= gets a pipe of its own
+
+    def test_warming_lists_every_corpus(self):
+        self.m.warm()
+        corpora = [c['path'] for c in self.m.law.manifest()['corpora'] if (ROOT / c['path'] / '.git').exists()]
+        cached = self.m.names_of.cache_info().misses
+        for corpus in corpora:
+            self.m.names_of(corpus, self.m.corpus_head(corpus))
+        self.assertEqual(self.m.names_of.cache_info().misses, cached)  # every one was already read
+
+
+class Limits(unittest.TestCase):
+    """Long answers come in parts, no call outlives its time in git or in the server's own work, and the server keeps
+    answering while a call runs: a ping is answered, and a cancelled call stops and gets no answer."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+        cls.server = Server()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.close()
+
+    def parts(self, tool: str, field: str, **args) -> tuple[str, list[dict]]:
+        """Every part of a paged answer, read the way a model would: each part's next_offset asks for the next."""
+        whole, places, offset = '', [], 0
+        while offset is not None:
+            r = self.server.call(tool, max_chars=5000, offset=offset, **args)
+            self.assertFalse(r['isError'], r['content'][0]['text'])
+            whole += r['structuredContent'][field]
+            places.append(r['structuredContent'][f'{field}_part' if field != 'text' else 'text_part'])
+            offset = places[-1]['next_offset']
+        return whole, places
+
+    def test_read_law_comes_in_parts_that_join_up(self):
+        full = self.server.call('read_law', path=STAY, date='2026-01-01')['structuredContent']['text']
+        joined, places = self.parts('read_law', 'text', path=STAY, date='2026-01-01')
+        self.assertGreater(len(places), 1)
+        self.assertEqual(joined, full)
+        self.assertTrue(all(p['chars'] == len(full) for p in places))
+        r = self.server.call('read_law', path=STAY, date='2026-01-01', max_chars=1000)
+        self.assertIn('call again with offset=', r['content'][0]['text'])
+        r = self.server.call('read_law', path=STAY, date='2026-01-01', offset=len(full) + 10)
+        self.assertTrue(r['isError'])
+
+    def test_compare_dates_comes_in_parts(self):
+        full = self.server.call('compare_dates', path=STAY, date_a='2018-01-01', date_b='2026-01-01',
+                                max_chars=self.m.PAGE_MOST)['structuredContent']['word_diff']
+        if len(full) <= 5000:
+            self.skipTest('the diff is short')
+        joined, places = self.parts('compare_dates', 'word_diff', path=STAY, date_a='2018-01-01', date_b='2026-01-01')
+        self.assertEqual(joined, full)
+
+    def test_parts_are_never_tiny_and_end_between_words(self):
+        r = self.server.call('read_law', path=STAY, date='2026-01-01', max_chars=0)  # a slip, not 1-character parts
+        self.assertGreaterEqual(r['structuredContent']['text_part']['next_offset'], 500)
+        text = '[1]' + ' '.join(['word'] * 600) + '[2]' + ' '.join(['more'] * 600)  # marked text, no line break
+        part, place, _ = self.m.page(text, {'max_chars': 1000})
+        self.assertTrue(part.endswith(' '), repr(part[-20:]))
+        self.assertEqual(place['next_offset'], len(part))
+
+    def test_a_long_answer_not_in_parts_is_cut_and_says_so(self):
+        from unittest import mock
+        folder = CORPUS(USC)
+        with mock.patch.object(self.m, 'MAX_ANSWER', 2000):
+            reply = self.m._handle('tools/call', 1, {'name': 'list_provisions', 'arguments': {'path': folder, 'max_results': 500, 'by_folder': False}})
+        text = reply['result']['content'][0]['text']
+        self.assertLess(len(text), 2300)
+        self.assertIn('Narrow the question', text)
+        self.assertGreater(reply['result']['structuredContent']['text_cut']['chars'], 2000)
+        with mock.patch.object(self.m, 'MAX_ANSWER', 2000):  # a paged answer keeps the length it asked for
+            reply = self.m._handle('tools/call', 2, {'name': 'read_law', 'arguments': {'path': STAY, 'date': '2026-01-01', 'max_chars': 5000}})
+        self.assertGreater(len(reply['result']['content'][0]['text']), 4000)
+
+    def test_headings_are_read_only_for_rows_shown(self):
+        # Reading every file's heading read every file: listing Spain's 326,000 took 34 s and the whole text in memory.
+        from unittest import mock
+        asked = []
+        real = self.m.read_headings.__wrapped__
+        with mock.patch.object(self.m, 'read_headings', lambda c, s, names: asked.append(len(names)) or real(c, s, names)):
+            text, data = self.m.t_list_provisions({'path': CORPUS(USC), 'max_results': 3, 'by_folder': False})
+            self.assertEqual(len(data['provisions']), 3)
+            self.assertTrue(all(p['heading'] for p in data['provisions']), data['provisions'])
+            self.assertLessEqual(max(asked), 3)
+            asked.clear()
+            self.m.t_list_provisions({'path': CORPUS(USC)})  # by folder: a title for each folder shown
+            self.assertLessEqual(max(asked or [0]), self.m.FOLDER_ROWS)
+
+    def test_a_server_no_one_reads_still_exits(self):
+        # A client that closes stdin and never reads: the answers fill the pipe, and the server must not wait for ever.
+        fresh = Server()
+        try:
+            for i in range(4):
+                fresh.proc.stdin.write((json.dumps({'jsonrpc': '2.0', 'id': i, 'method': 'tools/call', 'params': {
+                    'name': 'read_law', 'arguments': {'path': STAY, 'date': '2026-01-01'}}}) + '\n').encode('utf-8'))
+            fresh.proc.stdin.close()
+            started = time.monotonic()
+            # It must exit, however busy the machine: warming up and four reads, then 10 s of a stalled write.
+            fresh.proc.wait(timeout=600)
+            self.assertLess(time.monotonic() - started, 600)
+        finally:
+            if fresh.proc.poll() is None:
+                fresh.proc.kill()
+            fresh.proc.stdout.close()
+            fresh.proc.stderr.close()
+
+    def test_who_wrote_credits_long_provisions_by_line(self):
+        from unittest import mock
+        with mock.patch.object(self.m, 'WORDS_MAX', 50):
+            text, data = self.m.t_who_wrote({'path': USC, 'date': '2026-01-01'})
+        self.assertEqual(data['granularity'], 'line')
+        self.assertIn('Credited by line', text)
+        with mock.patch.object(self.m, 'WORDS_SECONDS', -1):  # any word-by-word pass is too slow
+            text, data = self.m.t_who_wrote({'path': USC, 'date': '2026-01-01'})
+        self.assertEqual(data['granularity'], 'line')
+        self.assertIn('longer than', data['fell_back'])
+
+    def test_the_deadline_covers_the_servers_own_work(self):
+        self.m._call.deadline = time.monotonic() - 1
+        try:
+            with self.assertRaises(subprocess.TimeoutExpired):
+                self.m.checkpoint()
+            with self.assertRaises(subprocess.TimeoutExpired):
+                self.m.git_run(['git', 'rev-parse', 'HEAD'], capture_output=True)
+        finally:
+            self.m._call.deadline = 0.0
+
+    def test_a_cancelled_git_process_is_stopped(self):
+        import threading
+        self.m._call.cancel = threading.Event()
+        self.m._call.cancel.set()
+        try:
+            with self.assertRaises(self.m.Cancelled):
+                self.m.git_run(['git', 'rev-parse', 'HEAD'], capture_output=True)
+        finally:
+            self.m._call.cancel = None
+
+    def test_ping_and_cancel_while_a_call_waits(self):
+        # A fresh server's first call waits for the warm-up (seconds), so the ping and the cancel arrive while it waits.
+        fresh = Server()
+        try:
+            def line(m):
+                fresh.proc.stdin.write((json.dumps({'jsonrpc': '2.0', **m}) + '\n').encode('utf-8'))
+            line({'id': 1, 'method': 'tools/call', 'params': {'name': 'list_jurisdictions', 'arguments': {}}})
+            line({'method': 'notifications/cancelled', 'params': {'requestId': 1, 'reason': 'test'}})
+            line({'id': 2, 'method': 'ping'})
+            line({'id': 3, 'method': 'tools/call', 'params': {'name': 'find_provision', 'arguments': {'query': '1182'}}})
+            fresh.proc.stdin.flush()
+            first = json.loads(fresh.proc.stdout.readline())
+            second = json.loads(fresh.proc.stdout.readline())
+            self.assertEqual(first['id'], 2)  # answered at once, ahead of the waiting call
+            self.assertEqual(second['id'], 3)
+            fresh.proc.stdin.close()
+            self.assertEqual(fresh.proc.stdout.read(), b'')  # the cancelled call never answers
+        finally:
+            fresh.proc.wait(timeout=60)
+            fresh.proc.stdout.close()
+            fresh.proc.stderr.close()
+
+
+class Dating(unittest.TestCase):
+    """A provision on a date is read from its own history by in-force date, not commit order: corpora append older acts
+    after their tip and corrections to earlier versions, and the tree can only grow by fast-forward."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import law
+        cls.law = law
+
+    def test_the_greatest_in_force_date_wins_and_a_correction_only_in_its_dates(self):
+        from unittest import mock
+        rows = [{'commit': 'a', 'in_force': '2010-01-01', 'kind': 'law'},
+                {'commit': 'b', 'in_force': '2020-01-01', 'kind': 'law'},
+                {'commit': 'c', 'in_force': '2005-06-01', 'kind': 'law'},  # an older act, appended after the tip
+                {'commit': 'd', 'in_force': '2010-01-01', 'kind': 'correction', 'until': '2015-12-31'}]  # corrects a
+        with mock.patch.object(self.law, 'history', lambda path: rows):
+            on = lambda date: self.law.file_commit(date, 'x/y/z/a.md')  # noqa: E731
+            self.assertIsNone(on('2004-12-31'))
+            self.assertEqual(on('2007-01-01'), 'c')
+            self.assertEqual(on('2012-01-01'), 'd')  # the correction ties with a and is later
+            self.assertEqual(on('2016-01-01'), 'a')  # the correction's dates are over
+            self.assertEqual(on('2021-01-01'), 'b')
+
+    def test_corrects_names_its_dates(self):
+        m = self.law.CORRECTS.search('Legea nr. 31/1990 2010-01-01..2015-12-31')
+        self.assertEqual((m.group(1), m.group(2)), ('2010-01-01', '2015-12-31'))
+        m = self.law.CORRECTS.search('Codul civil 2011-10-01..')
+        self.assertEqual((m.group(1), m.group(2)), ('2011-10-01', None))
+
+
+class Choosing(unittest.TestCase):
+    """A clone may hold some countries, and a user may narrow the server to some: what is left out is named, with
+    the command that adds it, and never fails a tool."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import countries
+        import law
+        cls.law, cls.countries = law, countries
+        cls.server = Server(GLOBAL_LAW_JURISDICTIONS=GG_FOLDER)  # only the corpus that holds the Grundgesetz
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.close()
+
+    def test_names_take_in_corpora(self):
+        corpus = {'path': 'united-states/federal/usc', 'iso_path': 'us/federal/usc', 'code': 'US'}
+        for name in ('united-states', 'United States', 'us', 'US', 'us/federal', 'united-states/federal/usc',
+                     'united-states/federal/usc/title-11', 'united-states/'):
+            self.assertTrue(self.law.matches(corpus, name), name)
+        for name in ('united', 'united-kingdom', 'u', '', 'united-states/state'):
+            self.assertFalse(self.law.matches(corpus, name), name)
+
+    def test_only_the_chosen_corpus_is_served(self):
+        r = self.server.call('list_jurisdictions')
+        served = [c['path'] for c in r['structuredContent']['corpora']]
+        self.assertEqual(served, [CORPUS(GG_FOLDER)])
+        left = r['structuredContent']['not_served']
+        self.assertTrue(left and all(c['reason'] in ('not chosen', 'not checked out') for c in left))
+        self.assertIn('Served here: 1 of the', r['content'][0]['text'])
+
+    def test_a_corpus_left_out_says_how_to_add_it(self):
+        if CORPUS(USC) == CORPUS(GG_FOLDER):
+            self.skipTest('the US Code and the Grundgesetz share a corpus')
+        r = self.server.call('read_law', path=USC)
+        self.assertTrue(r['isError'])
+        self.assertIn(CORPUS(USC), r['content'][0]['text'])
+        self.assertRegex(r['content'][0]['text'], r'countries\.py (only --all|add )')
+        r = self.server.call('search_law', query='stay', jurisdiction=P('us'))
+        self.assertTrue(r['isError'])
+        self.assertIn('countries.py', r['content'][0]['text'])
+
+    def test_answers_over_every_jurisdiction_say_what_was_not_searched(self):
+        r = self.server.call('laws_between', start='2019-01-01', end='2019-12-31')
+        self.assertFalse(r['isError'])
+        self.assertIn('were not searched', r['content'][0]['text'])
+        self.assertTrue(r['structuredContent']['not_searched_corpora'])
+        r = self.server.call('read_law', path=GG.format('001'), include_text=False)  # a served path carries no note
+        self.assertFalse(r['isError'])
+        self.assertNotIn('were not searched', r['content'][0]['text'])
+
+    def test_a_citation_left_out_is_not_called_absent(self):
+        r = self.server.call('resolve_citations', text='11 U.S.C. § 1182(1) and Art. 1 GG')
+        states = {c['path']: c['status'] for c in r['structuredContent']['citations']}
+        self.assertEqual(states.get(USC), 'not served here')
+
+    def test_a_corpus_not_checked_out_is_named(self):
+        import mcp_server
+        self.assertEqual(mcp_server.serving({'path': 'nowhere/national/acts', 'name': 'x'}, ()), 'not checked out')
+
+    def test_countries_resolves_names_and_suggests(self):
+        self.assertEqual([c['path'] for c in self.countries.resolve([GG_FOLDER])], [CORPUS(GG_FOLDER)])
+        with self.assertRaises(SystemExit) as stop:
+            self.countries.resolve([GG_FOLDER.split('/')[0] + 'x'])
+        self.assertIn('Did you mean', str(stop.exception))
 
 
 if __name__ == '__main__':

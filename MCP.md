@@ -6,13 +6,45 @@ and git, reads the repository and changes nothing.
 
 ## Set up
 
+You need git and Python 3.9 or newer (macOS's own `python3` will do). Nothing else to install.
+
+**One country.** The whole tree is several GB, but each country is its own git submodule, so you can download only
+the law you need. For Romania:
+
 ```sh
-git clone --recurse-submodules https://github.com/lexifina/global-law && cd global-law
-claude mcp add global-law -- python tools/mcp_server.py
+git clone https://github.com/lexifina/global-law && cd global-law
+python3 tools/countries.py add romania
+claude      # or open the folder in Cursor, VS Code or Codex
 ```
 
-The repository also carries a project `.mcp.json`, so Claude Code offers the server in any clone without that
-second command; approve it when asked.
+The first command fetches the shared index of every country without any country's law (about 650 MB). The second
+downloads Romania's history alone (about 60 MB). Ask about Romanian law and the server answers from it; ask about a country you have not added and it tells
+you the command that adds it. Add more countries at any time (`python3 tools/countries.py add france spain`); a
+running server sees them within seconds. On Windows, run the script with `py` or `python`.
+
+**Every country:**
+
+```sh
+git clone --recurse-submodules https://github.com/lexifina/global-law && cd global-law
+claude
+```
+
+The clone carries each client's project config, all starting `tools/mcp.sh` through git, which runs it from the top of
+the clone with a POSIX shell on every platform (Git for Windows brings one) and picks the first of `python3`, `python`
+and `py` that is new enough:
+
+| Client | File | First run |
+|---|---|---|
+| Claude Code | `.mcp.json`, approved by `.claude/settings.json` | Trust the folder when asked; the server and its read-only tools are then allowed |
+| Cursor | `.cursor/mcp.json` | Turn the server on under MCP settings if Cursor lists it as off |
+| VS Code (Copilot agent mode) | `.vscode/mcp.json` | Start it from the file's "Start" link or the MCP servers list |
+| Codex | `.codex/config.toml` | Trust the project; Codex reads project config only in trusted projects |
+
+`AGENTS.md` (and `CLAUDE.md`, which includes it) tells agents to answer questions about the law with these tools.
+To start the server by hand, `sh tools/mcp.sh` speaks MCP on stdin and stdout.
+
+The first answer after starting reads the whole timeline and lists every corpus, a few seconds on a full checkout. The
+server does that as soon as it starts, so by the time a client asks, it is usually done.
 
 On large corpora (Malta has about 7,000 commits and 67,000 files), a provision's history is a path-limited `git log`.
 Writing each corpus's commit graph with changed-path filters makes it about three times faster. This writes only
@@ -25,8 +57,52 @@ git submodule foreach --quiet 'git commit-graph write --reachable --changed-path
 Any other MCP client works the same way: the server speaks newline-delimited JSON-RPC over stdio. For a project file:
 
 ```json
-{ "mcpServers": { "global-law": { "command": "python", "args": ["/path/to/global-law/tools/mcp_server.py"] } } }
+{ "mcpServers": { "global-law": { "command": "git", "args": ["-C", "/path/to/global-law", "-c", "alias.global-law-mcp=!sh tools/mcp.sh", "global-law-mcp"] } } }
 ```
+
+## Only some countries
+
+The server serves the countries checked out in your clone and, if you choose some, only those. `tools/countries.py`
+does both:
+
+| Command | What it does |
+|---|---|
+| `python3 tools/countries.py` | Lists every body of law in the tree: served, checked out but not chosen, or not checked out |
+| `python3 tools/countries.py add romania` | Checks it out; git downloads only that |
+| `python3 tools/countries.py only romania` | Serves only these, checking out any not yet here |
+| `python3 tools/countries.py only --all` | Serves every body of law checked out again |
+
+A name is a country folder (`romania`, `"united kingdom"`), an ISO code (`ro`), a level (`united-states/federal`) or a
+corpus path (`romania/national/acts`). A misspelt name gets a suggestion. `only` writes `global-law.jurisdictions` to
+the clone's own `.git/config`, which is never committed. To narrow one client's server without changing the clone, set
+`GLOBAL_LAW_JURISDICTIONS` (names separated by commas) in that server's environment; it takes precedence.
+
+What the model sees:
+- `list_jurisdictions` describes the bodies of law served, then names the others, why each is left out (not checked
+  out, or not chosen) and the command that adds them.
+- An answer over every jurisdiction (a search, `laws_between`, `world_on_date`) ends with "Served here: 1 of the 107
+  corpora in the tree; the other 106 were not searched", so "nothing found" is not read as nothing in the law.
+- A path or `jurisdiction` in a country left out gets an error naming the command that adds it. `resolve_citations`
+  marks such a citation `not served here`, and `find_provision` flags an alias that points to one.
+- The server's instructions tell the model to pass that command to the user, not to answer from memory.
+
+A provision's history needs only its own corpus, so dates, authorship and history are the same with one country as
+with all of them.
+
+## How a date is read
+
+Each country's record is its own git history, and each commit there carries the day its change took effect. A
+provision on a date is read from its own history, in the history the tree pins at HEAD: of the commits that touch it,
+the one with the latest in-force date on or before that date, a later commit winning a tie. The order of commits does
+not matter, because a country may append an older act after its tip. A correction (`Kind: correction`, with
+`Corrects: <act> <from>..<to>`, `Supersedes:` and `Reason:`) wins over the version it corrects for the dates it names,
+and `read_law` says that a correction applies. The timeline across countries (`laws_between`, `world_on_date`,
+`search_changes`) merges the countries' histories by date.
+
+Until 2 November 2026 the tree also wrote one dated root commit per law taking effect, and the tools read those. Since
+then the tree only moves each country's pin forward (it grows by fast-forward alone, and a country's repository may be
+rebuilt), so its root history ends there. The old root commits now only date a country commit that carries no date of
+its own.
 
 ## Tools
 
@@ -58,7 +134,26 @@ its title and last change.
 Resources: `global-law://README.md`, `REPRODUCE.md`, `CHANGELOG.md` and `manifest.json`.
 
 Prompts (ready-made research tasks): `provision_on_a_date`, `case_timeline` and `what_changed`. A resource template
-`global-law://law/{path}?date={date}` gives any provision as in force on a date.
+`global-law://law/{path}?date={date}&offset={n}` gives any provision as in force on a date.
+
+## Long provisions and long calls
+
+- **Long texts come in parts.** `read_law`, `compare_dates` and `who_wrote` give at most 40,000 characters of text at a
+  time (about 10,000 tokens; `max_chars` sets 1,000 to 100,000). A longer text says "Part: characters 0 to 39,958 of
+  6,541,961. For the next part, call again with offset=39958", and the structured answer gives the same as
+  `text_part`, `word_diff_part`, `marked_part` or `lines_part`. Parts end at a line break or a space. One Spanish order
+  is 6.5 MB, and over a thousand files pass 100 KB. `read_law` with `include_text: false` gives the length
+  (`text_chars`), so a model can go straight to the end of a long act.
+- **Other answers stop at 60,000 characters**, at a line break, and say how to narrow the question.
+- **No call runs past 120 seconds**, whether the time goes to git or to the server's own work, such as comparing
+  versions. A git process still running then is killed.
+- **`who_wrote` stays quick on long provisions.** It credits by word up to 100,000 characters, and by line (git blame)
+  past that or when the word-by-word pass takes more than 30 seconds, and says so (`fell_back`). Tracing words brought
+  back after a temporary change ended is skipped for long provisions with many versions and stopped after 20 seconds
+  otherwise; the answer says so (`traced`).
+- **The server keeps answering while a call runs.** Tool calls and resource reads run in order on a worker thread;
+  everything else, `ping` included, is answered at once. `notifications/cancelled` stops the call it names: its git
+  process is killed, the server's own loops stop at their next check, and it gets no answer.
 
 ## Protocol
 
@@ -89,8 +184,12 @@ an option.
   back-reference.
 - Git never runs a text-conversion filter or an external diff driver (`--no-textconv --no-ext-diff`), even when a
   checkout's attributes name one that your git config defines.
-- Each tool call has 120 seconds of git in total, after which it stops and says so. Lists are capped and say when they
-  were cut. Searches look at no more commits than they show, and `resolve_citations` looks up at most 100 provisions.
+- Each tool call has 120 seconds in all, in git and in the server's own work, after which it stops and says so. A
+  client can cancel a call, and the server answers other requests while one runs. Long texts come in parts. Lists are
+  capped and say when they were cut. Searches look at no more commits than they show, and `resolve_citations` looks up
+  at most 100 provisions.
+- A client that stops reading cannot keep the server alive: a broken pipe drops the remaining work, and after stdin
+  closes a reply stalled for 10 seconds ends the process.
 - A message is limited to 1 MB. Bytes that are not UTF-8, JSON nested too deep and numbers too long to read are
   answered with a parse error. A corpus that is not checked out narrows an answer and is named; it does not stop the
   server. An internal error reports only its type, and the details go to stderr.

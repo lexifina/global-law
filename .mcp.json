@@ -1,9 +1,14 @@
 {
   "mcpServers": {
     "global-law": {
-      "command": "python",
-      "args": ["tools/mcp_server.py"],
-      "env": { "PYTHONDONTWRITEBYTECODE": "1" }
+      "command": "git",
+      "args": [
+        "-C",
+        "${CLAUDE_PROJECT_DIR:-.}",
+        "-c",
+        "alias.global-law-mcp=!f() { if [ -f tools/mcp.sh ]; then exec sh tools/mcp.sh; fi; echo 'global-law: start the MCP server inside a clone of lexifina/global-law' >&2; exit 1; }; f",
+        "global-law-mcp"
+      ]
     }
   }
 }

@@ -306,6 +306,25 @@ class Semantics(unittest.TestCase):
         self.assertEqual([e.in_force for e in window], sorted(e.in_force for e in window))
 
 
+class Trailers(unittest.TestCase):
+    """Only the last paragraph that is mostly trailers counts, as in git interpret-trailers."""
+
+    def test_last_paragraph(self):
+        self.assertEqual(law.trailers_all('Subject\n\nBody.\n\nCorpus: c\nIn-force: 2020-01-01\nAffecting: a\nAffecting: b'),
+                         {'Corpus': ['c'], 'In-force': ['2020-01-01'], 'Affecting': ['a', 'b']})
+
+    def test_an_earlier_paragraph_when_the_last_is_prose(self):
+        self.assertEqual(law.trailers_all('Subject\n\nKey: v\n\nnot a trailer\nnor this\nnor that'), {'Key': ['v']})
+
+    def test_a_line_of_spaces_ends_a_paragraph(self):
+        self.assertEqual(law.trailers_all('Subject\nWord: in the body\nmore body\nand more\n  \nKey: v'), {'Key': ['v']})
+        self.assertEqual(law.trailers_all('Subject\n \n\nKey: v'), {'Key': ['v']})
+
+    def test_none(self):
+        self.assertEqual(law.trailers_all('Subject only'), {})
+        self.assertEqual(law.trailers_all(''), {})
+
+
 class GitReadsTheDates(unittest.TestCase):
     """git's own trailer parser must find each law commit's in-force date, so plain git (interpret-trailers,
     %(trailers)) works without our parser. Trailer keys must be ASCII: a key like `Verkündet:` makes git reject the

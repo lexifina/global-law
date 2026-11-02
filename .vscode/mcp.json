@@ -1,0 +1,15 @@
+{
+  "servers": {
+    "global-law": {
+      "type": "stdio",
+      "command": "git",
+      "args": [
+        "-C",
+        "${workspaceFolder}",
+        "-c",
+        "alias.global-law-mcp=!f() { if [ -f tools/mcp.sh ]; then exec sh tools/mcp.sh; fi; echo 'global-law: start the MCP server inside a clone of lexifina/global-law' >&2; exit 1; }; f",
+        "global-law-mcp"
+      ]
+    }
+  }
+}
