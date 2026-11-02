@@ -1049,6 +1049,36 @@ class ScopeRules(unittest.TestCase):
         for text in ('regulation 2.1 of the EU Regulation', 'reg 3.4 applies', 'r. 12.5', 'reg 6.10.01.5'):
             self.assertTrue(all('corporations-regulations' not in c for c in cite(text)), text)
 
+    def test_mexican_citation_forms(self):
+        cite = lambda text: [p for rx, to in self.m.CITATION_FORMS for m in rx.finditer(text)
+                             for p in ([to(m)] if isinstance(to(m), str) else to(m))]
+        # The article, any apartado, fracción or párrafo, then the act by its abbreviation or title; or the act
+        # first; or "constitucional". The folder Mexico's corpus sits in comes from the manifest, as Malta's does.
+        self.assertTrue(cite('artículo 123, apartado A, fracción XI, de la CPEUM')[0].endswith('/constitucion/art-123.md'))
+        self.assertTrue(cite('el art. 94 constitucional')[0].endswith('/constitucion/art-094.md'))
+        self.assertTrue(cite('el artículo 4o. de la Constitución Política de los Estados Unidos Mexicanos')[0].endswith('/constitucion/art-004.md'))
+        self.assertTrue(cite('artículo 46 Bis de la LFTSE')[0].endswith(
+            '/ley-federal-de-los-trabajadores-al-servicio-del-estado/art-046-bis.md'))
+        self.assertTrue(cite('artículo 29-A Bis del Código Fiscal de la Federación')[0].endswith(
+            '/codigo-fiscal-de-la-federacion/art-029-a-bis.md'))
+        self.assertTrue(cite('artículo 15 A de la Ley del Seguro Social')[0].endswith('/ley-del-seguro-social/art-015-a.md'))
+        # A list gives every article in it, in its order.
+        self.assertEqual([p.rsplit('/', 1)[1] for p in cite('artículos 103 y 107 constitucionales')], ['art-103.md', 'art-107.md'])
+        self.assertEqual([p.rsplit('/', 1)[1] for p in cite('artículos 46, 46 Bis y 47 de la LFTSE')],
+                         ['art-046.md', 'art-046-bis.md', 'art-047.md'])
+        # Codes of more than 999 articles pad to four digits (art-0048.md); the record's own file names decide, so
+        # this is checked only where the corpus is checked out.
+        corpus = self.m.mexico_corpus()
+        if corpus and (ROOT / corpus / '.git').exists():
+            self.assertTrue(cite('LFT, art. 48')[0].endswith('/ley-federal-del-trabajo/art-0048.md'))
+        # No act named, or a constitution not named as Mexico's: left alone rather than guessed.
+        self.assertEqual(cite('el artículo 48 establece'), [])
+        self.assertEqual(cite('artículo 24 de la Constitución'), [])
+        self.assertEqual(cite('artículo 31.3 de la Ley Orgánica 4/2000'), [])
+        # An act named first does not take an article that names its own act.
+        self.assertEqual([p.rsplit('/', 2)[1] for p in cite('artículo 48 de la LFT, artículo 50 del CFF')],
+                         ['ley-federal-del-trabajo', 'codigo-fiscal-de-la-federacion'])
+
     def test_page_furniture_is_not_law(self):
         # Malta's consolidations come from print: running heads, page numbers, hyphens at line ends and a symbol
         # font's private-use spaces move whenever a page break does. None of them is a word of the law.
