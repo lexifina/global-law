@@ -1828,6 +1828,53 @@ def t_check_precedent(args: dict) -> tuple[str, dict]:
     return '\n'.join(lines), {'path': path, 'date': date, 'checks': checks, 'judgments_recorded': len(recorded)}
 
 
+# Mexico: the acts a Mexican brief names, by the abbreviation or title it uses, and the folder each is in. Only names
+# no other country's law uses: "Código de Comercio" and "Ley del Impuesto sobre la Renta" are left out for that reason.
+MEXICAN_ACTS = {
+    'constitucion': ('CPEUM', 'Constitución Política de los Estados Unidos Mexicanos', 'Constitución Federal',
+                     'Constitución mexicana'),
+    'ley-federal-del-trabajo': ('LFT', 'Ley Federal del Trabajo'),
+    'ley-federal-de-los-trabajadores-al-servicio-del-estado': ('LFTSE', 'Ley Federal de los Trabajadores al Servicio del Estado',
+                                                               'Ley Burocrática'),
+    'ley-organica-del-poder-judicial-de-la-federacion': ('LOPJF', 'Ley Orgánica del Poder Judicial de la Federación'),
+    'ley-de-amparo': ('Ley de Amparo',),
+    'codigo-nacional-de-procedimientos-penales': ('CNPP', 'Código Nacional de Procedimientos Penales'),
+    'codigo-nacional-de-procedimientos-civiles-y-familiares': ('CNPCF', 'Código Nacional de Procedimientos Civiles y Familiares'),
+    'codigo-federal-de-procedimientos-civiles': ('CFPC', 'Código Federal de Procedimientos Civiles'),
+    'codigo-civil-federal': ('CCF', 'Código Civil Federal'),
+    'codigo-penal-federal': ('Código Penal Federal',),
+    'codigo-fiscal-de-la-federacion': ('CFF', 'Código Fiscal de la Federación'),
+    'ley-del-seguro-social': ('LSS', 'Ley del Seguro Social'),
+    'ley-del-issste': ('LISSSTE', 'Ley del ISSSTE', 'Ley del Instituto de Seguridad y Servicios Sociales de los Trabajadores del Estado'),
+    'ley-del-infonavit': ('Ley del INFONAVIT', 'Ley del Instituto del Fondo Nacional de la Vivienda para los Trabajadores'),
+    'ley-general-de-responsabilidades-administrativas': ('LGRA', 'Ley General de Responsabilidades Administrativas'),
+    'ley-federal-de-procedimiento-administrativo': ('LFPA', 'Ley Federal de Procedimiento Administrativo'),
+    'ley-federal-de-procedimiento-contencioso-administrativo': ('LFPCA', 'Ley Federal de Procedimiento Contencioso Administrativo'),
+    'ley-general-de-sociedades-mercantiles': ('LGSM', 'Ley General de Sociedades Mercantiles'),
+    'ley-general-de-titulos-y-operaciones-de-credito': ('LGTOC', 'Ley General de Títulos y Operaciones de Crédito'),
+}
+
+
+def _mx_name(name: str) -> str:
+    """A name as a pattern that also reads it without accents ("Codigo", "Organica") and across line breaks."""
+    out = re.escape(name)
+    for accented, plain in zip('áéíóú', 'aeiou'):
+        out = out.replace(accented, f'[{accented}{plain}]')
+    return out.replace(r'\ ', r'\s+')
+
+
+_MX_ACT = '|'.join(_mx_name(n) for n in sorted((n for ns in MEXICAN_ACTS.values() for n in ns), key=len, reverse=True))
+# One article: "123", "4o.", and its suffix: "46 Bis", "21 bis 1", "410 A", "29-A Bis", "32-A".
+_MX_ONE = (r'(\d{1,4})(?!\d)(?:o\.|°|º)?((?:\s*-\s*|\s+)(?-i:[A-Z])(?!\w)(?:\s+(?:bis|ter))?'
+           r'|\s+(?:bis|ter|qu[áa]ter|quinquies|sexies|septies|octies|nonies|decies)(?:\s+\d{1,2}(?![\d°º]|o\.))?)?')
+# "artículo 123", "art. 94", and a list: "artículos 103 y 107", "arts. 46, 46 Bis y 47".
+_MX_ART = (r'\bart(?:[íi]culos?|s?\.)\s*(?P<list>' + re.sub(r'\((?!\?)', '(?:', _MX_ONE) +
+           r'(?:(?:\s*,\s*|\s+[yeo]\s+)' + re.sub(r'\((?!\?)', '(?:', _MX_ONE) + r')*)')
+# What may stand between the article and the act: ", apartado A, fracción XI,", "párrafo segundo", "primer párrafo".
+_MX_PARTS = (r'(?:[\s,]+(?:apartados?|fracci[óo]n(?:es)?|p[áa]rrafos?|incisos?|bases?|numerales?|primer[oa]?|segund[oa]|'
+             r'tercer[oa]?|cuart[oa]|quint[oa]|[úu]ltim[oa]|pen[úu]ltim[oa])\b(?:\s+(?!de\b|del\b)[\w°º.-]{1,12}){0,2})*')
+
+
 # Citation forms the tree can resolve: (regex over free text, function from the match to a provision path).
 CITATION_FORMS = [
     (re.compile(r'\b(\d{1,2})\s*U\.?\s?S\.?\s?C\.?(?:\s*A\.?)?\s*(?:(?:§§?|[Ss]ec(?:tion|\.)?)\s*)?(\d+[a-zA-Z]?(?:-\d+)?)((?:\([0-9A-Za-z]+\))*)'),
@@ -1844,6 +1891,14 @@ CITATION_FORMS = [
     (re.compile(r'\b(?:art(?:icle|\.)?|s\.|section|reg(?:ulation|\.)?)\s*(\d+[A-Z]?)(?:\(\w+\))*\s*(?:of\s+)?(?:the\s+)?'
                 r'(?:Cap\.?\s*(\d+[A-Z]?)|S\.\s?L\.\s*(\d+)\.0*(\d+))\b', re.I),
      lambda m: f"{malta_corpus() or 'mt/national/malta-law'}/{f'cap/{m.group(2)}' if m.group(2) else f'sl/{m.group(3)}.{m.group(4)}'}/{m.group(1)}.md"),
+    # Mexico: "artículo 123, apartado A, fracción XI, de la CPEUM", "artículo 46 Bis de la LFTSE", "art. 94
+    # constitucional", and the act first: "LFT, art. 48". A bare "artículo 48" names no act and is left alone.
+    (re.compile(_MX_ART + _MX_PARTS + r'[\s,]+(?:(?:de\s+(?:la|el|los)|del)\s+)?(?:(?P<act>' + _MX_ACT + r')|constitucional(?:es)?)(?!\w)', re.I),
+     lambda m: mexico_paths(m.group('act') or 'CPEUM', m.group('list'))),
+    # The act first ("LFT, art. 48"), unless the article goes on to name its own act ("de la LFT, artículo 50 del CFF").
+    (re.compile(r'(?<!\w)(?P<act>' + _MX_ACT + r')\s*,?\s*' + _MX_ART + r'(?!' + _MX_PARTS + r'[\s,]+(?:(?:de\s+(?:la|el|los)|del)\s+)?(?:'
+                + _MX_ACT + r'|constitucional(?:es)?)(?!\w))', re.I),
+     lambda m: mexico_paths(m.group('act'), m.group('list'))),
 ]
 MAX_BRIEF = 50_000  # characters of text resolve_citations reads
 # A Maltese Act or instrument named on its own: "Cap. 387", "S.L. 586.08". ("Chapter 11" is left alone: in a US
@@ -1859,6 +1914,31 @@ def malta_corpus() -> str | None:
     """Malta's statute book in this tree, found by its country code in the manifest: its folder has been
     mt/national/malta-law and malta/national/acts, and Chapters (cap/) and subsidiary legislation (sl/) sit under it."""
     return next((c['path'] for c in law.manifest()['corpora'] if iso_code(c) == 'mt'), None)
+
+
+def mexico_corpus() -> str | None:
+    """Mexico's federal law in this tree, found by its country code in the manifest (mx/national/acts, later
+    mexico/national/acts)."""
+    return next((c['path'] for c in law.manifest()['corpora'] if iso_code(c) == 'mx'), None)
+
+
+def mexico_paths(act: str, articles: str) -> list[str]:
+    """The files of the Mexican articles a citation names: art-048.md, art-046-bis.md, art-0410-a.md. Codes of more
+    than 999 articles pad to four digits (art-0048.md in the Ley Federal del Trabajo); the record's own files decide."""
+    folder = next(f for f, names in MEXICAN_ACTS.items() if any(re.fullmatch(_mx_name(n), act.strip(), re.I) for n in names))
+    corpus = mexico_corpus() or 'mx/national/acts'
+    try:
+        names = names_of(corpus, corpus_head(corpus))
+    except Exception:  # the corpus is not checked out: the usual three digits
+        names = ()
+    width = 4 if any(re.match(rf'{re.escape(folder)}/art-\d{{4}}', n) for n in names) else 3
+    paths = []
+    for m in re.finditer(_MX_ONE, articles, re.I):
+        tail = ''.join('-' + p for p in re.split(r'[\s-]+', (m.group(2) or '').strip().lower().replace('á', 'a')) if p)
+        paths.append(f'{corpus}/{folder}/art-{m.group(1).zfill(width)}{tail}.md')
+    return paths
+
+
 MAX_CITATIONS = 100  # distinct provisions resolve_citations looks up in one call
 
 
@@ -1895,11 +1975,13 @@ def t_resolve_citations(args: dict) -> tuple[str, dict]:
     matches, seen = [], set()
     for rx, to_path in CITATION_FORMS:  # finding citations is cheap; looking each one up is not
         for m in rx.finditer(text):
-            key = (here(to_path(m)), m.group(0).strip())
-            if key not in seen:
-                seen.add(key)
-                matches.append((m.start(), *key))
-    matches.sort()
+            found_paths = to_path(m)
+            for path in [found_paths] if isinstance(found_paths, str) else found_paths:  # a list: "artículos 103 y 107"
+                key = (here(path), m.group(0).strip())
+                if key not in seen:
+                    seen.add(key)
+                    matches.append((m.start(), *key))
+    matches.sort(key=lambda r: r[0])  # by place in the text; a list keeps its own order
     found, states = [], {}
     for at, path, cited in matches:
         if path not in states and len(states) >= limit:  # each provision is looked up once, and only up to the limit
@@ -1910,7 +1992,7 @@ def t_resolve_citations(args: dict) -> tuple[str, dict]:
     found = found[:MAX_ITEMS]
     if not found:
         return ('No citation this tree can resolve was found. Forms read: "11 U.S.C. § 1182(1)", "Art. 16a Abs. 1 GG", '
-                '"s. 42 CFA 2014", "reg. 13 SEND Regulations 2014", "Art. 10a BV".'), {'date': date, 'citations': []}
+                '"s. 42 CFA 2014", "reg. 13 SEND Regulations 2014", "Art. 10a BV", "artículo 48 de la LFT".'), {'date': date, 'citations': []}
     lines = [f'{len(found)} citation(s), as on {date}:']
     for e in found:
         detail = ''
