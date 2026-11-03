@@ -205,6 +205,8 @@ def corpus_events(corpus: str) -> list[Event]:
     cwd = ROOT / corpus
     if not (cwd / '.git').exists():
         return []
+    if not _readable(corpus, cwd):
+        return []  # an unfinished checkout: left out and named (unreadable()), so it does not stop every other corpus
     _require_full_history(corpus, cwd)
     sha = tip(corpus) or 'HEAD'
     key = ('corpus-events', f'{corpus}@{sha}')
@@ -515,8 +517,11 @@ def corpus_tree(date: str, corpus: str) -> str | None:
 def corpus_of(path: str) -> tuple[str, str]:
     for corpus in sorted(manifest()['corpora'], key=lambda c: -len(c['path'])):
         prefix = corpus['path'] + '/'
-        if path.startswith(prefix):
+        if path.startswith(prefix) and path[len(prefix):]:
             return corpus['path'], path[len(prefix):]
+        if path == corpus['path'] or path == prefix:
+            raise SystemExit(f"{corpus['path']} is a whole corpus, not one provision: give a file inside it, for example "
+                             f"{corpus['path']}/<act>/<provision>.md (git -C {corpus['path']} ls-files lists them)")
     raise SystemExit(f'{path} is not inside a corpus; see manifest.json')
 
 
@@ -534,8 +539,29 @@ def corpus_dir(corpus: str) -> Path:
     path = ROOT / corpus
     if not (path / '.git').exists():
         raise SystemExit(f'{corpus} is not checked out; run: python3 tools/countries.py add {corpus}')
+    if not _readable(corpus, path):
+        raise SystemExit(_UNREADABLE.format(corpus=corpus))
     _require_full_history(corpus, path)
     return path
+
+
+_UNREADABLE = ('{corpus} is checked out but has no commit yet (an unfinished or interrupted clone). '
+               'Run: git submodule update --init -- {corpus}')
+
+
+def _readable(corpus: str, cwd: Path) -> bool:
+    """Whether a corpus checkout has a commit to read. A clone that was interrupted, or is still running, has a .git
+    but no HEAD; reading every corpus (timeline, world, laws) would then stop on it, so it is left out and named."""
+    key = ('readable', corpus)
+    if not _CACHE.get(key):  # asked again until it is readable: a clone still running finishes later
+        done = subprocess.run(['git', 'rev-parse', '-q', '--verify', 'HEAD^{commit}'], cwd=cwd, capture_output=True)
+        _CACHE[key] = done.returncode == 0
+    return bool(_CACHE[key])
+
+
+def unreadable() -> list[str]:
+    """The corpora left out of a whole-tree read because their checkout has no commit yet."""
+    return sorted(k[1] for k, ok in _CACHE.items() if k[0] == 'readable' and not ok)
 
 
 def _shallow(cwd: Path) -> bool:
@@ -908,8 +934,11 @@ def main(argv: list[str]) -> None:
             last = [e for e in events if e.corpus == corpus['path'] and e.in_force <= args[0] and e.kind != 'documentation']
             state = (f'{last[-1].law}, in force {last[-1].in_force}' if last else 'not yet in the record') \
                 if (ROOT / corpus['path'] / '.git').exists() else 'not checked out'
+            if corpus['path'] in unreadable():
+                state = 'checkout unfinished (no commit yet)'
             print(f"  {corpus['path']:<24} {state}")
         note(c for corpus in manifest()['corpora'] for c in caveats(args[0], corpus['path'], events) if 'runs to' in c)
+        note(_UNREADABLE.format(corpus=c) for c in unreadable())
     elif command in ('show', 'blame', 'words'):
         corpus, _ = corpus_of(args[1])
         note(caveats(args[0], corpus))
@@ -956,6 +985,7 @@ def main(argv: list[str]) -> None:
         for e in timeline():
             if args[0] <= e.in_force <= args[1] and e.corpus.startswith(prefix) and e.kind not in ('documentation', 'printing'):
                 print(f'{e.in_force}  {e.corpus:<24} {e.law}')
+        note(_UNREADABLE.format(corpus=c) for c in unreadable() if c.startswith(prefix))
     else:
         raise SystemExit(__doc__)
 

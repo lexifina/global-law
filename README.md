@@ -11,13 +11,16 @@ https://github.com/user-attachments/assets/f24f3411-24d9-416a-8c45-9cebc817c64e
 sits in each country's repository, under that repository's own terms.
 
 The law of many jurisdictions as one git history. Each jurisdiction's law is its own repository, where every commit
-is one law taking effect, written by that law. This repository arranges those repositories by jurisdiction and
-interleaves their histories in the order the changes took force, so a single commit here is the state of all of them on
-one day.
+is one law taking effect, written by that law. This repository arranges those repositories by jurisdiction as
+submodules, and each commit here moves them forward to their latest commits. The dates come from each repository's
+own history: the tools read the `In-force` trailer of every commit there, so they can give the law of any country on
+any date. Until 2 November 2026 this repository also interleaved those histories into one commit per law, in the order
+the changes took force; that part of the history is still here, frozen, but it no longer grows, and some of the
+commits it pins were later rebuilt and are gone.
 
 ```
 global-law/
-├── manifest.json            every corpus: path, source repo, coverage, which trailer holds the in-force date
+├── manifest.json            the first 107 corpora, as of 2 November 2026; .gitmodules lists them all
 ├── jurisdiction.json        the world, and its children: 193 UN members, other territories with their own ISO code, and the EU
 ├── germany/                 Germany (ISO code DE in its jurisdiction.json)
 │   ├── SOURCES.md           where German law can be read, with what each source offers
@@ -25,18 +28,22 @@ global-law/
 │       └── acts/            submodule: the Grundgesetz since 1949 (grundgesetz/), every other federal act since 2019
 ├── estonia/                 Estonia
 │   └── national/acts/       submodule: Estonia's law history, from its corpus.json
-├── france/                  France: jurisdiction.json and SOURCES.md, no history yet
+├── france/                  France
+│   └── national/acts/       submodule: every consolidated text in LEGI, the database behind Légifrance
 └── …                        every other country, the same way
 ```
 
 Each country's law lives in its own repository, `lexifina/<country>-law`, which says where it belongs here in a
 `corpus.json` at its root. A country whose repository still holds only its sources (no law yet) has a folder with its
-`jurisdiction.json` and `SOURCES.md`, and no submodule: only real law is pinned. Laws adopted but not yet in force stay
-on each corpus's future branch; `main` here holds only what is in force by the build date.
+`jurisdiction.json` and `SOURCES.md`, and no submodule. Not every submodule holds a history of the law: some hold only
+the current text, and some only a list of acts with no text, where the publisher's terms do not allow copying it. Each
+corpus's own README says which. Laws adopted but not yet in force are kept on a future branch by most corpora; a few
+keep them on `main`, dated ahead, and the tools show them only from that date.
 
 Corpora differ widely in reach. Some hold a country's whole statute book (Czechia, Spain, Switzerland, Georgia, Malta);
 others hold a few acts, or a sample: the US corpus is nine titles of the United States Code, and the UK corpus is the
-special educational needs law. `manifest.json` gives each corpus's `coverage`, and `history` says how its past is known:
+special educational needs law. For the corpora in `manifest.json`, it gives each one's `coverage`; for the rest, their
+own `corpus.json` or README does. `history` says how a corpus's past is known:
 `in-force` (dated official versions), `replayed` (rebuilt by applying each amending act; its `verification` says which
 dates were checked) or `current-only` (today's text only).
 
@@ -130,19 +137,25 @@ python tools/law.py laws 1990-01-01 1990-12-31 germany
 ```
 
 Dates must be written YYYY-MM-DD. When a date falls before a record starts or after it ends, the tools say so on
-stderr, because each country's record covers a different period (see `record_to` in `manifest.json`).
+stderr, because each country's record covers a different period (see `record_to` in `manifest.json`, or in the
+corpus's own `corpus.json`).
 
 Plain git works too, with care:
 
-- `git log --first-parent` is a world chronology of laws taking effect.
-- `git grep --recurse-submodules <term> <commit>` searches all the law in force at that moment, in every country.
-- `git diff --submodule=diff <commit> <commit>` shows every change in every country between two moments.
+- `git log --first-parent` lists when each corpus was moved forward here, not when laws took effect. Up to
+  2 November 2026 it was a world chronology of laws taking effect, and those commits are still in the history.
+- `git grep --recurse-submodules <term>` searches the latest text of every country checked out. For the law on a
+  date, use the tools: a corpus's commits are not always in the order the changes took force, because older acts can
+  be added after newer ones.
+- `git diff --submodule=diff <commit> <commit>` shows every change between two commits here.
 - Inside a corpus, `git blame` names the law that wrote each line, and `git log -p --word-diff -- <file>` shows each
   law's change word by word, which matters where a line is a whole paragraph. Blame and log do not cross from here
   into a corpus: run them in the corpus folder, or use `law.py`.
 - To look around an older moment, use a separate worktree, not `git checkout` here:
   `git worktree add ../then <commit> && cd ../then && git submodule update --init`. Checking out an old commit here
   leaves the folders of corpora that did not exist yet, and the tools, which live in the last commit, disappear.
+  Commits made here before 3 November 2026 may pin corpus commits that were later rebuilt and are no longer published;
+  `git submodule update` then fails for those corpora.
 - Git cannot store dates before 1970, so `git log --before=1960-01-01` gives a wrong answer without saying so. The
   tools read the `In-force` trailer instead.
 - Don't clone with `--depth` (here, or with `--shallow-submodules`): every date is read from the whole history, so a
@@ -166,9 +179,10 @@ rebuild check.
 
 ## How it was made
 
-`tools/build.py` builds this repository from the published corpus repositories, deterministically. REPRODUCE.md
-records the command, the software, the commits pinned, the decisions made by hand and what an AI model did and did
-not do.
+Up to 2 November 2026, `tools/build.py` built this repository from the published corpus repositories,
+deterministically, and REPRODUCE.md records that build: the command, the software, the commits pinned, the decisions
+made by hand and what an AI model did and did not do. Since then the repository is not rebuilt: each commit only adds
+corpora as submodules and moves their pins forward, so its history only grows.
 
 ## Videos
 
