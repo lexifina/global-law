@@ -896,7 +896,7 @@ def credit(author: str, kind: str) -> str:
     return CREDIT.get(kind, '{}').format(author)
 
 
-INDEX_VERSION = 3  # raise when what the index keeps changes: old indexes are then rebuilt
+INDEX_VERSION = 4  # raise when what the index keeps changes: old indexes are then rebuilt
 
 
 def _derive(info: dict, commit: str, author: str, when: str, subject: str, block: str) -> tuple[tuple, str | None]:
@@ -914,8 +914,14 @@ def _derive(info: dict, commit: str, author: str, when: str, subject: str, block
         kind = 'uncredited'
     trailer = info.get('in_force_trailer') or 'In-force'
     in_force = t.get(trailer)
-    if not in_force and ISO_DAY.match(t.get('Text-as-of', '')):  # a text read on a day, with no in-force day of its own
-        in_force, kind = t['Text-as-of'][:10], ('baseline' if kind == 'law' else kind)
+    # A text read on a day, with no in-force day of its own: Text-as-of alone, or In-force set to that same day, or
+    # In-force-basis saying the source gives no date. It is a starting text: before it the record does not reach.
+    as_of = t.get('Text-as-of', '')[:10] if ISO_DAY.match(t.get('Text-as-of', '')) else None
+    no_date = 'no date' in t.get('In-force-basis', '').lower()
+    if as_of and (not in_force or in_force[:10] == as_of or no_date):
+        in_force, kind = in_force or as_of, ('baseline' if kind == 'law' else kind)
+    elif no_date and kind == 'law':
+        kind = 'baseline'
     via = None
     for key, label in (('baseline_trailer', 'baseline'), ('correction_trailer', 'correction')):
         k = info.get(key)

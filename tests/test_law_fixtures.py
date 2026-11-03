@@ -143,6 +143,8 @@ class Fixtures(unittest.TestCase):
         d.commit('Odd 2005', {'act/b.md': 'Other law.\n'}, In_force='2005-01-01', Kind='wobble')
         d.commit('Publisher of DD', {'act/b.md': 'Other law, changed.\n'}, In_force='2006-01-01', Kind='publisher',
                  Words_changed='yes')
+        c.commit('Publisher of CC', {'l1980/art-1.md': '# Art. 1\nText of 1980.\n'}, In_force='2026-10-31',
+                 Text_as_of='2026-10-31', In_force_basis='source gives no date')
         e = t.corpus('ee/national/acts')
         e.commit('Lexifina', {'README.md': '# EE\n\n**Metadata only, no law text.**\n'}, Kind='documentation')
         e.commit('Register', {'acts/1.md': '# Law 1\nNumber: 1\n'}, In_force='2014-01-01')
@@ -202,6 +204,9 @@ class Fixtures(unittest.TestCase):
         out, err, _ = self.t.cli('laws', '2026-10-30', '2026-10-30')
         self.assertNotIn('cc/national/acts', out)
         self.assertIn('1 starting texts', err)
+        # In-force written as the capture day, with Text-as-of and In-force-basis: still a starting text.
+        msg = self.law.explain_missing('2000-01-01', 'cc/national/acts/l1980/art-1.md')
+        self.assertIn('the record starts on 2026-10-31', msg)
 
     def test_kinds(self):
         kinds = {e.corpus_commit: e.kind for e in self.law.corpus_events('dd/national/acts')}
