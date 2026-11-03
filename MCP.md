@@ -116,6 +116,27 @@ then the tree only moves each country's pin forward (it grows by fast-forward al
 rebuilt), so its root history ends there. The old root commits now only date a country commit that carries no date of
 its own.
 
+## How a corpus describes itself
+
+The server reads every corpus the tree pins. `manifest.json` describes those the full builder placed, and since
+2 November 2026 it is no longer rewritten. Each corpus it does not list is described by its own `corpus.json` when
+it is checked out, or else by the `jurisdiction.json` and `data/repo.json` that build.py repos ship (name and code,
+with defaults for the rest), or else by its path. `corpus.json` fields the readers use:
+
+| Field | Meaning |
+|---|---|
+| `corpus` | ISO path, `<iso2>/<level>/<kind>`, for example `de/bremen/acts` (required) |
+| `name`, `language` | What it is, and its ISO 639-1 language |
+| `coverage` | One line on what the record holds, for example "every Act in force since 1947" |
+| `history` | `in-force`, `current-only`, `replayed` or `as-enacted` |
+| `history_from`, `record_to`, `checked_on` | Where the record starts, the day it is complete to, the day it was last checked |
+| `record_note` | Anything a reader must know about the record |
+| `in_force_trailer` | The trailer holding each change's in-force day (default `In-force`); `baseline_trailer` and `correction_trailer` if used |
+| `citation` | `{"file": "<regex over the corpus path with groups (folder, number)>", "cites": "<git grep -E pattern, {n} for the number>"}` |
+| `scope.default_reach` | Optional: how a change reaches pending cases where no scope is recorded |
+
+`tools/check_corpus.py` checks a repo against this before it is pinned.
+
 ## Tools
 
 To browse a large corpus by act, give `list_provisions` the start of a folder name, for example

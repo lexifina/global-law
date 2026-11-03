@@ -54,7 +54,14 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         except json.JSONDecodeError as e:
             fatal.append(f'corpus.json is not valid JSON: {e}')
             corpus_json = {}
-    if not corpus_json and not legacy:
+    # A build.py repo describes itself in jurisdiction.json and data/repo.json, and the reader (tools/law.py
+    # with_unlisted) takes its name and code from them, with defaults for the rest: a warning, not a failure.
+    descriptor = 'jurisdiction.json' in files or git('cat-file', '-e', 'HEAD:data/repo.json', cwd=repo).returncode == 0
+    if not corpus_json and descriptor:
+        warn.append('no corpus.json: described by jurisdiction.json and data/repo.json, so readers take the name and '
+                    'code from them and use defaults for the rest (no language, coverage or record dates, the In-force '
+                    'trailer, no citation rule)')
+    elif not corpus_json and not legacy:
         (warn if work_in_progress else fatal).append('no corpus.json at the root')
     cj = corpus_json or {}
     missing = [k for k in REQUIRED if not cj.get(k)]
@@ -67,9 +74,9 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         fatal.append(f"corpus path {cj['corpus']!r} is not <iso>/<level>/<name>")
     if cj.get('history', 'in-force') not in HISTORY:
         fatal.append(f"corpus.json history {cj['history']!r} is not one of {', '.join(HISTORY)}")
-    if 'citation' not in cj:
+    if cj and 'citation' not in cj:  # only of a corpus.json that exists: the descriptor warning above covers the rest
         warn.append('corpus.json has no citation rule, so citations of this law are not recognised')
-    else:
+    elif 'citation' in cj:
         warn.extend(citation_problems(cj['citation']))
 
     # A legacy corpus has no corpus.json, so the builder's fallback entry names its trailer (Germany: In-Kraft).

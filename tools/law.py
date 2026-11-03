@@ -47,8 +47,63 @@ def _head() -> str:
 def manifest() -> dict:
     key = ('manifest', _head())
     if key not in _CACHE:
-        _CACHE[key] = json.loads(git('show', 'HEAD:manifest.json'))
+        _CACHE[key] = with_unlisted(json.loads(git('show', 'HEAD:manifest.json')))
     return _CACHE[key]  # type: ignore[return-value]
+
+
+def with_unlisted(m: dict) -> dict:
+    """manifest.json with every corpus the tree pins but does not list. Since 2 November 2026 the tree only adds
+    submodules and moves pins, and manifest.json is no longer rewritten, so most corpora are in .gitmodules alone
+    (603 of 710 on 3 November). Each is described by its own corpus.json, else data/repo.json and jurisdiction.json
+    (what build.py repos ship), when it is checked out; else by its path. Defaults: In-force trailer, no citation rule."""
+    listed = {c['path'] for c in m.get('corpora', [])}
+    pins = [l.split(None, 3)[3] for l in git('ls-tree', '-r', '-d', 'HEAD').splitlines() if l.split(None, 3)[1] == 'commit']
+    urls: dict[str, str] = {}
+    paths: dict[str, str] = {}
+    for line in git('config', '--blob', 'HEAD:.gitmodules', '--get-regexp', r'^submodule\..*\.(path|url)$', check=False).splitlines():
+        name, _, value = line.partition(' ')
+        (paths if name.endswith('.path') else urls)[name.rsplit('.', 1)[0]] = value
+    url_of = {p: urls.get(n, '') for n, p in paths.items()}
+    extra = []
+    for path in pins:
+        if path in listed:
+            continue
+        folders = path.split('/')
+        entry = {'path': path, 'name': ', '.join(f.replace('-', ' ').title() for f in folders[:2]), 'language': '',
+                 'in_force_trailer': 'In-force', 'url': url_of.get(path, ''), 'unlisted': True}
+        entry.update(described(path))
+        extra.append(entry)
+    return {**m, 'corpora': m.get('corpora', []) + extra}
+
+
+def described(path: str) -> dict:
+    """A checked-out corpus's own description: corpus.json, else data/repo.json and jurisdiction.json."""
+    cwd = ROOT / path
+    if not (cwd / '.git').exists():
+        return {}
+
+    def read(name: str) -> dict:
+        done = subprocess.run(['git', 'show', f'HEAD:{name}'], cwd=cwd, capture_output=True, encoding='utf-8')
+        try:
+            return json.loads(done.stdout) if done.returncode == 0 else {}
+        except ValueError:
+            return {}
+
+    cj = read('corpus.json')
+    if cj:
+        out = {k: v for k, v in cj.items() if k not in ('corpus', 'path')}
+        if cj.get('corpus'):
+            out['iso_path'] = cj['corpus']
+        return out
+    repo, juris = read('data/repo.json'), read('jurisdiction.json')
+    out = {}
+    if repo.get('name') or juris.get('name'):
+        out['name'] = repo.get('name') or juris['name']
+    if repo.get('country') or juris.get('code'):
+        out['code'] = repo.get('country') or juris['code']
+    if repo.get('publisher'):
+        out['record_note'] = f"Publisher: {repo['publisher']}."
+    return out
 
 
 @dataclass
@@ -481,14 +536,21 @@ def corpus_dir(corpus: str) -> Path:
 def matches(corpus: dict, name: str) -> bool:
     """Whether a name a user gives for a jurisdiction takes in a corpus (a manifest entry): its country folder
     ("germany", "united kingdom"), its ISO code ("de"), a level ("united-states/federal", "us/federal") or the corpus
-    itself, or a folder inside it, which takes in the whole corpus."""
+    itself, or a folder inside it, which takes in the whole corpus. A state, province or city by its own name
+    ("bremen", "california") takes in its corpora too; the generic levels ("national", "federal") do not."""
     name = re.sub(r'\s+', '-', name.strip().strip('/').lower())
     if not name:
         return False
     for path in (corpus['path'], corpus.get('iso_path') or ''):
         if path and (path == name or path.startswith(name + '/') or name.startswith(path + '/')):
             return True
+    level = corpus['path'].split('/')[1:2]
+    if level and level[0] == name and name not in GENERIC_LEVELS:
+        return True
     return name == str(corpus.get('code') or '').lower()
+
+
+GENERIC_LEVELS = {'national', 'federal', 'bund', 'uk', 'central', 'state', 'acts', 'statutes'}
 
 
 def file_commit(date: str, path: str) -> str | None:

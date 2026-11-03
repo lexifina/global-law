@@ -18,8 +18,10 @@ from __future__ import annotations
 import difflib
 import subprocess
 import sys
+from pathlib import Path
 
-import law
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # law.py beside it, however Python was started (-I drops it)
+import law  # noqa: E402
 
 CONFIG = 'global-law.jurisdictions'  # in the clone's own .git/config: never committed, never shared
 
@@ -43,7 +45,9 @@ def resolve(names: list[str]) -> list[dict]:
     for name in names:
         hits = [c for c in corpora() if law.matches(c, name)]
         if not hits:
-            folders = sorted({c['path'].split('/')[0] for c in corpora()})
+            # Countries, and states, provinces and cities by their own names
+            folders = sorted({c['path'].split('/')[0] for c in corpora()} | {c['path'].split('/')[1] for c in corpora()
+                                                                      if c['path'].count('/') >= 2} - law.GENERIC_LEVELS)
             near = difflib.get_close_matches(name.strip().lower().replace(' ', '-'), folders, n=3)
             raise SystemExit(f'No body of law in this tree matches {name!r}.'
                              + (f" Did you mean {', '.join(near)}?" if near else '') + ' Run with no arguments to list them.')

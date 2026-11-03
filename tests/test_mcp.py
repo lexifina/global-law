@@ -1149,6 +1149,38 @@ class Dating(unittest.TestCase):
         finally:
             shutil.rmtree(root, ignore_errors=True)
 
+    def test_states_and_cities_by_their_own_names(self):
+        bremen = {'path': 'germany/bremen/acts', 'code': 'DE-HB'}
+        for name in ('bremen', 'Bremen', 'germany', 'germany/bremen', 'de-hb'):
+            self.assertTrue(self.law.matches(bremen, name), name)
+        self.assertFalse(self.law.matches({'path': 'germany/bund/acts'}, 'bund'))  # a generic level names nothing
+
+    def test_a_build_py_repo_passes_on_its_own_descriptors(self):
+        # build.py repos ship jurisdiction.json and data/repo.json, not corpus.json: a warning, not a failure, and
+        # no "no citation rule" warning about a corpus.json that does not exist.
+        import json as _json
+        import shutil
+        import tempfile
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import check_corpus
+        d = Path(tempfile.mkdtemp())
+        try:
+            run = lambda *a: subprocess.run(['git', *a], cwd=d, check=True, capture_output=True)  # noqa: E731
+            run('init', '-q')
+            (d / 'REPRODUCE.md').write_text('x')
+            (d / 'jurisdiction.json').write_text(_json.dumps({'path': 'de-hb', 'code': 'DE-HB', 'name': 'Bremen'}))
+            (d / 'data').mkdir()
+            (d / 'data' / 'repo.json').write_text(_json.dumps({'country': 'DE-HB', 'name': 'Bremen'}))
+            (d / 'a.md').write_text('a')
+            run('add', '-A')
+            run('-c', 'user.name=L', '-c', 'user.email=l@x', 'commit', '-q', '-m', 'a\n\nIn-force: 2020-01-01')
+            fatal, warn = check_corpus.problems(d, '2026-11-03')
+            self.assertEqual(fatal, [])
+            self.assertTrue(any('described by jurisdiction.json' in w for w in warn), warn)
+            self.assertFalse(any(w.startswith('corpus.json has no citation rule') for w in warn), warn)
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+
     def test_corrects_names_its_dates(self):
         m = self.law.CORRECTS.search('Legea nr. 31/1990 2010-01-01..2015-12-31')
         self.assertEqual((m.group(1), m.group(2)), ('2010-01-01', '2015-12-31'))

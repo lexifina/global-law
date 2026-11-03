@@ -453,6 +453,14 @@ def names_for(corpus: str) -> list[str]:
 
 def scope_arg(args: dict, key: str = 'jurisdiction') -> str:
     scope = here(text_arg(args, key).strip('/'))
+    full = _full_manifest(head())['corpora']
+    if scope and not any(scoped(c['path'], scope) is not None for c in full):
+        # A state, province or city by its own name ("bremen"): scopes are path prefixes, so name its corpus.
+        named = [c['path'] for c in full if law.matches(c, scope)]
+        if len(named) == 1:
+            scope = named[0]
+        elif named:
+            scope = os.path.commonpath(named).replace('\\', '/') or scope
     shut = scope and unserved_answer(scope)
     if shut:
         raise UserError(shut)
@@ -636,7 +644,12 @@ def served_note(names: bool = False) -> str:
         note += (f"\nNot chosen (this server is set to {', '.join(chosen())}): {', '.join(unchosen)}. "
                  '`python3 tools/countries.py only --all` serves every corpus checked out.')
     if missing:
-        note += (f"\nNot checked out in this clone: {', '.join(missing)}. To add one, the user runs "
+        # Hundreds of corpora (every province and city) would bury the answer: past 40, name the countries instead.
+        countries = sorted({p.split('/')[0] for p in missing})
+        listed = ', '.join(missing) if len(missing) <= 40 else (
+            f"{len(missing)} corpora in {len(countries)} countries ({', '.join(countries[:60])}"
+            + (', …' if len(countries) > 60 else '') + '); `python3 tools/countries.py` lists them all')
+        note += (f"\nNot checked out in this clone: {listed}. To add one, the user runs "
                  '`python3 tools/countries.py add <country>` (for example `add spain`). A running server sees it within '
                  'seconds, with no restart.')
     return note
