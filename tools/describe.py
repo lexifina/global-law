@@ -34,9 +34,10 @@ def git(*args: str) -> str:
 
 def fetch(repo: str, sha: str, name: str) -> dict:
     url = f'https://raw.githubusercontent.com/{repo}/{sha}/{name}'
+    headers = {'Authorization': f'token {TOKEN}'} if TOKEN else {}  # a private corpus answers 404 without one
     for _ in range(3):
         try:
-            with urllib.request.urlopen(url, timeout=60) as r:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=60) as r:
                 return json.loads(r.read().decode('utf-8'))
         except urllib.error.HTTPError as e:
             if e.code == 404:
@@ -44,6 +45,23 @@ def fetch(repo: str, sha: str, name: str) -> dict:
         except (OSError, ValueError):
             pass
     return {}
+
+
+def _token() -> str:
+    """A GitHub token, if one is at hand (GITHUB_TOKEN or GH_TOKEN, else `gh auth token`): reads of public corpora
+    need none, a private corpus does. Never printed."""
+    import os
+    tok = os.environ.get('GITHUB_TOKEN') or os.environ.get('GH_TOKEN')
+    if not tok:
+        try:
+            tok = subprocess.run(['gh', 'auth', 'token'], capture_output=True, encoding='utf-8', timeout=20).stdout.strip()
+        except (OSError, subprocess.SubprocessError):
+            tok = ''
+    return tok
+
+
+TOKEN = ''
+LEVELS_WHOLE = ('national', 'federal', 'bund', 'union', 'uk')  # the folder for a whole country's (or the EU's) law
 
 
 def pins() -> dict[str, tuple[str, str]]:
@@ -88,9 +106,19 @@ def describe(path: str, sha: str, repo: str) -> tuple[dict, dict]:
     return entry, jj
 
 
+def subdivision_code(code: str | None, country: str, depth: int) -> str:
+    """A code below the country as ISO 3166-2 writes it (US-CO, not CO): a bare two-letter code of a subdivision gets
+    its country's prefix, so it cannot be read as another country's code (CO is Colombia, AS American Samoa)."""
+    code = (code or '').upper()
+    if depth >= 1 and country and re.fullmatch(r'[A-Z0-9]{1,3}', code) and code != country:
+        return f'{country}-{code}'
+    return code
+
+
 def main(argv: list[str]) -> int:
+    global TOKEN
     check = '--check' in argv
-    head = git('rev-parse', 'HEAD').strip()
+    TOKEN = _token()
     old = json.loads(git('show', 'HEAD:manifest.json'))
     moved = {}
     try:
@@ -137,14 +165,43 @@ def main(argv: list[str]) -> int:
         container = path.rsplit('/', 2)[0] if path.count('/') >= 3 else None
         if container and '-' in parent and not folders[container].get('iso_path'):
             folders[container].update({'iso_path': parent, 'code': parent.upper(), 'level': 'subdivision'})
+    def country_code(folder: str) -> str:
+        return str(folders.get(folder.split('/')[0], {}).get('code') or '').upper()
+
     for folder, body in folders.items():
         body.setdefault('name', folder.rsplit('/', 1)[-1].replace('-', ' ').title())
-        body.setdefault('level', 'subdivision')
+        depth, leaf = folder.count('/'), folder.rsplit('/', 1)[-1]
+        # One level vocabulary: "country" (or the EU's "supranational") only at the top; the folder for a whole
+        # country's law is named by its own word (national, federal, bund, union, uk); anything below that is a
+        # subdivision, whatever its repository called it (a place name, or "country").
+        if depth == 0:
+            body['level'] = body.get('level') if body.get('level') in ('country', 'supranational', 'world') else 'country'
+        elif depth == 1 and leaf in LEVELS_WHOLE:
+            body['level'] = leaf
+        elif body.get('level') in (None, 'country', leaf) or body.get('level', '').replace(' ', '-') == leaf:
+            body['level'] = 'subdivision'
+        body['code'] = subdivision_code(body.get('code'), country_code(folder), depth)
+        if not body['code']:
+            body.pop('code')
         body['path'] = folder
         body['jurisdictions'] = sorted(f for f in folders if f.rsplit('/', 1)[0] == folder and '/' in f)
         body['corpora'] = sorted(p for p in tree if p.rsplit('/', 1)[0] == folder)
     world = read('')
     world['jurisdictions'] = sorted(set(world.get('jurisdictions', [])) | {f for f in folders if '/' not in f})
+    for c in corpora:  # a corpus's code and ISO path, in the same form as its folder's
+        cc = country_code(c['path'])
+        parts = c['path'].split('/')
+        whole = len(parts) >= 3 and parts[1] in LEVELS_WHOLE  # federal or national law: the country's own code
+        c['code'] = cc if whole and cc else subdivision_code(c.get('code'), cc, c['path'].count('/') - 1)
+        if not c['code']:
+            c.pop('code')
+        if not c.get('iso_path') and cc:
+            c['iso_path'] = '/'.join([cc.lower()] + c['path'].split('/')[1:])
+    unread = [c['path'] for c in corpora if c.get('described_by') == 'path']
+    if unread:  # nothing could be read from these repositories: private without a token, or gone
+        print(f'warning: {len(unread)} corpus repositories gave no corpus.json, data/repo.json or jurisdiction.json '
+              f'(private without a token, or missing), so they are described by their path only: {unread[:10]}',
+              file=sys.stderr)
 
     manifest = {**old,
                 'date_rule': 'Each corpus is read from its own history at the commit the tree pins: the In-force trailer '
@@ -154,8 +211,8 @@ def main(argv: list[str]) -> int:
                                "dated ahead, and the tools show them only from that date.",
                 'countries': len([f for f in world['jurisdictions'] if '/' not in f]),
                 'awaiting_corpus_json': sorted(c['path'] for c in corpora if c.get('described_by') != 'corpus.json'),
-                'described_at': head,
                 'corpora': corpora}
+    manifest.pop('described_at', None)  # it named the commit described, which changed with every commit
     out = {'manifest.json': json.dumps(manifest, ensure_ascii=False, indent=2) + '\n',
            'jurisdiction.json': json.dumps(world, ensure_ascii=False, indent=2) + '\n'}
     for folder, body in folders.items():

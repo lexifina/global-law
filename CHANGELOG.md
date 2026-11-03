@@ -10,6 +10,18 @@ Status words:
 
 ## 3 November 2026
 
+- **Changed (all). The preview branch moved out.** `preview` (each country pinned at its work in progress) was a separate history of over 400,000 commits inside this repository, so every plain clone downloaded it. It now lives in its own repository, lexifina/global-law-preview, and this repository has one branch, `main`. Its last state here is kept there as the branch `global-law-preview-final`.
+- **Fixed (all). Codes and levels in the descriptions.**
+  - 25 US states and territories had bare two-letter codes. `CO` read as Colombia, and American Samoa's `AS` was its own country code. They now use ISO 3166-2 form (`US-CO`, `US-AS`).
+  - A corpus of a whole country's law carries the country's code (the Code of Federal Regulations: `US`).
+  - Levels use one vocabulary:
+    - `country` (or `supranational`) only at the top;
+    - the whole-country folder named by its own word (`national`, `federal`, `bund`, `union`, `uk`);
+    - `subdivision` where a repository called a state a country, or used a place name as a level;
+    - otherwise the repository's own word (`state`, `province`, `canton`, `municipality` and so on).
+  - `manifest.json` no longer carries the commit it described, which changed with every commit, so `tools/describe.py --check` reports real drift only.
+  - `describe.py` uses a GitHub token when one is at hand (`GITHUB_TOKEN`, `GH_TOKEN` or `gh auth token`) and warns of any corpus it cannot read, so a private repository is never described as empty without a word.
+
 - **Adopted (all). `tools/check_corpus.py` warns of the data problems readers cannot fix.** Builders run it before pushing. New warnings:
   - an in-force date earlier than the act's own date (`Enacted`, `Made`, `Adopted`, `Dated` or `Signed`) with no `Retroactive:` trailer, or earlier than 1500 unless `corpus.json` sets `earliest`;
   - 30% or more of a corpus's commits taking force on one day without being marked as starting texts, which is how a download day shows up;
