@@ -2822,7 +2822,10 @@ def citation_state(date: str, path: str) -> dict:
     return {'status': status,
             'last_change': st['last_change'] and {k: st['last_change'].get(k) for k in ('law', 'in_force', 'kind')},
             'next_change': st['next_change'] and {k: st['next_change'][k] for k in ('law', 'in_force')},
-            'caveats': st['caveats'], 'cite': citation_for(path, date, st['last_change'], text) if inforce else None}
+            # Still today's wording: cite the act's current page, as read_law does.
+            'caveats': st['caveats'],
+            'cite': citation_for(path, date, st['last_change'], text,
+                                 current=latest_wording(path, date, text)['state'] == 'same') if inforce else None}
 
 
 def t_resolve_citations(args: dict) -> tuple[str, dict]:

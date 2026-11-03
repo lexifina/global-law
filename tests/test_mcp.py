@@ -1385,7 +1385,8 @@ class Romania(unittest.TestCase):
         r = self.s.call('read_law', path=f'{ROMANIA}/lege/2009/287/art-1349.md', include_text=False)
         self.assertEqual(r['structuredContent']['cite']['official_url'], 'https://legislatie.just.ro/Public/DetaliiDocument/109884')
         r = self.s.call('resolve_citations', date='2026-01-01', text='art. 194 alin. (1) din Legea nr. 31/1990')
-        self.assertTrue(r['structuredContent']['citations'][0]['cite']['official_url'].startswith('https://legislatie.just.ro/Public/DetaliiDocument/'))
+        # Still today's wording: the act's own page, as read_law gives it.
+        self.assertEqual(r['structuredContent']['citations'][0]['cite']['official_url'], 'https://legislatie.just.ro/Public/DetaliiDocument/798')
 
     def test_a_correction_by_the_maintainer_is_a_version(self):
         r = self.s.call('provision_history', path=f'{ROMANIA}/lege/2013/300/art-001.md')
