@@ -631,15 +631,52 @@ def blame_rows(date: str, path: str) -> list[tuple[str, str, str]]:
     version that first wrote it, following the versions in the order they took force up to `date` (the same choice
     as file_commit), not the order of the commits: a corpus can append an older act or a correction after newer
     ones, and git blame would then credit lines to laws not yet in force on that date."""
+    seq = versions_in_force(date, path)
+    fast = _git_blame_if_same(path, seq)
+    if fast is not None:
+        return fast
     lines: list[str] = []
     credit: list[str] = []
-    for sha, law in versions_in_force(date, path):
+    for sha, law in seq:
         new = (read_version(path, sha) or '').splitlines()
         nc: list[str] = []
         for op, a0, a1, b0, b1 in difflib.SequenceMatcher(None, lines, new, autojunk=False).get_opcodes():
             nc += credit[a0:a1] if op == 'equal' else [f'{sha}\x1f{law}'] * (b1 - b0)
         lines, credit = new, nc
     return [(c.split('\x1f', 1)[0], c.split('\x1f', 1)[1], line) for c, line in zip(credit, lines)]
+
+
+def _git_blame_if_same(path: str, seq: list[tuple[str, str]]) -> list[tuple[str, str, str]] | None:
+    """git blame's answer, when it is the same as replaying `seq`: when the versions in force, in the order they took
+    force, are exactly the commits that touched the file, in commit order (no correction or older act appended out of
+    order, no documentation commit in between, no gap). git blame is far faster on a long file with many versions.
+    None when they differ, or when git's answer does not cover the text: then the replay is used."""
+    if not seq or any(not sha for sha, _ in seq):
+        return None
+    corpus, rel = corpus_of(path)
+    ix = _index(corpus)
+    rows = ix['rows']
+    order_of = {rows[o][0]: o for o, _, _ in ix['files'].get(rel, [])}
+    last = order_of.get(seq[-1][0])
+    if last is None:
+        return None
+    touching = [rows[o][0] for o, _, _ in ix['files'].get(rel, []) if o <= last]
+    if touching != [sha for sha, _ in seq]:
+        return None
+    label = dict(seq)
+    out, commit = [], ''
+    try:
+        porcelain = git('blame', '--line-porcelain', seq[-1][0], '--', rel, cwd=corpus_dir(corpus))
+    except RuntimeError:
+        return None
+    for line in porcelain.splitlines():
+        if re.match(r'^[0-9a-f]{40} ', line):
+            commit = line[:40]
+        elif line.startswith('\t'):
+            if commit not in label:
+                return None
+            out.append((commit, label[commit], line[1:]))
+    return out if [l for _, _, l in out] == (read_version(path, seq[-1][0]) or '').splitlines() else None
 
 
 def blame_on(date: str, path: str) -> list[tuple[str, str]]:

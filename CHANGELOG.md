@@ -10,6 +10,12 @@ Status words:
 
 ## 3 November 2026
 
+- **Fixed (all). Slow `blame` on long, much-amended files, and slow checkouts.**
+  - `law.py blame` uses git's own blame when the versions in force, in the order they took force, are exactly the file's commits in commit order. It replays the versions only where they differ (a correction, an older act appended later). Czechia's sb/2007/378 on 2018-11-23 went from 37 to 2.4 seconds. On 46 files where git's blame applied, its answer was the same as the replay's.
+  - `countries.py add --no-files <country>` fetches a corpus's history without writing its files. Colombia's 60,436 files took 48 seconds instead of minutes; Romania's 160,000 had taken 19. The tools read the history, not the files.
+- **Changed (all). `tools/verify.py` summarises by kind and by day.** Past damage (pins of country repositories rewritten before 2 November) reads apart from anything new.
+- **Checked (all). A deep test of `law.py` on a fresh clone:** 15 corpora of every kind, every command at random files and dates. It found no crash, no `blame` or `words` that disagrees with the text shown, no version chosen before its date, and no text read for today that differs from the pinned file.
+
 - **Open (Romania). 26 files show an outdated version at HEAD.** An older act was appended after a newer one, and the newer text was not written again. So in 26 articles of the Fiscal Code (Legea 571/2003) and Legea 85/2006, the file on GitHub and in a plain checkout is the 2016 text, while a later one is in force. `law.py` reads them correctly, by in-force date. `tools/check_corpus.py` now warns of this in any corpus, from commits and trees alone, and the corpus standard requires the in-force text to be written again after an older version is appended. The other 84 corpora committed out of in-force order have no such file.
 
 - **Changed (all). The preview branch moved out.** `preview` (each country pinned at its work in progress) was a separate history of over 400,000 commits inside this repository, so every plain clone downloaded it. It now lives in its own repository, lexifina/global-law-preview, and this repository has one branch, `main`. Its last state here is kept there as the branch `global-law-preview-final`.

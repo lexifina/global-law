@@ -187,7 +187,9 @@ Plain git works too, with care:
 - After a pull that moves corpora to new folders (`data/moved-paths.tsv` lists them), run `git submodule sync` and
   `git submodule update --init`, then delete the old folders the file names: git leaves them in place.
 - The whole tree with every country is several GB (France alone is over 1 GB). Most uses need a few countries:
-  `python3 tools/countries.py add <country>` fetches one country's history only.
+  `python3 tools/countries.py add <country>` fetches one country's history only. A corpus of many files is quicker
+  with `add --no-files <country>`, which fetches the history but writes only its README (the tools read the history,
+  not the files); `git -C <corpus> sparse-checkout disable` writes the rest later.
 - `manifest.json` and each folder's `jurisdiction.json` are written by `tools/describe.py` from the corpora pinned
   here, each described by its own repository; run it after adding or moving corpora.
 

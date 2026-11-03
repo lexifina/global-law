@@ -50,7 +50,9 @@ def main(argv: list[str]) -> int:
     fetch = '--fetch' in argv
     since = argv[argv.index('--since') + 1] if '--since' in argv else None
     revs = f'{since}..HEAD' if since else 'HEAD'
-    commits = git('log', '--first-parent', '--reverse', '--format=%H', *([revs] if since else ['-200', revs])).split()
+    dated = git('log', '--first-parent', '--reverse', '--format=%H %cs', *([revs] if since else ['-200', revs])).splitlines()
+    day = dict(l.split() for l in dated if l.strip())
+    commits = [l.split()[0] for l in dated if l.strip()]
     problems: list[str] = []
     moves: list[tuple[str, str, str, str]] = []  # (tree commit, url, old pin, new pin)
     prev_links, prev_urls = state(f'{commits[0]}^') if commits and git('rev-parse', '-q', '--verify', f'{commits[0]}^',
@@ -105,10 +107,24 @@ def main(argv: list[str]) -> int:
                                                 capture_output=True).returncode:
                 problems.append(f'{c[:10]}: moved {url} from {old[:10]} to {new[:10]}, not forward')
         print(f'{len(reach)} repositories fetched; {len(head_links)} pins at HEAD checked')
-    for p in problems[:200]:
-        print('FAIL', p)
-    if len(problems) > 200:
-        print(f'... and {len(problems) - 200} more')
+    # A summary by kind and by day, then the first of each kind: old damage and new breakage read apart.
+    kinds = Counter()
+    by_day = Counter()
+    first: dict[str, list[str]] = {}
+    for p in problems:
+        kind = ('pin at HEAD not held' if p.startswith('HEAD:') else 'pin no longer held' if 'no longer holds' in p
+                else 'pin moved backward' if 'not forward' in p else 'gitlink without .gitmodules entry'
+                if 'with no .gitmodules entry' in p else '.gitmodules entry without gitlink' if 'with no gitlink' in p
+                else 'repository pinned twice')
+        kinds[kind] += 1
+        short = p.split(':', 1)[0].strip()
+        by_day[(kind, next((d for c, d in day.items() if c.startswith(short)), ''))] += 1
+        first.setdefault(kind, []).append(p)
+    for kind, n in kinds.most_common():
+        days = ', '.join(f'{d or "?"}: {c}' for (k, d), c in sorted(by_day.items()) if k == kind)
+        print(f'{kind}: {n} ({days})')
+        for p in first[kind][:5]:
+            print('  FAIL', p)
     print('ok' if not problems else f'{len(problems)} problem(s)')
     return 1 if problems else 0
 

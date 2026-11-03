@@ -7,6 +7,8 @@ jurisdictions chosen with `only`, if any.
 
   python3 tools/countries.py                      every jurisdiction: checked out, served, or neither
   python3 tools/countries.py add germany spain    check these out (git downloads only them)
+  python3 tools/countries.py add --no-files romania   the history only, no files written: much quicker for a corpus
+                                                  of many files; `git -C <corpus> sparse-checkout disable` adds them
   python3 tools/countries.py only germany         serve only these (checking out any not yet here)
   python3 tools/countries.py only --all           serve every corpus checked out
 
@@ -63,15 +65,40 @@ def resolve(names: list[str]) -> list[dict]:
     return found
 
 
-def add(found: list[dict]) -> bool:
-    """Check out the corpora not yet here; whether any was."""
+def add_without_files(path: str) -> subprocess.CompletedProcess:
+    """A corpus's history without writing its files: the tools read the history, not the files, and writing a corpus
+    of 160,000 files (Romania) takes much longer than fetching it. The checkout holds the README only (a sparse
+    checkout); `git -C <corpus> sparse-checkout disable` writes every file later."""
+    pin = law.tip(path)
+    url = law.git('config', '-f', '.gitmodules', f'submodule.{path}.url').strip()
+    law.git('submodule', 'init', '--', path)
+    steps = [['git', 'clone', '-q', '--no-checkout', url, path],
+             ['git', '-C', path, 'sparse-checkout', 'set', '--no-cone', '/README.md'],
+             ['git', '-C', path, '-c', 'core.longpaths=true', 'checkout', '-q', '--detach', pin]]
+    for step in steps:
+        done = subprocess.run(step, cwd=law.ROOT, stderr=subprocess.PIPE, encoding='utf-8', errors='replace')
+        if done.returncode:
+            return done
+    return done
+
+
+def add(found: list[dict], files: bool = True) -> bool:
+    """Check out the corpora not yet here; whether any was. `files=False` fetches each history without writing its
+    files (add_without_files)."""
     todo = [c['path'] for c in found if not checked_out(c)]
     if not todo:
         print('Already checked out: ' + ', '.join(c['path'] for c in found))
         return False
-    print('Checking out ' + ', '.join(todo) + ' (only these are downloaded) ...', flush=True)
+    print('Checking out ' + ', '.join(todo) + ' (only these are downloaded' + ('' if files else '; no files written')
+          + ') ...', flush=True)
     failed = []
     for path in todo:  # one at a time: a corpus git cannot check out does not stop the others
+        if not files and not (law.ROOT / path / '.git').exists():
+            done = add_without_files(path)
+            if done.returncode:
+                sys.stderr.write(done.stderr)
+                failed.append((path, done.stderr))
+            continue
         # core.longpaths: some corpora have file paths past Windows' 260-character limit (a Swiss commune's
         # regulations), which git for Windows refuses to write without it. Elsewhere it changes nothing.
         # A clone never checked out (no index: nothing of the user's to lose) needs --force: git sees its HEAD already
@@ -112,9 +139,10 @@ def main(argv: list[str]) -> None:
     sys.stdout.reconfigure(encoding='utf-8')  # names of laws are not ASCII; Windows consoles default to cp1252
     if not argv or argv[0] in ('list', 'ls'):
         return show()
-    command, names = argv[0], argv[1:]
+    command, names = argv[0], [a for a in argv[1:] if a != '--no-files']
+    files = '--no-files' not in argv
     if command == 'add' and names:
-        if not add(resolve(names)):
+        if not add(resolve(names), files):
             return
     elif command == 'only' and names == ['--all']:
         law.git('config', '--unset', CONFIG, check=False)
