@@ -294,6 +294,8 @@ class Checkouts(unittest.TestCase):
         corpus = {'path': 'aa/national/acts'}
         self.assertTrue(law.matches(corpus, 'xx/old-city/acts'))
         self.assertTrue(law.matches(corpus, 'xx/old-city'))
+        out, err, code = self.t.cli('laws', '2000-01-01', '2030-01-01', 'xx/old-city/acts')
+        self.assertIn('Act 2 of 2020', out, err)
 
     def test_folder_renamed_by_documentation_keeps_its_history(self):
         a = self.t.corpora['aa/national/acts']

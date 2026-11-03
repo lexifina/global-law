@@ -1432,7 +1432,7 @@ def main(argv: list[str]) -> None:
     elif command == 'laws':
         if args[0] > args[1]:
             args[0], args[1] = args[1], args[0]
-        prefix = args[2] if len(args) > 2 else ''
+        prefix = moved(args[2].strip('/')) if len(args) > 2 else ''  # an old path of a moved corpus names it too
         # Only laws taking effect: starting texts (the text as a publisher gave it on the day it was read), corrections,
         # printings, court rulings, treaties and changes no law is named for are not laws taking effect that day.
         left_out: dict[str, int] = {}
