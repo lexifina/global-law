@@ -1038,6 +1038,16 @@ def credit(author: str, kind: str) -> str:
 INDEX_VERSION = 5  # raise when what the index keeps changes: old indexes are then rebuilt
 
 
+def _index_version() -> str:
+    """INDEX_VERSION and a fingerprint of the tables a commit's kind is read with: the index keeps each commit's kind,
+    so an index built before a Kind word was added kept calling it unknown (Romania's "referendum" note, 3 November
+    2026, long after the word was known). A change to the tables now rebuilds the index by itself."""
+    import hashlib
+    tables = repr([sorted(t) for t in (_LAW_KINDS, _START_KINDS, _UNCREDITED_KINDS, _COURT_KINDS)]
+                  + [list(t) for t in (_START_WORDS, _UNCREDITED_WORDS, _CORRECTION_WORDS, _LAW_WORDS)] + [MAINTAINER])
+    return f'{INDEX_VERSION}-{hashlib.sha256(tables.encode("utf-8")).hexdigest()[:12]}'
+
+
 def _derive(info: dict, commit: str, author: str, when: str, subject: str, block: str) -> tuple[tuple, str | None]:
     """One commit as the index keeps it: (commit, author, date, subject, kind, in force or None, Kind as written,
     enacted, published, correction or None), and the Kind word when it is not one the tools know."""
@@ -1182,7 +1192,7 @@ def _index(corpus: str) -> dict:
     try:
         with open(path, 'rb') as f:
             data = pickle.load(f)
-        if data.get('v') != INDEX_VERSION:
+        if data.get('v') != _index_version():
             data = None
     except Exception:
         data = None
@@ -1198,7 +1208,7 @@ def _index(corpus: str) -> dict:
     if data is None:
         # moves: old path -> new, one step each (moves()); withdrawn: path -> the commit that removed it; restates:
         # correction -> the commit it restates; pos: commit -> its row.
-        data = {'v': INDEX_VERSION, 'pin': sha, 'rows': [], 'files': {}, 'unknown': set(), 'moves': {}, 'withdrawn': {},
+        data = {'v': _index_version(), 'pin': sha, 'rows': [], 'files': {}, 'unknown': set(), 'moves': {}, 'withdrawn': {},
                 'restates': {}, 'pos': {}}
         _extend(corpus, cwd, data, sha)
         changed = True
