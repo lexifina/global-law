@@ -58,13 +58,12 @@ dates were checked) or `current-only` (today's text only).
 law what it said on a date, and every answer states where its record starts and ends. It uses only Python 3.9+ and
 git, runs on your machine over stdio, reads the repository and changes nothing. It makes no network calls.
 
-You can download one country's law instead of the whole tree, which is many GB. The clone itself is the shared
-index of every country, about 600 MB; each country then adds its own history, from a few MB to several hundred
-(Romania, with over 17,000 acts and 36,000 changes, was about 770 MB in November 2026):
+You can download one country's law instead of the whole tree, which is several GB. The clone itself is the shared
+index of every country, about 650 MB; Romania then adds about 60 MB:
 
 ```sh
 git clone https://github.com/lexifina/global-law && cd global-law
-python3 tools/countries.py add romania      # git downloads Romania's history only (on Windows: python or py)
+python3 tools/countries.py add romania      # git downloads Romania's history only
 claude      # or open the folder in Cursor, VS Code or Codex: the server starts on its own
 ```
 
@@ -181,9 +180,16 @@ Plain git works too, with care:
 - Don't clone with `--depth` (here, or with `--shallow-submodules`): every date is read from the whole history, so a
   shallow clone cannot answer. `law.py` and the MCP server stop and name the fix, `git fetch --unshallow` in the
   shallow clone. To save time, fetch fewer countries instead (above).
-- Each corpus's own tags are copied here under its path, for example `germany/bund/acts/gg/36`.
+- The tags here (`germany/bund/acts/gg/36` and the like) are each corpus's own tags as they stood on 29 October 2026,
+  copied under its path; they are not kept up to date. For current tags, look inside the corpus.
 - After a corpus is rebuilt (its maintainers force-push), run `git submodule update --init` and, inside that corpus,
   `git fetch --force --tags`: a plain fetch keeps old tags with the same names.
+- After a pull that moves corpora to new folders (`data/moved-paths.tsv` lists them), run `git submodule sync` and
+  `git submodule update --init`, then delete the old folders the file names: git leaves them in place.
+- The whole tree with every country is several GB (France alone is over 1 GB). Most uses need a few countries:
+  `python3 tools/countries.py add <country>` fetches one country's history only.
+- `manifest.json` and each folder's `jurisdiction.json` are written by `tools/describe.py` from the corpora pinned
+  here, each described by its own repository; run it after adding or moving corpora.
 
 - The most amended provisions of a corpus: inside its folder, `git log --format= --name-only | sort | uniq -c | sort -rn | head`.
 
