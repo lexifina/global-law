@@ -23,6 +23,21 @@ EXPECTED = ('name', 'language', 'history_from', 'record_to', 'in_force_trailer')
 # as-enacted: each law as first published, with later amendments not applied (a gazette is all the source has).
 HISTORY = ('in-force', 'current-only', 'replayed', 'as-enacted')
 PLACEHOLDER = 'sources, before any law'
+DATE_TRAILERS = ('In-force', 'In-Kraft', 'Consolidated', 'Corrected', 'Enacted', 'Made', 'Adopted', 'Signed',
+                 'Published', 'Text-as-of')
+ACT_DATES = ('Enacted', 'Made', 'Adopted', 'Dated', 'Signed')  # the act's own date, when the corpus gives one
+STARTING_KINDS = ('baseline', 'consolidated', 'current', 'current-only', 'current-text', 'publisher', 'consolidation',
+                  'first published version (publisher)')
+
+
+def _known_kinds():
+    """tools/law.py's kind_of, which says whether readers know a Kind word; None if law.py is not beside this file."""
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import law  # noqa: PLC0415
+    except Exception:
+        return None
+    return law.kind_of
 
 
 def git(*args: str, cwd: Path) -> subprocess.CompletedProcess:
@@ -83,6 +98,10 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
     trailer = cj.get('in_force_trailer') or in_force_trailer or 'In-force'
     baseline = cj.get('baseline_trailer') or (cj.get('dates') or {}).get('baseline_trailer')
     last, future, dated, early = '', 0, 0, []
+    before_act, ancient, not_dates, odd_kinds, no_corrects = [], [], {}, {}, []
+    days: dict[str, int] = {}
+    starting = 0
+    known = _known_kinds()
     for sha, author, subject, body in commits:
         t = {}
         for line in body.splitlines():
@@ -90,6 +109,15 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
             if sep and key and ' ' not in key and key[0].isupper():
                 t.setdefault(key, value.strip())
         doc = t.get('Kind', '').lower() == 'documentation' or author == 'Lexifina'
+        kind = t.get('Kind', '').strip().lower()
+        # Date-named trailers hold dates (YYYY-MM-DD); a link belongs in Text-source: or Source: (corpus standard).
+        for key in DATE_TRAILERS:
+            if key in t and not re.match(r'\d{4}-\d{2}-\d{2}', t[key]):
+                not_dates.setdefault(key, []).append(sha)
+        if not doc and known is not None and kind and known(kind)[1] is not None:
+            odd_kinds.setdefault(kind, []).append(sha)
+        if kind == 'correction' and 'Corrects' not in t:
+            no_corrects.append(sha)
         when = t.get(trailer) or (t.get(baseline) if baseline and re.match(r'\d{4}-\d{2}-\d{2}', t.get(baseline, '')) else None)
         if when is None:
             continue
@@ -99,6 +127,14 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
             continue
         if doc:
             continue
+        own = next((t[k][:10] for k in ACT_DATES if re.match(r'\d{4}-\d{2}-\d{2}', t.get(k, ''))), None)
+        if own and when[:10] < own and 'Retroactive' not in t:
+            before_act.append(sha)  # in force before the act itself was made, with no Retroactive: saying why
+        elif when[:10] < (cj.get('earliest') or '1500-01-01'):
+            ancient.append(sha)
+        days[when[:10]] = days.get(when[:10], 0) + 1
+        if kind in STARTING_KINDS or 'Text-as-of' in t:
+            starting += 1
         if when < last:
             # An end block: an older act or version found late and appended after later-dated commits (main only
             # grows by fast-forward). Readers resolve each provision by its In-force trailer, not commit order
@@ -115,6 +151,28 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
     if future:
         warn.append(f'{future} commit(s) on main are in force after {until}; readers apply each from its {trailer} '
                     'date only, but a future branch keeps main the law in force today')
+    if before_act:
+        warn.append(f'{len(before_act)} commit(s) are in force before the act itself was made (Enacted/Made/Signed), '
+                    f'with no Retroactive: trailer, first {before_act[0][:7]}: a date taken from the wrong field?')
+    if ancient:
+        warn.append(f"{len(ancient)} commit(s) are in force before {cj.get('earliest') or '1500'}, first {ancient[0][:7]}; "
+                    'set corpus.json earliest if the record really reaches that far back')
+    total = sum(days.values())
+    if total >= 20:
+        day_, n = max(days.items(), key=lambda kv: kv[1])
+        if n / total >= 0.3 and starting < n:
+            warn.append(f'{n} of {total} dated commits ({n * 100 // total}%) take force on one day, {day_}, and are not '
+                        'marked as starting texts: if that is the day the text was read, write Text-as-of (and '
+                        'In-force-basis: source gives no date), not an in-force date')
+    for key, shas in sorted(not_dates.items()):
+        warn.append(f'{len(shas)} commit(s) have a {key}: trailer that is not a date (first {shas[0][:7]}); a link '
+                    'belongs in Text-source:')
+    if odd_kinds:
+        warn.append('Kind values readers do not know (read as laws): ' +
+                    ', '.join(f'{k!r} ({len(v)})' for k, v in sorted(odd_kinds.items(), key=lambda kv: -len(kv[1]))[:12]))
+    if no_corrects:
+        warn.append(f'{len(no_corrects)} correction(s) have no Corrects: trailer, so readers apply each as an ordinary '
+                    f'version from its In-force date, first {no_corrects[0][:7]}')
 
     if pin:
         if git('cat-file', '-e', f'{pin}^{{commit}}', cwd=repo).returncode:

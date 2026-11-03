@@ -843,7 +843,7 @@ def norm(path: str) -> str:
 
 # The trailers corpora use for a law's other dates. The German keys are ASCII since its 2026-10-28 rebuild; the
 # newer corpora use Adopted, Proclaimed and Published (corpus.json `dates.other_trailers`).
-ENACTED = ('Enacted', 'Made', 'Beschlossen', 'Adopted', 'Dated')
+ENACTED = ('Enacted', 'Made', 'Beschlossen', 'Adopted', 'Dated', 'Signed')
 PUBLISHED = ('Published', 'Proclaimed', 'Printed-in', 'Verkuendet', 'Verkündet')
 ISO_DAY = re.compile(r'\d{4}-\d{2}-\d{2}')
 
@@ -909,7 +909,19 @@ _LAW_KINDS = {'', 'law', 'decree', 'amendment', 'act', 'amending law', 'lov', 'l
               'rozporządzenie', 'legal notice', 'ordinance', 'several', 'enacted', 'original', 'version', 'repeal'}
 _START_KINDS = {'baseline', 'consolidated', 'current', 'current-only', 'current-text', 'publisher', 'consolidation',
                 'first published version (publisher)', 'tekst jednolity (current text)'}
-_UNCREDITED_KINDS = {'unexplained', 'change no law explains'}
+_UNCREDITED_KINDS = {'unexplained', 'change no law explains', 'republication', 'obwieszczenie'}
+_COURT_KINDS = {'orzeczenie', 'nález'}  # rulings of the Polish and Slovak constitutional courts
+# Words in the longer Kind values corpora write (Australia, Canada, Hong Kong, Poland, Portugal and others).
+_START_WORDS = ('first version in the database', 'oldest version available', 'publisher-text', 'record starts here')
+_UNCREDITED_WORDS = ('editorial', 'notes only', 'style only', 'no act named', 'no law named', 'no amending law',
+                     'not identified', 'several candidate laws', 'credited to neither', 'no change to the',
+                     'without a change', 'no change in the text', 'removed from the consolidation', 'layout',
+                     'typesetting', 'reprint')
+_CORRECTION_WORDS = ('retificação', 'rectificação', 'ispravak', 'sprostowanie')
+_LAW_WORDS = ('law', 'act', 'decree', 'decreto', 'regulation', 'instrument', 'notice', 'order in council', 'lei',
+              'zákon', 'zakon', 'закон', 'ustav', 'uredba', 'constitution', 'constituicao', 'конституция',
+              'referendum', 'reform', 'amend', 'enact', 'lov', 'lag', 'laki', 'expiry', 'replacement', 'reverted',
+              'declaração', 'uznesenie', 'several', 'two or more', '修', '决定', 'regulation (sor)')
 
 
 MAINTAINER = 'Lexifina'  # the author of documentation commits, and of some corpora's versions (the UK, Romania's corrections)
@@ -997,13 +1009,15 @@ def kind_of(raw: str | None, author: str = '') -> tuple[str, str | None]:
         return 'documentation', None
     if k in ('correction', 'printing', 'treaty'):
         return k, None
-    if k == 'court' or k.startswith('court '):
+    if k == 'court' or k.startswith('court ') or k in _COURT_KINDS:
         return 'court', None
-    if k in _START_KINDS or k.startswith(('baseline', 'first published')):
+    if k in _START_KINDS or k.startswith(('baseline', 'first published')) or any(w in k for w in _START_WORDS):
         return 'baseline', None
-    if k in _UNCREDITED_KINDS or 'not credited' in k or k.startswith(('editorial', 'notes only', 'style only', 'no act named')):
+    if k in _UNCREDITED_KINDS or 'not credited' in k or any(w in k for w in _UNCREDITED_WORDS):
         return 'uncredited', None
-    if k in _LAW_KINDS:
+    if any(w in k for w in _CORRECTION_WORDS):
+        return 'correction', None
+    if k in _LAW_KINDS or any(w in k for w in _LAW_WORDS):
         return 'law', None
     return 'law', k
 

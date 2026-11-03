@@ -10,6 +10,19 @@ Status words:
 
 ## 3 November 2026
 
+- **Adopted (all). `tools/check_corpus.py` warns of the data problems readers cannot fix.** Builders run it before pushing. New warnings:
+  - an in-force date earlier than the act's own date (`Enacted`, `Made`, `Adopted`, `Dated` or `Signed`) with no `Retroactive:` trailer, or earlier than 1500 unless `corpus.json` sets `earliest`;
+  - 30% or more of a corpus's commits taking force on one day without being marked as starting texts, which is how a download day shows up;
+  - a date-named trailer (`Consolidated`, `Corrected`, `Enacted`, `Text-as-of` and the rest) that holds something other than a date: a link belongs in `Text-source:`;
+  - a `Kind:` word the readers do not know;
+  - a correction with no `Corrects:` trailer.
+  - **Checked** over all 710 corpora:
+    - 657 have a `Consolidated:` that is not a date.
+    - 126 have versions in force before their act was made, France most (4,165 by its `Signed:` dates, from a 1988 decree dated 0881).
+    - 12 put a third or more of their commits on one day without saying they are starting texts; New Jersey's 713 of 1,145 on 2025-08-08 are the largest.
+    - Romania has 519 corrections without `Corrects:`, and Kosovo 1.
+- **Fixed (all). The rest of the `Kind:` words.** Corpora also write words such as "first version in the database", "no law named", "change with several candidate laws", "version with no change to the English text", "orzeczenie" and "declaração de retificação". `law.py` reads each by what it says: a starting text, a change no law is named for, a court ruling, a correction, or a law. No corpus now uses a `Kind:` word the readers do not know. `Signed:` (France) is read as the act's own date.
+
 - **Fixed (all). REPRODUCE.md promised a rebuild that can no longer be done.** Its short version said `python tools/build.py ../rebuilt` gives the same hashes. That build rewrites the whole history from the first commit, so it could only be published by force-pushing, which the repository no longer does. It also reads country repositories that were rewritten on 29 October, so it cannot repeat itself hash for hash.
   - `tools/build.py` moved, byte for byte, to `tools/archive/build-2026-10-29.py`, with a note beside it, so the blob hash REPRODUCE.md records still matches.
   - REPRODUCE.md is now in two parts: how the repository grows now (by fast-forward, with what is checked before each push), and the record of the 28–29 October build, kept as it was written then and marked as frozen.
