@@ -4,25 +4,37 @@
       "what": "law.py show, one provision (about 20 corpora checked out)",
       "before": "50–76 s",
       "after": "1.6–2.3 s warm (France 4.5 s)",
-      "where": "Windows 11, 24 cores, 2026-11-03; before: main 13dc2a1, after: main eda0237"
+      "where": "Windows 11, 24 cores, 2026-11-03; before: main 13dc2a1, after: main eda0237",
+      "before_s": 63,
+      "after_s": 2.0,
+      "short": "show one provision"
     },
     {
       "what": "law.py world (every corpus checked out)",
       "before": "287 s (19 corpora)",
       "after": "21 s (11 corpora); 72 s (22 corpora)",
-      "where": "same machine, 2026-11-03"
+      "where": "same machine, 2026-11-03",
+      "before_s": 287,
+      "after_s": 72,
+      "short": "world, all corpora"
     },
     {
       "what": "law.py laws for one country (germany, 2020)",
       "before": "15.6 s (read every corpus)",
       "after": "2.3 s (reads only that country)",
-      "where": "same, 2026-11-03"
+      "where": "same, 2026-11-03",
+      "before_s": 15.6,
+      "after_s": 2.3,
+      "short": "laws, one country"
     },
     {
       "what": "law.py blame, Czechia sb/2007/378 on 2018-11-23 (5,186 lines, many versions)",
       "before": "37.3 s",
       "after": "0.7 s (git blame when it gives the same answer)",
-      "where": "same, main db78f18"
+      "where": "same, main db78f18",
+      "before_s": 37.3,
+      "after_s": 0.7,
+      "short": "blame, Czechia sb/2007/378"
     },
     {
       "what": "First read of France (187,164 commits, 1.08M paths): building its index",
@@ -34,7 +46,10 @@
       "what": "countries.py add for a corpus of many files",
       "before": "Romania 1,130 s (160,000 files written)",
       "after": "Colombia 48 s with --no-files (60,436 files, 1 written)",
-      "where": "same, main db78f18"
+      "where": "same, main db78f18",
+      "before_s": 1130,
+      "after_s": 48,
+      "short": "countries.py add"
     },
     {
       "what": "law.py laws 2026-10-30 (correctness, not speed)",
