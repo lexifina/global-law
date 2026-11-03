@@ -1,0 +1,252 @@
+{
+  "speed": [
+    {
+      "what": "law.py show, one provision (about 20 corpora checked out)",
+      "before": "50–76 s",
+      "after": "1.6–2.3 s warm (France 4.5 s)",
+      "where": "Windows 11, 24 cores, 2026-11-03; before: main 13dc2a1, after: main eda0237"
+    },
+    {
+      "what": "law.py world (every corpus checked out)",
+      "before": "287 s (19 corpora)",
+      "after": "21 s (11 corpora); 72 s (22 corpora)",
+      "where": "same machine, 2026-11-03"
+    },
+    {
+      "what": "law.py laws for one country (germany, 2020)",
+      "before": "15.6 s (read every corpus)",
+      "after": "2.3 s (reads only that country)",
+      "where": "same, 2026-11-03"
+    },
+    {
+      "what": "law.py blame, Czechia sb/2007/378 on 2018-11-23 (5,186 lines, many versions)",
+      "before": "37.3 s",
+      "after": "0.7 s (git blame when it gives the same answer)",
+      "where": "same, main db78f18"
+    },
+    {
+      "what": "First read of France (187,164 commits, 1.08M paths): building its index",
+      "before": "every read walked the history",
+      "after": "88 s once, then 2.4 s to load",
+      "where": "same, 2026-11-03"
+    },
+    {
+      "what": "countries.py add for a corpus of many files",
+      "before": "Romania 1,130 s (160,000 files written)",
+      "after": "Colombia 48 s with --no-files (60,436 files, 1 written)",
+      "where": "same, main db78f18"
+    },
+    {
+      "what": "law.py laws 2026-10-30 (correctness, not speed)",
+      "before": "1,911 lines, 1,908 of them Lazio captures read as laws",
+      "after": "3 laws; 1,908 starting texts named as left out",
+      "where": "same, main eda0237"
+    }
+  ],
+  "deep_tests": [
+    {
+      "when": "2026-11-03",
+      "title": "law.py against an independent reader",
+      "how": "A separate reader (each file's version with the latest In-force on or before the date) compared with law.py on random file-and-date pairs, and old law.py against new on readings that should not change.",
+      "items": [
+        {
+          "status": "clean",
+          "finding": "0 differences: Antigua 350 reads, Romania 442, New Zealand 535, Czechia (127 corrections) 628, Lazio 160",
+          "evidence": "fixtest worktree, main eda0237",
+          "action": ""
+        },
+        {
+          "status": "clean",
+          "finding": "Eight readings (US Code, Grundgesetz, Romania, Portugal) byte-identical between the old and the new law.py",
+          "evidence": "show, log, diff",
+          "action": ""
+        },
+        {
+          "status": "clean",
+          "finding": "Text read for today = file at the pinned commit for 300 sampled files in each of six countries (France: only generated index.md tables differ, which are not law)",
+          "evidence": "",
+          "action": ""
+        }
+      ]
+    },
+    {
+      "when": "2026-11-03",
+      "title": "Fundamental flaws found and fixed in the tools",
+      "how": "Code review of tools/law.py and live reads on a worktree of main.",
+      "items": [
+        {
+          "status": "fixed",
+          "finding": "One unfinished corpus checkout made every command fail for every corpus",
+          "evidence": "germany/bund/acts mid-clone",
+          "action": "main 64b14c6: left out and named"
+        },
+        {
+          "status": "fixed",
+          "finding": "40+ Kind words read as laws: publisher captures listed as laws taking effect, starting texts read as 'not yet in force'",
+          "evidence": "Lazio 1971 law 'not yet in force' in 2000; 1,908 Lazio 'laws' on 2026-10-30",
+          "action": "main eda0237, 8b2076d: one vocabulary; unknown kinds named"
+        },
+        {
+          "status": "fixed",
+          "finding": "blame and words credited laws not yet in force where a correction or older act was appended later",
+          "evidence": "Czechia sb/1995/247 on 1996-01-01: 77 lines credited to 2000 and 2021 versions",
+          "action": "main eda0237: versions replayed in in-force order"
+        },
+        {
+          "status": "fixed",
+          "finding": "Files moved by a documentation commit lost their whole dated history",
+          "evidence": "a fifth of Romania's provisions (layout commit)",
+          "action": "main eda0237: exact renames followed"
+        },
+        {
+          "status": "fixed",
+          "finding": "history and explain_missing read the checkout's HEAD while dates came from the pin",
+          "evidence": "",
+          "action": "main eda0237: everything at the pin"
+        },
+        {
+          "status": "fixed",
+          "finding": "A checkout behind its pin (after git pull without git submodule update, the usual state) aborted world and laws for every corpus",
+          "evidence": "found by fundamentals-2 on main cbc8eeb: 8 of 22 checkouts behind after one pull",
+          "action": "left out of whole-tree reads and named; a read of that corpus alone stops with the command that fixes it"
+        },
+        {
+          "status": "fixed",
+          "finding": "An old path of a moved corpus was not accepted by countries.py or laws",
+          "evidence": "",
+          "action": "main 5377878, 3593a46"
+        }
+      ]
+    },
+    {
+      "when": "2026-11-03",
+      "title": "Fresh clone, every command on 15 corpora of every kind",
+      "how": "performance-style stress run (w9 clone, main 59a28c1): show, log, blame, words, diff, today and explain at random files and dates, with invariants.",
+      "items": [
+        {
+          "status": "clean",
+          "finding": "No crash, no blame or words that disagrees with the text shown, no version chosen before its date, no text for today that differs from the pinned file",
+          "evidence": "15 corpora including Czechia, Romania, Switzerland, Malta, Kyrgyzstan, Canada, Sweden, Russia (Adygea), Lazio, the US Code",
+          "action": ""
+        },
+        {
+          "status": "fixed",
+          "finding": "blame on very large, much-amended single files took 13 to 93 s",
+          "evidence": "Czechia sb/2007/378, Canada S-15.3 schedule 1",
+          "action": "main db78f18: git blame when it gives the same answer (40 of 40 compared: identical)"
+        },
+        {
+          "status": "fixed",
+          "finding": "Adding a corpus of many files took up to 19 minutes (Romania), though the tools read no files",
+          "evidence": "",
+          "action": "main db78f18: countries.py add --no-files"
+        }
+      ]
+    },
+    {
+      "when": "2026-11-03",
+      "title": "The tree's history (tools/verify.py --since 0e10db0 --fetch)",
+      "how": "Every commit since the last per-law build: gitlinks against .gitmodules, every pin held by its repository, every pin move forward.",
+      "items": [
+        {
+          "status": "open",
+          "finding": "2,154 pins point at commits their repositories no longer hold (repositories rewritten 29 October to 2 November, before the fast-forward rule)",
+          "evidence": "10-29: 149, 10-30: 657, 10-31: 527, 11-01: 386, 11-02: 435",
+          "action": "cannot be repaired without rewriting history; documented in REPRODUCE.md; the tools read each corpus at its current pin"
+        },
+        {
+          "status": "open",
+          "finding": "43 commits of 30 October have a .gitmodules entry with no gitlink (united-states/iowa)",
+          "evidence": "",
+          "action": "harmless for checkout; left as history"
+        },
+        {
+          "status": "clean",
+          "finding": "Nothing since the rule: every pin at HEAD held, no pin moved backward, links = entries",
+          "evidence": "2,390 commits, 4,305 pin moves",
+          "action": ""
+        }
+      ]
+    },
+    {
+      "when": "2026-11-03",
+      "title": "The data (tools/check_corpus.py over all 710 corpora; file order in the 85 committed out of in-force order)",
+      "how": "Commits and trees of every corpus repository.",
+      "items": [
+        {
+          "status": "handed",
+          "finding": "26 Romanian files show an older version at HEAD than the one in force (GitHub and plain git show outdated law; law.py is right)",
+          "evidence": "lege/2003/571 (24 articles), lege/2006/85 (2)",
+          "action": "check_corpus.py warns; corpus standard 3.2.7; relayed to Romania's builder"
+        },
+        {
+          "status": "handed",
+          "finding": "657 corpora put a URL in Consolidated:, a date-named trailer",
+          "evidence": "",
+          "action": "corpus standard: Text-source: for links"
+        },
+        {
+          "status": "handed",
+          "finding": "126 corpora have versions in force before their act was made, France most (4,165 by Signed:, back to the year 881)",
+          "evidence": "",
+          "action": "check_corpus.py warns; France builder"
+        },
+        {
+          "status": "handed",
+          "finding": "12 corpora put a third or more of their commits on one day without marking them starting texts (New Jersey 713 of 1,145)",
+          "evidence": "",
+          "action": "corpus standard: Text-as-of"
+        },
+        {
+          "status": "handed",
+          "finding": "Romania has 519 corrections without Corrects:",
+          "evidence": "",
+          "action": "corpus standard"
+        },
+        {
+          "status": "clean",
+          "finding": "The other 84 out-of-order corpora show today's law at HEAD in every file",
+          "evidence": "",
+          "action": ""
+        },
+        {
+          "status": "clean",
+          "finding": "manifest.json and every jurisdiction.json match the tree (describe.py --check)",
+          "evidence": "",
+          "action": ""
+        }
+      ]
+    },
+    {
+      "when": "2026-11-03",
+      "title": "First bench run (performance/bench.py, 16 corpora, tree fc97345)",
+      "how": "Every check in bench.py and the timings of every command on the fixed provisions.",
+      "items": [
+        {
+          "status": "clean",
+          "finding": "All six checks pass: fixture tests, checkouts at their pins, today's text = pinned file (30 files a corpus), blame covers the text, verify.py, describe.py --check",
+          "evidence": "runs.jsonl, first run",
+          "action": ""
+        },
+        {
+          "status": "open",
+          "finding": "words is slow on large, much-amended files: 79 s for Czechia sb/2007/378 today, 19 s for sb/1995/247 (blame on the same file takes under 1 s through git blame)",
+          "evidence": "runs.jsonl, first run",
+          "action": "next: give words the same git-blame path as blame when it gives the same answer"
+        },
+        {
+          "status": "open",
+          "finding": "describe.py --check takes 389 s (it asks GitHub about every corpus) and the fixture tests 116 s",
+          "evidence": "runs.jsonl, first run",
+          "action": "to look at; neither is a reader path"
+        },
+        {
+          "status": "open",
+          "finding": "blame and diff at a past date on Switzerland 101/art-001 and Canada S-15.3 schedule 1 take 9 to 12 s",
+          "evidence": "runs.jsonl, first run",
+          "action": "to look at: these replay versions (corrections or out-of-order commits), where git blame does not apply"
+        }
+      ]
+    }
+  ]
+}

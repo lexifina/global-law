@@ -10,6 +10,8 @@ Status words:
 
 ## 3 November 2026
 
+- **Added (all). `performance/`: a record of how fast and how right the tools are, run by run.** `python performance/bench.py` times reading each corpus and every command on fixed provisions, checks the fixture tests, today's text against the pinned file, blame against the text, `verify.py` and `describe.py --check`, and adds the run to `performance/runs.jsonl`. `performance/index.html` shows every run beside the before-and-after speeds and what each deep test found (`findings.json`). The first run, on 16 corpora, passed every check; it found `words` slow on long, much-amended files (79 s on Czechia's sb/2007/378), left open.
+
 - **Fixed (all). A checkout behind its pin stopped `world` and `laws` for every corpus.** After `git pull` without `git submodule update` (the usual state, since the tree moves pins every few minutes), a corpus checkout lacks the commit the tree now pins. `law.py` stopped the whole command on the first such corpus: in one clone 8 of 22 checkouts were behind after a single pull (found by fundamentals-2). Whole-tree reads now leave such a corpus out and name it (`world` shows it as behind the tree, with the command that updates it). A read of that corpus alone still stops with `git submodule update --init -- <corpus>`.
 
 - **Fixed (all). Slow `blame` on long, much-amended files, and slow checkouts.**
