@@ -7,12 +7,16 @@ corpus.json, data/repo.json and jurisdiction.json from GitHub at the pinned comm
   python tools/describe.py --check    say what would change, change nothing (exit 1 if anything would)
 
 A corpus is listed in manifest.json with its path, repository, name, code, language, coverage and dates, from its own
-corpus.json where it has one, else from data/repo.json and jurisdiction.json. Every folder that holds a corpus, or a
-folder that does, gets a jurisdiction.json naming its level, its code and what is inside it. Fields an earlier build
-wrote and nothing here replaces are kept.
+corpus.json where it has one, else from data/repo.json and jurisdiction.json. A corpus with no corpus.json gets its
+history, history_from, record_to, checked_on, acts and coverage from what its build publishes (data/commits.csv,
+REPRODUCE.md, the README's "metadata only" note), and `derived` names those fields. Every folder that holds a corpus,
+or a folder that does, gets a jurisdiction.json naming its level, its code and what is inside it. Fields an earlier
+build wrote and nothing here replaces are kept.
 """
 from __future__ import annotations
 
+import csv
+import io
 import json
 import re
 import subprocess
@@ -32,19 +36,74 @@ def git(*args: str) -> str:
     return subprocess.run(['git', *args], cwd=ROOT, capture_output=True, encoding='utf-8', check=True).stdout
 
 
-def fetch(repo: str, sha: str, name: str) -> dict:
+def fetch_text(repo: str, sha: str, name: str) -> str:
     url = f'https://raw.githubusercontent.com/{repo}/{sha}/{name}'
     headers = {'Authorization': f'token {TOKEN}'} if TOKEN else {}  # a private corpus answers 404 without one
     for _ in range(3):
         try:
             with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=60) as r:
-                return json.loads(r.read().decode('utf-8'))
+                return r.read().decode('utf-8')
         except urllib.error.HTTPError as e:
             if e.code == 404:
-                return {}
+                return ''
         except (OSError, ValueError):
             pass
-    return {}
+    return ''
+
+
+def fetch(repo: str, sha: str, name: str) -> dict:
+    try:
+        return json.loads(fetch_text(repo, sha, name) or '{}')
+    except ValueError:
+        return {}
+
+
+METADATA_ONLY = re.compile(r'metadata only|no law text|catalogue only', re.I)
+RETRIEVED = re.compile(r'written by the build on (\d{4}-\d{2}-\d{2}), the day the source data was retrieved')
+ISO_DAY = re.compile(r'\d{4}-\d{2}-\d{2}$')
+
+
+def from_build(repo: str, sha: str) -> dict:
+    """What a corpus with no corpus.json says about its own record in the files its build publishes: data/commits.csv
+    (one row per commit on main: day, kind, law, acts), REPRODUCE.md (the day the source was retrieved) and the README
+    (a "metadata only" note). history is in-force when an act on main has more than one version; as-enacted when
+    nearly every act's only version is credited to the law that made it; current-only when the only versions are the
+    text as the publisher gave it; metadata-only when the README says the repository holds no law text."""
+    readme, reproduce = fetch_text(repo, sha, 'README.md'), fetch_text(repo, sha, 'REPRODUCE.md')
+    rows = [r for r in csv.DictReader(io.StringIO(fetch_text(repo, sha, 'data/commits.csv')))
+            if (r.get('branch') or 'main') == 'main' and ISO_DAY.match(r.get('day') or '')]
+    out: dict = {}
+    if METADATA_ONLY.search(readme):
+        out['history'] = 'metadata-only'
+    if rows:
+        acts: dict[str, int] = {}
+        for r in rows:
+            for act in re.split(r'[\s;|]+', (r.get('acts') or '').strip()):
+                if act:
+                    acts[act] = acts.get(act, 0) + 1
+        starts = [r for r in rows if r.get('kind') == 'start']
+        days = sorted(r['day'] for r in rows)
+        out['acts'] = len(acts)
+        out['history_from'] = days[0]
+        if 'history' not in out:
+            if any(n > 1 for n in acts.values()):
+                out['history'] = 'in-force'
+            elif starts and sum(1 for r in starts if r.get('law')) >= 0.9 * len(starts):
+                out['history'] = 'as-enacted'
+            else:
+                out['history'] = 'current-only'
+        kind = {'current-only': '; current text only, as the publisher gave it',
+                'metadata-only': '; catalogue entries only, no law text',
+                'as-enacted': '; each act as enacted, later changes not applied'}.get(out['history'], '')
+        out['coverage'] = f"{len(acts)} acts, {len(rows)} dated versions from {days[0]} to {days[-1]}{kind}"
+    retrieved = RETRIEVED.search(reproduce)
+    if retrieved:
+        out['record_to'] = out['checked_on'] = retrieved.group(1)
+    elif rows:
+        out['record_to'] = max(r['day'] for r in rows)
+    if out:
+        out['derived'] = sorted(out)
+    return out
 
 
 def _token() -> str:
@@ -96,6 +155,8 @@ def describe(path: str, sha: str, repo: str) -> tuple[dict, dict]:
             entry['publisher'] = rj['publisher']
         if rj.get('future_branch'):
             entry['future_branch'] = rj['future_branch']
+        for k, v in from_build(repo, sha).items():  # only what the build files show; never overrides a stated field
+            entry.setdefault(k, v)
     code = (rj.get('country') or jj.get('code') or cj.get('code') or '')
     if code:
         entry['code'] = code.upper()
