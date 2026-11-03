@@ -131,10 +131,12 @@ its own.
 
 ## How a corpus describes itself
 
-The server reads every corpus the tree pins. `manifest.json` describes those the full builder placed, and since
-2 November 2026 it is no longer rewritten. Each corpus it does not list is described by its own `corpus.json` when
-it is checked out, or else by the `jurisdiction.json` and `data/repo.json` that build.py repos ship (name and code,
-with defaults for the rest), or else by its path. `corpus.json` fields the readers use:
+The server reads every corpus the tree pins. `manifest.json` lists them all, written by `tools/describe.py` from each
+corpus's own `corpus.json`, or else the `jurisdiction.json` and `data/repo.json` that the shared builder's repos ship
+(name and code, with defaults for the rest), or else its path. Codes follow ISO 3166: a country's two letters, a
+subdivision's ISO 3166-2 code (`US-CO`, `BR-BA`). Codes below the first level (`AR-B-ALBERTI`, a city in Buenos Aires
+province) are built from the parent's code and the folder name, and are not ISO codes. `corpus.json` fields the
+readers use:
 
 | Field | Meaning |
 |---|---|
