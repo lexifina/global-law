@@ -114,7 +114,14 @@ second apart, in the right order. The `In-force` trailer is authoritative and th
   but does not change the text shown on those earlier dates.
 - `git blame` works by line, so a line changed in part is credited to the last law that touched it. `law.py words`
   credits each word instead, by comparing each version with the one before; text rewritten in place is credited to
-  the law that rewrote it, even where a few of its words are the same as before.
+  the law that rewrote it, even where a few of its words are the same as before. Both `law.py blame` and `words` take
+  the versions in the order they took force, so an older act or a correction appended after newer ones is never
+  credited with words that came later; plain `git blame` inside a corpus follows the order of the commits instead.
+- Not every commit is a law taking effect. Corpora mark the others in `Kind:`, and the tools say what each is: a
+  starting text (the text as a publisher gave it on the day it was read, with no law named, so it shows where the
+  record starts, not when the law came into force), a correction, a court ruling, a treaty, or a change no law is
+  named for. `law.py laws` lists only laws taking effect, and says how many of the others it left out. A `Kind:` the
+  tools do not know is read as a law and named in the caveats.
 
 ## Visualisation suite
 
@@ -138,7 +145,14 @@ python tools/law.py laws 1990-01-01 1990-12-31 germany
 
 Dates must be written YYYY-MM-DD. When a date falls before a record starts or after it ends, the tools say so on
 stderr, because each country's record covers a different period (see `record_to` in `manifest.json`, or in the
-corpus's own `corpus.json`).
+corpus's own `corpus.json`). They also say when a record holds only current text, or a list of acts without their
+text, and when a corpus's `main` holds changes not yet in force.
+
+The first time `law.py` reads a corpus it indexes the corpus's history once, which takes from under a second to about
+a minute and a half for France, and keeps the index in this clone's git folder (`.git/global-law-cache`, never
+committed). Later reads load it in a second or two; when the tree moves a corpus's pin forward, only the new commits
+are added. Deleting the folder is always safe. A corpus checkout that has not fetched the commit the tree pins stops
+with `git submodule update --init -- <corpus>`, rather than answering from an older commit.
 
 Plain git works too, with care:
 
@@ -173,9 +187,12 @@ Plain git works too, with care:
 python -m unittest discover -s tests -v
 ```
 
-The 48 tests check the jurisdiction tree and the timeline, known readings in each country, and that the answers here
-agree with each corpus read with its own tools. REPRODUCE.md lists them, with the exact build and a hash-for-hash
-rebuild check.
+`tests/test_law.py` checks the jurisdiction tree and the timeline, known readings in each country, and that the
+answers here agree with each corpus read with its own tools; it needs the corpora it reads checked out.
+`tests/test_law_fixtures.py` needs none: it builds small corpora in a temporary folder for each way a corpus records its
+law (older acts appended after newer ones, corrections, a publisher's starting text, court rulings and treaties, a
+list of acts without their text, laws not yet in force on main, unfinished, shallow and out-of-date checkouts, a pin
+that moves forward) and checks what `law.py` reads from each.
 
 ## How it was made
 

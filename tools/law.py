@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Read the global law tree on any date. Standard library only.
 
-Every root commit is one law taking effect somewhere, in the order the changes took force, and pins every corpus at
-that moment. So one root commit is the state of all the law in the tree, and the tools below never check anything
-out: they read the pinned corpus commits straight from the submodules.
+Each corpus is read at the commit the tree pins, from its own history: every commit's In-force trailer says when its
+text took force, so the text on a date is the version of each file with the latest in-force date on or before it,
+whatever order the commits were made in. Nothing is checked out: the tools read the pinned commits straight from the
+submodules. The first read of a corpus indexes its history once (kept in the tree's git folder, global-law-cache);
+later reads load that index, and a pin that moves forward adds only its new commits.
 
   python tools/law.py world 2022-05-01                     what every corpus looked like that day
   python tools/law.py show 2022-05-01 united-states/federal/usc/title-11/1182.md
@@ -41,7 +43,14 @@ _CACHE: dict[tuple[str, str], object] = {}
 
 
 def _head() -> str:
-    return git('rev-parse', 'HEAD').strip()
+    """The tree's HEAD, asked of git at most once a second: every cache is keyed by it, so a long-running reader
+    (the MCP server) still sees a new commit, without a git process for every lookup."""
+    import time
+    now = time.monotonic()
+    seen = _CACHE.get(('head-at', ''))
+    if not seen or now - seen[0] > 1.0:  # type: ignore[index]
+        _CACHE[('head-at', '')] = (now, git('rev-parse', 'HEAD').strip())
+    return _CACHE[('head-at', '')][1]  # type: ignore[index]
 
 
 def manifest() -> dict:
@@ -83,10 +92,10 @@ def described(path: str) -> dict:
         return {}
 
     def read(name: str) -> dict:
-        done = subprocess.run(['git', 'show', f'HEAD:{name}'], cwd=cwd, capture_output=True, encoding='utf-8')
+        # The checked-out file: a corpus's own description, read without a git process per corpus.
         try:
-            return json.loads(done.stdout) if done.returncode == 0 else {}
-        except ValueError:
+            return json.loads((cwd / name).read_text(encoding='utf-8'))
+        except (OSError, ValueError):
             return {}
 
     cj = read('corpus.json')
@@ -198,70 +207,21 @@ def reachable_tip(corpus: str) -> str:
 
 
 def corpus_events(corpus: str) -> list[Event]:
-    """The dated commits of one corpus, in its own history order, read at the commit the tree pins (or the
-    checkout's own HEAD, if the checkout has not fetched that commit yet). Empty when the corpus is not checked out.
-    A commit is dated as history() dates it; one with no date of its own takes the date the tree's legacy root
-    history gave it, if any; documentation commits are kept with kind 'documentation'."""
+    """The dated commits of one corpus, in its own history order, read at the commit the tree pins. Empty when the
+    corpus is not checked out, or its checkout is unfinished (unreadable() names it). A commit is dated as history()
+    dates it; one with no date of its own takes the date the tree's per-law history gave it (legacy_dates);
+    documentation commits are kept with kind 'documentation'. Read from the corpus index (_index)."""
     cwd = ROOT / corpus
     if not (cwd / '.git').exists():
         return []
     if not _readable(corpus, cwd):
         return []  # an unfinished checkout: left out and named (unreadable()), so it does not stop every other corpus
     _require_full_history(corpus, cwd)
-    sha = tip(corpus) or 'HEAD'
-    key = ('corpus-events', f'{corpus}@{sha}')
-    if key in _CACHE:
-        return _CACHE[key]  # type: ignore[return-value]
-    info = corpus_info(corpus)
-    trailer = info.get('in_force_trailer') or 'In-force'
-    dated_by = [(info[k], kind) for k, kind in (('baseline_trailer', 'baseline'), ('correction_trailer', 'correction')) if info.get(k)]
-    # Only the trailers, which git finds as interpret-trailers does: the whole messages are three times the bytes
-    # (Czechia's 33,000 commits: 36 MB and 21 s, against 12 MB and 5 s).
-    fmt = '--format=%H%x1f%an%x1f%aI%x1f%s%x1f%(trailers:only,unfold)%x1e'
-    try:
-        raw = git('log', '--reverse', fmt, sha, cwd=cwd)
-    except RuntimeError:  # the checkout has not fetched the pinned commit yet: read what it has
-        raw = git('log', '--reverse', fmt, 'HEAD', cwd=cwd)
-    rows, undated, fixes = [], [], []
-    for record in raw.split('\x1e'):
-        if not record.strip():
-            continue
-        commit, author, when, subject, block = record.strip('\n').split('\x1f', 4)
-        every = trailer_values(block)
-        t = {k: v[0] for k, v in every.items()}
-        kind = (t.get('Kind') or '').strip().lower()
-        if kind == 'correction' and 'Corrects' in t:
-            span = CORRECTS.search(t['Corrects'])
-            start = span.group(1) if span else (t.get(trailer) or '')[:10]
-            if ISO_DAY.match(start):
-                fixes.append({'commit': commit, 'law': author, 'from': start, 'to': span.group(2) if span else None,
-                              'files': every.get('Files', []), 'act_path': t.get('Act-path'), 'corrects': t['Corrects'],
-                              'supersedes': t.get('Supersedes'), 'reason': t.get('Reason')})
-        docs = kind == 'documentation' or author == 'Lexifina'
-        in_force, what = (None, 'documentation') if docs else (t.get(trailer), 'law')
-        for k, label in dated_by if not docs else ():
-            if not in_force and k in t and ISO_DAY.match(t[k]):
-                in_force, what = t[k][:10], label
-        if not in_force and not docs and 'Printed-in' in t:
-            in_force, what = when[:10], 'printing'
-        if in_force and not docs:
-            if kind == 'correction' or (info.get('correction_trailer') or '') in t:
-                what = 'correction'
-            elif kind in ('baseline', 'consolidated', 'current', 'current-only'):
-                what = 'baseline'
-        rows.append([commit, author, in_force[:10] if in_force and ISO_DAY.match(in_force) else None, what, subject])
-        if rows[-1][2] is None and what != 'documentation':  # documentation is never law: no need to date it
-            undated.append(len(rows) - 1)
-    if undated:
-        legacy = legacy_dates(corpus)
-        for i in undated:
-            if rows[i][0] in legacy:
-                rows[i][2], kind = legacy[rows[i][0]]
-                rows[i][3] = kind if rows[i][3] != 'documentation' else 'documentation'
-    events = [Event(c, corpus, c, a, d, k, s) for c, a, d, k, s in rows if d]
-    _CACHE[key] = events
-    _CACHE[('corrections', key[1])] = fixes
-    return events
+    ix = _index(corpus)
+    key = ('corpus-events', f"{corpus}@{ix['pin']}")
+    if key not in _CACHE:
+        _CACHE[key] = [Event(r[0], corpus, r[0], r[1], r[5], r[4], r[3]) for r in ix['rows'] if r[5]]
+    return _CACHE[key]  # type: ignore[return-value]
 
 
 def corrections(corpus: str) -> list[dict]:
@@ -269,23 +229,29 @@ def corrections(corpus: str) -> list[dict]:
     Each sets the files it names (one Files: trailer per corpus-relative path) to the corrected text for those dates,
     whether or not git shows a change for a file: a late-found version can equal the text the tip already has.
     Act-path: names the act, whose next ordinary commit ends an open range."""
-    corpus_events(corpus)
-    return _CACHE.get(('corrections', f'{corpus}@{tip(corpus) or "HEAD"}'), [])  # type: ignore[return-value]
+    if not corpus_events(corpus):
+        return []
+    return [r[9] for r in _index(corpus)['rows'] if r[9]]
 
 
 def act_next(corpus: str, paths: list[str], after: str) -> str | None:
     """The in-force date of the act's next ordinary commit (not a correction, not documentation) after `after`: the
-    first commit by in-force date that touches any of `paths`."""
-    key = ('act-next', f'{corpus}@{tip(corpus)}:' + '\x1f'.join(paths))
+    first commit by in-force date that touches any of `paths` (folders or files)."""
+    paths = [p for p in paths if p]
+    if not paths:
+        return None
+    ix = _index(corpus)
+    key = ('act-next', f"{corpus}@{ix['pin']}:" + '\x1f'.join(paths))
     if key not in _CACHE:
-        cwd = corpus_dir(corpus)
-        try:
-            touched = set(git('log', '--format=%H', tip(corpus) or 'HEAD', '--', *paths, cwd=cwd).split())
-        except RuntimeError:
-            touched = set(git('log', '--format=%H', 'HEAD', '--', *paths, cwd=cwd).split())
-        fixes = {c['commit'] for c in corrections(corpus)}
-        _CACHE[key] = sorted(e.in_force for e in corpus_events(corpus)
-                             if e.corpus_commit in touched and e.corpus_commit not in fixes and e.kind != 'documentation')
+        rows = ix['rows']
+        days = set()
+        for rel, versions in ix['files'].items():
+            if any(rel == p or rel.startswith(p + '/') for p in paths):
+                for order, _, _ in versions:
+                    r = rows[order]
+                    if r[5] and r[4] not in ('correction', 'documentation'):
+                        days.add(r[5])
+        _CACHE[key] = sorted(days)
     return next((d for d in _CACHE[key] if d > after), None)  # type: ignore[union-attr]
 
 
@@ -325,21 +291,30 @@ def trailer_lines(block: str) -> dict[str, str]:
 
 def legacy_dates(corpus: str) -> dict[str, tuple[str, str]]:
     """corpus commit -> (in-force date, kind) from the tree's root commits made before 2 November 2026, which dated a
-    starting edition with no trailer of its own (the US 2017 edition) and every documentation commit."""
+    starting edition with no trailer of its own (the US 2017 edition). That history no longer grows, so the dates it
+    gives commits with no date of their own are shipped in data/legacy-dates.tsv; the root is read only without it."""
     key = ('legacy', _head())
     if key not in _CACHE:
-        if _shallow(ROOT):  # these dates come from the tree's own history: a shallow root would drop them silently
-            raise SystemExit('This clone of the tree is shallow (--depth), so the dates its history gives some corpus '
-                             'commits cannot be read. Run: git fetch --unshallow')
-        raw = git('log', '--first-parent', '--reverse', '--format=%(trailers:only,unfold)%x1e')
         found: dict[str, dict[str, tuple[str, str]]] = {}
-        for body in raw.split('\x1e'):
-            if 'Corpus-commit:' not in body:
-                continue
-            t = trailer_lines(body)
-            if 'Corpus' in t and 'Corpus-commit' in t and ISO_DAY.match(t.get('In-force', '')):
-                kind = 'documentation' if t.get('Law', '') == 'Lexifina' else t.get('Kind', 'law')
-                found.setdefault(t['Corpus'], {})[t['Corpus-commit']] = (t['In-force'][:10], kind)
+        shipped = subprocess.run(['git', 'show', 'HEAD:data/legacy-dates.tsv'], cwd=ROOT, capture_output=True,
+                                 encoding='utf-8')
+        if shipped.returncode == 0:
+            for line in shipped.stdout.splitlines():
+                if line and not line.startswith('#'):
+                    c, sha, day_, kind = line.split('\t')[:4]
+                    found.setdefault(c, {})[sha] = (day_, kind)
+        else:
+            if _shallow(ROOT):  # these dates come from the tree's own history: a shallow root would drop them silently
+                raise SystemExit('This clone of the tree is shallow (--depth), so the dates its history gives some corpus '
+                                 'commits cannot be read. Run: git fetch --unshallow')
+            raw = git('log', '--first-parent', '--reverse', '--format=%(trailers:only,unfold)%x1e')
+            for body in raw.split('\x1e'):
+                if 'Corpus-commit:' not in body:
+                    continue
+                t = trailer_lines(body)
+                if 'Corpus' in t and 'Corpus-commit' in t and ISO_DAY.match(t.get('In-force', '')):
+                    kind = 'documentation' if t.get('Law', '') == 'Lexifina' else t.get('Kind', 'law')
+                    found.setdefault(t['Corpus'], {})[t['Corpus-commit']] = (t['In-force'][:10], kind)
         _CACHE[key] = found
     return _CACHE[key].get(corpus, {})  # type: ignore[union-attr]
 
@@ -391,50 +366,38 @@ def _unquote(path: str) -> str:
 
 
 def file_index(corpus: str) -> tuple[dict, list]:
-    """Every version of every file of a corpus, from one `git log --raw` at the pinned tip: path -> [(in force, order,
-    blob or None for a deletion, mode)] for ordinary commits, and the corrections laid over them as
-    [(from, last day, order, {path: (blob, mode)})]."""
-    key = ('file-index', f'{corpus}@{tip(corpus) or "HEAD"}')
+    """Every version of every file of a corpus, from the corpus index: path -> [(in force, order, blob or None for a
+    deletion, mode)] for ordinary commits, and the corrections laid over them as [(fix, order, {path: (blob, mode)})]."""
+    ix = _index(corpus)
+    key = ('file-index', f"{corpus}@{ix['pin']}")
     if key in _CACHE:
         return _CACHE[key]  # type: ignore[return-value]
-    cwd = corpus_dir(corpus)
-    events = corpus_events(corpus)
-    dates = {e.corpus_commit: (e.in_force, i) for i, e in enumerate(events) if e.kind != 'documentation'}
-    fixes = {c['commit']: c for c in corrections(corpus)}
-    try:
-        raw = git('log', '--reverse', '--raw', '--no-renames', '--no-abbrev', '--format=@%H', tip(corpus) or 'HEAD', cwd=cwd)
-    except RuntimeError:
-        raw = git('log', '--reverse', '--raw', '--no-renames', '--no-abbrev', '--format=@%H', 'HEAD', cwd=cwd)
+    rows = ix['rows']
     index: dict[str, list] = {}
-    touched: dict[str, dict] = {}
-    commit = ''
-    for line in raw.splitlines():
-        if line.startswith('@'):
-            commit = line[1:]
-            continue
-        if not line.startswith(':') or '\t' not in line:
-            continue
-        meta, path = line.split('\t', 1)
-        _, mode, _, blob, status = meta.split()[:5]
-        path = _unquote(path)
-        if commit in fixes:
-            touched.setdefault(commit, {})[path] = (None if status.startswith('D') else blob, mode)
-        elif commit in dates:
-            day, order = dates[commit]
-            index.setdefault(path, []).append((day, order, None if status.startswith('D') else blob, mode))
-    order_of = {e.corpus_commit: i for i, e in enumerate(events)}
+    touched: dict[int, dict] = {}
+    for path, versions in ix['files'].items():
+        for order, blob, mode in versions:
+            r = rows[order]
+            if r[9]:
+                touched.setdefault(order, {})[path] = (blob, mode)
+            elif r[5] and r[4] != 'documentation':
+                index.setdefault(path, []).append((r[5], order, blob, mode))
+    cwd = corpus_dir(corpus)
     overlays = []
-    for sha, fix in fixes.items():
-        files = dict(touched.get(sha, {}))
+    for order, r in enumerate(rows):
+        fix = r[9]
+        if not fix:
+            continue
+        files = dict(touched.get(order, {}))
         named = [f for f in fix['files'] if f not in files]
         if named:  # named but unchanged: their text at the correction commit is the tip's
-            for line in git('ls-tree', sha, '--', *named, cwd=cwd).splitlines():
+            for line in git('ls-tree', r[0], '--', *named, cwd=cwd).splitlines():
                 meta, path = line.split('\t', 1)
                 mode, _, blob = meta.split()
                 files[_unquote(path)] = (blob, mode)
         if fix['files']:
             files = {p: v for p, v in files.items() if p in fix['files']}
-        overlays.append((fix, order_of.get(sha, len(order_of)), files))
+        overlays.append((fix, order, files))
     _CACHE[key] = (index, overlays)
     return index, overlays
 
@@ -626,29 +589,24 @@ def file_commit(date: str, path: str) -> str | None:
 
 
 def text_on(date: str, path: str) -> str | None:
-    corpus, rel = corpus_of(path)
     sha = file_commit(date, path)
-    if sha is None:
-        return None
-    done = subprocess.run(['git', 'show', f'{sha}:{rel}'], cwd=corpus_dir(corpus), capture_output=True, encoding='utf-8')
-    return done.stdout if done.returncode == 0 else None
+    return read_version(path, sha) if sha else None
 
 
 def blame_rows(date: str, path: str) -> list[tuple[str, str, str]]:
-    """(corpus commit, law, line) for every line of the file as it stood on `date`."""
-    corpus, rel = corpus_of(path)
-    sha = file_commit(date, path)
-    if sha is None:
-        return []
-    out, commit, law = [], '', ''
-    for line in git('blame', '--line-porcelain', sha, '--', rel, cwd=corpus_dir(corpus)).splitlines():
-        if re.match(r'^[0-9a-f]{40} ', line):
-            commit = line[:40]
-        elif line.startswith('author '):
-            law = line[7:]
-        elif line.startswith('\t'):
-            out.append((commit, law, line[1:]))
-    return out
+    """(corpus commit, law, line) for every line of the file as it stood on `date`. Each line is credited to the
+    version that first wrote it, following the versions in the order they took force up to `date` (the same choice
+    as file_commit), not the order of the commits: a corpus can append an older act or a correction after newer
+    ones, and git blame would then credit lines to laws not yet in force on that date."""
+    lines: list[str] = []
+    credit: list[str] = []
+    for sha, law in versions_in_force(date, path):
+        new = (read_version(path, sha) or '').splitlines()
+        nc: list[str] = []
+        for op, a0, a1, b0, b1 in difflib.SequenceMatcher(None, lines, new, autojunk=False).get_opcodes():
+            nc += credit[a0:a1] if op == 'equal' else [f'{sha}\x1f{law}'] * (b1 - b0)
+        lines, credit = new, nc
+    return [(c.split('\x1f', 1)[0], c.split('\x1f', 1)[1], line) for c, line in zip(credit, lines)]
 
 
 def blame_on(date: str, path: str) -> list[tuple[str, str]]:
@@ -684,23 +642,18 @@ def _credit_words(old: list[str], old_authors: list[str], new: list[str], law: s
 def words_on(date: str, path: str, check=None) -> list[tuple[str, str]]:
     """(law, run of text) for the file as it stood on `date`, credited word by word. git blame credits whole lines;
     here each version of the file is compared with the one before, word by word, and words that survive keep the law
-    that first wrote them. Text moved within the file usually keeps its author; text that is rewritten in place is
+    that first wrote them. The versions are taken in the order they took force up to `date` (versions_in_force), not
+    in commit order. Text moved within the file usually keeps its author; text that is rewritten in place is
     credited to the law that rewrote it. Unchanged lines are matched first, so only changed stretches are compared
     word by word, which keeps long sections fast. `check`, if given, is called between steps and may raise to stop
     a pass that is taking too long (the MCP server's time limit)."""
     check = check or (lambda: None)
-    corpus, rel = corpus_of(path)
-    sha = file_commit(date, path)
-    if sha is None:
-        return []
-    cwd = corpus_dir(corpus)
     lines: list[str] = []
     authors: list[list[str]] = []  # per line, one law per token
-    for record in git('log', '--reverse', '--format=%H%x1f%an', sha, '--', rel, cwd=cwd).splitlines():
+    for commit, law in versions_in_force(date, path):
         check()
-        commit, law = record.split('\x1f', 1)
-        shown = subprocess.run(['git', 'show', f'{commit}:{rel}'], cwd=cwd, capture_output=True, encoding='utf-8')
-        new_lines = shown.stdout.splitlines(keepends=True) if shown.returncode == 0 else []
+        text = read_version(path, commit)
+        new_lines = text.splitlines(keepends=True) if text else []
         new_authors: list[list[str]] = []
         for op, a0, a1, b0, b1 in difflib.SequenceMatcher(None, lines, new_lines, autojunk=False).get_opcodes():
             if op == 'equal':
@@ -760,20 +713,31 @@ def corpus_info(corpus: str) -> dict:
 
 
 def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[str]:
-    """What a reader must know about a date in one corpus: before its record starts, or after it ends."""
-    own = [e for e in (events if events is not None else timeline()) if e.corpus == corpus and e.kind != 'documentation']
+    """What a reader must know about a date in one corpus: before its record starts or after it ends, what kind of
+    record it is (current text only, a list of acts without their text), and changes on main not yet in force.
+    Reads only this corpus (`events`, if given, may hold others: only this corpus's are used)."""
+    own = [e for e in (events if events is not None else corpus_events(corpus)) if e.corpus == corpus and e.kind != 'documentation']
     info = corpus_info(corpus)
     out = []
-    if own and date < own[0].in_force:
-        out.append(f"{corpus}: the record starts on {own[0].in_force} ({own[0].law}); nothing earlier is in it.")
-    # The record covers every day up to the later of its last change and the day it was checked against the source.
+    if (ROOT / corpus / '.git').exists() and not _readable(corpus, ROOT / corpus):
+        return [_UNREADABLE.format(corpus=corpus)]
+    if own:
+        first = min(own, key=lambda e: e.in_force)
+        if date < first.in_force:
+            out.append(f"{corpus}: the record starts on {first.in_force} ({first.law}); nothing earlier is in it.")
+    # The record covers every day up to the later of its last change and the day it was checked against the source;
+    # a corpus that does not say gives its latest dated change.
     covered = max(filter(None, (info.get('record_to'), info.get('checked_on'))), default=None)
+    import datetime as dt
+    today = dt.date.today().isoformat()
     if covered and date > covered:
         checked = f", checked on {info['checked_on']}" if info.get('checked_on') else ''
         out.append(f"{corpus}: the record runs to {info.get('record_to') or covered}{checked}. {info.get('record_note', '')}".rstrip())
-    if (ROOT / corpus / '.git').exists() and tip(corpus) and reachable_tip(corpus) == 'HEAD':
-        out.append(f"{corpus}: this checkout has not fetched the commit the tree pins ({tip(corpus)[:10]}), so answers "
-                   f"come from the checkout's own HEAD and may be out of date. Run: git submodule update -- {corpus}")
+    elif not covered and own:
+        last = max((e.in_force for e in own if e.in_force <= today), default=None)
+        if last and date > last:
+            out.append(f"{corpus}: the latest change in this record took force on {last}; it does not say whether it "
+                       "covers later changes.")
     if info.get('provisional'):
         out.append(f"{corpus}: provisional upload: {info['provisional']}.")
     if info.get('history') == 'as-enacted':
@@ -782,30 +746,42 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
     if info.get('history') == 'replayed':
         checked = f" {info['verification']}" if info.get('verification') else ''
         out.append(f"{corpus}: earlier versions were rebuilt by applying each amending act, not read from an official text.{checked}")
-    if info.get('history') == 'current-only' and (not covered or date < covered):
-        out.append(f"{corpus}: this record holds only the current text; an earlier date shows each law as last updated, not as it was in force then.")
+    current_only = info.get('history') == 'current-only' or (own and all(e.kind == 'baseline' for e in own))
+    if current_only and (not covered or date < covered):
+        out.append(f"{corpus}: this record holds only the text as the publisher gave it on the day it was read; an "
+                   "earlier date shows that text only from that day, not as the law was in force before.")
+    if own and _metadata_only(corpus):
+        out.append(f"{corpus}: this record lists acts (titles, numbers, dates) without their text, so what it shows "
+                   "is a catalogue entry, not the law.")
+    ahead = sum(1 for e in own if e.in_force > today)
+    if ahead:
+        out.append(f"{corpus}: {ahead} change(s) in this record take force after today; they are shown only from their "
+                   "dates, but the files at the corpus's HEAD already hold them.")
+    odd = _index(corpus)['unknown'] if own else set()
+    if odd:
+        out.append(f"{corpus}: commit kind(s) not recognised, read as laws: {', '.join(sorted(odd))}.")
     return out
 
 
 def explain_missing(date: str, path: str) -> str:
     """Why there is no text: a mistyped path, before the record, not yet in force, or repealed."""
     corpus, rel = corpus_of(path)
-    cwd = corpus_dir(corpus)
-    if not git('log', '-1', '--format=%H', 'HEAD', '--', rel, cwd=cwd).strip():
-        names = git('ls-tree', '-r', '--name-only', 'HEAD', cwd=cwd).split()
-        close = difflib.get_close_matches(rel, names, n=3, cutoff=0.6)
+    files = _index(corpus)['files']
+    if rel not in files:
+        close = difflib.get_close_matches(rel, list(files), n=3, cutoff=0.6)
         hint = f" Did you mean {', '.join(f'{corpus}/{c}' for c in close)}?" if close else ''
         return f'{path} is not in this record at any date.{hint}'
     h = history(path)
     if not h:
         return f'{path} has no dated change in the record.'
-    if date < h[0]['in_force'] and h[0]['kind'] == 'baseline':
-        return (f"{path} is not in the record on {date}: the record starts on {h[0]['in_force']} ({h[0]['law']}), "
+    first = min(h, key=lambda x: x['in_force'])
+    if date < first['in_force'] and first['kind'] == 'baseline':
+        return (f"{path} is not in the record on {date}: the record starts on {first['in_force']} ({first['law']}), "
                 f"which is where this record starts, not the day it came into force.")
-    if date < h[0]['in_force']:
-        return f"{path} was not yet in force on {date}. It first appears on {h[0]['in_force']} ({h[0]['law']})."
-    gone = [x for x in h if x['in_force'] <= date][-1]
-    back = next((x for x in h if x['in_force'] > date), None)
+    if date < first['in_force']:
+        return f"{path} was not yet in force on {date}. It first appears on {first['in_force']} ({first['law']})."
+    gone = max((x for x in h if x['in_force'] <= date), key=lambda x: x['in_force'])
+    back = min((x for x in h if x['in_force'] > date), key=lambda x: x['in_force'], default=None)
     again = f" It is in force again from {back['in_force']} ({back['law']})." if back else ''
     return f"{path} was not in force on {date}: it was removed on {gone['in_force']} ({gone['law']}).{again}"
 
@@ -838,14 +814,16 @@ ISO_DAY = re.compile(r'\d{4}-\d{2}-\d{2}')
 
 
 def history(path: str) -> list[dict]:
-    """Every dated change to a file, oldest first, with its dates: the reader's "follow" list.
+    """Every dated change to a file, in the corpus's commit order, with its dates: the reader's "follow" list.
 
     A change is dated by the corpus's in-force trailer; failing that by its baseline or correction trailer (Malta's
     consolidated versions, Switzerland's first versions and corrections), which must hold an ISO date (Liechtenstein's
     `Consolidated:` is a URL, not a date); failing that, a printing that differs from the laws behind it (US
-    "Printed text differs") is dated by its commit. Documentation commits are left out."""
+    "Printed text differs") is dated by its commit. Documentation commits are left out. Read at the pinned commit,
+    from the corpus index."""
     corpus, rel = corpus_of(path)
-    key = ('history', f'{corpus}@{tip(corpus)}:{rel}')
+    ix = _index(corpus)
+    key = ('history', f"{corpus}@{ix['pin']}:{rel}")
     if key not in _CACHE:
         _CACHE[key] = _history(corpus, rel)
     return [dict(h) for h in _CACHE[key]]  # type: ignore[union-attr]
@@ -855,56 +833,295 @@ CORRECTS = re.compile(r'(\d{4}-\d{2}-\d{2})(?:\s*\.\.\s*(\d{4}-\d{2}-\d{2})?)?')
 
 
 def _history(corpus: str, rel: str) -> list[dict]:
-    info = corpus_info(corpus)
-    trailer = info['in_force_trailer']
-    dated_by = [(info[k], kind) for k, kind in (('baseline_trailer', 'baseline'), ('correction_trailer', 'correction')) if info.get(k)]
-    raw = git('log', '--reverse', '--format=%H%x1f%an%x1f%aI%x1f%B%x1e', '--', rel, cwd=corpus_dir(corpus))
-    # The tree's own dating of each corpus commit: it dates a starting edition with no trailer of its own (the US
-    # 2017 edition) as the baseline, so a file that starts there is not reported as starting with its first amendment.
-    placed = {e.corpus_commit: e for e in corpus_events(corpus)}
+    ix = _index(corpus)
+    rows = ix['rows']
     out = []
-    for record in raw.split('\x1e'):
-        if not record.strip():
+    for order, blob, mode in ix['files'].get(rel, []):
+        r = rows[order]
+        commit, author, when, subject, kind, in_force, raw_kind, enacted, published, fix = r
+        if kind == 'documentation' or not in_force:
             continue
-        sha, author, date, body = record.strip('\n').split('\x1f', 3)
-        t = trailers(body)
-        if t.get('Kind', '').strip().lower() == 'documentation' or author == 'Lexifina':
-            continue
-        in_force, kind = t.get(trailer), 'law'
-        for key, k in dated_by:
-            if not in_force and key in t and ISO_DAY.match(t[key]):
-                in_force, kind = t[key][:10], k
-        if not in_force and 'Printed-in' in t:
-            in_force, kind = date[:10], 'printing'
-        corrects = CORRECTS.search(t.get('Corrects', ''))
-        if not in_force and corrects:  # a correction appended at the tip: dated by the first day it corrects
-            in_force, kind = corrects.group(1), 'correction'
-        if not in_force and sha in placed and placed[sha].kind == 'baseline':
-            in_force, kind = placed[sha].in_force, 'baseline'
-        if not in_force:
-            continue  # documentation and an undated starting edition
-        # A publisher's correction is never a law, whatever In-force says (In-force only places it in the order).
-        if t.get('Kind', '').strip().lower() == 'correction' or (info.get('correction_trailer') or '') in t:
-            kind = 'correction'
-        elif t.get('Kind', '').strip().lower() in ('baseline', 'consolidated', 'current', 'current-only'):
-            kind = 'baseline'  # a starting text the corpus labels as such (Turkey: Kind: consolidated)
-        row = {'commit': sha, 'law': author, 'in_force': in_force[:10], 'kind': kind,
-               'enacted': next((t[k] for k in ENACTED if k in t), None),
-               'published': next((t[k] for k in PUBLISHED if k in t), None)}
-        if kind == 'correction' and 'Corrects' in t:
-            # Corrects: <act> <from>..<to>, the end open when it runs to the present.
-            row.update({'corrects': t['Corrects'], 'until': corrects.group(2) if corrects else None,
-                        'supersedes': t.get('Supersedes'), 'reason': t.get('Reason')})
+        row = {'commit': commit, 'law': author, 'in_force': in_force, 'kind': kind, 'enacted': enacted,
+               'published': published, 'blob': blob, 'order': order}
+        if fix:
+            row.update({'corrects': fix['corrects'], 'until': fix['to'], 'supersedes': fix['supersedes'],
+                        'reason': fix['reason']})
         out.append(row)
     seen = {r['commit'] for r in out}
-    extra = [c for c in corrections(corpus) if rel in c['files'] and c['commit'] not in seen]
-    if extra:
-        out += [{'commit': c['commit'], 'law': c['law'], 'in_force': c['from'], 'kind': 'correction', 'enacted': None,
-                 'published': None, 'corrects': c['corrects'], 'until': c['to'], 'supersedes': c['supersedes'],
-                 'reason': c['reason']} for c in extra]
-        order = {e.corpus_commit: i for i, e in enumerate(corpus_events(corpus))}
-        out.sort(key=lambda r: order.get(r['commit'], len(order)))
+    for order, r in enumerate(rows):
+        fix = r[9]
+        if fix and rel in fix['files'] and r[0] not in seen:
+            out.append({'commit': r[0], 'law': r[1], 'in_force': fix['from'], 'kind': 'correction', 'enacted': None,
+                        'published': None, 'order': order, 'corrects': fix['corrects'], 'until': fix['to'],
+                        'supersedes': fix['supersedes'], 'reason': fix['reason']})
+    out.sort(key=lambda h: h['order'])
     return out
+
+
+# Commit kinds. Corpora write many words in Kind:; the tools read them as one of: law (a law taking effect),
+# baseline (a starting text: the text as a publisher gave it, no law named), correction, printing, court (a ruling),
+# treaty, uncredited (a change no law is named for), documentation. A word not listed is read as a law and named in
+# the caveats, never silently.
+_LAW_KINDS = {'', 'law', 'decree', 'amendment', 'act', 'amending law', 'lov', 'lbk', 'laki', 'ustawa', 'zakon',
+              'rozporządzenie', 'legal notice', 'ordinance', 'several', 'enacted', 'original', 'version', 'repeal'}
+_START_KINDS = {'baseline', 'consolidated', 'current', 'current-only', 'current-text', 'publisher', 'consolidation',
+                'first published version (publisher)', 'tekst jednolity (current text)'}
+_UNCREDITED_KINDS = {'unexplained', 'change no law explains'}
+
+
+def kind_of(raw: str | None, author: str = '') -> tuple[str, str | None]:
+    """(the tools' kind, the word itself when it is not one the tools know) for a commit's Kind: and author."""
+    k = (raw or '').strip().lower()
+    if author == 'Lexifina' or k == 'documentation':
+        return 'documentation', None
+    if k in ('correction', 'printing', 'treaty'):
+        return k, None
+    if k == 'court' or k.startswith('court '):
+        return 'court', None
+    if k in _START_KINDS or k.startswith(('baseline', 'first published')):
+        return 'baseline', None
+    if k in _UNCREDITED_KINDS or 'not credited' in k or k.startswith(('editorial', 'notes only', 'style only', 'no act named')):
+        return 'uncredited', None
+    if k in _LAW_KINDS:
+        return 'law', None
+    return 'law', k
+
+
+CREDIT = {'printing': '{} (printing)', 'baseline': '{} (text as published; no law named)', 'correction': '{} (correction)',
+          'court': '{} (court ruling, not a law)', 'treaty': '{} (treaty)', 'uncredited': '{} (no law named for this change)'}
+
+
+def credit(author: str, kind: str) -> str:
+    """How blame and words credit a version: a law by its name; anything else says what it is."""
+    return CREDIT.get(kind, '{}').format(author)
+
+
+INDEX_VERSION = 3  # raise when what the index keeps changes: old indexes are then rebuilt
+
+
+def _derive(info: dict, commit: str, author: str, when: str, subject: str, block: str) -> tuple[tuple, str | None]:
+    """One commit as the index keeps it: (commit, author, date, subject, kind, in force or None, Kind as written,
+    enacted, published, correction or None), and the Kind word when it is not one the tools know."""
+    every = trailer_values(block)
+    t = {k: v[0] for k, v in every.items()}
+    raw = (t.get('Kind') or '').strip()
+    kind, unknown = kind_of(raw, author)
+    if kind == 'documentation':
+        return (commit, author, when, subject, kind, None, raw, None, None, None), None
+    # The shared builder writes Kind: publisher both for an act's first text and for a change in a later text that no
+    # law explains ("... (unexplained)", Words-changed: yes): the second is a change no law is named for.
+    if raw.lower() == 'publisher' and ('(unexplained)' in subject or t.get('Words-changed', '').lower() == 'yes'):
+        kind = 'uncredited'
+    trailer = info.get('in_force_trailer') or 'In-force'
+    in_force = t.get(trailer)
+    if not in_force and ISO_DAY.match(t.get('Text-as-of', '')):  # a text read on a day, with no in-force day of its own
+        in_force, kind = t['Text-as-of'][:10], ('baseline' if kind == 'law' else kind)
+    via = None
+    for key, label in (('baseline_trailer', 'baseline'), ('correction_trailer', 'correction')):
+        k = info.get(key)
+        if k and not in_force and k in t and ISO_DAY.match(t[k]):
+            in_force, via = t[k][:10], label
+    if not in_force and 'Printed-in' in t:
+        in_force, kind = when[:10], 'printing'
+    fix = None
+    if raw.lower() == 'correction' and 'Corrects' in t:
+        span = CORRECTS.search(t['Corrects'])
+        start = span.group(1) if span else (t.get(trailer) or '')[:10]
+        if ISO_DAY.match(start):
+            fix = {'commit': commit, 'law': author, 'from': start, 'to': span.group(2) if span else None,
+                   'files': every.get('Files', []), 'act_path': t.get('Act-path'), 'corrects': t['Corrects'],
+                   'supersedes': t.get('Supersedes'), 'reason': t.get('Reason')}
+            in_force = in_force or start  # a correction appended at the tip: dated by the first day it corrects
+    if via == 'correction' or (info.get('correction_trailer') and info['correction_trailer'] in t):
+        kind = 'correction'
+    elif via == 'baseline' and kind == 'law':
+        kind = 'baseline'
+    in_force = in_force[:10] if in_force and ISO_DAY.match(in_force) else None
+    enacted = next((t[k] for k in ENACTED if k in t), None)
+    published = next((t[k] for k in PUBLISHED if k in t), None)
+    return (commit, author, when, subject, kind, in_force, raw, enacted, published, fix), unknown
+
+
+def _extend(corpus: str, cwd: Path, data: dict, revs: str) -> None:
+    """Add the commits in `revs` to a corpus index, oldest first: one `git log --raw` for every commit and file."""
+    info = corpus_info(corpus)
+    fmt = '--format=%x1d%H%x1f%an%x1f%aI%x1f%s%x1f%(trailers:only,unfold)%x1e'
+    raw = git('log', '--reverse', '--raw', '--find-renames=100%', '--no-abbrev', fmt, revs, cwd=cwd)
+    legacy = None
+    rows, files = data['rows'], data['files']
+    for chunk in raw.split('\x1d')[1:]:
+        head, _, changes = chunk.partition('\x1e')
+        commit, author, when, subject, block = head.split('\x1f', 4)
+        row, unknown = _derive(info, commit, author, when, subject, block)
+        if unknown:
+            data['unknown'].add(unknown)
+        if row[5] is None and row[4] != 'documentation':
+            legacy = legacy if legacy is not None else legacy_dates(corpus)
+            if commit in legacy:
+                day_, k = legacy[commit]
+                kind = kind_of(k, author)[0]
+                row = row[:4] + (row[4] if kind == 'law' else kind, day_) + row[6:]
+        order = len(rows)
+        rows.append(row)
+        for line in changes.splitlines():
+            if not line.startswith(':') or '\t' not in line:
+                continue
+            meta, *paths = line.split('\t')
+            f = meta.split()
+            if f[4].startswith('R') and len(paths) == 2:
+                old, new = _unquote(paths[0]), _unquote(paths[1])
+                if row[4] == 'documentation':
+                    # A file moved unchanged by a documentation commit (a corpus renaming its folders) keeps its
+                    # history: the new path takes the old one's versions, which are read by blob, not by path.
+                    files[new] = files.get(new, []) + files.pop(old, [])
+                    continue
+                files.setdefault(old, []).append((order, None, f[1]))  # moved by a law: gone here, new there
+                files.setdefault(new, []).append((order, f[3], f[2]))
+                continue
+            files.setdefault(_unquote(paths[0]), []).append((order, None if f[4].startswith('D') else f[3], f[1]))
+
+
+def _index(corpus: str) -> dict:
+    """The corpus read once at the commit the tree pins: every commit (rows, in history order) and every version of
+    every file (files: path -> [(row, blob or None for a deletion, mode)]). Kept on disk in the tree's git folder
+    (global-law-cache), keyed by the pin: a pin that moved forward adds only the new commits, so after the first read
+    a corpus costs one file load, not a walk of its history."""
+    cwd = corpus_dir(corpus)
+    sha = tip(corpus)
+    if not sha:
+        raise SystemExit(f'{corpus} is not pinned in this tree')
+    key = ('index', f'{corpus}@{sha}')
+    if key in _CACHE:
+        return _CACHE[key]  # type: ignore[return-value]
+    if subprocess.run(['git', 'cat-file', '-e', f'{sha}^{{commit}}'], cwd=cwd, capture_output=True).returncode:
+        raise SystemExit(f'{corpus}: this checkout does not have the commit the tree pins ({sha[:10]}), so the law it '
+                         f'holds cannot be read as of now. Run: git submodule update --init -- {corpus}')
+    import os
+    import pickle
+    store = Path(git('rev-parse', '--path-format=absolute', '--git-path', 'global-law-cache').strip())
+    path = store / (corpus.replace('/', '~') + '.pickle')
+    data = None
+    try:
+        with open(path, 'rb') as f:
+            data = pickle.load(f)
+        if data.get('v') != INDEX_VERSION:
+            data = None
+    except Exception:
+        data = None
+    changed = False
+    if data and data['pin'] != sha:
+        forward = subprocess.run(['git', 'merge-base', '--is-ancestor', data['pin'], sha], cwd=cwd,
+                                 capture_output=True).returncode == 0
+        if forward:
+            _extend(corpus, cwd, data, f"{data['pin']}..{sha}")
+            data['pin'], changed = sha, True
+        else:
+            data = None
+    if data is None:
+        data = {'v': INDEX_VERSION, 'pin': sha, 'rows': [], 'files': {}, 'unknown': set()}
+        _extend(corpus, cwd, data, sha)
+        changed = True
+    if changed:
+        try:  # a cache: a tree that cannot be written to is read the slow way next time, nothing more
+            store.mkdir(parents=True, exist_ok=True)
+            tmp = path.with_name(f'{path.name}.{os.getpid()}.tmp')
+            with open(tmp, 'wb') as f:
+                pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+            os.replace(tmp, path)
+        except OSError:
+            pass
+    _CACHE[key] = data
+    return data
+
+
+_BATCH: dict = {}
+
+
+def read_object(corpus: str, spec: str) -> str | None:
+    """A file's text by blob id or <commit>:<path>, or None. One long-lived `git cat-file --batch` per corpus, so
+    reading many files costs no process each; where processes can only be run one at a time, one `git cat-file`."""
+    cwd = corpus_dir(corpus)
+    if not hasattr(subprocess, 'Popen'):
+        done = subprocess.run(['git', 'cat-file', 'blob', spec], cwd=cwd, capture_output=True)
+        data = done.stdout if done.returncode == 0 else None
+    else:
+        p = _BATCH.get(corpus)
+        if p is None or p.poll() is not None:
+            p = _BATCH[corpus] = subprocess.Popen(['git', 'cat-file', '--batch'], cwd=cwd, stdin=subprocess.PIPE,
+                                                  stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+            import atexit
+            atexit.register(lambda p=p: (p.stdin.close(), p.wait(5)))
+        p.stdin.write(spec.encode('utf-8') + b'\n')
+        p.stdin.flush()
+        head = p.stdout.readline().split()
+        if len(head) < 3 or head[-1] in (b'missing', b'ambiguous'):
+            return None
+        data = p.stdout.read(int(head[2]))
+        p.stdout.read(1)
+        if head[1] != b'blob':
+            return None
+    if data is None:
+        return None
+    # As `git show` read in text mode gave it: line ends as \n.
+    return data.decode('utf-8', 'replace').replace('\r\n', '\n').replace('\r', '\n')
+
+
+def close_readers() -> None:
+    """Stop the `git cat-file --batch` readers (they hold each corpus folder open while they run)."""
+    for p in _BATCH.values():
+        try:
+            p.stdin.close()
+            p.wait(5)
+        except Exception:
+            p.kill()
+    _BATCH.clear()
+
+
+def read_version(path: str, commit: str) -> str | None:
+    """The text a version of a file gives (None for a version that deletes it)."""
+    if not commit:
+        return None
+    corpus, rel = corpus_of(path)
+    row = next((h for h in history(path) if h['commit'] == commit and 'blob' in h), None)
+    if row is not None:
+        return read_object(corpus, row['blob']) if row['blob'] else None
+    return read_object(corpus, f'{commit}:{rel}')
+
+
+def versions_in_force(date: str, path: str) -> list[tuple[str, str]]:
+    """(commit, credit) for each version of a file that was in force at some time up to `date`, in the order they
+    took force: the commit file_commit chooses on every day a version starts or a correction starts or ends.
+    A day the file is not in force gives ('', '')."""
+    import datetime as dt
+    corpus, rel = corpus_of(path)
+    hist = history(path)
+    days = {h['in_force'] for h in hist if h['in_force'] <= date}
+    mine = {h['commit'] for h in hist}
+    for c in corrections(corpus):
+        if not (rel in c['files'] or (not c['files'] and c['commit'] in mine)):
+            continue
+        if c['from'] <= date:
+            days.add(c['from'])
+        end = correction_end(corpus, c, rel)
+        if end < date:
+            days.add((dt.date.fromisoformat(end) + dt.timedelta(days=1)).isoformat())
+    who = {h['commit']: credit(h['law'], h['kind']) for h in hist}
+    who.update({c['commit']: credit(c['law'], 'correction') for c in corrections(corpus)})
+    out: list[tuple[str, str]] = []
+    for d in sorted(days):
+        sha = file_commit(d, path) or ''
+        if not out or out[-1][0] != sha:
+            out.append((sha, who.get(sha, '') if sha else ''))
+    return out
+
+
+def _metadata_only(corpus: str) -> bool:
+    """Whether a corpus says it holds a list of acts without their text (its README, at the pinned commit)."""
+    key = ('metadata-only', corpus)
+    if key not in _CACHE:
+        text = read_object(corpus, f"{_index(corpus)['pin']}:README.md") or ''
+        _CACHE[key] = bool(re.search(r'metadata only|no law text|catalogue only', text, re.I))
+    return bool(_CACHE[key])
 
 
 def main(argv: list[str]) -> None:
@@ -930,22 +1147,28 @@ def main(argv: list[str]) -> None:
     if command == 'world':
         events = timeline()
         print(f'The law on {args[0]}' + ('' if root_on(args[0], events) else ' (nothing in force yet)') + ':')
+        by_corpus: dict[str, list[Event]] = {}
+        for e in events:  # once, not once per corpus: the timeline holds every corpus's commits
+            by_corpus.setdefault(e.corpus, []).append(e)
         for corpus in manifest()['corpora']:
-            last = [e for e in events if e.corpus == corpus['path'] and e.in_force <= args[0] and e.kind != 'documentation']
+            own = by_corpus.get(corpus['path'], [])
+            last = [e for e in own if e.in_force <= args[0] and e.kind != 'documentation']
             state = (f'{last[-1].law}, in force {last[-1].in_force}' if last else 'not yet in the record') \
                 if (ROOT / corpus['path'] / '.git').exists() else 'not checked out'
             if corpus['path'] in unreadable():
                 state = 'checkout unfinished (no commit yet)'
             print(f"  {corpus['path']:<24} {state}")
-        note(c for corpus in manifest()['corpora'] for c in caveats(args[0], corpus['path'], events) if 'runs to' in c)
+        note(c for corpus in manifest()['corpora'] if corpus['path'] in by_corpus
+             for c in caveats(args[0], corpus['path'], by_corpus[corpus['path']]) if 'runs to' in c)
         note(_UNREADABLE.format(corpus=c) for c in unreadable())
     elif command in ('show', 'blame', 'words'):
         corpus, _ = corpus_of(args[1])
         note(caveats(args[0], corpus))
-        if text_on(args[0], args[1]) is None:
+        text = text_on(args[0], args[1])
+        if text is None:
             raise SystemExit(explain_missing(args[0], args[1]))
         if command == 'show':
-            print(text_on(args[0], args[1]), end='')
+            print(text, end='')
         elif command == 'blame':
             # git blame prints commit dates, which are 1970 for laws before 1970; print the in-force date instead.
             dates = {h['commit']: h['in_force'] for h in history(args[1])}
@@ -982,9 +1205,22 @@ def main(argv: list[str]) -> None:
         if args[0] > args[1]:
             args[0], args[1] = args[1], args[0]
         prefix = args[2] if len(args) > 2 else ''
-        for e in timeline():
-            if args[0] <= e.in_force <= args[1] and e.corpus.startswith(prefix) and e.kind not in ('documentation', 'printing'):
-                print(f'{e.in_force}  {e.corpus:<24} {e.law}')
+        # Only laws taking effect: starting texts (the text as a publisher gave it on the day it was read), corrections,
+        # printings, court rulings, treaties and changes no law is named for are not laws taking effect that day.
+        left_out: dict[str, int] = {}
+        # Only the corpora the prefix takes in are read, not every corpus checked out.
+        chosen = [c['path'] for c in manifest()['corpora'] if c['path'].startswith(prefix)]
+        events = sorted((e for c in chosen for e in corpus_events(c)), key=lambda e: e.in_force) if prefix else timeline()
+        for e in events:
+            if args[0] <= e.in_force <= args[1] and e.corpus.startswith(prefix) and e.kind != 'documentation':
+                if e.kind == 'law':
+                    print(f'{e.in_force}  {e.corpus:<24} {e.law}')
+                else:
+                    left_out[e.kind] = left_out.get(e.kind, 0) + 1
+        names = {'baseline': 'starting texts (text as published, no law named)', 'correction': 'corrections',
+                 'printing': 'printings', 'court': 'court rulings', 'treaty': 'treaties',
+                 'uncredited': 'changes no law is named for'}
+        note(f'not listed, as they are not laws taking effect: {n} {names.get(k, k)}' for k, n in sorted(left_out.items()))
         note(_UNREADABLE.format(corpus=c) for c in unreadable() if c.startswith(prefix))
     else:
         raise SystemExit(__doc__)
