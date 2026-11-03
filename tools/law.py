@@ -579,6 +579,10 @@ def matches(corpus: dict, name: str) -> bool:
     name = re.sub(r'\s+', '-', name.strip().strip('/').lower())
     if not name:
         return False
+    # A corpus's old path, from before it moved (data/moved-paths.tsv), names it too, with or without /acts.
+    renamed = moved(name) if moved(name) != name else moved(name + '/acts').removesuffix('/acts')
+    if renamed != name and matches(corpus, renamed):
+        return True
     for path in (corpus['path'], corpus.get('iso_path') or ''):
         if path and (path == name or path.startswith(name + '/') or name.startswith(path + '/')):
             return True

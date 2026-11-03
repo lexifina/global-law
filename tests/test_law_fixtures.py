@@ -290,6 +290,10 @@ class Checkouts(unittest.TestCase):
         self.t.pin()
         out, err, code = self.t.cli('show', TODAY, 'xx/old-city/acts/act/s1.md')
         self.assertEqual(out, 'two\n', err)
+        law = self.t.law()  # a name that is the old path, with or without /acts, takes in the moved corpus
+        corpus = {'path': 'aa/national/acts'}
+        self.assertTrue(law.matches(corpus, 'xx/old-city/acts'))
+        self.assertTrue(law.matches(corpus, 'xx/old-city'))
 
     def test_folder_renamed_by_documentation_keeps_its_history(self):
         a = self.t.corpora['aa/national/acts']
