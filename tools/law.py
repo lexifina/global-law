@@ -153,13 +153,21 @@ def corpus_events(corpus: str) -> list[Event]:
         raw = git('log', '--reverse', fmt, sha, cwd=cwd)
     except RuntimeError:  # the checkout has not fetched the pinned commit yet: read what it has
         raw = git('log', '--reverse', fmt, 'HEAD', cwd=cwd)
-    rows, undated = [], []
+    rows, undated, fixes = [], [], []
     for record in raw.split('\x1e'):
         if not record.strip():
             continue
         commit, author, when, subject, block = record.strip('\n').split('\x1f', 4)
-        t = trailer_lines(block)
+        every = trailer_values(block)
+        t = {k: v[0] for k, v in every.items()}
         kind = (t.get('Kind') or '').strip().lower()
+        if kind == 'correction' and 'Corrects' in t:
+            span = CORRECTS.search(t['Corrects'])
+            start = span.group(1) if span else (t.get(trailer) or '')[:10]
+            if ISO_DAY.match(start):
+                fixes.append({'commit': commit, 'law': author, 'from': start, 'to': span.group(2) if span else None,
+                              'files': every.get('Files', []), 'act_path': t.get('Act-path'), 'corrects': t['Corrects'],
+                              'supersedes': t.get('Supersedes'), 'reason': t.get('Reason')})
         docs = kind == 'documentation' or author == 'Lexifina'
         in_force, what = (None, 'documentation') if docs else (t.get(trailer), 'law')
         for k, label in dated_by if not docs else ():
@@ -183,7 +191,57 @@ def corpus_events(corpus: str) -> list[Event]:
                 rows[i][3] = kind if rows[i][3] != 'documentation' else 'documentation'
     events = [Event(c, corpus, c, a, d, k, s) for c, a, d, k, s in rows if d]
     _CACHE[key] = events
+    _CACHE[('corrections', key[1])] = fixes
     return events
+
+
+def corrections(corpus: str) -> list[dict]:
+    """The corrections appended to a corpus (Kind: correction, with Corrects: <act> <from>..<to>), in history order.
+    Each sets the files it names (one Files: trailer per corpus-relative path) to the corrected text for those dates,
+    whether or not git shows a change for a file: a late-found version can equal the text the tip already has.
+    Act-path: names the act, whose next ordinary commit ends an open range."""
+    corpus_events(corpus)
+    return _CACHE.get(('corrections', f'{corpus}@{tip(corpus) or "HEAD"}'), [])  # type: ignore[return-value]
+
+
+def act_next(corpus: str, paths: list[str], after: str) -> str | None:
+    """The in-force date of the act's next ordinary commit (not a correction, not documentation) after `after`: the
+    first commit by in-force date that touches any of `paths`."""
+    key = ('act-next', f'{corpus}@{tip(corpus)}:' + '\x1f'.join(paths))
+    if key not in _CACHE:
+        cwd = corpus_dir(corpus)
+        try:
+            touched = set(git('log', '--format=%H', tip(corpus) or 'HEAD', '--', *paths, cwd=cwd).split())
+        except RuntimeError:
+            touched = set(git('log', '--format=%H', 'HEAD', '--', *paths, cwd=cwd).split())
+        fixes = {c['commit'] for c in corrections(corpus)}
+        _CACHE[key] = sorted(e.in_force for e in corpus_events(corpus)
+                             if e.corpus_commit in touched and e.corpus_commit not in fixes and e.kind != 'documentation')
+    return next((d for d in _CACHE[key] if d > after), None)  # type: ignore[union-attr]
+
+
+def correction_end(corpus: str, fix: dict, rel: str) -> str:
+    """The last day a correction applies: its own end, or for an open range the day before the act's next ordinary
+    commit (the act is Act-path:, else the folders of its Files:, else the folder of the file read)."""
+    if fix.get('to'):
+        return fix['to']
+    folder = lambda f: f.rsplit('/', 1)[0] if '/' in f else f  # noqa: E731
+    paths = [fix['act_path']] if fix.get('act_path') else sorted({folder(f) for f in fix['files']}) or [folder(rel)]
+    nxt = act_next(corpus, paths, fix['from'])
+    if not nxt:
+        return '9999-12-31'
+    import datetime as dt
+    return (dt.date.fromisoformat(nxt) - dt.timedelta(days=1)).isoformat()
+
+
+def trailer_values(block: str) -> dict[str, list[str]]:
+    """Every value of each trailer in a block git printed with %(trailers:only,unfold), repeated keys in order."""
+    out: dict[str, list[str]] = {}
+    for line in block.splitlines():
+        m = _TRAILER.match(line)
+        if m:
+            out.setdefault(m.group(1), []).append(m.group(2).strip())
+    return out
 
 
 def trailer_lines(block: str) -> dict[str, str]:
@@ -279,18 +337,28 @@ def matches(corpus: dict, name: str) -> bool:
 
 
 def file_commit(date: str, path: str) -> str | None:
-    """The commit whose version of a provision is in force on `date`: of the dated commits that touch the file, the one
-    with the greatest in-force date on or before `date`, a later commit winning a tie (so a correction beats the
-    version it corrects). A correction counts only within the dates it names (Corrects: <act> <from>..<to>). The
-    commit may delete the file: then nothing is in force. This reads the file's own history by date, not the order of
-    commits, because a corpus can append an older act after its tip, or a correction to an earlier version."""
-    best = None
-    for h in history(path):
-        if h['in_force'] > date or (h.get('until') and h['until'] < date):
+    """The commit whose version of a provision is in force on `date`. First the ordinary commit: of the dated commits
+    that touch the file, the one with the greatest in-force date on or before `date`, a later commit winning a tie.
+    The order of commits does not matter, because a corpus can append an older act after its tip. Then, file by
+    file, the latest correction whose dates cover the day and that names this file (Files:), or touches it when it
+    names none: its text replaces the ordinary one. A commit may delete the file: then nothing is in force."""
+    corpus, rel = corpus_of(path)
+    hist = history(path)
+    base = None
+    for h in hist:
+        if h.get('corrects') or h['in_force'] > date:
             continue
-        if best is None or h['in_force'] >= best['in_force']:
-            best = h
-    return best['commit'] if best else None
+        if base is None or h['in_force'] >= base['in_force']:
+            base = h
+    mine = {h['commit'] for h in hist}
+    fix = None
+    for c in corrections(corpus):
+        if not (rel in c['files'] or (not c['files'] and c['commit'] in mine)):
+            continue
+        if c['from'] <= date <= correction_end(corpus, c, rel) and (fix is None or c['from'] >= fix['from']):
+            fix = c
+    chosen = fix or base
+    return chosen['commit'] if chosen else None
 
 
 def text_on(date: str, path: str) -> str | None:
@@ -561,6 +629,14 @@ def _history(corpus: str, rel: str) -> list[dict]:
             row.update({'corrects': t['Corrects'], 'until': corrects.group(2) if corrects else None,
                         'supersedes': t.get('Supersedes'), 'reason': t.get('Reason')})
         out.append(row)
+    seen = {r['commit'] for r in out}
+    extra = [c for c in corrections(corpus) if rel in c['files'] and c['commit'] not in seen]
+    if extra:
+        out += [{'commit': c['commit'], 'law': c['law'], 'in_force': c['from'], 'kind': 'correction', 'enacted': None,
+                 'published': None, 'corrects': c['corrects'], 'until': c['to'], 'supersedes': c['supersedes'],
+                 'reason': c['reason']} for c in extra]
+        order = {e.corpus_commit: i for i, e in enumerate(corpus_events(corpus))}
+        out.sort(key=lambda r: order.get(r['commit'], len(order)))
     return out
 
 

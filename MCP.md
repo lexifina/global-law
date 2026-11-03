@@ -94,9 +94,15 @@ with all of them.
 Each country's record is its own git history, and each commit there carries the day its change took effect. A
 provision on a date is read from its own history, in the history the tree pins at HEAD: of the commits that touch it,
 the one with the latest in-force date on or before that date, a later commit winning a tie. The order of commits does
-not matter, because a country may append an older act after its tip. A correction (`Kind: correction`, with
-`Corrects: <act> <from>..<to>`, `Supersedes:` and `Reason:`) wins over the version it corrects for the dates it names,
-and `read_law` says that a correction applies. The timeline across countries (`laws_between`, `world_on_date`,
+not matter, because a country may append an older act after its tip.
+
+Then corrections apply, file by file. A correction commit carries `Kind: correction`, `In-force: <first day>`,
+`Corrects: <act> <from>..<to>`, `Supersedes: <commit or none>`, `Reason:`, `Act-path: <the act's folder or file>` and one
+`Files: <path>` trailer for each file it sets. Its text replaces the ordinary version of each file it names on every
+day its range covers, even when git shows no change to that file (a late-found version can equal the text the tip
+already has). An open range (`<from>..`) ends the day before the act's next ordinary commit, the next commit by
+in-force date that touches `Act-path` (or, without it, the folders of its `Files`). The latest correction covering a
+day wins, and `read_law` says that a correction applies, with what it supersedes and why. The timeline across countries (`laws_between`, `world_on_date`,
 `search_changes`) merges the countries' histories by date.
 
 Until 2 November 2026 the tree also wrote one dated root commit per law taking effect, and the tools read those. Since

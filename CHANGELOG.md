@@ -8,6 +8,12 @@ Status words:
 - **Open:** found and reported, not yet fixed.
 - **Checked:** a test that passed.
 
+## 3 November 2026
+
+- **Adopted (all). Correction commits and back-filled versions.** Corpora now grow breadth first: current texts first, older versions appended after the tip, and corrections appended too, since the tree only grows by fast-forward. A correction carries `Kind: correction`, `In-force`, `Corrects: <act> <from>..<to>`, `Supersedes`, `Reason`, `Act-path` and one `Files:` trailer per file. Readers take the ordinary version by in-force date, then apply each correction whose range covers the day to the files it names, even when git shows no change to a file. An open range ends the day before the act's next ordinary commit. MCP.md, "How a date is read", has the rule.
+  - **Fixed:** `law.py` found corrections only through the files they changed, so one naming a file whose text the tip already had was missed. It also ended an open range at the file's next version rather than the act's.
+  - **Checked:** a real git corpus with a current text, an older version appended after it, a correction that changes the file and an empty correction that only names it. Each date reads the right text, and an act that is one file in a shared folder is not ended by changes to the folder.
+
 ## 2 November 2026
 
 The MCP server, tested and fixed from 29 October to 2 November.

@@ -1060,19 +1060,82 @@ class Dating(unittest.TestCase):
         import law
         cls.law = law
 
-    def test_the_greatest_in_force_date_wins_and_a_correction_only_in_its_dates(self):
+    def test_the_greatest_in_force_date_wins_then_corrections_apply_by_their_dates(self):
+        # The file act/a.md: version a (2010), an older version c appended after the tip (2005), and a correction e
+        # that touches it for 2012 only. Correction d names the file in Files: but leaves its text as it is (a late-
+        # found version equal to the tip), from 2010 with an open end: it ends the day before the act's next ordinary
+        # commit, b on 2020-01-01, which does not touch this file.
         from unittest import mock
-        rows = [{'commit': 'a', 'in_force': '2010-01-01', 'kind': 'law'},
-                {'commit': 'b', 'in_force': '2020-01-01', 'kind': 'law'},
-                {'commit': 'c', 'in_force': '2005-06-01', 'kind': 'law'},  # an older act, appended after the tip
-                {'commit': 'd', 'in_force': '2010-01-01', 'kind': 'correction', 'until': '2015-12-31'}]  # corrects a
-        with mock.patch.object(self.law, 'history', lambda path: rows):
-            on = lambda date: self.law.file_commit(date, 'x/y/z/a.md')  # noqa: E731
+        hist = [{'commit': 'a', 'in_force': '2010-01-01', 'kind': 'law'},
+                {'commit': 'c', 'in_force': '2005-06-01', 'kind': 'law'},
+                {'commit': 'e', 'in_force': '2012-01-01', 'kind': 'correction', 'corrects': 'Act 2012-01-01..2012-12-31'}]
+        fixes = [{'commit': 'd', 'from': '2010-01-01', 'to': None, 'files': ['act/a.md'], 'act_path': 'act'},
+                 {'commit': 'e', 'from': '2012-01-01', 'to': '2012-12-31', 'files': [], 'act_path': None}]
+        nexts = {('act',): ['2020-01-01']}
+        with mock.patch.object(self.law, 'corpus_of', lambda path: ('x/y/z', path.removeprefix('x/y/z/'))), \
+                mock.patch.object(self.law, 'history', lambda path: hist), \
+                mock.patch.object(self.law, 'corrections', lambda corpus: fixes), \
+                mock.patch.object(self.law, 'act_next', lambda corpus, paths, after: next((d for d in nexts[tuple(paths)] if d > after), None)):
+            on = lambda date: self.law.file_commit(date, 'x/y/z/act/a.md')  # noqa: E731
             self.assertIsNone(on('2004-12-31'))
-            self.assertEqual(on('2007-01-01'), 'c')
-            self.assertEqual(on('2012-01-01'), 'd')  # the correction ties with a and is later
-            self.assertEqual(on('2016-01-01'), 'a')  # the correction's dates are over
-            self.assertEqual(on('2021-01-01'), 'b')
+            self.assertEqual(on('2007-01-01'), 'c')  # the older version, though appended after the tip
+            self.assertEqual(on('2011-01-01'), 'd')  # corrected, though git shows no change to the file
+            self.assertEqual(on('2012-06-01'), 'e')  # the later correction covering the day
+            self.assertEqual(on('2013-01-01'), 'd')  # e's dates are over; d still applies
+            self.assertEqual(on('2019-12-31'), 'd')
+            self.assertEqual(on('2020-01-01'), 'a')  # the act's next commit ends d: back to the ordinary version
+            # An act that is one file in a shared folder: Act-path names it, so a change to the folder does not end d.
+            fixes[0]['act_path'] = 'act/a.md'
+            nexts[('act/a.md',)] = []
+            self.assertEqual(on('2021-01-01'), 'd')
+
+    def test_a_real_corpus_with_end_blocks_and_corrections(self):
+        # A corpus as the breadth-first scrapers write it: the current text first, an older version back-filled after
+        # the tip, then corrections with Files: and Act-path:, one of them an empty commit (no change git can see).
+        import shutil
+        import tempfile
+        from unittest import mock
+        root = Path(tempfile.mkdtemp())
+        cwd = root / 'zz'
+        cwd.mkdir()
+
+        def commit(law_name, files, trailers, empty=False):
+            for name, text in files.items():
+                (cwd / name).parent.mkdir(parents=True, exist_ok=True)
+                (cwd / name).write_text(text, encoding='utf-8')
+            subprocess.run(['git', 'add', '-A'], cwd=cwd, check=True)
+            subprocess.run(['git', '-c', f'user.name={law_name}', '-c', 'user.email=law@example.org', 'commit', '-q',
+                            *(['--allow-empty'] if empty else []), '-m', f'{law_name}\n\n' + '\n'.join(trailers)], cwd=cwd, check=True)
+            return subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=cwd, capture_output=True, text=True).stdout.strip()
+
+        try:
+            subprocess.run(['git', 'init', '-q'], cwd=cwd, check=True)
+            current = commit('Law 2020', {'act/a.md': 'current\n'}, ['In-force: 2020-01-01'])
+            commit('Law 2021', {'act/b.md': 'other\n'}, ['In-force: 2021-01-01'])  # the folder changes; a.md does not
+            original = commit('Law 2010', {'act/a.md': 'original 2010\n'}, ['In-force: 2010-01-01'])  # an end block
+            fixed = commit('Correction', {'act/a.md': 'corrected 2010\n'},
+                           ['Kind: correction', 'In-force: 2010-01-01', 'Corrects: Act 2010-01-01..2014-12-31',
+                            f'Supersedes: {original}', 'Reason: misread', 'Act-path: act/a.md', 'Files: act/a.md'])
+            empty = commit('Correction', {}, ['Kind: correction', 'In-force: 2015-01-01', 'Corrects: Act 2015-01-01..',
+                                              'Supersedes: none', 'Reason: late-found version', 'Act-path: act/a.md',
+                                              'Files: act/a.md'], empty=True)
+            info = {'path': 'zz', 'in_force_trailer': 'In-force'}
+            with mock.patch.object(self.law, 'ROOT', root), mock.patch.object(self.law, 'tip', lambda corpus: None), \
+                    mock.patch.object(self.law, 'corpus_info', lambda corpus: info), \
+                    mock.patch.object(self.law, 'corpus_of', lambda path: ('zz', path.removeprefix('zz/'))):
+                self.law._CACHE.clear()
+                on = lambda date: self.law.text_on(date, 'zz/act/a.md')  # noqa: E731
+                self.assertIsNone(on('2005-01-01'))
+                self.assertEqual(on('2012-01-01'), 'corrected 2010\n')
+                self.assertEqual(on('2016-01-01'), 'corrected 2010\n')  # the empty correction, open from 2015
+                self.assertEqual(self.law.file_commit('2016-01-01', 'zz/act/a.md'), empty)
+                self.assertEqual(on('2020-06-01'), 'current\n')  # Act-path's next ordinary commit ends the open range
+                self.assertEqual(self.law.file_commit('2020-06-01', 'zz/act/a.md'), current)
+                self.assertIn(empty, [h['commit'] for h in self.law.history('zz/act/a.md')])  # named, though unchanged
+                self.assertEqual([c['commit'] for c in self.law.corrections('zz')], [fixed, empty])
+                self.law._CACHE.clear()
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
 
     def test_corrects_names_its_dates(self):
         m = self.law.CORRECTS.search('Legea nr. 31/1990 2010-01-01..2015-12-31')
