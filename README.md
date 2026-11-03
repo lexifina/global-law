@@ -208,10 +208,13 @@ that moves forward) and checks what `law.py` reads from each.
 
 ## How it was made
 
-Up to 2 November 2026, `tools/build.py` built this repository from the published corpus repositories,
-deterministically, and REPRODUCE.md records that build: the command, the software, the commits pinned, the decisions
-made by hand and what an AI model did and did not do. Since then the repository is not rebuilt: each commit only adds
-corpora as submodules and moves their pins forward, so its history only grows.
+Since 2 November 2026 the repository is not rebuilt: each commit adds corpora as submodules, moves their pins forward,
+or changes the documentation and tools, so its history only grows. `tools/verify.py` checks that history (every
+submodule has its `.gitmodules` entry; with `--fetch`, every pin is held by its repository and moved only forward), and
+`tools/describe.py --check` checks the descriptions against the tree. Up to 29 October 2026 a script rebuilt the
+repository from scratch; it is kept, unchanged, as `tools/archive/build-2026-10-29.py`, and REPRODUCE.md records that
+build (the command, the software, the commits pinned, the decisions made by hand, what an AI model did) and why it can
+no longer be repeated.
 
 ## Videos
 

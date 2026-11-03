@@ -1,28 +1,58 @@
-# Git for Global Law: how this repository was made, and how to make it again
+# Git for Global Law: how this repository is made, and how to check it
 
-This file records exactly how the repository was built: what it was built from, the commands, the software, the
-decisions made by hand, and what an AI model did and did not do. Anyone with Python and git, and read access to the
-three corpus repositories, can rebuild it and check it hash for hash.
+This file records how the repository is made and how anyone can check it with git alone. It has two parts. Since
+2 November 2026 the repository grows by fast-forward only: it is never rebuilt, and no commit already published is
+replaced. Up to 29 October 2026 it was rebuilt from scratch by a script, whose record is kept below, in part two.
 
-## Short version
+## Part one: how the repository grows now
 
 ```sh
-git clone --recurse-submodules https://github.com/lexifina/global-law && cd global-law
-python -m unittest discover -s tests -v                       # 48 checks, described below
-python tools/build.py ../rebuilt --date 2026-10-28             # the same build, from the published corpus repos
-git -C ../rebuilt log --format=%H                              # the same hashes as `git log --format=%H` here
+git clone https://github.com/lexifina/global-law && cd global-law
+python tools/verify.py                       # the last 200 commits: every submodule has its .gitmodules entry
+python tools/verify.py --fetch               # and every pin is held by its repository and moved only forward
+python tools/describe.py --check             # manifest.json and the jurisdiction.json files match the tree
+python -m unittest tests.test_law_fixtures   # how law.py reads a corpus, on small corpora built for the test
+```
+
+- **What a commit does.** Each commit since 2 November 2026 does one of three things:
+  - adds corpora as submodules;
+  - moves the pins of corpora to their repositories' current commits;
+  - changes the documentation and tools.
+
+  A program run by Lexifina makes the first two about every few minutes, as country repositories publish. It is not part of this repository.
+- **What it checks before each push.**
+  - A pin moves only forward: the new commit descends from the old one. A country repository that was rewritten is held at its last pin and reported, never followed.
+  - Every submodule has its `.gitmodules` entry and every entry its submodule.
+  - The push is a plain fast-forward, retried from a fresh fetch if another commit landed first.
+- **Where a corpus goes.** Each corpus goes where its own `jurisdiction.json` places it:
+  - `<country>/<level>/<corpus>` for national or federal law and for a state or province;
+  - `<country>/<state>/<city>/acts` for a city or regency within one.
+
+  `data/moved-paths.tsv` lists the corpora moved since, and the tools read an old path from the new place.
+- **The descriptions.** `manifest.json` and every `jurisdiction.json` are written by `tools/describe.py` from the corpora pinned at the time. Each corpus is described by its own repository's `corpus.json`, `data/repo.json` and `jurisdiction.json` at the pinned commit.
+- **The dates.** Dates are read from each corpus's own history, as `tools/law.py` and README.md describe. The per-law history from part two is still here, frozen. Its dates for corpus commits that carry none of their own are kept in `data/legacy-dates.tsv`.
+- **What cannot be checked.** Some old commits pin corpus commits that their repositories no longer hold. In part two's history, 1,400 pins are affected, the last pin of 89 corpora among them. Between 29 October and 2 November, 2,503 pins are affected. Those repositories were rewritten before the fast-forward rule. `git submodule update` at such a commit fails for those corpora, and nothing in this repository can repair it; `tools/verify.py --since <commit> --fetch` names them.
+
+## Part two: the build of 28 and 29 October 2026 (frozen)
+
+Up to 29 October 2026 (commit `0e10db05b17`) this repository was rebuilt from scratch by what is now
+`tools/archive/build-2026-10-29.py` (then `tools/build.py`), kept byte for byte as it was. That build can no longer
+be repeated hash for hash: most of the country repositories it read were rewritten on 29 October, before the
+fast-forward rule, so the commits it pinned are not all published any more. Never publish its output over this
+repository: it would replace the whole history. What follows is the record of that build as it was written then.
+
+```sh
+python tools/archive/build-2026-10-29.py ../rebuilt --date 2026-10-28   # as it was run then
 ```
 
 On 28 October 2026 two builds into separate empty folders gave the same 339326 commit hashes, from the first commit
-(the jurisdiction tree, dated 1 January 1970) to the last (this documentation). The build reads the corpus
-repositories as they are published, so it rebuilds hash for hash for as long as those repositories are at the commits
-listed below.
+(the jurisdiction tree, dated 1 January 1970) to the last (that documentation).
 
-## What it is built from
+### What it was built from
 
 This repository contains no legal text of its own. It is built from three repositories, each with its own
 REPRODUCE.md recording how its text was obtained. At this build they were at these commits, which are the commits this
-repository pins at its head:
+repository pinned at that build (not the pins at HEAD now, which manifest.json lists):
 
 | Path here | Repository | Commit |
 | --- | --- | --- |
@@ -137,9 +167,9 @@ repository pins at its head:
 The build reads each repository's commits on the first-parent line of its default branch, with their authors, dates
 and message trailers, and its tags. It reads no file contents and makes no other network requests.
 
-## The build, step by step
+### The build, step by step
 
-The build script is `tools/build.py`. It is the same file as `scripts/global-law/build.py` in Lexifina's own
+The build script was `tools/build.py`, now `tools/archive/build-2026-10-29.py`. It is the same file as `scripts/global-law/build.py` in Lexifina's own
 repository (git blob `d1b094cb56666f87012d2e7ddf3a6d746042c176`). The reading tool `tools/law.py` has blob
 `a4eed065182fff59d22f60f5f5a595435047eb19`, and the tests `tests/test_law.py` have blob
 `b8f530cdac1abe5b1631b88d42f01c4de1dd0bcc`.
@@ -153,16 +183,16 @@ repository (git blob `d1b094cb56666f87012d2e7ddf3a6d746042c176`). The reading to
    - and, with `--site-data`, writes the timeline that the page at lexifina.com/watch/global-law reads
 2. The same command into a second empty folder. `git log --format=%H` was identical in both: 339326 commits.
 3. `git submodule update --init`, then `python -m unittest discover -s tests -v`. All 48 tests passed.
-4. `git push --force -u origin main` and `git push --force origin --tags` published it to GitHub. It is a private
-   repository.
+4. `git push --force -u origin main` and `git push --force origin --tags` published it to GitHub. It was a private
+   repository then; it is public now.
 5. A fresh `git clone --recurse-submodules` from GitHub, then the tests again. All passed.
 
 The build and the tools use only the Python standard library and git. They were run with Python 3.12.10 and git
 2.46.0 on Windows 11. No AI model or other service is involved in building or reading the history.
 
-## How the history is derived
+### How that history was derived
 
-Everything below is done by `tools/build.py`, deterministically. The same corpus commits give the same hashes.
+Everything below was done by the build script, deterministically. The same corpus commits give the same hashes.
 
 - **Paths.** Each corpus sits at country (ISO 3166-1), then level, then corpus:
   - `germany/bund/acts`
@@ -188,7 +218,7 @@ Everything below is done by `tools/build.py`, deterministically. The same corpus
 - **Tags.** Each corpus tag is copied as `<path>/<tag>`, for example `germany/bund/acts/gg/36`, pointing at
   the commit here that moved the corpus to the tagged commit.
 
-## Decisions made by hand
+### Decisions made by hand
 
 1. **Folders above the corpora, not repositories.** Nested repositories would make every change ripple up through
    each level's pin. Folders give the same tree with one level of submodules.
@@ -204,7 +234,7 @@ Everything below is done by `tools/build.py`, deterministically. The same corpus
    Neither is in this repository. A later law's retroactive reach is in the corpus commit messages only, and does not
    change the text shown on earlier dates.
 
-## What an AI model did
+### What an AI model did
 
 This repository was built on 28 October 2026 in **Claude Code**, Anthropic's coding tool, by the model **Claude Opus
 5.5** (model id `claude-opus-5-5`). The model was working from a goal set by the user at Lexifina: to design a git
@@ -226,10 +256,10 @@ The model did **not**:
   was copied by their own scripts from the official publishers, as their REPRODUCE.md files record.
 - **Take part in building or reading the history.** No AI model is called by the build, the tools or the tests.
 
-The user decided the scope, the owner (the Lexifina organisation) and that the repository is private. The work was not
+The user decided the scope, the owner (the Lexifina organisation) and that the repository was private (it is public now). The work was not
 reviewed line by line by a lawyer. For anything that matters, the legislation itself should be read.
 
-## The tests
+### The tests then
 
 `tests/test_law.py` has 48 tests:
 
@@ -262,3 +292,10 @@ reviewed line by line by a lawyer. For anything that matters, the legislation it
 - **28 October 2026.** The repository moved from a personal account to the Lexifina organisation, and the corpus
   repositories followed. It was rebuilt with the new addresses and force-pushed, and later with this file and the
   build script added.
+- **29 October to 2 November 2026.** The country repositories were cleaned of private material and rewritten, and
+  this repository stopped being rebuilt: each commit since then adds corpora or moves pins (part one).
+- **2 November 2026.** No force-push from then on, here or in any country repository, without the owner's yes for
+  that repository.
+- **3 November 2026.** `tools/build.py` moved, unchanged, to `tools/archive/build-2026-10-29.py`; `tools/verify.py`
+  and `tools/describe.py` added; 173 corpora moved to the folders their own `jurisdiction.json` gives
+  (`data/moved-paths.tsv`).
