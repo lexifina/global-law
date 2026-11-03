@@ -16,6 +16,7 @@ corpus path. On Windows, run it with `py` or `python`. A running MCP server sees
 from __future__ import annotations
 
 import difflib
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -31,7 +32,14 @@ def corpora() -> list[dict]:
 
 
 def checked_out(corpus: dict) -> bool:
-    return (law.ROOT / corpus['path'] / '.git').exists()
+    """Cloned and checked out. A clone whose checkout failed (a path too long for Windows) has no index yet: `add`
+    finishes it rather than call it done."""
+    here = law.ROOT / corpus['path']
+    if not (here / '.git').exists():
+        return False
+    index = subprocess.run(['git', 'rev-parse', '--path-format=absolute', '--git-path', 'index'], cwd=here,
+                           capture_output=True, encoding='utf-8')
+    return index.returncode == 0 and Path(index.stdout.strip()).exists()
 
 
 def chosen() -> list[str]:
@@ -62,9 +70,26 @@ def add(found: list[dict]) -> bool:
         print('Already checked out: ' + ', '.join(c['path'] for c in found))
         return False
     print('Checking out ' + ', '.join(todo) + ' (only these are downloaded) ...', flush=True)
-    done = subprocess.run(['git', 'submodule', 'update', '--init', '--', *todo], cwd=law.ROOT)
-    if done.returncode:
-        raise SystemExit('git could not check them out; see its message above (a private repository needs access).')
+    failed = []
+    for path in todo:  # one at a time: a corpus git cannot check out does not stop the others
+        # core.longpaths: some corpora have file paths past Windows' 260-character limit (a Swiss commune's
+        # regulations), which git for Windows refuses to write without it. Elsewhere it changes nothing.
+        # A clone never checked out (no index: nothing of the user's to lose) needs --force: git sees its HEAD already
+        # at the pinned commit and would leave it empty.
+        force = ['--force'] if (law.ROOT / path / '.git').exists() else []
+        done = subprocess.run(['git', '-c', 'core.longpaths=true', 'submodule', 'update', '--init', *force, '--', path],
+                              cwd=law.ROOT, stderr=subprocess.PIPE, encoding='utf-8', errors='replace')
+        if done.returncode:
+            sys.stderr.write(done.stderr)
+            failed.append((path, done.stderr))
+    for path, err in failed:
+        why = ('a file path is too long for Windows: run `git config --global core.longpaths true`, or clone to a '
+               'shorter folder such as C:\\gl, then add it again' if 'too long' in err.lower() else
+               'the repository needs access you do not have' if re.search(r'not found|authentication|permission denied', err, re.I) else
+               'see git\'s message above (often the network: try again)')
+        print(f'Could not check out {path}: {why}.', file=sys.stderr)
+    if failed and len(failed) == len(todo):
+        raise SystemExit(1)
     return True
 
 

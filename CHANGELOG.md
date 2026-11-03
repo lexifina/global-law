@@ -10,6 +10,60 @@ Status words:
 
 ## 3 November 2026
 
+A clone holding Romania alone, set up as the README says and used as a user would: every tool, then a model given only
+the tools (six questions in Romanian and English, all answered correctly).
+
+- **Fixed (Romania; any corpus that moves files). A moved act had no history in the server.** romania-law moved 949
+  acts into folders named by official number (`codul-civil/` to `lege/2009/287/`) in an undated commit, and
+  `read_law`, `provision_history` and `who_wrote` answered "no dated change in the record" for the Civil Code and
+  every other moved act. The reader's index now follows such a move; the index also records it (`law.moves`), so
+  `phrase_history` searches a folder under its earlier names and `law_details` gives paths as they are now, and a
+  whole country on a past date is filed under the current paths.
+- **Fixed (Romania). Corrections were invisible.** romania-law appends a wrong version's fix as a `Kind: correction`
+  commit with its own `In-force` day and `Corrects: <commit>` or `Re-asserts: <commit>`, written by the maintainer.
+  The readers took every commit by the maintainer for documentation, so all 1,092 were dropped and the wrong text
+  served. Read as overlays (the `<act> <from>..<to>` form), each also cost a path-limited git log over 36,000 commits,
+  which made a whole country on a past date time out. They are now ordinary versions for their day, credited to the
+  law of the version they restate; `read_law` and `provision_history` say a correction applies and which entry it
+  replaces.
+- **Fixed (Romania). Withdrawn acts and corrected credits.** An act removed as not belonging (`Withdraws:`, an undated
+  deletion) stayed in force on every past date; its versions are now out of the record. A credit corrected in
+  `data/credits.csv` (the words right, the law wrong) is now the law `provision_history`, `read_law` and `who_wrote`
+  name, with the law first credited.
+- **Fixed (Romania). Finding a provision.** `find_provision` took 25 s a call and timed out on any topic; "OUG 195/2002
+  art. 102" gave OUG 194/2002 first, "legea societatilor art 10" gave the Constitution, and "art. 6^1 Legea 31/1990"
+  missed the article. Now: act citations (`Legea nr. 31/1990`, `OUG 195/2002`, `nr. 31 din 16 noiembrie 1990`) and
+  code names (`Codul civil`, from `data/acts.json`) narrow the search to the act, the code in force first; `6^1`,
+  `6¹` and `1.357` read as files name them; headings are matched from an index built once in the background, with the
+  title under each heading ("Prezumția de renunțare") and without diacritics. Calls take under 3 s.
+- **Fixed (Romania). Reading one article took up to two minutes.** `read_law` built the whole country as in force on
+  the date to report one field. It no longer does; a past date of the whole country takes 2 to 13 s.
+- **Fixed (Romania). Romanian text and citations.** Searches match with or without diacritics, either form of ș and ț,
+  and â for î (spelling before 1993). `resolve_citations` reads "art. 1.357 din Codul civil", "art. 194 alin. (1) din
+  Legea nr. 31/1990", "art. 1349 C. civ." and "art. 16 din Constituție"; `what_else_changes` finds "art. 10" within an
+  act; change notes name only the provision asked about, not a 600-item list.
+- **Fixed (all). Setup.** The README said Romania adds about 60 MB: it was 770 MB and five minutes. On Windows,
+  `python3` is the Store's placeholder: the server now names the Python that started it. `countries.py add` stopped at
+  the first corpus it could not check out (a Swiss commune's paths are too long for Windows) and blamed access; it now
+  sets `core.longpaths`, goes on with the rest, names the cause, and finishes a clone left without a checkout. A server
+  narrowed by `GLOBAL_LAW_JURISDICTIONS` no longer tells the user to run `countries.py only --all`, which that setting
+  overrides.
+- **Fixed (all). Answers cite the publisher, not this tree.** `read_law` gave "Sources" read from three trailers:
+  for Romania's Civil Code none at all (its only link was an archive wrapper under `Consolidated:`, not read); for
+  9,367 Romanian versions a non-link ("…/Public/document 172949 of the official web service"); for Germany nothing (its
+  3,232 links are under `Quelle:`); and for the US and Germany Lexifina's own reader (`Reader:`) as if it were a
+  source. Every answer now starts with the official page and a pincite: the provision as in force on the date at
+  legislation.gov.uk, the consolidated act in force then at legislatie.just.ro and Fedlex, the § or article (today's
+  text, said so) at gesetze-im-internet.de, the section at govinfo.gov, the Chapter at legislation.mt. Archived copies
+  are named apart; the instructions tell the model to cite the publisher. MCP.md, "Citing the official text".
+- **Fixed (UK, Romania). Versions written by the maintainer were dropped as documentation.** 9,201 of the UK corpus's
+  9,212 commits (every text as enacted and in force) are authored Lexifina with an In-force day; the readers took every
+  Lexifina commit for documentation, so the UK showed 11 changes. A maintainer's commit is now documentation only when
+  it is undated; a dated one is credited to its `Law:` trailer, the version it restates, or the act its subject names.
+- **Fixed (romania-law, by its maintainers). Its own reader did not run.** `tools/on.py` and four other published files
+  had every newline removed (a scrub rule had lost its markers), so `python tools/on.py` was a SyntaxError since 2
+  November. Fixed in ef0c6f874f, with a check that every published script compiles.
+
 - **Fixed (171 corpora). Corpora in the wrong place.** Since 29 October new corpora were placed by guessing from the repository's name, which put Guinea-Bissau under Guinea (`guinea/bissau`), Dubai under a country of its own (`uae-dubai`), the Code of Federal Regulations at the level of a US state (`united-states/cfr`), the EU at a national level, seven Bosnian entities beside Bosnia and Herzegovina, and 158 cities and regencies beside the states and provinces they belong to. Each is now where its own `jurisdiction.json` puts it:
   - a city or regency under its state, province or canton (`brazil/bahia/salvador/acts`, `argentina/buenos-aires/bahia-blanca/acts`, `switzerland/zug/zug/acts`), with the "-city" dropped from the folder name;
   - `guinea-bissau/national/acts`, `united-arab-emirates/dubai/acts`, `united-states/federal/cfr` beside `united-states/federal/usc`, `european-union/union/acts`, and `bosnia-and-herzegovina/federation/<canton>/acts`.

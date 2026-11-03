@@ -473,6 +473,23 @@ class McpServer(unittest.TestCase):
         self.assertIn(GG.format('016a'), [h['path'] for h in asyl][:3])
         self.assertTrue(self.s.call('find_provision', query='')['isError'])
 
+    def test_every_answer_cites_the_publishers_page(self):
+        # The provision itself, as in force on the date, where the publisher's URLs follow the layout (the UK).
+        r = self.s.call('read_law', path=SEND, date='2020-06-01', include_text=False)['structuredContent']['cite']
+        self.assertEqual(r['official_url'], 'https://www.legislation.gov.uk/uksi/2014/1530/regulation/13/2020-06-01')
+        self.assertIn('Special Educational Needs and Disability Regulations 2014', r['pincite'])
+        r = self.s.call('read_law', path=USC, date='2022-07-01', include_text=False)['structuredContent']['cite']
+        self.assertTrue(r['official_url'].startswith('https://www.govinfo.gov/link/uscode/11/1182'))
+        self.assertIn('PLAW-117publ151', r['law_url'])
+        for c in (r,):
+            self.assertNotIn('lexifina', json.dumps(c).lower())  # never this tree or its reader
+
+    def test_maintainer_written_versions_are_law(self):
+        # The UK corpus writes its texts as Lexifina, with an In-force day: they are versions, not documentation.
+        hist = self.s.call('provision_history', path=P('gb/uk/send/ukpga/2014/6/section/42.md'))['structuredContent']['changes']
+        self.assertTrue(hist)
+        self.assertNotIn('Lexifina', [h['law'] for h in hist])
+
     def test_read_law_across_the_2022_gap(self):
         may = self.s.call('read_law', path=USC, date='2022-05-01')
         july = self.s.call('read_law', path=USC, date='2022-07-01')
@@ -1227,10 +1244,12 @@ class Choosing(unittest.TestCase):
         r = self.server.call('read_law', path=USC)
         self.assertTrue(r['isError'])
         self.assertIn(CORPUS(USC), r['content'][0]['text'])
-        self.assertRegex(r['content'][0]['text'], r'countries\.py (only --all|add )')
+        # This server is narrowed by GLOBAL_LAW_JURISDICTIONS, which `countries.py only` cannot override: the answer
+        # names the setting to change instead.
+        self.assertRegex(r['content'][0]['text'], r'countries\.py add |GLOBAL_LAW_JURISDICTIONS in this server')
         r = self.server.call('search_law', query='stay', jurisdiction=P('us'))
         self.assertTrue(r['isError'])
-        self.assertIn('countries.py', r['content'][0]['text'])
+        self.assertRegex(r['content'][0]['text'], r'countries\.py|GLOBAL_LAW_JURISDICTIONS in this server')
 
     def test_answers_over_every_jurisdiction_say_what_was_not_searched(self):
         r = self.server.call('laws_between', start='2019-01-01', end='2019-12-31')
@@ -1255,6 +1274,146 @@ class Choosing(unittest.TestCase):
         with self.assertRaises(SystemExit) as stop:
             self.countries.resolve([GG_FOLDER.split('/')[0] + 'x'])
         self.assertIn('Did you mean', str(stop.exception))
+
+
+class Helpers(unittest.TestCase):
+    """The text helpers, on their own (no corpus needed)."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def test_article_number_forms(self):
+        self.assertEqual(self.m.number_forms('art. 6^1'), 'art. 6-1')
+        self.assertEqual(self.m.number_forms('art. 6¹'), 'art. 6-1')
+        self.assertEqual(self.m.number_forms('art. 6 indice 1'), 'art. 6-1')
+        self.assertEqual(self.m.number_forms('art. 1.357'), 'art. 1357')
+        self.assertEqual(self.m.number_forms('S.L. 586.08'), 'S.L. 586.08')  # not a thousands dot
+        self.assertEqual(self.m.stem_of('lege/2009/287/art-0194.md'), '194')
+        self.assertEqual(self.m.stem_of('lege/1990/31/art-006-1.md'), '6-1')
+
+    def test_act_citations(self):
+        for text, kind, n, y in (('Legea nr. 31/1990', 'Legea', '31', '1990'), ('OUG 195/2002', 'OUG', '195', '2002'),
+                                 ('H.G. nr. 1/2016', 'H.G.', '1', '2016'), ('Legea nr. 31 din 16 noiembrie 1990', 'Legea', '31', '1990')):
+            m = self.m.ACT_CITE.search(text)
+            self.assertEqual((m.group('kind'), m.group('n'), m.group('y')), (kind, n, y), text)
+
+    def test_romanian_letters_match_with_or_without_diacritics(self):
+        posix = lambda q: self.m.loose_pattern(q).replace('[[:space:]]+', r'\s+')  # git's class, as Python writes it  # noqa: E731
+        rx = re.compile(posix('raspundere limitata'), re.I)
+        self.assertTrue(rx.search('societate cu răspundere limitată'))
+        rx = re.compile(self.m.loose_pattern('societăţi'))  # cedilla typed, comma below in the text
+        self.assertTrue(rx.search('societăți'))
+        self.assertTrue(re.compile(self.m.loose_pattern('când'), re.I).search('Cînd societatea'))  # spelling before 1993
+
+    def test_links_are_the_publishers_own(self):
+        url = self.m.official_url
+        self.assertEqual(url('https://web.archive.org/web/20260605162605id_/https://legislatie.just.ro/Public/DetaliiDocument/137240'),
+                         ('https://legislatie.just.ro/Public/DetaliiDocument/137240',
+                          'https://web.archive.org/web/20260605162605id_/https://legislatie.just.ro/Public/DetaliiDocument/137240'))
+        self.assertEqual(url('https://legislatie.just.ro/Public/document 172949 of the official web service')[0],
+                         'https://legislatie.just.ro/Public/DetaliiDocument/172949')
+        self.assertEqual(url('https://fedlex.data.admin.ch/eli/cc/1999/404/20210101')[0],
+                         'https://www.fedlex.admin.ch/eli/cc/1999/404/20210101/de')
+        self.assertEqual(url('https://www.gesetze-im-internet.de (Archiv QuantLaw)')[0], 'https://www.gesetze-im-internet.de')
+        self.assertNotIn('Reader', self.m.SOURCE_KEYS + self.m.VERSION_KEYS)  # Lexifina's reader is never a source
+
+    def test_a_wrapped_list_note_names_only_this_provision(self):
+        body = ('Codul civil: 661 provisions (Legea nr. 71/2011)\n\nCodul civil, changed: Art. 1, Art. 2, Art.\n'
+                '1076, Art. 1112, Art. 1114,\nArt. 1120\n\nAffecting: Codul civil Art. 1, Art. 1112\n')
+        note = self.m.change_note(body, 'romania/national/acts/lege/2009/287/art-1112.md')
+        self.assertEqual(note, 'Codul civil, changed: Art. 1112 (and 5 other provision(s))')
+
+
+ROMANIA = 'romania/national/acts'
+
+
+@unittest.skipUnless((ROOT / ROMANIA / '.git').exists(), 'Romania is not checked out (python tools/countries.py add romania)')
+class Romania(unittest.TestCase):
+    """A corpus that grows append-only: acts moved to new folders (November 2026), corrections appended as new
+    versions by the maintainer, credits corrected in data/credits.csv, acts withdrawn, and 137,000 files."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.s = Server(GLOBAL_LAW_JURISDICTIONS='romania')
+        cls.s.send('initialize', {'protocolVersion': '2025-06-18', 'capabilities': {}, 'clientInfo': {'name': 'test', 'version': '0'}})
+        cls.s.send('notifications/initialized', notify=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.s.close()
+
+    def first(self, query):
+        r = self.s.call('find_provision', query=query)
+        self.assertFalse(r.get('isError'), r)
+        return [h['path'] for h in r['structuredContent']['results']]
+
+    def test_find_by_act_citation_and_by_code_name(self):
+        self.assertEqual(self.first('Legea nr. 31/1990 art. 194')[0], f'{ROMANIA}/lege/1990/31/art-194.md')
+        self.assertEqual(self.first('OUG 195/2002 art. 102')[0], f'{ROMANIA}/oug/2002/195/art-102.md')  # not OUG 194/2002
+        self.assertEqual(self.first('art. 6^1 Legea 31/1990')[0], f'{ROMANIA}/lege/1990/31/art-006-1.md')
+        self.assertEqual(self.first('art. 1.357 Codul civil')[0], f'{ROMANIA}/lege/2009/287/art-1357.md')
+        self.assertEqual(self.first('legea societatilor art 10')[0], f'{ROMANIA}/lege/1990/31/art-010.md')
+        self.assertEqual(self.first('Codul de procedura civila art. 194')[0], f'{ROMANIA}/lege/2010/134/art-0194.md')
+        self.assertEqual(self.first('codul fiscal')[0], f'{ROMANIA}/lege/2015/227')  # the code in force first
+        self.assertEqual(self.first('Legea 31/1990'), [f'{ROMANIA}/lege/1990/31'])
+
+    def test_find_by_the_title_under_a_heading(self):
+        self.assertIn(f'{ROMANIA}/lege/2009/287/art-1112.md', self.first('prezumtia de renuntare')[:3])
+
+    def test_a_moved_act_keeps_its_history(self):
+        r = self.s.call('provision_history', path=f'{ROMANIA}/lege/1990/31/art-010.md')
+        self.assertFalse(r.get('isError'), r)
+        rows = r['structuredContent']['changes']
+        self.assertGreaterEqual(len(rows), 8)
+        self.assertEqual((rows[0]['in_force'], rows[0]['law']), ('1990-12-17', 'Legea nr. 31/1990'))
+        r = self.s.call('read_law', path=f'{ROMANIA}/lege/2009/287/art-1112.md', date='2014-10-18')
+        self.assertIn('ca urmare a citării sale', r['structuredContent']['text'])
+        self.assertEqual(r['structuredContent']['last_change']['law'], 'Legea nr. 71/2011')
+
+    def test_cites_the_publishers_text_in_force_on_the_date(self):
+        r = self.s.call('read_law', path=f'{ROMANIA}/lege/2009/287/art-1112.md', date='2014-10-18', include_text=False)
+        cite = r['structuredContent']['cite']
+        self.assertEqual(cite['official_url'], 'https://legislatie.just.ro/Public/DetaliiDocument/137240')  # not the archive copy
+        self.assertTrue(cite['archived_copies'][0].startswith('https://web.archive.org/'))
+        self.assertEqual(cite['pincite'], 'Articolul 1112, Codul civil (Legea nr. 287/2009), as in force on 2014-10-18')
+        self.assertTrue(r['content'][0]['text'].splitlines()[1].startswith('Official text: https://legislatie.just.ro/'))
+        # The wording in force today: the act's own page (its current consolidated text), not the code as published.
+        r = self.s.call('read_law', path=f'{ROMANIA}/lege/2009/287/art-1349.md', include_text=False)
+        self.assertEqual(r['structuredContent']['cite']['official_url'], 'https://legislatie.just.ro/Public/DetaliiDocument/109884')
+        r = self.s.call('resolve_citations', date='2026-01-01', text='art. 194 alin. (1) din Legea nr. 31/1990')
+        self.assertTrue(r['structuredContent']['citations'][0]['cite']['official_url'].startswith('https://legislatie.just.ro/Public/DetaliiDocument/'))
+
+    def test_a_correction_by_the_maintainer_is_a_version(self):
+        r = self.s.call('provision_history', path=f'{ROMANIA}/lege/2013/300/art-001.md')
+        rows = r['structuredContent']['changes']
+        self.assertTrue(any(h.get('restates', '').startswith('9fdd8bee') for h in rows), rows)
+        self.assertNotIn('Lexifina', [h['law'] for h in rows])
+        r = self.s.call('read_law', path=f'{ROMANIA}/lege/2013/300/art-001.md', date='2013-12-20')
+        self.assertFalse(r['structuredContent']['in_force'])  # art. I took effect on 26 December 2013
+
+    def test_a_corrected_credit_is_used(self):
+        r = self.s.call('provision_history', path=f'{ROMANIA}/oug/2003/19/art-003.md')
+        same_day = [h for h in r['structuredContent']['changes'] if h['in_force'] == '2008-06-26']
+        self.assertTrue(same_day and all(h['law'] == 'OUG nr. 81/2008' for h in same_day), same_day)
+
+    def test_romanian_citations_resolve(self):
+        r = self.s.call('resolve_citations', date='2026-01-01', text=(
+            'art. 1.357 din Codul civil, art. 1349 C. civ., art. 194 alin. (1) din Legea nr. 31/1990, '
+            'art. 16 din Constituție'))
+        paths = [c['path'] for c in r['structuredContent']['citations']]
+        self.assertEqual(paths, [f'{ROMANIA}/lege/2009/287/art-1357.md', f'{ROMANIA}/lege/2009/287/art-1349.md',
+                                 f'{ROMANIA}/lege/1990/31/art-194.md', f'{ROMANIA}/constitutie/1991/art-016.md'])
+
+    def test_whole_country_on_a_past_date_and_search_without_diacritics(self):
+        r = self.s.call('search_law', query='raspundere limitata', date='2005-01-01', jurisdiction='romania')
+        self.assertFalse(r.get('isError'), r)
+        self.assertIn(f'{ROMANIA}/lege/1990/31/art-002.md', r['content'][0]['text'])
+        r = self.s.call('world_on_date', date='2010-06-01')
+        self.assertFalse(r.get('isError'), r)
 
 
 if __name__ == '__main__':

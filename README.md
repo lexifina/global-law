@@ -58,12 +58,13 @@ dates were checked) or `current-only` (today's text only).
 law what it said on a date, and every answer states where its record starts and ends. It uses only Python 3.9+ and
 git, runs on your machine over stdio, reads the repository and changes nothing. It makes no network calls.
 
-You can download one country's law instead of the whole tree, which is several GB. The clone itself is the shared
-index of every country, about 650 MB; Romania then adds about 60 MB:
+You can download one country's law instead of the whole tree, which is many GB. The clone itself is the shared
+index of every country, about 600 MB; each country then adds its own history, from a few MB to several hundred
+(Romania, with over 17,000 acts and 36,000 changes, was about 770 MB in November 2026):
 
 ```sh
 git clone https://github.com/lexifina/global-law && cd global-law
-python3 tools/countries.py add romania      # git downloads Romania's history only
+python3 tools/countries.py add romania      # git downloads Romania's history only (on Windows: python or py)
 claude      # or open the folder in Cursor, VS Code or Codex: the server starts on its own
 ```
 

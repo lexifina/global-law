@@ -355,7 +355,10 @@ def in_order(corpus: str) -> bool:
         if e.in_force < last:
             return False
         last = e.in_force
-    return not corrections(corpus)
+    # A corpus that moved or withdrew files reads a past date under the files' current paths, which only a built tree
+    # gives: its commit-order prefix still holds the old paths and the withdrawn acts.
+    ix = _index(corpus)
+    return not corrections(corpus) and not ix.get('moves') and not ix.get('withdrawn')
 
 
 def _unquote(path: str) -> str:
@@ -526,7 +529,7 @@ def pinned(root_commit, corpus: str) -> str | None:
 def corpus_dir(corpus: str) -> Path:
     path = ROOT / corpus
     if not (path / '.git').exists():
-        raise SystemExit(f'{corpus} is not checked out; run: python3 tools/countries.py add {corpus}')
+        raise SystemExit(f'{corpus} is not checked out; run: {countries_cmd()} add {corpus}')
     if not _readable(corpus, path):
         raise SystemExit(_UNREADABLE.format(corpus=corpus))
     _require_full_history(corpus, path)
@@ -808,6 +811,12 @@ def explain_missing(date: str, path: str) -> str:
         return f"{path} was not yet in force on {date}. It first appears on {first['in_force']} ({first['law']})."
     gone = max((x for x in h if x['in_force'] <= date), key=lambda x: x['in_force'])
     back = min((x for x in h if x['in_force'] > date), key=lambda x: x['in_force'], default=None)
+    latest_that_day = max((x for x in h if x['in_force'] == gone['in_force']), key=lambda x: x['order'])
+    if latest_that_day.get('restates'):  # a correction says the version first published for that day was not in force
+        until = f" It takes effect on {back['in_force']} ({back['law']})." if back else ''
+        return (f"{path} was not in force on {date}. The record first gave it a version from {gone['in_force']}, but a "
+                f"correction appended later (commit {latest_that_day['commit'][:10]}) replaces that version: the "
+                f"provision was not in force from that day.{until}")
     again = f" It is in force again from {back['in_force']} ({back['law']})." if back else ''
     return f"{path} was not in force on {date}: it was removed on {gone['in_force']} ({gone['law']}).{again}"
 
@@ -869,6 +878,14 @@ def _history(corpus: str, rel: str) -> list[dict]:
             continue
         row = {'commit': commit, 'law': author, 'in_force': in_force, 'kind': kind, 'enacted': enacted,
                'published': published, 'blob': blob, 'order': order}
+        restated = ix.get('restates', {}).get(commit)
+        if restated:  # a correction appended later: this version replaces the one first published for its day
+            row['restates'] = restated[0]
+            row['restated_because'] = 'its text was wrong' if restated[1] == 'Corrects' else 'it had to be restated'
+        credit_fix = credited(corpus, rel, in_force, commit)
+        if credit_fix:  # data/credits.csv: the words stand, the law credited changes
+            row.update({'law': credit_fix[0], 'credit_corrected_from': credit_fix[2]})
+            row['kind'] = 'uncredited' if credit_fix[1] else ('law' if kind == 'uncredited' else kind)
         if fix:
             row.update({'corrects': fix['corrects'], 'until': fix['to'], 'supersedes': fix['supersedes'],
                         'reason': fix['reason']})
@@ -893,6 +910,84 @@ _LAW_KINDS = {'', 'law', 'decree', 'amendment', 'act', 'amending law', 'lov', 'l
 _START_KINDS = {'baseline', 'consolidated', 'current', 'current-only', 'current-text', 'publisher', 'consolidation',
                 'first published version (publisher)', 'tekst jednolity (current text)'}
 _UNCREDITED_KINDS = {'unexplained', 'change no law explains'}
+
+
+MAINTAINER = 'Lexifina'  # the author of documentation commits, and of some corpora's versions (the UK, Romania's corrections)
+
+
+def maintainer_credit(t: dict, subject: str) -> str:
+    """The law a maintainer-written version stands for: its Law: trailer, else the act its subject names ("Sentencing
+    Act 2020: Royal Assent, the text as enacted", "Correction: Legea nr. 85/2003 as in force on 2003-03-27")."""
+    if t.get('Law'):
+        return t['Law']
+    name = re.sub(r'^Correction:\s*', '', subject.strip())
+    name = re.split(r':\s| as (?:enacted|in force|published|made|amended)\b| the text\b', name, maxsplit=1)[0].strip()
+    return name or MAINTAINER
+
+
+def moves(corpus: str) -> dict[str, str]:
+    """old path -> its path at the pin, for files a documentation commit moved unchanged (romania-law's layout move of
+    November 2026: codul-civil/art-1112.md is lege/2009/287/art-1112.md). Their history is the new path's (_extend)."""
+    ix = _index(corpus)
+    key = ('moves', f"{corpus}@{ix['pin']}")
+    if key not in _CACHE:
+        step, out = ix.get('moves', {}), {}
+        for old, new in step.items():
+            seen = {old}
+            while new in step and new not in seen:  # moved again later
+                seen.add(new)
+                new = step[new]
+            out[old] = new
+        _CACHE[key] = out
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+def withdrawn(corpus: str) -> dict[str, str]:
+    """path -> the commit (not a law) that removed it and its versions from the record (_extend)."""
+    return dict(_index(corpus).get('withdrawn', {}))
+
+
+def credited(corpus: str, rel: str, in_force: str, commit: str = '') -> tuple[str, bool, str] | None:
+    """A corrected credit for one provision's change of one day, made by `commit`: (the law's label, whether it is
+    "no law", the label first credited), or None. romania-law corrects a wrongly credited change without restating
+    it: a Kind: correction commit with no In-force adds rows to data/credits.csv (act,in_force,provision,law,was_law,
+    was_commit; the last row for a key counts; labels in data/laws.csv). A row naming the commit it re-credits applies
+    to that commit only; a row without one, to the day. The commit's author stays as published."""
+    pin = _index(corpus)['pin']
+    key = ('credits', f'{corpus}@{pin}')
+    if key not in _CACHE:
+        import csv
+        import io
+        table: dict[tuple[str, str, str], list] = {}
+        rows = list(csv.DictReader(io.StringIO(read_object(corpus, f'{pin}:data/credits.csv') or '')))
+        if rows and {'act', 'in_force', 'provision', 'law'} <= set(rows[0]):
+            laws = csv.DictReader(io.StringIO(read_object(corpus, f'{pin}:data/laws.csv') or ''))
+            labels = {r.get('key', ''): r.get('label', '') for r in laws}
+            try:
+                folders = json.loads(read_object(corpus, f'{pin}:data/paths.json') or '{}').get('paths', {})
+            except ValueError:
+                folders = {}
+            unexplained = 'no law named (a change the record leaves unexplained)'
+            for r in rows:
+                law_key, was = (r.get('law') or '').strip(), (r.get('was_law') or '').strip()
+                entry = (labels.get(law_key) or law_key or unexplained, not law_key, labels.get(was) or was or unexplained)
+                for folder in {r['act'], folders.get(r['act'], r['act'])}:  # the act's folder now and before the move
+                    table.setdefault((folder, r['in_force'], r['provision']), []).append(((r.get('was_commit') or '').strip(), entry))
+        _CACHE[key] = table
+    table = _CACHE[key]  # type: ignore[assignment]
+    if not table:
+        return None
+    folder, _, unit = rel.rpartition('/')
+    found = table.get((folder, in_force, unit.removesuffix('.md')), [])  # type: ignore[union-attr]
+    mine = [e for c, e in found if c and commit and (c.startswith(commit) or commit.startswith(c))]
+    return (mine or [e for c, e in found if not c] or [None])[-1]
+
+
+def countries_cmd() -> str:
+    """tools/countries.py as the user runs it here: with the Python that started the MCP server (tools/mcp.sh sets
+    GLOBAL_LAW_PYTHON), else python3, or python on Windows, where python3 is usually the Microsoft Store's placeholder."""
+    import os
+    return f"{os.environ.get('GLOBAL_LAW_PYTHON') or ('python' if sys.platform == 'win32' else 'python3')} tools/countries.py"
 
 
 def kind_of(raw: str | None, author: str = '') -> tuple[str, str | None]:
@@ -922,7 +1017,7 @@ def credit(author: str, kind: str) -> str:
     return CREDIT.get(kind, '{}').format(author)
 
 
-INDEX_VERSION = 4  # raise when what the index keeps changes: old indexes are then rebuilt
+INDEX_VERSION = 5  # raise when what the index keeps changes: old indexes are then rebuilt
 
 
 def _derive(info: dict, commit: str, author: str, when: str, subject: str, block: str) -> tuple[tuple, str | None]:
@@ -932,13 +1027,21 @@ def _derive(info: dict, commit: str, author: str, when: str, subject: str, block
     t = {k: v[0] for k, v in every.items()}
     raw = (t.get('Kind') or '').strip()
     kind, unknown = kind_of(raw, author)
+    trailer = info.get('in_force_trailer') or 'In-force'
+    # Lexifina writes documentation, and also versions of the law: the UK corpus's texts (9,201 of its 9,212 commits)
+    # and romania-law's corrections. A maintainer's commit is documentation only when it has no in-force day; a dated
+    # one is a version, credited to its Law: trailer or the act its subject names (and, for a restated version, the
+    # law of the version it restates: _extend).
+    if kind == 'documentation' and author == MAINTAINER and raw.lower() != 'documentation' and \
+            (ISO_DAY.match(t.get(trailer) or '') or ISO_DAY.match(t.get('Text-as-of') or '')):
+        kind, unknown = kind_of(raw, '')
+        author = maintainer_credit(t, subject)
     if kind == 'documentation':
         return (commit, author, when, subject, kind, None, raw, None, None, None), None
     # The shared builder writes Kind: publisher both for an act's first text and for a change in a later text that no
     # law explains ("... (unexplained)", Words-changed: yes): the second is a change no law is named for.
     if raw.lower() == 'publisher' and ('(unexplained)' in subject or t.get('Words-changed', '').lower() == 'yes'):
         kind = 'uncredited'
-    trailer = info.get('in_force_trailer') or 'In-force'
     in_force = t.get(trailer)
     # A text read on a day, with no in-force day of its own: Text-as-of alone, or In-force set to that same day, or
     # In-force-basis saying the source gives no date. It is a starting text: before it the record does not reach.
@@ -956,9 +1059,13 @@ def _derive(info: dict, commit: str, author: str, when: str, subject: str, block
     if not in_force and 'Printed-in' in t:
         in_force, kind = when[:10], 'printing'
     fix = None
-    if raw.lower() == 'correction' and 'Corrects' in t:
-        span = CORRECTS.search(t['Corrects'])
-        start = span.group(1) if span else (t.get(trailer) or '')[:10]
+    # An overlay correction names the days it covers (Corrects: <act> <from>..<to>). One that names a commit
+    # (Corrects: or Re-asserts: <commit>, as romania-law appends them: 1,092 by 3 November 2026) restates a version
+    # with its own In-force day: an ordinary version, the later commit winning its day. Read as overlays they each
+    # cost a path-limited git log, and a whole country on a past date timed out.
+    span = CORRECTS.search(t.get('Corrects', '')) if raw.lower() == 'correction' else None
+    if span:
+        start = span.group(1)
         if ISO_DAY.match(start):
             fix = {'commit': commit, 'law': author, 'from': start, 'to': span.group(2) if span else None,
                    'files': every.get('Files', []), 'act_path': t.get('Act-path'), 'corrects': t['Corrects'],
@@ -987,6 +1094,18 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str) -> None:
         row, unknown = _derive(info, commit, author, when, subject, block)
         if unknown:
             data['unknown'].add(unknown)
+        if author == MAINTAINER and row[4] != 'documentation':
+            # A restated version (Corrects: or Re-asserts: <commit>) is credited to the law of the version it
+            # restates, followed back through a correction of a correction.
+            t = trailer_lines(block)
+            target = (t.get('Corrects') or t.get('Re-asserts') or '').split()
+            if target and re.fullmatch(r'[0-9a-f]{7,40}', target[0]) and not CORRECTS.search(target[0]):
+                data['restates'][commit] = (target[0], 'Corrects' if t.get('Corrects') else 'Re-asserts')
+                at = data['pos'].get(target[0]) if len(target[0]) == 40 else \
+                    next((i for c, i in data['pos'].items() if c.startswith(target[0])), None)
+                if at is not None and not t.get('Law'):
+                    row = (row[0], rows[at][1]) + row[2:]
+        data['pos'][commit] = len(rows)
         if row[5] is None and row[4] != 'documentation':
             legacy = legacy if legacy is not None else legacy_dates(corpus)
             if commit in legacy:
@@ -1006,11 +1125,20 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str) -> None:
                     # A file moved unchanged by a documentation commit (a corpus renaming its folders) keeps its
                     # history: the new path takes the old one's versions, which are read by blob, not by path.
                     files[new] = files.get(new, []) + files.pop(old, [])
+                    data['moves'][old] = new  # one step; moves() follows a file moved more than once
                     continue
                 files.setdefault(old, []).append((order, None, f[1]))  # moved by a law: gone here, new there
                 files.setdefault(new, []).append((order, f[3], f[2]))
                 continue
-            files.setdefault(_unquote(paths[0]), []).append((order, None if f[4].startswith('D') else f[3], f[1]))
+            path = _unquote(paths[0])
+            if row[4] == 'documentation' and f[4].startswith('D'):
+                # Deleted by a commit that is not a law: withdrawn (romania-law's Withdraws:, an act that never
+                # belonged). Its versions leave the record on every day; read by in-force day alone, the act stayed
+                # in force on every past date. A later law may add the path again.
+                files.pop(path, None)
+                data['withdrawn'][path] = commit
+                continue
+            files.setdefault(path, []).append((order, None if f[4].startswith('D') else f[3], f[1]))
 
 
 def _index(corpus: str) -> dict:
@@ -1050,7 +1178,10 @@ def _index(corpus: str) -> dict:
         else:
             data = None
     if data is None:
-        data = {'v': INDEX_VERSION, 'pin': sha, 'rows': [], 'files': {}, 'unknown': set()}
+        # moves: old path -> new, one step each (moves()); withdrawn: path -> the commit that removed it; restates:
+        # correction -> the commit it restates; pos: commit -> its row.
+        data = {'v': INDEX_VERSION, 'pin': sha, 'rows': [], 'files': {}, 'unknown': set(), 'moves': {}, 'withdrawn': {},
+                'restates': {}, 'pos': {}}
         _extend(corpus, cwd, data, sha)
         changed = True
     if changed:

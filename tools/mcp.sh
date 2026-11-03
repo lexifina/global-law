@@ -7,7 +7,7 @@
 cd "$(dirname "$0")/.." || exit 1
 for p in python3 python py; do
   if "$p" -c 'import sys; sys.exit(sys.version_info < (3, 9))' 2>/dev/null; then
-    PYTHONDONTWRITEBYTECODE=1 exec "$p" tools/mcp_server.py "$@"
+    GLOBAL_LAW_PYTHON="$p" PYTHONDONTWRITEBYTECODE=1 exec "$p" tools/mcp_server.py "$@"
   fi
 done
 echo 'global-law: the MCP server needs Python 3.9 or newer, as python3, python or py on the PATH' >&2

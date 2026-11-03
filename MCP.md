@@ -8,7 +8,7 @@ and git, reads the repository and changes nothing.
 
 You need git and Python 3.9 or newer (macOS's own `python3` will do). Nothing else to install.
 
-**One country.** The whole tree is several GB, but each country is its own git submodule, so you can download only
+**One country.** The whole tree is many GB, but each country is its own git submodule, so you can download only
 the law you need. For Romania:
 
 ```sh
@@ -17,8 +17,9 @@ python3 tools/countries.py add romania
 claude      # or open the folder in Cursor, VS Code or Codex
 ```
 
-The first command fetches the shared index of every country without any country's law (about 650 MB). The second
-downloads Romania's history alone (about 60 MB). Ask about Romanian law and the server answers from it; ask about a country you have not added and it tells
+The first command fetches the shared index of every country without any country's law (about 600 MB). The second
+downloads Romania's history alone (about 770 MB in November 2026, a few minutes; most countries are far smaller). Ask
+about Romanian law and the server answers from it; ask about a country you have not added and it tells
 you the command that adds it. Add more countries at any time (`python3 tools/countries.py add france spain`); a
 running server sees them within seconds. On Windows, run the script with `py` or `python`.
 
@@ -96,7 +97,19 @@ provision on a date is read from its own history, in the history the tree pins a
 the one with the latest in-force date on or before that date, a later commit winning a tie. The order of commits does
 not matter, because a country may append an older act after its tip.
 
-Then corrections apply, file by file. A correction commit carries `Kind: correction`, `In-force: <first day>`,
+A corpus that grows append-only (romania-law) fixes a wrong version by appending it again: a `Kind: correction`
+commit with its own `In-force:` day and `Corrects: <commit>` (the text was wrong) or `Re-asserts: <commit>` (it was
+right and is restated). That is an ordinary version under the rule above, the later commit winning its day, credited to
+the law of the version it restates; `read_law` says that a correction applies. Such corrections may be written by the
+maintainer (author `Lexifina`), whose other commits are documentation. Three more of its records are read:
+- **Moves.** A commit that is not a law and renames files without changing them (romania-law's layout move of November
+  2026, `codul-civil/` to `lege/2009/287/`) leaves each provision one history under its current path.
+- **Withdrawals.** A commit that is not a law and deletes files (`Withdraws: <act>`: an act that never belonged in the
+  record) takes the versions written before it out of the record on every day.
+- **Credits.** When only the credited law was wrong, `data/credits.csv` (`act,in_force,provision,law,...`, labels in
+  `data/laws.csv`) names the law each change is credited to; `provision_history`, `read_law` and `who_wrote` use it.
+
+Then overlay corrections apply, file by file. An overlay correction commit carries `Kind: correction`, `In-force: <first day>`,
 `Corrects: <act> <from>..<to>`, `Supersedes: <commit or none>`, `Reason:`, `Act-path: <the act's folder or file>` and one
 `Files: <path>` trailer for each file it sets. Its text replaces the ordinary version of each file it names on every
 day its range covers, even when git shows no change to that file (a late-found version can equal the text the tip
@@ -168,6 +181,27 @@ Resources: `global-law://README.md`, `REPRODUCE.md`, `CHANGELOG.md` and `manifes
 
 Prompts (ready-made research tasks): `provision_on_a_date`, `case_timeline` and `what_changed`. A resource template
 `global-law://law/{path}?date={date}&offset={n}` gives any provision as in force on a date.
+
+## Citing the official text
+
+This tree is a copy. Every `read_law` answer starts with where to read and cite the law itself: the publisher's own
+page, then a pincite (`Cite as:`). The structured answer has the same as `cite`: `official_url`, `shows` (what that page
+holds), `pincite`, `version_url` (the publisher's text of the act in force then), `law_url` (the law behind the version)
+and `archived_copies`. `resolve_citations` gives the same for each citation in a text. The server's instructions tell
+the model to cite that page, never this server or its repository.
+
+| Publisher | `official_url` shows |
+|---|---|
+| legislation.gov.uk | the provision itself as in force on the date asked (`…/ukpga/2014/6/section/42/2020-06-01`) |
+| legislatie.just.ro (Romania) | the official consolidated text of the act in force on the date, in which to find the article; the portal's article anchors are numbered per page, not by article, so they cannot be built from the record |
+| fedlex.admin.ch (Switzerland) | the act as in force from the version's day (`…/eli/cc/1999/404/20210101/de`) |
+| gesetze-im-internet.de (Germany) | the § or article, as in force today only; the answer says when that differs from the text read |
+| govinfo.gov (US Code) | the section in the latest edition, with the Public Law behind the version as `law_url` |
+| legislation.mt (Malta) | the Chapter or instrument as in force today |
+
+Links are given as the publisher's: an archived copy the record was read from (web.archive.org) is unwrapped and named
+apart as provenance, and Lexifina's own reader (`Reader:` links) is never given as a source. Where the record holds no
+link for a version, the answer says so rather than offer this tree.
 
 ## Long provisions and long calls
 
