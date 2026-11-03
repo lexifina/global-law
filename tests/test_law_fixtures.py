@@ -281,6 +281,16 @@ class Checkouts(unittest.TestCase):
         self.assertNotEqual(code, 0)
         self.assertIn('git submodule update --init -- aa/national/acts', err)
 
+    def test_old_path_of_a_moved_corpus_still_reads(self):
+        data = self.t.root / 'data'
+        data.mkdir(exist_ok=True)
+        (data / 'moved-paths.tsv').write_text('# old\tnew\tmoved on\nxx/old-city/acts\taa/national/acts\t2026-11-03\n',
+                                             encoding='utf-8')
+        run('add', 'data', cwd=self.t.root)
+        self.t.pin()
+        out, err, code = self.t.cli('show', TODAY, 'xx/old-city/acts/act/s1.md')
+        self.assertEqual(out, 'two\n', err)
+
     def test_folder_renamed_by_documentation_keeps_its_history(self):
         a = self.t.corpora['aa/national/acts']
         run('mv', 'act', 'act-1-2010', cwd=a.path)

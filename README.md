@@ -33,6 +33,11 @@ global-law/
 └── …                        every other country, the same way
 ```
 
+Folders follow the jurisdictions: `<country>/<level>/<corpus>` for national or federal law and for a state or
+province (`brazil/bahia/acts`), and `<country>/<state>/<city>/acts` for a city or regency within one
+(`brazil/bahia/salvador/acts`). A corpus moved to a new folder keeps working under its old path in the tools
+(`data/moved-paths.tsv`).
+
 Each country's law lives in its own repository, `lexifina/<country>-law`, which says where it belongs here in a
 `corpus.json` at its root. A country whose repository still holds only its sources (no law yet) has a folder with its
 `jurisdiction.json` and `SOURCES.md`, and no submodule. Not every submodule holds a history of the law: some hold only

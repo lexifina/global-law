@@ -477,7 +477,32 @@ def corpus_tree(date: str, corpus: str) -> str | None:
     return sha
 
 
+def moved_paths() -> dict[str, str]:
+    """Corpus folders the tree has moved (old path -> new), from data/moved-paths.tsv: a path given in the old form
+    still reads, from the corpus's new place."""
+    key = ('moved', _head())
+    if key not in _CACHE:
+        found: dict[str, str] = {}
+        done = subprocess.run(['git', 'show', 'HEAD:data/moved-paths.tsv'], cwd=ROOT, capture_output=True, encoding='utf-8')
+        if done.returncode == 0:
+            for line in done.stdout.splitlines():
+                if line and not line.startswith('#'):
+                    old, new = line.split('\t')[:2]
+                    found[old] = new
+        _CACHE[key] = found
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+def moved(path: str) -> str:
+    """A path with a moved corpus folder at its start given its new place; any other path as it is."""
+    for old, new in moved_paths().items():
+        if path == old or path.startswith(old + '/'):
+            return new + path[len(old):]
+    return path
+
+
 def corpus_of(path: str) -> tuple[str, str]:
+    path = moved(path)
     for corpus in sorted(manifest()['corpora'], key=lambda c: -len(c['path'])):
         prefix = corpus['path'] + '/'
         if path.startswith(prefix) and path[len(prefix):]:
@@ -554,8 +579,9 @@ def matches(corpus: dict, name: str) -> bool:
     for path in (corpus['path'], corpus.get('iso_path') or ''):
         if path and (path == name or path.startswith(name + '/') or name.startswith(path + '/')):
             return True
-    level = corpus['path'].split('/')[1:2]
-    if level and level[0] == name and name not in GENERIC_LEVELS:
+    # A state, province, canton or city by its own folder name, at any level below the country
+    # (brazil/bahia/salvador/acts is taken in by "bahia" and by "salvador").
+    if name not in GENERIC_LEVELS and name in corpus['path'].split('/')[1:-1]:
         return True
     return name == str(corpus.get('code') or '').lower()
 
