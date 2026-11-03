@@ -217,6 +217,13 @@ def corpus_events(corpus: str) -> list[Event]:
     if not _readable(corpus, cwd):
         return []  # an unfinished checkout: left out and named (unreadable()), so it does not stop every other corpus
     _require_full_history(corpus, cwd)
+    pin = tip(corpus)
+    if pin and subprocess.run(['git', 'cat-file', '-e', f'{pin}^{{commit}}'], cwd=cwd, capture_output=True).returncode:
+        # The checkout is behind the tree (a pull without `git submodule update`, the usual state while pins move
+        # every few minutes): left out of whole-tree reads and named (behind()); a read of this corpus alone stops.
+        _CACHE[('behind', corpus)] = pin
+        return []
+    _CACHE.pop(('behind', corpus), None)
     ix = _index(corpus)
     key = ('corpus-events', f"{corpus}@{ix['pin']}")
     if key not in _CACHE:
@@ -553,6 +560,16 @@ def _readable(corpus: str, cwd: Path) -> bool:
 def unreadable() -> list[str]:
     """The corpora left out of a whole-tree read because their checkout has no commit yet."""
     return sorted(k[1] for k, ok in _CACHE.items() if k[0] == 'readable' and not ok)
+
+
+_BEHIND = ('{corpus} is behind the tree: its checkout does not have the commit the tree pins ({pin}), so it is left '
+           'out. Run: git submodule update --init -- {corpus}  (or for every corpus: git submodule update --init)')
+
+
+def behind() -> dict[str, str]:
+    """The corpora left out of a whole-tree read because their checkout lacks the commit the tree pins: corpus ->
+    that commit."""
+    return {k[1]: v for k, v in _CACHE.items() if k[0] == 'behind'}  # type: ignore[misc]
 
 
 def _shallow(cwd: Path) -> bool:
@@ -1385,10 +1402,13 @@ def main(argv: list[str]) -> None:
                 if (ROOT / corpus['path'] / '.git').exists() else 'not checked out'
             if corpus['path'] in unreadable():
                 state = 'checkout unfinished (no commit yet)'
+            if corpus['path'] in behind():
+                state = 'checkout behind the tree (git submodule update)'
             print(f"  {corpus['path']:<24} {state}")
         note(c for corpus in manifest()['corpora'] if corpus['path'] in by_corpus
              for c in caveats(args[0], corpus['path'], by_corpus[corpus['path']]) if 'runs to' in c)
         note(_UNREADABLE.format(corpus=c) for c in unreadable())
+        note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()))
     elif command in ('show', 'blame', 'words'):
         corpus, _ = corpus_of(args[1])
         note(caveats(args[0], corpus))
@@ -1450,6 +1470,7 @@ def main(argv: list[str]) -> None:
                  'uncredited': 'changes no law is named for'}
         note(f'not listed, as they are not laws taking effect: {n} {names.get(k, k)}' for k, n in sorted(left_out.items()))
         note(_UNREADABLE.format(corpus=c) for c in unreadable() if c.startswith(prefix))
+        note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()) if c.startswith(prefix))
     else:
         raise SystemExit(__doc__)
 

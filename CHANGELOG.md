@@ -10,6 +10,8 @@ Status words:
 
 ## 3 November 2026
 
+- **Fixed (all). A checkout behind its pin stopped `world` and `laws` for every corpus.** After `git pull` without `git submodule update` (the usual state, since the tree moves pins every few minutes), a corpus checkout lacks the commit the tree now pins. `law.py` stopped the whole command on the first such corpus: in one clone 8 of 22 checkouts were behind after a single pull (found by fundamentals-2). Whole-tree reads now leave such a corpus out and name it (`world` shows it as behind the tree, with the command that updates it). A read of that corpus alone still stops with `git submodule update --init -- <corpus>`.
+
 - **Fixed (all). Slow `blame` on long, much-amended files, and slow checkouts.**
   - `law.py blame` uses git's own blame when the versions in force, in the order they took force, are exactly the file's commits in commit order. It replays the versions only where they differ (a correction, an older act appended later). Czechia's sb/2007/378 on 2018-11-23 went from 37 to 2.4 seconds. On 46 files where git's blame applied, its answer was the same as the replay's.
   - `countries.py add --no-files <country>` fetches a corpus's history without writing its files. Colombia's 60,436 files took 48 seconds instead of minutes; Romania's 160,000 had taken 19. The tools read the history, not the files.

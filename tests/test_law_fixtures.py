@@ -307,6 +307,23 @@ class Checkouts(unittest.TestCase):
         out, err, code = self.t.cli('show', TODAY, 'aa/national/acts/act-1-2010/s1.md')
         self.assertEqual(out, 'two\n', err)
 
+    def test_checkout_behind_its_pin_is_left_out_of_whole_tree_reads(self):
+        a = self.t.corpora['aa/national/acts']
+        a.commit('Act 3 of 2021', {'act/s1.md': 'three\n'}, In_force='2021-01-01')
+        b = self.t.corpus('bb/national/acts')  # a corpus that is current, beside the one behind
+        b.commit('Act 1 of 2015', {'act/x.md': 'x\n'}, In_force='2015-01-01')
+        self.t.pin()
+        run('reset', '-q', '--hard', 'HEAD~1', cwd=a.path)  # as after a pull without `git submodule update`
+        run('reflog', 'expire', '--expire=now', '--all', cwd=a.path)
+        run('gc', '-q', '--prune=now', cwd=a.path)
+        out, err, code = self.t.cli('world', TODAY)
+        self.assertEqual(code, 0, err)
+        self.assertIn('Act 1 of 2015', out)
+        self.assertIn('behind the tree', out + err)
+        out, err, code = self.t.cli('laws', '2000-01-01', '2030-01-01')
+        self.assertEqual(code, 0, err)
+        self.assertIn('Act 1 of 2015', out)
+
     def test_pin_moving_forward_extends_the_index(self):
         self.t.cli('show', TODAY, 'aa/national/acts/act/s1.md')
         a = self.t.corpora['aa/national/acts']
