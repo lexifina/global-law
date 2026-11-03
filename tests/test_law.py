@@ -557,5 +557,36 @@ class KindsAndDates(unittest.TestCase):
         self.assertIn('printing', kinds)
 
 
+class ShallowClones(unittest.TestCase):
+    """A clone made with --depth cuts the history every date is read from: law.py must stop and name the fix, not
+    answer wrongly (issue #3). Self-contained: builds a two-commit repository and a shallow clone of it."""
+
+    def test_shallow_corpus_stops_with_the_fix(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            src, shallow = Path(tmp) / 'src', Path(tmp) / 'shallow'
+            run = lambda *a, cwd=None: subprocess.run(['git', *a], cwd=cwd, check=True, capture_output=True)  # noqa: E731
+            run('init', '-q', str(src))
+            for n in (1, 2):
+                (src / 'a.md').write_text(f'version {n}\n', encoding='utf-8')
+                run('add', 'a.md', cwd=src)
+                run('-c', 'user.name=t', '-c', 'user.email=t@example.invalid', 'commit', '-q', '-m', f'v{n}', cwd=src)
+            run('clone', '-q', '--depth', '1', src.as_uri(), str(shallow))
+            self.assertTrue(law._shallow(shallow))
+            self.assertFalse(law._shallow(src))
+            law._CACHE.pop(('full-history', 'x/acts'), None)
+            with self.assertRaises(SystemExit) as stop:
+                law._require_full_history('x/acts', shallow)
+            self.assertIn('git -C x/acts fetch --unshallow', str(stop.exception))
+            law._CACHE.pop(('full-history', 'x/acts'), None)
+            law._require_full_history('x/acts', src)  # a full clone passes
+            law._CACHE.pop(('full-history', 'x/acts'), None)
+
+    def test_no_checked_out_corpus_is_shallow(self):
+        shallow = [c['path'] for c in law.manifest()['corpora']
+                   if (ROOT / c['path'] / '.git').exists() and law._shallow(ROOT / c['path'])]
+        self.assertEqual(shallow, [], 'shallow corpora give wrong dates; run git fetch --unshallow in each')
+
+
 if __name__ == '__main__':
     unittest.main()

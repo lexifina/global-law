@@ -205,6 +205,7 @@ def corpus_events(corpus: str) -> list[Event]:
     cwd = ROOT / corpus
     if not (cwd / '.git').exists():
         return []
+    _require_full_history(corpus, cwd)
     sha = tip(corpus) or 'HEAD'
     key = ('corpus-events', f'{corpus}@{sha}')
     if key in _CACHE:
@@ -325,6 +326,9 @@ def legacy_dates(corpus: str) -> dict[str, tuple[str, str]]:
     starting edition with no trailer of its own (the US 2017 edition) and every documentation commit."""
     key = ('legacy', _head())
     if key not in _CACHE:
+        if _shallow(ROOT):  # these dates come from the tree's own history: a shallow root would drop them silently
+            raise SystemExit('This clone of the tree is shallow (--depth), so the dates its history gives some corpus '
+                             'commits cannot be read. Run: git fetch --unshallow')
         raw = git('log', '--first-parent', '--reverse', '--format=%(trailers:only,unfold)%x1e')
         found: dict[str, dict[str, tuple[str, str]]] = {}
         for body in raw.split('\x1e'):
@@ -530,7 +534,24 @@ def corpus_dir(corpus: str) -> Path:
     path = ROOT / corpus
     if not (path / '.git').exists():
         raise SystemExit(f'{corpus} is not checked out; run: python3 tools/countries.py add {corpus}')
+    _require_full_history(corpus, path)
     return path
+
+
+def _shallow(cwd: Path) -> bool:
+    done = subprocess.run(['git', 'rev-parse', '--is-shallow-repository'], cwd=cwd, capture_output=True, encoding='utf-8')
+    return done.stdout.strip() == 'true'
+
+
+def _require_full_history(corpus: str, cwd: Path) -> None:
+    """Dates come from a corpus's whole history, so a shallow clone (--depth) would give wrong answers, not an error:
+    a provision in force reads as never changed or as repealed. Stop with the command that fixes it instead."""
+    key = ('full-history', corpus)
+    if key not in _CACHE:
+        _CACHE[key] = not _shallow(cwd)
+    if not _CACHE[key]:
+        raise SystemExit(f'{corpus} is a shallow clone (--depth), so its history is cut and its dates cannot be read. '
+                         f'Run: git -C {corpus} fetch --unshallow')
 
 
 def matches(corpus: dict, name: str) -> bool:
@@ -724,6 +745,9 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
     if covered and date > covered:
         checked = f", checked on {info['checked_on']}" if info.get('checked_on') else ''
         out.append(f"{corpus}: the record runs to {info.get('record_to') or covered}{checked}. {info.get('record_note', '')}".rstrip())
+    if (ROOT / corpus / '.git').exists() and tip(corpus) and reachable_tip(corpus) == 'HEAD':
+        out.append(f"{corpus}: this checkout has not fetched the commit the tree pins ({tip(corpus)[:10]}), so answers "
+                   f"come from the checkout's own HEAD and may be out of date. Run: git submodule update -- {corpus}")
     if info.get('provisional'):
         out.append(f"{corpus}: provisional upload: {info['provisional']}.")
     if info.get('history') == 'as-enacted':

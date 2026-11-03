@@ -145,6 +145,9 @@ Plain git works too, with care:
   leaves the folders of corpora that did not exist yet, and the tools, which live in the last commit, disappear.
 - Git cannot store dates before 1970, so `git log --before=1960-01-01` gives a wrong answer without saying so. The
   tools read the `In-force` trailer instead.
+- Don't clone with `--depth` (here, or with `--shallow-submodules`): every date is read from the whole history, so a
+  shallow clone cannot answer. `law.py` and the MCP server stop and name the fix, `git fetch --unshallow` in the
+  shallow clone. To save time, fetch fewer countries instead (above).
 - Each corpus's own tags are copied here under its path, for example `germany/bund/acts/gg/36`.
 - After a corpus is rebuilt (its maintainers force-push), run `git submodule update --init` and, inside that corpus,
   `git fetch --force --tags`: a plain fetch keeps old tags with the same names.
