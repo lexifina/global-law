@@ -174,12 +174,55 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         warn.append(f'{len(no_corrects)} correction(s) have no Corrects: trailer, so readers apply each as an ordinary '
                     f'version from its In-force date, first {no_corrects[0][:7]}')
 
+    stale = stale_at_head(repo, trailer, until) if early else []
+    if stale:
+        warn.append(f'{len(stale)} file(s) hold an older version at HEAD than the one in force on {until} (an older '
+                    f'version appended after a newer one, and the newer text not written again), e.g. {stale[0]}: '
+                    'readers by date are right, but GitHub and plain git show outdated text; write the in-force text '
+                    'again after appending an older version')
+
     if pin:
         if git('cat-file', '-e', f'{pin}^{{commit}}', cwd=repo).returncode:
             fatal.append(f'history rewritten: the pinned commit {pin[:7]} is no longer in the repo (main must be append-only)')
         elif git('merge-base', '--is-ancestor', pin, 'HEAD', cwd=repo).returncode:
             fatal.append(f'history rewritten: the pinned commit {pin[:7]} is not an ancestor of main (main must be append-only)')
     return fatal, warn
+
+
+def stale_at_head(repo: Path, trailer: str, until: str) -> list[str]:
+    """Files whose last-committed version (what HEAD shows) is not the version in force on `until`: the version with
+    the latest in-force date on or before it. Only possible once commits are out of in-force order."""
+    log = git('log', '--reverse', '--raw', '--find-renames=100%', '--no-abbrev', '--first-parent',
+              '--format=%x1d%an%x1f%(trailers:only,unfold)%x1e', cwd=repo)
+    if log.returncode:
+        return []
+    files: dict[str, list] = {}
+    for order, chunk in enumerate(log.stdout.split('\x1d')[1:]):
+        head, _, changes = chunk.partition('\x1e')
+        author, block = head.split('\x1f', 1)
+        t = dict(re.findall(r'^([A-Z][A-Za-z0-9-]*): (.*)$', block, re.M))
+        doc = author == 'Lexifina' or t.get('Kind', '').lower() == 'documentation'
+        when = (t.get(trailer) or '')[:10]
+        for line in changes.splitlines():
+            if not line.startswith(':'):
+                continue
+            meta, *paths = line.split('\t')
+            f = meta.split()
+            if f[4].startswith('R') and doc:
+                files[paths[1]] = files.pop(paths[0], [])
+                continue
+            files.setdefault(paths[-1], []).append((order, when, doc, None if f[4].startswith('D') else f[3],
+                                                    t.get('Kind', '').lower()))
+    out = []
+    for path, vs in files.items():
+        dated = [v for v in vs if v[1] and not v[2] and v[1] <= until]
+        if not dated:
+            continue
+        in_force = max(dated, key=lambda v: (v[1], v[0]))
+        last = max(vs, key=lambda v: v[0])
+        if last[3] != in_force[3] and last[1] and last[1] <= until and not last[2] and last[4] != 'correction':
+            out.append(path)
+    return out
 
 
 def citation_problems(rule: object) -> list[str]:

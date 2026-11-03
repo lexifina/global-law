@@ -10,6 +10,8 @@ Status words:
 
 ## 3 November 2026
 
+- **Open (Romania). 26 files show an outdated version at HEAD.** An older act was appended after a newer one, and the newer text was not written again. So in 26 articles of the Fiscal Code (Legea 571/2003) and Legea 85/2006, the file on GitHub and in a plain checkout is the 2016 text, while a later one is in force. `law.py` reads them correctly, by in-force date. `tools/check_corpus.py` now warns of this in any corpus, from commits and trees alone, and the corpus standard requires the in-force text to be written again after an older version is appended. The other 84 corpora committed out of in-force order have no such file.
+
 - **Changed (all). The preview branch moved out.** `preview` (each country pinned at its work in progress) was a separate history of over 400,000 commits inside this repository, so every plain clone downloaded it. It now lives in its own repository, lexifina/global-law-preview, and this repository has one branch, `main`. Its last state here is kept there as the branch `global-law-preview-final`.
 - **Fixed (all). Codes and levels in the descriptions.**
   - 25 US states and territories had bare two-letter codes. `CO` read as Colombia, and American Samoa's `AS` was its own country code. They now use ISO 3166-2 form (`US-CO`, `US-AS`).
