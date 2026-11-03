@@ -75,7 +75,7 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
     # A legacy corpus has no corpus.json, so the builder's fallback entry names its trailer (Germany: In-Kraft).
     trailer = cj.get('in_force_trailer') or in_force_trailer or 'In-force'
     baseline = cj.get('baseline_trailer') or (cj.get('dates') or {}).get('baseline_trailer')
-    last, future, dated = '', 0, 0
+    last, future, dated, early = '', 0, 0, []
     for sha, author, subject, body in commits:
         t = {}
         for line in body.splitlines():
@@ -93,15 +93,21 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         if doc:
             continue
         if when < last:
-            fatal.append(f'{sha[:7]}: in force {when}, before the commit above it ({last}); main must be in in-force order')
+            # An end block: an older act or version found late and appended after later-dated commits (main only
+            # grows by fast-forward). Readers resolve each provision by its In-force trailer, not commit order
+            # (tools/law.py file_commit), so this is reported, not refused.
+            early.append(sha)
         last = max(last, when)
         if when > until:
             future += 1
     if not dated:
         fatal.append(f'no commit carries the {trailer} trailer')
+    if early:
+        warn.append(f'{len(early)} commit(s) are in force before a commit above them (end blocks appended after later '
+                    f'dates, first {early[0][:7]}); readers order by {trailer}, so this is allowed')
     if future:
-        warn.append(f'{future} commit(s) on main are in force after {until}; they belong on a future branch, and '
-                    f'global-law pins only the history before the first of them')
+        warn.append(f'{future} commit(s) on main are in force after {until}; readers apply each from its {trailer} '
+                    'date only, but a future branch keeps main the law in force today')
 
     if pin:
         if git('cat-file', '-e', f'{pin}^{{commit}}', cwd=repo).returncode:

@@ -131,6 +131,17 @@ def tip(corpus: str) -> str | None:
     return _CACHE[key].get(corpus)  # type: ignore[union-attr]
 
 
+def reachable_tip(corpus: str) -> str:
+    """The commit the tree pins for a corpus, or the checkout's own HEAD if it has not fetched that commit yet."""
+    key = ('reachable', f'{corpus}@{tip(corpus)}')
+    if key not in _CACHE:
+        sha = tip(corpus)
+        ok = bool(sha) and subprocess.run(['git', 'cat-file', '-e', f'{sha}^{{commit}}'], cwd=corpus_dir(corpus),
+                                          capture_output=True).returncode == 0
+        _CACHE[key] = sha if ok else 'HEAD'
+    return _CACHE[key]  # type: ignore[return-value]
+
+
 def corpus_events(corpus: str) -> list[Event]:
     """The dated commits of one corpus, in its own history order, read at the commit the tree pins (or the
     checkout's own HEAD, if the checkout has not fetched that commit yet). Empty when the corpus is not checked out.
@@ -298,6 +309,150 @@ def corpus_on(date: str, corpus: str) -> str | None:
     return found
 
 
+def in_order(corpus: str) -> bool:
+    """Whether a corpus's history is in in-force order with no corrections: then the commit-order prefix (corpus_on)
+    is exactly the corpus as in force on a date, and no tree has to be built."""
+    last = ''
+    for e in corpus_events(corpus):
+        if e.kind == 'documentation':
+            continue
+        if e.in_force < last:
+            return False
+        last = e.in_force
+    return not corrections(corpus)
+
+
+def _unquote(path: str) -> str:
+    """A path git printed in C quotes (non-ASCII, when core.quotepath is on) back to the name itself."""
+    if not path.startswith('"'):
+        return path
+    return path[1:-1].encode('latin-1', 'backslashreplace').decode('unicode_escape').encode('latin-1').decode('utf-8')
+
+
+def file_index(corpus: str) -> tuple[dict, list]:
+    """Every version of every file of a corpus, from one `git log --raw` at the pinned tip: path -> [(in force, order,
+    blob or None for a deletion, mode)] for ordinary commits, and the corrections laid over them as
+    [(from, last day, order, {path: (blob, mode)})]."""
+    key = ('file-index', f'{corpus}@{tip(corpus) or "HEAD"}')
+    if key in _CACHE:
+        return _CACHE[key]  # type: ignore[return-value]
+    cwd = corpus_dir(corpus)
+    events = corpus_events(corpus)
+    dates = {e.corpus_commit: (e.in_force, i) for i, e in enumerate(events) if e.kind != 'documentation'}
+    fixes = {c['commit']: c for c in corrections(corpus)}
+    try:
+        raw = git('log', '--reverse', '--raw', '--no-renames', '--no-abbrev', '--format=@%H', tip(corpus) or 'HEAD', cwd=cwd)
+    except RuntimeError:
+        raw = git('log', '--reverse', '--raw', '--no-renames', '--no-abbrev', '--format=@%H', 'HEAD', cwd=cwd)
+    index: dict[str, list] = {}
+    touched: dict[str, dict] = {}
+    commit = ''
+    for line in raw.splitlines():
+        if line.startswith('@'):
+            commit = line[1:]
+            continue
+        if not line.startswith(':') or '\t' not in line:
+            continue
+        meta, path = line.split('\t', 1)
+        _, mode, _, blob, status = meta.split()[:5]
+        path = _unquote(path)
+        if commit in fixes:
+            touched.setdefault(commit, {})[path] = (None if status.startswith('D') else blob, mode)
+        elif commit in dates:
+            day, order = dates[commit]
+            index.setdefault(path, []).append((day, order, None if status.startswith('D') else blob, mode))
+    order_of = {e.corpus_commit: i for i, e in enumerate(events)}
+    overlays = []
+    for sha, fix in fixes.items():
+        files = dict(touched.get(sha, {}))
+        named = [f for f in fix['files'] if f not in files]
+        if named:  # named but unchanged: their text at the correction commit is the tip's
+            for line in git('ls-tree', sha, '--', *named, cwd=cwd).splitlines():
+                meta, path = line.split('\t', 1)
+                mode, _, blob = meta.split()
+                files[_unquote(path)] = (blob, mode)
+        if fix['files']:
+            files = {p: v for p, v in files.items() if p in fix['files']}
+        overlays.append((fix, order_of.get(sha, len(order_of)), files))
+    _CACHE[key] = (index, overlays)
+    return index, overlays
+
+
+_TREES: dict = {'dir': None}
+
+
+def _tree_store() -> Path:
+    """A private object directory for the trees this process builds. Every git command reads it as an alternate,
+    so a built tree can be grepped and listed like a commit; nothing is written into the clone."""
+    if _TREES['dir'] is None:
+        import atexit
+        import os
+        import shutil
+        import tempfile
+        d = Path(tempfile.mkdtemp(prefix='global-law-trees-'))
+        (d / 'objects').mkdir()
+        atexit.register(shutil.rmtree, d, True)
+        os.environ['GIT_ALTERNATE_OBJECT_DIRECTORIES'] = str(d / 'objects')
+        _TREES['dir'] = d
+    return _TREES['dir']
+
+
+def corpus_tree(date: str, corpus: str) -> str | None:
+    """The corpus as in force on `date`, as something git reads like a commit (grep, ls-tree, show, diff): each file
+    at the version file_commit would pick, corrections included. A corpus in in-force order is its commit-order
+    prefix; any other (older acts appended after the tip, corrections) is a tree built from file_index for the date."""
+    if in_order(corpus):
+        return corpus_on(date, corpus)
+    key = ('tree', f'{corpus}@{tip(corpus) or "HEAD"}@{date}')
+    if key in _CACHE:
+        return _CACHE[key]  # type: ignore[return-value]
+    index, overlays = file_index(corpus)
+    chosen: dict[str, tuple] = {}
+    for path, versions in index.items():
+        best = None
+        for day, order, blob, mode in versions:
+            if day <= date and (best is None or (day, order) >= (best[0], best[1])):
+                best = (day, order, blob, mode)
+        if best and best[2]:
+            chosen[path] = (best[2], best[3])
+    best_fix: dict[str, tuple] = {}
+    for fix, order, files in overlays:
+        if fix['from'] > date:
+            continue
+        for path, (blob, mode) in files.items():
+            if date > correction_end(corpus, fix, path):
+                continue
+            prev = best_fix.get(path)
+            if prev is None or (fix['from'], order) >= prev[0]:
+                best_fix[path] = ((fix['from'], order), blob, mode)
+    for path, (_, blob, mode) in best_fix.items():
+        if blob:
+            chosen[path] = (blob, mode)
+        else:
+            chosen.pop(path, None)
+    if not chosen:
+        _CACHE[key] = None
+        return None
+    store = _tree_store()
+    cwd = corpus_dir(corpus)
+    objects = git('rev-parse', '--path-format=absolute', '--git-path', 'objects', cwd=cwd).strip()
+    import os
+    env = {**os.environ, 'GIT_INDEX_FILE': str(store / f'index-{abs(hash(key))}'), 'GIT_OBJECT_DIRECTORY': str(store / 'objects'),
+           'GIT_ALTERNATE_OBJECT_DIRECTORIES': objects}
+    # Bytes, NUL-terminated: in text mode Windows writes \r\n, and git reads "act/a.md\r" and ignores it.
+    listing = b''.join(f'{mode} blob {blob}\t{path}'.encode('utf-8') + b'\0' for path, (blob, mode) in sorted(chosen.items()))
+    run = subprocess.run(['git', 'update-index', '--add', '-z', '--index-info'], cwd=cwd, env=env, input=listing,
+                         capture_output=True)
+    if run.returncode or b'Ignoring path' in run.stderr:  # git exits 0 when it drops a path it cannot read
+        raise RuntimeError(f"git update-index: {run.stderr.decode('utf-8', 'replace').strip()[:300]}")
+    tree = subprocess.run(['git', 'write-tree'], cwd=cwd, env=env, capture_output=True, encoding='utf-8')
+    if tree.returncode:
+        raise RuntimeError(f'git write-tree: {tree.stderr.strip()[:300]}')
+    sha = tree.stdout.strip()
+    _CACHE[key] = sha
+    return sha
+
+
 def corpus_of(path: str) -> tuple[str, str]:
     for corpus in sorted(manifest()['corpora'], key=lambda c: -len(c['path'])):
         prefix = corpus['path'] + '/'
@@ -311,7 +466,7 @@ def pinned(root_commit, corpus: str) -> str | None:
     if root_commit is None:
         return None
     if isinstance(root_commit, Moment):
-        return corpus_on(root_commit.date, corpus)
+        return corpus_tree(root_commit.date, corpus)
     line = git('ls-tree', root_commit, '--', corpus).split()
     return line[2] if len(line) >= 3 and line[1] == 'commit' else None
 

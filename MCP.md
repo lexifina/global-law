@@ -102,7 +102,13 @@ Then corrections apply, file by file. A correction commit carries `Kind: correct
 day its range covers, even when git shows no change to that file (a late-found version can equal the text the tip
 already has). An open range (`<from>..`) ends the day before the act's next ordinary commit, the next commit by
 in-force date that touches `Act-path` (or, without it, the folders of its `Files`). The latest correction covering a
-day wins, and `read_law` says that a correction applies, with what it supersedes and why. The timeline across countries (`laws_between`, `world_on_date`,
+day wins, and `read_law` says that a correction applies, with what it supersedes and why.
+
+The same rule holds for a whole country on a date (`search_law`, `list_provisions`, `changes_between`). A country whose
+history is in in-force order with no corrections is read at its last commit on or before the date. Any other is read
+as a tree of each file's version for the date, which the server builds in a temporary object directory, never in your
+clone. `tools/check_corpus.py` reports commits appended after later-dated ones (end blocks) as a warning: they are
+allowed. The timeline across countries (`laws_between`, `world_on_date`,
 `search_changes`) merges the countries' histories by date.
 
 Until 2 November 2026 the tree also wrote one dated root commit per law taking effect, and the tools read those. Since

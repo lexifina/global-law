@@ -1376,8 +1376,8 @@ def credit_restored(path: str, date: str, runs: list[dict]) -> str:
     This reads every version and searches each for each run, so it is bounded: a 6.5 MB Spanish order took six minutes
     here alone. Returns a note when the tracing was skipped or cut short, else ''."""
     corpus, rel = law.corpus_of(path)
-    sha = law.pinned(law.root_on(date), corpus)
-    if sha is None:
+    upto = sorted((h for h in history_of(path) if h['in_force'] <= date), key=lambda h: h['in_force'])
+    if not upto:
         return ''
     hist = {h['commit']: h['in_force'] for h in history_of(path)}
     size = sum(len(r['text']) for r in runs) * max(1, len(hist))
@@ -1386,10 +1386,9 @@ def credit_restored(path: str, date: str, runs: list[dict]) -> str:
                 f'them back, since this provision is too long, with too many versions ({len(hist)}), to trace them.')
     cwd = law.corpus_dir(corpus)
     versions = []
-    for record in law.git('log', '--reverse', '--format=%H%x1f%an', sha, '--', rel, cwd=cwd).splitlines()[:MAX_ITEMS]:
-        commit, author = record.split('\x1f', 1)
-        body = law.git('show', f'{commit}:{rel}', cwd=cwd, check=False)
-        versions.append((commit, author, ' '.join(body.split())))
+    for h in upto[:MAX_ITEMS]:
+        body = law.git('show', f"{h['commit']}:{rel}", cwd=cwd, check=False)
+        versions.append((h['commit'], h['law'], ' '.join(body.split())))
     stop = time.monotonic() + RESTORE_SECONDS
     for i, r in enumerate(runs):
         if i % 200 == 0:
@@ -1537,9 +1536,10 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     date = date_arg(args.get('date'))
     scope = scope_arg(args)
     limit = num(args, 'max_results', 30, 200)
-    # Each corpus is searched at its own commit in force on the date (law.corpus_on): the tree's root commits stopped
-    # recording laws on 2 November 2026, so one grep of the tree at a root commit would read stale corpora.
-    pins = [(c['path'], law.corpus_on(date, c['path'])) for c in law.manifest()['corpora']
+    # Each corpus is searched as in force on the date (law.corpus_tree): its commit-order prefix when its history is
+    # in in-force order, else a tree of each file's version for the date, so older acts appended after the tip and
+    # corrections are searched on the dates they apply.
+    pins = [(c['path'], law.corpus_tree(date, c['path'])) for c in law.manifest()['corpora']
             if not scope or scoped(c['path'], scope) is not None]
     pins = [(c, sha) for c, sha in pins if sha]
     if not pins:
@@ -1635,7 +1635,7 @@ def t_list_provisions(args: dict) -> tuple[str, dict]:
     heads = read_headings(corpus, sha, tuple(shown))
     # A folder that is one Act (Cap. 387, a US title): when the record has it from, and its last change as a whole,
     # which otherwise takes a search of the change notes.
-    span = folder_span(corpus, sha, inner) if inner and not partial else None
+    span = folder_span(corpus, date, inner) if inner and not partial else None
     text = (f'{len(items)} provision file(s) under {prefix} in force on {date}'
             + (f'; folders: {", ".join(folders[:40])}' if folders and len(items) > limit else '') + '.\n'
             + (span['summary'] + '\n' if span else '')
@@ -1644,10 +1644,12 @@ def t_list_provisions(args: dict) -> tuple[str, dict]:
                   'provisions': [{'path': f'{corpus}/{p}', 'heading': heads.get(p, '')} for p in shown]}
 
 
-def folder_span(corpus: str, sha: str, inner: str) -> dict | None:
+def folder_span(corpus: str, date: str, inner: str) -> dict | None:
     by_commit = {e.corpus_commit: e for e in law.timeline() if e.corpus == corpus}
-    dated = [by_commit[c] for c in law.git('log', '--format=%H', sha, '--', inner, cwd=law.corpus_dir(corpus)).split()
-             if c in by_commit and by_commit[c].kind != 'documentation']
+    # Newest first by in-force date: a corpus can append an older act after its tip.
+    dated = sorted((by_commit[c] for c in law.git('log', '--format=%H', law.reachable_tip(corpus), '--', inner, cwd=law.corpus_dir(corpus)).split()
+                    if c in by_commit and by_commit[c].kind != 'documentation' and by_commit[c].in_force <= date),
+                   key=lambda e: e.in_force, reverse=True)
     if not dated:
         return None
     last, first = dated[0], dated[-1]
@@ -1691,8 +1693,9 @@ def list_folders(corpus: str, sha: str, base: str, items: list, folders: list[st
         mine, first = mine_of[where], firsts[where]
         is_title = bool(first) and first.endswith('/title.md')
         title = (heads.get(first, '') if is_title else '') or folder_title(cwd, sha, where) or (heads.get(first, '') if first else '')
-        changes = law.git('log', '--format=%H', sha, '--', where, cwd=cwd).split()
-        dated = [by_commit[c] for c in changes if c in by_commit and by_commit[c].kind != 'documentation']
+        changes = law.git('log', '--format=%H', law.reachable_tip(corpus), '--', where, cwd=cwd).split()
+        dated = sorted((by_commit[c] for c in changes if c in by_commit and by_commit[c].kind != 'documentation'
+                        and by_commit[c].in_force <= date), key=lambda e: e.in_force, reverse=True)
         last, first = (dated[0], dated[-1]) if dated else (None, None)
         rows.append({'folder': f'{corpus}/{where}', 'title': title, 'files': len(mine), 'changes': len(dated),
                      'first': first and {'law': first.law, 'in_force': first.in_force, 'kind': first.kind},
@@ -2372,7 +2375,7 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
         changed = [(l.split('\t')[0], l.split('\t')[-1]) for l in names if l.strip() and not NOT_LAW.search(l.split('\t')[-1])]
         if sub and not changed:
             continue
-        mine = touching(cwd, sub, f'{pa}..{pb}' if pa else pb)
+        mine = touching(cwd, sub, law.reachable_tip(c['path']))  # the laws below keep those in force in the window
         laws = [e.law for e in events if e.corpus == c['path'] and a < e.in_force <= b and e.kind != 'documentation'
                 and (not sub or e.corpus_commit in mine)]
         kinds = {'A': 'added', 'M': 'changed', 'D': 'removed'}

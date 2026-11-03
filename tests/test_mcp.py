@@ -1133,6 +1133,18 @@ class Dating(unittest.TestCase):
                 self.assertEqual(self.law.file_commit('2020-06-01', 'zz/act/a.md'), current)
                 self.assertIn(empty, [h['commit'] for h in self.law.history('zz/act/a.md')])  # named, though unchanged
                 self.assertEqual([c['commit'] for c in self.law.corrections('zz')], [fixed, empty])
+                # The whole corpus on a past date (search_law, list_provisions, changes_between): not the commit-order
+                # prefix, which would miss the end block, but a tree of each file's version for the date.
+                self.assertFalse(self.law.in_order('zz'))
+                files = lambda tree: self.law.git('ls-tree', '-r', '--name-only', tree, cwd=cwd).split()  # noqa: E731
+                t2016 = self.law.corpus_tree('2016-01-01', 'zz')
+                self.assertEqual(files(t2016), ['act/a.md'])  # the act appended after the tip; b.md not yet in force
+                self.assertEqual(self.law.git('show', f'{t2016}:act/a.md', cwd=cwd), 'corrected 2010\n')
+                self.assertIn('act/a.md', self.law.git('grep', '-l', 'corrected', t2016, cwd=cwd))
+                t2021 = self.law.corpus_tree('2021-06-01', 'zz')
+                self.assertEqual(files(t2021), ['act/a.md', 'act/b.md'])
+                self.assertEqual(self.law.git('show', f'{t2021}:act/a.md', cwd=cwd), 'current\n')
+                self.assertIsNone(self.law.corpus_tree('2005-01-01', 'zz'))
                 self.law._CACHE.clear()
         finally:
             shutil.rmtree(root, ignore_errors=True)
