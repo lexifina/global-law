@@ -9,6 +9,17 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). The corpus standard agrees with itself.** `tools/check_corpus.py` accepts every `history` value
+  MCP.md documents, `metadata-only` included (95 corpora; one with nothing dated warns instead of failing).
+  `Consolidated:` is canonically a date, with the link in `Source:`; most corpora wrote the link there, so readers and
+  the check take either, and warn only when it is neither, or when a link is a commit's only date. A corpus with no
+  `corpus.json` is always a warning (632 of the 710 pinned have none), counted when a global-law checkout is checked at once.
+- **Fixed (nigeria/national/acts). A corpus table that missed four corrections.** nigeria-law 5ed3c65: four section
+  heading corrections of 3 November had no row in data/commits.csv; the shared generator now lists them. Of the 74
+  corpora the audit flagged, the other tables already match their dated commits (the rest are documentation commits);
+  Russia's gap waits for its pending job, and the Balkan corpora are held elsewhere.
+- **Changed (switzerland). The three Swiss city corpora sit under their cantons** (switzerland/basel-landschaft/birsfelden,
+  bern/nidau, st-gallen/st-gallen), where their own jurisdiction.json puts them; the old paths still work.
 - **Fixed (all). A repealed act is out of search and `world` too, not only `show`.** A corpus whose history is in
   in-force order was read as its commit-order prefix, which still holds the files of an act data/acts.json records as
   repealed (Spain's 1,559 repealed norms): such a corpus is now read as a tree built for the date, as `show` reads it.
