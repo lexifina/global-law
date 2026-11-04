@@ -9,6 +9,10 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (france/national/acts). Six of the last eight doubtful French dates settled.** france-law 0ac3099: three
+  versions confirmed by an effect clause (two found only in LEGI's daily snapshots, one set by a later law, Loi
+  n° 2007-148 art. 55), one date corrected (2007-12-09, the day after the arrêté's JO), and two versions credited to the
+  arrêtés they belong to (data/credits.csv). Two stay unsettled: they need the JORF bulk data.
 - **Fixed (Czechia). Czechia's future branch is read again.** czechia-law `future` was behind main (134 e-Sbírka corrections and 10 laws appended on 2026-11-02 were not on it). It is brought up to date by fast-forward only (f01870b → 8c9aff5, 137 replayed commits, append_future.py's replay: main's author lines, messages and act files), and data/future-pins.tsv records it. 199/2026 Sb.'s changes to 136/2015 and 1/2019 Sb. (in force 2026-10-31) now read, and the 134 later future versions from their days.
 - future_pins.py now reads a commit message written with CRLF as its LF twin, as law.py does. Main's 2026-11-02 Czech appends use CRLF, so the two tools had disagreed on the same branch.
 - Both tools now treat a branch's own earlier version of a law as superseded when a true copy of main's commit for that law follows it on the branch. Main's text stands, and the branch is read rather than refused as diverged. One case: 200/2026 Sb.
