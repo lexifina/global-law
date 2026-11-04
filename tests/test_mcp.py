@@ -1428,6 +1428,112 @@ class Dating(unittest.TestCase):
         self.assertEqual((m.group(1), m.group(2)), ('2011-10-01', None))
 
 
+class UnreadableCheckouts(unittest.TestCase):
+    """Issues #7 and #11: a corpus checked out but unreadable at its pin (no commit yet, behind its pin, shallow) is
+    not served. Every tool over several corpora answers from the rest and names it with its fix; a tool scoped to it
+    says what to run. A small tree built here, with the server's tools called in a child process at its root."""
+
+    CALL = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server\n'
+            'out = []\n'
+            'for name, args in json.loads(sys.stdin.read()):\n'
+            '    r = mcp_server.handle({"jsonrpc": "2.0", "id": 1, "method": "tools/call", '
+            '"params": {"name": name, "arguments": args}})["result"]\n'
+            '    out.append({"error": r["isError"], "text": r["content"][0]["text"], "data": r.get("structuredContent", {})})\n'
+            'print(json.dumps(out))\n')
+
+    @classmethod
+    def setUpClass(cls):
+        import shutil
+        sys.path.insert(0, str(ROOT))
+        from tests.test_law_fixtures import Tree, run
+        t = cls.t = Tree()
+        shutil.copy(ROOT / 'tools' / 'mcp_server.py', t.root / 'tools' / 'mcp_server.py')
+        (t.root / 'jurisdiction.json').write_text('{"name": "fixture", "jurisdictions": []}', encoding='utf-8')
+        run('add', 'jurisdiction.json', cwd=t.root)
+        good = t.corpus('aa/national/acts')
+        good.commit('Act 1 of 2010', {'act/s1.md': 'The constitution holds.\n'}, In_force='2010-01-01', Kind='law')
+        good.commit('Act 2 of 2020', {'act/s1.md': 'The constitution still holds.\n'}, In_force='2020-01-01', Kind='law')
+        for path in ('bb/national/acts', 'aa/upper/acts', 'dd/national/acts'):  # unborn, behind, shallow
+            c = t.corpus(path)
+            c.commit('Act 1 of 2011', {'s1.md': 'A constitution here too.\n'}, In_force='2011-01-01', Kind='law')
+            c.commit('Act 2 of 2021', {'s1.md': 'A constitution, amended.\n'}, In_force='2021-01-01', Kind='law')
+        t.pin()
+        unborn = t.corpora['bb/national/acts'].path  # an interrupted clone: a .git, no commit
+        shutil.rmtree(unborn, onerror=lambda f, p, _: (os.chmod(p, 0o700), f(p)))
+        unborn.mkdir()
+        run('init', '-q', cwd=unborn)
+        behind = t.corpora['aa/upper/acts'].path  # a pull without `git submodule update`: the pin is not here
+        run('reset', '-q', '--hard', 'HEAD~1', cwd=behind)
+        run('reflog', 'expire', '--expire=now', '--all', cwd=behind)
+        run('gc', '-q', '--prune=now', cwd=behind)
+        cut = t.corpora['dd/national/acts'].path  # a --depth 1 clone of two commits: its history is cut
+        shutil.move(str(cut), str(t.root / 'dd-full'))
+        run('clone', '-q', '--depth', '1', (t.root / 'dd-full').as_uri(), str(cut), cwd=t.root)
+        cls.FIXES = {'bb/national/acts': 'git submodule update --init -- bb/national/acts',
+                     'aa/upper/acts': 'git submodule update --init -- aa/upper/acts',
+                     'dd/national/acts': 'git -C dd/national/acts fetch --unshallow'}
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def calls(self, *calls) -> list[dict]:
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', self.CALL], cwd=self.t.root, input=json.dumps(calls),
+                              capture_output=True, encoding='utf-8', timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        return json.loads(done.stdout)
+
+    def assert_names_the_broken(self, answer: dict, label: str, paths=None):
+        self.assertFalse(answer['error'], (label, answer['text']))
+        for path, fix in self.FIXES.items():
+            if paths is None or path in paths:
+                self.assertIn(f'Left out: {path}', answer['text'], label)
+                self.assertIn(fix, answer['text'], label)
+
+    def test_tools_over_every_corpus_answer_the_rest_and_name_the_broken(self):
+        tools = [('list_jurisdictions', {}), ('find_provision', {'query': 'constitution'}),
+                 ('search_law', {'query': 'constitution'}), ('laws_between', {'start': '2000-01-01', 'end': '2030-01-01'}),
+                 ('world_on_date', {'date': '2025-01-01'}), ('search_changes', {'query': 'Act'}),
+                 ('phrase_history', {'query': 'constitution'})]
+        answers = self.calls(*tools)
+        for (name, _), answer in zip(tools, answers):
+            self.assert_names_the_broken(answer, name)
+        listed = answers[0]['data']
+        self.assertEqual([c['path'] for c in listed['corpora']], ['aa/national/acts'])
+        reasons = {c['path']: c['reason'] for c in listed['not_served']}
+        self.assertEqual(reasons, {'bb/national/acts': 'no commit yet', 'aa/upper/acts': 'behind its pin',
+                                   'dd/national/acts': 'shallow clone'})
+        self.assertIn('aa/national/acts/act/s1.md', answers[2]['text'])  # search_law: the healthy corpus's hit
+        self.assertEqual(answers[2]['data']['provision_count'], 1)
+        self.assertIn('Act 2 of 2020', answers[3]['text'])  # laws_between
+        self.assertNotIn('Act 2 of 2021', answers[3]['text'])
+        self.assertIn('aa/national/acts', answers[5]['text'])  # search_changes: not "not checked out"
+        self.assertNotIn('Not checked out, so not searched', answers[5]['text'])
+        self.assertIn('aa/national/acts/act/s1.md', answers[6]['text'])  # phrase_history
+
+    def test_a_tool_scoped_to_a_broken_corpus_says_what_to_run(self):
+        tools = [('search_law', {'query': 'constitution', 'jurisdiction': 'dd'}),
+                 ('search_changes', {'query': 'Act', 'jurisdiction': 'aa/upper/acts'}),
+                 ('phrase_history', {'query': 'constitution', 'jurisdiction': 'aa/upper/acts'}),
+                 ('laws_between', {'start': '2000-01-01', 'end': '2030-01-01', 'jurisdiction': 'bb'}),
+                 ('read_law', {'path': 'dd/national/acts/s1.md'}),
+                 ('list_provisions', {'path': 'bb/national/acts'})]
+        corpora = ['dd/national/acts', 'aa/upper/acts', 'aa/upper/acts', 'bb/national/acts', 'dd/national/acts',
+                   'bb/national/acts']
+        for (name, args), corpus, answer in zip(tools, corpora, self.calls(*tools)):
+            self.assertTrue(answer['error'], (name, answer['text']))
+            self.assertIn(self.FIXES[corpus], answer['text'], name)
+            self.assertNotIn('Internal error', answer['text'], name)
+
+    def test_a_scope_over_a_healthy_and_a_broken_corpus_names_the_broken(self):
+        answers = self.calls(('search_law', {'query': 'constitution', 'jurisdiction': 'aa'}),
+                             ('laws_between', {'start': '2000-01-01', 'end': '2030-01-01', 'jurisdiction': 'aa'}))
+        for answer in answers:
+            self.assert_names_the_broken(answer, 'aa', ['aa/upper/acts'])
+            self.assertNotIn('bb/national/acts', answer['text'])
+        self.assertIn('aa/national/acts/act/s1.md', answers[0]['text'])
+
+
 class Choosing(unittest.TestCase):
     """A clone may hold some countries, and a user may narrow the server to some: what is left out is named, with
     the command that adds it, and never fails a tool."""

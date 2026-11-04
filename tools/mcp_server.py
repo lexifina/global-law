@@ -206,18 +206,47 @@ def chosen() -> tuple[str, ...]:
 
 
 def serving(corpus: dict, names: tuple[str, ...] | None = None) -> str | None:
-    """None when the corpus is served, else why not: 'not checked out' or 'not chosen'."""
+    """None when the corpus is served, else why not: 'not checked out', 'not chosen', or a checkout that cannot be read
+    at the commit the tree pins (a key of UNREADABLE), which law.py's world and laws leave out and name too: one such
+    corpus narrows an answer over every corpus, and does not fail it (issues #7 and #11)."""
     if not (ROOT / corpus['path'] / '.git').exists():
         return 'not checked out'
     names = chosen() if names is None else names
-    return 'not chosen' if names and not any(law.matches(corpus, n) for n in names) else None
+    if names and not any(law.matches(corpus, n) for n in names):
+        return 'not chosen'
+    return unreadable_why(corpus['path'])
+
+
+# Why a checked-out corpus cannot be read, as law.py words it, with the command that fixes it.
+UNREADABLE = {'no commit yet': law._UNREADABLE, 'behind its pin': law._BEHIND, 'shallow clone': law._SHALLOW}
+
+
+def unreadable_why(corpus: str) -> str | None:
+    """None when a checkout can be read at the commit the tree pins, else a key of UNREADABLE. law.py caches each check
+    while it holds and asks again while it fails, so a corpus fixed later is served within seconds."""
+    cwd = ROOT / corpus
+    if not law._readable(corpus, cwd):
+        return 'no commit yet'
+    if law._CACHE.get(('full-history', corpus)) is False and not law._shallow(cwd):
+        law._CACHE.pop(('full-history', corpus), None)  # fetched with --unshallow since
+    if not law._full_history(corpus, cwd):
+        return 'shallow clone'
+    pin = law.tip(corpus)
+    return 'behind its pin' if pin and not law._has_commit(corpus, cwd, pin) else None
+
+
+def unreadable_fix(corpus: str, why: str) -> str:
+    """law.py's note for a corpus left out as unreadable: what is wrong, and the command that fixes it."""
+    return UNREADABLE[why].format(corpus=corpus, pin=(law.tip(corpus) or '')[:10])
 
 
 def not_served() -> list[dict]:
-    """The corpora in the tree that this server leaves out, each with its reason."""
+    """The corpora in the tree that this server leaves out, each with its reason, and for one checked out but
+    unreadable, the fix."""
     served, names = set(_look()[1]), chosen()
-    return [{'path': c['path'], 'name': c['name'], 'reason': serving(c, names)}
-            for c in _full_manifest(head())['corpora'] if c['path'] not in served]
+    out = [{'path': c['path'], 'name': c['name'], 'reason': serving(c, names)}
+           for c in _full_manifest(head())['corpora'] if c['path'] not in served]
+    return [{**c, 'fix': unreadable_fix(c['path'], c['reason'])} if c['reason'] in UNREADABLE else c for c in out]
 
 
 def widen() -> str:
@@ -237,6 +266,8 @@ def unserved_answer(where: str) -> str | None:
     if not reach or any(c['path'] in served for c in reach):
         return None
     shut = [(c['path'], serving(c)) for c in reach]
+    if any(why in UNREADABLE for _, why in shut):  # checked out, but not readable at its pin: say how to fix it
+        return ' '.join(unreadable_fix(p, why) for p, why in shut if why in UNREADABLE)
     if all(why == 'not checked out' for _, why in shut):
         paths = ' '.join(p for p, _ in shut)
         return (f"{', '.join(p for p, _ in shut)} {'is' if len(shut) == 1 else 'are'} in the tree but not checked out in "
@@ -890,8 +921,12 @@ def served_note(names: bool = False) -> str:
     if stray:  # a misspelt choice would otherwise leave the server serving nothing, silently
         note += (f" The jurisdictions chosen include {', '.join(repr(n.strip()) for n in stray)}, which name nothing in "
                  f'this tree; `{COUNTRIES}` lists the names.')
+    # One checked out but unreadable at its pin is always named, with its fix: the user can act on it now.
+    broken = [c['fix'] for c in out if 'fix' in c]
+    fixes = ''.join(f'\nLeft out: {f}' for f in broken)
     if not names:
-        return note + ' list_jurisdictions names them.'
+        return note + (' list_jurisdictions names them.' if len(out) > len(broken) else '') + fixes
+    note += fixes
     if unchosen:
         note += (f"\nNot chosen (this server is set to {', '.join(chosen())}): {', '.join(unchosen)}. "
                  + widen())
@@ -2127,11 +2162,17 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     # Each corpus is searched as in force on the date (law.corpus_tree): its commit-order prefix when its history is
     # in in-force order, else a tree of each file's version for the date, so older acts appended after the tip and
     # corrections are searched on the dates they apply.
-    pins = [(c['path'], law.corpus_tree(date, c['path'])) for c in law.manifest()['corpora']
-            if not scope or scoped(c['path'], scope) is not None]
+    pins, left_out = [], []
+    for c in law.manifest()['corpora']:
+        if not scope or scoped(c['path'], scope) is not None:
+            try:
+                pins.append((c['path'], law.corpus_tree(date, c['path'])))
+            except SystemExit as e:  # a checkout broken since it was served (issue #7): named, and the rest searched
+                left_out.append(str(e.code))
     pins = [(c, sha) for c, sha in pins if sha]
     if not pins:
-        return f'Nothing is in the record on {date}.', {'results': []}
+        return f'Nothing is in the record on {date}.' + ''.join(f'\nLeft out: {n}' for n in left_out), \
+            {'results': [], 'left_out': left_out}
     # Official texts use typographic dashes and quotes ("COVID–19", “debtor”); plain searches match either form.
     pattern = safe_regex(query) if args.get('regex') else loose_pattern(query)
     flags = ['-E']
@@ -2162,7 +2203,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     notes = sorted({n for r in results for n in law.caveats(date, law.corpus_of(r['path'])[0])})
     summary = (f'{len(files)} provision(s) in force on {date} contain {query!r}' + (f' in {scope}' if scope else '')
                + (f'; showing {len(results)} line(s).' if results else '.'))
-    lines = [summary] + [f'Note: {n}' for n in notes] + [f"{r['path']}:{r['line']}: {r['text']}" for r in results]
+    lines = ([summary] + [f'Note: {n}' for n in notes] + [f'Left out: {n}' for n in left_out]
+             + [f"{r['path']}:{r['line']}: {r['text']}" for r in results])
     named = [e for e in aliases() if e.get('paths') and any(query.lower() == n.lower() for n in e['names'])]
     for e in named:  # a popular name: the law never uses it, but we know where it lives
         lines.append(f"'{query}' is a popular name, not words of the law: it refers to {', '.join(e['paths'])}. {e.get('note', '')}")
@@ -2189,7 +2231,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     return '\n'.join(lines), {'date': date, 'provisions': every_corpus_first(files, SEARCH_PATHS), 'provision_count': len(files),
                               'results': results,
                               'caveats': notes, 'related_changes': related,
-                              'popular_name_for': [p for e in named for p in e['paths']]}
+                              'popular_name_for': [p for e in named for p in e['paths']], 'left_out': left_out}
 
 
 def t_list_provisions(args: dict) -> tuple[str, dict]:
@@ -2198,8 +2240,8 @@ def t_list_provisions(args: dict) -> tuple[str, dict]:
     if not prefix:
         raise UserError('Give a corpus or a folder in one, for example us/federal/usc/title-11 or de/bund/grundgesetz.')
     corpus = next((c['path'] for c in law.manifest()['corpora'] if prefix == c['path'] or prefix.startswith(c['path'] + '/')), None)
-    if corpus is None:
-        raise UserError(f'{prefix} is not a corpus or inside one; see list_jurisdictions.')
+    if corpus is None:  # a corpus this server leaves out says why, and how to add or fix it
+        raise UserError(unserved_answer(prefix) or f'{prefix} is not a corpus or inside one; see list_jurisdictions.')
     date = date_arg(args.get('date'))
     sha = law.pinned(law.root_on(date, law.timeline()), corpus)
     if sha is None:
@@ -3339,6 +3381,13 @@ def _handle(method, mid, params: dict) -> dict:
                     note = served_note()
                     if note:
                         text, data = text + note, {**data, 'not_searched_corpora': len(not_served())}
+                elif isinstance(args.get('jurisdiction'), str) and args['jurisdiction'].strip():
+                    # A scope over several corpora, some served: those within it left out as unreadable are named.
+                    entry = {c['path']: c for c in _full_manifest(head())['corpora']}
+                    left = [c for c in not_served() if 'fix' in c and law.matches(entry[c['path']], args['jurisdiction'].strip())]
+                    if left:
+                        text = text + ''.join(f"\nLeft out: {c['fix']}" for c in left)
+                        data = {**data, 'not_searched_corpora': len(left)}
                 if len(text) > MAX_ANSWER and not any(k.endswith('_part') for k in data):
                     # A long text answer that is not already in parts: list_provisions with max_results 2000 was 410 KB,
                     # and a generic law name in law_details 200 KB. Cut at a line break, and say how to narrow it.

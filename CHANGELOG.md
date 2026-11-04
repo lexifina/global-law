@@ -9,6 +9,9 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). The MCP server leaves out a corpus checked out but unreadable at its pin, and names it (#7, #11).**
+  A corpus with no commit yet, behind its pin (after `git pull` without `git submodule update`) or shallow was served because it had a `.git`: unscoped `search_law` answered only with the first one's error, `list_jurisdictions` and `find_provision` gave "Internal error (RuntimeError)" (`git ls-tree <pin>`: "not a tree object"), and `laws_between`, `search_changes` and `phrase_history` dropped it without a word (`search_changes` called it "not checked out").
+  The server now leaves such a corpus out (`serving()`: `no commit yet`, `behind its pin`, `shallow clone`, from law.py's own checks), as `law.py world` and `laws` do. Every answer over several corpora, and a `jurisdiction` over a healthy and a broken one, ends with a "Left out:" line per corpus with law.py's fix command; a path or `jurisdiction` in one gets that command as its error (`list_provisions` too, which said "not a corpus"). `not_served` carries a `fix` for each. Tests: tests/test_mcp.py UnreadableCheckouts (fixture tree: one corpus of each kind beside a healthy one).
 - **Fixed (france/national/acts, spain/national/acts). The last checked dates and credits.** france-law e5e220c: of the
   50 versions dated more than a year before their act that were left unchecked, 19 dates corrected from LEGI and 22
   confirmed by the act's own effect clause (`Retroactive`); 8 left as they are (no source settles them). spain-law

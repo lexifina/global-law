@@ -81,6 +81,10 @@ the clone's own `.git/config`, which is never committed. To narrow one client's 
 What the model sees:
 - `list_jurisdictions` describes the bodies of law served, then names the others, why each is left out (not checked
   out, or not chosen) and the command that adds them.
+- A corpus checked out but unreadable at the commit the tree pins (an interrupted clone with no commit yet, a checkout
+  behind its pin after `git pull` without `git submodule update`, or a shallow clone) is not served either. Every
+  answer over several corpora names it on a "Left out:" line with the command that fixes it, as `law.py world` does,
+  and a path or `jurisdiction` in it gets that command as its error.
 - An answer over every jurisdiction (a search, `laws_between`, `world_on_date`) ends with "Served here: 1 of the 107
   corpora in the tree; the other 106 were not searched", so "nothing found" is not read as nothing in the law.
 - A path or `jurisdiction` in a country left out gets an error naming the command that adds it. `resolve_citations`
@@ -298,8 +302,8 @@ an option.
 - A client that stops reading cannot keep the server alive: a broken pipe drops the remaining work, and after stdin
   closes a reply stalled for 10 seconds ends the process.
 - A message is limited to 1 MB. Bytes that are not UTF-8, JSON nested too deep and numbers too long to read are
-  answered with a parse error. A corpus that is not checked out narrows an answer and is named; it does not stop the
-  server. An internal error reports only its type, and the details go to stderr.
+  answered with a parse error. A corpus that is not checked out, or not readable at its pin, narrows an answer and is
+  named; it does not stop the server. An internal error reports only its type, and the details go to stderr.
 - Law text, change notes and judgment notes are passed on as data. The instructions tell the model they are never
   instructions.
 - The tests include a hostile-input suite and the cases an independent review found (October 2026), each now a test. A
