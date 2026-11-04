@@ -13,6 +13,7 @@ import math
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+BUDGET = {'show today': 3, 'show past': 3, 'log': 3, 'blame past': 5, 'words today': 10, 'diff': 3}  # as bench.py
 COMMANDS = ['show today', 'show past', 'log', 'blame past', 'words today', 'diff']
 STATUSES = [('clean', 'Clean'), ('fixed', 'Fixed'), ('handed', 'Handed to a builder'), ('open', 'Open')]
 
@@ -115,13 +116,18 @@ def heatmap(run: dict) -> str:
             if v is None:
                 continue
             var, dark = heat_color(v, lo, hi)
-            body += (f'<g class="hit" data-tip="{esc(f"{c} on {p}: {fmt(v)} s")}">'
+            over = v > BUDGET.get(c, 1e9)
+            note = f' (over its {BUDGET[c]} s budget)' if over else ''
+            body += (f'<g class="hit" data-tip="{esc(f"{c} on {p}: {fmt(v)} s{note}")}">'
                      f'<rect x="{x + 1}" y="{y + 1}" width="{cw - 2}" height="{ch - 2}" rx="3" style="fill:var({var})"/>'
+                     + (f'<rect x="{x + 2.5}" y="{y + 2.5}" width="{cw - 5}" height="{ch - 5}" rx="2" class="over"/>'
+                        if over else '') +
                      f'<text x="{x + cw / 2}" y="{y + ch / 2 + 4}" text-anchor="middle" class="cell{" on" if dark else ""}">'
                      f'{fmt(v)}</text></g>')
     key = ('<div class="legend"><span class="key">Seconds, darker is slower:</span>' + ''.join(
         f'<span class="key"><span class="sw" style="background:var(--seq-{s})"></span></span>' for s in
-        (100, 200, 300, 400, 500, 600, 700)) + f'<span class="key">{fmt(lo)} s or less … {fmt(hi)} s</span></div>')
+        (100, 200, 300, 400, 500, 600, 700)) + f'<span class="key">{fmt(lo)} s or less … {fmt(hi)} s</span>'
+        '<span class="key"><span class="sw over-key"></span>over its budget</span></div>')
     return key + f'<svg viewBox="0 0 {w} {h}" role="img" aria-label="Seconds per command and provision">{body}</svg>'
 
 
@@ -276,7 +282,11 @@ p, li { max-width:80ch; } .sub { color:var(--muted); font-size:12px; font-weight
 .chart .dot { stroke:var(--sheet); stroke-width:2; }
 .chart text { fill:var(--ink); font-size:12px; } .chart .tick { fill:var(--muted); font-size:11px; }
 .chart .value { fill:var(--muted); font-size:11.5px; } .chart .cell { fill:#0b0b0b; font-size:11.5px; font-variant-numeric:tabular-nums; }
-.chart .cell.on { fill:#fff; }
+.chart .cell.on { fill:#fff; } .chart .over { fill:none; stroke:var(--st-open); stroke-width:2.5; }
+.over-key { background:transparent; border:2.5px solid var(--st-open); box-sizing:border-box; }
+.attn { background:var(--sheet); border:1px solid var(--rule); border-left:4px solid var(--st-open); border-radius:6px;
+  padding:10px 16px; margin:14px 0; } .attn.ok { border-left-color:var(--st-clean); } .attn ul { margin:6px 0; }
+.ctx { color:var(--muted); font-size:13px; }
 .chart .hit:hover .dot, .chart .hit:hover rect[rx] { filter:brightness(1.12); }
 .legend { display:flex; flex-wrap:wrap; gap:6px 16px; font-size:12.5px; color:var(--muted); margin:0 0 6px; }
 .key { display:inline-flex; align-items:center; gap:6px; } .sw { width:12px; height:12px; border-radius:3px; display:inline-block; }
@@ -341,6 +351,32 @@ def main() -> None:
                  f'<div class="wrap"><table><thead><tr><th>Status</th><th>Finding</th><th>Evidence</th>'
                  f'<th>What was done</th></tr></thead><tbody>{items}</tbody></table></div>')
     latest = runs[-1] if runs else {}
+    failed = [f'{k}: {v}' for k, v in latest.get('checks', {}).items() if v != 'pass']
+    slower = latest.get('regressions', [])
+    over = latest.get('over_budget', [])
+    if runs and (failed or slower or over):
+        attention = ('<div class="attn"><b>Needs attention in the latest run</b><ul>' +
+                     ''.join(f'<li>Check failed: {esc(x)}</li>' for x in failed) +
+                     ''.join(f'<li>Slower than the last run on the same corpora: {esc(x)}</li>' for x in slower) +
+                     ''.join(f'<li>Over budget: {esc(x)}</li>' for x in over) + '</ul></div>')
+    elif runs:
+        attention = '<div class="attn ok"><b>Latest run: every check passes, nothing slower, nothing over budget.</b></div>'
+    else:
+        attention = ''
+    context = ''
+    if runs:
+        context = (f'<p class="ctx">Latest run: {esc(latest.get("machine", ""))}; law.py {esc(latest.get("law_py", "?"))}; '
+                   f'{latest.get("tries", 1)} tr{"y" if latest.get("tries", 1) == 1 else "ies"} a command, median kept'
+                   f'{"; quick run" if latest.get("quick") else ""}. Index caches: '
+                   + esc(', '.join(f'{c.split("/")[0]} {mb:g} MB' for c, mb in sorted(latest.get('cache_mb', {}).items(),
+                                                                                       key=lambda x: -x[1])[:6]) or '–')
+                   + '.</p>')
+    experiments = ''.join(
+        f'<h3>{esc(e["when"])}: {esc(e["title"])}</h3><p>{esc(e.get("question", ""))}</p>'
+        f'<p><b>Result.</b> {esc(e.get("result", ""))}</p><p><b>Decision.</b> {esc(e.get("decision", ""))}</p>'
+        f'<p class="ctx">Write-up: <a href="{esc(e["file"])}">{esc(e["file"])}</a>'
+        + (f'; script: <code>{esc(e["script"])}</code>' if e.get('script') else '') + '</p>'
+        for e in found.get('experiments', []))
 
     def chart(svg: str) -> str:
         return f'<div class="chart">{svg}</div>' if svg else ''
@@ -356,6 +392,8 @@ says how many). Times are seconds. This page is written by <code>performance/rep
 <code>runs.jsonl</code> and <code>findings.json</code>; hover a mark for its value.</p>
 <p><b>{len(runs)} run{"s" if len(runs) != 1 else ""}</b>{f", the latest on {esc(latest['when'][:10])} at tree {esc(latest['tree'])} with {latest.get('corpora_checked_out')} corpora: {n_pass} of {n_checks} checks pass" if runs else ""}.</p>
 
+{attention}
+{context}
 <h2>Speed: before and after</h2>
 <p>Each fix, the time before (orange) and after (blue). The scale is logarithmic: each gridline is ten times the last.</p>
 {chart(dumbbell(found.get('speed', [])))}
@@ -366,7 +404,8 @@ says how many). Times are seconds. This page is written by <code>performance/rep
 {chart(trend(runs))}
 
 <h2>Latest run: each command on each fixed provision</h2>
-<p>One process per command, as a reader runs it, so each time includes starting Python and loading the corpus's index.</p>
+<p>One process per command, as a reader runs it, so each time includes starting Python and loading the corpus's index.
+Budgets: show, log and diff 3 s; blame 5 s; words 10 s.</p>
 {chart(heatmap(latest))}
 
 <h2>Latest run: reading each corpus's history</h2>
@@ -379,6 +418,7 @@ says how many). Times are seconds. This page is written by <code>performance/rep
 <details><summary>All {len(metrics)} timings</summary>
 <div class="wrap"><table><thead><tr><th>Measure</th>{head}</tr></thead><tbody>{timing_rows}</tbody></table></div></details>
 {f"<h2>Notes from the runs</h2><ul>{notes}</ul>" if notes else ""}
+{f"<h2>Experiments</h2><p>What was tried to make a slow path faster, what each try gave, and what was kept.</p>{experiments}" if experiments else ""}
 <h2>Deep tests</h2>
 <p>What each deep test of the repository found, and what became of it.</p>
 {chart(status_bars(found.get('deep_tests', [])))}

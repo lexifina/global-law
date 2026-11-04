@@ -3,6 +3,10 @@
 
   python performance/bench.py                 run, append the run to performance/runs.jsonl, rewrite index.html
   python performance/bench.py --no-record     run and print, record nothing
+  python performance/bench.py --quick         one try of each command, no fixture tests or describe --check
+
+It exits 1 when a check fails or a timing regressed against the last run on the same corpora (more than 1.5 times
+and 1 second slower), so a scheduled job can watch it; the run is still recorded.
 
 It reads only the corpora checked out here (python tools/countries.py add <country> adds one), so runs on different
 clones measure different things: each run records which corpora it read, the machine and the tree commit. Compare
@@ -54,6 +58,11 @@ BENCH = [
 ]
 MAX_OTHER = 8
 SAMPLE = 30
+REPEAT = 3  # each command is run this many times and the median kept: process start-up varies a lot on some machines
+# What a reader should wait at most, in seconds, for one command (median of the tries).
+BUDGET = {'show today': 3, 'show past': 3, 'log': 3, 'blame past': 5, 'words today': 10, 'diff': 3,
+          'index warm': 3, 'world (every corpus checked out)': 60, 'laws 2026 (every corpus checked out)': 60}
+SLOWER, SLOWER_BY = 1.5, 1.0  # a regression: this many times the last run's time, and this many seconds more
 TODAY = dt.date.today().isoformat()
 
 
@@ -66,8 +75,25 @@ def run(args: list[str], timeout: int = 1800) -> tuple[float, int, str]:
         return float(timeout), -1, 'timed out'
 
 
-def cli(*args: str, timeout: int = 1800) -> tuple[float, int, str]:
-    return run([sys.executable, '-X', 'utf8', str(ROOT / 'tools' / 'law.py'), *args], timeout)
+def cli(*args: str, timeout: int = 1800, tries: int = 1) -> tuple[float, int, str]:
+    """law.py as a reader runs it; with tries > 1, the median time of that many runs."""
+    got = [run([sys.executable, '-X', 'utf8', str(ROOT / 'tools' / 'law.py'), *args], timeout) for _ in range(tries)]
+    times = sorted(g[0] for g in got)
+    return times[len(times) // 2], got[-1][1], got[-1][2]
+
+
+def budget_of(name: str) -> float | None:
+    return BUDGET.get(name.split(': ', 1)[0]) if ': ' in name else BUDGET.get(name)
+
+
+def regressions(result: dict, earlier: list[dict]) -> list[str]:
+    """Timings well above the last run that measured the same corpora."""
+    same = [r for r in earlier if r.get('corpora_measured') == result['corpora_measured']]
+    if not same:
+        return []
+    last = same[-1]['timings']
+    return [f'{k}: {last[k]:.1f} s -> {v:.1f} s' for k, v in result['timings'].items()
+            if k in last and v > last[k] * SLOWER and v - last[k] > SLOWER_BY]
 
 
 def cache_file(corpus: str) -> Path:
@@ -77,6 +103,8 @@ def cache_file(corpus: str) -> Path:
 
 def main(argv: list[str]) -> int:
     record = '--no-record' not in argv
+    quick = '--quick' in argv
+    tries = 1 if quick else REPEAT
     random.seed(1)
     here = [c['path'] for c in law.manifest()['corpora'] if (ROOT / c['path'] / '.git').exists()]
     bench_corpora = sorted({c for c, _, _ in BENCH if c in here})
@@ -88,14 +116,18 @@ def main(argv: list[str]) -> int:
                    f'{os.cpu_count()} cpus',
         'corpora_checked_out': len(here),
         'corpora_measured': bench_corpora + others,
-        'timings': {}, 'checks': {}, 'notes': [],
+        'law_py': law.git('hash-object', str(ROOT / 'tools' / 'law.py')).strip()[:12],
+        'quick': quick, 'tries': tries,
+        'pins': {c: (law.tip(c) or '')[:12] for c in bench_corpora + others},
+        'timings': {}, 'checks': {}, 'notes': [], 'cache_mb': {},
     }
     t, checks = result['timings'], result['checks']
 
     # 1. tests that need no corpus
-    secs, code, tail = run([sys.executable, '-X', 'utf8', '-m', 'unittest', 'tests.test_law_fixtures'], 1800)
-    checks['fixture tests'] = 'pass' if code == 0 else f'FAIL: {tail[-200:]}'
-    t['fixture tests'] = secs
+    if not quick:
+        secs, code, tail = run([sys.executable, '-X', 'utf8', '-m', 'unittest', 'tests.test_law_fixtures'], 1800)
+        checks['fixture tests'] = 'pass' if code == 0 else f'FAIL: {tail[-200:]}'
+        t['fixture tests'] = secs
 
     # 2. per corpus: index cold and warm, behind its pin
     behind = []
@@ -116,6 +148,8 @@ def main(argv: list[str]) -> int:
         t[f'index warm: {corpus}'] = secs
         if kept.exists():
             kept.unlink()
+        if f.exists():
+            result['cache_mb'][corpus] = round(f.stat().st_size / 1e6, 1)
     checks['checkouts at their pins'] = 'pass' if not behind else f'{len(behind)} behind: {behind[:5]}'
 
     # 3. fixed provisions, one process per command, as a reader runs them
@@ -126,7 +160,7 @@ def main(argv: list[str]) -> int:
         for name, args in (('show today', ('show', TODAY, p)), ('show past', ('show', past, p)), ('log', ('log', p)),
                            ('blame past', ('blame', past, p)), ('words today', ('words', TODAY, p)),
                            ('diff', ('diff', past, TODAY, p))):
-            secs, code, tail = cli(*args)
+            secs, code, tail = cli(*args, tries=tries)
             t[f'{name}: {p}'] = secs
             if code not in (0, 1) or 'Traceback' in tail:
                 result['notes'].append(f'{name} {p}: exit {code}: {tail[-160:]}')
@@ -163,16 +197,27 @@ def main(argv: list[str]) -> int:
     secs, code, tail = run([sys.executable, '-X', 'utf8', str(ROOT / 'tools' / 'verify.py')], 1800)
     checks['verify.py, last 200 commits'] = 'pass' if code == 0 else f'FAIL: {tail[-200:]}'
     t['verify.py, last 200 commits'] = secs
-    secs, code, tail = run([sys.executable, '-X', 'utf8', str(ROOT / 'tools' / 'describe.py'), '--check'], 1800)
-    checks['describe.py --check'] = 'pass' if code == 0 else f'drift or error: {tail[-200:]}'
-    t['describe.py --check'] = secs
+    if not quick:
+        secs, code, tail = run([sys.executable, '-X', 'utf8', str(ROOT / 'tools' / 'describe.py'), '--check'], 1800)
+        checks['describe.py --check'] = 'pass' if code == 0 else f'drift or error: {tail[-200:]}'
+        t['describe.py --check'] = secs
+
+    # 6. against the budgets and the last comparable run
+    result['over_budget'] = [f'{k}: {v:.1f} s (budget {budget_of(k):g} s)' for k, v in t.items()
+                             if budget_of(k) is not None and v > budget_of(k)]
+    runs_file = HERE / 'runs.jsonl'
+    earlier = [json.loads(l) for l in runs_file.read_text(encoding='utf-8').splitlines() if l.strip()]         if runs_file.exists() else []
+    result['regressions'] = regressions(result, earlier)
 
     print(json.dumps(result, indent=1, ensure_ascii=False))
     if record:
         with open(HERE / 'runs.jsonl', 'a', encoding='utf-8', newline='\n') as fh:
             fh.write(json.dumps(result, ensure_ascii=False) + '\n')
         subprocess.run([sys.executable, '-X', 'utf8', str(HERE / 'report.py')], cwd=ROOT)
-    return 0
+    failed = [k for k, v in checks.items() if v != 'pass']
+    for line in [f'check failed: {k}' for k in failed] + [f'slower: {r}' for r in result['regressions']]:
+        print(line, file=sys.stderr)
+    return 1 if failed or result['regressions'] else 0
 
 
 if __name__ == '__main__':

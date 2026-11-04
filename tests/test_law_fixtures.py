@@ -244,6 +244,59 @@ class Fixtures(unittest.TestCase):
         self.assertTrue((store / 'ff~national~acts.pickle').exists())
 
 
+class LineMatching(unittest.TestCase):
+    """How words and blame match one version's lines to the next (performance/experiments/line_matching.md)."""
+
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location('law_lines', HERE / 'tools' / 'law.py')
+        cls.law = importlib.util.module_from_spec(spec)
+        sys.modules['law_lines'] = cls.law
+        spec.loader.exec_module(cls.law)
+
+    def covers(self, ops, a, b):
+        """The opcodes walk both lists end to end, and every 'equal' stretch is equal."""
+        ia = ib = 0
+        for op, a0, a1, b0, b1 in ops:
+            self.assertEqual((a0, b0), (ia, ib))
+            if op == 'equal':
+                self.assertEqual(a[a0:a1], b[b0:b1])
+            ia, ib = a1, b1
+        self.assertEqual((ia, ib), (len(a), len(b)))
+
+    def statute(self, n, change):
+        lines = []
+        for i in range(n):
+            lines += [f'## § {i}\n', '\n', f'(1) Text of section {i}, {"amended" if i in change else "as made"}.\n', '\n']
+        return lines
+
+    def test_small_comparison_is_difflib(self):
+        import difflib
+        a, b = self.statute(40, set()), self.statute(41, {3, 17})
+        self.assertEqual(self.law._line_opcodes(a, b),
+                         difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes())
+
+    def test_large_comparison_is_git_and_matches_the_unchanged_lines(self):
+        a = self.statute(700, set())
+        b = self.statute(700, {5, 350, 690})
+        del b[400:404]  # a section repealed
+        b[100:100] = ['## § 100a\n', '\n', '(1) A new section.\n', '\n']  # one inserted
+        self.assertGreater(len(a) * len(b), self.law.GIT_DIFF_ABOVE)
+        ops = self.law._line_opcodes(a, b)
+        self.covers(ops, a, b)
+        changed_new = [i for op, _, _, b0, b1 in ops if op != 'equal' for i in range(b0, b1)]
+        self.assertEqual(len([i for i in changed_new if b[i].strip()]), 3 + 2)  # 3 amended, the new heading and text
+
+    def test_git_unavailable_falls_back_to_difflib(self):
+        a, b = self.statute(700, set()), self.statute(700, {1})
+        real = self.law._git_line_opcodes
+        self.law._git_line_opcodes = lambda a, b: None
+        try:
+            self.covers(self.law._line_opcodes(a, b), a, b)
+        finally:
+            self.law._git_line_opcodes = real
+
+
 class Checkouts(unittest.TestCase):
     """Checkouts that are not what the tree pins."""
 

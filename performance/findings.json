@@ -37,6 +37,15 @@
       "short": "blame, Czechia sb/2007/378"
     },
     {
+      "what": "law.py words, Czechia sb/2007/378 today (6,896 lines, 44 versions)",
+      "before": "55.6 s (79 s in the first bench run)",
+      "after": "10.9 s",
+      "where": "same machine, 2026-11-04; experiments/line_matching.md",
+      "before_s": 55.6,
+      "after_s": 10.9,
+      "short": "words, Czechia sb/2007/378"
+    },
+    {
       "what": "First read of France (187,164 commits, 1.08M paths): building its index",
       "before": "every read walked the history",
       "after": "88 s once, then 2.4 s to load",
@@ -244,10 +253,10 @@
           "action": ""
         },
         {
-          "status": "open",
+          "status": "fixed",
           "finding": "words is slow on large, much-amended files: 79 s for Czechia sb/2007/378 today, 19 s for sb/1995/247 (blame on the same file takes under 1 s through git blame)",
           "evidence": "runs.jsonl, first run",
-          "action": "next: give words the same git-blame path as blame when it gives the same answer"
+          "action": "git histogram diff for long files (experiments/line_matching.md): 79 s to 11 s"
         },
         {
           "status": "open",
@@ -256,12 +265,23 @@
           "action": "to look at; neither is a reader path"
         },
         {
-          "status": "open",
+          "status": "fixed",
           "finding": "blame and diff at a past date on Switzerland 101/art-001 and Canada S-15.3 schedule 1 take 9 to 12 s",
           "evidence": "runs.jsonl, first run",
-          "action": "to look at: these replay versions (corrections or out-of-order commits), where git blame does not apply"
+          "action": "the replay now matches lines with git for long files; Canada S-15.3 blame replay 3.8 s to 1.1 s; Switzerland 101 was 1.3 s on a quiet machine (the 11.7 s was a busy disk)"
         }
       ]
+    }
+  ],
+  "experiments": [
+    {
+      "when": "2026-11-04",
+      "title": "How words and blame match lines from one version to the next",
+      "question": "words took 79 s on Czechia sb/2007/378. 49 of 54 s were Python's difflib matching lines; it is quadratic in repeated lines, and half this statute's lines are blank. Six ways of matching lines were compared on 30 files: speed, and how many characters each credits to a different law than before.",
+      "result": "git's histogram diff was the fastest and the closest to the old answers: 0.12% of characters credited differently, all in one file. Leaving blank lines out, patience anchoring and git's default (Myers) were 2 to 5% off. Adding move detection did not bring the answers closer.",
+      "decision": "Kept: difflib as before for most files; git's histogram diff when both versions are long (over 1,000,000 line pairs); difflib if git cannot run. words on the 4 slow files: 76 s to 18 s; blame replay: 75 s to 10 s; 26 of 30 files give byte-identical answers. Open: text amended and moved in one version is credited to the amending law, by both methods.",
+      "file": "experiments/line_matching.md",
+      "script": "python performance/experiments/line_matching.py"
     }
   ]
 }

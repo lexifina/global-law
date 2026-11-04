@@ -49,8 +49,33 @@ def _head() -> str:
     now = time.monotonic()
     seen = _CACHE.get(('head-at', ''))
     if not seen or now - seen[0] > 1.0:  # type: ignore[index]
-        _CACHE[('head-at', '')] = (now, git('rev-parse', 'HEAD').strip())
+        _CACHE[('head-at', '')] = (now, _head_from_files() or git('rev-parse', 'HEAD').strip())
     return _CACHE[('head-at', '')][1]  # type: ignore[index]
+
+
+def _head_from_files() -> str | None:
+    """HEAD read from the git folder's files (HEAD, the branch's ref, packed-refs), which costs no process: starting
+    git is the slowest part of a short read on some machines. None when the layout is not the plain one."""
+    try:
+        dot = ROOT / '.git'
+        gitdir = dot if dot.is_dir() else (ROOT / dot.read_text().split('gitdir:', 1)[1].strip()).resolve()
+        common = gitdir / (gitdir / 'commondir').read_text().strip() if (gitdir / 'commondir').exists() else gitdir
+        head = (gitdir / 'HEAD').read_text().strip()
+        if re.fullmatch(r'[0-9a-f]{40}', head):
+            return head
+        if not head.startswith('ref: '):
+            return None
+        ref = head[5:].strip()
+        for base in (gitdir, common):
+            if (base / ref).is_file():
+                sha = (base / ref).read_text().strip()
+                return sha if re.fullmatch(r'[0-9a-f]{40}', sha) else None
+        for line in (common / 'packed-refs').read_text().splitlines():
+            if line.endswith(' ' + ref) and re.fullmatch(r'[0-9a-f]{40}', line[:40]):
+                return line[:40]
+    except (OSError, IndexError):
+        return None
+    return None
 
 
 def manifest() -> dict:
@@ -643,6 +668,51 @@ def text_on(date: str, path: str) -> str | None:
     return read_version(path, sha) if sha else None
 
 
+GIT_DIFF_ABOVE = 1_000_000  # line pairs above which git's histogram diff matches the lines instead of difflib
+
+
+def _git_line_opcodes(a: list[str], b: list[str]) -> list[tuple[str, int, int, int, int]] | None:
+    """git's histogram diff of two lists of lines, as difflib opcodes; None if git cannot be run here."""
+    import tempfile
+    try:
+        with tempfile.TemporaryDirectory() as d:
+            for name, lines in (('a', a), ('b', b)):
+                Path(d, name).write_bytes(''.join(x if x.endswith('\n') else x + '\n' for x in lines).encode('utf-8'))
+            out = subprocess.run(['git', 'diff', '--no-index', '--no-color', '--no-ext-diff', '-U0',
+                                  '--diff-algorithm=histogram', 'a', 'b'], cwd=d, capture_output=True)
+    except (OSError, AttributeError):
+        return None
+    if out.returncode not in (0, 1):
+        return None
+    ops: list[tuple[str, int, int, int, int]] = []
+    ia = ib = 0
+    for line in out.stdout.decode('utf-8', 'replace').splitlines():
+        hunk = re.match(r'@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@', line)
+        if not hunk:
+            continue
+        a0, an, b0, bn = int(hunk[1]), int(hunk[2] or 1), int(hunk[3]), int(hunk[4] or 1)
+        a0, b0 = (a0 if an == 0 else a0 - 1), (b0 if bn == 0 else b0 - 1)
+        if a0 > ia:
+            ops.append(('equal', ia, a0, ib, b0))
+        ops.append(('replace' if an and bn else 'delete' if an else 'insert', a0, a0 + an, b0, b0 + bn))
+        ia, ib = a0 + an, b0 + bn
+    if ia < len(a):
+        ops.append(('equal', ia, len(a), ib, len(b)))
+    return ops
+
+
+def _line_opcodes(a: list[str], b: list[str]) -> list[tuple[str, int, int, int, int]]:
+    """How the lines of one version of a file (a) became the next (b), as difflib opcodes: difflib for most files;
+    git's histogram diff when both versions are long. difflib is quadratic in lines that repeat (the blank lines that
+    are half of a long statute) and took most of a minute on one; git's histogram diff gives nearly the same answer
+    in milliseconds (performance/experiments/line_matching.md). difflib again if git cannot be run here."""
+    if len(a) * len(b) > GIT_DIFF_ABOVE:
+        ops = _git_line_opcodes(a, b)
+        if ops is not None:
+            return ops
+    return difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes()
+
+
 def blame_rows(date: str, path: str) -> list[tuple[str, str, str]]:
     """(corpus commit, law, line) for every line of the file as it stood on `date`. Each line is credited to the
     version that first wrote it, following the versions in the order they took force up to `date` (the same choice
@@ -657,7 +727,7 @@ def blame_rows(date: str, path: str) -> list[tuple[str, str, str]]:
     for sha, law in seq:
         new = (read_version(path, sha) or '').splitlines()
         nc: list[str] = []
-        for op, a0, a1, b0, b1 in difflib.SequenceMatcher(None, lines, new, autojunk=False).get_opcodes():
+        for op, a0, a1, b0, b1 in _line_opcodes(lines, new):
             nc += credit[a0:a1] if op == 'equal' else [f'{sha}\x1f{law}'] * (b1 - b0)
         lines, credit = new, nc
     return [(c.split('\x1f', 1)[0], c.split('\x1f', 1)[1], line) for c, line in zip(credit, lines)]
@@ -726,6 +796,9 @@ def _credit_words(old: list[str], old_authors: list[str], new: list[str], law: s
     return credited
 
 
+WORD_DIFF_LIMIT = 400_000  # old tokens × new tokens above which a changed block is compared line by line
+
+
 def words_on(date: str, path: str, check=None) -> list[tuple[str, str]]:
     """(law, run of text) for the file as it stood on `date`, credited word by word. git blame credits whole lines;
     here each version of the file is compared with the one before, word by word, and words that survive keep the law
@@ -742,7 +815,7 @@ def words_on(date: str, path: str, check=None) -> list[tuple[str, str]]:
         text = read_version(path, commit)
         new_lines = text.splitlines(keepends=True) if text else []
         new_authors: list[list[str]] = []
-        for op, a0, a1, b0, b1 in difflib.SequenceMatcher(None, lines, new_lines, autojunk=False).get_opcodes():
+        for op, a0, a1, b0, b1 in _line_opcodes(lines, new_lines):
             if op == 'equal':
                 new_authors += authors[a0:a1]
                 continue
@@ -750,7 +823,7 @@ def words_on(date: str, path: str, check=None) -> list[tuple[str, str]]:
             old_block = [re.findall(r'\s+|\S+', line) for line in lines[a0:a1]]
             block = [re.findall(r'\s+|\S+', line) for line in new_lines[b0:b1]]
             old_tokens = [t for line in old_block for t in line]
-            if len(old_tokens) * sum(map(len, block)) <= 400_000:
+            if len(old_tokens) * sum(map(len, block)) <= WORD_DIFF_LIMIT:
                 old_credit = [a for line_authors in authors[a0:a1] for a in line_authors]
                 credit = _credit_words(old_tokens, old_credit, [t for line in block for t in line], law)
                 for line in block:

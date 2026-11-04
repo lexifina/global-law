@@ -8,6 +8,31 @@ Status words:
 - **Open:** found and reported, not yet fixed.
 - **Checked:** a test that passed.
 
+## 4 November 2026
+
+- **Fixed (all). `words` was slow on long, much-amended statutes.** It compares each version with the one before, and
+  matching the lines took most of the time: Python's difflib is quadratic in lines that repeat, and half of a long
+  statute's lines are blank. Six ways of matching lines were compared on 30 files
+  (`performance/experiments/line_matching.md`). git's histogram diff was the fastest and the closest to the old
+  answers, so `law.py` now uses it when both versions are long (over a million line pairs), and difflib otherwise.
+  - Czechia's sb/2007/378 (6,896 lines, 44 versions): `words` from 79 to 10 s. The four slowest files: `words` 76 s
+    to 18 s, `blame` where it replays versions 75 s to 10 s.
+  - 26 of the 30 files give byte-identical answers. In the other four, 1,171 of 993,079 characters (all in
+    sb/2007/378) and some blank lines and repeated headings are credited differently.
+  - Open: text that one version both amends and moves is credited to the amending law, by the old method and the
+    new.
+- **Changed (all). `law.py` reads the tree's HEAD from the `.git` files** rather than starting git for it after every
+  second.
+- **Changed (all). `performance/bench.py` is a monitor.**
+  - It tries each command three times and keeps the median.
+  - It sets budgets: `show`, `log` and `diff` 3 s, `blame` 5 s, `words` 10 s.
+  - It flags a timing more than 1.5 times and 1 second slower than the last run on the same corpora, and exits 1 on
+    that or on a failed check.
+  - It records each corpus's commit, the version of `law.py` and each index cache's size.
+  - `performance/index.html` opens with what needs attention, and lists each experiment with its result and
+    decision.
+  - Second run, 16 corpora: every check passes, nothing over budget, nothing slower.
+
 ## 3 November 2026
 
 - **Added (all). `performance/`: a record of how fast and how right the tools are, run by run.** `python performance/bench.py` times reading each corpus and every command on fixed provisions, checks the fixture tests, today's text against the pinned file, blame against the text, `verify.py` and `describe.py --check`, and adds the run to `performance/runs.jsonl`. `performance/index.html` shows every run beside the before-and-after speeds and what each deep test found (`findings.json`). The first run, on 16 corpora, passed every check; it found `words` slow on long, much-amended files (79 s on Czechia's sb/2007/378), left open.
