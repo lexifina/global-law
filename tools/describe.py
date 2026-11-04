@@ -9,7 +9,8 @@ corpus.json, data/repo.json and jurisdiction.json from GitHub at the pinned comm
 A corpus is listed in manifest.json with its path, repository, name, code, language, coverage and dates, from its own
 corpus.json where it has one, else from data/repo.json and jurisdiction.json. A corpus with no corpus.json gets its
 history, history_from, record_to, checked_on, acts and coverage from what its build publishes (data/commits.csv,
-REPRODUCE.md, the README's "metadata only" note), and `derived` names those fields. Every folder that holds a corpus,
+REPRODUCE.md, the README's "metadata only" note), and `derived` names those fields. A corpus that states no history
+from the standard's values takes the measured one in data/history-measured.tsv (also named in `derived`). Every folder that holds a corpus,
 or a folder that does, gets a jurisdiction.json naming its level, its code and what is inside it. Fields an earlier
 build wrote and nothing here replaces are kept.
 """
@@ -30,6 +31,8 @@ ROOT = Path(__file__).resolve().parent.parent
 CORPUS_KEYS = ('name', 'label', 'language', 'coverage', 'history', 'history_from', 'record_to', 'checked_on',
                'in_force_trailer', 'baseline_trailer', 'correction_trailer', 'citation', 'scope', 'acts', 'publisher',
                'future_branch', 'verification', 'record_note')
+HISTORY_VALUES = ('in-force', 'replayed', 'as-enacted', 'current-only', 'metadata-only')  # CORPUS-STANDARD.md
+MEASURED: dict[str, tuple[str, str]] = {}  # path -> (history, coverage note), from data/history-measured.tsv
 
 
 def git(*args: str) -> str:
@@ -157,6 +160,18 @@ def describe(path: str, sha: str, repo: str) -> tuple[dict, dict]:
             entry['future_branch'] = rj['future_branch']
         for k, v in from_build(repo, sha).items():  # only what the build files show; never overrides a stated field
             entry.setdefault(k, v)
+    if entry.get('history') not in HISTORY_VALUES:
+        # A history that is none of the standard's values: a phrase is kept as the coverage note, the measured value
+        # (data/history-measured.tsv) stands in until the corpus states one.
+        if entry.get('history') and not entry.get('coverage'):
+            entry['coverage'] = entry['history']
+        entry.pop('history', None)
+        if path in MEASURED:
+            history, coverage = MEASURED[path]
+            entry['history'] = history
+            if coverage and coverage not in entry.get('record_note', ''):
+                entry['record_note'] = ' '.join(filter(None, [entry.get('record_note', ''), f'History: {coverage}.']))
+            entry['derived'] = sorted(set(entry.get('derived', [])) | {'history'})
     code = (rj.get('country') or jj.get('code') or cj.get('code') or '')
     if code:
         entry['code'] = code.upper()
@@ -187,6 +202,13 @@ def main(argv: list[str]) -> int:
             if line and not line.startswith('#'):
                 a, b = line.split('\t')[:2]
                 moved[a] = b
+    except subprocess.CalledProcessError:
+        pass
+    try:
+        for line in git('show', 'HEAD:data/history-measured.tsv').splitlines():
+            if line and not line.startswith('#'):
+                f = line.split('\t') + ['', '']
+                MEASURED[f[0]] = (f[1], f[3])
     except subprocess.CalledProcessError:
         pass
     before = {moved.get(c['path'], c['path']): c for c in old.get('corpora', [])}

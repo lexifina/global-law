@@ -3506,7 +3506,11 @@
       "code": "AM",
       "iso_path": "am/national/acts",
       "future_branch": "future",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "australia/australian-capital-territory/acts",
@@ -14735,7 +14739,12 @@
       "code": "CR",
       "iso_path": "cr/acts",
       "in_force_trailer": "In-force",
-      "described_by": "jurisdiction.json"
+      "described_by": "jurisdiction.json",
+      "history": "metadata-only",
+      "record_note": "History: no law text yet: the repository holds its sources only.",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "cote-divoire/national/acts",
@@ -14897,7 +14906,11 @@
       "correction_trailer": "Corrected",
       "acts": 18576,
       "future_branch": "future",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "denmark/national/acts",
@@ -16816,7 +16829,11 @@
       ],
       "code": "FJ",
       "iso_path": "fj/national/acts",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "current-only",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "finland/national/acts",
@@ -18642,7 +18659,11 @@
         "texts": 153011,
         "with_articles_in_force": 118853
       },
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "gabon/national/acts",
@@ -18731,7 +18752,11 @@
       "code": "GE",
       "iso_path": "ge/national/acts",
       "future_branch": "future",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "germany/bavaria/acts",
@@ -18844,7 +18869,11 @@
       },
       "code": "DE",
       "iso_path": "de/bund/acts",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "germany/north-rhine-westphalia/acts",
@@ -23734,7 +23763,11 @@
         "Legge 300/1970",
         "Legge 241/1990"
       ],
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "italy/piedmont/acts",
@@ -43580,7 +43613,11 @@
       },
       "code": "MT",
       "iso_path": "mt/national/acts",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "marshall-islands/national/acts",
@@ -50408,7 +50445,7 @@
       "history_from": "1967-06-01",
       "record_to": "2026-07-01",
       "checked_on": "2026-10-28",
-      "record_note": "checked against the Diário da República consolidated texts retrieved on 2026-10-28",
+      "record_note": "checked against the Diário da República consolidated texts retrieved on 2026-10-28 History: versions for the Constituição, Código Civil and Código do Trabalho; current text for other laws.",
       "has_future_branch": false,
       "tool": "tools/em_vigor.py",
       "citation": {
@@ -50432,7 +50469,11 @@
         "Lei n.º 7/2009 (Código do Trabalho)",
         "Decreto-Lei n.º 47344 (Código Civil)"
       ],
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "puerto-rico/national/acts",
@@ -55743,7 +55784,11 @@
       "code": "ES",
       "iso_path": "es/national/acts",
       "acts": 8774,
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "spain/navarre/acts",
@@ -56321,7 +56366,11 @@
       "iso_path": "ch/bund/acts",
       "acts": 5874,
       "future_branch": "future",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "switzerland/fribourg/acts",
@@ -57322,9 +57371,8 @@
       "history_from": "1928-05-16",
       "record_to": "2026-10-02",
       "checked_on": "2026-11-03",
-      "record_note": "Current text from law.moj.gov.tw. Past versions of the laws in the README’s \"Past versions\" table (639) from 立法院法律系統 (lis.ly.gov.tw), appended as one block per law and dated by the commencement day the record states or the third day after promulgation (中央法規標準法 §13). Other laws have one version, dated by the page date (not a commencement day).",
+      "record_note": "Current text from law.moj.gov.tw. Past versions of the laws in the README’s \"Past versions\" table (639) from 立法院法律系統 (lis.ly.gov.tw), appended as one block per law and dated by the commencement day the record states or the third day after promulgation (中央法規標準法 §13). Other laws have one version, dated by the page date (not a commencement day). History: versions for some laws, current text for others.",
       "has_future_branch": false,
-      "history": "versions for some laws, current text for others",
       "tool": "tools/on_date.py",
       "citation": {
         "file": "([a-z-]+/article)/([0-9]+(?:-[0-9]+)?)\\.md",
@@ -57343,7 +57391,11 @@
       "code": "TW",
       "iso_path": "tw/national/acts",
       "acts": 7398,
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "tajikistan/national/acts",
@@ -57707,7 +57759,12 @@
       "code": "TV",
       "iso_path": "tv/acts",
       "in_force_trailer": "In-force",
-      "described_by": "jurisdiction.json"
+      "described_by": "jurisdiction.json",
+      "history": "metadata-only",
+      "record_note": "History: no law text yet: paused, as the publisher's copyright notice forbids redistribution.",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "uganda/national/acts",
@@ -57853,7 +57910,11 @@
       ],
       "code": "GB",
       "iso_path": "gb/uk/legislation",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "united-states/alabama/acts",
@@ -57989,7 +58050,11 @@
       ],
       "code": "US-CA",
       "iso_path": "us/california/statutes",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "united-states/colorado/acts",
@@ -58097,7 +58162,11 @@
       },
       "code": "US-DC",
       "iso_path": "us/district-of-columbia/statutes",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "united-states/federal/cfr",
@@ -58156,7 +58225,11 @@
       ],
       "code": "US",
       "iso_path": "us/federal/usc",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "united-states/florida/acts",
@@ -58346,7 +58419,11 @@
       ],
       "code": "US-IN",
       "iso_path": "us/indiana/statutes",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "united-states/iowa/acts",
@@ -58739,7 +58816,11 @@
       ],
       "code": "US-NJ",
       "iso_path": "us/new-jersey/statutes",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "united-states/north-carolina/acts",
@@ -59059,7 +59140,11 @@
       ],
       "code": "US-UT",
       "iso_path": "us/utah/statutes",
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "history": "in-force",
+      "derived": [
+        "history"
+      ]
     },
     {
       "path": "united-states/vermont/acts",
