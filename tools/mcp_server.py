@@ -953,8 +953,49 @@ STRUCTURAL = re.compile(r'\s*(?:(?:PART|Part|TITLE|Title|SCHEDULE|Schedule|CHAPT
 
 
 def stem_of(name: str) -> str:
-    """A file's number as a query writes it: art-0194.md is 194, art-006-1.md is 6-1, 1182.md is 1182."""
-    return re.sub(r'\.md$', '', name.rsplit('/', 1)[-1]).lower().lstrip('0').removeprefix('art-').lstrip('0')
+    """A file's number as a query writes it: art-0194.md is 194, art-006-1.md is 6-1, 1182.md is 1182; Spain's a31.md
+    and Luxembourg's art59.md are 31 and 59 (a letter prefix before a digit; no other corpus names files so)."""
+    stem = re.sub(r'\.md$', '', name.rsplit('/', 1)[-1]).lower().lstrip('0').removeprefix('art-').lstrip('0')
+    return re.sub(r'^(?:art|a)(?=\d)', '', stem).lstrip('0')
+
+
+# "bis", "ter" ...: an article inserted after another keeps its number with this word ("Artículo 31 bis").
+NUMBER_SUFFIX = r'bis|ter|qu[aá]ter|quinquies|sexies|septies|octies|nonies|decies'
+ARTICLE_HEADING = re.compile(rf'\s*(?:Art[íi]culo|Art\.)\s*0*(\d+)(?:\s*({NUMBER_SUFFIX})\b)?(?!\w)', re.I)
+HEADING_FILES = 5000  # files whose headings find_provision reads to number them, when the heading index is not built
+
+
+def article_number(heading: str) -> str | None:
+    """The article a heading numbers, as "31" or "31 bis": "Artículo 31. Situación ...", "Art. 4bis.". Spain names many
+    article files by the publisher's block id (RD 1155/2024 art. 125 is a1-37.md), so the heading is the number."""
+    m = ARTICLE_HEADING.match(heading.replace('\xa0', ' '))
+    return m and (m.group(1) + (f' {m.group(2).lower()}' if m.group(2) else ''))
+
+
+def heading_numbers(corpus: str, sha: str, names: list[str]) -> dict[str, str]:
+    """name -> the article number its heading gives, for files headed "Artículo N" or "Art. N". From the heading index
+    when it is built; else, for a few thousand files (one act, or a folder), their headings in one git process (cached
+    per file set); else nothing, so an unscoped query on a large corpus never waits for every heading."""
+    with _index_lock:  # only an index already built: building one reads every file (72 s for Spain)
+        index = _index_done.get((corpus, sha))
+    if index:
+        heads = {n: index.get(n, '') for n in names}
+    elif len(names) <= HEADING_FILES:
+        heads = read_headings(corpus, sha, tuple(names))
+    else:
+        return {}
+    return {n: k for n, h in heads.items() if (k := article_number(h))}
+
+
+@lru_cache(maxsize=256)
+def article_files(corpus: str, sha: str, folder: str) -> dict[str, list[str]]:
+    """An act's article numbers -> its files headed with that number (several where an annexed reglamento numbers its
+    articles again, as RD 1155/2024 does)."""
+    names = [n for n in names_of(corpus, sha) if n.startswith(folder + '/')]
+    out: dict[str, list[str]] = {}
+    for n, k in heading_numbers(corpus, sha, names).items():
+        out.setdefault(k, []).append(n)
+    return out
 
 
 def t_find_provision(args: dict) -> tuple[str, dict]:
@@ -979,7 +1020,8 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             if mm:
                 hint, rest = entry['scope'], rest[:mm.start()] + ' ' + rest[mm.end():]
                 break
-    noise = {'s', 's.', 'ss.', 'sec', 'sec.', 'section', 'art', 'art.', 'artikel', 'article', 'articolul', 'articolului', 'reg', 'reg.', 'regulation',
+    noise = {'s', 's.', 'ss.', 'sec', 'sec.', 'section', 'art', 'art.', 'artikel', 'article', 'articolul', 'articolului', 'artículo', 'articulo',
+             'artículos', 'articulos', 'reg', 'reg.', 'regulation',
              'abs', 'abs.', 'alin', 'alin.', '§', 'para', 'para.', 'nr', 'nr.', 'din', 'of', 'the', 'and', 'si', 'și', 'privind', 'al', 'a'}
     rest = number_forms(rest)
     in_reach = [c['path'] for c in law.manifest()['corpora']
@@ -1021,6 +1063,9 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         scope = hint
     words = [w for w in re.split(r'[\s,§]+', rest.lower()) if w and w not in noise]
     numbers = [w for w in words if re.fullmatch(r'\d+(?:-\d+)?[a-z]?', w)]
+    # The article numbers a heading may give, as article_number writes them: "31", or "31 bis" when the query says so.
+    suffixed = {f'{a.lstrip("0") or a} {b.lower()}' for a, b in re.findall(rf'(?<![\w.])(\d+)\s*({NUMBER_SUFFIX})\b', rest, re.I)}
+    wanted = suffixed | {n.lstrip('0') or n for n in numbers if (n.lstrip('0') or n) not in {x.split()[0] for x in suffixed}}
     if hint and not words and malta_corpus() and hint.startswith(malta_corpus() + '/'):  # the Act itself: its title page
         corpus, inner = run_law(law.corpus_of, hint + '/title.md')
         sha = law.pinned(law.root_on(date_arg(None), law.timeline()), corpus)
@@ -1070,12 +1115,24 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         if not names:
             continue
         scores: dict[str, int] = {}
+        # Numbers against the article a heading gives as well as the file name: Spain names a fifth of its article
+        # files by the publisher's block id (RD 1155/2024 art. 125 is a1-37.md). Where the heading names an article,
+        # it decides; a file name it contradicts counts for little.
+        # Headings are read for one act or folder, or for the few corpora a clone indexes: never for every small
+        # corpus of a clone of the world on an unscoped query.
+        narrow = bool(acts) or bool(scope) and scope.startswith(c['path'] + '/')
+        by_heading = heading_numbers(c['path'], sha, names) if numbers and (narrow or indexed) else {}
+        headed_hits = set()
         for name in names:
             stem = stem_of(name)
             score = 0
+            headed = by_heading.get(name)
+            if headed is not None and headed in wanted:
+                score += 10
+                headed_hits.add(name)
             for n in numbers:
                 if stem == n or stem == n.lstrip('0'):
-                    score += 10
+                    score += 10 if headed is None else 0 if headed in wanted else 2
                 elif re.search(rf'(^|[^0-9a-z]){re.escape(n)}([^0-9a-z]|$)', name.lower()):
                     score += 2
             folded = fold(name)  # "Constituția" names constitutia/: folders are spelt without diacritics
@@ -1119,7 +1176,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             for (cp, name), gain in head_best.items():
                 if cp == c['path']:
                     scores[name] = scores.get(name, 0) + gain
-        exact = {n for n in scores if any(stem_of(n) in (x, x.lstrip('0')) for x in numbers)}
+        exact = headed_hits | {n for n in scores if n not in by_heading and any(stem_of(n) in (x, x.lstrip('0')) for x in numbers)}
         if exact and not plain:  # "art. 1" is art-001.md, not every art-NNN-1.md beside it
             scores = {n: v for n, v in scores.items() if n in exact}
         best = sorted((n for n in scores if scores[n]), key=lambda n: (-scores[n], n))[:limit * 3]
@@ -1139,8 +1196,16 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             sha = corpus_head(c['path'])
             if not sha or not (ROOT / c['path'] / '.git').exists():
                 continue
-            terms = [w for w in words if len(w) > 2]
-            grep = ['git', 'grep', '-c', '-i', '-I', '-F', *[a for w in terms for a in ('-e', w)], sha, '--', '*.md']
+            # Within one act or folder the grep is quick and a 2-digit article number ("31") is worth looking for;
+            # across a corpus it is not. A number alone is matched as a whole word (31, not 310 or 2031).
+            inner = [a[len(c['path']) + 1:] for a in acts if a.startswith(c['path'] + '/')] if acts else \
+                [scope[len(c['path']) + 1:]] if scope and scope.startswith(c['path'] + '/') else []
+            terms = [w for w in words if len(w) > 2 or inner and w.isdigit()]
+            if not terms:
+                continue
+            whole = ['-w'] if all(w.isdigit() for w in terms) else []
+            grep = ['git', 'grep', '-c', '-i', '-I', '-F', *whole, *[a for w in terms for a in ('-e', w)], sha, '--',
+                    *(inner or ['*.md'])]
             out = git_run(grep, cwd=ROOT / c['path'], capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT).stdout
             law_files = set(names_of(c['path'], sha))
             counted = []
@@ -2526,7 +2591,9 @@ def citation_from_manifest(corpus: str, rel: str) -> tuple[str, str] | None:
         if not m or len(m.groups()) < 2:
             return None
         pattern = rule['cites'].replace('{n}', re.escape(m.group(2)))
-        return m.group(1), safe_regex(pattern)
+        # The folder searched is the path to the end of group 1, from the corpus root: a rule whose group 1 is only
+        # the last folder ("sb/([0-9]{4})/...", "acts/([a-z0-9-]+)/...") then searches that folder, not none.
+        return rel[:m.end(1)], safe_regex(pattern)
     except (re.error, UserError):
         return None
 
@@ -2565,6 +2632,255 @@ def citation_pattern(rel: str, corpus: str | None = None) -> tuple[str, str] | N
     return None
 
 
+# Spain (spain-law): a folder per norm, estatal/<rango>/<year>/<BOE id>/, with article files named by the publisher's
+# block id (RD 1155/2024 art. 124 is a1-36.md), so no rule over the path can name an article as the law cites it.
+# Citations are read from the heading ("## Artículo 31.") and the norm's name in normas.tsv ("Ley Orgánica 4/2000"):
+# "artículo 31.3 de la Ley Orgánica 4/2000", anywhere in the corpus; "artículo 31" within the norm itself.
+# Words that narrow an article without naming another: "10.1, letras k) y l) del apartado 1", "8.6, segundo párrafo".
+ES_QUALIFIER = (r'(?:,?\s*(?:(?:primer|segundo|tercer|último)\s+párrafo|(?:letras?|párrafos?|apartados?|números?)\s+(?:[a-zñ]\)|\d+)'
+                r'(?:\s*(?:,|\sy)\s*(?:[a-zñ]\)|\d+))*(?:\s+del?\s+(?:su\s+)?(?:apartado|número)\s+\d+)?))')
+ES_ITEM = rf'\d+(?:[\s.]*(?:{NUMBER_SUFFIX})\b)?(?:\.\d+(?:\.\w+)?)*(?:\.?\s*[a-zñ]\))?{ES_QUALIFIER}*'
+ES_ARTICLES = re.compile(rf'\bart(?:[íi]culos?|s?\.)\s*(?P<list>{ES_ITEM}(?:\s*(?:,|\s[yeo]\s|\sa\s|,\s*y\s)\s*{ES_ITEM})*)', re.I)
+ES_RANGO = {'ley organica': r'(?:Ley\s+Org[áa]nica|L\.\s?O\.|LO)', 'ley': r'Ley', 'real decreto': r'(?:Real\s+Decreto|R\.\s?D\.|RD)',
+            'real decreto legislativo': r'Real\s+Decreto\s+Legislativo', 'real decreto ley': r'Real\s+Decreto[-\s]ley',
+            'decreto ley': r'Decreto[-\s]ley', 'decreto legislativo': r'Decreto\s+Legislativo', 'decreto': r'Decreto'}
+ES_RANGO_ANY = r'(?:Ley\s+Org[áa]nica|Real\s+Decreto\s+Legislativo|Real\s+Decreto[-\s]ley|Real\s+Decreto|Decreto[-\s]ley|Decreto\s+Legislativo|Decreto|Ley|L\.\s?O\.|LO|R\.\s?D\.|RD)'
+# Norms the law cites by a short name, not their number (or have none: the Código Civil is a Real Decreto of 1889).
+# The third field: the name was used before for a norm numbered otherwise (the Código Penal of 1973, the Ley General
+# de la Seguridad Social of 1994), and older norms still cite that one, so the name means this norm only in a norm
+# made on or after it. Where the numbering carried over (the Estatuto de los Trabajadores of 1980, 1995 and 2015), an
+# older norm's reference reads as this one, as the refundición says ("se entenderán efectuadas a los preceptos
+# correspondientes"). Never when the clause names another year ("Estatuto de los Trabajadores, aprobado por Real
+# Decreto Legislativo 1/1995", "Código Penal de 1973").
+ES_SHORT_NAMES = {  # BOE id: (how the law writes the name, a fixed string every such name holds for git grep, renamed)
+    'BOE-A-1978-31229': (r'Constituci[óo]n(?:\s+Espa[ñn]ola)?', 'Constituci', False),
+    'BOE-A-1889-4763': (r'C[óo]digo\s+Civil', 'digo Civil', False),
+    'BOE-A-1995-25444': (r'C[óo]digo\s+Penal(?!\s+Militar)', 'digo Penal', True),
+    'BOE-A-1885-6627': (r'C[óo]digo\s+de\s+Comercio', 'digo de Comercio', False),
+    'BOE-A-2015-11430': (r'(?:Ley\s+del\s+)?Estatuto\s+de\s+los\s+Trabajadores', 'Estatuto de los Trabajadores', False),
+    'BOE-A-2000-323': (r'Ley\s+de\s+Enjuiciamiento\s+Civil', 'Enjuiciamiento Civil', False),
+    'BOE-A-1882-6036': (r'Ley\s+de\s+Enjuiciamiento\s+Criminal', 'Enjuiciamiento Criminal', False),
+    'BOE-A-2003-23186': (r'Ley\s+General\s+Tributaria', 'General Tributaria', False),
+    'BOE-A-1985-5392': (r'Ley\s+(?:Reguladora\s+)?de\s+(?:las\s+)?Bases\s+(?:del?\s+)?R[ée]gimen\s+Local', 'gimen Local', False),
+    'BOE-A-2017-12902': (r'Ley\s+de\s+Contratos\s+del\s+Sector\s+P[úu]blico', 'Contratos del Sector P', True),
+    'BOE-A-2006-20764': (r'Ley\s+del\s+Impuesto\s+sobre\s+la\s+Renta\s+de\s+las\s+Personas\s+F[íi]sicas', 'Renta de las Personas F', True),
+    'BOE-A-2015-11724': (r'Ley\s+General\s+de\s+la\s+Seguridad\s+Social', 'General de la Seguridad Social', True),
+    'BOE-A-2003-21614': (r'Ley\s+General\s+Presupuestaria', 'General Presupuestaria', True),
+    'BOE-A-2003-20977': (r'Ley\s+General\s+de\s+Subvenciones', 'General de Subvenciones', False),
+    'BOE-A-2010-10544': (r'Ley\s+de\s+Sociedades\s+de\s+Capital', 'Sociedades de Capital', False),
+    'BOE-A-2015-10565': (r'Ley\s+del\s+Procedimiento\s+Administrativo\s+Com[úu]n\s+de\s+las\s+Administraciones\s+P[úu]blicas', 'Procedimiento Administrativo Com', False),
+    'BOE-A-2015-10566': (r'Ley\s+de\s+R[ée]gimen\s+Jur[íi]dico\s+del\s+Sector\s+P[úu]blico', 'dico del Sector P', False),
+    'BOE-A-1998-16718': (r'Ley\s+(?:reguladora\s+)?de\s+la\s+Jurisdicci[óo]n\s+Contencioso[-\s]?[Aa]dministrativa', 'Contencioso', True),
+    'BOE-A-1985-12666': (r'Ley\s+Org[áa]nica\s+del\s+Poder\s+Judicial', 'del Poder Judicial', False),
+    'BOE-A-1946-2453': (r'Ley\s+Hipotecaria', 'Ley Hipotecaria', False),
+}
+ES_OTHER = re.compile(r'\b(?:de\s+la|del|de)\s+(?:(?:citad|mencionad|referid|precitad|dich)[oa]\s+)?(?:Ley|Real\s+Decreto|Decreto|C[óo]digo|'
+                      r'Constituci[óo]n|Reglamento|Estatuto|Orden|Directiva|Convenio|Tratado|texto\s+refundido)\b(?!\s+(?:\w+\s+)?(?:esta|presente))', re.I)
+ES_THIS = re.compile(r'\b(?:de\s+la|del)\s+(?:esta|presente|la\s+presente)\b|\bde\s+esta\b', re.I)
+
+
+def es_rango_key(text: str) -> str:
+    """"Ley Orgánica", "L.O.", "Real Decreto-ley" as one key: "ley organica", "real decreto ley"."""
+    k = ' '.join(fold(text).replace('-', ' ').split())
+    return {'lo': 'ley organica', 'l.o.': 'ley organica', 'l. o.': 'ley organica', 'rd': 'real decreto',
+            'r.d.': 'real decreto', 'r. d.': 'real decreto'}.get(k, k)
+
+
+@lru_cache(maxsize=8)
+def es_norms(corpus: str, sha: str) -> dict[str, dict]:
+    """folder -> {'id', 'rango' (as the title writes it), 'numyear' ("4/2000"), 'date', 'title'} from the corpus's
+    normas.tsv (that of the commit the tree pins now, for an older commit without one); {} for a corpus without one."""
+    done = git_run(['git', 'show', f'{sha}:normas.tsv'], cwd=ROOT / corpus, capture_output=True, timeout=GIT_TIMEOUT)
+    out: dict[str, dict] = {}
+    if done.returncode:
+        now = corpus_head(corpus)
+        return es_norms(corpus, now) if now and now != sha else out
+    rows = done.stdout.decode('utf-8', 'replace').splitlines()
+    cols = rows[0].split('\t') if rows else []
+    if not {'id', 'path', 'titulo'} <= set(cols):
+        return out
+    for line in rows[1:]:
+        r = dict(zip(cols, line.split('\t')))
+        m = re.match(r'(.{1,40}?)\s+(\d+/\d{4})\b', r.get('titulo', ''))
+        out[r['path'].strip('/')] = {'id': r['id'], 'rango': m.group(1) if m else None, 'numyear': m.group(2) if m else None,
+                                    'date': r.get('fecha_disposicion', ''), 'title': r.get('titulo', '')}
+    return out
+
+
+def es_norm_rx(norm: dict, short: bool) -> re.Pattern | None:
+    """How the law names a norm: "<rango> [núm.] n/yyyy" ("Ley Orgánica 4/2000", "LO 4/2000"), and, when `short`, its
+    short name not pinned to another year in the same clause."""
+    forms = []
+    if norm['numyear']:
+        r = ES_RANGO.get(es_rango_key(norm['rango']), r'\s+'.join(map(re.escape, norm['rango'].split())))
+        forms.append(rf'(?<!\w){r}\s+(?:n[úu]m(?:ero|\.)\s*)?{re.escape(norm["numyear"])}(?!\d)')
+    if short and norm['id'] in ES_SHORT_NAMES:
+        # A proper name, as written ("Código Civil", not "la constitución de gravámenes"), not followed by another
+        # year's norm ("..., aprobado por Real Decreto Legislativo 1/1995", "Código Penal de 1973").
+        year = norm['numyear'].split('/')[1] if norm['numyear'] else norm['date'][:4]
+        forms.append(rf'\b(?-i:{ES_SHORT_NAMES[norm["id"]][0]})(?![^.;]{{0,30}}?\baprobad[oa]\s+por\s+(?:el\s+)?{ES_RANGO_ANY}\s+'
+                     rf'(?:n[úu]m(?:ero|\.)\s*)?\d+/(?!{year})\d{{4}})(?!,?\s+de\s+(?!{year})(?:1[6-9]|20)\d\d\b)')
+    return re.compile('|'.join(forms), re.I) if forms else None
+
+
+def es_in_list(items: str, number: str) -> bool:
+    """Whether an "artículos 4, 29, 31.3 y 32" list holds the article ("31", or "31 bis"; "31 bis" is not 31)."""
+    want, _, suffix = number.partition(' ')
+    for item in re.split(r'\s*(?:,|\s[yeo]\s|\sa\s)\s*', re.sub(ES_QUALIFIER, ' ', items, flags=re.I)):
+        m = re.match(rf'0*(\d+)(?:[\s.]*({NUMBER_SUFFIX})\b)?', item.strip(), re.I)
+        if m and m.group(1) == want and fold(m.group(2) or '') == fold(suffix):
+            return True
+    return False
+
+
+def es_cites(text: str, number: str, norm: dict, by_number: re.Pattern | None, own: bool) -> int | None:
+    """Where in a line of Spanish law a citation of article `number` of the norm starts, or None. `by_number` names the
+    norm (es_norm_rx). The article list must be followed in the same clause by the norm, or come just after it ("la
+    Ley Orgánica 4/2000 ... en sus artículos 4, 29, 31 y 32"); within the norm itself "artículo 31" and "artículo 31
+    de esta Ley" count, "artículo 31 de la Ley 30/1992" does not."""
+    text = text.replace('\xa0', ' ')
+    rango = ES_RANGO.get(es_rango_key(norm['rango'] or ''), re.escape(norm['rango'] or 'Ley'))
+    for m in ES_ARTICLES.finditer(text):
+        if not es_in_list(m.group('list'), number):
+            continue
+        # The clause: to a norm's number, a full stop, or the next article unless the list goes on ("artículo 10.1,
+        # letras k) y l) y en el artículo 11.1.f), de la Ley 29/1998").
+        tail, at = text[m.end():m.end() + 240], 0
+        while (stop := re.search(r'\d+/\d{4}|\bart(?:[íi]culos?|s?\.)\s*\d|[.;]\s', tail[at:])) and stop.group(0)[0] in 'aA' \
+                and re.search(r'(?:,|\b[yeo])\s+(?:en\s+)?(?:el\s+|los\s+)?$', tail[:at + stop.start()]) and at + stop.end() < 200:
+            at += stop.end()
+        clause = tail[:at + stop.end() if stop else len(tail)]
+        # "del Reglamento de la Ley 38/2003, de 17 de noviembre, aprobado por el Real Decreto 887/2006": the article
+        # is the Reglamento's, so the norm is the decree that approves it, not the law it develops.
+        regl = re.match(rf'\s*,?\s*del\s+Reglamento\b[^.;]{{0,160}}?\baprobad[oa]\s+por\s+(?:el\s+)?(?={ES_RANGO_ANY}\s+(?:n[úu]m(?:ero|\.)\s*)?\d+/\d{{4}})',
+                         tail, re.I)
+        if regl:
+            clause = tail[:regl.end()] + re.match(r'[^,.;]*', tail[regl.end():]).group(0)
+            c = clause.lstrip(' ,')
+            if by_number and by_number.search(c, regl.end() - (len(clause) - len(c))):
+                return m.start()
+            continue
+        c = clause.lstrip(' ,')
+        named = by_number.search(c) if by_number else None
+        # The norm is named as the article's ("de la Ley 39/2015", "del Reglamento aprobado por Real Decreto
+        # 1155/2024"), not later in the sentence ("se tramitarán ... en la Ley 29/1998"); and it is the first norm the
+        # clause names: not "artículo 122 de la Constitución, la Ley Orgánica 6/1985", but "del texto refundido de la
+        # Ley ..., aprobado por Real Decreto Legislativo 8/2015".
+        if named and not (not c[:named.start()].strip() or re.search(
+                r'\b(?:de\s+la|del|de)\s+(?:\S+\s+){0,2}$|\baprobad[oa]\s+por(?:\s+el)?\s+$', c[:named.start()], re.I)):
+            named = None
+        first = ES_OTHER.match(c)
+        if named and first and named.start() > first.end() and not re.fullmatch(
+                r'\s*(?:de\s+la|del|de)\s+|[^.;]{0,90}?\baprobad[oa]\s+por(?:\s+el)?\s+', c[first.end():named.start()], re.I):
+            named = None
+        if named:
+            return m.start()
+        # "del citado texto refundido", "del referido Estatuto", "de dicha Ley": the line names the norm elsewhere.
+        kind = rf'{rango}|Ley|Estatuto|C[óo]digo|Reglamento|texto\s+refundido'
+        if by_number and re.search(rf'\b(?:citad|mencionad|referid|precitad|dich)[oa]\s+(?:{kind})\b(?!\s+\d)', clause, re.I) \
+                and by_number.search(text) and (not first or re.search(r'citad|mencionad|referid|precitad|dich', first.group(0), re.I)):
+            return m.start()
+        before = text[max(0, m.start() - 160):m.start()]
+        last = list(by_number.finditer(before)) if by_number else []
+        if last and not re.search(r'\d+/\d{4}|[.;]\s', before[last[-1].end():]) and not ES_OTHER.match(clause.lstrip(' ,')):
+            # "La Constitución ... en su artículo 103"; but where the norm closed another citation ("artículo 149.1.13.ª
+            # de la Constitución, el título III y los artículos 89 b), 103 a)"), only "de dicha Ley" and the like refer back.
+            closes = re.search(r'\bart(?:[íi]culos?|s?\.)\s*[^;]{0,60}?\b(?:de\s+la|del|de)\s+(?:\w+\s+)?$', before[:last[-1].start()], re.I)
+            if not closes or re.search(r'\b(?:dich[oa]|citad[oa]|mencionad[oa]|referid[oa]|precitad[oa]|mism[oa])\b', clause, re.I):
+                return m.start()
+        # Within the norm itself, but not "en su artículo 122" (another norm's) or "artículo 31 de la Ley 30/1992".
+        if own and not re.search(r'\bsus?\s+$', text[:m.start()]) and (ES_THIS.search(clause) or not ES_OTHER.search(clause)):
+            return m.start()
+    return None
+
+
+def es_citing(corpus: str, sha: str, rel: str) -> dict[str, list[str]] | None:
+    """The files of a Spanish corpus that cite an article (file -> the lines that do), or None when the file is not
+    an article ("## Artículo N") of a norm in normas.tsv: then citations of it are not recognised."""
+    norms = es_norms(corpus, sha)
+    folder = rel.rsplit('/', 1)[0]
+    norm = norms.get(folder)
+    heading = read_headings(corpus, sha, (rel,)).get(rel, '') if norm else ''
+    number = article_number(heading)
+    if not number:
+        return None
+    full, by_number = es_norm_rx(norm, True), es_norm_rx(norm, False)
+    names = [x for x in (norm['numyear'], ES_SHORT_NAMES.get(norm['id'], ('', ''))[1]) if x]
+    digits = number.split()[0]
+
+    def grep(spec: list[str], pathspec: str) -> list[tuple[str, str]]:
+        cmd = ['git', 'grep', '-n', '-I', '-i', '-F', *spec, '--and', '-e', digits, sha, '--', pathspec]
+        out = git_run(cmd, cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT).stdout
+        rows = []
+        for line in out.splitlines():
+            name, _, rest = line.removeprefix(f'{sha}:').partition(':')
+            rows.append((name, rest.partition(':')[2]))
+        return rows
+
+    lines = grep(['(', *[a for n in names for a in ('-e', n)], ')'], '*.md') if names else []
+    lines += grep(['-e', 'art'], f'{folder}/*.md')
+    hits: dict[str, list[str]] = {}
+    seen = set()
+    for name, text in lines:
+        # Lines quoted with ">" are the publisher's notes ("Su anterior numeración era art. 31."), not the law.
+        if name == rel or NOT_LAW.search(name) or (name, text) in seen or text.lstrip().startswith('>'):
+            continue
+        seen.add((name, text))
+        here_folder = name.rsplit('/', 1)[0]
+        own = here_folder == folder
+        # A short name used before for a norm numbered otherwise means this norm only in a norm made on or after it.
+        later = not ES_SHORT_NAMES.get(norm['id'], ('', '', False))[2] or norms.get(here_folder, {}).get('date', '') >= norm['date']
+        at = es_cites(text, number, norm, full if later else by_number, own)
+        if at is not None:
+            hits.setdefault(name, []).append(text.replace('\xa0', ' ')[max(0, at - 60):at + 240].strip())
+    return hits
+
+
+# resolve_citations' Spanish forms: "artículo 31.3 de la Ley Orgánica 4/2000", "art. 127 del Reglamento aprobado por
+# Real Decreto 1155/2024", "artículo 1902 del Código Civil", "BOE-A-2000-544, art. 31".
+ES_ONE = rf'\bart(?:[íi]culo|\.)\s*(?P<n>\d+)(?:[\s.]*(?P<suf>{NUMBER_SUFFIX})\b)?(?:\.\d+(?:\.\w+)?)*(?:\.?\s*[a-zñ]\))?'
+ES_CITE = re.compile(ES_ONE + rf'[^.;]{{0,80}}?\b(?:de\s+la|del)\s+(?:(?P<regl>Reglamento)\b[^.;]{{0,80}}?\baprobad[oa]\s+por\s+(?:el\s+)?)?'
+                     rf'(?P<rango>{ES_RANGO_ANY})\s+(?:n[úu]m(?:ero|\.)\s*)?(?P<ny>\d+/\d{{4}})(?!\d)', re.I)
+ES_BOE_CITE = re.compile(rf'\b(?P<id>BOE-A-\d{{4}}-\d+),?\s*' + ES_ONE.removeprefix(r'\b'), re.I)
+ES_SHORT_CITE = re.compile(ES_ONE + r'\s*,?\s*(?:de\s+la|del)\s+(?:vigente\s+)?(?:' + '|'.join(
+    f'(?P<s{i}>(?-i:{rx}))' for i, (rx, *_) in enumerate(ES_SHORT_NAMES.values())) + r')', re.I)
+
+
+def es_corpus() -> tuple[str | None, str | None]:
+    """Spain's state law in this tree (its path, and its pinned commit when this server serves it)."""
+    path = next((c['path'] for c in _full_manifest(head())['corpora'] if iso_code(c) == 'es'), None)
+    served = path and any(c['path'] == path for c in law.manifest()['corpora']) and (ROOT / path / '.git').exists()
+    return path, (corpus_head(path) or None) if served else None
+
+
+def es_article_path(m: re.Match, by: str) -> str:
+    """The file a Spanish citation names: the norm from normas.tsv (by rango and number/year, BOE id or short name),
+    the article from its heading; where the norm or article is not in the record, a path that says so when looked up."""
+    corpus, sha = es_corpus()
+    corpus = corpus or 'spain/national/acts'
+    number = m.group('n').lstrip('0') + (f" {m.group('suf').lower()}" if m.group('suf') else '')
+    norms = es_norms(corpus, sha) if sha else {}
+    if by == 'id':
+        want = lambda f, r: r['id'] == m.group('id').upper()  # noqa: E731
+    elif by == 'short':
+        bid = list(ES_SHORT_NAMES)[next(i for i in range(len(ES_SHORT_NAMES)) if m.group(f's{i}'))]
+        # "Estatuto de los Trabajadores, aprobado por Real Decreto Legislativo 1/1995": the norm the clause names.
+        named = re.match(rf'[^.;]{{0,90}}?(?P<rango>{ES_RANGO_ANY})\s+(?P<ny>\d+/\d{{4}})(?!\d)', m.string[m.end():], re.I)
+        want = (lambda f, r: r['id'] == bid) if not named else (  # noqa: E731
+            lambda f, r: r['numyear'] == named.group('ny') and es_rango_key(r['rango'] or '') == es_rango_key(named.group('rango')))
+    else:
+        want = lambda f, r: r['numyear'] == m.group('ny') and es_rango_key(r['rango'] or '') == es_rango_key(m.group('rango'))  # noqa: E731
+    folder = next((f for f, r in norms.items() if want(f, r)), None)
+    if not folder:
+        return f"{corpus}/estatal/{m.group('id') if by == 'id' else 'norma-no-encontrada'}/a{m.group('n')}.md"
+    files = sorted(article_files(corpus, sha, folder).get(number, []))
+    # Where a decree numbers its own articles and those of the Reglamento it approves (two files for one number), a
+    # citation of the Reglamento means the annexed one, filed by block (a1-37.md), else the decree's own (a5.md).
+    regl = by == 'number' and bool(m.group('regl'))
+    files = [f for f in files if ('-' in stem_of(f)) == regl] or files
+    return f'{corpus}/{files[0]}' if files else f'{corpus}/{folder}/a{m.group("n")}.md'
+
+
 def defined_terms(text: str) -> list[str]:
     """Terms a provision defines, in the common drafting forms: The term "X" means; "X" means; "X" has the meaning.
     Only terms of two or more words: one-word terms ("debtor") appear everywhere and would list the whole Act."""
@@ -2601,14 +2917,16 @@ def t_what_else_changes(args: dict) -> tuple[str, dict]:
         return hits
 
     groups = []
-    rule = citation_pattern(rel, corpus)
+    spanish = bool(es_norms(corpus, sha).get(rel.rsplit('/', 1)[0]))  # a norm of spain-law: read by es_citing, not a path rule
+    rule = (rel.rsplit('/', 1)[0], '') if spanish else citation_pattern(rel, corpus)
+    cites = es_citing(corpus, sha, rel) if spanish else grep(*rule) if rule else {}
+    if spanish and cites is None:
+        rule = None  # not an article ("## Artículo N"): its citations are not recognised
     if rule:
-        folder, pattern = rule
-        cites = grep(folder, pattern)
         if cites:
             groups.append({'kind': 'cites this provision', 'term': None, 'provisions': [
                 {'path': f'{corpus}/{n}', 'lines': l[:3]} for n, l in sorted(cites.items())[:limit]], 'count': len(cites)})
-    scope = rule[0] if rule else ''
+    scope = rule[0] if rule else rel.rsplit('/', 1)[0] if spanish else ''
     scoped_m = DEFINITION_SCOPE.search(law_words(text) or '')
     scoped = scoped_m.group(0) if scoped_m else None
     for term in defined_terms(text)[:10]:
@@ -2648,7 +2966,10 @@ def t_what_else_changes(args: dict) -> tuple[str, dict]:
     if scoped:
         lines.insert(1, f'Its definitions are scoped: "{scoped}". The record does not hold where that part begins and ends, so a use '
                         'listed below may lie outside it; check the structure of the Act.')
-    lines.append('Citations are found by their usual wording and terms by exact match, within the same body of law; '
+    lines.append('Citations are found as "artículo N de la <rango> n/aaaa" (or a short name such as "Código Civil") anywhere in '
+                 'the corpus, and as "artículo N" within the norm itself; a citation by "dicha Ley" or by a name not '
+                 'recognised is not followed. Terms are found by exact match.' if spanish else
+                 'Citations are found by their usual wording and terms by exact match, within the same body of law; '
                  'references from other titles or Acts, and one-word terms, are not followed.')
     return '\n'.join(lines), {'path': path, 'date': date, 'groups': groups, 'definition_scope': scoped}
 
@@ -2827,6 +3148,10 @@ CITATION_FORMS = [
     (re.compile(r'\b(?:art(?:icle|\.)?|s\.|section|reg(?:ulation|\.)?)\s*(\d+[A-Z]?)(?:\(\w+\))*\s*(?:of\s+)?(?:the\s+)?'
                 r'(?:Cap\.?\s*(\d+[A-Z]?)|S\.\s?L\.\s*(\d+)\.0*(\d+))\b', re.I),
      lambda m: f"{malta_corpus() or 'mt/national/malta-law'}/{f'cap/{m.group(2)}' if m.group(2) else f'sl/{m.group(3)}.{m.group(4)}'}/{m.group(1)}.md"),
+    # Spain: "artículo 31.3 de la Ley Orgánica 4/2000", "artículo 1902 del Código Civil", "BOE-A-2000-544, art. 31".
+    (ES_CITE, lambda m: es_article_path(m, 'number')),
+    (ES_SHORT_CITE, lambda m: es_article_path(m, 'short')),
+    (ES_BOE_CITE, lambda m: es_article_path(m, 'id')),
 ]
 MAX_BRIEF = 50_000  # characters of text resolve_citations reads
 
@@ -2956,7 +3281,8 @@ def t_resolve_citations(args: dict) -> tuple[str, dict]:
     if not found:
         return ('No citation this tree can resolve was found. Forms read: "11 U.S.C. § 1182(1)", "Art. 16a Abs. 1 GG", '
                 '"s. 42 CFA 2014", "reg. 13 SEND Regulations 2014", "Art. 10a BV", "art. 1.357 din Codul civil", '
-                '"art. 194 alin. (1) din Legea nr. 31/1990".'), {'date': date, 'citations': []}
+                '"art. 194 alin. (1) din Legea nr. 31/1990", "artículo 31.3 de la Ley Orgánica 4/2000", '
+                '"artículo 1902 del Código Civil", "BOE-A-2000-544, art. 31".'), {'date': date, 'citations': []}
     lines = [f'{len(found)} citation(s), as on {date}:']
     for e in found:
         detail = ''

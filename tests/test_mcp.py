@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -1796,6 +1797,179 @@ class Helpers(unittest.TestCase):
                 '1076, Art. 1112, Art. 1114,\nArt. 1120\n\nAffecting: Codul civil Art. 1, Art. 1112\n')
         note = self.m.change_note(body, 'romania/national/acts/lege/2009/287/art-1112.md')
         self.assertEqual(note, 'Codul civil, changed: Art. 1112 (and 5 other provision(s))')
+
+
+class SpanishArticles(unittest.TestCase):
+    """Issues #9 and #10 on a small tree built here, laid out as spain-law is: a folder per norm under
+    estatal/<rango>/<year>/<BOE id>/, article files named a<N>.md or by the publisher's block id (a1-37.md is art. 125
+    of the Reglamento RD 1155/2024 approves), normas.tsv naming each norm, and the citation rule spain-law declared
+    (its {n} is the file name, which no law text holds)."""
+
+    LO = 'es/national/acts/estatal/ley-organica/2000/BOE-A-2000-544'
+    RD = 'es/national/acts/estatal/real-decreto/2024/BOE-A-2024-24099'
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tests'))
+        from test_law_fixtures import Tree, run
+        t = cls.t = Tree()
+        shutil.copy(ROOT / 'tools' / 'mcp_server.py', t.root / 'tools' / 'mcp_server.py')
+        lo, rd = 'estatal/ley-organica/2000/BOE-A-2000-544', 'estatal/real-decreto/2024/BOE-A-2024-24099'
+        es = t.corpus('es/national/acts')
+        normas = ('id\trango\tpath\tfecha_disposicion\tfecha_publicacion\tfecha_actualizacion\tvigencia_agotada\t'
+                  'estado_consolidacion\ttitulo\n'
+                  f'BOE-A-2000-544\tLey Orgánica\t{lo}\t2000-01-11\t2000-01-12\t\tN\tFinalizado\tLey Orgánica 4/2000, de 11 '
+                  'de enero, sobre derechos y libertades de los extranjeros en España y su integración social.\n'
+                  f'BOE-A-2024-24099\tReal Decreto\t{rd}\t2024-11-19\t2024-11-20\t\tN\tFinalizado\tReal Decreto 1155/2024, '
+                  'de 19 de noviembre, por el que se aprueba el Reglamento de la Ley Orgánica 4/2000.\n')
+        es.commit('Ley Orgánica 4/2000', {
+            'normas.tsv': normas,
+            f'{lo}/README.md': '# Ley Orgánica 4/2000\n\n- [Artículo 31](a31.md)\n',
+            f'{lo}/a1.md': '## Artículo 1. Delimitación del ámbito.\n\nTexto.\n',
+            f'{lo}/a10.md': '## Artículo 10. Derecho al trabajo.\n\nTexto.\n',
+            f'{lo}/a31.md': '## Artículo 31. Situación de residencia temporal.\n\n1. La residencia temporal.\n',
+            f'{lo}/a31bis.md': '## Artículo 31 bis. Residencia temporal y trabajo de mujeres extranjeras.\n\nTexto.\n',
+            f'{lo}/a34.md': '## Artículo 34. Documentación.\n\n> Su anterior numeración era art. 31.\n\nTexto.\n',
+            f'{lo}/a63.md': '## Artículo 63. Procedimiento.\n\nConforme a lo dispuesto en el artículo 31.3 de esta Ley.\n'
+                            'Y en el artículo 10 de la Ley 30/1992, de 26 de noviembre.\n',
+        }, In_force='2000-02-01', Kind='law')
+        es.commit('Real Decreto 1155/2024', {
+            f'{rd}/a1.md': '## Artículo 1. Entrada por pasos fronterizos.\n\nTexto.\n',
+            f'{rd}/a1-36.md': '## Artículo 124. Residencia por circunstancias excepcionales.\n\n1. De conformidad con lo '
+                              'previsto en el artículo 31.3 de la Ley Orgánica 4/2000, de 11 de enero, la Administración.\n',
+            f'{rd}/a1-37.md': '## Artículo 125. Tipos de autorización de residencia temporal por razones de arraigo.\n\nTexto.\n',
+            f'{rd}/a1-38.md': '## Artículo 126. Requisitos.\n\nEn el artículo 31 bis de la Ley Orgánica 4/2000 y el '
+                              'artículo 125 de este Reglamento.\n',
+            f'{rd}/a1-39.md': '## Artículo 127. Requisitos específicos.\n\nEl artículo 31 de la Ley Orgánica 8/2000 no se aplica.\n',
+        }, In_force='2025-05-20', Kind='law')
+        (t.root / 'manifest.json').write_text(json.dumps({'corpora': [{
+            'path': 'es/national/acts', 'code': 'ES', 'name': 'Spain', 'language': 'es',
+            'citation': {'file': 'estatal/[a-z-]+/\\d{4}/(BOE-A-\\d{4}-\\d+)/([^/]+)\\.md', 'cites': '{n}'}}]}), encoding='utf-8')
+        run('add', 'tools/mcp_server.py', cwd=t.root)
+        t.pin()
+        cls.proc = subprocess.Popen([sys.executable, str(t.root / 'tools' / 'mcp_server.py')], stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, cwd=t.root,
+                                    env={**os.environ, 'PYTHONDONTWRITEBYTECODE': '1'})
+        cls.next_id = 0
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.proc.stdin.close()
+        cls.proc.wait(timeout=30)
+        cls.proc.stdout.close()
+        cls.t.close()
+
+    def call(self, name, **arguments):
+        type(self).next_id += 1
+        msg = {'jsonrpc': '2.0', 'id': self.next_id, 'method': 'tools/call', 'params': {'name': name, 'arguments': arguments}}
+        self.proc.stdin.write((json.dumps(msg) + '\n').encode('utf-8'))
+        self.proc.stdin.flush()
+        r = json.loads(self.proc.stdout.readline().decode('utf-8'))['result']
+        self.assertFalse(r.get('isError'), r)
+        return r
+
+    def found(self, query, scope):
+        return [h['path'] for h in self.call('find_provision', query=query, jurisdiction=scope)['structuredContent']['results']]
+
+    def test_find_an_article_by_its_heading_number(self):
+        for q in ('artículo 31', 'articulo 31', 'art. 31', '31'):
+            self.assertEqual(self.found(q, self.LO), [f'{self.LO}/a31.md'], q)
+        self.assertEqual(self.found('31 bis', self.LO)[0], f'{self.LO}/a31bis.md')
+        for q in ('artículo 125', 'art. 125', '125'):
+            self.assertEqual(self.found(q, self.RD), [f'{self.RD}/a1-37.md'], q)  # a block id: only the heading numbers it
+
+    def test_what_cites_an_article(self):
+        r = self.call('what_else_changes', path=f'{self.LO}/a31.md')
+        groups = r['structuredContent']['groups']
+        cites = sorted(p['path'] for g in groups if g['kind'] == 'cites this provision' for p in g['provisions'])
+        # From the Reglamento ("artículo 31.3 de la Ley Orgánica 4/2000") and within the law ("artículo 31.3 de esta
+        # Ley"); not "31 bis", not another law's art. 31, not the publisher's note on a34.md, not the README link.
+        self.assertEqual(cites, [f'{self.LO}/a63.md', f'{self.RD}/a1-36.md'])
+        self.assertIn('artículo N de la <rango> n/aaaa', r['content'][0]['text'])
+        r = self.call('what_else_changes', path=f'{self.RD}/a1-37.md')  # art. 125, cited within its own Reglamento
+        self.assertEqual([p['path'] for g in r['structuredContent']['groups'] for p in g['provisions']], [f'{self.RD}/a1-38.md'])
+
+    def test_resolve_spanish_citations(self):
+        r = self.call('resolve_citations', text='El artículo 31.3 de la Ley Orgánica 4/2000, de 11 de enero; el art. 125 del '
+                                                'Reglamento aprobado por Real Decreto 1155/2024; BOE-A-2000-544, art. 31 bis; '
+                                                'artículo 3 de la Ley 99/2099.')
+        paths = [c['path'] for c in r['structuredContent']['citations']]
+        self.assertEqual(paths[:3], [f'{self.LO}/a31.md', f'{self.RD}/a1-37.md', f'{self.LO}/a31bis.md'])
+        self.assertEqual(r['structuredContent']['citations'][3]['status'], 'not in the record at any date')
+
+
+class SpanishCitationRule(unittest.TestCase):
+    """The parts of the Spanish reader that need no tree: article numbers from headings, lists, and which norm a
+    clause names."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import mcp_server
+        cls.m = mcp_server
+
+    def test_stem_and_heading_numbers(self):
+        m = self.m
+        self.assertEqual([m.stem_of(n) for n in ('a/a31.md', 'x/art59.md', 'x/art-0194.md', 'x/a1-37.md', 'x/1182.md')],
+                         ['31', '59', '194', '1-37', '1182'])
+        self.assertEqual([m.article_number(h) for h in ('Artículo 31. Situación', 'Artículo 31 bis. Residencia', 'Art. 4bis.',
+                                                        'Artículo único.', 'Art. 16a', 'Artículo\xa0124.')],
+                         ['31', '31 bis', '4 bis', None, None, '124'])
+
+    def test_which_lines_cite(self):
+        m = self.m
+        norm = {'id': 'BOE-A-2015-10565', 'rango': 'Ley', 'numyear': '39/2015', 'date': '2015-10-01', 'title': ''}
+        rx = m.es_norm_rx(norm, True)
+        yes = ['previa resolución dictada en los términos previstos en el artículo 21 de la Ley 39/2015, de 1 de octubre.',
+               'en los términos de los artículos 21 y 68 de la Ley 39/2015, de 1 de octubre.',
+               'el artículo 68.1 de la Ley 39/2015, de 1 de octubre, y conforme al artículo 21 de dicha Ley.',
+               'las referencias a los artículos 21.2 y 22 de la Ley 39/2015 se entenderán hechas.']
+        no = ['los artículos 25.1.b) de la Ley 39/2015, de 1 de octubre, y 21.2 de este real decreto.',
+              'el artículo 21 de la Ley 40/2015, de 1 de octubre.',
+              'el artículo 21 bis de la Ley 39/2015.']
+        self.assertEqual([m.es_cites(t, '21', norm, rx, False) is not None for t in yes + no], [True] * len(yes) + [False] * len(no))
+        ce = {'id': 'BOE-A-1978-31229', 'rango': None, 'numyear': None, 'date': '1978-12-27', 'title': ''}
+        rx = m.es_norm_rx(ce, True)
+        self.assertIsNotNone(m.es_cites('de acuerdo con el artículo 103.1 de la Constitución Española.', '103', ce, rx, False))
+        self.assertIsNone(m.es_cites('la autorización a que se refiere el artículo 103 para la constitución de gravámenes', '103', ce, rx, False))
+        self.assertIsNone(m.es_cites('el artículo 122 de la Constitución reserva esta materia a la Ley Orgánica del Poder Judicial.',
+                                     '122', {'id': 'BOE-A-1985-12666', 'rango': 'Ley Orgánica', 'numyear': '6/1985',
+                                             'date': '1985-07-01', 'title': ''},
+                                     m.es_norm_rx({'id': 'BOE-A-1985-12666', 'rango': 'Ley Orgánica', 'numyear': '6/1985',
+                                                   'date': '1985-07-01', 'title': ''}, True), False))
+
+
+SPAIN = 'spain/national/acts'
+
+
+@needs(SPAIN)
+class Spain(unittest.TestCase):
+    """Issues #9 and #10 on spain-law itself: LO 4/2000 art. 31 is a31.md, RD 1155/2024 art. 125 is a1-37.md."""
+
+    LO, RD = f'{SPAIN}/estatal/ley-organica/2000/BOE-A-2000-544', f'{SPAIN}/estatal/real-decreto/2024/BOE-A-2024-24099'
+
+    @classmethod
+    def setUpClass(cls):
+        cls.s = Server()  # not narrowed: GLOBAL_LAW_JURISDICTIONS recurses on main (_look -> matches -> manifest)
+        cls.s.send('initialize', {'protocolVersion': '2025-06-18', 'capabilities': {}, 'clientInfo': {'name': 'test', 'version': '0'}})
+        cls.s.send('notifications/initialized', notify=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.s.close()
+
+    def test_issue_examples(self):
+        for q, scope, want in (('artículo 31', self.LO, 'a31.md'), ('31', self.LO, 'a31.md'), ('art. 31', self.LO, 'a31.md'),
+                               ('artículo 125', self.RD, 'a1-37.md'), ('art. 125', self.RD, 'a1-37.md')):
+            r = self.s.call('find_provision', query=q, jurisdiction=scope, max_results=3)
+            self.assertEqual(r['structuredContent']['results'][0]['path'], f'{scope}/{want}', q)
+        r = self.s.call('resolve_citations', text='Véase el artículo 124 del Real Decreto 557/2011 y el art. 127 del Reglamento '
+                                                  'aprobado por Real Decreto 1155/2024. Ref. BOE-A-2000-544, art. 31.')
+        self.assertEqual([c['path'] for c in r['structuredContent']['citations']],
+                         [f'{SPAIN}/estatal/real-decreto/2011/BOE-A-2011-7703/a124.md', f'{self.RD}/a1-39.md', f'{self.LO}/a31.md'])
+        r = self.s.call('what_else_changes', path=f'{self.LO}/a31.md')
+        cites = {p['path'] for g in r['structuredContent']['groups'] for p in g['provisions']}
+        self.assertTrue({f'{self.RD}/a1-36.md', f'{self.RD}/a1-85.md', f'{self.RD}/da-20.md', f'{self.RD}/da-21.md'} <= cites, cites)
 
 
 ROMANIA = 'romania/national/acts'
