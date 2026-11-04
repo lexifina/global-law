@@ -79,7 +79,7 @@ made.
 
 ## More
 
-- [MCP.md](MCP.md): the MCP server · [REPRODUCE.md](REPRODUCE.md): how it was built · [CHANGELOG.md](CHANGELOG.md)
+- [FAQ.md](FAQ.md): questions and answers · [CONTRIBUTING.md](CONTRIBUTING.md): proposing changes · [MCP.md](MCP.md): the MCP server · [REPRODUCE.md](REPRODUCE.md): how it was built · [CHANGELOG.md](CHANGELOG.md)
 - [performance/](performance/): how fast the tools are, measured
 - [visualisations/](visualisations/): charts and bridges across the world's law
 - Tests: `python -m unittest discover -s tests`
