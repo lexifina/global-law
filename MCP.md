@@ -153,6 +153,7 @@ readers use:
 | `in_force_trailer` | The trailer holding each change's in-force day (default `In-force`); `baseline_trailer` and `correction_trailer` if used |
 | `citation` | `{"file": "<regex over the corpus path with groups (folder, number)>", "cites": "<git grep -E pattern, {n} for the number>"}` |
 | `scope.default_reach` | Optional: how a change reaches pending cases where no scope is recorded |
+| `repeal_notice` | Optional: regexes (one or a list) for a line that says only that a provision is gone, in the corpus's own wording, added to the built-in ones; `false` turns repeal notices off for the corpus |
 
 Trailers named for a day (`In-force`, `Enacted`, `Made`, `Published`, `Corrected`, `Text-as-of` and the like) hold a
 YYYY-MM-DD date; a link goes in `Source:` (or `Text-source:`). `Consolidated:` is canonically the day the publisher's
@@ -161,7 +162,7 @@ consolidated text took force, with its link in `Source:`. Most corpora built bef
 the `baseline_trailer`), a link is cited as the version's source. A `baseline_trailer` or `correction_trailer` dates a
 change only when it holds a date.
 
-Three more records change the answers:
+Four more records change the answers:
 - **`Redates: <commit> <YYYY-MM-DD>|no-date`.** An append-only corpus corrects a version's date without rewriting it:
   a later commit carries one `Redates:` line per version it corrects (the line may repeat), naming a commit above it
   (in full or by a prefix of 7 or more). A date becomes the version's in-force day, and for an overlay correction also
@@ -186,6 +187,28 @@ Three more records change the answers:
   `show` says so. A correction (`Corrects:`) stops the day before its file's act ends; one starting after the end
   applies only once a later version has brought the file back. `in_force` is named when a provision is asked for
   before the record starts.
+- **A repeal notice as the text.** Where a publisher keeps a repealed provision's number and prints only that it is gone
+  (Sweden's `16 § Har upphävts genom lag (2011:1252).`, Georgia's `# მუხლი 26. (ამოღებულია)`, Malta's `Repealed by Legal
+  Notice 99 of 2026.`, Spain's `(Derogado)`, Germany's `§ 5 (weggefallen)`, Romania's `Abrogat.`), the version holding
+  that notice ends the provision on its day, as a deletion would: `show` says "repealed on <day> by <law>, the record
+  keeps its repeal notice" and quotes it, with the exit code of an ended provision; `log` labels the row `repealed`;
+  `world` and search trees leave the file out; `diff` shows the text removed; `blame` and `words` stop. Where the notice
+  is the first version the record holds (a current-only record: every Swedish one), `show` says only "repealed", as the
+  record holds neither the text nor the day of the repeal (the notice names the law). A later version with other text
+  brings it back. The rule is conservative: once heading lines, the provision's amendment-history lines (`- Amended by:
+  ...`) and quoted editor's notes (`> Se deroga por ...`) are set aside, every remaining line (the headings, when
+  nothing else is left; at most four) must be the provision's number, then a repeal word in the corpus's language
+  (`upphävts`, `ამოღებულია`, `repealed`, `deleted`, `derogado`, `suprimido`, `aufgehoben`, `weggefallen`, `abrogat`,
+  `abrogé`, `ophævet`, `kehtetu`, `утратил силу` and others), then at most the law that made the repeal (`by ...`,
+  `genom ...`, `por ...`, a dash or a bracketed citation): at most 40 words, and no rule words such as "shall" or "may".
+  A text with any law beside the notice (`1) Aufgehoben 2) Die Regierung ...`), a sentence repealing another law (`The X
+  Act is repealed.`, `Genom lagen upphävs lagen ...`) or `(Sin contenido)` stays text. On 4 November 2026 this ended
+  3,554 Swedish, 1,517 Georgian, 1,345 Maltese, 6,650 Spanish, 465 Liechtenstein and 30 Nauruan provisions that were
+  shown in force that day; 148 of 148 notices checked by hand were notices, and 1,400 other files read the same as
+  before. A corpus adds its own wording with `repeal_notice` in `corpus.json`. The act-end rule's repeal notes are read
+  by the same detector; after an act's end a note need only start as one (`Norma derogada, excepto su art. 7 ...`).
+  Builders should still remove a repealed provision in the repealing law's commit (with the notice, if kept, as the last
+  wording): the rule reads the history already written.
 
 `tools/check_corpus.py` checks a repo against this before it is pinned. A missing `corpus.json` is a warning when the
 repo ships `jurisdiction.json` or `data/repo.json` (readers then use defaults for the rest), and is counted when several

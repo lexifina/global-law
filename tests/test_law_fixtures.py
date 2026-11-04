@@ -1735,5 +1735,198 @@ class RecordFloors(unittest.TestCase):
                       self.law.explain_missing('1990-01-01', p))
 
 
+class RepealNotices(unittest.TestCase):
+    """A version whose whole text is a repeal notice ("16 § Har upphävts genom lag (2011:1252).", "# მუხლი 26.
+    (ამოღებულია)", "Repealed by Legal Notice 99 of 2026.") ends the provision on that version's day, as a deletion
+    does (audit row 33); a provision that only mentions a repeal is law; a corpus can add patterns or turn it off."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus('se/national/acts')
+        a.commit('Lag (2000:1)', {'l/16.md': '16 § Avgiften är 10 kronor.\n', 'l/17.md': '17 § Gäller alla.\n',
+                                  'l/18.md': '18 § Lagen (1990:5) upphävs.\n',
+                                  'l/19.md': '19 § Myndigheten tar ut avgift.\n',
+                                  'l/20.md': '20 § Har upphävts genom lag (1995:3).\n'},
+                 In_force='2000-01-01', Kind='law', Enacted='1999-12-01')
+        a.commit('Lag (2011:1252)', {'l/16.md': '16 § Har upphävts genom lag (2011:1252).\n',
+                                     'l/19.md': '19 § Har upphävts genom förordning (2011:9).\n\n'
+                                                'Myndigheten får disponera avgiftsinkomsterna.\n'},
+                 In_force='2012-01-01', Kind='law', Enacted='2011-11-01')
+        a.commit('Lag (2020:7)', {'l/17.md': '### Rubrik\n\n17 § har upphävts genom lag (2020:7).\n'},
+                 In_force='2020-07-01', Kind='law', Enacted='2020-02-01')
+        a.commit('Lag (2024:3)', {'l/17.md': '17 § Gäller åter alla.\n'}, In_force='2024-01-01', Kind='law',
+                 Enacted='2023-12-01')
+        g = t.corpus('ge/national/acts')
+        g.commit('კანონი №1', {'a/26.md': '# მუხლი 26. დროებითი წესი\n1. ტექსტი.\n'}, In_force='2010-11-03')
+        g.commit('კანონი №5', {'a/26.md': '# მუხლი 26. (ამოღებულია)\n- საქართველოს 2011 წლის 17 ოქტომბრის კანონი №5 - '
+                                         'ვებგვერდი, 25.10.2011წ.\n'}, In_force='2011-10-25')
+        m = t.corpus('mt/national/acts')
+        m.commit('Act I of 1935', {'cap/107.md': '# 107. Cellars used for habitation.\nNo cellar shall be used.\n',
+                                   'cap/108.md': '# 108. Cellars.\nThe Minister may make rules.\n'},
+                 In_force='1935-01-01')
+        m.commit('Legal Notice 99 of 2026', {'cap/107.md': '# 107. Cellars used for habitation.\nRepealed by Legal '
+                                                         'Notice 99 of 2026.\n- Amended by: XXIX.1935.6.\n'},
+                 In_force='2026-03-01')
+        o = t.corpus('oo/national/acts')  # a corpus with its own notice wording
+        o.commit('Lexifina', {'corpus.json': json.dumps({'repeal_notice': [r'Entf(ä|ae)llt\.?']})},
+                 Kind='documentation')
+        o.commit('Gesetz 1', {'g/1.md': '# § 1\nText.\n', 'g/2.md': '# § 2\nText zwei.\n'}, In_force='2001-01-01')
+        o.commit('Gesetz 2', {'g/1.md': '# § 1\nEntfällt.\n', 'g/2.md': '# § 2\n(aufgehoben)\n'}, In_force='2005-01-01')
+        f = t.corpus('ff/national/acts')  # a corpus that turns the rule off
+        f.commit('Lexifina', {'corpus.json': json.dumps({'repeal_notice': False})}, Kind='documentation')
+        f.commit('Act 1', {'s/1.md': '# 1\nText.\n'}, In_force='2001-01-01')
+        f.commit('Act 2', {'s/1.md': '# 1\n[Repealed]\n'}, In_force='2005-01-01')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def names(self, corpus, date):
+        law = self.t.law()
+        try:
+            tree = law.corpus_tree(date, corpus)  # None: nothing in force
+            return law.git('ls-tree', '-r', '--name-only', tree, cwd=law.corpus_dir(corpus)).split() if tree else []
+        finally:
+            law.close_readers()
+
+    def test_notices_in_each_language_are_recognised(self):
+        law = self.t.law()
+        notices = ['16 § Har upphävts genom lag (2011:1252).', '5 b § Har upphävts genom förordning (2020:762).',
+                   '### Inhämtande av uppgifter\n\n11 § Har upphävts genom förordning (2024:104).',
+                   '15 § 2 mom. har upphävts genom lag (1993:36).', '3 § Har utgått genom lag (2005:456).',
+                   '# მუხლი 43 3 . (ამოღებულია)\n- საქართველოს 2013 წლის 24 ივლისის კანონი №844 - ვებგვერდი, 16.08.2013წ.',
+                   '# მუხლი 57¹. (ამოღებულია)', '# მუხლი 11. (ძალადაკარგულია )',
+                   '# 72. Adultery.\nRepealed by: XXI.1993.37.',
+                   '# 35. Register.\n(Repealed by Act X of 2010 - see L.N. 512 of 2010).\n- Substituted by: XXIII. 1997.16.',
+                   '# 13. Eligible offices.\n(Deleted by Legal Notice 462 of 2014)',
+                   '## Artículo 72.\n\n(Suprimido)\n\n> Se suprime por el art. 1 de la Ley 30/1981. Ref. BOE-A-1981-16216.',
+                   '## Artículos 16 a 21.\n\n(Derogados).', '# Articolul 13\nAbrogat.', '# § 416a (weggefallen)',
+                   '# (XXXX) §§ 311a und 311b (weggefallen)', '# Anlage 2 (weggefallen)', '# Art. 86\nAufgehoben',
+                   '# Art. 37 bis 39\nAufgehoben', '§ 17 a. (Ophævet)', '# Article 54\nAbrogé.',
+                   '# 67 Repeal\n[s 67 repealed by the Law Revision Commission under powers authorised by Act 10 of 2019]',
+                   '# § 53. Elektrooniline hääletamine\n[Kehtetu]',
+                   '# Статья 2.\nУТРАТИЛ СИЛУ (в соответствии с Законом КР от 18 января 2022 года №4)']
+        for text in notices:
+            self.assertTrue(law.repeal_notice(text + '\n'), text)
+        law_texts = ['18 § Lagen (1990:5) upphävs.', '2. Genom lagen upphävs lagen (1996:764) om företagsrekonstruktion.',
+                     '19 § Har upphävts genom förordning (2011:9).\n\nMyndigheten får disponera avgiftsinkomsterna.',
+                     '# Art. 18 Entschädigungen\n1) Aufgehoben\n2) Die Regierung setzt die Entschädigung fest.',
+                     '# 27 Repeal\nThe Antiquities Act 1935 is hereby repealed.',
+                     '# 221 Repeal\nThe following Acts are repealed:\n(a) Port Authority Act 2015;',
+                     '# მუხლი 1. ძალადაკარგულად გამოცხადდეს "საქართველოს სახელმწიფო ჰიმნის შესახებ" ორგანული კანონი.',
+                     '## Artículo 33.\n\n(Sin contenido)', '## Disposición derogatoria única. Derogación normativa.',
+                     'Quedan derogadas cuantas disposiciones de igual o inferior rango se opongan a lo establecido.',
+                     '# 15. Prime Minister may extend.\nDeleted by XVI.2019.16 and the Minister shall make rules.',
+                     '# 54. Exemption.\nRepealed by Act XIX.2024.50.\nPART X\nCo-ordination with other Authorities',
+                     '28 § /Upphör att gälla U:2028-07-02/ Regeringen får meddela föreskrifter.', '# § 5', '']
+        for text in law_texts:
+            self.assertIsNone(law.repeal_notice(text + '\n'), text)
+        self.assertTrue(law.repeal_notice('Norma derogada, con efectos de 1 de julio de 2020, por la disposición '
+                                          'derogatoria única.1.a) del Real Decreto 550/2020. Ref. BOE-A-2020-6745#dd.\n'))
+        # One detector: after an act's end (is_repeal_note, after_end) a note need only start as one.
+        for text in ('Norma derogada, excepto su art. 7, según establece su disposición derogatoria única.\n\nDisposición'
+                     ' transitoria quinta.\n', 'Repealed with effect from 2020-01-01.\n', '# Article 3\nAbrogé.\nNOTA : voir.\n',
+                     '16 § Har upphävts genom lag (2011:1252).\n'):
+            self.assertTrue(law.is_repeal_note(text), text)
+        for text in ('## Artículo 5.\n\n1. (Derogado)\n\n2. La información se publicará.\n',
+                     '# Art. 3\nAufgehoben werden:\n- a) die §§ 1 bis 3\n', '# Articolul 4\nAbrogat.\nPosesorul nu poate refuza.\n'):
+            self.assertFalse(law.is_repeal_note(text), text)
+        law.close_readers()
+
+    def test_show_says_the_provision_was_repealed_and_by_which_law(self):
+        out, err, code = self.t.cli('show', '2011-12-31', 'se/national/acts/l/16.md')
+        self.assertEqual(out, '16 § Avgiften är 10 kronor.\n', err)
+        out, err, code = self.t.cli('show', '2012-01-01', 'se/national/acts/l/16.md')
+        self.assertEqual(out, '')
+        self.assertNotEqual(code, 0)
+        self.assertIn('repealed on 2012-01-01 by Lag (2011:1252), the record keeps its repeal notice: '
+                      '"16 § Har upphävts genom lag (2011:1252)."', err)
+        for path, day, law in (('ge/national/acts/a/26.md', '2011-10-25', 'კანონი №5'),
+                               ('mt/national/acts/cap/107.md', '2026-03-01', 'Legal Notice 99 of 2026')):
+            out, err, code = self.t.cli('show', '2026-10-01', path)
+            self.assertNotEqual(code, 0, out)
+            self.assertIn(f'repealed on {day} by {law}, the record keeps its repeal notice', err)
+        # A record whose first version is the notice (current-only) does not hold the day of the repeal.
+        out, err, code = self.t.cli('show', '2001-01-01', 'se/national/acts/l/20.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertIn('repealed, the record keeps its repeal notice: "20 § Har upphävts '
+                      'genom lag (1995:3)."', err)
+        out, err, code = self.t.cli('show', '1999-01-01', 'se/national/acts/l/20.md')
+        self.assertIn('only as a repeal notice', err)
+
+    def test_log_labels_the_row_repealed(self):
+        out, err, code = self.t.cli('log', 'ge/national/acts/a/26.md')
+        self.assertIn('in force 2010-11-03  კანონი №1', out, err)
+        self.assertIn('repealed 2011-10-25  კანონი №5', out)
+        self.assertIn('[repeal notice: მუხლი 26. (ამოღებულია)]', out)
+
+    def test_world_and_search_trees_leave_the_notice_out(self):
+        law = self.t.law()
+        try:
+            self.assertFalse(law.in_order('se/national/acts'))  # its commit-order prefix still holds the notices
+            self.assertTrue(law.in_order('ff/national/acts'))
+        finally:
+            law.close_readers()
+        names = self.names('se/national/acts', '2021-01-01')
+        self.assertNotIn('l/16.md', names)
+        self.assertNotIn('l/17.md', names)
+        for f in ('l/18.md', 'l/19.md'):
+            self.assertIn(f, names)
+        self.assertIn('l/16.md', self.names('se/national/acts', '2011-06-01'))
+        self.assertIn('l/17.md', self.names('se/national/acts', '2025-01-01'))  # in force again
+        self.assertNotIn('a/26.md', self.names('ge/national/acts', '2026-01-01'))
+        self.assertEqual(self.names('mt/national/acts', '2026-06-01'), ['cap/108.md'])
+
+    def test_diff_shows_the_text_removed(self):
+        out, err, code = self.t.cli('diff', '2011-06-01', '2012-06-01', 'se/national/acts/l/16.md')
+        self.assertIn('[-16 § Avgiften är 10 kronor.-]', out)
+        self.assertIn('repealed on 2012-01-01 by Lag (2011:1252)', out)
+        self.assertNotIn('{+', out)
+
+    def test_blame_and_words_stop_at_the_notice(self):
+        for cmd in ('blame', 'words', 'show'):
+            out, err, code = self.t.cli(cmd, '2021-01-01', 'se/national/acts/l/17.md')
+            self.assertNotEqual(code, 0, out)
+            self.assertIn('repealed on 2020-07-01 by Lag (2020:7)', err)
+        out, err, code = self.t.cli('blame', '2025-01-01', 'se/national/acts/l/17.md')
+        self.assertIn('Lag (2024:3)', out, err)
+        self.assertNotIn('Lag (2000:1)', out)
+        out, err, code = self.t.cli('show', '2025-01-01', 'se/national/acts/l/17.md')
+        self.assertEqual(out, '17 § Gäller åter alla.\n', err)
+
+    def test_provisions_that_only_mention_a_repeal_are_unchanged(self):
+        for path, text in (('se/national/acts/l/18.md', '18 § Lagen (1990:5) upphävs.\n'),
+                           ('se/national/acts/l/19.md', '19 § Har upphävts genom förordning (2011:9).\n\n'
+                                                        'Myndigheten får disponera avgiftsinkomsterna.\n'),
+                           ('mt/national/acts/cap/108.md', '# 108. Cellars.\nThe Minister may make rules.\n')):
+            out, err, code = self.t.cli('show', '2026-10-01', path)
+            self.assertEqual((out, code), (text, 0), err)
+            out, err, code = self.t.cli('log', path)
+            self.assertNotIn('repealed', out)
+
+    def test_a_corpus_adds_its_own_wording_or_turns_the_rule_off(self):
+        out, err, code = self.t.cli('show', '2006-01-01', 'oo/national/acts/g/1.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertIn('repealed on 2005-01-01 by Gesetz 2', err)
+        out, err, code = self.t.cli('show', '2006-01-01', 'oo/national/acts/g/2.md')  # the built-in markers still apply
+        self.assertNotEqual(code, 0, out)
+        out, err, code = self.t.cli('show', '2006-01-01', 'ff/national/acts/s/1.md')
+        self.assertEqual(out, '# 1\n[Repealed]\n', err)
+
+    def test_the_notice_list_is_kept_on_disk(self):
+        law = self.t.law()
+        try:
+            got = law.notice_blobs('se/national/acts')
+            self.assertEqual(len(got), 3)  # l/16.md, l/17.md and l/20.md's notices; l/19.md is law
+            kept = list(law._store().glob('se~national~acts.notices.*.json'))
+            self.assertEqual(len(kept), 1)
+            self.assertEqual(set(json.loads(kept[0].read_text(encoding='utf-8'))['notices']), set(got))
+            self.assertEqual(law.notice_blobs('ff/national/acts'), frozenset())
+        finally:
+            law.close_readers()
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -495,8 +495,9 @@ def in_order(corpus: str) -> bool:
     if ix.get('future') and not ix['future']['linear']:
         return False
     # An act data/acts.json records as ended keeps its files in the commit-order prefix: only a built tree ends them.
+    # A file whose text is a repeal notice is in the prefix too: only a built tree leaves it out (file_index).
     return (not corrections(corpus) and not ix.get('moves') and not ix.get('withdrawn')
-            and not any(e['day'] for e in act_ends(corpus).values()))
+            and not any(e['day'] for e in act_ends(corpus).values()) and not notice_blobs(corpus))
 
 
 def _unquote(path: str) -> str:
@@ -516,9 +517,12 @@ def file_index(corpus: str) -> tuple[dict, list]:
     rows = ix['rows']
     index: dict[str, list] = {}
     touched: dict[int, dict] = {}
+    notices = notice_blobs(corpus)
     for path, versions in ix['files'].items():
         for order, blob, mode in versions:
             r = rows[order]
+            if blob in notices:  # a repeal notice ends the file there, as a deletion does (history() reads it so too)
+                blob = None
             if r[9]:
                 touched.setdefault(order, {})[path] = (blob, mode)
             elif r[5] and r[4] != 'documentation':
@@ -1241,6 +1245,9 @@ def _git_blame_if_same(path: str, seq: list[tuple[str, str]]) -> list[tuple[str,
     None when they differ, or when git's answer does not cover the text: then the replay is used."""
     if not seq or any(not sha for sha, _ in seq):
         return None
+    shas = {sha for sha, _ in seq}
+    if any(h.get('repeal_notice') for h in history(path) if h['commit'] in shas):
+        return None  # a repeal notice ends the text there; git blame would carry lines across it
     corpus, rel = corpus_of(path)
     ix = _index(corpus)
     rows = ix['rows']
@@ -1588,6 +1595,10 @@ def explain_missing(date: str, path: str) -> str:
     if not h:
         return f'{path} has no dated change in the record.'
     first = min(h, key=lambda x: x['in_force'])
+    if date < first['in_force'] and first.get('repeal_notice'):
+        return (f"{path} is not in the record on {date}: the record first has it on {first['in_force']} "
+                f"({first['law']}), and then only as a repeal notice (\"{first['repeal_notice']}\"); it holds no text "
+                "of the provision in force.")
     floor = record_floor(path) if date < first['in_force'] else None
     if floor:
         what = ('' if floor['kind'] == 'baseline' else
@@ -1605,6 +1616,16 @@ def explain_missing(date: str, path: str) -> str:
                 f"correction appended later (commit {latest_that_day['commit'][:10]}) replaces that version: the "
                 f"provision was not in force from that day.{until}")
     again = f" It is in force again from {back['in_force']} ({back['law']})." if back else ''
+    if latest_that_day.get('repeal_notice'):
+        notice = latest_that_day['repeal_notice']
+        if any(x.get('blob') for x in h if x['in_force'] < gone['in_force']):
+            return (f"{path} was not in force on {date}: repealed on {gone['in_force']} by {latest_that_day['law']}, "
+                    f"the record keeps its repeal notice: \"{notice}\".{again}")
+        # Its first version is the notice (a current-only record such as Sweden's): the record does not hold the day
+        # of the repeal, only the day of the version that holds the notice; the notice names the repealing law.
+        return (f"{path} was not in force on {date}: repealed, the record keeps its repeal notice: \"{notice}\" (in "
+                f"its version of {gone['in_force']}, {latest_that_day['law']}; the record holds no text of the "
+                f"provision, nor the day of its repeal).{again}")
     if latest_that_day.get('ends'):
         return (f"{path} was not in force on {date}: its act ({latest_that_day['act']}) was {latest_that_day['ends']} "
                 f"on {gone['in_force']}" + (f" by {latest_that_day['law']}" if latest_that_day['law'] and
@@ -1712,6 +1733,9 @@ def _history(corpus: str, rel: str) -> list[dict]:
             continue
         row = {'commit': commit, 'law': author, 'in_force': in_force, 'kind': kind, 'enacted': enacted,
                'published': published, 'blob': blob, 'order': order}
+        notice = notice_text(corpus, blob)
+        if notice:  # a version that only says the provision is gone ends it, as a deletion would (row 33)
+            row.update({'blob': None, 'repeal_notice': notice, 'notice_blob': blob})
         restated = ix.get('restates', {}).get(commit)
         if restated:  # a correction appended later: this version replaces the one first published for its day
             row['restates'] = restated[0]
@@ -1748,7 +1772,8 @@ def _history(corpus: str, rel: str) -> list[dict]:
                     h['until'] = cap
                 kept.append(h)
                 continue
-            why = after_end(corpus, end, (end['day'], order + 0.5), h['in_force'], h['order'], h.get('blob', ''), rel)
+            why = after_end(corpus, end, (end['day'], order + 0.5), h['in_force'], h['order'],
+                            h.get('notice_blob') or h.get('blob', ''), rel)
             (dropped.append(dict(h, why=why)) if why else kept.append(h))
         out = kept
         out.append({'commit': commit, 'law': end['by'] or f"{end['how']} (data/acts.json)", 'in_force': end['day'],
@@ -1793,19 +1818,256 @@ def reenacts(end: dict, enacted: str | None) -> bool:
     return bool(made) and made >= end['day']
 
 
-# A version whose text only says the provision or act is gone ("Norma derogada por ...", "(Derogada)", "Norma anulada
-# por Sentencia ...", "[Repealed]"), once any heading lines are set aside. Spain's repealing laws write such a note into
-# the repealed act's folder (no.md) or over a provision; after the act's end it is the end restated, not a re-enactment.
-REPEAL_NOTE = re.compile(r'^[\s\[(*_]*(?:norma\s+(?:\w+\s+)?|disposici[oó]n\s+|art[ií]culo\s+)?'
-                         r'(?:derogad|deogad|anulad|suprimid)[oa]s?\b|^[\s\[(*_]*(?:repealed|revoked|annulled)\b', re.I)
-
-
 def is_repeal_note(text: str | None) -> bool:
-    """Whether a version's text is only a repeal or annulment note (REPEAL_NOTE), not law: short, headings aside."""
-    if not text:
+    """Whether a version's text is only a repeal or annulment note ("Norma derogada por ...", "(Derogada)", "Norma
+    anulada por Sentencia ...", "[Repealed]", "16 § Har upphävts genom lag (2011:1252)."): repeal_notice, the one
+    detector, with the built-in markers only, in its `lead` form. Spain's repealing laws write such a note into the repealed act's folder
+    (no.md) or over a provision; after the act's end it is the end restated, not a re-enactment (after_end)."""
+    return repeal_notice(text, lead=True) is not None
+
+
+# A repeal notice kept as a provision's whole text (audit row 33: 4,610 tip files in Sweden, Georgia and Malta): the
+# publisher keeps the number of a repealed provision and prints only that it is gone ("16 § Har upphävts genom lag
+# (2011:1252).", "# მუხლი 26. (ამოღებულია)", "Repealed by Legal Notice 99 of 2026.", "§ 5 (weggefallen)"). The
+# markers, per language: a line counts only when, once its number is set aside, it is a marker alone or a marker and
+# the law that made the repeal ("by ...", "genom ...", "por ...", or a dash and a citation). A corpus can add its own
+# (corpus.json `repeal_notice`: regexes for such a line) or turn the rule off (`"repeal_notice": false`).
+NOTICE_MARKERS = (
+    r'(?:har\s+)?(?:upph[äa]vts|upph[äa]vt|upph[äa]vd[ae]?|utg[åa]tt|upph[öo]rt\s+att\s+g[äa]lla)'  # sv
+    r'|repealed|revoked|deleted|omitted|spent|lapsed|expired|annulled|rescinded'  # en
+    r'|ამოღებულია|ძალადაკარგულია'  # ka
+    r'|derogad[oa]s?|deogad[oa]s?|suprimid[oa]s?|anulad[oa]s?|revogad[oa]s?|abrogad[oa]s?'  # es, pt
+    r'|abrogat[oaie]|abrogat[ăe]?|abrog[ée]e?s?|supprim[ée]e?s?|derogat[ăa]?'  # it, ro, fr
+    r'|aufgehoben|weggefallen|gestrichen|vervallen|oph[æe]vet|opph[æe]vet'  # de, nl, da, no
+    r'|zru[šs]en[oaýáé]?|vypu[šs]t[ěe]n[oaýáé]?|uchylon[yae]|skre[śs]lon[yae]'  # cs, sk, pl
+    r'|brisan[oaie]?|prestao\s+da\s+va[žz]i|[čc]rtan[oaie]?|ukinut[oaie]?'  # hr, sr, bs, sl
+    r'|(?:on\s+)?kumottu|kehtetu|izsl[ēe]gt[sa]|neteko\s+galios|hat[áa]lyon\s+k[íi]v[üu]l\s+helyezve|m[üu]lga'  # fi et lv lt hu tr
+    r'|утратил[аио]?\s+силу|исключен[аоы]?|втратил[аио]?\s+чинн[іи]сть|виключен[аоі]?|καταργ[ήη]θηκε')  # ru uk el
+# What may follow the marker: the law that made the repeal ("by Act XIX.2021.76", "genom lag (2011:1252)", "por la
+# Ley 2/2011", "L:lla 123/2020", "- ... კანონი №5"), short, or a citation in brackets.
+NOTICE_BY = (r'(?:by|under|genom|enligt|por|pela|pelo|per|par|durch|mit|door|ved|med|av|przez|z|zákonem|zakonem'
+             r'|l:lla|lailla|asetuksella|con\s+efectos|[-–—]|(?=[(\[]))')
+# Spain's act-level notes name what is gone before the marker: "Norma derogada, con efectos de ..., por ...".
+NOTICE_SUBJECT = r'(?:(?:norma|disposici[oó]n|art[ií]culo)\s+(?:\w+\s+)?)?'
+NOTICE_LINE = re.compile(r'[\[(*_\s]*' + NOTICE_SUBJECT + r'(?:' + NOTICE_MARKERS + r')[\])*_\s.,:;]*(?:' + NOTICE_BY + r'\W.{0,250}?)?'
+                         r'[\s.\])*_;:]*', re.I | re.S)
+# A provision's number, set aside before the marker: "16 §", "5 b §", "§ 5", "Art. 5", "Artículo 12.", "მუხლი 43 3 .",
+# "107.", "(1)", "Article 5 bis -", "15 § 2 mom.", "Section 4:", "(XXXX) §§ 42 und 42a", "Anlage 2", "Art. 66 bis 69".
+_NOTICE_NUM = r'(?:\d|(?-i:[IVXLCDM]))+[\w¹²³⁴⁵⁶⁷⁸⁹⁰~-]*'
+NOTICE_NUMBER = re.compile(
+    r'\s*(?:(?:\(XXXX\)\s*)?(?:art(?:icle|[ií]culo|igo|ikel|icolo|\.)?|section|sec\.|ss?\.?(?=\s*\d)|§+|[čc]l\.|'
+    r'[čc]l[áa]nek|[čc]len|[čc]lan|paragraf|pyk[äa]l[äa]|madde|მუხლი|თავი|kap(?:itel)?\.?|chapter|regulation|reg\.|'
+    r'rule|para(?:graph)?\.?|item|schedule|annex|anexo|anlage|anhang|'
+    r'disposici[oó]n(?:\s+(?:adicional|transitoria|final|derogatoria))?)\s*'
+    r'(?:' + _NOTICE_NUM + r'(?:\s*(?:bis|und|u\.|to|–|-)\s*' + _NOTICE_NUM + r')?'
+    r'(?:\s+(?:bis|ter|quater|[a-z]|\d{1,2})\b)?|única|unica|primera|segunda)?'
+    r'\s*[.:)–—-]?'
+    r'|\d+[\w¹²³⁴⁵⁶⁷⁸⁹⁰]*(?:\s+[a-z])?\s*§(?:\s*\d+\s*mom\.)?'
+    r'|\(?\d+[A-Za-z]{0,3}[¹²³⁴⁵⁶⁷⁸⁹⁰]*\)?\.?)\s*', re.I)
+NOTICE_MAX_LINE = 320
+NOTICE_RULE_WORDS = re.compile(r'\b(?:shall|may|must|ska|skall|får|deberá|podrá|muss|kann|soll|doit|peut|deve|pode)\b',
+                               re.I)
+
+
+# The start of a note after an act's end (repeal_notice's `lead`): "Norma derogada, con efectos de ...", "(Derogado)",
+# "Repealed by ...", then anything on that line; later lines only an editor's remarks ("Téngase en cuenta ...").
+NOTICE_LEAD = re.compile(r'[\[(*_\s]*' + NOTICE_SUBJECT + r'(?:' + NOTICE_MARKERS + r')(?:[\])*_\s]*(?:$|[,.:;)]|'
+                         + NOTICE_BY + r'\W))', re.I)
+NOTICE_REMARK = re.compile(r'(?:t[ée]ngase|no obstante|nota\b|v[ée]ase|see\b)', re.I)
+# Notes whose first words alone mark them (any text may follow): Spain's act notes ("Norma derogada, excepto su art. 7
+# ...", "(Derogado)") and "Repealed ...", "Revoked ...", "Annulled ..." (the act-end rule's notes since #8).
+NOTICE_OPEN = re.compile(r'[\s\[(*_]*(?:(?:norma|disposici[oó]n|art[ií]culo)\s+(?:\w+\s+)?)?'
+                         r'(?:derogad|deogad|anulad|suprimid)[oa]s?\b|[\s\[(*_]*(?:repealed|revoked|annulled)\b', re.I)
+
+
+def notice_line(line: str, extra: tuple = ()) -> bool:
+    """Whether one line of a provision says only that the provision is gone (NOTICE_LINE, or a corpus's own pattern),
+    once its number (NOTICE_NUMBER) is set aside."""
+    line = line.strip().lstrip('#').strip().strip('*_').strip()
+    if not line or len(line) > NOTICE_MAX_LINE:
         return False
-    body = '\n'.join(line for line in text.splitlines() if not line.lstrip().startswith('#')).strip()
-    return len(body) <= 1500 and bool(REPEAL_NOTE.match(body))
+    bare = line.lstrip('[(').strip()  # "[s 67 repealed by ...]"
+    for cand in (NOTICE_NUMBER.sub('', line, count=1), NOTICE_NUMBER.sub('', bare, count=1), line):
+        if any(re.fullmatch(p, cand, re.I | re.S) for p in extra):
+            return True
+        # What follows the marker names a law; it does not lay down a rule ("shall", "may", "ska" ...).
+        if NOTICE_LINE.fullmatch(cand) and len(cand.split()) <= 40 and not NOTICE_RULE_WORDS.search(cand):
+            return True
+    return False
+
+
+def repeal_notice(text: str | None, extra: tuple = (), lead: bool = False) -> str | None:
+    """The notice, when a version's whole text is only a repeal notice for its provision, else None. Lines listing
+    the provision's amendment history ("- Amended by: ...", Georgia's "- საქართველოს ... კანონი №...") and editors'
+    notes quoted below it (Spain's "> Se deroga por ...") are set aside; then every line of the body (its headings,
+    when it has no other text) must be a notice line (notice_line). A text with any substance besides ("1) Aufgehoben
+    2) Die Regierung ...", "Genom lagen upphävs lagen (1996:764)") is law.
+
+    `lead` is for a version dated after its act's end (after_end), where the act is already ended and a note need
+    only restate it: the body (headings aside, at most 1,500 characters) may also just start with a notice, with no
+    number before it and editors' remarks after it ("Abrogé." then "NOTA : ..."), or start with a note whose first
+    words alone mark it (NOTICE_OPEN: "Norma derogada, excepto su art. 7 ...", "(Derogado) ...", "Repealed by ...").
+    "1. (Derogado) 2. La información ...", "Abrogat. Posesorul nu poate ..." and "Aufgehoben werden: a) ..." are
+    law."""
+    if not text or len(text) > NOTICE_MAX_BYTES:
+        return None
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+    if lead:
+        body = [l for l in lines if not l.startswith('#')]
+        if body and len(' '.join(body)) <= 1500 and (NOTICE_OPEN.match(body[0]) or (
+                NOTICE_LEAD.match(body[0]) and all(NOTICE_REMARK.match(l) for l in body[1:]))):
+            return body[0]
+    lines = [l for l in lines if not re.match(r'[-–]\s|>', l)]
+    body = [l for l in lines if not l.startswith('#')] or lines
+    if not body or len(body) > 4 or not all(notice_line(l, extra) for l in body):
+        return None
+    return ' '.join(l.lstrip('#').strip() for l in body)
+
+
+NOTICE_RULE = 2  # raise when repeal_notice changes what it reads as a notice: the kept lists are then made again
+NOTICE_MAX_BYTES = 6000
+
+
+def notice_patterns(corpus: str) -> tuple | None:
+    """The corpus's own notice patterns (corpus.json `repeal_notice`: a regex or a list of them, matched against a
+    whole line once its number is set aside), or None when the corpus turns the rule off (`"repeal_notice": false`)."""
+    ix = _index(corpus)
+    key = ('notice-patterns', f"{corpus}@{_at(ix)}")
+    if key not in _CACHE:
+        value = corpus_info(corpus).get('repeal_notice', _MISSING)
+        if value is _MISSING:  # a corpus manifest.json lists is described there, not by its corpus.json
+            try:
+                value = json.loads(read_object(corpus, f"{ix['pin']}:corpus.json") or '{}').get('repeal_notice')
+            except (ValueError, AttributeError):
+                value = None
+        if value is False:
+            _CACHE[key] = None
+        else:
+            pats = [value] if isinstance(value, str) else value if isinstance(value, list) else []
+            good = []
+            for p in pats:
+                try:
+                    re.compile(p)
+                    good.append(p)
+                except (re.error, TypeError):
+                    pass
+            _CACHE[key] = tuple(good)
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+def notice_text(corpus: str, blob: str | None) -> str | None:
+    """The repeal notice a version's text is (repeal_notice, with the corpus's own patterns), else None."""
+    if not blob:
+        return None
+    extra = notice_patterns(corpus)
+    if extra is None:
+        return None
+    key = ('notice', f'{corpus}:{blob}')
+    if key not in _CACHE:
+        text = read_object(corpus, blob)
+        _CACHE[key] = repeal_notice(text, extra) if text and len(text.encode('utf-8')) <= NOTICE_MAX_BYTES else None
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+# Words at least one of which every notice holds (NOTICE_MARKERS): a corpus-wide pass greps blobs for these first.
+NOTICE_STEMS = ('upphäv', 'upphav', 'upphört', 'upphort', 'utgått', 'utgatt', 'repealed', 'revoked', 'deleted',
+                'omitted', 'spent', 'lapsed', 'expired', 'annulled', 'rescinded', 'ამოღებულია', 'ძალადაკარგულია',
+                'derogad', 'deogad', 'suprimid', 'anulad', 'revogad', 'abrogad', 'abrogat', 'abrogă', 'abrog',
+                'supprim', 'derogat', 'aufgehoben', 'weggefallen', 'gestrichen', 'vervallen', 'ophævet', 'ophaevet',
+                'opphevet', 'opphævet', 'zrušen', 'zrusen', 'vypušt', 'vypust', 'uchylon', 'skreślon', 'skreslon',
+                'brisan', 'prestao', 'črtan', 'crtan', 'ukinut', 'kumottu', 'kehtetu', 'izslēgt', 'izslegt',
+                'neteko galios', 'hatályon', 'hatalyon', 'mülga', 'mulga', 'утратил', 'исключен', 'втратил',
+                'виключен', 'καταργ', 'Καταργ')
+
+
+def notice_blobs(corpus: str) -> frozenset:
+    """Every blob of a corpus whose text is a repeal notice (notice_text), for the readers that take in a whole corpus
+    at once (file_index, so every built tree; in_order). The list is kept on disk beside the corpus index with the
+    commits it covers, so a pin that moves reads only the blobs its new commits add."""
+    extra = notice_patterns(corpus)
+    if extra is None:
+        return frozenset()
+    ix = _index(corpus)
+    key = ('notice-blobs', f"{corpus}@{_at(ix)}")
+    if key in _CACHE:
+        return _CACHE[key]  # type: ignore[return-value]
+    import hashlib
+    import os
+    tag = hashlib.sha1(f"{NOTICE_RULE}|{json.dumps(extra)}".encode('utf-8')).hexdigest()[:12]
+    path = _store() / f"{corpus.replace('/', '~')}.notices.{tag}.json"
+    try:
+        kept = json.loads(path.read_text(encoding='utf-8'))
+        checked, found = set(kept['checked']), set(kept['notices'])
+    except (OSError, ValueError, TypeError, KeyError):
+        checked, found = set(), set()
+    rows = ix['rows']
+    todo = {o for o, r in enumerate(rows) if r[0] not in checked}
+    if todo:
+        blobs = sorted({b for versions in ix['files'].values() for o, b, _ in versions if b and o in todo})
+        found |= _notice_scan(corpus, blobs, extra)
+        checked |= {r[0] for r in rows}
+        try:  # a cache: a tree that cannot be written to makes the list again next time, nothing more
+            tmp = path.with_name(f'{path.name}.{os.getpid()}.tmp')
+            path.parent.mkdir(parents=True, exist_ok=True)
+            tmp.write_text(json.dumps({'checked': sorted(checked), 'notices': sorted(found)}), encoding='utf-8')
+            os.replace(tmp, path)
+        except OSError:
+            pass
+    _CACHE[key] = frozenset(found)
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+def _notice_scan(corpus: str, blobs: list[str], extra: tuple) -> set[str]:
+    """The blobs among `blobs` that are repeal notices. Only blobs of at most NOTICE_MAX_BYTES can be. Reading each
+    costs minutes on a large corpus (git rebuilds it from its pack's deltas), so they are listed as one tree in the
+    private tree store and one `git grep` names those holding a notice word (NOTICE_STEMS); only those are read. A
+    corpus's own patterns can match any words, so with them every small blob is read."""
+    import os
+    cwd = corpus_dir(corpus)
+    small = []
+    for i in range(0, len(blobs), 50000):
+        got = subprocess.run(['git', 'cat-file', '--buffer', '--batch-check=%(objectname) %(objectsize)'], cwd=cwd,
+                             input=''.join(f'{b}\n' for b in blobs[i:i + 50000]).encode(), capture_output=True)
+        for line in got.stdout.decode('ascii', 'replace').splitlines():
+            parts = line.split()
+            if len(parts) == 2 and parts[1].isdigit() and int(parts[1]) <= NOTICE_MAX_BYTES:
+                small.append(parts[0])
+    if small and not extra:
+        store = _tree_store()
+        objects = git('rev-parse', '--path-format=absolute', '--git-path', 'objects', cwd=cwd).strip()
+        env = {**os.environ, 'GIT_INDEX_FILE': str(store / f'notice-index-{os.getpid()}'),
+               'GIT_OBJECT_DIRECTORY': str(store / 'objects'), 'GIT_ALTERNATE_OBJECT_DIRECTORIES': objects}
+        listing = b''.join(f'100644 blob {b}\t{b[:2]}/{b}'.encode() + b'\0' for b in small)
+        run = subprocess.run(['git', 'update-index', '--add', '-z', '--index-info'], cwd=cwd, env=env, input=listing,
+                             capture_output=True)
+        tree = subprocess.run(['git', 'write-tree'], cwd=cwd, env=env, capture_output=True, encoding='utf-8')
+        try:
+            os.unlink(env['GIT_INDEX_FILE'])
+        except OSError:
+            pass
+        if not run.returncode and not tree.returncode:
+            words = sorted({w for s in NOTICE_STEMS for w in (s, s.upper(), s.capitalize())})
+            grep = subprocess.run(['git', 'grep', '-l', '-F', '-i', *[x for w in words for x in ('-e', w)],
+                                   tree.stdout.strip(), '--'], cwd=cwd, capture_output=True)
+            if grep.returncode in (0, 1):
+                small = [line.rsplit('/', 1)[-1] for line in grep.stdout.decode('ascii', 'replace').splitlines()]
+    hits = set()
+    for i in range(0, len(small), 20000):
+        got = subprocess.run(['git', 'cat-file', '--buffer', '--batch'], cwd=cwd, capture_output=True,
+                             input=''.join(f'{b}\n' for b in small[i:i + 20000]).encode()).stdout
+        at = 0
+        while at < len(got):
+            end = got.index(b'\n', at)
+            head = got[at:end].split()
+            at = end + 1
+            if len(head) < 3 or head[1] != b'blob':
+                continue
+            size = int(head[2])
+            text = got[at:at + size].decode('utf-8', 'replace').replace('\r\n', '\n').replace('\r', '\n')
+            at += size + 1
+            if repeal_notice(text, extra):
+                hits.add(head[0].decode('ascii'))
+    return hits
 
 
 def _names_law(by: str, law: str) -> bool:
@@ -1830,7 +2092,7 @@ def after_end(corpus: str, end: dict, cut: tuple, in_force: str, order: int, blo
         version with no enactment date, amended an act that no longer exists;
       - its law is not the law that ended the act (`repealed_by` ...): Spain's repealing laws restate the repeal in
         the repealed act's folder, sometimes after the day acts.json gives;
-      - its text is not a repeal or annulment note (is_repeal_note: "Norma derogada ...", "(Derogada)");
+      - its text is not a repeal or annulment note (notice_text: "Norma derogada ...", "(Derogada)");
       - given the file (`rel`), it is not the text in force at the end with only quoted repeal notes added
         (adds_only_repeal_note: BOE's "> Se derogan las reglas ..." for a later partial repeal of an ended act).
     A real later amendment to an ended act (Ley 9/2015 amending the repealed corporate-tax law for past tax periods)
@@ -1843,7 +2105,8 @@ def after_end(corpus: str, end: dict, cut: tuple, in_force: str, order: int, blo
         return f'enacted {made}' if made else 'no enactment date'
     if _names_law(end['by'], row[1]):
         return f'enacted {made}; the law that ended the act'
-    if blob and is_repeal_note(_blob_text(corpus, blob)):
+    extra = notice_patterns(corpus)
+    if blob and extra is not None and repeal_notice(_blob_text(corpus, blob), extra, lead=True):
         return f'enacted {made}; a repeal note, not a re-enactment'
     if blob and rel:
         before = _pre_end_blob(corpus, rel, cut)
@@ -3170,7 +3433,10 @@ def main(argv: list[str]) -> None:
             label = {'baseline': 'version of', 'correction': 'corrected', 'printing': 'printed'}.get(h.get('kind'), 'in force')
             if h.get('ends'):
                 label = h['ends']
+            if h.get('repeal_notice'):
+                label = 'repealed'
             print(f"{label} {h['in_force']}  {h['law']}" + (f'  ({dates})' if dates else '')
+                  + (f"  [repeal notice: {h['repeal_notice']}]" if h.get('repeal_notice') else '')
                   + (f"  [act {h['act']}, from data/acts.json]" if h.get('ends') else '')
                   + (f"  [not re-enacted by: {'; '.join(h['not_reenacting'])}]" if h.get('not_reenacting') else '')
                   + (f"  [date doubtful: {h['date_doubtful']}]" if h.get('date_doubtful') else ''))
