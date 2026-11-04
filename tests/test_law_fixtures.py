@@ -1314,6 +1314,81 @@ class FutureCopiesWithOtherText(unittest.TestCase):
             self.assertNotIn('change different text', err)
 
 
+class FutureCopySupersedes(unittest.TestCase):
+    """A future branch built before main published one of its laws (Czechia's): the branch holds its own earlier
+    version of the law, and main the law with the same author line and message (written with CRLF line ends) but
+    newer text. append_future.py's replay then adds a true copy of main's commit on top of the branch. future_pins.py
+    reads the CRLF message as its LF twin, as law.py does, and both take the earlier version as superseded by the
+    copy: the branch is forked and read, main's text stands for that law, and the branch's own later law reads from
+    its day."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(HERE / 'tools'))
+        import future_pins
+        cls.fp = future_pins
+        t = cls.t = Tree()
+        f = t.corpus('cz/national/acts')
+        f.commit('Act 1 of 2010', {'act/s1.md': 'The fee is 10.\nRule two.\n'}, In_force='2010-01-01', Kind='law')
+        run('checkout', '-q', '-b', 'future', cwd=f.path)
+        run('checkout', '-q', 'main', cwd=f.path)
+        stamp = '2001-01-01T00:00:30Z'
+        author = {'GIT_AUTHOR_NAME': 'Act 4 of 2015', 'GIT_AUTHOR_EMAIL': 'law@example.org', 'GIT_AUTHOR_DATE': stamp,
+                  'GIT_COMMITTER_NAME': 'test', 'GIT_COMMITTER_EMAIL': 't@example.org', 'GIT_COMMITTER_DATE': stamp}
+        msg = 'Act 4 of 2015\n\nIn-force: 2015-01-01\nKind: law\n'
+        (f.path / 'act' / 's1.md').write_bytes(b'The fee is 10.\nRule two, as amended in 2015.\n')
+        run('add', 'act', cwd=f.path)
+        msgf = Path(tempfile.mkdtemp()) / 'msg-crlf.txt'
+        msgf.write_bytes(msg.replace('\n', '\r\n').encode())
+        run('commit', '-q', '--cleanup=verbatim', '-F', str(msgf), cwd=f.path, env=author)
+        later = run('rev-parse', 'HEAD', cwd=f.path)
+        pin = f.commit('Lexifina', {'README.md': '# CZ\n'}, Kind='documentation')
+        run('checkout', '-q', 'future', cwd=f.path)
+        # the branch's own earlier version of the same law: same author line and message (LF), older text
+        (f.path / 'act' / 's1.md').write_bytes(b'The fee is 10.\nRule two, as amended  in 2015.\n')
+        run('add', 'act', cwd=f.path)
+        run('commit', '-q', '-m', msg, cwd=f.path, env=author)
+        cls.stale = run('rev-parse', 'HEAD', cwd=f.path)
+        # append_future.py's replay of main's commit: its message bytes and its text
+        (f.path / 'act' / 's1.md').write_bytes(b'The fee is 10.\nRule two, as amended in 2015.\n')
+        run('add', 'act', cwd=f.path)
+        run('commit', '-q', '-C', later, cwd=f.path, env={'GIT_COMMITTER_NAME': 'test',
+                                                          'GIT_COMMITTER_EMAIL': 't@example.org'})
+        fut = f.commit('Act 2 of 2020', {'act/s1.md': 'The fee is 20.\nRule two, as amended in 2015.\n'},
+                       In_force='2020-06-01', Kind='law')
+        run('checkout', '-q', 'main', cwd=f.path)
+        cls.row = (fut, pin)
+        (t.root / 'data').mkdir()
+        (t.root / 'data' / 'future-pins.tsv').write_bytes(
+            f'# corpus\tbranch\tfuture_sha\tmain_pin\ncz/national/acts\tfuture\t{fut}\t{pin}\n'.encode())
+        run('add', 'data', cwd=t.root)
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_future_pins_classes_it_forked(self):
+        fut, pin = self.row
+        got = self.fp.classify(self.t.corpora['cz/national/acts'].path, pin, fut, '2026-11-04')
+        self.assertEqual(got['state'], 'forked', got)
+        self.assertEqual(got['future_own'], 1, got)  # Act 2 of 2020 only
+
+    def test_law_reads_mains_text_then_the_branch_law(self):
+        p = 'cz/national/acts/act/s1.md'
+        out, err, code = self.t.cli('show', '2016-01-01', p)
+        self.assertEqual(out, 'The fee is 10.\nRule two, as amended in 2015.\n', err)
+        self.assertNotIn('change different text', err)
+        out, err, code = self.t.cli('show', '2020-06-01', p)
+        self.assertEqual(out, 'The fee is 20.\nRule two, as amended in 2015.\n', err)
+        out, err, code = self.t.cli('log', p)
+        self.assertEqual(out.count('Act 4 of 2015'), 1, out)
+        law = self.t.law()
+        ix = law._index('cz/national/acts')
+        self.assertEqual(ix['future']['replays_skipped'], 2)  # the copy and the version it supersedes
+        law.close_readers()
+
+
 class CountryNamesAndCodes(unittest.TestCase):
     """Audit row 47: a country's ISO code, its other common names ("uk") and its name with accents or in any case
     take in every corpus of the country, as its folder does; a country's name still never takes in another

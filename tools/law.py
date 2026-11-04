@@ -2876,7 +2876,9 @@ def _replays(cwd: Path, pin: str, fut: str) -> tuple[frozenset, tuple]:
     or text the branch had already; a file more written or removed on the branch is left out with the copy).
     Returns (copies, diverged): diverged are the commits with a main commit's author, date and message whose tree
     holds other text at a path that commit changes (a "copy" which, read on, would undo main's change): the caller
-    does not read such a branch."""
+    does not read such a branch. Such a commit followed on the branch by a true copy of the same main commit (the
+    branch's own earlier version of a law that main published later, then replayed by append_future.py) is
+    superseded: it is left out with the copies, so main's text stands."""
     fork = git('merge-base', pin, fut, cwd=cwd).strip()
     fmt = '--format=%x1d%H%x1f%an <%ae> %ad%x1f%B'
 
@@ -2894,7 +2896,12 @@ def _replays(cwd: Path, pin: str, fut: str) -> tuple[frozenset, tuple]:
     copies = frozenset(sha for sha, ms in candidates.items()
                        if any(changed.get(sha) == changed.get(m) for m in ms)  # the same change: no more to ask
                        or any(_holds(cwd, sha, changed.get(m, frozenset())) for m in ms))
-    return copies, tuple(sha for sha in candidates if sha not in copies)
+    superseded = frozenset(
+        sha for sha in candidates if sha not in copies
+        and any(c != sha and set(candidates[c]) & set(candidates[sha])
+                and subprocess.run(['git', 'merge-base', '--is-ancestor', sha, c], cwd=cwd).returncode == 0
+                for c in copies))
+    return copies | superseded, tuple(sha for sha in candidates if sha not in copies and sha not in superseded)
 
 
 def _future_check(corpus: str, cwd: Path, pin: str, fut: str) -> dict:

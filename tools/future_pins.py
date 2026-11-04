@@ -184,7 +184,9 @@ def commits(repo: Path, *rng: str) -> dict[str, dict]:
     out = {}
     for chunk in raw.split('\x1d')[1:]:
         sha, author, kind, in_force, body = chunk.split('\x1f', 4)
-        out[sha] = {'key': (author, body.strip()), 'kind': kind.strip(), 'in_force': in_force.strip()[:10],
+        # CRLF as LF, as tools/law.py reads git's output (text mode): a message written with CRLF is its LF twin
+        out[sha] = {'key': (author, body.replace('\r\n', '\n').strip()), 'kind': kind.strip(),
+                    'in_force': in_force.strip()[:10],
                     'law': not author.startswith('Lexifina <') or kind.strip() == 'correction'}
     return out
 
@@ -274,9 +276,14 @@ def classify(repo: Path, pin: str, fut: str, today: str) -> dict:
         on_main.setdefault(c['key'], []).append(sha)
     candidates = {sha: on_main[c['key']] for sha, c in fut_rows.items() if c['key'] in on_main}
     changed = tree_changes(repo, [*candidates, *(m for ms in candidates.values() for m in ms)])
-    diverged = [sha for sha, ms in candidates.items()
-                if not any(changed.get(sha) == changed.get(m) for m in ms)
-                and not any(holds(repo, sha, changed.get(m, frozenset())) for m in ms)]
+    copies = {sha for sha, ms in candidates.items()
+              if any(changed.get(sha) == changed.get(m) for m in ms)
+              or any(holds(repo, sha, changed.get(m, frozenset())) for m in ms)}
+    # One followed on the branch by a true copy of the same main commit is superseded, as tools/law.py _replays
+    # reads it: the branch's earlier version of a law main published later, then replayed by append_future.py.
+    diverged = [sha for sha, ms in candidates.items() if sha not in copies
+                and not any(c != sha and set(candidates[c]) & set(ms)
+                            and ok('merge-base', '--is-ancestor', sha, c, cwd=repo) for c in copies)]
     if diverged:
         return {'state': 'diverged', 'reason': f"{len(diverged)} commit(s) on the branch carry the author, date and "
                 f"message of a main commit but other text at a path it changes: "
