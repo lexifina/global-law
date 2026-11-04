@@ -111,7 +111,7 @@ def regressions(result: dict, earlier: list[dict]) -> list[str]:
 
 
 def cache_file(corpus: str) -> Path:
-    return law._store() / (corpus.replace('/', '~') + '.index')
+    return law._store() / (corpus.replace('/', '~') + f'.v{law.INDEX_VERSION}.index')
 
 
 def main(argv: list[str]) -> int:

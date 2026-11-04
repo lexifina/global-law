@@ -9,6 +9,14 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). Second audit, rows 19-23.** A `Redates:` of an overlay correction now moves the days its text
+  applies, not only its `log` date. `law.py laws <name>` takes in what countries.py and the MCP tools take in (a state,
+  canton, city, ISO code or old path) and stops with a suggestion for a name that takes in nothing, instead of listing
+  nothing. A built tree's index file is deleted once the tree is written, and tree folders a killed process left are
+  swept after a day. An index is read through the file it was loaded from, so another process replacing it cannot
+  break a running reader, and it is named by its version (`<corpus>.v7.index`), so two law.py versions no longer rebuild
+  each other's index (each corpus's index is rebuilt once). A shallow corpus is left out of `world`, `laws` and the
+  timeline and named, instead of stopping them; a shallow clone that holds its root commit counts as complete.
 - **Changed (all). REPRODUCE no longer offers the archived build as a command.** tools/archive/build-2026-10-29.py
   needs files outside this repository and today's pins, and could not reproduce the archived hashes anyway; it is kept
   for reference. In its place a check that needs no rebuild: fetch 0e10db05b17, compare its 107 pins with the table,

@@ -241,7 +241,8 @@ class Fixtures(unittest.TestCase):
         store = Path(subprocess.run(['git', 'rev-parse', '--path-format=absolute', '--git-path', 'global-law-cache'],
                                     cwd=self.t.root, capture_output=True, encoding='utf-8').stdout.strip())
         self.law.corpus_events('ff/national/acts')
-        self.assertTrue((store / 'ff~national~acts.index').exists())
+        self.assertTrue(list(store.glob('ff~national~acts.v*.index')))  # named by its version: two versions do not
+        # rebuild each other's index
 
 
 class LineMatching(unittest.TestCase):
@@ -323,6 +324,7 @@ class StartupCost(unittest.TestCase):
             self.assertEqual(list(back['files'].items()), list(files.items()))
             self.assertEqual(len(back['files']), 500)
             self.assertEqual(dict(back['files'].items()), files)
+            back['files']._f.close()  # held open from load (an index replaced under a reader stays readable)
 
     def test_credits_read_by_act_equal_the_whole_table(self):
         law = self.law
@@ -553,6 +555,82 @@ class RedatedVersions(unittest.TestCase):
     def test_no_date_makes_a_version_text_as_read(self):
         out, err, code = self.t.cli('log', 'cc/national/acts/s3.md')
         self.assertIn('version of', out)
+
+
+class FifthOfNovemberFixes(unittest.TestCase):
+    """Second audit (4 November 2026), rows 19-23: a redated overlay correction, laws by any name, built trees'
+    index files, an index replaced under a reader, and a shallow corpus in a whole-tree read."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus('rr/national/acts')
+        a.commit('Act 1 of 2000', {'act/x.md': 'original\n'}, In_force='2000-01-01', Kind='law')
+        a.commit('Act 2 of 2010', {'act/x.md': 'amended 2010\n'}, In_force='2010-01-01', Kind='law')
+        fix = a.commit('Gazette', {'act/x.md': 'original, corrected\n'}, In_force='2005-01-01', Kind='correction',
+                       Corrects='act 2005-01-01..2009-12-31', Files='act/x.md', Reason='misprint')
+        a.commit('Act 2 of 2010', {'act/x.md': 'amended 2010\n'}, In_force='2010-01-01')
+        a.commit('Lexifina', {}, Kind='documentation', Redates=f'{fix} 2007-01-01', Reason='applies from 2007')
+        b = t.corpus('qq/upper/acts')  # a state of qq, named on its own
+        b.commit('State Act 1 of 2020', {'s1.md': 'state\n'}, In_force='2020-06-01', Kind='law')
+        s = t.corpus('tt/national/acts')  # cloned with --depth below: one commit, so the clone holds it all
+        s.commit('Act 1 of 2021', {'s1.md': 'tee\n'}, In_force='2021-01-01', Kind='law')
+        u = t.corpus('uu/national/acts')  # cloned with --depth 1 of 2: its history is cut
+        u.commit('Act 1 of 2019', {'s1.md': 'you\n'}, In_force='2019-01-01', Kind='law')
+        u.commit('Act 2 of 2022', {'s1.md': 'you two\n'}, In_force='2022-01-01', Kind='law')
+        t.pin()
+        for name in ('tt', 'uu'):
+            src = t.root / f'{name}/national/acts'
+            shutil.move(str(src), str(t.root / f'{name}-full'))
+            run('clone', '-q', '--depth', '1', (t.root / f'{name}-full').as_uri(), str(src), cwd=t.root)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_a_redated_overlay_correction_moves_its_text(self):  # row 19
+        for day, text in (('2006-01-01', 'original\n'), ('2008-01-01', 'original, corrected\n')):
+            out, err, code = self.t.cli('show', day, 'rr/national/acts/act/x.md')
+            self.assertEqual(out, text, (day, err))
+
+    def test_laws_takes_a_state_by_its_own_name_and_refuses_an_unknown_one(self):  # row 20
+        out, err, code = self.t.cli('laws', '2020-01-01', '2020-12-31', 'upper')
+        self.assertIn('State Act 1 of 2020', out, err)
+        out, err, code = self.t.cli('laws', '2020-01-01', '2020-12-31', 'qqq')
+        self.assertNotEqual(code, 0)
+        self.assertIn('No body of law in this tree matches', err)
+
+    def test_a_built_tree_leaves_no_index_file(self):  # row 21
+        law = self.t.law()
+        law.corpus_tree('2006-01-01', 'rr/national/acts')
+        store = law._tree_store()
+        left = list(store.glob('index-*'))
+        law.close_readers()
+        self.assertEqual(left, [])
+
+    def test_a_reader_survives_its_index_being_replaced(self):  # row 22
+        law = self.t.law()
+        ix = law._index('rr/national/acts')
+        path = next(Path(ix['files']._path).parent.glob('rr~national~acts.v*.index'))
+        try:  # another process writes a different index in its place (refused on Windows while it is open)
+            path.with_name('other.tmp').write_bytes(b'GLX2' + (5).to_bytes(8, 'little') + b'xxxxx')
+            os.replace(path.with_name('other.tmp'), path)
+        except OSError:
+            path.with_name('other.tmp').unlink(missing_ok=True)
+        try:
+            self.assertEqual([v[0] for v in ix['files']['act/x.md']][:1], [0])
+        finally:
+            law.close_readers()
+            path.unlink(missing_ok=True)
+
+    def test_a_shallow_corpus_is_left_out_of_world_not_fatal(self):  # row 23
+        out, err, code = self.t.cli('world', '2023-01-01')
+        self.assertEqual(code, 0, err)
+        self.assertIn('uu/national/acts is a shallow clone', err)
+        self.assertIn('Act 1 of 2021', out)  # tt: shallow but holding its root, so complete
+        out, err, code = self.t.cli('show', '2023-01-01', 'uu/national/acts/s1.md')
+        self.assertNotEqual(code, 0)
+        self.assertIn('fetch --unshallow', err)
 
 
 class Checkouts(unittest.TestCase):

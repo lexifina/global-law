@@ -306,7 +306,8 @@ def corpus_events(corpus: str) -> list[Event]:
         return []
     if not _readable(corpus, cwd):
         return []  # an unfinished checkout: left out and named (unreadable()), so it does not stop every other corpus
-    _require_full_history(corpus, cwd)
+    if not _full_history(corpus, cwd):
+        return []  # left out and named (shallow()), so it does not stop every other corpus
     pin = tip(corpus)
     if pin and not _has_commit(corpus, cwd, pin):
         # The checkout is behind the tree (a pull without `git submodule update`, the usual state while pins move
@@ -519,6 +520,13 @@ def _tree_store() -> Path:
         import os
         import shutil
         import tempfile
+        import time
+        for old in Path(tempfile.gettempdir()).glob('global-law-trees-*'):  # left by a killed process
+            try:
+                if time.time() - old.stat().st_mtime > 86400:
+                    shutil.rmtree(old, True)
+            except OSError:
+                pass
         d = Path(tempfile.mkdtemp(prefix='global-law-trees-'))
         (d / 'objects').mkdir()
         atexit.register(shutil.rmtree, d, True)
@@ -579,6 +587,10 @@ def corpus_tree(date: str, corpus: str) -> str | None:
     if tree.returncode:
         raise RuntimeError(f'git write-tree: {tree.stderr.strip()[:300]}')
     sha = tree.stdout.strip()
+    try:  # the tree object is written; its index is not needed again (1-15 MB a date on a large corpus)
+        os.unlink(env['GIT_INDEX_FILE'])
+    except OSError:
+        pass
     _CACHE[key] = sha
     return sha
 
@@ -679,13 +691,37 @@ def _shallow(cwd: Path) -> bool:
     return done.stdout.strip() == 'true'
 
 
+def _full_history(corpus: str, cwd: Path) -> bool:
+    """Whether a corpus's checkout holds its whole history: not shallow, or shallow at commits that have no parent
+    (a --depth clone of a corpus with fewer commits than the depth holds it all)."""
+    key = ('full-history', corpus)
+    if key not in _CACHE:
+        ok = not _shallow(cwd)
+        if not ok:
+            dirs = _gitdirs(cwd)
+            f = (dirs[1] / 'shallow') if dirs else None
+            cut = f.read_text().split() if f and f.is_file() else []
+            # A boundary commit's own object still names its parents; one that names none is a root.
+            ok = bool(cut) and all(not re.search(r'^parent ', git('cat-file', 'commit', c, cwd=cwd).split('\n\n', 1)[0],
+                                                     re.M)
+                                   for c in cut)
+        _CACHE[key] = ok
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+_SHALLOW = ('{corpus} is a shallow clone (--depth), so its history is cut and its dates cannot be read; it is left '
+            'out. Run: git -C {corpus} fetch --unshallow')
+
+
+def shallow() -> list[str]:
+    """The corpora left out of a whole-tree read because their clone is shallow."""
+    return sorted(k[1] for k, ok in _CACHE.items() if k[0] == 'full-history' and not ok)
+
+
 def _require_full_history(corpus: str, cwd: Path) -> None:
     """Dates come from a corpus's whole history, so a shallow clone (--depth) would give wrong answers, not an error:
     a provision in force reads as never changed or as repealed. Stop with the command that fixes it instead."""
-    key = ('full-history', corpus)
-    if key not in _CACHE:
-        _CACHE[key] = not _shallow(cwd)
-    if not _CACHE[key]:
+    if not _full_history(corpus, cwd):
         raise SystemExit(f'{corpus} is a shallow clone (--depth), so its history is cut and its dates cannot be read. '
                          f'Run: git -C {corpus} fetch --unshallow')
 
@@ -1626,6 +1662,8 @@ def _redate(data: dict, rows: list, block: str) -> None:
                 rows[at] = r[:4] + ('baseline',) + r[5:]
         else:
             rows[at] = r[:5] + (day,) + r[6:]
+            if r[9]:  # an overlay correction (Corrects: <act> <from>..<to>): its text applies from the corrected day
+                rows[at] = rows[at][:9] + ({**r[9], 'from': day},)
         data.setdefault('redated', {})[r[0]] = (r[5], day)
         if retro:
             data.setdefault('retroactive', set()).add(r[0])
@@ -1714,7 +1752,7 @@ def _index(corpus: str) -> dict:
                          f'holds cannot be read as of now. Run: git submodule update --init -- {corpus}')
     import os
     store = _store()
-    path = store / (corpus.replace('/', '~') + '.index')
+    path = store / (corpus.replace('/', '~') + f'.v{INDEX_VERSION}.index')
     data = None
     changed = False
     try:
@@ -1815,21 +1853,27 @@ def _unpickle(raw: bytes):
         gc.enable()
 
 
+_OPEN_INDEXES: list = []
+
+
 class _Files:
     """An index's files (path -> versions), read from disk a piece at a time: looking up one path loads the piece
     holding it; going through every path loads them all. Read-only."""
 
     def __init__(self, path: Path, offsets: list[tuple[int, int]]):
         self._path, self._offsets = path, offsets
+        # Held open from load: another process may replace the file (a new pin, another law.py version), and the
+        # pieces must come from the file this index was loaded from. On Windows the replace then fails and is skipped.
+        self._f = open(path, 'rb')
+        _OPEN_INDEXES.append(self._f)
         self._shards: dict[int, tuple[dict, list]] = {}
         self._ordered: list | None = None
 
     def _piece(self, i: int) -> dict:
         if i not in self._shards:
             at, n = self._offsets[i]
-            with open(self._path, 'rb') as f:
-                f.seek(at)
-                raw = f.read(n)
+            self._f.seek(at)
+            raw = self._f.read(n)
             if len(raw) != n:
                 raise OSError(f'{self._path}: index cut short')
             self._shards[i] = _unpickle(raw)
@@ -1839,11 +1883,10 @@ class _Files:
         """Every (path, versions), in the order they were indexed."""
         if self._ordered is None:
             if len(self._shards) < len(self._offsets):
-                with open(self._path, 'rb') as f:
-                    for i, (at, n) in enumerate(self._offsets):
-                        if i not in self._shards:
-                            f.seek(at)
-                            self._shards[i] = _unpickle(f.read(n))
+                for i, (at, n) in enumerate(self._offsets):
+                    if i not in self._shards:
+                        self._f.seek(at)
+                        self._shards[i] = _unpickle(self._f.read(n))
             placed: list = [None] * sum(len(self._shards[i][1]) for i in self._shards)
             for files, places in self._shards.values():
                 for kv, at in zip(files.items(), places):
@@ -1943,6 +1986,11 @@ def close_readers() -> None:
     for p in _BATCH.values():
         _stop_reader(p)
     _BATCH.clear()
+    for f in _OPEN_INDEXES:  # and the index files they hold open
+        f.close()
+    _OPEN_INDEXES.clear()
+    for k in [k for k in _CACHE if k[0] == 'index']:
+        _CACHE.pop(k)
 
 
 def read_version(path: str, commit: str) -> str | None:
@@ -2027,11 +2075,14 @@ def main(argv: list[str]) -> None:
                 state = 'checkout unfinished (no commit yet)'
             if corpus['path'] in behind():
                 state = 'checkout behind the tree (git submodule update)'
+            if corpus['path'] in shallow():
+                state = 'shallow clone (git fetch --unshallow)'
             print(f"  {corpus['path']:<24} {state}")
         note(c for corpus in manifest()['corpora'] if corpus['path'] in by_corpus
              for c in caveats(args[0], corpus['path'], by_corpus[corpus['path']]) if 'runs to' in c)
         note(_UNREADABLE.format(corpus=c) for c in unreadable())
         note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()))
+        note(_SHALLOW.format(corpus=c) for c in shallow())
     elif command in ('show', 'blame', 'words'):
         corpus, _ = corpus_of(args[1])
         note(caveats(args[0], corpus) + file_notes(args[0], args[1]))
@@ -2079,15 +2130,24 @@ def main(argv: list[str]) -> None:
     elif command == 'laws':
         if args[0] > args[1]:
             args[0], args[1] = args[1], args[0]
-        prefix = moved(args[2].strip('/')) if len(args) > 2 else ''  # an old path of a moved corpus names it too
+        name = args[2] if len(args) > 2 else ''
         # Only laws taking effect: starting texts (the text as a publisher gave it on the day it was read), corrections,
         # printings, court rulings, treaties and changes no law is named for are not laws taking effect that day.
         left_out: dict[str, int] = {}
         # Only the corpora the prefix takes in are read, not every corpus checked out.
-        chosen = [c['path'] for c in manifest()['corpora'] if _under(c['path'], prefix)]
-        events = sorted((e for c in chosen for e in corpus_events(c)), key=lambda e: e.in_force) if prefix else timeline()
+        # A name takes in what countries.py and the MCP tools take in: a country, state, city, ISO code or old path.
+        chosen = {c['path'] for c in manifest()['corpora'] if not name or matches(c, name)}
+        if name and not chosen:
+            import difflib
+            folders = sorted({c['path'].split('/')[0] for c in manifest()['corpora']}
+                             | {c['path'].split('/')[1] for c in manifest()['corpora'] if c['path'].count('/') >= 2}
+                             - GENERIC_LEVELS)
+            near = difflib.get_close_matches(name.strip().lower().replace(' ', '-'), folders, n=3)
+            raise SystemExit(f'No body of law in this tree matches {name!r}.' + (f" Did you mean {', '.join(near)}?" if near
+                             else '') + f' {countries_cmd()} lists them.')
+        events = sorted((e for c in chosen for e in corpus_events(c)), key=lambda e: e.in_force) if name else timeline()
         for e in events:
-            if args[0] <= e.in_force <= args[1] and _under(e.corpus, prefix) and e.kind != 'documentation':
+            if args[0] <= e.in_force <= args[1] and e.corpus in chosen and e.kind != 'documentation':
                 if e.kind == 'law':
                     print(f'{e.in_force}  {e.corpus:<24} {e.law}')
                 else:
@@ -2096,8 +2156,9 @@ def main(argv: list[str]) -> None:
                  'printing': 'printings', 'court': 'court rulings', 'treaty': 'treaties',
                  'uncredited': 'changes no law is named for'}
         note(f'not listed, as they are not laws taking effect: {n} {names.get(k, k)}' for k, n in sorted(left_out.items()))
-        note(_UNREADABLE.format(corpus=c) for c in unreadable() if _under(c, prefix))
-        note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()) if _under(c, prefix))
+        note(_UNREADABLE.format(corpus=c) for c in unreadable() if c in chosen)
+        note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()) if c in chosen)
+        note(_SHALLOW.format(corpus=c) for c in shallow() if c in chosen)
     else:
         raise SystemExit(__doc__)
 
