@@ -1525,6 +1525,57 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
     return out
 
 
+# Kind words for a version that revises or amends an act already in force: China's Law（修订） (a full revision) and
+# 修正 (an amendment). An act whose record starts at such a version was in force before it, so the record starts
+# there, as at a publisher's starting text (#17: 50 Chinese acts, 标准化法 and 证券法 among them). Only these: other
+# corpora write "amendment" for an amending law kept as its own act (Azerbaijan, 1,025 acts), which starts there.
+_REVISION_WORDS = ('修订', '修正')
+
+
+def record_floor(path: str) -> dict | None:
+    """The version where a file's record starts without the provision starting there, or None: its first version
+    when that is a starting text (baseline), or when it came with the first version of its act (the file's folder)
+    and that version's Kind names a revision or an amendment (_REVISION_WORDS; the row then has `kind_written`)."""
+    h = history(path)
+    if not h:
+        return None
+    first = min(h, key=lambda x: x['in_force'])
+    if first['kind'] == 'baseline':
+        return first
+    corpus, rel = corpus_of(path)
+    ix = _index(corpus)
+    raw = (ix['rows'][first['order']][6] or '') if isinstance(first.get('order'), int) else ''
+    folder = rel.rpartition('/')[0]
+    if first['kind'] != 'law' or not folder or not any(w in raw for w in _REVISION_WORDS):
+        return None
+    key = ('act-start', f"{corpus}@{_at(ix)}:{folder}")
+    if key not in _CACHE:  # the first in-force day of any file of the act
+        rows, pre = ix['rows'], folder + '/'
+        _CACHE[key] = min((rows[o][5] for f, vs in ix['files'].items() if f.startswith(pre) for o, *_ in vs
+                           if rows[o][5] and rows[o][4] != 'documentation'), default=None)
+    return dict(first, kind_written=raw) if _CACHE[key] == first['in_force'] else None
+
+
+def act_floor_note(date: str, path: str) -> str:
+    """What data/acts.json says of a file's act on a date before its record starts: the act's own in_force (the day
+    it first came into force) or, without one, its `adopted` day. '' when it gives neither."""
+    corpus, rel = corpus_of(path)
+    fact = act_fact(corpus, rel)
+    since, adopted = (str(fact.get(k) or '')[:10] for k in ('in_force', 'adopted'))
+    if ISO_DAY.fullmatch(since):
+        if since <= date:
+            return (f" Its act was in force from {since} (data/acts.json), so the provision may well have been in "
+                    f"force on {date}, in words this record does not have.")
+        return f" Its act came into force only on {since} (data/acts.json), so it was not yet in force on {date}."
+    if ISO_DAY.fullmatch(adopted):
+        if adopted <= date:
+            return (f" Its act was adopted on {adopted} (data/acts.json); the record does not give the day it first "
+                    f"came into force, so the provision may well have been in force on {date}, in words this record "
+                    "does not have.")
+        return f" Its act was adopted only on {adopted} (data/acts.json), so it was not yet in force on {date}."
+    return ''
+
+
 def explain_missing(date: str, path: str) -> str:
     """Why there is no text: a mistyped path, before the record, not yet in force, or repealed."""
     corpus, rel = corpus_of(path)
@@ -1537,13 +1588,12 @@ def explain_missing(date: str, path: str) -> str:
     if not h:
         return f'{path} has no dated change in the record.'
     first = min(h, key=lambda x: x['in_force'])
-    if date < first['in_force'] and first['kind'] == 'baseline':
-        since = str(act_fact(corpus, rel).get('in_force') or '')
-        known = (f" Its act was in force from {since[:10]} (data/acts.json), so the provision may well have been in "
-                 f"force on {date}, in words this record does not have." if ISO_DAY.fullmatch(since[:10]) and
-                 since[:10] <= date else '')
-        return (f"{path} is not in the record on {date}: the record starts on {first['in_force']} ({first['law']}), "
-                f"which is where this record starts, not the day it came into force.{known}")
+    floor = record_floor(path) if date < first['in_force'] else None
+    if floor:
+        what = ('' if floor['kind'] == 'baseline' else
+                f", a revision of an act already in force then (Kind: {floor['kind_written']})")
+        return (f"{path} is not in the record on {date}: the record starts on {first['in_force']} ({first['law']})"
+                f"{what}, which is where this record starts, not the day it came into force.{act_floor_note(date, path)}")
     if date < first['in_force']:
         return f"{path} was not yet in force on {date}. It first appears on {first['in_force']} ({first['law']})."
     gone = max((x for x in h if x['in_force'] <= date), key=lambda x: x['in_force'])

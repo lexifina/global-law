@@ -1617,5 +1617,75 @@ class BuiltTreeStore(unittest.TestCase):
         self.assertEqual((grep.returncode, grep.stderr), (0, ''))
 
 
+class RecordFloors(unittest.TestCase):
+    """Issue #17: where an act's record starts at a revision of it (China's Law（修订）) or at a publisher's text, the
+    record starts there, not the act; data/acts.json's in_force or adopted dates the act itself."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        g = t.corpus('gg/national/acts')
+        # rev: the record starts at the 2017 revision of an act adopted in 1988; the 2020 修正 adds art-003.
+        g.commit('标准化法（2017年修订）', {'rev/art-001.md': '# 第一条\n修订后。\n', 'rev/art-002.md': '# 第二条\n二。\n'},
+                 In_force='2018-01-01', Kind='Law（修订）')
+        g.commit('关于修改《标准化法》的决定（2020年）', {'rev/art-003.md': '# 第三条\n新增。\n',
+                                                     'rev/art-001.md': '# 第一条\n修正后。\n'},
+                 In_force='2020-01-01', Kind='Law（修正）')
+        # new: an act as adopted; base: a publisher's text of an act in force since 1994; amd: an amending law kept as
+        # its own act (Azerbaijan), whose Kind says "amendment": it starts there.
+        g.commit('劳动合同法（2007年）', {'new/art-001.md': '# 第一条\n原文。\n'}, In_force='2008-01-01', Kind='Law')
+        g.commit('Publisher', {'base/art-001.md': '# 第一条\n2018年文本。\n'}, In_force='2018-10-26',
+                 Kind='oldest version available')
+        g.commit('Law 375 of 2021', {'amd/art-1.md': 'Amends Law 21300.\n'}, In_force='2021-11-26', Kind='amendment')
+        g.commit('Lexifina', {'data/acts.json': json.dumps({'acts': [
+            {'path': 'rev', 'status': 'in force', 'adopted': '1988-12-29'},
+            {'path': 'new', 'status': 'in force', 'in_force': '2008-01-01', 'adopted': '2007-06-29'},
+            {'path': 'base', 'status': 'in force', 'in_force': '1994-07-01', 'adopted': '1993-12-29'}]})},
+            Kind='documentation')
+        t.pin()
+        cls.law = t.law()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.law.close_readers()
+        cls.t.close()
+
+    def test_revision_is_where_the_record_starts(self):
+        p = 'gg/national/acts/rev/art-001.md'
+        msg = self.law.explain_missing('2015-01-01', p)
+        self.assertIn('the record starts on 2018-01-01', msg)
+        self.assertIn('a revision of an act already in force then (Kind: Law（修订）)', msg)
+        self.assertIn('Its act was adopted on 1988-12-29 (data/acts.json)', msg)
+        self.assertNotIn('not yet in force', msg)
+        self.assertEqual(self.law.record_floor(p)['in_force'], '2018-01-01')
+        # Before the act was adopted at all, it was not in force.
+        self.assertIn('adopted only on 1988-12-29 (data/acts.json), so it was not yet in force on 1980-01-01',
+                      self.law.explain_missing('1980-01-01', p))
+        # From the floor on, the text is the record's, as before.
+        self.assertEqual(self.law.text_on('2018-01-01', p), '# 第一条\n修订后。\n')
+        self.assertEqual(self.law.text_on('2021-01-01', p), '# 第一条\n修正后。\n')
+
+    def test_article_added_by_a_later_amendment_is_not_yet_in_force(self):
+        p = 'gg/national/acts/rev/art-003.md'
+        self.assertIsNone(self.law.record_floor(p))
+        self.assertIn('was not yet in force on 2019-01-01', self.law.explain_missing('2019-01-01', p))
+
+    def test_act_as_adopted_and_amending_law_start_with_the_law(self):
+        self.assertIsNone(self.law.record_floor('gg/national/acts/new/art-001.md'))
+        self.assertIn('was not yet in force on 2007-01-01',
+                      self.law.explain_missing('2007-01-01', 'gg/national/acts/new/art-001.md'))
+        self.assertIsNone(self.law.record_floor('gg/national/acts/amd/art-1.md'))
+        self.assertIn('was not yet in force on 2020-01-01',
+                      self.law.explain_missing('2020-01-01', 'gg/national/acts/amd/art-1.md'))
+
+    def test_publisher_text_names_the_acts_own_dates(self):
+        p = 'gg/national/acts/base/art-001.md'
+        msg = self.law.explain_missing('2015-01-01', p)
+        self.assertIn('the record starts on 2018-10-26', msg)
+        self.assertIn('Its act was in force from 1994-07-01 (data/acts.json)', msg)
+        self.assertIn('came into force only on 1994-07-01 (data/acts.json), so it was not yet in force on 1990-01-01',
+                      self.law.explain_missing('1990-01-01', p))
+
+
 if __name__ == '__main__':
     unittest.main()

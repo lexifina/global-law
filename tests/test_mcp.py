@@ -436,6 +436,24 @@ class McpServer(unittest.TestCase):
         self.assertIs(new['in_force'], False)
         self.assertTrue(new['in_record'])
 
+    def test_floor_at_a_revision_is_unknown_not_not_yet_in_force(self):
+        # 标准化法 enters the record with its 2017 revision (Kind: Law（修订）); it has been in force since 1989. Before
+        # 2018 the answer is "unknown", not "not yet in force" (issue #17); before its 1988 adoption, data/acts.json
+        # says it was not yet in force.
+        if not (ROOT / 'china/national/acts/.git').exists():
+            self.skipTest('China is not checked out')
+        p = 'china/national/acts/biaozhunhuafa/art-001.md'
+        before = self.s.call('read_law', path=p, date='2015-01-01', include_text=False)['structuredContent']
+        self.assertIsNone(before['in_force'])
+        self.assertFalse(before['in_record'])
+        self.assertEqual(before['record_starts'], '2018-01-01')
+        self.assertIn('a revision of an act already in force then', before['summary'])
+        after = self.s.call('read_law', path=p, date='2018-01-01', include_text=False)['structuredContent']
+        self.assertTrue(after['in_force'])
+        early = self.s.call('read_law', path=p, date='1980-01-01', include_text=False)['structuredContent']
+        if 'adopted only on' in early['summary']:  # data/acts.json with adopted days (china-law e681287)
+            self.assertIs(early['in_force'], False)
+
     @needs(US_C)
     def test_restored_words_and_latest_wording(self):
         # On 2022-05-01 §1182(1) held the 2019 words again: the CARES Act's temporary change had ended. They are the

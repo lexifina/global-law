@@ -330,7 +330,9 @@ def record_floor(date: str, path: str) -> dict | None:
         first = {'kind': 'baseline', 'in_force': start.in_force, 'law': start.law}
     if first and first['kind'] == 'baseline' and date < first['in_force']:
         return first
-    return None
+    # An act whose record starts at a revision of it (China's Law（修订）: 标准化法 from 2018, in force since 1989)
+    floor = run_law(law.record_floor, path) if first else None
+    return floor if floor and date < floor['in_force'] else None
 
 
 def explain(date: str, path: str) -> str:
@@ -338,9 +340,13 @@ def explain(date: str, path: str) -> str:
     why = run_law(law.explain_missing, date, path)
     first = record_floor(date, path)
     if first:
-        return (f"{path}: the record's first version of it is the consolidated text in force on {first['in_force']} "
+        what = ('the consolidated text' if first['kind'] == 'baseline' else
+                f"a revision of an act already in force then (Kind: {first.get('kind_written')}),")
+        act = run_law(law.act_floor_note, date, path)  # the act's own dates, from data/acts.json
+        return (f"{path}: the record's first version of it is {what} in force on {first['in_force']} "
                 f"({first['law']}), where this record starts, not the day it came into force. The record does not say what "
-                f"it said on {date}; it may well have been in force then. Read the publisher's earlier versions.")
+                f"it said on {date}" + (f".{act}" if act else '; it may well have been in force then.') +
+                " Read the publisher's earlier versions.")
     return re.sub(r'see `law\.py log [^`]*`', 'provision_history shows when and by which law', why)
 
 
@@ -1859,6 +1865,8 @@ def t_read_law(args: dict) -> tuple[str, dict]:
         # too, so a program that reads only in_force does not take a provision in force then for one that was not.
         state = ({'in_force': None, 'in_record': False, 'record_starts': floor['in_force']} if floor
                  else {'in_force': False, 'in_record': True})
+        if floor and 'not yet in force on' in run_law(law.act_floor_note, date, path):
+            state['in_force'] = False  # data/acts.json: the act itself came into force (or was adopted) after the date
         return why + ''.join(f'\nNote: {c}' for c in st['caveats']), {**st, **state, 'text': None, 'why': why}
     head_lines = [f'{path} as in force on {date}.']
     if st['last_change']:
