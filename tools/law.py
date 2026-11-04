@@ -508,7 +508,11 @@ def file_index(corpus: str) -> tuple[dict, list]:
         for path, versions in index.items():
             end = act_end(corpus, path)
             if end and end['day']:
-                versions.append((end['day'], _end_commit(corpus, end)[1] + 0.5, None, versions[-1][3]))
+                mode = versions[-1][3]
+                cut = (end['day'], _end_commit(corpus, end)[1] + 0.5)
+                # After the end, only a version made by a law enacted on or after it re-enacts the file.
+                versions[:] = [v for v in versions if (v[0], v[1]) < cut or reenacts(end, rows[v[1]][7])]
+                versions.append((cut[0], cut[1], None, mode))
     cwd = corpus_dir(corpus)
     overlays = []
     wanted = {order: [f for f in r[9]['files'] if f not in touched.get(order, {})] for order, r in enumerate(rows) if r[9]}
@@ -1346,8 +1350,15 @@ def explain_missing(date: str, path: str) -> str:
         return (f"{path} was not in force on {date}: its act ({latest_that_day['act']}) was {latest_that_day['ends']} "
                 f"on {gone['in_force']}" + (f" by {latest_that_day['law']}" if latest_that_day['law'] and
                                              '(data/acts.json)' not in latest_that_day['law'] else '') +
-                f", as the corpus's data/acts.json records; the record did not remove the file itself.{again}")
+                f", as the corpus's data/acts.json records; the record did not remove the file itself.{again}"
+                + _not_reenacting(latest_that_day))
     return f"{path} was not in force on {date}: it was removed on {gone['in_force']} ({gone['law']}).{again}"
+
+
+def _not_reenacting(end_row: dict) -> str:
+    later = end_row.get('not_reenacting')
+    return (f" Later version(s) are not read as re-enacting it, their laws not having been enacted on or after that "
+            f"day: {'; '.join(later)}." if later else '')
 
 
 def file_notes(date: str, path: str) -> list[str]:
@@ -1455,18 +1466,25 @@ def _history(corpus: str, rel: str) -> list[dict]:
     end = act_end(corpus, rel)
     if end and end['day'] and out:
         commit, order = _end_commit(corpus, end)
+        # A version dated after the end re-enacts the file only if its law was enacted on or after the end; one made
+        # before it (a delayed amendment to the act it repealed) or with no enactment date never takes force.
+        kept, dropped = [], []
+        for h in out:
+            late = not h.get('corrects') and (h['in_force'], h['order']) > (end['day'], order + 0.5)
+            (dropped if late and not reenacts(end, h['enacted']) else kept).append(h)
+        out = kept
         out.append({'commit': commit, 'law': end['by'] or f"{end['how']} (data/acts.json)", 'in_force': end['day'],
                     'kind': 'law', 'enacted': None, 'published': None, 'blob': None, 'order': order + 0.5,
-                    'ends': end['how'], 'act': end['act']})
+                    'ends': end['how'], 'act': end['act'],
+                    'not_reenacting': [f"{h['in_force']} {h['law']} (" + (f"enacted {enacted_day(h['enacted'])}"
+                                       if enacted_day(h['enacted']) else 'no enactment date') + ')' for h in dropped]})
     retro = ix.get('retroactive')
     capture = capture_day(corpus)
     earliest = str(corpus_info(corpus).get('earliest') or '1500-01-01')
     for h in out:
         if h.get('ends'):
             continue
-        made = h['enacted'][:10] if h.get('enacted') and ISO_DAY.fullmatch(h['enacted'][:10]) else None
-        if made and made > day('today'):  # a placeholder (LEGI's 2999-01-01 for a text it holds no signing date for)
-            made = None
+        made = enacted_day(h.get('enacted'))
         if h['in_force'] < earliest:
             h['date_doubtful'] = (f"dated {h['in_force']}, before anything this record can hold "
                                   f"({earliest}): a mistyped date")
@@ -1480,6 +1498,22 @@ def _history(corpus: str, rel: str) -> list[dict]:
                                   "probably the day the text was read, not the day it took force")
     out.sort(key=lambda h: h['order'])
     return out
+
+
+def enacted_day(enacted: str | None) -> str | None:
+    """The ISO day a law was enacted (law.py's `enacted`: Enacted, Made, Signed, Adopted ...), or None when the record
+    gives none or a placeholder (LEGI's 2999-01-01 for a text it holds no signing date for)."""
+    made = enacted[:10] if enacted and ISO_DAY.fullmatch(enacted[:10]) else None
+    return None if made and made > day('today') else made
+
+
+def reenacts(end: dict, enacted: str | None) -> bool:
+    """Whether a version dated after an act's end (act_end) brings its file back into force: only when the law that
+    made it was enacted on or after the end. A delayed amendment enacted before the repeal, taking effect after it,
+    amended an act that no longer exists; a version with no enactment date cannot be shown to re-enact, so the act
+    stays ended (its history's end row names it in `not_reenacting`)."""
+    made = enacted_day(enacted)
+    return bool(made) and made >= end['day']
 
 
 def _days(a: str, b: str) -> int | None:
@@ -2533,6 +2567,7 @@ def main(argv: list[str]) -> None:
                 label = h['ends']
             print(f"{label} {h['in_force']}  {h['law']}" + (f'  ({dates})' if dates else '')
                   + (f"  [act {h['act']}, from data/acts.json]" if h.get('ends') else '')
+                  + (f"  [not re-enacted by: {'; '.join(h['not_reenacting'])}]" if h.get('not_reenacting') else '')
                   + (f"  [date doubtful: {h['date_doubtful']}]" if h.get('date_doubtful') else ''))
     elif command == 'laws':
         if args[0] > args[1]:

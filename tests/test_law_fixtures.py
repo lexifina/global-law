@@ -381,6 +381,16 @@ class WholeLawRepealsAndDoubtfulDates(unittest.TestCase):
         a = t.corpus('aa/national/acts')
         a.commit('Act 1 of 2010', {'act/s1.md': 'one\n', 'act/s2.md': 'two\n', 'other/s1.md': 'other\n'},
                  In_force='2010-01-01', Kind='law', Enacted='2009-12-01')
+        # Delayed amendments made before the repeal, taking effect after it (Spain's ET art. 48 bis, Ley 9/2009): one
+        # enacted before the repeal, one with no enactment date. Neither brings its file back.
+        a.commit('Act 6 of 2010', {'late/s1.md': 'late one\n', 'late/s2.md': 'late two\n'},
+                 In_force='2010-01-01', Kind='law', Enacted='2009-12-01')
+        a.commit('Act 8 of 2018', {'late/s1.md': 'late one, amended\n'}, In_force='2021-01-01', Kind='law',
+                 Enacted='2018-03-01')
+        a.commit('Act 7 of 2017', {'late/s2.md': 'late two, amended\n'}, In_force='2021-01-01', Kind='law')
+        # And one enacted after the repeal: it re-enacts.
+        a.commit('Act 13 of 2020', {'late/s3.md': 'late three\n'}, In_force='2021-03-01', Kind='law',
+                 Enacted='2020-11-01')
         # The repeal as spain-law records it: a note in the act's folder, the provisions left as they were.
         a.commit('Act 9 of 2019', {'act/no.md': 'Repealed with effect from 2020-01-01.\n', 'other/s1.md': 'other 2\n'},
                  In_force='2020-01-01', Kind='law', Enacted='2019-06-01')
@@ -405,6 +415,7 @@ class WholeLawRepealsAndDoubtfulDates(unittest.TestCase):
         run('checkout', '-q', 'main', cwd=b.path)
         acts = {'acts': [{'path': 'cap', 'status': 'as captured', 'in_force': '1990-01-01'},
                          {'path': 'act', 'status': 'repealed', 'repealed': '2020-01-01', 'repealed_by': 'Act 9 of 2019'},
+                         {'path': 'late', 'status': 'repealed', 'repealed': '2020-01-01', 'repealed_by': 'Act 9 of 2019'},
                          {'path': 'other', 'status': 'in force'}]}
         a.commit('Lexifina', {'data/acts.json': json.dumps(acts)}, Kind='documentation')
         t.pin()
@@ -431,6 +442,43 @@ class WholeLawRepealsAndDoubtfulDates(unittest.TestCase):
         self.assertIn('in force again from 2022-01-01', err)
         out, err, code = self.t.cli('show', '2023-01-01', 'aa/national/acts/act/s1.md')
         self.assertEqual(out, 'one again\n', err)
+
+    def test_a_delayed_amendment_made_before_the_repeal_stays_ended(self):
+        out, err, code = self.t.cli('show', '2019-12-31', 'aa/national/acts/late/s1.md')
+        self.assertEqual(out, 'late one\n', err)
+        for date in ('2021-01-01', '2026-01-01'):
+            out, err, code = self.t.cli('show', date, 'aa/national/acts/late/s1.md')
+            self.assertNotEqual(code, 0, out)
+            self.assertIn('was repealed on 2020-01-01', err)
+            self.assertNotIn('in force again', err)
+            self.assertIn('2021-01-01 Act 8 of 2018 (enacted 2018-03-01)', err)
+
+    def test_a_delayed_amendment_with_no_enactment_date_stays_ended(self):
+        out, err, code = self.t.cli('show', '2022-01-01', 'aa/national/acts/late/s2.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertNotIn('in force again', err)
+        self.assertIn('2021-01-01 Act 7 of 2017 (no enactment date)', err)
+
+    def test_a_version_enacted_after_the_repeal_reenacts(self):
+        out, err, code = self.t.cli('show', '2021-06-01', 'aa/national/acts/late/s3.md')
+        self.assertEqual(out, 'late three\n', err)
+
+    def test_show_log_and_world_agree_on_the_delayed_amendment(self):
+        out, err, code = self.t.cli('log', 'aa/national/acts/late/s1.md')
+        self.assertIn('repealed 2020-01-01  Act 9 of 2019', out, err)
+        self.assertIn('not re-enacted by: 2021-01-01 Act 8 of 2018 (enacted 2018-03-01)', out)
+        self.assertNotIn('in force 2021-01-01', out)
+        law = self.t.law()
+        try:
+            self.assertIsNone(law.text_on('2022-01-01', 'aa/national/acts/late/s1.md'))
+            index, _ = law.file_index('aa/national/acts')
+            best = {p: max(v for v in vs if v[0] <= '2022-01-01') for p, vs in index.items() if p.startswith('late/')}
+            self.assertEqual([p for p, v in sorted(best.items()) if v[2]], ['late/s3.md'])
+            tree = law.corpus_tree('2022-01-01', 'aa/national/acts')
+            names = law.git('ls-tree', '-r', '--name-only', tree, cwd=law.corpus_dir('aa/national/acts')).split()
+        finally:
+            law.close_readers()
+        self.assertEqual([n for n in names if n.startswith('late/')], ['late/s3.md'])
 
     def test_other_acts_are_untouched(self):
         out, err, code = self.t.cli('show', '2021-01-01', 'aa/national/acts/other/s1.md')
