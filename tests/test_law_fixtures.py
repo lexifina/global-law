@@ -722,6 +722,54 @@ class RedatedVersions(unittest.TestCase):
         self.assertIn('version of', out)
 
 
+class SameDayVersions(unittest.TestCase):
+    """Two laws in force the same day (#12): the first build kept only the last version, so the earlier law's
+    version is appended, dated that day, and the last one re-asserted (Re-asserts: <commit>). The text in force
+    stays; blame and words credit each law with its own words."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus('sd/national/acts')
+        a.commit('Act 1 of 2010', {'s1.md': 'alpha beta\n\nrate 10\n', 's2.md': 'two\n'}, In_force='2010-01-01')
+        cls.last = a.commit('Act 9 of 2022', {'s1.md': 'alpha gamma delta\n\nrate 12\n'}, In_force='2023-01-01',
+                            Enacted='2022-12-23')
+        a.commit('Lexifina', {'s1.md': 'alpha gamma delta\n\nrate 10\n'}, In_force='2023-01-01',
+                 Law='Act 8 of 2022', Enacted='2022-12-21')
+        a.commit('Lexifina', {'s1.md': 'alpha gamma delta\n\nrate 12\n'}, In_force='2023-01-01',
+                 Re_asserts=cls.last, Enacted='2022-12-23')
+        # Romania's pattern stays as it was: a correction re-asserting a commit that never wrote the file, after
+        # another version of that day.
+        other = a.commit('Act 7 of 2022', {'s3.md': 'x\n'}, In_force='2023-01-01')
+        a.commit('Act 6 of 2022', {'s2.md': 'two amended\n'}, In_force='2023-01-01')
+        a.commit('Lexifina', {'s2.md': 'two amended\n'}, In_force='2023-01-01', Re_asserts=other, Kind='correction')
+        t.pin()
+        cls.law = t.law()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.law.close_readers()
+        cls.t.close()
+
+    def test_text_in_force_is_unchanged(self):
+        for day in ('2022-12-31', '2023-01-01', '2024-01-01'):
+            out, err, code = self.t.cli('show', day, 'sd/national/acts/s1.md')
+            self.assertEqual(out, 'alpha beta\n\nrate 10\n' if day < '2023' else 'alpha gamma delta\n\nrate 12\n', err)
+
+    def test_each_law_is_credited_with_its_words(self):
+        law = self.law
+        rows = law.blame_on('2024-01-01', 'sd/national/acts/s1.md')
+        self.assertEqual([who for who, _ in rows], ['Act 8 of 2022', 'Act 1 of 2010', 'Act 9 of 2022'])
+        words = law.words_on('2024-01-01', 'sd/national/acts/s1.md')
+        self.assertIn(('Act 8 of 2022', 'gamma delta\n\n'), [(w, t) for w, t in words])
+        self.assertEqual([w for w, t in words if '12' in t], ['Act 9 of 2022'])
+
+    def test_a_restated_commit_that_never_wrote_the_file_adds_no_step(self):
+        law = self.law
+        seq = law.versions_in_force('2024-01-01', 'sd/national/acts/s2.md')
+        self.assertEqual(len(seq), 2)
+
+
 class FifthOfNovemberFixes(unittest.TestCase):
     """Second audit (4 November 2026), rows 19-23: a redated overlay correction, laws by any name, built trees'
     index files, an index replaced under a reader, and a shallow corpus in a whole-tree read."""

@@ -3051,9 +3051,29 @@ def versions_in_force(date: str, path: str) -> list[tuple[str, str]]:
     out: list[tuple[str, str]] = []
     for d in sorted(days):
         sha = file_commit(d, path) or ''
-        if not out or out[-1][0] != sha:
-            out.append((sha, who.get(sha, '') if sha else ''))
+        for step in [*_same_day_steps(hist, d, sha), sha]:
+            if not out or out[-1][0] != step:
+                out.append((step, who.get(step, '') if step else ''))
     return out
+
+
+def _same_day_steps(hist: list[dict], day: str, chosen: str) -> list[str]:
+    """The versions of a file appended for `day` before the version file_commit chooses for it, when that version
+    re-asserts an earlier one (Re-asserts: <commit>): a law in force the same day as another, whose version the
+    first build left out, appended dated that day, then the day's last text restated (spain-law's same-day
+    versions, global-law #12). The later commit wins the day, but the earlier law's words are its own, so blame and
+    words step through them, in commit order. Only the versions appended after the restated commit count; left out
+    are versions a later commit restates, deletions and correction overlays."""
+    last = next((h for h in hist if h['commit'] == chosen and h['in_force'] == day and not h.get('corrects')), None)
+    if last is None or not last.get('restates') or last.get('restated_because') != 'it had to be restated':
+        return []
+    restated = [h['restates'] for h in hist if h.get('restates')]
+    after = next((h['order'] for h in hist if h['commit'].startswith(last['restates'])), None)
+    if after is None:  # the restated commit never wrote this file: nothing here was left out of it
+        return []
+    return [h['commit'] for h in hist
+            if h['in_force'] == day and after < h['order'] < last['order'] and h.get('blob') and not h.get('corrects')
+            and not h.get('ends') and not any(h['commit'].startswith(r) or r.startswith(h['commit']) for r in restated)]
 
 
 def _metadata_only(corpus: str) -> bool:

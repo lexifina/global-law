@@ -9,6 +9,8 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- spain-law 6ec3f8e (behind d15bf45, append-only, 152 commits): the 201 same-day BOE versions by another norm that the first build left out (#12) are appended, each dated its day and credited to its norm (Law:), and each block's last BOE text that day is restated after them (Re-asserts: <commit>). The text in force is unchanged on every day.
+- law.py: blame and words step through the versions appended for a day before a Re-asserts: commit restating one that wrote the same file (`_same_day_steps`), so the earlier law keeps its words. LIRPF art. 93 on 2023-01-01: Ley 28/2022 now wrote 31 lines; Ley 31/2022 the savings scale (#12). No other corpus checked (Romania, Czechia, Malta, Sweden, Liechtenstein, Switzerland) reads differently.
 - **Fixed (all; China data). A record that starts at a revision of an act is a floor, not the act's start (#17).**
   50 Chinese acts start at a 修订 (标准化法 2018, 证券法 2020, 刑法 1997 …) and read "not yet in force" / `in_force: false` for years they were in force. `record_floor()` now treats an act's first version whose Kind names a revision or amendment (修订, 修正) like a starting text: "the record starts on …, a revision of an act already in force then", `in_force: null`; articles a later amendment adds are unchanged. No other of 31 corpora checked has the pattern.
   china-law e681287: data/acts.json in the standard `{"acts": [...]}` shape (it failed check_corpus), with `adopted` (172 acts, from each page's 题注) and `in_force` (76 held as adopted); answers before a floor now name the act's own dates. No pre-2018 公司法 text yet.
