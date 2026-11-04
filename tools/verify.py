@@ -293,6 +293,29 @@ def first_parent_base(n: int) -> str | None:
     return line[n] if len(line) > n else None
 
 
+def read_checkpoint(marker: Path) -> dict:
+    """The checkpoint, or {} with a note when it cannot be read (an interrupted write leaves it truncated)."""
+    if not marker.exists():
+        return {}
+    try:
+        data = json.loads(marker.read_text(encoding='utf-8'))
+        if isinstance(data, dict) and all(isinstance(v, dict) and isinstance(v.get('commit'), str)
+                                          for v in data.values()):
+            return data
+    except (OSError, ValueError):
+        pass
+    print(f'note: the checkpoint {marker} could not be read (truncated or invalid); treated as absent')
+    return {}
+
+
+def write_checkpoint(marker: Path, checkpoint: dict) -> None:
+    """Written to a temporary file and moved into place, so an interrupted write leaves the old one."""
+    marker.parent.mkdir(parents=True, exist_ok=True)
+    tmp = marker.with_name(marker.name + f'.{os.getpid()}.tmp')
+    tmp.write_text(json.dumps(checkpoint, indent=1) + '\n', encoding='utf-8')
+    os.replace(tmp, marker)
+
+
 def main(argv: list[str]) -> int:
     t0 = time.time()
     remote = '--remote' in argv or '--fetch' in argv
@@ -300,11 +323,20 @@ def main(argv: list[str]) -> int:
     use_checkpoint = '--no-checkpoint' not in argv
     store_dir = Path(git('rev-parse', '--path-format=absolute', '--git-path', 'global-law-verify').strip())
     marker = store_dir / 'verified.json'
-    checkpoint = json.loads(marker.read_text(encoding='utf-8')) if use_checkpoint and marker.exists() else {}
+    checkpoint = read_checkpoint(marker) if use_checkpoint else {}
     head = git('rev-parse', 'HEAD').strip()
+    shallow = git('rev-parse', '--is-shallow-repository').strip() == 'true'
     problems: list[str] = []
     mark = checkpoint.get('remote' if remote else 'structure') or checkpoint.get('remote') or {}
-    if mark and not ok('merge-base', '--is-ancestor', mark['commit'], 'HEAD', env=NO_LAZY):
+    at_head = any(v.get('commit') == head for v in checkpoint.values())
+    if mark and shallow and not ok('merge-base', '--is-ancestor', mark['commit'], 'HEAD', env=NO_LAZY):
+        # A shallow clone lacks the history between an older checkpoint and HEAD (git fetch --depth 1 drops it):
+        # whether the tree was rewritten cannot be told here, which is not the same as rewritten.
+        print(f"note: the checkpoint commit {mark['commit'][:10]} ({mark.get('checked_at', '?')}) is not in this "
+              f"shallow clone's history, so whether the tree was rewritten since cannot be checked here; for that, "
+              f"run git fetch --unshallow")
+        mark = {}
+    elif mark and not ok('merge-base', '--is-ancestor', mark['commit'], 'HEAD', env=NO_LAZY):
         problems.append(f"{head[:10]}: the checkpoint commit {mark['commit'][:10]} ({mark.get('checked_at', '?')}) is "
                         f"not in this history: the tree was rewritten, or this clone is behind it")
         mark = {}
@@ -317,6 +349,8 @@ def main(argv: list[str]) -> int:
         start, how = mark['commit'], f"since the checkpoint {mark['commit'][:10]} ({mark.get('checked_at', '?')})"
     else:
         start, how = first_parent_base(200), 'the last 200 commits'
+    # In a shallow clone the range may run into the clone's cut: then the commits before it were never read.
+    cut = shallow and (start is None or not ok('merge-base', '--is-ancestor', start, 'HEAD', env=NO_LAZY))
 
     commits: list[str] = []
     day: dict[str, str] = {}
@@ -346,6 +380,9 @@ def main(argv: list[str]) -> int:
         links, blob = state('HEAD')
         urls = modules(blob)
     t_scan = time.time() - t0
+    if cut and commits:
+        how = (f'shallow clone: checked {len(commits)} commit(s) from {commits[0][:10]}; the history before it is not '
+               f'in this clone; for the whole history run git fetch --unshallow')
     print(f'{len(commits)} commit(s) checked for gitlinks and .gitmodules ({how}); {len(moves)} pin move(s) in the '
           f'range [{t_scan:.1f} s]')
 
@@ -423,15 +460,21 @@ def main(argv: list[str]) -> int:
         print(f'{kind}: {n} ({days})')
         for p in firsts[kind][:5]:
             print('  note' if kind == '.gitmodules entry without gitlink' else '  FAIL', p)
-    if not [p for p in problems if 'with no gitlink' not in p] and use_checkpoint:
+    clean = not [p for p in problems if 'with no gitlink' not in p]
+    if clean and use_checkpoint and not commits and not at_head:
+        # Nothing was read (--since HEAD): a checkpoint here would vouch for commits no run has checked.
+        print('note: no commit was checked, so the checkpoint is left as it was')
+    elif clean and use_checkpoint:
         stamp = {'commit': head, 'tree': git('rev-parse', 'HEAD^{tree}').strip(),
                  'checked_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-                 'from': start or 'root'}
+                 # Never "root" for a shallow clone's cut: the history before it was not read.
+                 'from': f'shallow {commits[0]}' if cut and commits else start or 'root'}
+        if cut:
+            stamp['shallow'] = True
         checkpoint['structure'] = stamp
         if remote:
             checkpoint['remote'] = {**stamp, 'tips': {u: tips_now[u] for u in sorted(tips_now)}}
-        store_dir.mkdir(parents=True, exist_ok=True)
-        marker.write_text(json.dumps(checkpoint, indent=1) + '\n', encoding='utf-8')
+        write_checkpoint(marker, checkpoint)
     # A .gitmodules entry with no gitlink does not stop `git submodule update` (git skips it); part two's history
     # (to 30 October 2026) has them at most commits. Reported above, but not a failure.
     notes = [p for p in problems if 'with no gitlink' in p]

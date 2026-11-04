@@ -9,6 +9,9 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). `tools/verify.py` on a shallow clone, after `--since HEAD`, and with a broken checkpoint (audit rows 38, 39).**
+  On the README's `git clone --depth 1` it checked 1 commit, called it "the last 200 commits" or "the whole history", and recorded a checkpoint `from: root`; after a `git fetch --depth 1` update every run, even `--full`, failed with a false "tree history rewritten". It now says "shallow clone: checked N commit(s) from <first>; the history before it is not in this clone; for the whole history run git fetch --unshallow", never records a shallow cut as `root`, and reports a checkpoint commit outside a shallow clone's history as not checkable, not as a rewrite.
+  A run that checked no commit (`--since HEAD`) no longer writes or advances the checkpoint, unless it is already at HEAD. A truncated or invalid `verified.json` is treated as absent with a note instead of crashing every run, and the checkpoint is now written to a temporary file and moved into place. Tests: tests/test_verify.py (8 cases).
 - **Changed (all). The day an act was made is read under the names Japan, Sweden and Australia use** (`Promulgated:`,
   `Issued:`, `Assented:`; 31,017 commits). Re-enactment after a repeal and doubtful dates now see it.
 - **Fixed (all; Spain data). One act-end rule for every reader, now including annulment, repeal notes, corrections, `diff` and `laws` (audit rows 30, 43, 44, 45, 48).**
