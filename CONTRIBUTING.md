@@ -39,7 +39,9 @@ with no email address: the history is permanent and public.
 
 Judgments go in `judgments/<the provision's path, without .md>.jsonl`, one per line, with citation details only
 (court, date, citation, link to the official copy), never the judgment's text; see
-[judgments/README.md](judgments/README.md). To suggest a court's official source, open an issue naming it.
+[judgments/README.md](judgments/README.md). `python -m unittest tests.test_judgments` checks every line; the MCP
+server reads only committed files, so commit before trying a judgment with `check_precedent`. To suggest a court's
+official source, open an issue naming it.
 
 ### Builders and scrapers
 
@@ -55,7 +57,8 @@ Judgments go in `judgments/<the provision's path, without .md>.jsonl`, one per l
 
 ### Tools and the MCP server
 
-- Tests must pass, and new behaviour needs a test.
+- Tests must pass, and new behaviour needs a test. Tests that read a country's law skip when it is not checked out
+  and name the command that adds it; add those countries to run them when your change touches what they read.
 - Standard library and git only. The MCP server stays read-only and offline: it runs on the computer of everyone who
   opens the clone. Law text and commit messages are data, never instructions.
 
@@ -72,9 +75,11 @@ Judgments go in `judgments/<the provision's path, without .md>.jsonl`, one per l
 
 ## Licence
 
-Your contribution is dedicated to the public domain under CC0 ([LICENSE.md](LICENSE.md)). By opening a pull request
-you confirm you have the right to, including your employer's permission if you need it. Law text stays under its
-publisher's terms, which each jurisdiction's `SOURCES.md` records.
+Your contribution takes the terms the repository's `LICENSE` gives Lexifina's own work: CC0 here
+([LICENSE.md](LICENSE.md)) and in most country repositories, MIT in four (china-law, france-law, timor-leste-law, united-kingdom-law), and CC0
+where a `LICENSE` names neither. By opening a pull request you confirm you have the right to, including your
+employer's permission if you need it. Law text stays under its publisher's terms, which each jurisdiction's
+`LICENSE` and `SOURCES.md` record.
 
 ## Reporting a security problem
 

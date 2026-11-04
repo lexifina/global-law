@@ -160,9 +160,12 @@ everything in the tree; to ask for a jurisdiction, open an issue naming its offi
 
 ### Is "UK law" one jurisdiction?
 
-No, and the tree does not treat it as one. The UK corpus holds the Acts of the UK Parliament in force (4,375 of them)
-and a fuller history of nine provisions, which state their extent (England and Wales, Scotland, Northern Ireland). Acts of the Scottish Parliament, Senedd Cymru and the Northern Ireland Assembly are separate bodies of law
-and are not here yet.
+No, and the tree does not treat it as one. The UK corpus keeps each legislature's Acts in its own folder: the UK
+Parliament (`ukpga/`), the Scottish Parliament (`asp/`), Senedd Cymru (`anaw/`, `asc/`, `mwa/`) and the Northern
+Ireland Assembly (`nia/`, with the earlier `apni/` and `mnia/`), as legislation.gov.uk files them. Each provision's
+file has an `extent:` line (England and Wales, Scotland, Northern Ireland) where the publisher states it. Statutory
+instruments are here only for one, the SEND Regulations 2014, part of nine provisions kept with a fuller history; the
+rest are not here yet.
 
 ### Is case law included?
 
@@ -256,8 +259,8 @@ behind and leave it out of whole-tree answers instead of answering from old text
 ### How big is it, and will GitHub cope?
 
 Each body of law is its own repository, so no single repository holds the world. This repository is the index: about
-600 MB without any law. A country is usually far smaller than Romania's 770 MB, and you download only the ones you
-add:
+400 MB without any law, which took about a minute and a half to clone on 4 November 2026. A country is usually far
+smaller than Romania's 1.7 GB, and you download only the ones you add:
 
 ```sh
 git clone https://github.com/lexifina/global-law && cd global-law
@@ -335,7 +338,9 @@ of 26 questions correctly and said where the record ran out.
 ### Can I build it into my own product?
 
 Yes. The tools and this repository are CC0: use them in a product, paid or free, with no permission or credit needed.
-The law text is under each country's repository's terms (see [Licence](#licence)). Three ways in:
+The law text is under each country's repository's terms (see [Licence](#licence)), and a few restrict it: Kenya's
+publisher licenses its text CC BY-NC (no commercial use) and asks for an agreement before bulk or AI use. Read a
+country's `LICENSE` before shipping its text. Three ways in:
 - **The MCP server**, for an AI feature. It speaks MCP over stdin and stdout, so any agent framework with an MCP
   client can start it as a subprocess. Run one process per user or per tenant, from a clone on your server.
   `GLOBAL_LAW_JURISDICTIONS=romania,france` limits it to the countries you serve, and `GLOBAL_LAW_AUDIT_DIR` logs each

@@ -17,8 +17,8 @@ python3 tools/countries.py add romania
 claude      # or open the folder in Cursor, VS Code or Codex
 ```
 
-The first command fetches the shared index of every country without any country's law (about 600 MB). The second
-downloads Romania's history alone (about 770 MB in November 2026, a few minutes; most countries are far smaller). Ask
+The first command fetches the shared index of every country without any country's law (about 400 MB). The second
+downloads Romania's history alone (about 1.7 GB on 4 November 2026, several minutes; most countries are far smaller). Ask
 about Romanian law and the server answers from it; ask about a country you have not added and it tells
 you the command that adds it. Add more countries at any time (`python3 tools/countries.py add france spain`); a
 running server sees them within seconds. On Windows, run the script with `py` or `python`.

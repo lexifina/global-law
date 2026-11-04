@@ -1,0 +1,26 @@
+# The checks CONTRIBUTING.md asks for, on every pull request. They need no country checked out: tests that read a
+# country's law skip when it is absent, and say which command adds it.
+name: checks
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.9', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # the dates and the pin history are read from the whole history
+          submodules: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Tests
+        run: python -m unittest discover -s tests -v
+      - name: Pins move only forward
+        run: python tools/verify.py
