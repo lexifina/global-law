@@ -28,13 +28,17 @@ global-law/
 ## Start
 
 ```sh
-git clone https://github.com/lexifina/global-law && cd global-law
+git clone --depth 1 https://github.com/lexifina/global-law && cd global-law
 python3 tools/countries.py add united-states/federal/usc   # one corpus; every country is several GB
 python3 tools/law.py show 2022-05-01 united-states/federal/usc/title-11/1182.md
 ```
 
-For every country, clone with `--recurse-submodules` instead. Don't clone with `--depth`: dates are read from the whole
-history.
+On Windows, type `py` or `python` where these say `python3`.
+
+`--depth 1` downloads about 34 MB instead of the index's whole history (about 370 MB). The tools never read that
+history, so they work the same. To have it without its file contents, clone with `--filter=blob:none` instead. For
+every country, add `--recurse-submodules`. Don't clone a country's repository with `--depth`: its dates are read from
+its whole history, and `countries.py add` fetches all of it.
 
 ## From an AI model (MCP)
 

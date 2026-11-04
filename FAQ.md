@@ -26,8 +26,8 @@ submodules, arranged by jurisdiction, with an index of what each one holds.
 
 Where a repository has the law's history, each commit is one law taking effect: the files are the text as it stood
 after that law, the commit is dated by the day the change took force, and its author is the law that made it. So the
-text can be read on any date, and `git blame` names the law behind each line. Not every repository has that history
-yet, which `manifest.json` says for each (`history`):
+text can be read on any date, and `tools/law.py blame` names the law behind each line. Not every repository has that
+history yet, which `manifest.json` says for each (`history`):
 - 265 corpora (`in-force`, `replayed`) hold every version, each credited to the law that made it;
 - 189 (`as-enacted`) hold each law as passed, not yet merged into the texts it amends;
 - 161 (`current-only`) hold today's text only, dated by its latest version;
@@ -39,11 +39,29 @@ in its commit message.
 
 ### Why git?
 
-Because the questions lawyers ask of legislation are the questions git answers. What did this say on that date is
-`git show` at a commit. Which law wrote these words is `git blame`. What changed between two dates is `git diff`.
-Everything one law changed is `git log --author`. Git also gives every version a content hash, works offline and
-can be copied anywhere, so the record does not depend on any one website staying up. `tools/law.py` and the MCP
-server wrap these commands so they read by in-force date rather than by commit order.
+Because the questions lawyers ask of legislation are the questions git answers: what this said on a date, which law
+wrote these words, what changed between two dates, everything one law changed. Git also gives every version a content
+hash, works offline and can be copied anywhere, so the record does not depend on any one website staying up.
+
+Plain git answers by commit order. `tools/law.py` (`show`, `blame`, `diff`) and the MCP server answer by in-force
+date, and give the in-force answer for every corpus. The two agree only where a corpus's commits are in in-force
+order and none was corrected later. There, `git show` at the last commit in force on a day is the text on that day,
+`git blame` names the law behind each line, and `git log --author` is everything one law changed. Some corpora append
+commits out of in-force order (Canada's federal acts, Romania's national acts, partly Czechia's) or add
+corrections to earlier versions later (Malta's), and there plain git gives the wrong text or the wrong law: on
+sampled Canadian files, 135 of 147 days gave a different text and 38 of 50 blames a different law.
+
+To see whether a corpus's commits are in in-force order, run this in it (Git Bash on Windows). It prints nothing
+when they are, and the first date out of order when they are not:
+
+```sh
+git log --reverse --format='%(trailers:key=In-force,valueonly)' | grep . | sort -c
+```
+
+Use the corpus's own `in_force_trailer` from `manifest.json` where it is not `In-force`.
+`python tools/check_corpus.py <corpus>` warns of commits appended out of order ("in force before a commit above
+them"), but not of Malta's corrections, which this line catches. A date changed later by a `Redates:` commit passes
+both, so use `law.py` whenever the answer matters.
 
 ### Isn't this already done?
 
@@ -259,15 +277,16 @@ behind and leave it out of whole-tree answers instead of answering from old text
 ### How big is it, and will GitHub cope?
 
 Each body of law is its own repository, so no single repository holds the world. This repository is the index: about
-400 MB without any law, which took about a minute and a half to clone on 4 November 2026. A country is usually far
-smaller than Romania's 1.7 GB, and you download only the ones you add:
+370 MB of history without any law, or about 34 MB cloned with `--depth 1`, which is all the tools need. A
+country is usually far smaller than Romania's 1.7 GB, and you download only the ones you add:
 
 ```sh
-git clone https://github.com/lexifina/global-law && cd global-law
+git clone --depth 1 https://github.com/lexifina/global-law && cd global-law
 python3 tools/countries.py add romania france
 ```
 
-Everything at once (`--recurse-submodules`) is many GB. Don't clone with `--depth`: the dates are read from the whole
+Everything at once (`--recurse-submodules`) is many GB. `--filter=blob:none` instead of `--depth 1` keeps the index's
+history without its file contents. Don't clone a country's repository with `--depth`: its dates are read from its whole
 history. `countries.py add --no-files` fetches a history without writing its files, which is all the tools need.
 
 ### What if GitHub goes down?
@@ -295,7 +314,7 @@ folder's `jurisdiction.json` names its level, its code and what is inside. The M
 Clone the index, add the countries you want, and ask by date:
 
 ```sh
-git clone https://github.com/lexifina/global-law && cd global-law
+git clone --depth 1 https://github.com/lexifina/global-law && cd global-law
 python3 tools/countries.py add united-states/federal/usc
 python3 tools/law.py show 2022-05-01 united-states/federal/usc/title-11/1182.md     # the text on a date
 python3 tools/law.py blame 2022-07-01 united-states/federal/usc/title-11/1182.md    # the law behind each line
@@ -304,8 +323,9 @@ python3 tools/law.py diff 2022-05-01 2022-07-01 united-states/federal/usc/title-
 
 You need git and Python 3.9 or newer, nothing else, and it works offline. On Windows, type `py` or `python` where
 these examples say `python3`. Each country's repository is also ordinary
-git, so `git log`, `git blame` and `git grep` work on it directly; use `law.py` when the date matters, because it
-reads the `In-force:` lines rather than git's dates. [README.md](README.md) lists every command.
+git, so `git log`, `git blame` and `git grep` work on it directly; use `law.py` when the date or the law matters,
+because it reads the `In-force:` lines rather than git's dates and commit order ([Why git?](#why-git)).
+[README.md](README.md) lists every command.
 
 ### How do I use it from an AI model?
 

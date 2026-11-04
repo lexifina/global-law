@@ -9,6 +9,13 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Changed (all). Plain git is exact only for corpora in in-force order.** The FAQ said `git show` and `git blame`
+  give the text on a date and the law behind each line; where commits are appended out of in-force order or corrected
+  later (Canada, Romania, Malta, partly Czechia) they do not, and `tools/law.py` does. The FAQ now says so and gives a
+  one-line check of a corpus's order.
+- **Changed (all). Clone the index with `--depth 1`.** About 34 MB instead of about 370 MB of history the tools never
+  read (`data/legacy-dates.tsv` ships); `--filter=blob:none` keeps the history. Corpora are still fetched whole. The
+  README's Start also says to type `py` or `python` on Windows.
 - **Fixed (all). The corpus standard agrees with itself.** `tools/check_corpus.py` accepts every `history` value
   MCP.md documents, `metadata-only` included (95 corpora; one with nothing dated warns instead of failing).
   `Consolidated:` is canonically a date, with the link in `Source:`; most corpora wrote the link there, so readers and
