@@ -298,6 +298,122 @@ class LineMatching(unittest.TestCase):
         finally:
             self.law._git_line_opcodes = real
 
+    def test_a_wrong_git_answer_is_never_used(self):  # row 46
+        a, b = self.statute(700, set()), self.statute(700, {1, 600})
+        real = self.law._hunks_to_opcodes
+        self.law._hunks_to_opcodes = lambda hunks, a, b: [('equal', 0, len(a), 0, len(b))]  # an answer read wrong
+        try:
+            self.assertIsNone(self.law._git_line_opcodes(a, b))
+            for ops in self.law._step_opcodes([a, b]):
+                pass
+            self.covers(ops, a, b)
+            self.assertEqual(len([1 for op, *_ in ops if op != 'equal']), 2)
+        finally:
+            self.law._hunks_to_opcodes = real
+
+
+class HostileGitConfig(unittest.TestCase):
+    """blame and words on a long file (git's batched line diffs) give the same answer whatever the user's git config
+    says, and keep a NUL byte and a missing final newline (row 46)."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        base = ''.join(f'Article {i}. Text of article {i}.\n' if i % 2 else '\n' for i in range(1400))
+        cls.texts = {
+            'Act 1 of 2010': base + 'Final article',  # no final newline
+            'Act 2 of 2012': base + 'Final article\nNew article by Act 2.\n',
+            'Act 3 of 2015': (base + 'Final article\nNew article by Act 2.\n').replace(
+                'Article 5. Text', 'Article 5. NEW\x00TEXT', 1),
+        }
+        cls.texts['Act 4 of 2020'] = cls.texts['Act 3 of 2015'].replace('Article 701. Text', 'Article 701. Amended', 1)
+        a = t.corpus('hh/national/acts')
+        # appended out of the order they took force, so blame replays the versions (no git blame)
+        for name, day in [('Act 1 of 2010', '2010-01-01'), ('Act 4 of 2020', '2020-01-01'),
+                          ('Act 2 of 2012', '2012-01-01'), ('Act 3 of 2015', '2015-01-01')]:
+            a.commit(name, {'act/long.md': cls.texts[name]}, In_force=day)
+        t.pin()
+        cls.path = 'hh/national/acts/act/long.md'
+        script = t.root / 'external-diff.sh'
+        script.write_bytes(b'#!/bin/sh\nprintf "diff --git a/a/000000 b/b/000000\\n@@ -1 +1 @@\\n"\nexit 0\n')
+        os.chmod(script, 0o755)
+        cls.hostile = t.root / 'hostile.gitconfig'
+        cls.hostile.write_text(
+            '[diff]\n\tnoprefix = true\n\tmnemonicPrefix = true\n\trelative = true\n\trenames = copies\n'
+            f'\texternal = {script.as_posix()}\n[color]\n\tdiff = always\n\tui = always\n'
+            '[core]\n\tquotePath = true\n\tautocrlf = true\n', encoding='utf-8')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def answers(self, config: Path | None, batch: int | None = None):
+        """(words, blame, git pairs that checked out, pairs that did not) with GIT_CONFIG_GLOBAL set to `config`."""
+        saved = os.environ.get('GIT_CONFIG_GLOBAL')
+        if config:
+            os.environ['GIT_CONFIG_GLOBAL'] = str(config)
+        law = self.t.law()
+        if batch:
+            law.STEP_BATCH = batch
+        seen = [0, 0]
+        real = law._GitDiffs.opcodes
+
+        def counted(diffs):
+            out = real(diffs)
+            seen[0] += sum(x is not None for x in out)
+            seen[1] += sum(x is None for x in out)
+            return out
+        law._GitDiffs.opcodes = counted
+        try:
+            return law.words_on('2021-01-01', self.path), law.blame_on('2021-01-01', self.path), seen
+        finally:
+            law.close_readers()
+            if saved is None:
+                os.environ.pop('GIT_CONFIG_GLOBAL', None)
+            else:
+                os.environ['GIT_CONFIG_GLOBAL'] = saved
+
+    def test_the_config_is_hostile(self):
+        f1, f2 = self.t.root / 'one.txt', self.t.root / 'two.txt'
+        f1.write_text('a\n', encoding='utf-8')
+        f2.write_text('b\n', encoding='utf-8')
+        env = {**os.environ, 'GIT_CONFIG_GLOBAL': str(self.hostile)}
+        diff = ['git', 'diff', '--no-index', str(f1), str(f2)]
+        out = subprocess.run(diff, cwd=self.t.root, capture_output=True, env=env).stdout
+        self.assertEqual(out, b'diff --git a/a/000000 b/b/000000\n@@ -1 +1 @@\n')  # the external diff ran
+        out = subprocess.run([*diff, '--no-ext-diff'], cwd=self.t.root, capture_output=True, env=env).stdout
+        self.assertIn(b'\x1b[', out)  # in colour
+        self.assertNotIn(b' a/', out)  # with no prefixes
+
+    def test_words_and_blame_are_right(self):
+        words, blame, (good, bad) = self.answers(None)
+        self.assertEqual((good, bad), (6, 0))  # the long steps (3 each) went to git, and each answer checked out
+        text = self.texts['Act 4 of 2020']
+        self.assertEqual(''.join(t for _, t in words), text)
+        by = {}
+        for who, run_ in words:
+            for w in run_.split():
+                by.setdefault(w, set()).add(who)
+        self.assertEqual(by['NEW\x00TEXT'], {'Act 3 of 2015'})
+        self.assertEqual(by['Amended'], {'Act 4 of 2020'})
+        self.assertEqual(by['Act'], {'Act 2 of 2012'})
+        self.assertEqual(by['Final'], {'Act 1 of 2010'})
+        self.assertEqual([line for _, line in blame], text.splitlines())
+        credit = {line: who for who, line in blame}
+        self.assertEqual(credit['New article by Act 2.'], 'Act 2 of 2012')
+        self.assertEqual(credit['Article 5. NEW\x00TEXT of article 5.'], 'Act 3 of 2015')
+        self.assertEqual(credit['Article 701. Amended of article 701.'], 'Act 4 of 2020')
+        self.assertEqual(credit['Article 703. Text of article 703.'], 'Act 1 of 2010')
+        self.assertEqual(sum(who != 'Act 1 of 2010' for who, _ in blame), 3)  # blame lines keep no newline
+
+    def test_a_hostile_git_config_changes_nothing(self):
+        plain = self.answers(None)
+        hostile = self.answers(self.hostile)
+        self.assertEqual(hostile[2], [6, 0])
+        self.assertEqual(hostile[:2], plain[:2])
+        small_batches = self.answers(self.hostile, batch=2)
+        self.assertEqual(small_batches[:2], plain[:2])
+
 
 class StartupCost(unittest.TestCase):
     """What a short read costs before it reads any law (performance/experiments/startup.md): the index kept in

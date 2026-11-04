@@ -9,6 +9,8 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- blame and words: the line diffs behind long files (one `git diff --no-index` per batch of steps) now run git with a fixed config (no system/global config, attributes or GIT_* variables; explicit prefixes, --text, --no-ext-diff, --no-textconv, --no-color, --no-renames), so settings like diff.noprefix or diff.external no longer drop lines or credit them all to the first law (audit row 46).
+- Lines are written so a NUL byte or a missing final newline is kept, and every answer is checked to rebuild the new version exactly; a step that fails the check is diffed again alone, then by difflib, never credited wrong.
 - **Adopted (all). `Redates:`, `Retroactive:` and `data/acts.json` are in the corpus standard, and checked (row 24).**
   MCP.md says what readers do with each: only Lexifina's `Redates:` naming a commit above it apply, `Retroactive:`
   counts only from `yes`, and acts.json ends a repealed or expired act from its YYYY-MM-DD day. `check_corpus.py` warns,

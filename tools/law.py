@@ -873,13 +873,40 @@ GIT_DIFF_ABOVE = 1_000_000  # line pairs above which git's histogram diff matche
 
 
 def _git_line_opcodes(a: list[str], b: list[str]) -> list[tuple[str, int, int, int, int]] | None:
-    """git's histogram diff of two lists of lines, as difflib opcodes; None if git cannot be run here."""
+    """git's histogram diff of two lists of lines, as difflib opcodes; None if git cannot be run here or its answer
+    does not check out (_opcodes_fit)."""
     return _GitDiffs([(a, b)]).opcodes()[0]
 
 
 def _file_bytes(lines: list[str]) -> bytes:
-    """Lines as git reads them for a diff: each ends with a newline."""
-    return ''.join(x if x.endswith('\n') else x + '\n' for x in lines).encode('utf-8')
+    """Lines as git reads them for a diff: one line of the file for each line, so that two lines are the same line to
+    git exactly when they are the same string. A line's own '\\n' ends its line; backslash, NUL and CR inside a line
+    are escaped (git takes a file with a NUL for binary). In a list whose lines keep their endings (words), a line
+    with no final newline is marked, so 'x' and 'x\\n' differ, as they do to difflib."""
+    keeps = bool(lines) and lines[0].endswith('\n')
+    out = []
+    for x in lines:
+        ended = x.endswith('\n')
+        body = (x[:-1] if ended else x).replace('\\', '\\\\').replace('\x00', '\\0').replace('\r', '\\r')
+        out.append(body.replace('\n', '\\n') + ('\\$' if keeps and not ended else '') + '\n')
+    return ''.join(out).encode('utf-8', 'surrogatepass')
+
+
+def _opcodes_fit(ops, a: list[str], b: list[str]) -> bool:
+    """The opcodes walk both lists end to end in order, and every 'equal' stretch is equal: applied to `a` they give
+    back `b` exactly. O(len(a) + len(b))."""
+    kinds = {(True, True): 'replace', (True, False): 'delete', (False, True): 'insert'}
+    ia = ib = 0
+    for op, a0, a1, b0, b1 in ops:
+        if (a0, b0) != (ia, ib) or a1 < a0 or b1 < b0:
+            return False
+        if op == 'equal':
+            if a1 - a0 != b1 - b0 or a[a0:a1] != b[b0:b1]:
+                return False
+        elif op != kinds.get((a1 > a0, b1 > b0)):
+            return False
+        ia, ib = a1, b1
+    return (ia, ib) == (len(a), len(b))
 
 
 def _hunks_to_opcodes(hunks: list[str], a: list[str], b: list[str]) -> list[tuple[str, int, int, int, int]]:
@@ -891,25 +918,53 @@ def _hunks_to_opcodes(hunks: list[str], a: list[str], b: list[str]) -> list[tupl
             continue
         a0, an, b0, bn = int(hunk[1]), int(hunk[2] or 1), int(hunk[3]), int(hunk[4] or 1)
         a0, b0 = (a0 if an == 0 else a0 - 1), (b0 if bn == 0 else b0 - 1)
-        if a0 > ia:
+        if a0 > ia or b0 > ib:
             ops.append(('equal', ia, a0, ib, b0))
         ops.append(('replace' if an and bn else 'delete' if an else 'insert', a0, a0 + an, b0, b0 + bn))
         ia, ib = a0 + an, b0 + bn
-    if ia < len(a):
+    if ia < len(a) or ib < len(b):
         ops.append(('equal', ia, len(a), ib, len(b)))
     return ops
+
+
+# settings and options that fix the output _GitDiffs reads, whatever the user's git config, attributes or
+# environment say (prefixes, colour, external diff, textconv, binary detection, renames, quoting, relative paths)
+_GIT_DIFF_SETTINGS = ('core.quotePath=false', 'core.autocrlf=false', 'core.safecrlf=false', 'core.bigFileThreshold=1g',
+                      'diff.noprefix=false', 'diff.mnemonicPrefix=false', 'diff.relative=false', 'diff.renames=false',
+                      'diff.suppressBlankEmpty=false', 'diff.indentHeuristic=true', 'diff.interHunkContext=0',
+                      'color.ui=never', 'color.diff=never')
+_GIT_DIFF_OPTIONS = ('--no-index', '--text', '--no-textconv', '--no-ext-diff', '--no-color', '--no-renames',
+                     '--src-prefix=a/', '--dst-prefix=b/', '-U0', '--inter-hunk-context=0', '--indent-heuristic',
+                     '--diff-algorithm=histogram')
+
+
+def _hermetic_git(folder: Path) -> tuple[list[str], dict]:
+    """The command prefix and environment for a git that reads no config but these settings: no system or global
+    config, no attributes file, no GIT_* variable of the caller's, and no repository looked for above `folder`."""
+    import os
+    empty = folder / 'empty'
+    empty.write_bytes(b'')
+    env = {k: v for k, v in os.environ.items() if not k.upper().startswith('GIT_') or k.upper() == 'GIT_EXEC_PATH'}
+    env.update(GIT_CONFIG_NOSYSTEM='1', GIT_ATTR_NOSYSTEM='1', GIT_CONFIG_GLOBAL=str(empty),
+               GIT_CEILING_DIRECTORIES=str(folder.parent), XDG_CONFIG_HOME=str(folder), LC_ALL='C')
+    cmd = ['git', '-c', f'core.attributesFile={empty.as_posix()}']
+    for setting in _GIT_DIFF_SETTINGS:
+        cmd += ['-c', setting]
+    return cmd, env
 
 
 class _GitDiffs:
     """git's histogram diff of many (a, b) pairs of lists of lines from ONE git process, started at once and read
     when wanted, so git works while Python credits the versions before. The pairs are written as files of the same
     name in two folders and `git diff --no-index` compares the folders file by file, with the same diff it gives two
-    single files. `encoded` (id of a list -> its bytes) keeps a version that is the new side of one pair and the old
-    side of the next from being encoded twice."""
+    single files. git runs with fixed settings (_hermetic_git) and each pair's answer is checked (_opcodes_fit): a
+    pair whose answer is missing, unreadable or wrong comes back None, never as a wrong credit. `ran`: git ran and
+    exited normally. `encoded` (id of a list -> its bytes) keeps a version that is the new side of one pair and the
+    old side of the next from being encoded twice."""
 
     def __init__(self, pairs: list[tuple[list[str], list[str]]], encoded: dict | None = None):
         import tempfile
-        self.pairs, self.proc, self.dir = pairs, None, None
+        self.pairs, self.proc, self.dir, self.ran = pairs, None, None, False
         if not pairs:
             return
         encoded = {} if encoded is None else encoded
@@ -926,11 +981,11 @@ class _GitDiffs:
             for k, (a, b) in enumerate(pairs):
                 (d / 'a' / f'{k:06d}').write_bytes(data(a))
                 (d / 'b' / f'{k:06d}').write_bytes(data(b))
+            cmd, env = _hermetic_git(d)
             self.out = open(d / 'out', 'wb')
-            self.proc = subprocess.Popen(['git', 'diff', '--no-index', '--no-color', '--no-ext-diff', '--no-renames',
-                                          '-U0', '--diff-algorithm=histogram', 'a', 'b'], cwd=d, stdout=self.out,
-                                         stderr=subprocess.DEVNULL)
-        except (OSError, AttributeError):
+            self.proc = subprocess.Popen([*cmd, 'diff', *_GIT_DIFF_OPTIONS, 'a', 'b'], cwd=d, env=env,
+                                         stdout=self.out, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+        except (OSError, AttributeError, UnicodeError):
             self.close()
 
     def close(self) -> None:
@@ -944,7 +999,8 @@ class _GitDiffs:
         self.dir = None
 
     def opcodes(self) -> list[list[tuple[str, int, int, int, int]] | None]:
-        """Each pair's difflib opcodes; None for every pair if git could not be run here."""
+        """Each pair's difflib opcodes; None for a pair whose answer does not check out, and for every pair if git
+        could not be run here."""
         if self.proc is None:
             self.close()
             return [None] * len(self.pairs)
@@ -954,15 +1010,21 @@ class _GitDiffs:
         self.close()
         if code not in (0, 1):
             return [None] * len(self.pairs)
+        self.ran = True
         hunks: dict[int, list[str]] = {}
         current: list[str] | None = None
-        for line in raw.decode('utf-8', 'replace').splitlines():
-            head = re.match(r'diff --git a/a/(\d{6}) b/b/(\d{6})$', line)
-            if head:
-                current = hunks.setdefault(int(head[1]), [])
+        # split at '\n' only, as git does: splitlines would also split at the form feeds and other breaks in the text
+        for line in raw.decode('utf-8', 'replace').split('\n'):
+            if line.startswith('diff '):
+                head = re.fullmatch(r'diff --git a/a/(\d{6}) b/b/(\d{6})', line)
+                current = hunks.setdefault(int(head[1]), []) if head and head[1] == head[2] else None
             elif current is not None and line.startswith('@@ '):
                 current.append(line)
-        return [_hunks_to_opcodes(hunks.get(k, []), a, b) for k, (a, b) in enumerate(self.pairs)]
+        out = []
+        for k, (a, b) in enumerate(self.pairs):
+            ops = _hunks_to_opcodes(hunks.get(k, []), a, b)
+            out.append(ops if _opcodes_fit(ops, a, b) else None)
+        return out
 
 
 def _line_opcodes(a: list[str], b: list[str]) -> list[tuple[str, int, int, int, int]]:
@@ -1003,6 +1065,8 @@ def _step_opcodes(versions: list[list[str]], check=None):
             by_git = by_git_now
             for i in range(batch[0] if n else 0, (batches[n + 1][0] if n + 1 < len(batches) else len(steps))):
                 ops = by_git.get(i)
+                if ops is None and i in by_git and running[n].ran:
+                    ops = _git_line_opcodes(*steps[i])  # git ran but this step's answer did not check out: alone
                 yield ops if ops is not None else difflib.SequenceMatcher(None, *steps[i], autojunk=False).get_opcodes()
         if not batches:
             for a, b in steps:
