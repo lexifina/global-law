@@ -4,8 +4,9 @@
 
 Each case is a way a real corpus records its law: older acts appended after newer ones, corrections laid over past
 dates, a publisher's starting text, court rulings and treaties, a list of acts without their text, laws not yet in
-force on main, an unfinished or shallow checkout, a checkout at an older commit than the tree pins, and a pin that
-moves forward (the index on disk grows by the new commits only).
+force on main, an unfinished or shallow checkout, a checkout at an older commit than the tree pins, a pin that
+moves forward (the index on disk grows by the new commits only), and laws kept on a future branch, read from their day
+through data/future-pins.tsv.
 """
 from __future__ import annotations
 
@@ -665,6 +666,186 @@ class FifthOfNovemberFixes(unittest.TestCase):
         out, err, code = self.t.cli('show', '2023-01-01', 'uu/national/acts/s1.md')
         self.assertNotEqual(code, 0)
         self.assertIn('fetch --unshallow', err)
+
+
+class FutureBranches(unittest.TestCase):
+    """Laws with a later in-force day kept on a future branch, read beside main once their day comes, as the tree's
+    data/future-pins.tsv records them (corpus, branch, future_sha, main_pin): a branch that descends from the pin, one
+    that forked before it (main went on with documentation and a law the branch copied), a row made for an earlier
+    pin, and a recorded commit the checkout does not have."""
+
+    BEFORE, ON = '2020-05-31', '2020-06-01'
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        cls.rows = {}
+        # Linear: the branch goes on from the pinned main commit.
+        a = t.corpus('li/national/acts')
+        a.commit('Act 1 of 2010', {'act/s1.md': 'The fee is 10.\nRule two.\n', 'act/s2.md': 'Other.\n'},
+                 In_force='2010-01-01', Kind='law')
+        pin = a.commit('Lexifina', {'README.md': '# LI\n'}, Kind='documentation')
+        run('checkout', '-q', '-b', 'future', cwd=a.path)
+        a.commit('Act 2 of 2020', {'act/s1.md': 'The fee is 20.\nRule two.\n'}, In_force=cls.ON, Kind='law')
+        fut = a.commit('Act 3 of 2099', {'act/s1.md': 'The fee is 99.\nRule two.\n'}, In_force='2099-01-01', Kind='law')
+        run('checkout', '-q', 'main', cwd=a.path)
+        cls.rows['li/national/acts'] = ('future', fut, pin)
+        # Forked: the branch left main at its last law; main went on with a law the branch copies (same author line
+        # and message) and with documentation the branch does not have.
+        f = t.corpus('fk/national/acts')
+        f.commit('Act 1 of 2010', {'act/s1.md': 'The fee is 10.\nRule two.\n'}, In_force='2010-01-01', Kind='law')
+        run('checkout', '-q', '-b', 'zukunft', cwd=f.path)
+        run('checkout', '-q', 'main', cwd=f.path)
+        later = f.commit('Act 4 of 2015', {'act/s4.md': 'Section four.\n'}, In_force='2015-01-01', Kind='law')
+        pin = f.commit('Lexifina', {'README.md': '# FK\n'}, Kind='documentation')
+        run('checkout', '-q', 'zukunft', cwd=f.path)
+        run('cherry-pick', later, cwd=f.path,
+            env={'GIT_COMMITTER_NAME': 'test', 'GIT_COMMITTER_EMAIL': 't@example.org'})
+        f.commit('Act 2 of 2020', {'act/s1.md': 'The fee is 20.\nRule two.\n'}, In_force=cls.ON, Kind='law')
+        fut = f.commit('Act 3 of 2099', {'act/s1.md': 'The fee is 99.\nRule two.\n'}, In_force='2099-01-01', Kind='law')
+        run('checkout', '-q', 'main', cwd=f.path)
+        cls.rows['fk/national/acts'] = ('zukunft', fut, pin)
+        # Stale: the row names the main pin before the last one (the pin moved, the file was not written again).
+        s = t.corpus('st/national/acts')
+        old = s.commit('Act 1 of 2010', {'act/s1.md': 'The fee is 10.\n'}, In_force='2010-01-01', Kind='law')
+        run('checkout', '-q', '-b', 'future', cwd=s.path)
+        fut = s.commit('Act 2 of 2020', {'act/s1.md': 'The fee is 20.\n'}, In_force=cls.ON, Kind='law')
+        run('checkout', '-q', 'main', cwd=s.path)
+        s.commit('Lexifina', {'README.md': '# ST\n'}, Kind='documentation')
+        cls.rows['st/national/acts'] = ('future', fut, old)
+        # Missing: the checkout has never fetched the recorded future commit.
+        m = t.corpus('mi/national/acts')
+        pin = m.commit('Act 1 of 2010', {'act/s1.md': 'The fee is 10.\n'}, In_force='2010-01-01', Kind='law')
+        cls.rows['mi/national/acts'] = ('future', 'f' * 40, pin)
+        cls.write_rows()
+        t.pin()
+
+    @classmethod
+    def write_rows(cls):
+        data = cls.t.root / 'data'
+        data.mkdir(exist_ok=True)
+        (data / 'future-pins.tsv').write_bytes(
+            ('# corpus\tbranch\tfuture_sha\tmain_pin\n'
+             + ''.join(f'{c}\t{b}\t{f}\t{p}\n' for c, (b, f, p) in sorted(cls.rows.items()))).encode('utf-8'))
+        run('add', 'data', cwd=cls.t.root)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def check_reads(self, corpus):
+        p = f'{corpus}/act/s1.md'
+        out, err, code = self.t.cli('show', self.BEFORE, p)
+        self.assertEqual(out, 'The fee is 10.\nRule two.\n', err)
+        out, err, code = self.t.cli('show', self.ON, p)
+        self.assertEqual(out, 'The fee is 20.\nRule two.\n', err)
+        out, err, code = self.t.cli('show', TODAY, p)
+        self.assertEqual(out, 'The fee is 20.\nRule two.\n', err)  # the 2099 law only from its day
+        self.assertIn('take force after today', err)
+        out, err, code = self.t.cli('blame', self.BEFORE, p)
+        self.assertIn('Act 1 of 2010', out, err)
+        self.assertNotIn('Act 2 of 2020', out)
+        out, err, code = self.t.cli('blame', self.ON, p)
+        line = next(l for l in out.splitlines() if 'fee is 20' in l)
+        self.assertIn('Act 2 of 2020', line)
+        self.assertIn(self.ON, line)
+        self.assertIn('Act 1 of 2010', next(l for l in out.splitlines() if 'Rule two' in l))
+        out, err, code = self.t.cli('diff', self.BEFORE, self.ON, p)
+        self.assertIn('[-10.-]{+20.+}', out, err)
+        out, err, code = self.t.cli('diff', '2010-01-01', self.BEFORE, p)
+        self.assertIn('No change between those dates', out, err)
+        out, err, code = self.t.cli('log', p)
+        self.assertIn(f'in force {self.ON}  Act 2 of 2020', out, err)
+        self.assertIn('in force 2099-01-01  Act 3 of 2099', out)
+        out, err, code = self.t.cli('world', self.BEFORE)
+        self.assertEqual(code, 0, err)
+        self.assertRegex(out, rf'{corpus}\s+Act (1 of 2010|4 of 2015), in force 20(10|15)-01-01')
+        out, err, code = self.t.cli('world', self.ON)
+        self.assertRegex(out, rf'{corpus}\s+Act 2 of 2020, in force {self.ON}')
+        out, err, code = self.t.cli('laws', '2020-01-01', '2020-12-31', corpus)
+        self.assertIn(f'{self.ON}  {corpus}', out, err)
+        self.assertIn('Act 2 of 2020', out)
+
+    def test_a_linear_future_branch_is_read_from_its_day(self):
+        self.check_reads('li/national/acts')
+        law = self.t.law()
+        ix = law._index('li/national/acts')
+        self.assertTrue(ix['future']['linear'])
+        self.assertTrue(law.in_order('li/national/acts'))
+        law.close_readers()
+
+    def test_a_forked_future_branch_is_read_beside_main(self):
+        self.check_reads('fk/national/acts')
+        out, err, code = self.t.cli('log', 'fk/national/acts/act/s4.md')
+        self.assertEqual(out.count('Act 4 of 2015'), 1, out)  # the branch's copy of a main law is not a second one
+        out, err, code = self.t.cli('show', self.ON, 'fk/national/acts/act/s4.md')
+        self.assertEqual(out, 'Section four.\n', err)
+        law = self.t.law()
+        ix = law._index('fk/national/acts')
+        self.assertFalse(ix['future']['linear'])
+        self.assertEqual(ix['future']['replays_skipped'], 1)
+        self.assertFalse(law.in_order('fk/national/acts'))
+        tree = law.corpus_tree(self.ON, 'fk/national/acts')  # main's documentation and the branch's law together
+        names = law.git('ls-tree', '-r', '--name-only', tree, cwd=law.corpus_dir('fk/national/acts')).split()
+        law.close_readers()
+        self.assertIn('act/s4.md', names)
+
+    def test_a_row_for_an_earlier_pin_falls_back_to_main(self):
+        p = 'st/national/acts/act/s1.md'
+        out, err, code = self.t.cli('show', self.ON, p)
+        self.assertEqual(out, 'The fee is 10.\n', err)  # main alone, never main and an old branch together
+        self.assertIn('records that branch for an earlier pin', err)
+        out, err, code = self.t.cli('log', p)
+        self.assertNotIn('Act 2 of 2020', out)
+        out, err, code = self.t.cli('world', self.ON)
+        self.assertRegex(out, r'st/national/acts\s+Act 1 of 2010')
+        self.assertIn('st/national/acts: laws with a later in-force day are kept on its future branch', err)
+
+    def test_a_future_commit_the_checkout_lacks_falls_back_with_the_fetch(self):
+        out, err, code = self.t.cli('show', self.ON, 'mi/national/acts/act/s1.md')
+        self.assertEqual(out, 'The fee is 10.\n', err)
+        self.assertIn('which this checkout does not have', err)
+        self.assertIn('Run: git -C mi/national/acts fetch origin future', err)
+
+    def test_the_index_on_disk_stays_mains_and_a_pin_move_rebuilds(self):
+        self.t.cli('show', self.ON, 'li/national/acts/act/s1.md')
+        law = self.t.law()
+        main = law._main_index('li/national/acts')
+        self.assertNotIn('Act 2 of 2020', [r[1] for r in main['rows']])
+        self.assertNotIn('future', main)
+        law.close_readers()
+        # The pin moves on; the row still names the old pin: main alone (with its new law), then the branch again
+        # once the row is written for the new pin.
+        a = self.t.corpora['li/national/acts']
+        branch, fut, _ = self.rows['li/national/acts']
+        try:
+            new = a.commit('Act 5 of 2021', {'act/s2.md': 'Other, amended.\n'}, In_force='2021-01-01', Kind='law')
+            self.t.pin()
+            out, err, code = self.t.cli('show', TODAY, 'li/national/acts/act/s1.md')
+            self.assertEqual(out, 'The fee is 10.\nRule two.\n', err)
+            self.assertIn('earlier pin', err)
+            out, err, code = self.t.cli('show', TODAY, 'li/national/acts/act/s2.md')
+            self.assertEqual(out, 'Other, amended.\n', err)
+            run('checkout', '-q', 'future', cwd=a.path)  # the builder copies main's new law onto the branch
+            run('cherry-pick', new, cwd=a.path, env={'GIT_COMMITTER_NAME': 'test', 'GIT_COMMITTER_EMAIL': 't@example.org'})
+            run('checkout', '-q', 'main', cwd=a.path)
+            self.rows['li/national/acts'] = (branch, run('rev-parse', 'future', cwd=a.path), new)
+            self.write_rows()
+            self.t.pin()
+            out, err, code = self.t.cli('show', TODAY, 'li/national/acts/act/s1.md')
+            self.assertEqual(out, 'The fee is 20.\nRule two.\n', err)
+            out, err, code = self.t.cli('show', TODAY, 'li/national/acts/act/s2.md')
+            self.assertEqual(out, 'Other, amended.\n', err)
+            law = self.t.law()
+            self.assertFalse(law._index('li/national/acts')['future']['linear'])  # forked from the new pin now
+            self.assertNotIn('Act 2 of 2020', [r[1] for r in law._main_index('li/national/acts')['rows']])
+            law.close_readers()
+        finally:  # back as setUpClass left it, for the other tests
+            run('reset', '-q', '--hard', 'HEAD~1', cwd=a.path)
+            run('branch', '-q', '-f', 'future', fut, cwd=a.path)
+            self.rows['li/national/acts'] = (branch, fut, run('rev-parse', 'HEAD', cwd=a.path))
+            self.write_rows()
+            self.t.pin()
 
 
 class Checkouts(unittest.TestCase):

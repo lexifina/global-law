@@ -100,12 +100,12 @@ def _store() -> Path:
     return _CACHE[('store', '')]  # type: ignore[return-value]
 
 
-ROOT_FILES = ('manifest.json', 'data/moved-paths.tsv', 'data/legacy-dates.tsv')
+ROOT_FILES = ('manifest.json', 'data/moved-paths.tsv', 'data/future-pins.tsv', 'data/legacy-dates.tsv')
 
 
 def _root() -> dict:
-    """What every command reads from the tree's HEAD commit: manifest.json, data/moved-paths.tsv and
-    data/legacy-dates.tsv (None where missing), the submodule pins (`git ls-tree -r -d`) and .gitmodules' paths and
+    """What every command reads from the tree's HEAD commit: manifest.json, data/moved-paths.tsv,
+    data/future-pins.tsv and data/legacy-dates.tsv (None where missing), the submodule pins (`git ls-tree -r -d`) and .gitmodules' paths and
     urls. All of it depends on the commit alone, so it is kept on disk (global-law-cache/root-<commit>.json): after
     the first read of a commit, a command starts no git process for it, where it used to start five."""
     head = _head()
@@ -116,8 +116,8 @@ def _root() -> dict:
     data = None
     try:
         data = json.loads(path.read_text(encoding='utf-8'))
-        if data.get('v') != 1 or data.get('head') != head:
-            data = None
+        if data.get('v') != 1 or data.get('head') != head or not set(ROOT_FILES) <= set(data.get('files') or {}):
+            data = None  # another version's cache, or one written before a file was added to ROOT_FILES
     except (OSError, ValueError):
         data = None
     if data is None:
@@ -316,7 +316,7 @@ def corpus_events(corpus: str) -> list[Event]:
         return []
     _CACHE.pop(('behind', corpus), None)
     ix = _index(corpus)
-    key = ('corpus-events', f"{corpus}@{ix['pin']}")
+    key = ('corpus-events', f"{corpus}@{_at(ix)}")
     if key not in _CACHE:
         _CACHE[key] = [Event(r[0], corpus, r[0], r[1], r[5], r[4], r[3]) for r in ix['rows'] if r[5]]
     return _CACHE[key]  # type: ignore[return-value]
@@ -339,7 +339,7 @@ def act_next(corpus: str, paths: list[str], after: str) -> str | None:
     if not paths:
         return None
     ix = _index(corpus)
-    key = ('act-next', f"{corpus}@{ix['pin']}:" + '\x1f'.join(paths))
+    key = ('act-next', f"{corpus}@{_at(ix)}:" + '\x1f'.join(paths))
     if key not in _CACHE:
         rows = ix['rows']
         days = set()
@@ -455,6 +455,10 @@ def in_order(corpus: str) -> bool:
     # A corpus that moved or withdrew files reads a past date under the files' current paths, which only a built tree
     # gives: its commit-order prefix still holds the old paths and the withdrawn acts.
     ix = _index(corpus)
+    # A forked future branch read beside main (future_pins) is not a prefix of main's history: only a built tree
+    # holds main's files and the branch's versions together.
+    if ix.get('future') and not ix['future']['linear']:
+        return False
     # An act data/acts.json records as ended keeps its files in the commit-order prefix: only a built tree ends them.
     return (not corrections(corpus) and not ix.get('moves') and not ix.get('withdrawn')
             and not any(e['day'] for e in act_ends(corpus).values()))
@@ -471,7 +475,7 @@ def file_index(corpus: str) -> tuple[dict, list]:
     """Every version of every file of a corpus, from the corpus index: path -> [(in force, order, blob or None for a
     deletion, mode)] for ordinary commits, and the corrections laid over them as [(fix, order, {path: (blob, mode)})]."""
     ix = _index(corpus)
-    key = ('file-index', f"{corpus}@{ix['pin']}")
+    key = ('file-index', f"{corpus}@{_at(ix)}")
     if key in _CACHE:
         return _CACHE[key]  # type: ignore[return-value]
     rows = ix['rows']
@@ -559,7 +563,7 @@ def corpus_tree(date: str, corpus: str) -> str | None:
     prefix; any other (older acts appended after the tip, corrections) is a tree built from file_index for the date."""
     if in_order(corpus):
         return corpus_on(date, corpus)
-    key = ('tree', f'{corpus}@{tip(corpus) or "HEAD"}@{date}')
+    key = ('tree', f'{corpus}@{_at(_index(corpus))}@{date}')
     if key in _CACHE:
         return _CACHE[key]  # type: ignore[return-value]
     index, overlays = file_index(corpus)
@@ -1240,9 +1244,16 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
         out.append(f"{corpus}: this record lists acts (titles, numbers, dates) without their text, so what it shows "
                    "is a catalogue entry, not the law.")
     ahead = sum(1 for e in own if e.in_force > today)
-    if ahead:
+    fut = _index(corpus).get('future') if own else None
+    if ahead and fut:
+        out.append(f"{corpus}: {ahead} change(s) in this record (main and its {fut['branch']} branch, recorded at "
+                   f"{fut['sha'][:10]}) take force after today; they are shown only from their dates.")
+    elif ahead:
         out.append(f"{corpus}: {ahead} change(s) in this record take force after today; they are shown only from their "
                    "dates, but the files at the corpus's HEAD already hold them.")
+    note = future_note(corpus)
+    if note:
+        out.append(note)
     missing = [EFFECTS[e] for e in EFFECTS if e not in effects_of(corpus)]
     if own and missing and info.get('history') not in ('metadata-only',):
         out.append(f"{corpus}: this record changes the text on each change's in-force date only; it does not hold "
@@ -1354,7 +1365,7 @@ def history(path: str) -> list[dict]:
     from the corpus index."""
     corpus, rel = corpus_of(path)
     ix = _index(corpus)
-    key = ('history', f"{corpus}@{ix['pin']}:{rel}")
+    key = ('history', f"{corpus}@{_at(ix)}:{rel}")
     if key not in _CACHE:
         _CACHE[key] = _history(corpus, rel)
     return [dict(h) for h in _CACHE[key]]  # type: ignore[union-attr]
@@ -1438,7 +1449,7 @@ def act_ends(corpus: str) -> dict[str, dict]:
     may record a whole-law repeal there without removing each file of the law (spain-law until November 2026: 1,991
     norms), so the readers end every file of the act on that day themselves."""
     ix = _index(corpus)
-    key = ('act-ends', f"{corpus}@{ix['pin']}")
+    key = ('act-ends', f"{corpus}@{_at(ix)}")
     if key not in _CACHE:
         out: dict[str, dict] = {}
         facts: dict[str, dict] = {}
@@ -1451,7 +1462,7 @@ def act_ends(corpus: str) -> dict[str, dict]:
             if not folder:
                 continue
             facts[folder] = a
-            _CACHE[('act-facts', f"{corpus}@{ix['pin']}")] = facts
+            _CACHE[('act-facts', f"{corpus}@{_at(ix)}")] = facts
             status = str(a.get('status') or '').lower()
             for how in ('repealed', 'expired'):
                 d = a.get(how)
@@ -1468,7 +1479,7 @@ def act_ends(corpus: str) -> dict[str, dict]:
 def act_fact(corpus: str, rel: str) -> dict:
     """data/acts.json's row for the act holding a file (its longest folder), or {}."""
     act_ends(corpus)
-    facts = _CACHE.get(('act-facts', f"{corpus}@{_index(corpus)['pin']}")) or {}
+    facts = _CACHE.get(('act-facts', f"{corpus}@{_at(_index(corpus))}")) or {}
     parts = rel.split('/')
     for i in range(len(parts) - 1, 0, -1):
         f = facts.get('/'.join(parts[:i]))  # type: ignore[union-attr]
@@ -1495,7 +1506,7 @@ def _end_commit(corpus: str, end: dict) -> tuple[str, int]:
     names the repealing law (its author or subject), else the latest; else the pinned commit, where data/acts.json
     says so. (commit, its row)."""
     ix = _index(corpus)
-    key = ('end-commit', f"{corpus}@{ix['pin']}:{end['act']}")
+    key = ('end-commit', f"{corpus}@{_at(ix)}:{end['act']}")
     if key not in _CACHE:
         rows = ix['rows']
         that_day = [i for i, r in enumerate(rows) if r[5] == end['day'] and r[4] != 'documentation']
@@ -1512,7 +1523,7 @@ def capture_day(corpus: str) -> tuple[str, int, int] | None:
     and they are not marked as starting texts: a capture day written as an in-force date (check_corpus.py warns the
     builder; New Jersey 713 of 1,145 on 3 November 2026). None otherwise."""
     ix = _index(corpus)
-    key = ('capture-day', f"{corpus}@{ix['pin']}")
+    key = ('capture-day', f"{corpus}@{_at(ix)}")
     if key not in _CACHE:
         days: dict[str, int] = {}
         starting: dict[str, int] = {}
@@ -1571,7 +1582,7 @@ def moves(corpus: str) -> dict[str, str]:
     """old path -> its path at the pin, for files a documentation commit moved unchanged (romania-law's layout move of
     November 2026: codul-civil/art-1112.md is lege/2009/287/art-1112.md). Their history is the new path's (_extend)."""
     ix = _index(corpus)
-    key = ('moves', f"{corpus}@{ix['pin']}")
+    key = ('moves', f"{corpus}@{_at(ix)}")
     if key not in _CACHE:
         step, out = ix.get('moves', {}), {}
         for old, new in step.items():
@@ -1784,8 +1795,9 @@ def _redate(data: dict, rows: list, block: str) -> None:
             data.setdefault('retroactive', set()).add(r[0])
 
 
-def _extend(corpus: str, cwd: Path, data: dict, revs: str) -> None:
-    """Add the commits in `revs` to a corpus index, oldest first: one `git log --raw` for every commit and file."""
+def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = frozenset()) -> None:
+    """Add the commits in `revs` to a corpus index, oldest first: one `git log --raw` for every commit and file.
+    Commits in `skip` are left out (a forked future branch's copies of main's commits: _future_index)."""
     info = corpus_info(corpus)
     fmt = '--format=%x1d%H%x1f%an%x1f%aI%x1f%s%x1f%(trailers:only,unfold)%x1e'
     raw = git('log', '--reverse', '--raw', '--find-renames=100%', '--no-abbrev', fmt, revs, cwd=cwd)
@@ -1794,6 +1806,8 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str) -> None:
     for chunk in raw.split('\x1d')[1:]:
         head, _, changes = chunk.partition('\x1e')
         commit, author, when, subject, block = head.split('\x1f', 4)
+        if commit in skip:
+            continue
         row, unknown = _derive(info, commit, author, when, subject, block)
         if unknown:
             data['unknown'].add(unknown)
@@ -1850,7 +1864,7 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str) -> None:
             files.setdefault(path, []).append((order, None if f[4].startswith('D') else f[3], f[1]))
 
 
-def _index(corpus: str) -> dict:
+def _main_index(corpus: str) -> dict:
     """The corpus read once at the commit the tree pins: every commit (rows, in history order) and every version of
     every file (files: path -> [(row, blob or None for a deletion, mode)]). Kept on disk in the tree's git folder
     (global-law-cache), keyed by the pin: a pin that moved forward adds only the new commits, so after the first read
@@ -1959,6 +1973,181 @@ def _forget_other_pins(corpus: str, sha: str) -> None:
         v = _CACHE.pop(k)
         if k[0] == 'index' and isinstance(v, dict) and isinstance(v.get('files'), _Files):
             v['files'].close()
+
+
+def _at(ix: dict) -> str:
+    """What an index was read at, for the caches built from it: the pin, and the future pin when one is read with it."""
+    return ix.get('at') or ix['pin']
+
+
+def future_pins() -> dict[str, tuple[str, str, str]]:
+    """{corpus: (future branch, future commit, main pin)} from the tree's data/future-pins.tsv (corpus, branch,
+    future_sha, main_pin), written in the same root commit as the gitlinks (tools/future_pins.py), so a reading stays
+    reproducible. A row names the main pin it was made for: it is read only while the tree still pins that commit."""
+    key = ('future-pins', _head())
+    if key not in _CACHE:
+        out = {}
+        for line in (_root()['files'].get('data/future-pins.tsv') or '').splitlines():
+            parts = line.rstrip('\r').split('\t')
+            if line.startswith('#') or len(parts) != 4:
+                continue
+            if all(re.fullmatch(r'[0-9a-f]{40}', x) for x in parts[2:]):
+                out[parts[0]] = (parts[1], parts[2], parts[3])
+        _CACHE[key] = out
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+def future_note(corpus: str) -> str | None:
+    """Why a corpus's future branch is not read, though the tree records it: the row was made for an earlier pin (the
+    pin moved and data/future-pins.tsv was not written again with it), or the checkout lacks the commit. Then the
+    reader shows main alone, and laws that took force since main's last law may be missing. None when it is read."""
+    fp = future_pins().get(corpus)
+    pin = tip(corpus)
+    cwd = ROOT / corpus
+    if not fp or not pin or not (cwd / '.git').exists() or not _readable(corpus, cwd):
+        return None
+    branch, fut, main_pin = fp
+    if main_pin != pin:
+        return (f"{corpus}: laws with a later in-force day are kept on its {branch} branch, but data/future-pins.tsv "
+                f"records that branch for an earlier pin ({main_pin[:10]}, not {pin[:10]}), so it is not read: changes "
+                "that took force after the last law on main may be missing until the file is written again.")
+    if not _has_commit(corpus, cwd, fut):
+        return (f"{corpus}: laws with a later in-force day are kept on its {branch} branch ({fut[:10]}), which this "
+                "checkout does not have, so changes that took force after the last law on main may be missing. "
+                f"Run: git -C {corpus} fetch origin {branch}  (if the branch has moved on since: git -C {corpus} "
+                f"fetch origin refs/tags/global-law/future-pinned-{fut})")
+    return None
+
+
+def _replays(cwd: Path, pin: str, fut: str) -> frozenset:
+    """Commits of pin..fut that copy a main commit made after the fork (same author line and message): a forked
+    future branch replays main's laws so that it reads whole on its own; read beside main they would be doubles."""
+    fork = git('merge-base', pin, fut, cwd=cwd).strip()
+    fmt = '--format=%x1d%H%x1f%an <%ae> %ad%x1f%B'
+
+    def keyed(*revs: str) -> dict:
+        out = {}
+        for chunk in git('log', '--date=raw', fmt, *revs, cwd=cwd).split('\x1d')[1:]:
+            sha, author, body = chunk.split('\x1f', 2)
+            out[sha] = (author, body.strip())
+        return out
+    on_main = set(keyed(pin, f'^{fork}').values()) if fork else set()
+    return frozenset(sha for sha, k in keyed(fut, f'^{pin}').items() if k in on_main)
+
+
+_MISSING = object()
+
+
+class _FilesOver:
+    """An index's files with a future branch's versions laid over them, the main index left as it is: a path the
+    branch touches is copied on first write, a path it removes is hidden. Read like the dict (or _Files) beneath."""
+
+    def __init__(self, base):
+        self._base, self._own, self._gone = base, {}, set()
+
+    def get(self, rel, default=None):
+        if rel in self._own:
+            return self._own[rel]
+        if rel in self._gone:
+            return default
+        return self._base.get(rel, default)
+
+    def __getitem__(self, rel):
+        v = self.get(rel, _MISSING)
+        if v is _MISSING:
+            raise KeyError(rel)
+        return v
+
+    def __contains__(self, rel) -> bool:
+        return self.get(rel, _MISSING) is not _MISSING
+
+    def setdefault(self, rel, default):
+        if rel not in self._own:
+            v = self.get(rel, _MISSING)
+            self._own[rel] = list(v) if v is not _MISSING else default
+            self._gone.discard(rel)
+        return self._own[rel]
+
+    def __setitem__(self, rel, value) -> None:
+        self._own[rel] = value
+        self._gone.discard(rel)
+
+    def pop(self, rel, *default):
+        v = self.get(rel, _MISSING)
+        if v is _MISSING:
+            if default:
+                return default[0]
+            raise KeyError(rel)
+        self._own.pop(rel, None)
+        self._gone.add(rel)
+        return v
+
+    def items(self):
+        out, seen = [], set()
+        for rel, v in self._base.items():
+            seen.add(rel)
+            if rel in self._own:
+                out.append((rel, self._own[rel]))
+            elif rel not in self._gone:
+                out.append((rel, v))
+        out += [(rel, v) for rel, v in self._own.items() if rel not in seen]
+        return out
+
+    def keys(self):
+        return [k for k, _ in self.items()]
+
+    def values(self):
+        return [v for _, v in self.items()]
+
+    def __iter__(self):
+        return iter(self.keys())
+
+    def __len__(self) -> int:
+        return len(self.items())
+
+
+def _index(corpus: str) -> dict:
+    """The corpus index (_main_index), and, where the tree records the corpus's future branch for this very pin
+    (future_pins) and the checkout has the commit, the branch's own commits up to it (_future_index). Readers pick
+    each file's version by its in-force day, so a version from the branch is read from its day on, never before."""
+    data = _main_index(corpus)
+    fp = future_pins().get(corpus)
+    if not fp or fp[2] != data['pin']:
+        return data  # none recorded, or recorded for an earlier pin (stale): main alone, and future_note says so
+    branch, fut, _ = fp
+    key = ('index', f"{corpus}@{data['pin']}+{fut}")
+    if key not in _CACHE:
+        mine = f"{corpus}@{data['pin']}+"  # what this process kept for an earlier future pin of the same main pin
+        for k in [k for k in _CACHE if len(k) == 2 and isinstance(k[1], str) and k[1].startswith(mine)
+                  and not k[1].startswith(mine + fut)]:
+            _CACHE.pop(k)
+        cwd = corpus_dir(corpus)
+        _CACHE[key] = _future_index(corpus, cwd, data, branch, fut) if _has_commit(corpus, cwd, fut) else data
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+def _future_index(corpus: str, cwd: Path, data: dict, branch: str, fut: str) -> dict:
+    """The main index with the commits pin..fut added, kept in memory only: the index on disk stays main's, keyed by
+    the main pin, so moving either pin never leaves a branch's versions in it. A branch that forked from main before
+    the pin (gitlaw_common's append_future.py forks at main's last law commit) has copies of main's later commits;
+    those are left out (_replays). Its cache keys start <corpus>@<pin>, so _forget_other_pins drops them with the
+    pin, and nothing is written to disk for _prune_indexes to keep or remove."""
+    pin = data['pin']
+    linear = subprocess.run(['git', 'merge-base', '--is-ancestor', pin, fut], cwd=cwd,
+                            capture_output=True).returncode == 0
+    skip = frozenset() if linear else _replays(cwd, pin, fut)
+    over = dict(data)
+    over['rows'] = list(data['rows'])
+    over['files'] = _FilesOver(data['files'])
+    for k in ('unknown', 'moves', 'withdrawn', 'restates', 'pos', 'retroactive', 'redated'):
+        if k in data:
+            over[k] = type(data[k])(data[k])
+    before = len(over['rows'])
+    _extend(corpus, cwd, over, f'{pin}..{fut}', skip=skip)
+    over['at'] = f'{pin}+{fut}'
+    over['future'] = {'branch': branch, 'sha': fut, 'linear': linear, 'commits': len(over['rows']) - before,
+                      'replays_skipped': len(skip)}
+    return over
 
 
 INDEX_SHARDS = 64
@@ -2249,6 +2438,7 @@ def main(argv: list[str]) -> None:
             print(f"  {corpus['path']:<24} {state}")
         note(c for corpus in manifest()['corpora'] if corpus['path'] in by_corpus
              for c in caveats(args[0], corpus['path'], by_corpus[corpus['path']]) if 'runs to' in c)
+        note(n for n in (future_note(corpus['path']) for corpus in manifest()['corpora']) if n)
         note(_UNREADABLE.format(corpus=c) for c in unreadable())
         note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()))
         note(_SHALLOW.format(corpus=c) for c in shallow())
@@ -2325,6 +2515,7 @@ def main(argv: list[str]) -> None:
                  'printing': 'printings', 'court': 'court rulings', 'treaty': 'treaties',
                  'uncredited': 'changes no law is named for'}
         note(f'not listed, as they are not laws taking effect: {n} {names.get(k, k)}' for k, n in sorted(left_out.items()))
+        note(n for n in (future_note(c) for c in sorted(chosen)) if n)
         note(_UNREADABLE.format(corpus=c) for c in unreadable() if c in chosen)
         note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()) if c in chosen)
         note(_SHALLOW.format(corpus=c) for c in shallow() if c in chosen)

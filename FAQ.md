@@ -119,6 +119,13 @@ Consolidated: https://web.archive.org/web/20260626113712id_/https://legislatie.j
 Most corpora keep them on a `future` branch until their day; a few keep them on `main`, dated ahead, and the tools
 show them only from that date. `manifest.json` says which (`future_branch`).
 
+The readers (`tools/law.py` and the MCP tools) also read a corpus's future branch once a law on it is due: the tree
+records each branch's tip beside the corpus's pin, in `data/future-pins.tsv`, written in the same commit as the pins,
+so a reading stays reproducible. Each version still shows only from its in-force day. A branch that has fallen behind
+main is not recorded, and a row made for an earlier pin is not read; in both cases, and when your clone lacks the
+branch's commit, the reader shows main alone and says that due laws may be missing, with the command that fetches
+them.
+
 ### What about commencement, transitional provisions and retroactive law?
 
 Where the publisher gives a date per provision, each provision changes on its own day, so a law that commences in

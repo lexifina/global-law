@@ -9,6 +9,12 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). Laws due on a future branch are read from their day (audit row 1).** `law.py` and the MCP tools read
+  main plus the commits pin..future_sha that `data/future-pins.tsv` records beside each pin (`tools/future_pins.py`
+  writes it with the gitlinks), so 132 due changes in 84 corpora (5 linear, 79 forked) are no longer hidden. A forked
+  branch's copies of main's laws are left out. The 7 corpora whose branch is behind main (Norway, Uruguay, Czechia,
+  Colombia, Ethiopia, Peru, General Lavalle) are not recorded; a stale row or a missing commit reads main alone, with a
+  note and the fetch command. Each recorded commit is kept by a `global-law/future-pinned-<sha>` tag on its corpus.
 - **Fixed (all). Second audit, rows 27-29: what law.py leaves behind.** An index is named by its version and pin
   (`<corpus>.v7.<pin>.index`) and never replaced in place; a new pin extends the newest earlier index and then removes
   it, with the names used before, other versions unused for a week, and .tmp files over an hour old (a refused write
