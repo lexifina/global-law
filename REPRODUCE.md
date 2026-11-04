@@ -41,8 +41,28 @@ be repeated hash for hash: most of the country repositories it read were rewritt
 fast-forward rule, so the commits it pinned are not all published any more. Never publish its output over this
 repository: it would replace the whole history. What follows is the record of that build as it was written then.
 
+The script is kept for reference. It does not run from this repository alone. It was written to sit in Lexifina's own
+repository, beside `check_corpus.py` (as shipped then: blob `df05a76154489dda2f7644651b3c37bd009d773e` in
+`0e10db05b17`, not the newer `tools/check_corpus.py`), a `repo/` folder of README and REPRODUCE templates, and a
+`../world-law/` folder holding `countries.json`, `register.json` and `build_countries.py`. Only the first is in this
+repository. It also lists corpora with `gh repo list lexifina`, clones each repository's current default branch rather
+than the commit pinned then, and reads global-law's current pins for its append-only check, so even with those files
+it builds from today's repositories, not from the commits in the table below. As it was run then, from that folder:
+
 ```sh
-python tools/archive/build-2026-10-29.py ../rebuilt --date 2026-10-28   # as it was run then
+python scripts/global-law/build.py ../rebuilt --date 2026-10-28   # in Lexifina's repository, on 28-29 October 2026
+```
+
+What can be checked without a rebuild is that the table below is what the last rebuilt commit pinned, and that the
+archived script is the one that commit ships:
+
+```sh
+git fetch --depth 1 origin 0e10db05b17774b0ac8c07aa79c51ef353141cac
+git ls-tree -r 0e10db05b17 | awk '$2=="commit"{print $4" "$3}' | sort > pins-built.txt
+sed -n 's/^| `\([^`]*\)` | [^|]* | `\([0-9a-f]*\)` |$/\1 \2/p' REPRODUCE.md | sort > pins-claimed.txt
+diff pins-built.txt pins-claimed.txt && echo "the 107 pins match"
+git show 0e10db05b17:tools/build.py | git hash-object --stdin   # d1b094cb56666f87012d2e7ddf3a6d746042c176
+git ls-files -s tools/archive/build-2026-10-29.py                 # the same blob
 ```
 
 On 28 October 2026 two builds into separate empty folders gave the same 339326 commit hashes, from the first commit
@@ -50,7 +70,7 @@ On 28 October 2026 two builds into separate empty folders gave the same 339326 c
 
 ### What it was built from
 
-This repository contains no legal text of its own. It is built from three repositories, each with its own
+This repository contains no legal text of its own. It was built from 107 repositories, each with its own
 REPRODUCE.md recording how its text was obtained. At this build they were at these commits, which are the commits this
 repository pinned at that build (not the pins at HEAD now, which manifest.json lists):
 
@@ -165,12 +185,13 @@ repository pinned at that build (not the pins at HEAD now, which manifest.json l
 | `zimbabwe/national/acts` | https://github.com/lexifina/zimbabwe-law | `e7a3c9bfe4b0e44b1366f2f6c3278cb67fe2a3f6` |
 
 The build reads each repository's commits on the first-parent line of its default branch, with their authors, dates
-and message trailers, and its tags. It reads no file contents and makes no other network requests.
+and message trailers, and its tags. It also reads each repository's `corpus.json` (or `data/repo.json`) at that commit, lists the organisation's
+repositories with `gh`, and reads global-law's own pins from GitHub.
 
 ### The build, step by step
 
-The build script was `tools/build.py`, now `tools/archive/build-2026-10-29.py`. It is the same file as `scripts/global-law/build.py` in Lexifina's own
-repository (git blob `d1b094cb56666f87012d2e7ddf3a6d746042c176`). The reading tool `tools/law.py` has blob
+The build script was `tools/build.py`, now `tools/archive/build-2026-10-29.py`. It is the file commit `0e10db05b17` ships as
+`tools/build.py` (git blob `d1b094cb56666f87012d2e7ddf3a6d746042c176`). The reading tool `tools/law.py` has blob
 `a4eed065182fff59d22f60f5f5a595435047eb19`, and the tests `tests/test_law.py` have blob
 `b8f530cdac1abe5b1631b88d42f01c4de1dd0bcc`.
 
