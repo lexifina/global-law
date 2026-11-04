@@ -21,10 +21,14 @@ fetches main and that branch without blobs into a bare clone kept in the tree's 
 
   linear    the future tip descends from the pinned main commit
   forked    it does not, but every law commit of main after the fork, up to the pin, is held on the branch (same
-            author line with its raw date, same message), and every main commit there that is not held on it only
-            changes documentation: it deletes no file and touches no file the branch's own commits touch
+            author line with its raw date, same message, and main's blob at each path main's commit changes), and
+            every main commit there that is not held on it only changes documentation: it deletes no file and
+            touches no file the branch's own commits touch
   behind    neither: the branch has not caught up with the pin (or main moved or withdrew files the branch's own
             commits rely on); law.py then reads main alone
+  diverged  not behind, but a branch commit has the author line, raw date and message of a main commit after the
+            fork and other text at a path that commit changes: read beside main it would undo main's change;
+            law.py then reads main alone
   unrelated, pin-missing, no-future-branch, ls-remote-failed, fetch-failed
 
 Only linear and forked corpora get a row. future_own counts the branch's own commits (not replays of main), and due
@@ -196,6 +200,52 @@ def changes(repo: Path, sha: str) -> list[tuple[str, str]]:
     return rows
 
 
+def tree_changes(repo: Path, shas: list[str]) -> dict[str, frozenset]:
+    """Each commit's changes against its first parent as (path, mode, blob id) after it (a zero id where it deletes
+    the path), from one `git diff-tree --stdin` (trees only: works in the blob-less clones)."""
+    shas = list(dict.fromkeys(shas))
+    if not shas:
+        return {}
+    done = subprocess.run(['git', 'diff-tree', '--stdin', '-r', '-m', '--first-parent', '--no-renames', '--root',
+                           '--no-abbrev'], cwd=repo, input=''.join(s + '\n' for s in shas).encode(),
+                          capture_output=True)
+    if done.returncode:
+        raise RuntimeError(f"git diff-tree --stdin: {done.stderr.decode('utf-8', 'replace').strip()[:300]}")
+    out: dict[str, set] = {s: set() for s in shas}
+    sha = None
+    for line in done.stdout.decode('utf-8', 'replace').splitlines():
+        if line.startswith(':'):
+            meta, _, path = line.partition('\t')
+            parts = meta.split()
+            if sha is not None and len(parts) >= 5:
+                out[sha].add((path, parts[1], parts[3]))
+        elif line.strip():
+            sha = line.split()[0]
+            out.setdefault(sha, set())
+    return {s: frozenset(v) for s, v in out.items()}
+
+
+ZERO_SHA = '0' * 40
+
+
+def holds(repo: Path, sha: str, change: frozenset) -> bool:
+    """Whether a commit's tree has each path of `change` (another commit's tree_changes) at that commit's blob, or
+    lacks it where that commit deletes it. Trees only (git ls-tree): works in the blob-less clones."""
+    want = {path: blob for path, _, blob in change}
+    have: dict[str, str] = {}
+    paths = sorted(want)
+    for i in range(0, len(paths), 200):  # keep the command line short
+        done = run(['git', '--literal-pathspecs', 'ls-tree', '-r', '-z', '--full-tree', sha, '--', *paths[i:i + 200]],
+                   repo)
+        if done.returncode:
+            return False
+        for entry in done.stdout.decode('utf-8', 'replace').split('\0'):
+            meta, _, path = entry.partition('\t')
+            if path:
+                have[path] = meta.split()[2]
+    return all(have.get(path, ZERO_SHA) == blob for path, blob in want.items())
+
+
 def classify(repo: Path, pin: str, fut: str, today: str) -> dict:
     linear = ok('merge-base', '--is-ancestor', pin, fut, cwd=repo)
     fork = git('merge-base', pin, fut, cwd=repo, check=False).strip()
@@ -215,6 +265,22 @@ def classify(repo: Path, pin: str, fut: str, today: str) -> dict:
     if missing:
         return {'state': 'behind', 'reason': f'{len(missing)} law commit(s) of main after the fork not on the branch',
                 **result}
+    # A commit counts as a copy of main's only if its tree also holds main's blob at each path main's commit changes
+    # (the same change, or text the branch had already): one with main's author line, date and message but other
+    # text there would, read beside main, undo main's change. One diff-tree for all, ls-tree only where they differ.
+    on_main: dict[tuple, list[str]] = {}
+    for sha, c in main_after.items():
+        on_main.setdefault(c['key'], []).append(sha)
+    candidates = {sha: on_main[c['key']] for sha, c in fut_rows.items() if c['key'] in on_main}
+    changed = tree_changes(repo, [*candidates, *(m for ms in candidates.values() for m in ms)])
+    diverged = [sha for sha, ms in candidates.items()
+                if not any(changed.get(sha) == changed.get(m) for m in ms)
+                and not any(holds(repo, sha, changed.get(m, frozenset())) for m in ms)]
+    if diverged:
+        return {'state': 'diverged', 'reason': f"{len(diverged)} commit(s) on the branch carry the author, date and "
+                f"message of a main commit but other text at a path it changes: "
+                f"{', '.join(s[:10] for s in diverged[:5])}"
+                + (f' (+{len(diverged) - 5} more)' if len(diverged) > 5 else ''), **result}
     own_paths: set[str] = set()
     for sha in own:
         own_paths.update(path for _, path in changes(repo, sha))

@@ -9,6 +9,27 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). A running reader picks up a future commit once it is fetched (audit row 37).** A reader that started
+  while the checkout lacked the commit `data/future-pins.tsv` records (the MCP server) kept serving main alone after
+  the user ran the fetch the note asks for, until restart. `_index` now asks again on each read while the commit is
+  missing (one line to the corpus's batch reader), and whole-tree reads and the MCP server's HEAD-keyed caches (every
+  two seconds) do the same; when the commit appears, what was built from main alone is dropped and the merged reading
+  is built.
+- **Fixed (all). A branch's "copy" of a main law must carry main's text (audit row 42).** `future_pins.py` and
+  `law.py` took a branch commit with a main commit's author line, raw date and message as a copy and skipped it, even
+  with other text, so the branch's later laws could undo main's amendment. A copy must now also hold main's blob at
+  every path main's commit changes (one `git diff-tree --stdin` for all candidates, `git ls-tree` only where the
+  changes differ). Otherwise `future_pins.py` classes the corpus `diverged` (no row) and `law.py`, given a row, reads
+  main alone with a note. Found on a synthetic corpus only: a dry run of `future_pins.py` against main (91 corpora with
+  a future branch) changes no corpus's class, and the 84 rows are unchanged.
+- **Fixed (all). A country's ISO code and other names take in the whole country (audit row 47).** `laws es` read
+  1 of Spain's 20 corpora, `ch` 1 of 52, `ar` 1 of 100, `us` 19 of 50; `uk`, and names with accents or in capitals,
+  matched nothing. `matches()` (used by `laws`, `countries.py add/only` and the MCP server) now takes every corpus of
+  a country by its ISO 3166-1 code (from the manifest's `code`), by common other names (`uk`, `great britain`, `usa`,
+  `uae`, `türkiye`, `ivory coast`, `czech republic` ...) and by its name without regard to accents or case
+  ("Côte d'Ivoire"). On the real manifest the 25 countries whose code took in only part of them now take in all of
+  them. A country's name still never takes in another country's state of that name (`georgia`, `niger`), and
+  subdivision codes (`ES-MD`) still take in their own corpus.
 - blame and words: the line diffs behind long files (one `git diff --no-index` per batch of steps) now run git with a fixed config (no system/global config, attributes or GIT_* variables; explicit prefixes, --text, --no-ext-diff, --no-textconv, --no-color, --no-renames), so settings like diff.noprefix or diff.external no longer drop lines or credit them all to the first law (audit row 46).
 - Lines are written so a NUL byte or a missing final newline is kept, and every answer is checked to rebuild the new version exactly; a step that fails the check is diffed again alone, then by difflib, never credited wrong.
 - **Adopted (all). `Redates:`, `Retroactive:` and `data/acts.json` are in the corpus standard, and checked (row 24).**

@@ -1113,5 +1113,202 @@ class Checkouts(unittest.TestCase):
         self.assertIn('shallow clone', err)
 
 
+class FutureCommitFetchedLater(unittest.TestCase):
+    """Audit row 37: a long-running reader (the MCP server) that started while the checkout lacked the recorded
+    future commit reads the branch once the commit is fetched, as future_note asks, without a restart."""
+
+    def test_a_running_reader_reads_the_branch_once_it_is_fetched(self):
+        t = Tree()
+        up = Path(tempfile.mkdtemp(prefix='gl-up-'))
+        law = None
+        try:
+            a = t.corpus('li/national/acts')
+            a.commit('Act 1 of 2010', {'act/s1.md': 'The fee is 10.\n'}, In_force='2010-01-01', Kind='law')
+            pin = a.commit('Lexifina', {'README.md': '# LI\n'}, Kind='documentation')
+            run('clone', '-q', str(a.path), str(up / 'r'), cwd=up)
+            u = Corpus.__new__(Corpus)
+            u.path, u.n = up / 'r', 10
+            run('checkout', '-q', '-b', 'future', cwd=u.path)
+            fut = u.commit('Act 2 of 2020', {'act/s1.md': 'The fee is 20.\n'}, In_force='2020-06-01', Kind='law')
+            (t.root / 'data').mkdir()
+            (t.root / 'data' / 'future-pins.tsv').write_bytes(
+                f'# corpus\tbranch\tfuture_sha\tmain_pin\nli/national/acts\tfuture\t{fut}\t{pin}\n'.encode())
+            run('add', 'data', cwd=t.root)
+            t.pin()
+            law = t.law()
+            p = 'li/national/acts/act/s1.md'
+            self.assertIn('which this checkout does not have', law.future_note('li/national/acts'))
+            self.assertEqual(law.text_on('2021-01-01', p), 'The fee is 10.\n')
+            self.assertNotIn('Act 2 of 2020', [e.law for e in law.timeline()])
+            self.assertEqual([h['in_force'] for h in law.history(p)], ['2010-01-01'])
+            run('fetch', '-q', str(u.path), 'future', cwd=a.path)
+            self.assertIsNone(law.future_note('li/national/acts'))
+            self.assertIn('Act 2 of 2020', [e.law for e in law.timeline()])  # a whole-tree read first
+            self.assertEqual(law.text_on('2021-01-01', p), 'The fee is 20.\n')
+            self.assertEqual(law.text_on('2019-01-01', p), 'The fee is 10.\n')
+            self.assertEqual([h['in_force'] for h in law.history(p)], ['2010-01-01', '2020-06-01'])
+            self.assertTrue(law._index('li/national/acts')['future']['linear'])
+        finally:
+            if law:
+                law.close_readers()
+            t.close()
+            shutil.rmtree(up, onerror=lambda f, p, _: (os.chmod(p, 0o700), f(p)))
+
+
+class FutureCopiesWithOtherText(unittest.TestCase):
+    """Audit row 42: a forked future branch whose "copy" of a main law has the law's author line, date and message
+    but other text. Read beside main it would undo main's amendment; future_pins.py classes it diverged (no row) and
+    law.py, given a row for it anyway, reads main alone and says why. A true copy (cherry-pick), and one that also
+    writes a file more, are still forked."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(HERE / 'tools'))
+        import future_pins
+        cls.fp = future_pins
+        t = cls.t = Tree()
+        rows = {}
+        for corpus, copy in (('fk/national/acts', 'other text'), ('ok/national/acts', 'cherry-pick'),
+                             ('mo/national/acts', 'and more')):
+            f = t.corpus(corpus)
+            f.commit('Act 1 of 2010', {'act/s1.md': 'The fee is 10.\nRule two.\n'}, In_force='2010-01-01', Kind='law')
+            run('checkout', '-q', '-b', 'zukunft', cwd=f.path)
+            run('checkout', '-q', 'main', cwd=f.path)
+            later = f.commit('Act 4 of 2015', {'act/s1.md': 'The fee is 10.\nRule two, as amended in 2015.\n'},
+                             In_force='2015-01-01', Kind='law')
+            pin = f.commit('Lexifina', {'README.md': '# FK\n'}, Kind='documentation')
+            run('checkout', '-q', 'zukunft', cwd=f.path)
+            env = {'GIT_COMMITTER_NAME': 'test', 'GIT_COMMITTER_EMAIL': 't@example.org'}
+            text = 'The fee is 20.\nRule two, as amended in 2015.\n'
+            if copy == 'cherry-pick':
+                run('cherry-pick', later, cwd=f.path, env=env)
+            elif copy == 'and more':  # main's change, and a file more (as Belgium's copies write a README): a copy
+                (f.path / 'act' / 's1.md').write_bytes(b'The fee is 10.\nRule two, as amended in 2015.\n')
+                (f.path / 'act' / 'README.md').write_bytes(b'# Act\n')
+                run('add', 'act', cwd=f.path)
+                run('commit', '-q', '-C', later, cwd=f.path, env=env)
+            else:  # same author, author date and message (git commit -C), without the amendment
+                (f.path / 'act' / 'note.md').write_text('replayed\n')
+                run('add', 'act/note.md', cwd=f.path)
+                run('commit', '-q', '-C', later, cwd=f.path, env=env)
+                text = 'The fee is 20.\nRule two.\n'
+            fut = f.commit('Act 2 of 2020', {'act/s1.md': text}, In_force='2020-06-01', Kind='law')
+            run('checkout', '-q', 'main', cwd=f.path)
+            rows[corpus] = (fut, pin)
+        cls.rows = rows
+        (t.root / 'data').mkdir()
+        (t.root / 'data' / 'future-pins.tsv').write_bytes(
+            ('# corpus\tbranch\tfuture_sha\tmain_pin\n'
+             + ''.join(f'{c}\tzukunft\t{f}\t{p}\n' for c, (f, p) in sorted(rows.items()))).encode())
+        run('add', 'data', cwd=t.root)
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_future_pins_classes_a_copy_with_other_text_diverged(self):
+        fut, pin = self.rows['fk/national/acts']
+        got = self.fp.classify(self.t.corpora['fk/national/acts'].path, pin, fut, '2026-11-04')
+        self.assertEqual(got['state'], 'diverged', got)
+        self.assertNotIn('diverged', self.fp.RECORDED)
+        for corpus in ('ok/national/acts', 'mo/national/acts'):
+            fut, pin = self.rows[corpus]
+            got = self.fp.classify(self.t.corpora[corpus].path, pin, fut, '2026-11-04')
+            self.assertEqual(got['state'], 'forked', (corpus, got))
+
+    def test_law_reads_main_alone_beside_a_diverged_branch(self):
+        p = 'fk/national/acts/act/s1.md'
+        for day in ('2016-01-01', '2020-06-01'):
+            out, err, code = self.t.cli('show', day, p)
+            self.assertEqual(out, 'The fee is 10.\nRule two, as amended in 2015.\n', (day, err))
+        self.assertIn('change different text', err)
+        self.assertIn('so the branch is not read', err)
+        out, err, code = self.t.cli('log', p)
+        self.assertNotIn('Act 2 of 2020', out)
+        self.assertEqual(out.count('Act 4 of 2015'), 1, out)
+
+    def test_a_true_copy_is_still_skipped_and_the_branch_read(self):
+        for corpus in ('ok/national/acts', 'mo/national/acts'):
+            p = f'{corpus}/act/s1.md'
+            out, err, code = self.t.cli('show', '2020-06-01', p)
+            self.assertEqual(out, 'The fee is 20.\nRule two, as amended in 2015.\n', (corpus, err))
+            out, err, code = self.t.cli('log', p)
+            self.assertEqual(out.count('Act 4 of 2015'), 1, out)
+            self.assertNotIn('change different text', err)
+
+
+class CountryNamesAndCodes(unittest.TestCase):
+    """Audit row 47: a country's ISO code, its other common names ("uk") and its name with accents or in any case
+    take in every corpus of the country, as its folder does; a country's name still never takes in another
+    country's state of that name, and subdivision codes (ES-MD) still take in their own corpus only."""
+
+    CORPORA = [('spain/national/acts', 'ES', 'es/national/acts'), ('spain/madrid/acts', 'ES-MD', 'es-md/acts'),
+               ('united-kingdom/uk/legislation', 'GB', 'gb/uk/legislation'),
+               ('cote-divoire/national/acts', 'CI', 'ci/national/acts'),
+               ('georgia/national/acts', 'GE', 'ge/national/acts'),
+               ('united-states/federal/usc', 'US', 'us/federal/usc'),
+               ('united-states/georgia/acts', 'US-GA', 'united-states/georgia/acts')]
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        shutil.copy(HERE / 'tools' / 'countries.py', t.root / 'tools' / 'countries.py')
+        for i, (path, code, iso) in enumerate(cls.CORPORA):
+            t.corpus(path).commit(f'Act {i + 1} of 2020', {'act/s1.md': f'{path}\n'}, In_force=f'2020-01-0{i + 1}',
+                                  Kind='law')
+        (t.root / 'manifest.json').write_text(json.dumps({'corpora': [
+            {'path': p, 'code': c, 'iso_path': i, 'name': p} for p, c, i in cls.CORPORA]}), encoding='utf-8')
+        run('add', 'tools/countries.py', cwd=t.root)
+        t.pin()
+        cls.law = t.law()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.law.close_readers()
+        cls.t.close()
+
+    def taken(self, name):
+        return sorted(c['path'] for c in self.law.manifest()['corpora'] if self.law.matches(c, name))
+
+    def test_names_and_codes(self):
+        spain = ['spain/madrid/acts', 'spain/national/acts']
+        us = ['united-states/federal/usc', 'united-states/georgia/acts']
+        for name, want in (('es', spain), ('ES', spain), ('Spain', spain), ('spain', spain),
+                           ('ES-MD', ['spain/madrid/acts']), ('es-md', ['spain/madrid/acts']),
+                           ('madrid', ['spain/madrid/acts']),
+                           ('uk', ['united-kingdom/uk/legislation']), ('UK', ['united-kingdom/uk/legislation']),
+                           ('gb', ['united-kingdom/uk/legislation']),
+                           ('United Kingdom', ['united-kingdom/uk/legislation']),
+                           ("Côte d'Ivoire", ['cote-divoire/national/acts']),
+                           ('CÔTE-DIVOIRE', ['cote-divoire/national/acts']),
+                           ('ivory coast', ['cote-divoire/national/acts']),
+                           ('us', us), ('usa', us), ('united states', us),
+                           ('us/federal', ['united-states/federal/usc']),
+                           ('georgia', ['georgia/national/acts']), ('Georgia', ['georgia/national/acts']),
+                           ('ge', ['georgia/national/acts']), ('US-GA', ['united-states/georgia/acts']),
+                           ('national', []), ('ga', [])):
+            self.assertEqual(self.taken(name), want, name)
+
+    def test_laws_by_code(self):
+        out, err, code = self.t.cli('laws', '2020-01-01', '2020-12-31', 'es')
+        self.assertIn('spain/madrid/acts', out, err)
+        self.assertIn('spain/national/acts', out)
+        out, err, code = self.t.cli('laws', '2020-01-01', '2020-12-31', 'UK')
+        self.assertIn('united-kingdom/uk/legislation', out, err)
+
+    def test_countries_only_takes_the_same_corpora(self):
+        script = str(self.t.root / 'tools' / 'countries.py')
+        try:
+            for name, want in (('es', 'spain/national/acts, spain/madrid/acts'),
+                               ('uk', 'united-kingdom/uk/legislation')):
+                done = subprocess.run([sys.executable, '-X', 'utf8', script, 'only', name], cwd=self.t.root,
+                                      capture_output=True, encoding='utf-8')
+                self.assertEqual(done.returncode, 0, done.stderr)
+                self.assertIn('The MCP server now serves only: ' + want, done.stdout)
+        finally:
+            run('config', '--unset', 'global-law.jurisdictions', cwd=self.t.root, check=False)
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -26,6 +26,7 @@ import json
 import re
 import subprocess
 import sys
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -270,6 +271,7 @@ def timeline() -> list[Event]:
     commits now only date a corpus commit that carries no date of its own (legacy_dates)."""
     corpora = tuple(c['path'] for c in manifest()['corpora'])
     key = ('timeline', _head() + '|' + ','.join(corpora))
+    recheck_missing_futures()
     if key not in _CACHE:
         events = [e for c in corpora for e in corpus_events(c)]
         events.sort(key=lambda e: e.in_force)  # stable: each corpus keeps its own order within a day
@@ -813,25 +815,67 @@ def _countries() -> set[str]:
     return _CACHE[key]  # type: ignore[return-value]
 
 
+# Other names in common use for a country -> its ISO 3166-1 code; each takes in every corpus of that country.
+COUNTRY_ALIASES = {
+    'uk': 'gb', 'great-britain': 'gb', 'britain': 'gb', 'usa': 'us', 'united-states-of-america': 'us',
+    'uae': 'ae', 'turkiye': 'tr', 'czech-republic': 'cz', 'ivory-coast': 'ci', 'cape-verde': 'cv',
+    'east-timor': 'tl', 'swaziland': 'sz', 'burma': 'mm', 'holy-see': 'va', 'vatican': 'va', 'macedonia': 'mk',
+    'drc': 'cd', 'the-gambia': 'gm', 'the-netherlands': 'nl', 'russian-federation': 'ru', 'republic-of-korea': 'kr',
+}
+
+
+def _plain(name: str) -> str:
+    """A name as the tree's folders write it: no accents, lower case, no apostrophes, words joined by hyphens
+    ("Côte d'Ivoire" -> cote-divoire, "São Tomé and Príncipe" -> sao-tome-and-principe)."""
+    name = ''.join(ch for ch in unicodedata.normalize('NFKD', name) if not unicodedata.combining(ch))
+    name = re.sub(r"['’ʼ`]", '', name.strip().strip('/').lower())
+    return re.sub(r'\s+', '-', name)
+
+
+def _country_names() -> dict[str, str]:
+    """Every name that names a whole country -> its folder: the folder ("spain"), its ISO 3166-1 code ("es", the
+    first part of its corpora's codes ES, ES-MD) and its other names in COUNTRY_ALIASES ("uk")."""
+    key = ('country-names', _head())
+    if key not in _CACHE:
+        out: dict[str, str] = {}
+        for c in manifest()['corpora']:
+            folder = c['path'].split('/')[0]
+            out.setdefault(folder, folder)
+            code = str(c.get('code') or '').split('-')[0].lower()
+            if code:
+                out.setdefault(code, folder)
+        for alias, code in COUNTRY_ALIASES.items():
+            if code in out:
+                out.setdefault(alias, out[code])
+        _CACHE[key] = out
+    return _CACHE[key]  # type: ignore[return-value]
+
+
 def matches(corpus: dict, name: str) -> bool:
-    """Whether a name a user gives for a jurisdiction takes in a corpus (a manifest entry): its country folder
-    ("germany", "united kingdom"), its ISO code ("de"), a level ("united-states/federal", "us/federal") or the corpus
-    itself, or a folder inside it, which takes in the whole corpus. A state, province or city by its own name
-    ("bremen", "california") takes in its corpora too; the generic levels ("national", "federal") do not."""
-    name = re.sub(r'\s+', '-', name.strip().strip('/').lower())
+    """Whether a name a user gives for a jurisdiction takes in a corpus (a manifest entry): its country by folder,
+    name, ISO code or other common name ("germany", "United Kingdom", "es", "uk", "Côte d'Ivoire"), which takes in
+    every corpus of that country; a level ("united-states/federal", "us/federal") or the corpus itself, or a folder
+    inside it, which takes in the whole corpus; or the corpus's own code ("ES-MD"). A state, province or city by its
+    own name ("bremen", "california") takes in its corpora too; the generic levels ("national", "federal") do not.
+    Accents and case do not matter."""
+    name = _plain(name)
     if not name:
         return False
     # A corpus's old path, from before it moved (data/moved-paths.tsv), names it too, with or without /acts.
     renamed = moved(name) if moved(name) != name else moved(name + '/acts').removesuffix('/acts')
     if renamed != name and matches(corpus, renamed):
         return True
+    countries = _country_names()
+    if countries.get(name) == corpus['path'].split('/')[0]:
+        return True
     for path in (corpus['path'], corpus.get('iso_path') or ''):
         if path and (path == name or path.startswith(name + '/') or name.startswith(path + '/')):
             return True
     # A state, province, canton or city by its own folder name, at any level below the country
     # (brazil/bahia/salvador/acts is taken in by "bahia" and by "salvador").
-    # A country's own name (niger, georgia) names that country, not another's state of the same name.
-    if name not in GENERIC_LEVELS and name not in _countries() and name in corpus['path'].split('/')[1:-1]:
+    # A country's own name or code (niger, georgia) names that country, not another's state of the same name.
+    if (name not in GENERIC_LEVELS and name not in _countries() and name not in countries
+            and name in corpus['path'].split('/')[1:-1]):
         return True
     return name == str(corpus.get('code') or '').lower()
 
@@ -2162,12 +2206,70 @@ def future_note(corpus: str) -> str | None:
                 "checkout does not have, so changes that took force after the last law on main may be missing. "
                 f"Run: git -C {corpus} fetch origin {branch}  (if the branch has moved on since: git -C {corpus} "
                 f"fetch origin refs/tags/global-law/future-pinned-{fut})")
+    diverged = _future_check(corpus, corpus_dir(corpus), pin, fut)['diverged']
+    if diverged:
+        return (f"{corpus}: laws with a later in-force day are kept on its {branch} branch ({fut[:10]}), but "
+                f"{len(diverged)} commit(s) there carry the author, date and message of a law on main and change "
+                f"different text (first: {diverged[0][:10]}), so the branch is not read: main alone is shown, and "
+                "changes that took force after the last law on main may be missing until the branch is rebuilt.")
     return None
 
 
-def _replays(cwd: Path, pin: str, fut: str) -> frozenset:
-    """Commits of pin..fut that copy a main commit made after the fork (same author line and message): a forked
-    future branch replays main's laws so that it reads whole on its own; read beside main they would be doubles."""
+def _tree_changes(cwd: Path, shas) -> dict[str, frozenset]:
+    """Each commit's changes against its first parent, as (path, mode, blob id) after it (a zero id where it deletes
+    the path), from one `git diff-tree --stdin`."""
+    shas = list(dict.fromkeys(shas))
+    if not shas:
+        return {}
+    done = subprocess.run(['git', 'diff-tree', '--stdin', '-r', '-m', '--first-parent', '--no-renames', '--root',
+                           '--no-abbrev'], cwd=cwd, input=''.join(s + '\n' for s in shas), capture_output=True,
+                          encoding='utf-8', errors='replace')
+    if done.returncode:
+        raise RuntimeError(f'git diff-tree --stdin: {done.stderr.strip()}')
+    out: dict[str, set] = {s: set() for s in shas}
+    sha = None
+    for line in done.stdout.splitlines():
+        if line.startswith(':'):
+            meta, _, path = line.partition('\t')
+            parts = meta.split()
+            if sha is not None and len(parts) >= 5:
+                out[sha].add((path, parts[1], parts[3]))
+        elif line.strip():
+            sha = line.split()[0]
+            out.setdefault(sha, set())
+    return {s: frozenset(v) for s, v in out.items()}
+
+
+ZERO_SHA = '0' * 40
+
+
+def _holds(cwd: Path, sha: str, change: frozenset) -> bool:
+    """Whether a commit's tree has each path of `change` (another commit's _tree_changes) at that commit's blob, or
+    lacks it where that commit deletes it: the commit carries the other's change, though it may change more, or have
+    had the same text already. Trees only (git ls-tree), never blobs."""
+    want = {path: blob for path, _, blob in change}
+    have: dict[str, str] = {}
+    paths = sorted(want)
+    for i in range(0, len(paths), 200):  # keep the command line short
+        out = subprocess.run(['git', '--literal-pathspecs', 'ls-tree', '-r', '-z', '--full-tree', sha, '--',
+                              *paths[i:i + 200]], cwd=cwd, capture_output=True)
+        if out.returncode:
+            return False
+        for entry in out.stdout.decode('utf-8', 'replace').split('\0'):
+            meta, _, path = entry.partition('\t')
+            if path:
+                have[path] = meta.split()[2]
+    return all(have.get(path, ZERO_SHA) == blob for path, blob in want.items())
+
+
+def _replays(cwd: Path, pin: str, fut: str) -> tuple[frozenset, tuple]:
+    """Commits of pin..fut that copy a main commit made after the fork: a forked future branch replays main's laws so
+    that it reads whole on its own; read beside main they would be doubles. A copy has the main commit's author line,
+    raw date and message, and leaves each path the main commit changes at the main commit's blob (the same change,
+    or text the branch had already; a file more written or removed on the branch is left out with the copy).
+    Returns (copies, diverged): diverged are the commits with a main commit's author, date and message whose tree
+    holds other text at a path that commit changes (a "copy" which, read on, would undo main's change): the caller
+    does not read such a branch."""
     fork = git('merge-base', pin, fut, cwd=cwd).strip()
     fmt = '--format=%x1d%H%x1f%an <%ae> %ad%x1f%B'
 
@@ -2177,8 +2279,28 @@ def _replays(cwd: Path, pin: str, fut: str) -> frozenset:
             sha, author, body = chunk.split('\x1f', 2)
             out[sha] = (author, body.strip())
         return out
-    on_main = set(keyed(pin, f'^{fork}').values()) if fork else set()
-    return frozenset(sha for sha, k in keyed(fut, f'^{pin}').items() if k in on_main)
+    on_main: dict[tuple, list[str]] = {}
+    for sha, k in (keyed(pin, f'^{fork}') if fork else {}).items():
+        on_main.setdefault(k, []).append(sha)
+    candidates = {sha: on_main[k] for sha, k in keyed(fut, f'^{pin}').items() if k in on_main}
+    changed = _tree_changes(cwd, [*candidates, *(m for ms in candidates.values() for m in ms)])
+    copies = frozenset(sha for sha, ms in candidates.items()
+                       if any(changed.get(sha) == changed.get(m) for m in ms)  # the same change: no more to ask
+                       or any(_holds(cwd, sha, changed.get(m, frozenset())) for m in ms))
+    return copies, tuple(sha for sha in candidates if sha not in copies)
+
+
+def _future_check(corpus: str, cwd: Path, pin: str, fut: str) -> dict:
+    """Whether a recorded future commit descends from the pin (linear), and if not, which of its commits are copies
+    of main's (skipped when read) and which only look like copies (diverged: the branch is not read). Once a process,
+    and only once the checkout has the commit."""
+    key = ('future-check', f'{corpus}@{pin}+{fut}')
+    if key not in _CACHE:
+        linear = subprocess.run(['git', 'merge-base', '--is-ancestor', pin, fut], cwd=cwd,
+                                capture_output=True).returncode == 0
+        skip, diverged = (frozenset(), ()) if linear else _replays(cwd, pin, fut)
+        _CACHE[key] = {'linear': linear, 'skip': skip, 'diverged': diverged}
+    return _CACHE[key]  # type: ignore[return-value]
 
 
 _MISSING = object()
@@ -2262,26 +2384,64 @@ def _index(corpus: str) -> dict:
         return data  # none recorded, or recorded for an earlier pin (stale): main alone, and future_note says so
     branch, fut, _ = fp
     key = ('index', f"{corpus}@{data['pin']}+{fut}")
+    missing = ('future-missing', f"{corpus}@{data['pin']}+{fut}")
+    if missing in _CACHE and _has_commit(corpus, corpus_dir(corpus), fut):
+        _future_arrived(corpus, data['pin'], fut)  # fetched since (as future_note asks): read it from now on
     if key not in _CACHE:
         mine = f"{corpus}@{data['pin']}+"  # what this process kept for an earlier future pin of the same main pin
         for k in [k for k in _CACHE if len(k) == 2 and isinstance(k[1], str) and k[1].startswith(mine)
                   and not k[1].startswith(mine + fut)]:
             _CACHE.pop(k)
         cwd = corpus_dir(corpus)
-        _CACHE[key] = _future_index(corpus, cwd, data, branch, fut) if _has_commit(corpus, cwd, fut) else data
+        if _has_commit(corpus, cwd, fut):
+            _CACHE[key] = _future_index(corpus, cwd, data, branch, fut)
+        else:
+            # Main alone for now. A long-running reader (the MCP server) asks again on each read, one line to the
+            # batch reader (_has_commit keeps only a yes), and reads the branch once the commit is fetched.
+            _CACHE[missing] = True
+            _CACHE[key] = data
     return _CACHE[key]  # type: ignore[return-value]
+
+
+def _future_arrived(corpus: str, pin: str, fut: str) -> None:
+    """A recorded future commit the checkout lacked is there now: drop what this process built from main alone (the
+    caches keyed <corpus>@<pin> without the +<future>, but not main's own index, which the merged reading is built
+    on, and every timeline), so the next read builds the merged reading."""
+    at = f'{corpus}@{pin}'
+    for k in [k for k in _CACHE if len(k) == 2 and isinstance(k[1], str)
+              and (k[0] == 'timeline' or (k[1].startswith(at) and not k[1].startswith(at + '+')
+                                          and k != ('index', at)))]:
+        _CACHE.pop(k)
+    _CACHE.pop(('index', f'{at}+{fut}'), None)
+    _CACHE.pop(('future-missing', f'{at}+{fut}'), None)
+
+
+def recheck_missing_futures() -> bool:
+    """For readers of every corpus at once (timeline), which do not go through _index on a cache hit, and for the
+    MCP server's own caches: whether any recorded future commit the checkout lacked when it was last read is there
+    now (its main-only caches are then dropped). One line to each such corpus's batch reader."""
+    arrived = False
+    for k in [k for k in _CACHE if k[0] == 'future-missing']:
+        at, fut = str(k[1]).rsplit('+', 1)
+        corpus, pin = at.rsplit('@', 1)
+        if _has_commit(corpus, corpus_dir(corpus), fut):
+            _future_arrived(corpus, pin, fut)
+            arrived = True
+    return arrived
 
 
 def _future_index(corpus: str, cwd: Path, data: dict, branch: str, fut: str) -> dict:
     """The main index with the commits pin..fut added, kept in memory only: the index on disk stays main's, keyed by
     the main pin, so moving either pin never leaves a branch's versions in it. A branch that forked from main before
     the pin (gitlaw_common's append_future.py forks at main's last law commit) has copies of main's later commits;
-    those are left out (_replays). Its cache keys start <corpus>@<pin>, so _forget_other_pins drops them with the
-    pin, and nothing is written to disk for _prune_indexes to keep or remove."""
+    those are left out (_replays). A branch with a commit that only looks like a copy (diverged) is not read at all:
+    main alone, and future_note says why. Its cache keys start <corpus>@<pin>, so _forget_other_pins drops them with
+    the pin, and nothing is written to disk for _prune_indexes to keep or remove."""
     pin = data['pin']
-    linear = subprocess.run(['git', 'merge-base', '--is-ancestor', pin, fut], cwd=cwd,
-                            capture_output=True).returncode == 0
-    skip = frozenset() if linear else _replays(cwd, pin, fut)
+    check = _future_check(corpus, cwd, pin, fut)
+    if check['diverged']:
+        return data
+    linear, skip = check['linear'], check['skip']
     over = dict(data)
     over['rows'] = list(data['rows'])
     over['files'] = _FilesOver(data['files'])

@@ -160,6 +160,9 @@ def _look() -> tuple[str, tuple[str, ...]]:
     if now - _head_seen[0] > 2.0:
         sha, names = law.git('rev-parse', 'HEAD').strip(), chosen()
         _head_seen = (now, sha, tuple(c['path'] for c in _full_manifest(sha)['corpora'] if serving(c, names) is None))
+        if law.recheck_missing_futures():  # a future commit fetched since (as future_note asks): HEAD did not move
+            for cached in (_timeline, _history, latest_text):
+                cached.cache_clear()
     return _head_seen[1], _head_seen[2]
 
 
