@@ -241,7 +241,7 @@ class Fixtures(unittest.TestCase):
         store = Path(subprocess.run(['git', 'rev-parse', '--path-format=absolute', '--git-path', 'global-law-cache'],
                                     cwd=self.t.root, capture_output=True, encoding='utf-8').stdout.strip())
         self.law.corpus_events('ff/national/acts')
-        self.assertTrue(list(store.glob('ff~national~acts.v*.index')))  # named by its version: two versions do not
+        self.assertTrue(list(store.glob('ff~national~acts.v*.*.index')))  # named by its version: two versions do not
         # rebuild each other's index
 
 
@@ -611,7 +611,7 @@ class FifthOfNovemberFixes(unittest.TestCase):
     def test_a_reader_survives_its_index_being_replaced(self):  # row 22
         law = self.t.law()
         ix = law._index('rr/national/acts')
-        path = next(Path(ix['files']._path).parent.glob('rr~national~acts.v*.index'))
+        path = next(Path(ix['files']._path).parent.glob('rr~national~acts.v*.*.index'))
         try:  # another process writes a different index in its place (refused on Windows while it is open)
             path.with_name('other.tmp').write_bytes(b'GLX2' + (5).to_bytes(8, 'little') + b'xxxxx')
             os.replace(path.with_name('other.tmp'), path)
@@ -622,6 +622,40 @@ class FifthOfNovemberFixes(unittest.TestCase):
         finally:
             law.close_readers()
             path.unlink(missing_ok=True)
+
+    def test_old_indexes_and_tmp_files_are_removed(self):  # row 29
+        law = self.t.law()
+        with tempfile.TemporaryDirectory() as d:
+            store, name = Path(d), 'xx~national~acts'
+            keep = store / f'{name}.v{law.INDEX_VERSION}.bbbbbbbbbbbb.index'
+            gone = [store / f'{name}.v{law.INDEX_VERSION}.aaaaaaaaaaaa.index', store / f'{name}.v{law.INDEX_VERSION}.index',
+                    store / f'{name}.index', store / f'{name}.pickle', store / f'{name}.v1.cccc.index.77.tmp']
+            stays = [store / f'{name}.v99.dddd.index', store / 'xx~national~acts~other.v1.eeee.index']
+            for f in [keep] + gone + stays:
+                f.write_bytes(b'x')
+            os.utime(gone[-1], (0, 0))  # an old .tmp
+            law._prune_indexes(store, name, keep)
+            self.assertEqual(sorted(f.name for f in store.iterdir()), sorted(f.name for f in [keep] + stays))
+
+    def test_a_reader_keeps_only_the_current_pin(self):  # row 27
+        law = self.t.law()
+        law._CACHE[('index', 'rr/national/acts@old')] = {'files': {}}
+        law._CACHE[('file-index', 'rr/national/acts@old')] = ({}, [])
+        law._CACHE[('index', 'rr/national/acts~x@old')] = {}  # another corpus, a longer name
+        law._forget_other_pins('rr/national/acts', 'new')
+        self.assertNotIn(('index', 'rr/national/acts@old'), law._CACHE)
+        self.assertNotIn(('file-index', 'rr/national/acts@old'), law._CACHE)
+        self.assertIn(('index', 'rr/national/acts~x@old'), law._CACHE)
+
+    def test_tree_folders_are_removed_though_git_made_them_read_only(self):  # row 28
+        law = self.t.law()
+        d = Path(tempfile.mkdtemp(prefix='gl-rmtree-'))
+        (d / 'objects' / 'ab').mkdir(parents=True)
+        f = d / 'objects' / 'ab' / 'cdef'
+        f.write_bytes(b'x')
+        os.chmod(f, 0o444)
+        law._rmtree(d)
+        self.assertFalse(d.exists())
 
     def test_a_shallow_corpus_is_left_out_of_world_not_fatal(self):  # row 23
         out, err, code = self.t.cli('world', '2023-01-01')

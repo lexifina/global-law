@@ -524,15 +524,33 @@ def _tree_store() -> Path:
         for old in Path(tempfile.gettempdir()).glob('global-law-trees-*'):  # left by a killed process
             try:
                 if time.time() - old.stat().st_mtime > 86400:
-                    shutil.rmtree(old, True)
+                    _rmtree(old)
             except OSError:
                 pass
         d = Path(tempfile.mkdtemp(prefix='global-law-trees-'))
         (d / 'objects').mkdir()
-        atexit.register(shutil.rmtree, d, True)
+        atexit.register(_rmtree, d)
         os.environ['GIT_ALTERNATE_OBJECT_DIRECTORIES'] = str(d / 'objects')
         _TREES['dir'] = d
     return _TREES['dir']
+
+
+def _rmtree(d: Path) -> None:
+    """Remove a folder git wrote into: its objects are read-only, which Windows will not delete as they are."""
+    import os
+    import shutil
+    import stat
+
+    def writable(func, path, _):
+        try:
+            os.chmod(path, stat.S_IWRITE | stat.S_IREAD)
+            func(path)
+        except OSError:
+            pass
+    try:
+        shutil.rmtree(d, onerror=writable)
+    except OSError:
+        pass
 
 
 def corpus_tree(date: str, corpus: str) -> str | None:
@@ -1849,11 +1867,18 @@ def _index(corpus: str) -> dict:
                          f'holds cannot be read as of now. Run: git submodule update --init -- {corpus}')
     import os
     store = _store()
-    path = store / (corpus.replace('/', '~') + f'.v{INDEX_VERSION}.index')
+    name = corpus.replace('/', '~')
+    # Named by version and pin: a file is never replaced in place (a reader holds its file open, row 22 of the audit
+    # of 4 November 2026), and a new pin extends the newest index of an earlier pin.
+    path = store / f'{name}.v{INDEX_VERSION}.{sha[:12]}.index'
+    source = path
+    if not path.is_file():
+        older = [f for f in store.glob(f'{name}.v{INDEX_VERSION}.*index') if f.suffix == '.index'] if store.is_dir() else []
+        source = max(older, key=lambda f: f.stat().st_mtime) if older else path
     data = None
     changed = False
     try:
-        data = _load_index(path)
+        data = _load_index(source)
         if data.get('v') != _index_version():
             data = None
     except Exception:
@@ -1865,8 +1890,15 @@ def _index(corpus: str) -> dict:
             data = data if changed else None
         except Exception:
             data = None
+    if data and source != path and data['pin'] == sha:  # the same pin under an earlier name: kept under this one
+        held = data['files']
+        data['files'] = dict(held.items())
+        held.close()
+        changed = True
     if data and data['pin'] != sha:
-        data['files'] = dict(data['files'].items())  # every file, to extend
+        held = data['files']
+        data['files'] = dict(held.items())  # every file, to extend
+        held.close()  # so that the index of the earlier pin can be removed below
         forward = subprocess.run(['git', 'merge-base', '--is-ancestor', data['pin'], sha], cwd=cwd,
                                  capture_output=True).returncode == 0
         if forward:
@@ -1887,11 +1919,46 @@ def _index(corpus: str) -> dict:
             tmp = path.with_name(f'{path.name}.{os.getpid()}.tmp')
             _save_index(tmp, data)
             os.replace(tmp, path)
-            path.with_suffix('.pickle').unlink(missing_ok=True)  # the one-piece index this replaces (until 4 November 2026)
         except OSError:
-            pass
+            try:
+                tmp.unlink(missing_ok=True)  # a refused replace leaves no corpus-sized .tmp behind
+            except (OSError, NameError):
+                pass
+        _prune_indexes(store, name, path)
+    _forget_other_pins(corpus, sha)
     _CACHE[key] = data
     return data
+
+
+def _prune_indexes(store: Path, name: str, keep: Path) -> None:
+    """Remove a corpus's indexes this one replaces: earlier pins of this version, the names used before (one piece
+    until 4 November 2026, then one per version), other versions unused for a week, and .tmp files over an hour old.
+    A file another process still reads is refused on Windows and left for a later run; elsewhere it stays readable
+    to the process that holds it open."""
+    import time
+    now = time.time()
+    for f in store.glob(f'{name}.*'):
+        if f == keep or not f.name.startswith(name + '.'):
+            continue
+        try:
+            age = now - f.stat().st_mtime
+            this_version = f.name.startswith(f'{name}.v{INDEX_VERSION}.')
+            if (f.suffix == '.tmp' and age > 3600) or (f.suffix in ('.index', '.pickle') and (
+                    this_version or not f.name.startswith(f'{name}.v') or age > 7 * 86400)):
+                f.unlink()
+        except OSError:
+            pass
+
+
+def _forget_other_pins(corpus: str, sha: str) -> None:
+    """Drop what this process keeps for earlier pins of a corpus (a long-running reader, such as the MCP server, sees
+    pins move several times an hour; each index of a large corpus holds hundreds of MB)."""
+    mine = f'{corpus}@'
+    for k in [k for k in _CACHE if len(k) == 2 and isinstance(k[1], str) and k[1].startswith(mine)
+              and not k[1].startswith(mine + sha)]:
+        v = _CACHE.pop(k)
+        if k[0] == 'index' and isinstance(v, dict) and isinstance(v.get('files'), _Files):
+            v['files'].close()
 
 
 INDEX_SHARDS = 64
@@ -1965,6 +2032,11 @@ class _Files:
         _OPEN_INDEXES.append(self._f)
         self._shards: dict[int, tuple[dict, list]] = {}
         self._ordered: list | None = None
+
+    def close(self) -> None:
+        if self._f in _OPEN_INDEXES:
+            _OPEN_INDEXES.remove(self._f)
+        self._f.close()
 
     def _piece(self, i: int) -> dict:
         if i not in self._shards:

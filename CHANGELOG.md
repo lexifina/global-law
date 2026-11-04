@@ -9,6 +9,12 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). Second audit, rows 27-29: what law.py leaves behind.** An index is named by its version and pin
+  (`<corpus>.v7.<pin>.index`) and never replaced in place; a new pin extends the newest earlier index and then removes
+  it, with the names used before, other versions unused for a week, and .tmp files over an hour old (a refused write
+  leaves no .tmp). A long-running reader (the MCP server) drops what it kept for a corpus's earlier pins when the pin
+  moves, instead of holding every index it ever loaded. Tree folders are removed though git made their objects
+  read-only, which Windows would not delete, at exit and by the day-old sweep.
 - **Changed (all). `tools/verify.py` reads each commit's change, not its whole tree, and fetches every corpus into
   one commit store, 32 at a time.** The whole history (342,041 commits) checks in 44 s, 2 November to now in 2–4 s
   (was 80.8 s); `--remote` (was `--fetch`) fills the store in about 4 minutes and 560 MB (was about 100 minutes). A
