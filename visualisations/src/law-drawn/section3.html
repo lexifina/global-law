@@ -1,0 +1,51 @@
+
+<style>
+.divider { display: grid; gap: 10px; max-width: 74ch; padding-top: 28px; border-top: 1px solid var(--rule); }
+.divider h2.part { font: 600 1.8rem/1.15 var(--display); }
+</style>
+<div class="divider"><span class="eyebrow">Part two · the regions</span><h2 class="part">Since 29 October, global-law has added states, provinces, cantons and cities</h2>
+  <p class="lede">global-law grew from 143 to 684 corpora in four days, 456 of them below the national level. These five pictures use every corpus with dated changes: 612 histories from 182 countries, 479,003 dated changes. A dated change is one act where the record names the act, or one day's batch of changes where it credits only the publisher.</p></div>
+
+<figure id="growth">
+  <div class="figtext"><span class="eyebrow">global-law · corpora by level, 29 October to 2 November 2026</span>
+    <h2>global-law grew sixfold in four days, mostly below the national level</h2>
+    <p>The number of corpora in global-law, counted after every commit. <b>On the evening of 29 October it held 107 corpora, 94 of them national. By 2 November it held 684: 206 national, 334 regional and 144 city corpora.</b> Countries covered went from 101 to 213. Most national corpora arrived on 30 October and regions on 30 and 31 October. Cities followed on 1 and 2 November, almost all in Argentina, Brazil and Switzerland.</p></div>
+  <div class="legend" id="lg-growth"></div>
+  <div class="plot"><svg id="f-growth" role="img" aria-label="Stacked area of global-law corpora by level over four days"></svg></div>
+  <p class="src">Submodules (gitlinks) in every fifth commit of lexifina/global-law since 29 October 19:34 UTC, plus the latest. A path ending in /national/acts is national, one whose middle part ends in -city is a city, and the rest are regional.</p>
+</figure>
+
+<figure id="world">
+  <div class="figtext"><span class="eyebrow">612 corpora with dated changes · 182 countries</span>
+    <h2>The world's law, now in 612 histories</h2>
+    <p>Each circle is one corpus, grouped by country and coloured by level. <b>France's single national history still holds 150,000 of the 479,003 dated changes, almost a third.</b> The federations are now constellations: Argentina has 87 corpora, Russia 83, Brazil 48, the United States 42 and Switzerland 39. Regional and city corpora hold 191,000 dated changes, 40% of the total.</p></div>
+  <div class="legend" id="lg-world"></div>
+  <div class="plot square"><svg id="f-world" role="img" aria-label="Circle packing of 612 law corpora by country and level"></svg></div>
+  <p class="src">Dated changes per corpus, counted as in global-law's analysis11.py: one per crediting author and in-force date, with snapshot, consolidated and generic commits left out. Circle area is proportional to the square root of the count, so small corpora stay visible. The US Code, German Basic Law and Swiss federal histories live in separate repositories and are not counted here.</p>
+</figure>
+
+<figure id="clocks">
+  <div class="figtext"><span class="eyebrow">Eleven federations · regional and city law</span>
+    <h2>Each federation's regions keep a different calendar</h2>
+    <p>Each clock is one federation's year, with 1 January at the top. Each spoke is a day, and its length is the share of regional changes that start that day. <b>53% of US state changes start on 1 January, and 81% of Swiss cantonal changes on the first of some month.</b> Australian states start theirs on 1 July, the first day of the financial year. Russia's and Brazil's regions almost never use the first of the month. Their law bunches into the last days of December.</p></div>
+  <div class="plot"><svg id="f-clocks" role="img" aria-label="Radial day-of-year charts for eleven federations"></svg></div>
+  <p class="src">In-force dates of every dated change in each federation's regional and city corpora. Spoke length grows with the 0.4 power of the day's share, on one scale for all clocks, so quiet days stay visible. First-of-month spokes are red. Russian regional changes are dated by their official publication, which their record treats as the day they take effect.</p>
+</figure>
+
+<figure id="russia">
+  <div class="figtext"><span class="eyebrow">Russia · 82 regions · weekly, 2015–2025</span>
+    <h2>Russia's regions publish their law in a December wave</h2>
+    <p>Each row is a region and each column a week, shaded by how many days that week the region published changes to its law. The bars above count how many regions published anything. <b>In the week of 24 December 2018, 71 of the 82 regions published law, and December holds 19% of all regional publications.</b> The wave returns every December, with a smaller one at the end of November.</p></div>
+  <div class="legend"><span>days with publications that week</span><span>1</span><span class="ramp"></span><span>5+</span></div>
+  <div class="plot"><svg id="f-russia" role="img" aria-label="Heatmap of Russian regional acts by week"></svg></div>
+  <p class="src">Publication dates in the 82 Russian regional corpora with 20 or more dated changes in 2015–2025. Each corpus credits the official portal (publication.pravo.gov.ru), so a dated change is one day's publication. Weeks start on Monday. Rows are sorted by total publication days.</p>
+</figure>
+
+<figure id="copies">
+  <div class="figtext"><span class="eyebrow">145 municipal corpora · Argentina, Brazil, Switzerland, Mexico and Indonesia</span>
+    <h2>Towns copy their laws, mostly from the province's templates</h2>
+    <p>Each dot is a town. A line joins two towns whose law shares at least one long article word for word, and its colour is the kind of text shared. <b>499 articles of 25 words or more appear in two or more towns, linking 100 of the 145 towns.</b> Most links are in Buenos Aires province. Towns there pass the province's model ordinances to borrow from it, and copy each other's municipal tax codes. The most widely shared article comes from ordinances rescheduling debts owed to the province's COVID-19 emergency health fund. 24 towns passed it word for word between September 2020 and November 2022. In Switzerland, the neighbouring Zug communes of Oberägeri and Unterägeri share 27 articles. Brazilian towns share passages of their town charters (leis orgânicas).</p></div>
+  <div class="legend" id="lg-copies"></div>
+  <div class="plot square"><svg id="f-copies" role="img" aria-label="Network of municipalities sharing identical ordinance text"></svg></div>
+  <p class="src">Current text of every municipal corpus in global-law. Articles are normalised (lower case, with accents, numbers and punctuation removed) and compared exactly. Articles under 25 words are left out because they are mostly boilerplate. Each article's family comes from its wording and its ordinance's title. Argentine town corpora hold a sample of about 200 recent ordinances each, so these are the copies visible in the sample, not all of them.</p>
+</figure>

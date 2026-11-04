@@ -1,0 +1,51 @@
+
+<style>
+.legend .ramp { width: 140px; height: 10px; border-radius: 3px; background: linear-gradient(90deg, var(--seq-lo), var(--seq-hi)); display: inline-block; }
+</style>
+<div class="divider"><span class="eyebrow">Part three · five more ways to look at the record</span>
+  <h2 class="part">The rhythm, the map, the purpose, the anatomy and the authors of Romanian law</h2>
+  <p class="lede">These five pictures go back to Romania's own record: the days the Official Gazette prints, the counties the government decides about, what Parliament's laws are for, how much of the Fiscal Code is still original, and who rewrites the most-amended acts.</p></div>
+
+<figure id="days">
+  <div class="figtext"><span class="eyebrow">Monitorul Oficial, Partea I · every day, 2014–2025</span>
+    <h2>The Official Gazette is a weekday paper, busiest on Thursdays and in December</h2>
+    <p>Each square is a day and each block a year, laid out week by week with Monday at the top. The shade is how many acts in the corpus were published that day. <b>Of 14,785 acts published in these twelve years, 67 appeared at a weekend, so the bottom two rows of every year stay almost empty.</b> Thursday is the busiest day and December the busiest month. The record is 3 March 2021, with 154 government decisions in one day: 153 of them concern the posts of county prefects and subprefects.</p></div>
+  <div class="legend"><span>acts published that day</span><span>1</span><span class="ramp"></span><span>20+</span><span style="margin-left:8px"><i class="bar" style="background:var(--tint)"></i>none</span></div>
+  <div class="plot"><svg id="f-days" role="img" aria-label="Calendar heatmap of acts published each day, 2014 to 2025"></svg></div>
+  <p class="src">Publication dates in data/laws.csv, all kinds of act. 2014–2025 are the years the corpus holds densely, with 946 to 1,679 acts each. Earlier years are thinner, so they are left out here.</p>
+</figure>
+
+<figure id="hex">
+  <div class="figtext"><span class="eyebrow">Hotărâri de Guvern that name a county · 3,579 decisions</span>
+    <h2>Prefects change everywhere, coats of arms cluster inside the Carpathians, and property means Bucharest</h2>
+    <p>Each hexagon is a county, placed roughly where it sits on the map, with its number-plate code. The count is how many government decisions name that county in their title, split by what the decision is about; each map has its own shade scale, and its largest county is outlined. <b>Prefect and subprefect appointments reach every county in similar numbers, from 22 to 56, because a new government replaces them all.</b> Flags and coats of arms gather in a band from Maramureș to Covasna and Harghita: the five counties with the most all lie inside the Carpathian arc. Decisions on state property name Bucharest 134 times, four times more than any county.</p></div>
+  <div class="plot"><svg id="f-hex" role="img" aria-label="Four hex tile maps of Romania's counties showing government decisions by topic"></svg></div>
+  <p class="src">Titles of government decisions (HG) in data/laws.csv that contain "județul" followed by a county name, or "municipiul București". A decision naming two counties counts for both. Topics are matched by words in the title: prefect; stemă, steag or sigiliu; domeniul public or privat, transmitere, trecere, administrare or concesiune; expropriere, utilitate publică, obiectiv or indicatori tehnico-economici. A further 237 decisions on money and other subjects are left out. Most decisions date from 2007–2009 and 2014–2026, the years the corpus holds densely.</p>
+</figure>
+
+<figure id="purpose">
+  <div class="figtext"><span class="eyebrow">Legi · what each law is for, 1991–2025</span>
+    <h2>Parliament now mostly approves the government's ordinances and amends its own laws; new law is about one in seven</h2>
+    <p>The river is as wide as the number of laws Parliament passed each year, read from the highest law number of the year. The coloured core is the laws the corpus holds, sorted by the purpose their title states, or, where the title is only a number, by what the first article does. The pale edges are laws passed but not held. <b>Of the 1,551 laws held from 2017 to 2025, 596 amend or repeal an earlier law and 574 approve or reject a government ordinance. Only 237, 15%, set out new law.</b> The core is thin before 2015 because the corpus holds a smaller share of older laws, so the early mix is not a fair sample.</p></div>
+  <div class="legend" id="lg-purpose"></div>
+  <div class="plot"><svg id="f-purpose" role="img" aria-label="Streamgraph of laws passed each year by purpose, 1991 to 2025"></svg></div>
+  <p class="src">Laws passed per year: the highest Legea number in each year, with outliers removed as in the first chart on this page. Laws held: the 2,899 folders under lege/1991–2025. 2,145 are sorted by title, 754 by their first article ("Se aprobă Ordonanța…", "Se ratifică…", "Legea nr. … se modifică…"), and 50 with neither are counted as not held. A law that both sets out new rules and amends others counts as new.</p>
+</figure>
+
+<figure id="quilt">
+  <div class="figtext"><span class="eyebrow">Codul fiscal, Legea nr. 227/2015 · 645 articles, 149 versions</span>
+    <h2>One article in five of the Fiscal Code still reads as it did in 2015</h2>
+    <p>Each square is an article, in reading order, grouped by the code's eleven Titles. Its shade is the year its current wording dates from. <b>Of 645 articles, 134 are as enacted, 142 were inserted later and 95 have been repealed outright; 180 have wording from 2025 or 2026.</b> The social contributions Title has the most rewriting: 4% of it is as enacted and 59 of its articles are repealed. The microenterprise tax is the most restless, with 69 changes across 12 articles. The single most-changed articles are art. 25 on deductible expenses (23 changes), art. 456 on exemptions from the buildings tax (22) and art. 76 on what counts as salary (20).</p></div>
+  <div class="legend" id="lg-quilt"></div>
+  <div class="plot"><svg id="f-quilt" role="img" aria-label="Quilt of the 645 articles of the Romanian Fiscal Code, shaded by the year of their current wording"></svg></div>
+  <p class="src">The provision table in lege/2015/227/README.md (changes and last change per article) and the article files themselves: an article whose whole text is "Abrogat." counts as repealed. Inserted articles are those numbered with a superscript, such as art. 25^1. Title boundaries are read from the articles' own text.</p>
+</figure>
+
+<figure id="sankey">
+  <div class="figtext"><span class="eyebrow">The 14 most-amended acts · 1,704 changes and what made them</span>
+    <h2>The government rewrites Romania's tax and health law; Parliament rewrites its education, labour and pension law</h2>
+    <p>Each ribbon is the number of amendments one kind of act has made to one of the fourteen acts the corpus records as amended most often. The acts are sorted by the government's share of the amendments made by a law or an ordinance. <b>Emergency ordinances and ordinances make 73% of those changes to the Fiscal Procedure Code, 68% to the old Fiscal Code and 57% to the current one and to the health reform law. Parliament's laws make 75% of the changes to the Labour Code and 78% to the pensions law.</b> The grey ribbons are new versions published on the legislation portal without naming the act that caused them.</p></div>
+  <div class="legend" id="lg-sankey"></div>
+  <div class="plot"><svg id="f-sankey" role="img" aria-label="Sankey diagram from kinds of amending act to the fourteen most-amended Romanian acts"></svg></div>
+  <p class="src">Every commit in the corpus that changes an act's text other than as enacted, counted once per amending act per amended act, from the commit's author and its Affecting: trailer. "Other acts" are government decisions, Official Gazette rectifications and ministerial orders. A law that approves an ordinance with amendments counts as a law.</p>
+</figure>

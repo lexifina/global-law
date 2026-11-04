@@ -1,0 +1,383 @@
+<title>Romanian Law, Drawn</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+/* Layout: a column of findings, each led by its claim, then the chart, then a gazette-style source line. Same family as global-law's Law in Motion. */
+:root {
+  --bg: #f4f5f8; --plate: #ffffff; --ink: #18202e; --muted: #596476; --rule: #dbdfe7; --ghost: #b7bdc9; --tint: #eceff5;
+  --c1: #3a5fbf; --c2: #c23f38; --c3: #008a7a; --c4: #b5801a; --seq-lo: #dfe6f6; --seq-hi: #1c3784;
+  --display: "Source Serif 4", Georgia, serif; --body: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10141b; --plate: #171d27; --ink: #e6eaf0; --muted: #9aa4b4; --rule: #2a323f; --ghost: #485264; --tint: #1f2633;
+  --c1: #6b8ae6; --c2: #e0584f; --c3: #16a594; --c4: #bd8526; --seq-lo: #253049; --seq-hi: #a9bdf7; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #10141b; --plate: #171d27; --ink: #e6eaf0; --muted: #9aa4b4; --rule: #2a323f; --ghost: #485264; --tint: #1f2633;
+  --c1: #6b8ae6; --c2: #e0584f; --c3: #16a594; --c4: #bd8526; --seq-lo: #253049; --seq-hi: #a9bdf7; color-scheme: dark }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 44px 80px; }
+main { max-width: 1000px; margin: 0 auto; display: grid; gap: 28px; }
+header { display: grid; gap: 14px; }
+.mast { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 18px; padding-bottom: 10px; border-bottom: 3px double var(--ink);
+  font: 500 11px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 600 2.5rem/1.08 var(--display); margin: 0; text-wrap: balance; max-width: 22ch; }
+h2 { font: 600 1.35rem/1.25 var(--display); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.lede { color: var(--muted); font-size: 16px; max-width: 68ch; }
+.lede em { color: var(--ink); font-style: italic; }
+.eyebrow { font: 500 11px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.fact { background: var(--plate); padding: 14px 16px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.fact b { font: 600 1.6rem/1.1 var(--display); font-variant-numeric: tabular-nums; }
+.fact span { color: var(--muted); font-size: 13px; }
+.glossary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 22px; font-size: 13.5px; color: var(--muted); }
+.glossary div { min-width: 0; }
+.glossary b { color: var(--ink); font: 500 12.5px var(--mono); }
+figure { margin: 0; background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; display: grid; min-width: 0; }
+.figtext { padding: 20px 22px 4px; display: grid; gap: 8px; max-width: 76ch; }
+.figtext p { color: var(--muted); font-size: 14.5px; }
+.figtext p b { color: var(--ink); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 10px 22px 0; font: 12px/1.4 var(--mono); color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.legend i.bar { border-radius: 2px; width: 12px; }
+.plot { overflow-x: auto; padding: 6px 10px; }
+.plot svg { display: block; width: 100%; height: auto; min-width: 620px; }
+.plot.square svg { max-width: 820px; margin: 0 auto; }
+.src { padding: 6px 22px 18px; font: 12px/1.5 var(--mono); color: var(--muted); }
+.src::before { content: "M.Of. · "; color: var(--ink); }
+svg text { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+svg .lbl { fill: var(--ink); }
+svg .ser { font-family: var(--display); font-size: 14px; fill: var(--ink); }
+svg .halo { paint-order: stroke; stroke: var(--plate); stroke-width: 3.5px; stroke-linejoin: round; }
+svg .domain { stroke: var(--rule); }
+svg .tick line { stroke: var(--rule); }
+#tip { position: fixed; pointer-events: none; z-index: 10; background: var(--plate); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 8px 10px; font: 12.5px/1.45 var(--body); box-shadow: 0 4px 16px rgb(0 0 0 / .14); max-width: 340px; opacity: 0; transition: opacity .08s; }
+#tip b { font-weight: 600; }
+#tip .m { font-family: var(--mono); color: var(--muted); font-size: 11.5px; }
+footer { color: var(--muted); font-size: 13px; max-width: 76ch; display: grid; gap: 8px; }
+footer a { color: var(--ink); }
+a:focus-visible { outline: 2px solid var(--c1); outline-offset: 2px; }
+@media (max-width: 520px) { h1 { font-size: 1.9rem; } }
+</style>
+
+<main>
+<header>
+  <div class="mast"><span>România · lexifina/romania-law</span><span>Partea I · drawn 3 November 2026</span></div>
+  <h1>Romanian law, drawn from its own Official Gazette</h1>
+  <p class="lede">Romania publishes every law, ordinance and government decision in the <em>Monitorul Oficial</em>, and numbers each kind afresh every year. lexifina/romania-law rebuilds that record as a git history. Part one's eight pictures use what only Romania's record holds: the emergency ordinance, the three-day rule, the laws that carried in four new codes, and the Constitutional Court's red pen. Part two's five set Romania against its Balkan neighbours, the rest of Europe and the world.</p>
+  <div class="facts" id="facts"></div>
+  <div class="glossary">
+    <div><b>Legea</b> · a law passed by Parliament.</div>
+    <div><b>OUG</b> · ordonanță de urgență, the government's emergency ordinance, in force on publication.</div>
+    <div><b>OG</b> · ordonanță, an ordinance the government makes under a law that empowers it.</div>
+    <div><b>HG</b> · hotărâre de guvern, a government decision that carries laws out.</div>
+  </div>
+</header>
+
+<figure id="ratio">
+  <div class="figtext"><span class="eyebrow">1990–2026 · acts issued each year, by number</span>
+    <h2>The government writes four acts for every law Parliament passes</h2>
+    <p>Each kind of act is numbered from 1 every year, so a year's highest number is its total. <b>Since 1997, Parliament has passed 10,723 laws. The government has issued 4,231 emergency ordinances, 1,495 ordinances and 40,660 decisions: 4.3 acts for every law.</b> Emergency ordinances peaked in 2000, at 298, and again in 2020, at 227.</p></div>
+  <div class="legend" id="lg-ratio"></div>
+  <div class="plot"><svg id="f-ratio" role="img" aria-label="Laws and government acts issued each year"></svg></div>
+  <p class="src">The highest number of each kind per year in data/laws.csv, so the count holds even for acts not yet built. A top number far beyond the rest of its year (8 cases, such as "Legea nr. 791/2010") is treated as a typo. The strip below shows who was prime minister; hover it for full names and dates.</p>
+</figure>
+
+<figure id="pms">
+  <div class="figtext"><span class="eyebrow">17 prime ministers · emergency ordinances per month in office</span>
+    <h2>Every government rules by emergency ordinance, some three times as often as others</h2>
+    <p>Emergency ordinances issued per month of each prime minister's time in office. <b>Mugur Isărescu's 2000 cabinet issued 25 a month. Ludovic Orban's, in the pandemic year, issued 18. Ilie Bolojan's issued 6.</b> The habit crosses party lines: social-democratic governments average 10.8 a month and centre-right ones 12.3.</p></div>
+  <div class="legend" id="lg-pms"></div>
+  <div class="plot"><svg id="f-pms" role="img" aria-label="Emergency ordinances per month for each prime minister"></svg></div>
+  <p class="src">Each numbered ordinance is dated by its publication. Ordinances not in the corpus are dated between their numbered neighbours. Terms are from Wikipedia's list of heads of government of Romania. Short acting premierships are left out, and Victor Ciorbea's term is counted from 1997.</p>
+</figure>
+
+<figure id="approve">
+  <div class="figtext"><span class="eyebrow">364 emergency ordinances and the laws that judged them</span>
+    <h2>An emergency ordinance applies at once. Parliament takes a median of 319 days to rule on it</h2>
+    <p>Under the Constitution's article 115, an emergency ordinance applies once it is filed with Parliament and published. Parliament then approves or rejects it by law. Each dot is an ordinance, placed by when it was published and how long the approving or rejecting law took. <b>165 of the 364 waited more than a year, and OUG 174/2008 was approved in 2022, after 13 years and 5 months.</b> 25 were rejected, some only after years in force.</p></div>
+  <div class="legend" id="lg-approve"></div>
+  <div class="plot"><svg id="f-approve" role="img" aria-label="Scatter of emergency ordinances by days until approval or rejection"></svg></div>
+  <p class="src">Laws titled "privind aprobarea / respingerea Ordonanței de urgență a Guvernului nr. N/YYYY", matched to the ordinance's own publication date. Only pairs where both acts are in the corpus are shown.</p>
+</figure>
+
+<figure id="three">
+  <div class="figtext"><span class="eyebrow">18,637 acts as enacted · days from the Monitorul Oficial to entry into force</span>
+    <h2>Three days after publication: the Constitution's default start day</h2>
+    <p>The Constitution's article 78 makes a law take effect three days after it appears in the Monitorul Oficial, unless the law sets a later day. Government acts take effect on the day they are published. <b>76% of laws start exactly three days after publication, and 97% of government decisions and 93% of emergency ordinances start the same day.</b> Ordinances (OG) are split, because many are approved later by a law.</p></div>
+  <div class="plot"><svg id="f-three" role="img" aria-label="Histograms of days from publication to entry into force by kind of act"></svg></div>
+  <p class="src">Published and In-force trailers of every act's first version. Each commit states the rule it used: "in force 3 days after publication (Constituția art. 78)" or "in force on publication (Legea nr. 24/2000 art. 12)". The last bar gathers 41 days and more.</p>
+</figure>
+
+<figure id="codes">
+  <div class="figtext"><span class="eyebrow">2011–2013 · four implementing laws, 194 acts</span>
+    <h2>The four new codes rewired the rest of Romanian law</h2>
+    <p>Between 2011 and 2013 Romania replaced its civil code, criminal code and both procedure codes. Each came with an implementing law that changed every other act that pointed to the old code. Each spoke joins an implementing law to an act it changed. <b>The Criminal Code's implementing law, Legea nr. 187/2012, changed 107 acts, and the four together changed 194.</b> For scale, the widest emergency ordinance, the 2018 omnibus OUG 114/2018 (in grey), changed 24.</p></div>
+  <div class="legend" id="lg-codes"></div>
+  <div class="plot square"><svg id="f-codes" role="img" aria-label="Radial graph of the acts changed by the four codes' implementing laws"></svg></div>
+  <p class="src">Affecting trailers of every commit credited to Legea nr. 71/2011, 76/2012, 187/2012, 255/2013 and OUG nr. 114/2018. Spoke width is the number of articles changed in that act.</p>
+</figure>
+
+<figure id="ccr">
+  <div class="figtext"><span class="eyebrow">Curtea Constituțională · 77 rulings that changed text</span>
+    <h2>The Constitutional Court's red pen falls hardest on criminal procedure</h2>
+    <p>Each dot is a Constitutional Court ruling that struck out or conditioned a provision, on the day it took effect. <b>The Code of Criminal Procedure has been hit by more rulings than any other act (7), then the referendum law, Legea nr. 3/2000 (6), and the statute of magistrates, Legea nr. 303/2004 (5).</b> 2020 was the busiest year, with 13 rulings.</p></div>
+  <div class="plot"><svg id="f-ccr" role="img" aria-label="Timeline of Constitutional Court rulings by the act they changed"></svg></div>
+  <p class="src">Commits of kind court, credited to "Decizia CCR nr. N/YYYY". A ruling that hits several acts appears once per act. Rulings that changed no text in an act built so far are not counted.</p>
+</figure>
+
+<figure id="fiscal">
+  <div class="figtext"><span class="eyebrow">Codul fiscal · 448 amendments over 22 years</span>
+    <h2>The Fiscal Code changes about twenty times a year, and an emergency ordinance makes most of the changes</h2>
+    <p>Each tick is one change to the Fiscal Code, on the day it took effect. Romania has had two: Legea nr. 571/2003 and, since 2016, Legea nr. 227/2015. <b>The 2003 code changed 228 times in twelve years, and the 2015 code 220 times in eleven.</b> Emergency ordinances made 171 of those changes, laws 131 and ordinances 46. The rest are consolidations the portal shows without naming an act. The 2003 code's worst year was 2014, with 61.</p></div>
+  <div class="legend" id="lg-fiscal"></div>
+  <div class="plot"><svg id="f-fiscal" role="img" aria-label="Barcode timeline of Fiscal Code amendments"></svg></div>
+  <p class="src">Affecting trailers naming Codul fiscal, Legea nr. 571/2003 or Legea nr. 227/2015, one tick per amending act and in-force day. "Unexplained" means the official consolidation changed with no act named. The record holds almost no changes for 2011 and 2012, which is likely a gap in the sources rather than a quiet spell.</p>
+</figure>
+
+<figure id="rect">
+  <div class="figtext"><span class="eyebrow">Rectificări · 220 printed corrections</span>
+    <h2>The Official Gazette corrects its own text, usually two months later</h2>
+    <p>A rectificare is an official correction of an act's printed text, published in a later issue of the Monitorul Oficial. Each dot is one, placed by the days between the act and its correction. <b>The median correction comes 67 days after the act, and 76 of the 220 within a month.</b> Laws and emergency ordinances are corrected most.</p></div>
+  <div class="legend" id="lg-rect"></div>
+  <div class="plot"><svg id="f-rect" role="img" aria-label="Beeswarm of days from act to its rectification"></svg></div>
+  <p class="src">Commits credited to "Rectificare MO nr. N/YYYY", matched to the corrected act's first publication date. A correction to a later republication still counts from the first, which is why a few come years later. The axis is logarithmic.</p>
+</figure>
+
+<footer>
+  <p>Data: the public history of <a href="https://github.com/lexifina/romania-law">lexifina/romania-law</a> on 3 November 2026 (37,819 commits, 18,825 acts) and its data tables, which rebuild the Ministry of Justice's legislative portal. The corpus is still growing, so counts of acts in the corpus are lower bounds. Counts by number (the first two figures) are not.</p>
+</footer>
+</main>
+<div id="tip" role="status" aria-live="polite"></div>
+<script>
+const DATA = __DATA__;
+const fmt = d3.format(","), esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const tip = document.getElementById("tip");
+function showTip(ev, html) { tip.innerHTML = html; tip.style.opacity = 1; const r = tip.getBoundingClientRect(); let x = ev.clientX + 14, y = ev.clientY + 14;
+  if (x + r.width > innerWidth - 8) x = ev.clientX - r.width - 14; if (y + r.height > innerHeight - 8) y = ev.clientY - r.height - 14; tip.style.left = x + "px"; tip.style.top = y + "px"; }
+const hideTip = () => tip.style.opacity = 0;
+const legend = (id, items, bar) => document.getElementById(id).innerHTML = items.map(([n, v]) => `<span><i class="${bar ? "bar" : ""}" style="background:var(${v})"></i>${n}</span>`).join("");
+const axisStyle = g => g.call(a => a.select(".domain").attr("stroke", "var(--rule)")).call(a => a.selectAll(".tick line").attr("stroke", "var(--rule)"));
+const BLOC = { "Social democratic": "--c2", "Centre-right": "--c1", "Technocrat or independent": "--c4" };
+const fmtDate = d3.timeFormat("%-d %b %Y");
+
+// Facts strip
+{
+  const s = DATA.stats, iss = DATA.issued, y = DATA.years, since = k => d3.sum(iss[k].filter((v, i) => y[i] >= 1997));
+  const lags = DATA.approvals.map(a => a[2]).sort(d3.ascending);
+  document.getElementById("facts").innerHTML = [[fmt(s.acts), "acts in the corpus so far, 9,520 of them in force"], [fmt(since("OUG")), "emergency ordinances since 1997"],
+    [fmt(since("Legea")), "laws passed by Parliament since 1997"], [`${Math.round(d3.median(lags))} days`, "median wait for Parliament to approve or reject an ordinance"]]
+    .map(([b, t]) => `<div class="fact"><b>${b}</b><span>${t}</span></div>`).join("");
+}
+
+// 1. Laws against government acts, year by year
+{
+  const Y = DATA.years, I = DATA.issued, W = 960, H = 500, m = { t: 24, r: 18, b: 58, l: 58 };
+  legend("lg-ratio", [["Laws (Legea)", "--c1"], ["Emergency ordinances (OUG)", "--c2"], ["Ordinances (OG)", "--c4"], ["Government decisions (HG)", "--ghost"]], true);
+  const svg = d3.select("#f-ratio").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleBand().domain(Y).range([m.l, W - m.r]).padding(.18);
+  const top = 250, y = d3.scaleLinear().domain([0, 2000]).range([top, m.t]), yd = d3.scaleLinear().domain([0, 500]).range([top, top + 150]);
+  svg.append("g").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(y).tickValues([0, 500, 1000, 1500, 2000]).tickSize(-(W - m.l - m.r))).call(axisStyle).call(g => g.select(".domain").remove());
+  svg.append("g").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(yd).tickValues([100, 200, 300, 400]).tickSize(-(W - m.l - m.r))).call(axisStyle).call(g => g.select(".domain").remove());
+  svg.append("text").attr("x", m.l).attr("y", m.t - 8).text("above: laws and government decisions issued");
+  svg.append("text").attr("x", m.l).attr("y", top + 166).text("below: emergency ordinances and ordinances issued");
+  Y.forEach((yr, i) => {
+    const g = svg.append("g"), xx = x(yr), bw = x.bandwidth();
+    g.append("rect").attr("x", xx).attr("width", bw).attr("y", y(I.HG[i])).attr("height", top - y(I.HG[i])).attr("fill", "var(--ghost)").attr("opacity", .55).attr("rx", 2);
+    g.append("rect").attr("x", xx + bw * .2).attr("width", bw * .6).attr("y", y(I.Legea[i])).attr("height", top - y(I.Legea[i])).attr("fill", "var(--c1)").attr("rx", 2);
+    g.append("rect").attr("x", xx).attr("width", bw).attr("y", top + 1).attr("height", yd(I.OUG[i]) - top).attr("fill", "var(--c2)").attr("rx", 2);
+    g.append("rect").attr("x", xx).attr("width", bw).attr("y", yd(I.OUG[i]) + 1).attr("height", Math.max(0, yd(I.OUG[i] + I.OG[i]) - yd(I.OUG[i]) - 1)).attr("fill", "var(--c4)").attr("rx", 2);
+    g.append("rect").attr("x", xx - 2).attr("width", bw + 4).attr("y", m.t).attr("height", top + 150 - m.t).attr("fill", "transparent")
+      .on("pointermove", ev => showTip(ev, `<b>${yr}</b><br>Laws ${fmt(I.Legea[i])} · decisions ${fmt(I.HG[i])}<br>Emergency ordinances ${fmt(I.OUG[i])} · ordinances ${fmt(I.OG[i])}`)).on("pointerleave", hideTip);
+  });
+  svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", top).attr("y2", top).attr("stroke", "var(--ink)");
+  [[2000, "298 in 2000"], [2020, "227 in 2020"]].forEach(([yr, t]) => { const i = Y.indexOf(yr);
+    svg.append("text").attr("class", "lbl halo").attr("x", x(yr) + x.bandwidth() / 2).attr("y", yd(I.OUG[i] + I.OG[i]) + 13).attr("text-anchor", "middle").text(t); });
+  // Prime ministers along the bottom
+  const pb = H - 30, tx = d => { const t = new Date(d); const yr = t.getFullYear(), f = (t - new Date(yr, 0, 1)) / 31536e6; return x(Math.min(2026, Math.max(1990, yr))) + f * x.step(); };
+  const PM = [["Petre Roman", "1990-01-01", "1991-10-16", "Social democratic"], ["Theodor Stolojan", "1991-10-16", "1992-11-19", "Technocrat or independent"], ["Nicolae Văcăroiu", "1992-11-19", "1996-12-11", "Social democratic"]]
+    .concat(DATA.pm.map(p => [p.name, p.from, p.to, p.bloc]));
+  PM.forEach(([n, a, b, bl], k) => { const x0 = tx(a), x1 = Math.min(tx(b), W - m.r), sur = n.split(" ").slice(-1)[0].replace("Popescu-", "");
+    svg.append("rect").attr("x", x0).attr("width", Math.max(1, x1 - x0 - 1)).attr("y", pb - 8).attr("height", 16).attr("fill", k % 2 ? "var(--tint)" : "var(--rule)").attr("rx", 2)
+      .on("pointermove", ev => showTip(ev, `<b>${n}</b><br>${fmtDate(new Date(a))} to ${fmtDate(new Date(b))}<br><span class="m">${bl}</span>`)).on("pointerleave", hideTip);
+    if (x1 - x0 > sur.length * 5.6 + 6) svg.append("text").attr("x", (x0 + x1) / 2).attr("y", pb + 3.5).attr("text-anchor", "middle").attr("pointer-events", "none").style("font-size", "9px").attr("class", "lbl").text(sur);
+  });
+  svg.append("g").selectAll("text").data(Y.filter(v => v % 5 === 0)).join("text").attr("x", v => x(v) + x.bandwidth() / 2).attr("y", pb + 24).attr("text-anchor", "middle").text(v => v);
+  svg.append("text").attr("x", m.l - 8).attr("y", pb + 4).attr("text-anchor", "end").style("font-size", "10px").text("PM");
+}
+
+// 2. Emergency ordinances per month in office
+{
+  const P = DATA.pm, W = 960, rh = 26, m = { t: 8, l: 250, r: 120, b: 30 }, H = m.t + P.length * rh + m.b;
+  legend("lg-pms", Object.entries(BLOC));
+  const svg = d3.select("#f-pms").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleLinear().domain([0, 27]).range([m.l, W - m.r]);
+  svg.append("g").attr("transform", `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(9)).call(axisStyle);
+  svg.append("g").selectAll("line").data(x.ticks(9)).join("line").attr("x1", x).attr("x2", x).attr("y1", m.t).attr("y2", H - m.b).attr("stroke", "var(--rule)");
+  const avg = d3.sum(P, p => p.ougs) / d3.sum(P, p => p.ougs / p.per_month);
+  P.forEach((p, i) => { const yy = m.t + i * rh;
+    svg.append("text").attr("class", "lbl").attr("x", m.l - 10).attr("y", yy + rh / 2 + 4).attr("text-anchor", "end").text(p.name);
+    svg.append("text").attr("x", 4).attr("y", yy + rh / 2 + 4).style("font-size", "10px").text(`${p.from.slice(0, 4)}–${p.to.slice(0, 4)}`);
+    svg.append("rect").attr("x", m.l).attr("y", yy + 5).attr("height", rh - 10).attr("width", x(p.per_month) - m.l).attr("fill", `var(${BLOC[p.bloc]})`).attr("rx", 3);
+    svg.append("text").attr("x", x(p.per_month) + 8).attr("y", yy + rh / 2 + 4).text(`${p.per_month.toFixed(1)} · ${fmt(p.ougs)} in all`);
+    svg.append("rect").attr("x", 0).attr("y", yy).attr("width", W).attr("height", rh).attr("fill", "transparent")
+      .on("pointermove", ev => showTip(ev, `<b>${p.name}</b> · ${p.party}<br>${fmtDate(new Date(p.from))} to ${fmtDate(new Date(p.to))}<br>${fmt(p.ougs)} emergency ordinances, ${p.per_month.toFixed(1)} a month`)).on("pointerleave", hideTip); });
+  svg.append("line").attr("x1", x(avg)).attr("x2", x(avg)).attr("y1", m.t).attr("y2", H - m.b).attr("stroke", "var(--ink)").attr("stroke-dasharray", "3 3");
+  svg.append("text").attr("class", "lbl halo").attr("x", x(avg) + 4).attr("y", H - m.b - 6).text(`all governments: ${avg.toFixed(1)} a month`);
+}
+
+// 3. From emergency ordinance to the law that judges it
+{
+  const A = DATA.approvals.map(a => ({ oug: a[0], pub: new Date(a[1]), lag: a[2], v: a[3], law: a[4] })), W = 960, H = 440, m = { t: 20, r: 20, b: 40, l: 62 };
+  legend("lg-approve", [["approved by law", "--c1"], ["rejected by law", "--c2"]]);
+  const svg = d3.select("#f-approve").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleTime().domain([new Date(1997, 0, 1), new Date(2027, 0, 1)]).range([m.l, W - m.r]);
+  const y = d3.scaleSqrt().domain([0, 5000]).range([H - m.b, m.t]);
+  const tv = [30, 180, 365, 730, 1461, 2922, 4383];
+  svg.append("g").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(y).tickValues(tv).tickFormat(d => d < 365 ? `${d} d` : `${Math.round(d / 365.25)} y`).tickSize(-(W - m.l - m.r))).call(axisStyle).call(g => g.select(".domain").remove());
+  svg.append("g").attr("transform", `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(d3.timeYear.every(3))).call(axisStyle);
+  const med = d3.median(A, a => a.lag);
+  svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y(med)).attr("y2", y(med)).attr("stroke", "var(--ink)").attr("stroke-dasharray", "3 3");
+  svg.append("text").attr("class", "lbl halo").attr("x", m.l + 6).attr("y", y(med) - 6).text(`median ${Math.round(med)} days`);
+  const dots = svg.append("g").selectAll("circle").data(A.sort((a, b) => (a.v === "r") - (b.v === "r"))).join("circle").attr("cx", a => x(a.pub)).attr("cy", a => y(a.lag))
+    .attr("r", a => a.v === "r" ? 4.5 : 3.4).attr("fill", a => a.v === "r" ? "var(--c2)" : "var(--c1)").attr("fill-opacity", .8).attr("stroke", "var(--plate)").attr("stroke-width", 1);
+  const top = A.reduce((a, b) => b.lag > a.lag ? b : a);
+  svg.append("text").attr("class", "lbl halo").attr("x", x(top.pub) + 8).attr("y", y(top.lag) + 4).text(`${top.oug}: ${top.law}, 13 y 5 m later`);
+  const vor = d3.Delaunay.from(A, a => x(a.pub), a => y(a.lag));
+  svg.append("rect").attr("x", m.l).attr("y", m.t).attr("width", W - m.l - m.r).attr("height", H - m.t - m.b).attr("fill", "transparent")
+    .on("pointermove", ev => { const [px, py] = d3.pointer(ev), a = A[vor.find(px, py)]; if (Math.hypot(x(a.pub) - px, y(a.lag) - py) > 14) return hideTip();
+      showTip(ev, `<b>${a.oug}</b>, published ${fmtDate(a.pub)}<br>${a.v === "r" ? "Rejected" : "Approved"} by ${esc(a.law)}<br><span class="m">${fmt(a.lag)} days later</span>`); })
+    .on("pointerleave", hideTip);
+}
+
+// 4. The three-day rule
+{
+  const S = DATA.start, ORDER = [["Law", "Laws (Legea)", "--c1"], ["OG", "Ordinances (OG)", "--c4"], ["OUG", "Emergency ordinances (OUG)", "--c2"], ["HG", "Government decisions (HG)", "--c3"]];
+  const W = 960, rowH = 92, m = { t: 14, l: 210, r: 20, b: 36 }, H = m.t + ORDER.length * rowH + m.b, bins = d3.range(0, 42);
+  const svg = d3.select("#f-three").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleBand().domain(bins).range([m.l, W - m.r]).padding(.14);
+  ORDER.forEach(([k, name, col], r) => {
+    const c = S[k], tot = d3.sum(Object.values(c)), v = bins.map(d => d < 41 ? (c[d] || 0) : d3.sum(Object.entries(c).filter(([dd]) => +dd >= 41), e => e[1]));
+    const y = d3.scaleLinear().domain([0, 1]).range([m.t + (r + 1) * rowH - 14, m.t + r * rowH + 8]), base = y(0);
+    svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", base).attr("y2", base).attr("stroke", "var(--rule)");
+    svg.append("text").attr("class", "lbl").attr("x", m.l - 12).attr("y", base - 28).attr("text-anchor", "end").text(name);
+    svg.append("text").attr("x", m.l - 12).attr("y", base - 12).attr("text-anchor", "end").text(`${fmt(tot)} acts`);
+    svg.append("g").selectAll("rect").data(v).join("rect").attr("x", (d, i) => x(bins[i])).attr("width", x.bandwidth()).attr("y", d => y(d / tot)).attr("height", d => base - y(d / tot))
+      .attr("fill", (d, i) => i === 0 || i === 3 ? `var(${col})` : "var(--ghost)").attr("rx", 2)
+      .on("pointermove", (ev, d) => { const i = v.indexOf(d); showTip(ev, `<b>${name}</b><br>${bins[i] === 41 ? "41 days or more" : bins[i] === 0 ? "in force on the day of publication" : `${bins[i]} day${bins[i] > 1 ? "s" : ""} after publication`}<br>${fmt(d)} acts, ${(d / tot * 100).toFixed(1)}%`); })
+      .on("pointerleave", hideTip);
+    const peak = v[0] > v[3] ? 0 : 3;
+    svg.append("text").attr("class", "lbl halo").attr("x", x(bins[peak]) + x.bandwidth() + 6).attr("y", y(v[peak] / tot) + 12).text(`${Math.round(v[peak] / tot * 100)}% ${peak ? "after 3 days" : "same day"}`);
+  });
+  svg.append("g").attr("transform", `translate(0,${H - m.b + 4})`).call(d3.axisBottom(x).tickValues([0, 3, 10, 15, 30, 41]).tickFormat(d => d === 41 ? "41+" : d)).call(axisStyle);
+  svg.append("text").attr("x", (m.l + W - m.r) / 2).attr("y", H - 2).attr("text-anchor", "middle").text("days from publication in the Monitorul Oficial to entry into force");
+}
+
+// 5. The four codes' implementing laws
+{
+  const Hb = DATA.hubs, keys = Object.keys(Hb), COL = ["--c1", "--c2", "--c3", "--c4", "--ghost"], S = 820, c = S / 2, R = 292;
+  legend("lg-codes", keys.map((k, i) => [`${k} · ${Hb[k].name}`, COL[i]]));
+  const svg = d3.select("#f-codes").attr("viewBox", `0 0 ${S} ${S}`), g = svg.append("g").attr("transform", `translate(${c},${c})`);
+  // Targets on the outer ring, grouped by the first hub that changed them
+  const first = new Map(); keys.forEach((k, i) => Hb[k].targets.forEach(([t]) => { if (!first.has(t)) first.set(t, i); }));
+  const targets = [...first.keys()].sort((a, b) => first.get(a) - first.get(b) || a.localeCompare(b));
+  const ang = new Map(targets.map((t, i) => [t, i / targets.length * 2 * Math.PI - Math.PI / 2]));
+  const hubPos = keys.map((k, i) => { const a = i / keys.length * 2 * Math.PI - Math.PI / 2 + .3; const r = i === 4 ? 40 : 110; return [r * Math.cos(a), r * Math.sin(a)]; });
+  const links = keys.flatMap((k, i) => Hb[k].targets.map(([t, n]) => ({ i, t, n })));
+  const path = l => { const [hx, hy] = hubPos[l.i], a = ang.get(l.t), tx = R * Math.cos(a), ty = R * Math.sin(a); return `M${hx},${hy} Q${hx * .2 + tx * .45},${hy * .2 + ty * .45} ${tx},${ty}`; };
+  const sw = d3.scaleSqrt().domain([1, 31]).range([.7, 3.4]);
+  const ln = g.append("g").selectAll("path").data(links).join("path").attr("d", path).attr("fill", "none").attr("stroke", l => `var(${COL[l.i]})`).attr("stroke-opacity", .55).attr("stroke-width", l => sw(l.n));
+  const dots = g.append("g").selectAll("circle").data(targets).join("circle").attr("cx", t => R * Math.cos(ang.get(t))).attr("cy", t => R * Math.sin(ang.get(t))).attr("r", 2.6).attr("fill", "var(--ink)");
+  const hubs = g.append("g").selectAll("g").data(keys).join("g").attr("transform", (k, i) => `translate(${hubPos[i]})`);
+  hubs.append("circle").attr("r", (k, i) => 7 + Math.sqrt(Hb[k].targets.length) * 1.6).attr("fill", (k, i) => `var(${COL[i]})`).attr("stroke", "var(--plate)").attr("stroke-width", 2);
+  hubs.append("text").attr("class", "lbl halo").attr("text-anchor", "middle").attr("dy", (k, i) => -(10 + Math.sqrt(Hb[k].targets.length) * 1.6)).style("font-size", "11.5px").text(k => `${k.replace("Legea nr. ", "L ").replace("OUG nr. ", "OUG ")} · ${Hb[k].targets.length}`);
+  // Name the ten acts touched hardest, on the ring
+  const NICE = { "Codul civil din 1864": "Civil Code of 1864", "Codul comercial din 1887": "Commercial Code of 1887", "Codul de procedură civilă din 1865": "Civil Procedure Code of 1865",
+    "Codul penal din 1969": "Criminal Code of 1969", "Codul de procedură penală din 1969": "Criminal Procedure Code of 1969" };
+  const ranked = d3.rollups(links, v => d3.sum(v, l => l.n), l => l.t).sort((a, b) => b[1] - a[1]).map(d => d[0]), hard = [];
+  for (const t of ranked) { if (hard.length >= 10) break; const a = ang.get(t); if (hard.every(h => Math.abs(Math.atan2(Math.sin(a - ang.get(h)), Math.cos(a - ang.get(h)))) > .2)) hard.push(t); }
+  g.append("g").selectAll("text").data(hard).join("text").attr("class", "lbl halo").style("font-size", "10px")
+    .attr("transform", t => { const a = ang.get(t), deg = a * 180 / Math.PI; return `rotate(${deg}) translate(${R + 8},0) ${Math.cos(a) < 0 ? "rotate(180)" : ""}`; })
+    .attr("text-anchor", t => Math.cos(ang.get(t)) < 0 ? "end" : "start").attr("dy", "0.35em").text(t => NICE[t] || t);
+  const focus = f => ln.attr("stroke-opacity", l => f(l) ? .95 : .06);
+  hubs.on("pointermove", (ev, k) => { const i = keys.indexOf(k); focus(l => l.i === i);
+      showTip(ev, `<b>${k}</b>, implementing the ${Hb[k].name}<br>in force ${fmtDate(new Date(Hb[k].date))}<br>changed ${Hb[k].targets.length} acts<br><span class="m">most: ${Hb[k].targets.slice(0, 3).map(t => `${t[0]} (${t[1]} art.)`).join(", ")}</span>`); })
+    .on("pointerleave", () => { ln.attr("stroke-opacity", .55); hideTip(); });
+  dots.on("pointermove", (ev, t) => { focus(l => l.t === t); const by = links.filter(l => l.t === t);
+      showTip(ev, `<b>${esc(t)}</b><br>${by.map(l => `${keys[l.i]}: ${l.n} article${l.n > 1 ? "s" : ""}`).join("<br>")}`); })
+    .on("pointerleave", () => { ln.attr("stroke-opacity", .55); hideTip(); });
+}
+
+// 6. Constitutional Court rulings
+{
+  const C = DATA.ccr.map(r => ({ dec: r[0], d: new Date(r[1]), t: r[2], u: r[3] }));
+  const counts = d3.rollups(C, v => v.length, r => r.t).sort((a, b) => b[1] - a[1]);
+  const rows = counts.slice(0, 11).map(r => r[0]).concat(["Other acts"]), rowOf = t => rows.includes(t) ? t : "Other acts";
+  const NAME = { "Legea nr. 3/2000": "Legea nr. 3/2000 (referendum)", "Legea nr. 303/2004": "Legea nr. 303/2004 (magistrates)", "Legea nr. 188/1999": "Legea nr. 188/1999 (civil servants)",
+    "Legea nr. 51/1995": "Legea nr. 51/1995 (the Bar)", "Legea nr. 115/1999": "Legea nr. 115/1999 (ministerial liability)" };
+  const W = 960, rh = 30, m = { t: 10, l: 300, r: 20, b: 34 }, H = m.t + rows.length * rh + m.b;
+  const svg = d3.select("#f-ccr").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleTime().domain([new Date(2002, 0, 1), new Date(2027, 0, 1)]).range([m.l, W - m.r]);
+  svg.append("g").attr("transform", `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(d3.timeYear.every(2)).tickFormat(d3.timeFormat("%Y"))).call(axisStyle);
+  rows.forEach((r, i) => { const yy = m.t + i * rh + rh / 2;
+    svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", yy).attr("y2", yy).attr("stroke", "var(--rule)");
+    svg.append("text").attr("class", r === "Other acts" ? "" : "lbl").attr("x", m.l - 10).attr("y", yy + 4).attr("text-anchor", "end").text(NAME[r] || r);
+    svg.append("text").attr("x", m.l - 10 - (NAME[r] || r).length * 6.6 - 6).attr("y", yy + 4).attr("text-anchor", "end").text(r === "Other acts" ? d3.sum(counts.slice(11), c => c[1]) : counts[i][1]); });
+  const jit = (s) => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) % 101; return (h / 101 - .5) * 10; };
+  svg.append("g").selectAll("circle").data(C).join("circle").attr("cx", r => x(r.d)).attr("cy", r => m.t + rows.indexOf(rowOf(r.t)) * rh + rh / 2 + (rowOf(r.t) === "Other acts" ? jit(r.dec + r.t) : 0))
+    .attr("r", 5).attr("fill", "var(--c2)").attr("fill-opacity", .85).attr("stroke", "var(--plate)").attr("stroke-width", 1.5)
+    .on("pointermove", (ev, r) => showTip(ev, `<b>${esc(r.dec)}</b><br>${esc(r.t)}${r.u ? ": " + esc(r.u) : ""}<br><span class="m">effective ${fmtDate(r.d)}</span>`)).on("pointerleave", hideTip);
+}
+
+// 7. Fiscal Code barcode
+{
+  const F = DATA.fiscal.map(f => ({ code: f[0], d: new Date(f[1]), k: f[2], law: f[3], u: f[4] }));
+  const KC = { "Legea": ["Law", "--c1"], "OUG": ["Emergency ordinance", "--c2"], "OG": ["Ordinance", "--c4"], "Unexplained": ["No act named", "--ghost"], "Rectificare MO": ["Rectification", "--c3"] };
+  legend("lg-fiscal", Object.values(KC).map(([n, c]) => [n, c]), true);
+  const W = 960, m = { t: 26, l: 150, r: 20, b: 34 }, rowH = 70, H = m.t + 2 * rowH + 60 + m.b;
+  const svg = d3.select("#f-fiscal").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleTime().domain([new Date(2004, 0, 1), new Date(2027, 0, 1)]).range([m.l, W - m.r]);
+  [["2003", "Legea nr. 571/2003"], ["2015", "Legea nr. 227/2015"]].forEach(([code, name], i) => { const y0 = m.t + i * rowH;
+    svg.append("text").attr("class", "lbl").attr("x", m.l - 12).attr("y", y0 + 26).attr("text-anchor", "end").text(name);
+    svg.append("text").attr("x", m.l - 12).attr("y", y0 + 42).attr("text-anchor", "end").text(`${F.filter(f => f.code === code).length} changes`);
+    svg.append("g").selectAll("rect").data(F.filter(f => f.code === code)).join("rect").attr("x", f => x(f.d) - 1).attr("width", 2.2).attr("y", y0).attr("height", rowH - 16)
+      .attr("fill", f => `var(${(KC[f.k] || KC.Unexplained)[1]})`)
+      .on("pointermove", (ev, f) => showTip(ev, `<b>${esc(f.law)}</b><br>${(KC[f.k] || KC.Unexplained)[0]} · ${f.u} article${f.u > 1 ? "s" : ""}<br><span class="m">${name}, in force ${fmtDate(f.d)}</span>`)).on("pointerleave", hideTip); });
+  // Yearly counts below
+  const yrs = d3.range(2004, 2027), cnt = yrs.map(y => F.filter(f => f.d.getFullYear() === y).length), yb = m.t + 2 * rowH + 50;
+  const hy = d3.scaleLinear().domain([0, d3.max(cnt)]).range([0, 44]);
+  svg.append("g").selectAll("rect").data(yrs).join("rect").attr("x", y => x(new Date(y, 0, 1)) + 2).attr("width", y => x(new Date(y + 1, 0, 1)) - x(new Date(y, 0, 1)) - 4)
+    .attr("y", (y, i) => yb - hy(cnt[i])).attr("height", (y, i) => hy(cnt[i])).attr("fill", "var(--ghost)").attr("rx", 2);
+  svg.append("g").selectAll("text").data(yrs).join("text").attr("x", y => (x(new Date(y, 0, 1)) + x(new Date(y + 1, 0, 1))) / 2).attr("y", (y, i) => yb - hy(cnt[i]) - 4)
+    .attr("text-anchor", "middle").style("font-size", "9.5px").text((y, i) => cnt[i] || "");
+  svg.append("text").attr("x", m.l - 12).attr("y", yb - 6).attr("text-anchor", "end").text("changes a year");
+  svg.append("g").attr("transform", `translate(0,${yb + 2})`).call(d3.axisBottom(x).ticks(d3.timeYear.every(2)).tickFormat(d3.timeFormat("%Y"))).call(axisStyle);
+  const t = F.find(f => f.law === "OUG nr. 114/2018");
+  if (t) svg.append("text").attr("class", "lbl halo").attr("x", x(t.d)).attr("y", m.t + rowH + rowH - 4).attr("text-anchor", "middle").style("font-size", "10px").text("OUG 114/2018");
+}
+
+// 8. Rectifications
+{
+  const R = DATA.rect.map(r => ({ rect: r[0], t: r[1], k: r[2] === "Legea-cadru" ? "Legea" : r[2], lag: Math.max(1, r[3]) }));
+  const KC = { "Legea": ["Law", "--c1"], "OUG": ["Emergency ordinance", "--c2"], "OG": ["Ordinance", "--c4"], "HG": ["Government decision", "--c3"] };
+  legend("lg-rect", Object.values(KC));
+  const W = 960, H = 260, m = { t: 20, l: 40, r: 30, b: 40 };
+  const svg = d3.select("#f-rect").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleLog().domain([1, 8000]).range([m.l, W - m.r]).clamp(true);
+  svg.append("g").attr("transform", `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues([1, 7, 30, 90, 365, 1826, 7305]).tickFormat(d => ({ 1: "1 day", 7: "1 week", 30: "1 month", 90: "3 months", 365: "1 year", 1826: "5 years", 7305: "20 years" }[d]))).call(axisStyle);
+  const nodes = R.map(r => ({ ...r, x: x(r.lag), y: (H - m.b + m.t) / 2 }));
+  const sim = d3.forceSimulation(nodes).force("x", d3.forceX(d => x(d.lag)).strength(1)).force("y", d3.forceY((H - m.b + m.t) / 2).strength(.06)).force("c", d3.forceCollide(4.6)).stop();
+  for (let i = 0; i < 220; i++) sim.tick();
+  const med = d3.median(R, r => r.lag);
+  svg.append("line").attr("x1", x(med)).attr("x2", x(med)).attr("y1", m.t).attr("y2", H - m.b).attr("stroke", "var(--ink)").attr("stroke-dasharray", "3 3");
+  svg.append("text").attr("class", "lbl halo").attr("x", x(med) + 5).attr("y", m.t + 10).text(`median ${med} days`);
+  svg.append("g").selectAll("circle").data(nodes).join("circle").attr("cx", d => d.x).attr("cy", d => Math.max(m.t, Math.min(H - m.b - 4, d.y))).attr("r", 4)
+    .attr("fill", d => `var(${KC[d.k][1]})`).attr("stroke", "var(--plate)").attr("stroke-width", .8)
+    .on("pointermove", (ev, d) => showTip(ev, `<b>${esc(d.rect)}</b><br>corrects ${esc(d.t)}<br><span class="m">${fmt(d.lag)} days after the act</span>`)).on("pointerleave", hideTip);
+}
+</script>

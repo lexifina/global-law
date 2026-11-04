@@ -1,0 +1,53 @@
+
+<style>
+.divider { display: grid; gap: 10px; max-width: 76ch; padding-top: 30px; border-top: 3px double var(--ink); }
+.divider h2.part { font: 600 1.85rem/1.15 var(--display); }
+</style>
+<div class="divider"><span class="eyebrow">Part two · Romania among its neighbours</span>
+  <h2 class="part">How Romanian law differs from the Balkans, the rest of Europe and the world</h2>
+  <p class="lede">These five pictures set Romania against the 62 national corpora in global-law with 30 or more dated acts, grouped as south-east Europe, the rest of the EU, the rest of Europe and the rest of the world. Two of them also use the constitutional rules of countries whose records global-law does not yet hold in full. South-east Europe is the thinnest group so far: beyond Romania, only Kosovo, Turkey and Greece have sizeable records.</p></div>
+
+<figure id="deadline">
+  <div class="figtext"><span class="eyebrow">Government emergency laws · how long Parliament has to rule</span>
+    <h2>Elsewhere an emergency decree lapses if Parliament does not act. In Romania it does not</h2>
+    <p>Italy, Spain, Albania and Greece let the government make law in an emergency, but each sets a deadline, and a decree Parliament has not approved by then loses force. <b>Romania's deadline only makes Parliament's silence count as consent: after 30 days a chamber is deemed to have adopted the ordinance.</b> The law that finally approves or rejects it comes a median of 319 days later, and 165 of 364 waited more than a year.</p></div>
+  <div class="legend" id="lg-deadline"></div>
+  <div class="plot"><svg id="f-deadline" role="img" aria-label="Constitutional deadlines for emergency decrees against Romania's observed approval times"></svg></div>
+  <p class="src">Italy: Constitution art. 77, conversion within 60 days of publication. Spain: art. 86, a Congress vote within 30 days. Albania: art. 101, approval within 45 days. Greece: art. 44(1), submission within 40 days and ratification within three months. Romania: art. 115(5), tacit adoption after 30 days; dots are the 364 approval and rejection laws in romania-law.</p>
+</figure>
+
+<figure id="spain">
+  <div class="figtext"><span class="eyebrow">Romania and Spain · acts issued each year, by number</span>
+    <h2>Romania issues nine times as many emergency laws as Spain, but Spain's Parliament passes far fewer laws</h2>
+    <p>Spain, like Romania, numbers its government decree-laws (Real Decreto-ley) afresh each year, so the two can be counted the same way. <b>Since 1997 Romania has issued 4,231 emergency ordinances and Spain 487 decree-laws. In 2020 the counts were 227 and 39, while Romania's Parliament passed 298 laws and Spain's 14.</b> Spain's decree-laws outnumbered its laws in 2012 and in every year from 2016 to 2020. Romania's laws have outnumbered its ordinances in every year except 1999 and 2000, about 2.5 to one since 1997.</p></div>
+  <div class="legend" id="lg-spain"></div>
+  <div class="plot"><svg id="f-spain" role="img" aria-label="Lines of emergency decrees and laws per year in Romania and Spain"></svg></div>
+  <p class="src">The highest number per year: Romania's Legea and OUG from romania-law's data/laws.csv; Spain's Ley and Ley Orgánica (together) and Real Decreto-ley as cited in spain-law's commit messages. The vertical axis is logarithmic, and 2026 is left out because the year is not over.</p>
+</figure>
+
+<figure id="vacatio">
+  <div class="figtext"><span class="eyebrow">Vacatio legis · the default wait between publication and force</span>
+    <h2>Romania and Bulgaria give a new law three days. Their neighbours give it a week or two</h2>
+    <p>Most systems set a default day for a law to take effect when it names none, counted from its publication in the official gazette. <b>Romania's Constitution (art. 78) and Bulgaria's (art. 5(5)) both say three days. Serbia waits until the eighth day, Germany the fourteenth, Italy and Slovenia the fifteenth, and Spain twenty days.</b> France applies its laws the next day. In Romania's record, 76% of laws start exactly on day three, and government acts start the same day they are published.</p></div>
+  <div class="legend" id="lg-vacatio"></div>
+  <div class="plot"><svg id="f-vacatio" role="img" aria-label="Default number of days from publication to entry into force by country"></svg></div>
+  <p class="src">Romania: Constitution art. 78 and Legea nr. 24/2000 art. 12. Bulgaria: Constitution art. 5(5). Serbia: National Assembly guidance. Germany: Basic Law art. 82(2). Italy: Constitution art. 73. Slovenia: Constitution art. 154. Spain: Civil Code art. 2.1. Portugal: Civil Code art. 5(2). France: Civil Code art. 1. These are defaults: each act may set its own day.</p>
+</figure>
+
+<figure id="calendar">
+  <div class="figtext"><span class="eyebrow">30 national corpora with 300 or more dated acts</span>
+    <h2>Romanian law starts any day of the month, and rarely at the weekend</h2>
+    <p>For each country, the share of dated acts that start on the first of a month (left) and on a Saturday or Sunday (right). <b>Only 7% of Romanian acts start on the first of a month, the fifth-lowest of the 30. The rest of the EU's median is 35%, and Sweden and Finland start three in four acts on the first.</b> 12% of Romanian acts start at the weekend, against a median of 22% in the rest of the EU.</p></div>
+  <div class="legend" id="lg-calendar"></div>
+  <div class="plot"><svg id="f-calendar" role="img" aria-label="Dot plot of first-of-month and weekend start shares by country"></svg></div>
+  <p class="src">In-force trailers of every national corpus with 300 or more dated acts since 1990, one act per author and in-force date. Snapshot, consolidated, publisher-only and correction commits are left out.</p>
+</figure>
+
+<figure id="wait">
+  <div class="figtext"><span class="eyebrow">33 national corpora · median days from adoption to entry into force</span>
+    <h2>From adoption to force, Romanian law waits six days, as French law does</h2>
+    <p>Each dot is a country, placed by the median number of days between the day its acts are adopted or signed and the day they take effect. <b>Romania's median is 6 days, the same as France and Luxembourg, ahead of Spain (9) and Turkey (10), and far shorter than Italy (23), Finland (42) or Denmark (89).</b> Greece and Colombia apply most acts on the day they are signed, and Brazil within a day.</p></div>
+  <div class="legend" id="lg-wait"></div>
+  <div class="plot"><svg id="f-wait" role="img" aria-label="Strip plot of median days from adoption to force by country"></svg></div>
+  <p class="src">Enacted (or Adopted, Signed, Made) and In-force trailers, for corpora with 50 or more acts carrying both. The horizontal axis is a square-root scale.</p>
+</figure>

@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Life of a Provision</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+/* Same tokens and layout as law-in-motion.html; the four series colours are re-stepped to pass the palette validator. */
+:root {
+  --bg: #f5f6f8; --plate: #ffffff; --ink: #1a2230; --muted: #5c6778; --rule: #dce0e7; --ghost: #b9bfca; --tint: #eceff5;
+  --c1: #3a5fbf; --c2: #c23f38; --c3: #008a7a; --c4: #b5801a;
+  --display: "Source Serif 4", Georgia, serif; --body: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11151c; --plate: #181e27; --ink: #e6eaf0; --muted: #99a3b3; --rule: #2a323f; --ghost: #465061; --tint: #1f2633;
+  --c1: #6b8ae6; --c2: #e0584f; --c3: #16a594; --c4: #bd8526; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11151c; --plate: #181e27; --ink: #e6eaf0; --muted: #99a3b3; --rule: #2a323f; --ghost: #465061; --tint: #1f2633;
+  --c1: #6b8ae6; --c2: #e0584f; --c3: #16a594; --c4: #bd8526; color-scheme: dark }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 44px 80px; }
+main { max-width: 1000px; margin: 0 auto; display: grid; gap: 28px; }
+header { display: grid; gap: 12px; max-width: 66ch; }
+h1 { font: 600 2.3rem/1.1 var(--display); margin: 0; text-wrap: balance; }
+h2 { font: 600 1.35rem/1.25 var(--display); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.lede { color: var(--muted); font-size: 16px; }
+.eyebrow { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.draft { display: inline-flex; align-items: center; gap: 8px; font: 12px/1.4 var(--mono); color: var(--muted); border: 1px dashed var(--rule); border-radius: 6px; padding: 6px 10px; width: fit-content; }
+figure { margin: 0; background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; display: grid; min-width: 0; }
+.figtext { padding: 20px 22px 4px; display: grid; gap: 8px; max-width: 74ch; }
+.figtext p { color: var(--muted); font-size: 14.5px; }
+.figtext p b { color: var(--ink); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 10px 22px 0; font: 12px/1.4 var(--mono); color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.legend i.line { height: 2px; width: 16px; border-radius: 1px; }
+.plot { overflow-x: auto; padding: 6px 10px 6px; }
+.plot svg { display: block; width: 100%; height: auto; min-width: 600px; }
+.src { padding: 6px 22px 14px; font: 12px/1.5 var(--mono); color: var(--muted); }
+details { margin: 0 22px 18px; font-size: 13px; }
+summary { cursor: pointer; color: var(--muted); font: 12px var(--mono); }
+summary:focus-visible { outline: 2px solid var(--c1); outline-offset: 2px; }
+.tbl { overflow-x: auto; margin-top: 8px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 5px 10px 5px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 500 11px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+td.n, th.n { text-align: right; }
+svg text { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+svg .lbl { fill: var(--ink); }
+svg .ser { font-family: var(--display); font-size: 13px; fill: var(--ink); }
+svg .grid line { stroke: var(--rule); }
+svg .grid path, svg .axis path { stroke: none; }
+svg .axis line { stroke: var(--rule); }
+svg .ghost { stroke: var(--ghost); }
+svg .hover-hit { cursor: default; }
+#tip { position: fixed; pointer-events: none; z-index: 10; background: var(--plate); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 8px 10px; font: 12.5px/1.45 var(--body); box-shadow: 0 4px 16px rgb(0 0 0 / .12); max-width: 320px; opacity: 0; transition: opacity .08s; }
+#tip b { font-weight: 600; }
+#tip .m { font-family: var(--mono); color: var(--muted); font-size: 11.5px; }
+footer { color: var(--muted); font-size: 13px; max-width: 74ch; display: grid; gap: 8px; }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <span class="eyebrow">Global law · five new findings</span>
+  <h1>The life of a provision</h1>
+  <p class="lede">Law in Motion follows acts and constitutions. These five charts follow the single provision instead: how often it is changed, how long it lasts before the first change, the days when many change at once, which EU law it cites, and how far one amending act reaches.</p>
+  <span class="draft">Local draft · not in global-law yet · built 2026-10-30 from the corpora on this machine</span>
+</header>
+
+<figure id="few">
+  <div class="figtext"><span class="eyebrow">Twenty jurisdictions · one provision per file</span>
+    <h2>A few provisions take most of the amendments, and they are usually the law's plumbing</h2>
+    <p>Each line adds up every amendment, starting with the most-amended provision. <b>In Spain, the busiest 1% of provisions have taken 23% of all amendments, and 86% have never been amended.</b> South Korea and Latvia spread their changes most evenly. The single most-amended provisions are rarely about policy. France's Code pénal art. 711-1 has been rewritten 49 times because it names the version of the code that applies overseas, so every new criminal law updates it. Austria's B-VG art. 151 (75 amendments) holds the constitution's commencement and transition rules. Spain's top provision is an annex listing EU vehicle-approval acts, and Latvia's is the Criminal Law's list of EU directives.</p></div>
+  <div class="legend" id="lg-few"></div>
+  <div class="plot"><svg id="f-few" role="img" aria-label="Concentration curves of amendments over provisions, by country"></svg></div>
+  <p class="src">Every amendment to a provision file (a git modification on a dated commit), counted per file, repealed provisions included. The x-axis is square-root scaled so the busiest few percent are readable. Czechia is left out: its repository stores whole acts, not provisions.</p>
+  <details><summary>Table: the most-amended provision in each jurisdiction</summary><div class="tbl"><table id="t-few"></table></div></details>
+</figure>
+
+<figure id="first">
+  <div class="figtext"><span class="eyebrow">Fifteen jurisdictions · provisions written since each record began</span>
+    <h2>Five years after it is written, 94% of Spanish provisions are still untouched. In Romania, 53% are</h2>
+    <p>The share of new provisions still in their first wording, by years since they took effect (Kaplan–Meier; provisions never amended count until today or until repeal). <b>Romania's new codes were amended almost at once: 40% of their provisions changed within the first year</b>, mostly by the implementing laws that brought the codes into force. France keeps 85% of new provisions unchanged after five years and about 70% after ten, and Latvia under half after ten. Latin American codes in Paraguay, Argentina, Uruguay and Peru are the most stable: 97% or more are still in their first wording after five years.</p></div>
+  <div class="legend" id="lg-first"></div>
+  <div class="plot"><svg id="f-first" role="img" aria-label="Survival curves: share of provisions not yet amended by years since enactment"></svg></div>
+  <p class="src">Only provisions first seen on a dated commit after the record's opening snapshot, so their real start date is known. Snapshots labelled "oldest version available", "consolidated" or "unexplained" are excluded. Jurisdictions with fewer than 300 such provisions are left out, and curves stop when fewer than 50 remain unamended and in force. Czechia is left out because its files are whole acts.</p>
+  <details><summary>Table: share still unamended after 1, 5 and 10 years</summary><div class="tbl"><table id="t-first"></table></div></details>
+</figure>
+
+<figure id="days">
+  <div class="figtext"><span class="eyebrow">Twenty jurisdictions · the single busiest day of amendment</span>
+    <h2>Each country's biggest day in law</h2>
+    <p>The date on which each history records the most provisions amended or repealed at once, and the act responsible. Codes and their reforms dominate. <b>France's biggest day was 1 January 2002, when 365 provisions changed, almost all of them because one ordinance converted their franc amounts into euros.</b> Argentina's was 30 December 2023, when one emergency decree (DNU 70/2023) rewrote provisions across eight codes and statutes. Belgium's was the new law of obligations on 1 January 2023. Italy's (2018) and Mexico's (2025) biggest days were both data-protection laws. Dot size is the number of provisions changed. The share shows how much of all recorded change happened that day.</p></div>
+  <div class="plot"><svg id="f-days" role="img" aria-label="Timeline of each country's single busiest day of amendment"></svg></div>
+  <p class="src">Provisions modified, repealed or renumbered, grouped by in-force date, excluding newly inserted provisions and snapshot commits ("oldest version available", "unexplained"). The label names the act that changed the most provisions that day.</p>
+</figure>
+
+<figure id="eu">
+  <div class="figtext"><span class="eyebrow">Spain and Czechia · EU acts cited in the law in force</span>
+    <h2>Spain's law cites the GDPR most. Czechia's cites the rule on notifying technical standards</h2>
+    <p>Each dot is an EU act cited at least eight times in all, placed by how many provisions of Spanish and Czech law cite it today. <b>Spain's law names the GDPR in 671 provisions and Czechia's in only 46. Czechia's most-cited EU act is the technical-standards notification directive, 2015/1535, which is named in 176 acts.</b> That directive requires draft technical rules to be notified to Brussels, and Czech laws record the notification. Food and chemicals law is where the two agree most: the General Food Law, REACH and the plant-protection regulation sit close to the diagonal. 1,826 EU acts are cited in both.</p></div>
+  <div class="plot"><svg id="f-eu" role="img" aria-label="Scatter plot of EU acts by citations in Spanish and Czech law"></svg></div>
+  <p class="src">Spain: 12,131 of 326,037 provision files cite 3,360 EU acts. Czechia: 1,994 of 8,975 act files cite 3,127. EU references are matched by number in any official language: directives as year/number/EC (and its translations), pre-2015 regulations as No number/year, and post-2015 acts as (EU) year/number. Each file is counted once per act. Both axes are symmetric-log scaled. The dashed line marks equal counts. Only the two EU members with full statute books on this machine are compared.</p>
+  <details><summary>Table: the twenty most-cited EU acts</summary><div class="tbl"><table id="t-eu"></table></div></details>
+</figure>
+
+<figure id="omni">
+  <div class="figtext"><span class="eyebrow">Spain · 4,357 amending acts that changed two or more laws, 1979–2026</span>
+    <h2>Spain's widest-reaching laws arrive on New Year's Day</h2>
+    <p>Each dot is one act that changed two or more other laws at once. <b>The record is Ley 62/2003, which changed 96 laws on 1 January 2004.</b> All five widest-reaching acts are budget laws or the end-of-year "accompanying" laws on fiscal, administrative and social measures (Leyes de medidas) passed with the budget. Parliamentary laws are 10% of amending acts but 45% of those that change ten or more laws, and decree-laws are another 28%. Acts that reach five or more laws have grown from about 1 in 70 in 1985 to about 1 in 10 in 2020.</p></div>
+  <div class="legend" id="lg-omni"></div>
+  <div class="plot"><svg id="f-omni" role="img" aria-label="Scatter of Spanish amending acts by date and number of laws changed"></svg></div>
+  <p class="src">The Laws-changed trailer on every commit of spain-law (BOE consolidated legislation), first texts excluded. Dates are in-force dates. "Law" includes organic laws. "Other" covers ministerial orders, legislative decrees, resolutions and Constitutional or Supreme Court rulings that annul provisions. Points are jittered slightly so equal counts don't stack.</p>
+  <details><summary>Table: the fifteen widest-reaching acts</summary><div class="tbl"><table id="t-omni"></table></div></details>
+</figure>
+
+<footer>
+  <p>Data: the git histories of the law repositories in ~/Documents on this machine, read on 2026-10-30 without writing to them. Each history covers its jurisdiction's codes and constitutions as loaded so far. Spain covers the whole of the BOE consolidated record. Scripts: pass.py (one pass per repository), analyse.py and build.py, in the same folder as this page.</p>
+</footer>
+</main>
+<div id="tip" role="status" aria-live="polite"></div>
+<script>
+const DATA = __DATA__;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C = ["--c1", "--c2", "--c3", "--c4"];
+const pct = v => (v * 100).toFixed(v < 0.1 && v > 0 ? 1 : 0) + "%";
+const fmt = d3.format(",");
+const tip = document.getElementById("tip");
+function showTip(ev, html) {
+  tip.innerHTML = html; tip.style.opacity = 1;
+  const r = tip.getBoundingClientRect(); let x = ev.clientX + 14, y = ev.clientY + 14;
+  if (x + r.width > innerWidth - 8) x = ev.clientX - r.width - 14;
+  if (y + r.height > innerHeight - 8) y = ev.clientY - r.height - 14;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+}
+const hideTip = () => tip.style.opacity = 0;
+function legend(id, items, line) {
+  document.getElementById(id).innerHTML = items.map(([name, v]) => `<span><i class="${line ? "line" : ""}" style="background:var(${v})"></i>${name}</span>`).join("")
+    + (line ? `<span><i class="line" style="background:var(--ghost)"></i>other jurisdictions (hover to identify)</span>` : "");
+}
+function table(id, head, rows, numeric) {
+  document.getElementById(id).innerHTML = "<thead><tr>" + head.map((h, i) => `<th class="${numeric.includes(i) ? "n" : ""}">${h}</th>`).join("") + "</tr></thead><tbody>"
+    + rows.map(r => "<tr>" + r.map((c, i) => `<td class="${numeric.includes(i) ? "n" : ""}">${c}</td>`).join("") + "</tr>").join("") + "</tbody>";
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+// Lines drawn ghost-grey except the highlighted few; hovering any line brings it forward with a tooltip.
+function lineChart({ svgId, series, highlight, x, y, xAxis, yAxis, xLabel, yLabel, tipFor, endLabel }) {
+  const W = 960, H = 440, m = { t: 16, r: 120, b: 44, l: 56 };
+  const svg = d3.select("#" + svgId).attr("viewBox", `0 0 ${W} ${H}`);
+  x.range([m.l, W - m.r]); y.range([H - m.b, m.t]);
+  svg.append("g").attr("class", "grid").attr("transform", `translate(${m.l},0)`).call(yAxis(d3.axisLeft(y)).tickSize(-(W - m.l - m.r)).tickFormat(""));
+  svg.append("g").attr("class", "axis").attr("transform", `translate(0,${H - m.b})`).call(xAxis(d3.axisBottom(x)));
+  svg.append("g").attr("class", "axis").attr("transform", `translate(${m.l},0)`).call(yAxis(d3.axisLeft(y)));
+  svg.append("text").attr("x", (m.l + W - m.r) / 2).attr("y", H - 8).attr("text-anchor", "middle").text(xLabel);
+  svg.append("text").attr("transform", `translate(14,${(m.t + H - m.b) / 2}) rotate(-90)`).attr("text-anchor", "middle").text(yLabel);
+  const line = d3.line().x(p => x(p[0])).y(p => y(p[1])).curve(d3.curveStepAfter);
+  const hi = new Map(highlight.map((k, i) => [k, C[i]]));
+  const order = [...series.filter(s => !hi.has(s.key)), ...series.filter(s => hi.has(s.key))];
+  const g = svg.append("g");
+  const paths = g.selectAll("path").data(order).join("path").attr("d", s => line(s.pts)).attr("fill", "none")
+    .attr("stroke", s => hi.has(s.key) ? `var(${hi.get(s.key)})` : "var(--ghost)").attr("stroke-width", s => hi.has(s.key) ? 2 : 1.2)
+    .attr("stroke-linejoin", "round");
+  svg.append("g").selectAll("text").data(series.filter(s => hi.has(s.key))).join("text").attr("class", "lbl")
+    .attr("x", s => x(s.pts.at(-1)[0]) + 6).attr("y", s => y(s.pts.at(-1)[1]) + 4 + (endLabel?.[s.key] || 0)).text(s => s.name);
+  return { x, y };
+  // Wide invisible hit paths so a thin line is easy to hover
+  g.append("g").selectAll("path").data(order).join("path").attr("class", "hover-hit").attr("d", s => line(s.pts)).attr("fill", "none")
+    .attr("stroke", "transparent").attr("stroke-width", 10)
+    .on("pointermove", (ev, s) => {
+      paths.attr("stroke-opacity", d => d === s ? 1 : 0.25).attr("stroke-width", d => d === s ? 2.5 : (hi.has(d.key) ? 2 : 1.2))
+        .attr("stroke", d => d === s && !hi.has(d.key) ? "var(--ink)" : (hi.has(d.key) ? `var(${hi.get(d.key)})` : "var(--ghost)"));
+      showTip(ev, tipFor(s));
+    })
+    .on("pointerleave", () => { paths.attr("stroke-opacity", 1).attr("stroke-width", s => hi.has(s.key) ? 2 : 1.2)
+      .attr("stroke", s => hi.has(s.key) ? `var(${hi.get(s.key)})` : "var(--ghost)"); hideTip(); });
+}
+
+// 1. Concentration curves
+{
+  const rows = DATA.concentration;
+  const HI = ["spain", "france", "austria", "south-korea"];
+  legend("lg-few", HI.map((k, i) => [rows.find(r => r.key === k).name, C[i]]), true);
+  lineChart({ svgId: "f-few", highlight: HI,
+    series: rows.map(r => ({ key: r.key, name: r.name, pts: r.lorenz, r })),
+    x: d3.scaleSqrt().domain([0, 1]), y: d3.scaleLinear().domain([0, 1]),
+    xAxis: a => a.tickValues([0, .01, .05, .1, .25, .5, .75, 1]).tickFormat(d3.format(".0%")),
+    yAxis: a => a.ticks(5).tickFormat(d3.format(".0%")),
+    xLabel: "share of provisions, most-amended first", yLabel: "share of all amendments",
+    endLabel: {},
+    tipFor: s => `<b>${s.name}</b><br>Busiest 1% of provisions: ${pct(s.r.top1)} of amendments<br>Busiest 10%: ${pct(s.r.top10)}<br>Never amended: ${pct(s.r.never)}<br><span class="m">${fmt(s.r.provisions)} provisions · ${fmt(s.r.amendments)} amendments</span>` });
+  // End labels for highlighted series would all sit at (100%, 100%); place them at the 1% mark instead
+  const svg = d3.select("#f-few"); svg.selectAll("text.lbl").remove();
+  const x = d3.scaleSqrt().domain([0, 1]).range([56, 840]), y = d3.scaleLinear().domain([0, 1]).range([396, 16]);
+  HI.forEach((k, i) => { const r = rows.find(r => r.key === k); const p = r.lorenz.find(p => p[0] >= 0.05) || r.lorenz.at(-1);
+    svg.append("text").attr("class", "lbl").attr("x", x(p[0]) + 8).attr("y", y(p[1]) + 4).text(r.name); });
+  const NAMES = { "code-penal/art-711-001.md": "Code pénal art. 711-1 (overseas application)", "b-vg/art-151.md": "B-VG art. 151 (commencement and transition)",
+    "codigo-organico-tribunales/art-198.md": "Courts Organisation Code art. 198", "estatal/real-decreto/1986/BOE-A-1986-26182/ani.md": "Real Decreto 2028/1986, Annex I (EU vehicle-approval acts)",
+    "constitucion/art-073.md": "Constitution art. 73 (powers of Congress)", "legge/1990/241/art-019.md": "Law 241/1990 art. 19 (certified start of activity)",
+    "wetboek-van-strafrecht/art-023.md": "Criminal Code art. 23 (fine amounts)", "estatuto-tributario/art-0206.md": "Tax Statute art. 206 (exempt labour income)",
+    "crimes-act/sec-002.md": "Crimes Act s 2 (interpretation)", "kriminallikums/zz-es-direktivas-teksts.md": "Criminal Law: list of EU directives",
+    "codigo-penal/art-121.md": "Penal Code art. 121 (homicide)", "codul-muncii/art-017.md": "Labour Code art. 17 (information before hiring)",
+    "gaeinjeongbo-bohobeop/art-0075.md": "Personal Information Protection Act art. 75 (fines)", "code-penal/art-458-bis.md": "Code pénal art. 458bis (professional secrecy)",
+    "codigo-civil/artigo-1980.md": "Civil Code art. 1980 (who may be adopted)", "codigo-procesal-civil-y-comercial/art-242.md": "Civil and Commercial Procedure Code art. 242 (appeals)",
+    "constitucion/art-002.md": "Constitution art. 2 (fundamental rights)", "codigo-penal/art-341.md": "Penal Code art. 341 (aggravated theft)",
+    "codigo-electoral/art-130.md": "Electoral Code art. 130 (voter registration)" };
+  table("t-few", ["Jurisdiction", "Most-amended provision", "Amendments", "Busiest 1% share", "Never amended"],
+    [...rows].sort((a, b) => b.most[0][0] - a.most[0][0]).map(r => [r.name, esc(NAMES[r.most[0][1]] || r.most[0][1]), r.most[0][0], pct(r.top1), pct(r.never)]), [2, 3, 4]);
+}
+
+// 2. Time to first amendment
+{
+  const rows = DATA.first_amendment;
+  const HI = ["romania", "france", "spain", "paraguay"];
+  legend("lg-first", HI.map((k, i) => [rows.find(r => r.key === k).name, C[i]]), true);
+  const LO = Math.floor(d3.min(rows, r => d3.min(r.curve.filter(p => p[0] <= 30), p => p[1])) * 10) / 10;
+  const clip = r => { const pts = r.curve.filter(p => p[0] <= 30); const end = Math.min(30, r.horizon); return [...pts, [end, pts.at(-1)[1]]]; };
+  lineChart({ svgId: "f-first", highlight: HI,
+    series: rows.map(r => ({ key: r.key, name: r.name, pts: clip(r), r })),
+    x: d3.scaleLinear().domain([0, 30]), y: d3.scaleLinear().domain([LO, 1]),
+    xAxis: a => a.ticks(6), yAxis: a => a.tickValues(d3.range(LO, 1.001, .1)).tickFormat(d3.format(".0%")),
+    xLabel: "years since the provision took effect", yLabel: "still in first wording",
+    endLabel: { spain: -6, paraguay: 0 },
+    tipFor: s => `<b>${s.name}</b><br>Unamended after 1 year: ${pct(s.r.s1)}<br>after 5 years: ${pct(s.r.s5)}<br>after 10 years: ${pct(s.r.s10)}<br><span class="m">${fmt(s.r.n)} provisions, ${fmt(s.r.amended)} since amended</span>` });
+  table("t-first", ["Jurisdiction", "Provisions", "After 1 year", "After 5 years", "After 10 years"],
+    rows.map(r => [r.name, fmt(r.n), pct(r.s1), pct(r.s5), pct(r.s10)]), [1, 2, 3, 4]);
+}
+
+// 3. Biggest days
+{
+  const rows = DATA.big_days;
+  const W = 960, rowH = 30, m = { t: 30, b: 10, l: 112 }, H = m.t + rows.length * rowH + m.b, tx0 = m.l, tx1 = 470, txt = 496;
+  const svg = d3.select("#f-days").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleTime().domain([new Date(1975, 0, 1), new Date(2027, 0, 1)]).range([tx0, tx1]);
+  const r = d3.scaleSqrt().domain([0, d3.max(rows, d => d.events)]).range([0, 13]);
+  svg.append("g").attr("class", "grid").attr("transform", `translate(0,${m.t - 8})`)
+    .call(d3.axisTop(x).ticks(d3.timeYear.every(10)).tickSize(-(rows.length * rowH)).tickFormat(d3.timeFormat("%Y")));
+  svg.select(".grid").selectAll("text").attr("fill", "var(--muted)");
+  svg.append("text").attr("x", txt).attr("y", m.t - 14).text("act · provisions changed · share of all recorded change");
+  const g = svg.append("g").selectAll("g").data(rows).join("g").attr("transform", (d, i) => `translate(0,${m.t + i * rowH + rowH / 2})`);
+  g.append("text").attr("class", "lbl").attr("x", m.l - 12).attr("y", 4).attr("text-anchor", "end").text(d => d.name);
+  g.append("line").attr("x1", tx0).attr("x2", tx1).attr("stroke", "var(--rule)");
+  g.append("circle").attr("cx", d => x(new Date(d.date))).attr("r", d => Math.max(4, r(d.events))).attr("fill", "var(--c1)").attr("fill-opacity", .85)
+    .attr("stroke", "var(--plate)").attr("stroke-width", 2);
+  const ACT = { portugal: "Decreto-Lei 496/77 (Civil Code reform)", brazil: "Lei 7.209/1984 (Penal Code, general part)", "south-korea": "Act No. 5057 (Criminal Act)",
+    france: "Ordonnance 2000-916 (francs to euros)", chile: "DFL 1 of 2003 (Labour Code)", austria: "BGBl. I Nr. 100/2003 (B-VG)", colombia: "Ley 890 of 2004 (Penal Code)",
+    paraguay: "Ley 3440/2008 (Penal Code)", spain: "Ley 13/2009 (procedural reform)", romania: "Legea 76/2012 (Civil Procedure Code)", latvia: "Law of 13.12.2012 (Criminal Law)",
+    "new-zealand": "Crimes Amendment Act (No 4) 2011", uruguay: "Ley 19.090 (General Procedure Code)", denmark: "LOV nr 649 of 2013 (Tax Administration Act)",
+    italy: "D.Lgs. 101/2018 (GDPR, privacy code)", netherlands: "Stb. 2017, 82 (Criminal Code)", belgium: "Law of 28 April 2022 (law of obligations)",
+    argentina: "DNU 70/2023 (eight codes and statutes)", mexico: "Decree of 20 March 2025 (data protection)", peru: "Ley 31988 (Criminal Procedure Code)" };
+  const short = (s, k) => ACT[k] || (s.length > 44 ? s.slice(0, 43) + "…" : s);
+  g.append("text").attr("x", txt).attr("y", 4).attr("class", "lbl").text(d => `${d3.timeFormat("%-d %b %Y")(new Date(d.date))}  ${short(d.subject, d.key)}`);
+  g.append("text").attr("x", W - 4).attr("y", 4).attr("text-anchor", "end").text(d => `${fmt(d.events)} · ${pct(d.share)}`);
+  g.append("rect").attr("x", 0).attr("y", -rowH / 2).attr("width", W).attr("height", rowH).attr("fill", "transparent")
+    .on("pointermove", (ev, d) => showTip(ev, `<b>${d.name}, ${d3.timeFormat("%-d %B %Y")(new Date(d.date))}</b><br>${esc(d.subject)}<br>${fmt(d.events)} provisions changed: ${pct(d.share)} of the ${fmt(d.total)} changes recorded<br><span class="m">Next: ${d.runners.map(q => `${q[0]} (${q[1]})`).join(", ")}</span>`))
+    .on("pointerleave", hideTip);
+}
+
+// 4. EU acts in Spanish and Czech law
+{
+  const E = DATA.eu, pts = E.points;
+  const name = a => a.startsWith("R") ? "Reg. " + a.slice(1) : (+a.split("/")[0] < 1999 ? a.slice(2) : (+a.split("/")[0] >= 2015 ? "(EU) " + a : a));
+  const W = 960, H = 520, m = { t: 16, r: 30, b: 46, l: 60 };
+  const svg = d3.select("#f-eu").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleSymlog().constant(2).domain([0, 800]).range([m.l, W - m.r]), y = d3.scaleSymlog().constant(2).domain([0, 200]).range([H - m.b, m.t]);
+  const tv = [0, 2, 5, 10, 25, 50, 100, 200, 400, 800];
+  svg.append("g").attr("class", "grid").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(y).tickValues(tv.filter(v => v <= 200)).tickSize(-(W - m.l - m.r)).tickFormat(""));
+  svg.append("g").attr("class", "axis").attr("transform", `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues(tv));
+  svg.append("g").attr("class", "axis").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(y).tickValues(tv.filter(v => v <= 200)));
+  svg.append("text").attr("x", (m.l + W - m.r) / 2).attr("y", H - 8).attr("text-anchor", "middle").text("Spanish provisions citing the act");
+  svg.append("text").attr("transform", `translate(14,${(m.t + H - m.b) / 2}) rotate(-90)`).attr("text-anchor", "middle").text("Czech acts citing it");
+  const diag = d3.range(0, 201, 1);
+  svg.append("path").attr("d", d3.line()(diag.map(v => [x(v), y(v)]))).attr("fill", "none").attr("stroke", "var(--muted)").attr("stroke-dasharray", "4 4");
+  svg.append("text").attr("x", x(200) + 8).attr("y", y(200) + 4).text("cited equally");
+  const jit = a => { let h = 0; for (const c of a) h = (h * 31 + c.charCodeAt(0)) % 997; return (h / 997 - .5) * 5; };
+  const named = pts.filter(p => p.title);
+  svg.append("g").selectAll("circle").data(pts.filter(p => !p.title)).join("circle")
+    .attr("cx", p => x(p.es) + jit(p.act)).attr("cy", p => y(p.cz) + jit(p.act + "y")).attr("r", 3).attr("fill", "var(--c1)").attr("fill-opacity", .28);
+  svg.append("g").selectAll("circle").data(named).join("circle")
+    .attr("cx", p => x(p.es)).attr("cy", p => y(p.cz)).attr("r", 5).attr("fill", "var(--c1)").attr("stroke", "var(--plate)").attr("stroke-width", 2);
+  const LBL = { "2016/679": [-9, 18, "end", "GDPR"], "2015/1535": [-9, 4, "end", "Technical standards notification (2015)"], "1998/34": [9, -6, "start", "98/34"],
+    "R575/2013": [9, 14, "start", "CRR"], "R1308/2013": [9, 4, "start", "CMO"], "R178/2002": [-9, -6, "end", "General Food Law"],
+    "R1907/2006": [0, 18, "middle", "REACH"], "2021/241": [-9, -8, "end", "Recovery and Resilience Facility"] };
+  svg.append("g").selectAll("text").data(named.filter(p => LBL[p.act])).join("text").attr("class", "lbl")
+    .attr("x", p => x(p.es) + LBL[p.act][0]).attr("y", p => y(p.cz) + LBL[p.act][1]).attr("text-anchor", p => LBL[p.act][2])
+    .text(p => LBL[p.act][3]);
+  const vor = d3.Delaunay.from(pts, p => x(p.es) + (p.title ? 0 : jit(p.act)), p => y(p.cz) + (p.title ? 0 : jit(p.act + "y")));
+  svg.append("rect").attr("x", m.l).attr("y", m.t).attr("width", W - m.l - m.r).attr("height", H - m.t - m.b).attr("fill", "transparent")
+    .on("pointermove", ev => { const [mx, my] = d3.pointer(ev); const i = vor.find(mx, my); const p = pts[i];
+      if (Math.hypot(x(p.es) - mx, y(p.cz) - my) > 24) return hideTip();
+      showTip(ev, `<b>${name(p.act)}</b>${p.title ? "<br>" + p.title : ""}<br>Spain: ${p.es} provisions · Czechia: ${p.cz} acts`); })
+    .on("pointerleave", hideTip);
+  table("t-eu", ["EU act", "Name", "Spain", "Czechia"], [...pts].sort((a, b) => (b.es + b.cz) - (a.es + a.cz)).slice(0, 20)
+    .map(p => [name(p.act), p.title || "", p.es, p.cz]), [2, 3]);
+}
+
+// 5. Spanish omnibus acts
+{
+  const P = DATA.omnibus.pts, KINDS = [["Law", "--c1"], ["Decree-law", "--c2"], ["Royal decree", "--c3"], ["Other", "--c4"]];
+  const col = new Map(KINDS);
+  legend("lg-omni", KINDS.map(([k, v]) => [k === "Law" ? "Law (incl. organic)" : k, v]));
+  const W = 960, H = 460, m = { t: 16, r: 30, b: 44, l: 56 };
+  const svg = d3.select("#f-omni").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleTime().domain([new Date(1979, 0, 1), new Date(2027, 0, 1)]).range([m.l, W - m.r]);
+  const y = d3.scaleLog().domain([2, 110]).range([H - m.b, m.t]);
+  const tv = [2, 3, 5, 10, 20, 50, 100];
+  svg.append("g").attr("class", "grid").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(y).tickValues(tv).tickSize(-(W - m.l - m.r)).tickFormat(""));
+  svg.append("g").attr("class", "axis").attr("transform", `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(d3.timeYear.every(5)));
+  svg.append("g").attr("class", "axis").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(y).tickValues(tv).tickFormat(d3.format("d")));
+  svg.append("text").attr("transform", `translate(14,${(m.t + H - m.b) / 2}) rotate(-90)`).attr("text-anchor", "middle").text("laws changed by one act");
+  const jy = (p, i) => y(p[1]) + (((i * 2654435761) % 1000) / 1000 - .5) * Math.min(14, (y(p[1]) - y(p[1] + 1)) * .9);
+  const order = [...P.keys()].sort((a, b) => ["Other", "Royal decree", "Decree-law", "Law"].indexOf(P[a][2]) - ["Other", "Royal decree", "Decree-law", "Law"].indexOf(P[b][2]));
+  const dots = order.map(i => ({ p: P[i], cx: x(new Date(P[i][0])), cy: jy(P[i], i) }));
+  svg.append("g").selectAll("circle").data(dots).join("circle").attr("cx", d => d.cx).attr("cy", d => d.cy)
+    .attr("r", d => d.p[1] >= 10 ? 3.6 : 2.4).attr("fill", d => `var(${col.get(d.p[2])})`).attr("fill-opacity", d => d.p[1] >= 10 ? .9 : .35);
+  const top = [...P].sort((a, b) => b[1] - a[1]);
+  const ANN = [[top[0], "Ley 62/2003 · 96 laws · 1 Jan 2004", 8, 4, "start"], [top.find(p => p[3].startsWith("Ley 6/2018")), "Ley 6/2018, 2018 budget · 69", 0, -10, "middle"],
+    [top.find(p => p[3].startsWith("Ley 2/2011")), "Ley 2/2011, Sustainable Economy · 57", -8, -6, "end"]];
+  svg.append("g").selectAll("text").data(ANN.filter(a => a[0])).join("text").attr("class", "lbl")
+    .attr("x", a => x(new Date(a[0][0])) + a[2]).attr("y", a => y(a[0][1]) + a[3]).attr("text-anchor", a => a[4]).text(a => a[1]);
+  const vor = d3.Delaunay.from(dots, d => d.cx, d => d.cy);
+  svg.append("rect").attr("x", m.l).attr("y", m.t).attr("width", W - m.l - m.r).attr("height", H - m.t - m.b).attr("fill", "transparent")
+    .on("pointermove", ev => { const [mx, my] = d3.pointer(ev); const d = dots[vor.find(mx, my)];
+      if (Math.hypot(d.cx - mx, d.cy - my) > 16) return hideTip();
+      showTip(ev, `<b>${esc(d.p[3])}</b><br>${d.p[1]} laws changed · ${d.p[2]}<br><span class="m">in force ${d.p[0]}</span>`); })
+    .on("pointerleave", hideTip);
+  table("t-omni", ["In force", "Act", "Kind", "Laws changed"], top.slice(0, 15).map(p => [p[0], esc(p[3]), p[2], p[1]]), [3]);
+}
+</script>
+</body>
+</html>

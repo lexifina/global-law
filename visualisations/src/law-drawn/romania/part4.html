@@ -1,0 +1,47 @@
+
+<div class="divider"><span class="eyebrow">Part four · five shapes for the record</span>
+  <h2 class="part">A spiral, a sunflower, arches, a wheel and a triangle</h2>
+  <p class="lede">These five pictures use geometry to show what tables hide: how much notice the Fiscal Code gives, how old the law in force is, how long acts live, which kinds of act rewrite which, and where each heavily amended act sits between Parliament and the government.</p></div>
+
+<figure id="spiral">
+  <div class="figtext"><span class="eyebrow">Codul fiscal, art. 4 · 178 dated changes made by law or ordinance, 2016–2026</span>
+    <h2>The Fiscal Code promises six months' notice of a change by law. It gave it four times</h2>
+    <p>Article 4 of the Fiscal Code says a law that changes the code takes effect at least six months after it is published, and an ordinance at least 15 days after. The spiral makes one turn a year, with 1 January at the top. Each change is a dot on the day it took effect, with a tail back along the spiral to the day it was published, so the tail's length is the notice given. A filled dot met the article's own rule. <b>Of 76 changes made by law, 4 had six months' notice; the median was 3 days, the Constitution's default. Of 102 made by ordinance, 33 had 15 days, and 39 took effect the day they were published.</b></p></div>
+  <div class="legend" id="lg-spiral"></div>
+  <div class="plot"><svg id="f-spiral" role="img" aria-label="Time spiral of Fiscal Code changes with tails showing the notice period of each"></svg></div>
+  <p class="src">Commits that change Legea 227/2015 and name a law (Legea), emergency ordinance (OUG) or ordinance (OG), with the amending act's publication day and the version's in-force day. One amending act with parts in force on different days counts once per day. Art. 4(4) lets a law take effect sooner when it follows from Romania's international commitments or, since OUG 74/2023, an EU excessive deficit procedure; this chart does not try to sort which changes those cover.</p>
+</figure>
+
+<figure id="seeds">
+  <div class="figtext"><span class="eyebrow">18,825 acts · every act in the corpus, in order of the day it took effect</span>
+    <h2>Half the corpus exists only to amend the other half, and most law in force dates from after 2014</h2>
+    <p>Each seed is one act. They are laid out like the seeds of a sunflower, one after another in the order they took effect, so the oldest acts sit at the centre and the newest at the rim; the dashed rings mark where 2007, 2014, 2020 and 2025 begin. A faded seed is an act whose text the corpus keeps only as changes to other acts. A larger seed has more versions. <b>9,068 acts only amend others. Of the 9,520 in force, half took effect after July 2015 and 398 before 2000.</b> Emergency ordinances are themselves amended far more than laws are: 70% of them have changed since they were issued, against 27% of laws and 6% of government decisions.</p></div>
+  <div class="legend" id="lg-seeds"></div>
+  <div class="plot"><svg id="f-seeds" role="img" aria-label="Sunflower of the 18,825 acts in the corpus, oldest at the centre"></svg></div>
+  <p class="src">data/acts.json: each act's first in-force day, kind, status and number of versions. The corpus holds government decisions densely only for 2007–2009 and from 2014, so green seeds are sparse inside the 2007 ring. An act's position follows its order, not the calendar, so the rings are not evenly spaced in time.</p>
+</figure>
+
+<figure id="arcs">
+  <div class="figtext"><span class="eyebrow">13,294 dated changes · from the year an act took effect to the year it was changed</span>
+    <h2>Parliament reaches further back than the government: it is still rewriting the law of the 1990s</h2>
+    <p>Each arc joins the year an act took effect, on the left, to the year a change to it took effect, on the right. The longer the arc, the older the law it changes. Laws of Parliament arch above the line and the government's ordinances and decisions below it; an arc's weight is the number of changes it stands for. <b>Of the 1,594 changes Parliament has made since 2020, 603, or 38%, rewrite acts older than Romania's EU membership. Of the government's 2,060, 472 do, 23%.</b> The land, water, cadastre and companies laws of the early 1990s are all still being changed.</p></div>
+  <div class="plot"><svg id="f-arcs" role="img" aria-label="Arc diagram of changes from the year an act took effect to the year it was changed"></svg></div>
+  <p class="src">Commits that change an act other than as enacted and name a law, emergency ordinance, ordinance or government decision, joined to the changed act's first in-force day in data/acts.json. Changes in the same year an act took effect are not drawn. New versions with no amending act named, rectifications and Constitutional Court rulings are left out.</p>
+</figure>
+
+<figure id="chord">
+  <div class="figtext"><span class="eyebrow">13,387 changes · the kind of act that made each, and the kind it changed</span>
+    <h2>Government decisions amend only each other, while laws and emergency ordinances rewrite one another</h2>
+    <p>The wheel's segments are the kinds of act. Each ribbon runs from the kind that made a change to the kind it changed, with the arrowhead at the changed end; a ribbon that loops back to its own segment is, for example, a law changing another law. Its width is the number of changes. <b>Government decisions form a closed circle: 97% of the changes to them come from other government decisions. Parliament's laws are the opposite: 40% of the changes to them come from the government, 2,006 of them from emergency ordinances.</b> Laws in turn change emergency ordinances 1,785 times, mostly when Parliament approves an ordinance with amendments.</p></div>
+  <div class="plot"><svg id="f-chord" role="img" aria-label="Directed chord diagram of which kinds of Romanian act amend which"></svg></div>
+  <p class="src">Commits that change an act other than as enacted and name a law, emergency ordinance, ordinance, government decision or Constitutional Court ruling, matched to the changed act's kind in data/acts.json. The codes filed under lege/ count as laws and the administrative code, an emergency ordinance, as one. New versions with no amending act named are left out.</p>
+</figure>
+
+<figure id="tri">
+  <div class="figtext"><span class="eyebrow">287 acts changed ten times or more · who made the changes</span>
+    <h2>An emergency ordinance is rewritten mostly by more emergency ordinances, and no act is rewritten mostly by ordinance</h2>
+    <p>Every point inside the triangle is a mix of three routes for changing an act: a law of Parliament, an emergency ordinance, and an ordinance, which the government can issue only under a special enabling law (Constitution, art. 115). An act at a corner was changed only one way, and an act at the centre equally all three ways. Its colour is what the act itself is, and its size is the number of changes. <b>113 of the 172 laws were changed mostly by other laws, but 38 of the 72 emergency ordinances were changed mostly by further emergency ordinances.</b> Ordinances never made more than half the changes to any act, so the shaded corner region towards them is empty.</p></div>
+  <div class="legend" id="lg-tri"></div>
+  <div class="plot"><svg id="f-tri" role="img" aria-label="Ternary plot of heavily amended acts by the share of changes made by law, emergency ordinance and ordinance"></svg></div>
+  <p class="src">Commits that change a law, emergency ordinance or ordinance and name a law, emergency ordinance or ordinance as the amending act; acts with ten or more such changes. Government decisions, Constitutional Court rulings and versions with no act named are left out, as are the old codes held under cod/.</p>
+</figure>

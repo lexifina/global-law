@@ -1,4 +1,4 @@
-// Static renders of every chart in law-in-motion.html and legal-system-bridges.html, for the folder README.
+// Static renders of every chart in the folder's pages, for the folder README.
 //
 //   node src/stills.mjs            (from visualisations/)
 //
@@ -17,6 +17,10 @@ const { chromium } = require('playwright')
 const PAGES = [
   ['law-in-motion.html', 'Law in Motion'],
   ['legal-system-bridges.html', 'Legal system bridges'],
+  ['law-drawn.html', 'Law, Drawn'],
+  ['life-of-a-provision.html', 'The Life of a Provision'],
+  ['romanian-law-drawn.html', 'Romanian Law, Drawn'],
+  ['the-romanian-record.html', 'The Romanian Record'],
 ]
 const out = join(viz, 'stills')
 rmSync(out, { recursive: true, force: true })
@@ -56,7 +60,7 @@ const readme = join(viz, 'README.md')
 const BEGIN = '<!-- stills:begin -->'
 const END = '<!-- stills:end -->'
 const lines = [BEGIN, '', '## The charts', '',
-  'Still images of every chart, rendered from the two pages by `src/stills.mjs`. Open the HTML pages for the interactive versions and the full text.', '']
+  'Still images of every chart, rendered from the pages by `src/stills.mjs`. Open the HTML pages for the interactive versions and the full text.', '']
 for (const [label, file, items] of sections) {
   lines.push(`### ${label} (\`${file}\`)`, '')
   for (const [title, name] of items) lines.push(`![${title.replace(/[[\]]/g, '')}](stills/${name})`, '')

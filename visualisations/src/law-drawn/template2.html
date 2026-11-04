@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Law, Drawn</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+/* Tokens shared with law-in-motion.html; series colours re-stepped to pass the palette validator in both modes. */
+:root {
+  --bg: #f5f6f8; --plate: #ffffff; --ink: #1a2230; --muted: #5c6778; --rule: #dce0e7; --ghost: #b9bfca; --tint: #eceff5;
+  --c1: #3a5fbf; --c2: #c23f38; --c3: #008a7a; --c4: #b5801a; --seq-lo: #dfe6f6; --seq-hi: #1c3784;
+  --display: "Source Serif 4", Georgia, serif; --body: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11151c; --plate: #181e27; --ink: #e6eaf0; --muted: #99a3b3; --rule: #2a323f; --ghost: #465061; --tint: #1f2633;
+  --c1: #6b8ae6; --c2: #e0584f; --c3: #16a594; --c4: #bd8526; --seq-lo: #253049; --seq-hi: #a9bdf7; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11151c; --plate: #181e27; --ink: #e6eaf0; --muted: #99a3b3; --rule: #2a323f; --ghost: #465061; --tint: #1f2633;
+  --c1: #6b8ae6; --c2: #e0584f; --c3: #16a594; --c4: #bd8526; --seq-lo: #253049; --seq-hi: #a9bdf7; color-scheme: dark }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 44px 80px; }
+main { max-width: 1000px; margin: 0 auto; display: grid; gap: 28px; }
+header { display: grid; gap: 12px; max-width: 66ch; }
+h1 { font: 600 2.3rem/1.1 var(--display); margin: 0; text-wrap: balance; }
+h2 { font: 600 1.35rem/1.25 var(--display); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.lede { color: var(--muted); font-size: 16px; }
+.eyebrow { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.draft { font: 12px/1.4 var(--mono); color: var(--muted); border: 1px dashed var(--rule); border-radius: 6px; padding: 6px 10px; width: fit-content; }
+figure { margin: 0; background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; display: grid; min-width: 0; }
+.figtext { padding: 20px 22px 4px; display: grid; gap: 8px; max-width: 74ch; }
+.figtext p { color: var(--muted); font-size: 14.5px; }
+.figtext p b { color: var(--ink); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 10px 22px 0; font: 12px/1.4 var(--mono); color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.legend .ramp { width: 140px; height: 10px; border-radius: 3px; background: linear-gradient(90deg, var(--seq-lo), var(--seq-hi)); }
+.plot { overflow-x: auto; padding: 6px 10px 6px; }
+.plot svg { display: block; width: 100%; height: auto; min-width: 600px; }
+.plot.square svg { max-width: 860px; margin: 0 auto; }
+.hint { padding: 0 22px; font: 12px/1.4 var(--mono); color: var(--muted); }
+.src { padding: 6px 22px 18px; font: 12px/1.5 var(--mono); color: var(--muted); }
+svg text { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+svg .lbl { fill: var(--ink); }
+svg .ser { font-family: var(--display); font-size: 14px; fill: var(--ink); }
+svg .halo { paint-order: stroke; stroke: var(--plate); stroke-width: 3.5px; stroke-linejoin: round; }
+#tip { position: fixed; pointer-events: none; z-index: 10; background: var(--plate); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 8px 10px; font: 12.5px/1.45 var(--body); box-shadow: 0 4px 16px rgb(0 0 0 / .12); max-width: 340px; opacity: 0; transition: opacity .08s; }
+#tip b { font-weight: 600; }
+#tip .m { font-family: var(--mono); color: var(--muted); font-size: 11.5px; }
+footer { color: var(--muted); font-size: 13px; max-width: 74ch; display: grid; gap: 8px; }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <span class="eyebrow">Global law · five more findings</span>
+  <h1>Law, drawn</h1>
+  <p class="lede">Ten pictures of how law is made, each built from the git histories in global-law. Part one: the calendar of a statute book, the laws that move together, the year each country legislated most, a whole statute book at once, and thirty years of reform across one code. Part two: the states, provinces, cantons and cities that global-law added this week.</p>
+  <span class="draft">Local draft · not in global-law yet · part one built 2026-10-30, part two 2026-11-02</span>
+</header>
+
+<figure id="spiral">
+  <div class="figtext"><span class="eyebrow">Spain · 15,999 acts in force, 1979–2026 · one turn per year</span>
+    <h2>Spanish law keeps a calendar: twenty times as many acts start on 1 January as on an average day</h2>
+    <p>Every act in Spain's consolidated record, placed by the day it took effect. Each turn of the spiral is a year: 1979 at the centre, 2026 at the edge, with 1 January at the top. <b>861 acts took effect on 1 January, against an average of 44 per calendar day, so the year's opening shows as a bright spoke.</b> Smaller spokes mark 1 July (235) and 31 December (167). January is the busiest month and August and September the quietest. Dot size is how many laws the act changed.</p></div>
+  <div class="legend" id="lg-spiral"></div>
+  <div class="plot square"><svg id="f-spiral" role="img" aria-label="Spiral calendar of Spanish acts by in-force date, 1979 to 2026"></svg></div>
+  <p class="src">spain-law commits from 1979 on, one per act and in-force date, including first texts. "Law" includes organic laws. "Other" covers orders, resolutions, legislative decrees and court rulings that annul provisions.</p>
+</figure>
+
+<figure id="chord">
+  <div class="figtext"><span class="eyebrow">Spain · 23 of the most-amended laws</span>
+    <h2>Spain amends its laws in pairs: social security with the Workers' Statute, corporate tax with income tax</h2>
+    <p>Each ribbon joins two laws, and its width is the number of acts that changed both at once. <b>62 acts changed the Social Security Act and the Workers' Statute together, and 55 changed corporate and income tax together.</b> Tax laws form the densest cluster: VAT moves with excise duties (39 acts), corporate tax (36), income tax (33) and the Canary Islands tax regime (31). The justice laws form their own smaller cluster: civil procedure moves with the administrative courts act (18 acts) and the Civil Code (16). Hover a law to isolate its ties.</p></div>
+  <div class="legend" id="lg-chord"></div>
+  <div class="plot square"><svg id="f-chord" role="img" aria-label="Chord diagram of Spanish laws changed together"></svg></div>
+  <p class="src">Norms each amending commit lists in its In force from block. Successive recasts of one law are merged: the Social Security Act (1994, 2015), the Workers' Statute (1995, 2015) and the Corporate Tax Act (2004, 2014). Arc length is a law's total ties to the other 22. The Customs Ordinances, among the most amended, never changed alongside any of these, so they are left out.</p>
+</figure>
+
+<figure id="ridges">
+  <div class="figtext"><span class="eyebrow">Twenty-one jurisdictions · acts taking effect each year, 1990–2025</span>
+    <h2>When each country made the most law</h2>
+    <p>Each row is one jurisdiction and each stripe one year, shaded by how many acts took effect that year relative to its own busiest year (outlined in red). Rows are sorted by when that year came. <b>Hong Kong's busiest year was 1997, the handover, and Czechia's 2004, the year it joined the EU.</b> Thirteen of the twenty-one jurisdictions had their busiest year in 2017 or later: Spain in 2020, France and Malta in 2021, Switzerland in 2022, Armenia and Azerbaijan in 2023, and Costa Rica and Mexico in 2024.</p></div>
+  <div class="legend"><span>acts that year, relative to the busiest</span><span>none</span><span class="ramp"></span><span>busiest</span><span style="margin-left:8px"><i style="background:var(--tint)"></i>before the record begins</span></div>
+  <div class="plot"><svg id="f-ridges" role="img" aria-label="Stripes of acts per year by jurisdiction"></svg></div>
+  <p class="src">The published visualisations/src/analysis11.json: dated amending acts per in-force year in each repository, snapshot and consolidated commits excluded. Shading uses a 0.75 power so quieter years stay visible. 2026 is left out because the year is not over. Rows start where each record starts (Malta 2016, Ontario and Canada 2002). Each repository covers a different share of its jurisdiction's law, so rows compare rhythms, not volumes.</p>
+</figure>
+
+<figure id="pack">
+  <div class="figtext"><span class="eyebrow">Spain · 8,774 norms · 326,037 provisions</span>
+    <h2>Three quarters of Spain's statute book was issued by the government</h2>
+    <p>Every norm in Spain's consolidated record, sized by its number of provisions and grouped by type. <b>Royal decrees hold 49% of all provisions and laws passed by parliament 22%.</b> With ministerial orders, decree-laws, legislative decrees and resolutions, the government issued 75% of the provisions. The Civil Code (1889) is the largest single norm, with 2,444 provisions. Colour shows how often each norm has been amended. Most are amended at least once, and the darkest are the tax and social-security laws. Click a group to zoom in and name its largest norms.</p></div>
+  <div class="legend"><span>times amended</span><span>0</span><span class="ramp"></span><span>100+</span><span style="margin-left:8px"><i style="background:var(--plate);border:1px solid var(--ghost)"></i>never amended</span></div>
+  <div class="plot square"><svg id="f-pack" role="img" aria-label="Circle packing of Spanish norms by type and size"></svg></div>
+  <p class="hint">Click a group to zoom in, and click the background to zoom out.</p>
+  <p class="src">spain-law file tree (estatal/&lt;type&gt;/&lt;year&gt;/&lt;BOE id&gt;/), one circle per norm, area proportional to its provision files. Amendments are the commits that list the norm in their In force from block. The BOE consolidated record is a selection: it consolidates the norms most in use, which is why so many have been amended.</p>
+</figure>
+
+<figure id="arcs">
+  <div class="figtext"><span class="eyebrow">France · Code civil · 231 amending acts, 1994–2026</span>
+    <h2>Since 1994 France has rewritten most of its Code civil, but almost never the law of property</h2>
+    <p>The code's 2,899 articles run left to right. Each arc joins two articles changed by the same act, one after the other, and the bars below count how many acts changed each article. <b>1,853 articles have changed at least once since 1994. Book II on property has seen only 21 article changes, against 1,168 in Book I on persons.</b> The big blocks are the reforms: succession (2006), securities (2006 and 2021), the protection of adults (2007) and the 2016 rewrite of contract law, which changed 372 articles at once. Hover an arc to light up its act.</p></div>
+  <div class="legend"><span>year of the act</span><span>1994</span><span class="ramp"></span><span>2026</span></div>
+  <div class="plot"><svg id="f-arcs" role="img" aria-label="Arc diagram of amendments across the French Code civil"></svg></div>
+  <p class="src">france-law commits touching code-civil/, from the 1994 base text (excluded) to 2026. Articles are ordered by number, with inserted articles (515-11, 2374-1) in place. Book boundaries: art. 7, 516, 711, 2284 and 2489.</p>
+</figure>
+
+<footer>
+  <p>Data: spain-law and france-law in ~/Documents on this machine, read on 2026-10-30 without writing to them, and visualisations/src/analysis11.json from global-law. Scripts: pass2.py, analyse2.py and build2.py in the same folder as this page.</p>
+  <p>Part two: the commit metadata of every corpus in global-law's .gitmodules (684 corpora, fetched on 2 November 2026; dominican-republic-law could not be cloned) and the current text of its 145 municipal corpora. Scripts: fetch.py, fetch_text.py, analyse3.py, analyse4.py, analyse_copy.py and build3.py.</p>
+</footer>
+</main>
+<div id="tip" role="status" aria-live="polite"></div>
+<script>
+const DATA = __DATA__;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fmt = d3.format(",");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const tip = document.getElementById("tip");
+function showTip(ev, html) {
+  tip.innerHTML = html; tip.style.opacity = 1;
+  const r = tip.getBoundingClientRect(); let x = ev.clientX + 14, y = ev.clientY + 14;
+  if (x + r.width > innerWidth - 8) x = ev.clientX - r.width - 14;
+  if (y + r.height > innerHeight - 8) y = ev.clientY - r.height - 14;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+}
+const hideTip = () => tip.style.opacity = 0;
+const legendDots = (id, items) => document.getElementById(id).innerHTML = items.map(([n, v]) => `<span><i style="background:var(${v})"></i>${n}</span>`).join("");
+const seq = t => d3.interpolateLab(css("--seq-lo"), css("--seq-hi"))(t);
+const fmtDate = d3.timeFormat("%-d %B %Y");
+
+// 1. Spiral calendar
+{
+  const A = DATA.spiral, KINDS = [["Law", "--c1"], ["Decree-law", "--c2"], ["Royal decree", "--c3"], ["Other", "--c4"]], col = new Map(KINDS);
+  legendDots("lg-spiral", KINDS.map(([k, v]) => [k === "Law" ? "Law (incl. organic)" : k, v]));
+  const S = 860, c = S / 2, r0 = 52, r1 = 392, Y0 = 1979, Y1 = 2027;
+  const svg = d3.select("#f-spiral").attr("viewBox", `0 0 ${S} ${S}`);
+  const g = svg.append("g").attr("transform", `translate(${c},${c})`);
+  const doy = d => (d - new Date(d.getFullYear(), 0, 1)) / 864e5, ylen = y => (new Date(y + 1, 0, 1) - new Date(y, 0, 1)) / 864e5;
+  const pos = s => { const d = new Date(s + "T12:00:00"), f = doy(d) / ylen(d.getFullYear()), t = d.getFullYear() + f;
+    const r = r0 + (t - Y0) / (Y1 - Y0) * (r1 - r0), a = f * 2 * Math.PI - Math.PI / 2; return [r * Math.cos(a), r * Math.sin(a)]; };
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  months.forEach((m, i) => { const a = i / 12 * 2 * Math.PI - Math.PI / 2;
+    g.append("line").attr("x1", r0 * .8 * Math.cos(a)).attr("y1", r0 * .8 * Math.sin(a)).attr("x2", (r1 + 8) * Math.cos(a)).attr("y2", (r1 + 8) * Math.sin(a)).attr("stroke", "var(--rule)");
+    const am = (i + .5) / 12 * 2 * Math.PI - Math.PI / 2;
+    g.append("text").attr("x", (r1 + 22) * Math.cos(am)).attr("y", (r1 + 22) * Math.sin(am) + 4).attr("text-anchor", "middle").text(m); });
+  // The spiral path itself, faintly, so the turns read as years
+  const turn = d3.range(Y0, Y1, 1 / 96).map(t => { const r = r0 + (t - Y0) / (Y1 - Y0) * (r1 - r0), a = (t % 1) * 2 * Math.PI - Math.PI / 2; return [r * Math.cos(a), r * Math.sin(a)]; });
+  g.append("path").attr("d", d3.line()(turn)).attr("fill", "none").attr("stroke", "var(--rule)").attr("stroke-width", .6);
+  const R = n => n <= 1 ? 1.25 : Math.min(7, 1.25 + Math.sqrt(n) * .62);
+  const dots = A.map(a => { const [x, y] = pos(a[0]); return { a, x, y }; }).sort((p, q) => q.a[1] - p.a[1]);
+  g.append("g").selectAll("circle").data(dots).join("circle").attr("cx", d => d.x).attr("cy", d => d.y).attr("r", d => R(d.a[1]))
+    .attr("fill", d => `var(${col.get(d.a[2])})`).attr("fill-opacity", d => d.a[1] >= 5 ? .9 : .62)
+    .attr("stroke", d => d.a[1] >= 5 ? "var(--plate)" : "none").attr("stroke-width", 1);
+  [1980, 1990, 2000, 2010, 2020].forEach(y => { const r = r0 + (y - Y0) / (Y1 - Y0) * (r1 - r0);
+    g.append("text").attr("class", "lbl halo").attr("x", 5).attr("y", -r - 3).text(y); });
+  g.append("text").attr("class", "ser").attr("text-anchor", "middle").attr("y", -6).text("1979");
+  g.append("text").attr("text-anchor", "middle").attr("y", 12).text("start");
+  const ring = g.append("circle").attr("fill", "none").attr("stroke", "var(--ink)").attr("stroke-width", 1.5).attr("opacity", 0);
+  const vor = d3.Delaunay.from(dots, d => d.x, d => d.y);
+  svg.append("rect").attr("width", S).attr("height", S).attr("fill", "transparent")
+    .on("pointermove", ev => { const [mx, my] = d3.pointer(ev, g.node()); const d = dots[vor.find(mx, my)];
+      if (Math.hypot(d.x - mx, d.y - my) > 12) { ring.attr("opacity", 0); return hideTip(); }
+      ring.attr("cx", d.x).attr("cy", d.y).attr("r", R(d.a[1]) + 3).attr("opacity", 1);
+      const same = A.filter(a => a[0] === d.a[0]).length;
+      showTip(ev, `<b>${esc(d.a[3])}</b><br>${d.a[4] ? "First text" : `Changed ${d.a[1]} law${d.a[1] > 1 ? "s" : ""}`} · ${d.a[2]}<br><span class="m">in force ${fmtDate(new Date(d.a[0] + "T12:00:00"))} · ${same} act${same > 1 ? "s" : ""} that day</span>`); })
+    .on("pointerleave", () => { ring.attr("opacity", 0); hideTip(); });
+}
+
+// 2. Chord diagram
+{
+  const C = DATA.chord, AREAS = [["Tax", "--c1"], ["Social", "--c2"], ["Justice", "--c3"], ["Other", "--c4"]], col = new Map(AREAS);
+  legendDots("lg-chord", AREAS.map(([k, v]) => [{ Social: "Social security and labour", Justice: "Courts and procedure", Tax: "Tax", Other: "Other" }[k], v]));
+  const S = 860, c = S / 2, ro = 250, ri = ro - 14;
+  const svg = d3.select("#f-chord").attr("viewBox", `0 0 ${S} ${S}`);
+  const g = svg.append("g").attr("transform", `translate(${c},${c})`);
+  const chords = d3.chord().padAngle(.022).sortSubgroups(d3.descending).sortChords(d3.descending)(C.matrix);
+  const defs = svg.append("defs");
+  const colorOf = i => `var(${col.get(C.area[i])})`;
+  const ribbons = g.append("g").selectAll("path").data(chords).join("path").attr("d", d3.ribbon().radius(ri - 2))
+    .attr("fill", (d, k) => {
+      const id = "rg" + k, a0 = (d.source.startAngle + d.source.endAngle) / 2 - Math.PI / 2, a1 = (d.target.startAngle + d.target.endAngle) / 2 - Math.PI / 2;
+      const gr = defs.append("linearGradient").attr("id", id).attr("gradientUnits", "userSpaceOnUse")
+        .attr("x1", ri * Math.cos(a0)).attr("y1", ri * Math.sin(a0)).attr("x2", ri * Math.cos(a1)).attr("y2", ri * Math.sin(a1));
+      gr.append("stop").attr("offset", "0%").attr("stop-color", colorOf(d.source.index));
+      gr.append("stop").attr("offset", "100%").attr("stop-color", colorOf(d.target.index));
+      return `url(#${id})`; })
+    .attr("fill-opacity", .5).attr("stroke", "var(--plate)").attr("stroke-width", .6);
+  const groups = g.append("g").selectAll("g").data(chords.groups).join("g");
+  groups.append("path").attr("d", d3.arc().innerRadius(ri).outerRadius(ro)).attr("fill", d => colorOf(d.index)).attr("stroke", "var(--plate)").attr("stroke-width", 1.5);
+  groups.append("text").each(d => { d.angle = (d.startAngle + d.endAngle) / 2; }).attr("dy", ".35em").attr("class", "lbl")
+    .attr("transform", d => `rotate(${d.angle * 180 / Math.PI - 90}) translate(${ro + 10}) ${d.angle > Math.PI ? "rotate(180)" : ""}`)
+    .attr("text-anchor", d => d.angle > Math.PI ? "end" : null).style("font-size", "11.5px").text(d => C.names[d.index]);
+  const focus = i => ribbons.attr("fill-opacity", d => i == null ? .5 : (d.source.index === i || d.target.index === i ? .85 : .05));
+  groups.on("pointermove", (ev, d) => { focus(d.index);
+      const ties = C.matrix[d.index].map((v, j) => [v, C.names[j]]).filter(t => t[0]).sort((a, b) => b[0] - a[0]).slice(0, 4);
+      showTip(ev, `<b>${C.names[d.index]}</b><br>${C.acts[d.index]} amending acts<br><span class="m">most often with: ${ties.map(t => `${t[1]} (${t[0]})`).join(", ")}</span>`); })
+    .on("pointerleave", () => { focus(null); hideTip(); });
+  ribbons.on("pointermove", (ev, d) => { ribbons.attr("fill-opacity", x => x === d ? .9 : .06);
+      showTip(ev, `<b>${C.names[d.source.index]}</b> and <b>${C.names[d.target.index]}</b><br>changed together by ${d.source.value} acts`); })
+    .on("pointerleave", () => { focus(null); hideTip(); });
+}
+
+// 3. Law stripes: one row per jurisdiction, one stripe per year, darker = closer to its busiest year
+{
+  const Rr = DATA.ridges, W = 960, rowH = 24, gap = 3, m = { t: 28, l: 178, r: 120, b: 34 }, H = m.t + Rr.length * (rowH + gap) + m.b;
+  const svg = d3.select("#f-ridges").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleLinear().domain([1990, 2026]).range([m.l, W - m.r]), sw = x(1991) - x(1990);
+  svg.append("g").selectAll("text").data(d3.range(1990, 2026, 5)).join("text").attr("x", d => x(d) + sw / 2).attr("y", H - 12).attr("text-anchor", "middle").text(d => d);
+  svg.append("text").attr("x", W - 4).attr("y", m.t - 10).attr("text-anchor", "end").text("busiest year · acts");
+  const rows = svg.append("g").selectAll("g").data(Rr).join("g").attr("transform", (r, i) => `translate(0,${m.t + i * (rowH + gap)})`);
+  rows.each(function (r) {
+    const sel = d3.select(this), mx = r.peak;
+    const yrs = d3.range(r.x0, 2026);
+    sel.append("rect").attr("x", x(1990)).attr("width", x(r.x0) - x(1990)).attr("height", rowH).attr("fill", "var(--tint)").attr("opacity", r.x0 > 1990 ? .55 : 0);
+    sel.selectAll("rect.s").data(yrs).join("rect").attr("class", "s").attr("x", y => x(y)).attr("width", sw + .6).attr("height", rowH)
+      .attr("fill", y => seq(Math.pow((r.years[y] || 0) / mx, .75)));
+    sel.append("rect").attr("x", x(r.peak_year) + 1).attr("y", 1).attr("width", sw - 2).attr("height", rowH - 2).attr("fill", "none").attr("stroke", "var(--c2)").attr("stroke-width", 1.6).attr("rx", 2);
+    sel.append("text").attr("class", "lbl").attr("x", m.l - 12).attr("y", rowH / 2 + 4).attr("text-anchor", "end").text(r.name);
+    sel.append("text").attr("x", W - m.r + 12).attr("y", rowH / 2 + 4).text(`${r.peak_year} · ${fmt(r.peak)}`);
+    sel.append("rect").attr("x", m.l).attr("width", W - m.l - m.r).attr("height", rowH).attr("fill", "transparent")
+      .on("pointermove", ev => { const yr = Math.floor(x.invert(d3.pointer(ev, this)[0]));
+        showTip(ev, `<b>${r.name}, ${yr}</b><br>${r.years[yr] != null ? fmt(r.years[yr]) + " acts took effect" : yr < r.x0 ? "before this record begins" : "no dated acts"}<br><span class="m">busiest year ${r.peak_year} (${fmt(r.peak)} acts)</span>`); })
+      .on("pointerleave", hideTip);
+  });
+}
+
+// 4. Circle packing
+{
+  const P = DATA.pack, S = 860;
+  const root = d3.hierarchy({ children: Object.entries(P).map(([g, v]) => ({ name: g === "Resolutions, circulars and instructions" ? "Resolutions and circulars" : g, children: v.map(n => ({ id: n[0], value: n[1], amended: n[2], year: n[3], title: n[4] })) })) })
+    .sum(d => d.value || 0).sort((a, b) => b.value - a.value);
+  d3.pack().size([S, S]).padding(d => d.depth === 0 ? 14 : 1.2)(root);
+  const svg = d3.select("#f-pack").attr("viewBox", `0 0 ${S} ${S}`), g = svg.append("g");
+  const cs = d3.scaleLog().domain([1, 100]).clamp(true);
+  const groups = root.children;
+  g.selectAll("circle.grp").data(groups).join("circle").attr("class", "grp").attr("cx", d => d.x).attr("cy", d => d.y).attr("r", d => d.r)
+    .attr("fill", "var(--bg)").attr("stroke", "var(--rule)").style("cursor", "zoom-in");
+  const leaves = g.append("g").selectAll("circle").data(root.leaves()).join("circle").attr("cx", d => d.x).attr("cy", d => d.y).attr("r", d => d.r)
+    .attr("fill", d => d.data.amended ? seq(cs(d.data.amended)) : "var(--plate)").attr("stroke", d => d.data.amended ? "none" : "var(--ghost)").attr("stroke-width", .6);
+  const NAMES = { "BOE-A-1889-4763": "Civil|Code", "BOE-A-1882-6036": "Criminal|Procedure", "BOE-A-2020-4859": "Insolvency|Act", "BOE-A-2000-323": "Civil|Procedure",
+    "BOE-A-1995-25444": "Criminal|Code", "BOE-A-1985-12666": "Judiciary|Act", "BOE-A-1885-6627": "Commercial|Code", "BOE-A-1947-3843": "Mortgage|Regulation",
+    "BOE-A-2010-10544": "Companies|Act", "BOE-A-2023-3511": "Basin|plans 2023", "BOE-A-2016-439": "Basin|plans 2016", "BOE-A-1994-14960": "Social|Security '94",
+    "BOE-A-2015-11724": "Social|Security", "BOE-A-1973-330": "Navarre|Civil Law", "BOE-A-1984-12106": "Navy|Ordinances" };
+  const fs = d => Math.min(11, d.r / 2.5), fits = (d, k) => d.r * k >= 21;
+  const lab = g.append("g").attr("pointer-events", "none");
+  lab.selectAll("text").data(root.leaves().filter(d => NAMES[d.data.id])).join("text").attr("class", "lbl halo").attr("text-anchor", "middle").style("opacity", d => fits(d, 1) ? 1 : 0)
+    .attr("x", d => d.x).attr("y", d => d.y).style("font-size", d => fs(d) + "px")
+    .selectAll("tspan").data(d => NAMES[d.data.id].split("|").map((s, i) => ({ s, i, d }))).join("tspan")
+    .attr("x", t => t.d.x).attr("dy", t => t.i ? "1.15em" : "-0.2em").text(t => t.s);
+  const glab = g.append("g").attr("pointer-events", "none").selectAll("text").data(groups).join("text").attr("class", "ser halo").attr("text-anchor", "middle")
+    .attr("x", d => d.x).attr("y", d => d.y - d.r + (d.r > 120 ? 22 : 14)).style("font-size", d => d.r > 120 ? "15px" : "12px").text(d => d.data.name);
+  const share = d => (d.value / root.value * 100).toFixed(1) + "%";
+  leaves.on("pointermove", (ev, d) => showTip(ev, `<b>${esc(d.data.title || d.data.id)}</b><br>${fmt(d.data.value)} provisions · amended ${d.data.amended} time${d.data.amended === 1 ? "" : "s"}<br><span class="m">${d.parent.data.name} · ${d.data.id}</span>`))
+    .on("pointerleave", hideTip);
+  g.selectAll("circle.grp").on("pointermove", (ev, d) => showTip(ev, `<b>${d.data.name}</b><br>${fmt(d.children.length)} norms · ${fmt(d.value)} provisions (${share(d)})`)).on("pointerleave", hideTip);
+  let focus = root;
+  const zoom = d => { focus = d; const k = S / (d.r * 2.1);
+    g.transition().duration(650).attr("transform", d === root ? null : `translate(${S / 2},${S / 2}) scale(${k}) translate(${-d.x},${-d.y})`);
+    const kk = d === root ? 1 : k;
+    lab.selectAll("text").transition().duration(650).style("font-size", x => Math.min(11, x.r * kk / 2.5) / kk + "px").attr("stroke-width", 3 / kk).style("opacity", x => fits(x, kk) ? 1 : 0);
+    glab.transition().duration(650).style("opacity", x => d === root || x === d ? 1 : 0).style("font-size", x => (d === root ? (x.r > 120 ? 15 : 12) : 15 / k) + "px")
+      .attr("y", x => x.y - x.r + (d === root ? (x.r > 120 ? 22 : 14) : 22 / k)).attr("stroke-width", d === root ? 3.5 : 3.5 / k); };
+  g.selectAll("circle.grp").on("click", (ev, d) => { ev.stopPropagation(); zoom(focus === d ? root : d); });
+  leaves.on("click", (ev, d) => { ev.stopPropagation(); zoom(focus === d.parent ? root : d.parent); });
+  svg.on("click", () => zoom(root));
+}
+
+// 5. Arc diagram
+{
+  const A = DATA.arcs, W = 960, base = 430, H = 560, m = { l: 24, r: 24 };
+  const svg = d3.select("#f-arcs").attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleLinear().domain([0, A.n - 1]).range([m.l, W - m.r]);
+  const yr = d3.scaleLinear().domain([1994, 2026]).range([0, 1]);
+  const B = Object.entries(A.bounds).sort((a, b) => a[1] - b[1]);
+  B.forEach(([name, s], i) => { const e = i + 1 < B.length ? B[i + 1][1] : A.n;
+    svg.append("rect").attr("x", x(s)).attr("y", base + 2).attr("width", Math.max(1, x(e - 1) - x(s))).attr("height", 64).attr("fill", i % 2 ? "var(--tint)" : "transparent");
+    if (e - s > 60) svg.append("text").attr("x", (x(s) + x(e - 1)) / 2).attr("y", base + 84).attr("text-anchor", "middle").attr("class", "lbl").style("font-size", "10.5px").text(name);
+  });
+  const mx = d3.max(A.per_art);
+  svg.append("g").selectAll("rect").data(A.per_art).join("rect").attr("x", (c, i) => x(i) - .4).attr("width", .9).attr("y", base + 3).attr("height", c => c / mx * 56)
+    .attr("fill", "var(--muted)").attr("opacity", .75);
+  svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", base).attr("y2", base).attr("stroke", "var(--ink)").attr("stroke-width", .8);
+  const arcPath = a => { const x0 = x(a[0]), x1 = x(a[1]), rx = (x1 - x0) / 2, ry = Math.min(rx * .8, base - 80); return `M${x0},${base} A${rx},${ry} 0 0 1 ${x1},${base}`; };
+  const arcs = [...A.arcs].sort((p, q) => (q[1] - q[0]) - (p[1] - p[0]));
+  const paths = svg.append("g").selectAll("path").data(arcs).join("path").attr("d", arcPath).attr("fill", "none")
+    .attr("stroke", a => seq(.3 + .7 * yr(a[2]))).attr("stroke-width", 1.1).attr("stroke-opacity", .6);
+  // Annotate the big reforms at the top of their widest arc
+  const NOTE = { "Ordonnance n° 2016-131 du 10 février 2016": "Contract law, 2016", "Loi n° 2006-728 du 23 juin 2006": "Succession, 2006",
+    "Ordonnance n° 2006-346 du 23 mars 2006": "Securities, 2006", "Loi n° 2007-308 du 5 mars 2007": "Protection of adults, 2007" };
+  const best = new Map();
+  A.acts.forEach((a, i) => { const lab = NOTE[a[1]] || (a[1].includes("Ordonnance n° 2021-1192") ? "Securities, 2021" : null);
+    if (lab && (!best.has(lab) || best.get(lab)[0][2] < a[2])) best.set(lab, [a, i]); });
+  const note = [...best.values()];
+  note.forEach(([a, i]) => { const mine = A.arcs.filter(r => r[3] === i); const idx = mine.flatMap(r => [r[0], r[1]]).sort((p, q) => p - q);
+    const mid = idx[Math.floor(idx.length / 2)];
+    const lab = NOTE[a[1]] || "Securities, 2021";
+    svg.append("circle").attr("cx", x(mid)).attr("cy", base).attr("r", 2.5).attr("fill", "var(--c2)");
+    a.mid = mid; a.lab = lab; });
+  const placed = note.map(([a]) => a).sort((p, q) => p.mid - q.mid);
+  placed.forEach((a, k) => { const ty = 20 + (k % 3) * 19, xx = x(a.mid), anchor = xx > W - 150 ? "end" : xx < 150 ? "start" : "middle";
+    svg.append("line").attr("x1", xx).attr("x2", xx).attr("y1", ty + 5).attr("y2", base).attr("stroke", "var(--c2)").attr("stroke-width", .8).attr("stroke-dasharray", "2 3");
+    svg.append("text").attr("class", "lbl halo").attr("x", anchor === "end" ? xx + 4 : anchor === "start" ? xx - 4 : xx).attr("y", ty).attr("text-anchor", anchor).text(`${a.lab} · ${a[2]} articles`); });
+  const hit = svg.append("g").selectAll("path").data(arcs).join("path").attr("d", arcPath).attr("fill", "none").attr("stroke", "transparent").attr("stroke-width", 6)
+    .on("pointermove", (ev, a) => { const act = A.acts[a[3]];
+      paths.attr("stroke-opacity", p => p[3] === a[3] ? 1 : .08).attr("stroke-width", p => p[3] === a[3] ? 1.8 : 1).attr("stroke", p => p[3] === a[3] ? "var(--c2)" : seq(.3 + .7 * yr(p[2])));
+      showTip(ev, `<b>${esc(act[1].replace(/^Code civil: [^(]*\(/, "").replace(/\)$/, ""))}</b><br>${act[2]} article${act[2] > 1 ? "s" : ""} changed · in force ${fmtDate(new Date(act[0] + "T12:00:00"))}<br><span class="m">art. ${A.labels[act[3]]} to art. ${A.labels[act[4]]}</span>`); })
+    .on("pointerleave", () => { paths.attr("stroke-opacity", .6).attr("stroke-width", 1.1).attr("stroke", a => seq(.3 + .7 * yr(a[2]))); hideTip(); });
+}
+</script>
+</body>
+</html>

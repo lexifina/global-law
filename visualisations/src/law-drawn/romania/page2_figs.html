@@ -1,0 +1,36 @@
+
+<figure id="const">
+  <div class="figtext"><span class="eyebrow">Constituția României · 1991 and the revision of 2003 (Legea nr. 429/2003, approved by referendum on 18–19 October 2003)</span>
+    <h2>The 2003 revision added Europe and NATO and renumbered most of the Constitution, but kept 67 articles word for word</h2>
+    <p>The inner ring holds the 152 articles of the 1991 Constitution and the outer ring the 156 of the revised text, both in order, clockwise from the top, and shaded by Title. A ribbon joins each 1991 article to the article that carries it on in 2003, matched by its text, and its colour says how much the words changed. <b>93 articles changed their number, yet 67 kept every word. Twelve articles are new, among them joining the European Union and NATO, the right to a healthy environment and European Parliament elections.</b> The two articles on mediation between the Chambers gave way to a new article 75 that fixes which Chamber debates a bill first. The article on the Constitutional Court's decisions was rewritten. In 1991 Parliament could override a ruling against a law by passing it again unchanged with two thirds of each Chamber; since 2003 it must bring the law into line, and provisions in force that the Court strikes down stop having effect 45 days after its decision is published.</p></div>
+  <div class="legend" id="lg-const"></div>
+  <div class="plot"><svg id="f-const" role="img" aria-label="Wheel joining the articles of the 1991 Constitution to those of the 2003 revised text"></svg></div>
+  <p class="src">The corpus's two versions of constitutie/1991, from its first commit and the commit for Legea nr. 429/2003. Articles are matched by the similarity of their text within twelve places of each other, then by identical headings. The 1991 text's spelling (î inside words, sînt) is brought to the 1993 standard before comparing, so a change of spelling alone does not count as rewording. Word for word means 99.5% or more of the text the same; lightly reworded 85% or more; rewritten under 50%.</p>
+</figure>
+
+<figure id="mo">
+  <div class="figtext"><span class="eyebrow">Monitorul Oficial, Partea I · issue numbers, 1991–2025</span>
+    <h2>The Official Gazette now prints five times as many issues a year as in 1991</h2>
+    <p>Partea I of the Monitorul Oficial, where every law, ordinance and decision is published, numbers its issues from 1 again each January. Each curve is one year: it starts at the centre on 1 January and winds clockwise through the year, moving outward as the issue numbers climb, so a year that printed more issues ends further out. <b>1991 ended at issue no. 267; 2024 reached no. 1,334, about five issues for every working day.</b> The curves bulge in 2004, the year Romania closed its EU accession negotiations, fall back after it joined in 2007, and swell again from 2015, with 2020 and 2024 the widest.</p></div>
+  <div class="legend" id="lg-mo"></div>
+  <div class="plot"><svg id="f-mo" role="img" aria-label="Nautilus of Official Gazette issue numbers through each year, 1991 to 2025"></svg></div>
+  <p class="src">The issue number and date that each act's entry in data/laws.csv cites ("publicată în Monitorul Oficial al României, Partea I, nr. … din …"), 5,710 dated issues in all. Each year's curve follows the highest number seen so far, so it is a lower bound on the issues printed: issues that published no act in the corpus are not seen, but the last issue of the year almost always is.</p>
+</figure>
+
+<figure id="mins">
+  <div class="figtext"><span class="eyebrow">Hotărâri de Guvern · 3,127 decisions that name a ministry</span>
+    <h2>When a government decision names a ministry, it is usually handing over land or buildings</h2>
+    <p>Each block is a ministry's portfolio, sized by the number of government decisions whose title names it, under any of the names the ministry has had. Inside, amber is decisions that transfer property, put it in a ministry's administration or change what belongs to the public domain; blue is everything else. <b>The interior ministry is named most, in 589 decisions, and 88% of them move property; defence follows the same pattern at 86%.</b> Transport and the economy ministry are the exceptions, with most of their decisions on works, concessions and companies. Across all portfolios, 60% of the decisions that name a ministry move land or buildings.</p></div>
+  <div class="legend" id="lg-mins"></div>
+  <div class="plot"><svg id="f-mins" role="img" aria-label="Treemap of ministries named in government decisions, split by whether the decision moves property"></svg></div>
+  <p class="src">Titles of government decisions (HG) in data/laws.csv that contain "Ministerul" or "Ministerului" followed by a ministry's name. Names are grouped into portfolios by their leading words, so Ministerul Transporturilor and Ministerul Transporturilor și Infrastructurii count together, and the interior ministry includes its inspectorates. A decision moves property when its title says transmitere, trecere, darea or aflat în administrare, domeniul public or privat, inventar or imobil. Most decisions date from 2007–2009 and 2014–2026, the years the corpus holds densely.</p>
+</figure>
+
+<figure id="codes">
+  <div class="figtext"><span class="eyebrow">Romania's codes · 19 codes and the Constitution, every version the corpus holds</span>
+    <h2>Romania kept its 19th-century codes into the 2010s, and each code that replaced one changes faster than its predecessor did</h2>
+    <p>Each line is a code, from its first version to its repeal or today, with a station at every new version; the dashed red bends join an old code to the one that replaced it. The years before 1990 are compressed into the shaded band. <b>The Civil Code of 1864 and the Civil Procedure Code of 1865 lasted until the new codes of 2011–2014. Their successors change faster: the Criminal Procedure Code 4.8 times a year against 2.3 for the 1968 code in its last years, and the Fiscal Code 13.7 times a year against 5.2 for the code of 2003.</b> The family code of 1953 ended in 2011 when the new Civil Code took family law into it.</p></div>
+  <div class="legend" id="lg-codes"></div>
+  <div class="plot"><svg id="f-codes" role="img" aria-label="Railway-style lines for each Romanian code, with a station for every version"></svg></div>
+  <p class="src">data/versions.json and data/acts.json: each code's version days and status. The portal lists few versions of the old codes before the 1990s, so for them the comparison in the text counts versions from 2000 to repeal (Civil Code of 1864: 0.5 a year; Civil Procedure Code of 1865: 1.7; Criminal Code of 1968: 1.4; Criminal Procedure Code of 1968: 2.3), while the rates at the right of each line run over the code's whole life. A line ends at the repeal day the corpus records; the Commercial Code of 1887 is still listed as in force, with its last version in 2013.</p>
+</figure>

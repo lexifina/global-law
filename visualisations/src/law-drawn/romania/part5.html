@@ -1,0 +1,31 @@
+
+<div class="divider"><span class="eyebrow">Part five · Romania against all of global law</span>
+  <h2 class="part">How big Romania's record is, the shape of its legal year, and which countries' calendars it resembles</h2>
+  <p class="lede">The global-law collection holds 683 corpora from 212 countries. These three pictures set Romania against all of them: by the size of its record, by the days of the year its law takes effect, and by which other countries keep a calendar most like it.</p></div>
+
+<figure id="pack">
+  <div class="figtext"><span class="eyebrow">global-law · 683 corpora, 656,193 commits</span>
+    <h2>Romania's is the second-largest record in global law, after France's</h2>
+    <p>Each small circle is one corpus, a country's national law or one of its regions, cities or courts, and its area is the number of commits, which is roughly the number of dated changes it records. Corpora sit inside a larger circle for their country. <b>Romania's single national corpus holds 38,108 commits, 5.8% of all of global law and more than the 188 smallest countries put together.</b> Only France's national corpus is larger. Australia counts more commits as a country only because its states and territories are separate corpora.</p></div>
+  <div class="legend" id="lg-pack"></div>
+  <div class="plot"><svg id="f-pack" role="img" aria-label="Circle packing of the 683 corpora in global law, sized by commits"></svg></div>
+  <p class="src">Commit counts of each corpus as cloned for this page from the global-law superproject's submodules, 2–3 November 2026. A commit is one version of one act in most corpora, but corpora differ in how finely they split their history, so the sizes compare records, not the volume of law.</p>
+</figure>
+
+<figure id="roses">
+  <div class="figtext"><span class="eyebrow">29 national corpora with 300 or more dated acts · the day of the year each act took effect</span>
+    <h2>Romanian law takes effect on any day of the year, more evenly than in any other country with enough dates to tell</h2>
+    <p>Each rose is one country's legal year. It has 366 spokes, one for each calendar day, starting with 1 January at the top and running clockwise; a spoke is longer the more of the country's acts took effect that day. The dashed ring is where every spoke would end if law took effect equally on every day. <b>Romania's spokes hug that ring: 2% of its acts start on 1 January and 6.5% on the 1st of a month.</b> Finland, the Netherlands, Sweden and Norway sit at the other end, with a third or more of their acts on 1 January and three quarters on the 1st of a month, so their roses are twelve spikes. Spain, Colombia, Brazil and France come next.</p></div>
+  <div class="legend" id="lg-roses"></div>
+  <div class="plot"><svg id="f-roses" role="img" aria-label="Small-multiple roses of the day of the year acts take effect, for 29 countries"></svg></div>
+  <p class="src">In-force days 1990–2026 from each national corpus's commit trailers, one act per author and in-force day as in global-law's analysis11.py. Evenness is the entropy of the 366-day distribution divided by its maximum. Small corpora look a little spikier by chance alone, but France, with 123,261 acts, is still less even than Romania with 26,254. Trinidad and Tobago is left out: 68% of its dates fall in December, a pattern no other corpus shows, which points to how its corpus is dated. Spoke length is on a log scale of each day's share against an even year's, so that ordinary days and 1 January both fit.</p>
+</figure>
+
+<figure id="tree">
+  <div class="figtext"><span class="eyebrow">29 legal years · which countries' calendars look alike</span>
+    <h2>By the days its law takes effect, Romania belongs with Spain and France, and furthest from Sweden</h2>
+    <p>This tree joins the countries of the previous chart by how alike their legal years are. Two countries whose acts take effect on the same days of the year in the same proportions join far out, near the rim; countries with little in common join only towards the centre. Romania's branch is drawn in red. <b>Romania's nearest calendars are Spain's (0.20) and France's (0.22), then Brazil's and Colombia's; its furthest are the Netherlands', Finland's and Sweden's, at 0.62 to 0.67.</b> Those three and Norway form their own family, the one that starts its law on 1 January and the 1st of each month.</p></div>
+  <div class="legend" id="lg-tree"></div>
+  <div class="plot"><svg id="f-tree" role="img" aria-label="Radial tree of 29 countries grouped by the similarity of their legal calendars"></svg></div>
+  <p class="src">Distance between two countries is the Jensen–Shannon distance between their shares of acts taking effect on each of the 366 days of the year (0 = the same distribution, 1 = no day in common). Countries are joined by average linkage. The distances describe calendars only, not the content of the law, and are noisier for the smaller corpora.</p>
+</figure>
