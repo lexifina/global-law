@@ -9,6 +9,8 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- Faster corpus trees for corpora with many corrections (audit row 26): `act_next` now reads one per-index map from each file and folder to the sorted in-force days of its ordinary commits, answered with bisect, instead of walking all files for every act; `file_index` gets the blobs of files a correction names but does not change from one `git cat-file --batch-check` (mode from the index, `git ls-tree` only as a fallback) instead of one `git ls-tree` per correction.
+- Malta (10,488 commits, 3,222 corrections): `corpus_tree('2015-01-01')` in a fresh process 147 s on this machine (382 s in the audit) -> 2.7 s; all four test dates in one process 158 s -> 3.2 s. Trees and 880 sampled `show` reads byte-identical for Malta and Czechia.
 - **Fixed (all). Laws due on a future branch are read from their day (audit row 1).** `law.py` and the MCP tools read
   main plus the commits pin..future_sha that `data/future-pins.tsv` records beside each pin (`tools/future_pins.py`
   writes it with the gitlinks), so 132 due changes in 84 corpora (5 linear, 79 forked) are no longer hidden. A forked

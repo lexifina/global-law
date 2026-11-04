@@ -341,16 +341,32 @@ def act_next(corpus: str, paths: list[str], after: str) -> str | None:
     ix = _index(corpus)
     key = ('act-next', f"{corpus}@{_at(ix)}:" + '\x1f'.join(paths))
     if key not in _CACHE:
-        rows = ix['rows']
-        days = set()
-        for rel, versions in ix['files'].items():
-            if any(rel == p or rel.startswith(p + '/') for p in paths):
-                for order, _, _ in versions:
-                    r = rows[order]
-                    if r[5] and r[4] not in ('correction', 'documentation'):
-                        days.add(r[5])
+        found = _act_days(corpus, ix)
+        days: set = set()
+        for p in paths:
+            days.update(found.get(p, ()))
         _CACHE[key] = sorted(days)
-    return next((d for d in _CACHE[key] if d > after), None)  # type: ignore[union-attr]
+    days = _CACHE[key]
+    import bisect
+    i = bisect.bisect_right(days, after)  # type: ignore[arg-type]
+    return days[i] if i < len(days) else None  # type: ignore[index,arg-type]
+
+
+def _act_days(corpus: str, ix: dict) -> dict[str, list[str]]:
+    """Every file, and every folder above it -> the sorted in-force days of the ordinary commits that touch it, read
+    from the index in one pass: act_next looks an act up here instead of walking every file for each act."""
+    key = ('act-days', f"{corpus}@{ix['pin']}")
+    if key not in _CACHE:
+        rows = ix['rows']
+        found: dict[str, set] = {}
+        for rel, versions in ix['files'].items():
+            days = {rows[o][5] for o, _, _ in versions if rows[o][5] and rows[o][4] not in ('correction', 'documentation')}
+            if days:
+                parts = rel.split('/')
+                for n in range(1, len(parts) + 1):
+                    found.setdefault('/'.join(parts[:n]), set()).update(days)
+        _CACHE[key] = {p: sorted(d) for p, d in found.items()}
+    return _CACHE[key]  # type: ignore[return-value]
 
 
 def correction_end(corpus: str, fix: dict, rel: str) -> str:
@@ -495,22 +511,54 @@ def file_index(corpus: str) -> tuple[dict, list]:
                 versions.append((end['day'], _end_commit(corpus, end)[1] + 0.5, None, versions[-1][3]))
     cwd = corpus_dir(corpus)
     overlays = []
+    wanted = {order: [f for f in r[9]['files'] if f not in touched.get(order, {})] for order, r in enumerate(rows) if r[9]}
+    at = _named_at(ix, cwd, wanted)
     for order, r in enumerate(rows):
         fix = r[9]
         if not fix:
             continue
         files = dict(touched.get(order, {}))
-        named = [f for f in fix['files'] if f not in files]
-        if named:  # named but unchanged: their text at the correction commit is the tip's
-            for line in git('ls-tree', r[0], '--', *named, cwd=cwd).splitlines():
-                meta, path = line.split('\t', 1)
-                mode, _, blob = meta.split()
-                files[_unquote(path)] = (blob, mode)
+        files.update(at.get(order, {}))  # named but unchanged: their text at the correction commit is the tip's
         if fix['files']:
             files = {p: v for p, v in files.items() if p in fix['files']}
         overlays.append((fix, order, files))
     _CACHE[key] = (index, overlays)
     return index, overlays
+
+
+def _named_at(ix: dict, cwd: Path, wanted: dict[int, list[str]]) -> dict[int, dict[str, tuple]]:
+    """row -> {path: (blob, mode)} for the paths a correction names but does not change: each as `git ls-tree` lists
+    it at that commit. One `git cat-file --batch-check` gives every blob; the mode is the file's own last version in
+    the index when that version has the same blob. Anything else (a folder, a path moved or withdrawn, a version the
+    index does not hold) is asked of `git ls-tree`, one commit at a time, as before."""
+    rows = ix['rows']
+    queries = [(order, f) for order, named in wanted.items() for f in named]
+    out: dict[int, dict[str, tuple]] = {}
+    if not queries:
+        return out
+    odd = set(ix.get('moves', {})) | set(ix.get('moves', {}).values()) | set(ix.get('withdrawn', {}))
+    raw = subprocess.run(['git', 'cat-file', '--batch-check=%(objectname) %(objecttype)'], cwd=cwd, capture_output=True,
+                         input=''.join(f'{rows[o][0]}:{f}\n' for o, f in queries).encode('utf-8'))
+    answers = raw.stdout.decode('utf-8', 'replace').splitlines() if not raw.returncode else []
+    slow: dict[int, list[str]] = {}
+    for n, (order, f) in enumerate(queries):
+        answer = answers[n] if len(answers) == len(queries) else ''
+        if answer == f'{rows[order][0]}:{f} missing':
+            continue  # not in the tree at that commit: ls-tree lists nothing
+        sha, _, kind = answer.partition(' ')
+        last = None
+        if kind == 'blob' and len(sha) == 40 and f not in odd:
+            last = next((v for v in reversed(ix['files'].get(f, [])) if v[0] < order), None)
+        if last is not None and last[1] == sha:
+            out.setdefault(order, {})[f] = (sha, last[2])
+        else:
+            slow.setdefault(order, []).append(f)
+    for order, named in slow.items():
+        for line in git('ls-tree', rows[order][0], '--', *named, cwd=cwd).splitlines():
+            meta, path = line.split('\t', 1)
+            mode, _, blob = meta.split()
+            out.setdefault(order, {})[_unquote(path)] = (blob, mode)
+    return out
 
 
 _TREES: dict = {'dir': None}
