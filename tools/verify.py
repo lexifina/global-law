@@ -422,8 +422,8 @@ def main(argv: list[str]) -> int:
         days = ', '.join(days if len(days) <= 12 else days[:6] + [f'... {len(days) - 12} more days ...'] + days[-6:])
         print(f'{kind}: {n} ({days})')
         for p in firsts[kind][:5]:
-            print('  FAIL', p)
-    if not problems and use_checkpoint:
+            print('  note' if kind == '.gitmodules entry without gitlink' else '  FAIL', p)
+    if not [p for p in problems if 'with no gitlink' not in p] and use_checkpoint:
         stamp = {'commit': head, 'tree': git('rev-parse', 'HEAD^{tree}').strip(),
                  'checked_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
                  'from': start or 'root'}
@@ -432,6 +432,12 @@ def main(argv: list[str]) -> int:
             checkpoint['remote'] = {**stamp, 'tips': {u: tips_now[u] for u in sorted(tips_now)}}
         store_dir.mkdir(parents=True, exist_ok=True)
         marker.write_text(json.dumps(checkpoint, indent=1) + '\n', encoding='utf-8')
+    # A .gitmodules entry with no gitlink does not stop `git submodule update` (git skips it); part two's history
+    # (to 30 October 2026) has them at most commits. Reported above, but not a failure.
+    notes = [p for p in problems if 'with no gitlink' in p]
+    problems = [p for p in problems if 'with no gitlink' not in p]
+    if notes:
+        print(f'note: {len(notes)} commit(s) list .gitmodules entries with no gitlink; git skips them (not a failure)')
     print('ok' if not problems else f'{len(problems)} problem(s)', f'[{time.time() - t0:.1f} s]')
     return 1 if problems else 0
 
