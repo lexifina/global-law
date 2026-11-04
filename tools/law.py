@@ -1548,7 +1548,8 @@ def norm(path: str) -> str:
 
 # The trailers corpora use for a law's other dates. The German keys are ASCII since its 2026-10-28 rebuild; the
 # newer corpora use Adopted, Proclaimed and Published (corpus.json `dates.other_trailers`).
-ENACTED = ('Enacted', 'Made', 'Beschlossen', 'Adopted', 'Dated', 'Signed')
+ENACTED = ('Enacted', 'Made', 'Beschlossen', 'Adopted', 'Dated', 'Signed', 'Promulgated', 'Issued', 'Assented')
+# Promulgated (Japan), Issued (Sweden), Assented (Australia): the act's own date under the name its source uses
 PUBLISHED = ('Published', 'Proclaimed', 'Printed-in', 'Verkuendet', 'Verkündet')
 ISO_DAY = re.compile(r'\d{4}-\d{2}-\d{2}')
 
