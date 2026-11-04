@@ -9,6 +9,19 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (spain/national/acts). Spain's repealed norms end in every answer (#8).** spain-law 9ad5878 adds
+  `data/acts.json` from BOE's own status for each of its 8,821 norms: 1,559 repealed with BOE's repeal date, 418
+  expired (vigencia agotada, no date), 16 annulled, 6,828 in force. RD 557/2011 art. 124 now ends on 2025-05-20.
+- **Changed (all). A corpus corrects a version's date without rewriting its history.** A maintainer commit with
+  `Redates: <commit> <YYYY-MM-DD>` gives the version that day; `Redates: <commit> no-date` says the source gives none
+  (text as of its recorded day); with `Retroactive: yes; <provision>` the date stands as the law's own (INDEX_VERSION 7).
+- **Fixed. Doubtful dates checked against their sources.** Kyrgyzstan (14feb22): two mistyped years
+  (0025-03-28 → 2025-03-28, 0202-02-03 → 2025-02-03), one wrong publication year, one real retroactive law. Spain
+  (9ad5878): six BOE date typos or note dates corrected, three real backdated starts. Switzerland (77205c9): two
+  retroactive provisions. New Jersey (cd27dba): all 1,145 versions are dated by Internet Archive capture, now marked as
+  text as of that day. Turkey and the US Code have nothing more than a year early. Left flagged, the date right but
+  another field wrong: Spain 1e1f763 (credited to Ley 14/2000, written by Ley 46/1998) and Switzerland d732e26
+  (Adopted date of another part of AS 2025 422).
 - **Fixed (all). An act a corpus records as repealed stays repealed in every answer (#8).** spain-law records a
   whole-law repeal in the law's `no.md` and `normas.tsv` and leaves each article file in place (1,991 of 8,821 norms),
   so `show` and `read_law` gave RD 557/2011 art. 124 as in force after its repeal. `law.py` now reads the corpus's

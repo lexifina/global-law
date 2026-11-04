@@ -1514,7 +1514,7 @@ def credit(author: str, kind: str) -> str:
     return CREDIT.get(kind, '{}').format(author)
 
 
-INDEX_VERSION = 6  # raise when what the index keeps changes: old indexes are then rebuilt
+INDEX_VERSION = 7  # raise when what the index keeps changes: old indexes are then rebuilt
 
 
 def _index_version() -> str:
@@ -1588,6 +1588,31 @@ def _derive(info: dict, commit: str, author: str, when: str, subject: str, block
     return (commit, author, when, subject, kind, in_force, raw, enacted, published, fix), unknown
 
 
+REDATES = re.compile(r'^Redates:\s*([0-9a-f]{7,40})\s+(\d{4}-\d{2}-\d{2}|no-date)\s*$', re.M)
+
+
+def _redate(data: dict, rows: list, block: str) -> None:
+    """A dated version's date, corrected by a later commit (corpus standard; an append-only corpus cannot change the
+    commit itself). One `Redates: <commit> <YYYY-MM-DD>` trailer per version gives the day it took force;
+    `Redates: <commit> no-date` says the source gives none, so the version is text as of its recorded day. With
+    `Retroactive: yes; <provision>` the versions took force before their act was made, as that provision says."""
+    retro = trailer_lines(block).get('Retroactive', '').strip().lower().startswith('yes')
+    for target, day in REDATES.findall(block):
+        at = data['pos'].get(target) if len(target) == 40 else \
+            next((i for c, i in data['pos'].items() if c.startswith(target)), None)
+        if at is None:
+            continue
+        r = rows[at]
+        if day == 'no-date':
+            if r[4] == 'law':
+                rows[at] = r[:4] + ('baseline',) + r[5:]
+        else:
+            rows[at] = r[:5] + (day,) + r[6:]
+        data.setdefault('redated', {})[r[0]] = (r[5], day)
+        if retro:
+            data.setdefault('retroactive', set()).add(r[0])
+
+
 def _extend(corpus: str, cwd: Path, data: dict, revs: str) -> None:
     """Add the commits in `revs` to a corpus index, oldest first: one `git log --raw` for every commit and file."""
     info = corpus_info(corpus)
@@ -1616,6 +1641,8 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str) -> None:
                     next((i for c, i in data['pos'].items() if c.startswith(target[0])), None)
                 if at is not None and not t.get('Law'):
                     row = (row[0], rows[at][1]) + row[2:]
+        if author == MAINTAINER and 'Redates:' in block:
+            _redate(data, rows, block)
         data['pos'][commit] = len(rows)
         if row[5] is None and row[4] != 'documentation':
             legacy = legacy if legacy is not None else legacy_dates(corpus)

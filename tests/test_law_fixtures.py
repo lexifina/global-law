@@ -494,6 +494,51 @@ class WholeLawRepealsAndDoubtfulDates(unittest.TestCase):
         self.assertIn('more than a year before its act was made', err)
 
 
+class RedatedVersions(unittest.TestCase):
+    """An append-only corpus corrects a version's date with a later commit (Redates: <commit> <day> | no-date)."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus('cc/national/acts')
+        a.commit('Act 1 of 2010', {'s1.md': 'one\n', 's2.md': 'two\n', 's3.md': 'three\n'}, In_force='2010-01-01',
+                 Kind='law', Enacted='2009-12-01')
+        typo = a.commit('Act 2 of 2015', {'s1.md': 'one amended\n'}, In_force='0015-03-01', Kind='law',
+                        Enacted='2015-02-01')
+        retro = a.commit('Act 3 of 2016', {'s2.md': 'two amended\n'}, In_force='2014-01-01', Kind='law',
+                         Enacted='2016-05-01')
+        read = a.commit('Act 4 of 2017', {'s3.md': 'three as read\n'}, In_force='2017-06-01', Kind='law')
+        a.commit('Lexifina', {}, Kind='documentation', Redates=[f'{typo} 2015-03-01', f'{read} no-date'],
+                 Reason='the source gives 2015-03-01; the 2017 text is the day it was read')
+        a.commit('Lexifina', {}, Kind='documentation', Redates=f'{retro} 2014-01-01',
+                 Retroactive='yes; Act 3 of 2016, s. 9 (effect from 1 January 2014)')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_a_mistyped_date_is_corrected(self):
+        out, err, code = self.t.cli('show', '2015-02-28', 'cc/national/acts/s1.md')
+        self.assertEqual(out, 'one\n', err)
+        out, err, code = self.t.cli('show', '2015-03-01', 'cc/national/acts/s1.md')
+        self.assertEqual(out, 'one amended\n', err)
+        out, err, code = self.t.cli('log', 'cc/national/acts/s1.md')
+        self.assertIn('2015-03-01', out)
+        self.assertNotIn('0015-03-01', out)
+        self.assertNotIn('date doubtful', out)
+
+    def test_a_retroactive_date_stands_unflagged(self):
+        out, err, code = self.t.cli('show', '2014-06-01', 'cc/national/acts/s2.md')
+        self.assertEqual(out, 'two amended\n', err)
+        out, err, code = self.t.cli('log', 'cc/national/acts/s2.md')
+        self.assertNotIn('date doubtful', out)
+
+    def test_no_date_makes_a_version_text_as_read(self):
+        out, err, code = self.t.cli('log', 'cc/national/acts/s3.md')
+        self.assertIn('version of', out)
+
+
 class Checkouts(unittest.TestCase):
     """Checkouts that are not what the tree pins."""
 
