@@ -1,7 +1,7 @@
 # Questions and answers
 
-The questions people asked most when this repository was posted, answered from what the repository holds on
-4 November 2026. [README.md](README.md) says how to use it, [MCP.md](MCP.md) how to use it from an AI model,
+The questions people asked most when this repository was posted. Figures are as of 4 November 2026; `manifest.json`
+and `python3 tools/countries.py` give the current ones. [README.md](README.md) says how to use it, [MCP.md](MCP.md) how to use it from an AI model,
 [REPRODUCE.md](REPRODUCE.md) how it is made, and [LICENSE.md](LICENSE.md) what you may do with it.
 
 - [What it is](#what-it-is)
@@ -133,8 +133,9 @@ Not in general. The Grundgesetz record carries the vote and who introduced each 
 
 ### How much is here?
 
-710 corpora (bodies of law: a country's national law, a state's, a city's, or one court's or agency's) from 208
-countries and territories, about 306,000 acts and more than 650,000 commits. They are not all alike, and each says
+On 4 November 2026, 710 corpora (bodies of law: a country's national law, a state's, a city's, or one court's or
+agency's) from 208 countries and territories, about 306,000 acts and more than 650,000 commits; `manifest.json` has
+today's figures. They are not all alike, and each says
 which kind it is in `manifest.json` (`history`):
 
 | Kind | Corpora | What it holds |
@@ -192,6 +193,14 @@ Use it to find, compare and trace text, then check the official source before re
 page it was taken from (`Source:`), many link an archived copy of that page as fetched (`Consolidated:`), and each
 country's `SOURCES.md` and `REPRODUCE.md` say how its record was obtained. Consolidated texts on official sites are
 often themselves not the authoritative version, which a record built from them inherits.
+
+### How do I cite it?
+
+Cite the official text: every answer from the tools names the publisher's page and a pinpoint citation. To record the
+exact version you read, give the repository and commit as well, for example `lexifina/romania-law@56122abd49ce`,
+`lege/2015/227/art-004.md` (article 4 of the Fiscal Code). On GitHub, press `y` on a file to get its permanent link:
+<https://github.com/lexifina/romania-law/blob/56122abd49cecb30312d69d341ab1ff895e0e4b6/lege/2015/227/art-004.md>.
+Commits are never rewritten, so the link keeps showing the same text.
 
 ### How is it checked?
 
@@ -263,6 +272,13 @@ history. `countries.py add --no-files` fetches a history without writing its fil
 Git does not need it. Every clone is a full copy that works offline and can be pushed anywhere else; the tools and
 the MCP server read only the local clone.
 
+### Can I download it as JSON, CSV or Parquet?
+
+Not as a separate dataset yet: git is the format. The text is Markdown, one file per provision, and the dates, laws and
+sources are in each commit's trailers. `manifest.json` describes every corpus as JSON, and many corpora also ship
+tables in `data/` (`laws.csv`, `versions.json`, `commits.csv`; Romania's `acts.json`). There is no Parquet file or
+Hugging Face dataset yet. The MCP server's answers are structured JSON, so it can serve as the export.
+
 ### Is there an index, so a program does not have to read everything?
 
 Yes. `manifest.json` lists every corpus with its publisher, span, kind and the trailer holding its dates, and each
@@ -283,7 +299,8 @@ python3 tools/law.py blame 2022-07-01 united-states/federal/usc/title-11/1182.md
 python3 tools/law.py diff 2022-05-01 2022-07-01 united-states/federal/usc/title-11/1182.md
 ```
 
-You need git and Python 3.9 or newer, nothing else, and it works offline. Each country's repository is also ordinary
+You need git and Python 3.9 or newer, nothing else, and it works offline. On Windows, type `py` or `python` where
+these examples say `python3`. Each country's repository is also ordinary
 git, so `git log`, `git blame` and `git grep` work on it directly; use `law.py` when the date matters, because it
 reads the `In-force:` lines rather than git's dates. [README.md](README.md) lists every command.
 

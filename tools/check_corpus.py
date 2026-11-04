@@ -1,10 +1,11 @@
 """The checks every country law repo must pass before global-law pins it. Standard library only.
 
-  python scripts/global-law/check_corpus.py <repo folder or URL> [--until 2026-10-28] [--pin <sha>]
+  python tools/check_corpus.py <repo folder or URL> [--until 2026-10-28] [--pin <sha>]
 
 Country builders run it on their own repo before pushing; global-law's builder runs the same checks on every repo it
 finds and leaves out (with the reason, in manifest.json `not_pinned`) any repo that fails. Fatal problems keep a repo
-out; warnings are reported but do not. The rules are those in git_for_law.md ("corpus.json standard").
+out; warnings are reported but do not. The fields it checks are those in MCP.md ("How a corpus describes itself").
+Needs only git and Python: a URL is cloned bare into a temporary folder.
 """
 from __future__ import annotations
 
@@ -271,19 +272,21 @@ def previous_pins(url: str = 'https://github.com/lexifina/global-law.git') -> di
                 continue
             old = c['url'].rstrip('/').removesuffix('.git').rsplit('/', 1)[1]
             pins[old] = links[c['path']]
-            # A renamed repo (swiss-law → switzerland-law) still answers at its old URL; key the pin by its current
-            # name too, or the renamed repo looks unpinned and its append-only check is silently skipped.
-            now = current_name(old)
-            if now and now != old:
-                pins[now] = links[c['path']]
             pins['path:' + c['path']] = links[c['path']]
         return pins
 
 
-def current_name(name: str, org: str = 'lexifina') -> str | None:
-    """The repo's name today, following GitHub's rename redirect (gh CLI), or None if it cannot be read."""
-    done = subprocess.run(['gh', 'api', f'repos/{org}/{name}', '--jq', '.name'], capture_output=True, encoding='utf-8')
-    return done.stdout.strip() or None if done.returncode == 0 else None
+def pin_held_by(repo: Path, pins: dict[str, str]) -> str | None:
+    """The global-law pin this repo holds, whatever the repo is called now. A repo renamed since global-law recorded
+    its URL (swiss-law → switzerland-law) is found by the pinned commit it contains, so its append-only check is not
+    skipped. Only git, no network: the commits are already in the clone."""
+    shas = sorted({v for k, v in pins.items() if k.startswith('path:')})
+    if not shas:
+        return None
+    done = subprocess.run(['git', 'cat-file', '--batch-check'], cwd=repo, input='\n'.join(shas) + '\n',
+                          capture_output=True, encoding='utf-8', errors='replace')
+    held = [line.split()[0] for line in done.stdout.splitlines() if line.endswith(' commit') or ' commit ' in line]
+    return held[0] if len(held) == 1 else None
 
 
 def main() -> None:
@@ -306,7 +309,8 @@ def main() -> None:
         repo = Path(target).resolve()
         url = git('config', '--get', 'remote.origin.url', cwd=repo).stdout.strip()
         name = url.rstrip('/').removesuffix('.git').rsplit('/', 1)[-1] if url else repo.name
-    pin = a.pin or previous_pins().get(name)
+    pins = {} if a.pin else previous_pins()
+    pin = a.pin or pins.get(name) or pin_held_by(repo, pins)
     fatal, warn = problems(repo, until, pin)
     for w in warn:
         print(f'warning: {w}')
