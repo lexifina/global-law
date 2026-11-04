@@ -1,0 +1,23 @@
+name: Missing jurisdiction or law
+description: A country, region, city or body of law that is not here, or is thin.
+labels: ["coverage"]
+body:
+  - type: input
+    id: jurisdiction
+    attributes:
+      label: Jurisdiction
+      description: For example "Quebec" or "Austria, all federal law".
+    validations:
+      required: true
+  - type: input
+    id: publisher
+    attributes:
+      label: Official publisher
+      description: The official site, API or bulk download that publishes its law.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Terms of use, past versions available, or access only from inside the country.

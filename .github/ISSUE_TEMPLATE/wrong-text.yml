@@ -1,0 +1,44 @@
+name: Wrong text or date
+description: A provision reads differently from its official source on a date.
+labels: ["correction"]
+body:
+  - type: input
+    id: path
+    attributes:
+      label: Path
+      description: The provision's path in the tree, for example romania/national/acts/lege/2015/227/art-4.md
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Date
+      description: The day (YYYY-MM-DD) on which the text is wrong.
+    validations:
+      required: true
+  - type: input
+    id: official
+    attributes:
+      label: Official page
+      description: The publisher's page with the right text. An archived copy (web.archive.org) helps too.
+    validations:
+      required: true
+  - type: textarea
+    id: difference
+    attributes:
+      label: What differs
+      description: The words as the official page has them, and as the tree has them.
+    validations:
+      required: true
+  - type: textarea
+    id: copy
+    attributes:
+      label: A copy, if the text is not online
+      description: Drag a scan or PDF of the printed gazette into this box, or link to it, and say where the copy is from. Don't add it to the repository.
+  - type: checkboxes
+    id: checked
+    attributes:
+      label: Checked
+      options:
+        - label: I compared the text with the official page myself.
+          required: true
