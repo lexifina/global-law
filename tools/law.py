@@ -530,7 +530,7 @@ def file_index(corpus: str) -> tuple[dict, list]:
                 end, cut = got
                 mode = versions[-1][3]
                 # After the end, only a version after_end lets re-enact the file (history() applies the same rule).
-                versions[:] = [v for v in versions if after_end(corpus, end, cut, v[0], v[1], v[2]) is None]
+                versions[:] = [v for v in versions if after_end(corpus, end, cut, v[0], v[1], v[2], path) is None]
                 versions.append((cut[0], cut[1], None, mode))
     cwd = corpus_dir(corpus)
     overlays = []
@@ -1698,7 +1698,7 @@ def _history(corpus: str, rel: str) -> list[dict]:
                     h['until'] = cap
                 kept.append(h)
                 continue
-            why = after_end(corpus, end, (end['day'], order + 0.5), h['in_force'], h['order'], h.get('blob', ''))
+            why = after_end(corpus, end, (end['day'], order + 0.5), h['in_force'], h['order'], h.get('blob', ''), rel)
             (dropped.append(dict(h, why=why)) if why else kept.append(h))
         out = kept
         out.append({'commit': commit, 'law': end['by'] or f"{end['how']} (data/acts.json)", 'in_force': end['day'],
@@ -1770,7 +1770,8 @@ def _names_law(by: str, law: str) -> bool:
     return (len(law) >= 6 and law in by) or (len(by) >= 6 and by in law)
 
 
-def after_end(corpus: str, end: dict, cut: tuple, in_force: str, order: int, blob: str | None) -> str | None:
+def after_end(corpus: str, end: dict, cut: tuple, in_force: str, order: int, blob: str | None,
+              rel: str | None = None) -> str | None:
     """The act-end rule, which history(), file_index (and so every tree), ended_rows (laws, timeline) and
     correction_cap share: for a version of a file whose act data/acts.json ends (act_end), why it does not take
     force, or None when it does. A version at or before the end (`cut`: the end day and the end commit's place that
@@ -1779,7 +1780,9 @@ def after_end(corpus: str, end: dict, cut: tuple, in_force: str, order: int, blo
         version with no enactment date, amended an act that no longer exists;
       - its law is not the law that ended the act (`repealed_by` ...): Spain's repealing laws restate the repeal in
         the repealed act's folder, sometimes after the day acts.json gives;
-      - its text is not a repeal or annulment note (is_repeal_note: "Norma derogada ...", "(Derogada)").
+      - its text is not a repeal or annulment note (is_repeal_note: "Norma derogada ...", "(Derogada)");
+      - given the file (`rel`), it is not the text in force at the end with only quoted repeal notes added
+        (adds_only_repeal_note: BOE's "> Se derogan las reglas ..." for a later partial repeal of an ended act).
     A real later amendment to an ended act (Ley 9/2015 amending the repealed corporate-tax law for past tax periods)
     still re-enacts its file, and file_notes says so. Text is read only for a version that passes the first two."""
     if (in_force, order) <= cut:
@@ -1792,7 +1795,49 @@ def after_end(corpus: str, end: dict, cut: tuple, in_force: str, order: int, blo
         return f'enacted {made}; the law that ended the act'
     if blob and is_repeal_note(_blob_text(corpus, blob)):
         return f'enacted {made}; a repeal note, not a re-enactment'
+    if blob and rel:
+        before = _pre_end_blob(corpus, rel, cut)
+        if before and before != blob and adds_only_repeal_note(_blob_text(corpus, before), _blob_text(corpus, blob)):
+            return f'enacted {made}; the ended text with a repeal note added, not a re-enactment'
     return None
+
+
+# One added line of a quoted change note that records a repeal or annulment: BOE's "> Se derogan las reglas ...",
+# "> Queda derogado ...", "> Derogado ...", "> Se anula ...".
+ADDED_REPEAL_NOTE = re.compile(r'^>\s*(?:se\s+(?:derogan?|anulan?)\b|quedan?\s+(?:derogad|anulad|sin\s+efecto)'
+                               r'|(?:derogad|anulad)[oa]s?\b)', re.I)
+
+
+def adds_only_repeal_note(before: str | None, after: str | None) -> bool:
+    """Whether `after` is `before` with nothing changed but added quoted repeal-note lines (ADDED_REPEAL_NOTE) and
+    blank lines: no line removed or rewritten, at least one note added. Conservative: any other difference is a change
+    to the law."""
+    if before is None or after is None:
+        return False
+    import difflib
+    a, b = before.splitlines(), after.splitlines()
+    added = []
+    for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
+        if tag == 'equal':
+            continue
+        if tag != 'insert' and any(line.strip() for line in a[i1:i2]):
+            return False
+        added += [line for line in b[j1:j2] if line.strip()]
+    return bool(added) and all(ADDED_REPEAL_NOTE.match(line.strip()) for line in added)
+
+
+def _pre_end_blob(corpus: str, rel: str, cut: tuple) -> str | None:
+    """The blob of a file's last ordinary version at or before its act's end (`cut`), or None."""
+    ix = _index(corpus)
+    rows = ix['rows']
+    best = None
+    for o, blob, _ in ix['files'].get(rel, []):
+        r = rows[o]
+        if r[9] or not r[5] or r[4] == 'documentation' or (r[5], o) > cut:
+            continue
+        if best is None or (r[5], o) > best[0]:
+            best = ((r[5], o), blob)
+    return best[1] if best else None
 
 
 def _blob_text(corpus: str, blob: str) -> str | None:
@@ -1820,7 +1865,7 @@ def reenacted_on(corpus: str, rel: str) -> str | None:
     rows = ix['rows']
     days = [rows[o][5] for o, blob, _ in ix['files'].get(rel, [])
             if not rows[o][9] and rows[o][5] and rows[o][4] != 'documentation' and (rows[o][5], o) > cut
-            and after_end(corpus, end, cut, rows[o][5], o, blob) is None]
+            and after_end(corpus, end, cut, rows[o][5], o, blob, rel) is None]
     return min(days, default=None)
 
 
@@ -1865,7 +1910,7 @@ def ended_rows(corpus: str) -> frozenset:
                 if r[9] or not r[5] or r[4] == 'documentation':
                     continue
                 touched[order] = touched.get(order, 0) + 1
-                if got and after_end(corpus, got[0], got[1], r[5], order, blob):
+                if got and after_end(corpus, got[0], got[1], r[5], order, blob, rel):
                     dropped[order] = dropped.get(order, 0) + 1
         _CACHE[key] = frozenset(o for o, n in dropped.items() if n == touched[o])
     return _CACHE[key]  # type: ignore[return-value]

@@ -1569,6 +1569,12 @@ def t_applies_to_case(args: dict) -> tuple[str, dict]:
     for h in hist:
         if h.get('kind') == 'baseline':
             continue
+        if h.get('ends'):
+            # The act's end (data/acts.json: repealed, annulled or expired), not a change with a scope: no text of
+            # the provision is in force from that day, so it reaches no case commenced on or after it.
+            rows.append({**h, 'what': None, 'verdict': f"{h['ends']}: no text in force from this day", 'scope': [],
+                         'assumptions': []})
+            continue
         body = commit_body(corpus, h['commit'])
         groups = applies_groups(body)
         any_scope = any_scope or bool(groups)
@@ -1608,9 +1614,19 @@ def t_applies_to_case(args: dict) -> tuple[str, dict]:
     if unrecorded:
         lines.append(f"{len(unrecorded)} later change(s) record no reach to cases already pending: "
                      + '; '.join(f"{r['law']} ({r['in_force']})" for r in unrecorded) + '. ' + (default_reach(corpus) or 'Reach to pending cases is not recorded; check the amending law.'))
-    if not later and not gap:
+    ended = [r for r in later if r.get('ends')]
+    for r in ended:
+        lines.append(f"Ended: {path} was {r['ends']} on {r['in_force']} by {r['law']} (the record's data/acts.json). No text "
+                     f"of it is in force from {r['in_force']}, and it does not apply to cases commenced on or after that day. "
+                     f"Whether its text still governs this case, commenced on {commenced}, is a question for the transition "
+                     'rules of the law that ended it; the record does not decide it.')
+    gone = max((h for h in hist if h['in_force'] <= commenced), key=lambda h: (h['in_force'], h['order']), default=None)
+    if gone and gone.get('ends'):
+        lines.append(f"Not in force when the case was commenced: {path} was {gone['ends']} on {gone['in_force']} by "
+                     f"{gone['law']} (the record's data/acts.json), so it does not apply to a case commenced on {commenced}.")
+    elif not later and not gap:
         lines.append('No change took effect after the case was commenced; the text in force on the commencement date applies.')
-    if not any_scope:
+    if not any_scope and not (gone and gone.get('ends')) and not (later and all(r.get('ends') for r in later)):
         read = [r for r in later if 'read from the record' in r['verdict']]
         if read:
             lines.append('Scope here is read from the words of the record (the change notes), not from structured data, '
@@ -1628,7 +1644,7 @@ def t_applies_to_case(args: dict) -> tuple[str, dict]:
     ahead = []
     section = Path(path).stem.lstrip('0')
     for h in history_of(path):
-        if h['in_force'] <= date:
+        if h['in_force'] <= date or h.get('ends'):
             continue
         body = commit_body(corpus, h['commit'])
         groups = [g['conditions'] for g in applies_groups(body)] or [c for c in (conditions_from_words(w) for w in scope_in_words(body, section)) if c]
@@ -1657,13 +1673,17 @@ def t_applies_to_case(args: dict) -> tuple[str, dict]:
     for r in later:
         if r['verdict'].startswith('does not apply'):
             continue  # the case keeps the text it had
+        if r.get('ends'):
+            periods.append({'from': r['in_force'], 'until': None, 'text_as_of': None, 'by': r['law'], 'ends': r['ends']})
+            continue
         periods.append({'from': r['in_force'], 'until': None, 'text_as_of': r['in_force'], 'by': r['law'],
                         'certain': r['verdict'].startswith('applies'), 'verdict': r['verdict']})
     for i in range(len(periods) - 1):
         periods[i]['until'] = periods[i + 1]['from']
     periods = [p for p in periods if p['until'] is None or p['until'] > p['from']]
     if len(periods) > 1:
-        moves = [f"on {p['from']} by {p['by']} ({'reaches the case' + (' by the record' + chr(39) + 's words' if 'words' in p.get('verdict', '') else '') if p.get('certain') else 'scope for pending cases not recorded'})"
+        moves = [f"on {p['from']} by {p['by']} ({p['ends']}: no text after it)" if p.get('ends') else
+                 f"on {p['from']} by {p['by']} ({'reaches the case' + (' by the record' + chr(39) + 's words' if 'words' in p.get('verdict', '') else '') if p.get('certain') else 'scope for pending cases not recorded'})"
                  for p in periods[1:] if p['by']]
         at = 2 if gap else 1
         lines.insert(at, (f"Bottom line: the text governing this case changed {len(moves)} time(s) in the record after it was commenced"
@@ -1675,6 +1695,12 @@ def t_applies_to_case(args: dict) -> tuple[str, dict]:
             span = f"{p['from']} to {p['until']} (exclusive)" if p['until'] else f"from {p['from']}"
             if p.get('not_in_record'):
                 lines.insert(i, f"  - {span}: not in the record, which starts on {gap['in_force']}; the text, and any change to it, are unknown here.")
+                continue
+            if p.get('ends'):
+                p['text'] = None
+                lines.insert(i, f"  - {span}: no text: {p['ends']} on {p['from']} by {p['by']}; the provision does not "
+                                'apply to cases commenced in this period.')
+                prev = None
                 continue
             if p.get('record_starts'):
                 p['text'] = run_law(law.text_on, p['text_as_of'], path)
@@ -1698,7 +1724,8 @@ def t_applies_to_case(args: dict) -> tuple[str, dict]:
             prev = p['text_as_of']
     # The text the record settles for the case: the last period whose reach is recorded. Later periods whose reach is
     # not recorded are listed, with the default rule, but not decided here.
-    settled = [p for p in periods if (p['by'] is None or p.get('certain')) and not p.get('not_in_record')]
+    settled = [p for p in periods if (p['by'] is None or p.get('certain')) and not p.get('not_in_record')
+               and not p.get('ends')]
     text_date = settled[-1]['text_as_of'] if settled else text_date
     text = run_law(law.text_on, text_date, path) or ''
     # Each period's full text is long (a §362 runs to 20 KB, and Claude Code gives the model the structured answer

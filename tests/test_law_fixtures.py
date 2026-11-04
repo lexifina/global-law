@@ -1363,6 +1363,13 @@ class ActEndRule(unittest.TestCase):
                  Enacted='2017-02-01')
         a.commit('Act 40 of 2018', {'rep/s3.md': '# s3\nthree, amended for past years\n'}, In_force='2018-03-01',
                  Kind='law', Enacted='2018-02-01')
+        # A provision of the ended act whose only later version is its old text with BOE's quoted partial-repeal note
+        # added (Decreto 28-11-1933 art. 3 and RD 161/1997): the note restates an end, it does not re-enact.
+        a.commit('Act 3 of 2012', {'rep/s4.md': '# s4\nfour\n\n> Se modifica por Act 3 of 2012.\n'},
+                 In_force='2012-06-01', Kind='law', Enacted='2012-05-01')
+        a.commit('Act 50 of 2019', {'rep/s4.md': '# s4\nfour\n\n> Se derogan las reglas de este artículo, según establece '
+                                                 'Act 50 of 2019.\n\n> Se modifica por Act 3 of 2012.\n'},
+                 In_force='2019-03-01', Kind='law', Enacted='2019-02-01')
         # A correction whose range runs past its act's end, and one that starts after it.
         a.commit('Gazette 2', {'cor/s2.md': 'cor two, corrected\n'}, In_force='2012-01-01', Kind='correction',
                  Corrects='cor 2012-01-01..2025-12-31', Files='cor/s2.md', Reason='misprint')
@@ -1409,6 +1416,24 @@ class ActEndRule(unittest.TestCase):
         self.assertEqual(out, '# s3\nthree, amended for past years\n', err)
         self.assertIn('is read as bringing it back into force', err)
         self.assertEqual([n for n in self.tree_names('2026-01-01') if n.startswith('rep/')], ['rep/s3.md'])
+
+    def test_a_repeal_note_added_to_the_ended_text_does_not_reenact(self):
+        out, err, code = self.t.cli('show', '2026-01-01', 'aa/national/acts/rep/s4.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertIn('2019-03-01 Act 50 of 2019 (enacted 2019-02-01; the ended text with a repeal note added, not a '
+                      're-enactment)', err)
+        out, err, code = self.t.cli('show', '2014-12-31', 'aa/national/acts/rep/s4.md')
+        self.assertEqual(out, '# s4\nfour\n\n> Se modifica por Act 3 of 2012.\n', err)
+        law = self.t.law()
+        before = '# s4\nfour\n\n> Se modifica por Act 3 of 2012.\n'
+        self.assertTrue(law.adds_only_repeal_note(before, '# s4\nfour\n\n> Queda derogado el párrafo segundo.\n\n'
+                                                          '> Se modifica por Act 3 of 2012.\n'))
+        for after in (before,  # nothing added
+                      '# s4\nfour, amended\n\n> Se derogan las reglas ...\n\n> Se modifica por Act 3 of 2012.\n',
+                      '# s4\nfour\n\n> Se modifica por Act 60 of 2020.\n\n> Se modifica por Act 3 of 2012.\n',
+                      '# s4\nfour\nSe derogan las reglas ...\n\n> Se modifica por Act 3 of 2012.\n',  # not a quoted note
+                      '# s4\n\n> Se derogan las reglas ...\n\n> Se modifica por Act 3 of 2012.\n'):  # text removed
+            self.assertFalse(law.adds_only_repeal_note(before, after), after)
 
     def test_repeal_notes_are_recognised(self):
         law = self.t.law()
