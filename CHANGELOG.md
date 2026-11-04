@@ -9,6 +9,10 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Changed (all). REPRODUCE no longer offers the archived build as a command.** tools/archive/build-2026-10-29.py
+  needs files outside this repository and today's pins, and could not reproduce the archived hashes anyway; it is kept
+  for reference. In its place a check that needs no rebuild: fetch 0e10db05b17, compare its 107 pins with the table,
+  and compare the script's blob. "Three repositories" was a template left over; it is 107.
 - **Changed (all). Plain git is exact only for corpora in in-force order.** The FAQ said `git show` and `git blame`
   give the text on a date and the law behind each line; where commits are appended out of in-force order or corrected
   later (Canada, Romania, Malta, partly Czechia) they do not, and `tools/law.py` does. The FAQ now says so and gives a
