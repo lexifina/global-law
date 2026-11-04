@@ -9,6 +9,12 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (france/national/acts). France's early dates checked against LEGI.** france-law 100b71a: 811 versions in
+  force before their act was signed are confirmed by the act's own effect clause ("prend effet au", "à compter du";
+  49 hand-checked, all right) and marked `Retroactive`; 13 dates corrected (7 mistyped years, 4 dates copied from
+  another text, 2 from the act's publication). LEGI's placeholder signing date 2999-01-01 (39 texts) is no longer
+  read as a signing date. 50 versions stay flagged unchecked, and 2 articles of Décret 63-766 are filed under
+  Décret 94-969 (a credit, not a date, to correct).
 - **Fixed (spain/national/acts). Spain's repealed norms end in every answer (#8).** spain-law 9ad5878 adds
   `data/acts.json` from BOE's own status for each of its 8,821 norms: 1,559 repealed with BOE's repeal date, 418
   expired (vigencia agotada, no date), 16 annulled, 6,828 in force. RD 557/2011 art. 124 now ends on 2025-05-20.

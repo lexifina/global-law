@@ -1239,6 +1239,8 @@ def _history(corpus: str, rel: str) -> list[dict]:
         if h.get('ends'):
             continue
         made = h['enacted'][:10] if h.get('enacted') and ISO_DAY.fullmatch(h['enacted'][:10]) else None
+        if made and made > day('today'):  # a placeholder (LEGI's 2999-01-01 for a text it holds no signing date for)
+            made = None
         if h['in_force'] < earliest:
             h['date_doubtful'] = (f"dated {h['in_force']}, before anything this record can hold "
                                   f"({earliest}): a mistyped date")
