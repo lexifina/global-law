@@ -24,6 +24,8 @@ With --remote, also:
     now (before 4 November 2026 this asked only that some branch or tag held it);
   - every pin that moved, moved forward: the new commit descends from the old one;
   - no repository's main was rewritten since this store last fetched it, or since the checkpoint's check.
+    A pin set in the range that its main no longer holds, but that tools/verify-known.tsv lists by tree commit and
+    corpus commit (with why), is counted and named as known, not as a failure; a pin at HEAD must always be held.
 Exits 1 if anything fails, and names it. A clean run records its last commit (and, with --remote, each repository's
 main) in .git/global-law-verify/verified.json, so the next run checks only what came after. The checkpoint is this
 clone's own record, not something anyone else need trust: --full or --since checks again from any point. This
@@ -287,6 +289,22 @@ class Store:
         return held, backward
 
 
+def known_unheld(path: Path) -> dict[tuple[str, str], str]:
+    """(tree commit, corpus commit) -> why, from tools/verify-known.tsv: pins set in the history that their
+    repository's main no longer holds, each looked at and explained (REPRODUCE.md). Full hashes only, so an entry
+    never covers any other pin."""
+    known = {}
+    try:
+        lines = path.read_text(encoding='utf-8').splitlines()
+    except OSError:
+        return known
+    for line in lines:
+        cols = line.split('\t')
+        if len(cols) >= 4 and re.fullmatch(r'[0-9a-f]{40}', cols[0]) and re.fullmatch(r'[0-9a-f]{40}', cols[2]):
+            known[(cols[0], cols[2])] = cols[3]
+    return known
+
+
 def first_parent_base(n: int) -> str | None:
     """The commit before the last n on the first-parent line (None: the history is shorter)."""
     line = git('rev-list', '--first-parent', f'--max-count={n + 1}', 'HEAD').split()
@@ -427,9 +445,14 @@ def main(argv: list[str]) -> int:
                 continue
             if sha not in reach.get(url, (set(), set()))[0]:
                 problems.append(f'HEAD: {path} pins {sha[:10]}, which {url} main does not reach (no longer holds)')
+        known = known_unheld(ROOT / 'tools' / 'verify-known.tsv')
+        listed = []
         for c, path, url, sha in set_in_range:
             if url not in failed and sha not in reach.get(url, (set(), set()))[0]:
-                problems.append(f'{c[:10]}: pins {sha[:10]} in {url}, which no longer holds it on main')
+                if (c, sha) in known:
+                    listed.append(f'{c[:10]}: {path} pins {sha[:10]}: {known[(c, sha)]}')
+                else:
+                    problems.append(f'{c[:10]}: pins {sha[:10]} in {url}, which no longer holds it on main')
         for c, url, old, new in moves:
             held, backward = reach.get(url, (set(), set()))
             if url not in failed and old in held and new in held and (old, new) in backward:
@@ -437,6 +460,11 @@ def main(argv: list[str]) -> int:
         print(f'{len(tips_now)} repositories in the store, {store.fetched - len(failed)} fetched [{t_fetch:.1f} s]; '
               f'{len(head_links)} pins at HEAD and {len(set_in_range)} pins set in the range checked against main '
               f'[{time.time() - t1:.1f} s]')
+        if listed:
+            print(f'known: {len(listed)} pin(s) set in the range are not on their main, each listed in '
+                  f'tools/verify-known.tsv with why (REPRODUCE.md); not a failure')
+            for k in listed:
+                print('  known', k)
     # A summary by kind and by day, then the first of each kind: old damage and new breakage read apart.
     kinds = Counter()
     by_day = Counter()

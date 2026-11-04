@@ -1,0 +1,14 @@
+# Pins set in this history that their repository's main no longer holds, each looked at by hand (REPRODUCE.md,
+# "What cannot be checked"). tools/verify.py --remote names these as known instead of failing on them.
+# Columns (tab-separated): tree commit, corpus path, corpus commit, why. Full hashes only; a pin at HEAD is never
+# listed here. Checked 4 November 2026: each commit could still be fetched from GitHub by its hash; nothing keeps it.
+91e4db5dff58add145569e997378ba598fd2c20b	brazil/national/acts	99eb99c88c0ead0880ebb3a277614d2827ee8e2c	2 November; brazil-law main was later rebuilt without it; 761bdbb949 (pinned by d672410a2e, on main) holds the same law files
+04d84c137be1a2f2ccf89d4e88e5f79d608680ce	uruguay/national/acts	da799fa0e2caaeab611a6cbb487966adbeb03b47	2 November; uruguay-law main was later rebuilt without it; its law files are unchanged in 91222c4cd2 (pinned by b015c4ca9d, on main), which adds 32
+f03e878bc8d7798ff1c91a431c53aa77426eecd0	norway/national/acts	70ce377cf641f7ff27414470eddcca94962406fb	2 November; norway-law main was later rebuilt without it; its law files are unchanged in e6b2241e6f (pinned by 11f3145ec2, on main), which adds 87
+481a8e15fa3b0dcaf935525baef321c626dc147e	norway/national/acts	3c3d3eebd419476785ad46311eff3e46f677234b	2 November; norway-law main was later rebuilt without it; e6b2241e6f (pinned by 11f3145ec2, on main) holds the same law files
+9d59081e4568bedfaf8f7bde59e258c78af8a0af	romania/national/acts	05a36d50fb4fc9246a7cfeabad2e4888dc859b45	2 November; romania-law main was later rebuilt without it; its law files are unchanged in f22df37eb0 (pinned by 11f3145ec2, on main), which adds 506
+d672410a2ed4fefa9d87e54926e0c2b8b126145a	greece/national/acts	6987df6970747c6f9fab51a7d66618c8e3ea11a3	2 November; greece-law main was later rebuilt without it; 882319db3d (pinned by 7bb82d0b51, on main) holds the same law files
+d672410a2ed4fefa9d87e54926e0c2b8b126145a	uruguay/national/acts	67c336c40d2563090b17b5c9ec1a0e67641316c6	2 November; uruguay-law main was later rebuilt without it; its law files are unchanged in 91222c4cd2 (pinned by b015c4ca9d, on main), which adds 32
+d7e828ff19539102ceb539910f20175ce347c382	belgium/national/acts	e02c7a9fcf7961c13cebed30e160fd535f47d098	2 November; belgium-law main was later rebuilt without it; its law files are unchanged in 5c588043a7 (pinned by a9d52b55e9, on main), which adds 339
+1a7b01f24404d202b1cbb0e4b7b7f6f210a0b3e3	uruguay/national/acts	f4e9ff04e6628590c9b3af28df8f88ea01d38b32	2 November; uruguay-law main was later rebuilt without it; 91222c4cd2 (pinned by b015c4ca9d, on main) holds the same law files
+536ab620b33d7d355d10943eef16f4cf2e487b15	norway/national/acts	8772a62ba9a8141a2acf10ba3f79f8ad34875296	2 November; norway-law main was later rebuilt without it; same tree as 6f96cfcec2 on main

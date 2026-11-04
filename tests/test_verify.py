@@ -1,5 +1,6 @@
 """tools/verify.py on small trees built here, in a temporary folder: a shallow clone and its --depth 1 update,
-`--since HEAD`, and a truncated checkpoint.
+`--since HEAD`, a truncated checkpoint, and --remote against a local corpus with a pin listed in
+tools/verify-known.tsv.
 
   python -m unittest tests.test_verify -v
 """
@@ -35,13 +36,13 @@ class Tree:
         path.mkdir(parents=True)
         git('init', '-q', '-b', 'main', cwd=path)
         self.pins: dict[str, str] = {}
+        self.url = lambda p: f'https://example.org/{p.replace("/", "-")}'
 
     def commit(self, pins: dict[str, str], gitmodules: dict[str, str] | None = None) -> str:
         """Set pins (path -> 40-hex commit) and write .gitmodules for gitmodules (default: every pin)."""
         self.pins.update(pins)
         entries = self.pins if gitmodules is None else gitmodules
-        text = ''.join(f'[submodule "{p}"]\n\tpath = {p}\n\turl = https://example.org/{p.replace("/", "-")}\n'
-                       for p in sorted(entries))
+        text = ''.join(f'[submodule "{p}"]\n\tpath = {p}\n\turl = {self.url(p)}\n' for p in sorted(entries))
         (self.path / '.gitmodules').write_text(text, encoding='utf-8', newline='\n')
         git('add', '.gitmodules', cwd=self.path)
         for p, sha in pins.items():
@@ -180,3 +181,61 @@ class Checkpoint(VerifyCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class KnownUnheld(unittest.TestCase):
+    """--remote fails a pin set in the range that its corpus's main does not hold, unless tools/verify-known.tsv
+    lists that tree commit and corpus commit; a listing never covers another pair."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp(prefix='verify-'))
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        corpus = self.tmp / 'corpus'
+        corpus.mkdir()
+        git('init', '-q', '-b', 'main', cwd=corpus)
+        sha = {}
+        for name in ('c1', 'c2'):
+            (corpus / 'f').write_text(name, encoding='utf-8')
+            git('add', 'f', cwd=corpus)
+            git('commit', '-q', '-m', name, cwd=corpus)
+            sha[name] = git('rev-parse', 'HEAD', cwd=corpus)
+        git('checkout', '-q', '-b', 'side', sha['c1'], cwd=corpus)
+        (corpus / 'f').write_text('o1', encoding='utf-8')
+        git('commit', '-q', '-am', 'o1', cwd=corpus)
+        sha['o1'] = git('rev-parse', 'HEAD', cwd=corpus)
+        git('checkout', '-q', 'main', cwd=corpus)
+        self.sha = sha
+        self.tree = Tree(self.tmp / 'tree')
+        self.tree.url = lambda p: corpus.as_uri()
+        self.tree.commit({'k/acts': sha['c1']})
+        self.orphan_at = self.tree.commit({'k/acts': sha['o1']})  # o1 is on no main
+        self.tree.commit({'k/acts': sha['c2']})
+
+    def known(self, *rows: tuple[str, str, str]) -> None:
+        tools = self.tree.path / 'tools'
+        tools.mkdir(exist_ok=True)
+        text = '# test\n' + ''.join(f'{c}\tk/acts\t{s}\t{why}\n' for c, s, why in rows)
+        (tools / 'verify-known.tsv').write_text(text, encoding='utf-8', newline='\n')
+
+    def run_remote(self) -> tuple[int, str]:
+        return verify(self.tree.path, '--full', '--remote', '--no-checkpoint')
+
+    def test_unlisted_pin_fails(self):
+        code, out = self.run_remote()
+        self.assertEqual(code, 1, out)
+        self.assertIn(f'{self.orphan_at[:10]}: pins {self.sha["o1"][:10]}', out)
+        self.assertIn('no longer holds it on main', out)
+
+    def test_listed_pin_is_known_not_failed(self):
+        self.known((self.orphan_at, self.sha['o1'], 'replaced the same day'))
+        code, out = self.run_remote()
+        self.assertEqual(code, 0, out)
+        self.assertIn('known: 1 pin(s)', out)
+        self.assertIn(f'known {self.orphan_at[:10]}: k/acts pins {self.sha["o1"][:10]}: replaced the same day', out)
+
+    def test_a_listing_covers_only_its_own_pair(self):
+        head = git('rev-parse', 'HEAD', cwd=self.tree.path)
+        self.known((head, self.sha['o1'], 'wrong tree commit'), (self.orphan_at[:10], self.sha['o1'], 'short hash'))
+        code, out = self.run_remote()
+        self.assertEqual(code, 1, out)
+        self.assertNotIn('known:', out)
