@@ -153,6 +153,11 @@ def manifest() -> dict:
     return _CACHE[key]  # type: ignore[return-value]
 
 
+# Every corpus in the tree, whatever a reader serves: the MCP server replaces manifest() with the corpora it serves, and
+# names (_countries, _country_names) mean the same however few that is ("georgia" is the country, served or not).
+_whole_manifest = manifest
+
+
 def with_unlisted(m: dict) -> dict:
     """manifest.json with every corpus the tree pins but does not list. Since 2 November 2026 the tree only adds
     submodules and moves pins, and manifest.json is no longer rewritten, so most corpora are in .gitmodules alone
@@ -909,7 +914,7 @@ def _under(path: str, prefix: str) -> bool:
 def _countries() -> set[str]:
     key = ('countries', _head())
     if key not in _CACHE:
-        _CACHE[key] = {c['path'].split('/')[0] for c in manifest()['corpora']} | {str(c.get('iso_path') or '').split('/')[0] for c in manifest()['corpora'] if c.get('iso_path')}
+        _CACHE[key] = {c['path'].split('/')[0] for c in _whole_manifest()['corpora']} | {str(c.get('iso_path') or '').split('/')[0] for c in _whole_manifest()['corpora'] if c.get('iso_path')}
     return _CACHE[key]  # type: ignore[return-value]
 
 
@@ -936,7 +941,7 @@ def _country_names() -> dict[str, str]:
     key = ('country-names', _head())
     if key not in _CACHE:
         out: dict[str, str] = {}
-        for c in manifest()['corpora']:
+        for c in _whole_manifest()['corpora']:
             folder = c['path'].split('/')[0]
             out.setdefault(folder, folder)
             code = str(c.get('code') or '').split('-')[0].lower()

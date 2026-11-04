@@ -25,6 +25,7 @@ import time
 import traceback
 import types
 import unicodedata
+import warnings
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 from pathlib import Path
@@ -416,26 +417,134 @@ def page(text: str, args: dict) -> tuple[str, dict, str]:
 
 MAX_BOUND = 20  # largest count in a bounded repetition, {m,n}
 MAX_BOUNDS_TOTAL = 40  # sum of the counts of every bounded repetition in one pattern
-MAX_QUANTIFIERS = 4  # repetition operators in one pattern
+MAX_QUANTIFIERS = 10  # repetition operators in one pattern
+
+
+class _Shape:
+    """What safe_regex needs to know of a piece of a pattern: whether it can match nothing, whether it holds a
+    repetition, the characters it can start with (None: a class, '.', or not known), whether it holds an alternation
+    whose branches can start alike, and how many repetition operators it holds."""
+    def __init__(self, nullable=False, repeats=False, first=frozenset(), overlap=False, count=0):
+        self.nullable, self.repeats, self.first, self.overlap, self.count = nullable, repeats, first, overlap, count
+
+
+_COUNT = re.compile(r'\{(\d*)(,?)(\d*)\}')
+_NESTED = ('That regular expression repeats a group that holds a quantifier, an alternation whose branches can start '
+           'alike, or a part that can match nothing, or uses a back-reference; simplify it.')
+
+
+def _regex_shape(pattern: str) -> _Shape:
+    """The pattern read as git's extended regular expressions read it (escapes, bracket expressions with [:space:]
+    classes, groups, |, *, +, ?, {m,n}), refusing the shapes that make a regex engine backtrack without end: a
+    repeated group (or a repeated repetition) holding a repetition or a part that can match nothing ((a+)+, (a?){30},
+    a**), a repeated alternation whose branches can start with the same character ((a|ab)*, (\\w|\\w)*), an optional
+    group that can match nothing and holds a repetition ((a?)?), and back-references. Simple repetitions are cheap:
+    "([Ss]ections?|[Pp]aragraphs?|ss?\\.) ?12" holds four and is linear."""
+    i = 0
+
+    def seq(items: list[_Shape]) -> _Shape:
+        out, first, open_ = _Shape(nullable=True), set(), True
+        for s in items:
+            if open_:
+                first = None if first is None or s.first is None else first | s.first
+                open_ = s.nullable
+            out.repeats |= s.repeats
+            out.overlap |= s.overlap
+            out.count += s.count
+        out.nullable = open_
+        out.first = None if first is None else frozenset(first)
+        return out
+
+    def group() -> _Shape:
+        nonlocal i
+        branches: list[list[_Shape]] = [[]]
+        while i < len(pattern) and pattern[i] != ')':
+            ch = pattern[i]
+            if ch == '|':
+                branches.append([])
+                i += 1
+                continue
+            if ch in '*+?' and branches[-1]:
+                atom = None  # a repetition of the item before: read below
+            elif ch == '(':
+                i += 1
+                if pattern.startswith('?', i):
+                    raise UserError('Git reads extended regular expressions, which have no (?...) groups.')
+                atom = group()
+                if i >= len(pattern):
+                    raise UserError('Not a valid regular expression: a ( is not closed.')
+                i += 1
+            elif ch == '[':
+                j = i + 1 + pattern.startswith('^', i + 1)
+                j += pattern.startswith(']', j)
+                while j < len(pattern) and pattern[j] != ']':
+                    end = pattern.find(pattern[j + 1] + ']', j + 2) if pattern[j] == '[' and pattern[j + 1:j + 2] in (':', '=', '.') else -1
+                    j = end + 2 if end >= 0 else j + 1
+                atom, i = _Shape(first=None), j + 1
+            elif ch == '\\':
+                nxt = pattern[i + 1:i + 2]
+                if nxt in '123456789' and nxt:
+                    raise UserError(_NESTED)
+                atom = _Shape(first=None if nxt.isalpha() or not nxt else frozenset(nxt.lower()))
+                if nxt in ('b', 'B', '<', '>', '`', "'"):
+                    atom = _Shape(nullable=True)  # a word boundary or edge: matches no character
+                i += 2
+            elif ch in '^$':
+                atom, i = _Shape(nullable=True), i + 1
+            elif ch == '.':
+                atom, i = _Shape(first=None), i + 1
+            else:
+                atom, i = _Shape(first=frozenset(ch.lower())), i + 1
+            if atom is not None:
+                branches[-1].append(atom)
+            while i < len(pattern):  # repetitions of the item just read
+                count = _COUNT.match(pattern, i) if pattern[i] == '{' else None
+                if pattern[i] in '*+?':
+                    low, high = (0 if pattern[i] != '+' else 1), (1 if pattern[i] == '?' else None)
+                    i += 1
+                elif count:
+                    low = int(count.group(1) or 0)
+                    high = (int(count.group(3)) if count.group(3) else None) if count.group(2) else low
+                    i = count.end()
+                else:
+                    break
+                inner = branches[-1].pop()
+                many = high is None or high > 1
+                if (many and (inner.repeats or inner.nullable or inner.overlap)) or (inner.nullable and inner.repeats):
+                    raise UserError(_NESTED)
+                branches[-1].append(_Shape(nullable=low == 0 or inner.nullable, repeats=True, first=inner.first,
+                                           overlap=inner.overlap, count=inner.count + 1))
+        shapes = [seq(b) for b in branches]
+        out = _Shape(nullable=any(s.nullable for s in shapes), repeats=any(s.repeats for s in shapes),
+                     overlap=any(s.overlap for s in shapes), count=sum(s.count for s in shapes))
+        firsts = [s.first for s in shapes]
+        out.first = None if None in firsts else frozenset().union(*firsts)
+        if len(shapes) > 1 and (None in firsts or out.nullable or sum(map(len, firsts)) > len(out.first)):
+            out.overlap = True  # branches that can start alike: harmless once, exponential when repeated
+        return out
+
+    shape = group()
+    if i < len(pattern):
+        raise UserError('Not a valid regular expression: a ) has no (.')
+    return shape
 
 
 def safe_regex(pattern: str) -> str:
     """A regular expression from a model or a corpus's manifest. Only git runs these (never Python's backtracking
     engine), and each tool call has a deadline. Shapes that cost exponential time or memory are refused:
-    - a quantified group that holds a quantifier, an alternation or another group ((a+)+, (a|a)*, (a?){30}, ((a))+);
+    - a repeated group that holds a repetition or can match nothing, or a repeated alternation whose branches can
+      start alike ((a+)+, (a?){30}, (a|ab)*, (.|.)*), as _regex_shape reads the pattern; an optional part that holds a
+      repetition (([0-9.]+)?) is fine;
     - back-references;
     - large bounded repetitions. POSIX ERE compiles {m,n} into n copies of the automaton, and git grep builds one per
       thread: .{1,32000}x drove git past 8 GB of memory in 15 seconds. Bounds stay at 20 or less, 40 in all, with at
-      most 4 repetition operators.
+      most 10 repetition operators.
     Never reproduce such a pattern against the whole tree to test this guard: on 28 October 2026 two orphaned
     `git grep ... .{1,32000}x` processes over the 55-corpus tree took 156 GB and 55 GB and starved every build on the
     machine. Test the guard on the pattern string alone (it raises before any git process starts)."""
     if len(pattern) > 200:
         raise UserError('The regular expression is longer than 200 characters.')
-    if (re.search(r'\([^()]*[+*?}|][^()]*\)[+*?{]', pattern) or re.search(r'\([^)]*\([^)]*\)[^)]*\)[+*?{]', pattern)
-            or re.search(r'\\[1-9]', pattern)):
-        raise UserError('That regular expression repeats a group that holds a quantifier, an alternation or another '
-                        'group, or uses a back-reference; simplify it.')
+    shape = _regex_shape(pattern)
     # Escapes and bracket expressions hold literal characters, not operators.
     bare = re.sub(r'\[(?:\^?\])?[^\]]*\]', 'x', re.sub(r'\\.', 'x', pattern))
     if re.search(r'\{(?!\d+(?:,\d*)?\}|,\d+\})', bare):  # git refuses "x{1, 1000}" that Python reads as text
@@ -444,10 +553,12 @@ def safe_regex(pattern: str) -> str:
     if any(n > MAX_BOUND for n in bounds) or sum(bounds) > MAX_BOUNDS_TOTAL:
         raise UserError(f'Counted repetitions ({{m,n}}) may go up to {MAX_BOUND}, and {MAX_BOUNDS_TOTAL} in all: large '
                         'counts make the search use a great deal of memory. Use * or + instead.')
-    if len(re.findall(r'[+*?]|\{\d*(?:,\d*)?\}', bare)) > MAX_QUANTIFIERS:
+    if shape.count > MAX_QUANTIFIERS:
         raise UserError(f'At most {MAX_QUANTIFIERS} repetition operators (*, +, ?, {{m,n}}) in one regular expression.')
     try:
-        re.compile(pattern)
+        with warnings.catch_warnings():  # [[:space:]] is git's; Python warns of a nested set
+            warnings.simplefilter('ignore', FutureWarning)
+            re.compile(pattern)
     except re.error as e:
         raise UserError(f'Not a valid regular expression: {e}') from None
     return pattern
@@ -2583,7 +2694,10 @@ def grep_counts(cwd: Path, pattern: str, pairs: list) -> dict[tuple[str, str], i
 def citation_from_manifest(corpus: str, rel: str) -> tuple[str, str] | None:
     """A corpus's own citation rule from manifest.json (field "citation" in its corpus.json), when it declares one:
     {"file": regex with groups (scope, number), "cites": extended regex with {n} for the number}. Example for the US Code:
-    {"file": "(title-[0-9]+[a-z]?)/([0-9]+[a-zA-Z0-9-]*)\\\\.md", "cites": "(section|§) ?{n}([^0-9a-zA-Z-]|$)"}."""
+    {"file": "(title-[0-9]+[a-z]?)/([0-9]+[a-zA-Z0-9-]*)\\\\.md", "cites": "(section|§) ?{n}([^0-9a-zA-Z-]|$)"}.
+    Named groups fill {name} in "cites", and a group named n is the number. Czech acts are cited by number and year
+    ("89/2012 Sb."), from any year: {"file": "(sb)/(?P<year>[0-9]{4})/(?P<n>[0-9a-z]+)\\\\.md",
+    "cites": "(^|[^0-9]){n}/{year} Sb\\\\."}."""
     entry = next((c for c in law.manifest()['corpora'] if c['path'] == corpus), {})
     rule = entry.get('citation') if isinstance(entry.get('citation'), dict) else None
     if not rule or not isinstance(rule.get('file'), str) or not isinstance(rule.get('cites'), str):
@@ -2592,7 +2706,9 @@ def citation_from_manifest(corpus: str, rel: str) -> tuple[str, str] | None:
         m = re.fullmatch(rule['file'], rel)
         if not m or len(m.groups()) < 2:
             return None
-        pattern = rule['cites'].replace('{n}', re.escape(m.group(2)))
+        pattern = rule['cites']
+        for name, value in {**m.groupdict(), 'n': m.group('n' if 'n' in m.re.groupindex else 2)}.items():
+            pattern = pattern.replace('{' + name + '}', re.escape(value or ''))
         # The folder searched is the path to the end of group 1, from the corpus root: a rule whose group 1 is only
         # the last folder ("sb/([0-9]{4})/...", "acts/([a-z0-9-]+)/...") then searches that folder, not none.
         return rel[:m.end(1)], safe_regex(pattern)

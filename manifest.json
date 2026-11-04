@@ -14707,8 +14707,9 @@
       "has_future_branch": true,
       "tool": "tools/czlaw.py",
       "citation": {
-        "file": "sb/([0-9]{4})/([0-9a-z]+)\\.md",
-        "cites": "{n}/[0-9]{4} Sb\\."
+        "file": "(sb)/(?P<year>[0-9]{4})/(?P<n>[0-9a-z]+)\\.md",
+        "cites": "(^|[^0-9]){n}/{year} Sb\\.",
+        "note": "an act is cited by its number and year (\"zákona č. 89/2012 Sb.\"), from any year of the Sbírka"
       },
       "scope": {
         "trailer": "Applies",

@@ -930,12 +930,53 @@ class ScopeRules(unittest.TestCase):
         # POSIX ERE compiles {m,n} into n copies of the automaton, per git grep thread: .{1,32000}x took git past
         # 8 GB in 15 s. These shapes are refused before git sees them; ordinary patterns still pass.
         for bad in ('.{1,32000}x', 'a{1,32767}', '[a-z]{0,255}[a-z]{0,255}[a-z]{0,255}[a-z]{0,255}', '(a?){30}a{30}',
-                    '(.?){200}', '(a?)?(a?)?', 'a{20}b{20}c{1}', 'a+b+c+d+e+', '.{,32000}', '[{]{1000}',
+                    '(.?){200}', '(a?)?(a?)?', 'a{20}b{20}c{1}', 'a+b+c+d+e+f+g+h+i+j+k+', '.{,32000}', '[{]{1000}',
+                    'a**', '(a|ab)*', '(x|)*', '(^|a)+', '([ab]|c)*', '(A|a)+',
                     'x{1, 1000}'):  # the last: Python reads it as text, git refuses it
             with self.assertRaises(self.m.UserError, msg=bad):
                 self.m.safe_regex(bad)
-        for good in ('7,500,000', 'COVID-?19', r'Art\. ?16a', 'debtor[s]? in possession', '[0-9]{4}', r'\{literal\}', 'x{2,5}y'):
+        for good in ('7,500,000', 'COVID-?19', r'Art\. ?16a', 'debtor[s]? in possession', '[0-9]{4}', r'\{literal\}', 'x{2,5}y',
+                     'a+b+c+d+e+', '(a|b)*', '((ab))+', r'(\.[0-9.]+)?', '[[:space:]]+x', '[]a]+', r'\(? ?12 ?\)?'):
             self.assertEqual(self.m.safe_regex(good), good)
+
+    def test_declared_citation_rules_pass_the_regex_check(self):
+        # Six corpora's own rules were refused by a count of operators (at most 4) and by checks that read \( and
+        # [^...] as groups; each is linear (simple repetitions, unrepeated alternations) and finds real citations.
+        import json
+        import re
+        rules = {c['path']: c['citation'] for c in json.loads((ROOT / 'manifest.json').read_text(encoding='utf-8'))['corpora']
+                 if isinstance(c.get('citation'), dict)}
+        real = {'canada/federal/acts': ('ristmas recess, as defined in section 12 of the Federal Courts Rules', 'section 120'),
+                'canada/northwest-territories/acts': ('provided under subsection 12(2) and a certified copy', 'section 12.5'),
+                'canada/newfoundland-and-labrador/acts': ('notwithstanding paragraph 12(i), means the minister', 'ss. 112'),
+                'azerbaijan/national/acts': ('Qanunu ilə 12-ci maddənin', '112-ci maddənin'),
+                'georgia/national/acts': ('ამ კანონის მე-12 მუხლის პირველი პუნქტისა', 'მე-112 მუხლის'),
+                'saudi-arabia/national/acts': ('على الفقرة (2) من المادة (12) من نظام', 'المادة (112)')}
+        for corpus, (hit, miss) in real.items():
+            if corpus not in rules:
+                continue
+            pattern = self.m.safe_regex(rules[corpus]['cites'].replace('{n}', '12'))
+            rx = re.compile(pattern.replace('[[:space:]]', r'\s').replace('[[:alnum:]]', r'\w'), re.I)
+            self.assertTrue(rx.search(hit), (corpus, hit))
+            self.assertFalse(rx.search(miss), (corpus, miss))
+        if 'china/national/acts' in rules:  # a description, not a regular expression: still refused
+            with self.assertRaises(self.m.UserError):
+                self.m.safe_regex(rules['china/national/acts']['cites'].replace('{n}', '12'))
+
+    def test_czech_citations_need_the_number_and_the_year(self):
+        # czechia-law's rule matched 262/1996 Sb. for 262/2006 Sb., and searched only the act's own year folder.
+        import re
+        from unittest import mock
+        rule = {'file': r'(sb)/(?P<year>[0-9]{4})/(?P<n>[0-9a-z]+)\.md', 'cites': r'(^|[^0-9]){n}/{year} Sb\.'}
+        entry = {'corpora': [{'path': 'czechia/national/acts', 'citation': rule}]}
+        with mock.patch.object(self.m.law, 'manifest', lambda: entry):
+            folder, pattern = self.m.citation_pattern('sb/2006/262.md', 'czechia/national/acts')
+        self.assertEqual(folder, 'sb')
+        rx = re.compile(pattern, re.I)
+        self.assertTrue(rx.search('podle § 5 zákona č. 262/2006 Sb., zákoník práce'))
+        self.assertTrue(rx.search('262/2006 Sb.'))
+        for miss in ('Vyhláška č. 262/1996 Sb., kterou se mění', 'zákona č. 1262/2006 Sb.', 'č. 262/2006 Sb'):
+            self.assertFalse(rx.search(miss), miss)
 
     def test_results_fit(self):
         import json
@@ -1616,9 +1657,9 @@ class UnreadableCheckouts(unittest.TestCase):
     def tearDownClass(cls):
         cls.t.close()
 
-    def calls(self, *calls) -> list[dict]:
+    def calls(self, *calls, env: dict | None = None) -> list[dict]:
         done = subprocess.run([sys.executable, '-X', 'utf8', '-c', self.CALL], cwd=self.t.root, input=json.dumps(calls),
-                              capture_output=True, encoding='utf-8', timeout=300)
+                              capture_output=True, encoding='utf-8', timeout=300, env={**os.environ, **(env or {})})
         self.assertEqual(done.returncode, 0, done.stderr)
         return json.loads(done.stdout)
 
@@ -1663,6 +1704,21 @@ class UnreadableCheckouts(unittest.TestCase):
             self.assertTrue(answer['error'], (name, answer['text']))
             self.assertIn(self.FIXES[corpus], answer['text'], name)
             self.assertNotIn('Internal error', answer['text'], name)
+
+    def test_a_server_narrowed_by_the_environment_answers(self):
+        # GLOBAL_LAW_JURISDICTIONS once made every tool call fail with a RecursionError: _look asked law.matches, which
+        # read law.manifest for country names, and the server's law.manifest is _look. Names now read every corpus.
+        answers = self.calls(('list_jurisdictions', {}), ('search_law', {'query': 'constitution'}),
+                             ('read_law', {'path': 'aa/national/acts/act/s1.md'}),
+                             env={'GLOBAL_LAW_JURISDICTIONS': 'aa/national'})
+        for answer in answers:
+            self.assertFalse(answer['error'], answer['text'])
+        listed = answers[0]['data']
+        self.assertEqual([c['path'] for c in listed['corpora']], ['aa/national/acts'])
+        self.assertEqual({c['reason'] for c in listed['not_served']}, {'not chosen'})
+        self.assertEqual(listed['chosen'], ['aa/national'])
+        self.assertIn('aa/national/acts/act/s1.md', answers[1]['text'])
+        self.assertIn('The constitution still holds.', answers[2]['text'])
 
     def test_a_scope_over_a_healthy_and_a_broken_corpus_names_the_broken(self):
         answers = self.calls(('search_law', {'query': 'constitution', 'jurisdiction': 'aa'}),
