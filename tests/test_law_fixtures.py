@@ -241,7 +241,7 @@ class Fixtures(unittest.TestCase):
         store = Path(subprocess.run(['git', 'rev-parse', '--path-format=absolute', '--git-path', 'global-law-cache'],
                                     cwd=self.t.root, capture_output=True, encoding='utf-8').stdout.strip())
         self.law.corpus_events('ff/national/acts')
-        self.assertTrue((store / 'ff~national~acts.pickle').exists())
+        self.assertTrue((store / 'ff~national~acts.index').exists())
 
 
 class LineMatching(unittest.TestCase):
@@ -295,6 +295,203 @@ class LineMatching(unittest.TestCase):
             self.covers(self.law._line_opcodes(a, b), a, b)
         finally:
             self.law._git_line_opcodes = real
+
+
+class StartupCost(unittest.TestCase):
+    """What a short read costs before it reads any law (performance/experiments/startup.md): the index kept in
+    pieces, the tree's HEAD files kept per commit, one git process a read, and the credits table read by act."""
+
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location('law_startup', HERE / 'tools' / 'law.py')
+        cls.law = importlib.util.module_from_spec(spec)
+        sys.modules['law_startup'] = cls.law
+        spec.loader.exec_module(cls.law)
+
+    def test_index_in_pieces_gives_back_every_file_in_order(self):
+        law = self.law
+        files = {f'act{i % 7}/s{i}.md': [(i, f'{i:040x}', '100644')] for i in range(500)}
+        data = {'v': 'x', 'pin': 'p', 'rows': [('c', 1)], 'files': dict(files)}
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / 'c.index'
+            law._save_index(path, data)
+            back = law._load_index(path)
+            self.assertEqual(back['rows'], data['rows'])
+            self.assertEqual(back['files'].get('act3/s10.md'), files['act3/s10.md'])  # one piece, before the rest
+            self.assertIsNone(back['files'].get('nope.md'))
+            self.assertNotIn('nope.md', back['files'])
+            self.assertEqual(list(back['files'].items()), list(files.items()))
+            self.assertEqual(len(back['files']), 500)
+            self.assertEqual(dict(back['files'].items()), files)
+
+    def test_credits_read_by_act_equal_the_whole_table(self):
+        law = self.law
+        credits = ('act,in_force,provision,law,was_law,was_commit\n'
+                   'old-name,2001-01-01,art-1,l1,,\nnew/1,2001-01-01,art-1,l2,l1,abc123\n'
+                   'other,2001-01-01,art-1,l1,,\nnew/1,2002-02-02,art-2,,l1,\n')
+        blobs = {'data/credits.csv': credits, 'data/laws.csv': 'key,label\nl1,Law One\nl2,Law Two\n',
+                 'data/paths.json': json.dumps({'paths': {'old-name': 'new/1'}})}
+        saved = law.read_object, law._index
+        law.read_object = lambda corpus, spec: blobs.get(spec.split(':', 1)[1])
+        law._index = lambda corpus: {'pin': 'p'}
+        try:
+            law._CACHE.clear()
+            self.assertEqual(law.credited('c', 'new/1/art-1.md', '2001-01-01', 'abc123'), ('Law Two', False, 'Law One'))
+            self.assertEqual(law.credited('c', 'new/1/art-1.md', '2001-01-01', 'fff'), ('Law One', False, 'no law named (a change the record leaves unexplained)'))
+            self.assertEqual(law.credited('c', 'old-name/art-1.md', '2001-01-01'), law.credited('c', 'old-name/art-1.md', '2001-01-01'))
+            self.assertEqual(law.credited('c', 'new/1/art-2.md', '2002-02-02')[:2], ('no law named (a change the record leaves unexplained)', True))
+            self.assertIsNone(law.credited('c', 'other/art-9.md', '2001-01-01'))
+        finally:
+            law.read_object, law._index = saved
+            law._CACHE.clear()
+
+    def test_a_read_starts_one_git_process(self):
+        t = Tree()
+        try:
+            a = t.corpus('aa/national/acts')
+            a.commit('Act 1 of 2010', {'act/s1.md': 'one\n'}, In_force='2010-01-01', Kind='law')
+            t.pin()
+            out, err, code = t.cli('show', TODAY, 'aa/national/acts/act/s1.md')  # indexes, and keeps HEAD's files
+            self.assertEqual(out, 'one\n', err)
+            trace = t.root / 'trace.txt'
+            done = subprocess.run([sys.executable, '-X', 'utf8', str(t.root / 'tools' / 'law.py'), 'show', TODAY,
+                                   'aa/national/acts/act/s1.md'], cwd=t.root, capture_output=True, encoding='utf-8',
+                                  env={**os.environ, 'GIT_TRACE2': str(trace)})
+            self.assertEqual(done.stdout, 'one\n', done.stderr)
+            started = [l for l in trace.read_text(encoding='utf-8').splitlines() if l.split()[2:3] == ['version']]
+            self.assertEqual(len(started), 1, trace.read_text(encoding='utf-8'))
+            a.commit('Act 2 of 2020', {'act/s1.md': 'two\n'}, In_force='2020-01-01', Kind='law')
+            t.pin()  # a new HEAD: read again, not taken from the last commit's files
+            out, err, code = t.cli('show', TODAY, 'aa/national/acts/act/s1.md')
+            self.assertEqual(out, 'two\n', err)
+        finally:
+            t.close()
+
+
+class WholeLawRepealsAndDoubtfulDates(unittest.TestCase):
+    """An act that data/acts.json records as repealed ends every file of it, though the files stay (global-law #8);
+    dates the record itself makes doubtful are said so."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus('aa/national/acts')
+        a.commit('Act 1 of 2010', {'act/s1.md': 'one\n', 'act/s2.md': 'two\n', 'other/s1.md': 'other\n'},
+                 In_force='2010-01-01', Kind='law', Enacted='2009-12-01')
+        # The repeal as spain-law records it: a note in the act's folder, the provisions left as they were.
+        a.commit('Act 9 of 2019', {'act/no.md': 'Repealed with effect from 2020-01-01.\n', 'other/s1.md': 'other 2\n'},
+                 In_force='2020-01-01', Kind='law', Enacted='2019-06-01')
+        a.commit('Act 12 of 2022', {'act/s1.md': 'one again\n'}, In_force='2022-01-01', Kind='law', Enacted='2021-11-01')
+        a.commit('Act 3 of 2015', {'other/s2.md': 'typo\n'}, In_force='0015-03-01', Kind='law', Enacted='2015-02-01')
+        a.commit('Act 4 of 2016', {'other/s3.md': 'late\n'}, In_force='2014-01-01', Kind='law', Enacted='2016-05-01')
+        a.commit('Act 5 of 2016', {'other/s4.md': 'back\n'}, In_force='2016-01-01', Kind='law', Enacted='2016-05-01')
+        # A paragraph moved to the end and amended by one law, unchanged rules between (sb/2007/378's case).
+        rules = ''.join(f'Rule {n} stays exactly where it is, word for word.\n' for n in ('one', 'two', 'three'))
+        old = 'The minister shall publish the yearly report of the agency in the gazette.\n' + rules
+        new = (rules + 'A new rule about something else entirely added here.\n'
+               'The minister shall publish the yearly report of the agency in the official gazette.\n')
+        a.commit('Act 20 of 2001', {'move/s1.md': old}, In_force='2001-01-01', Kind='law', Enacted='2000-12-01')
+        a.commit('Act 21 of 2005', {'move/s1.md': new}, In_force='2005-01-01', Kind='law', Enacted='2004-12-01')
+        # An act held only as captured text (a baseline), its own commencement known from data/acts.json.
+        a.commit('Publisher', {'cap/a.md': 'captured\n'}, Kind='baseline', Text_as_of='2018-05-01',
+                 In_force_basis='source gives no date')
+        b = t.corpus('bb/national/acts')  # a corpus that says it models every effect beyond the text
+        b.commit('Act 1 of 2010', {'act/s1.md': 'bee\n'}, In_force='2010-01-01', Kind='law')
+        b.commit('Lexifina', {'corpus.json': json.dumps({'effects': ['modifications', 'commencement', 'transitional']})},
+                 Kind='documentation')
+        run('checkout', '-q', 'main', cwd=b.path)
+        acts = {'acts': [{'path': 'cap', 'status': 'as captured', 'in_force': '1990-01-01'},
+                         {'path': 'act', 'status': 'repealed', 'repealed': '2020-01-01', 'repealed_by': 'Act 9 of 2019'},
+                         {'path': 'other', 'status': 'in force'}]}
+        a.commit('Lexifina', {'data/acts.json': json.dumps(acts)}, Kind='documentation')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_a_repealed_act_ends_each_of_its_files(self):
+        out, err, code = self.t.cli('show', '2019-12-31', 'aa/national/acts/act/s2.md')
+        self.assertEqual(out, 'two\n', err)
+        out, err, code = self.t.cli('show', '2020-01-01', 'aa/national/acts/act/s2.md')
+        self.assertNotEqual(code, 0)
+        self.assertIn('was repealed on 2020-01-01 by Act 9 of 2019', err)
+        self.assertIn('data/acts.json', err)
+
+    def test_the_repeal_is_in_the_log(self):
+        out, err, code = self.t.cli('log', 'aa/national/acts/act/s2.md')
+        self.assertIn('repealed 2020-01-01  Act 9 of 2019', out, err)
+
+    def test_a_later_version_reenacts(self):
+        out, err, code = self.t.cli('show', '2021-06-01', 'aa/national/acts/act/s1.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertIn('in force again from 2022-01-01', err)
+        out, err, code = self.t.cli('show', '2023-01-01', 'aa/national/acts/act/s1.md')
+        self.assertEqual(out, 'one again\n', err)
+
+    def test_other_acts_are_untouched(self):
+        out, err, code = self.t.cli('show', '2021-01-01', 'aa/national/acts/other/s1.md')
+        self.assertEqual(out, 'other 2\n', err)
+
+    def test_blame_and_words_stop_at_the_repeal(self):
+        for cmd in ('blame', 'words'):
+            out, err, code = self.t.cli(cmd, '2020-06-01', 'aa/national/acts/act/s2.md')
+            self.assertNotEqual(code, 0, out)
+            self.assertIn('repealed on 2020-01-01', err)
+
+    def test_the_world_on_a_date_leaves_the_repealed_files_out(self):
+        law = self.t.law()
+        files = law._index('aa/national/acts')['files']  # warm
+        index, _ = law.file_index('aa/national/acts')
+        best = {p: max((v for v in vs if v[0] <= '2021-01-01'), default=None) for p, vs in index.items()}
+        law.close_readers()
+        self.assertIsNone(best['act/s2.md'][2])
+        self.assertIsNotNone(best['other/s1.md'][2])
+        self.assertTrue(files)
+
+    def test_moved_and_amended_text_keeps_its_law(self):
+        law = self.t.law()
+        runs = law.words_on('2010-01-01', 'aa/national/acts/move/s1.md')
+        law.close_readers()
+        by = {}
+        for who, text in runs:
+            for w in text.split():
+                by.setdefault(w, set()).add(who)
+        self.assertEqual(by['minister'], {'Act 20 of 2001'})  # moved: written in 2001
+        self.assertEqual(by['yearly'], {'Act 20 of 2001'})
+        self.assertEqual(by['official'], {'Act 21 of 2005'})  # the word the move added
+        self.assertEqual(by['entirely'], {'Act 21 of 2005'})  # a new rule, not a move
+
+    def test_effects_a_corpus_does_not_model_are_named(self):
+        out, err, code = self.t.cli('show', '2021-01-01', 'aa/national/acts/other/s1.md')
+        self.assertIn('does not hold changes that alter how a provision applies', err)
+        self.assertIn('transitional and saving rules', err)
+        out, err, code = self.t.cli('show', '2021-01-01', 'bb/national/acts/act/s1.md')
+        self.assertEqual(out, 'bee\n', err)
+        self.assertNotIn('does not hold', err)
+
+    def test_an_act_held_only_as_captured_text_says_so(self):
+        out, err, code = self.t.cli('show', '2000-01-01', 'aa/national/acts/cap/a.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertIn('the record starts on 2018-05-01', err)
+        self.assertIn('Its act was in force from 1990-01-01', err)  # A8: not "not yet in force"
+        out, err, code = self.t.cli('show', '2020-01-01', 'aa/national/acts/cap/a.md')
+        self.assertEqual(out, 'captured\n', err)
+        self.assertIn('holds only the text as the publisher gave it (from 2018-05-01)', err)  # A9
+        out, err, code = self.t.cli('show', '2021-01-01', 'aa/national/acts/other/s1.md')
+        self.assertNotIn('holds only the text', err)
+
+    def test_doubtful_dates_are_said(self):
+        out, err, code = self.t.cli('log', 'aa/national/acts/other/s2.md')
+        self.assertIn('date doubtful', out)
+        self.assertIn('mistyped date', out)
+        out, err, code = self.t.cli('log', 'aa/national/acts/other/s3.md')
+        self.assertIn('more than a year before its act was made', out)
+        out, err, code = self.t.cli('log', 'aa/national/acts/other/s4.md')  # months before: often real, not flagged
+        self.assertNotIn('date doubtful', out)
+        out, err, code = self.t.cli('show', '2015-01-01', 'aa/national/acts/other/s3.md')
+        self.assertEqual(out, 'late\n')
+        self.assertIn('more than a year before its act was made', err)
 
 
 class Checkouts(unittest.TestCase):

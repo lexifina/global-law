@@ -9,6 +9,47 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). An act a corpus records as repealed stays repealed in every answer (#8).** spain-law records a
+  whole-law repeal in the law's `no.md` and `normas.tsv` and leaves each article file in place (1,991 of 8,821 norms),
+  so `show` and `read_law` gave RD 557/2011 art. 124 as in force after its repeal. `law.py` now reads the corpus's
+  `data/acts.json` (corpus standard, gitlaw_common): an act with a `repealed` or `expired` date ends every file of it
+  on that day, in `show`, `blame`, `words`, `log`, `world` and what the MCP tools build on them, and says so ("its act
+  was repealed on 2025-05-20 by …, as the corpus's data/acts.json records"). A later version re-enacts. An act
+  recorded as repealed with no date gives a note on each file. Spain's builder writing `data/acts.json` from its own
+  repeal notes is with fundamentals-2 (queued); until it ships, #8 stays open for Spain.
+- **Fixed (all). Text moved and amended by one law keeps the law that wrote its unchanged words.** `words` matched a
+  moved paragraph as a deletion and an insertion and credited every word to the amending law (Czechia sb/2007/378,
+  70/2013 → 262/2019). A new line credited almost wholly to the amending law is now compared with the lines removed
+  elsewhere in the same step (at least 75% alike, 5 words or more, each removed line used once); the words they share
+  keep their law. On 34 files, 35,630 of 999,217 characters change credit; for 81% of a sample of them the words were
+  already in the law before the amending law took force (`performance/experiments/word_moves_check.py`).
+- **Changed (all). Dates the record itself makes doubtful are said.** A version dated before the year a record can
+  reach (corpus.json `earliest`, else 1500: Kyrgyzstan's `0025-03-28`) is called a mistyped date; one in force more
+  than a year before its act was made, with no `Retroactive: yes; …`, is flagged as perhaps wrong (`log` and `show`).
+  Shorter gaps are often real retroactive effect (Swiss acts, US appropriations) and are not flagged. A day holding a
+  third or more of a corpus's dated commits that are not starting texts is called a capture day. The builders' fixes
+  are with fundamentals-2 (France's impossible years are fixed, a81f0fa).
+- **Changed (all). Before an act's record starts, and for an act held only as captured text, answers say so per act.**
+  When `data/acts.json` gives the act's own in-force date, "the record starts on …" adds that the act was in force
+  earlier, in words the record does not have (#17). A file whose every version is a starting text, in a corpus whose
+  history is otherwise in force (the UK's 4,375 Acts held as current text), gets its own note.
+- **Changed (all). What a corpus does not model is named.** corpus.json `effects` (corpus standard, recommended: any
+  of `modifications`, `commencement`, `transitional`; absent means none) says what a corpus holds beyond its text.
+  Each answer now names what is missing, so a text is not taken for the whole law that applied. `describe.py` carries
+  `effects` into the manifest.
+- **Changed (all). `law.py` starts one git process for a short read, not twelve, and loads a 64th of a corpus's index
+  for one file.** What every command read from the tree's HEAD commit (manifest, moved paths, legacy dates, pins and
+  .gitmodules) is kept per commit in `global-law-cache`; each corpus is checked through its `.git` files and the one
+  `git cat-file --batch` reader; Romania's credits table is parsed for the act asked about only; and the index is
+  stored in 64 pieces by path (`<corpus>.index`, read in order when a command needs every file). `show` on 8 U.S.C.
+  §1182 went from 0.8 to 0.2 s, `log` on a Romanian article from 1.6 to 0.4 s, `world` over 16 corpora from 7 to 1 s;
+  `words` on Czechia sb/2007/378 from 9.2 to 4.1 s (two quadratic steps removed, the same answers). 644 commands on 16
+  corpora gave identical answers before and after (`performance/experiments/startup.md`). Indexes are rebuilt once
+  (INDEX_VERSION 6). Seven ways of comparing words were also tried and none kept
+  (`performance/experiments/word_matching.md`).
+- **Changed (all). `performance/` monitors.** `index.html` opens with a tile per measure: the latest value against its
+  budget and the last comparable run, and a line across every run. `bench.py` records how many git processes each
+  command starts (GIT_TRACE2).
 
 - **Fixed (all). Before an act's record floor, `read_law`'s fields said "not in force" ([#17](https://github.com/lexifina/global-law/issues/17)).** Where the record's first version of a provision is a consolidated text (China's 公司法 from the 2018 text, the earliest full text 中国人大网 serves; the US Code's 2017 edition; Fedlex), its text already said the record does not know the provision's state on an earlier date, but `in_force` was `false`. It is now `null`, with `in_record: false` and `record_starts`; every answer carries `in_record`. Repealed and not-yet-enacted provisions are unchanged (`in_force: false`).
   - **Checked:** all 173 acts of `china/national/acts` on the day before and the day of their first version: the 47 that start at a consolidated text now read `in_force: null`, `in_record: false`; the 126 that start at their enactment still read `false` before it. New test `test_floor_of_one_act_is_unknown_not_repealed`; `test_before_a_baseline_is_outside_the_record` checks the fields.

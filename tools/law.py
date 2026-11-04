@@ -53,13 +53,26 @@ def _head() -> str:
     return _CACHE[('head-at', '')][1]  # type: ignore[index]
 
 
-def _head_from_files() -> str | None:
+def _gitdirs(top: Path) -> tuple[Path, Path] | None:
+    """A checkout's git folder and the folder it shares objects and refs with (the same unless it is a worktree),
+    read from .git: a folder, or a file naming one (submodules and worktrees). None when there is neither."""
+    try:
+        dot = top / '.git'
+        gitdir = dot if dot.is_dir() else (top / dot.read_text().split('gitdir:', 1)[1].strip()).resolve()
+        common = (gitdir / (gitdir / 'commondir').read_text().strip()).resolve() if (gitdir / 'commondir').exists() else gitdir
+        return gitdir, common
+    except (OSError, IndexError):
+        return None
+
+
+def _head_from_files(top: Path = ROOT) -> str | None:
     """HEAD read from the git folder's files (HEAD, the branch's ref, packed-refs), which costs no process: starting
     git is the slowest part of a short read on some machines. None when the layout is not the plain one."""
     try:
-        dot = ROOT / '.git'
-        gitdir = dot if dot.is_dir() else (ROOT / dot.read_text().split('gitdir:', 1)[1].strip()).resolve()
-        common = gitdir / (gitdir / 'commondir').read_text().strip() if (gitdir / 'commondir').exists() else gitdir
+        dirs = _gitdirs(top)
+        if dirs is None:
+            return None
+        gitdir, common = dirs
         head = (gitdir / 'HEAD').read_text().strip()
         if re.fullmatch(r'[0-9a-f]{40}', head):
             return head
@@ -78,10 +91,63 @@ def _head_from_files() -> str | None:
     return None
 
 
+def _store() -> Path:
+    """The tree's cache folder (global-law-cache in its git folder), found without a git process when it can be."""
+    if ('store', '') not in _CACHE:
+        dirs = _gitdirs(ROOT)
+        _CACHE[('store', '')] = (dirs[1] / 'global-law-cache' if dirs else
+                                 Path(git('rev-parse', '--path-format=absolute', '--git-path', 'global-law-cache').strip()))
+    return _CACHE[('store', '')]  # type: ignore[return-value]
+
+
+ROOT_FILES = ('manifest.json', 'data/moved-paths.tsv', 'data/legacy-dates.tsv')
+
+
+def _root() -> dict:
+    """What every command reads from the tree's HEAD commit: manifest.json, data/moved-paths.tsv and
+    data/legacy-dates.tsv (None where missing), the submodule pins (`git ls-tree -r -d`) and .gitmodules' paths and
+    urls. All of it depends on the commit alone, so it is kept on disk (global-law-cache/root-<commit>.json): after
+    the first read of a commit, a command starts no git process for it, where it used to start five."""
+    head = _head()
+    key = ('root', head)
+    if key in _CACHE:
+        return _CACHE[key]  # type: ignore[return-value]
+    path = _store() / f'root-{head}.json'
+    data = None
+    try:
+        data = json.loads(path.read_text(encoding='utf-8'))
+        if data.get('v') != 1 or data.get('head') != head:
+            data = None
+    except (OSError, ValueError):
+        data = None
+    if data is None:
+        files = {}
+        for name in ROOT_FILES:
+            done = subprocess.run(['git', 'show', f'{head}:{name}'], cwd=ROOT, capture_output=True, encoding='utf-8')
+            files[name] = done.stdout if done.returncode == 0 else None
+        if files['manifest.json'] is None:
+            raise RuntimeError(f'git show {head}:manifest.json: the tree has no manifest.json')
+        data = {'v': 1, 'head': head, 'files': files, 'gitlinks': git('ls-tree', '-r', '-d', head),
+                'modules': git('config', '--blob', f'{head}:.gitmodules', '--get-regexp', r'^submodule\..*\.(path|url)$',
+                               check=False)}
+        try:  # a cache: where it cannot be written, the next command reads the commit again
+            import os
+            path.parent.mkdir(parents=True, exist_ok=True)
+            tmp = path.with_name(f'{path.name}.{os.getpid()}.tmp')
+            tmp.write_text(json.dumps(data), encoding='utf-8')
+            os.replace(tmp, path)
+            for old in sorted(path.parent.glob('root-*.json'), key=lambda f: f.stat().st_mtime)[:-8]:
+                old.unlink(missing_ok=True)  # only the last few commits' (pins move every few minutes)
+        except OSError:
+            pass
+    _CACHE[key] = data
+    return data
+
+
 def manifest() -> dict:
     key = ('manifest', _head())
     if key not in _CACHE:
-        _CACHE[key] = with_unlisted(json.loads(git('show', 'HEAD:manifest.json')))
+        _CACHE[key] = with_unlisted(json.loads(_root()['files']['manifest.json']))
     return _CACHE[key]  # type: ignore[return-value]
 
 
@@ -91,10 +157,10 @@ def with_unlisted(m: dict) -> dict:
     (603 of 710 on 3 November). Each is described by its own corpus.json, else data/repo.json and jurisdiction.json
     (what build.py repos ship), when it is checked out; else by its path. Defaults: In-force trailer, no citation rule."""
     listed = {c['path'] for c in m.get('corpora', [])}
-    pins = [l.split(None, 3)[3] for l in git('ls-tree', '-r', '-d', 'HEAD').splitlines() if l.split(None, 3)[1] == 'commit']
+    pins = [l.split(None, 3)[3] for l in _root()['gitlinks'].splitlines() if l.split(None, 3)[1] == 'commit']
     urls: dict[str, str] = {}
     paths: dict[str, str] = {}
-    for line in git('config', '--blob', 'HEAD:.gitmodules', '--get-regexp', r'^submodule\..*\.(path|url)$', check=False).splitlines():
+    for line in _root()['modules'].splitlines():
         name, _, value = line.partition(' ')
         (paths if name.endswith('.path') else urls)[name.rsplit('.', 1)[0]] = value
     url_of = {p: urls.get(n, '') for n, p in paths.items()}
@@ -215,7 +281,7 @@ def tip(corpus: str) -> str | None:
     """The corpus commit the tree pins at HEAD."""
     key = ('tips', _head())
     if key not in _CACHE:
-        out = git('ls-tree', '-r', '-d', 'HEAD')
+        out = _root()['gitlinks']
         _CACHE[key] = {path: sha for mode, kind, sha, path in (l.split(None, 3) for l in out.splitlines()) if kind == 'commit'}
     return _CACHE[key].get(corpus)  # type: ignore[union-attr]
 
@@ -225,8 +291,7 @@ def reachable_tip(corpus: str) -> str:
     key = ('reachable', f'{corpus}@{tip(corpus)}')
     if key not in _CACHE:
         sha = tip(corpus)
-        ok = bool(sha) and subprocess.run(['git', 'cat-file', '-e', f'{sha}^{{commit}}'], cwd=corpus_dir(corpus),
-                                          capture_output=True).returncode == 0
+        ok = bool(sha) and _has_commit(corpus, corpus_dir(corpus), sha)
         _CACHE[key] = sha if ok else 'HEAD'
     return _CACHE[key]  # type: ignore[return-value]
 
@@ -243,7 +308,7 @@ def corpus_events(corpus: str) -> list[Event]:
         return []  # an unfinished checkout: left out and named (unreadable()), so it does not stop every other corpus
     _require_full_history(corpus, cwd)
     pin = tip(corpus)
-    if pin and subprocess.run(['git', 'cat-file', '-e', f'{pin}^{{commit}}'], cwd=cwd, capture_output=True).returncode:
+    if pin and not _has_commit(corpus, cwd, pin):
         # The checkout is behind the tree (a pull without `git submodule update`, the usual state while pins move
         # every few minutes): left out of whole-tree reads and named (behind()); a read of this corpus alone stops.
         _CACHE[('behind', corpus)] = pin
@@ -328,10 +393,9 @@ def legacy_dates(corpus: str) -> dict[str, tuple[str, str]]:
     key = ('legacy', _head())
     if key not in _CACHE:
         found: dict[str, dict[str, tuple[str, str]]] = {}
-        shipped = subprocess.run(['git', 'show', 'HEAD:data/legacy-dates.tsv'], cwd=ROOT, capture_output=True,
-                                 encoding='utf-8')
-        if shipped.returncode == 0:
-            for line in shipped.stdout.splitlines():
+        shipped = _root()['files']['data/legacy-dates.tsv']
+        if shipped is not None:
+            for line in shipped.splitlines():
                 if line and not line.startswith('#'):
                     c, sha, day_, kind = line.split('\t')[:4]
                     found.setdefault(c, {})[sha] = (day_, kind)
@@ -417,6 +481,11 @@ def file_index(corpus: str) -> tuple[dict, list]:
                 touched.setdefault(order, {})[path] = (blob, mode)
             elif r[5] and r[4] != 'documentation':
                 index.setdefault(path, []).append((r[5], order, blob, mode))
+    if act_ends(corpus):
+        for path, versions in index.items():
+            end = act_end(corpus, path)
+            if end and end['day']:
+                versions.append((end['day'], _end_commit(corpus, end)[1] + 0.5, None, versions[-1][3]))
     cwd = corpus_dir(corpus)
     overlays = []
     for order, r in enumerate(rows):
@@ -518,9 +587,9 @@ def moved_paths() -> dict[str, str]:
     key = ('moved', _head())
     if key not in _CACHE:
         found: dict[str, str] = {}
-        done = subprocess.run(['git', 'show', 'HEAD:data/moved-paths.tsv'], cwd=ROOT, capture_output=True, encoding='utf-8')
-        if done.returncode == 0:
-            for line in done.stdout.splitlines():
+        shipped = _root()['files']['data/moved-paths.tsv']
+        if shipped is not None:
+            for line in shipped.splitlines():
                 if line and not line.startswith('#'):
                     old, new = line.split('\t')[:2]
                     found[old] = new
@@ -577,8 +646,10 @@ def _readable(corpus: str, cwd: Path) -> bool:
     but no HEAD; reading every corpus (timeline, world, laws) would then stop on it, so it is left out and named."""
     key = ('readable', corpus)
     if not _CACHE.get(key):  # asked again until it is readable: a clone still running finishes later
-        done = subprocess.run(['git', 'rev-parse', '-q', '--verify', 'HEAD^{commit}'], cwd=cwd, capture_output=True)
-        _CACHE[key] = done.returncode == 0
+        head = _head_from_files(cwd)  # a checked-out commit; else (an unborn branch, an odd layout) git decides
+        _CACHE[key] = (_has_commit(corpus, cwd, head) if head else
+                       subprocess.run(['git', 'rev-parse', '-q', '--verify', 'HEAD^{commit}'], cwd=cwd,
+                                      capture_output=True).returncode == 0)
     return bool(_CACHE[key])
 
 
@@ -598,6 +669,10 @@ def behind() -> dict[str, str]:
 
 
 def _shallow(cwd: Path) -> bool:
+    dirs = _gitdirs(cwd)
+    if dirs is not None and (dirs[1] / 'objects').is_dir():  # git's own test: a non-empty shallow file
+        f = dirs[1] / 'shallow'
+        return f.is_file() and f.stat().st_size > 0
     done = subprocess.run(['git', 'rev-parse', '--is-shallow-repository'], cwd=cwd, capture_output=True, encoding='utf-8')
     return done.stdout.strip() == 'true'
 
@@ -797,6 +872,77 @@ def _credit_words(old: list[str], old_authors: list[str], new: list[str], law: s
 
 
 WORD_DIFF_LIMIT = 400_000  # old tokens × new tokens above which a changed block is compared line by line
+_WORD = re.compile(r'\s+|\S+')
+
+
+def _tokens(line: str) -> list[str]:
+    """A line as `words` compares it: words and the spaces between them, each a token."""
+    return _WORD.findall(line)
+
+
+def _pair_old_line(old_block: list[list[str]], line: list[str]) -> int | None:
+    """In a large rewrite, the old line most like a new one (difflib's quick_ratio of their tokens, at least 0.6),
+    or None."""
+    best, score = None, 0.0
+    for j, old in enumerate(old_block):
+        s = difflib.SequenceMatcher(None, old, line, autojunk=False).quick_ratio()
+        if s > score:
+            best, score = j, s
+    return best if best is not None and score >= 0.6 else None
+
+
+MOVE_CREDIT = True  # words: a line moved and amended in one step keeps the law that wrote its unchanged words
+MOVE_MIN_WORDS, MOVE_SIMILAR, MOVE_PAIRS_LIMIT = 5, 0.75, 400_000
+
+
+def _credit_moves(lines: list[str], authors: list[list[str]], new_lines: list[str], new_authors: list[list[str]],
+                  ops: list, law: str, check) -> None:
+    """Text moved and amended in the same version (a subsection rewritten and renumbered elsewhere): the line
+    matching sees a deletion in one place and an insertion in another, so every word of the insertion went to the
+    amending law. Here a new line credited almost wholly to `law` is compared with the lines removed anywhere in the
+    same step; the most similar one (at least MOVE_SIMILAR alike, MOVE_MIN_WORDS words or more, each removed line
+    used once) gives back the credit of the words they share. Words the step changed stay with `law`."""
+    removed = [j for op, a0, a1, b0, b1 in ops if op in ('delete', 'replace') for j in range(a0, a1)
+               if len(lines[j].split()) >= MOVE_MIN_WORDS]
+    fresh = [i for op, a0, a1, b0, b1 in ops if op in ('insert', 'replace') for i in range(b0, b1)
+             if len(new_lines[i].split()) >= MOVE_MIN_WORDS]
+    if not removed or not fresh or len(removed) * len(fresh) > MOVE_PAIRS_LIMIT:
+        return
+    old_tokens = {j: _tokens(lines[j]) for j in removed}
+    holding: dict[str, list[int]] = {}  # word -> the removed lines that hold it, to compare only likely pairs
+    for j in removed:
+        for w in set(lines[j].split()):
+            holding.setdefault(w, []).append(j)
+    candidates = []
+    m = difflib.SequenceMatcher(None, autojunk=False)
+    for i in fresh:
+        toks = _tokens(new_lines[i])
+        words = [k for k, t in enumerate(toks) if not t.isspace()]
+        if not words or sum(new_authors[i][k] == law for k in words) < 0.8 * len(words):
+            continue  # already matched in place: most of its words kept their law
+        check()
+        mine = set(new_lines[i].split())
+        shared: dict[int, int] = {}
+        for w in mine:
+            for j in holding.get(w, ()):
+                shared[j] = shared.get(j, 0) + 1
+        # Two lines MOVE_SIMILAR alike share at least about that share of their distinct words.
+        likely = [j for j, n in shared.items() if n >= 0.5 * MOVE_SIMILAR * max(len(mine), 1)]
+        m.set_seq2(toks)
+        for j in likely:
+            m.set_seq1(old_tokens[j])
+            if m.real_quick_ratio() < MOVE_SIMILAR or m.quick_ratio() < MOVE_SIMILAR:
+                continue
+            r = m.ratio()
+            if r >= MOVE_SIMILAR:
+                candidates.append((r, i, j, toks))
+    taken_new, taken_old = set(), set()
+    for r, i, j, toks in sorted(candidates, key=lambda c: (-c[0], c[1], c[2])):
+        if i in taken_new or j in taken_old:
+            continue
+        taken_new.add(i)
+        taken_old.add(j)
+        new_authors[i] = _credit_words(old_tokens[j], authors[j], toks, law)
 
 
 def words_on(date: str, path: str, check=None) -> list[tuple[str, str]]:
@@ -815,46 +961,46 @@ def words_on(date: str, path: str, check=None) -> list[tuple[str, str]]:
         text = read_version(path, commit)
         new_lines = text.splitlines(keepends=True) if text else []
         new_authors: list[list[str]] = []
-        for op, a0, a1, b0, b1 in _line_opcodes(lines, new_lines):
+        ops = _line_opcodes(lines, new_lines)
+        for op, a0, a1, b0, b1 in ops:
             if op == 'equal':
                 new_authors += authors[a0:a1]
                 continue
             check()
-            old_block = [re.findall(r'\s+|\S+', line) for line in lines[a0:a1]]
-            block = [re.findall(r'\s+|\S+', line) for line in new_lines[b0:b1]]
+            old_block = [_tokens(line) for line in lines[a0:a1]]
+            block = [_tokens(line) for line in new_lines[b0:b1]]
             old_tokens = [t for line in old_block for t in line]
             if len(old_tokens) * sum(map(len, block)) <= WORD_DIFF_LIMIT:
                 old_credit = [a for line_authors in authors[a0:a1] for a in line_authors]
                 credit = _credit_words(old_tokens, old_credit, [t for line in block for t in line], law)
+                at = 0
                 for line in block:
-                    new_authors.append(credit[:len(line)])
-                    credit = credit[len(line):]
+                    new_authors.append(credit[at:at + len(line)])
+                    at += len(line)
             else:
                 # A large rewrite: pair each new line with the most similar old line and compare only those two,
                 # which keeps a whole-section rewrite (17 U.S.C. §115 in 2018) to seconds rather than minutes.
                 for line in block:
                     check()
-                    best, score = None, 0.0
-                    for j, old in enumerate(old_block):
-                        s = difflib.SequenceMatcher(None, old, line, autojunk=False).quick_ratio()
-                        if s > score:
-                            best, score = j, s
-                    if best is not None and score >= 0.6:
+                    best = _pair_old_line(old_block, line)
+                    if best is not None:
                         new_authors.append(_credit_words(old_block[best], authors[a0 + best], line, law))
                     else:
                         new_authors.append([law] * len(line))
+        if MOVE_CREDIT:
+            _credit_moves(lines, authors, new_lines, new_authors, ops, law, check)
         lines, authors = new_lines, new_authors
-    tokens = [t for line in lines for t in re.findall(r'\s+|\S+', line)]
+    tokens = [t for line in lines for t in _tokens(line)]
     flat = [a for line_authors in authors for a in line_authors]
-    runs: list[tuple[str, str]] = []
+    runs: list[tuple[str, list[str]]] = []  # the pieces of each run, joined once at the end
     for law, token in zip(flat, tokens):
         if token.isspace() and runs:
             law = runs[-1][0]  # spaces never start a new run
         if runs and runs[-1][0] == law:
-            runs[-1] = (law, runs[-1][1] + token)
+            runs[-1][1].append(token)
         else:
-            runs.append((law, token))
-    return runs
+            runs.append((law, [token]))
+    return [(law, ''.join(pieces)) for law, pieces in runs]
 
 
 EMPTY_TREE = '4b825dc642cb6eb9a060e54bf8d69288fbee4904'  # git's empty tree: "nothing yet", before a record starts
@@ -870,6 +1016,19 @@ def diff_between(date_a: str, date_b: str, path: str) -> str:
 
 def corpus_info(corpus: str) -> dict:
     return next(c for c in manifest()['corpora'] if c['path'] == corpus)
+
+
+# What a corpus may model beyond its text (corpus.json `effects`, corpus standard): anything not listed, answers name.
+EFFECTS = {'modifications': 'changes that alter how a provision applies without changing its words (Modifies:)',
+           'commencement': 'commencement orders and conditions that decide when or to whom a change applies (Applies:)',
+           'transitional': 'transitional and saving rules that keep older text applying to some cases'}
+
+
+def effects_of(corpus: str) -> list[str]:
+    """The effects a corpus models, from its manifest entry, else its checked-out corpus.json; [] when it says none."""
+    info = corpus_info(corpus)
+    got = info['effects'] if 'effects' in info else described(corpus).get('effects', [])
+    return [str(e) for e in got] if isinstance(got, list) else []
 
 
 def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[str]:
@@ -917,6 +1076,10 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
     if ahead:
         out.append(f"{corpus}: {ahead} change(s) in this record take force after today; they are shown only from their "
                    "dates, but the files at the corpus's HEAD already hold them.")
+    missing = [EFFECTS[e] for e in EFFECTS if e not in effects_of(corpus)]
+    if own and missing and info.get('history') not in ('metadata-only',):
+        out.append(f"{corpus}: this record changes the text on each change's in-force date only; it does not hold "
+                   f"{', '.join(missing)}, so the text shown may not be the whole law that applied on {date}.")
     odd = _index(corpus)['unknown'] if own else set()
     if odd:
         out.append(f"{corpus}: commit kind(s) not recognised, read as laws: {', '.join(sorted(odd))}.")
@@ -936,8 +1099,12 @@ def explain_missing(date: str, path: str) -> str:
         return f'{path} has no dated change in the record.'
     first = min(h, key=lambda x: x['in_force'])
     if date < first['in_force'] and first['kind'] == 'baseline':
+        since = str(act_fact(corpus, rel).get('in_force') or '')
+        known = (f" Its act was in force from {since[:10]} (data/acts.json), so the provision may well have been in "
+                 f"force on {date}, in words this record does not have." if ISO_DAY.fullmatch(since[:10]) and
+                 since[:10] <= date else '')
         return (f"{path} is not in the record on {date}: the record starts on {first['in_force']} ({first['law']}), "
-                f"which is where this record starts, not the day it came into force.")
+                f"which is where this record starts, not the day it came into force.{known}")
     if date < first['in_force']:
         return f"{path} was not yet in force on {date}. It first appears on {first['in_force']} ({first['law']})."
     gone = max((x for x in h if x['in_force'] <= date), key=lambda x: x['in_force'])
@@ -949,7 +1116,38 @@ def explain_missing(date: str, path: str) -> str:
                 f"correction appended later (commit {latest_that_day['commit'][:10]}) replaces that version: the "
                 f"provision was not in force from that day.{until}")
     again = f" It is in force again from {back['in_force']} ({back['law']})." if back else ''
+    if latest_that_day.get('ends'):
+        return (f"{path} was not in force on {date}: its act ({latest_that_day['act']}) was {latest_that_day['ends']} "
+                f"on {gone['in_force']}" + (f" by {latest_that_day['law']}" if latest_that_day['law'] and
+                                             '(data/acts.json)' not in latest_that_day['law'] else '') +
+                f", as the corpus's data/acts.json records; the record did not remove the file itself.{again}")
     return f"{path} was not in force on {date}: it was removed on {gone['in_force']} ({gone['law']}).{again}"
+
+
+def file_notes(date: str, path: str) -> list[str]:
+    """What a reader must know about one file on a date, beyond its corpus's caveats: an act recorded as ended with no
+    date, and a version in force whose date the record itself makes doubtful."""
+    corpus, rel = corpus_of(path)
+    out = []
+    end = act_end(corpus, rel)
+    if end and not end['day']:
+        out.append(f"{path}: data/acts.json records its act ({end['act']}) as {end['how']}, but not from when; the "
+                   "text shown may no longer be in force.")
+    hist = history(path)
+    sha = file_commit(date, path)
+    row = next((h for h in reversed(hist) if h['commit'] == sha), None) if sha else None
+    if row and row.get('date_doubtful'):
+        out.append(f"{path}: the version shown is {row['date_doubtful']}.")
+    # One act held only as captured text, in a corpus whose history is otherwise in force (the UK's 4,375 Acts as
+    # current text among its full histories): the corpus caveats do not say so for it.
+    info = corpus_info(corpus)
+    texts = [h for h in hist if not h.get('ends')]
+    if texts and all(h['kind'] == 'baseline' for h in texts) and info.get('history') not in ('current-only', 'as-enacted'):
+        first = min(h['in_force'] for h in texts)
+        out.append(f"{path}: this record holds only the text as the publisher gave it (from {first}), not the "
+                   "versions before it or the laws that changed it; later changes appear only where the record "
+                   "read the text again.")
+    return out
 
 
 USAGE = {'world': 1, 'show': 2, 'blame': 2, 'words': 2, 'today': 2, 'diff': 3, 'log': 1, 'laws': 2}
@@ -1028,8 +1226,140 @@ def _history(corpus: str, rel: str) -> list[dict]:
             out.append({'commit': r[0], 'law': r[1], 'in_force': fix['from'], 'kind': 'correction', 'enacted': None,
                         'published': None, 'order': order, 'corrects': fix['corrects'], 'until': fix['to'],
                         'supersedes': fix['supersedes'], 'reason': fix['reason']})
+    end = act_end(corpus, rel)
+    if end and end['day'] and out:
+        commit, order = _end_commit(corpus, end)
+        out.append({'commit': commit, 'law': end['by'] or f"{end['how']} (data/acts.json)", 'in_force': end['day'],
+                    'kind': 'law', 'enacted': None, 'published': None, 'blob': None, 'order': order + 0.5,
+                    'ends': end['how'], 'act': end['act']})
+    retro = ix.get('retroactive')
+    capture = capture_day(corpus)
+    earliest = str(corpus_info(corpus).get('earliest') or '1500-01-01')
+    for h in out:
+        if h.get('ends'):
+            continue
+        made = h['enacted'][:10] if h.get('enacted') and ISO_DAY.fullmatch(h['enacted'][:10]) else None
+        if h['in_force'] < earliest:
+            h['date_doubtful'] = (f"dated {h['in_force']}, before anything this record can hold "
+                                  f"({earliest}): a mistyped date")
+        elif retro is not None and made and h['commit'] not in retro and (_days(h['in_force'], made) or 0) > 366:
+            # Days or months before the act is often real (retroactive effect: Swiss acts, US appropriations); more
+            # than a year with no Retroactive: trailer is as often a date taken from the wrong field.
+            h['date_doubtful'] = (f"dated {h['in_force']}, more than a year before its act was made ({made}); the "
+                                  "record does not say it took effect retroactively, so the date may be wrong")
+        elif capture and h['in_force'] == capture[0] and h['kind'] != 'baseline':
+            h['date_doubtful'] = (f"{capture[1]} of {capture[2]} changes in this record are dated {capture[0]}: "
+                                  "probably the day the text was read, not the day it took force")
     out.sort(key=lambda h: h['order'])
     return out
+
+
+def _days(a: str, b: str) -> int | None:
+    """Days from a to b (ISO dates), or None when either is not a real date (2021-02-30)."""
+    import datetime as dt
+    try:
+        return (dt.date.fromisoformat(b[:10]) - dt.date.fromisoformat(a[:10])).days
+    except ValueError:
+        return None
+
+
+def act_ends(corpus: str) -> dict[str, dict]:
+    """Acts the corpus's data/acts.json (corpus standard, gitlaw_common) records as repealed or expired, at the pinned
+    commit: act folder -> {'act', 'how' ('repealed' or 'expired'), 'day' (or None when not recorded), 'by'}. A builder
+    may record a whole-law repeal there without removing each file of the law (spain-law until November 2026: 1,991
+    norms), so the readers end every file of the act on that day themselves."""
+    ix = _index(corpus)
+    key = ('act-ends', f"{corpus}@{ix['pin']}")
+    if key not in _CACHE:
+        out: dict[str, dict] = {}
+        facts: dict[str, dict] = {}
+        try:
+            acts = json.loads(read_object(corpus, f"{ix['pin']}:data/acts.json") or '{}').get('acts') or []
+        except (ValueError, AttributeError):
+            acts = []
+        for a in acts if isinstance(acts, list) else []:
+            folder = str(a.get('path') or a.get('slug') or '').strip('/') if isinstance(a, dict) else ''
+            if not folder:
+                continue
+            facts[folder] = a
+            _CACHE[('act-facts', f"{corpus}@{ix['pin']}")] = facts
+            status = str(a.get('status') or '').lower()
+            for how in ('repealed', 'expired'):
+                d = a.get(how)
+                if isinstance(d, str) and ISO_DAY.match(d) and status not in ('in force', 'not yet in force'):
+                    out[folder] = {'act': folder, 'how': how, 'day': d[:10], 'by': str(a.get(f'{how}_by') or '')}
+                    break
+            else:
+                if status in ('repealed', 'expired'):
+                    out[folder] = {'act': folder, 'how': status, 'day': None, 'by': str(a.get('repealed_by') or '')}
+        _CACHE[key] = out
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+def act_fact(corpus: str, rel: str) -> dict:
+    """data/acts.json's row for the act holding a file (its longest folder), or {}."""
+    act_ends(corpus)
+    facts = _CACHE.get(('act-facts', f"{corpus}@{_index(corpus)['pin']}")) or {}
+    parts = rel.split('/')
+    for i in range(len(parts) - 1, 0, -1):
+        f = facts.get('/'.join(parts[:i]))  # type: ignore[union-attr]
+        if f:
+            return f
+    return {}
+
+
+def act_end(corpus: str, rel: str) -> dict | None:
+    """The end data/acts.json records for the act holding a file (its longest folder), or None."""
+    ends = act_ends(corpus)
+    if not ends:
+        return None
+    parts = rel.split('/')
+    for i in range(len(parts) - 1, 0, -1):
+        e = ends.get('/'.join(parts[:i]))
+        if e:
+            return e
+    return None
+
+
+def _end_commit(corpus: str, end: dict) -> tuple[str, int]:
+    """The commit that ended an act, for the history row of its repeal: of the commits in force on that day, one that
+    names the repealing law (its author or subject), else the latest; else the pinned commit, where data/acts.json
+    says so. (commit, its row)."""
+    ix = _index(corpus)
+    key = ('end-commit', f"{corpus}@{ix['pin']}:{end['act']}")
+    if key not in _CACHE:
+        rows = ix['rows']
+        that_day = [i for i, r in enumerate(rows) if r[5] == end['day'] and r[4] != 'documentation']
+        by = end['by'].lower()
+        named = [i for i in that_day if by and (by in rows[i][1].lower() or by in rows[i][3].lower()
+                                                 or rows[i][1].lower() in by)]
+        pick = (named or that_day or [None])[-1]
+        _CACHE[key] = (rows[pick][0], pick) if pick is not None else (ix['pin'], len(rows))
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+def capture_day(corpus: str) -> tuple[str, int, int] | None:
+    """(day, commits that day, dated commits) when a third or more of a corpus's dated commits take force on one day
+    and they are not marked as starting texts: a capture day written as an in-force date (check_corpus.py warns the
+    builder; New Jersey 713 of 1,145 on 3 November 2026). None otherwise."""
+    ix = _index(corpus)
+    key = ('capture-day', f"{corpus}@{ix['pin']}")
+    if key not in _CACHE:
+        days: dict[str, int] = {}
+        starting: dict[str, int] = {}
+        for r in ix['rows']:
+            if r[5] and r[4] != 'documentation':
+                days[r[5]] = days.get(r[5], 0) + 1
+                if r[4] == 'baseline':
+                    starting[r[5]] = starting.get(r[5], 0) + 1
+        total = sum(days.values())
+        found = None
+        if total >= 20:
+            d, n = max(days.items(), key=lambda kv: kv[1])
+            if n / total >= 0.3 and starting.get(d, 0) < n / 2:
+                found = (d, n, total)
+        _CACHE[key] = found
+    return _CACHE[key]  # type: ignore[return-value]
 
 
 # Commit kinds. Corpora write many words in Kind:; the tools read them as one of: law (a law taking effect),
@@ -1097,33 +1427,55 @@ def credited(corpus: str, rel: str, in_force: str, commit: str = '') -> tuple[st
     was_commit; the last row for a key counts; labels in data/laws.csv). A row naming the commit it re-credits applies
     to that commit only; a row without one, to the day. The commit's author stays as published."""
     pin = _index(corpus)['pin']
-    key = ('credits', f'{corpus}@{pin}')
+    folder, _, unit = rel.rpartition('/')
+    table = _credits_for(corpus, pin, folder)
+    if not table:
+        return None
+    found = table.get((folder, in_force, unit.removesuffix('.md')), [])  # type: ignore[union-attr]
+    mine = [e for c, e in found if c and commit and (c.startswith(commit) or commit.startswith(c))]
+    return (mine or [e for c, e in found if not c] or [None])[-1]
+
+
+def _credits_for(corpus: str, pin: str, folder: str) -> dict:
+    """data/credits.csv's rows for one act folder, as credited() reads them. Only the lines that name the folder (or
+    the act's name before the layout move) are parsed: a read of one provision parses a few rows, not every row of
+    the table and of data/laws.csv (0.3 s on romania-law)."""
+    import csv
+    import io
+    key = ('credits-raw', f'{corpus}@{pin}')
     if key not in _CACHE:
-        import csv
-        import io
-        table: dict[tuple[str, str, str], list] = {}
-        rows = list(csv.DictReader(io.StringIO(read_object(corpus, f'{pin}:data/credits.csv') or '')))
-        if rows and {'act', 'in_force', 'provision', 'law'} <= set(rows[0]):
-            laws = csv.DictReader(io.StringIO(read_object(corpus, f'{pin}:data/laws.csv') or ''))
-            labels = {r.get('key', ''): r.get('label', '') for r in laws}
+        text = read_object(corpus, f'{pin}:data/credits.csv') or ''
+        header, _, body = text.partition('\n')
+        raw = None
+        if {'act', 'in_force', 'provision', 'law'} <= set(next(csv.reader([header]), [])):
             try:
                 folders = json.loads(read_object(corpus, f'{pin}:data/paths.json') or '{}').get('paths', {})
             except ValueError:
                 folders = {}
-            unexplained = 'no law named (a change the record leaves unexplained)'
-            for r in rows:
-                law_key, was = (r.get('law') or '').strip(), (r.get('was_law') or '').strip()
-                entry = (labels.get(law_key) or law_key or unexplained, not law_key, labels.get(was) or was or unexplained)
-                for folder in {r['act'], folders.get(r['act'], r['act'])}:  # the act's folder now and before the move
-                    table.setdefault((folder, r['in_force'], r['provision']), []).append(((r.get('was_commit') or '').strip(), entry))
-        _CACHE[key] = table
-    table = _CACHE[key]  # type: ignore[assignment]
-    if not table:
-        return None
-    folder, _, unit = rel.rpartition('/')
-    found = table.get((folder, in_force, unit.removesuffix('.md')), [])  # type: ignore[union-attr]
-    mine = [e for c, e in found if c and commit and (c.startswith(commit) or commit.startswith(c))]
-    return (mine or [e for c, e in found if not c] or [None])[-1]
+            raw = {'header': header, 'lines': body.splitlines(), 'folders': folders, 'labels': None,
+                   'quoted': '"' in body or header.split(',')[0] != 'act'}  # else every row is parsed
+        _CACHE[key] = raw
+    raw = _CACHE[key]
+    if raw is None:
+        return {}
+    fkey = ('credits', f'{corpus}@{pin}@{folder}')
+    if fkey not in _CACHE:
+        names = {folder} | {act for act, now in raw['folders'].items() if now == folder}
+        lines = raw['lines'] if raw['quoted'] else [l for l in raw['lines'] if l.split(',', 1)[0] in names]
+        table: dict[tuple[str, str, str], list] = {}
+        if lines and raw['labels'] is None:
+            laws = csv.DictReader(io.StringIO(read_object(corpus, f'{pin}:data/laws.csv') or ''))
+            raw['labels'] = {r.get('key', ''): r.get('label', '') for r in laws}
+        unexplained = 'no law named (a change the record leaves unexplained)'
+        for r in csv.DictReader(io.StringIO('\n'.join([raw['header'], *lines]))):
+            law_key, was = (r.get('law') or '').strip(), (r.get('was_law') or '').strip()
+            labels = raw['labels']
+            entry = (labels.get(law_key) or law_key or unexplained, not law_key, labels.get(was) or was or unexplained)
+            for f in {r['act'], raw['folders'].get(r['act'], r['act'])}:  # the act's folder now and before the move
+                if f == folder:
+                    table.setdefault((f, r['in_force'], r['provision']), []).append(((r.get('was_commit') or '').strip(), entry))
+        _CACHE[fkey] = table
+    return _CACHE[fkey]  # type: ignore[return-value]
 
 
 def countries_cmd() -> str:
@@ -1162,7 +1514,7 @@ def credit(author: str, kind: str) -> str:
     return CREDIT.get(kind, '{}').format(author)
 
 
-INDEX_VERSION = 5  # raise when what the index keeps changes: old indexes are then rebuilt
+INDEX_VERSION = 6  # raise when what the index keeps changes: old indexes are then rebuilt
 
 
 def _index_version() -> str:
@@ -1249,6 +1601,10 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str) -> None:
         row, unknown = _derive(info, commit, author, when, subject, block)
         if unknown:
             data['unknown'].add(unknown)
+        if trailer_lines(block).get('Retroactive', '').strip().lower().startswith('yes'):
+            # "Retroactive: yes; <the provision that says so>" (corpus standard): in force before the act was made, and
+            # the source says so: not a doubtful date.
+            data.setdefault('retroactive', set()).add(commit)
         if author == MAINTAINER and row[4] != 'documentation':
             # A restated version (Corrects: or Re-asserts: <commit>) is credited to the law of the version it
             # restates, followed back through a correction of a correction.
@@ -1308,23 +1664,29 @@ def _index(corpus: str) -> dict:
     key = ('index', f'{corpus}@{sha}')
     if key in _CACHE:
         return _CACHE[key]  # type: ignore[return-value]
-    if subprocess.run(['git', 'cat-file', '-e', f'{sha}^{{commit}}'], cwd=cwd, capture_output=True).returncode:
+    if not _has_commit(corpus, cwd, sha):
         raise SystemExit(f'{corpus}: this checkout does not have the commit the tree pins ({sha[:10]}), so the law it '
                          f'holds cannot be read as of now. Run: git submodule update --init -- {corpus}')
     import os
-    import pickle
-    store = Path(git('rev-parse', '--path-format=absolute', '--git-path', 'global-law-cache').strip())
-    path = store / (corpus.replace('/', '~') + '.pickle')
+    store = _store()
+    path = store / (corpus.replace('/', '~') + '.index')
     data = None
+    changed = False
     try:
-        with open(path, 'rb') as f:
-            data = pickle.load(f)
+        data = _load_index(path)
         if data.get('v') != _index_version():
             data = None
     except Exception:
         data = None
-    changed = False
+        try:  # an index kept in one piece (until 4 November 2026): read once, and kept in pieces from now on
+            with open(path.with_suffix('.pickle'), 'rb') as f:
+                data = _unpickle(f.read())
+            changed = data.get('v') == _index_version() or None
+            data = data if changed else None
+        except Exception:
+            data = None
     if data and data['pin'] != sha:
+        data['files'] = dict(data['files'].items())  # every file, to extend
         forward = subprocess.run(['git', 'merge-base', '--is-ancestor', data['pin'], sha], cwd=cwd,
                                  capture_output=True).returncode == 0
         if forward:
@@ -1336,23 +1698,171 @@ def _index(corpus: str) -> dict:
         # moves: old path -> new, one step each (moves()); withdrawn: path -> the commit that removed it; restates:
         # correction -> the commit it restates; pos: commit -> its row.
         data = {'v': _index_version(), 'pin': sha, 'rows': [], 'files': {}, 'unknown': set(), 'moves': {}, 'withdrawn': {},
-                'restates': {}, 'pos': {}}
+                'restates': {}, 'pos': {}, 'retroactive': set()}
         _extend(corpus, cwd, data, sha)
         changed = True
     if changed:
         try:  # a cache: a tree that cannot be written to is read the slow way next time, nothing more
             store.mkdir(parents=True, exist_ok=True)
             tmp = path.with_name(f'{path.name}.{os.getpid()}.tmp')
-            with open(tmp, 'wb') as f:
-                pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+            _save_index(tmp, data)
             os.replace(tmp, path)
+            path.with_suffix('.pickle').unlink(missing_ok=True)  # the one-piece index this replaces (until 4 November 2026)
         except OSError:
             pass
     _CACHE[key] = data
     return data
 
 
+INDEX_SHARDS = 64
+
+
+def _shard(path: str) -> int:
+    import zlib
+    return zlib.crc32(path.encode('utf-8')) % INDEX_SHARDS
+
+
+def _save_index(target: Path, data: dict) -> None:
+    """The index as one file: its commits and tables in one piece, then every file's versions split in INDEX_SHARDS
+    pieces by path, so that a read of one provision loads one piece (a 64th) and not every file of the corpus."""
+    import pickle
+    shards: list[tuple[dict, list]] = [({}, []) for _ in range(INDEX_SHARDS)]
+    for n, (rel, versions) in enumerate(data['files'].items()):
+        piece = shards[_shard(rel)]
+        piece[0][rel] = versions
+        piece[1].append(n)  # its place among all files, so that going through them all keeps the order
+    blobs = [pickle.dumps(sh, protocol=pickle.HIGHEST_PROTOCOL) for sh in shards]
+    head = {k: v for k, v in data.items() if k != 'files'}
+    head['shards'] = [len(b) for b in blobs]
+    head_blob = pickle.dumps(head, protocol=pickle.HIGHEST_PROTOCOL)
+    with open(target, 'wb') as f:
+        f.write(b'GLX2' + len(head_blob).to_bytes(8, 'little'))
+        f.write(head_blob)
+        for b in blobs:
+            f.write(b)
+
+
+def _load_index(path: Path) -> dict:
+    import pickle
+    with open(path, 'rb') as f:
+        if f.read(4) != b'GLX2':
+            raise ValueError('not an index')
+        size = int.from_bytes(f.read(8), 'little')
+        head = _unpickle(f.read(size))
+    sizes = head.pop('shards')
+    offsets, at = [], 12 + size
+    for n in sizes:
+        offsets.append((at, n))
+        at += n
+    head['files'] = _Files(path, offsets)
+    return head
+
+
+def _unpickle(raw: bytes):
+    """pickle.loads with the garbage collector paused: loading builds millions of objects, which it would only walk
+    (a fifth of the load)."""
+    import gc
+    import pickle
+    gc.disable()
+    try:
+        return pickle.loads(raw)
+    finally:
+        gc.enable()
+
+
+class _Files:
+    """An index's files (path -> versions), read from disk a piece at a time: looking up one path loads the piece
+    holding it; going through every path loads them all. Read-only."""
+
+    def __init__(self, path: Path, offsets: list[tuple[int, int]]):
+        self._path, self._offsets = path, offsets
+        self._shards: dict[int, tuple[dict, list]] = {}
+        self._ordered: list | None = None
+
+    def _piece(self, i: int) -> dict:
+        if i not in self._shards:
+            at, n = self._offsets[i]
+            with open(self._path, 'rb') as f:
+                f.seek(at)
+                raw = f.read(n)
+            if len(raw) != n:
+                raise OSError(f'{self._path}: index cut short')
+            self._shards[i] = _unpickle(raw)
+        return self._shards[i][0]
+
+    def _all(self) -> list[tuple[str, list]]:
+        """Every (path, versions), in the order they were indexed."""
+        if self._ordered is None:
+            if len(self._shards) < len(self._offsets):
+                with open(self._path, 'rb') as f:
+                    for i, (at, n) in enumerate(self._offsets):
+                        if i not in self._shards:
+                            f.seek(at)
+                            self._shards[i] = _unpickle(f.read(n))
+            placed: list = [None] * sum(len(self._shards[i][1]) for i in self._shards)
+            for files, places in self._shards.values():
+                for kv, at in zip(files.items(), places):
+                    placed[at] = kv
+            self._ordered = placed
+        return self._ordered
+
+    def get(self, rel, default=None):
+        return self._piece(_shard(rel)).get(rel, default) if isinstance(rel, str) else default
+
+    def __getitem__(self, rel):
+        return self._piece(_shard(rel))[rel]
+
+    def __contains__(self, rel) -> bool:
+        return isinstance(rel, str) and rel in self._piece(_shard(rel))
+
+    def items(self):
+        return list(self._all())
+
+    def keys(self):
+        return [k for k, _ in self._all()]
+
+    def values(self):
+        return [v for _, v in self._all()]
+
+    def __iter__(self):
+        return iter(self.keys())
+
+    def __len__(self) -> int:
+        return len(self._all())
+
+
 _BATCH: dict = {}
+
+
+def _batch_read(corpus: str, cwd: Path, spec: str) -> tuple[bytes | None, bytes | None]:
+    """(type, content) of an object through the corpus's long-lived `git cat-file --batch`; (None, None) if missing."""
+    p = _BATCH.get(corpus)
+    if p is None or p.poll() is not None:
+        p = _BATCH[corpus] = subprocess.Popen(['git', 'cat-file', '--batch'], cwd=cwd, stdin=subprocess.PIPE,
+                                              stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        import atexit
+        atexit.register(_stop_reader, p)
+    p.stdin.write(spec.encode('utf-8') + b'\n')
+    p.stdin.flush()
+    head = p.stdout.readline().split()
+    if len(head) < 3 or head[-1] in (b'missing', b'ambiguous'):
+        return None, None
+    data = p.stdout.read(int(head[2]))
+    p.stdout.read(1)
+    return head[1], data
+
+
+def _has_commit(corpus: str, cwd: Path, sha: str) -> bool:
+    """Whether a checkout has a commit, asked once a process, and of the batch reader the command uses anyway rather
+    than a git process each time."""
+    key = ('has-commit', f'{corpus}@{sha}')
+    if not _CACHE.get(key):
+        if hasattr(subprocess, 'Popen'):
+            _CACHE[key] = _batch_read(corpus, cwd, f'{sha}^{{commit}}')[0] == b'commit'
+        else:
+            _CACHE[key] = subprocess.run(['git', 'cat-file', '-e', f'{sha}^{{commit}}'], cwd=cwd,
+                                         capture_output=True).returncode == 0
+    return bool(_CACHE[key])
 
 
 def read_object(corpus: str, spec: str) -> str | None:
@@ -1363,20 +1873,8 @@ def read_object(corpus: str, spec: str) -> str | None:
         done = subprocess.run(['git', 'cat-file', 'blob', spec], cwd=cwd, capture_output=True)
         data = done.stdout if done.returncode == 0 else None
     else:
-        p = _BATCH.get(corpus)
-        if p is None or p.poll() is not None:
-            p = _BATCH[corpus] = subprocess.Popen(['git', 'cat-file', '--batch'], cwd=cwd, stdin=subprocess.PIPE,
-                                                  stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
-            import atexit
-            atexit.register(lambda p=p: (p.stdin.close(), p.wait(5)))
-        p.stdin.write(spec.encode('utf-8') + b'\n')
-        p.stdin.flush()
-        head = p.stdout.readline().split()
-        if len(head) < 3 or head[-1] in (b'missing', b'ambiguous'):
-            return None
-        data = p.stdout.read(int(head[2]))
-        p.stdout.read(1)
-        if head[1] != b'blob':
+        kind, data = _batch_read(corpus, cwd, spec)
+        if kind != b'blob':
             return None
     if data is None:
         return None
@@ -1384,14 +1882,21 @@ def read_object(corpus: str, spec: str) -> str | None:
     return data.decode('utf-8', 'replace').replace('\r\n', '\n').replace('\r', '\n')
 
 
+def _stop_reader(p) -> None:
+    try:
+        p.stdin.close()
+        p.wait(5)
+    except Exception:  # slow to exit (a busy machine) or gone already: stopped, without a traceback at exit
+        try:
+            p.kill()
+        except Exception:
+            pass
+
+
 def close_readers() -> None:
     """Stop the `git cat-file --batch` readers (they hold each corpus folder open while they run)."""
     for p in _BATCH.values():
-        try:
-            p.stdin.close()
-            p.wait(5)
-        except Exception:
-            p.kill()
+        _stop_reader(p)
     _BATCH.clear()
 
 
@@ -1400,7 +1905,7 @@ def read_version(path: str, commit: str) -> str | None:
     if not commit:
         return None
     corpus, rel = corpus_of(path)
-    row = next((h for h in history(path) if h['commit'] == commit and 'blob' in h), None)
+    row = next((h for h in reversed(history(path)) if h['commit'] == commit and 'blob' in h), None)
     if row is not None:
         return read_object(corpus, row['blob']) if row['blob'] else None
     return read_object(corpus, f'{commit}:{rel}')
@@ -1484,7 +1989,7 @@ def main(argv: list[str]) -> None:
         note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()))
     elif command in ('show', 'blame', 'words'):
         corpus, _ = corpus_of(args[1])
-        note(caveats(args[0], corpus))
+        note(caveats(args[0], corpus) + file_notes(args[0], args[1]))
         text = text_on(args[0], args[1])
         if text is None:
             raise SystemExit(explain_missing(args[0], args[1]))
@@ -1521,7 +2026,11 @@ def main(argv: list[str]) -> None:
         for h in history(args[0]):
             dates = '; '.join(f'{k} {h[k]}' for k in ('enacted', 'published') if h[k])
             label = {'baseline': 'version of', 'correction': 'corrected', 'printing': 'printed'}.get(h.get('kind'), 'in force')
-            print(f"{label} {h['in_force']}  {h['law']}" + (f'  ({dates})' if dates else ''))
+            if h.get('ends'):
+                label = h['ends']
+            print(f"{label} {h['in_force']}  {h['law']}" + (f'  ({dates})' if dates else '')
+                  + (f"  [act {h['act']}, from data/acts.json]" if h.get('ends') else '')
+                  + (f"  [date doubtful: {h['date_doubtful']}]" if h.get('date_doubtful') else ''))
     elif command == 'laws':
         if args[0] > args[1]:
             args[0], args[1] = args[1], args[0]

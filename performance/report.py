@@ -225,6 +225,119 @@ def trend(runs: list[dict]) -> str:
             f'<svg viewBox="0 0 800 {bottom + 30}" role="img" aria-label="Headline timings by run, log scale">{body}</svg>')
 
 
+MONITORS = [  # (title, how a run gives its value, budget in seconds or None, unit)
+    ('show, today', 'worst show today', 3, 's'), ('show, past date', 'worst show past', 3, 's'),
+    ('log', 'worst log', 3, 's'), ('blame, past date', 'worst blame past', 5, 's'),
+    ('words, today', 'worst words today', 10, 's'), ('diff', 'worst diff', 3, 's'),
+    ('Loading an index', 'worst index warm', 3, 's'), ('world, every corpus', 'world (every corpus checked out)', 60, 's'),
+    ('laws, every corpus', 'laws 2026 (every corpus checked out)', 60, 's'),
+    ('git processes per read', 'procs median', None, 'processes'),
+    ('Checks passing', 'checks passing', None, 'checks'),
+]
+
+
+def monitor_value(run: dict, how: str) -> float | None:
+    t = run.get('timings', {})
+    if how.startswith('worst '):
+        vs = [v for k, v in t.items() if k.startswith(how[6:] + ': ')]
+        return max(vs) if vs else None
+    if how == 'procs median':
+        vs = sorted(v for k, v in run.get('git_processes', {}).items() if v is not None and 'every corpus' not in k)
+        return vs[len(vs) // 2] if vs else None
+    if how == 'checks passing':
+        c = run.get('checks', {})
+        return sum(1 for v in c.values() if v == 'pass') if c else None
+    return t.get(how)
+
+
+def worst_key(run: dict, how: str) -> str:
+    if not how.startswith('worst '):
+        return ''
+    t = run.get('timings', {})
+    ks = [k for k in t if k.startswith(how[6:] + ': ')]
+    if not ks:
+        return ''
+    name = max(ks, key=lambda k: t[k]).split(': ', 1)[1]
+    return name.split('/')[0] if how == 'worst index warm' else short_name(name)
+
+
+def sparkline(values: list, budget: float | None, unit: str, labels: list[str]) -> str:
+    """Every run's value, oldest left; the budget as a dashed line when it is in view."""
+    pts = [(i, v) for i, v in enumerate(values) if v is not None]
+    if not pts:
+        return ''
+    w, h, pad = 220, 54, 6
+    hi = max(v for _, v in pts) or 1
+    show_budget = bool(budget) and budget <= hi * 2.5
+    top = max(hi, budget if show_budget else 0) * 1.12
+    n = len(values)
+    x = lambda i: pad + (i * (w - 2 * pad) / (n - 1) if n > 1 else (w - 2 * pad) / 2)
+    y = lambda v: h - pad - v / top * (h - 2 * pad)
+    body = ''
+    if show_budget:
+        body += (f'<line x1="0" x2="{w}" y1="{y(budget):.1f}" y2="{y(budget):.1f}" class="budget"/>'
+                 f'<text x="{w}" y="{y(budget) - 3:.1f}" class="btext" text-anchor="end">budget {budget:g} s</text>')
+    if len(pts) > 1:
+        body += (f'<polyline points="{" ".join(f"{x(i):.1f},{y(v):.1f}" for i, v in pts)}" class="line" '
+                 f'style="stroke:var(--s1)"/>')
+    for i, v in pts:
+        val = f'{fmt(v)} s' if unit == 's' else f'{v:g} {unit}'
+        tip = esc(f'{labels[i]}: {val}')
+        body += (f'<g class="hit" data-tip="{tip}"><rect x="{x(i) - 8:.1f}" y="0" width="16" height="{h}" fill="transparent"/>'
+                 f'<circle cx="{x(i):.1f}" cy="{y(v):.1f}" r="{4 if i == pts[-1][0] else 2.5}" class="dot" '
+                 f'style="fill:var(--s1)"/></g>')
+    return f'<svg viewBox="0 0 {w} {h}" class="spark" role="img" aria-label="Value in each run">{body}</svg>'
+
+
+def monitors(runs: list[dict]) -> str:
+    """One tile a monitored measure: the latest run against its budget and the last run on the same corpora, and a
+    line of every run."""
+    if not runs:
+        return ''
+    latest = runs[-1]
+    same = [r for r in runs[:-1] if r.get('corpora_measured') == latest.get('corpora_measured')]
+    prev = same[-1] if same else None
+    labels = [f"{r['when'][:16].replace('T', ' ')}, law.py {r.get('law_py', '?')[:7]}" for r in runs]
+    tiles = ''
+    for title, how, budget, unit in MONITORS:
+        v = monitor_value(latest, how)
+        if v is None:
+            continue
+        before = monitor_value(prev, how) if prev else None
+        if unit == 's':
+            big = f'{fmt(v)}<small> s</small>'
+            if budget and v > budget:
+                state, word = 'bad', f'Over its {budget:g} s budget'
+            elif before is not None and v > before * 1.5 and v - before > 1:
+                state, word = 'warn', f'Slower than the last run ({fmt(before)} s)'
+            else:
+                state, word = 'ok', f'Within its {budget:g} s budget'
+        elif how == 'checks passing':
+            total = len(latest.get('checks', {}))
+            big = f'{v:g}<small> of {total}</small>'
+            state, word = ('ok', 'Every check passes') if v == total else ('bad', f'{total - v:g} failing')
+        else:
+            big = f'{v:g}<small> {unit}</small>'
+            state, word = 'ok', 'Median over the fixed reads'
+        change = ''
+        if before is not None and unit == 's' and before > 0:
+            ratio = v / before
+            change = (f'{ratio:.1f}× the last run' if ratio >= 1.05 else
+                      f'{1 / ratio:.1f}× faster than the last run' if ratio <= 0.95 else 'Same as the last run')
+        elif before is not None and unit != 's':
+            change = f'Was {before:g}' if before != v else 'Same as the last run'
+        where = worst_key(latest, how)
+        if where:
+            change += (' · ' if change else '') + f'slowest: {where}'
+        icon = {'ok': '✓', 'warn': '▲', 'bad': '✕'}[state]
+        series = [monitor_value(r, how) for r in runs]
+        tiles += (f'<div class="tile"><div class="tt">{esc(title)}</div><div class="big">{big}</div>'
+                  f'<div class="state {state}"><span aria-hidden="true">{icon}</span> {esc(word)}</div>'
+                  f'<div class="sub">{esc(change)}</div>'
+                  f'{sparkline(series, budget if unit == "s" else None, unit, labels)}</div>')
+    return f'<div class="tiles">{tiles}</div>'
+
+
 def status_bars(tests: list[dict]) -> str:
     """For each deep test, its findings split by what became of them."""
     if not tests:
@@ -300,6 +413,17 @@ td.na { color:var(--muted); }
 .tag.fixed { background:var(--ok-soft); color:var(--ok); } .tag.open { background:var(--bad-soft); color:var(--bad); }
 .tag.clean { background:var(--ok-soft); color:var(--ok); } .tag.handed { background:var(--warn-soft); color:var(--warn); }
 code { font-family:ui-monospace, Consolas, monospace; font-size:.9em; }
+.tiles { display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:12px; margin:12px 0 8px; }
+.tile { background:var(--sheet); border:1px solid var(--rule); border-radius:8px; padding:12px 14px 8px; min-width:0; }
+.tile .tt { font-size:13px; color:var(--muted); }
+.tile .big { font-size:28px; font-weight:600; line-height:1.2; font-variant-numeric:tabular-nums; }
+.tile .big small { font-size:14px; font-weight:400; color:var(--muted); }
+.tile .state { font-size:12.5px; font-weight:600; margin:2px 0; } .state.ok { color:var(--ok); }
+.state.warn { color:var(--warn); } .state.bad { color:var(--bad); }
+.tile .sub { min-height:18px; } .spark { display:block; width:100%; height:auto; margin-top:4px; overflow:visible; }
+.spark .line { fill:none; stroke-width:2; stroke-linejoin:round; } .spark .dot { stroke:var(--sheet); stroke-width:1.5; }
+.spark .budget { stroke:var(--st-open); stroke-width:1; stroke-dasharray:3 3; opacity:.7; }
+.spark .btext { fill:var(--muted); font-size:9.5px; }
 #tip { position:fixed; pointer-events:none; background:var(--ink); color:var(--paper); font-size:12.5px; padding:5px 9px;
   border-radius:5px; max-width:340px; display:none; z-index:10; }
 '''
@@ -394,6 +518,12 @@ says how many). Times are seconds. This page is written by <code>performance/rep
 
 {attention}
 {context}
+<h2>Monitors</h2>
+<p>Each measure in the latest run, against its budget and the last run on the same corpora; the line under it is every
+run, oldest left (hover a point). A command's tile shows its slowest fixed provision. <code>python performance/bench.py
+--quick</code> adds a run in a few minutes.</p>
+{monitors(runs)}
+
 <h2>Speed: before and after</h2>
 <p>Each fix, the time before (orange) and after (blue). The scale is logarithmic: each gridline is ten times the last.</p>
 {chart(dumbbell(found.get('speed', [])))}

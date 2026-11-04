@@ -66,20 +66,34 @@ SLOWER, SLOWER_BY = 1.5, 1.0  # a regression: this many times the last run's tim
 TODAY = dt.date.today().isoformat()
 
 
-def run(args: list[str], timeout: int = 1800) -> tuple[float, int, str]:
+def run(args: list[str], timeout: int = 1800, env: dict | None = None) -> tuple[float, int, str]:
     t = time.time()
     try:
-        done = subprocess.run(args, cwd=ROOT, capture_output=True, encoding='utf-8', errors='replace', timeout=timeout)
+        done = subprocess.run(args, cwd=ROOT, capture_output=True, encoding='utf-8', errors='replace', timeout=timeout,
+                              env=env)
         return round(time.time() - t, 2), done.returncode, (done.stdout + done.stderr)[-400:]
     except subprocess.TimeoutExpired:
         return float(timeout), -1, 'timed out'
 
 
-def cli(*args: str, timeout: int = 1800, tries: int = 1) -> tuple[float, int, str]:
-    """law.py as a reader runs it; with tries > 1, the median time of that many runs."""
-    got = [run([sys.executable, '-X', 'utf8', str(ROOT / 'tools' / 'law.py'), *args], timeout) for _ in range(tries)]
+def cli(*args: str, timeout: int = 1800, tries: int = 1) -> tuple[float, int, str, int | None]:
+    """law.py as a reader runs it; with tries > 1, the median time of that many runs. The last item is how many git
+    processes the command started, counted by git itself (GIT_TRACE2: one "version" line a process) on the first try:
+    starting a process is the slowest part of a short read on some machines."""
+    import tempfile
+    trace = Path(tempfile.gettempdir()) / f'global-law-bench-{os.getpid()}.trace'
+    trace.unlink(missing_ok=True)
+    got = []
+    for i in range(tries):
+        env = {**os.environ, 'GIT_TRACE2': str(trace)} if i == 0 else None
+        got.append(run([sys.executable, '-X', 'utf8', str(ROOT / 'tools' / 'law.py'), *args], timeout, env))
+    procs = None
+    if trace.exists():
+        procs = sum(1 for line in trace.read_text(encoding='utf-8', errors='replace').splitlines()
+                    if line.split()[2:3] == ['version'])
+        trace.unlink(missing_ok=True)
     times = sorted(g[0] for g in got)
-    return times[len(times) // 2], got[-1][1], got[-1][2]
+    return times[len(times) // 2], got[-1][1], got[-1][2], procs
 
 
 def budget_of(name: str) -> float | None:
@@ -97,8 +111,7 @@ def regressions(result: dict, earlier: list[dict]) -> list[str]:
 
 
 def cache_file(corpus: str) -> Path:
-    store = Path(law.git('rev-parse', '--path-format=absolute', '--git-path', 'global-law-cache').strip())
-    return store / (corpus.replace('/', '~') + '.pickle')
+    return law._store() / (corpus.replace('/', '~') + '.index')
 
 
 def main(argv: list[str]) -> int:
@@ -119,7 +132,7 @@ def main(argv: list[str]) -> int:
         'law_py': law.git('hash-object', str(ROOT / 'tools' / 'law.py')).strip()[:12],
         'quick': quick, 'tries': tries,
         'pins': {c: (law.tip(c) or '')[:12] for c in bench_corpora + others},
-        'timings': {}, 'checks': {}, 'notes': [], 'cache_mb': {},
+        'timings': {}, 'checks': {}, 'notes': [], 'cache_mb': {}, 'git_processes': {},
     }
     t, checks = result['timings'], result['checks']
 
@@ -140,6 +153,7 @@ def main(argv: list[str]) -> int:
         kept = f.with_suffix('.bench-keep')
         if f.exists():
             shutil.move(str(f), str(kept))
+        f.with_suffix('.pickle').unlink(missing_ok=True)  # the one-piece index law.py read until 4 November 2026
         secs, code, _ = run([sys.executable, '-X', 'utf8', '-c', f'import sys; sys.path.insert(0, "tools"); import law; '
                              f'law._index({corpus!r})'], 3600)
         t[f'index cold: {corpus}'] = secs
@@ -160,16 +174,19 @@ def main(argv: list[str]) -> int:
         for name, args in (('show today', ('show', TODAY, p)), ('show past', ('show', past, p)), ('log', ('log', p)),
                            ('blame past', ('blame', past, p)), ('words today', ('words', TODAY, p)),
                            ('diff', ('diff', past, TODAY, p))):
-            secs, code, tail = cli(*args, tries=tries)
+            secs, code, tail, procs = cli(*args, tries=tries)
             t[f'{name}: {p}'] = secs
+            result['git_processes'][f'{name}: {p}'] = procs
             if code not in (0, 1) or 'Traceback' in tail:
                 result['notes'].append(f'{name} {p}: exit {code}: {tail[-160:]}')
-    secs, code, tail = cli('world', TODAY, timeout=3600)
+    secs, code, tail, procs = cli('world', TODAY, timeout=3600)
     t['world (every corpus checked out)'] = secs
+    result['git_processes']['world (every corpus checked out)'] = procs
     if code:
         result['notes'].append(f'world: exit {code}: {tail[-160:]}')
-    secs, code, tail = cli('laws', '2026-01-01', TODAY, timeout=3600)
+    secs, code, tail, procs = cli('laws', '2026-01-01', TODAY, timeout=3600)
     t['laws 2026 (every corpus checked out)'] = secs
+    result['git_processes']['laws 2026 (every corpus checked out)'] = procs
 
     # 4. correctness on samples, in this process
     wrong, blamed = [], []
@@ -206,7 +223,8 @@ def main(argv: list[str]) -> int:
     result['over_budget'] = [f'{k}: {v:.1f} s (budget {budget_of(k):g} s)' for k, v in t.items()
                              if budget_of(k) is not None and v > budget_of(k)]
     runs_file = HERE / 'runs.jsonl'
-    earlier = [json.loads(l) for l in runs_file.read_text(encoding='utf-8').splitlines() if l.strip()]         if runs_file.exists() else []
+    earlier = [json.loads(l) for l in runs_file.read_text(encoding='utf-8').splitlines() if l.strip()] \
+        if runs_file.exists() else []
     result['regressions'] = regressions(result, earlier)
 
     print(json.dumps(result, indent=1, ensure_ascii=False))
