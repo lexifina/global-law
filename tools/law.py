@@ -800,20 +800,18 @@ GIT_DIFF_ABOVE = 1_000_000  # line pairs above which git's histogram diff matche
 
 def _git_line_opcodes(a: list[str], b: list[str]) -> list[tuple[str, int, int, int, int]] | None:
     """git's histogram diff of two lists of lines, as difflib opcodes; None if git cannot be run here."""
-    import tempfile
-    try:
-        with tempfile.TemporaryDirectory() as d:
-            for name, lines in (('a', a), ('b', b)):
-                Path(d, name).write_bytes(''.join(x if x.endswith('\n') else x + '\n' for x in lines).encode('utf-8'))
-            out = subprocess.run(['git', 'diff', '--no-index', '--no-color', '--no-ext-diff', '-U0',
-                                  '--diff-algorithm=histogram', 'a', 'b'], cwd=d, capture_output=True)
-    except (OSError, AttributeError):
-        return None
-    if out.returncode not in (0, 1):
-        return None
+    return _GitDiffs([(a, b)]).opcodes()[0]
+
+
+def _file_bytes(lines: list[str]) -> bytes:
+    """Lines as git reads them for a diff: each ends with a newline."""
+    return ''.join(x if x.endswith('\n') else x + '\n' for x in lines).encode('utf-8')
+
+
+def _hunks_to_opcodes(hunks: list[str], a: list[str], b: list[str]) -> list[tuple[str, int, int, int, int]]:
     ops: list[tuple[str, int, int, int, int]] = []
     ia = ib = 0
-    for line in out.stdout.decode('utf-8', 'replace').splitlines():
+    for line in hunks:
         hunk = re.match(r'@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@', line)
         if not hunk:
             continue
@@ -828,6 +826,71 @@ def _git_line_opcodes(a: list[str], b: list[str]) -> list[tuple[str, int, int, i
     return ops
 
 
+class _GitDiffs:
+    """git's histogram diff of many (a, b) pairs of lists of lines from ONE git process, started at once and read
+    when wanted, so git works while Python credits the versions before. The pairs are written as files of the same
+    name in two folders and `git diff --no-index` compares the folders file by file, with the same diff it gives two
+    single files. `encoded` (id of a list -> its bytes) keeps a version that is the new side of one pair and the old
+    side of the next from being encoded twice."""
+
+    def __init__(self, pairs: list[tuple[list[str], list[str]]], encoded: dict | None = None):
+        import tempfile
+        self.pairs, self.proc, self.dir = pairs, None, None
+        if not pairs:
+            return
+        encoded = {} if encoded is None else encoded
+
+        def data(lines: list[str]) -> bytes:
+            if id(lines) not in encoded:
+                encoded[id(lines)] = _file_bytes(lines)
+            return encoded[id(lines)]
+        try:
+            self.dir = tempfile.TemporaryDirectory()
+            d = Path(self.dir.name)
+            (d / 'a').mkdir()
+            (d / 'b').mkdir()
+            for k, (a, b) in enumerate(pairs):
+                (d / 'a' / f'{k:06d}').write_bytes(data(a))
+                (d / 'b' / f'{k:06d}').write_bytes(data(b))
+            self.out = open(d / 'out', 'wb')
+            self.proc = subprocess.Popen(['git', 'diff', '--no-index', '--no-color', '--no-ext-diff', '--no-renames',
+                                          '-U0', '--diff-algorithm=histogram', 'a', 'b'], cwd=d, stdout=self.out,
+                                         stderr=subprocess.DEVNULL)
+        except (OSError, AttributeError):
+            self.close()
+
+    def close(self) -> None:
+        if self.proc is not None and self.proc.poll() is None:
+            self.proc.kill()
+            self.proc.wait()
+        if getattr(self, 'out', None) is not None:
+            self.out.close()
+        if self.dir is not None:
+            self.dir.cleanup()
+        self.dir = None
+
+    def opcodes(self) -> list[list[tuple[str, int, int, int, int]] | None]:
+        """Each pair's difflib opcodes; None for every pair if git could not be run here."""
+        if self.proc is None:
+            self.close()
+            return [None] * len(self.pairs)
+        code = self.proc.wait()
+        self.out.close()
+        raw = Path(self.dir.name, 'out').read_bytes()
+        self.close()
+        if code not in (0, 1):
+            return [None] * len(self.pairs)
+        hunks: dict[int, list[str]] = {}
+        current: list[str] | None = None
+        for line in raw.decode('utf-8', 'replace').splitlines():
+            head = re.match(r'diff --git a/a/(\d{6}) b/b/(\d{6})$', line)
+            if head:
+                current = hunks.setdefault(int(head[1]), [])
+            elif current is not None and line.startswith('@@ '):
+                current.append(line)
+        return [_hunks_to_opcodes(hunks.get(k, []), a, b) for k, (a, b) in enumerate(self.pairs)]
+
+
 def _line_opcodes(a: list[str], b: list[str]) -> list[tuple[str, int, int, int, int]]:
     """How the lines of one version of a file (a) became the next (b), as difflib opcodes: difflib for most files;
     git's histogram diff when both versions are long. difflib is quadratic in lines that repeat (the blank lines that
@@ -838,6 +901,41 @@ def _line_opcodes(a: list[str], b: list[str]) -> list[tuple[str, int, int, int, 
         if ops is not None:
             return ops
     return difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes()
+
+
+STEP_BATCH = 48  # long-file steps one git process diffs; the next batch's git runs while this one is credited
+
+
+def _step_opcodes(versions: list[list[str]], check=None):
+    """_line_opcodes for each step of a file's history ([] -> versions[0] -> versions[1] -> ...), in order, the same
+    answer step by step; but the long-file steps go to git STEP_BATCH at a time, one process each batch rather than
+    one each step, and the next batch is started before this one is used."""
+    check = check or (lambda: None)
+    steps = [(versions[i - 1] if i else [], versions[i]) for i in range(len(versions))]
+    big = [i for i, (a, b) in enumerate(steps) if len(a) * len(b) > GIT_DIFF_ABOVE]
+    batches = [big[i:i + STEP_BATCH] for i in range(0, len(big), STEP_BATCH)]
+    encoded: dict = {}
+    running = [_GitDiffs([steps[i] for i in batch], encoded) for batch in batches[:1]]
+    by_git: dict[int, list | None] = {}
+    try:
+        for n, batch in enumerate(batches):
+            check()
+            if n + 1 < len(batches):
+                running.append(_GitDiffs([steps[i] for i in batches[n + 1]], encoded))
+            by_git_now = dict(zip(batch, running[n].opcodes()))
+            # versions of earlier batches are not needed again
+            for i in by_git:
+                encoded.pop(id(versions[i]), None)
+            by_git = by_git_now
+            for i in range(batch[0] if n else 0, (batches[n + 1][0] if n + 1 < len(batches) else len(steps))):
+                ops = by_git.get(i)
+                yield ops if ops is not None else difflib.SequenceMatcher(None, *steps[i], autojunk=False).get_opcodes()
+        if not batches:
+            for a, b in steps:
+                yield difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes()
+    finally:
+        for r in running:
+            r.close()
 
 
 def blame_rows(date: str, path: str) -> list[tuple[str, str, str]]:
@@ -851,10 +949,10 @@ def blame_rows(date: str, path: str) -> list[tuple[str, str, str]]:
         return fast
     lines: list[str] = []
     credit: list[str] = []
-    for sha, law in seq:
-        new = (read_version(path, sha) or '').splitlines()
+    texts = [(read_version(path, sha) or '').splitlines() for sha, _ in seq]
+    for (sha, law), new, step in zip(seq, texts, _step_opcodes(texts)):
         nc: list[str] = []
-        for op, a0, a1, b0, b1 in _line_opcodes(lines, new):
+        for op, a0, a1, b0, b1 in step:
             nc += credit[a0:a1] if op == 'equal' else [f'{sha}\x1f{law}'] * (b1 - b0)
         lines, credit = new, nc
     return [(c.split('\x1f', 1)[0], c.split('\x1f', 1)[1], line) for c, line in zip(credit, lines)]
@@ -1008,12 +1106,11 @@ def words_on(date: str, path: str, check=None) -> list[tuple[str, str]]:
     check = check or (lambda: None)
     lines: list[str] = []
     authors: list[list[str]] = []  # per line, one law per token
-    for commit, law in versions_in_force(date, path):
+    seq = versions_in_force(date, path)
+    texts = [(read_version(path, commit) or '').splitlines(keepends=True) for commit, _ in seq]
+    for (commit, law), new_lines, ops in zip(seq, texts, _step_opcodes(texts, check)):
         check()
-        text = read_version(path, commit)
-        new_lines = text.splitlines(keepends=True) if text else []
         new_authors: list[list[str]] = []
-        ops = _line_opcodes(lines, new_lines)
         for op, a0, a1, b0, b1 in ops:
             if op == 'equal':
                 new_authors += authors[a0:a1]

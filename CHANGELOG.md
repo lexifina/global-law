@@ -9,6 +9,11 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Changed (all). `blame` and `words` on long, often amended files start a few git processes, not one per
+  version.** The line matching for long files (git's histogram diff) now runs 48 version steps per `git diff
+  --no-index` over two folders, the next batch running while Python reads the last. Czechia sb/1992/586 (236
+  versions): blame 8-18 s to about 2 s, 148 git processes to 5; words 20-24 s to 13-19 s (the rest is word comparison).
+  72 of 72 blame and words answers on 24 files in three corpora are byte-identical to before.
 - **Fixed (all). `describe.py` describes appended corpora rightly, and `--check` passes.** Acts appended after a first
   build are read from registry/data/ too (Serbia 9,749 acts, not 1; Bosnia 1,574, not 2; Albania 17,784); a README
   table row no longer makes Romania metadata-only; a failed fetch stops the run instead of reading as a missing file.
