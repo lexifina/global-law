@@ -1310,5 +1310,151 @@ class CountryNamesAndCodes(unittest.TestCase):
             run('config', '--unset', 'global-law.jurisdictions', cwd=self.t.root, check=False)
 
 
+class ActEndRule(unittest.TestCase):
+    """One act-end rule for every reader (audit rows 30, 43, 44, 45, 48): an act data/acts.json ends (repealed,
+    expired or annulled) stays ended unless a later version's law was enacted on or after the end, is not the law that
+    ended it, and is not a repeal note; corrections stop at the end; diff, laws and the timeline agree with history()."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus('aa/national/acts')
+        a.commit('Act 1 of 2010', {'rep/s1.md': '# s1\none\n', 'rep/s2.md': '# s2\ntwo\n', 'rep/s3.md': '# s3\nthree\n',
+                                   'other/x.md': 'other\n'},
+                 In_force='2010-01-01', Kind='law', Enacted='2009-12-01')
+        a.commit('Order 2 of 2011', {'ann/s1.md': 'struck\n', 'cor/s1.md': 'cor one\n', 'cor/s2.md': 'cor two\n'},
+                 In_force='2011-01-01', Kind='law', Enacted='2010-12-01')
+        a.commit('Act 9 of 2014', {'other/x.md': 'other 2\n'}, In_force='2015-01-01', Kind='law', Enacted='2014-06-01')
+        # The repealing law, made after the day acts.json gives (Spain's RD 199/2012 for RD 392/2011): its note in the
+        # repealed act's folder, and its rewording of one provision, do not bring the act back.
+        a.commit('Act 20 of 2016', {'rep/no.md': 'Norma derogada por Act 20 of 2016.\n',
+                                    'rep/s1.md': '# s1\none, as ended\n'},
+                 In_force='2016-02-01', Kind='law', Enacted='2016-01-10')
+        # A later law's "(Derogado)" over a provision, and a real later amendment, both made after the end.
+        a.commit('Act 30 of 2017', {'rep/s2.md': '## Section 2\n\n(Derogado)\n'}, In_force='2017-03-01', Kind='law',
+                 Enacted='2017-02-01')
+        a.commit('Act 40 of 2018', {'rep/s3.md': '# s3\nthree, amended for past years\n'}, In_force='2018-03-01',
+                 Kind='law', Enacted='2018-02-01')
+        # A correction whose range runs past its act's end, and one that starts after it.
+        a.commit('Gazette 2', {'cor/s2.md': 'cor two, corrected\n'}, In_force='2012-01-01', Kind='correction',
+                 Corrects='cor 2012-01-01..2025-12-31', Files='cor/s2.md', Reason='misprint')
+        a.commit('Gazette 3', {'cor/s1.md': 'cor one, corrected\n'}, In_force='2021-01-01', Kind='correction',
+                 Corrects='cor 2021-01-01..2025-12-31', Files='cor/s1.md', Reason='misprint')
+        acts = {'acts': [{'path': 'rep', 'status': 'repealed', 'repealed': '2015-01-01', 'repealed_by': 'Act 20 of 2016'},
+                         {'path': 'ann', 'status': 'annulled', 'in_force': '2011-01-01', 'annulled': '2014-05-01'},
+                         {'path': 'cor', 'status': 'repealed', 'repealed': '2020-01-01', 'repealed_by': 'Act 9 of 2019'},
+                         {'path': 'other', 'status': 'in force'}]}
+        a.commit('Lexifina', {'data/acts.json': json.dumps(acts)}, Kind='documentation')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def tree_names(self, date):
+        law = self.t.law()
+        try:
+            tree = law.corpus_tree(date, 'aa/national/acts')
+            return law.git('ls-tree', '-r', '--name-only', tree, cwd=law.corpus_dir('aa/national/acts')).split()
+        finally:
+            law.close_readers()
+
+    # Row 43: a repeal note, "(Derogado)" text or the repealing law's own version is not a re-enactment.
+    def test_the_repealing_laws_own_versions_do_not_reenact(self):
+        for f in ('no.md', 's1.md'):
+            out, err, code = self.t.cli('show', '2026-01-01', f'aa/national/acts/rep/{f}')
+            self.assertNotEqual(code, 0, out)
+            self.assertNotIn('in force again', err)
+        self.assertIn('was repealed on 2015-01-01 by Act 20 of 2016', err)
+        self.assertIn('2016-02-01 Act 20 of 2016 (enacted 2016-01-10; the law that ended the act)', err)
+
+    def test_a_derogado_note_does_not_reenact(self):
+        out, err, code = self.t.cli('show', '2026-01-01', 'aa/national/acts/rep/s2.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertIn('2017-03-01 Act 30 of 2017 (enacted 2017-02-01; a repeal note, not a re-enactment)', err)
+        out, err, code = self.t.cli('log', 'aa/national/acts/rep/s2.md')
+        self.assertNotIn('in force 2017-03-01', out)
+        self.assertIn('a repeal note', out)
+
+    def test_a_real_later_amendment_reenacts_and_says_so(self):
+        out, err, code = self.t.cli('show', '2026-01-01', 'aa/national/acts/rep/s3.md')
+        self.assertEqual(out, '# s3\nthree, amended for past years\n', err)
+        self.assertIn('is read as bringing it back into force', err)
+        self.assertEqual([n for n in self.tree_names('2026-01-01') if n.startswith('rep/')], ['rep/s3.md'])
+
+    def test_repeal_notes_are_recognised(self):
+        law = self.t.law()
+        for text in ('Norma derogada por la disposición derogatoria única del Real Decreto 199/2012.\n',
+                     'Norma deogada, con efectos de 11 de agosto de 2021.\n',
+                     '## Disposición transitoria décima.\n\n(Derogada)\n',
+                     'Norma anulada por Sentencia del TS de 17 de diciembre de 2024.\n', '[Repealed]\n'):
+            self.assertTrue(law.is_repeal_note(text), text)
+        for text in ('## Artículo 3\n\nLa norma derogada seguirá aplicándose a los periodos anteriores.\n', 'one\n', '',
+                     '## Artículo 15. Reglas de valoración.\n\n1. Los elementos patrimoniales se valorarán ...\n'):
+            self.assertFalse(law.is_repeal_note(text), text)
+
+    # Row 30: an annulled act ends like a repeal, from the annulment day, and says it was annulled.
+    def test_an_annulled_act_ends_on_its_annulment_day(self):
+        out, err, code = self.t.cli('show', '2014-04-30', 'aa/national/acts/ann/s1.md')
+        self.assertEqual(out, 'struck\n', err)
+        out, err, code = self.t.cli('show', '2014-05-01', 'aa/national/acts/ann/s1.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertIn('its act (ann) was annulled on 2014-05-01', err)
+        self.assertIn('data/acts.json', err)
+        out, err, code = self.t.cli('log', 'aa/national/acts/ann/s1.md')
+        self.assertIn('annulled 2014-05-01  annulled (data/acts.json)', out, err)
+        self.assertNotIn('ann/s1.md', self.tree_names('2020-01-01'))
+
+    # Row 45: diff across an end shows the text removed and names the end.
+    def test_diff_across_an_end_shows_the_text_removed(self):
+        out, err, code = self.t.cli('diff', '2014-04-30', '2014-05-01', 'aa/national/acts/ann/s1.md')
+        self.assertNotIn('No change', out)
+        self.assertIn('was annulled on 2014-05-01', out)
+        self.assertIn('[-struck-]', out)
+        out, err, code = self.t.cli('diff', '2014-12-31', '2026-01-01', 'aa/national/acts/rep/s3.md')
+        self.assertIn('three, amended for past years', out)
+        out, err, code = self.t.cli('diff', '2015-06-01', '2026-01-01', 'aa/national/acts/rep/s1.md')
+        self.assertIn('No change between those dates.', out)  # ended on both days
+
+    # Row 48: a law whose every version the act-end rule drops is not listed as taking force.
+    def test_laws_and_the_timeline_agree_with_history(self):
+        out, err, code = self.t.cli('laws', '2016-01-01', '2017-12-31', 'aa')
+        self.assertNotIn('Act 20 of 2016', out, err)
+        self.assertNotIn('Act 30 of 2017', out, err)
+        self.assertIn('2 laws that changed only acts data/acts.json had already ended', err)
+        out, err, code = self.t.cli('laws', '2018-01-01', '2018-12-31')
+        self.assertIn('Act 40 of 2018', out, err)
+        law = self.t.law()
+        try:
+            self.assertNotIn('Act 20 of 2016', [e.law for e in law.timeline()])
+            self.assertIn('Act 30 of 2017', [e.law for e in law.corpus_events('aa/national/acts')])  # raw history
+            self.assertNotIn('Act 30 of 2017', [e.law for e in law.law_events('aa/national/acts')])
+        finally:
+            law.close_readers()
+
+    # Row 44: a correction running past its act's end stops at the end; one starting after it never applies.
+    def test_a_correction_stops_at_its_acts_end(self):
+        out, err, code = self.t.cli('show', '2019-06-01', 'aa/national/acts/cor/s2.md')
+        self.assertEqual(out, 'cor two, corrected\n', err)
+        for date in ('2020-01-01', '2023-01-01'):
+            out, err, code = self.t.cli('show', date, 'aa/national/acts/cor/s2.md')
+            self.assertNotEqual(code, 0, out)
+            self.assertIn('was repealed on 2020-01-01', err)
+        out, err, code = self.t.cli('show', '2023-01-01', 'aa/national/acts/cor/s1.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertNotIn('cor/s2.md', self.tree_names('2023-01-01'))
+        self.assertNotIn('cor/s1.md', self.tree_names('2023-01-01'))
+        self.assertIn('cor/s2.md', self.tree_names('2019-06-01'))
+        law = self.t.law()
+        try:
+            h = law.history('aa/national/acts/cor/s2.md')
+            self.assertEqual([x['until'] for x in h if x.get('corrects')], ['2019-12-31'])
+            end = next(x for x in law.history('aa/national/acts/cor/s1.md') if x.get('ends'))
+            self.assertIn('2021-01-01 Gazette 3 (a correction for days after the end)', end['not_reenacting'])
+            self.assertEqual(law.versions_in_force('2023-01-01', 'aa/national/acts/cor/s2.md')[-1][1], 'Act 9 of 2019')
+        finally:
+            law.close_readers()
+
+
 if __name__ == '__main__':
     unittest.main()

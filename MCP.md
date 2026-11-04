@@ -169,10 +169,19 @@ Three more records change the answers:
   not start with `yes` is ignored.
 - **`data/acts.json`.** `{"acts": [{...}, ...]}`, one row per act: `path` (the act's folder, `slug` in older corpora),
   `status` (`in force`, `not yet in force`, `repealed`, `expired` or `annulled`), and the days `in_force`, `repealed`,
-  `expired` and `annulled` as YYYY-MM-DD, with `repealed_by` and `expired_by` naming the ending law. Readers end every
-  file under an act that is `repealed` or `expired` on that day, unless its status is `in force` or `not yet in force`;
-  with no valid day they say it has ended but not from when. `annulled` is recorded, not applied. `in_force` is named
-  when a provision is asked for before the record starts.
+  `expired` and `annulled` as YYYY-MM-DD, with `repealed_by`, `expired_by` and `annulled_by` naming the ending law or
+  ruling. Readers end every file under an act that is `repealed`, `expired` or `annulled` on that day (an annulment
+  ends it like a repeal, and the reader says "annulled"), unless its status is `in force` or `not yet in force`; with
+  no valid day they say it has ended but not from when. One rule decides what happens after the end, the same in
+  `show`, `log`, `blame`, `words`, `diff`, `world`, search, `laws` and the timeline: a version dated after the end
+  brings the file back into force only if its law was enacted (`Enacted:`, `Made:`, `Signed:` ...) on or after the end
+  day, is not the law that ended the act (`repealed_by` names it, by official id or name), and its text is not a
+  repeal note (`Norma derogada ...`, `(Derogada)`, `Norma anulada ...`, `[Repealed]`: a note is the end restated, not
+  a re-enactment). Any other later version never takes force, and the end's `log` row names it; a law none of whose
+  versions takes force is not listed by `laws`. A real later amendment to an ended act does bring its file back, and
+  `show` says so. A correction (`Corrects:`) stops the day before its file's act ends; one starting after the end
+  applies only once a later version has brought the file back. `in_force` is named when a provision is asked for
+  before the record starts.
 
 `tools/check_corpus.py` checks a repo against this before it is pinned. A missing `corpus.json` is a warning when the
 repo ships `jurisdiction.json` or `data/repo.json` (readers then use defaults for the rest), and is counted when several

@@ -268,12 +268,13 @@ def timeline() -> list[Event]:
     Until 2 November 2026 the tree recorded one root commit per law taking effect, and this read those. Since then the
     tree only moves each corpus's pin forward (it grows by fast-forward alone, and corpus repositories may be rebuilt),
     so its root history ends there and an old root commit can pin a corpus commit that no longer exists. Those root
-    commits now only date a corpus commit that carries no date of its own (legacy_dates)."""
+    commits now only date a corpus commit that carries no date of its own (legacy_dates). A law that only changed
+    acts already ended (ended_rows) is left out, as history() leaves its versions out."""
     corpora = tuple(c['path'] for c in manifest()['corpora'])
     key = ('timeline', _head() + '|' + ','.join(corpora))
     recheck_missing_futures()
     if key not in _CACHE:
-        events = [e for c in corpora for e in corpus_events(c)]
+        events = [e for c in corpora for e in law_events(c)]
         events.sort(key=lambda e: e.in_force)  # stable: each corpus keeps its own order within a day
         _CACHE[key] = events
     return list(_CACHE[key])  # type: ignore[arg-type]
@@ -322,6 +323,19 @@ def corpus_events(corpus: str) -> list[Event]:
     if key not in _CACHE:
         _CACHE[key] = [Event(r[0], corpus, r[0], r[1], r[5], r[4], r[3]) for r in ix['rows'] if r[5]]
     return _CACHE[key]  # type: ignore[return-value]
+
+
+def law_events(corpus: str) -> list[Event]:
+    """corpus_events less the laws all of whose versions the act-end rule keeps out of force (ended_rows): history()
+    gives none of their versions, so the timeline and `laws` do not say they took force. corpus_events itself keeps
+    them, as finding them reads every file's versions, which a read of one provision does not need."""
+    events = corpus_events(corpus)
+    void = ended_rows(corpus) if events else frozenset()
+    if not void:
+        return events
+    rows = _index(corpus)['rows']
+    gone = {rows[n][0] for n in void}
+    return [e for e in events if e.corpus_commit not in gone]
 
 
 def corrections(corpus: str) -> list[dict]:
@@ -373,16 +387,18 @@ def _act_days(corpus: str, ix: dict) -> dict[str, list[str]]:
 
 def correction_end(corpus: str, fix: dict, rel: str) -> str:
     """The last day a correction applies: its own end, or for an open range the day before the act's next ordinary
-    commit (the act is Act-path:, else the folders of its Files:, else the folder of the file read)."""
+    commit (the act is Act-path:, else the folders of its Files:, else the folder of the file read). Never past the
+    end data/acts.json gives the file's act (correction_cap)."""
+    cap = correction_cap(corpus, rel, fix['from']) or '9999-12-31'  # never past the file's act's end
     if fix.get('to'):
-        return fix['to']
+        return min(fix['to'], cap)
     folder = lambda f: f.rsplit('/', 1)[0] if '/' in f else f  # noqa: E731
     paths = [fix['act_path']] if fix.get('act_path') else sorted({folder(f) for f in fix['files']}) or [folder(rel)]
     nxt = act_next(corpus, paths, fix['from'])
     if not nxt:
-        return '9999-12-31'
+        return cap
     import datetime as dt
-    return (dt.date.fromisoformat(nxt) - dt.timedelta(days=1)).isoformat()
+    return min((dt.date.fromisoformat(nxt) - dt.timedelta(days=1)).isoformat(), cap)
 
 
 def trailer_values(block: str) -> dict[str, list[str]]:
@@ -508,12 +524,12 @@ def file_index(corpus: str) -> tuple[dict, list]:
                 index.setdefault(path, []).append((r[5], order, blob, mode))
     if act_ends(corpus):
         for path, versions in index.items():
-            end = act_end(corpus, path)
-            if end and end['day']:
+            got = _cut(corpus, path)
+            if got:
+                end, cut = got
                 mode = versions[-1][3]
-                cut = (end['day'], _end_commit(corpus, end)[1] + 0.5)
-                # After the end, only a version made by a law enacted on or after it re-enacts the file.
-                versions[:] = [v for v in versions if (v[0], v[1]) < cut or reenacts(end, rows[v[1]][7])]
+                # After the end, only a version after_end lets re-enact the file (history() applies the same rule).
+                versions[:] = [v for v in versions if after_end(corpus, end, cut, v[0], v[1], v[2]) is None]
                 versions.append((cut[0], cut[1], None, mode))
     cwd = corpus_dir(corpus)
     overlays = []
@@ -1342,7 +1358,14 @@ def diff_between(date_a: str, date_b: str, path: str) -> str:
     a, b = file_commit(date_a, path), file_commit(date_b, path)
     if a == b:
         return ''
-    return git('diff', '--word-diff=plain', a or EMPTY_TREE, b or EMPTY_TREE, '--', rel, cwd=corpus_dir(corpus))
+    # A side with no text (an act ended by data/acts.json, whose files stay in git) reads as the empty tree, so the
+    # text the end removed is shown, headed by why that side has none.
+    gone = [d for d, c in ((date_a, a), (date_b, b)) if c and read_version(path, c) is None]
+    a, b = (EMPTY_TREE if date_a in gone else a), (EMPTY_TREE if date_b in gone else b)
+    if a == b:
+        return ''
+    out = git('diff', '--word-diff=plain', a or EMPTY_TREE, b or EMPTY_TREE, '--', rel, cwd=corpus_dir(corpus))
+    return ''.join(f'{explain_missing(d, path)}\n' for d in gone) + out if out else out
 
 
 def corpus_info(corpus: str) -> dict:
@@ -1465,8 +1488,9 @@ def explain_missing(date: str, path: str) -> str:
 
 def _not_reenacting(end_row: dict) -> str:
     later = end_row.get('not_reenacting')
-    return (f" Later version(s) are not read as re-enacting it, their laws not having been enacted on or after that "
-            f"day: {'; '.join(later)}." if later else '')
+    return (f" Later version(s) are not read as re-enacting it (only a version whose law was enacted on or after that "
+            f"day, is not the law that ended the act and is not a repeal note does): {'; '.join(later)}."
+            if later else '')
 
 
 def file_notes(date: str, path: str) -> list[str]:
@@ -1483,6 +1507,13 @@ def file_notes(date: str, path: str) -> list[str]:
     row = next((h for h in reversed(hist) if h['commit'] == sha), None) if sha else None
     if row and row.get('date_doubtful'):
         out.append(f"{path}: the version shown is {row['date_doubtful']}.")
+    ended = next((h for h in hist if h.get('ends') and h['in_force'] <= date), None)
+    if row and not row.get('ends') and ended and (row['in_force'], row['order']) > (ended['in_force'], ended['order']):
+        made = enacted_day(row.get('enacted'))
+        out.append(f"{path}: data/acts.json records its act ({ended['act']}) as {ended['ends']} on {ended['in_force']}; "
+                   f"the version shown, by {row['law']}" + (f" (enacted {made})" if made else '') + ", is read as "
+                   "bringing it back into force, as its law was made after that day. It may only apply to cases "
+                   "from before the end: read the law that made it.")
     # One act held only as captured text, in a corpus whose history is otherwise in force (the UK's 4,375 Acts as
     # current text among its full histories): the corpus caveats do not say so for it.
     info = corpus_info(corpus)
@@ -1574,18 +1605,27 @@ def _history(corpus: str, rel: str) -> list[dict]:
     end = act_end(corpus, rel)
     if end and end['day'] and out:
         commit, order = _end_commit(corpus, end)
-        # A version dated after the end re-enacts the file only if its law was enacted on or after the end; one made
-        # before it (a delayed amendment to the act it repealed) or with no enactment date never takes force.
+        # The act-end rule (after_end): a version dated after the end re-enacts the file only if its law was enacted
+        # on or after the end, is not the law that ended the act, and is not a repeal note. A correction is cut at
+        # the end too (correction_cap): one starting after it applies only once a later version re-enacted the file.
         kept, dropped = [], []
         for h in out:
-            late = not h.get('corrects') and (h['in_force'], h['order']) > (end['day'], order + 0.5)
-            (dropped if late and not reenacts(end, h['enacted']) else kept).append(h)
+            if h.get('corrects'):
+                cap = correction_cap(corpus, rel, h['in_force'])
+                if cap is not None and cap < h['in_force']:
+                    dropped.append(dict(h, why='a correction for days after the end'))
+                    continue
+                if cap is not None and (h.get('until') or '9999-12-31') > cap:
+                    h['until'] = cap
+                kept.append(h)
+                continue
+            why = after_end(corpus, end, (end['day'], order + 0.5), h['in_force'], h['order'], h.get('blob', ''))
+            (dropped.append(dict(h, why=why)) if why else kept.append(h))
         out = kept
         out.append({'commit': commit, 'law': end['by'] or f"{end['how']} (data/acts.json)", 'in_force': end['day'],
                     'kind': 'law', 'enacted': None, 'published': None, 'blob': None, 'order': order + 0.5,
                     'ends': end['how'], 'act': end['act'],
-                    'not_reenacting': [f"{h['in_force']} {h['law']} (" + (f"enacted {enacted_day(h['enacted'])}"
-                                       if enacted_day(h['enacted']) else 'no enactment date') + ')' for h in dropped]})
+                    'not_reenacting': [f"{h['in_force']} {h['law']} ({h['why']})" for h in dropped]})
     retro = ix.get('retroactive')
     capture = capture_day(corpus)
     earliest = str(corpus_info(corpus).get('earliest') or '1500-01-01')
@@ -1619,9 +1659,137 @@ def reenacts(end: dict, enacted: str | None) -> bool:
     """Whether a version dated after an act's end (act_end) brings its file back into force: only when the law that
     made it was enacted on or after the end. A delayed amendment enacted before the repeal, taking effect after it,
     amended an act that no longer exists; a version with no enactment date cannot be shown to re-enact, so the act
-    stays ended (its history's end row names it in `not_reenacting`)."""
+    stays ended (its history's end row names it in `not_reenacting`). after_end adds the other two conditions."""
     made = enacted_day(enacted)
     return bool(made) and made >= end['day']
+
+
+# A version whose text only says the provision or act is gone ("Norma derogada por ...", "(Derogada)", "Norma anulada
+# por Sentencia ...", "[Repealed]"), once any heading lines are set aside. Spain's repealing laws write such a note into
+# the repealed act's folder (no.md) or over a provision; after the act's end it is the end restated, not a re-enactment.
+REPEAL_NOTE = re.compile(r'^[\s\[(*_]*(?:norma\s+(?:\w+\s+)?|disposici[oó]n\s+|art[ií]culo\s+)?'
+                         r'(?:derogad|deogad|anulad|suprimid)[oa]s?\b|^[\s\[(*_]*(?:repealed|revoked|annulled)\b', re.I)
+
+
+def is_repeal_note(text: str | None) -> bool:
+    """Whether a version's text is only a repeal or annulment note (REPEAL_NOTE), not law: short, headings aside."""
+    if not text:
+        return False
+    body = '\n'.join(line for line in text.splitlines() if not line.lstrip().startswith('#')).strip()
+    return len(body) <= 1500 and bool(REPEAL_NOTE.match(body))
+
+
+def _names_law(by: str, law: str) -> bool:
+    """Whether an act's ending law (acts.json `repealed_by` ...) names the law that made a version: an official id they
+    share (BOE-A-2012-1033), or one name holding the other."""
+    by, law = by.strip().lower(), law.strip().lower()
+    if not by or not law:
+        return False
+    ids = re.compile(r'\b[a-z]{2,}-[a-z]-\d{4}-\d+\b')
+    if set(ids.findall(by)) & set(ids.findall(law)):
+        return True
+    return (len(law) >= 6 and law in by) or (len(by) >= 6 and by in law)
+
+
+def after_end(corpus: str, end: dict, cut: tuple, in_force: str, order: int, blob: str | None) -> str | None:
+    """The act-end rule, which history(), file_index (and so every tree), ended_rows (laws, timeline) and
+    correction_cap share: for a version of a file whose act data/acts.json ends (act_end), why it does not take
+    force, or None when it does. A version at or before the end (`cut`: the end day and the end commit's place that
+    day) takes force as dated. One after it re-enacts the file only when all of these hold:
+      - its law was enacted on or after the end day (reenacts): a delayed amendment made before the repeal, or a
+        version with no enactment date, amended an act that no longer exists;
+      - its law is not the law that ended the act (`repealed_by` ...): Spain's repealing laws restate the repeal in
+        the repealed act's folder, sometimes after the day acts.json gives;
+      - its text is not a repeal or annulment note (is_repeal_note: "Norma derogada ...", "(Derogada)").
+    A real later amendment to an ended act (Ley 9/2015 amending the repealed corporate-tax law for past tax periods)
+    still re-enacts its file, and file_notes says so. Text is read only for a version that passes the first two."""
+    if (in_force, order) <= cut:
+        return None
+    row = _index(corpus)['rows'][order]
+    made = enacted_day(row[7])
+    if not reenacts(end, row[7]):
+        return f'enacted {made}' if made else 'no enactment date'
+    if _names_law(end['by'], row[1]):
+        return f'enacted {made}; the law that ended the act'
+    if blob and is_repeal_note(_blob_text(corpus, blob)):
+        return f'enacted {made}; a repeal note, not a re-enactment'
+    return None
+
+
+def _blob_text(corpus: str, blob: str) -> str | None:
+    key = ('blob-text', f'{corpus}:{blob}')
+    if key not in _CACHE:
+        _CACHE[key] = read_object(corpus, blob)
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+def _cut(corpus: str, rel: str) -> tuple[dict, tuple] | None:
+    """(end, cut) for a file whose act data/acts.json ends on a day (act_end), else None."""
+    end = act_end(corpus, rel)
+    if not end or not end['day']:
+        return None
+    return end, (end['day'], _end_commit(corpus, end)[1] + 0.5)
+
+
+def reenacted_on(corpus: str, rel: str) -> str | None:
+    """The first day after its act's end that a version brings a file back into force (after_end), else None."""
+    got = _cut(corpus, rel)
+    if not got:
+        return None
+    end, cut = got
+    ix = _index(corpus)
+    rows = ix['rows']
+    days = [rows[o][5] for o, blob, _ in ix['files'].get(rel, [])
+            if not rows[o][9] and rows[o][5] and rows[o][4] != 'documentation' and (rows[o][5], o) > cut
+            and after_end(corpus, end, cut, rows[o][5], o, blob) is None]
+    return min(days, default=None)
+
+
+def correction_cap(corpus: str, rel: str, start: str) -> str | None:
+    """The last day a correction starting on `start` may apply to a file, given its act's end (data/acts.json): the day
+    before the end, so a corrected range that runs past the end does not keep the file in force; for a correction
+    starting after the end, None (no cap) once a later version re-enacted the file by then, else the day before
+    `start` (it never applies). None when the act has no dated end."""
+    got = _cut(corpus, rel)
+    if not got:
+        return None
+    end = got[0]
+    import datetime as dt
+    if start >= end['day']:
+        back = reenacted_on(corpus, rel)
+        if back and back <= start:
+            return None
+        return (dt.date.fromisoformat(start) - dt.timedelta(days=1)).isoformat()
+    return (dt.date.fromisoformat(end['day']) - dt.timedelta(days=1)).isoformat()
+
+
+def ended_rows(corpus: str) -> frozenset:
+    """Index rows of ordinary commits every file version of which after_end keeps out of force: a law that only
+    changed acts data/acts.json had already ended (Spain's repealing decrees writing their note into the repealed
+    act's folder after its end day). history() lists none of its versions, so law_events leaves it out too, and
+    `laws` and the timeline do not say it took force."""
+    ends = act_ends(corpus)
+    if not any(e['day'] for e in ends.values()):
+        return frozenset()
+    ix = _index(corpus)
+    key = ('ended-rows', f"{corpus}@{_at(ix)}")
+    if key not in _CACHE:
+        rows = ix['rows']
+        touched: dict[int, int] = {}
+        dropped: dict[int, int] = {}
+        folders = {f for f, e in ends.items() if e['day']}
+        for rel, versions in ix['files'].items():
+            parts = rel.split('/')
+            got = _cut(corpus, rel) if any('/'.join(parts[:i]) in folders for i in range(1, len(parts))) else None
+            for order, blob, _ in versions:
+                r = rows[order]
+                if r[9] or not r[5] or r[4] == 'documentation':
+                    continue
+                touched[order] = touched.get(order, 0) + 1
+                if got and after_end(corpus, got[0], got[1], r[5], order, blob):
+                    dropped[order] = dropped.get(order, 0) + 1
+        _CACHE[key] = frozenset(o for o, n in dropped.items() if n == touched[o])
+    return _CACHE[key]  # type: ignore[return-value]
 
 
 def _days(a: str, b: str) -> int | None:
@@ -1634,10 +1802,12 @@ def _days(a: str, b: str) -> int | None:
 
 
 def act_ends(corpus: str) -> dict[str, dict]:
-    """Acts the corpus's data/acts.json (corpus standard, gitlaw_common) records as repealed or expired, at the pinned
-    commit: act folder -> {'act', 'how' ('repealed' or 'expired'), 'day' (or None when not recorded), 'by'}. A builder
-    may record a whole-law repeal there without removing each file of the law (spain-law until November 2026: 1,991
-    norms), so the readers end every file of the act on that day themselves."""
+    """Acts the corpus's data/acts.json (corpus standard, gitlaw_common) records as repealed, expired or annulled, at
+    the pinned commit: act folder -> {'act', 'how' ('repealed', 'expired' or 'annulled'), 'day' (or None when not
+    recorded), 'by' (`<how>_by`)}. A builder may record a whole-law repeal there without removing each file of the law
+    (spain-law until November 2026: 1,991 norms), so the readers end every file of the act on that day themselves. An
+    annulment (a court striking the act down: 16 Spanish decrees and orders) ends it like a repeal, from the day
+    recorded."""
     ix = _index(corpus)
     key = ('act-ends', f"{corpus}@{_at(ix)}")
     if key not in _CACHE:
@@ -1654,14 +1824,14 @@ def act_ends(corpus: str) -> dict[str, dict]:
             facts[folder] = a
             _CACHE[('act-facts', f"{corpus}@{_at(ix)}")] = facts
             status = str(a.get('status') or '').lower()
-            for how in ('repealed', 'expired'):
+            for how in ('repealed', 'expired', 'annulled'):
                 d = a.get(how)
                 if isinstance(d, str) and ISO_DAY.match(d) and status not in ('in force', 'not yet in force'):
                     out[folder] = {'act': folder, 'how': how, 'day': d[:10], 'by': str(a.get(f'{how}_by') or '')}
                     break
             else:
-                if status in ('repealed', 'expired'):
-                    out[folder] = {'act': folder, 'how': status, 'day': None, 'by': str(a.get('repealed_by') or '')}
+                if status in ('repealed', 'expired', 'annulled'):
+                    out[folder] = {'act': folder, 'how': status, 'day': None, 'by': str(a.get(f'{status}_by') or '')}
         _CACHE[key] = out
     return _CACHE[key]  # type: ignore[return-value]
 
@@ -2811,14 +2981,21 @@ def main(argv: list[str]) -> None:
             near = difflib.get_close_matches(name.strip().lower().replace(' ', '-'), folders, n=3)
             raise SystemExit(f'No body of law in this tree matches {name!r}.' + (f" Did you mean {', '.join(near)}?" if near
                              else '') + f' {countries_cmd()} lists them.')
-        events = sorted((e for c in chosen for e in corpus_events(c)), key=lambda e: e.in_force) if name else timeline()
+        events = sorted((e for c in chosen for e in law_events(c)), key=lambda e: e.in_force) if name else timeline()
         for e in events:
             if args[0] <= e.in_force <= args[1] and e.corpus in chosen and e.kind != 'documentation':
                 if e.kind == 'law':
                     print(f'{e.in_force}  {e.corpus:<24} {e.law}')
                 else:
                     left_out[e.kind] = left_out.get(e.kind, 0) + 1
+        for c in chosen:  # laws that only changed acts already ended: history() gives none of their versions
+            rows = _index(c)['rows'] if corpus_events(c) else []
+            for n in ended_rows(c) if rows else ():
+                if args[0] <= rows[n][5] <= args[1] and rows[n][4] == 'law':
+                    left_out['ended'] = left_out.get('ended', 0) + 1
         names = {'baseline': 'starting texts (text as published, no law named)', 'correction': 'corrections',
+                 'ended': 'laws that changed only acts data/acts.json had already ended (none of their versions took '
+                          'force)',
                  'printing': 'printings', 'court': 'court rulings', 'treaty': 'treaties',
                  'uncredited': 'changes no law is named for'}
         note(f'not listed, as they are not laws taking effect: {n} {names.get(k, k)}' for k, n in sorted(left_out.items()))
