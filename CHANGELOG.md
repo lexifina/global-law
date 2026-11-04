@@ -9,6 +9,12 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). `describe.py` describes appended corpora rightly, and `--check` passes.** Acts appended after a first
+  build are read from registry/data/ too (Serbia 9,749 acts, not 1; Bosnia 1,574, not 2; Albania 17,784); a README
+  table row no longer makes Romania metadata-only; a failed fetch stops the run instead of reading as a missing file.
+  manifest.json regenerated: Liechtenstein's 3,689 acts, the moved Swiss cities, no stale `not_pinned`, 16 subdivision
+  codes (Northwest Territories CA-NT), full history_from days, a future_branch only where it exists (553 dropped), and
+  `countries` counts the 197 with law text (`countries_listed` 212); `countries.py` marks each corpus's record.
 - **Fixed (all). Second audit, rows 19-23.** A `Redates:` of an overlay correction now moves the days its text
   applies, not only its `log` date. `law.py laws <name>` takes in what countries.py and the MCP tools take in (a state,
   canton, city, ISO code or old path) and stops with a suggestion for a name that takes in nothing, instead of listing

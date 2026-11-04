@@ -120,17 +120,24 @@ def add(found: list[dict], files: bool = True) -> bool:
     return True
 
 
+# What each corpus's record holds, from its history in manifest.json: dated versions of the law, the current text
+# only, or catalogue entries with no law text
+RECORD = {'in-force': 'dated', 'replayed': 'dated', 'as-enacted': 'dated', 'current-only': 'current text',
+          'metadata-only': 'catalogue only'}
+
+
 def show() -> None:
     names = chosen()
     rows = []
     for c in corpora():
         here = checked_out(c)
         served = here and (not names or any(law.matches(c, n) for n in names))
-        rows.append((c['path'], 'served' if served else 'checked out, not chosen' if here else 'not checked out', c['name']))
-    width = max(len(p) for p, _, _ in rows)
-    for path, state, name in rows:
-        print(f'{path:<{width}}  {state:<24} {name[:70]}')
-    served = sum(1 for _, s, _ in rows if s == 'served')
+        rows.append((c['path'], 'served' if served else 'checked out, not chosen' if here else 'not checked out',
+                     RECORD.get(c.get('history'), ''), c['name']))
+    width = max(len(p) for p, _, _, _ in rows)
+    for path, state, record, name in rows:
+        print(f'{path:<{width}}  {state:<24} {record:<14} {name[:70]}')
+    served = sum(1 for _, s, _, _ in rows if s == 'served')
     print(f'\n{served} of {len(rows)} served by the MCP server'
           + (f" (chosen: {', '.join(names)})" if names else '') + '. Add one with: python3 tools/countries.py add <country>')
 

@@ -429,7 +429,11 @@ class EveryCountry(unittest.TestCase):
         nodes = {p: json.loads((ROOT / p / 'jurisdiction.json').read_text(encoding='utf-8')) for p in world['jurisdictions']}
         # The European Union sits beside the countries (level 'union') and is not counted as one.
         countries = [p for p, node in nodes.items() if node['level'] == 'country']
-        self.assertEqual(len(countries), law.manifest()['countries'])
+        self.assertEqual(len(countries), law.manifest()['countries_listed'])
+        # countries counts only those with law text: not the catalogue-only ones, nor those with no corpus yet
+        m = law.manifest()
+        self.assertEqual(m['countries'], len(countries) - len(m['countries_catalogue_only'])
+                         - len(m['countries_without_corpus']))
         self.assertGreaterEqual(len(countries), 209)  # 193 UN members and 16 other jurisdictions in countries.json
         for country in countries:
             # SOURCES.md comes from the world register (countries.json); a territory placed by its own corpus.json
