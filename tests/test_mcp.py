@@ -959,6 +959,40 @@ class ScopeRules(unittest.TestCase):
         self.assertEqual(parts[1], 'amount-adjusted')
         self.assertEqual(parts[2].partition('..')[0], '2025-04-01')
 
+    def test_a_repeal_ends_the_text_for_the_case(self):
+        # Spain's RD 557/2011 art. 124 (global-law #8): history() ends the file on the act's repeal day (an `ends` row,
+        # from data/acts.json). applies_to_case says so, rather than listing the repeal as a change with no scope.
+        from unittest import mock
+        path = 'es/national/acts/rd/2011/7703/a124.md'
+        hist = [{'commit': 'a', 'law': 'RD 557/2011', 'in_force': '2011-06-30', 'kind': 'law', 'order': 0},
+                {'commit': 'b', 'law': 'RD 629/2022', 'in_force': '2022-08-16', 'kind': 'law', 'order': 1},
+                {'commit': 'c', 'law': 'disposición derogatoria única del RD 1155/2024', 'in_force': '2025-05-20',
+                 'kind': 'law', 'order': 2.5, 'blob': None, 'ends': 'repealed', 'act': 'rd/2011/7703'}]
+        texts = {'2024-03-01': 'text of 2022', '2022-08-16': 'text of 2022'}
+        with mock.patch.object(self.m, 'path_arg', lambda v: v), \
+                mock.patch.object(self.m, 'history_of', lambda _p: [dict(h) for h in hist]), \
+                mock.patch.object(self.m, 'commit_body', lambda _c, _s: ''), \
+                mock.patch.object(self.m, 'default_reach', lambda _c: None), \
+                mock.patch.object(self.m.law, 'corpus_of', lambda v: ('es/national/acts', v.split('acts/', 1)[1])), \
+                mock.patch.object(self.m.law, 'text_on', lambda d, _p: texts.get(d) if d < '2025-05-20' else None), \
+                mock.patch.object(self.m.law, 'diff_between', lambda *a: ''):
+            said, r = self.m.t_applies_to_case({'path': path, 'commenced': '2024-03-01', 'date': '2026-10-31'})
+            self.assertIn(f'Ended: {path} was repealed on 2025-05-20 by disposición derogatoria única del RD 1155/2024',
+                          said)
+            self.assertIn('it does not apply to cases commenced on or after that day', said)
+            self.assertNotIn('no recorded scope', said)
+            self.assertNotIn('record no reach to cases already pending', said)
+            self.assertEqual(r['periods'][-1]['ends'], 'repealed')
+            self.assertIsNone(r['periods'][-1]['text_as_of'])
+            self.assertIn('2025-05-20: no text: repealed on 2025-05-20', said)
+            self.assertEqual((r['text_date'], r['text']), ('2024-03-01', 'text of 2022'))  # the text before the end
+            # A case commenced after the repeal: the provision does not apply to it at all.
+            said, r = self.m.t_applies_to_case({'path': path, 'commenced': '2025-06-01', 'date': '2026-10-31'})
+            self.assertIn('Not in force when the case was commenced', said)
+            self.assertIn('does not apply to a case commenced on 2025-06-01', said)
+            self.assertNotIn('the text in force on the commencement date applies', said)
+            self.assertEqual(r['text'], '')
+
     def test_any_commencement_and_unknown_conditions(self):
         self.assertEqual(self.m.group_holds([('any-commencement', '')], '1999-01-01'), (True, []))
         ok, assumed = self.m.group_holds([('subset', 'small business')], '2022-01-01')

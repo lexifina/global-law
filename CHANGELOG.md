@@ -9,6 +9,7 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Checked (all).** applies_to_case on a repealed provision: test added (#8).
 - **Fixed (all; Spain). A repeal note added to an ended act's text does not bring it back, and `applies_to_case` says when a provision was repealed (#8).**
   `after_end` now compares a version dated after its act's end with the file's last text before the end: when the only difference is added quoted repeal notes ("> Se derogan las reglas ...", "> Queda derogado ..."), the version is "the ended text with a repeal note added, not a re-enactment" (`adds_only_repeal_note`). Any other change still re-enacts. Decreto 28-11-1933 art. 3 (repealed 1957-07-10; RD 161/1997 only added BOE's partial-repeal note) is no longer in force today. `applies_to_case` reads the history's `ends` row: "Ended: … was repealed on 2025-05-20 by … It does not apply to cases commenced on or after that day". The period table ends there with no text, and a case commenced after the end is told the provision was not in force. Before, the repeal was listed as a change with "no recorded scope", and the answer said the commencement text applied. Tests: `ActEndRule` (+1), `ScopeRules.test_a_repeal_ends_the_text_for_the_case`.
   - Spain (6a5ee64), files of repealed acts in force on 2026-11-04: 6 in 4 acts → 5 in 3. All 5 are real later amendments, each with a note: TRLIS 2004 arts. 15 and 19 (Ley 9/2015), RD 1472/2007 art. 3 (RDL 20/2012), and Orden ECD/2796/2015 a1-6 and a2-4 (RDL 17/2020).
