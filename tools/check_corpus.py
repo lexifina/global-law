@@ -36,6 +36,12 @@ DATE_OR_LINK_TRAILERS = ('Consolidated',)
 ISO_DAY = re.compile(r'\d{4}-\d{2}-\d{2}')
 LINK = re.compile(r'https?://\S')
 ACT_DATES = ('Enacted', 'Made', 'Adopted', 'Dated', 'Signed')  # the act's own date, when the corpus gives one
+MAINTAINER = 'Lexifina'  # the author whose Redates: and corrections readers apply (tools/law.py MAINTAINER)
+# Redates: <commit> <YYYY-MM-DD>|no-date, as tools/law.py REDATES reads it (one per line, in the trailer block)
+REDATES = re.compile(r'^Redates:\s*([0-9a-f]{7,40})\s+(\d{4}-\d{2}-\d{2}|no-date)\s*$')
+# data/acts.json `status`: readers end an act that is repealed or expired, and never one in force or not yet in force
+ACT_STATUSES = ('in force', 'not yet in force', 'repealed', 'expired', 'annulled')
+ACT_DATE_FIELDS = ('repealed', 'expired', 'annulled', 'in_force')
 STARTING_KINDS = ('baseline', 'consolidated', 'current', 'current-only', 'current-text', 'publisher', 'consolidation',
                   'first published version (publisher)')
 
@@ -122,7 +128,28 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
     days: dict[str, int] = {}
     starting = 0
     known = _known_kinds()
+    seen: set[str] = set()  # commits above this one: a Redates: can only reach back (tools/law.py _redate)
+    redates: dict[str, list[str]] = {'author': [], 'malformed': [], 'target': [], 'retro': []}
+    # Versions the maintainer redated `no-date`: readers take them as text as of their day, a starting text.
+    no_date = {m.group(1) for _, author, _, body in commits if author == MAINTAINER for line in body.splitlines()
+               if (m := REDATES.match(line.strip())) and m.group(2) == 'no-date'}
+    no_date_prefixes = tuple(c for c in no_date if len(c) < 40)
     for sha, author, subject, body in commits:
+        redates_lines = [line.strip() for line in body.splitlines() if line.startswith('Redates:')]
+        if redates_lines and author != MAINTAINER:
+            redates['author'].append(sha)  # readers apply only the maintainer's
+        for line in redates_lines:
+            m = REDATES.match(line)
+            if not m:
+                redates['malformed'].append(sha)
+            elif not (m.group(1) in seen if len(m.group(1)) == 40 else any(c.startswith(m.group(1)) for c in seen))                     and git('merge-base', '--is-ancestor', m.group(1), f'{sha}^', cwd=repo).returncode:
+                # not above it on the first-parent line, nor on a branch merged before it
+                redates['target'].append(f'{sha[:7]}->{m.group(1)[:7]}')
+        retro = next((line.partition(':')[2].strip() for line in body.splitlines() if line.startswith('Retroactive:')),
+                     None)
+        if retro is not None and not retro.lower().startswith('yes'):
+            redates['retro'].append(sha)
+        seen.add(sha)
         t = {}
         for line in body.splitlines():
             key, sep, value = line.partition(': ')
@@ -154,12 +181,12 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         if doc:
             continue
         own = next((t[k][:10] for k in ACT_DATES if re.match(r'\d{4}-\d{2}-\d{2}', t.get(k, ''))), None)
-        if own and when[:10] < own and 'Retroactive' not in t:
+        if own and when[:10] < own and not t.get('Retroactive', '').lower().startswith('yes'):
             before_act.append(sha)  # in force before the act itself was made, with no Retroactive: saying why
         elif when[:10] < (cj.get('earliest') or '1500-01-01'):
             ancient.append(sha)
         days[when[:10]] = days.get(when[:10], 0) + 1
-        if kind in STARTING_KINDS or 'Text-as-of' in t:
+        if kind in STARTING_KINDS or 'Text-as-of' in t or sha in no_date or sha.startswith(no_date_prefixes or ('-',)):
             starting += 1
         if when < last:
             # An end block: an older act or version found late and appended after later-dated commits (main only
@@ -208,6 +235,24 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         warn.append(f'{len(no_corrects)} correction(s) have no Corrects: trailer, so readers apply each as an ordinary '
                     f'version from its In-force date, first {no_corrects[0][:7]}')
 
+    if redates['author']:
+        warn.append(f"{len(redates['author'])} commit(s) carry Redates: by an author other than {MAINTAINER}, which "
+                    f"readers ignore (first {redates['author'][0][:7]}); append them again as {MAINTAINER}")
+    if redates['malformed']:
+        warn.append(f"{len(redates['malformed'])} commit(s) have a Redates: line that is not "
+                    f"'Redates: <commit> <YYYY-MM-DD>|no-date', which readers ignore (first {redates['malformed'][0][:7]})")
+    if redates['target']:
+        # A warning, not a failure: readers skip it, and an append-only history cannot take it back, only redate again.
+        warn.append(f"{len(redates['target'])} Redates: name(s) no commit above them in the history, which readers "
+                    f"ignore (first {redates['target'][0]})")
+    if redates['retro']:
+        warn.append(f"{len(redates['retro'])} commit(s) have a Retroactive: trailer that does not start with 'yes', "
+                    f"which readers ignore (first {redates['retro'][0][:7]}); write 'Retroactive: yes; <provision>'")
+    if 'data' in files:
+        acts_fatal, acts_warn = acts_problems(repo)
+        fatal.extend(acts_fatal)
+        warn.extend(acts_warn)
+
     stale = stale_at_head(repo, trailer, until) if early else []
     if stale:
         warn.append(f'{len(stale)} file(s) hold an older version at HEAD than the one in force on {until} (an older '
@@ -221,6 +266,51 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         elif git('merge-base', '--is-ancestor', pin, 'HEAD', cwd=repo).returncode:
             fatal.append(f'history rewritten: the pinned commit {pin[:7]} is not an ancestor of main (main must be append-only)')
     return fatal, warn
+
+
+def acts_problems(repo: Path) -> tuple[list[str], list[str]]:
+    """(fatal, warnings) for data/acts.json at HEAD, which readers use to end a repealed or expired act's files
+    (tools/law.py act_ends): it must parse as {"acts": [...]}, its dates must be YYYY-MM-DD and each path a folder."""
+    shown = git('show', 'HEAD:data/acts.json', cwd=repo)
+    if shown.returncode:
+        return [], []
+    try:
+        acts = json.loads(shown.stdout).get('acts')
+    except (json.JSONDecodeError, AttributeError):
+        acts = None
+    if not isinstance(acts, list):
+        return ['data/acts.json is not {"acts": [...]} JSON, so readers end no act it records'], []
+    folders = set(git('ls-tree', '-r', '-d', '--name-only', 'HEAD', cwd=repo).stdout.splitlines())
+    no_path, no_folder, statuses = [], [], {}
+    bad_dates: dict[str, list[str]] = {}
+    for i, a in enumerate(acts):
+        folder = str(a.get('path') or a.get('slug') or '').strip('/') if isinstance(a, dict) else ''
+        if not folder:
+            no_path.append(str(i))
+            continue
+        if folder not in folders:
+            no_folder.append(folder)
+        for key in ACT_DATE_FIELDS:
+            d = a.get(key)
+            if d not in (None, '') and not (isinstance(d, str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', d)):
+                bad_dates.setdefault(key, []).append(f'{folder}: {d!r}')
+        status = str(a.get('status') or '').strip().lower()
+        if status and status not in ACT_STATUSES:
+            statuses.setdefault(status, []).append(folder)
+    warn = []
+    if no_path:
+        warn.append(f'data/acts.json: {len(no_path)} entr(ies) have no path, so readers skip them (first index '
+                    f'{no_path[0]})')
+    if no_folder:
+        warn.append(f'data/acts.json: {len(no_folder)} path(s) name no folder at HEAD, so they end no file (first '
+                    f'{no_folder[0]!r})')
+    for key, bad in sorted(bad_dates.items()):
+        warn.append(f'data/acts.json: {len(bad)} {key} date(s) are not YYYY-MM-DD (first {bad[0]})'
+                    + ('; readers then record the end without its day' if key in ('repealed', 'expired') else ''))
+    if statuses:
+        warn.append(f"data/acts.json: status values readers do not know ({', '.join(ACT_STATUSES)} are): " +
+                    ', '.join(f'{k!r} ({len(v)})' for k, v in sorted(statuses.items(), key=lambda kv: -len(kv[1]))[:12]))
+    return [], warn
 
 
 def stale_at_head(repo: Path, trailer: str, until: str) -> list[str]:

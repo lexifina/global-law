@@ -9,6 +9,11 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Adopted (all). `Redates:`, `Retroactive:` and `data/acts.json` are in the corpus standard, and checked (row 24).**
+  MCP.md says what readers do with each: only Lexifina's `Redates:` naming a commit above it apply, `Retroactive:`
+  counts only from `yes`, and acts.json ends a repealed or expired act from its YYYY-MM-DD day. `check_corpus.py` warns,
+  with counts, on any of these readers would skip (another author, a missing target, a malformed line, a non-ISO date,
+  a path that is no folder, an unknown status); an acts.json that does not parse fails.
 - **Fixed (all). A delayed amendment no longer brings a repealed act back into force (audit row 25).** After an act's end in `data/acts.json`, a later-dated version re-enacted the file whoever made it, so Spain showed 76 files of 33 repealed acts as in force on 2026-11-04 (Workers' Statute 1995 art. 48 bis, repealed 2015-11-13, back from 2017-01-01 by Ley 9/2009, enacted 2009-10-06).
   Now a version after the end re-enacts only if its law was enacted (Enacted/Made/Signed/Adopted ...) on or after the end day. One enacted before, or with no enactment date, stays ended, and the repeal row in `log`, the `show` message and the MCP history name it ("not re-enacted by: 2017-01-01 Ley 9/2009 (enacted 2009-10-06)").
   `show`, `log`, `blame`, `words`, `world` and the trees built from `file_index` apply the same rule. Spain (9ad5878): 76 files of 33 ended acts in force today → 24 of 11, each made by a law enacted after the end (11 of them Orden APA/508/2020, whose `repealed: 2003-05-18` in data/acts.json is probably a builder typo for 2023, before the act was made).

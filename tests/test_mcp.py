@@ -1363,6 +1363,64 @@ class Dating(unittest.TestCase):
         finally:
             shutil.rmtree(d, ignore_errors=True)
 
+    def test_the_check_reports_redates_and_acts_json_readers_ignore(self):
+        # Redates:, Retroactive: and data/acts.json change what readers answer (MCP.md "How a corpus describes
+        # itself"), so a record readers would silently skip is reported: a warning each, with a count.
+        import json as _json
+        import shutil
+        import tempfile
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import check_corpus
+        d = Path(tempfile.mkdtemp())
+        try:
+            run = lambda *a: subprocess.run(['git', *a], cwd=d, check=True, capture_output=True, text=True)  # noqa: E731
+            commit = lambda who, msg: run('-c', f'user.name={who}', '-c', 'user.email=l@x', 'commit', '-q',  # noqa: E731
+                                          '--allow-empty', '-m', msg)
+            run('init', '-q')
+            (d / 'REPRODUCE.md').write_text('x')
+            (d / 'corpus.json').write_text(_json.dumps({
+                'corpus': 'qq/national/acts', 'name': 'QQ', 'language': 'en', 'history_from': '2000-01-01',
+                'record_to': '2026-11-01', 'in_force_trailer': 'In-force', 'citation': {'file': '(a)/(b)', 'cites': 'x{n}'}}))
+            for act in ('act1', 'act2'):
+                (d / act).mkdir()
+                (d / act / 's1.md').write_text(act)
+            run('add', '-A')
+            commit('Act 1', 'Act 1\n\nIn-force: 2000-01-01')
+            act1 = run('rev-parse', 'HEAD').stdout.strip()
+            commit('Act 2', 'Act 2\n\nIn-force: 2001-01-01\nEnacted: 2001-02-01\nRetroactive: yes; Article 9')
+            good = {'acts': [{'path': 'act1', 'status': 'repealed', 'repealed': '2010-01-01', 'repealed_by': 'Act 3'},
+                             {'path': 'act2', 'status': 'in force', 'in_force': '2001-01-01'}]}
+            (d / 'data').mkdir()
+            (d / 'data' / 'acts.json').write_text(_json.dumps(good))
+            run('add', '-A')
+            commit('Lexifina', f'Redate\n\nKind: documentation\nRedates: {act1} 2000-02-01\nRedates: {act1[:7]} no-date')
+            fatal, warn = check_corpus.problems(d, '2026-11-03')
+            self.assertEqual((fatal, warn), ([], []))
+            commit('builder', f'Redate\n\nKind: documentation\nRedates: {act1} 2000-03-01')
+            commit('Lexifina', 'Redate\n\nKind: documentation\nRedates: deadbeefdeadbeef 2000-03-01\n'
+                               f'Redates: {act1} 1 March 2000')
+            commit('Act 4', 'Act 4\n\nIn-force: 2002-01-01\nRetroactive: Article 2')
+            (d / 'data' / 'acts.json').write_text(_json.dumps({'acts': [
+                {'path': 'act1', 'status': 'repealed', 'repealed': '01/05/2020'},
+                {'path': 'act9', 'status': 'repealed', 'repealed': '2020-05-01'},
+                {'path': 'act2', 'status': 'struck down'}, {'title': 'no path'}]}))
+            run('add', '-A')
+            commit('Lexifina', 'Bad rows\n\nKind: documentation')
+            fatal, warn = check_corpus.problems(d, '2026-11-03')
+            self.assertEqual(fatal, [])
+            for expected in ('author other than Lexifina', "is not 'Redates:", 'no commit above them',
+                             "does not start with 'yes'", "1 path(s) name no folder at HEAD, so they end no file (first 'act9')",
+                             "1 repealed date(s) are not YYYY-MM-DD (first act1: '01/05/2020')",
+                             "status values readers do not know", "'struck down' (1)", '1 entr(ies) have no path'):
+                self.assertTrue(any(expected in w for w in warn), (expected, warn))
+            (d / 'data' / 'acts.json').write_text('{"acts": [')
+            run('add', '-A')
+            commit('Lexifina', 'Broken\n\nKind: documentation')
+            fatal, warn = check_corpus.problems(d, '2026-11-03')
+            self.assertTrue(any('data/acts.json is not' in f for f in fatal), fatal)
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+
     def test_corrects_names_its_dates(self):
         m = self.law.CORRECTS.search('Legea nr. 31/1990 2010-01-01..2015-12-31')
         self.assertEqual((m.group(1), m.group(2)), ('2010-01-01', '2015-12-31'))

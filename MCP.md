@@ -157,9 +157,29 @@ consolidated text took force, with its link in `Source:`. Most corpora built bef
 the `baseline_trailer`), a link is cited as the version's source. A `baseline_trailer` or `correction_trailer` dates a
 change only when it holds a date.
 
+Three more records change the answers:
+- **`Redates: <commit> <YYYY-MM-DD>|no-date`.** An append-only corpus corrects a version's date without rewriting it:
+  a later commit carries one `Redates:` line per version it corrects (the line may repeat), naming a commit above it
+  (in full or by a prefix of 7 or more). A date becomes the version's in-force day, and for an overlay correction also
+  the first day its text applies (`Corrects: <act> <from>..`); `no-date` says the source gives none, so a law's version
+  becomes text as of its recorded day. Readers apply it only when the commit's author is the maintainer, `Lexifina`;
+  anyone else's, a line in another form, or a commit not above it is ignored.
+- **`Retroactive: yes; <provision>`.** The version took force before its act was made, as that provision says, so its
+  date is not marked doubtful. On a `Redates:` commit it covers every version that commit redates. A value that does
+  not start with `yes` is ignored.
+- **`data/acts.json`.** `{"acts": [{...}, ...]}`, one row per act: `path` (the act's folder, `slug` in older corpora),
+  `status` (`in force`, `not yet in force`, `repealed`, `expired` or `annulled`), and the days `in_force`, `repealed`,
+  `expired` and `annulled` as YYYY-MM-DD, with `repealed_by` and `expired_by` naming the ending law. Readers end every
+  file under an act that is `repealed` or `expired` on that day, unless its status is `in force` or `not yet in force`;
+  with no valid day they say it has ended but not from when. `annulled` is recorded, not applied. `in_force` is named
+  when a provision is asked for before the record starts.
+
 `tools/check_corpus.py` checks a repo against this before it is pinned. A missing `corpus.json` is a warning when the
 repo ships `jurisdiction.json` or `data/repo.json` (readers then use defaults for the rest), and is counted when several
 corpora are checked at once (`python tools/check_corpus.py <global-law checkout>` checks every corpus checked out there).
+A `Redates:` or `Retroactive:` that readers would ignore is a warning (the history cannot take it back; a later
+`Redates:` can correct it), as is each kind of bad `data/acts.json` row, with a count; an `acts.json` that does not
+parse fails.
 
 ## Tools
 
