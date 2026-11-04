@@ -350,11 +350,35 @@ class McpServer(unittest.TestCase):
         # §101 enters the US record with the 2017 edition: before it, the record is silent, the law was not.
         r = self.s.call('read_law', path=P('us/federal/usc/title-11/101.md'), date='2010-01-01')['structuredContent']
         self.assertIn('where this record starts, not the day it came into force', r['summary'])
+        # The fields say so too: unknown, not "not in force" (issue #17).
+        self.assertIsNone(r['in_force'])
+        self.assertFalse(r['in_record'])
+        self.assertTrue(r['record_starts'] > '2010-01-01')
         c = self.s.call('resolve_citations', text='11 U.S.C. § 101', date='2010-01-01')['structuredContent']['citations'][0]
         self.assertTrue(c['status'].startswith('before the record starts'))
         today = self.s.call('read_law', path=P('us/federal/usc/title-11/1101.md'), include_text=False)['structuredContent']
         if today['last_change']['kind'] == 'baseline':
             self.assertIn('First version in the record', today['summary'])
+
+    def test_floor_of_one_act_is_unknown_not_repealed(self):
+        # China's 公司法 enters the record with the 2018 text, the earliest full text 中国人大网 serves; it has been in
+        # force since 1994. Before 2018 the answer is "unknown", in the fields as in the text (issue #17). An article
+        # added by the 2023 revision is still "not yet in force" in 2020: it starts with a law, not a baseline.
+        if not (ROOT / 'china/national/acts/.git').exists():
+            self.skipTest('China is not checked out')
+        before = self.s.call('read_law', path='china/national/acts/gongsifa/art-001.md', date='2015-01-01',
+                             include_text=False)['structuredContent']
+        self.assertIsNone(before['in_force'])
+        self.assertFalse(before['in_record'])
+        self.assertEqual(before['record_starts'], '2018-10-26')
+        after = self.s.call('read_law', path='china/national/acts/gongsifa/art-001.md', date='2020-01-01',
+                            include_text=False)['structuredContent']
+        self.assertTrue(after['in_force'])
+        self.assertTrue(after['in_record'])
+        new = self.s.call('read_law', path='china/national/acts/gongsifa/art-219.md', date='2020-01-01',
+                          include_text=False)['structuredContent']
+        self.assertIs(new['in_force'], False)
+        self.assertTrue(new['in_record'])
 
     def test_restored_words_and_latest_wording(self):
         # On 2022-05-01 §1182(1) held the 2019 words again: the CARES Act's temporary change had ended. They are the

@@ -10,6 +10,9 @@ Status words:
 
 ## 4 November 2026
 
+- **Fixed (all). Before an act's record floor, `read_law`'s fields said "not in force" ([#17](https://github.com/lexifina/global-law/issues/17)).** Where the record's first version of a provision is a consolidated text (China's 公司法 from the 2018 text, the earliest full text 中国人大网 serves; the US Code's 2017 edition; Fedlex), its text already said the record does not know the provision's state on an earlier date, but `in_force` was `false`. It is now `null`, with `in_record: false` and `record_starts`; every answer carries `in_record`. Repealed and not-yet-enacted provisions are unchanged (`in_force: false`).
+  - **Checked:** all 173 acts of `china/national/acts` on the day before and the day of their first version: the 47 that start at a consolidated text now read `in_force: null`, `in_record: false`; the 126 that start at their enactment still read `false` before it. New test `test_floor_of_one_act_is_unknown_not_repealed`; `test_before_a_baseline_is_outside_the_record` checks the fields.
+
 - **Fixed (all). `words` was slow on long, much-amended statutes.** It compares each version with the one before, and
   matching the lines took most of the time: Python's difflib is quadratic in lines that repeat, and half of a long
   statute's lines are blank. Six ways of matching lines were compared on 30 files

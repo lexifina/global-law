@@ -278,11 +278,12 @@ def num(args: dict, key: str, default: int, most: int) -> int:
         raise UserError(f'{key} must be a whole number, not {value!r}.') from None
 
 
-def explain(date: str, path: str) -> str:
-    """law.py's reason for missing text, with its command-line hint turned into the matching tool."""
-    why = run_law(law.explain_missing, date, path)
-    # A record that starts from a consolidated text (Fedlex, a code edition) holds no date of entry into force: before
-    # that text, the provision is outside the record, not "not yet in force" (Art. 8 BV has been in force since 2000).
+def record_floor(date: str, path: str) -> dict | None:
+    """The record's first version of a provision when `date` is before it and that version is a consolidated text
+    (a baseline), not the law taking effect: the record then does not know the provision's state on `date`. None
+    otherwise. A record that starts from a consolidated text (Fedlex, a code edition, the earliest full text a
+    publisher still serves) holds no date of entry into force: before that text, the provision is outside the record,
+    not "not yet in force" (Art. 8 BV has been in force since 2000; China's 公司法 since 1994)."""
     try:
         first = (history_of(path) or [None])[0]
         corpus, _ = law.corpus_of(path)
@@ -294,6 +295,15 @@ def explain(date: str, path: str) -> str:
     if start and start.kind == 'baseline' and date < start.in_force and run_law(law.text_on, start.in_force, path) is not None:
         first = {'kind': 'baseline', 'in_force': start.in_force, 'law': start.law}
     if first and first['kind'] == 'baseline' and date < first['in_force']:
+        return first
+    return None
+
+
+def explain(date: str, path: str) -> str:
+    """law.py's reason for missing text, with its command-line hint turned into the matching tool."""
+    why = run_law(law.explain_missing, date, path)
+    first = record_floor(date, path)
+    if first:
         return (f"{path}: the record's first version of it is the consolidated text in force on {first['in_force']} "
                 f"({first['law']}), where this record starts, not the day it came into force. The record does not say what "
                 f"it said on {date}; it may well have been in force then. Read the publisher's earlier versions.")
@@ -1779,7 +1789,12 @@ def t_read_law(args: dict) -> tuple[str, dict]:
         info = law.corpus_info(st['corpus'])
         if 'any date' in why and info.get('record_to') and date > info['record_to']:
             why += f" The record ends on {info['record_to']}, so it may exist in the law after that date."
-        return why + ''.join(f'\nNote: {c}' for c in st['caveats']), {**st, 'in_force': False, 'text': None, 'why': why}
+        floor = record_floor(date, path)
+        # Before the record's first consolidated text the state is unknown, not "not in force": say so in the fields
+        # too, so a program that reads only in_force does not take a provision in force then for one that was not.
+        state = ({'in_force': None, 'in_record': False, 'record_starts': floor['in_force']} if floor
+                 else {'in_force': False, 'in_record': True})
+        return why + ''.join(f'\nNote: {c}' for c in st['caveats']), {**st, **state, 'text': None, 'why': why}
     head_lines = [f'{path} as in force on {date}.']
     if st['last_change']:
         lc = st['last_change']
@@ -1810,10 +1825,10 @@ def t_read_law(args: dict) -> tuple[str, dict]:
     beyond = beyond_the_words(date, path)
     head_lines += [f'Not the whole answer: {b}' for b in beyond]
     if args.get('include_text') is False:  # a cheap check: dates, laws, sources and notes, without the text
-        return '\n'.join(head_lines), {**st, 'in_force': True, 'text_chars': len(text), 'beyond_the_words': beyond}
+        return '\n'.join(head_lines), {**st, 'in_force': True, 'in_record': True, 'text_chars': len(text), 'beyond_the_words': beyond}
     part, place, where = page(text, args)
     head_lines += [where] if where else []
-    return '\n'.join(head_lines) + '\n\n' + part, {**st, 'in_force': True, 'text': part, 'text_part': place, 'beyond_the_words': beyond}
+    return '\n'.join(head_lines) + '\n\n' + part, {**st, 'in_force': True, 'in_record': True, 'text': part, 'text_part': place, 'beyond_the_words': beyond}
 
 
 def t_world_on_date(args: dict) -> tuple[str, dict]:
