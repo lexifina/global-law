@@ -1537,12 +1537,32 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
 # there, as at a publisher's starting text (#17: 50 Chinese acts, 标准化法 and 证券法 among them). Only these: other
 # corpora write "amendment" for an amending law kept as its own act (Azerbaijan, 1,025 acts), which starts there.
 _REVISION_WORDS = ('修订', '修正')
+# The In-force-basis of a version dated by the consolidation that first shows it, not by its law's commencement
+# (trinidad-and-tobago-law: "...; a change first shown here took effect on or before it"). An act whose record starts
+# at such a version may have been in force before it: 41 Trinidad subsidiary-legislation folders start with an
+# amending Act first shown in a Revised Edition or consolidation (27 of them in the 1980 edition as at December 1990).
+_FIRST_SHOWN = 'first shown here took effect on or before it'
+
+
+def _in_force_basis(corpus: str, commit: str) -> str:
+    """A commit's In-force-basis trailer, read from the commit itself ('' without one), as read_object reads a file."""
+    if not hasattr(subprocess, 'Popen'):
+        done = subprocess.run(['git', 'cat-file', 'commit', commit], cwd=corpus_dir(corpus), capture_output=True)
+        kind, data = (b'commit', done.stdout) if done.returncode == 0 else (None, None)
+    else:
+        kind, data = _batch_read(corpus, corpus_dir(corpus), commit)
+    if kind != b'commit' or not data:
+        return ''
+    message = data.decode('utf-8', 'replace').replace('\r\n', '\n').partition('\n\n')[2]
+    return trailers(message).get('In-force-basis', '')
 
 
 def record_floor(path: str) -> dict | None:
     """The version where a file's record starts without the provision starting there, or None: its first version
     when that is a starting text (baseline), or when it came with the first version of its act (the file's folder)
-    and that version's Kind names a revision or an amendment (_REVISION_WORDS; the row then has `kind_written`)."""
+    and that version's Kind names a revision or an amendment (_REVISION_WORDS; the row then has `kind_written`) or
+    its In-force-basis says it is dated by the consolidation that first shows it (_FIRST_SHOWN; the row then has
+    `in_force_basis`)."""
     h = history(path)
     if not h:
         return None
@@ -1553,14 +1573,21 @@ def record_floor(path: str) -> dict | None:
     ix = _index(corpus)
     raw = (ix['rows'][first['order']][6] or '') if isinstance(first.get('order'), int) else ''
     folder = rel.rpartition('/')[0]
-    if first['kind'] != 'law' or not folder or not any(w in raw for w in _REVISION_WORDS):
+    if first['kind'] != 'law' or not folder:
         return None
+    if any(w in raw for w in _REVISION_WORDS):
+        extra = {'kind_written': raw}
+    else:
+        basis = _in_force_basis(corpus, first['commit']) if isinstance(first.get('order'), int) else ''
+        if _FIRST_SHOWN not in basis:
+            return None
+        extra = {'in_force_basis': basis}
     key = ('act-start', f"{corpus}@{_at(ix)}:{folder}")
     if key not in _CACHE:  # the first in-force day of any file of the act
         rows, pre = ix['rows'], folder + '/'
         _CACHE[key] = min((rows[o][5] for f, vs in ix['files'].items() if f.startswith(pre) for o, *_ in vs
                            if rows[o][5] and rows[o][4] != 'documentation'), default=None)
-    return dict(first, kind_written=raw) if _CACHE[key] == first['in_force'] else None
+    return dict(first, **extra) if _CACHE[key] == first['in_force'] else None
 
 
 def act_floor_note(date: str, path: str) -> str:
@@ -1602,6 +1629,8 @@ def explain_missing(date: str, path: str) -> str:
     floor = record_floor(path) if date < first['in_force'] else None
     if floor:
         what = ('' if floor['kind'] == 'baseline' else
+                ", the first consolidation to show it, so in force on or before that day (In-force-basis)"
+                if floor.get('in_force_basis') else
                 f", a revision of an act already in force then (Kind: {floor['kind_written']})")
         return (f"{path} is not in the record on {date}: the record starts on {first['in_force']} ({first['law']})"
                 f"{what}, which is where this record starts, not the day it came into force.{act_floor_note(date, path)}")
@@ -1719,6 +1748,14 @@ def history(path: str) -> list[dict]:
     return [dict(h) for h in _CACHE[key]]  # type: ignore[union-attr]
 
 
+def log_rows(path: str) -> list[dict]:
+    """history() in the order the versions took force: by in-force day, then commit order. Rows appended later (a
+    Redates:, a version found late, spain-law's same-day restatements) sit at their day, not at the end; on one day
+    the later commit stays last, as it wins the day (file_commit), and an act's end row (order + 0.5) stays just
+    after the commit that ended it."""
+    return sorted(history(path), key=lambda h: (h['in_force'], h['order']))
+
+
 CORRECTS = re.compile(r'(\d{4}-\d{2}-\d{2})(?:\s*\.\.\s*(\d{4}-\d{2}-\d{2})?)?')
 
 
@@ -1744,6 +1781,8 @@ def _history(corpus: str, rel: str) -> list[dict]:
         if credit_fix:  # data/credits.csv: the words stand, the law credited changes
             row.update({'law': credit_fix[0], 'credit_corrected_from': credit_fix[2]})
             row['kind'] = 'uncredited' if credit_fix[1] else ('law' if kind == 'uncredited' else kind)
+            # The commit's Enacted/Published are the first-credited law's: the corrected law's own, or none.
+            row['enacted'], row['published'] = (None, None) if credit_fix[1] else law_dates(corpus, credit_fix[0])
         if fix:
             row.update({'corrects': fix['corrects'], 'until': fix['to'], 'supersedes': fix['supersedes'],
                         'reason': fix['reason']})
@@ -2346,7 +2385,8 @@ def capture_day(corpus: str) -> tuple[str, int, int] | None:
 _LAW_KINDS = {'', 'law', 'decree', 'amendment', 'act', 'amending law', 'lov', 'lbk', 'laki', 'ustawa', 'zakon',
               'rozporządzenie', 'legal notice', 'ordinance', 'several', 'enacted', 'original', 'version', 'repeal'}
 _START_KINDS = {'baseline', 'consolidated', 'current', 'current-only', 'current-text', 'publisher', 'consolidation',
-                'first published version (publisher)', 'tekst jednolity (current text)'}
+                'first published version (publisher)', 'tekst jednolity (current text)',
+                'start'}  # start: Liechtenstein's oldest version available of an act, the history before it to come
 _UNCREDITED_KINDS = {'unexplained', 'change no law explains', 'republication', 'obwieszczenie'}
 _COURT_KINDS = {'orzeczenie', 'nález'}  # rulings of the Polish and Slovak constitutional courts
 # Words in the longer Kind values corpora write (Australia, Canada, Hong Kong, Poland, Portugal and others).
@@ -2455,6 +2495,51 @@ def _credits_for(corpus: str, pin: str, folder: str) -> dict:
     return _CACHE[fkey]  # type: ignore[return-value]
 
 
+def law_dates(corpus: str, label: str) -> tuple[str | None, str | None]:
+    """(enacted, published) of a law named by its credit label, as the corpus records them, for a credit corrected by
+    data/credits.csv (credited): data/laws.csv's row of that label or key (enacted, published), else normas.tsv's
+    row of the norm the label starts with (spain-law: fecha_disposicion, fecha_publicacion), else the law's own
+    commits (Enacted:/Published: of one it is the author of). (None, None) when the record gives neither: the dates
+    of the commit, which are the first-credited law's, are never shown for the corrected one."""
+    import csv
+    import io
+    ix = _index(corpus)
+    pin = ix['pin']
+    key = ('law-dates', f'{corpus}@{_at(ix)}')
+    if key not in _CACHE:
+        _CACHE[key] = {'laws': None, 'normas': None, 'commits': None}
+    seen = _CACHE[key]
+    pick = lambda e, p: (e or None, p or None) if (e or p) else None  # noqa: E731
+    if seen['laws'] is None:
+        seen['laws'] = {}
+        for r in csv.DictReader(io.StringIO(read_object(corpus, f'{pin}:data/laws.csv') or '')):
+            dates = pick((r.get('enacted') or '').strip(), (r.get('published') or '').strip())
+            for name in {(r.get('label') or '').strip(), (r.get('key') or '').strip()} - {''}:
+                if dates:
+                    seen['laws'].setdefault(name, dates)
+    if label in seen['laws']:
+        return seen['laws'][label]
+    if seen['normas'] is None:
+        seen['normas'] = {}
+        lines = (read_object(corpus, f'{pin}:normas.tsv') or '').splitlines()
+        cols = lines[0].split('\t') if lines else []
+        if 'id' in cols:
+            for line in lines[1:]:
+                r = dict(zip(cols, line.split('\t')))
+                dates = pick((r.get('fecha_disposicion') or '').strip(), (r.get('fecha_publicacion') or '').strip())
+                if dates:
+                    seen['normas'][r['id']] = dates
+    norm = label.split(' ', 1)[0]
+    if norm in seen['normas']:
+        return seen['normas'][norm]
+    if seen['commits'] is None:
+        seen['commits'] = {}
+        for r in ix['rows']:
+            if r[4] != 'documentation' and r[5] and (r[7] or r[8]):
+                seen['commits'].setdefault(r[1], (r[7], r[8]))
+    return seen['commits'].get(label, (None, None))
+
+
 def countries_cmd() -> str:
     """tools/countries.py as the user runs it here: with the Python that started the MCP server (tools/mcp.sh sets
     GLOBAL_LAW_PYTHON), else python3, or python on Windows, where python3 is usually the Microsoft Store's placeholder."""
@@ -2491,7 +2576,7 @@ def credit(author: str, kind: str) -> str:
     return CREDIT.get(kind, '{}').format(author)
 
 
-INDEX_VERSION = 8  # raise when what the index keeps changes: old indexes are then rebuilt
+INDEX_VERSION = 9  # raise when what the index keeps changes: old indexes are then rebuilt
 
 
 def _index_version() -> str:
@@ -2565,29 +2650,35 @@ def _derive(info: dict, commit: str, author: str, when: str, subject: str, block
     return (commit, author, when, subject, kind, in_force, raw, enacted, published, fix), unknown
 
 
-REDATES = re.compile(r'^Redates:\s*([0-9a-f]{7,40})\s+(\d{4}-\d{2}-\d{2}|no-date)\s*$', re.M)
+REDATES = re.compile(r'^Redates:\s*([0-9a-f]{7,40})\s+(?:(enacted)\s+)?(\d{4}-\d{2}-\d{2}|no-date)\s*$', re.M)
 
 
 def _redate(data: dict, rows: list, block: str) -> None:
     """A dated version's date, corrected by a later commit (corpus standard; an append-only corpus cannot change the
     commit itself). One `Redates: <commit> <YYYY-MM-DD>` trailer per version gives the day it took force;
     `Redates: <commit> no-date` says the source gives none, so the version is text as of its recorded day. With
-    `Retroactive: yes; <provision>` the versions took force before their act was made, as that provision says."""
+    `Retroactive: yes; <provision>` the versions took force before their act was made, as that provision says.
+    `Redates: <commit> enacted <YYYY-MM-DD>|no-date` corrects the day its law was made instead (the value its
+    Enacted/Adopted/Made... trailer gives: ENACTED, the row's `enacted`), or says the record gives none."""
     retro = trailer_lines(block).get('Retroactive', '').strip().lower().startswith('yes')
-    for target, day in REDATES.findall(block):
+    for target, field, day in REDATES.findall(block):
         at = data['pos'].get(target) if len(target) == 40 else \
             next((i for c, i in data['pos'].items() if c.startswith(target)), None)
         if at is None:
             continue
         r = rows[at]
-        if day == 'no-date':
+        if field:  # enacted
+            rows[at] = r[:7] + (None if day == 'no-date' else day,) + r[8:]
+            data.setdefault('redated_enacted', {})[r[0]] = (r[7], day)
+        elif day == 'no-date':
             if r[4] == 'law':
                 rows[at] = r[:4] + ('baseline',) + r[5:]
         else:
             rows[at] = r[:5] + (day,) + r[6:]
             if r[9]:  # an overlay correction (Corrects: <act> <from>..<to>): its text applies from the corrected day
                 rows[at] = rows[at][:9] + ({**r[9], 'from': day},)
-        data.setdefault('redated', {})[r[0]] = (r[5], day)
+        if not field:
+            data.setdefault('redated', {})[r[0]] = (r[5], day)
         if retro:
             data.setdefault('retroactive', set()).add(r[0])
 
@@ -3059,7 +3150,7 @@ def _future_index(corpus: str, cwd: Path, data: dict, branch: str, fut: str) -> 
     over = dict(data)
     over['rows'] = list(data['rows'])
     over['files'] = _FilesOver(data['files'])
-    for k in ('unknown', 'moves', 'withdrawn', 'restates', 'pos', 'retroactive', 'redated'):
+    for k in ('unknown', 'moves', 'withdrawn', 'restates', 'pos', 'retroactive', 'redated', 'redated_enacted'):
         if k in data:
             over[k] = type(data[k])(data[k])
     before = len(over['rows'])
@@ -3435,7 +3526,7 @@ def main(argv: list[str]) -> None:
     elif command == 'log':
         if not history(args[0]):
             raise SystemExit(explain_missing('9999-12-31', args[0]))
-        for h in history(args[0]):
+        for h in log_rows(args[0]):
             dates = '; '.join(f'{k} {h[k]}' for k in ('enacted', 'published') if h[k])
             label = {'baseline': 'version of', 'correction': 'corrected', 'printing': 'printed'}.get(h.get('kind'), 'in force')
             if h.get('ends'):

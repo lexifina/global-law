@@ -341,6 +341,8 @@ def explain(date: str, path: str) -> str:
     first = record_floor(date, path)
     if first:
         what = ('the consolidated text' if first['kind'] == 'baseline' else
+                'the first consolidation to show it (In-force-basis: in force on or before its day),'
+                if first.get('in_force_basis') else
                 f"a revision of an act already in force then (Kind: {first.get('kind_written')}),")
         act = run_law(law.act_floor_note, date, path)  # the act's own dates, from data/acts.json
         return (f"{path}: the record's first version of it is {what} in force on {first['in_force']} "

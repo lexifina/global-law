@@ -115,9 +115,10 @@ def reader_retroactive(block: str) -> bool:
 def reader_redates(repo: Path) -> dict[str, list]:
     """Every Redates: line, applied as law.py _extend applies them while it indexes a corpus (all commits of HEAD,
     oldest first, only the maintainer's, each line through _redate): {'applied': [(commit, target, day)],
-    'author', 'malformed', 'target', 'outside'} with the commits whose lines readers ignore, and why."""
+    'enacted': [(commit, target, day)] for `Redates: <commit> enacted <day>`, 'author', 'malformed', 'target',
+    'outside'} with the commits whose lines readers ignore, and why."""
     law = reader()
-    out: dict[str, list] = {'applied': [], 'author': [], 'malformed': [], 'target': [], 'outside': []}
+    out: dict[str, list] = {'applied': [], 'enacted': [], 'author': [], 'malformed': [], 'target': [], 'outside': []}
     log = git('log', '--reverse', '--format=%x1d%H%x1f%an%x1f%(trailers:only,unfold)%x1f%B', cwd=repo)
     data: dict = {'pos': {}}
     rows: list = []
@@ -136,10 +137,12 @@ def reader_redates(repo: Path) -> dict[str, list]:
                     continue
                 one: dict = {'pos': data['pos']}
                 law._redate(one, rows, line)
-                if not one.get('redated'):
+                if not one.get('redated') and not one.get('redated_enacted'):
                     out['target'].append(f'{sha[:7]}->{m.group(1)[:7]}')
                 for target, (_, day_) in one.get('redated', {}).items():
                     out['applied'].append((sha, target, day_))
+                for target, (_, day_) in one.get('redated_enacted', {}).items():
+                    out['enacted'].append((sha, target, day_))
         data['pos'][sha] = len(rows)
         rows.append((sha, author, '', '', 'law', None, '', None, None, None))
     return out
@@ -238,8 +241,10 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
     # Redates: as law.py applies them (reader_redates); a version redated `no-date` is a starting text to readers.
     redates = reader_redates(repo) if law else {}
     no_date = {target for _, target, d in redates.get('applied', []) if d == 'no-date'}
-    unreal_redates = [f'{c[:7]}->{target[:7]} {d}' for c, target, d in redates.get('applied', [])
+    unreal_redates = [f'{c[:7]}->{target[:7]} {d}' for c, target, d in redates.get('applied', []) + redates.get('enacted', [])
                       if d != 'no-date' and not real_day(d)]
+    # Redates: <commit> enacted <day>: the act's own date readers use instead of the commit's Enacted/Adopted/...
+    enacted_fix = {target: (None if d == 'no-date' else d) for _, target, d in redates.get('enacted', [])}
     retro_bad: list[str] = []  # Retroactive: trailers readers do not take as yes
     outside: dict[str, list[str]] = {}  # trailer lines readers never see: in the message, not in git's trailer block
     unreal: list[str] = []  # in-force days that are no day of the calendar
@@ -286,6 +291,7 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         if doc:
             continue
         own = next((t[k][:10] for k in ACT_DATES if re.match(r'\d{4}-\d{2}-\d{2}', t.get(k, ''))), None)
+        own = enacted_fix[sha][:10] if enacted_fix.get(sha) else (None if sha in enacted_fix else own)
         if own and when[:10] < own and not (law and 'Retroactive' in t and reader_retroactive(block)):
             before_act.append(sha)  # in force before the act itself was made, with no Retroactive: saying why
         elif when[:10] < (cj.get('earliest') or '1500-01-01'):
@@ -361,7 +367,7 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
                     f"readers ignore (first {redates['author'][0][:7]}); append them again as {maintainer}")
     if redates.get('malformed'):
         warn.append(f"{len(redates['malformed'])} commit(s) have a Redates: line that is not "
-                    f"'Redates: <commit> <YYYY-MM-DD>|no-date', which readers ignore (first {redates['malformed'][0][:7]})")
+                    f"'Redates: <commit> [enacted] <YYYY-MM-DD>|no-date', which readers ignore (first {redates['malformed'][0][:7]})")
     if redates.get('target'):
         # A warning, not a failure: readers skip it, and an append-only history cannot take it back, only redate again.
         warn.append(f"{len(redates['target'])} Redates: name(s) no commit above them in the history, which readers "

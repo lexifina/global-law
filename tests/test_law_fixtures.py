@@ -2003,5 +2003,193 @@ class RepealNotices(unittest.TestCase):
             law.close_readers()
 
 
+class ReaderQuirks(unittest.TestCase):
+    """Five reader quirks (4 November 2026): the log in in-force order, a corrected credit's own enacted day,
+    Trinidad's versions dated by the consolidation that first shows them, Liechtenstein's Kind: start, and
+    `Redates: <commit> enacted <day>` correcting a law's Adopted/Enacted day."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        # 1. Log order: a version found late, two laws in force the same day appended after a later one (spain-law's
+        # same-day versions, LIRPF art. 93), and an act ended by data/acts.json.
+        a = t.corpus('lo/national/acts')
+        a.commit('Act 1 of 2010', {'act/s1.md': 'one\n', 'old/s1.md': 'old\n'}, In_force='2010-01-01', Kind='law')
+        cls.nine = a.commit('Act 9 of 2022', {'act/s1.md': 'one, 9\n'}, In_force='2023-01-01', Enacted='2022-12-23')
+        a.commit('Act 10 of 2024', {'act/s1.md': 'one, 10\n'}, In_force='2024-12-22', Enacted='2024-12-20')
+        a.commit('Act 3 of 2015', {'act/s1.md': 'one, 3\n', 'old/s1.md': 'old, 3\n'}, In_force='2015-06-01')
+        a.commit('Lexifina', {'act/s1.md': 'one, 8\n'}, In_force='2023-01-01', Law='Act 8 of 2022',
+                 Enacted='2022-12-21')
+        a.commit('Lexifina', {'act/s1.md': 'one, 9\n'}, In_force='2023-01-01', Re_asserts=cls.nine, Enacted='2022-12-23')
+        a.commit('Lexifina', {'data/acts.json': json.dumps({'acts': [
+            {'path': 'old', 'status': 'repealed', 'repealed': '2020-01-01', 'repealed_by': 'Act 19 of 2019'}]})},
+            Kind='documentation')
+        a.commit('Act 2 of 2012', {'old/s1.md': 'old, 2\n'}, In_force='2012-01-01', Enacted='2011-12-01')
+        # 2. Credits corrected by data/credits.csv; the commit's own Enacted is the first-credited law's.
+        c = t.corpus('cr/national/acts')
+        c.commit('L1 of 1998', {'a/s0.md': 'zero\n'}, In_force='1998-06-01', Enacted='1998-05-17', Published='1998-05-18')
+        cls.wrong = c.commit('L14 of 2000', {'a/s1.md': 'one\n', 'a/s2.md': 'two\n', 'a/s3.md': 'three\n',
+                                            'a/s4.md': 'four\n'},
+                             In_force='1999-01-01', Enacted='2000-12-29', Published='2000-12-30')
+        credits = ('act,in_force,provision,law,was_law,was_commit\n'
+                   f'a,1999-01-01,s1,k46,k14,{cls.wrong}\n'  # laws.csv gives its dates
+                   f'a,1999-01-01,s2,BOE-A-1998-29216 (Ley 46/1998),k14,{cls.wrong}\n'  # normas.tsv does
+                   f'a,1999-01-01,s3,L1 of 1998,k14,{cls.wrong}\n'  # its own commit does
+                   f'a,1999-01-01,s4,Unknown Law,k14,{cls.wrong}\n')  # nothing does
+        c.commit('Lexifina', {'data/credits.csv': credits,
+                              'data/laws.csv': 'key,label,enacted,published\nk46,Law 46 of 1998,1998-12-17,1998-12-18\n'
+                                               'k14,L14 of 2000,2000-12-29,2000-12-30\n',
+                              'normas.tsv': 'id\trango\tpath\tfecha_disposicion\tfecha_publicacion\ttitulo\n'
+                                            'BOE-A-1998-29216\tLey\ta\t1998-12-17\t1998-12-18\tLey 46/1998\n'},
+                 Kind='documentation')
+        # 3. Trinidad: a subsidiary-legislation folder whose first version is an amending Act first shown in a
+        # Revised Edition; a section added to an existing chapter the same way; and a control without that basis.
+        shown = ('1980 Revised Edition as at December 1990; the label gives the month only, so it is dated the '
+                 "month's last day, 31 December 1990; a change first shown here took effect on or before it")
+        tt = t.corpus('tt/national/acts')
+        tt.commit('Law Revision Commission', {'chapters/88-09/s-1.md': 'Section 1 (1950).\n'}, In_force='1950-12-31',
+                  Kind='consolidation', In_force_basis='1950 Revised Edition as at December 1950')
+        tt.commit('Act No. 38 of 1961', {'chapters/88-09/s-1.md': 'Section 1 (1990).\n',
+                                         'chapters/88-09/s-1A.md': 'Section 1A.\n',
+                                         'chapters/88-09/sl-01/title.md': 'Regulations.\n'},
+                  In_force='1990-12-31', Kind='amendment', In_force_basis=shown)
+        tt.commit('Act No. 5 of 1990', {'chapters/90-01/sl-01/title.md': 'New regulations.\n'},
+                  In_force='1990-12-31', Kind='amendment', In_force_basis='commencement order')
+        # 4. Liechtenstein's Kind: start, the oldest version available of an act.
+        li = t.corpus('li/national/acts')
+        li.commit('LGBl. 2023 Nr. 252', {'lr-1/art-001.md': 'Art. 1\n'}, In_force='2023-07-01', Kind='start',
+                  Published='2023-06-20 (LGBl. 2023 Nr. 252)')
+        # 5. An Adopted day taken from another part of the act, corrected by Redates: <commit> enacted <day>.
+        sw = t.corpus('sw/bund/acts')
+        cls.part = sw.commit('AS 2025 422', {'0.232/r14.md': 'Regel 14\n'}, In_force='2023-04-01',
+                             Adopted='2024-07-17', Published='2025-06-25 (AS 2025 422)')
+        cls.other = sw.commit('AS 2025 423', {'0.232/r15.md': 'Regel 15\n'}, In_force='2023-04-01',
+                              Adopted='2024-07-17')
+        sw.commit('Lexifina', {}, Kind='documentation',
+                  Redates=[f'{cls.part} enacted 2016-10-11', f'{cls.other[:10]} enacted no-date'])
+        t.pin()
+        cls.law = t.law()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.law.close_readers()
+        cls.t.close()
+
+    @staticmethod
+    def dated(out: str) -> list[tuple[str, str]]:
+        """(in-force day, law) of each log line: '<label> <day>  <law>  ...'."""
+        return [(line.split('  ')[0].split()[-1], line.split('  ')[1]) for line in out.splitlines() if line.strip()]
+
+    def test_log_is_in_in_force_order(self):
+        out, err, code = self.t.cli('log', 'lo/national/acts/act/s1.md')
+        self.assertEqual(self.dated(out), [('2010-01-01', 'Act 1 of 2010'), ('2015-06-01', 'Act 3 of 2015'),
+                                           ('2023-01-01', 'Act 9 of 2022'), ('2023-01-01', 'Act 8 of 2022'),
+                                           ('2023-01-01', 'Act 9 of 2022'), ('2024-12-22', 'Act 10 of 2024')], err)
+        # history() itself stays in commit order (blame, words and the MCP tools read it so).
+        self.assertEqual([h['in_force'] for h in self.law.history('lo/national/acts/act/s1.md')],
+                         ['2010-01-01', '2023-01-01', '2024-12-22', '2015-06-01', '2023-01-01', '2023-01-01'])
+        self.assertEqual(self.law.text_on('2023-06-01', 'lo/national/acts/act/s1.md'), 'one, 9\n')
+
+    def test_log_keeps_the_act_end_after_the_versions_before_it(self):
+        out, err, code = self.t.cli('log', 'lo/national/acts/old/s1.md')
+        self.assertEqual(self.dated(out), [('2010-01-01', 'Act 1 of 2010'), ('2012-01-01', 'Act 2 of 2012'),
+                                           ('2015-06-01', 'Act 3 of 2015'), ('2020-01-01', 'Act 19 of 2019')], err)
+        self.assertTrue(out.splitlines()[-1].startswith('repealed 2020-01-01'), out)
+
+    def test_a_corrected_credit_shows_its_own_laws_dates(self):
+        expected = {'s1': ('Law 46 of 1998', '1998-12-17', '1998-12-18'),
+                    's2': ('BOE-A-1998-29216 (Ley 46/1998)', '1998-12-17', '1998-12-18'),
+                    's3': ('L1 of 1998', '1998-05-17', '1998-05-18'),
+                    's4': ('Unknown Law', None, None)}
+        for unit, (label, enacted, published) in expected.items():
+            row = self.law.history(f'cr/national/acts/a/{unit}.md')[0]
+            self.assertEqual((row['law'], row['enacted'], row['published']), (label, enacted, published), unit)
+            self.assertNotIn('date_doubtful', row, unit)
+            out, err, code = self.t.cli('log', f'cr/national/acts/a/{unit}.md')
+            self.assertNotIn('2000-12-29', out)
+            self.assertNotIn('date doubtful', out)
+
+    def test_a_version_first_shown_in_a_consolidation_is_a_record_floor(self):
+        p = 'tt/national/acts/chapters/88-09/sl-01/title.md'
+        floor = self.law.record_floor(p)
+        self.assertEqual((floor['in_force'], floor['law']), ('1990-12-31', 'Act No. 38 of 1961'))
+        self.assertIn('first shown here took effect on or before it', floor['in_force_basis'])
+        msg = self.law.explain_missing('1985-01-01', p)
+        self.assertIn('the record starts on 1990-12-31', msg)
+        self.assertIn('so in force on or before that day', msg)
+        self.assertNotIn('not yet in force', msg)
+        self.assertEqual(self.law.text_on('1991-01-01', p), 'Regulations.\n')
+        # The MCP server gives law.py a subprocess with run() only: the basis is read the same.
+        import types
+        saved = self.law.subprocess
+        self.law.subprocess = types.SimpleNamespace(run=subprocess.run)
+        try:
+            self.assertEqual(self.law._in_force_basis('tt/national/acts', floor['commit']), floor['in_force_basis'])
+        finally:
+            self.law.subprocess = saved
+        # A section added to a chapter already in the record, and a folder without that basis: as before.
+        self.assertIsNone(self.law.record_floor('tt/national/acts/chapters/88-09/s-1A.md'))
+        self.assertIsNone(self.law.record_floor('tt/national/acts/chapters/90-01/sl-01/title.md'))
+        self.assertIn('was not yet in force on 1985-01-01',
+                      self.law.explain_missing('1985-01-01', 'tt/national/acts/chapters/90-01/sl-01/title.md'))
+
+    def test_kind_start_is_a_starting_text(self):
+        self.assertEqual(self.law.kind_of('start'), ('baseline', None))
+        out, err, code = self.t.cli('log', 'li/national/acts/lr-1/art-001.md')
+        self.assertTrue(out.startswith('version of 2023-07-01'), out)
+        out, err, code = self.t.cli('show', '2023-01-01', 'li/national/acts/lr-1/art-001.md')
+        self.assertNotIn('not recognised', err)
+        self.assertIn('the record starts on 2023-07-01', err)
+
+    def test_redates_enacted_corrects_the_day_a_law_was_made(self):
+        row = self.law.history('sw/bund/acts/0.232/r14.md')[0]
+        self.assertEqual((row['in_force'], row['enacted']), ('2023-04-01', '2016-10-11'))
+        self.assertNotIn('date_doubtful', row)
+        out, err, code = self.t.cli('log', 'sw/bund/acts/0.232/r14.md')
+        self.assertIn('(enacted 2016-10-11; published 2025-06-25 (AS 2025 422))', out, err)
+        self.assertNotIn('2024-07-17', out)
+        self.assertNotIn('date doubtful', out)
+        row = self.law.history('sw/bund/acts/0.232/r15.md')[0]
+        self.assertEqual((row['in_force'], row['enacted']), ('2023-04-01', None))
+        ix = self.law._index('sw/bund/acts')
+        self.assertEqual(ix['redated_enacted'][self.part], ('2024-07-17', '2016-10-11'))
+        self.assertNotIn(self.part, ix.get('redated', {}))  # its in-force day stands
+
+    def test_check_corpus_reads_redates_enacted_as_readers_do(self):
+        sys.path.insert(0, str(HERE / 'tools'))
+        try:
+            import check_corpus
+        finally:
+            sys.path.pop(0)
+        d = Path(tempfile.mkdtemp(prefix='gl-check-'))
+        try:
+            c = Corpus(d / 'repo')
+            (c.path / 'REPRODUCE.md').write_text('x', encoding='utf-8')
+            (c.path / 'corpus.json').write_text(json.dumps({
+                'corpus': 'sw/bund/acts', 'name': 'SW', 'language': 'de', 'history_from': '2000-01-01',
+                'record_to': '2026-11-01', 'in_force_trailer': 'In-force',
+                'citation': {'file': '(a)/(b)', 'cites': 'x{n}'}}), encoding='utf-8')
+            run('add', '-A', cwd=c.path)
+            part = c.commit('AS 2025 422', {'r14.md': 'Regel 14\n'}, In_force='2023-04-01', Adopted='2024-07-17')
+            fatal, warn = check_corpus.problems(c.path, '2026-11-03')
+            self.assertTrue(any('in force before the act itself was made' in w for w in warn), warn)
+            fix = c.commit('Lexifina', {}, Kind='documentation', Redates=f'{part} enacted 2016-10-11')
+            fatal, warn = check_corpus.problems(c.path, '2026-11-03')
+            self.assertEqual(fatal, [])
+            self.assertFalse(any('in force before the act itself was made' in w for w in warn), warn)
+            self.assertFalse(any('Redates' in w for w in warn), warn)
+            self.assertEqual(check_corpus.reader_redates(c.path)['enacted'], [(fix, part, '2016-10-11')])
+            c.commit('Lexifina', {}, Kind='documentation', Redates=[f'{part} adopted 2016-10-11',
+                                                                   f'{part} enacted 2016-13-45'])
+            fatal, warn = check_corpus.problems(c.path, '2026-11-03')
+            self.assertTrue(any("is not 'Redates: <commit> [enacted]" in w for w in warn), warn)
+            self.assertTrue(any('no day of the calendar' in w and '2016-13-45' in w for w in warn), warn)
+        finally:
+            def writable(func, path, _):
+                os.chmod(path, 0o700)
+                func(path)
+            shutil.rmtree(d, onerror=writable)
+
+
 if __name__ == '__main__':
     unittest.main()

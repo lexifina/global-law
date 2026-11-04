@@ -9,6 +9,9 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all; Spain, Trinidad and Tobago, Liechtenstein, Switzerland). Five reader quirks.** `log` lists versions by in-force day, then commit order: rows appended later (Redates, spain-law's same-day versions, LIRPF art. 93's 2023-01-01 rows) sit at their day, act-end rows after the versions before them. A credit corrected by data/credits.csv shows the corrected law's own enacted/published days (data/laws.csv, normas.tsv or its own commit), else none, and no longer flags a false doubtful date (spain a25: Ley 46/1998, enacted 1998-12-17, was "enacted 2000-12-29 [date doubtful]").
+- A file whose act starts at a version dated by the consolidation that first shows it (In-force-basis "...first shown here took effect on or before it") is a record floor, as China's 修订/修正: 58 files in 41 Trinidad subsidiary-legislation folders read "the record starts on 1990-12-31 ..." instead of "not yet in force"; no other local corpus writes that basis. Liechtenstein's `Kind: start` (500 commits) is a starting text, no longer an unknown kind.
+- **Adopted:** `Redates: <commit> enacted <YYYY-MM-DD>|no-date` corrects a version's Enacted/Adopted/Made day (MCP.md; index version 9; check_corpus judges "in force before its act was made" by it). switzerland-law 8357e27 (documentation) corrects d732e26's Adopted 2024-07-17 (AS 2025 422 part III) to 2016-10-11 (part II): its 2023-04-01 version is no longer flagged doubtful.
 - **Fixed (france/national/acts). Six of the last eight doubtful French dates settled.** france-law 0ac3099: three
   versions confirmed by an effect clause (two found only in LEGI's daily snapshots, one set by a later law, Loi
   n° 2007-148 art. 55), one date corrected (2007-12-09, the day after the arrêté's JO), and two versions credited to the

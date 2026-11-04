@@ -163,12 +163,14 @@ the `baseline_trailer`), a link is cited as the version's source. A `baseline_tr
 change only when it holds a date.
 
 Four more records change the answers:
-- **`Redates: <commit> <YYYY-MM-DD>|no-date`.** An append-only corpus corrects a version's date without rewriting it:
+- **`Redates: <commit> [enacted] <YYYY-MM-DD>|no-date`.** An append-only corpus corrects a version's date without rewriting it:
   a later commit carries one `Redates:` line per version it corrects (the line may repeat), naming a commit above it
   (in full or by a prefix of 7 or more). A date becomes the version's in-force day, and for an overlay correction also
   the first day its text applies (`Corrects: <act> <from>..`); `no-date` says the source gives none, so a law's version
-  becomes text as of its recorded day. Readers apply it only when the commit's author is the maintainer, `Lexifina`;
-  anyone else's, a line in another form, or a commit not above it is ignored.
+  becomes text as of its recorded day. `Redates: <commit> enacted <YYYY-MM-DD>|no-date` corrects instead the day
+  its law was made (the value of its `Enacted:`, `Adopted:`, `Made:` ... trailer, which readers show and judge a
+  doubtful date by), or says the record has none; its in-force day stands. Readers apply it only when the commit's
+  author is the maintainer, `Lexifina`; anyone else's, a line in another form, or a commit not above it is ignored.
 - **`Retroactive: yes; <provision>`.** The version took force before its act was made, as that provision says, so its
   date is not marked doubtful. On a `Redates:` commit it covers every version that commit redates. A value that does
   not start with `yes` is ignored.
@@ -214,7 +216,8 @@ Four more records change the answers:
 repo ships `jurisdiction.json` or `data/repo.json` (readers then use defaults for the rest), and is counted when several
 corpora are checked at once (`python tools/check_corpus.py <global-law checkout>` checks every corpus checked out there).
 A `Redates:` or `Retroactive:` that readers would ignore is a warning (the history cannot take it back; a later
-`Redates:` can correct it), as is each kind of bad `data/acts.json` row, with a count; an `acts.json` that does not
+`Redates:` can correct it), as is each kind of bad `data/acts.json` row, with a count; a version in force before its act
+was made is judged by the act's day as `Redates: <commit> enacted` corrects it; an `acts.json` that does not
 parse fails.
 
 ## Tools
