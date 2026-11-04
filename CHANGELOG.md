@@ -9,6 +9,9 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). A file a law moves to a new path no longer breaks trees built for a date.** The index stored a blob id
+  as the moved file's mode, so `git mktree` failed for any date after the move in a corpus not in in-force order (the
+  Swiss federal corpus has 43 such moves). INDEX_VERSION 8: every index is rebuilt once.
 - **Fixed (all). Built trees read by the process that built them, and kept while it runs (audit rows 49, 50).**
   `read_object(corpus, '<built tree>:<path>')` returned None when the corpus's `git cat-file --batch` reader had started before the tree store existed, or under another store: each reader now starts with this process's store as its alternate and is restarted when that differs. A new law.py process deleted any `global-law-trees-*` folder idle for a day, so an idle MCP server then failed every git command (`unable to normalize alternate object path`): each store now holds an `owner` file (pid, touched as a heartbeat while in use), the sweep removes only a store whose owner is no longer running and whose heartbeat is over a day old, and an owner whose store was removed anyway makes it again in the same place and rebuilds its trees on the next ask.
 - **Fixed (all). `tools/verify.py` on a shallow clone, after `--since HEAD`, and with a broken checkpoint (audit rows 38, 39).**

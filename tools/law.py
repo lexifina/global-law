@@ -2133,7 +2133,7 @@ def credit(author: str, kind: str) -> str:
     return CREDIT.get(kind, '{}').format(author)
 
 
-INDEX_VERSION = 7  # raise when what the index keeps changes: old indexes are then rebuilt
+INDEX_VERSION = 8  # raise when what the index keeps changes: old indexes are then rebuilt
 
 
 def _index_version() -> str:
@@ -2290,7 +2290,7 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = fro
                     data['moves'][old] = new  # one step; moves() follows a file moved more than once
                     continue
                 files.setdefault(old, []).append((order, None, f[1]))  # moved by a law: gone here, new there
-                files.setdefault(new, []).append((order, f[3], f[2]))
+                files.setdefault(new, []).append((order, f[3], f[1]))  # f[1]: the new side's mode (f[2] is a blob id)
                 continue
             path = _unquote(paths[0])
             if row[4] == 'documentation' and f[4].startswith('D'):

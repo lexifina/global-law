@@ -1012,6 +1012,34 @@ class FutureBranches(unittest.TestCase):
             self.t.pin()
 
 
+class RenamedByALaw(unittest.TestCase):
+    """A file a law moves to a new path keeps a valid mode in the index, so a tree built for a date holds it."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus('mv/national/acts')
+        a.commit('Act 1 of 2000', {'act/art-205.md': 'the text of the article\n'}, In_force='2000-01-01', Kind='law')
+        a.commit('Act 2 of 2010', {'act/art-205.md': None, 'act/art-105a.md': 'the text of the article\n'},
+                 In_force='2010-01-01', Kind='law')
+        a.commit('Act 3 of 2005', {'other.md': 'older, appended later\n'}, In_force='2005-01-01', Kind='law')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_a_tree_after_the_move_holds_the_moved_file(self):
+        law = self.t.law()
+        self.assertFalse(law.in_order('mv/national/acts'))  # out of order: the tree is built, not a prefix
+        tree = law.corpus_tree('2011-01-01', 'mv/national/acts')
+        names = law.git('ls-tree', '-r', tree, cwd=law.corpus_dir('mv/national/acts'))
+        law.close_readers()
+        self.assertIn('100644 blob', names)
+        self.assertIn('act/art-105a.md', names)
+        self.assertNotIn('act/art-205.md', names)
+
+
 class Checkouts(unittest.TestCase):
     """Checkouts that are not what the tree pins."""
 
