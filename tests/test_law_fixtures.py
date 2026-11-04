@@ -1456,5 +1456,113 @@ class ActEndRule(unittest.TestCase):
             law.close_readers()
 
 
+class BuiltTreeStore(unittest.TestCase):
+    """Fundamentals audit rows 49-50: a built tree read by the batch reader of the process that built it, and a tree
+    store that another process's sweep leaves alone while its owner runs (and that is made again if removed)."""
+
+    C = 'ts/national/acts'
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus(cls.C)  # older acts appended after a newer one: not in in-force order
+        # The trees for 2015-07-01 and 2017-01-01 are no commit's tree, so only a built tree holds them.
+        a.commit('Act 1 of 2010', {'act/s1.md': 'fee 10\n', 'act/s2.md': 'two a\n', 'act/s3.md': 'three x\n'},
+                 In_force='2010-01-01', Kind='law')
+        a.commit('Act 5 of 2020', {'act/s1.md': 'fee 30\n'}, In_force='2020-01-01', Kind='law')
+        a.commit('Act 3 of 2015', {'act/s2.md': 'two b\n'}, In_force='2015-06-01', Kind='law')
+        a.commit('Act 4 of 2016', {'act/s3.md': 'three y\n'}, In_force='2016-06-01', Kind='law')
+        a.commit('Lexifina', {'README.md': '# TS\n'}, Kind='documentation')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def setUp(self):  # each test's law module makes its own store; none sees another's through the environment
+        self.saved = os.environ.pop('GIT_ALTERNATE_OBJECT_DIRECTORIES', None)
+        self.mods = []
+
+    def tearDown(self):
+        for law in self.mods:
+            law.close_readers()
+            if law._TREES['dir'] is not None:
+                law._rmtree(law._TREES['dir'])
+        os.environ.pop('GIT_ALTERNATE_OBJECT_DIRECTORIES', None)
+        if self.saved is not None:
+            os.environ['GIT_ALTERNATE_OBJECT_DIRECTORIES'] = self.saved
+
+    def law(self):
+        law = self.t.law()
+        self.mods.append(law)
+        return law
+
+    def test_the_batch_reader_reads_a_tree_built_after_it_started(self):  # row 49
+        law = self.law()
+        self.assertIsNotNone(law.read_object(self.C, f"{law._index(self.C)['pin']}:README.md"))  # the reader first
+        self.assertFalse(law.in_order(self.C))
+        tree = law.corpus_tree('2015-07-01', self.C)
+        self.assertEqual(law.read_object(self.C, f'{tree}:act/s2.md'), 'two b\n')
+        self.assertEqual(law.read_object(self.C, f'{tree}:act/s1.md'), 'fee 10\n')
+        self.assertEqual(law.text_on('2015-07-01', f'{self.C}/act/s2.md'), 'two b\n')
+
+    def test_the_batch_reader_reads_a_tree_under_another_alternate(self):  # row 49: another store in the environment
+        law = self.law()
+        elsewhere = self.t.root / 'elsewhere' / 'objects'
+        elsewhere.mkdir(parents=True)
+        os.environ['GIT_ALTERNATE_OBJECT_DIRECTORIES'] = str(elsewhere)
+        self.assertIsNotNone(law.read_object(self.C, f"{law._index(self.C)['pin']}:README.md"))
+        tree = law.corpus_tree('2017-01-01', self.C)
+        os.environ['GIT_ALTERNATE_OBJECT_DIRECTORIES'] = str(elsewhere)  # set again, as another law module would
+        self.assertEqual(law.read_object(self.C, f'{tree}:act/s3.md'), 'three y\n')
+
+    def test_a_sweep_leaves_a_running_owners_idle_store(self):  # row 50
+        law = self.law()
+        tree = law.corpus_tree('2017-01-01', self.C)
+        d = law._TREES['dir']
+        old = dt.datetime.now().timestamp() - 3 * 86400  # idle for three days, as an MCP server can be
+        for p in (d, d / 'owner'):
+            os.utime(p, (old, old))
+        self.law()._tree_store()  # another law.py starting its own store sweeps old ones
+        self.assertTrue((d / 'objects').is_dir())
+        law.close_readers()
+        self.assertEqual(law.read_object(self.C, f'{tree}:act/s3.md'), 'three y\n')
+
+    def test_a_sweep_removes_a_dead_owners_old_store(self):  # row 50
+        law = self.law()
+        dead = int(subprocess.run([sys.executable, '-c', 'import os; print(os.getpid())'], capture_output=True,
+                                  encoding='utf-8').stdout)
+        self.assertFalse(law._pid_alive(dead))
+        self.assertTrue(law._pid_alive(os.getpid()))
+        stale, fresh, legacy = (Path(tempfile.mkdtemp(prefix='global-law-trees-')) for _ in range(3))
+        for d in (stale, fresh):
+            (d / 'owner').write_text(f'{dead}\n', encoding='utf-8')
+        old = dt.datetime.now().timestamp() - 3 * 86400
+        for p in (stale, stale / 'owner', legacy):  # legacy: a store from before owner files, judged by its age
+            os.utime(p, (old, old))
+        try:
+            law._sweep_tree_stores()
+            self.assertFalse(stale.exists())
+            self.assertFalse(legacy.exists())
+            self.assertTrue(fresh.exists())  # its owner is gone, but its heartbeat is recent
+        finally:
+            for d in (stale, fresh, legacy):
+                law._rmtree(d)
+
+    def test_a_removed_store_is_made_again_and_its_trees_rebuilt(self):  # row 50
+        law = self.law()
+        tree = law.corpus_tree('2015-07-01', self.C)
+        self.assertEqual(law.read_object(self.C, f'{tree}:act/s2.md'), 'two b\n')
+        d = law._TREES['dir']
+        law.close_readers()  # (a running reader may still hold the tree it parsed)
+        law._rmtree(d)  # a sweep from an older law.py, which looked only at the folder's age
+        self.assertFalse(d.exists())
+        self.assertEqual(law.corpus_tree('2015-07-01', self.C), tree)
+        self.assertEqual(law.read_object(self.C, f'{tree}:act/s2.md'), 'two b\n')
+        grep = subprocess.run(['git', 'grep', '-c', 'two', tree, '--', '*.md'], cwd=self.t.root / self.C,
+                              capture_output=True, encoding='utf-8')
+        self.assertEqual((grep.returncode, grep.stderr), (0, ''))
+
+
 if __name__ == '__main__':
     unittest.main()

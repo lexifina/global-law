@@ -34,6 +34,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def git(*args: str, cwd: Path = ROOT, check: bool = True) -> str:
+    _trees_alive()  # a swept tree store would fail every git command naming it as an alternate
     done = subprocess.run(['git', *args], cwd=cwd, capture_output=True, encoding='utf-8')
     if check and done.returncode:
         raise RuntimeError(f"git {' '.join(args)}: {done.stderr.strip()}")
@@ -583,30 +584,106 @@ def _named_at(ix: dict, cwd: Path, wanted: dict[int, list[str]]) -> dict[int, di
     return out
 
 
-_TREES: dict = {'dir': None}
+_TREES: dict = {'dir': None, 'beat': 0.0}
+TREE_STORE_IDLE = 86400  # a store whose owner is gone and whose heartbeat is older than this is swept
+TREE_STORE_BEAT = 600  # seconds between heartbeats while the owner is in use
+
+
+def _pid_alive(pid: int) -> bool:
+    """Whether a process is running, without signalling it (os.kill(pid, 0) on Windows would end it)."""
+    import os
+    if pid <= 0:
+        return False
+    if os.name == 'nt':
+        import ctypes
+        from ctypes import wintypes
+        k32 = ctypes.WinDLL('kernel32', use_last_error=True)
+        k32.OpenProcess.restype = wintypes.HANDLE
+        k32.OpenProcess.argtypes = (wintypes.DWORD, wintypes.BOOL, wintypes.DWORD)
+        k32.GetExitCodeProcess.argtypes = (wintypes.HANDLE, ctypes.POINTER(wintypes.DWORD))
+        k32.CloseHandle.argtypes = (wintypes.HANDLE,)
+        h = k32.OpenProcess(0x1000, False, pid)  # PROCESS_QUERY_LIMITED_INFORMATION
+        if not h:
+            return ctypes.get_last_error() == 5  # access denied: it exists
+        try:
+            code = wintypes.DWORD()
+            return bool(k32.GetExitCodeProcess(h, ctypes.byref(code))) and code.value == 259  # STILL_ACTIVE
+        finally:
+            k32.CloseHandle(h)
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except OSError:
+        return True
+    return True
+
+
+def _sweep_tree_stores() -> None:
+    """Remove tree stores left by killed processes: one whose owner (its `owner` file) is no longer running and whose
+    heartbeat is over a day old. A store whose owner still runs stays, however long it has been idle."""
+    import tempfile
+    import time
+    for old in Path(tempfile.gettempdir()).glob('global-law-trees-*'):
+        try:
+            owner = old / 'owner'
+            try:
+                pid = int(owner.read_text(encoding='utf-8').split()[0])
+                beat = owner.stat().st_mtime
+            except (OSError, ValueError, IndexError):  # a store from before owner files, or one just being made
+                pid, beat = 0, old.stat().st_mtime
+            if pid and _pid_alive(pid):
+                continue
+            if time.time() - beat > TREE_STORE_IDLE:
+                _rmtree(old)
+        except OSError:
+            pass
+
+
+def _make_tree_store(d: Path) -> None:
+    import os
+    (d / 'objects').mkdir(parents=True, exist_ok=True)
+    (d / 'owner').write_text(f'{os.getpid()}\n', encoding='utf-8')
+    os.environ['GIT_ALTERNATE_OBJECT_DIRECTORIES'] = str(d / 'objects')
 
 
 def _tree_store() -> Path:
     """A private object directory for the trees this process builds. Every git command reads it as an alternate,
-    so a built tree can be grepped and listed like a commit; nothing is written into the clone."""
+    so a built tree can be grepped and listed like a commit; nothing is written into the clone. The store names its
+    owner (an `owner` file with the pid, touched as a heartbeat while in use), so another process's sweep leaves it
+    alone however long this process sits idle; if it is removed anyway, it is made again and the trees rebuilt."""
+    import time
     if _TREES['dir'] is None:
         import atexit
-        import os
-        import shutil
         import tempfile
-        import time
-        for old in Path(tempfile.gettempdir()).glob('global-law-trees-*'):  # left by a killed process
-            try:
-                if time.time() - old.stat().st_mtime > 86400:
-                    _rmtree(old)
-            except OSError:
-                pass
+        _sweep_tree_stores()
         d = Path(tempfile.mkdtemp(prefix='global-law-trees-'))
-        (d / 'objects').mkdir()
+        _make_tree_store(d)
         atexit.register(_rmtree, d)
-        os.environ['GIT_ALTERNATE_OBJECT_DIRECTORIES'] = str(d / 'objects')
-        _TREES['dir'] = d
-    return _TREES['dir']
+        _TREES['dir'], _TREES['beat'] = d, time.time()
+        return d
+    d = _TREES['dir']
+    if not (d / 'objects').is_dir() or not (d / 'owner').is_file():
+        _make_tree_store(d)  # swept by another process: the same place, so git's alternate path holds again
+        for k in [k for k in _CACHE if k[0] == 'tree']:  # its trees went with it; built again when next asked
+            _CACHE.pop(k)
+        _restart_readers()
+        _TREES['beat'] = time.time()
+    elif time.time() - _TREES['beat'] > TREE_STORE_BEAT:
+        try:
+            import os
+            os.utime(d / 'owner')
+            os.utime(d)
+        except OSError:
+            pass
+        _TREES['beat'] = time.time()
+    return d
+
+
+def _trees_alive() -> None:
+    """Check the tree store (made again if swept) and keep its heartbeat, where a process has one."""
+    if _TREES['dir'] is not None:
+        _tree_store()
 
 
 def _rmtree(d: Path) -> None:
@@ -634,6 +711,7 @@ def corpus_tree(date: str, corpus: str) -> str | None:
     if in_order(corpus):
         return corpus_on(date, corpus)
     key = ('tree', f'{corpus}@{_at(_index(corpus))}@{date}')
+    _trees_alive()  # a swept store drops the cached trees, so the one asked for is built again below
     if key in _CACHE:
         return _CACHE[key]  # type: ignore[return-value]
     index, overlays = file_index(corpus)
@@ -2759,10 +2837,22 @@ _BATCH: dict = {}
 
 def _batch_read(corpus: str, cwd: Path, spec: str) -> tuple[bytes | None, bytes | None]:
     """(type, content) of an object through the corpus's long-lived `git cat-file --batch`; (None, None) if missing."""
-    p = _BATCH.get(corpus)
-    if p is None or p.poll() is not None:
-        p = _BATCH[corpus] = subprocess.Popen(['git', 'cat-file', '--batch'], cwd=cwd, stdin=subprocess.PIPE,
-                                              stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    _trees_alive()
+    import os
+    # The reader sees built trees only if it was started with the tree store as an alternate: one started before the
+    # store existed (or under another store) is restarted with it.
+    alt = str(_TREES['dir'] / 'objects') if _TREES['dir'] is not None else None
+    p, started = _BATCH.get(corpus, (None, None))
+    if p is not None and (p.poll() is not None or started != alt):
+        _stop_reader(p)
+        p = None
+    if p is None:
+        env = dict(os.environ)
+        if alt is not None:
+            env['GIT_ALTERNATE_OBJECT_DIRECTORIES'] = alt
+        p = subprocess.Popen(['git', 'cat-file', '--batch'], cwd=cwd, stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=env)
+        _BATCH[corpus] = (p, alt)
         import atexit
         atexit.register(_stop_reader, p)
     p.stdin.write(spec.encode('utf-8') + b'\n')
@@ -2816,11 +2906,16 @@ def _stop_reader(p) -> None:
             pass
 
 
-def close_readers() -> None:
-    """Stop the `git cat-file --batch` readers (they hold each corpus folder open while they run)."""
-    for p in _BATCH.values():
+def _restart_readers() -> None:
+    """Stop the batch readers; each starts again on its next read, with the tree store as it is now."""
+    for p, _ in _BATCH.values():
         _stop_reader(p)
     _BATCH.clear()
+
+
+def close_readers() -> None:
+    """Stop the `git cat-file --batch` readers (they hold each corpus folder open while they run)."""
+    _restart_readers()
     for f in _OPEN_INDEXES:  # and the index files they hold open
         f.close()
     _OPEN_INDEXES.clear()
