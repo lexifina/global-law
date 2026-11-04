@@ -8,8 +8,11 @@ replaced. Up to 29 October 2026 it was rebuilt from scratch by a script, whose r
 
 ```sh
 git clone https://github.com/lexifina/global-law && cd global-law
-python tools/verify.py                       # the last 200 commits: every submodule has its .gitmodules entry
-python tools/verify.py --fetch               # and every pin is held by its repository and moved only forward
+python tools/verify.py                       # since the last clean run: every submodule has its .gitmodules entry
+python tools/verify.py --full                # every commit (about 45 s)
+python tools/verify.py --remote              # and every pin is on its repository's main and moved only forward
+                                             # (first run about 4 minutes and 560 MB in .git/global-law-verify;
+                                             # later runs check only what came after the last clean run)
 python tools/describe.py --check             # manifest.json and the jurisdiction.json files match the tree
 python -m unittest tests.test_law_fixtures   # how law.py reads a corpus, on small corpora built for the test
 ```
@@ -31,7 +34,7 @@ python -m unittest tests.test_law_fixtures   # how law.py reads a corpus, on sma
   `data/moved-paths.tsv` lists the corpora moved since, and the tools read an old path from the new place.
 - **The descriptions.** `manifest.json` and every `jurisdiction.json` are written by `tools/describe.py` from the corpora pinned at the time. Each corpus is described by its own repository's `corpus.json`, `data/repo.json` and `jurisdiction.json` at the pinned commit.
 - **The dates.** Dates are read from each corpus's own history, as `tools/law.py` and README.md describe. The per-law history from part two is still here, frozen. Its dates for corpus commits that carry none of their own are kept in `data/legacy-dates.tsv`.
-- **What cannot be checked.** Some old commits pin corpus commits that their repositories no longer hold. In part two's history, 1,400 pins are affected, the last pin of 89 corpora among them. Between 29 October and 2 November, 2,503 pins are affected. Those repositories were rewritten before the fast-forward rule. `git submodule update` at such a commit fails for those corpora, and nothing in this repository can repair it; `tools/verify.py --since <commit> --fetch` names them.
+- **What cannot be checked.** Some old commits pin corpus commits that their repositories no longer hold. In part two's history, 1,400 pins are affected, the last pin of 89 corpora among them. Between 29 October and 2 November, 2,503 pins are affected. Those repositories were rewritten before the fast-forward rule. `git submodule update` at such a commit fails for those corpora, and nothing in this repository can repair it; `tools/verify.py --since <commit> --remote` names them. GitHub still serves most of these commits by their hash (all 3,486 pins set before 2 November that no branch holds could be fetched on 4 November 2026), but nothing keeps them: they predate the cleaning of private material, so they are left to GitHub's garbage collection; checking out the history from before 2 November is best effort. Ten pins set on 2 November after db84b4c are not on their corpus's main (uruguay and norway 3 each; brazil, romania, greece and belgium 1).
 
 ## Part two: the build of 28 and 29 October 2026 (frozen)
 

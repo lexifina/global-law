@@ -9,6 +9,15 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Changed (all). `tools/verify.py` reads each commit's change, not its whole tree, and fetches every corpus into
+  one commit store, 32 at a time.** The whole history (342,041 commits) checks in 44 s, 2 November to now in 2–4 s
+  (was 80.8 s); `--remote` (was `--fetch`) fills the store in about 4 minutes and 560 MB (was about 100 minutes). A
+  pin must now be reachable from its corpus's main, not from any branch or tag. A clean run records where it stopped
+  in `.git/global-law-verify/verified.json`, and the next run checks only what came after and that nothing was
+  rewritten. **Open:** ten pins set on 2 November after `db84b4c` are not on main (uruguay and norway 3 each; brazil, romania, greece, belgium 1).
+- **Changed (all). Pins from before 2 November are best effort, and REPRODUCE says so.** 3,486 such pins are on no
+  branch or tag; GitHub still serves them by hash, but they predate the cleaning of private material and are not
+  kept by a tag.
 - **Changed (all). `blame` and `words` on long, often amended files start a few git processes, not one per
   version.** The line matching for long files (git's histogram diff) now runs 48 version steps per `git diff
   --no-index` over two folders, the next batch running while Python reads the last. Czechia sb/1992/586 (236
