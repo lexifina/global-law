@@ -1320,6 +1320,49 @@ class Dating(unittest.TestCase):
         finally:
             shutil.rmtree(d, ignore_errors=True)
 
+    def test_the_check_takes_every_history_and_either_consolidated(self):
+        # Every history value MCP.md documents passes; Consolidated: is a date (canonical) or, in older corpora, a
+        # link; a legacy corpus with no corpus.json is warned about, not passed silently.
+        import json as _json
+        import shutil
+        import tempfile
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import check_corpus
+        import describe
+        self.assertEqual(set(check_corpus.HISTORY), set(describe.HISTORY_VALUES))
+        d = Path(tempfile.mkdtemp())
+        try:
+            run = lambda *a: subprocess.run(['git', *a], cwd=d, check=True, capture_output=True)  # noqa: E731
+            commit = lambda msg: run('-c', 'user.name=L', '-c', 'user.email=l@x', 'commit', '-q', '--allow-empty',
+                                     '-m', msg)  # noqa: E731
+            run('init', '-q')
+            (d / 'REPRODUCE.md').write_text('x')
+            cj = {'corpus': 'kg/national/acts', 'citation': {'file': '(a)/(b)', 'cites': 'x{n}'}}
+            (d / 'corpus.json').write_text(_json.dumps({**cj, 'history': 'metadata-only'}))
+            run('add', '-A')
+            commit('Catalogue\n\nKind: documentation')
+            fatal, warn = check_corpus.problems(d, '2026-11-03')
+            self.assertEqual(fatal, [])  # nothing to date in a catalogue
+            (d / 'corpus.json').write_text(_json.dumps({**cj, 'baseline_trailer': 'Consolidated'}))
+            run('add', '-A')
+            commit('Act 1\n\nIn-force: 2020-01-01\nConsolidated: 2020-01-01\nSource: https://example.org/1')
+            commit('Act 2\n\nIn-force: 2021-01-01\nConsolidated: https://example.org/2')
+            fatal, warn = check_corpus.problems(d, '2026-11-03')
+            self.assertEqual(fatal, [])
+            self.assertFalse(any('Consolidated' in w for w in warn), warn)
+            commit('Act 3\n\nIn-force: 2022-01-01\nConsolidated: ask the registry')
+            commit('Act 4\n\nConsolidated: https://example.org/4')  # its only date would be a link
+            fatal, warn = check_corpus.problems(d, '2026-11-03')
+            self.assertTrue(any('neither a date' in w for w in warn), warn)
+            self.assertTrue(any('cannot date them' in w for w in warn), warn)
+            run('rm', '-q', 'corpus.json')
+            commit('No description\n\nKind: documentation')
+            fatal, warn = check_corpus.problems(d, '2026-11-03', legacy=True)
+            self.assertEqual(fatal, [])
+            self.assertTrue(any(w.startswith(check_corpus.NO_CORPUS_JSON) for w in warn), warn)
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+
     def test_corrects_names_its_dates(self):
         m = self.law.CORRECTS.search('Legea nr. 31/1990 2010-01-01..2015-12-31')
         self.assertEqual((m.group(1), m.group(2)), ('2010-01-01', '2015-12-31'))

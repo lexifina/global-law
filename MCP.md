@@ -143,14 +143,23 @@ readers use:
 | `corpus` | ISO path, `<iso2>/<level>/<kind>`, for example `de/bremen/acts` (required) |
 | `name`, `language` | What it is, and its ISO 639-1 language |
 | `coverage` | One line on what the record holds, for example "every Act in force since 1947" |
-| `history` | `in-force`, `current-only`, `replayed` or `as-enacted` |
+| `history` | `in-force` (each version from the day it took force), `current-only` (the source keeps no past versions), `replayed` (past versions rebuilt by applying each amending act), `as-enacted` (each law as first published, amendments not applied) or `metadata-only` (catalogue entries, no law text) |
 | `history_from`, `record_to`, `checked_on` | Where the record starts, the day it is complete to, the day it was last checked |
 | `record_note` | Anything a reader must know about the record |
 | `in_force_trailer` | The trailer holding each change's in-force day (default `In-force`); `baseline_trailer` and `correction_trailer` if used |
 | `citation` | `{"file": "<regex over the corpus path with groups (folder, number)>", "cites": "<git grep -E pattern, {n} for the number>"}` |
 | `scope.default_reach` | Optional: how a change reaches pending cases where no scope is recorded |
 
-`tools/check_corpus.py` checks a repo against this before it is pinned.
+Trailers named for a day (`In-force`, `Enacted`, `Made`, `Published`, `Corrected`, `Text-as-of` and the like) hold a
+YYYY-MM-DD date; a link goes in `Source:` (or `Text-source:`). `Consolidated:` is canonically the day the publisher's
+consolidated text took force, with its link in `Source:`. Most corpora built before 4 November 2026 wrote the link in
+`Consolidated:` instead, and their history cannot change, so readers take either: a date there can date a version (as
+the `baseline_trailer`), a link is cited as the version's source. A `baseline_trailer` or `correction_trailer` dates a
+change only when it holds a date.
+
+`tools/check_corpus.py` checks a repo against this before it is pinned. A missing `corpus.json` is a warning when the
+repo ships `jurisdiction.json` or `data/repo.json` (readers then use defaults for the rest), and is counted when several
+corpora are checked at once (`python tools/check_corpus.py <global-law checkout>` checks every corpus checked out there).
 
 ## Tools
 

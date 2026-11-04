@@ -32,7 +32,8 @@ If you are not sure, open an issue here and say what you found.
 Published commits are never changed or force-pushed, so citations of a commit keep working. Pull requests here are
 merged with "Rebase and merge", keeping `main` one line of commits, each with its author; in a country repository,
 Lexifina applies the change itself. A law's commit is authored by the law, with its dates as trailers (`In-force:`,
-`Enacted:`, `Published:`, `Source:`). Your credit goes in a trailer, `Contributed-by: Your Name (@your-github-handle)`,
+`Enacted:`, `Published:`, `Source:`): a trailer named for a day holds a YYYY-MM-DD date, and a link goes in
+`Source:` (MCP.md, "How a corpus describes itself"). Your credit goes in a trailer, `Contributed-by: Your Name (@your-github-handle)`,
 with no email address: the history is permanent and public.
 
 ### Case law

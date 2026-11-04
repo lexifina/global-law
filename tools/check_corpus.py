@@ -1,11 +1,12 @@
 """The checks every country law repo must pass before global-law pins it. Standard library only.
 
-  python tools/check_corpus.py <repo folder or URL> [--until 2026-10-28] [--pin <sha>]
+  python tools/check_corpus.py <repo folder or URL> [...] [--until 2026-10-28] [--pin <sha>]
 
 Country builders run it on their own repo before pushing; global-law's builder runs the same checks on every repo it
 finds and leaves out (with the reason, in manifest.json `not_pinned`) any repo that fails. Fatal problems keep a repo
 out; warnings are reported but do not. The fields it checks are those in MCP.md ("How a corpus describes itself").
-Needs only git and Python: a URL is cloned bare into a temporary folder.
+Needs only git and Python: a URL is cloned bare into a temporary folder. Several repos, or a global-law checkout
+(every corpus its manifest.json lists that is checked out there), are checked in one run and counted at the end.
 """
 from __future__ import annotations
 
@@ -22,10 +23,18 @@ EXPECTED = ('name', 'language', 'history_from', 'record_to', 'in_force_trailer')
 # current-only: the source keeps no past versions (Fiji); dated as last updated. replayed: past versions were rebuilt
 # by applying each amending act to the text, and only some dates are checked against an official text (`verification`).
 # as-enacted: each law as first published, with later amendments not applied (a gazette is all the source has).
-HISTORY = ('in-force', 'current-only', 'replayed', 'as-enacted')
+# metadata-only: catalogue entries only, no law text (tools/describe.py writes it for such repos), so nothing is dated.
+HISTORY = ('in-force', 'current-only', 'replayed', 'as-enacted', 'metadata-only')
 PLACEHOLDER = 'sources, before any law'
-DATE_TRAILERS = ('In-force', 'In-Kraft', 'Consolidated', 'Corrected', 'Enacted', 'Made', 'Adopted', 'Signed',
-                 'Published', 'Text-as-of')
+NO_CORPUS_JSON = 'no corpus.json'  # every problem for a missing corpus.json starts with this, so a run can count them
+DATE_TRAILERS = ('In-force', 'In-Kraft', 'Corrected', 'Enacted', 'Made', 'Adopted', 'Signed', 'Published',
+                 'Text-as-of')
+# Consolidated: canonically the day the publisher's consolidated text took force, with its link in Source:. Most
+# corpora built before 4 November 2026 wrote the link itself here, and their history is append-only, so readers and
+# this check take either: tools/law.py dates a change by it only when it is a date, mcp_server.py cites it when a link.
+DATE_OR_LINK_TRAILERS = ('Consolidated',)
+ISO_DAY = re.compile(r'\d{4}-\d{2}-\d{2}')
+LINK = re.compile(r'https?://\S')
 ACT_DATES = ('Enacted', 'Made', 'Adopted', 'Dated', 'Signed')  # the act's own date, when the corpus gives one
 STARTING_KINDS = ('baseline', 'consolidated', 'current', 'current-only', 'current-text', 'publisher', 'consolidation',
                   'first published version (publisher)')
@@ -79,6 +88,8 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
                     'trailer, no citation rule)')
     elif not corpus_json and not legacy:
         (warn if work_in_progress else fatal).append('no corpus.json at the root')
+    elif not corpus_json:
+        warn.append("no corpus.json: still on the builder's fallback entry, so readers use its defaults")
     cj = corpus_json or {}
     missing = [k for k in REQUIRED if not cj.get(k)]
     if cj and missing:
@@ -88,7 +99,8 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         warn.append(f"corpus.json lacks {', '.join(lacking)} (defaults are used)")
     if cj.get('corpus') and not re.fullmatch(r'[a-z]{2}(/[a-z0-9-]+){2}', cj['corpus']):
         fatal.append(f"corpus path {cj['corpus']!r} is not <iso>/<level>/<name>")
-    if cj.get('history', 'in-force') not in HISTORY:
+    history = cj.get('history', 'in-force')
+    if history not in HISTORY:
         fatal.append(f"corpus.json history {cj['history']!r} is not one of {', '.join(HISTORY)}")
     if cj and 'citation' not in cj:  # only of a corpus.json that exists: the descriptor warning above covers the rest
         warn.append('corpus.json has no citation rule, so citations of this law are not recognised')
@@ -98,8 +110,15 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
     # A legacy corpus has no corpus.json, so the builder's fallback entry names its trailer (Germany: In-Kraft).
     trailer = cj.get('in_force_trailer') or in_force_trailer or 'In-force'
     baseline = cj.get('baseline_trailer') or (cj.get('dates') or {}).get('baseline_trailer')
+    for field in ('baseline_trailer', 'correction_trailer'):
+        key = cj.get(field) or (cj.get('dates') or {}).get(field)
+        if key and not re.fullmatch(r'[A-Z][A-Za-z0-9-]*', str(key)):
+            warn.append(f'corpus.json {field} {key!r} is not a trailer key (one word, such as Consolidated), so '
+                        'readers never find it')
     last, future, dated, early = '', 0, 0, []
     before_act, ancient, not_dates, odd_kinds, no_corrects = [], [], {}, {}, []
+    neither: dict[str, list[str]] = {}  # a date-or-link trailer that holds neither
+    link_only: list[str] = []  # no in-force day, and a baseline trailer holding a link: readers cannot date it
     days: dict[str, int] = {}
     starting = 0
     known = _known_kinds()
@@ -113,8 +132,14 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         kind = t.get('Kind', '').strip().lower()
         # Date-named trailers hold dates (YYYY-MM-DD); a link belongs in Text-source: or Source: (corpus standard).
         for key in DATE_TRAILERS:
-            if key in t and not re.match(r'\d{4}-\d{2}-\d{2}', t[key]):
+            if key in t and not ISO_DAY.match(t[key]):
                 not_dates.setdefault(key, []).append(sha)
+        for key in DATE_OR_LINK_TRAILERS:
+            if key in t and not ISO_DAY.match(t[key]) and not LINK.match(t[key]):
+                neither.setdefault(key, []).append(sha)
+        if baseline and not doc and baseline in t and not ISO_DAY.match(t[baseline]) and not t.get(trailer) \
+                and not ISO_DAY.match(t.get('Text-as-of', '')):
+            link_only.append(sha)
         if not doc and known is not None and kind and known(kind)[1] is not None:
             odd_kinds.setdefault(kind, []).append(sha)
         if kind == 'correction' and 'Corrects' not in t:
@@ -145,7 +170,8 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         if when > until:
             future += 1
     if not dated:
-        fatal.append(f'no commit carries the {trailer} trailer')
+        # A metadata-only corpus holds catalogue entries, not law text: it has nothing to date.
+        (warn if history == 'metadata-only' else fatal).append(f'no commit carries the {trailer} trailer')
     if early:
         warn.append(f'{len(early)} commit(s) are in force before a commit above them (end blocks appended after later '
                     f'dates, first {early[0][:7]}); readers order by {trailer}, so this is allowed')
@@ -167,7 +193,14 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
                         'In-force-basis: source gives no date), not an in-force date')
     for key, shas in sorted(not_dates.items()):
         warn.append(f'{len(shas)} commit(s) have a {key}: trailer that is not a date (first {shas[0][:7]}); a link '
-                    'belongs in Text-source:')
+                    'belongs in Source: or Text-source:')
+    for key, shas in sorted(neither.items()):
+        warn.append(f'{len(shas)} commit(s) have a {key}: trailer that is neither a date (canonical) nor a link '
+                    f'(first {shas[0][:7]})')
+    if link_only:
+        warn.append(f'{len(link_only)} commit(s) have no {trailer} day and a {baseline}: trailer (the corpus.json '
+                    f'baseline_trailer) holding a link, not a date, so readers cannot date them (first '
+                    f'{link_only[0][:7]}); write the date there and the link in Source:')
     if odd_kinds:
         warn.append('Kind values readers do not know (read as laws): ' +
                     ', '.join(f'{k!r} ({len(v)})' for k, v in sorted(odd_kinds.items(), key=lambda kv: -len(kv[1]))[:12]))
@@ -289,36 +322,68 @@ def pin_held_by(repo: Path, pins: dict[str, str]) -> str | None:
     return held[0] if len(held) == 1 else None
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument('repo')
-    ap.add_argument('--until', default=None, help='the build date (default today)')
-    ap.add_argument('--pin', default=None, help='the commit global-law pins now (default: read from global-law)')
-    a = ap.parse_args()
-    import datetime as dt
-    until = a.until or dt.date.today().isoformat()
-    target = a.repo
-    tmp = None
-    if re.match(r'https?://|git@', target):
-        tmp = tempfile.TemporaryDirectory()
-        if git('clone', '-q', '--bare', target, tmp.name, cwd=Path('.')).returncode:
-            raise SystemExit(f'cannot clone {target}')
-        repo = Path(tmp.name)
-        name = target.rstrip('/').removesuffix('.git').rsplit('/', 1)[1]
-    else:
-        repo = Path(target).resolve()
-        url = git('config', '--get', 'remote.origin.url', cwd=repo).stdout.strip()
-        name = url.rstrip('/').removesuffix('.git').rsplit('/', 1)[-1] if url else repo.name
-    pins = {} if a.pin else previous_pins()
-    pin = a.pin or pins.get(name) or pin_held_by(repo, pins)
-    fatal, warn = problems(repo, until, pin)
+def targets(args: list[str]) -> tuple[list[str], int]:
+    """The repos to check: each argument, or for a global-law checkout (a folder holding manifest.json) every corpus
+    its manifest lists that is checked out there. Also the number listed but not checked out."""
+    out, absent = [], 0
+    for a in args:
+        manifest = Path(a) / 'manifest.json'
+        if re.match(r'https?://|git@', a) or not manifest.is_file():
+            out.append(a)
+            continue
+        for c in json.loads(manifest.read_text(encoding='utf-8')).get('corpora', []):
+            if (Path(a) / c['path'] / '.git').exists():
+                out.append(str(Path(a) / c['path']))
+            else:
+                absent += 1
+    return out, absent
+
+
+def check_one(target: str, until: str, pin_arg: str | None, pins: dict[str, str]) -> tuple[list[str], list[str]]:
+    """Check one repo folder or URL and print its result; (fatal, warnings)."""
+    with tempfile.TemporaryDirectory() as tmp:
+        if re.match(r'https?://|git@', target):
+            if git('clone', '-q', '--bare', target, tmp, cwd=Path('.')).returncode:
+                print(f'FAIL: cannot clone {target}')
+                return [f'cannot clone {target}'], []
+            repo = Path(tmp)
+            name = target.rstrip('/').removesuffix('.git').rsplit('/', 1)[1]
+        else:
+            repo = Path(target).resolve()
+            url = git('config', '--get', 'remote.origin.url', cwd=repo).stdout.strip()
+            name = url.rstrip('/').removesuffix('.git').rsplit('/', 1)[-1] if url else target
+        pin = pin_arg or pins.get(name) or pin_held_by(repo, pins)
+        fatal, warn = problems(repo, until, pin)
     for w in warn:
         print(f'warning: {w}')
     for f in fatal:
         print(f'FAIL: {f}')
     print(f"{name}: {'FAIL' if fatal else 'pass'} ({len(fatal)} problem(s), {len(warn)} warning(s)"
           + (f'; checked against global-law pin {pin[:7]}' if pin else '; not yet pinned by global-law') + ')')
-    sys.exit(1 if fatal else 0)
+    return fatal, warn
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument('repo', nargs='+', help='repo folders or URLs, or a global-law checkout (its checked-out corpora)')
+    ap.add_argument('--until', default=None, help='the build date (default today)')
+    ap.add_argument('--pin', default=None, help='the commit global-law pins now (default: read from global-law); '
+                                                'one repo only')
+    a = ap.parse_args()
+    import datetime as dt
+    until = a.until or dt.date.today().isoformat()
+    repos, absent = targets(a.repo)
+    if a.pin and len(repos) != 1:
+        raise SystemExit('--pin is the pin of one repo')
+    pins = {} if a.pin else previous_pins()
+    results = [check_one(r, until, a.pin, pins) for r in repos]
+    if len(results) > 1 or absent:
+        failed = sum(1 for f, _ in results if f)
+        no_cj = sum(1 for f, w in results if any(x.startswith(NO_CORPUS_JSON) for x in f + w))
+        print(f'\n{len(results)} corpora checked: {len(results) - failed} pass, {failed} fail; {no_cj} of '
+              f'{len(results)} have no corpus.json'
+              + (f'; {absent} listed in manifest.json are not checked out here' if absent else ''))
+    sys.exit(1 if any(f for f, _ in results) else 0)
 
 
 if __name__ == '__main__':
