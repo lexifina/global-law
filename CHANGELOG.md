@@ -9,6 +9,13 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (france/national/acts, spain/national/acts). The last checked dates and credits.** france-law e5e220c: of the
+  50 versions dated more than a year before their act that were left unchecked, 19 dates corrected from LEGI and 22
+  confirmed by the act's own effect clause (`Retroactive`); 8 left as they are (no source settles them). spain-law
+  d15bf45: three repeal days moved to the day BOE gives (2020-10-31, 2014-09-24) and one repealing decree corrected
+  (Real Decreto 739/2021). Both add data/credits.csv for versions filed under the wrong law (LIRPF-era a25 to Ley
+  46/1998; Décret 63-766 arts. 31-1 and 32; the Arrêté du 28 avril 1980). A credit correction does not change the
+  enacted date shown, so those versions can still carry a date-doubtful note.
 - **Fixed (all). A file a law moves to a new path no longer breaks trees built for a date.** The index stored a blob id
   as the moved file's mode, so `git mktree` failed for any date after the move in a corpus not in in-force order (the
   Swiss federal corpus has 43 such moves). INDEX_VERSION 8: every index is rebuilt once.
