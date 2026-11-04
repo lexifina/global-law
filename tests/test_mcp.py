@@ -1410,8 +1410,9 @@ class Dating(unittest.TestCase):
             self.assertEqual(fatal, [])
             for expected in ('author other than Lexifina', "is not 'Redates:", 'no commit above them',
                              "does not start with 'yes'", "1 path(s) name no folder at HEAD, so they end no file (first 'act9')",
-                             "1 repealed date(s) are not YYYY-MM-DD (first act1: '01/05/2020')",
-                             "status values readers do not know", "'struck down' (1)", '1 entr(ies) have no path'):
+                             "1 repealed value(s) that are not YYYY-MM-DD, on acts whose status ends them: readers "
+                             "end the act with no day", "(first act1: '01/05/2020')",
+                             "status values readers do not recognise", "'struck down' (1)", '1 entr(ies) have no path'):
                 self.assertTrue(any(expected in w for w in warn), (expected, warn))
             (d / 'data' / 'acts.json').write_text('{"acts": [')
             run('add', '-A')
@@ -1420,6 +1421,91 @@ class Dating(unittest.TestCase):
             self.assertTrue(any('data/acts.json is not' in f for f in fatal), fatal)
         finally:
             shutil.rmtree(d, ignore_errors=True)
+
+    def test_the_check_says_what_law_py_does(self):
+        # Row 40: the same synthetic corpus goes to check_corpus.py and to tools/law.py, and each warning's claim is
+        # what law.py answers: a trailer outside git's trailer block is ignored, an impossible day is used as written,
+        # and each data/acts.json row ends its act exactly as the warning says (or, with no warning, as written).
+        sys.path.insert(0, str(ROOT / 'tests'))
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import check_corpus
+        from test_law_fixtures import Tree, run as git_run
+        t = Tree()
+        try:
+            c = t.corpus('xx/national/acts')
+
+            def raw(author, files, message):  # a commit whose message is written out, not built from trailers
+                for name, text in files.items():
+                    (c.path / name).parent.mkdir(parents=True, exist_ok=True)
+                    (c.path / name).write_text(text, encoding='utf-8')
+                    git_run('add', name, cwd=c.path)
+                c.n += 1
+                stamp = f'2001-01-01T00:00:{c.n:02d}Z'
+                git_run('commit', '-q', '--allow-empty', '-m', message, cwd=c.path,
+                        env={'GIT_AUTHOR_NAME': author, 'GIT_AUTHOR_EMAIL': 'l@x', 'GIT_AUTHOR_DATE': stamp,
+                             'GIT_COMMITTER_NAME': 't', 'GIT_COMMITTER_EMAIL': 't@x', 'GIT_COMMITTER_DATE': stamp})
+                return git_run('rev-parse', 'HEAD', cwd=c.path)
+
+            files = {f'{a}/s.md': f'{a}\n' for a in ('p1', 'p2', 'p3', 'p5', 'p6', 'p8')}
+            typo = c.commit('Act 1 of 2015', files, In_force='2051-03-01', Kind='law', Enacted='2015-01-01')
+            raw('Lexifina', {}, f'Redate a typo\n\nKind: documentation\nRedates: {typo} 2015-03-01\n'
+                                'The source gave 2051 by mistake.\n')  # P1: the Redates: line is not in the block
+            imp = c.commit('Act 2 of 2015', {'p4/s.md': 'p4 2015\n'}, In_force='2015-03-01', Kind='law')
+            c.commit('Lexifina', {}, Kind='documentation', Redates=f'{imp} 2015-13-45')  # P4
+            raw('Act 3 of 2011', {'p7/s.md': 'p7\n'}, 'Act 3 of 2011\n\nIn-force: 2011-01-01\n'
+                                                       'Text from the gazette.\n')  # P7: In-force in the body
+            retro = c.commit('Act 4 of 2012', {'p9/s.md': 'p9 2012\n'}, In_force='2012-01-01', Kind='law',
+                             Retroactive='Article 2')
+            acts = {'acts': [
+                {'path': 'p2', 'status': 'annulled', 'annulled': '2018-05-01'},
+                {'path': 'p3', 'status': 'repealed', 'repealed': '2018-05-01T00:00:00Z'},
+                {'path': 'p5', 'repealed': '1999'},
+                {'path': 'p6', 'status': 'in force ', 'repealed': '2018-05-01'},
+                {'path': 'p8', 'status': 'in force', 'repealed': '2018-05-01'},
+                {'path': 'p9', 'status': 'Repealed', 'repealed': '2019-02-30'}]}
+            c.commit('Lexifina', {'data/acts.json': json.dumps(acts), 'REPRODUCE.md': 'x'}, Kind='documentation')
+            t.pin()
+            cj = {'corpus': 'xx/national/acts', 'name': 'X', 'language': 'en', 'history_from': '2000-01-01',
+                  'record_to': '2026-11-01', 'in_force_trailer': 'In-force', 'citation': {'file': '(a)/(b)', 'cites': 'x'}}
+            fatal, warn = check_corpus.problems(c.path, '2026-11-04', corpus_json=cj)
+            law = t.law()  # noqa: F841 (closed in finally)
+            day = lambda p: [h['in_force'] for h in law.history(f'xx/national/acts/{p}') if not h.get('ends')]  # noqa: E731
+            said = lambda text: any(text in w for w in warn)  # noqa: E731
+
+            self.assertTrue(said('Redates: line outside the trailer block, which readers ignore'), warn)  # P1
+            self.assertEqual(day('p1/s.md'), ['2051-03-01'])
+            self.assertTrue(said(f'->{imp[:7]} 2015-13-45); readers date the version by it as written'), warn)
+            self.assertEqual(day('p4/s.md'), ['2015-13-45'])
+            self.assertTrue(said('have a In-force: line outside the trailer block'), warn)  # P7
+            self.assertEqual(law.history('xx/national/acts/p7/s.md'), [])
+            self.assertTrue(said(f"Retroactive: trailer that does not start with 'yes', which readers ignore (first "
+                                 f"{retro[:7]})"), warn)
+            self.assertNotIn(retro, law._index('xx/national/acts').get('retroactive', set()))
+
+            # data/acts.json: the check reads each row with law.py's own act_ends, and the tree's reader agrees.
+            ends = law.act_ends('xx/national/acts')
+            self.assertEqual(check_corpus.reader_act_ends(json.dumps(acts))[0], ends)
+            self.assertEqual(ends['p2']['day'], '2018-05-01')  # P2: annulled ends it, and nothing is said
+            self.assertFalse(said("p2:"), warn)
+            self.assertEqual(ends['p3']['day'], '2018-05-01')  # P3
+            self.assertTrue(said("longer than YYYY-MM-DD: readers end the act on the first 10 characters (first p3: "
+                                 "'2018-05-01T00:00:00Z' -> 2018-05-01)"), warn)
+            self.assertNotIn('p5', ends)  # P5
+            self.assertTrue(said("on acts with no ending status: readers do not end the act at all (first p5: '1999')"),
+                            warn)
+            self.assertEqual(ends['p6']['day'], '2018-05-01')  # P6: an unknown status is no status
+            self.assertTrue(said("so they read them as no status (an act with a repealed, expired or annulled day is "
+                                 "ended on it, one without is not ended): 'in force ' (1)"), warn)
+            self.assertNotIn('p8', ends)  # in force, whatever day it records
+            self.assertTrue(said("end day(s) on acts whose status says in force, which readers ignore: the act is not "
+                                 "ended (first p8: '2018-05-01')"), warn)
+            self.assertEqual(ends['p9']['day'], '2019-02-30')  # an impossible end day, used as written
+            self.assertTrue(said("no day of the calendar: readers end the act on it as written"), warn)
+            self.assertEqual(fatal, [])
+        finally:
+            if 'law' in locals():
+                law.close_readers()
+            t.close()
 
     def test_corrects_names_its_dates(self):
         m = self.law.CORRECTS.search('Legea nr. 31/1990 2010-01-01..2015-12-31')

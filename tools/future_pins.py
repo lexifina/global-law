@@ -123,8 +123,9 @@ def manifest_branches() -> dict[str, str]:
 
     def walk(node):
         if isinstance(node, dict):
-            if node.get('path') and node.get('future_branch'):
-                out[node['path']] = node['future_branch']
+            if node.get('path') and (node.get('future_branch') or node.get('future_branch_unread')):
+                # the branch read now, or the one that exists but is not read yet (tools/describe.py)
+                out[node['path']] = node.get('future_branch') or node['future_branch_unread']
             for value in node.values():
                 walk(value)
         elif isinstance(node, list):

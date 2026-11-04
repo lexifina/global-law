@@ -11,8 +11,9 @@ corpus.json where it has one, else from data/repo.json and jurisdiction.json. A 
 history, history_from, record_to, checked_on, acts and coverage from what its build publishes (data/commits.csv,
 registry/data/ for acts appended later, REPRODUCE.md, the README's "metadata only" note outside its tables), and
 `derived` names those fields. A corpus that states no history from the standard's values takes the measured one in
-data/history-measured.tsv (also named in `derived`). A future_branch is named only when the repository has that
-branch. Every folder that holds a corpus, or a folder that does, gets a jurisdiction.json naming its level, its code
+data/history-measured.tsv (also named in `derived`). future_branch names the branch tools/law.py reads laws not yet
+in force from, as data/future-pins.tsv records it (tools/future_pins.py); a future branch the repository has that is
+not read (behind main, or diverged) is named future_branch_unread instead. Every folder that holds a corpus, or a folder that does, gets a jurisdiction.json naming its level, its code
 and what is inside it. Fields an earlier build wrote and nothing here replaces are kept. A file that GitHub fails to
 serve (anything but a 404) stops the run with exit 2 and nothing written: it would otherwise read as a missing file.
 """
@@ -32,6 +33,8 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import future_pins  # noqa: E402  (FUTURE_NAMES, pick_branch: which branch counts)
 CORPUS_KEYS = ('name', 'label', 'language', 'coverage', 'history', 'history_from', 'record_to', 'checked_on',
                'in_force_trailer', 'baseline_trailer', 'correction_trailer', 'citation', 'scope', 'acts', 'publisher',
                'future_branch', 'verification', 'record_note', 'effects')
@@ -313,6 +316,14 @@ def main(argv: list[str]) -> int:
                 MEASURED[f[0]] = (f[1], f[3])
     except subprocess.CalledProcessError:
         pass
+    read_future: dict[str, str] = {}  # corpus -> the future branch tools/law.py reads (data/future-pins.tsv)
+    try:
+        for line in git('show', 'HEAD:data/future-pins.tsv').splitlines():
+            if line and not line.startswith('#'):
+                f = line.split('\t')
+                read_future[f[0]] = f[1]
+    except subprocess.CalledProcessError:
+        pass
     before = {moved.get(c['path'], c['path']): c for c in old.get('corpora', [])}
     tree = pins()
     try:
@@ -327,8 +338,21 @@ def main(argv: list[str]) -> int:
         branches = entry.pop('_branches')
         merged = {**before.get(path, {}), **entry}  # what this build knows wins; what only the old build knew is kept
         merged['path'] = path
-        if merged.get('future_branch') and merged['future_branch'] not in branches:
-            merged.pop('future_branch')  # a future branch is named only when the repository has it
+        # future_branch is the branch tools/law.py reads: data/future-pins.tsv's, which tools/future_pins.py writes
+        # only for a branch that has caught up with the pin. A future branch the repository has (the one the corpus
+        # names, else the first of future_pins.FUTURE_NAMES, as future_pins.py picks it) that is not read, because
+        # it is behind main or diverged, is future_branch_unread: its laws are not in any answer.
+        stated = merged.get('future_branch') or merged.get('future_branch_unread')
+        if path in read_future:
+            merged['future_branch'] = read_future[path]  # in place, so the manifest keeps its key order
+            merged.pop('future_branch_unread', None)
+        else:
+            merged.pop('future_branch', None)
+            unread = future_pins.pick_branch(sorted(branches), stated)
+            if unread:
+                merged['future_branch_unread'] = unread
+            else:
+                merged.pop('future_branch_unread', None)
         corpora.append(merged)
 
     # jurisdiction.json for every folder that holds a corpus or a folder that does

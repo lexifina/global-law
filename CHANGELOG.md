@@ -9,6 +9,28 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). check_corpus.py says what the readers do, using their own code (audit row 40).**
+  The Redates:, Retroactive: and data/acts.json checks (row 24) re-implemented `tools/law.py`'s parsing and disagreed
+  with it: a `Redates:` or `In-force:` line in the body (outside git's trailer block) passed, though readers never see it;
+  an impossible day (`Redates: <commit> 2015-13-45`) passed, though readers date the version by it; a repeal day with a
+  time part, or `'1999'` with no status, drew "readers then record the end without its day", when readers in fact end
+  the act on the first 10 characters, or do not end it at all; `status: 'in force '` passed, though readers end that act.
+  check_corpus.py now loads `tools/law.py` (beside it, at `$GLOBAL_LAW_PY`, or global-law main's, fetched once) and reads
+  with it: trailers from `%(trailers:only,unfold)` through `trailer_lines`, each `Redates:` line through `REDATES` and
+  `_redate` as `_extend` applies them, Retroactive: through `_redate`, and every `data/acts.json` row through `act_ends`
+  itself (annulment and the act-end rule of 09ea39f included). Each warning is worded from what that code answered:
+  a trailer line outside the block is ignored; a day that is no day of the calendar is used as written (dates compare as
+  text); an acts.json end value is cut to 10 characters, ignored on an act whose status says in force, ends the act with
+  no day, or ends nothing; an unrecognised status is read as no status. `tests/test_mcp.py`
+  `test_the_check_says_what_law_py_does` builds one synthetic corpus, runs both, and asserts each warning against
+  `law.history()` and `law.act_ends()`.
+- **Fixed (all). manifest.json's `future_branch` is the branch law.py reads (audit row 41).**
+  `describe.py` named a future branch whenever the corpus stated one and the repository had it; law.py reads only
+  branches `future_pins.py` records in `data/future-pins.tsv` (caught up with the pin). They disagreed on 10 corpora, the
+  manifest wrong in each: Tasmania, Finland and Japan (`mishiko`) are read but were not named; general-lavalle, Colombia,
+  Czechia, Ethiopia, Norway, Peru and Uruguay were named but are behind main and not read. `future_branch` now comes from
+  `data/future-pins.tsv`; a future branch that exists but is not read (picked as `future_pins.pick_branch` picks it) is
+  `future_branch_unread`, which `future_pins.py` still prefers on its next run.
 - **Fixed (all). The MCP server leaves out a corpus checked out but unreadable at its pin, and names it (#7, #11).**
   A corpus with no commit yet, behind its pin (after `git pull` without `git submodule update`) or shallow was served because it had a `.git`: unscoped `search_law` answered only with the first one's error, `list_jurisdictions` and `find_provision` gave "Internal error (RuntimeError)" (`git ls-tree <pin>`: "not a tree object"), and `laws_between`, `search_changes` and `phrase_history` dropped it without a word (`search_changes` called it "not checked out").
   The server now leaves such a corpus out (`serving()`: `no commit yet`, `behind its pin`, `shallow clone`, from law.py's own checks), as `law.py world` and `laws` do. Every answer over several corpora, and a `jurisdiction` over a healthy and a broken one, ends with a "Left out:" line per corpus with law.py's fix command; a path or `jurisdiction` in one gets that command as its error (`list_provisions` too, which said "not a corpus"). `not_served` carries a `fix` for each. Tests: tests/test_mcp.py UnreadableCheckouts (fixture tree: one corpus of each kind beside a healthy one).
