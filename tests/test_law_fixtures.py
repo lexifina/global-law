@@ -449,6 +449,22 @@ class WholeLawRepealsAndDoubtfulDates(unittest.TestCase):
         self.assertIsNotNone(best['other/s1.md'][2])
         self.assertTrue(files)
 
+    def test_search_and_world_trees_leave_the_repealed_act_out(self):
+        law = self.t.law()
+        self.assertFalse(law.in_order('aa/national/acts'))  # its commit-order prefix still holds the repealed files
+        tree = law.corpus_tree('2021-01-01', 'aa/national/acts')
+        names = law.git('ls-tree', '-r', '--name-only', tree, cwd=law.corpus_dir('aa/national/acts')).split()
+        law.close_readers()
+        self.assertNotIn('act/s2.md', names)
+        self.assertIn('other/s1.md', names)
+
+    def test_names_take_in_whole_path_segments_only(self):
+        law = self.t.law()
+        self.assertTrue(law._under('niger/national/acts', 'niger'))
+        self.assertFalse(law._under('nigeria/national/acts', 'niger'))
+        self.assertTrue(law._under('nigeria/niger/acts', 'nigeria/niger'))
+        self.assertTrue(law._under('anything/at/all', ''))
+
     def test_moved_and_amended_text_keeps_its_law(self):
         law = self.t.law()
         runs = law.words_on('2010-01-01', 'aa/national/acts/move/s1.md')

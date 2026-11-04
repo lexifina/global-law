@@ -9,6 +9,13 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 4 November 2026
+- **Fixed (all). A repealed act is out of search and `world` too, not only `show`.** A corpus whose history is in
+  in-force order was read as its commit-order prefix, which still holds the files of an act data/acts.json records as
+  repealed (Spain's 1,559 repealed norms): such a corpus is now read as a tree built for the date, as `show` reads it.
+- **Fixed (all). A jurisdiction named on the command line takes in whole path segments.** `law.py laws … niger` listed
+  Nigeria's laws (a raw string prefix; also dominica/dominican-republic, guinea/guinea-bissau, brazil/para/paraiba).
+  A country's own name no longer takes in another country's state of that name ("niger" took in Nigeria's Niger
+  State, "georgia" the US state); "united-states/georgia" still names the state.
 - **Fixed (france/national/acts). France's early dates checked against LEGI.** france-law 100b71a: 811 versions in
   force before their act was signed are confirmed by the act's own effect clause ("prend effet au", "à compter du";
   49 hand-checked, all right) and marked `Retroactive`; 13 dates corrected (7 mistyped years, 4 dates copied from

@@ -454,7 +454,9 @@ def in_order(corpus: str) -> bool:
     # A corpus that moved or withdrew files reads a past date under the files' current paths, which only a built tree
     # gives: its commit-order prefix still holds the old paths and the withdrawn acts.
     ix = _index(corpus)
-    return not corrections(corpus) and not ix.get('moves') and not ix.get('withdrawn')
+    # An act data/acts.json records as ended keeps its files in the commit-order prefix: only a built tree ends them.
+    return (not corrections(corpus) and not ix.get('moves') and not ix.get('withdrawn')
+            and not any(e['day'] for e in act_ends(corpus).values()))
 
 
 def _unquote(path: str) -> str:
@@ -688,6 +690,19 @@ def _require_full_history(corpus: str, cwd: Path) -> None:
                          f'Run: git -C {corpus} fetch --unshallow')
 
 
+def _under(path: str, prefix: str) -> bool:
+    """Whether a corpus path is the folder `prefix` or inside it, by whole path segments (niger is not nigeria)."""
+    prefix = prefix.strip('/')
+    return not prefix or path == prefix or path.startswith(prefix + '/')
+
+
+def _countries() -> set[str]:
+    key = ('countries', _head())
+    if key not in _CACHE:
+        _CACHE[key] = {c['path'].split('/')[0] for c in manifest()['corpora']} | {str(c.get('iso_path') or '').split('/')[0] for c in manifest()['corpora'] if c.get('iso_path')}
+    return _CACHE[key]  # type: ignore[return-value]
+
+
 def matches(corpus: dict, name: str) -> bool:
     """Whether a name a user gives for a jurisdiction takes in a corpus (a manifest entry): its country folder
     ("germany", "united kingdom"), its ISO code ("de"), a level ("united-states/federal", "us/federal") or the corpus
@@ -705,7 +720,8 @@ def matches(corpus: dict, name: str) -> bool:
             return True
     # A state, province, canton or city by its own folder name, at any level below the country
     # (brazil/bahia/salvador/acts is taken in by "bahia" and by "salvador").
-    if name not in GENERIC_LEVELS and name in corpus['path'].split('/')[1:-1]:
+    # A country's own name (niger, georgia) names that country, not another's state of the same name.
+    if name not in GENERIC_LEVELS and name not in _countries() and name in corpus['path'].split('/')[1:-1]:
         return True
     return name == str(corpus.get('code') or '').lower()
 
@@ -2068,10 +2084,10 @@ def main(argv: list[str]) -> None:
         # printings, court rulings, treaties and changes no law is named for are not laws taking effect that day.
         left_out: dict[str, int] = {}
         # Only the corpora the prefix takes in are read, not every corpus checked out.
-        chosen = [c['path'] for c in manifest()['corpora'] if c['path'].startswith(prefix)]
+        chosen = [c['path'] for c in manifest()['corpora'] if _under(c['path'], prefix)]
         events = sorted((e for c in chosen for e in corpus_events(c)), key=lambda e: e.in_force) if prefix else timeline()
         for e in events:
-            if args[0] <= e.in_force <= args[1] and e.corpus.startswith(prefix) and e.kind != 'documentation':
+            if args[0] <= e.in_force <= args[1] and _under(e.corpus, prefix) and e.kind != 'documentation':
                 if e.kind == 'law':
                     print(f'{e.in_force}  {e.corpus:<24} {e.law}')
                 else:
@@ -2080,8 +2096,8 @@ def main(argv: list[str]) -> None:
                  'printing': 'printings', 'court': 'court rulings', 'treaty': 'treaties',
                  'uncredited': 'changes no law is named for'}
         note(f'not listed, as they are not laws taking effect: {n} {names.get(k, k)}' for k, n in sorted(left_out.items()))
-        note(_UNREADABLE.format(corpus=c) for c in unreadable() if c.startswith(prefix))
-        note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()) if c.startswith(prefix))
+        note(_UNREADABLE.format(corpus=c) for c in unreadable() if _under(c, prefix))
+        note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()) if _under(c, prefix))
     else:
         raise SystemExit(__doc__)
 
