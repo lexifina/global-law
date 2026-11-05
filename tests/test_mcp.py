@@ -1044,6 +1044,9 @@ class ScopeRules(unittest.TestCase):
         self.assertEqual(cite('under reg 15'), [])
         self.assertTrue(all('corporations-regulations' not in c
                             for c in cite('reg. 15 of the SEND Regulations 2014')))
+        # Two-part numbers belong to other instruments (EU, UK): only chapter.part.number is theirs.
+        for text in ('regulation 2.1 of the EU Regulation', 'reg 3.4 applies', 'r. 12.5', 'reg 6.10.01.5'):
+            self.assertTrue(all('corporations-regulations' not in c for c in cite(text)), text)
 
     def test_page_furniture_is_not_law(self):
         # Malta's consolidations come from print: running heads, page numbers, hyphens at line ends and a symbol
