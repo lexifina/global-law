@@ -8,6 +8,14 @@ Status words:
 - **Open:** found and reported, not yet fixed.
 - **Checked:** a test that passed.
 
+## 5 November 2026
+- **Added (australia/federal/instruments). Australia's Commonwealth legislative instruments**, contributed by Finlay
+  McCall (#18): five instruments from the Federal Register of Legislation (the Corporations Regulations 2001, the
+  Foreign Acquisitions and Takeovers Regulation 2015, ASIC's Takeover Bids Instrument 2023/683 and the two Notification
+  of Acquisitions Determinations 2025), 166 compilations, each checked word for word against the register's documents.
+  Taken in as a fork, lexifina/australia-regulations, and pinned at australia/federal/instruments. resolve_citations
+  reads the Corporations Regulations' chapter.part.number form ("reg 6.10.01"), from his PR #6.
+
 ## 4 November 2026
 - **Fixed (all; Switzerland, Czechia). A moved pin no longer drops a future branch's laws in force without a word (audit row 60), and a branch's own earlier build of a law main has since published is not read twice (audit row 59).**
   `tools/future_pins.py` now writes a row for a branch that is behind main, and keeps the old row (for its old main pin) of a corpus that fails to class (diverged, fetch failed, ...), listed under `kept`; 14 rows had been dropped since 4 November, 6 of them holding laws in force (Basel-Landschaft GS 2026.047 among them); a run on 713 pins now writes 91 rows (63 on main), and on the 5 behind corpora with due laws 12 are read and 17 named in a note (Norway 10, Uruguay 7). For a forked or behind branch, `law.py` reads a branch commit only where, at each path it changes, it starts from (or leaves) a text the reading holds: main's at the pin, or one a branch commit read before it left; the others are not read, and the note names those already in force and how many. A stale row's note names them too.
