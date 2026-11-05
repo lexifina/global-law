@@ -1073,8 +1073,10 @@ class ScopeRules(unittest.TestCase):
             self.assertTrue(cite('LFT, art. 48')[0].endswith('/ley-federal-del-trabajo/art-0048.md'))
         # No act named, or a constitution not named as Mexico's: left alone rather than guessed.
         self.assertEqual(cite('el artículo 48 establece'), [])
-        self.assertEqual(cite('artículo 24 de la Constitución'), [])
-        self.assertEqual(cite('artículo 31.3 de la Ley Orgánica 4/2000'), [])
+        self.assertFalse([p for p in cite('artículo 24 de la Constitución') if p.startswith('mexico/')])  # Spain's, if anyone's
+        self.assertFalse([p for p in cite('artículo 31.3 de la Ley Orgánica 4/2000') if p.startswith('mexico/')])
+        # Mexico's Código Penal Federal is not Spain's Código Penal.
+        self.assertFalse([p for p in cite('artículo 7 del Código Penal Federal') if p.startswith('spain/')])
         # An act named first does not take an article that names its own act.
         self.assertEqual([p.rsplit('/', 2)[1] for p in cite('artículo 48 de la LFT, artículo 50 del CFF')],
                          ['ley-federal-del-trabajo', 'codigo-fiscal-de-la-federacion'])

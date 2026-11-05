@@ -3129,7 +3129,7 @@ ES_CITE = re.compile(ES_ONE + rf'[^.;]{{0,80}}?\b(?:de\s+la|del)\s+(?:(?P<regl>R
                      rf'(?P<rango>{ES_RANGO_ANY})\s+(?:n[úu]m(?:ero|\.)\s*)?(?P<ny>\d+/\d{{4}})(?!\d)', re.I)
 ES_BOE_CITE = re.compile(rf'\b(?P<id>BOE-A-\d{{4}}-\d+),?\s*' + ES_ONE.removeprefix(r'\b'), re.I)
 ES_SHORT_CITE = re.compile(ES_ONE + r'\s*,?\s*(?:de\s+la|del)\s+(?:vigente\s+)?(?:' + '|'.join(
-    f'(?P<s{i}>(?-i:{rx}))' for i, (rx, *_) in enumerate(ES_SHORT_NAMES.values())) + r')', re.I)
+    f'(?P<s{i}>(?-i:{rx}))' for i, (rx, *_) in enumerate(ES_SHORT_NAMES.values())) + r')(?!\s+Federal)', re.I)  # not Mexico's Código Penal Federal
 # The usual abbreviations, right after the article: "art. 14 CE", "artículo 1902 CC", "art. 48 bis ET", "art. 21 LPAC".
 ES_ABBREVIATIONS = {'CE': 'BOE-A-1978-31229', 'CC': 'BOE-A-1889-4763', 'CP': 'BOE-A-1995-25444', 'CCom': 'BOE-A-1885-6627',
                     'ET': 'BOE-A-2015-11430', 'LEC': 'BOE-A-2000-323', 'LECrim': 'BOE-A-1882-6036', 'LGT': 'BOE-A-2003-23186',
@@ -3520,7 +3520,7 @@ CITATION_FORMS = [
     # Mexico: "artículo 123, apartado A, fracción XI, de la CPEUM", "artículo 46 Bis de la LFTSE", "art. 94
     # constitucional", and the act first: "LFT, art. 48". A bare "artículo 48" names no act and is left alone.
     (re.compile(_MX_ART + _MX_PARTS + r'[\s,]+(?:(?:de\s+(?:la|el|los)|del)\s+)?(?:(?P<act>' + _MX_ACT + r')|constitucional(?:es)?)(?!\w)', re.I),
-     lambda m: mexico_paths(m.group('act') or 'CPEUM', m.group('list'))),
+     lambda m: mexico_paths(m.group('act'), m.group('list')) if m.group('act') else mx_constitutional_paths(m.group('list'))),
     # The act first ("LFT, art. 48"), unless the article goes on to name its own act ("de la LFT, artículo 50 del CFF").
     (re.compile(r'(?<!\w)(?P<act>' + _MX_ACT + r')\s*,?\s*' + _MX_ART + r'(?!' + _MX_PARTS + r'[\s,]+(?:(?:de\s+(?:la|el|los)|del)\s+)?(?:'
                 + _MX_ACT + r'|constitucional(?:es)?)(?!\w))', re.I),
@@ -3603,26 +3603,48 @@ def malta_corpus() -> str | None:
 
 
 def mexico_corpus() -> str | None:
-    """Mexico's federal law in this tree, found by its country code in the manifest (mx/national/acts, later
-    mexico/national/acts)."""
-    return next((c['path'] for c in law.manifest()['corpora'] if iso_code(c) == 'mx'), None)
+    """Mexico's federal law in this tree (mexico/national/acts), found by its country code in the manifest; the
+    states' corpora share the code, so the national one is picked by its folder."""
+    return next((c['path'] for c in law.manifest()['corpora']
+                 if iso_code(c) == 'mx' and c['path'].endswith('/national/acts')), None)
+
+
+@lru_cache(maxsize=8)
+def _mx_stems(corpus: str, sha: str) -> dict[str, frozenset[str]]:
+    """Each act folder's article file stems at one commit (art-048, art-0048, art-046-bis), read once."""
+    out: dict[str, set[str]] = {}
+    for n in names_of(corpus, sha):
+        folder, _, name = n.rpartition('/')
+        out.setdefault(folder, set()).add(name[:-3])
+    return {f: frozenset(v) for f, v in out.items()}
 
 
 def mexico_paths(act: str, articles: str) -> list[str]:
     """The files of the Mexican articles a citation names: art-048.md, art-046-bis.md, art-0410-a.md. Codes of more
     than 999 articles pad to four digits (art-0048.md in the Ley Federal del Trabajo); the record's own files decide."""
     folder = next(f for f, names in MEXICAN_ACTS.items() if any(re.fullmatch(_mx_name(n), act.strip(), re.I) for n in names))
-    corpus = mexico_corpus() or 'mx/national/acts'
+    corpus = mexico_corpus() or 'mexico/national/acts'
     try:
-        names = names_of(corpus, corpus_head(corpus))
+        stems = _mx_stems(corpus, corpus_head(corpus)).get(folder, frozenset())
     except Exception:  # the corpus is not checked out: the usual three digits
-        names = ()
-    width = 4 if any(re.match(rf'{re.escape(folder)}/art-\d{{4}}', n) for n in names) else 3
+        stems = frozenset()
     paths = []
     for m in re.finditer(_MX_ONE, articles, re.I):
         tail = ''.join('-' + p for p in re.split(r'[\s-]+', (m.group(2) or '').strip().lower().replace('á', 'a')) if p)
-        paths.append(f'{corpus}/{folder}/art-{m.group(1).zfill(width)}{tail}.md')
+        # The file the act holds decides the padding (art-0048 in a code of more than 999 articles); else three digits.
+        stem = next((s for s in (f'art-{m.group(1).zfill(w)}{tail}' for w in (3, 4)) if s in stems),
+                    f'art-{m.group(1).zfill(3)}{tail}')
+        paths.append(f'{corpus}/{folder}/{stem}.md')
     return paths
+
+
+def mx_constitutional_paths(articles: str) -> list[str]:
+    """"artículo 14 constitucional" names no country: Spanish writing uses it of the Constitución Española too. It goes
+    to Mexico's Constitution unless this tree serves Spain and not Mexico."""
+    mx = mexico_corpus()
+    if es_corpus()[1] and not (mx and (ROOT / mx / '.git').exists()):
+        return []
+    return mexico_paths('CPEUM', articles)
 
 
 MAX_CITATIONS = 100  # distinct provisions resolve_citations looks up in one call
