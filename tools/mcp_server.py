@@ -2072,6 +2072,8 @@ def t_read_law(args: dict) -> tuple[str, dict]:
     if 'today' in (st['cite']['shows'] or '') and st['latest']['state'] != 'same':
         st['cite']['shows'] += '; it is worded differently from the text read here, which is older'
     head_lines[1:1] = cite_lines(st['cite'])
+    partial = run_law(law.partial_end_note, date, path)  # an act's end whose scope the record leaves unresolved
+    st['caveats'] = st['caveats'] + ([partial] if partial else [])
     head_lines += [f'Note: {c}' for c in st['caveats']]
     beyond = beyond_the_words(date, path)
     head_lines += [f'Not the whole answer: {b}' for b in beyond]
@@ -2256,7 +2258,10 @@ def t_provision_history(args: dict) -> tuple[str, dict]:
             h['superseded_by'] = fix['commit']
         if h.get('restates') and not run_law(law.text_on, h['in_force'], path):
             h['removes'] = True  # the correction takes the provision out from its day (it was not yet in force)
-    lines = [f"{h['in_force']}  {h['law']}" + ''.join(f"  {k} {h[k]}" for k in ('enacted', 'published') if h[k])
+        if 'blob' in h and h['blob'] is None and h.get('kind') != 'correction':
+            h['ended'] = True  # the version that removes the provision (a deletion, a repeal notice, an act's end)
+    lines = [f"{h['in_force']}  " + ('ended: ' if h.get('ended') else '')
+             + (law.credit(h['law'], h['kind']) if h.get('kind') in ('uncredited', 'end') else h['law']) + ''.join(f"  {k} {h[k]}" for k in ('enacted', 'published') if h[k])
              + (f"  — {h['what']}" if h['what'] else '')
              + (f"  [corrected: commit {h['superseded_by'][:10]} replaces this version for its day]" if h.get('superseded_by') else '')
              + (f"  [a correction of commit {h['restates'][:10]}, because {h.get('restated_because')}"
@@ -2275,6 +2280,8 @@ def t_laws_between(args: dict) -> tuple[str, dict]:
     inside = {c: touching(law.corpus_dir(c), s, 'HEAD') for c, s in subs.items() if s}  # a scope within a corpus
     every = [e for e in law.timeline() if a <= e.in_force <= b and e.kind != 'documentation' and subs.get(e.corpus) is not None
              and (e.corpus not in inside or e.corpus_commit in inside[e.corpus])]
+    ends = sum(1 for e in every if e.kind == 'end')  # France's "Fin de vigueur": an end of validity, no law named
+    every = [e for e in every if e.kind != 'end']
     rows = every[:num(args, 'max_results', 200, MAX_ITEMS)]  # oldest first; a long window is cut, and says so
     changed_counts([(e.corpus, e.corpus_commit) for e in rows])  # one git process per corpus, not one per row
     data = [{'in_force': e.in_force, 'corpus': e.corpus, 'law': e.law, 'summary': re.sub(r'^[^:]+:\s*', '', e.subject),
@@ -2288,9 +2295,13 @@ def t_laws_between(args: dict) -> tuple[str, dict]:
     top = sorted(per_law.items(), key=lambda kv: -kv[1])[:5]
     cut = (f'\nShowing the first {len(rows)} of {len(every)} changes; narrow the window or the jurisdiction for the rest.'
            if len(every) > len(rows) else '')
+    if ends:
+        cut += (f'\nNot listed: {ends} end(s) of validity no law is named for (versions that end with no successor); '
+                'provision_history shows them as ended.')
     return ('\n'.join(f"{d['in_force']}  {d['corpus']}  {d['law']} ({d['provisions_changed']} provisions): {d['summary']}" for d in data)
             + '\nMost provisions changed: ' + '; '.join(f'{k} ({v})' for k, v in top) + cut), \
-        {'changes': data, 'provisions_per_law': per_law, 'total': len(every), 'truncated': len(every) > len(rows)}
+        {'changes': data, 'provisions_per_law': per_law, 'total': len(every), 'truncated': len(every) > len(rows),
+         'ends_not_listed': ends}
 
 
 _CHANGED: dict[tuple[str, str], int] = {}

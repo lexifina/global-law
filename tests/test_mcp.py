@@ -1729,6 +1729,53 @@ class UnreadableCheckouts(unittest.TestCase):
         self.assertIn('aa/national/acts/act/s1.md', answers[0]['text'])
 
 
+class EndsAndPartialRepeals(unittest.TestCase):
+    """Audit rows 53 and 57 in the server: provision_history marks the version that removes a provision as ended,
+    laws_between leaves out ends of validity no law is named for (France's "Fin de vigueur"), and read_law notes an
+    act's end whose scope the record leaves unresolved. A small tree built here, the tools called in a child process."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT))
+        from tests.test_law_fixtures import Tree, run
+        t = cls.t = Tree()
+        shutil.copy(ROOT / 'tools' / 'mcp_server.py', t.root / 'tools' / 'mcp_server.py')
+        (t.root / 'jurisdiction.json').write_text('{"name": "fixture", "jurisdictions": []}', encoding='utf-8')
+        run('add', 'jurisdiction.json', cwd=t.root)
+        a = t.corpus('aa/national/acts')
+        a.commit('Act 1', {'act1/s1.md': 'one\n', 'act1/s2.md': 'two\n', 'unres/a1.md': 'unres one\n'},
+                 In_force='2010-01-01', Kind='law')
+        a.commit('Act 2', {'act1/s1.md': None}, In_force='2020-01-01', Kind='law')
+        a.commit('Fin de vigueur', {'act1/s2.md': None}, In_force='2020-01-01')
+        acts = {'acts': [{'path': 'unres', 'status': 'repealed', 'repealed': '2020-01-01',
+                          'repealed_by': 'Act 2, excepto el art. 2', 'lifecycle_scope_unresolved': True}]}
+        a.commit('Lexifina', {'data/acts.json': json.dumps(acts)}, Kind='documentation')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_ends_in_history_laws_and_read_law(self):
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', UnreadableCheckouts.CALL], cwd=self.t.root,
+                              input=json.dumps([['provision_history', {'path': 'aa/national/acts/act1/s1.md'}],
+                                                ['provision_history', {'path': 'aa/national/acts/act1/s2.md'}],
+                                                ['laws_between', {'start': '2020-01-01', 'end': '2020-01-01'}],
+                                                ['read_law', {'date': '2021-01-01',
+                                                              'path': 'aa/national/acts/unres/a1.md'}]]),
+                              capture_output=True, encoding='utf-8', timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        s1, s2, laws, read = json.loads(done.stdout)
+        self.assertIn('2020-01-01  ended: Act 2', s1['text'])
+        self.assertTrue(s1['data']['changes'][-1]['ended'])
+        self.assertIn('2020-01-01  ended: Fin de vigueur (end of validity; no law named)', s2['text'])
+        self.assertIn('Act 2', laws['text'])
+        self.assertNotIn('Fin de vigueur', laws['text'])
+        self.assertEqual(laws['data']['ends_not_listed'], 1)
+        self.assertIn('unres one', read['text'])
+        self.assertIn('saves some provisions', read['text'])
+
+
 class Choosing(unittest.TestCase):
     """A clone may hold some countries, and a user may narrow the server to some: what is left out is named, with
     the command that adds it, and never fails a tool."""

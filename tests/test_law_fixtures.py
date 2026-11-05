@@ -1188,6 +1188,19 @@ class Checkouts(unittest.TestCase):
         self.assertNotEqual(code, 0)
         self.assertIn('shallow clone', err)
 
+    def test_laws_names_corpora_not_checked_out(self):
+        (self.t.root / 'manifest.json').write_text(json.dumps({'corpora': [
+            {'path': 'aa/national/acts', 'name': 'Aa'}, {'path': 'nn/national/acts', 'name': 'Nn'}]}), encoding='utf-8')
+        self.t.pin()
+        out, err, code = self.t.cli('laws', '1900-01-01', '2026-12-31', 'nn')
+        self.assertNotEqual(code, 0, out)
+        self.assertEqual(out, '')
+        self.assertIn('nn/national/acts is not checked out', err)
+        self.assertIn('countries.py add nn/national/acts', err)
+        out, err, code = self.t.cli('laws', '1900-01-01', '2026-12-31', 'aa')
+        self.assertEqual(code, 0, err)
+        self.assertNotIn('not checked out', err)
+
 
 class FutureCommitFetchedLater(unittest.TestCase):
     """Audit row 37: a long-running reader (the MCP server) that started while the checkout lacked the recorded
@@ -2190,6 +2203,170 @@ class ReaderQuirks(unittest.TestCase):
                 func(path)
             shutil.rmtree(d, onerror=writable)
 
+
+class PartialRepeals(unittest.TestCase):
+    """Audit row 53: an act data/acts.json ends whose repeal scope the corpus marks unresolved
+    (lifecycle_scope_unresolved: spain-law's BOE "Norma derogada ... excepto ..." notes) is not ended file by file: the
+    text stays readable, with a note that quotes the publisher's wording; where the row lists the provisions the repeal
+    covers (lifecycle_repealed_provisions), only those end."""
+
+    NOTICE = ('Norma derogada, con efectos de 1 de enero de 2020, por la disposición derogatoria única del Act 5 of '
+              '2019, excepto el art. 2, que seguirá aplicándose hasta el 1 de enero de 2022.\n')
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus('aa/national/acts')
+        a.commit('Act 1 of 2010', {'part/a1.md': 'part one\n', 'part/a2.md': 'part two\n',
+                                   'unres/a1.md': 'unres one\n', 'unres/a2.md': 'unres two\n',
+                                   'bare/a1.md': 'bare one\n', 'whole/a1.md': 'whole one\n'},
+                 In_force='2010-01-01', Kind='law', Enacted='2009-12-01')
+        a.commit('Act 5 of 2019', {'unres/no.md': cls.NOTICE}, In_force='2020-01-01', Kind='law', Enacted='2019-12-01')
+        acts = {'acts': [
+            {'path': 'part', 'status': 'repealed', 'repealed': '2020-01-01',
+             'repealed_by': 'Act 5 of 2019, excepto el art. 2', 'lifecycle_scope_unresolved': True,
+             'lifecycle_repealed_provisions': ['a1.md']},
+            # BOE gives the end of the saved part as the act's day (RD 384/2015): the general repeal was earlier.
+            {'path': 'unres', 'status': 'repealed', 'repealed': '2022-01-01', 'repealed_by': None,
+             'lifecycle_scope_unresolved': True, 'lifecycle_notice': 'no.md'},
+            {'path': 'bare', 'status': 'repealed', 'repealed': '2020-01-01', 'lifecycle_scope_unresolved': True},
+            {'path': 'whole', 'status': 'repealed', 'repealed': '2020-01-01', 'repealed_by': 'Act 5 of 2019',
+             'lifecycle_scope_unresolved': False}]}
+        a.commit('Lexifina', {'data/acts.json': json.dumps(acts)}, Kind='documentation')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_a_repeal_that_saves_provisions(self):
+        out, err, code = self.t.cli('show', '2021-01-01', 'aa/national/acts/part/a2.md')
+        self.assertEqual((out, code), ('part two\n', 0), err)
+        self.assertIn('lists the provisions that repeal covers', err)
+        out, err, code = self.t.cli('show', '2021-01-01', 'aa/national/acts/part/a1.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertIn('was repealed on 2020-01-01', err)
+
+    def test_an_unresolved_scope_is_noted_not_applied(self):
+        out, err, code = self.t.cli('show', '2021-01-01', 'aa/national/acts/unres/a1.md')
+        self.assertEqual((out, code), ('unres one\n', 0), err)
+        self.assertIn('saves some provisions', err)
+        self.assertIn('excepto el art. 2', err)  # the publisher's own wording
+        self.assertIn('2020-01-01', err)  # from the day the notice gives, before the act's recorded day
+        out, err, code = self.t.cli('show', '2023-01-01', 'aa/national/acts/unres/a2.md')
+        self.assertEqual((out, code), ('unres two\n', 0), err)
+        self.assertIn('saves some provisions', err)
+        out, err, code = self.t.cli('show', '2015-01-01', 'aa/national/acts/unres/a1.md')
+        self.assertNotIn('saves some provisions', err)
+        out, err, code = self.t.cli('log', 'aa/national/acts/unres/a1.md')
+        self.assertNotIn('repealed 2022-01-01', out)
+        out, err, code = self.t.cli('show', '2021-01-01', 'aa/national/acts/bare/a1.md')
+        self.assertEqual((out, code), ('bare one\n', 0), err)
+        self.assertIn('may not cover every provision', err)
+        out, err, code = self.t.cli('show', '2021-01-01', 'aa/national/acts/whole/a1.md')  # resolved: ended as before
+        self.assertNotEqual(code, 0, out)
+        law = self.t.law()
+        try:
+            names = law.git('ls-tree', '-r', '--name-only', law.corpus_tree('2023-01-01', 'aa/national/acts'),
+                            cwd=law.corpus_dir('aa/national/acts')).split()
+        finally:
+            law.close_readers()
+        self.assertIn('unres/a1.md', names)
+        self.assertIn('part/a2.md', names)
+        self.assertNotIn('part/a1.md', names)
+        self.assertNotIn('whole/a1.md', names)
+
+
+class DeletionLabels(unittest.TestCase):
+    """Audit row 57: a version that removes a provision is its end, not a law in force: log says "ended"; France's
+    "Fin de vigueur" commits (a version ending with no successor, no law named) are ends, not laws, in laws and world."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus('aa/national/acts')
+        a.commit('Act 1', {'act1/s1.md': 'one\n', 'act1/s2.md': 'two\n', 'act1/s3.md': 'three\n'},
+                 In_force='2010-01-01')
+        a.commit('Act 2', {'act1/s1.md': None, 'act1/s3.md': 'three, amended\n'}, In_force='2020-01-01')
+        a.commit('Fin de vigueur', {'act1/s2.md': None}, In_force='2020-01-01')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_log_labels_an_end_ended(self):
+        out, err, code = self.t.cli('log', 'aa/national/acts/act1/s1.md')
+        self.assertIn('ended 2020-01-01  Act 2', out, err)
+        self.assertNotIn('in force 2020-01-01', out)
+        out, err, code = self.t.cli('log', 'aa/national/acts/act1/s2.md')
+        self.assertIn('ended 2020-01-01  Fin de vigueur', out, err)
+        self.assertNotIn('in force 2020-01-01', out)
+        out, err, code = self.t.cli('log', 'aa/national/acts/act1/s3.md')
+        self.assertIn('in force 2020-01-01  Act 2', out, err)
+
+    def test_an_end_of_validity_is_not_a_law(self):
+        out, err, code = self.t.cli('laws', '2020-01-01', '2020-01-01', 'aa')
+        self.assertIn('Act 2', out, err)
+        self.assertNotIn('Fin de vigueur', out)
+        self.assertIn('1 ends of validity', err)
+        out, err, code = self.t.cli('world', '2021-01-01')
+        self.assertIn('Act 2, in force 2020-01-01', out, err)
+        self.assertEqual(self.t.law().kind_of('end of validity')[0], 'end')
+
+
+class PublisherCredit(unittest.TestCase):
+    """Audit row 62: a dated commit with no Kind (or a Kind word for a law) by the name the same corpus uses for its
+    starting or unexplained texts is the publisher's change, not a law: "no law named", and not in laws. Kind: reverted
+    (Monaco's "texte antérieur rétabli par Legimonaco (aucune loi)") is not a law either."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus('aa/national/acts')
+        a.commit('Publisher X', {'act/s1.md': 'one\n'}, In_force='2000-01-01', Kind='baseline')
+        a.commit('Act 5 of 2010', {'act/s1.md': 'two\n'}, In_force='2010-01-01')
+        a.commit('Publisher X', {'act/s1.md': 'three\n'}, In_force='2015-01-01')
+        a.commit('Restorer', {'act/s1.md': 'two\n'}, In_force='2016-01-01', Kind='reverted')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_publisher_author_is_not_a_law(self):
+        out, err, code = self.t.cli('log', 'aa/national/acts/act/s1.md')
+        self.assertIn('in force 2015-01-01  Publisher X (no law named for this change)', out, err)
+        self.assertIn('in force 2016-01-01  Restorer (no law named for this change)', out, err)
+        self.assertIn('in force 2010-01-01  Act 5 of 2010', out)
+        out, err, code = self.t.cli('laws', '2000-01-01', '2020-01-01', 'aa')
+        self.assertEqual([line.split()[-4:] for line in out.splitlines()], [['Act', '5', 'of', '2010']], out)
+        self.assertIn('2 changes no law is named for', err)
+        out, err, code = self.t.cli('words', '2015-06-01', 'aa/national/acts/act/s1.md')
+        self.assertIn('Publisher X (no law named for this change)', out, err)
+
+
+class RestoredAfterWithdrawal(unittest.TestCase):
+    """spain-law 645ca52 (documentation) recorded every file as deleted by mistake, and 57854db (documentation) put
+    them all back: a file a documentation commit withdraws and a later one restores keeps its versions."""
+
+    def test_a_restored_file_keeps_its_history(self):
+        t = Tree()
+        try:
+            a = t.corpus('aa/national/acts')
+            a.commit('Act 1 of 2010', {'act/s1.md': 'one\n', 'act/s2.md': 'gone\n'}, In_force='2010-01-01')
+            a.commit('Act 2 of 2020', {'act/s1.md': 'two\n'}, In_force='2020-01-01')
+            a.commit('Lexifina', {'act/s1.md': None, 'act/s2.md': None}, Kind='documentation')
+            a.commit('Lexifina', {'act/s1.md': 'two\n'}, Kind='documentation')
+            t.pin()
+            out, err, code = t.cli('show', '2015-01-01', 'aa/national/acts/act/s1.md')
+            self.assertEqual(out, 'one\n', err)
+            out, err, code = t.cli('show', TODAY, 'aa/national/acts/act/s1.md')
+            self.assertEqual(out, 'two\n', err)
+            out, err, code = t.cli('show', '2015-01-01', 'aa/national/acts/act/s2.md')  # still withdrawn
+            self.assertNotEqual(code, 0, out)
+        finally:
+            t.close()
 
 if __name__ == '__main__':
     unittest.main()

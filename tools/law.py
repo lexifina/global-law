@@ -1685,6 +1685,9 @@ def file_notes(date: str, path: str) -> list[str]:
     if end and not end['day']:
         out.append(f"{path}: data/acts.json records its act ({end['act']}) as {end['how']}, but not from when; the "
                    "text shown may no longer be in force.")
+    partial = partial_end_note(date, path)
+    if partial:
+        out.append(partial)
     hist = history(path)
     sha = file_commit(date, path)
     row = next((h for h in reversed(hist) if h['commit'] == sha), None) if sha else None
@@ -2313,6 +2316,17 @@ def act_ends(corpus: str) -> dict[str, dict]:
             else:
                 if status in ('repealed', 'expired', 'annulled'):
                     out[folder] = {'act': folder, 'how': status, 'day': None, 'by': str(a.get(f'{status}_by') or '')}
+            if folder in out:
+                # The scope of the end (audit row 53): the provisions it covers, where the row lists them, else whether
+                # the corpus marks it unresolved (spain-law: 350 BOE notes such as "Norma derogada ... excepto los
+                # arts. 30 y 32"), and the file holding the publisher's note.
+                covers = a.get('lifecycle_repealed_provisions')
+                if isinstance(covers, list) and covers:
+                    out[folder]['covers'] = [str(c).strip('/') for c in covers if str(c).strip('/')]
+                if a.get('lifecycle_scope_unresolved') is True:
+                    out[folder]['unresolved'] = True
+                if isinstance(a.get('lifecycle_notice'), str) and a['lifecycle_notice'].strip('/'):
+                    out[folder]['notice'] = a['lifecycle_notice'].strip('/')
         _CACHE[key] = out
     return _CACHE[key]  # type: ignore[return-value]
 
@@ -2330,7 +2344,13 @@ def act_fact(corpus: str, rel: str) -> dict:
 
 
 def act_end(corpus: str, rel: str) -> dict | None:
-    """The end data/acts.json records for the act holding a file (its longest folder), or None."""
+    """The end data/acts.json records for the act holding a file (its longest folder), or None. None too where that
+    end does not reach the file (partial_end): every reader ends a file through here."""
+    e = _act_end_row(corpus, rel)
+    return e if e is not None and _end_reaches(e, rel) else None
+
+
+def _act_end_row(corpus: str, rel: str) -> dict | None:
     ends = act_ends(corpus)
     if not ends:
         return None
@@ -2340,6 +2360,65 @@ def act_end(corpus: str, rel: str) -> dict | None:
         if e:
             return e
     return None
+
+
+def _end_reaches(end: dict, rel: str) -> bool:
+    """Whether an act's end (act_ends) ends this file: where the row lists the provisions it covers, only those (by
+    file or folder, relative to the act); else every file, unless the corpus marks its scope unresolved."""
+    inner = rel[len(end['act']) + 1:]
+    if end.get('covers') is not None:
+        return any(inner == c or inner.startswith(c + '/') for c in end['covers'])
+    return not end.get('unresolved')
+
+
+def partial_end(corpus: str, rel: str) -> dict | None:
+    """The end data/acts.json records for a file's act when it does not end this file (_end_reaches), else None."""
+    e = _act_end_row(corpus, rel)
+    return e if e is not None and not _end_reaches(e, rel) else None
+
+
+SAVING_WORDS = re.compile(r'\b(?:excepto|salvo|a\s+excepci[oó]n|con\s+la\s+excepci[oó]n|except|save\s+for)\b', re.I)
+_MONTHS_ES = {m: n for n, m in enumerate(('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto',
+                                          'septiembre', 'octubre', 'noviembre', 'diciembre'), 1)}
+EFFECT_DAY_ES = re.compile(r'con\s+efectos?\s+(?:de(?:sde)?\s+)?(?:el\s+)?(\d{1,2})\s+de\s+(\w+)\s+de\s+(\d{4})', re.I)
+
+
+def partial_end_note(date: str, path: str) -> str:
+    """What to say of a file whose act data/acts.json ends but whose end does not reach it (partial_end), on a date: the
+    end and why the file is not ended, with the publisher's wording of a repeal that saves provisions. From the end's
+    day, or an earlier day the wording gives the repeal effect from ("con efectos de 3 de diciembre de 2025" where the
+    row has the day the saved part ends). '' before that, or when the end reaches the file."""
+    corpus, rel = corpus_of(path)
+    end = partial_end(corpus, rel)
+    if not end:
+        return ''
+    wording = ''
+    if end.get('notice'):
+        text = read_object(corpus, f"{_index(corpus)['pin']}:{end['act']}/{end['notice']}") or ''
+        wording = ' '.join(re.sub(r'^[#>\s]+', '', line) for line in text.splitlines()).strip()
+        wording = wording if SAVING_WORDS.search(wording) else ''
+    if not wording and SAVING_WORDS.search(end['by']):
+        wording = end['by']
+    wording = wording[:600].rstrip(' .') + ('...' if len(wording) > 600 else '')
+    days = [end['day']] if end['day'] else []
+    for d, month, year in EFFECT_DAY_ES.findall(wording):
+        if month.lower() in _MONTHS_ES:
+            iso = f'{year}-{_MONTHS_ES[month.lower()]:02d}-{int(d):02d}'
+            if ISO_DAY.fullmatch(iso) and _days(iso, iso) is not None:
+                days.append(iso)
+    if days and date < min(days):
+        return ''
+    noun = {'repealed': 'repeal', 'expired': 'expiry', 'annulled': 'annulment'}.get(end['how'], 'end')
+    said = (f"{path}: data/acts.json records its act ({end['act']}) as {end['how']}"
+            + (f" on {end['day']}" if end['day'] else '') + (f" by {end['by']}" if end['by'] else ''))
+    if end.get('covers') is not None:
+        return (f"{said}, and lists the provisions that {noun} covers (lifecycle_repealed_provisions); this one is not "
+                "among them, so the text is read as the record has it.")
+    why = (f"the publisher's note says it saves some provisions: \"{wording}\"" if wording else
+           f"it may not cover every provision")
+    return (f"{said}, but marks the scope of that {noun} unresolved (lifecycle_scope_unresolved): {why}. The record "
+            f"does not say which provisions it ends, so it ends none of them here: the text shown may no longer be in "
+            f"force on {date}" + (f" (the {noun} took effect from {min(days)})" if days else '') + '.')
 
 
 def _end_commit(corpus: str, end: dict) -> tuple[str, int]:
@@ -2385,8 +2464,9 @@ def capture_day(corpus: str) -> tuple[str, int, int] | None:
 
 # Commit kinds. Corpora write many words in Kind:; the tools read them as one of: law (a law taking effect),
 # baseline (a starting text: the text as a publisher gave it, no law named), correction, printing, court (a ruling),
-# treaty, uncredited (a change no law is named for), documentation. A word not listed is read as a law and named in
-# the caveats, never silently.
+# treaty, uncredited (a change no law is named for), end (a version that ends with no successor and no law named:
+# France's 5,527 "Fin de vigueur" commits), documentation. A word not listed is read as a law and named in the
+# caveats, never silently.
 _LAW_KINDS = {'', 'law', 'decree', 'amendment', 'act', 'amending law', 'lov', 'lbk', 'laki', 'ustawa', 'zakon',
               'rozporządzenie', 'legal notice', 'ordinance', 'several', 'enacted', 'original', 'version', 'repeal'}
 _START_KINDS = {'baseline', 'consolidated', 'current', 'current-only', 'current-text', 'publisher', 'consolidation',
@@ -2394,16 +2474,19 @@ _START_KINDS = {'baseline', 'consolidated', 'current', 'current-only', 'current-
                 'start'}  # start: Liechtenstein's oldest version available of an act, the history before it to come
 _UNCREDITED_KINDS = {'unexplained', 'change no law explains', 'republication', 'obwieszczenie'}
 _COURT_KINDS = {'orzeczenie', 'nález'}  # rulings of the Polish and Slovak constitutional courts
+# An end of validity no law is named for: as a Kind:, or as the author and subject of a commit with no Kind (france-law's
+# "Fin de vigueur": "These versions end on this day and LEGI gives no successor; no text is credited").
+_END_KINDS = {'end', 'end of validity', 'fin de vigueur'}
 # Words in the longer Kind values corpora write (Australia, Canada, Hong Kong, Poland, Portugal and others).
 _START_WORDS = ('first version in the database', 'oldest version available', 'publisher-text', 'record starts here')
 _UNCREDITED_WORDS = ('editorial', 'notes only', 'style only', 'no act named', 'no law named', 'no amending law',
                      'not identified', 'several candidate laws', 'credited to neither', 'no change to the',
                      'without a change', 'no change in the text', 'removed from the consolidation', 'layout',
-                     'typesetting', 'reprint')
+                     'typesetting', 'reprint', 'reverted')  # reverted: Monaco's earlier text put back, "aucune loi"
 _CORRECTION_WORDS = ('retificação', 'rectificação', 'ispravak', 'sprostowanie')
 _LAW_WORDS = ('law', 'act', 'decree', 'decreto', 'regulation', 'instrument', 'notice', 'order in council', 'lei',
               'zákon', 'zakon', 'закон', 'ustav', 'uredba', 'constitution', 'constituicao', 'конституция',
-              'referendum', 'reform', 'amend', 'enact', 'lov', 'lag', 'laki', 'expiry', 'replacement', 'reverted',
+              'referendum', 'reform', 'amend', 'enact', 'lov', 'lag', 'laki', 'expiry', 'replacement',
               'declaração', 'uznesenie', 'several', 'two or more', '修', '决定', 'regulation (sor)')
 
 
@@ -2559,6 +2642,8 @@ def kind_of(raw: str | None, author: str = '') -> tuple[str, str | None]:
         return 'documentation', None
     if k in ('correction', 'printing', 'treaty'):
         return k, None
+    if k in _END_KINDS:
+        return 'end', None
     if k == 'court' or k.startswith('court ') or k in _COURT_KINDS:
         return 'court', None
     if k in _START_KINDS or k.startswith(('baseline', 'first published')) or any(w in k for w in _START_WORDS):
@@ -2573,7 +2658,8 @@ def kind_of(raw: str | None, author: str = '') -> tuple[str, str | None]:
 
 
 CREDIT = {'printing': '{} (printing)', 'baseline': '{} (text as published; no law named)', 'correction': '{} (correction)',
-          'court': '{} (court ruling, not a law)', 'treaty': '{} (treaty)', 'uncredited': '{} (no law named for this change)'}
+          'court': '{} (court ruling, not a law)', 'treaty': '{} (treaty)', 'uncredited': '{} (no law named for this change)',
+          'end': '{} (end of validity; no law named)'}
 
 
 def credit(author: str, kind: str) -> str:
@@ -2581,7 +2667,7 @@ def credit(author: str, kind: str) -> str:
     return CREDIT.get(kind, '{}').format(author)
 
 
-INDEX_VERSION = 9  # raise when what the index keeps changes: old indexes are then rebuilt
+INDEX_VERSION = 10  # raise when what the index keeps changes: old indexes are then rebuilt
 
 
 def _index_version() -> str:
@@ -2589,7 +2675,7 @@ def _index_version() -> str:
     so an index built before a Kind word was added kept calling it unknown (Romania's "referendum" note, 3 November
     2026, long after the word was known). A change to the tables now rebuilds the index by itself."""
     import hashlib
-    tables = repr([sorted(t) for t in (_LAW_KINDS, _START_KINDS, _UNCREDITED_KINDS, _COURT_KINDS)]
+    tables = repr([sorted(t) for t in (_LAW_KINDS, _START_KINDS, _UNCREDITED_KINDS, _COURT_KINDS, _END_KINDS)]
                   + [list(t) for t in (_START_WORDS, _UNCREDITED_WORDS, _CORRECTION_WORDS, _LAW_WORDS)] + [MAINTAINER])
     return f'{INDEX_VERSION}-{hashlib.sha256(tables.encode("utf-8")).hexdigest()[:12]}'
 
@@ -2601,6 +2687,8 @@ def _derive(info: dict, commit: str, author: str, when: str, subject: str, block
     t = {k: v[0] for k, v in every.items()}
     raw = (t.get('Kind') or '').strip()
     kind, unknown = kind_of(raw, author)
+    if not raw and author.strip().lower() in _END_KINDS and subject.strip().lower() == author.strip().lower():
+        kind = 'end'  # france-law's "Fin de vigueur": versions that end with no successor, credited to no law
     trailer = info.get('in_force_trailer') or 'In-force'
     # Lexifina writes documentation, and also versions of the law: the UK corpus's texts (9,201 of its 9,212 commits)
     # and romania-law's corrections. A maintainer's commit is documentation only when it has no in-force day; a dated
@@ -2696,6 +2784,7 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = fro
     raw = git('log', '--reverse', '--raw', '--find-renames=100%', '--no-abbrev', fmt, revs, cwd=cwd)
     legacy = None
     rows, files = data['rows'], data['files']
+    put_back = dict(data.get('withdrawn_versions') or {})  # path -> the versions a documentation commit withdrew
     for chunk in raw.split('\x1d')[1:]:
         head, _, changes = chunk.partition('\x1e')
         commit, author, when, subject, block = head.split('\x1f', 4)
@@ -2751,10 +2840,29 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = fro
                 # Deleted by a commit that is not a law: withdrawn (romania-law's Withdraws:, an act that never
                 # belonged). Its versions leave the record on every day; read by in-force day alone, the act stayed
                 # in force on every past date. A later law may add the path again.
-                files.pop(path, None)
+                put_back[path] = files.pop(path, [])
                 data['withdrawn'][path] = commit
                 continue
+            if row[4] == 'documentation' and path in put_back:
+                # Added again by a commit that is not a law: the withdrawal undone (spain-law 645ca52 recorded every
+                # file as deleted by mistake, 57854db put them all back): the file keeps its versions.
+                files[path] = put_back.pop(path) + files.get(path, [])
+                data['withdrawn'].pop(path, None)
             files.setdefault(path, []).append((order, None if f[4].startswith('D') else f[3], f[1]))
+    if put_back or data.get('withdrawn_versions'):
+        data['withdrawn_versions'] = put_back  # a new dict: a future branch's index never changes main's
+    _publisher_changes(info, rows)
+
+
+def _publisher_changes(info: dict, rows: list) -> None:
+    """Audit row 62: a dated commit read as a law whose author is a name the same corpus gives its starting texts or
+    its changes no law is named for (or the manifest's publisher) is the publisher's change, not a law: Ireland's
+    "Law Reform Commission, Revised Acts" (615 commits), Tasmania, Canada, Sweden, Monaco, Nauru. Read as uncredited."""
+    names = {r[1] for r in rows if r[4] in ('baseline', 'uncredited')}
+    publisher = str(info.get('publisher') or '').strip().lower()
+    for i, r in enumerate(rows):
+        if r[4] == 'law' and r[5] and (r[1] in names or (publisher and r[1].strip().lower() == publisher)):
+            rows[i] = r[:4] + ('uncredited',) + r[5:]
 
 
 def _main_index(corpus: str) -> dict:
@@ -3479,7 +3587,7 @@ def main(argv: list[str]) -> None:
             by_corpus.setdefault(e.corpus, []).append(e)
         for corpus in manifest()['corpora']:
             own = by_corpus.get(corpus['path'], [])
-            last = [e for e in own if e.in_force <= args[0] and e.kind != 'documentation']
+            last = [e for e in own if e.in_force <= args[0] and e.kind not in ('documentation', 'end')]
             state = (f'{last[-1].law}, in force {last[-1].in_force}' if last else 'not yet in the record') \
                 if (ROOT / corpus['path'] / '.git').exists() else 'not checked out'
             if corpus['path'] in unreadable():
@@ -3534,15 +3642,19 @@ def main(argv: list[str]) -> None:
         for h in log_rows(args[0]):
             dates = '; '.join(f'{k} {h[k]}' for k in ('enacted', 'published') if h[k])
             label = {'baseline': 'version of', 'correction': 'corrected', 'printing': 'printed'}.get(h.get('kind'), 'in force')
+            if 'blob' in h and h['blob'] is None and h.get('kind') != 'correction':
+                label = 'ended'  # the version that removes the provision: its end, not a text in force
             if h.get('ends'):
                 label = h['ends']
             if h.get('repeal_notice'):
                 label = 'repealed'
-            print(f"{label} {h['in_force']}  {h['law']}" + (f'  ({dates})' if dates else '')
+            who = credit(h['law'], h['kind']) if h.get('kind') in ('uncredited', 'end') else h['law']
+            print(f"{label} {h['in_force']}  {who}" + (f'  ({dates})' if dates else '')
                   + (f"  [repeal notice: {h['repeal_notice']}]" if h.get('repeal_notice') else '')
                   + (f"  [act {h['act']}, from data/acts.json]" if h.get('ends') else '')
                   + (f"  [not re-enacted by: {'; '.join(h['not_reenacting'])}]" if h.get('not_reenacting') else '')
                   + (f"  [date doubtful: {h['date_doubtful']}]" if h.get('date_doubtful') else ''))
+        note(n for n in [partial_end_note(day('today'), args[0])] if n)
     elif command == 'laws':
         if args[0] > args[1]:
             args[0], args[1] = args[1], args[0]
@@ -3561,6 +3673,9 @@ def main(argv: list[str]) -> None:
             near = difflib.get_close_matches(name.strip().lower().replace(' ', '-'), folders, n=3)
             raise SystemExit(f'No body of law in this tree matches {name!r}.' + (f" Did you mean {', '.join(near)}?" if near
                              else '') + f' {countries_cmd()} lists them.')
+        # A name whose corpora are not checked out (the usual state after `countries.py add` of other countries) has
+        # no law to list: say so, as show does, rather than an empty list that reads as "no law took force".
+        absent = sorted(c for c in chosen if not (ROOT / c / '.git').exists()) if name else []
         events = sorted((e for c in chosen for e in law_events(c)), key=lambda e: e.in_force) if name else timeline()
         for e in events:
             if args[0] <= e.in_force <= args[1] and e.corpus in chosen and e.kind != 'documentation':
@@ -3577,12 +3692,16 @@ def main(argv: list[str]) -> None:
                  'ended': 'laws that changed only acts data/acts.json had already ended (none of their versions took '
                           'force)',
                  'printing': 'printings', 'court': 'court rulings', 'treaty': 'treaties',
-                 'uncredited': 'changes no law is named for'}
+                 'uncredited': 'changes no law is named for',
+                 'end': 'ends of validity no law is named for (versions that end with no successor)'}
         note(f'not listed, as they are not laws taking effect: {n} {names.get(k, k)}' for k, n in sorted(left_out.items()))
         note(n for n in (future_note(c) for c in sorted(chosen)) if n)
         note(_UNREADABLE.format(corpus=c) for c in unreadable() if c in chosen)
         note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()) if c in chosen)
         note(_SHALLOW.format(corpus=c) for c in shallow() if c in chosen)
+        note(f'{c} is not checked out, so its laws are not listed; run: {countries_cmd()} add {c}' for c in absent)
+        if absent and len(absent) == len(chosen):
+            raise SystemExit(f'No body of law matching {name!r} is checked out here, so no law can be listed.')
     else:
         raise SystemExit(__doc__)
 
