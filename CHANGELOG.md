@@ -9,6 +9,7 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 5 November 2026
+- **Fixed (Mexico). resolve_citations reads Mexican citations (#15, by takatatakeshi):** "artículo 123, apartado A, fracción XI, de la CPEUM", "LFT, art. 48", "artículos 103 y 107 constitucionales" and the acts aliases.json names, into `mexico/national/acts`. "N constitucional" is left alone when this tree serves Spain and not Mexico, and Spain's "Código Penal" no longer takes Mexico's "Código Penal Federal". **Checked:** ScopeRules and SpanishArticles with Mexico checked out; real calls on the CPEUM, LFT (four-digit files), CFF and CPF.
 - **Added (australia/federal/instruments). Australia's Commonwealth legislative instruments**, contributed by Finlay
   McCall (#18): five instruments from the Federal Register of Legislation (the Corporations Regulations 2001, the
   Foreign Acquisitions and Takeovers Regulation 2015, ASIC's Takeover Bids Instrument 2023/683 and the two Notification
