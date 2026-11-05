@@ -25,14 +25,19 @@ fetches main and that branch without blobs into a bare clone kept in the tree's 
             every main commit there that is not held on it only changes documentation: it deletes no file and
             touches no file the branch's own commits touch
   behind    neither: the branch has not caught up with the pin (or main moved or withdrew files the branch's own
-            commits rely on); law.py then reads main alone
+            commits rely on); law.py then reads only those of its own commits made on the text main holds at the
+            pin (or on text an earlier such commit left), and names the others already in force in a note
   diverged  not behind, but a branch commit has the author line, raw date and message of a main commit after the
             fork and other text at a path that commit changes: read beside main it would undo main's change;
             law.py then reads main alone
   unrelated, pin-missing, no-future-branch, ls-remote-failed, fetch-failed
 
-Only linear and forked corpora get a row. future_own counts the branch's own commits (not replays of main), and due
-those whose In-force trailer is on or before --today.
+Linear, forked and behind corpora get a row. A corpus of the tree's file (--tree-ref) that is pinned still and now
+fails to class (diverged, fetch-failed, ...) keeps its old row, for its old main pin, so that law.py names its laws
+in force that are not read rather than show older text with nothing said (audit row 60); the summary lists it under
+kept. future_own counts the branch's own commits (not replays of main, nor its own earlier builds of laws main has
+since published), due those whose In-force trailer is on or before --today, and due_unread the due ones law.py does
+not read (made on text main has changed since).
 
 A recorded future sha must stay reachable, because full rebuilds rewrite future branches: protect it with a tag
 refs/tags/global-law/future-pinned-<sha> on the corpus repo (--print-tags lists them). This script never pushes or
@@ -56,7 +61,7 @@ FUTURE_NAMES = ('future', 'zukunft', 'futuro', 'futur', 'fremtidig', 'mellon', '
                 'toekomst', 'e-ardhme', 'badeshte')
 LOCAL_BRANCH = 'future-branch'
 HEADER = '# corpus\tbranch\tfuture_sha\tmain_pin'
-RECORDED = ('linear', 'forked')
+RECORDED = ('linear', 'forked', 'behind')
 
 
 def run(args: list[str], cwd: Path | str | None = None, timeout: float | None = None) -> subprocess.CompletedProcess:
@@ -112,6 +117,17 @@ def read_urls(tree_ref: str) -> dict[str, str]:
         name, _, field = key[len('submodule.'):].rpartition('.')
         (paths if field == 'path' else urls)[name] = value.strip()
     return {paths.get(name, name): url for name, url in urls.items()}
+
+
+def previous_rows(tree_ref: str) -> dict[str, tuple[str, str, str]]:
+    """{corpus: (branch, future_sha, main_pin)} of data/future-pins.tsv at the tree ref (none without the file)."""
+    done = run(['git', 'show', f'{tree_ref}:data/future-pins.tsv'], ROOT)
+    out = {}
+    for line in (done.stdout.decode('utf-8', 'replace') if done.returncode == 0 else '').splitlines():
+        parts = line.rstrip('\r').split('\t')
+        if not line.startswith('#') and len(parts) == 4 and all(re.fullmatch(r'[0-9a-f]{40}', x) for x in parts[2:]):
+            out[parts[0]] = (parts[1], parts[2], parts[3])
+    return out
 
 
 def manifest_branches() -> dict[str, str]:
@@ -249,6 +265,63 @@ def holds(repo: Path, sha: str, change: frozenset) -> bool:
     return all(have.get(path, ZERO_SHA) == blob for path, blob in want.items())
 
 
+def published_own(repo: Path, pin: str, main_after: dict, own: dict) -> set[str]:
+    """The branch's own commits (another message than any main commit) that main has since published: every path one
+    changes is at its blob in the pin's tree (absent, for a deletion), and a main commit after the fork makes that
+    very change with the same In-force day (audit row 59: Czechia's branch built a repeal before main published it).
+    As tools/law.py _published: not the branch's own, and not read beside main (main's commit is)."""
+    dated = {s: c['in_force'] for s, c in own.items() if re.fullmatch(r'\d{4}-\d{2}-\d{2}', c['in_force'])}
+    if not dated or not main_after:
+        return set()
+    made: dict[tuple, set] = {}
+    for sha, ch in tree_changes(repo, list(main_after)).items():
+        for path, _, blob in ch:
+            made.setdefault((path, blob), set()).add(main_after[sha]['in_force'])
+    return {sha for sha, ch in tree_changes(repo, list(dated)).items()
+            if ch and all(dated[sha] in made.get((path, blob), ()) for path, _, blob in ch) and holds(repo, pin, ch)}
+
+
+def unread_commits(repo: Path, pin: str, fut: str, skip: set) -> list[str]:
+    """As tools/law.py _unread: the commits of pin..fut (less `skip`, the copies of main's) that law.py does not read,
+    because at a path one changes it starts from text that is neither main's at the pin nor one that an earlier read
+    commit left (the branch is behind main there), and the text it leaves is neither either. Trees only: works in the
+    blob-less clones."""
+    raw = git('-c', 'core.quotePath=false', 'log', '--reverse', '--raw', '--no-renames', '--no-abbrev', '--format=%x1d%H',
+              f'{pin}..{fut}', cwd=repo)
+    seq = []
+    for chunk in raw.split('\x1d')[1:]:
+        sha, *lines = chunk.strip().split('\n')
+        ch = []
+        for line in lines:
+            if line.startswith(':') and '\t' in line:
+                meta, _, path = line.partition('\t')
+                f = meta.split()
+                ch.append((path, f[2], f[3]))
+        seq.append((sha.strip(), ch))
+    want = sorted({p for sha, ch in seq if sha not in skip for p, _, _ in ch})
+    at_pin: dict[str, str] = {}
+    for i in range(0, len(want), 200):  # keep the command line short
+        done = run(['git', '--literal-pathspecs', 'ls-tree', '-r', '-z', '--full-tree', pin, '--', *want[i:i + 200]],
+                   repo)
+        if done.returncode:  # never a guess: the corpus is reported as an error, and its old row kept
+            raise RuntimeError(f"git ls-tree {pin[:10]}: {done.stderr.decode('utf-8', 'replace').strip()[:200]}")
+        for entry in done.stdout.decode('utf-8', 'replace').split('\0'):
+            meta, _, path = entry.partition('\t')
+            if path:
+                at_pin[path] = meta.split()[2]
+    allowed = {p: {at_pin.get(p, ZERO_SHA)} for p in want}
+    unread = []
+    for sha, ch in seq:
+        if sha in skip:
+            continue
+        if all(old in allowed[p] or new in allowed[p] for p, old, new in ch):
+            for p, _, new in ch:
+                allowed[p].add(new)
+        else:
+            unread.append(sha)
+    return unread
+
+
 def classify(repo: Path, pin: str, fut: str, today: str) -> dict:
     linear = ok('merge-base', '--is-ancestor', pin, fut, cwd=repo)
     fork = git('merge-base', pin, fut, cwd=repo, check=False).strip()
@@ -260,14 +333,20 @@ def classify(repo: Path, pin: str, fut: str, today: str) -> dict:
     held = {c['key'] for c in fut_rows.values()}
     main_keys = {c['key'] for c in main_after.values()}
     own = {s: c for s, c in fut_rows.items() if c['key'] not in main_keys}
-    due = sum(1 for c in own.values() if re.fullmatch(r'\d{4}-\d{2}-\d{2}', c['in_force']) and c['in_force'] <= today)
-    result = {'future_own': len(own), 'due': due}
+    published = set() if linear else published_own(repo, pin, main_after, own)
+    own = {s: c for s, c in own.items() if s not in published}
+
+    def is_due(c: dict) -> bool:
+        return bool(re.fullmatch(r'\d{4}-\d{2}-\d{2}', c['in_force'])) and c['in_force'] <= today
+    result = {'future_own': len(own), 'due': sum(1 for c in own.values() if is_due(c))}
     if linear:
         return {'state': 'linear', 'reason': '', **result}
     missing = main_law - held
     if missing:
+        # law.py reads of it only its own commits made on main's text at the pin (unread_commits)
+        unread = unread_commits(repo, pin, fut, published | {s for s, c in fut_rows.items() if c['key'] in main_keys})
         return {'state': 'behind', 'reason': f'{len(missing)} law commit(s) of main after the fork not on the branch',
-                **result}
+                **result, 'due_unread': sum(1 for s in unread if s in own and is_due(own[s]))}
     # A commit counts as a copy of main's only if its tree also holds main's blob at each path main's commit changes
     # (the same change, or text the branch had already): one with main's author line, date and message but other
     # text there would, read beside main, undo main's change. One diff-tree for all, ls-tree only where they differ.
@@ -302,6 +381,8 @@ def classify(repo: Path, pin: str, fut: str, today: str) -> dict:
         if deleted or overlap:
             bad.append(f"{sha[:10]} ({len(deleted)} deleted, {len(overlap)} touched by the branch's own commits"
                        f"{': ' + ', '.join((deleted + overlap)[:3]) if deleted or overlap else ''})")
+    unread = unread_commits(repo, pin, fut, published | set(candidates))
+    result['due_unread'] = sum(1 for s in unread if s in own and is_due(own[s]))
     if bad:
         return {'state': 'behind', 'reason': 'docs commit(s) of main not on the branch delete or overlap: '
                 + '; '.join(bad[:5]) + (f' (+{len(bad) - 5} more)' if len(bad) > 5 else ''), **result}
@@ -369,6 +450,16 @@ def main(argv: list[str] | None = None) -> int:
     report.sort(key=lambda r: r['corpus'])
 
     rows = [r for r in report if r['state'] in RECORDED]
+    # A pinned corpus whose row the tree's file has, and which fails to class this time (diverged, a fetch that
+    # failed, ...), keeps that row: law.py then reads main alone and names the branch's laws in force that it does
+    # not read, where dropping the row would show older text with nothing said (audit row 60).
+    recorded = {r['corpus'] for r in rows}
+    kept = []
+    for path, (branch, fut, old_pin) in sorted(previous_rows(a.tree_ref).items()):
+        if path in pins and path not in recorded:
+            kept.append(path)
+            rows.append({'corpus': path, 'url': urls.get(path, ''), 'branch': branch, 'fut': fut, 'pin': old_pin})
+    rows.sort(key=lambda r: r['corpus'])
     tsv = HEADER + '\n' + ''.join(f"{r['corpus']}\t{r['branch']}\t{r['fut']}\t{r['pin']}\n" for r in rows)
     if a.out == '-':
         sys.stdout.write(tsv)
@@ -394,8 +485,10 @@ def main(argv: list[str] | None = None) -> int:
         'recorded': len(rows),
         'corpora_with_due': sum(1 for r in report if r.get('due')),
         'due_total': sum(r.get('due', 0) for r in report),
-        'due_visible': sum(r.get('due', 0) for r in rows),
-        'corpora': [{k: r.get(k) for k in ('corpus', 'branch', 'state', 'future_own', 'due', 'reason')}
+        'due_visible': sum(r.get('due', 0) - r.get('due_unread', 0) for r in report if r['state'] in RECORDED),
+        'due_unread': sum(r.get('due_unread', 0) for r in report if r['state'] in RECORDED),
+        'kept': kept,
+        'corpora': [{k: r.get(k) for k in ('corpus', 'branch', 'state', 'future_own', 'due', 'due_unread', 'reason')}
                     for r in notable],
     }
     print(json.dumps(summary, indent=1, ensure_ascii=False))

@@ -2999,9 +2999,12 @@ def future_pins() -> dict[str, tuple[str, str, str]]:
 
 
 def future_note(corpus: str) -> str | None:
-    """Why a corpus's future branch is not read, though the tree records it: the row was made for an earlier pin (the
-    pin moved and data/future-pins.tsv was not written again with it), or the checkout lacks the commit. Then the
-    reader shows main alone, and laws that took force since main's last law may be missing. None when it is read."""
+    """Why a corpus's future branch is not read, or not all of it, though the tree records it: the row was made for an
+    earlier pin (the pin moved and data/future-pins.tsv was not written again with it), the checkout lacks the
+    commit, a commit there only looks like a copy of a law on main (diverged), or the branch is behind main and some
+    of its commits were made on text main has changed since (_unread). Then the reader shows main's text for those,
+    and the note names the laws on the branch already in force that are not read, and how many. None when it is all
+    read."""
     fp = future_pins().get(corpus)
     pin = tip(corpus)
     cwd = ROOT / corpus
@@ -3009,21 +3012,54 @@ def future_note(corpus: str) -> str | None:
         return None
     branch, fut, main_pin = fp
     if main_pin != pin:
+        due = _future_due(corpus, pin, fut, None) if _has_commit(corpus, cwd, fut) else ''
         return (f"{corpus}: laws with a later in-force day are kept on its {branch} branch, but data/future-pins.tsv "
                 f"records that branch for an earlier pin ({main_pin[:10]}, not {pin[:10]}), so it is not read: changes "
-                "that took force after the last law on main may be missing until the file is written again.")
+                "that took force after the last law on main may be missing until the file is written again."
+                + (f" {due}" if due else ''))
     if not _has_commit(corpus, cwd, fut):
         return (f"{corpus}: laws with a later in-force day are kept on its {branch} branch ({fut[:10]}), which this "
                 "checkout does not have, so changes that took force after the last law on main may be missing. "
                 f"Run: git -C {corpus} fetch origin {branch}  (if the branch has moved on since: git -C {corpus} "
                 f"fetch origin refs/tags/global-law/future-pinned-{fut})")
-    diverged = _future_check(corpus, corpus_dir(corpus), pin, fut)['diverged']
+    check = _future_check(corpus, corpus_dir(corpus), pin, fut)
+    diverged = check['diverged']
     if diverged:
+        due = _future_due(corpus, pin, fut, None)
         return (f"{corpus}: laws with a later in-force day are kept on its {branch} branch ({fut[:10]}), but "
                 f"{len(diverged)} commit(s) there carry the author, date and message of a law on main and change "
                 f"different text (first: {diverged[0][:10]}), so the branch is not read: main alone is shown, and "
-                "changes that took force after the last law on main may be missing until the branch is rebuilt.")
+                "changes that took force after the last law on main may be missing until the branch is rebuilt."
+                + (f" {due}" if due else ''))
+    if check['unread']:
+        due = _future_due(corpus, pin, fut, set(check['unread']))
+        if due:
+            return (f"{corpus}: its {branch} branch ({fut[:10]}) is behind main: some of its laws were made on text "
+                    "main has changed since, and are not read, as read they would undo main's change; main's text is "
+                    f"shown for them until the branch is rebuilt. {due}")
     return None
+
+
+def _future_due(corpus: str, pin: str, fut: str, only: set | None) -> str:
+    """'N change(s) in force by <today> ... not read: <day> <subject>; ...' for the commits of pin..fut that are not
+    read (`only`, or else every one but the copies of main's laws) whose in-force day has come; '' if none has."""
+    cwd = corpus_dir(corpus)
+    skip = _future_check(corpus, cwd, pin, fut)['skip'] if only is None else frozenset()
+    trailer = corpus_info(corpus).get('in_force_trailer') or 'In-force'
+    import datetime as dt
+    today = dt.date.today().isoformat()
+    due = []
+    for line in git('log', '--reverse', f'--format=%H%x1f%(trailers:key={trailer},valueonly,separator=)%x1f%s',
+                    f'{pin}..{fut}', cwd=cwd).splitlines():
+        sha, day, subject = (line.split('', 2) + ['', ''])[:3]
+        day = day.strip()[:10]
+        if (sha in only if only is not None else sha not in skip) and ISO_DAY.match(day) and day <= today:
+            due.append(f'{day} {subject.strip()} ({sha[:10]})')
+    if not due:
+        return ''
+    more = f' (and {len(due) - 5} more)' if len(due) > 5 else ''
+    return (f"{len(due)} change(s) in force by {today} are on that branch and not read: "
+            + '; '.join(due[:5]) + more + '.')
 
 
 def _tree_changes(cwd: Path, shas) -> dict[str, frozenset]:
@@ -3054,26 +3090,34 @@ def _tree_changes(cwd: Path, shas) -> dict[str, frozenset]:
 ZERO_SHA = '0' * 40
 
 
+def _blobs_at(cwd: Path, sha: str, paths) -> dict[str, str] | None:
+    """{path: blob id} in a commit's tree for those of `paths` it has (trees only, git ls-tree); None if git fails."""
+    have: dict[str, str] = {}
+    paths = sorted(set(paths))
+    for i in range(0, len(paths), 200):  # keep the command line short
+        out = subprocess.run(['git', '--literal-pathspecs', 'ls-tree', '-r', '-z', '--full-tree', sha, '--',
+                              *paths[i:i + 200]], cwd=cwd, capture_output=True)
+        if out.returncode:
+            return None
+        for entry in out.stdout.decode('utf-8', 'replace').split('\0'):
+            meta, _, path = entry.partition('\t')
+            if path:
+                have[path] = meta.split()[2]
+    return have
+
+
 def _holds(cwd: Path, sha: str, change: frozenset) -> bool:
     """Whether a commit's tree has each path of `change` (another commit's _tree_changes) at that commit's blob, or
     lacks it where that commit deletes it: the commit carries the other's change, though it may change more, or have
     had the same text already. Trees only (git ls-tree), never blobs."""
     want = {path: blob for path, _, blob in change}
-    have: dict[str, str] = {}
-    paths = sorted(want)
-    for i in range(0, len(paths), 200):  # keep the command line short
-        out = subprocess.run(['git', '--literal-pathspecs', 'ls-tree', '-r', '-z', '--full-tree', sha, '--',
-                              *paths[i:i + 200]], cwd=cwd, capture_output=True)
-        if out.returncode:
-            return False
-        for entry in out.stdout.decode('utf-8', 'replace').split('\0'):
-            meta, _, path = entry.partition('\t')
-            if path:
-                have[path] = meta.split()[2]
+    have = _blobs_at(cwd, sha, want)
+    if have is None:
+        return False
     return all(have.get(path, ZERO_SHA) == blob for path, blob in want.items())
 
 
-def _replays(cwd: Path, pin: str, fut: str) -> tuple[frozenset, tuple]:
+def _replays(cwd: Path, pin: str, fut: str, trailer: str = 'In-force') -> tuple[frozenset, tuple]:
     """Commits of pin..fut that copy a main commit made after the fork: a forked future branch replays main's laws so
     that it reads whole on its own; read beside main they would be doubles. A copy has the main commit's author line,
     raw date and message, and leaves each path the main commit changes at the main commit's blob (the same change,
@@ -3082,20 +3126,24 @@ def _replays(cwd: Path, pin: str, fut: str) -> tuple[frozenset, tuple]:
     holds other text at a path that commit changes (a "copy" which, read on, would undo main's change): the caller
     does not read such a branch. Such a commit followed on the branch by a true copy of the same main commit (the
     branch's own earlier version of a law that main published later, then replayed by append_future.py) is
-    superseded: it is left out with the copies, so main's text stands."""
+    superseded: it is left out with the copies, so main's text stands. So is a branch commit of its own (another
+    message) whose every change main already holds at the pin, each made by a main commit after the fork with the
+    same in-force day: the branch's earlier build of a law main has since published (audit row 59, Czechia)."""
     fork = git('merge-base', pin, fut, cwd=cwd).strip()
-    fmt = '--format=%x1d%H%x1f%an <%ae> %ad%x1f%B'
+    fmt = f'--format=%x1d%H%x1f%an <%ae> %ad%x1f%(trailers:key={trailer},valueonly,separator=)%x1f%B'
 
     def keyed(*revs: str) -> dict:
         out = {}
         for chunk in git('log', '--date=raw', fmt, *revs, cwd=cwd).split('\x1d')[1:]:
-            sha, author, body = chunk.split('\x1f', 2)
-            out[sha] = (author, body.strip())
+            sha, author, day, body = chunk.split('\x1f', 3)
+            out[sha] = ((author, body.strip()), day.strip()[:10])
         return out
+    main_after = keyed(pin, f'^{fork}') if fork else {}
+    branch = keyed(fut, f'^{pin}')
     on_main: dict[tuple, list[str]] = {}
-    for sha, k in (keyed(pin, f'^{fork}') if fork else {}).items():
+    for sha, (k, _) in main_after.items():
         on_main.setdefault(k, []).append(sha)
-    candidates = {sha: on_main[k] for sha, k in keyed(fut, f'^{pin}').items() if k in on_main}
+    candidates = {sha: on_main[k] for sha, (k, _) in branch.items() if k in on_main}
     changed = _tree_changes(cwd, [*candidates, *(m for ms in candidates.values() for m in ms)])
     copies = frozenset(sha for sha, ms in candidates.items()
                        if any(changed.get(sha) == changed.get(m) for m in ms)  # the same change: no more to ask
@@ -3105,7 +3153,61 @@ def _replays(cwd: Path, pin: str, fut: str) -> tuple[frozenset, tuple]:
         and any(c != sha and set(candidates[c]) & set(candidates[sha])
                 and subprocess.run(['git', 'merge-base', '--is-ancestor', sha, c], cwd=cwd).returncode == 0
                 for c in copies))
-    return copies | superseded, tuple(sha for sha in candidates if sha not in copies and sha not in superseded)
+    published = frozenset(_published(cwd, pin, main_after, {s: v for s, v in branch.items() if s not in candidates}))
+    return (copies | superseded | published,
+            tuple(sha for sha in candidates if sha not in copies and sha not in superseded))
+
+
+def _published(cwd: Path, pin: str, main_after: dict, own: dict) -> list[str]:
+    """Branch commits of their own (`own`: sha -> (key, in-force day)) that main has since published under another
+    message: every path the commit changes is at the commit's blob in the pin's tree (absent, for a deletion), and a
+    main commit after the fork (`main_after`, the same shape) makes that very change with the same in-force day.
+    Read beside main they would log and list main's law a second time; main alone gives the same text."""
+    dated = {s: d for s, (_, d) in own.items() if ISO_DAY.match(d)}
+    if not dated or not main_after:
+        return []
+    made: dict[tuple, set] = {}
+    for sha, ch in _tree_changes(cwd, list(main_after)).items():
+        for path, _, blob in ch:
+            made.setdefault((path, blob), set()).add(main_after[sha][1])
+    return [sha for sha, ch in _tree_changes(cwd, list(dated)).items()
+            if ch and all(dated[sha] in made.get((path, blob), ()) for path, _, blob in ch) and _holds(cwd, pin, ch)]
+
+
+def _unread(cwd: Path, pin: str, fut: str, skip: frozenset) -> tuple:
+    """Commits of a forked branch (pin..fut, less `skip`) that are not read beside main because they were made on
+    text main has since changed (a branch behind main: its builder has not replayed main's later laws), so that read,
+    they would undo main's change. A commit is read only if, at each path it changes, the text it starts from (its
+    parent's blob, or none) or the text it leaves is one the merged reading holds there: main's at the pin, or one a
+    branch commit read before it left. Its version is then main's text with the branch's change made to it, or a text
+    the reading has already (Czechia's own build of 199/2026 leaves main's text of the act and amends two others); a
+    later commit at the same path that starts from an unread one's text is not read either."""
+    seq = []
+    for chunk in git('log', '--reverse', '--raw', '--no-renames', '--no-abbrev', '--format=%x1d%H', f'{pin}..{fut}',
+                     cwd=cwd).split('\x1d')[1:]:
+        sha, *lines = chunk.strip().split('\n')
+        ch = []
+        for line in lines:
+            if line.startswith(':') and '\t' in line:
+                meta, _, path = line.partition('\t')
+                f = meta.split()
+                ch.append((_unquote(path), f[2], f[3]))
+        seq.append((sha.strip(), ch))
+    paths = {p for sha, ch in seq if sha not in skip for p, _, _ in ch}
+    at_pin = _blobs_at(cwd, pin, paths) if paths else {}
+    if at_pin is None:
+        return tuple(sha for sha, _ in seq if sha not in skip)
+    allowed = {p: {at_pin.get(p, ZERO_SHA)} for p in paths}
+    unread = []
+    for sha, ch in seq:
+        if sha in skip:
+            continue
+        if all(old in allowed[p] or new in allowed[p] for p, old, new in ch):
+            for p, _, new in ch:
+                allowed[p].add(new)
+        else:
+            unread.append(sha)
+    return tuple(unread)
 
 
 def _future_check(corpus: str, cwd: Path, pin: str, fut: str) -> dict:
@@ -3116,8 +3218,10 @@ def _future_check(corpus: str, cwd: Path, pin: str, fut: str) -> dict:
     if key not in _CACHE:
         linear = subprocess.run(['git', 'merge-base', '--is-ancestor', pin, fut], cwd=cwd,
                                 capture_output=True).returncode == 0
-        skip, diverged = (frozenset(), ()) if linear else _replays(cwd, pin, fut)
-        _CACHE[key] = {'linear': linear, 'skip': skip, 'diverged': diverged}
+        trailer = corpus_info(corpus).get('in_force_trailer') or 'In-force'
+        skip, diverged = (frozenset(), ()) if linear else _replays(cwd, pin, fut, trailer)
+        unread = () if linear or diverged else _unread(cwd, pin, fut, skip)
+        _CACHE[key] = {'linear': linear, 'skip': skip, 'diverged': diverged, 'unread': unread}
     return _CACHE[key]  # type: ignore[return-value]
 
 
@@ -3259,7 +3363,7 @@ def _future_index(corpus: str, cwd: Path, data: dict, branch: str, fut: str) -> 
     check = _future_check(corpus, cwd, pin, fut)
     if check['diverged']:
         return data
-    linear, skip = check['linear'], check['skip']
+    linear, skip = check['linear'], check['skip'] | frozenset(check['unread'])
     over = dict(data)
     over['rows'] = list(data['rows'])
     over['files'] = _FilesOver(data['files'])
@@ -3270,7 +3374,7 @@ def _future_index(corpus: str, cwd: Path, data: dict, branch: str, fut: str) -> 
     _extend(corpus, cwd, over, f'{pin}..{fut}', skip=skip)
     over['at'] = f'{pin}+{fut}'
     over['future'] = {'branch': branch, 'sha': fut, 'linear': linear, 'commits': len(over['rows']) - before,
-                      'replays_skipped': len(skip)}
+                      'replays_skipped': len(check['skip']), 'unread': len(check['unread'])}
     return over
 
 

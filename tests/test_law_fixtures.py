@@ -929,6 +929,17 @@ class FutureBranches(unittest.TestCase):
         m = t.corpus('mi/national/acts')
         pin = m.commit('Act 1 of 2010', {'act/s1.md': 'The fee is 10.\n'}, In_force='2010-01-01', Kind='law')
         cls.rows['mi/national/acts'] = ('future', 'f' * 40, pin)
+        # Behind (audit row 60): the row was written while the branch went on from the pin; then main moved on with a
+        # law the branch lacks (Act 5 of 2015, at a file one of the branch's own laws also changes).
+        b = t.corpus('bh/national/acts')
+        old = b.commit('Act 1 of 2010', {'act/s1.md': 'The fee is 10.\nRule two.\n', 'act/s2.md': 'Other.\n'},
+                       In_force='2010-01-01', Kind='law')
+        run('checkout', '-q', '-b', 'zukunft', cwd=b.path)
+        b.commit('Act 2 of 2020', {'act/s1.md': 'The fee is 20.\nRule two.\n'}, In_force=cls.ON, Kind='law')
+        fut = b.commit('Act 6 of 2020', {'act/s2.md': 'Other, as the branch has it.\n'}, In_force=cls.ON, Kind='law')
+        run('checkout', '-q', 'main', cwd=b.path)
+        b.commit('Act 5 of 2015', {'act/s2.md': 'Other, amended.\n'}, In_force='2015-01-01', Kind='law')
+        cls.rows['bh/national/acts'] = ('zukunft', fut, old)
         cls.write_rows()
         t.pin()
 
@@ -1018,6 +1029,83 @@ class FutureBranches(unittest.TestCase):
         self.assertEqual(out, 'The fee is 10.\n', err)
         self.assertIn('which this checkout does not have', err)
         self.assertIn('Run: git -C mi/national/acts fetch origin future', err)
+
+    def run_future_pins(self) -> tuple[dict, dict]:
+        """tools/future_pins.py over this tree as the repoint loop runs it (--pins, --tree-ref HEAD), the corpus
+        repositories read from their folders: ({corpus: (branch, future_sha, main_pin)}, summary)."""
+        import contextlib
+        import io
+        sys.path.insert(0, str(HERE / 'tools'))
+        import future_pins as fp
+        t = self.t
+        local = {f'https://example.org/{p.replace("/", "-")}.git': str(c.path) for p, c in t.corpora.items()}
+        work = Path(tempfile.mkdtemp(prefix='gl-fp-'))
+        (work / 'pins.tsv').write_text(''.join(f"{p}\t{run('rev-parse', 'HEAD', cwd=c.path)}\n"
+                                               for p, c in t.corpora.items()), encoding='utf-8')
+        saved = fp.ROOT, fp.ls_remote, fp.fetch
+        ls_remote, fetch = fp.ls_remote, fp.fetch
+        fp.ROOT = t.root
+        fp.ls_remote = lambda url: ls_remote(local[url])
+        fp.fetch = lambda repo, url, branch, pin: fetch(repo, local[url], branch, pin)
+        out = io.TextIOWrapper(io.BytesIO(), encoding='utf-8')
+        try:
+            with contextlib.redirect_stdout(out):
+                fp.main(['--pins', str(work / 'pins.tsv'), '--tree-ref', 'HEAD', '--cache', str(work / 'cache'),
+                         '--out', str(work / 'future-pins.tsv'), '--today', TODAY, '--jobs', '2'])
+            out.flush()
+            summary = json.loads(out.buffer.getvalue().decode('utf-8'))
+            rows = {}
+            for line in (work / 'future-pins.tsv').read_text(encoding='utf-8').splitlines():
+                if not line.startswith('#'):
+                    c, branch, fut, pin = line.split('\t')
+                    rows[c] = (branch, fut, pin)
+            return rows, summary
+        finally:
+            fp.ROOT, fp.ls_remote, fp.fetch = saved
+            shutil.rmtree(work, ignore_errors=True)
+
+    def test_pin_move_behind_branch_keeps_due_law_or_notes_it(self):
+        """Audit row 60: main's pin moved past the fork and the branch, behind main now, holds laws already in force.
+        Its row is never dropped: while it names the old pin, law.py names those laws as not read; written again for
+        the new pin (as behind), law.py reads the branch's law made on main's text and names the other."""
+        corpus, b = 'bh/national/acts', self.t.corpora['bh/national/acts']
+        s1, s2 = f'{corpus}/act/s1.md', f'{corpus}/act/s2.md'
+        # The row still names the old pin: main alone, and a note that names both laws in force on the branch.
+        out, err, code = self.t.cli('show', TODAY, s1)
+        self.assertEqual(out, 'The fee is 10.\nRule two.\n', err)
+        self.assertIn('2 change(s) in force by', err)
+        self.assertIn(f'{self.ON} Act 2 of 2020', err)
+        self.assertIn(f'{self.ON} Act 6 of 2020', err)
+        # The repoint loop's future_pins.py run: the branch is behind, and its row is kept, now for the new pin.
+        rows, summary = self.run_future_pins()
+        pin = run('rev-parse', 'HEAD', cwd=b.path)
+        self.assertEqual(rows.get(corpus), ('zukunft', self.rows[corpus][1], pin), summary)
+        got = next(c for c in summary['corpora'] if c['corpus'] == corpus)
+        self.assertEqual((got['state'], got['due'], got['due_unread']), ('behind', 2, 1), got)
+        # A row that fails to class now (here: the branch is not on the remote) is kept as it was, and said so.
+        self.assertEqual(rows.get('mi/national/acts'), self.rows['mi/national/acts'], summary)
+        self.assertIn('mi/national/acts', summary['kept'])
+        self.assertEqual(set(rows), set(self.rows))  # no row dropped
+        before = self.rows[corpus]
+        try:
+            self.rows[corpus] = rows[corpus]
+            self.write_rows()
+            self.t.pin()
+            out, err, code = self.t.cli('show', TODAY, s1)
+            self.assertEqual(out, 'The fee is 20.\nRule two.\n', err)  # made on main's text: read
+            out, err, code = self.t.cli('show', TODAY, s2)
+            self.assertEqual(out, 'Other, amended.\n', err)  # made on text main has changed since: main's, and said
+            self.assertIn('is behind main', err)
+            self.assertIn(f'1 change(s) in force by {TODAY} are on that branch and not read: {self.ON} Act 6 of 2020',
+                          err)
+            self.assertNotIn('Act 2 of 2020 (', err)
+            out, err, code = self.t.cli('log', s2)
+            self.assertIn('Act 5 of 2015', out, err)
+            self.assertNotIn('Act 6 of 2020', out)
+        finally:
+            self.rows[corpus] = before
+            self.write_rows()
+            self.t.pin()
 
     def test_the_index_on_disk_stays_mains_and_a_pin_move_rebuilds(self):
         self.t.cli('show', self.ON, 'li/national/acts/act/s1.md')
@@ -1371,9 +1459,24 @@ class FutureCopySupersedes(unittest.TestCase):
                        In_force='2020-06-01', Kind='law')
         run('checkout', '-q', 'main', cwd=f.path)
         cls.row = (fut, pin)
+        # Audit row 59: the branch's own build of a repeal (another message, one file) that main then published as
+        # a repeal of two, the same day; the builder's replay copies main's commit (deleting the other file).
+        y = t.corpus('cy/national/acts')
+        y.commit('Act 1 of 2010', {'act/a.md': 'Act a.\n', 'act/b.md': 'Act b.\n'}, In_force='2010-01-01', Kind='law')
+        run('checkout', '-q', '-b', 'future', cwd=y.path)
+        run('checkout', '-q', 'main', cwd=y.path)
+        repeal = y.commit('Repeal of 2 acts', {'act/a.md': None, 'act/b.md': None}, In_force='2026-11-01', Kind='law')
+        ypin = y.commit('Lexifina', {'README.md': '# CY\n'}, Kind='documentation')
+        run('checkout', '-q', 'future', cwd=y.path)
+        y.commit('Repeal of 1 act', {'act/a.md': None}, In_force='2026-11-01', Kind='law')
+        run('cherry-pick', repeal, cwd=y.path, env={'GIT_COMMITTER_NAME': 'test', 'GIT_COMMITTER_EMAIL': 't@example.org'})
+        yfut = y.commit('Act 3 of 2026', {'act/c.md': 'Act c.\n'}, In_force='2026-11-02', Kind='law')
+        run('checkout', '-q', 'main', cwd=y.path)
+        cls.yrow = (yfut, ypin)
         (t.root / 'data').mkdir()
         (t.root / 'data' / 'future-pins.tsv').write_bytes(
-            f'# corpus\tbranch\tfuture_sha\tmain_pin\ncz/national/acts\tfuture\t{fut}\t{pin}\n'.encode())
+            (f'# corpus\tbranch\tfuture_sha\tmain_pin\ncz/national/acts\tfuture\t{fut}\t{pin}\n'
+             f'cy/national/acts\tfuture\t{yfut}\t{ypin}\n').encode())
         run('add', 'data', cwd=t.root)
         t.pin()
 
@@ -1400,6 +1503,25 @@ class FutureCopySupersedes(unittest.TestCase):
         ix = law._index('cz/national/acts')
         self.assertEqual(ix['future']['replays_skipped'], 2)  # the copy and the version it supersedes
         law.close_readers()
+
+    def test_an_own_commit_main_already_holds_is_not_read_twice(self):
+        """Audit row 59 (Czechia): the branch's own earlier build of a repeal that main has since published under
+        another message, the same day, is taken as main's law: one removal row, one law listed, and future_pins.py
+        does not count it as the branch's own."""
+        fut, pin = self.yrow
+        got = self.fp.classify(self.t.corpora['cy/national/acts'].path, pin, fut, '2026-11-04')
+        self.assertEqual(got['state'], 'forked', got)
+        self.assertEqual(got['future_own'], 1, got)  # Act 3 of 2026 only
+        out, err, code = self.t.cli('log', 'cy/national/acts/act/a.md')
+        self.assertEqual(sum('2026-11-01' in line for line in out.splitlines()), 1, (out, err))  # one removal row
+        self.assertNotIn('Repeal of 1 act', out)
+        out, err, code = self.t.cli('laws', '2026-11-01', '2026-11-01', 'cy/national/acts')
+        listed = [line for line in out.splitlines() if 'cy/national/acts' in line]
+        self.assertEqual(len(listed), 1, (out, err))
+        self.assertIn('Repeal of 2 acts', listed[0])
+        out, err, code = self.t.cli('show', '2026-11-02', 'cy/national/acts/act/c.md')
+        self.assertEqual(out, 'Act c.\n', err)  # the branch's own law is still read
+        self.assertNotIn('not read', err)
 
 
 class CountryNamesAndCodes(unittest.TestCase):
