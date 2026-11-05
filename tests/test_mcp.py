@@ -1037,8 +1037,9 @@ class ScopeRules(unittest.TestCase):
         # The Corporations Regulations 2001 number regulations chapter.part.number. The folder the
         # instruments corpus sits in comes from the manifest, as Malta's does.
         for text in ('see reg 6.10.01 of the Corporations Regulations 2001', 'r 6.10.01', 'reg. 6.10.01'):
-            self.assertTrue(cite(text)[0].endswith('/corporations-regulations-2001/r-6.10.01.md'), text)
+            self.assertTrue(cite(text)[0].endswith('/corpus/corporations-regulations-2001/r-6.10.01.md'), text)
         self.assertTrue(cite('regulation 7.1.04(2) applies')[0].endswith('/r-7.1.04.md'))
+        self.assertTrue(cite('reg 1.0.02AA')[0].endswith('/r-1.0.02AA.md'))  # the corpus's files sit under corpus/, letters kept
         # A plain number is not resolvable to one instrument, so it is left alone rather than guessed,
         # and a regulation of a named foreign instrument still goes to that instrument.
         self.assertEqual(cite('under reg 15'), [])

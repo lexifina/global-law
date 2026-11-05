@@ -3468,8 +3468,8 @@ CITATION_FORMS = [
     # "reg 15" is left alone: every other instrument numbers that way too, so it would need the
     # instrument named to be resolvable, and guessing would point at the wrong law.
     # Exactly three parts: "regulation 2.1 of the EU Regulation" or a UK "reg 3.4" is not theirs.
-    (re.compile(r'\b(?:regulations?|regs?\.?|r\.?)\s*(\d+\.\d+\.\d+[A-Z]?)(?:\(\w+\))*(?![.\d])', re.I),
-     lambda m: f"{au_instruments_corpus() or 'au/federal/instruments'}/corporations-regulations-2001/r-{m.group(1)}.md"),
+    (re.compile(r'\b(?:regulations?|regs?\.?|r\.?)\s*(\d+\.\d+\.\d+[A-Z]{0,2})(?:\(\w+\))*(?![.\d])', re.I),
+     lambda m: f"{au_instruments_corpus() or 'au/federal/instruments'}/corpus/corporations-regulations-2001/r-{m.group(1).upper()}.md"),
 ]
 MAX_BRIEF = 50_000  # characters of text resolve_citations reads
 
