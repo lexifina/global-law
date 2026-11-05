@@ -932,7 +932,10 @@ class ScopeRules(unittest.TestCase):
         for bad in ('.{1,32000}x', 'a{1,32767}', '[a-z]{0,255}[a-z]{0,255}[a-z]{0,255}[a-z]{0,255}', '(a?){30}a{30}',
                     '(.?){200}', '(a?)?(a?)?', 'a{20}b{20}c{1}', 'a+b+c+d+e+f+g+h+i+j+k+', '.{,32000}', '[{]{1000}',
                     'a**', '(a|ab)*', '(x|)*', '(^|a)+', '([ab]|c)*', '(A|a)+',
-                    'x{1, 1000}'):  # the last: Python reads it as text, git refuses it
+                    'x{1, 1000}',  # Python reads it as text, git refuses it
+                    # A backslash in a bracket is a literal to git: [x\] is the class and {1,32000} counts it. A
+                    # separate pass that read \] as an escape let these through (audit row 51).
+                    r'[x\]{1,32000}]', r'[\]{99}]', r'[[:alpha:]\]{1,99}]', r'[^\]{21}', 'x{}', '{2}a'):
             with self.assertRaises(self.m.UserError, msg=bad):
                 self.m.safe_regex(bad)
         for good in ('7,500,000', 'COVID-?19', r'Art\. ?16a', 'debtor[s]? in possession', '[0-9]{4}', r'\{literal\}', 'x{2,5}y',
@@ -959,9 +962,44 @@ class ScopeRules(unittest.TestCase):
             rx = re.compile(pattern.replace('[[:space:]]', r'\s').replace('[[:alnum:]]', r'\w'), re.I)
             self.assertTrue(rx.search(hit), (corpus, hit))
             self.assertFalse(rx.search(miss), (corpus, miss))
-        if 'china/national/acts' in rules:  # a description, not a regular expression: still refused
-            with self.assertRaises(self.m.UserError):
-                self.m.safe_regex(rules['china/national/acts']['cites'].replace('{n}', '12'))
+        # China and Japan write the number in words; their rules (a description and a lookahead until audit row 55)
+        # are usable, and find the citations in the laws' own words (Criminal Law art. 267; Civil Code art. 91).
+        from unittest import mock
+        real = {'china/national/acts': ('xingfa/art-263.md', '携带凶器抢夺的，依照本法第二百六十三条的规定定罪处罚。',
+                                        '依照本法第二百六十三条之一的规定'),
+                'japan/national/acts': ('minpo/art-090.md', '第九十条の規定により無効とされた', '第九十条の二')}
+        for corpus, (rel, hit, miss) in real.items():
+            if corpus not in rules:
+                continue
+            with mock.patch.object(self.m.law, 'manifest', lambda: {'corpora': [{'path': corpus, 'citation': rules[corpus]}]}):
+                folder, pattern = self.m.citation_pattern(rel, corpus)
+                check = self.m.citation_line_check(corpus, rel)
+            self.assertEqual(folder, rel.split('/')[0])
+            self.assertTrue(re.search(pattern, hit) and check.search(hit), (corpus, hit))
+            self.assertFalse(check.search(miss), (corpus, miss))
+
+    def test_unusable_declared_rule_is_not_replaced(self):
+        # Audit row 55: a declared rule the server refuses was replaced by the built-in Swiss "Art. N" rule, and
+        # what_else_changes said nothing cites China's Criminal Law art. 263. It is refused, with the reason.
+        from unittest import mock
+        old = {'file': '([a-z]+)/art-0*([0-9]+)(?:-([0-9]+))?\\.md', 'cites': '第{n}条 (art-NNN-K.md: 第{n}条之{k})',
+               'numerals': 'zh-Hans: {n} is written in Chinese numerals'}
+        for rule in (old, {**old, 'cites': '第{n}(?![のノ][一二三四五六七八九十])', 'numerals': 'ja'}, {**old, 'numerals': 'roman'}):
+            with mock.patch.object(self.m.law, 'manifest', lambda: {'corpora': [{'path': 'cn/national/acts', 'citation': rule}]}):
+                with self.assertRaises(self.m.UnusableCitationRule, msg=rule['cites']):
+                    self.m.citation_pattern('xingfa/art-263.md', 'cn/national/acts')
+        self.assertEqual(self.m.citation_pattern('xingfa/art-263.md')[1], r'(Art\.|Artikel) ?263([^0-9a-z]|$)')  # no rule: built-in
+
+    def test_numbers_in_words(self):
+        zh = {10: '十', 16: '十六', 20: '二十', 103: '一百零三', 110: '一百一十', 263: '二百六十三', 1000: '一千',
+              1001: '一千零一', 1010: '一千零一十', 1100: '一千一百', 1260: '一千二百六十'}
+        ja = {1: '一', 10: '十', 16: '十六', 100: '百', 103: '百三', 110: '百十', 123: '百二十三', 1000: '千', 1050: '千五十',
+              2111: '二千百十一'}
+        self.assertEqual({n: self.m.cjk_number(n, 'zh') for n in zh}, zh)
+        self.assertEqual({n: self.m.cjk_number(n, 'ja') for n in ja}, ja)
+        self.assertEqual(self.m.cjk_article('263-1', 'zh'), '二百六十三条之一')
+        self.assertEqual(self.m.cjk_article('16-2-3', 'ja'), '十六条の二の三')
+        self.assertIsNone(self.m.cjk_number(10000, 'zh'))
 
     def test_czech_citations_need_the_number_and_the_year(self):
         # czechia-law's rule matched 262/1996 Sb. for 262/2006 Sb., and searched only the act's own year folder.
@@ -1945,6 +1983,35 @@ class SpanishArticles(unittest.TestCase):
                               'artículo 125 de este Reglamento.\n',
             f'{rd}/a1-39.md': '## Artículo 127. Requisitos específicos.\n\nEl artículo 31 de la Ley Orgánica 8/2000 no se aplica.\n',
         }, In_force='2025-05-20', Kind='law')
+        # Audit row 63: norms cited by name or abbreviation, beside an older norm whose headings hold the same numbers
+        # and words (a heading search found its article 155 for "artículo 155 de la Constitución").
+        ce, lpac = 'estatal/constitucion/1978/BOE-A-1978-31229', 'estatal/ley/2015/BOE-A-2015-10565'
+        cp, et = 'estatal/ley-organica/1995/BOE-A-1995-25444', 'estatal/real-decreto-legislativo/2015/BOE-A-2015-11430'
+        old = 'estatal/ley/1970/BOE-A-1970-369'
+        normas += (f'BOE-A-1978-31229\tConstitución\t{ce}\t1978-12-27\t1978-12-29\t\tN\tFinalizado\tConstitución Española.\n'
+                   f'BOE-A-2015-10565\tLey\t{lpac}\t2015-10-01\t2015-10-02\t\tN\tFinalizado\tLey 39/2015, de 1 de octubre, del '
+                   'Procedimiento Administrativo Común de las Administraciones Públicas.\n'
+                   f'BOE-A-1995-25444\tLey Orgánica\t{cp}\t1995-11-23\t1995-11-24\t\tN\tFinalizado\tLey Orgánica 10/1995, '
+                   'de 23 de noviembre, del Código Penal.\n'
+                   f'BOE-A-2015-11430\tReal Decreto Legislativo\t{et}\t2015-10-23\t2015-10-24\t\tN\tFinalizado\tReal Decreto '
+                   'Legislativo 2/2015, de 23 de octubre, por el que se aprueba el texto refundido de la Ley del Estatuto de '
+                   'los Trabajadores.\n'
+                   f'BOE-A-1970-369\tLey\t{old}\t1970-01-02\t1970-01-03\t\tN\tFinalizado\tLey 1/1970, de 2 de enero, de la '
+                   'Constitución de cotos y de la protección de los cultivos.\n')
+        es.commit('Norms cited by name', {
+            'normas.tsv': normas,
+            f'{ce}/a14.md': '## Artículo 14\n\nLos españoles son iguales ante la ley.\n',
+            f'{ce}/a155.md': '## Artículo 155\n\n1. Si una Comunidad Autónoma no cumpliere las obligaciones.\n',
+            f'{lpac}/a21.md': '## Artículo 21. Obligación de resolver.\n\nTexto.\n',
+            f'{cp}/a31bis.md': '## Artículo 31 bis.\n\nTexto.\n',
+            f'{et}/a48.md': '## Artículo 48. Suspensión con reserva de puesto de trabajo.\n\nTexto.\n',
+            f'{et}/a4-3.md': '## Artículo 48 bis.\n\n1. Las personas trabajadoras tendrán derecho a un permiso parental.\n',
+            f'{old}/a14.md': '## Art. 14. CE: Constitución de cotos.\n\nTexto.\n',
+            f'{old}/a21.md': '## Artículo 21. Protección de los cultivos (Ley 39/2015).\n\nTexto.\n',
+            f'{old}/a155.md': '## Artículo 155. De la Constitución de cotos.\n\nTexto.\n',
+            f'{old}/a31bis.md': '## Artículo 31 bis. Del Código Penal.\n\nTexto.\n',
+            f'{old}/a48bis.md': '## Artículo 48 bis. Estatuto de los Trabajadores del campo.\n\nTexto.\n',
+        }, In_force='2016-10-02', Kind='law')
         (t.root / 'manifest.json').write_text(json.dumps({'corpora': [{
             'path': 'es/national/acts', 'code': 'ES', 'name': 'Spain', 'language': 'es',
             'citation': {'file': 'estatal/[a-z-]+/\\d{4}/(BOE-A-\\d{4}-\\d+)/([^/]+)\\.md', 'cites': '{n}'}}]}), encoding='utf-8')
@@ -1999,6 +2066,127 @@ class SpanishArticles(unittest.TestCase):
         paths = [c['path'] for c in r['structuredContent']['citations']]
         self.assertEqual(paths[:3], [f'{self.LO}/a31.md', f'{self.RD}/a1-37.md', f'{self.LO}/a31bis.md'])
         self.assertEqual(r['structuredContent']['citations'][3]['status'], 'not in the record at any date')
+
+    def test_find_provision_reads_norm_and_article(self):
+        # Audit row 63: find_provision read these as heading words and numbers and gave another norm's article first,
+        # while resolve_citations resolved them. A citation is now read as resolve_citations reads it.
+        ce, lpac = 'es/national/acts/estatal/constitucion/1978/BOE-A-1978-31229', 'es/national/acts/estatal/ley/2015/BOE-A-2015-10565'
+        cp = 'es/national/acts/estatal/ley-organica/1995/BOE-A-1995-25444'
+        et = 'es/national/acts/estatal/real-decreto-legislativo/2015/BOE-A-2015-11430'
+        cited = {'artículo 21 de la Ley 39/2015': f'{lpac}/a21.md', 'artículo 155 de la Constitución': f'{ce}/a155.md',
+                 'art. 14 CE': f'{ce}/a14.md', 'artículo 31 bis del Código Penal': f'{cp}/a31bis.md'}
+        typed = {'Ley 39/2015 artículo 21': f'{lpac}/a21.md',  # the norm first, as a search is often typed
+                 'Estatuto de los Trabajadores artículo 48 bis': f'{et}/a4-3.md'}  # a block id: its heading says 48 bis
+        for q, want in {**cited, **typed}.items():
+            self.assertEqual(self.found(q, 'es')[0], want, q)
+            self.assertEqual(self.found(q, '')[0], want, q)
+        r = self.call('resolve_citations', text='; '.join(cited))
+        self.assertEqual([c['path'] for c in r['structuredContent']['citations']], list(cited.values()))
+        # Not a citation, or one of an article the norm lacks: the heading search as before.
+        self.assertEqual(self.found('artículo 31', self.LO), [f'{self.LO}/a31.md'])
+        self.assertNotIn(f'{ce}/a999.md', self.found('artículo 999 de la Constitución', 'es'))
+
+
+class RulesAndKinds(unittest.TestCase):
+    """Audit rows 55 and 56 on a small tree built here. China and Japan cite articles in words (第二百六十三条,
+    第十六条の二), with branch articles (之一, の二) that a plain rule would count; a corpus whose declared rule cannot be
+    used says so, and is never searched with another layout's rule. laws_between and changes_between list laws taking
+    effect only, as law.py laws does: a publisher's starting text and a correction are counted apart."""
+
+    CN, JP, OLD, TX = 'cn/national/acts', 'jp/national/acts', 'zz/national/acts', 'tt/national/acts'
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tests'))
+        from test_law_fixtures import Tree, run
+        t = cls.t = Tree()
+        shutil.copy(ROOT / 'tools' / 'mcp_server.py', t.root / 'tools' / 'mcp_server.py')
+        criminal = {'xingfa/art-263.md': '# 第二百六十三条\n\n以暴力、胁迫或者其他方法抢劫公私财物的，处三年以上十年以下有期徒刑。\n',
+                    'xingfa/art-263-1.md': '# 第二百六十三条之一\n\n另一条。\n',
+                    'xingfa/art-267.md': '# 第二百六十七条\n\n携带凶器抢夺的，依照本法第二百六十三条的规定定罪处罚。\n',
+                    'xingfa/art-268.md': '# 第二百六十八条\n\n依照本法第二百六十三条之一的规定处罚。\n',
+                    'xingfa/art-1010.md': '# 第一千零一十条\n\n依照本法第二百六十三条之二的规定。\n'}
+        for path in (cls.CN, cls.OLD):
+            t.corpus(path).commit('中华人民共和国刑法', criminal, In_force='2021-03-01', Kind='law')
+        t.corpus(cls.JP).commit('民法', {
+            'minpo/art-090.md': '# 第九十条\n\n公の秩序又は善良の風俗に反する法律行為は、無効とする。\n',
+            'minpo/art-090-2.md': '# 第九十条の二\n\n枝番号の条。\n',
+            'minpo/art-091.md': '# 第九十一条\n\n第九十条の規定により無効とされた行為。\n',
+            'minpo/art-092.md': '# 第九十二条\n\n商法第九十条の規定を準用する。\n',  # another law's article 90
+            'minpo/art-093.md': '# 第九十三条\n\n第九十条の二の規定により。\n',  # the branch article 90-2
+            'minpo/art-094.md': '# 第九十四条\n\n第九十条ノ二の規定による。\n'}, In_force='2020-04-01', Kind='law')  # older writing
+        tx = t.corpus(cls.TX)
+        tx.commit('Texas Legislative Council', {'code/s1.md': '# s1\nAs published.\n', 'code/s2.md': '# s2\nTwo.\n'},
+                  In_force='2019-09-01', Kind='publisher')
+        tx.commit('Texas Legislative Council', {'code/s1.md': '# s1\nAs published, corrected.\n'}, In_force='2019-09-01',
+                  Kind='correction', Corrects='code 2019-09-01..2021-08-31', Files='code/s1.md', Reason='misprint')
+        tx.commit('H.B. 7, 87th Leg.', {'code/s2.md': '# s2\nTwo, amended.\n'}, In_force='2021-09-01', Kind='law')
+        old_cn = {'file': '([a-z]+)/art-0*([0-9]+)(?:-([0-9]+))?\\.md', 'cites': '第{n}条 (art-NNN-K.md: 第{n}条之{k})',
+                  'numerals': 'zh-Hans: {n} is written in Chinese numerals'}  # China's rule before row 55: prose
+        rules = {r['path']: r['citation'] for r in json.loads((ROOT / 'manifest.json').read_text(encoding='utf-8'))['corpora']
+                 if r['path'] in ('china/national/acts', 'japan/national/acts')}
+        (t.root / 'manifest.json').write_text(json.dumps({'corpora': [
+            {'path': cls.CN, 'code': 'CN', 'name': 'China', 'language': 'zh', 'citation': rules['china/national/acts']},
+            {'path': cls.JP, 'code': 'JP', 'name': 'Japan', 'language': 'ja', 'citation': rules['japan/national/acts']},
+            {'path': cls.OLD, 'code': 'ZZ', 'name': 'Old rule', 'language': 'zh', 'citation': old_cn},
+            {'path': cls.TX, 'code': 'US-TX', 'name': 'Texas', 'language': 'en', 'history': 'current-only'}]}),
+            encoding='utf-8')
+        run('add', 'tools/mcp_server.py', cwd=t.root)
+        t.pin()
+        cls.proc = subprocess.Popen([sys.executable, str(t.root / 'tools' / 'mcp_server.py')], stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, cwd=t.root,
+                                    env={**os.environ, 'PYTHONDONTWRITEBYTECODE': '1'})
+        cls.next_id = 0
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.proc.stdin.close()
+        cls.proc.wait(timeout=30)
+        cls.proc.stdout.close()
+        cls.t.close()
+
+    call = SpanishArticles.call
+
+    def citing(self, path):
+        r = self.call('what_else_changes', path=path, date='2026-11-01')
+        return sorted(p['path'] for g in r['structuredContent']['groups'] if g['kind'] == 'cites this provision'
+                      for p in g['provisions']), r
+
+    def test_chinese_articles_cited_in_numerals(self):
+        cites, _ = self.citing(f'{self.CN}/xingfa/art-263.md')
+        self.assertEqual(cites, [f'{self.CN}/xingfa/art-267.md'])  # not 第二百六十三条之一 or 之二, not its own heading
+        cites, _ = self.citing(f'{self.CN}/xingfa/art-263-1.md')
+        self.assertEqual(cites, [f'{self.CN}/xingfa/art-268.md'])
+
+    def test_japanese_articles_cited_in_kanji(self):
+        cites, _ = self.citing(f'{self.JP}/minpo/art-090.md')
+        self.assertEqual(cites, [f'{self.JP}/minpo/art-091.md'])  # not 商法第九十条, not 第九十条の二 or ノ二
+        cites, _ = self.citing(f'{self.JP}/minpo/art-090-2.md')
+        self.assertEqual(cites, [f'{self.JP}/minpo/art-093.md', f'{self.JP}/minpo/art-094.md'])
+
+    def test_unusable_declared_rule_is_not_replaced(self):
+        # The old rule is refused; the answer says citations were not searched, never "nothing cites it" from the
+        # Swiss "Art. 263" rule.
+        cites, r = self.citing(f'{self.OLD}/xingfa/art-263.md')
+        self.assertEqual(cites, [])
+        text = r['content'][0]['text']
+        self.assertIn('Citations were not searched: citations in this corpus are not recognised', text)
+        self.assertNotIn('No other provision in force', text)
+        self.assertIn('cites pattern', r['structuredContent']['citations_not_searched'])
+
+    def test_laws_between_lists_laws_only(self):
+        r = self.call('laws_between', start='1900-01-01', end='2026-12-31', jurisdiction=self.TX)['structuredContent']
+        self.assertEqual([c['law'] for c in r['changes']], ['H.B. 7, 87th Leg.'])
+        self.assertEqual(r['not_laws'], {'baseline': 1, 'correction': 1})
+        out, err, _ = self.t.cli('laws', '1900-01-01', '2026-12-31', self.TX)
+        self.assertEqual([line.split()[-1] for line in out.splitlines() if line.strip()], ['Leg.'])
+        self.assertIn('H.B. 7, 87th Leg.', out)
+        self.assertIn('1 starting texts', out + err)
+        self.assertIn('1 corrections', out + err)
+        r = self.call('changes_between', date_a='2019-01-01', date_b='2026-12-31', jurisdiction=self.TX)
+        row = r['structuredContent']['corpora'][0]
+        self.assertEqual((row['laws'], row['not_laws']), (['H.B. 7, 87th Leg.'], {'baseline': 1, 'correction': 1}))
+        self.assertIn('by 1 law(s)', r['content'][0]['text'])
 
 
 class SpanishCitationRule(unittest.TestCase):

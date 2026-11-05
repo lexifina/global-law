@@ -14266,9 +14266,11 @@
       "history": "in-force",
       "tool": "tools/on_date.py",
       "citation": {
-        "file": "([a-z]+)/art-0*([0-9]+)(?:-([0-9]+))?\\.md",
-        "cites": "第{n}条 (art-NNN-K.md: 第{n}条之{k})",
-        "numerals": "zh-Hans: {n} is written in Chinese numerals (第一百零三条 = 103), as tools/text.py int_cn() does; with Arabic digits the rule finds nothing"
+        "file": "([a-z]+)/art-0*([0-9]+(?:-[0-9]+)?)\\.md",
+        "cites": "第{n}",
+        "numerals": "zh",
+        "not_followed_by": "之[一二三四五六七八九十]",
+        "n_format": "zh: {n} is the article in Chinese numerals with 条 and any 之 branch, as the law writes it: 103 -> 一百零三条, 1010 -> 一千零一十条, 263-1 (art-263-1.md) -> 二百六十三条之一; not_followed_by keeps 第二百六十三条之一 from counting as a citation of art. 263"
       },
       "scope": {
         "trailer": "Applies",
@@ -23674,9 +23676,12 @@
       "history": "in-force",
       "tool": "tools/jiten.py",
       "citation": {
-        "file": "([a-z-]+)/art-0*([0-9]+(?:-[0-9]+)*)\\.md",
-        "cites": "第{n}(?![のノ][一二三四五六七八九十])",
-        "n_format": "kanji-article: {n} is the article number in kanji with 条 and any branch numbers, as the text writes it: 16 -> 十六条, 16-2 -> 十六条の二, 100 -> 百条, 123 -> 百二十三条"
+        "file": "([0-9A-Za-z-]+)/art-0*([0-9]+(?:-[0-9]+)*)\\.md",
+        "cites": "第{n}",
+        "numerals": "ja",
+        "not_followed_by": "[のノ][一二三四五六七八九十]",
+        "not_preceded_by": "[法令則）]",
+        "n_format": "kanji-article: {n} is the article number in kanji with 条 and any branch numbers, as the text writes it: 16 -> 十六条, 16-2 -> 十六条の二, 100 -> 百条, 123 -> 百二十三条; not_followed_by keeps 第十六条の二 from counting as a citation of art. 16, and not_preceded_by one naming another law (民法第九十条, 同法第三条, …号）第三条) or the supplementary provisions (附則第二条)"
       },
       "scope": {
         "trailer": "Applies",
@@ -23688,9 +23693,6 @@
           "decided_here": false
         }
       },
-      "warnings": [
-        "citation.cites is not valid for git grep -E (POSIX extended: no lookbehind, lookahead or \\d): fatal: command line, '第1(?![のノ][一二三四五六七八九十])': Invalid preceding regular expression"
-      ],
       "code": "JP",
       "iso_path": "jp/national/acts",
       "acts": [

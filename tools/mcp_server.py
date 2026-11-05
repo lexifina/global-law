@@ -429,6 +429,7 @@ class _Shape:
 
 
 _COUNT = re.compile(r'\{(\d*)(,?)(\d*)\}')
+_BRACE = 'A brace in a regular expression opens a count, such as {2} or {1,5}; write a literal brace as \\{.'
 _NESTED = ('That regular expression repeats a group that holds a quantifier, an alternation whose branches can start '
            'alike, or a part that can match nothing, or uses a back-reference; simplify it.')
 
@@ -439,8 +440,11 @@ def _regex_shape(pattern: str) -> _Shape:
     repeated group (or a repeated repetition) holding a repetition or a part that can match nothing ((a+)+, (a?){30},
     a**), a repeated alternation whose branches can start with the same character ((a|ab)*, (\\w|\\w)*), an optional
     group that can match nothing and holds a repetition ((a?)?), and back-references. Simple repetitions are cheap:
-    "([Ss]ections?|[Pp]aragraphs?|ss?\\.) ?12" holds four and is linear."""
+    "([Ss]ections?|[Pp]aragraphs?|ss?\\.) ?12" holds four and is linear. The counts of every {m,n} go in the shape's
+    bounds, read as git reads them: a backslash in a bracket expression is a literal character, so the count in
+    "[x\\]{1,32000}]" repeats the class [x\\]. A brace that opens no count is refused, as git refuses "x{1, 1000}"."""
     i = 0
+    bounds: list[int] = []
 
     def seq(items: list[_Shape]) -> _Shape:
         out, first, open_ = _Shape(nullable=True), set(), True
@@ -493,6 +497,8 @@ def _regex_shape(pattern: str) -> _Shape:
                 atom, i = _Shape(nullable=True), i + 1
             elif ch == '.':
                 atom, i = _Shape(first=None), i + 1
+            elif ch == '{':
+                raise UserError(_BRACE)
             else:
                 atom, i = _Shape(first=frozenset(ch.lower())), i + 1
             if atom is not None:
@@ -502,7 +508,10 @@ def _regex_shape(pattern: str) -> _Shape:
                 if pattern[i] in '*+?':
                     low, high = (0 if pattern[i] != '+' else 1), (1 if pattern[i] == '?' else None)
                     i += 1
-                elif count:
+                elif pattern[i] == '{':
+                    if not count or not (count.group(1) or count.group(3)):
+                        raise UserError(_BRACE)
+                    bounds.extend(int(n) for n in (count.group(1), count.group(3)) if n)
                     low = int(count.group(1) or 0)
                     high = (int(count.group(3)) if count.group(3) else None) if count.group(2) else low
                     i = count.end()
@@ -526,6 +535,7 @@ def _regex_shape(pattern: str) -> _Shape:
     shape = group()
     if i < len(pattern):
         raise UserError('Not a valid regular expression: a ) has no (.')
+    shape.bounds = bounds
     return shape
 
 
@@ -545,11 +555,7 @@ def safe_regex(pattern: str) -> str:
     if len(pattern) > 200:
         raise UserError('The regular expression is longer than 200 characters.')
     shape = _regex_shape(pattern)
-    # Escapes and bracket expressions hold literal characters, not operators.
-    bare = re.sub(r'\[(?:\^?\])?[^\]]*\]', 'x', re.sub(r'\\.', 'x', pattern))
-    if re.search(r'\{(?!\d+(?:,\d*)?\}|,\d+\})', bare):  # git refuses "x{1, 1000}" that Python reads as text
-        raise UserError('A brace in a regular expression opens a count, such as {2} or {1,5}; write a literal brace as \\{.')
-    bounds = [int(n) for b in re.findall(r'\{(\d*)(?:,(\d*))?\}', bare) for n in b if n]
+    bounds = shape.bounds  # each {m,n} as git reads it, bracket expressions included (no separate textual pass)
     if any(n > MAX_BOUND for n in bounds) or sum(bounds) > MAX_BOUNDS_TOTAL:
         raise UserError(f'Counted repetitions ({{m,n}}) may go up to {MAX_BOUND}, and {MAX_BOUNDS_TOTAL} in all: large '
                         'counts make the search use a great deal of memory. Use * or + instead.')
@@ -1111,12 +1117,51 @@ def article_files(corpus: str, sha: str, folder: str) -> dict[str, list[str]]:
     return out
 
 
+# "Ley 39/2015 artículo 21", "Estatuto de los Trabajadores, art. 48 bis": the norm before the article, as a search is
+# often typed; read as "artículo 21 de la Ley 39/2015".
+ES_NORM_FIRST = re.compile(rf'^\s*(?P<norm>\D.*?)\s*,?\s+(?P<art>art(?:[íi]culo|\.)\s*\d+(?:[\s.]*(?:{NUMBER_SUFFIX})\b)?)\s*$', re.I)
+
+
+def cited_provisions(query: str, scope: str) -> list[tuple[str, str, str]]:
+    """(path, heading, citation) for each provision a citation in the query names, read with resolve_citations' forms
+    (CITATION_FORMS and the Romanian reader), that this tree holds within the scope; [] when there is none."""
+    forms = [query]
+    m = ES_NORM_FIRST.match(query)
+    if m:
+        forms += [f"{m.group('art')} de la {m.group('norm')}", f"{m.group('art')} del {m.group('norm')}"]
+    for q in forms:
+        found = [(mm.start(), here(to_path(mm)), mm.group(0).strip()) for rx, to_path in CITATION_FORMS for mm in rx.finditer(q)]
+        out, seen = [], set()
+        for _, path, cite in sorted(found + ro_citations(q)):
+            if path in seen or scope and not (path == scope or path.startswith(scope.rstrip('/') + '/')):
+                continue
+            seen.add(path)
+            try:
+                corpus, rel = law.corpus_of(path)
+            except SystemExit:
+                continue
+            sha = corpus_head(corpus)
+            if sha and rel in names_of(corpus, sha):
+                out.append((path, read_headings(corpus, sha, (rel,)).get(rel, ''), cite))
+        if out:
+            return out
+    return []
+
+
 def t_find_provision(args: dict) -> tuple[str, dict]:
     query = text_arg(args, 'query')
     if not query:
         raise UserError('Give a query: a section or article number ("1182", "16a", "reg 13") or words from a heading.')
     scope = scope_arg(args)
     limit = num(args, 'max_results', 15, 100)
+    # A query that is a citation ("artículo 155 de la Constitución", "art. 14 CE", "Art. 10a BV", "11 U.S.C. § 1182")
+    # is read as resolve_citations reads it, and the provision it names comes first: a heading search finds another
+    # norm's article 155 (Spain has thousands of norms).
+    cited = cited_provisions(query, scope)
+    if cited:
+        rows = [{'path': p, 'heading': f'{h}  (read as the citation "{c}", as resolve_citations reads it)'.lstrip(), 'score': 100}
+                for p, h, c in cited[:limit]]
+        return '\n'.join(f"{r['path']}  {r['heading']}" for r in rows), {'results': rows}
     # Citation forms narrow the search: "11 U.S.C. 1101" means title 11; "Art. 16a GG", "s. 42 CFA" name their Act
     # through a scoped entry in aliases.json. The words that named the scope are then left out of the matching.
     hint, rest = '', query
@@ -2278,17 +2323,20 @@ def t_laws_between(args: dict) -> tuple[str, dict]:
     scope = scope_arg(args)
     subs = {c['path']: scoped(c['path'], scope) for c in law.manifest()['corpora']}
     inside = {c: touching(law.corpus_dir(c), s, 'HEAD') for c, s in subs.items() if s}  # a scope within a corpus
-    every = [e for e in law.timeline() if a <= e.in_force <= b and e.kind != 'documentation' and subs.get(e.corpus) is not None
-             and (e.corpus not in inside or e.corpus_commit in inside[e.corpus])]
-    ends = sum(1 for e in every if e.kind == 'end')  # France's "Fin de vigueur": an end of validity, no law named
-    every = [e for e in every if e.kind != 'end']
+    window = [e for e in law.timeline() if a <= e.in_force <= b and e.kind != 'documentation' and subs.get(e.corpus) is not None
+              and (e.corpus not in inside or e.corpus_commit in inside[e.corpus])]
+    ends = sum(1 for e in window if e.kind == 'end')  # France's "Fin de vigueur": an end of validity, no law named
+    every, left_out = laws_only([e for e in window if e.kind != 'end'])
     rows = every[:num(args, 'max_results', 200, MAX_ITEMS)]  # oldest first; a long window is cut, and says so
     changed_counts([(e.corpus, e.corpus_commit) for e in rows])  # one git process per corpus, not one per row
     data = [{'in_force': e.in_force, 'corpus': e.corpus, 'law': e.law, 'summary': re.sub(r'^[^:]+:\s*', '', e.subject),
              'provisions_changed': changed_count(e.corpus, e.corpus_commit),
              'world_commit': e.commit[:12], 'corpus_commit': e.corpus_commit[:12]} for e in rows]  # short: every tool takes them
+    notes = ''.join('\n' + n for n in not_laws_note(left_out))
     if not data:
-        return f'No change took effect between {a} and {b}' + (f' in {scope}' if scope else '') + '.', {'changes': []}
+        return (f'No law took effect between {a} and {b}' + (f' in {scope}' if scope else '') + '.' + notes
+                + (f'\nNot listed: {ends} end(s) of validity no law is named for.' if ends else ''),
+                {'changes': [], 'not_laws': left_out, 'ends_not_listed': ends})
     per_law: dict[str, int] = {}
     for d in data:
         per_law[d['law']] = per_law.get(d['law'], 0) + d['provisions_changed']
@@ -2299,9 +2347,30 @@ def t_laws_between(args: dict) -> tuple[str, dict]:
         cut += (f'\nNot listed: {ends} end(s) of validity no law is named for (versions that end with no successor); '
                 'provision_history shows them as ended.')
     return ('\n'.join(f"{d['in_force']}  {d['corpus']}  {d['law']} ({d['provisions_changed']} provisions): {d['summary']}" for d in data)
-            + '\nMost provisions changed: ' + '; '.join(f'{k} ({v})' for k, v in top) + cut), \
+            + '\nMost provisions changed: ' + '; '.join(f'{k} ({v})' for k, v in top) + cut + notes), \
         {'changes': data, 'provisions_per_law': per_law, 'total': len(every), 'truncated': len(every) > len(rows),
-         'ends_not_listed': ends}
+         'not_laws': left_out, 'ends_not_listed': ends}
+
+
+# What law.py laws leaves out, named as it names them: a commit of these kinds is not a law taking effect that day.
+NOT_LAWS = {'baseline': 'starting texts (text as published, no law named)', 'correction': 'corrections',
+            'printing': 'printings', 'court': 'court rulings', 'treaty': 'treaties', 'uncredited': 'changes no law is named for',
+            'end': 'ends of validity no law is named for (versions that end with no successor)'}
+
+
+def laws_only(events: list) -> tuple[list, dict[str, int]]:
+    """The laws taking effect among timeline events (kind 'law', as law.py laws lists them), and a count by kind of the
+    rest: a starting text, a correction or a printing is the publisher's text on a day, not a law taking effect then,
+    and its author is the publisher, not a law."""
+    left_out: dict[str, int] = {}
+    for e in events:
+        if e.kind not in ('law', 'documentation'):
+            left_out[e.kind] = left_out.get(e.kind, 0) + 1
+    return [e for e in events if e.kind == 'law'], left_out
+
+
+def not_laws_note(left_out: dict[str, int]) -> list[str]:
+    return [f'Note: not listed, as they are not laws taking effect: {n} {NOT_LAWS.get(k, k)}' for k, n in sorted(left_out.items())]
 
 
 _CHANGED: dict[tuple[str, str], int] = {}
@@ -2708,28 +2777,116 @@ def citation_from_manifest(corpus: str, rel: str) -> tuple[str, str] | None:
     {"file": "(title-[0-9]+[a-z]?)/([0-9]+[a-zA-Z0-9-]*)\\\\.md", "cites": "(section|§) ?{n}([^0-9a-zA-Z-]|$)"}.
     Named groups fill {name} in "cites", and a group named n is the number. Czech acts are cited by number and year
     ("89/2012 Sb."), from any year: {"file": "(sb)/(?P<year>[0-9]{4})/(?P<n>[0-9a-z]+)\\\\.md",
-    "cites": "(^|[^0-9]){n}/{year} Sb\\\\."}."""
-    entry = next((c for c in law.manifest()['corpora'] if c['path'] == corpus), {})
-    rule = entry.get('citation') if isinstance(entry.get('citation'), dict) else None
-    if not rule or not isinstance(rule.get('file'), str) or not isinstance(rule.get('cites'), str):
+    "cites": "(^|[^0-9]){n}/{year} Sb\\\\."}.
+    Laws that write article numbers in words declare "numerals": "zh" (第二百六十三条之一 for art-263-1.md) or "ja"
+    (第十六条の二 for art-016-2.md), and {n} is then the number as the law writes it, with 条 and any branch numbers.
+    git grep reads bytes, so a bracket of CJK characters ([^之]) is a set of bytes, not of characters: a rule that must
+    not match a longer number (第二百六十三条之一 for 263) says what may not follow in "not_followed_by", and what may
+    not come just before in "not_preceded_by" (Japan: 法, 令, 則 or ）, which name another law or the 附則), Python
+    regexes the server checks on each line git finds. A declared rule that cannot be used raises
+    UnusableCitationRule: the corpus's citations are then not recognised, never searched with another layout's rule."""
+    found = _declared_rule(corpus, rel)
+    return found and found[:2]
+
+
+class UnusableCitationRule(Exception):
+    """A corpus declares a citation rule this server cannot use (the reason is the message)."""
+
+
+_CJK_DIGITS = '零一二三四五六七八九'
+
+
+def cjk_number(n: int, style: str) -> str | None:
+    """A number as Chinese (zh: 103 一百零三, 110 一百一十, 1010 一千零一十) or Japanese (ja: 103 百三, 110 百十,
+    1050 千五十) law writes it; None from 10,000 on."""
+    if not 0 < n < 10000:
         return None
+    out, gap = '', False
+    for value, unit in ((1000, '千'), (100, '百'), (10, '十'), (1, '')):
+        q, n = divmod(n, value)
+        if not q:
+            gap = bool(out)
+            continue
+        if gap and style == 'zh':
+            out += '零'
+        gap = False
+        bare = q == 1 and unit and (style == 'ja' or unit == '十' and not out)  # 十六 and 百, not 一十六 or 一百 (ja)
+        out += ('' if bare else _CJK_DIGITS[q]) + unit
+    return out
+
+
+def cjk_article(number: str, style: str) -> str | None:
+    """'263-1' -> 二百六十三条之一 (zh), '16-2' -> 十六条の二 (ja): the article as the law cites it, after 第."""
+    parts = number.split('-')
+    if not all(p.isdigit() for p in parts):
+        return None
+    words = [cjk_number(int(p), style) for p in parts]
+    if None in words:
+        return None
+    return words[0] + '条' + ''.join(('之' if style == 'zh' else 'の') + w for w in words[1:])
+
+
+def _declared_rule(corpus: str, rel: str) -> tuple[str, str, re.Pattern | None] | None:
+    """(folder, git pattern, line check or None) from the corpus's declared rule; None where it declares none or the
+    file is not in its layout; UnusableCitationRule where it declares one that cannot be used."""
+    entry = next((c for c in law.manifest()['corpora'] if c['path'] == corpus), {})
+    if 'citation' not in entry:
+        return None
+    rule = entry['citation']
+    if not isinstance(rule, dict) or not isinstance(rule.get('file'), str) or not isinstance(rule.get('cites'), str):
+        raise UnusableCitationRule('it is not {"file": ..., "cites": ...}')
     try:
         m = re.fullmatch(rule['file'], rel)
-        if not m or len(m.groups()) < 2:
-            return None
-        pattern = rule['cites']
-        for name, value in {**m.groupdict(), 'n': m.group('n' if 'n' in m.re.groupindex else 2)}.items():
-            pattern = pattern.replace('{' + name + '}', re.escape(value or ''))
-        # The folder searched is the path to the end of group 1, from the corpus root: a rule whose group 1 is only
-        # the last folder ("sb/([0-9]{4})/...", "acts/([a-z0-9-]+)/...") then searches that folder, not none.
-        return rel[:m.end(1)], safe_regex(pattern)
-    except (re.error, UserError):
+    except re.error as e:
+        raise UnusableCitationRule(f'its file pattern is not a valid regular expression ({e})') from None
+    if not m or len(m.groups()) < 2:
         return None
+    number = m.group('n' if 'n' in m.re.groupindex else 2) or ''
+    numerals = str(rule.get('numerals') or '').split(':')[0].strip().lower()
+    if numerals:
+        style = 'zh' if numerals.startswith('zh') else 'ja' if numerals.startswith('ja') else None
+        if not style:
+            raise UnusableCitationRule(f'its numerals ({numerals!r}) are not "zh" or "ja"')
+        number = cjk_article(number, style)
+        if not number:
+            return None
+    pattern = rule['cites']
+    for name, value in {**m.groupdict(), 'n': number}.items():
+        value = re.escape(value or '')
+        if name == 'n' and numerals.startswith('ja'):
+            value = value.replace('の', '(の|ノ)')  # older laws write a branch as 第十一条ノ二
+        pattern = pattern.replace('{' + name + '}', value)
+    try:
+        pattern = safe_regex(pattern)
+    except UserError as e:
+        raise UnusableCitationRule(f'git cannot use its cites pattern {pattern!r}: {str(e).rstrip(".")}') from None
+    check = None
+    before, after = rule.get('not_preceded_by'), rule.get('not_followed_by')
+    if before or after:
+        py = pattern.replace('[[:space:]]', r'\s').replace('[[:alnum:]]', r'\w')
+        try:
+            check = re.compile((f'(?<!{before})' if before else '') + f'(?:{py})' + (f'(?!{after})' if after else ''), re.I)
+        except (re.error, TypeError) as e:
+            raise UnusableCitationRule(f'its not_preceded_by or not_followed_by is not a valid regular expression ({e})') from None
+    # The folder searched is the path to the end of group 1, from the corpus root: a rule whose group 1 is only
+    # the last folder ("sb/([0-9]{4})/...", "acts/([a-z0-9-]+)/...") then searches that folder, not none.
+    return rel[:m.end(1)], pattern, check
+
+
+def citation_line_check(corpus: str, rel: str) -> re.Pattern | None:
+    """The line check of a declared rule with "not_followed_by" or "not_preceded_by" (git grep cannot say either)."""
+    try:
+        found = _declared_rule(corpus, rel)
+    except UnusableCitationRule:
+        return None
+    return found[2] if found else None
 
 
 def citation_pattern(rel: str, corpus: str | None = None) -> tuple[str, str] | None:
     """How other provisions of the same body of law cite this one: (folder to search, extended regex). The corpus's
-    own declared rule first; then one built-in rule per known file layout; None where citations cannot be recognised."""
+    own declared rule first; then one built-in rule per known file layout; None where citations cannot be recognised.
+    A declared rule that cannot be used raises UnusableCitationRule rather than fall back to a built-in rule, which was
+    written for another country's layout (China's art-263.md read as a Swiss "Art. 263")."""
     if corpus:
         declared = citation_from_manifest(corpus, rel)
         if declared:
@@ -2973,6 +3130,15 @@ ES_CITE = re.compile(ES_ONE + rf'[^.;]{{0,80}}?\b(?:de\s+la|del)\s+(?:(?P<regl>R
 ES_BOE_CITE = re.compile(rf'\b(?P<id>BOE-A-\d{{4}}-\d+),?\s*' + ES_ONE.removeprefix(r'\b'), re.I)
 ES_SHORT_CITE = re.compile(ES_ONE + r'\s*,?\s*(?:de\s+la|del)\s+(?:vigente\s+)?(?:' + '|'.join(
     f'(?P<s{i}>(?-i:{rx}))' for i, (rx, *_) in enumerate(ES_SHORT_NAMES.values())) + r')', re.I)
+# The usual abbreviations, right after the article: "art. 14 CE", "artículo 1902 CC", "art. 48 bis ET", "art. 21 LPAC".
+ES_ABBREVIATIONS = {'CE': 'BOE-A-1978-31229', 'CC': 'BOE-A-1889-4763', 'CP': 'BOE-A-1995-25444', 'CCom': 'BOE-A-1885-6627',
+                    'ET': 'BOE-A-2015-11430', 'LEC': 'BOE-A-2000-323', 'LECrim': 'BOE-A-1882-6036', 'LGT': 'BOE-A-2003-23186',
+                    'LBRL': 'BOE-A-1985-5392', 'LCSP': 'BOE-A-2017-12902', 'LIRPF': 'BOE-A-2006-20764',
+                    'LGSS': 'BOE-A-2015-11724', 'LGP': 'BOE-A-2003-21614', 'LGS': 'BOE-A-2003-20977', 'LSC': 'BOE-A-2010-10544',
+                    'LPAC': 'BOE-A-2015-10565', 'LPACAP': 'BOE-A-2015-10565', 'LRJSP': 'BOE-A-2015-10566',
+                    'LJCA': 'BOE-A-1998-16718', 'LOPJ': 'BOE-A-1985-12666', 'LH': 'BOE-A-1946-2453'}
+ES_ABBR_CITE = re.compile(ES_ONE + r'\s*,?\s*(?:(?:de\s+la|del)\s+)?(?-i:(?P<abbr>'
+                          + '|'.join(sorted(ES_ABBREVIATIONS, key=len, reverse=True)) + r'))\b', re.I)
 
 
 def es_corpus() -> tuple[str | None, str | None]:
@@ -2991,6 +3157,8 @@ def es_article_path(m: re.Match, by: str) -> str:
     norms = es_norms(corpus, sha) if sha else {}
     if by == 'id':
         want = lambda f, r: r['id'] == m.group('id').upper()  # noqa: E731
+    elif by == 'abbr':
+        want = lambda f, r: r['id'] == ES_ABBREVIATIONS[m.group('abbr')]  # noqa: E731
     elif by == 'short':
         bid = list(ES_SHORT_NAMES)[next(i for i in range(len(ES_SHORT_NAMES)) if m.group(f's{i}'))]
         # "Estatuto de los Trabajadores, aprobado por Real Decreto Legislativo 1/1995": the norm the clause names.
@@ -3047,8 +3215,15 @@ def t_what_else_changes(args: dict) -> tuple[str, dict]:
 
     groups = []
     spanish = bool(es_norms(corpus, sha).get(rel.rsplit('/', 1)[0]))  # a norm of spain-law: read by es_citing, not a path rule
-    rule = (rel.rsplit('/', 1)[0], '') if spanish else citation_pattern(rel, corpus)
+    unusable = None  # the reason a corpus's own citation rule cannot be used: its citations are then not searched
+    try:
+        rule = (rel.rsplit('/', 1)[0], '') if spanish else citation_pattern(rel, corpus)
+    except UnusableCitationRule as e:
+        rule, unusable = None, str(e)
     cites = es_citing(corpus, sha, rel) if spanish else grep(*rule) if rule else {}
+    check = None if spanish or not rule else citation_line_check(corpus, rel)
+    if check:  # what may not follow or precede it (第二百六十三条之一 is not art. 263), which git grep cannot say
+        cites = {n: kept for n, lines in cites.items() if (kept := [x for x in lines if check.search(x)])}
     if spanish and cites is None:
         rule = None  # not an article ("## Artículo N"): its citations are not recognised
     if rule:
@@ -3083,7 +3258,12 @@ def t_what_else_changes(args: dict) -> tuple[str, dict]:
             groups.append({'kind': 'defines the same term itself', 'term': term, 'provisions': [
                 {'path': f'{corpus}/{n}', 'lines': [x for x in l if own.search(x)][:1]} for n, l in sorted(redefines.items())[:limit]],
                 'count': len(redefines)})
+    not_searched = (f'Citations were not searched: citations in this corpus are not recognised, as its own citation rule '
+                    f'cannot be used: {unusable}. Only defined terms were checked.') if unusable else None
     if not groups:
+        if not_searched:
+            return (f'Nothing found that relies on {path} on {date}, but the answer is incomplete. {not_searched}',
+                    {'path': path, 'date': date, 'groups': [], 'citations_not_searched': unusable})
         why = '' if rule else ' Citations in this layout are not recognised yet; only defined terms were checked.'
         return f'No other provision in force on {date} cites {path} or uses a term it defines.{why}', {'path': path, 'date': date, 'groups': []}
     lines = [f'{path} on {date}: what else changes when it changes.']
@@ -3099,8 +3279,9 @@ def t_what_else_changes(args: dict) -> tuple[str, dict]:
                  'the corpus, and as "artículo N" within the norm itself; a citation by "dicha Ley" or by a name not '
                  'recognised is not followed. Terms are found by exact match.' if spanish else
                  'Citations are found by their usual wording and terms by exact match, within the same body of law; '
-                 'references from other titles or Acts, and one-word terms, are not followed.')
-    return '\n'.join(lines), {'path': path, 'date': date, 'groups': groups, 'definition_scope': scoped}
+                 'references from other titles or Acts, and one-word terms, are not followed.' if not not_searched else not_searched)
+    return '\n'.join(lines), {'path': path, 'date': date, 'groups': groups, 'definition_scope': scoped,
+                              **({'citations_not_searched': unusable} if unusable else {})}
 
 
 # Words that limit a definition to part of an Act: "In this subchapter:", "For the purposes of this Part".
@@ -3281,6 +3462,7 @@ CITATION_FORMS = [
     (ES_CITE, lambda m: es_article_path(m, 'number')),
     (ES_SHORT_CITE, lambda m: es_article_path(m, 'short')),
     (ES_BOE_CITE, lambda m: es_article_path(m, 'id')),
+    (ES_ABBR_CITE, lambda m: es_article_path(m, 'abbr')),
 ]
 MAX_BRIEF = 50_000  # characters of text resolve_citations reads
 
@@ -3590,10 +3772,11 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
         if sub and not changed:
             continue
         mine = touching(cwd, sub, law.reachable_tip(c['path']))  # the laws below keep those in force in the window
-        laws = [e.law for e in events if e.corpus == c['path'] and a < e.in_force <= b and e.kind != 'documentation'
-                and (not sub or e.corpus_commit in mine)]
+        laws, not_laws = laws_only([e for e in events if e.corpus == c['path'] and a < e.in_force <= b
+                                    and e.kind != 'documentation' and (not sub or e.corpus_commit in mine)])
+        laws = [e.law for e in laws]
         kinds = {'A': 'added', 'M': 'changed', 'D': 'removed'}
-        rows.append({'corpus': c['path'], 'laws': laws[:MAX_ITEMS], 'provision_count': len(changed), 'truncated': len(changed) > MAX_ITEMS,
+        rows.append({'corpus': c['path'], 'laws': laws[:MAX_ITEMS], 'not_laws': not_laws, 'provision_count': len(changed), 'truncated': len(changed) > MAX_ITEMS,
                      'provisions': [{'path': f"{c['path']}/{p}", 'change': kinds.get(s[0], s)} for s, p in changed[:MAX_ITEMS]]})
     if not rows:
         return f'Nothing changed between {a} and {b}' + (f' in {scope}' if scope else '') + '.', {'corpora': []}
@@ -3609,8 +3792,10 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
         r['law_count'] = len(laws)
         if len(laws) > per:  # the laws of a busy window; laws_between lists them all for one corpus
             r['laws'] = laws[:per]
-        out.append(f"{r['corpus']}: {r['provision_count']} provision(s), by {len(laws)} change(s)"
-                   + (f" ({'; '.join(laws[:8])}{'; ...' if len(laws) > 8 else ''})" if laws else '') + '\n'
+        out.append(f"{r['corpus']}: {r['provision_count']} provision(s), by {len(laws)} law(s)"
+                   + (f" ({'; '.join(laws[:8])}{'; ...' if len(laws) > 8 else ''})" if laws else '')
+                   + (' and ' + ', '.join(f'{n} {NOT_LAWS.get(k, k)}' for k, n in sorted(r['not_laws'].items()))
+                      + ' (not laws taking effect)' if r['not_laws'] else '') + '\n'
                    + '\n'.join(f"  {p['change']}: {p['path']}" for p in r['provisions'][:shown])
                    + (f"\n  ... {r['provision_count'] - shown} more; narrow with a jurisdiction" if r['provision_count'] > shown else ''))
     return f'Changes after {a}, up to and including {b}:\n' + '\n'.join(out), {'date_a': a, 'date_b': b, 'corpora': rows}

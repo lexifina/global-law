@@ -151,7 +151,7 @@ readers use:
 | `history_from`, `record_to`, `checked_on` | Where the record starts, the day it is complete to, the day it was last checked |
 | `record_note` | Anything a reader must know about the record |
 | `in_force_trailer` | The trailer holding each change's in-force day (default `In-force`); `baseline_trailer` and `correction_trailer` if used |
-| `citation` | `{"file": "<regex over the corpus path with groups (folder, number)>", "cites": "<git grep -E pattern, {n} for the number>"}` |
+| `citation` | `{"file": "<regex over the corpus path with groups (folder, number)>", "cites": "<git grep -E pattern, {n} for the number>"}`; optional `"numerals": "zh"` or `"ja"` (`{n}` is then the article as the law writes it: 二百六十三条之一, 十六条の二), and `"not_followed_by"` / `"not_preceded_by"` (Python regexes the server checks on each line git finds: git grep has no lookaround, and reads a bracket of CJK characters as bytes). A rule the server cannot use is reported, never replaced by another layout's |
 | `scope.default_reach` | Optional: how a change reaches pending cases where no scope is recorded |
 | `repeal_notice` | Optional: regexes (one or a list) for a line that says only that a provision is gone, in the corpus's own wording, added to the built-in ones; `false` turns repeal notices off for the corpus |
 
