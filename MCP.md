@@ -220,6 +220,15 @@ A `Redates:` or `Retroactive:` that readers would ignore is a warning (the histo
 was made is judged by the act's day as `Redates: <commit> enacted` corrects it; an `acts.json` that does not
 parse fails.
 
+Against the commit global-law pins now (`--pin`, or read from global-law), `data/acts.json` must not take act ends
+away without saying why. Each act readers end at the pin (as above: repealed, expired or annulled) must still be ended
+at HEAD, and one ended from a day must still have a day; an act whose row, end day or ending status is gone, or whose
+status is now one readers do not know (spain-law's `as captured`, which brought 834 acts back into force), fails the
+check, naming the first three. A later end day is not a loss. When the change is deliberate (the publisher lists the act
+in force again, or an end was recorded in error), the commit that changes `data/acts.json` says so in its trailer block
+with `Act-ends-reviewed: <why>`; that excuses the ends lost in that commit only, not in any commit before or after it.
+The pointer loop runs this before it moves a pin, so such a commit is not pinned until it is fixed or explained.
+
 ## Tools
 
 To browse a large corpus by act, give `list_provisions` the start of a folder name, for example

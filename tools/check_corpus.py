@@ -396,6 +396,8 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
             fatal.append(f'history rewritten: the pinned commit {pin[:7]} is no longer in the repo (main must be append-only)')
         elif git('merge-base', '--is-ancestor', pin, 'HEAD', cwd=repo).returncode:
             fatal.append(f'history rewritten: the pinned commit {pin[:7]} is not an ancestor of main (main must be append-only)')
+        elif reader() is not None:
+            fatal.extend(act_ends_lost(repo, pin))
     return fatal, warn
 
 
@@ -483,6 +485,57 @@ def acts_problems(repo: Path) -> tuple[list[str], list[str]]:
                     'with a repealed, expired or annulled day is ended on it, one without is not ended): ' +
                     ', '.join(f'{k!r} ({len(v)})' for k, v in sorted(statuses.items(), key=lambda kv: -len(kv[1]))[:12]))
     return [], warn
+
+
+ACT_ENDS_REVIEWED = 'Act-ends-reviewed'  # the trailer that says why a commit takes act ends away (MCP.md)
+
+
+def _ends_lost(old: str | None, new: str | None) -> dict[str, str]:
+    """Act folder -> how readers lose its end going from one data/acts.json text to another: 'no longer ended' (no
+    end at all now: the row, its day or its ending status gone, or a status readers do not know) or 'end day lost'
+    (still ended, but no longer from a day). Read with law.py's own act_ends (reader_act_ends)."""
+    was, now = reader_act_ends(old or ''), reader_act_ends(new or '')
+    out = {}
+    for folder, end in was[0].items():
+        later = now[0].get(folder)
+        if later is None:
+            out[folder] = 'no longer ended'
+        elif end['day'] and not later['day']:
+            out[folder] = 'end day lost'
+    return out
+
+
+def act_ends_lost(repo: Path, pin: str, head: str = 'HEAD') -> list[str]:
+    """The pin diff of data/acts.json: fatal when acts that readers end at the pinned commit (repealed, expired or
+    annulled, tools/law.py act_ends) are no longer ended at HEAD, or no longer from a day, unless the commit that took
+    each away says why in an `Act-ends-reviewed: <why>` trailer. A regenerated acts.json (spain-law d4839ce: 834 acts
+    from "expired" to "as captured") would otherwise bring ended acts back into force without anyone deciding so."""
+    def text(rev: str) -> str | None:
+        shown = git('show', f'{rev}:data/acts.json', cwd=repo)
+        return None if shown.returncode else shown.stdout
+
+    at_pin = text(pin)
+    if at_pin is None:
+        return []
+    lost = _ends_lost(at_pin, text(head))
+    if not lost:
+        return []
+    log = git('log', '--format=%H%x1f%(trailers:key=' + ACT_ENDS_REVIEWED + ',valueonly,unfold)%x1e',
+              f'{pin}..{head}', '--', 'data/acts.json', cwd=repo).stdout
+    for chunk in log.split('\x1e'):
+        sha, _, why = chunk.strip().partition('\x1f')
+        if sha and why.strip():
+            for folder in _ends_lost(text(f'{sha}^'), text(sha)):
+                lost.pop(folder, None)
+    if not lost:
+        return []
+    gone = [f for f, how in lost.items() if how == 'no longer ended']
+    dayless = [f for f, how in lost.items() if how == 'end day lost']
+    parts = ([f'{len(gone)} no longer ended'] if gone else []) + ([f'{len(dayless)} no longer from a day'] if dayless else [])
+    return [f'data/acts.json: {len(lost)} act(s) that readers end at the pinned commit {pin[:7]} lose that end at HEAD '
+            f'({", ".join(parts)}; e.g. {", ".join(sorted(lost)[:3])}), and no commit since says why: readers would '
+            f'show them in force again. Restore their status and day, or if deliberate add a trailer '
+            f'"{ACT_ENDS_REVIEWED}: <why>" to the commit that changes data/acts.json (MCP.md)']
 
 
 def stale_at_head(repo: Path, trailer: str, until: str) -> list[str]:

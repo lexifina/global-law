@@ -326,6 +326,16 @@ def read_checkpoint(marker: Path) -> dict:
     return {}
 
 
+def gap(mark: dict | None, start: str | None) -> bool:
+    """Whether a run that read the commits after `start` (None: the whole history) leaves commits unread between
+    the checkpoint `mark` and HEAD: `start` is neither the checkpoint commit nor one of its ancestors. A checkpoint
+    not in this history (rewritten, reported as such, or past a shallow clone's cut) has no range to join."""
+    old = mark.get('commit') if isinstance(mark, dict) else None
+    if not old or start is None or start == old or not ok('merge-base', '--is-ancestor', old, 'HEAD', env=NO_LAZY):
+        return False
+    return not ok('merge-base', '--is-ancestor', start, old, env=NO_LAZY)
+
+
 def write_checkpoint(marker: Path, checkpoint: dict) -> None:
     """Written to a temporary file and moved into place, so an interrupted write leaves the old one."""
     marker.parent.mkdir(parents=True, exist_ok=True)
@@ -499,10 +509,19 @@ def main(argv: list[str]) -> int:
                  'from': f'shallow {commits[0]}' if cut and commits else start or 'root'}
         if cut:
             stamp['shallow'] = True
-        checkpoint['structure'] = stamp
-        if remote:
+        # A checkpoint vouches for every commit from it to HEAD, so it moves only over a range this run read
+        # whole: one that starts at the old checkpoint or before it (--since a later commit leaves a gap unread).
+        kept = [k for k in ('structure', 'remote') if (remote or k == 'structure') and gap(checkpoint.get(k), start)]
+        for k in kept:
+            print(f"note: this run started at {start[:10]}, after the {k} checkpoint "
+                  f"{checkpoint[k]['commit'][:10]}, so the commits between them were not checked; the checkpoint is "
+                  f"left as it was (run without --since, or --since it or an earlier commit, to move it)")
+        if 'structure' not in kept:
+            checkpoint['structure'] = stamp
+        if remote and 'remote' not in kept:
             checkpoint['remote'] = {**stamp, 'tips': {u: tips_now[u] for u in sorted(tips_now)}}
-        write_checkpoint(marker, checkpoint)
+        if len(kept) < (2 if remote else 1):
+            write_checkpoint(marker, checkpoint)
     # A .gitmodules entry with no gitlink does not stop `git submodule update` (git skips it); part two's history
     # (to 30 October 2026) has them at most commits. Reported above, but not a failure.
     notes = [p for p in problems if 'with no gitlink' in p]

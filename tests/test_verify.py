@@ -165,6 +165,39 @@ class Checkpoint(VerifyCase):
         self.assertEqual(code, 0, out)
         self.assertNotIn('left as it was', out)
 
+    def test_since_inside_the_range_does_not_skip_the_gap(self):
+        # Audit row 58: a clean run at A, then a commit pinning x/y/z with no .gitmodules entry, a commit adding the
+        # entry, and one more. --since HEAD~1 reads only the last commit: it must not move the checkpoint past the
+        # broken commit, so the next default run still reads from A and names it.
+        repo = self.clone()
+        self.assertEqual(verify(repo)[0], 0)
+        before = marker(repo).read_text(encoding='utf-8')
+        broken = self.tree.commit({'x/y/z': f'{7:040x}'}, gitmodules={p: '' for p in self.tree.pins if p != 'x/y/z'})
+        self.tree.commit({})  # the entry added: .gitmodules lists every pin again
+        self.tree.commit({'c/1': f'{55:040x}'})
+        git('pull', '-q', '--ff-only', cwd=repo)
+        code, out = verify(repo, '--since', 'HEAD~1')
+        self.assertEqual(code, 0, out)
+        self.assertIn('left as it was', out)
+        self.assertEqual(marker(repo).read_text(encoding='utf-8'), before)
+        code, out = verify(repo)
+        self.assertEqual(code, 1, out)
+        self.assertIn(f'{broken[:10]}: 1 gitlink(s) with no .gitmodules entry', out)
+
+    def test_since_the_checkpoint_or_before_it_moves_it(self):
+        repo = self.clone()
+        self.assertEqual(verify(repo)[0], 0)
+        at = json.loads(marker(repo).read_text(encoding='utf-8'))['structure']['commit']
+        for since in (at, f'{at}~2'):
+            self.tree.commit({f'c/{since[-2:]}': f'{56:040x}'})
+            git('pull', '-q', '--ff-only', cwd=repo)
+            code, out = verify(repo, '--since', since)
+            self.assertEqual(code, 0, out)
+            self.assertNotIn('left as it was', out)
+            self.assertEqual(json.loads(marker(repo).read_text(encoding='utf-8'))['structure']['commit'],
+                             git('rev-parse', 'HEAD', cwd=repo))
+            at = git('rev-parse', 'HEAD', cwd=repo)
+
     def test_truncated_checkpoint_is_absent(self):
         repo = self.clone()
         self.assertEqual(verify(repo)[0], 0)
