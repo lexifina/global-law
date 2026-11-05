@@ -5019,6 +5019,39 @@
       "described_by": "corpus.json"
     },
     {
+      "path": "australia/federal/instruments",
+      "url": "https://github.com/lexifina/australia-regulations.git",
+      "name": "Australian (Commonwealth) legislative instruments: foreign investment, merger notification and takeovers",
+      "label": "Australia (Commonwealth): legislative instruments",
+      "language": "en",
+      "coverage": "from 2001-07-15",
+      "history": "replayed",
+      "history_from": "2001-07-15",
+      "record_to": "2026-09-01",
+      "checked_on": "2026-10-31",
+      "in_force_trailer": "In-force",
+      "citation": {
+        "file": "([a-z0-9-]+)/(?:s-0*|r-)([0-9][0-9A-Za-z.\\-]*)\\.md",
+        "cites": "(section|sections|s\\.?|regulation|regulations|reg\\.?|r\\.?) ?{n}([^0-9A-Za-z.]|$)"
+      },
+      "scope": {
+        "trailer": null,
+        "when_absent": "this corpus records no scope notes; the absence is not a statement that a change reaches every case",
+        "default_reach": {
+          "rule": "a legislative instrument takes effect as its commencement provision says, and an amendment does not disturb what was done before it commenced",
+          "meaning": "the Acts Interpretation Act 1901 and the Legislation Act 2003 apply to Commonwealth instruments; the repeal or amendment of an instrument does not affect its previous operation or any right or liability already acquired or incurred under it, unless a contrary intention appears",
+          "authority": "Acts Interpretation Act 1901 (Cth) s 7(2); Legislation Act 2003 (Cth) Part 2 of Chapter 3; not checked in this corpus",
+          "decided_here": false
+        }
+      },
+      "verification": "Verified against official text: every compilation on its compilation day (166 compilations, 0 with mismatches). The comparison is word for word against the register's own Word documents, using a second extractor written separately from the one the build uses. The register's endnotes, the table of contents and running headers are outside the compared text. Because both extractors drop the same apparatus, a second check reads the provision numbers out of each compilation's own table of contents -- the one part the build never reads -- and reports any whose text is nowhere in the tree (166 compilations, 0 with such an entry).",
+      "record_note": "Foreign Acquisitions and Takeovers Regulation 2015 (F2015L01854); Competition and Consumer (Notification of Acquisitions) Determination 2025 (F2025L00753); Competition and Consumer (Notification of Acquisitions—Forms) Determination 2025 (F2025L01604); ASIC Corporations (Takeover Bids) Instrument 2023/683 (F2023L01310); Corporations Regulations 2001 (F2001B00274). Compiled text from the Federal Register of Legislation, one commit per compilation on the day it took effect, authored by the amending instrument the register's version record names. Documents retrieved 2026-10-30 to 2026-10-30. Only compilation days are in the record: a change the register dates between two compilations appears on the later compilation's commit. Compilations the register publishes only as legacy .doc or .rtf are not in the record and are not an early block the record starts after; each instrument's no_gaps_from is the day its record becomes continuous, and a date before it may resolve to an earlier committed day.",
+      "iso_path": "au/federal/instruments",
+      "described_by": "corpus.json",
+      "future_branch_unread": "future",
+      "code": "AU"
+    },
+    {
       "path": "australia/new-south-wales/acts",
       "url": "https://github.com/lexifina/australia-new-south-wales-law.git",
       "name": "New South Wales",
