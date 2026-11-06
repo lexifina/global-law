@@ -210,6 +210,8 @@ def described(path: str) -> dict:
         out['code'] = repo.get('country') or juris['code']
     if repo.get('publisher'):
         out['record_note'] = f"Publisher: {repo['publisher']}."
+    if repo.get('history'):  # declared (corpus standard), as tools/describe.py takes it: never guessed over
+        out['history'] = repo['history']
     return out
 
 
@@ -558,17 +560,38 @@ def file_index(corpus: str) -> tuple[dict, list]:
     return index, overlays
 
 
+NAMED_TREE_MIN = 200  # a correction naming this many unchanged paths is read with one recursive ls-tree (_named_at)
+
+
 def _named_at(ix: dict, cwd: Path, wanted: dict[int, list[str]]) -> dict[int, dict[str, tuple]]:
     """row -> {path: (blob, mode)} for the paths a correction names but does not change: each as `git ls-tree` lists
     it at that commit. One `git cat-file --batch-check` gives every blob; the mode is the file's own last version in
     the index when that version has the same blob. Anything else (a folder, a path moved or withdrawn, a version the
     index does not hold) is asked of `git ls-tree`, one commit at a time, as before."""
     rows = ix['rows']
-    queries = [(order, f) for order, named in wanted.items() for f in named]
     out: dict[int, dict[str, tuple]] = {}
+    odd = set(ix.get('moves', {})) | set(ix.get('moves', {}).values()) | set(ix.get('withdrawn', {}))
+    # A correction that restates a whole code under Files: (Texas: 54,826 paths in 7 corrections, about 3 ms each
+    # as <commit>:<path>, since git resolves each from the root tree; audit row 54) is read with one recursive
+    # `git ls-tree` of the folders it names, and the named paths picked out of it. What that does not list (a
+    # folder, a path missing at that commit) goes the per-path way below.
+    wanted = dict(wanted)
+    for order, named in list(wanted.items()):
+        if len(named) < NAMED_TREE_MIN:
+            continue
+        want = set(named)
+        tops = sorted({f.split('/', 1)[0] for f in want})
+        for line in git('ls-tree', '-r', rows[order][0], '--', *tops, cwd=cwd).splitlines():
+            meta, _, path = line.partition('\t')
+            path = _unquote(path)
+            if path in want:
+                mode, _, blob = meta.split()
+                out.setdefault(order, {})[path] = (blob, mode)
+                want.discard(path)
+        wanted[order] = [f for f in named if f in want]
+    queries = [(order, f) for order, named in wanted.items() for f in named]
     if not queries:
         return out
-    odd = set(ix.get('moves', {})) | set(ix.get('moves', {}).values()) | set(ix.get('withdrawn', {}))
     raw = subprocess.run(['git', 'cat-file', '--batch-check=%(objectname) %(objecttype)'], cwd=cwd, capture_output=True,
                          input=''.join(f'{rows[o][0]}:{f}\n' for o, f in queries).encode('utf-8'))
     answers = raw.stdout.decode('utf-8', 'replace').splitlines() if not raw.returncode else []
@@ -1509,7 +1532,10 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
     if info.get('history') == 'replayed':
         checked = f" {info['verification']}" if info.get('verification') else ''
         out.append(f"{corpus}: earlier versions were rebuilt by applying each amending act, not read from an official text.{checked}")
-    current_only = info.get('history') == 'current-only' or (own and all(e.kind == 'baseline' for e in own))
+    # Starting texts only read as current text, unless the corpus says each is its act as enacted (audit row 79: the
+    # Indonesian builder credits each Perda as enacted to the publisher, Kind: publisher, dated by the Perda's own day).
+    current_only = info.get('history') == 'current-only' or (
+        info.get('history') != 'as-enacted' and own and all(e.kind == 'baseline' for e in own))
     if current_only and (not covered or date < covered):
         out.append(f"{corpus}: this record holds only the text as the publisher gave it on the day it was read; an "
                    "earlier date shows that text only from that day, not as the law was in force before.")
@@ -1664,9 +1690,20 @@ def explain_missing(date: str, path: str) -> str:
         return (f"{path} was not in force on {date}: its act ({latest_that_day['act']}) was {latest_that_day['ends']} "
                 f"on {gone['in_force']}" + (f" by {latest_that_day['law']}" if latest_that_day['law'] and
                                              '(data/acts.json)' not in latest_that_day['law'] else '') +
-                f", as the corpus's data/acts.json records; the record did not remove the file itself.{again}"
+                f", as the corpus's data/acts.json records; " + _end_removal(latest_that_day) + f".{again}"
                 + _not_reenacting(latest_that_day))
     return f"{path} was not in force on {date}: it was removed on {gone['in_force']} ({gone['law']}).{again}"
+
+
+def _end_removal(end_row: dict) -> str:
+    """Whether the record itself removes the files of an act data/acts.json ends: a correction deleting them from the
+    end day (or later) does (spain-law's repeals, audit row 64); else the end comes from data/acts.json alone."""
+    day_ = end_row.get('record_removes')
+    if not day_:
+        return 'the record did not remove the file itself'
+    if day_ == end_row['in_force']:
+        return 'the record removes the file from that day'
+    return f'the record removes the file from {day_}'
 
 
 def _not_reenacting(end_row: dict) -> str:
@@ -1808,8 +1845,14 @@ def _history(corpus: str, rel: str) -> list[dict]:
         # The act-end rule (after_end): a version dated after the end re-enacts the file only if its law was enacted
         # on or after the end, is not the law that ended the act, and is not a repeal note. A correction is cut at
         # the end too (correction_cap): one starting after it applies only once a later version re-enacted the file.
-        kept, dropped = [], []
+        kept, dropped, removes = [], [], None
         for h in out:
+            deletes = 'blob' in h and h['blob'] is None and not h.get('repeal_notice')
+            if h.get('corrects') and deletes and h['in_force'] >= end['day']:
+                # A correction that deletes the file from the end day on (spain-law c0980c9: Corrects: <act>
+                # <repeal day>..) is the record carrying out the end, not a later version to weigh (audit row 64).
+                removes = min(removes or h['in_force'], h['in_force'])
+                continue
             if h.get('corrects'):
                 cap = correction_cap(corpus, rel, h['in_force'])
                 if cap is not None and cap < h['in_force']:
@@ -1827,6 +1870,8 @@ def _history(corpus: str, rel: str) -> list[dict]:
                     'kind': 'law', 'enacted': None, 'published': None, 'blob': None, 'order': order + 0.5,
                     'ends': end['how'], 'act': end['act'],
                     'not_reenacting': [f"{h['in_force']} {h['law']} ({h['why']})" for h in dropped]})
+        if removes:
+            out[-1]['record_removes'] = removes  # the day a correction deletes the file: the end carried out
     retro = ix.get('retroactive')
     capture = capture_day(corpus)
     earliest = str(corpus_info(corpus).get('earliest') or '1500-01-01')
@@ -2468,7 +2513,8 @@ def capture_day(corpus: str) -> tuple[str, int, int] | None:
 # France's 5,527 "Fin de vigueur" commits), documentation. A word not listed is read as a law and named in the
 # caveats, never silently.
 _LAW_KINDS = {'', 'law', 'decree', 'amendment', 'act', 'amending law', 'lov', 'lbk', 'laki', 'ustawa', 'zakon',
-              'rozporządzenie', 'legal notice', 'ordinance', 'several', 'enacted', 'original', 'version', 'repeal'}
+              'rozporządzenie', 'legal notice', 'ordinance', 'several', 'enacted', 'original', 'version', 'repeal',
+              'asmade', 'as made', 'disallow'}  # Australia's Register: an instrument as made; a disallowance
 _START_KINDS = {'baseline', 'consolidated', 'current', 'current-only', 'current-text', 'publisher', 'consolidation',
                 'first published version (publisher)', 'tekst jednolity (current text)',
                 'start'}  # start: Liechtenstein's oldest version available of an act, the history before it to come
@@ -2482,7 +2528,8 @@ _START_WORDS = ('first version in the database', 'oldest version available', 'pu
 _UNCREDITED_WORDS = ('editorial', 'notes only', 'style only', 'no act named', 'no law named', 'no amending law',
                      'not identified', 'several candidate laws', 'credited to neither', 'no change to the',
                      'without a change', 'no change in the text', 'removed from the consolidation', 'layout',
-                     'typesetting', 'reprint', 'reverted')  # reverted: Monaco's earlier text put back, "aucune loi"
+                     'typesetting', 'reprint', 'reverted',  # reverted: Monaco's earlier text put back, "aucune loi"
+                     'unattributed', 'not attributable')  # Australia's Register: a compilation no one instrument made
 _CORRECTION_WORDS = ('retificação', 'rectificação', 'ispravak', 'sprostowanie')
 _LAW_WORDS = ('law', 'act', 'decree', 'decreto', 'regulation', 'instrument', 'notice', 'order in council', 'lei',
               'zákon', 'zakon', 'закон', 'ustav', 'uredba', 'constitution', 'constituicao', 'конституция',
@@ -3755,7 +3802,8 @@ def main(argv: list[str]) -> None:
             who = credit(h['law'], h['kind']) if h.get('kind') in ('uncredited', 'end') else h['law']
             print(f"{label} {h['in_force']}  {who}" + (f'  ({dates})' if dates else '')
                   + (f"  [repeal notice: {h['repeal_notice']}]" if h.get('repeal_notice') else '')
-                  + (f"  [act {h['act']}, from data/acts.json]" if h.get('ends') else '')
+                  + (f"  [act {h['act']}, from data/acts.json; {_end_removal(h)}]" if h.get('record_removes') else
+                     f"  [act {h['act']}, from data/acts.json]" if h.get('ends') else '')
                   + (f"  [not re-enacted by: {'; '.join(h['not_reenacting'])}]" if h.get('not_reenacting') else '')
                   + (f"  [date doubtful: {h['date_doubtful']}]" if h.get('date_doubtful') else ''))
         note(n for n in [partial_end_note(day('today'), args[0])] if n)

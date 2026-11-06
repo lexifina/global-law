@@ -1633,9 +1633,17 @@ class ActEndRule(unittest.TestCase):
                  Corrects='cor 2012-01-01..2025-12-31', Files='cor/s2.md', Reason='misprint')
         a.commit('Gazette 3', {'cor/s1.md': 'cor one, corrected\n'}, In_force='2021-01-01', Kind='correction',
                  Corrects='cor 2021-01-01..2025-12-31', Files='cor/s1.md', Reason='misprint')
+        # Spain's repeals (spain-law c0980c9, audit row 64): a dated correction from the end day that deletes the
+        # repealed act's files, beside the same end in data/acts.json.
+        a.commit('Act 7 of 2012', {'gone/s1.md': 'gone one\n', 'gone/s2.md': 'gone two\n'}, In_force='2012-03-01',
+                 Kind='law', Enacted='2012-02-01')
+        a.commit('Lexifina', {'gone/s1.md': None}, In_force='2020-06-01', Kind='correction',
+                 Corrects='gone 2020-06-01..2026-10-28', Files='gone/s1.md', Act_path='gone',
+                 Reason='remove the repealed normative files')
         acts = {'acts': [{'path': 'rep', 'status': 'repealed', 'repealed': '2015-01-01', 'repealed_by': 'Act 20 of 2016'},
                          {'path': 'ann', 'status': 'annulled', 'in_force': '2011-01-01', 'annulled': '2014-05-01'},
                          {'path': 'cor', 'status': 'repealed', 'repealed': '2020-01-01', 'repealed_by': 'Act 9 of 2019'},
+                         {'path': 'gone', 'status': 'repealed', 'repealed': '2020-06-01', 'repealed_by': 'Act 60 of 2019'},
                          {'path': 'other', 'status': 'in force'}]}
         a.commit('Lexifina', {'data/acts.json': json.dumps(acts)}, Kind='documentation')
         t.pin()
@@ -1765,6 +1773,27 @@ class ActEndRule(unittest.TestCase):
             self.assertEqual(law.versions_in_force('2023-01-01', 'aa/national/acts/cor/s2.md')[-1][1], 'Act 9 of 2019')
         finally:
             law.close_readers()
+
+    # Row 64: a correction from the end day that deletes the file is the record carrying out the end, not a later
+    # version that fails to re-enact it.
+    def test_a_repeal_correction_is_the_end_not_a_candidate(self):
+        out, err, code = self.t.cli('show', '2021-01-01', 'aa/national/acts/gone/s1.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertIn('was repealed on 2020-06-01 by Act 60 of 2019', err)
+        self.assertIn('the record removes the file from that day', err)
+        self.assertNotIn('did not remove the file itself', err)
+        self.assertNotIn('not read as re-enacting', err)
+        out, err, code = self.t.cli('log', 'aa/national/acts/gone/s1.md')
+        self.assertIn('repealed 2020-06-01  Act 60 of 2019  [act gone, from data/acts.json; the record removes the file '
+                      'from that day]', out, err)
+        self.assertNotIn('not re-enacted by', out)
+        # The file the correction leaves alone is ended by data/acts.json alone, and says so.
+        out, err, code = self.t.cli('show', '2021-01-01', 'aa/national/acts/gone/s2.md')
+        self.assertNotEqual(code, 0, out)
+        self.assertIn('the record did not remove the file itself', err)
+        out, err, code = self.t.cli('show', '2019-12-31', 'aa/national/acts/gone/s1.md')
+        self.assertEqual(out, 'gone one\n', err)
+        self.assertNotIn('gone/s1.md', self.tree_names('2021-01-01'))
 
 
 class BuiltTreeStore(unittest.TestCase):
@@ -2489,6 +2518,155 @@ class RestoredAfterWithdrawal(unittest.TestCase):
             self.assertNotEqual(code, 0, out)
         finally:
             t.close()
+
+class KindWords(unittest.TestCase):
+    """Audit row 77: Australia's Register writes Kind: Unattributed for a compilation no one instrument made (authored
+    by the Register itself), AsMade for an instrument as made, Disallow for a disallowance. Unattributed is not a law,
+    and the Register is not a law either."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus('au/federal/instruments')
+        a.commit('Federal Register of Legislation', {'reg/s1.md': 'one\n'}, In_force='2002-01-01', Kind='AsMade')
+        a.commit('Amending Regulation 2003', {'reg/s1.md': 'two\n'}, In_force='2003-01-01', Kind='Amend')
+        a.commit('Federal Register of Legislation', {'reg/s1.md': 'three\n'}, In_force='2004-01-01', Kind='Unattributed',
+                 Attribution='not attributable to one instrument (no reason recorded)')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_register_kinds_are_known(self):
+        law = self.t.law()
+        try:
+            self.assertEqual(law.kind_of('Unattributed'), ('uncredited', None))
+            self.assertEqual(law.kind_of('not attributable to one instrument'), ('uncredited', None))
+            self.assertEqual(law.kind_of('AsMade'), ('law', None))
+            self.assertEqual(law.kind_of('Disallow'), ('law', None))
+        finally:
+            law.close_readers()
+
+    def test_laws_lists_no_publisher(self):
+        out, err, code = self.t.cli('laws', '2000-01-01', '2026-12-31', 'au')
+        self.assertEqual(code, 0, err)
+        self.assertNotIn('Federal Register of Legislation', out)
+        self.assertIn('Amending Regulation 2003', out)
+        self.assertIn('2 changes no law is named for', err)
+        out, err, code = self.t.cli('show', '2005-01-01', 'au/federal/instruments/reg/s1.md')
+        self.assertNotIn('not recognised', err)
+
+
+class AsEnactedDeclared(unittest.TestCase):
+    """Audit row 79: the Indonesian builder credits each Perda as enacted to the publisher (Kind: publisher, dated by
+    the Perda's own day). A corpus that declares history as-enacted (data/repo.json, or corpus.json) is read so: the
+    as-enacted note, not "the text as the publisher gave it on the day it was read"."""
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        for path, history in (('id/lamongan/acts', 'as-enacted'), ('id/other/acts', None)):
+            a = t.corpus(path)
+            repo = {'country': 'ID-XX', 'name': path, 'publisher': 'JDIH X'}
+            if history:
+                repo['history'] = history
+            a.commit('Lexifina', {'data/repo.json': json.dumps(repo)}, Kind='documentation')
+            a.commit('JDIH X', {'perda-2016-012/pasal-001.md': 'Pasal 1\n'}, In_force='2016-12-05', Kind='publisher')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_declared_as_enacted_is_not_read_as_current_text(self):
+        law = self.t.law()
+        try:
+            self.assertEqual(law.corpus_info('id/lamongan/acts').get('history'), 'as-enacted')
+            notes = ' '.join(law.caveats('2017-01-01', 'id/lamongan/acts'))
+            self.assertIn('each law is shown as first published; later amendments are not applied', notes)
+            self.assertNotIn('on the day it was read', notes)
+            # Undeclared, the same commits still read as current text only.
+            self.assertIn('on the day it was read', ' '.join(law.caveats('2017-01-01', 'id/other/acts')))
+        finally:
+            law.close_readers()
+
+
+class NamedFilesScale(unittest.TestCase):
+    """Audit row 54: a correction whose Files: names a whole code (Texas: 54,826 paths in 7 corrections) is read with
+    one recursive ls-tree, not one <commit>:<path> lookup per named path, and builds the same tree."""
+
+    N = 20000
+    C = 'us/texas/acts'
+
+    @classmethod
+    def setUpClass(cls):
+        t = cls.t = Tree()
+        a = t.corpus(cls.C)
+        code = a.path / 'code'
+        code.mkdir()
+        for i in range(cls.N):
+            (code / f'f{i:05d}.md').write_bytes(f'section {i}\n'.encode('utf-8'))
+        run('add', '-A', cwd=a.path)
+        a.commit('Act 1 of 2010', {}, In_force='2010-01-01', Kind='law')
+        a.commit('Act 2 of 2015', {'code/f00001.md': 'section 1, amended\n'}, In_force='2015-01-01', Kind='law')
+        # The correction changes one file and names every file of the code (a message too long for a command line).
+        (code / 'f00000.md').write_bytes(b'section 0, corrected\n')
+        run('add', '-A', cwd=a.path)
+        names = ''.join(f'Files: code/f{i:05d}.md\n' for i in range(cls.N))
+        msg = a.path.parent / 'msg.txt'
+        msg.write_text('Publisher\n\nKind: correction\nIn-force: 2012-01-01\nCorrects: code 2012-01-01..2014-12-31\n'
+                       + names, encoding='utf-8')
+        env = {'GIT_AUTHOR_NAME': 'Publisher', 'GIT_AUTHOR_EMAIL': 'p@example.org', 'GIT_COMMITTER_NAME': 't',
+               'GIT_COMMITTER_EMAIL': 't@example.org'}
+        run('commit', '-q', '-F', str(msg), cwd=a.path, env=env)
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_one_ls_tree_per_correction_and_the_same_tree(self):
+        import subprocess as sp
+        fast, slow = self.t.law(), self.t.law()
+        slow.NAMED_TREE_MIN = 10 ** 9  # the per-path lookup, as before
+        # What _named_at asks git, for the paths the correction names but does not change.
+        calls = {'ls-tree -r': 0, 'ls-tree': 0, 'cat-file paths': 0}
+        git, run_, named_at = fast.git, sp.run, fast._named_at
+        active = []
+
+        def counted_git(*args, **kw):
+            if active and args[:1] == ('ls-tree',):
+                calls['ls-tree -r' if args[1:2] == ('-r',) else 'ls-tree'] += 1
+            return git(*args, **kw)
+
+        def counted_run(cmd, *args, **kw):
+            if active and isinstance(cmd, list) and 'cat-file' in cmd and kw.get('input'):
+                calls['cat-file paths'] += kw['input'].count(b'\n')
+            return run_(cmd, *args, **kw)
+
+        def counted_named_at(*args, **kw):
+            active.append(1)
+            try:
+                return named_at(*args, **kw)
+            finally:
+                active.pop()
+
+        try:
+            fast.git, sp.run, fast._named_at = counted_git, counted_run, counted_named_at
+            try:
+                fast.file_index(self.C)
+            finally:
+                fast.git, sp.run, fast._named_at = git, run_, named_at
+            self.assertEqual(calls, {'ls-tree -r': 1, 'ls-tree': 0, 'cat-file paths': 0})
+            for date in ('2011-01-01', '2013-01-01', '2016-01-01'):
+                self.assertEqual(fast.corpus_tree(date, self.C), slow.corpus_tree(date, self.C), date)
+            out, err, code = self.t.cli('show', '2013-01-01', f'{self.C}/code/f00000.md')
+            self.assertEqual(out, 'section 0, corrected\n', err)
+        finally:
+            fast.close_readers()
+            slow.close_readers()
+
 
 if __name__ == '__main__':
     unittest.main()
