@@ -1624,7 +1624,9 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
     if note:
         out.append(note)
     missing = [EFFECTS[e] for e in EFFECTS if e not in effects_of(corpus)]
-    if own and missing and info.get('history') not in ('metadata-only',):
+    # Court decisions have no Modifies:/Applies:/transitional rules to hold: the note is about law, so it is not given
+    # for a case-law corpus (found by the NL speed gate, 2026-11-06).
+    if own and missing and info.get('history') not in ('metadata-only',) and not is_caselaw({'path': corpus, **info}):
         out.append(f"{corpus}: this record changes the text on each change's in-force date only; it does not hold "
                    f"{', '.join(missing)}, so the text shown may not be the whole law that applied on {date}.")
     odd = _index(corpus)['unknown'] if own else set()

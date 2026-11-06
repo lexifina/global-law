@@ -109,6 +109,9 @@ class CaseLaw(unittest.TestCase):
     def test_law_py_reads_a_decision(self):
         path = f'{CASES}/{D1}'
         self.assertIn('wird gutgeheissen', self.cli('show', '2012-01-01', path))
+        # the law-record note on Modifies:/Applies: is about law, not court decisions
+        self.assertNotIn('Modifies:', self.cli('show', '2012-01-01', path))
+        self.assertNotIn('Modifies:', self.cli('blame', '2012-01-01', path))
         self.assertIn('ist gutzuheissen', self.cli('show', '2010-06-01', path))
         log = self.cli('log', path)
         self.assertIn('Bundesgericht 1C_100/2010', log)
