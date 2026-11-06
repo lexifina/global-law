@@ -12,12 +12,13 @@ You need git and Python 3.9 or newer (macOS's own `python3` will do). Nothing el
 the law you need. For Romania:
 
 ```sh
-git clone https://github.com/lexifina/global-law && cd global-law
+git clone --depth 1 https://github.com/lexifina/global-law && cd global-law
 python3 tools/countries.py add romania
 claude      # or open the folder in Cursor, VS Code or Codex
 ```
 
-The first command fetches the shared index of every country without any country's law (about 400 MB). The second
+The first command fetches the shared index of every country without any country's law, and without the index's own
+history, which the tools never read (see the README's Start). The second
 downloads Romania's history alone (about 1.7 GB on 4 November 2026, several minutes; most countries are far smaller). Ask
 about Romanian law and the server answers from it; ask about a country you have not added and it tells
 you the command that adds it. Add more countries at any time (`python3 tools/countries.py add france spain`); a
@@ -47,7 +48,7 @@ To start the server by hand, `sh tools/mcp.sh` speaks MCP on stdin and stdout.
 The first answer after starting reads the whole timeline and lists every corpus, a few seconds on a full checkout. The
 server does that as soon as it starts, so by the time a client asks, it is usually done.
 
-On large corpora (Malta has about 7,000 commits and 67,000 files), a provision's history is a path-limited `git log`.
+On large corpora (tens of thousands of commits and files), a provision's history is a path-limited `git log`.
 Writing each corpus's commit graph with changed-path filters makes it about three times faster. This writes only
 git's own index under `.git`, never the law files:
 
@@ -85,8 +86,8 @@ What the model sees:
   behind its pin after `git pull` without `git submodule update`, or a shallow clone) is not served either. Every
   answer over several corpora names it on a "Left out:" line with the command that fixes it, as `law.py world` does,
   and a path or `jurisdiction` in it gets that command as its error.
-- An answer over every jurisdiction (a search, `laws_between`, `world_on_date`) ends with "Served here: 1 of the 107
-  corpora in the tree; the other 106 were not searched", so "nothing found" is not read as nothing in the law.
+- An answer over every jurisdiction (a search, `laws_between`, `world_on_date`) ends with "Served here: N of the M corpora in
+  the tree; the other K were not searched" (the counts of this clone), so "nothing found" is not read as nothing in the law.
 - A path or `jurisdiction` in a country left out gets an error naming the command that adds it. `resolve_citations`
   marks such a citation `not served here`, and `find_provision` flags an alias that points to one.
 - The server's instructions tell the model to pass that command to the user, not to answer from memory.
@@ -232,7 +233,7 @@ The pointer loop runs this before it moves a pin, so such a commit is not pinned
 ## Tools
 
 To browse a large corpus by act, give `list_provisions` the start of a folder name, for example
-`mt/national/malta-law/sl/586.` for every instrument under Malta's Data Protection Act. You get one row per act, with
+`malta/national/acts/sl/586.` for every instrument under Malta's Data Protection Act. You get one row per act, with
 its title and last change.
 
 | Tool | What it answers |
@@ -284,18 +285,18 @@ link for a version, the answer says so rather than offer this tree.
 
 ## Long provisions and long calls
 
-- **Long texts come in parts.** `read_law`, `compare_dates` and `who_wrote` give at most 40,000 characters of text at a
-  time (about 10,000 tokens; `max_chars` sets 1,000 to 100,000). A longer text says "Part: characters 0 to 39,958 of
+- **Long texts come in parts.** `read_law`, `compare_dates` and `who_wrote` give at most <!-- fig:page_chars -->40,000<!-- /fig --> characters of text at a
+  time (about 10,000 tokens; `max_chars` sets <!-- fig:page_least -->1,000<!-- /fig --> to <!-- fig:page_most -->100,000<!-- /fig -->). A longer text says "Part: characters 0 to 39,958 of
   6,541,961. For the next part, call again with offset=39958", and the structured answer gives the same as
   `text_part`, `word_diff_part`, `marked_part` or `lines_part`. Parts end at a line break or a space. One Spanish order
   is 6.5 MB, and over a thousand files pass 100 KB. `read_law` with `include_text: false` gives the length
   (`text_chars`), so a model can go straight to the end of a long act.
-- **Other answers stop at 60,000 characters**, at a line break, and say how to narrow the question.
-- **No call runs past 120 seconds**, whether the time goes to git or to the server's own work, such as comparing
+- **Other answers stop at <!-- fig:answer_chars -->60,000<!-- /fig --> characters**, at a line break, and say how to narrow the question.
+- **No call runs past <!-- fig:call_seconds -->120<!-- /fig --> seconds**, whether the time goes to git or to the server's own work, such as comparing
   versions. A git process still running then is killed.
-- **`who_wrote` stays quick on long provisions.** It credits by word up to 100,000 characters, and by line (git blame)
-  past that or when the word-by-word pass takes more than 30 seconds, and says so (`fell_back`). Tracing words brought
-  back after a temporary change ended is skipped for long provisions with many versions and stopped after 20 seconds
+- **`who_wrote` stays quick on long provisions.** It credits by word up to <!-- fig:words_max -->100,000<!-- /fig --> characters, and by line (git blame)
+  past that or when the word-by-word pass takes more than <!-- fig:words_seconds -->30<!-- /fig --> seconds, and says so (`fell_back`). Tracing words brought
+  back after a temporary change ended is skipped for long provisions with many versions and stopped after <!-- fig:restore_seconds -->20<!-- /fig --> seconds
   otherwise; the answer says so (`traced`).
 - **The server keeps answering while a call runs.** Tool calls and resource reads run in order on a worker thread;
   everything else, `ping` included, is answered at once. `notifications/cancelled` stops the call it names: its git
@@ -323,20 +324,21 @@ an option.
 - Paths must stay inside the tree: no `..`, absolute paths, drive letters, colons or wildcards.
 - Commit hashes must be hexadecimal, and `law_details` reads only commits in the history the tree pins, never another
   branch or an unreachable draft in a maintainer's clone.
-- Text arguments are limited to 300 characters with no control characters. Arguments a tool's schema does not name are
+- Text arguments are limited to <!-- fig:text_limit -->300<!-- /fig --> characters, except the text `resolve_citations` reads
+  (<!-- fig:brief_limit -->50,000<!-- /fig --> characters), and none may hold control characters. Arguments a tool's schema does not name are
   refused, as are ids that are not strings or integers.
 - Only git runs a model-supplied regular expression, never Python's backtracking engine. Patterns that could still take
   exponential time are refused: a repeated group that holds a quantifier, an alternation or another group, or a
   back-reference.
 - Git never runs a text-conversion filter or an external diff driver (`--no-textconv --no-ext-diff`), even when a
   checkout's attributes name one that your git config defines.
-- Each tool call has 120 seconds in all, in git and in the server's own work, after which it stops and says so. A
+- Each tool call has <!-- fig:call_seconds -->120<!-- /fig --> seconds in all, in git and in the server's own work, after which it stops and says so. A
   client can cancel a call, and the server answers other requests while one runs. Long texts come in parts. Lists are
   capped and say when they were cut. Searches look at no more commits than they show, and `resolve_citations` looks up
-  at most 100 provisions.
+  at most <!-- fig:citations_limit -->100<!-- /fig --> provisions.
 - A client that stops reading cannot keep the server alive: a broken pipe drops the remaining work, and after stdin
-  closes a reply stalled for 10 seconds ends the process.
-- A message is limited to 1 MB. Bytes that are not UTF-8, JSON nested too deep and numbers too long to read are
+  closes a reply stalled for <!-- fig:stuck_seconds -->10<!-- /fig --> seconds ends the process.
+- A message is limited to <!-- fig:message_mb -->1<!-- /fig --> MB. Bytes that are not UTF-8, JSON nested too deep and numbers too long to read are
   answered with a parse error. A corpus that is not checked out, or not readable at its pin, narrows an answer and is
   named; it does not stop the server. An internal error reports only its type, and the details go to stderr.
 - Law text, change notes and judgment notes are passed on as data. The instructions tell the model they are never

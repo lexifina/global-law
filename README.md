@@ -35,14 +35,14 @@ python3 tools/law.py show 2022-05-01 united-states/federal/usc/title-11/1182.md
 
 On Windows, type `py` or `python` where these say `python3`.
 
-`--depth 1` downloads about 34 MB instead of the index's whole history (about 370 MB). The tools never read that
+`--depth 1` downloads the index without its whole history, a fraction of the size. The tools never read that
 history, so they work the same. To have it without its file contents, clone with `--filter=blob:none` instead. For
 every country, add `--recurse-submodules`. Don't clone a country's repository with `--depth`: its dates are read from
 its whole history, and `countries.py add` fetches all of it.
 
 ## From an AI model (MCP)
 
-`tools/mcp_server.py` is a Model Context Protocol server with 18 read-only tools: find a provision, read it on a date,
+`tools/mcp_server.py` is a Model Context Protocol server with <!-- fig:tools -->18<!-- /fig --> read-only tools: find a provision, read it on a date,
 who wrote each word, compare dates, a provision's history, search the text and the changes, and check a case or a
 brief against the law in force. It needs only Python 3.9+ and git, runs on your machine and makes no network calls.
 

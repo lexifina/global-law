@@ -2489,6 +2489,49 @@ class DescriptionExamplesResolve(unittest.TestCase):
                 self.assertTrue(any(self.m.scoped(c, ex) is not None for c in self.corpora), ex)
 
 
+class DocFigures(unittest.TestCase):
+    """Audit row 92: limits stated in README.md and MCP.md are marked spans written from the server's constants by
+    tools/doc_figures.py; a constant changed without rerunning it fails here."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import doc_figures
+        cls.d = doc_figures
+
+    def test_every_marked_figure_is_current(self):
+        self.assertEqual(self.d.run(check=True), [], 'run python tools/doc_figures.py')
+
+    def test_a_stale_or_unknown_figure_is_found(self):
+        values = self.d.figures()
+        new, found = self.d.rewrite('<!-- fig:text_limit -->299<!-- /fig --> and <!-- fig:nothing -->1<!-- /fig -->',
+                                    values)
+        self.assertEqual(len(found), 2, found)
+        self.assertIn(f'<!-- fig:text_limit -->{values["text_limit"]}<!-- /fig -->', new)
+
+    def test_every_stated_text_limit_is_one_mcp_md_gives(self):
+        """The text limit and its one exception are in MCP.md, and no tool states another."""
+        values = self.d.figures()
+        mcp = (ROOT / 'MCP.md').read_text(encoding='utf-8')
+        self.assertIn(f'<!-- fig:text_limit -->{values["text_limit"]}<!-- /fig -->', mcp)
+        self.assertIn(f'<!-- fig:brief_limit -->{values["brief_limit"]}<!-- /fig -->', mcp)
+        import mcp_server
+        r = mcp_server.handle({'jsonrpc': '2.0', 'id': 1, 'method': 'tools/list', 'params': {}})['result']
+        stated = {f'{int(n):,}' for t in r['tools'] for p in t['inputSchema']['properties'].values()
+                  for n in re.findall(r'Up to (\d+) characters', p.get('description', ''))}
+        self.assertTrue(stated and stated <= {values['text_limit'], values['brief_limit']}, stated)
+
+    def test_no_server_limit_typed_by_hand(self):
+        """The constants the documents state appear only inside marks: a figure typed by hand drifts."""
+        values = self.d.figures()
+        for name in self.d.DOCS:
+            text = self.d.SPAN.sub('', (ROOT / name).read_text(encoding='utf-8'))
+            for fig in ('text_limit', 'brief_limit', 'page_chars', 'answer_chars', 'words_max'):
+                with self.subTest(doc=name, figure=fig):
+                    self.assertNotRegex(text, rf'\b{re.escape(values[fig])} characters', f'{name}: {fig} typed by hand')
+
+
 class ListJurisdictionsExample(unittest.TestCase):
     """Audit row 91: list_jurisdictions' example path is a provision, and a corpus's own notes at its root
     (CHANGES.md) are not counted as provision files."""
