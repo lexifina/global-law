@@ -4259,6 +4259,94 @@ def de_article_paths(m) -> list[str]:
     return out
 
 
+# Poland ---------------------------------------------------------------------------------------------------------------
+PL_ACTS = 'poland/national/acts'
+
+
+@lru_cache(maxsize=1)
+def pl_aliases() -> dict:
+    """data/pl-aliases.json: 'acts' (abbreviation key: no spaces or dots, lower case -> act folder of lexifina/poland-law,
+    kept only where the folder exists) and 'forms' (key -> the abbreviations as courts write them: "k.c.", "kc",
+    "Konstytucji RP"). Codes poland-law does not hold yet (k.p.a., k.r.o., k.w., p.p.s.a. ...) are absent, so their
+    citations stay unresolved rather than guessed."""
+    try:
+        return json.loads((ROOT / 'data' / 'pl-aliases.json').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        try:
+            return json.loads(law.git('show', 'HEAD:data/pl-aliases.json', check=False) or '{}')
+        except (ValueError, SystemExit, RuntimeError, OSError):
+            return {}
+
+
+def pl_key(abbr: str) -> str:
+    return re.sub(r'[\s.]', '', abbr).lower()
+
+
+_PL_SUP = str.maketrans('⁰¹²³⁴⁵⁶⁷⁸⁹', '0123456789')
+
+
+def _pl_article_rx():
+    """'art. 415 k.c.', 'art. 22¹ § 1 k.p.', 'art. 77[1] k.p.', 'art. 58 § 1 i 2 k.c.', 'art. 32 ust. 1 Konstytucji RP':
+    the article (with a superscript or bracketed index and letters), its §/ust./pkt parts, then an abbreviation the
+    table holds. Bounded repetition, so a long run of numbers cannot make the match backtrack."""
+    forms = sorted({f for fs in pl_aliases().get('forms', {}).values() for f in fs}, key=lambda f: (-len(f), f))
+    alt = '|'.join(re.escape(f).replace(r'\.', r'\.\s?') for f in forms) or r'(?!x)x'
+    return re.compile(r'\bart(?:ykuł|ykułu|\.)?\s*(?P<num>\d{1,4})\s*(?P<sup>[⁰¹²³⁴⁵⁶⁷⁸⁹]{1,3}|\[\d{1,3}\]|\^\d{1,3})?\s*'
+                      r'(?P<let>[a-z]{0,2})(?![a-z])'
+                      r'(?:\s*(?:§|ust\.|pkt|zd\.|lit\.)\s*[\w\[\]]{1,6}(?:\s*(?:i|oraz|,)\s*\d{1,4}[a-z]?){0,6}){0,6}'
+                      r'\s*(?P<abbr>' + alt + r')(?![\wąćęłńóśźż])', re.I)
+
+
+PL_ARTICLE = _LazyRegex(_pl_article_rx)
+# Polish case numbers (sygnatura akt): "II CSK 123/20" (Sąd Najwyższy), "I ACa 456/19" (sąd apelacyjny), "II OSK 123/20"
+# (NSA), "III SA/Wa 1234/19" (WSA), "SK 12/20", "Kp 1/19" (Trybunał Konstytucyjny), "KIO 1234/20". Division codes of
+# more than one letter only: single letters ("II C 123/20") are German Aktenzeichen too, so they are found through
+# law_details and the decision index but not claimed as a citation form.
+PL_DOCKET = re.compile(r'(?<![\w/.-])(?:(?:[IVX]{1,5}\s+(?:A?Ca|A?Cz|CSKP?|CNPP?|CZP|CO|CKN|CSP|Nc|Ns|Nsm|GCo|GNc|GNs|A?Ga|GCz|'
+                       r'A?Pa|A?Ua|A?Ka|A?Kz|Kp|KK|KZP|KO|KS|OSK|FSK|GSK|OZ|FZ|GZ|OPS|FPS|GPS|SA(?:B)?/[A-Z][a-z]{1,2}|UK|UZP|PK|PZP|'
+                       r'NSNc|NSK|NSW|NSKP|NSP|SNo))|(?:SK|Kp|Ts|Tw|Pp)|KIO(?:/UZP)?)\s+\d{1,5}/\d{2}(?![\d/])')
+
+
+# Any sygnatura, single-letter divisions too ("I C 123/20", "II K 336/17"), for law_details only, where a decision is
+# looked up by name and nothing is claimed for one country's citation forms.
+PL_ANY_DOCKET = re.compile(r'(?<![\w/.-])[IVX]{1,5}\s+[A-Z][A-Za-z]{0,4}(?:/[A-Z][a-z]{1,2})?\s+\d{1,5}/\d{2}(?![\d/])')
+
+
+def pl_corpus() -> tuple[str, str | None]:
+    """Poland's law in this tree (its path, and its pinned commit when this server serves it)."""
+    path = next((c['path'] for c in _full_manifest(head())['corpora'] if iso_code(c) == 'pl' and not law.is_caselaw(c)
+                 and c['path'].endswith('/acts')), PL_ACTS)
+    served = any(c['path'] == path for c in law.manifest()['corpora']) and (ROOT / path / '.git').exists()
+    return path, (corpus_head(path) or None) if served else None
+
+
+@lru_cache(maxsize=256)
+def pl_act_files(corpus: str, sha: str, folder: str) -> dict[str, str]:
+    """An act folder's article files by number without leading zeros: art-415.md -> '415', art-022-1a.md -> '22-1a'."""
+    out = {}
+    for n in names_of(corpus, sha):
+        m = re.fullmatch(re.escape(folder) + r'/art-([0-9a-z-]+)\.md', n)
+        if m:
+            out.setdefault('-'.join(re.sub(r'^0+(?=\d)', '', p) for p in m.group(1).split('-')), n)
+    return out
+
+
+def pl_article_paths(m) -> list[str]:
+    """The file a Polish article citation names: the act by its abbreviation (data/pl-aliases.json), the article by its
+    number, superscript index and letters (art. 22¹ k.p. is kodeks-pracy/art-022-1.md); [] where the record lacks the act."""
+    folder = pl_aliases().get('acts', {}).get(pl_key(m.group('abbr')))
+    if not folder:
+        return []
+    sup = (m.group('sup') or '').translate(_PL_SUP).strip('[]^')
+    key = str(int(m.group('num'))) + (f'-{int(sup)}' if sup else '') + (m.group('let') or '').lower()
+    corpus, sha = pl_corpus()
+    files = pl_act_files(corpus, sha, folder) if sha else {}
+    if key in files:
+        return [f'{corpus}/{files[key]}']
+    pad = f"{int(m.group('num')):03d}" + (f'-{int(sup)}' if sup else '') + (m.group('let') or '').lower()
+    return [f'{corpus}/{folder}/art-{pad}.md']
+
+
 class CitationForm:
     """One citation form: `country` (ISO code), `rx` over free text, `to_path` from a match to a path or a list of
     paths ([] where the record cannot place it), `examples` of that country's citations it must claim. `open_name`:
@@ -4324,6 +4412,14 @@ CITATION_REGISTRY = [
     # German decisions by Aktenzeichen, to the decision's file in the case law served (decision-index.tsv).
     CitationForm('de', DE_DOCKET, lambda m: decision_paths(m.group(0)),
                  ('1 BvR 123/20', 'VI ZR 123/20', '2 C 12.19', 'IX R 12/19', '5 AZR 123/19', '35 W (pat) 12/19')),
+    # Poland: an article of a code by its abbreviation ("art. 415 k.c.", "art. 22¹ § 1 k.p.", "art. 32 ust. 1 Konstytucji
+    # RP"), to poland-law's files (data/pl-aliases.json); codes poland-law does not hold yet are left unresolved.
+    CitationForm('pl', PL_ARTICLE, lambda m: pl_article_paths(m),
+                 ('art. 415 k.c.', 'art. 22¹ § 1 k.p.', 'art. 58 § 1 i 2 k.c.', 'art. 189 k.p.c.', 'art. 32 ust. 1 Konstytucji RP',
+                  'art. 148 § 1 k.k.')),
+    # Polish judgments by case number (sygnatura), to the judgment's file in the case law served (decision-index.tsv).
+    CitationForm('pl', PL_DOCKET, lambda m: decision_paths(m.group(0)),
+                 ('II CSK 123/20', 'I ACa 456/19', 'II OSK 123/20', 'III SA/Wa 1234/19', 'SK 12/20', 'KIO 1234/20')),
     # Every other country's ECLI, read the same way: its decisions resolve once a case-law corpus of that country is
     # served (decision_paths finds them by file name), and nothing is claimed for a country the tree has no case law of.
     *[CitationForm(cc, re.compile(rf'\bECLI:{cc.upper()}:[A-Z0-9]{{1,7}}:\d{{4}}:[A-Z0-9.]{{1,25}}(?![A-Za-z0-9])', re.I),
@@ -4549,7 +4645,8 @@ def t_law_details(args: dict) -> tuple[str, dict]:
     # that names case law; a law's name is not looked for among a million decisions' authors.
     fr = FR_DECISION.search(law_name) if law_name else None
     decided = (fr_decision_paths(fr) if fr else decision_paths(law_name)) if law_name and (
-        fr or DECISION_REF.search(law_name) or DE_DOCKET.search(law_name)) else []
+        fr or DECISION_REF.search(law_name) or DE_DOCKET.search(law_name) or PL_DOCKET.search(law_name)
+        or PL_ANY_DOCKET.search(law_name)) else []
     corpora = [c['path'] for c in law.manifest()['corpora'] if (not corpus or c['path'].startswith(corpus))
                and (not law.is_caselaw(c) or commit or (corpus and law.names_caselaw(corpus))
                     or any(p.startswith(c['path'] + '/') for p in decided))]
