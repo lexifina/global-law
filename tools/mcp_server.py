@@ -866,12 +866,39 @@ def _folder_titles(corpus: str, sha: str) -> dict[str, dict]:
                                      'status': str(r.get('status') or ''), 'latest': str(r.get('latest') or '')}
     if out:
         return out
-    readmes = tuple(n for n in law.git('ls-tree', '-r', '--name-only', sha, cwd=ROOT / corpus).splitlines()
-                    if n.endswith('/README.md') and not NOT_LAW.search(n.rsplit('/', 1)[0] + '/x.md'))
-    if not readmes or len(readmes) > 50_000:
-        return {}
-    heads = read_headings(corpus, sha, readmes)
-    return {n.rsplit('/', 1)[0]: {'title': h, 'names': [h], 'status': '', 'latest': ''} for n, h in heads.items() if h}
+    heads = readme_titles(corpus, sha)
+    return {f: {'title': h, 'names': [h], 'status': '', 'latest': ''} for f, h in heads.items() if h}
+
+
+def readme_titles(corpus: str, sha: str) -> dict[str, str]:
+    """Each act folder's README heading, for a corpus with no data/acts.json: one `git grep -m1` (git reads the blobs
+    in its own threads and prints only the first heading line of each), kept on disk per corpus commit. Reading every
+    README through cat-file read the whole of each (the Netherlands: 35,466 READMEs, each a table of its provisions)
+    and took over 120 s in every new process (measured 2026-11-06)."""
+    cache = law._store() / f"titles-{re.sub(r'[^A-Za-z0-9]+', '-', corpus)}-{sha[:12]}.json"
+    try:
+        return json.loads(cache.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        pass
+    done = git_run(['git', '-c', 'core.quotePath=false', 'grep', '-m1', '-I', '--no-color', '-e', '^#', sha, '--', '*README.md'],
+                   cwd=ROOT / corpus, capture_output=True, timeout=GIT_TIMEOUT)
+    out: dict[str, str] = {}
+    for line in done.stdout.decode('utf-8', 'replace').splitlines():
+        _, _, rest = line.partition(':')            # "<sha>:<path>:<heading line>"
+        path, _, heading = rest.partition(':')
+        if not path.endswith('/README.md') or NOT_LAW.search(path.rsplit('/', 1)[0] + '/x.md'):
+            continue
+        h = heading.lstrip('#').strip()
+        if h:
+            out.setdefault(path.rsplit('/', 1)[0], h)
+    if len(out) > 50_000:
+        out = {}
+    try:
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_text(json.dumps(out, ensure_ascii=False), encoding='utf-8')
+    except OSError:
+        pass
+    return out
 
 
 # Romanian (and other) act citations: "Legea nr. 31/1990", "OUG 195/2002", "H.G. nr. 1/2016", "Legea nr. 31 din 16
@@ -4027,11 +4054,15 @@ def nl_aliases() -> dict:
 
 def _nl_article_rx():
     """'artikel 6:162 BW', 'art. 8:69 Awb', 'artikel 3:40 lid 2 BW', 'art. 359a Sv', 'artikel 310 Sr': an article, its
-    lid/onder, then an abbreviation the table holds (only real ones, so "art. 14 CE" or "Art. 336 OR" is never Dutch)."""
+    lid/onder, then an abbreviation the table holds (only real ones, so "art. 14 CE" or "Art. 336 OR" is never Dutch).
+    The bare form with a book or chapter ('6:162 BW', '8:69 Awb'), common in Dutch writing and in a find_provision
+    query, is read too; a bare number with no colon ('162 BW') is not, as it could be anything. Before 2026-11-06 a
+    bare '6:162 BW' fell through to the title search, which read all 35,466 act READMEs of the Dutch law (over 120 s)."""
     t = nl_aliases()
     names = sorted({n for forms in t.get('forms', {}).values() for n in forms if len(n) >= 2}, key=lambda n: (-len(n), n))
     abbr = '|'.join(re.escape(n) for n in names + ['BW']) or r'(?!x)x'
-    return re.compile(r'(?<![\w.])[Aa]rt(?:ikel|\.)?\s*(?P<num>\d+[a-z]{0,3}(?::\d+[a-z]{0,3})?)(?![\w:])'
+    return re.compile(r'(?<![\w.:/])(?:[Aa]rt(?:ikel|\.)?\s*(?=\d)|(?=\d+[a-z]{0,3}:\d))'
+                      r'(?P<num>\d+[a-z]{0,3}(?::\d+[a-z]{0,3})?)(?![\w:])'
                       r'(?:,?\s*(?:lid|leden)\s*\d+[a-z]?(?:\s*(?:en|,|-|t/m)\s*\d+[a-z]?)*)?'
                       r'(?:,?\s*(?:aanhef\s+en\s+)?(?:onder|sub)\s*[a-z0-9]{1,3}°?)?'
                       r',?\s*(?:van\s+(?:de|het)\s+)?(?P<abbr>' + abbr + r')(?![\w])')

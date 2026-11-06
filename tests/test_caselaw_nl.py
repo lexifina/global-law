@@ -60,7 +60,10 @@ class DutchCaseLaw(unittest.TestCase):
         law = t.corpus(LAW)
         law.commit('Stb. 1992, 422', {'bw-boek-6/art-162.md': '1 Hij die jegens een ander een onrechtmatige daad pleegt, '
                                                              'is verplicht de schade te vergoeden.\n',
-                                      'awb/art-08-069.md': '1 De bestuursrechter doet uitspraak op de grondslag van het beroepschrift.\n'},
+                                      'awb/art-08-069.md': '1 De bestuursrechter doet uitspraak op de grondslag van het beroepschrift.\n',
+                                      'bw-boek-6/README.md': '# Burgerlijk Wetboek Boek 6\n\n| Provision | File |\n| --- | --- |\n'
+                                                             '| Art. 162 | [art-162.md](art-162.md) |\n',
+                                      'awb/README.md': '# Algemene wet bestuursrecht\n\n# Not the title\n'},
                    In_force='1992-01-01', Kind='law')
         cls.v2020 = law.commit('Stb. 2020, 5', {'bw-boek-6/art-162.md': '1 Hij die jegens een ander een onrechtmatige daad '
                                                                         'pleegt, welke hem kan worden toegerekend, is verplicht '
@@ -236,6 +239,23 @@ class DutchCaseLaw(unittest.TestCase):
         self.assertIn(f'{CASES}/{D1}', text)
         self.assertNotIn('EVRM', json.dumps([h.get('path') for h in cites['data'].get('citations', [])]))
 
+    def test_bare_citation_and_readme_titles_are_fast(self):
+        """Speed gate on the real Dutch case law (2026-11-06): find_provision "6:162 BW" (no "artikel") fell through to
+        the act-title search, which read all 35,466 act READMEs of the Dutch law in full: over 120 s in every process.
+        Now the bare form is a citation, and act titles come from one git grep of each README's first heading, kept on
+        disk per corpus commit."""
+        (found,) = self.calls(('find_provision', {'query': '6:162 BW'}))
+        self.assertFalse(found['error'], found['text'])
+        self.assertTrue(found['text'].startswith(ART), found['text'])
+        code = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server as m, law\n'
+                f'c = "{LAW}"; sha = m.corpus_head(c)\n'
+                'print(json.dumps([m.readme_titles(c, sha), sorted(p.name for p in law._store().glob("titles-*.json"))]))\n')
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', code], cwd=self.t.root, capture_output=True, encoding='utf-8', timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        titles, cached = json.loads(done.stdout)
+        self.assertEqual(titles, {'bw-boek-6': 'Burgerlijk Wetboek Boek 6', 'awb': 'Algemene wet bestuursrecht'})
+        self.assertTrue(cached, 'the titles are kept on disk')
+
     def test_dutch_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))
         import mcp_server as m
@@ -246,6 +266,13 @@ class DutchCaseLaw(unittest.TestCase):
             self.assertIsNotNone(hit, text)
             self.assertEqual((hit.group('abbr'), hit.group('num')), (abbr, num), text)
         for other in ('artikel 6 EVRM', 'art. 14 CE', 'Art. 336 OR', 'Art. 16a Abs. 1 GG', 'art. 1902 CC'):
+            self.assertIsNone(m.NL_ARTICLE.search(other), other)
+        # The bare form with a book or chapter is Dutch too; a bare number without one is not read.
+        for text, abbr, num in (('6:162 BW', 'BW', '6:162'), ('zie 8:69 Awb', 'Awb', '8:69'), ('3:40 lid 2 BW', 'BW', '3:40')):
+            hit = m.NL_ARTICLE.search(text)
+            self.assertIsNotNone(hit, text)
+            self.assertEqual((hit.group('abbr'), hit.group('num')), (abbr, num), text)
+        for other in ('162 BW', 'ECLI:NL:HR:2019:162 BW', '2019/6:162 BW', 'om 12:30 uur'):
             self.assertIsNone(m.NL_ARTICLE.search(other), other)
         t = m.nl_aliases()
         self.assertEqual(t['bw_books']['6'], 'bw-boek-6')
