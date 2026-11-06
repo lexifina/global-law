@@ -2142,6 +2142,10 @@ def t_read_law(args: dict) -> tuple[str, dict]:
     head_lines[1:1] = cite_lines(st['cite'])
     partial = run_law(law.partial_end_note, date, path)  # an act's end whose scope the record leaves unresolved
     st['caveats'] = st['caveats'] + ([partial] if partial else [])
+    fresh = law.freshness_note(date, path)  # how current the record is, when the date asked is after its last check
+    if fresh:
+        st['freshness'] = fresh
+        st['caveats'] = st['caveats'] + [fresh]
     head_lines += [f'Note: {c}' for c in st['caveats']]
     beyond = beyond_the_words(date, path)
     head_lines += [f'Not the whole answer: {b}' for b in beyond]

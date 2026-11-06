@@ -1,0 +1,89 @@
+{
+ "note": "Freshness of every corpus here: when it was last checked against its official source, how, and whether global-law holds its newest commit. One row per corpus in data/freshness.tsv; `python tools/freshness.py <corpus or provision path>` reads them. A status is as of `as_of`; a corpus checked longer ago than its threshold has since become stale.",
+ "schema": "global-law-freshness/1",
+ "as_of": "2026-11-06",
+ "statuses": {
+  "current": "checked against the official source within its threshold, and global-law holds the newest commit",
+  "pending-change": "the corpus has a newer commit than the one pinned here: a check held it, or the next pass will pin it",
+  "stale": "not checked against the official source within its threshold",
+  "unverified": "never checked against the official source after it was built",
+  "source-unavailable": "due for a check, but the official source is not answering the corpus's pipeline"
+ },
+ "methods": {
+  "act-checks": "the corpus checks each act against its official source and publishes the result per act (the corpus's data/freshness.json); `last_verified` is the day of its latest check",
+  "source-retrieval": "the corpus's build read the official source on that day (its REPRODUCE.md); later changes at the source are not known until the next build",
+  "stated": "the day the corpus states it was last checked (corpus.json `checked_on`)"
+ },
+ "thresholds": {
+  "national": {
+   "days": 7
+  },
+  "subnational": {
+   "days": 30
+  }
+ },
+ "columns": [
+  "path",
+  "status",
+  "last_verified",
+  "check_due",
+  "method",
+  "pinned",
+  "newest",
+  "acts",
+  "acts_current",
+  "acts_pending",
+  "acts_stale",
+  "acts_unverified",
+  "per_act",
+  "official_source"
+ ],
+ "totals": {
+  "corpora": 714,
+  "by_status": {
+   "current": 619,
+   "pending-change": 0,
+   "stale": 81,
+   "unverified": 14,
+   "source-unavailable": 0
+  },
+  "verified_30d": 700,
+  "verified_7d": 609,
+  "pct_verified_7d": 85.3,
+  "pct_verified_30d": 98.0
+ },
+ "by_level": {
+  "national": {
+   "corpora": 210,
+   "by_status": {
+    "current": 121,
+    "pending-change": 0,
+    "stale": 81,
+    "unverified": 8,
+    "source-unavailable": 0
+   },
+   "verified_30d": 202,
+   "verified_7d": 121,
+   "pct_verified_7d": 57.6,
+   "pct_verified_30d": 96.2
+  },
+  "subnational": {
+   "corpora": 504,
+   "by_status": {
+    "current": 498,
+    "pending-change": 0,
+    "stale": 0,
+    "unverified": 6,
+    "source-unavailable": 0
+   },
+   "verified_7d": 488,
+   "verified_30d": 498,
+   "pct_verified_7d": 96.8,
+   "pct_verified_30d": 98.8
+  }
+ },
+ "per_act": {
+  "corpora": [],
+  "note": "these corpora publish a freshness row for every act; for a provision in one, `python tools/freshness.py <provision path>` reads its act's row when the corpus is checked out"
+ }
+}

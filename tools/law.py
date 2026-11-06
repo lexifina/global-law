@@ -1563,6 +1563,22 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
     return out
 
 
+def freshness_note(date: str, path: str) -> str:
+    """How current the record is for `path` (data/freshness.tsv, and the corpus's own per-act row when it publishes
+    one and is checked out), when `date` is on or after the last check against the official source: a later change
+    at the source would not be in the record yet. '' for an earlier date, or when there is no freshness data."""
+    import freshness
+    rows = freshness.read_rows(ROOT)
+    row, inner = freshness.corpus_of(path, rows)
+    if not row:
+        return ''
+    act = freshness.act_row(ROOT / row['path'], inner) if row.get('per_act') == 'yes' and inner else None
+    last = (act or row).get('last_verified') or ''
+    if last and date < last:
+        return ''
+    return freshness.note(path, root=ROOT)
+
+
 # Kind words for a version that revises or amends an act already in force: China's Law（修订） (a full revision) and
 # 修正 (an amendment). An act whose record starts at such a version was in force before it, so the record starts
 # there, as at a publisher's starting text (#17: 50 Chinese acts, 标准化法 and 证券法 among them). Only these: other

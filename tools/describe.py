@@ -35,9 +35,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import future_pins  # noqa: E402  (FUTURE_NAMES, pick_branch: which branch counts)
+from freshness import own_freshness  # noqa: E402  (a corpus's own per-act freshness, summarised)
 CORPUS_KEYS = ('name', 'label', 'language', 'coverage', 'history', 'history_from', 'record_to', 'checked_on',
                'in_force_trailer', 'baseline_trailer', 'correction_trailer', 'citation', 'scope', 'acts', 'publisher',
-               'future_branch', 'verification', 'record_note', 'effects')
+               'future_branch', 'verification', 'record_note', 'effects', 'freshness_days')
 HISTORY_VALUES = ('in-force', 'replayed', 'as-enacted', 'current-only', 'metadata-only')  # CORPUS-STANDARD.md
 MEASURED: dict[str, tuple[str, str]] = {}  # path -> (history, coverage note), from data/history-measured.tsv
 
@@ -262,6 +263,9 @@ def describe(path: str, sha: str, repo: str) -> tuple[dict, dict]:
         # history: the corpus's own declaration in data/repo.json (corpus standard), over anything derived
         for k, v in from_build(repo, sha, rj.get('history')).items():  # never overrides a stated field
             entry.setdefault(k, v)
+    own = own_freshness(fetch(repo, sha, 'data/freshness.json'))
+    if own:
+        entry['freshness'] = own
     if entry.get('history') not in HISTORY_VALUES:
         # A history that is none of the standard's values: a phrase is kept as the coverage note, the measured value
         # (data/history-measured.tsv) stands in until the corpus states one.

@@ -1,0 +1,29 @@
+# The public monitor: every hour, from GitHub rather than the machine that publishes, check that updates are still
+# being published (data/status.json refreshed within 2 hours, updates running) and that freshness is being recomputed
+# (data/freshness.json no older than a day). A failed run notifies the maintainers and turns the README badge red.
+name: monitor
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: false
+          sparse-checkout: |
+            data
+            tools/freshness.py
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Updates running, status and freshness current
+        run: python tools/freshness.py --health
+      - name: Freshness summary
+        if: always()
+        run: python tools/freshness.py --summary
