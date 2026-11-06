@@ -94,6 +94,10 @@ Court decisions sit beside the law, one file and one commit per published decisi
   the Krajowa Izba Odwoławcza and the common courts by appellate region), from SAOS, each judgment filed by its case
   number (sygnatura) and SAOS id, with the sygnatura in the corpus's `decision-index.tsv`. Judgments are official
   documents outside copyright (Art. 4 of the Polish Copyright Act).
+- **The United States:** `united-states/<court>/caselaw` (the Supreme Court; the courts of appeals `ca1` to `ca11`,
+  `cadc` and `cafc`), from the Caselaw Access Project (CC0), each decision filed by its official reporter citation
+  (`410-U-S-113.md`), with every parallel citation (`93 S. Ct. 705`) and its docket number in the corpus's
+  `decision-index.tsv`.
 
 Each commit is a court ruling, not a law (`Kind: court`), so the tools credit it as one and leave it out of everything
 about law (`laws`, searches, change lists) unless you name case law. Each case-law corpus also files, under the law's own
@@ -106,6 +110,7 @@ python tools/countries.py add netherlands/caselaw
 python tools/countries.py add france/caselaw
 python tools/countries.py add germany/caselaw
 python tools/countries.py add poland/caselaw
+python tools/countries.py add united-states/caselaw
 python tools/law.py show 2024-01-01 switzerland/bund/caselaw/<decision>.md
 python tools/law.py laws 2024-01-01 2024-01-31 netherlands/caselaw   decisions given in a window
 ```

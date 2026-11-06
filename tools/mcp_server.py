@@ -1268,9 +1268,10 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     # A query that is only a decision's reference (an Aktenzeichen, a Swiss docket or BGE reference, an ECLI) and is in no
     # case law served is answered at once: a heading search for "1 BvR 1547/19" read every corpus for over 120 seconds.
     # French references too ("pourvoi n° 20-23.673", "JURITEXT000047023646"): without French case law served they took
-    # 29 and 39 s of heading search (FR speed gate, 2026-11-06).
+    # 29 and 39 s of heading search (FR speed gate, 2026-11-06). US reporter citations and docket numbers likewise.
     ref = (DE_DOCKET.fullmatch(query.strip()) or DECISION_REF.fullmatch(query.strip())
-           or PL_DOCKET.fullmatch(query.strip()) or FR_DECISION.fullmatch(query.strip()))
+           or PL_DOCKET.fullmatch(query.strip()) or FR_DECISION.fullmatch(query.strip())
+           or US_REPORTER.fullmatch(query.strip()) or US_DOCKET.fullmatch(query.strip()))
     if ref:
         served = [c for c, _ in caselaw_pins()]
         return (f'No decision {query.strip()!r} in the case law this clone serves'
@@ -4338,6 +4339,15 @@ DE_DOCKET = re.compile(r'(?<![\w/.-])(?:\d{1,2}|[IVX]{1,5}a?)\s+(?:Bv[A-Z]|PBvU|
                        r'W\s?\(pat\)|Ni|VR|WB|WDS?|[ABCDEFKPRS])\s+\d{1,5}[/.]\d{2}(?![\d/.])')
 
 
+# United States decisions by reporter citation ("410 U.S. 113", "93 S. Ct. 705", "35 L. Ed. 2d 147", "550 F.3d 1",
+# "123 F. Supp. 2d 45", "200 F. App'x 3") and by docket number written with "No." ("No. 70-18", "Nos. 19-1392"), found in
+# the case law served through each corpus's decision-index.tsv. "11 U.S.C. § 1182" is not a reporter citation: the
+# reporter must be followed by a page number.
+US_REPORTER = re.compile(r"(?<![\w.§])\d{1,4}\s+(?:U\.\s?S\.|S\.\s?Ct\.|L\.\s?Ed\.(?:\s?2d)?|F\.(?:\s?(?:2d|3d|4th))?|"
+                         r"F\.\s?Supp\.(?:\s?(?:2d|3d))?|F\.\s?App['’]x|Fed\.\s?Appx\.?)\s+\d{1,5}(?![\w])")
+US_DOCKET = re.compile(r'\bNos?\.\s+\d{1,2}-\d{1,5}(?:-[A-Z]{1,3})?\b')
+
+
 def de_corpus() -> tuple[str, str | None]:
     """Germany's federal law in this tree (its path, and its pinned commit when this server serves it)."""
     path = next((c['path'] for c in _full_manifest(head())['corpora'] if iso_code(c) == 'de' and not law.is_caselaw(c)
@@ -4531,6 +4541,11 @@ CITATION_REGISTRY = [
     CitationForm('pl', PL_ARTICLE, lambda m: pl_article_paths(m),
                  ('art. 415 k.c.', 'art. 22¹ § 1 k.p.', 'art. 58 § 1 i 2 k.c.', 'art. 189 k.p.c.', 'art. 32 ust. 1 Konstytucji RP',
                   'art. 148 § 1 k.k.')),
+    # United States decisions by reporter citation and by docket number (decision-index.tsv).
+    CitationForm('us', US_REPORTER, lambda m: decision_paths(m.group(0)),
+                 ('410 U.S. 113', '93 S. Ct. 705', '35 L. Ed. 2d 147', '550 F.3d 1', '123 F. Supp. 2d 45', "200 F. App'x 3")),
+    CitationForm('us', US_DOCKET, lambda m: decision_paths(re.sub(r'^Nos?\.\s+', '', m.group(0))),
+                 ('No. 70-18', 'Nos. 19-1392')),
     # Polish judgments by case number (sygnatura), to the judgment's file in the case law served (decision-index.tsv).
     CitationForm('pl', PL_DOCKET, lambda m: decision_paths(m.group(0)),
                  ('II CSK 123/20', 'I ACa 456/19', 'II OSK 123/20', 'III SA/Wa 1234/19', 'SK 12/20', 'KIO 1234/20')),
@@ -4758,8 +4773,9 @@ def t_law_details(args: dict) -> tuple[str, dict]:
     # Case law is read for a decision (a docket or BGE reference, found by its file name), a commit, or a corpus
     # that names case law; a law's name is not looked for among a million decisions' authors.
     fr = FR_DECISION.search(law_name) if law_name else None
-    decided = (fr_decision_paths(fr) if fr else decision_paths(law_name)) if law_name and (
+    decided = (fr_decision_paths(fr) if fr else decision_paths(re.sub(r'^\s*Nos?\.\s+', '', law_name))) if law_name and (
         fr or DECISION_REF.search(law_name) or DE_DOCKET.search(law_name) or PL_DOCKET.search(law_name)
+        or US_REPORTER.search(law_name) or US_DOCKET.search(law_name)
         or PL_ANY_DOCKET.search(law_name)) else []
     corpora = [c['path'] for c in law.manifest()['corpora'] if (not corpus or c['path'].startswith(corpus))
                and (not law.is_caselaw(c) or commit or (corpus and law.names_caselaw(corpus))
