@@ -166,18 +166,20 @@ class OnDisk(unittest.TestCase):
         self.assertEqual((st['updates'], st['last_pass_ok']), ('running', False))
 
     def test_readme_lines_rewritten(self):
-        (self.root / 'README.md').write_text('top\n<!-- status-summary -->\nold\n<!-- /status-summary -->\n'
-                                             '<!-- freshness-summary -->\nold\n<!-- /freshness-summary -->\n',
-                                             encoding='utf-8')
+        (self.root / 'MONITORING.md').write_text('top\n<!-- status-summary -->\nold\n<!-- /status-summary -->\n',
+                                                 encoding='utf-8')
+        (self.root / 'FRESHNESS.md').write_text('<!-- freshness-summary -->\nold\n<!-- /freshness-summary -->\n',
+                                                encoding='utf-8')
         freshness.write(self.root, today=D)
         now = dt.datetime(2026, 11, 6, 14, 30, tzinfo=dt.timezone.utc)
         freshness.write_status({'at': '2026-11-06T14:20:00Z', 'result': 'pushed', 'last_success_at':
                                 '2026-11-06T14:20:00Z', 'last_push_at': '2026-11-06T14:20:00Z'}, self.root, now,
                                subjects=['Point submodules at the current country commits (7 corpora)'])
-        text = (self.root / 'README.md').read_text(encoding='utf-8')
-        self.assertIn('**Updates: running**, last published 2026-11-06 14:20 UTC, 7 corpus updates', text)
-        self.assertIn('of 2 corpora in the last 7 days', text)
-        self.assertNotIn('old', text)
+        mon = (self.root / 'MONITORING.md').read_text(encoding='utf-8')
+        fre = (self.root / 'FRESHNESS.md').read_text(encoding='utf-8')
+        self.assertIn('**Updates: running**, last published 2026-11-06 14:20 UTC; 7 corpus updates', mon)
+        self.assertIn('corpora current**', fre)
+        self.assertNotIn('old', mon + fre)
 
     def test_health(self):
         freshness.write(self.root, today=D)

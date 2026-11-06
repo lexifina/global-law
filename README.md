@@ -5,15 +5,6 @@
 An expansion of the same for the US Code, [#1 on Hacker News (28/10/26)](https://news.ycombinator.com/item?id=50268380).
 Semantic, searchable law on a global scale.
 
-<!-- status-summary -->
-**Updates: running**, last published 2026-11-06 15:15 UTC, 31 corpus updates in the last 24 hours ([data/status.json](data/status.json)). **Freshness:** 619 of 714 corpora current, 0 pending a change, 81 stale, 14 unverified; 85.3% checked against their official source in the last 7 days ([data/freshness.tsv](data/freshness.tsv)).
-<!-- /status-summary -->
-
-**Is it true right now?** Every corpus records when it was last checked against its official source, and every answer
-about today's law says how current it is: [how current is it](#how-current-is-it). **Does it keep up?** Each country's
-pipeline publishes new law as it takes effect, and this repository picks it up every 15 minutes, watched hourly from
-GitHub: [is it being updated](#is-it-being-updated).
-
 https://github.com/user-attachments/assets/f24f3411-24d9-416a-8c45-9cebc817c64e
 
 **Free to use: [CC0](LICENSE.md).** Fork it, build on it, ship it in a product: no permission or credit needed. The law text
@@ -83,79 +74,6 @@ Dates are YYYY-MM-DD. The first read of a corpus indexes its history once and ke
   corpora, run `git submodule sync` and `git submodule update --init`.
 - `manifest.json` and the `jurisdiction.json` files are written by `tools/describe.py`.
 
-## How current is it
-
-Law changes after a corpus is built, so every corpus says when it was last checked against its official source.
-`data/freshness.tsv` has one row per corpus: its status, the day of its last check (`last_verified`), how it was
-checked, when the next check is due, the commit pinned here and, for corpora that check every act (Romania), the acts by
-status. Answers from the MCP server about a date on or after a corpus's last check say how current it is.
-
-<!-- freshness-summary -->
-Checked against the official sources: 85.3% of 714 corpora in the last 7 days, 98.0% in the last 30 ([data/freshness.json](data/freshness.json), as of 2026-11-06).
-<!-- /freshness-summary -->
-
-```
-python tools/freshness.py romania/national/acts                        a corpus: status, last check, official source
-python tools/freshness.py romania/national/acts/lege/2009/287/art-1112.md   a provision: its act's own row, if published
-python tools/freshness.py --stale                                      corpora not checked within their threshold
-python tools/freshness.py --summary
-```
-
-| Status | Meaning |
-| --- | --- |
-| `current` | checked within its threshold, and this repository holds the corpus's newest commit |
-| `pending-change` | the corpus has a newer commit than the one pinned here (held back by a check, or not yet pinned) |
-| `stale` | last checked longer ago than its threshold |
-| `unverified` | never checked against its official source after it was built |
-| `source-unavailable` | due for a check, but the official source is not answering |
-
-The threshold is 7 days for a country's own law and 30 days for sub-national and municipal law, unless a corpus states
-its own. The tool works offline from these files: to be certain, open the official source it names.
-
-How each corpus is checked (`method`):
-
-| Method | What it means |
-| --- | --- |
-| `act-checks` | the corpus checks every act against its official source and publishes a row per act: status, last check, the newest change the source reports and whether it is in the record yet, and the official link. [Romania's repository](https://github.com/lexifina/romania-law#how-current-is-it) does this today; once a pinned commit carries those rows, `tools/freshness.py <path>` and the MCP answers give a provision's own act row |
-| `source-retrieval` | the day the corpus's build last read its official source; a change published at the source after that day is not known until the next read |
-| `stated` | the day the corpus states it was last checked |
-
-From an AI model: `read_law` adds a note whenever the date asked is on or after the record's last check, for example
-"united-states/federal/usc: stale, last checked against its official source on 2026-10-27 (10 days ago); later changes
-may be missing", or, for a Romanian act, its status, the change the official source reports that is not here yet, and
-the official link to check by hand.
-
-Only each country's official publication has legal force; no text here does.
-
-### Is it being updated?
-
-New law reaches this repository in two steps, and both are watched:
-
-1. **Each country's pipeline** reads its official source and publishes each new act or change as a commit dated the
-   day it takes effect. Where a pipeline polls its source (from every 3 hours to daily, by source), its checks show
-   in the freshness data above; a corpus whose source has not been read again within its threshold shows as `stale`,
-   never as `current`.
-2. **Every 15 minutes, a pass here** finds every corpus with a newer commit, checks that commit
-   (`tools/check_corpus.py`: a commit that breaks the record is held back, never pinned), moves the pins forward,
-   rewrites `data/freshness.tsv`, `data/freshness.json`, `data/status.json` and the status line at the top of this
-   page in the same commit, and then verifies the whole history (`tools/verify.py`: pins only move forward).
-
-[data/status.json](data/status.json) is the public record of that loop:
-
-| Field | Meaning |
-| --- | --- |
-| `updates` | `running` while a pass has succeeded in the last 45 minutes, else `stalled` |
-| `last_published`, `last_successful_pass` | when the newest commit reached this repository, and the last pass that worked |
-| `published_last_24h` | commits, corpora moved and corpora added in the last 24 hours |
-| `held_back` | corpora whose newest commit failed a check, so this repository keeps the last good one |
-| `freshness` | the corpora by status, as in `data/freshness.tsv` |
-| `official_sources_unavailable` | official sources a corpus's pipeline reports as not answering, and since when |
-
-The [monitor](.github/workflows/monitor.yml) runs every hour on GitHub, apart from the machines that publish:
-`python tools/freshness.py --health` fails when `data/status.json` has not been refreshed for 2 hours, updates have
-stalled, or freshness has not been recomputed for a day. A failure alerts the maintainers. You can run the same check
-on any clone.
-
 ## How it is made
 
 The repository's history only grows: each commit adds corpora, moves their pins forward, or changes the tools and
@@ -166,6 +84,7 @@ made.
 ## More
 
 - [FAQ.md](FAQ.md): questions and answers · [CONTRIBUTING.md](CONTRIBUTING.md): proposing changes · [MCP.md](MCP.md): the MCP server · [REPRODUCE.md](REPRODUCE.md): how it was built · [CHANGELOG.md](CHANGELOG.md)
+- [FRESHNESS.md](FRESHNESS.md): how current each corpus is · [MONITORING.md](MONITORING.md): whether updates are running
 - [performance/](performance/): how fast the tools are, measured
 - [visualisations/](visualisations/): charts and bridges across the world's law
 - Tests: `python -m unittest discover -s tests`

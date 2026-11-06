@@ -238,25 +238,31 @@ def status_line(status: dict, summary: dict) -> str:
     when = (status.get('last_published') or status.get('generated') or '')[:16].replace('T', ' ')
     upd = '**Updates: running**' if status.get('updates') == 'running' else '**Updates: stalled**'
     moved = (status.get('published_last_24h') or {}).get('corpora_moved', 0)
-    return (f"{upd}, last published {when} UTC, {moved} corpus updates in the last 24 hours "
-            f"([data/status.json](data/status.json)). **Freshness:** {f.get('current', 0)} of {n} corpora current, "
-            f"{f.get('pending-change', 0)} pending a change, {f.get('stale', 0)} stale, {f.get('unverified', 0)} "
-            f"unverified; {t.get('pct_verified_7d', '-')}% checked against their official source in the last 7 days "
-            f"([data/freshness.tsv](data/freshness.tsv)).")
+    held = len(status.get('held_back') or [])
+    return (f"{upd}, last published {when} UTC; {moved} corpus updates in the last 24 hours, {held} held back by a "
+            f"check; {f.get('current', 0)} of {n} corpora current (as of {(status.get('generated') or '')[:10]}).")
+
+
+PAGES = ('README.md', 'FRESHNESS.md', 'MONITORING.md')  # the pages whose marked lines this tool rewrites
+
+
+def _rewrite(root: Path, block: re.Pattern, line: str) -> bool:
+    """Rewrite the line between `block`'s markers in every page that has them; False when none has."""
+    found = False
+    for name in PAGES:
+        try:
+            text = (root / name).read_bytes().decode('utf-8')
+        except OSError:
+            continue
+        new = block.sub(lambda m: m.group(1) + line + m.group(2), text, count=1)
+        if new != text:
+            (root / name).write_bytes(new.encode('utf-8'))
+        found = found or bool(block.search(text))
+    return found
 
 
 def update_readme_status(root: Path, status: dict, summary: dict) -> bool:
-    """Rewrite the line between the README's status-summary markers; False when it has none."""
-    readme = root / 'README.md'
-    try:
-        text = readme.read_bytes().decode('utf-8')
-    except OSError:
-        return False
-    line = status_line(status, summary)
-    new = STATUS_BLOCK.sub(lambda m: m.group(1) + line + m.group(2), text, count=1)
-    if new != text:
-        readme.write_bytes(new.encode('utf-8'))
-    return bool(STATUS_BLOCK.search(text))
+    return _rewrite(root, STATUS_BLOCK, status_line(status, summary))
 
 
 def health(root: Path = ROOT, now: dt.datetime | None = None, max_age_h: float = 2.0) -> list[str]:
@@ -289,20 +295,14 @@ README_BLOCK = re.compile(r'(<!-- freshness-summary -->\r?\n).*?(\r?\n<!-- /fres
 
 
 def update_readme(root: Path, summary: dict) -> bool:
-    """Rewrite the line between the README's freshness-summary markers; False when it has none."""
-    readme = root / 'README.md'
-    try:
-        text = readme.read_bytes().decode('utf-8')
-    except OSError:
-        return False
+    """Rewrite the line between the freshness-summary markers (FRESHNESS.md); False when no page has them."""
     t = summary['totals']
-    line = (f"Checked against the official sources: {t['pct_verified_7d']}% of {t['corpora']} corpora in the last 7 "
-            f"days, {t['pct_verified_30d']}% in the last 30 ([data/freshness.json](data/freshness.json), as of "
+    s = t.get('by_status', {})
+    line = (f"**{s.get('current', 0)} of {t['corpora']} corpora current**, {s.get('pending-change', 0)} pending a "
+            f"change, {s.get('stale', 0)} stale, {s.get('unverified', 0)} unverified; {t['pct_verified_7d']}% checked "
+            f"against their official source in the last 7 days, {t['pct_verified_30d']}% in the last 30 (as of "
             f"{summary['as_of']}).")
-    new = README_BLOCK.sub(lambda m: m.group(1) + line + m.group(2), text, count=1)
-    if new != text:
-        readme.write_bytes(new.encode('utf-8'))
-    return bool(README_BLOCK.search(text))
+    return _rewrite(root, README_BLOCK, line)
 
 
 def write_status(heartbeat: dict, root: Path = ROOT, now: dt.datetime | None = None, stalled_after_min: int = 45,
