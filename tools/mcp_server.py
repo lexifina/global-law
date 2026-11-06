@@ -1069,13 +1069,16 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
         # caveats count it: a record checked in 2026 whose last change was in 2013 is complete to 2026.
         details = law.corpus_info(c['path'])
         info['complete_to'] = max(filter(None, (details.get('record_to'), details.get('checked_on'))), default=None)
+        credit = corpus_credit(c['path'])
+        if credit:
+            info['credit'] = credit
         data.append(info)
         # Some manifests leave language or coverage empty (Romania): leave the words out rather than print "Covers .".
         rows.append(f"- {c['path']}: {c['name']} ({c['language'] + '; ' if c.get('language') else ''}{len(files)} provision files; "
                     f"{len(own)} changes)." + (f" Covers {c['coverage']}." if c.get('coverage') else '')
                     + f" Record from {first}; last change {last}"
                     + (f"; complete to {info['complete_to']}. {c.get('record_note', '')}" if info['complete_to'] else '.')
-                    + f" Example path: {info['example_path']}")
+                    + f" Example path: {info['example_path']}" + (f" Credit: {credit}." if credit else ''))
     tree = json.loads(law.git('show', 'HEAD:jurisdiction.json'))
     text = ('Paths are country (ISO 3166-1) / level / corpus / file. Dates are in-force dates (YYYY-MM-DD).\n'
             + '\n'.join(rows) + served_note(names=True))
@@ -1706,6 +1709,28 @@ def citation_for(path: str, date: str, version: dict | None, text: str | None, c
     return cite
 
 
+def corpus_credit(corpus: str) -> str | None:
+    """The credit a corpus's licence requires, as its corpus.json states it ('credit', else built from 'source' and
+    'licence'): the French case law is Licence Ouverte 2.0, which requires naming the source and the date of its last
+    update. None where the corpus states no such duty."""
+    try:
+        info = dict(law.corpus_info(corpus))
+    except StopIteration:
+        info = {}
+    if not any(k in info for k in ('credit', 'source', 'licence')):
+        try:  # a corpus pinned before the manifest carried these fields: its own corpus.json
+            info.update({k: v for k, v in (law.described(corpus) or {}).items() if k in ('credit', 'source', 'licence')})
+        except (SystemExit, OSError, ValueError, RuntimeError):
+            pass
+    if info.get('credit'):
+        return str(info['credit'])
+    src, lic = info.get('source'), info.get('licence')
+    if isinstance(src, dict) and (lic or src.get('licence')):
+        parts = [src.get('publisher'), src.get('dataset'), src.get('updated') and f"updated {src['updated']}", lic or src.get('licence')]
+        return ', '.join(str(x) for x in parts if x)
+    return None
+
+
 def cite_lines(cite: dict) -> list[str]:
     """The cite block of an answer, first: the publisher's page, then the pincite."""
     if not cite.get('official_url'):
@@ -2193,6 +2218,10 @@ def t_read_law(args: dict) -> tuple[str, dict]:
     if 'today' in (st['cite']['shows'] or '') and st['latest']['state'] != 'same':
         st['cite']['shows'] += '; it is worded differently from the text read here, which is older'
     head_lines[1:1] = cite_lines(st['cite'])
+    credit = corpus_credit(st['corpus'])  # a licence that requires naming the source (Licence Ouverte 2.0) says so
+    if credit:
+        st['credit'] = credit
+        head_lines.insert(1 + len(cite_lines(st['cite'])), f'Credit: {credit}')
     partial = run_law(law.partial_end_note, date, path)  # an act's end whose scope the record leaves unresolved
     st['caveats'] = st['caveats'] + ([partial] if partial else [])
     fresh = law.freshness_note(date, path)  # how current the record is, when the date asked is after its last check
@@ -3940,6 +3969,15 @@ def _decisions(corpus: str, sha: str) -> dict[str, tuple[str, ...]]:
         name = line.rsplit('/', 1)[-1]
         if name.endswith('.md'):
             out.setdefault(_decision_key(name[:-3].split('--', 1)[0]), []).append(f'{corpus}/{line}')
+    # A corpus whose files are named by another id (France: the DILA id) lists its other references in
+    # decision-index.tsv at its root: "<reference>\t<path>" per line (a pourvoi, a decision number, an ECLI).
+    for line in law.git('show', f'{sha}:decision-index.tsv', cwd=ROOT / corpus, check=False).splitlines():
+        ref, _, path = line.partition('\t')
+        if ref and path.strip() and not ref.startswith('#'):
+            p = f'{corpus}/{path.strip()}'
+            k = _decision_key(ref)
+            if p not in out.get(k, ()):
+                out.setdefault(k, []).append(p)
     return {k: tuple(v) for k, v in out.items()}
 
 
@@ -4039,6 +4077,106 @@ def nl_article_paths(m) -> list[str]:
     return [f'{corpus}/{folder}/{guess}.md']
 
 
+# France ----------------------------------------------------------------------------------------------------------------
+FR_ACTS = 'france/national/acts'
+
+
+@lru_cache(maxsize=1)
+def fr_aliases() -> dict:
+    """data/fr-aliases.json: 'codes' (the code folders of lexifina/france-law), 'names' (a code's name as courts write
+    it -> its folder, where they differ: "code général des impôts" is code-general-des-impots-cgi), 'abbreviations'
+    ("C. trav.", "CJA", "CGI" -> folder; CPC, CPP, CP and LPF are left out, as Swiss acts use them in French, and C. civ.
+    and C. pén., as Romania writes them) and
+    'constitution' (the 1958 Constitution's folder)."""
+    try:
+        return json.loads((ROOT / 'data' / 'fr-aliases.json').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        try:
+            return json.loads(law.git('show', 'HEAD:data/fr-aliases.json', check=False) or '{}')
+        except (ValueError, SystemExit, RuntimeError, OSError):
+            return {}
+
+
+def fr_slug(s: str) -> str:
+    """france-law's folder rule (tools/build.py ascii_slug): accents dropped, anything else a dash, lower case."""
+    s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode()
+    return re.sub(r'[^A-Za-z0-9]+', '-', s).strip('-').lower()
+
+
+def fr_article_file(num: str) -> str:
+    """france-law's file rule (tools/build.py article_slug): 'L. 1234-5' -> L1234-5, '1240' -> 1240, '15 bis' -> 15-bis."""
+    s = unicodedata.normalize('NFKD', num).encode('ascii', 'ignore').decode()
+    s = re.sub(r'\b([LRDA])\s*\.?\s*\*?\s*(?=\d)', r'\1', s)
+    return re.sub(r'[^A-Za-z0-9\-]+', '-', s).strip('-')[:80]
+
+
+def fr_code_folder(words: str) -> str | None:
+    """The code a citation's words name ("code civil, ...", "code du travail maritime", "code général des impôts"):
+    the longest folder or court name the words start with, at a word's end, so "code du travail" never takes "code du
+    travail maritime" and "code civil" never takes "code civil local" ... (the folder that matches is code-civil)."""
+    t, s = fr_aliases(), fr_slug(words)
+    keys = {c: c for c in t.get('codes', [])} | t.get('names', {})
+    best = max((k for k in keys if s == k or s.startswith(k + '-')), key=len, default=None)
+    return f'codes/{keys[best]}' if best else None
+
+
+FR_NUM = r'(?:[LRDA]\.?\s*\*?\s*)?\d{1,5}(?:-\d{1,5})*(?:\s+(?:bis|ter|quater|quinquies|sexies|septies|octies|nonies|decies))?'
+FR_NUMS = rf'(?P<nums>{FR_NUM}(?:\s*(?:,|et|à)\s*{FR_NUM})*)'
+FR_DETAIL = r'(?:,?\s*(?:alinéa|al\.)\s*\d+(?:er)?)?(?:,?\s*\d+°)?(?:,?\s*[IVX]+)?'
+FR_CODE_ARTICLE = re.compile(rf"(?<![\w.])[Aa]rt(?:icles?|s?\.)\s*{FR_NUMS}{FR_DETAIL}\s+(?:du|de\s+la|de\s+l['’]|des)\s+"
+                             r"(?P<code>[Cc]ode\b[^\n.;:()\[\]]{0,90}|[Ll]ivre\s+des\s+procédures\s+fiscales)")
+
+
+def _fr_abbr_rx():
+    abbr = '|'.join(re.escape(a).replace(r'\ ', r'\s?') for a in sorted(fr_aliases().get('abbreviations', {}), key=lambda a: (-len(a), a)))
+    return re.compile(rf"(?<![\w.])[Aa]rt(?:icles?|s?\.)\s*{FR_NUMS}{FR_DETAIL}\s*,?\s*(?:du\s+)?(?P<abbr>{abbr or '(?!x)x'})(?![\w])")
+
+
+FR_ABBR_ARTICLE = _LazyRegex(_fr_abbr_rx)
+FR_CONSTITUTION = re.compile(rf"(?<![\w.])[Aa]rt(?:icles?|s?\.)\s*(?P<nums>\d{{1,3}}(?:-\d{{1,2}})?(?:\s*(?:,|et)\s*\d{{1,3}}(?:-\d{{1,2}})?)*)"
+                             r"(?:,?\s*(?:alinéa|al\.)\s*\d+(?:er)?)?\s+de\s+la\s+Constitution(?:\s+du\s+4\s+octobre\s+1958)?(?![\w])"
+                             # another state's constitution, in French ("Constitution fédérale", "... cantonale", "belge")
+                             r"(?!\s+(?:f[ée]d[ée]rale|suisse|cantonale|belge|du\s+[Cc]anton|de\s+la\s+R[ée]publique\s+(?!fran)|du\s+Royaume))")
+# Decisions: a DILA id (JURITEXT/CETATEXT/CONSTEXT + 12 digits), a Cour de cassation pourvoi ("n° 18-12.345"), a
+# Conseil constitutionnel decision ("n° 2019-791 QPC"), or a Conseil d'État requête named with its court ("CE, 10 juin
+# 2020, n° 412345"). A bare six-digit number is not read: too many things are numbered so.
+FR_DECISION = re.compile(r"\b(?:JURITEXT|CETATEXT|CONSTEXT)\d{12}\b"
+                         r"|\b(?:pourvoi\s+)?n[°o]s?\s*(?P<pv>\d{2}-\d{2}\.\d{3})\b"
+                         r"|\bn[°o]s?\s*(?P<cc>\d{2,4}-\d{1,4}\s+(?:QPC|DC|L|FNR|LP|LOM|AN|SEN|ELEC|PDR|REF|ORGA|RIP))\b"
+                         r"|\b(?:CE|Conseil\s+d['’][ÉE]tat)\b[^\n]{0,80}?\bn[°o]s?\s*(?P<ce>\d{5,6})\b")
+
+
+def fr_corpus() -> tuple[str, str | None]:
+    """France's law in this tree (its path, and its pinned commit when this server serves it)."""
+    path = next((c['path'] for c in _full_manifest(head())['corpora'] if iso_code(c) == 'fr' and not law.is_caselaw(c)), FR_ACTS)
+    served = any(c['path'] == path for c in law.manifest()['corpora']) and (ROOT / path / '.git').exists()
+    return path, (corpus_head(path) or None) if served else None
+
+
+def _fr_nums(text: str) -> list[str]:
+    return [n.strip() for n in re.findall(FR_NUM, text)]
+
+
+def fr_article_paths(m, folder: str | None) -> list[str]:
+    """Each article a French citation names, as france-law files it: <folder>/<article file>.md. Where the record is
+    served and lacks a file, the path is still given (the lookup then says it is not in the record)."""
+    if not folder:
+        return []
+    corpus, _ = fr_corpus()
+    return [f'{corpus}/{folder}/{fr_article_file(n)}.md' for n in _fr_nums(m.group('nums'))]
+
+
+def fr_abbr_folder(abbr: str) -> str | None:
+    table = fr_aliases().get('abbreviations', {})
+    folder = next((f for a, f in table.items() if re.sub(r'\s', '', a) == re.sub(r'\s', '', abbr)), None)
+    return f'codes/{folder}' if folder else None
+
+
+def fr_decision_paths(m) -> list[str]:
+    ref = m.group('pv') or m.group('cc') or m.group('ce') or m.group(0)
+    return decision_paths(ref)
+
+
 class CitationForm:
     """One citation form: `country` (ISO code), `rx` over free text, `to_path` from a match to a path or a list of
     paths ([] where the record cannot place it), `examples` of that country's citations it must claim. `open_name`:
@@ -4080,6 +4218,23 @@ CITATION_REGISTRY = [
                   'art. 7:658 BW')),
     # Dutch decisions by ECLI ("ECLI:NL:HR:2019:1234"), to the decision's file in the case law this server serves.
     CitationForm('nl', ECLI_NL, lambda m: decision_paths(m.group(0)), ('ECLI:NL:HR:2019:1234', 'ECLI:NL:RBAMS:2023:5678')),
+    # France: an article of a code by its name or a common abbreviation ("article 1240 du code civil", "art. L. 1234-5 du
+    # code du travail", "art. L. 1235-3 C. trav."), or of the Constitution of 1958 ("article 66 de la Constitution"), to
+    # france-law's files (data/fr-aliases.json; the article file as france-law names it: L. 1234-5 is L1234-5). The
+    # ECHR ("article 6 de la Convention") is not in the record and is left alone.
+    CitationForm('fr', FR_CODE_ARTICLE, lambda m: fr_article_paths(m, fr_code_folder(m.group('code'))),
+                 ('article 1240 du code civil', 'art. L. 1234-5 du code du travail', "article R. 421-1 du code de l'urbanisme",
+                  'articles 1240 et 1241 du code civil', 'article 39 du code général des impôts')),
+    CitationForm('fr', FR_ABBR_ARTICLE, lambda m: fr_article_paths(m, fr_abbr_folder(m.group('abbr'))),
+                 ('art. L. 411-1 CJA', 'article L. 1235-3 C. trav.', 'art. 39 CGI', 'art. L. 2131-11 CGCT')),
+    CitationForm('fr', FR_CONSTITUTION, lambda m: fr_article_paths(m, fr_aliases().get('constitution')),
+                 ('article 66 de la Constitution', 'articles 34 et 37 de la Constitution', 'article 61-1 de la Constitution'),
+                 open_name=True),
+    # French decisions: a DILA id, a pourvoi ("n° 18-12.345"), a Conseil constitutionnel decision ("n° 2019-791 QPC"),
+    # a Conseil d'État requête named with its court; found in the case law served through each corpus's
+    # decision-index.tsv (the files are named by DILA id).
+    CitationForm('fr', FR_DECISION, fr_decision_paths,
+                 ('JURITEXT000041234567', 'pourvoi n° 18-12.345', 'décision n° 2019-791 QPC', "CE, 10 juin 2020, n° 412345")),
     # Every other country's ECLI, read the same way: its decisions resolve once a case-law corpus of that country is
     # served (decision_paths finds them by file name), and nothing is claimed for a country the tree has no case law of.
     *[CitationForm(cc, re.compile(rf'\bECLI:{cc.upper()}:[A-Z0-9]{{1,7}}:\d{{4}}:[A-Z0-9.]{{1,25}}(?![A-Za-z0-9])', re.I),
@@ -4303,7 +4458,8 @@ def t_law_details(args: dict) -> tuple[str, dict]:
             commit, corpus = world.corpus_commit, world.corpus
     # Case law is read for a decision (a docket or BGE reference, found by its file name), a commit, or a corpus
     # that names case law; a law's name is not looked for among a million decisions' authors.
-    decided = decision_paths(law_name) if law_name and DECISION_REF.search(law_name) else []
+    fr = FR_DECISION.search(law_name) if law_name else None
+    decided = (fr_decision_paths(fr) if fr else decision_paths(law_name)) if law_name and (fr or DECISION_REF.search(law_name)) else []
     corpora = [c['path'] for c in law.manifest()['corpora'] if (not corpus or c['path'].startswith(corpus))
                and (not law.is_caselaw(c) or commit or (corpus and law.names_caselaw(corpus))
                     or any(p.startswith(c['path'] + '/') for p in decided))]

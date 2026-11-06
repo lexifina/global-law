@@ -38,7 +38,8 @@ import future_pins  # noqa: E402  (FUTURE_NAMES, pick_branch: which branch count
 from freshness import own_freshness  # noqa: E402  (a corpus's own per-act freshness, summarised)
 CORPUS_KEYS = ('name', 'label', 'language', 'coverage', 'history', 'history_from', 'record_to', 'checked_on',
                'in_force_trailer', 'baseline_trailer', 'correction_trailer', 'citation', 'scope', 'acts', 'publisher',
-               'future_branch', 'verification', 'record_note', 'effects', 'freshness_days', 'kind', 'overlay')
+               'future_branch', 'verification', 'record_note', 'effects', 'freshness_days', 'kind', 'overlay',
+               'source', 'licence', 'credit')
 HISTORY_VALUES = ('in-force', 'replayed', 'as-enacted', 'current-only', 'metadata-only')  # CORPUS-STANDARD.md
 MEASURED: dict[str, tuple[str, str]] = {}  # path -> (history, coverage note), from data/history-measured.tsv
 
