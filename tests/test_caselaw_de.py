@@ -239,6 +239,17 @@ class GermanCaseLaw(unittest.TestCase):
         self.assertIn(f'{CASES}/{D1}', text)
         self.assertNotIn('ABGB', json.dumps([h.get('path') for h in cites['data'].get('citations', [])]))
 
+    def test_a_decision_reference_in_no_served_case_law_is_answered_at_once(self):
+        """A heading search for "1 BvR 1547/19" read every corpus for over 120 s (speed gate, 2026-11-06): a query that is
+        only a decision's reference and is in no case law served is answered without searching the law."""
+        import time
+        t0 = time.time()
+        (miss,) = self.calls(('find_provision', {'query': '1 BvR 9999/99'}))
+        self.assertFalse(miss['error'], miss['text'])
+        self.assertIn('No decision', miss['text'])
+        self.assertEqual(miss['data']['results'], [])
+        self.assertLess(time.time() - t0, 30)
+
     def test_german_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))
         import mcp_server as m

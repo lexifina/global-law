@@ -1222,6 +1222,14 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         rows = [{'path': p, 'heading': f'{h}  (read as the citation "{c}", as resolve_citations reads it)'.lstrip(), 'score': 100}
                 for p, h, c in cited[:limit]]
         return '\n'.join(f"{r['path']}  {r['heading']}" for r in rows), {'results': rows}
+    # A query that is only a decision's reference (an Aktenzeichen, a Swiss docket or BGE reference, an ECLI) and is in no
+    # case law served is answered at once: a heading search for "1 BvR 1547/19" read every corpus for over 120 seconds.
+    ref = DE_DOCKET.fullmatch(query.strip()) or DECISION_REF.fullmatch(query.strip())
+    if ref:
+        served = [c for c, _ in caselaw_pins()]
+        return (f'No decision {query.strip()!r} in the case law this clone serves'
+                + (f' ({len(served)} case-law corpora). ' if served else ' (none is served). ')
+                + 'Add a country\'s case law with tools/countries.py add <country>/caselaw.'), {'results': [], 'case_law_served': served}
     # Citation forms narrow the search: "11 U.S.C. 1101" means title 11; "Art. 16a GG", "s. 42 CFA" name their Act
     # through a scoped entry in aliases.json. The words that named the scope are then left out of the matching.
     hint, rest = '', query
