@@ -272,3 +272,42 @@ class KnownUnheld(unittest.TestCase):
         code, out = self.run_remote()
         self.assertEqual(code, 1, out)
         self.assertNotIn('known:', out)
+
+
+class PinnedTwice(VerifyCase):
+    """A repository pinned at a second path in some commits fails verify, unless tools/verify-known.tsv lists each
+    such commit and the extra path as pinned-twice (the Australian instruments, 5-6 November 2026); HEAD never."""
+
+    def setUp(self):
+        super().setUp()
+        self.repo = self.tmp / 'origin'
+        url = self.tree.url
+        self.tree.url = lambda p: url('a/0') if p == 'b/dup' else url(p)
+        self.base = git('rev-parse', 'HEAD', cwd=self.repo)
+        self.dup = self.tree.commit({'b/dup': f'{1:040x}'})
+
+    def known(self, *commits: str) -> None:
+        (self.repo / 'tools').mkdir(exist_ok=True)
+        (self.repo / 'tools' / 'verify-known.tsv').write_text(
+            ''.join(f'{c}\tb/dup\tpinned-twice\tadded by mistake, dropped later\n' for c in commits), encoding='utf-8')
+
+    def drop(self) -> str:
+        git('rm', '-q', '--cached', 'b/dup', cwd=self.repo)
+        self.tree.pins.pop('b/dup')
+        return self.tree.commit({})
+
+    def test_unlisted_fails_and_listed_is_named_as_known(self):
+        self.drop()
+        code, out = verify(self.repo, '--since', self.base)
+        self.assertEqual(code, 1, out)
+        self.assertIn('pinned at two paths', out)
+        self.known(self.dup)
+        code, out = verify(self.repo, '--since', self.base)
+        self.assertEqual(code, 0, out)
+        self.assertIn('known: 1 repository pin(s) at a second path', out)
+
+    def test_head_is_never_excused(self):
+        self.known(self.dup)
+        code, out = verify(self.repo, '--since', self.base)
+        self.assertEqual(code, 1, out)
+        self.assertIn('pinned at two paths', out)

@@ -26,6 +26,8 @@ With --remote, also:
   - no repository's main was rewritten since this store last fetched it, or since the checkpoint's check.
     A pin set in the range that its main no longer holds, but that tools/verify-known.tsv lists by tree commit and
     corpus commit (with why), is counted and named as known, not as a failure; a pin at HEAD must always be held.
+A repository pinned at two paths in a commit that tools/verify-known.tsv lists (tree commit, the extra path,
+"pinned-twice", why) is named as known too; HEAD is never excused.
 Exits 1 if anything fails, and names it. A clean run records its last commit (and, with --remote, each repository's
 main) in .git/global-law-verify/verified.json, so the next run checks only what came after. The checkpoint is this
 clone's own record, not something anyone else need trust: --full or --since checks again from any point. This
@@ -289,6 +291,38 @@ class Store:
         return held, backward
 
 
+def known_twice(path: Path) -> dict[tuple[str, str], str]:
+    """(tree commit, path) -> why, from tools/verify-known.tsv rows whose third column is "pinned-twice": in that
+    commit, the repository at that path was also pinned at another path, a mistake fixed later. Full hashes only."""
+    known = {}
+    try:
+        lines = path.read_text(encoding='utf-8').splitlines()
+    except OSError:
+        return known
+    for line in lines:
+        cols = line.split('	')
+        if len(cols) >= 4 and re.fullmatch(r'[0-9a-f]{40}', cols[0]) and cols[2] == 'pinned-twice':
+            known[(cols[0], cols[1])] = cols[3]
+    return known
+
+
+def twice_excused(commit: str, urls: dict[str, str], known: dict[tuple[str, str], str]) -> list[str]:
+    """The known rows that excuse every repository pinned at two paths in this commit, or [] when any is not
+    excused (all but one of its paths must be listed for this commit)."""
+    paths: dict[str, list[str]] = {}
+    for p, u in urls.items():
+        if u:
+            paths.setdefault(u, []).append(p)
+    out = []
+    for u, ps in paths.items():
+        if len(ps) > 1:
+            listed = [p for p in ps if (commit, p) in known]
+            if len(ps) - len(listed) > 1 or not listed:
+                return []
+            out += [f'{commit[:10]}: {p} also pins {u}: {known[(commit, p)]}' for p in listed]
+    return out
+
+
 def known_unheld(path: Path) -> dict[tuple[str, str], str]:
     """(tree commit, corpus commit) -> why, from tools/verify-known.tsv: pins set in the history that their
     repository's main no longer holds, each looked at and explained (REPRODUCE.md). Full hashes only, so an entry
@@ -389,13 +423,17 @@ def main(argv: list[str]) -> int:
     links: dict[str, str] = {}
     urls: dict[str, str] = {}
     first = True
+    twice_known = known_twice(ROOT / 'tools' / 'verify-known.tsv')
+    twice_listed: list[str] = []
     for c, d, links, urls, changed, mod in walk(start, 'HEAD'):
         commits.append(c)
         day[c] = d
         if first or mod or any(old is None or new is None for _, old, new in changed):
             broken = [p.split(': ', 1)[1] for p in structure(c, links, urls)]
             first = False
-        problems.extend(f'{c[:10]}: {p}' for p in broken)
+        excused = twice_excused(c, urls, twice_known) if c != head and twice_known else []
+        twice_listed += excused
+        problems.extend(f'{c[:10]}: {p}' for p in broken if not (excused and p.startswith('repository pinned at two')))
         for path, old, new in changed:
             if new is None:
                 continue
@@ -408,6 +446,11 @@ def main(argv: list[str]) -> int:
         links, blob = state('HEAD')
         urls = modules(blob)
     t_scan = time.time() - t0
+    if twice_listed:
+        print(f'known: {len(twice_listed)} repository pin(s) at a second path, each listed in tools/verify-known.tsv '
+              f'with why; not a failure')
+        for k in twice_listed:
+            print('  known', k)
     if cut and commits:
         how = (f'shallow clone: checked {len(commits)} commit(s) from {commits[0][:10]}; the history before it is not '
                f'in this clone; for the whole history run git fetch --unshallow')
