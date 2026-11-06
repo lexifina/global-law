@@ -113,6 +113,119 @@ class PinDiff(unittest.TestCase):
 SPAIN = os.environ.get('SPAIN_LAW_GIT')
 
 
+class RecordStandard(unittest.TestCase):
+    """The record standard's refusals (audit rows 77-80): what builders write their own way and readers would have to
+    guess is refused ("refused (<code>): ...", exit 3), so the pointer loop does not move the pin. Commit checks look
+    at the commits added since the pin; what is already pinned only warns, as the history cannot change."""
+
+    def setUp(self):
+        self.d = Path(tempfile.mkdtemp(prefix='gl-standard-'))
+        self.addCleanup(self.close)
+
+    def close(self):
+        def writable(func, path, _):
+            os.chmod(path, 0o700)
+            func(path)
+        shutil.rmtree(self.d, onerror=writable)
+
+    def corpus(self, corpus_json: dict | None = None, repo_json: dict | None = None) -> Corpus:
+        c = Corpus(self.d / f'repo{len(list(self.d.iterdir()))}')
+        files = {'REPRODUCE.md': 'x\n'}
+        if corpus_json is not None:
+            files['corpus.json'] = json.dumps({'corpus': 'xx/national/acts', 'name': 'XX', 'language': 'en',
+                                               'history_from': '2000-01-01', 'record_to': '2026-11-01',
+                                               'in_force_trailer': 'In-force', 'citation': {
+                                                   'file': '([a-z0-9-]+)/s([0-9]+)\\.md', 'cites': 's {n}'},
+                                               **corpus_json})
+        if repo_json is not None:
+            files['data/repo.json'] = json.dumps(repo_json)
+            files['jurisdiction.json'] = json.dumps({'name': 'XX', 'code': 'XX'})
+        c.commit('Lexifina', files, Kind='documentation')
+        return c
+
+    def refusals(self, c: Corpus, pin: str | None = None) -> tuple[list[str], list[str]]:
+        fatal, warn = check_corpus.problems(c.path, UNTIL, pin)
+        return [f for f in fatal if check_corpus.is_refusal(f)], warn
+
+    # Row 77: an unknown Kind, and a law credited to the publisher, are refused when new; pinned ones only warn.
+    def test_kind_and_publisher_refusals(self):
+        c = self.corpus({'history': 'in-force', 'publisher': 'Register'})
+        c.commit('Act 1 of 2000', {'a/s1.md': 'one\n'}, In_force='2000-01-01', Kind='law')
+        pin = c.commit('Register', {'a/s1.md': 'two\n'}, In_force='2001-01-01', Kind='Wibble')
+        refused, warn = self.refusals(c)
+        self.assertTrue(any(f.startswith('refused (kind):') and "'wibble' (1)" in f for f in refused), refused)
+        self.assertTrue(any(f.startswith('refused (publisher):') and "'Register'" in f for f in refused), refused)
+        refused, warn = self.refusals(c, pin)  # already pinned: warnings
+        self.assertEqual(refused, [])
+        self.assertTrue(any('already pinned' in w and 'wibble' in w for w in warn), warn)
+        c.commit('Register', {'a/s1.md': 'three\n'}, In_force='2002-01-01', Kind='Amend')
+        refused, warn = self.refusals(c, pin)
+        self.assertEqual([f.split(':')[0] for f in refused], ['refused (publisher)'], refused)
+        self.assertIn(f'added since the pin {pin[:7]}', refused[0])
+        # Kinds readers know, credited to laws, pass.
+        ok = self.corpus({'history': 'in-force'})
+        ok.commit('Act 1 of 2000', {'a/s1.md': 'one\n'}, In_force='2000-01-01', Kind='AsMade')
+        ok.commit('Register', {'a/s1.md': 'two\n'}, In_force='2001-01-01', Kind='Unattributed')
+        self.assertEqual(self.refusals(ok)[0], [])
+
+    # Row 78: a corpus that says its versions were replayed, though each names the publisher's own compilation.
+    def test_history_label_replayed_with_compilations(self):
+        c = self.corpus({'history': 'replayed'})
+        c.commit('Act 1 of 2000', {'a/s1.md': 'one\n'}, In_force='2000-01-01', Kind='law', Compilation_id='C2000')
+        c.commit('Act 2 of 2001', {'a/s1.md': 'two\n'}, In_force='2001-01-01', Kind='law', Compilation_id='C2001')
+        refused, _ = self.refusals(c)
+        self.assertEqual(len(refused), 1, refused)
+        self.assertTrue(refused[0].startswith('refused (history):'))
+        self.assertIn("declare history 'in-force'", refused[0])
+        c.commit('Act 3 of 2002', {'a/s1.md': 'three\n'}, In_force='2002-01-01', Kind='law')  # one replayed version
+        self.assertEqual(self.refusals(c)[0], [])
+        bad = self.corpus({'history': 'compiled'})
+        bad.commit('Act 1 of 2000', {'a/s1.md': 'one\n'}, In_force='2000-01-01', Kind='law')
+        self.assertTrue(any(f.startswith("refused (history): corpus.json history 'compiled'") for f in self.refusals(bad)[0]))
+
+    # Row 79: data/repo.json may declare the history too; in an as-enacted record a law is not the publisher's
+    # starting text.
+    def test_as_enacted_declared_in_repo_json(self):
+        c = self.corpus(repo_json={'name': 'XX', 'publisher': 'JDIH X', 'history': 'as-enacted'})
+        pin = c.commit('JDIH X', {'perda-2016-012/pasal-001.md': 'Pasal 1\n'}, In_force='2016-12-05', Kind='publisher')
+        refused, _ = self.refusals(c)
+        self.assertTrue(any(f.startswith('refused (as-enacted):') and '(data/repo.json)' in f for f in refused), refused)
+        self.assertEqual(self.refusals(c, pin)[0], [])
+        c.commit('Perda Lamongan 4/2026', {'perda-2026-004/pasal-001.md': 'Pasal 1\n'}, In_force='2026-04-23', Kind='law')
+        self.assertEqual(self.refusals(c, pin)[0], [])  # credited to the law itself
+        odd = self.corpus(repo_json={'name': 'XX', 'history': 'publisher'})
+        odd.commit('Act 1', {'a/s1.md': 'one\n'}, In_force='2000-01-01', Kind='law')
+        self.assertTrue(any(f.startswith("refused (history): data/repo.json history 'publisher'")
+                            for f in self.refusals(odd)[0]))
+
+    # Row 80: a listing page's view and download counters, or its posting date, in an act folder's name.
+    def test_path_furniture(self):
+        c = self.corpus({'history': 'as-enacted'})
+        c.commit('Perda 4/2021', {'perda-2021-004-kawasan-tanpa-rokok-18-april-2022-tahun-2021-137-views-105-downloads/'
+                                  'pasal-001.md': 'one\n'}, In_force='2021-01-01', Kind='law')
+        pin = c.commit('Perda 14/2015', {'perda-2015-014-pedagang-kaki-lima-6-november-2025-tahun/pasal-001.md': 'x\n'},
+                       In_force='2016-03-15', Kind='law')
+        for p in (None, pin):  # a folder at HEAD: refused until it is renamed
+            refused, _ = self.refusals(c, p)
+            self.assertEqual([f.split(':')[0] for f in refused], ['refused (path)'], refused)
+            self.assertIn('2 folder(s)', refused[0])
+        for name in ('perda-2019-008-badan-usaha-milik-desa-10-november-2020-tahun-2019-73-views-72',
+                     'perda-2021-015-penanggulangan-bencana-21-november', 'x-lihat-unduh'):
+            self.assertTrue(check_corpus.PATH_FURNITURE.search(name), name)
+        for name in ('perda-2021-004-kawasan-tanpa-rokok', 'ley-de-1-de-enero-de-2000', 'act-1-of-may-2000',
+                     'review-of-views-2020', 'BOE-A-1996-4718', 'perda-2026-002-infrastruktur-pasif-telekomunikasi-tahun'):
+            self.assertFalse(check_corpus.PATH_FURNITURE.search(name), name)
+
+    def test_exit_code_says_refused(self):
+        c = self.corpus({'history': 'replayed'})
+        c.commit('Act 1 of 2000', {'a/s1.md': 'one\n'}, In_force='2000-01-01', Kind='law', Compilation_id='C2000')
+        done = subprocess.run([sys.executable, '-X', 'utf8', str(HERE / 'tools' / 'check_corpus.py'), str(c.path),
+                               '--pin', c.commit('Lexifina', {'README.md': 'x\n'}, Kind='documentation'),
+                               '--until', UNTIL], capture_output=True, encoding='utf-8')
+        self.assertEqual(done.returncode, check_corpus.EXIT_REFUSED, done.stdout + done.stderr)
+        self.assertIn('FAIL: refused (history):', done.stdout)
+
+
 @unittest.skipUnless(SPAIN, 'set SPAIN_LAW_GIT to a clone of lexifina/spain-law (blob-less is enough)')
 class SpainHistory(unittest.TestCase):
     """The regression that motivated the check, on the real commits: the gate must have held d4839ce."""

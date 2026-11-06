@@ -7,6 +7,9 @@ finds and leaves out (with the reason, in manifest.json `not_pinned`) any repo t
 out; warnings are reported but do not. The fields it checks are those in MCP.md ("How a corpus describes itself").
 Needs only git and Python: a URL is cloned bare into a temporary folder. Several repos, or a global-law checkout
 (every corpus its manifest.json lists that is checked out there), are checked in one run and counted at the end.
+
+Exit 0: pass. Exit 3: refused by the record standard (each such line reads "FAIL: refused (<code>): ...", codes
+history, kind, publisher, as-enacted and path; see REFUSED below): the pin must not move. Exit 1: any other failure.
 """
 from __future__ import annotations
 
@@ -40,6 +43,59 @@ ACT_DATES = ('Enacted', 'Made', 'Adopted', 'Dated', 'Signed')  # the act's own d
 ACT_END_FIELDS = ('repealed', 'expired', 'annulled')
 STARTING_KINDS = ('baseline', 'consolidated', 'current', 'current-only', 'current-text', 'publisher', 'consolidation',
                   'first published version (publisher)')
+
+# The record standard (MCP.md, "How a corpus describes itself"): a corpus that breaks it is refused, not warned about,
+# so the pointer loop holds its pin. Every such failure starts with REFUSED and a code in brackets ("refused (kind):"),
+# and the run exits with EXIT_REFUSED. Builders write trailers and folders each their own way; readers can only guess
+# at what they did not declare (audit rows 77-80).
+#   history     corpus.json / data/repo.json `history` is not one of HISTORY, or contradicts the commits
+#   kind        a commit's Kind: is a word readers do not know (they would read it as a law)
+#   publisher   a version readers would take as a law is credited to the publisher
+#   as-enacted  an as-enacted record credits a law's text to the publisher, or gives it as a starting text
+#   path        a folder's name carries a listing page's furniture (view or download counters, posting dates)
+# The commit checks (kind, publisher, as-enacted) look at the commits added since the pin: a history is append-only,
+# so what is already pinned is reported as a warning. A corpus not yet pinned is checked in full.
+REFUSED = 'refused'
+EXIT_FAIL, EXIT_REFUSED = 1, 3
+COMPILED_TRAILERS = ('Compilation-id', 'Consolidated')  # the publisher's own compiled text, not a replay
+_MONTHS = ('january|february|march|april|may|june|july|august|september|october|november|december|'
+           'januari|februari|maret|mei|juni|juli|agustus|oktober|desember')
+# A listing page's furniture in a folder name: JDIH's "137 views 105 downloads" (also cut short: "-73-views-72"),
+# its "Lihat Unduh" buttons, and the posting date before "tahun" or at the end of a cut name ("-6-november-2025-tahun",
+# "-21-november"). Lamongan: perda-2021-004-kawasan-tanpa-rokok-18-april-2022-tahun-2021-137-views-105-downloads.
+PATH_FURNITURE = re.compile(r'(?:^|-)\d+-(?:views|downloads)(?:-|$)|(?:^|-)lihat-unduh(?:-|$)'
+                            r'|-\d{1,2}-(?:' + _MONTHS + r')(?:-\d{4})?-tahun(?:-|$)|-\d{1,2}-(?:' + _MONTHS + r')$')
+
+
+def refused(code: str, text: str) -> str:
+    return f'{REFUSED} ({code}): {text}'
+
+
+def is_refusal(problem: str) -> bool:
+    """Whether a fatal problem breaks the record standard (the pointer loop refuses the corpus for it)."""
+    return problem.startswith(f'{REFUSED} (')
+
+
+def path_furniture(repo: Path) -> list[str]:
+    """Folders at HEAD whose own name carries a listing page's furniture (PATH_FURNITURE)."""
+    folders = git('ls-tree', '-r', '-d', '--name-only', 'HEAD', cwd=repo).stdout.splitlines()
+    return [f for f in folders if PATH_FURNITURE.search(f.rsplit('/', 1)[-1].strip('"').lower())]
+
+
+def since_pin(repo: Path, pin: str | None) -> set[str] | None:
+    """The commits on main added since the pin; None when there is no pin to measure from (every commit is new)."""
+    if not pin or git('merge-base', '--is-ancestor', pin, 'HEAD', cwd=repo).returncode:
+        return None
+    return set(git('rev-list', '--first-parent', f'{pin}..HEAD', cwd=repo).stdout.split())
+
+
+def _json_at(repo: Path, name: str) -> dict:
+    shown = git('show', f'HEAD:{name}', cwd=repo)
+    try:
+        got = json.loads(shown.stdout) if not shown.returncode else {}
+    except json.JSONDecodeError:
+        return {}
+    return got if isinstance(got, dict) else {}
 
 
 # Redates:, Retroactive:, trailers and data/acts.json are read with tools/law.py's own code (REDATES, _redate,
@@ -214,9 +270,13 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         warn.append(f"corpus.json lacks {', '.join(lacking)} (defaults are used)")
     if cj.get('corpus') and not re.fullmatch(r'[a-z]{2}(/[a-z0-9-]+){2}', cj['corpus']):
         fatal.append(f"corpus path {cj['corpus']!r} is not <iso>/<level>/<name>")
-    history = cj.get('history', 'in-force')
+    # The history a corpus declares, in corpus.json or else data/repo.json (the shared builder's descriptor): readers
+    # and tools/describe.py take it over anything derived from the commits, so it must be one of the standard's.
+    rj = _json_at(repo, 'data/repo.json') if not cj and descriptor else {}
+    declared_in = 'corpus.json' if 'history' in cj else 'data/repo.json' if 'history' in rj else None
+    history = (cj if declared_in == 'corpus.json' else rj).get('history', 'in-force')
     if history not in HISTORY:
-        fatal.append(f"corpus.json history {cj['history']!r} is not one of {', '.join(HISTORY)}")
+        fatal.append(refused('history', f"{declared_in} history {history!r} is not one of {', '.join(HISTORY)}"))
     if cj and 'citation' not in cj:  # only of a corpus.json that exists: the descriptor warning above covers the rest
         warn.append('corpus.json has no citation rule, so citations of this law are not recognised')
     elif 'citation' in cj:
@@ -238,6 +298,11 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
     starting = 0
     known = _known_kinds()
     law = reader()
+    new = since_pin(repo, pin)  # None: every commit counts as new (no pin to measure from)
+    info = {'in_force_trailer': trailer, 'baseline_trailer': baseline,
+            'correction_trailer': cj.get('correction_trailer') or (cj.get('dates') or {}).get('correction_trailer')}
+    derived: list[tuple] = []  # each commit as readers index it (law.py _derive), for the publisher checks
+    versions = compiled = 0  # dated versions, and those that name the publisher's own compilation (COMPILED_TRAILERS)
     # Redates: as law.py applies them (reader_redates); a version redated `no-date` is a starting text to readers.
     redates = reader_redates(repo) if law else {}
     no_date = {target for _, target, d in redates.get('applied', []) if d == 'no-date'}
@@ -273,12 +338,16 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
             link_only.append(sha)
         if not doc and known is not None and kind and known(kind)[1] is not None:
             odd_kinds.setdefault(kind, []).append(sha)
+        if law:
+            derived.append(law._derive(info, sha, author, '', subject, block)[0])
         if kind == 'correction' and 'Corrects' not in t:
             no_corrects.append(sha)
         when = t.get(trailer) or (t.get(baseline) if baseline and re.match(r'\d{4}-\d{2}-\d{2}', t.get(baseline, '')) else None)
         if when is None:
             continue
         dated += 1
+        versions += 0 if doc else 1
+        compiled += 1 if not doc and any(k in t for k in COMPILED_TRAILERS) else 0
         if not ISO_DAY.match(when):
             fatal.append(f'{sha[:7]}: {trailer} {when!r} is not YYYY-MM-DD, so readers do not date the commit')
             continue
@@ -339,9 +408,7 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         warn.append(f'{len(link_only)} commit(s) have no {trailer} day and a {baseline}: trailer (the corpus.json '
                     f'baseline_trailer) holding a link, not a date, so readers cannot date them (first '
                     f'{link_only[0][:7]}); write the date there and the link in Source:')
-    if odd_kinds:
-        warn.append('Kind values readers do not know (read as laws): ' +
-                    ', '.join(f'{k!r} ({len(v)})' for k, v in sorted(odd_kinds.items(), key=lambda kv: -len(kv[1]))[:12]))
+    fatal.extend(standard_problems(repo, odd_kinds, derived, new, pin, history, declared_in, versions, compiled, warn))
     if no_corrects:
         warn.append(f'{len(no_corrects)} correction(s) have no Corrects: trailer, so readers apply each as an ordinary '
                     f'version from its In-force date, first {no_corrects[0][:7]}')
@@ -399,6 +466,97 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
         elif reader() is not None:
             fatal.extend(act_ends_lost(repo, pin))
     return fatal, warn
+
+
+def standard_problems(repo: Path, odd_kinds: dict[str, list[str]], derived: list[tuple], new: set[str] | None,
+                      pin: str | None, history: str, declared_in: str | None, versions: int, compiled: int,
+                      warn: list[str]) -> list[str]:
+    """The record standard's refusals (REFUSED): what readers would otherwise have to guess. Commits already pinned
+    only warn (`warn` is extended), as an append-only history cannot change them; `new` is the commits since the pin,
+    or None when every commit counts."""
+    out: list[str] = []
+    fresh = (lambda sha: True) if new is None else (lambda sha: sha in new)  # noqa: E731
+    where = 'in a history not yet pinned' if new is None else f'added since the pin {pin[:7]}'
+
+    def split(shas: list[str]) -> tuple[list[str], list[str]]:
+        return [s for s in shas if fresh(s)], [s for s in shas if not fresh(s)]
+
+    # kind: a Kind: word readers do not know is read as a law (Australia's 20 "Unattributed" compilations, row 77).
+    now = {k: split(v)[0] for k, v in odd_kinds.items()}
+    old = {k: split(v)[1] for k, v in odd_kinds.items()}
+    listed = lambda d: ', '.join(f'{k!r} ({len(v)})' for k, v in sorted(d.items(), key=lambda kv: -len(kv[1]))[:12] if v)  # noqa: E731
+    if any(now.values()):
+        first = next(v[0] for v in now.values() if v)
+        out.append(refused('kind', f'commits {where} have Kind: values readers do not know, so they would read them as '
+                                   f'laws: {listed(now)} (first {first[:7]}); write a Kind tools/law.py knows (law, '
+                                   'baseline, correction, uncredited, documentation, ...), or add the word to its '
+                                   'tables first'))
+    if any(old.values()):
+        warn.append(f'Kind values readers do not know (read as laws), already pinned: {listed(old)}')
+
+    law = reader()
+    if law is not None and derived:
+        # publisher: a version read as a law, credited to the name the corpus gives its starting or unexplained
+        # texts or to its publisher: readers show it as no law named (law.py _publisher_changes, rows 62 and 77).
+        publisher = str(_publisher_of(repo)).strip().lower()
+        rows = list(derived)
+        law._publisher_changes({'publisher': publisher}, rows)
+        to_publisher = [r[0] for r, was in zip(rows, derived) if was[4] == 'law' and r[4] == 'uncredited']
+        names = {r[1] for r in derived if r[4] in ('baseline', 'uncredited')}
+        now_, old_ = split(to_publisher)
+        if now_:
+            out.append(refused('publisher', f'{len(now_)} commit(s) {where} read as laws are credited to the publisher '
+                                            f'(first {now_[0][:7]}, by {_author(derived, now_[0])!r}): credit each '
+                                            'version to the law that made it, or say no law is named (Kind: '
+                                            'uncredited) or that it is a starting text (Kind: baseline)'))
+        if old_:
+            warn.append(f'{len(old_)} commit(s) already pinned read as laws are credited to the publisher (first '
+                        f'{old_[0][:7]}); readers show them as changes no law is named for')
+        # as-enacted: each law as first published, credited to the law itself; a starting text or the publisher's
+        # credit says the opposite (the Indonesian builder's Kind: publisher for each Perda as enacted, row 79).
+        if history == 'as-enacted':
+            bad = [r[0] for r in derived if r[5] and r[4] != 'documentation' and
+                   (r[4] == 'baseline' or r[1] in names or (publisher and r[1].strip().lower() == publisher))]
+            now_, old_ = split(bad)
+            if now_:
+                out.append(refused('as-enacted', f'{len(now_)} commit(s) {where} give a law as a starting text or '
+                                                 f'credit it to the publisher (first {now_[0][:7]}, by '
+                                                 f'{_author(derived, now_[0])!r}, Kind {_kind(derived, now_[0])!r}), in '
+                                                 f'a record whose history is as-enacted ({declared_in}): author each '
+                                                 'version as the law it is (its name and number) and write Kind: law'))
+            if old_:
+                warn.append(f'{len(old_)} commit(s) already pinned give a law as a starting text or credit it to the '
+                            f'publisher in an as-enacted record (first {old_[0][:7]})')
+
+    # history: a declaration the commits contradict (Australia's instruments: "replayed", though every commit is the
+    # Register's own compilation, Compilation-id:, row 78).
+    if history == 'replayed' and versions and compiled == versions:
+        out.append(refused('history', f"{declared_in or 'corpus.json'} history is 'replayed' (past versions rebuilt by "
+                                      f'applying each amending act), but every one of the {versions} dated versions '
+                                      f"names the publisher's own compiled text ({' or '.join(COMPILED_TRAILERS)}): "
+                                      "declare history 'in-force'"))
+
+    # path: a listing page's furniture in a folder name changes with each page view, so a rebuild renames the act
+    # and breaks every saved path (Lamongan, row 80).
+    cluttered = path_furniture(repo)
+    if cluttered:
+        out.append(refused('path', f'{len(cluttered)} folder(s) carry a listing page\'s furniture in their names (view or '
+                                   f'download counters, posting dates), e.g. {cluttered[0]!r}: a rebuild would rename '
+                                   'them. Name each act folder from its number, year and title, and move it once in a '
+                                   'documentation commit'))
+    return out
+
+
+def _publisher_of(repo: Path) -> str:
+    return _json_at(repo, 'corpus.json').get('publisher') or _json_at(repo, 'data/repo.json').get('publisher') or ''
+
+
+def _author(rows: list[tuple], sha: str) -> str:
+    return next((r[1] for r in rows if r[0] == sha), '')
+
+
+def _kind(rows: list[tuple], sha: str) -> str:
+    return next((r[6] for r in rows if r[0] == sha), '')
 
 
 def acts_problems(repo: Path) -> tuple[list[str], list[str]]:
@@ -698,7 +856,9 @@ def main() -> None:
         print(f'\n{len(results)} corpora checked: {len(results) - failed} pass, {failed} fail; {no_cj} of '
               f'{len(results)} have no corpus.json'
               + (f'; {absent} listed in manifest.json are not checked out here' if absent else ''))
-    sys.exit(1 if any(f for f, _ in results) else 0)
+    # 3: refused by the record standard (REFUSED: the pointer loop must not move the pin); 1: any other failure.
+    fatal = [p for f, _ in results for p in f]
+    sys.exit(EXIT_REFUSED if any(is_refusal(p) for p in fatal) else EXIT_FAIL if fatal else 0)
 
 
 if __name__ == '__main__':

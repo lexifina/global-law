@@ -221,6 +221,25 @@ A `Redates:` or `Retroactive:` that readers would ignore is a warning (the histo
 was made is judged by the act's day as `Redates: <commit> enacted` corrects it; an `acts.json` that does not
 parse fails.
 
+Some things readers can only guess at, so the check refuses them (`FAIL: refused (<code>): ...`, exit code 3; any
+other failure exits 1), and the pin does not move until they are fixed:
+- `history`: a declared `history` that is not one of the five values above, or `replayed` when every dated version
+  names the publisher's own compiled text (`Compilation-id:` or `Consolidated:`).
+- `kind`: a `Kind:` that readers do not know (they would read it as a law). Use a word `tools/law.py` knows: `law`,
+  `baseline`, `correction`, `uncredited`, `documentation`, and the others listed in its tables.
+- `publisher`: a version that readers would take as a law but that is credited to the publisher (the corpus's
+  `publisher`, or the name it gives its starting texts). Credit it to the law that made it, or mark it with `Kind:
+  uncredited` (no law named) or `Kind: baseline` (a starting text).
+- `as-enacted`: in a record declared `as-enacted`, a law's text given as a starting text or credited to the
+  publisher. Credit each version to the law it is (its name and number) and give it `Kind: law`.
+- `path`: a folder name that carries furniture from a listing page: view or download counters, or a posting date
+  ("...-18-april-2022-tahun-2021-137-views-105-downloads"). These change on every rebuild, so a rebuild would rename
+  the act. Name the folder from the act's number, year and title, and move it once in a documentation commit.
+
+Because a history cannot change, the `kind`, `publisher` and `as-enacted` checks apply only to commits added since
+the pin. Older commits get a warning. A corpus that has never been pinned is checked in full. The `history` and
+`path` checks read HEAD, so they hold the pin until the corpus is fixed.
+
 Against the commit global-law pins now (`--pin`, or read from global-law), `data/acts.json` must not take act ends
 away without saying why. Each act readers end at the pin (as above: repealed, expired or annulled) must still be ended
 at HEAD, and one ended from a day must still have a day; an act whose row, end day or ending status is gone, or whose
