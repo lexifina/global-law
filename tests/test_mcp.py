@@ -2566,5 +2566,255 @@ class ListJurisdictionsExample(unittest.TestCase):
         self.assertEqual(row['provision_files'], 1)
 
 
+
+def _stub_forms(m):
+    """Every registered citation form with a stub path, so the forms are checked on their words alone."""
+    return [m.CitationForm(f.country, f.rx, lambda _m, c=f.country: f'{c}/x.md', f.examples, f.open_name) for f in m.CITATION_REGISTRY]
+
+
+class TestCrossCountryCitations(unittest.TestCase):
+    """Audit row 67, and the cause of rows 67 and 68: each country's citation forms were written and tested alone, but
+    every form runs over every text. Each form is now declared with its country and examples (CITATION_REGISTRY), and
+    every example must be claimed by its own country's forms and by no other country's, except the overlaps listed in
+    CITATION_OVERLAPS, which citations_in() settles by the name the citation carries."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def countries(self, text):
+        from unittest import mock
+        with mock.patch.object(self.m, 'citation_served', lambda c: False):  # no corpus decides: the words alone
+            return {h['country'] for h in self.m.citations_in(text, _stub_forms(self.m))}
+
+    def test_every_example_is_claimed_by_its_own_country_only(self):
+        forms = self.m.CITATION_REGISTRY
+        listed = {(ex, mine, other) for (mine, other), exs in self.m.CITATION_OVERLAPS.items() for ex in exs}
+        seen = set()
+        for f in forms:
+            self.assertTrue(f.examples, f'a {f.country} form has no examples')
+            for ex in f.examples:
+                self.assertTrue(f.rx.search(ex), f'{f.country} form does not read its own example {ex!r}')
+                for other in {g.country for g in forms if g.country != f.country and g.rx.search(ex)}:
+                    self.assertIn((ex, f.country, other), listed, f'{other} forms also read the {f.country} citation {ex!r}')
+                    seen.add((ex, f.country, other))
+                self.assertEqual(self.countries(ex), {f.country}, ex)
+        self.assertEqual(listed - seen, set(), 'CITATION_OVERLAPS lists overlaps that no longer happen')
+
+    def test_spain_does_not_take_mexican_or_argentine_citations(self):
+        text = ('Conforme al artículo 1 de la Constitución Política de los Estados Unidos Mexicanos y al artículo 14 de la '
+                'Ley Orgánica del Poder Judicial de la Federación, en relación con el artículo 1910 del Código Civil para el '
+                'Distrito Federal, el artículo 222 de la LGS (Ley General de Salud), el artículo 1716 del Código Civil y '
+                'Comercial de la Nación y el artículo 14 de la Constitución Nacional.')
+        self.assertNotIn('es', self.countries(text))
+        for one in ('artículo 1 de la Constitución Política de los Estados Unidos Mexicanos',
+                    'artículo 14 de la Ley Orgánica del Poder Judicial de la Federación',
+                    'artículo 1910 del Código Civil para el Distrito Federal', 'artículo 1716 del Código Civil y Comercial de la Nación',
+                    'artículo 24 de la Constitución Política de Colombia', 'artículo 222 de la LGS (Ley General de Salud)'):
+            self.assertNotIn('es', self.countries(one), one)
+            self.assertFalse([h for h in self.m.citations_in(one) if h['path'].startswith('spain/')], one)
+        # Spain's own citations still read as Spain's.
+        for one in ('artículo 14 de la Constitución Española', 'artículo 14 de la Constitución', 'art. 9 LGS',
+                    'artículo 1902 del Código Civil, que', 'artículo 14 de la Ley Orgánica del Poder Judicial.'):
+            self.assertEqual(self.countries(one), {'es'}, one)
+
+    def test_served_corpora_decide_when_the_words_do_not(self):
+        from unittest import mock
+        rx = re.compile(r'art\. (\d+) X')
+        forms = [self.m.CitationForm('aa', rx, lambda m: 'aa/x.md', ('art. 1 X',)), self.m.CitationForm('bb', rx, lambda m: 'bb/x.md', ('art. 1 X',))]
+        for served, want in (({'aa'}, {'aa'}), ({'bb'}, {'bb'}), (set(), {'aa', 'bb'}), ({'aa', 'bb'}, {'aa', 'bb'})):
+            with mock.patch.object(self.m, 'citation_served', lambda c: c in served):
+                self.assertEqual({h['country'] for h in self.m.citations_in('see art. 1 X', forms)}, want, served)
+                self.assertEqual({h['country'] for h in self.m.citations_in('see art. 1 X', forms[::-1])}, want, served)  # never the order
+
+
+class TestRomanianCitations(unittest.TestCase):
+    """Audit row 68: Moldovan citations were answered with Romania's acts."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def test_moldova_not_romania(self):
+        from unittest import mock
+        text = ('Potrivit art. 16 din Constituția Republicii Moldova și art. 5 din Codul civil al Republicii Moldova, '
+                'instanța a reținut încălcarea art. 2 din Codul penal al RM.')
+        with mock.patch.object(self.m, 'citation_served', lambda c: True):
+            self.assertEqual({h['country'] for h in self.m.citations_in(text, _stub_forms(self.m))}, {'md'})
+            self.assertEqual({h['country'] for h in self.m.citations_in('art. 16 din Constituția României', _stub_forms(self.m))}, {'ro'})
+        self.assertFalse([p for _, p, _ in self.m.ro_citations(text) if p.startswith('romania/')])
+        if _checked_out('moldova/national/acts'):
+            found = self.m.ro_citations('art. 16 din Constituția Republicii Moldova')
+            self.assertEqual([p for _, p, _ in found], ['moldova/national/acts/constitutia/art-016.md'])
+        if _checked_out(RO_C):  # Romania's own still resolve
+            self.assertEqual([p for _, p, _ in self.m.ro_citations('art. 16 din Constituția României')],
+                             [f'{RO_C}/constitutie/1991/art-016.md'])
+
+
+class TestSpanishCitations(unittest.TestCase):
+    """Audit rows 69 and 72: "art. 1.902 CC" is article 1902 (a thousands point), and lists ("artículos 14 y 24 de la
+    Constitución Española", "arts. 1902 y 1903 CC") give every article in them."""
+
+    CC, CE, LO = 'f/cc', 'f/ce', 'f/lo'
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def cite(self, text):
+        from unittest import mock
+        norms = {self.CC: {'id': 'BOE-A-1889-4763', 'rango': 'Real Decreto', 'numyear': None, 'date': '1889-07-24', 'title': ''},
+                 self.CE: {'id': 'BOE-A-1978-31229', 'rango': None, 'numyear': None, 'date': '1978-12-27', 'title': ''},
+                 self.LO: {'id': 'BOE-A-2000-544', 'rango': 'Ley Orgánica', 'numyear': '4/2000', 'date': '2000-01-11', 'title': ''}}
+        arts = {self.CC: {n: [f'{self.CC}/art{n}.md'] for n in ('1', '1101', '1902', '1903', '1968')},
+                self.CE: {n: [f'{self.CE}/a{n}.md'] for n in ('9', '14', '24', '103')},
+                self.LO: {'31': [f'{self.LO}/a31.md']}}
+        with mock.patch.object(self.m, 'es_corpus', lambda: ('es', 'sha')), \
+                mock.patch.object(self.m, 'es_norms', lambda c, s: norms), \
+                mock.patch.object(self.m, 'article_files', lambda c, s, f: arts[f]), \
+                mock.patch.object(self.m, 'citation_served', lambda c: c == 'es'), \
+                mock.patch.object(self.m, 'here', lambda p: p):
+            return [h['path'] for h in self.m.citations_in(text) if h['country'] == 'es']
+
+    def test_thousands_separator(self):
+        self.assertEqual(self.cite('art. 1.902 del Código Civil'), [f'es/{self.CC}/art1902.md'])
+        self.assertEqual(self.cite('el artículo 1.968.2 del Código Civil fija el plazo'), [f'es/{self.CC}/art1968.md'])
+        self.assertEqual(self.cite('véase también el art. 1.101 CC.'), [f'es/{self.CC}/art1101.md'])
+        self.assertEqual(self.cite('artículo 31.3 de la Ley Orgánica 4/2000'), [f'es/{self.LO}/a31.md'])  # an apartado
+        self.assertEqual(self.cite('artículo 9.3 CE'), [f'es/{self.CE}/a9.md'])
+        self.assertEqual(self.cite('art. 1.500 CC'), [f'es/{self.CC}/art1.md'])  # no article 1500 here: article 1, apartado 500
+        if _checked_out(SPAIN):
+            cc = 'spain/national/acts/estatal/real-decreto/1889/BOE-A-1889-4763'
+            self.assertEqual([h['path'] for h in self.m.citations_in('art. 1.902 del Código Civil')], [f'{cc}/art1902.md'])
+            self.assertEqual([h['path'] for h in self.m.citations_in('artículo 1.968.2 del Código Civil')], [f'{cc}/art1968.md'])
+
+    def test_article_lists(self):
+        self.assertEqual(self.cite('La sentencia vulnera los artículos 14 y 24 de la Constitución Española.'),
+                         [f'es/{self.CE}/a14.md', f'es/{self.CE}/a24.md'])
+        self.assertEqual(self.cite('y los arts. 1902 y 1903 CC.'), [f'es/{self.CC}/art1902.md', f'es/{self.CC}/art1903.md'])
+        self.assertEqual(self.cite('Véanse también los artículos 9.3 y 103.1 CE.'), [f'es/{self.CE}/a9.md', f'es/{self.CE}/a103.md'])
+        self.assertEqual(self.cite('artículos 9, 14 y 24 CE'), [f'es/{self.CE}/a{n}.md' for n in (9, 14, 24)])
+        if _checked_out(SPAIN):
+            ce = 'spain/national/acts/estatal/constitucion/1978/BOE-A-1978-31229'
+            self.assertEqual([h['path'] for h in self.m.citations_in('artículos 14 y 24 de la Constitución Española')],
+                             [f'{ce}/a14.md', f'{ce}/a24.md'])
+
+
+class TestAustralianCitations(unittest.TestCase):
+    """Audit row 70: the Corporations Regulations' lettered chapters and parts, and a citation ending a sentence."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def test_letter_parts_and_full_stop(self):
+        cite = lambda text: [p.rsplit('/', 1)[1] for rx, to in self.m.CITATION_FORMS for m in rx.finditer(text)
+                             for p in self.m.as_paths(to(m)) if 'corporations-regulations' in p]
+        self.assertEqual(cite('the disclosure exemption in reg 6D.2.01'), ['r-6D.2.01.md'])
+        self.assertEqual(cite('the relief in regulation 7.5A.73 and r 5C.11.01'), ['r-7.5A.73.md', 'r-5C.11.01.md'])
+        self.assertEqual(cite('reg 2M.3.03 applies'), ['r-2M.3.03.md'])
+        self.assertEqual(cite('signed in accordance with regulation 1.0.11.'), ['r-1.0.11.md'])
+        self.assertEqual(cite('The fee is payable under reg 7.1.04. It'), ['r-7.1.04.md'])
+        for text in ('regulation 2.1 of the EU Regulation', 'reg 6.10.01.5', 'reg 3.4 applies'):
+            self.assertEqual(cite(text), [], text)
+
+
+class TestMaltaCitations(unittest.TestCase):
+    """Audit row 71: an instrument recorded as one file (sl/<n>/title.md) holds the regulation cited."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def test_single_file_instrument(self):
+        from unittest import mock
+        names = ('sl/10.1/title.md', 'sl/586.8/title.md', 'sl/586.8/15.md')
+        with mock.patch.object(self.m, 'malta_corpus', lambda: 'mt/x'), \
+                mock.patch.object(self.m, 'corpus_head', lambda c: 'sha'), \
+                mock.patch.object(self.m, 'names_of', lambda c, s: names), \
+                mock.patch.object(type(ROOT), 'exists', lambda self: True), \
+                mock.patch.object(self.m, 'here', lambda p: p):
+            hits = self.m.citations_in('Permits are refused under regulation 3 of S.L. 10.01 and reg. 15 of S.L. 586.08.')
+        self.assertEqual([h['path'] for h in hits], ['mt/x/sl/10.1/title.md', 'mt/x/sl/586.8/15.md'])
+        self.assertIn('provision 3 is inside it', hits[0]['note'])
+        self.assertIsNone(hits[1]['note'])
+        if _checked_out(MT_C):
+            text, data = self.m.t_resolve_citations({'text': 'Permits are refused under regulation 3 of S.L. 10.01.', 'date': '2026-11-01'})
+            c = data['citations'][0]
+            self.assertEqual(c['path'], f'{MT_C}/sl/10.1/title.md')
+            self.assertNotEqual(c['status'], 'not in the record at any date')
+            self.assertIn('is inside it', text)
+
+
+class TestCitationFor(unittest.TestCase):
+    """Audit row 73: a provision with no "#" heading (all of Mexico's) is cited by the number it opens with."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def test_heading_from_first_line(self):
+        from unittest import mock
+        with mock.patch.object(self.m.law, 'corpus_of', lambda p: ('mexico/national/acts', p.split('acts/', 1)[1])), \
+                mock.patch.object(self.m, 'act_title', lambda c, r: 'Ley Federal del Trabajo'), \
+                mock.patch.object(self.m.law, 'corpus_info', lambda c: {}), \
+                mock.patch.object(self.m, 'provision_link', lambda *a: None), \
+                mock.patch.object(self.m, 'act_portals', lambda *a: {}), \
+                mock.patch.object(self.m, 'corpus_head', lambda c: 'sha'):
+            for text, want in (('Artículo 49.- La persona empleadora ...', 'Artículo 49'), ('Artículo 46 Bis.- ...', 'Artículo 46 Bis'),
+                               ('Artículo 4o.- Toda persona ...', 'Artículo 4o'), ('\nArtículo 15 A.- ...', 'Artículo 15 A')):
+                cite = self.m.citation_for('mexico/national/acts/ley-federal-del-trabajo/art-0049.md', '2026-11-06', None, text)
+                self.assertTrue(cite['pincite'].startswith(want + ','), cite['pincite'])
+                self.assertNotIn('art-0049', cite['pincite'])
+            # A "#" heading still decides, and a text with neither keeps the file's name.
+            self.assertTrue(self.m.citation_for('mexico/national/acts/x/art-1.md', '2026-11-06', None,
+                                                '# Art. 1 Objeto\nArtículo 2')['pincite'].startswith('Art. 1 Objeto,'))
+            self.assertTrue(self.m.citation_for('mexico/national/acts/x/art-1.md', '2026-11-06', None,
+                                                'Transitorio único')['pincite'].startswith('art-1,'))
+
+
+class TestResolveCitations(unittest.TestCase):
+    """Audit row 74 (its silent cap): citations past max_results are counted and named, never dropped without a word."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def test_limit_is_reported(self):
+        from unittest import mock
+        text = ' '.join(f'See 11 U.S.C. § {100 + i}.' for i in range(12))
+        with mock.patch.object(self.m, 'citation_state', lambda d, p: {'status': 'in force'}), \
+                mock.patch.object(self.m, 'here', lambda p: p):
+            said, data = self.m.t_resolve_citations({'text': text, 'max_results': 10, 'date': '2026-11-01'})
+            self.assertEqual(len(data['citations']), 10)
+            self.assertEqual(data['not_looked_up'], 2)
+            self.assertIn('2 more citation(s) not looked up', said)
+            self.assertIn('11 U.S.C. § 110', said)  # the first left out, named
+            said, data = self.m.t_resolve_citations({'text': text, 'max_results': 20, 'date': '2026-11-01'})
+            self.assertEqual(data['not_looked_up'], 0)
+            self.assertNotIn('not looked up', said)
+
+
 if __name__ == '__main__':
     unittest.main()

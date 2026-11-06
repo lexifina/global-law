@@ -1133,16 +1133,15 @@ def as_paths(found: str | list[str]) -> list[str]:
 
 def cited_provisions(query: str, scope: str) -> list[tuple[str, str, str]]:
     """(path, heading, citation) for each provision a citation in the query names, read with resolve_citations' forms
-    (CITATION_FORMS and the Romanian reader), that this tree holds within the scope; [] when there is none."""
+    (citations_in: every country's forms, one country per citation), that this tree holds within the scope; [] when
+    there is none."""
     forms = [query]
     m = ES_NORM_FIRST.match(query)
     if m:
         forms += [f"{m.group('art')} de la {m.group('norm')}", f"{m.group('art')} del {m.group('norm')}"]
     for q in forms:
-        found = [(mm.start(), here(p), mm.group(0).strip()) for rx, to_path in CITATION_FORMS for mm in rx.finditer(q)
-                 for p in as_paths(to_path(mm))]  # a form may give a list: "artículos 103 y 107 constitucionales"
         out, seen = [], set()
-        for _, path, cite in sorted(found + ro_citations(q)):
+        for path, cite in ((h['path'], h['citation']) for h in citations_in(q)):  # a list gives several: "artículos 103 y 107"
             if path in seen or scope and not (path == scope or path.startswith(scope.rstrip('/') + '/')):
                 continue
             seen.add(path)
@@ -1608,6 +1607,19 @@ def act_portals(corpus: str, sha: str) -> dict[str, str]:
     return out
 
 
+# A provision with no "#" heading that opens with its own number, as Mexico's do ("Artículo 49.- La persona ...",
+# "Artículo 46 Bis.- ...", "Artículo 4o.- ..."): that number is how to cite it, never the file's name (art-0049).
+TEXT_HEADING = re.compile(rf'\s*((?:Art[íi]culo|Articolul|Article|Artikel|Art\.|Section|Regulation)\s+\d+[A-Za-z]?(?:o\.|°|º)?'
+                          rf'(?:(?:\s*-\s*|\s+)(?:{NUMBER_SUFFIX}|(?-i:[A-Z]))(?!\w))*)', re.I)
+
+
+def text_heading(text: str | None) -> str:
+    """The number a provision's first line gives itself ("Artículo 49"), or '' when it gives none."""
+    first = next((l for l in (text or '').splitlines() if l.strip()), '')
+    m = TEXT_HEADING.match(first)
+    return m.group(1).strip().rstrip('.-') if m else ''
+
+
 def citation_for(path: str, date: str, version: dict | None, text: str | None, current: bool = False) -> dict:
     """How to cite a provision as read on a date, from the publisher's own pages, never this tree: the provision's
     page where the publisher's URLs allow (provision_link), else the publisher's text of the act in force on the date,
@@ -1615,7 +1627,8 @@ def citation_for(path: str, date: str, version: dict | None, text: str | None, c
     named apart, as provenance, not as the source."""
     corpus, rel = law.corpus_of(path)
     links = links_of(corpus, version['commit']) if version else []
-    heading = next((l.lstrip('#').strip() for l in (text or '').splitlines() if l.startswith('#')), '') or Path(rel).stem
+    heading = next((l.lstrip('#').strip() for l in (text or '').splitlines() if l.startswith('#')), '') \
+        or text_heading(text) or Path(rel).stem
     title = act_title(corpus, rel)
     corpus_name = law.corpus_info(corpus).get('name') or corpus
     cite = {'pincite': f"{heading}, {title or corpus_name}, as in force on {date}", 'official_url': None, 'shows': None,
@@ -3133,8 +3146,14 @@ def es_citing(corpus: str, sha: str, rel: str) -> dict[str, list[str]] | None:
 
 
 # resolve_citations' Spanish forms: "artículo 31.3 de la Ley Orgánica 4/2000", "art. 127 del Reglamento aprobado por
-# Real Decreto 1155/2024", "artículo 1902 del Código Civil", "BOE-A-2000-544, art. 31".
-ES_ONE = rf'\bart(?:[íi]culo|\.)\s*(?P<n>\d+)(?:[\s.]*(?P<suf>{NUMBER_SUFFIX})\b)?(?:\.\d+(?:\.\w+)?)*(?:\.?\s*[a-zñ]\))?'
+# Real Decreto 1155/2024", "artículo 1902 del Código Civil", "BOE-A-2000-544, art. 31"; and lists: "artículos 14 y 24
+# de la Constitución Española", "arts. 1902 y 1903 CC". Spanish writing marks thousands with a point: "art. 1.902 CC"
+# is article 1902 (es_article_paths falls back to article 1, apartado 902, only where the norm has no article 1902),
+# while "31.3" is article 31, apartado 3.
+ES_NUM = r'(?:\d{1,3}\.\d{3}(?!\d)|\d+)'
+ES_ONE_ITEM = rf'{ES_NUM}(?:[\s.]*(?:{NUMBER_SUFFIX})\b)?(?:\.\d+(?:\.\w+)?)*(?:\.?\s*[a-zñ]\))?'
+ES_ONE = rf'\bart(?:[íi]culos?|s?\.)\s*(?P<list>{ES_ONE_ITEM}(?:\s*(?:,\s*y\s|,|\s[yeo]\s)\s*{ES_ONE_ITEM})*)'
+ES_LIST_ITEM = re.compile(rf'(?P<n>{ES_NUM})(?:[\s.]*(?P<suf>{NUMBER_SUFFIX})\b)?(?:\.\d+(?:\.\w+)?)*(?:\.?\s*[a-zñ]\))?', re.I)
 ES_CITE = re.compile(ES_ONE + rf'[^.;]{{0,80}}?\b(?:de\s+la|del)\s+(?:(?P<regl>Reglamento)\b[^.;]{{0,80}}?\baprobad[oa]\s+por\s+(?:el\s+)?)?'
                      rf'(?P<rango>{ES_RANGO_ANY})\s+(?:n[úu]m(?:ero|\.)\s*)?(?P<ny>\d+/\d{{4}})(?!\d)', re.I)
 ES_BOE_CITE = re.compile(rf'\b(?P<id>BOE-A-\d{{4}}-\d+),?\s*' + ES_ONE.removeprefix(r'\b'), re.I)
@@ -3158,12 +3177,12 @@ def es_corpus() -> tuple[str | None, str | None]:
     return path, (corpus_head(path) or None) if served else None
 
 
-def es_article_path(m: re.Match, by: str) -> str:
-    """The file a Spanish citation names: the norm from normas.tsv (by rango and number/year, BOE id or short name),
-    the article from its heading; where the norm or article is not in the record, a path that says so when looked up."""
+def es_article_paths(m: re.Match, by: str) -> list[str]:
+    """The files a Spanish citation names, one per article of its list: the norm from normas.tsv (by rango and
+    number/year, BOE id or short name), each article from its heading; where the norm or article is not in the record,
+    a path that says so when looked up. "1.902" is article 1902 where the norm has one, else article 1 (apartado 902)."""
     corpus, sha = es_corpus()
     corpus = corpus or 'spain/national/acts'
-    number = m.group('n').lstrip('0') + (f" {m.group('suf').lower()}" if m.group('suf') else '')
     norms = es_norms(corpus, sha) if sha else {}
     if by == 'id':
         want = lambda f, r: r['id'] == m.group('id').upper()  # noqa: E731
@@ -3178,14 +3197,23 @@ def es_article_path(m: re.Match, by: str) -> str:
     else:
         want = lambda f, r: r['numyear'] == m.group('ny') and es_rango_key(r['rango'] or '') == es_rango_key(m.group('rango'))  # noqa: E731
     folder = next((f for f, r in norms.items() if want(f, r)), None)
-    if not folder:
-        return f"{corpus}/estatal/{m.group('id') if by == 'id' else 'norma-no-encontrada'}/a{m.group('n')}.md"
-    files = sorted(article_files(corpus, sha, folder).get(number, []))
+    articles = article_files(corpus, sha, folder) if folder else {}
     # Where a decree numbers its own articles and those of the Reglamento it approves (two files for one number), a
     # citation of the Reglamento means the annexed one, filed by block (a1-37.md), else the decree's own (a5.md).
     regl = by == 'number' and bool(m.group('regl'))
-    files = [f for f in files if ('-' in stem_of(f)) == regl] or files
-    return f'{corpus}/{files[0]}' if files else f'{corpus}/{folder}/a{m.group("n")}.md'
+    paths = []
+    for item in ES_LIST_ITEM.finditer(m.group('list')):
+        suffix = f" {item.group('suf').lower()}" if item.group('suf') else ''
+        joined = item.group('n').replace('.', '').lstrip('0') or '0'
+        numbers = [joined] + ([item.group('n').split('.')[0].lstrip('0')] if '.' in item.group('n') else [])
+        if not folder:
+            paths.append(f"{corpus}/estatal/{m.group('id') if by == 'id' else 'norma-no-encontrada'}/a{joined}.md")
+            continue
+        number = next((n for n in numbers if articles.get(n + suffix)), joined)
+        files = sorted(articles.get(number + suffix, []))
+        files = [f for f in files if ('-' in stem_of(f)) == regl] or files
+        paths.append(f'{corpus}/{files[0]}' if files else f'{corpus}/{folder}/a{number}.md')
+    return paths
 
 
 def defined_terms(text: str) -> list[str]:
@@ -3469,6 +3497,7 @@ MEXICAN_ACTS = {
     'codigo-penal-federal': ('Código Penal Federal',),
     'codigo-fiscal-de-la-federacion': ('CFF', 'Código Fiscal de la Federación'),
     'ley-del-seguro-social': ('LSS', 'Ley del Seguro Social'),
+    'ley-general-de-salud': ('Ley General de Salud',),  # not "LGS": Spain's Ley General de Subvenciones is LGS too
     'ley-del-issste': ('LISSSTE', 'Ley del ISSSTE', 'Ley del Instituto de Seguridad y Servicios Sociales de los Trabajadores del Estado'),
     'ley-del-infonavit': ('Ley del INFONAVIT', 'Ley del Instituto del Fondo Nacional de la Vivienda para los Trabajadores'),
     'ley-general-de-responsabilidades-administrativas': ('LGRA', 'Ley General de Responsabilidades Administrativas'),
@@ -3499,43 +3528,6 @@ _MX_PARTS = (r'(?:[\s,]+(?:apartados?|fracci[óo]n(?:es)?|p[áa]rrafos?|incisos?
              r'tercer[oa]?|cuart[oa]|quint[oa]|[úu]ltim[oa]|pen[úu]ltim[oa])\b(?:\s+(?!de\b|del\b)[\w°º.-]{1,12}){0,2})*')
 
 
-# Citation forms the tree can resolve: (regex over free text, function from the match to a provision path).
-CITATION_FORMS = [
-    (re.compile(r'\b(\d{1,2})\s*U\.?\s?S\.?\s?C\.?(?:\s*A\.?)?\s*(?:(?:§§?|[Ss]ec(?:tion|\.)?)\s*)?(\d+[a-zA-Z]?(?:-\d+)?)((?:\([0-9A-Za-z]+\))*)'),
-     lambda m: f'us/federal/usc/title-{m.group(1)}/{m.group(2)}.md'),
-    (re.compile(r'\b(?:Art(?:ikel|\.)?)\s*(\d+[a-z]?)(?:\s*(?:Abs\.|Absatz)\s*\d+[a-z]?)?(?:\s*(?:S\.|Satz)\s*\d+)?\s*(?:GG|Grundgesetz(?:es)?)\b'),
-     lambda m: f'de/bund/grundgesetz/artikel/{m.group(1).zfill(3) if m.group(1).isdigit() else m.group(1).rjust(4, "0")}.md'),
-    (re.compile(r'\b(?:s\.|ss\.|[Ss]ection)\s*(\d+[A-Z]?)((?:\(\d+\))*)\s*(?:of\s+the\s+)?(?:CFA(?:\s*2014)?|Children and Families Act 2014)'),
-     lambda m: f'gb/uk/send/ukpga/2014/6/section/{m.group(1)}.md'),
-    (re.compile(r'\b(?:reg\.|[Rr]egulation)\s*(\d+[A-Z]?)((?:\(\d+\))*)\s*(?:of\s+the\s+)?(?:SEND Regulations(?:\s*2014)?|Special Educational Needs and Disability Regulations 2014)'),
-     lambda m: f'gb/uk/send/uksi/2014/1530/regulation/{m.group(1)}.md'),
-    (re.compile(r'\bArt\.\s*(\d+[a-z]?)(?:\s*Abs\.\s*\d+[a-z]?)?(?:\s*(?:lit\.|Bst\.)\s*[a-z])?\s*(BV|DSG|SchKG)\b'),
-     lambda m: f"ch/bund/swiss-law/{m.group(2).lower()}/art-{m.group(1).rjust(3 + (not m.group(1).isdigit()), '0')}.md"),
-    # Malta: "article 11 of Cap. 586", "reg. 15 of S.L. 586.08" (a provision of a Chapter or of subsidiary legislation).
-    (re.compile(r'\b(?:art(?:icle|\.)?|s\.|section|reg(?:ulation|\.)?)\s*(\d+[A-Z]?)(?:\(\w+\))*\s*(?:of\s+)?(?:the\s+)?'
-                r'(?:Cap\.?\s*(\d+[A-Z]?)|S\.\s?L\.\s*(\d+)\.0*(\d+))\b', re.I),
-     lambda m: f"{malta_corpus() or 'mt/national/malta-law'}/{f'cap/{m.group(2)}' if m.group(2) else f'sl/{m.group(3)}.{m.group(4)}'}/{m.group(1)}.md"),
-    # Spain: "artículo 31.3 de la Ley Orgánica 4/2000", "artículo 1902 del Código Civil", "BOE-A-2000-544, art. 31".
-    (ES_CITE, lambda m: es_article_path(m, 'number')),
-    (ES_SHORT_CITE, lambda m: es_article_path(m, 'short')),
-    (ES_BOE_CITE, lambda m: es_article_path(m, 'id')),
-    (ES_ABBR_CITE, lambda m: es_article_path(m, 'abbr')),
-    # Australia: the Corporations Regulations 2001 number their regulations chapter.part.number
-    # ("reg 6.10.01", "r 7.1.04", "regulation 1.0.02"), and the dotted form is theirs. A plain
-    # "reg 15" is left alone: every other instrument numbers that way too, so it would need the
-    # instrument named to be resolvable, and guessing would point at the wrong law.
-    # Exactly three parts: "regulation 2.1 of the EU Regulation" or a UK "reg 3.4" is not theirs.
-    (re.compile(r'\b(?:regulations?|regs?\.?|r\.?)\s*(\d+\.\d+\.\d+[A-Z]{0,2})(?:\(\w+\))*(?![.\d])', re.I),
-     lambda m: f"{au_instruments_corpus() or 'au/federal/instruments'}/corpus/corporations-regulations-2001/r-{m.group(1).upper()}.md"),
-    # Mexico: "artículo 123, apartado A, fracción XI, de la CPEUM", "artículo 46 Bis de la LFTSE", "art. 94
-    # constitucional", and the act first: "LFT, art. 48". A bare "artículo 48" names no act and is left alone.
-    (re.compile(_MX_ART + _MX_PARTS + r'[\s,]+(?:(?:de\s+(?:la|el|los)|del)\s+)?(?:(?P<act>' + _MX_ACT + r')|constitucional(?:es)?)(?!\w)', re.I),
-     lambda m: mexico_paths(m.group('act'), m.group('list')) if m.group('act') else mx_constitutional_paths(m.group('list'))),
-    # The act first ("LFT, art. 48"), unless the article goes on to name its own act ("de la LFT, artículo 50 del CFF").
-    (re.compile(r'(?<!\w)(?P<act>' + _MX_ACT + r')\s*,?\s*' + _MX_ART + r'(?!' + _MX_PARTS + r'[\s,]+(?:(?:de\s+(?:la|el|los)|del)\s+)?(?:'
-                + _MX_ACT + r'|constitucional(?:es)?)(?!\w))', re.I),
-     lambda m: mexico_paths(m.group('act'), m.group('list'))),
-]
 MAX_BRIEF = 50_000  # characters of text resolve_citations reads
 
 # Romanian citations: "art. 1.357 din Codul civil", "art. 194 alin. (1) din Legea nr. 31/1990", "art. 6^1 din OUG nr.
@@ -3558,38 +3550,49 @@ RO_GENITIVE = [(r'^legii\b', 'Legea'), (r'^ordonan[tţț]ei de urgen[tţț][aă]
                (r'^hot[aă]r[aâ]rii', 'HG'), (r'^decretului', 'Decretul'), (r'^codului\b', 'Codul'), (r'^constitu[tţț]iei', 'Constituția')]
 
 
-def ro_citations(text: str) -> list[tuple[int, str, str]]:
-    """(position, provision path, citation) for each Romanian article citation in the text that names an act this
-    server holds; an act it does not hold, or an article the act does not have, is left to say so (its path)."""
-    corpora = [c['path'] for c in law.manifest()['corpora'] if iso_code(c) == 'ro']
+# Moldova's citations are Romania's words followed by Moldova's name: "art. 16 din Constituția Republicii Moldova",
+# "art. 5 din Codul civil al Republicii Moldova", "art. 2 din Codul penal al RM".
+MD_ARTICLE = re.compile(RO_ARTICLE.pattern + r'(?=\s+(?:(?:al|a)\s+)?(?:Republicii\s+Moldova|(?-i:RM)\b))', re.I)
+
+
+def ro_article_paths(m: re.Match, country: str = 'ro') -> list[str]:
+    """The provision a Romanian-language article citation names, in the country's corpora ("ro", or "md" for
+    Moldova's): the act as find_provision finds it (a kind, number and year, or a code by its name), and the article as
+    the file the act holds; [] where no such corpus is served or the act is not found. An article the act does not
+    have is left to say so (its path)."""
+    corpora = [c['path'] for c in law.manifest()['corpora'] if iso_code(c) == country]
     if not corpora:
         return []
-    out = []
-    for m in RO_ARTICLE.finditer(text):
-        act = ' '.join(m.group('act').split())
-        act = RO_CODE_ABBREVIATIONS.get(act.lower(), act)
-        for pattern, nominative in RO_GENITIVE:  # "din Legii nr. 31/1990" and "al Codului civil" name the same act
-            act = re.sub(pattern, nominative, act, flags=re.I)
-        folders, _ = act_folders(act, corpora)
-        if not folders:
-            words = act.lower().split()
-            titled = [t for t in act_by_title(words, corpora, ' '.join(words)) if t[0] >= 40]
-            if re.match(r'constitu', fold(act)):
-                titled = [t for t in act_by_title(['constitutia'], corpora, 'constitutia') if t[0] >= 40] or titled
-            folders = [t[1] for t in titled[:1]]
-        if not folders:
-            continue
-        number = m.group('n').replace('.', '')
-        sup = m.group('sup') or (m.group('supc') or '').translate(str.maketrans('¹²³⁴⁵⁶⁷⁸⁹', '123456789'))
-        want = f'{int(number)}-{int(sup)}' if sup else str(int(number))
-        folder = folders[0]
-        corpus = next(c for c in corpora if folder.startswith(c + '/'))
-        inner = folder[len(corpus) + 1:]
-        files = [n for n in names_of(corpus, corpus_head(corpus)) if n.startswith(inner + '/')]
-        hit = next((n for n in files if stem_of(n) == want), None)
-        path = f'{corpus}/{hit}' if hit else f"{folder}/art-{number.zfill(3)}{'-' + sup if sup else ''}.md"
-        out.append((m.start(), path, m.group(0).strip()))
-    return out
+    act = ' '.join(m.group('act').split())
+    act = RO_CODE_ABBREVIATIONS.get(act.lower(), act)
+    for pattern, nominative in RO_GENITIVE:  # "din Legii nr. 31/1990" and "al Codului civil" name the same act
+        act = re.sub(pattern, nominative, act, flags=re.I)
+    folders, _ = act_folders(act, corpora)
+    if not folders:
+        words = act.lower().split()
+        titled = [t for t in act_by_title(words, corpora, ' '.join(words)) if t[0] >= 40]
+        if re.match(r'constitu', fold(act)):
+            titled = [t for t in act_by_title(['constitutia'], corpora, 'constitutia') if t[0] >= 40] or titled
+        folders = [t[1] for t in titled[:1]]
+    if not folders:
+        return []
+    number = m.group('n').replace('.', '')
+    sup = m.group('sup') or (m.group('supc') or '').translate(str.maketrans('¹²³⁴⁵⁶⁷⁸⁹', '123456789'))
+    want = f'{int(number)}-{int(sup)}' if sup else str(int(number))
+    folder = folders[0]
+    corpus = next(c for c in corpora if folder == c or folder.startswith(c + '/'))
+    inner = folder[len(corpus) + 1:]
+    files = [n for n in names_of(corpus, corpus_head(corpus)) if not inner or n.startswith(inner + '/')]
+    hit = next((n for n in files if stem_of(n) == want), None)
+    return [f'{corpus}/{hit}' if hit else f"{folder}/art-{number.zfill(3)}{'-' + sup if sup else ''}.md"]
+
+
+def ro_citations(text: str) -> list[tuple[int, str, str]]:
+    """(position, provision path, citation) for each Romanian or Moldovan article citation in the text, read as
+    resolve_citations reads it (citations_in, with the Romanian and Moldovan forms only)."""
+    return [(h['at'], h['path'], h['citation']) for h in citations_in(text, [f for f in CITATION_REGISTRY if f.country in ('ro', 'md')])]
+
+
 # A Maltese Act or instrument named on its own: "Cap. 387", "S.L. 586.08". ("Chapter 11" is left alone: in a US
 # question it is a chapter of title 11.)
 MALTA_ACT = re.compile(r'\b(?:Cap\.?\s*(\d+[A-Z]?)|S\.\s?L\.\s*(\d+)\.0*(\d+))\b', re.I)
@@ -3597,6 +3600,27 @@ MALTA_ACT = re.compile(r'\b(?:Cap\.?\s*(\d+[A-Z]?)|S\.\s?L\.\s*(\d+)\.0*(\d+))\b
 
 def malta_folder(m: re.Match) -> str:
     return f"{malta_corpus() or 'mt/national/malta-law'}/{f'cap/{m.group(1)}' if m.group(1) else f'sl/{m.group(2)}.{m.group(3)}'}"
+
+
+def malta_provision_path(m: re.Match) -> str:
+    """The file a Maltese citation names ("reg. 3 of S.L. 10.01" is sl/10.1/3.md). Some instruments are recorded as
+    one file, their whole text in <folder>/title.md (795 of 4,493 sl/ folders): a provision of one is that file."""
+    corpus = malta_corpus() or 'mt/national/malta-law'
+    folder = f"{f'cap/{m.group(2)}' if m.group(2) else f'sl/{m.group(3)}.{m.group(4)}'}"
+    sha = corpus_head(corpus) if (ROOT / corpus / '.git').exists() else ''
+    if sha:
+        inside = [n for n in names_of(corpus, sha) if n.startswith(folder + '/')]
+        if f'{folder}/{m.group(1)}.md' not in inside and inside == [f'{folder}/title.md']:
+            return f'{corpus}/{folder}/title.md'
+    return f'{corpus}/{folder}/{m.group(1)}.md'
+
+
+def malta_single_file_note(m: re.Match, path: str) -> str | None:
+    if not path.endswith('/title.md'):
+        return None
+    what = 'Chapter' if m.group(2) else 'instrument'
+    return (f'the record holds this {what} as one file ({path.rsplit("/", 1)[0].rsplit("/", 1)[1]}/title.md), not one '
+            f'file per provision: provision {m.group(1)} is inside it')
 
 
 def au_instruments_corpus() -> str | None:
@@ -3657,6 +3681,160 @@ def mx_constitutional_paths(articles: str) -> list[str]:
     return mexico_paths('CPEUM', articles)
 
 
+# Citation forms the tree can resolve, each declared with the country whose law it names and examples of that
+# country's citations. Every form runs over every text, so a form written for one country also meets the others' (a
+# Spanish "Constitución" inside a Mexican "Constitución Política de los Estados Unidos Mexicanos", a Romanian "Codul
+# civil" inside "Codul civil al Republicii Moldova"). citations_in() settles which country a citation belongs to by
+# the names it carries (CITATION_COUNTRY_MARKS) and by the corpora this server serves, never by the order of the forms;
+# tests/test_mcp.py CitationRegistry checks every example against every other country's forms.
+class CitationForm:
+    """One citation form: `country` (ISO code), `rx` over free text, `to_path` from a match to a path or a list of
+    paths ([] where the record cannot place it), `examples` of that country's citations it must claim. `open_name`:
+    the form ends on a short name other countries' titles extend ("Constitución", "Codul civil"), so a name that goes
+    on ("... Política de Colombia") is not this country's. `note`: (match, path) -> a remark for the answer, or None."""
+    __slots__ = ('country', 'rx', 'to_path', 'examples', 'open_name', 'note')
+
+    def __init__(self, country, rx, to_path, examples, open_name=False, note=None):
+        self.country, self.rx, self.to_path, self.examples = country, rx, to_path, tuple(examples)
+        self.open_name, self.note = open_name, note
+
+
+CITATION_REGISTRY = [
+    CitationForm('us', re.compile(r'\b(\d{1,2})\s*U\.?\s?S\.?\s?C\.?(?:\s*A\.?)?\s*(?:(?:§§?|[Ss]ec(?:tion|\.)?)\s*)?(\d+[a-zA-Z]?(?:-\d+)?)((?:\([0-9A-Za-z]+\))*)'),
+                 lambda m: f'us/federal/usc/title-{m.group(1)}/{m.group(2)}.md', ('11 U.S.C. § 1182(1)', '28 USC 1334')),
+    CitationForm('de', re.compile(r'\b(?:Art(?:ikel|\.)?)\s*(\d+[a-z]?)(?:\s*(?:Abs\.|Absatz)\s*\d+[a-z]?)?(?:\s*(?:S\.|Satz)\s*\d+)?\s*(?:GG|Grundgesetz(?:es)?)\b'),
+                 lambda m: f'de/bund/grundgesetz/artikel/{m.group(1).zfill(3) if m.group(1).isdigit() else m.group(1).rjust(4, "0")}.md',
+                 ('Art. 16a Abs. 1 GG', 'Artikel 1 Grundgesetz')),
+    CitationForm('gb', re.compile(r'\b(?:s\.|ss\.|[Ss]ection)\s*(\d+[A-Z]?)((?:\(\d+\))*)\s*(?:of\s+the\s+)?(?:CFA(?:\s*2014)?|Children and Families Act 2014)'),
+                 lambda m: f'gb/uk/send/ukpga/2014/6/section/{m.group(1)}.md', ('s. 42 CFA 2014', 'section 20 of the Children and Families Act 2014')),
+    CitationForm('gb', re.compile(r'\b(?:reg\.|[Rr]egulation)\s*(\d+[A-Z]?)((?:\(\d+\))*)\s*(?:of\s+the\s+)?(?:SEND Regulations(?:\s*2014)?|Special Educational Needs and Disability Regulations 2014)'),
+                 lambda m: f'gb/uk/send/uksi/2014/1530/regulation/{m.group(1)}.md', ('reg. 13 SEND Regulations 2014',)),
+    CitationForm('ch', re.compile(r'\bArt\.\s*(\d+[a-z]?)(?:\s*Abs\.\s*\d+[a-z]?)?(?:\s*(?:lit\.|Bst\.)\s*[a-z])?\s*(BV|DSG|SchKG)\b'),
+                 lambda m: f"ch/bund/swiss-law/{m.group(2).lower()}/art-{m.group(1).rjust(3 + (not m.group(1).isdigit()), '0')}.md",
+                 ('Art. 10a BV', 'Art. 8 Abs. 2 SchKG')),
+    # Malta: "article 11 of Cap. 586", "reg. 15 of S.L. 586.08" (a provision of a Chapter or of subsidiary legislation).
+    CitationForm('mt', re.compile(r'\b(?:art(?:icle|\.)?|s\.|section|reg(?:ulation|\.)?)\s*(\d+[A-Z]?)(?:\(\w+\))*\s*(?:of\s+)?(?:the\s+)?'
+                                  r'(?:Cap\.?\s*(\d+[A-Z]?)|S\.\s?L\.\s*(\d+)\.0*(\d+))\b', re.I),
+                 lambda m: malta_provision_path(m), ('article 11 of Cap. 586', 'reg. 15 of S.L. 586.08', 'regulation 3 of S.L. 10.01'),
+                 note=lambda m, path: malta_single_file_note(m, path)),
+    # Spain: "artículo 31.3 de la Ley Orgánica 4/2000", "artículo 1902 del Código Civil", "BOE-A-2000-544, art. 31".
+    CitationForm('es', ES_CITE, lambda m: es_article_paths(m, 'number'),
+                 ('artículo 31.3 de la Ley Orgánica 4/2000', 'art. 125 del Reglamento aprobado por Real Decreto 1155/2024')),
+    CitationForm('es', ES_SHORT_CITE, lambda m: es_article_paths(m, 'short'),
+                 ('artículo 1902 del Código Civil', 'artículos 14 y 24 de la Constitución Española', 'art. 1.902 del Código Civil',
+                  'artículo 155 de la Constitución', 'artículo 14 de la Ley Orgánica del Poder Judicial'), open_name=True),
+    CitationForm('es', ES_BOE_CITE, lambda m: es_article_paths(m, 'id'), ('BOE-A-2000-544, art. 31',)),
+    CitationForm('es', ES_ABBR_CITE, lambda m: es_article_paths(m, 'abbr'),
+                 ('art. 14 CE', 'arts. 1902 y 1903 CC', 'artículos 9.3 y 103.1 CE', 'art. 1.101 CC', 'art. 48 bis ET')),
+    # Australia: the Corporations Regulations 2001 number their regulations chapter.part.number ("reg 6.10.01",
+    # "r 7.1.04", "regulation 1.0.02"), chapters and parts with letters too ("reg 6D.2.01", "r 5C.11.01", "regulation
+    # 7.5A.73"), and the dotted form is theirs. A plain "reg 15" is left alone: every other instrument numbers that way
+    # too, so it would need the instrument named to be resolvable, and guessing would point at the wrong law. Exactly
+    # three parts: "regulation 2.1 of the EU Regulation" or a UK "reg 3.4" is not theirs. A full stop may end the
+    # sentence after it ("in accordance with regulation 1.0.11."), but a fourth part ("6.10.01.5") is not theirs.
+    CitationForm('au', re.compile(r'\b(?:regulations?|regs?\.?|r\.?)\s*(\d+[A-Z]{0,2}\.\d+[A-Z]{0,2}\.\d+[A-Z]{0,3})(?![A-Za-z])(?:\(\w+\))*(?!\.?\d)', re.I),
+                 lambda m: f"{au_instruments_corpus() or 'au/federal/instruments'}/corpus/corporations-regulations-2001/r-{m.group(1).upper()}.md",
+                 ('reg 6.10.01', 'r 7.1.04', 'reg 6D.2.01', 'regulation 7.5A.73', 'r 5C.11.01', 'reg 2M.3.03')),
+    # Mexico: "artículo 123, apartado A, fracción XI, de la CPEUM", "artículo 46 Bis de la LFTSE", "art. 94
+    # constitucional", and the act first: "LFT, art. 48". A bare "artículo 48" names no act and is left alone.
+    CitationForm('mx', re.compile(_MX_ART + _MX_PARTS + r'[\s,]+(?:(?:de\s+(?:la|el|los)|del)\s+)?(?:(?P<act>' + _MX_ACT + r')|constitucional(?:es)?)(?!\w)', re.I),
+                 lambda m: mexico_paths(m.group('act'), m.group('list')) if m.group('act') else mx_constitutional_paths(m.group('list')),
+                 ('artículo 123, apartado A, fracción XI, de la CPEUM', 'artículo 1 de la Constitución Política de los Estados Unidos Mexicanos',
+                  'artículo 14 de la Ley Orgánica del Poder Judicial de la Federación', 'artículos 46, 46 Bis y 47 de la LFTSE',
+                  'artículo 7 del Código Penal Federal', 'artículo 49 de la LFT', 'artículo 222 de la Ley General de Salud')),
+    # The act first ("LFT, art. 48"), unless the article goes on to name its own act ("de la LFT, artículo 50 del CFF").
+    CitationForm('mx', re.compile(r'(?<!\w)(?P<act>' + _MX_ACT + r')\s*,?\s*' + _MX_ART + r'(?!' + _MX_PARTS + r'[\s,]+(?:(?:de\s+(?:la|el|los)|del)\s+)?(?:'
+                                  + _MX_ACT + r'|constitucional(?:es)?)(?!\w))', re.I),
+                 lambda m: mexico_paths(m.group('act'), m.group('list')), ('LFT, art. 48',)),
+    # Romania: "art. 1.357 din Codul civil", "art. 194 alin. (1) din Legea nr. 31/1990" (see RO_ARTICLE).
+    CitationForm('ro', RO_ARTICLE, lambda m: ro_article_paths(m, 'ro'),
+                 ('art. 1.357 din Codul civil', 'art. 194 alin. (1) din Legea nr. 31/1990', 'art. 16 din Constituția României'), open_name=True),
+    # Moldova writes Romanian too, and names its own acts: "art. 16 din Constituția Republicii Moldova", "art. 5 din
+    # Codul civil al Republicii Moldova", "Codul penal al RM".
+    CitationForm('md', MD_ARTICLE, lambda m: ro_article_paths(m, 'md'),
+                 ('art. 16 din Constituția Republicii Moldova', 'art. 5 din Codul civil al Republicii Moldova', 'art. 2 din Codul penal al RM')),
+]
+# Each country's citations that another country's forms also match: the text alone matches both, and citations_in()
+# decides by the name. (the example's country, the other country) -> the examples. The collision test allows only these.
+CITATION_OVERLAPS = {
+    ('mx', 'es'): ('artículo 1 de la Constitución Política de los Estados Unidos Mexicanos',  # "artículo 1 de la Constitución"
+                   'artículo 14 de la Ley Orgánica del Poder Judicial de la Federación'),  # "... del Poder Judicial"
+    ('md', 'ro'): ('art. 16 din Constituția Republicii Moldova', 'art. 5 din Codul civil al Republicii Moldova',
+                   'art. 2 din Codul penal al RM'),  # Romania's words, then Moldova's name
+}
+# Words that name a country's law, in a citation or where its name goes on: "Constitución Política de los Estados
+# Unidos Mexicanos", "Código Civil para el Distrito Federal", "Código Civil y Comercial de la Nación", "Constituția
+# Republicii Moldova". A citation naming another country's law is not the form's. Countries with no forms are named
+# too, so that their citations are left alone rather than read as another country's.
+CITATION_COUNTRY_MARKS = {
+    'mx': re.compile(r'Mexican[oa]s?\b|\bCPEUM\b|Distrito\s+Federal|Ciudad\s+de\s+M[ée]xico|de\s+la\s+Federaci[óo]n|(?-i:Federal)\b'
+                     r'|(?:del|para\s+el)\s+Estado\s+de\b|Ley\s+General\s+de\s+Salud', re.I),
+    'ar': re.compile(r'Constituci[óo]n\s+Nacional|Comercial\s+de\s+la\s+Naci[óo]n|Argentin[oa]', re.I),
+    'co': re.compile(r'\bColombia', re.I), 'cl': re.compile(r'\bChile\b|Rep[úu]blica\s+de\s+Chile', re.I),
+    'pe': re.compile(r'\bPer[úu]\b', re.I), 've': re.compile(r'\bVenezuela', re.I), 'ec': re.compile(r'\bEcuador', re.I),
+    'es': re.compile(r'\bEspa[ñn]ol[a]?\b|\bde\s+Espa[ñn]a\b', re.I),
+    'md': re.compile(r'Republicii\s+Moldova|\bMoldovei\b|(?-i:\bRM\b)', re.I),
+    'ro': re.compile(r'Rom[aâ]niei\b', re.I),
+}
+# How a citation's name may go on past what its form read: capitalised words and the joining words between them
+# ("Política de los Estados Unidos Mexicanos", "para el Distrito Federal", "al Republicii Moldova"); and a
+# parenthesis right after it ("LGS (Ley General de Salud)").
+CITE_NAME_GOES_ON = re.compile(r'(?:\s+(?:(?:de\s+(?:la|las|los|el)|del|de|para\s+(?:el|la)|y|al|a)\s+)?[A-ZÁÉÍÓÚÑĂÂÎȘȚŞŢ][\w.]*)*')
+CITE_PARENTHESIS = re.compile(r'\s*\([^()]{1,100}\)')
+
+
+def countries_named(text: str) -> set[str]:
+    """The countries whose law a citation's words name (CITATION_COUNTRY_MARKS)."""
+    return {c for c, rx in CITATION_COUNTRY_MARKS.items() if rx.search(text)}
+
+
+def citation_served(country: str) -> bool:
+    """Whether this server serves, checked out, a corpus of the country (an ISO code: "mx" covers Mexico's states)."""
+    return any(iso_code(c).split('-')[0] == country and (ROOT / c['path'] / '.git').exists() for c in law.manifest()['corpora'])
+
+
+def citations_in(text: str, forms: list | None = None) -> list[dict]:
+    """Every citation in a text, by place: {'at', 'end', 'path', 'citation', 'country', 'note'}. A citation that names
+    another country's law ("Mexicanos", "Republicii Moldova", "(Ley General de Salud)"), or a short name that goes on
+    into words its form does not know ("Constitución Política de Colombia"), is not the form's. Where forms of several
+    countries read the same words and the text names none, the countries this server serves decide; where that
+    leaves several, each is kept, as the text does not say which. The order of the forms never decides."""
+    hits = []
+    for form in CITATION_REGISTRY if forms is None else forms:
+        for m in form.rx.finditer(text):
+            goes_on = CITE_NAME_GOES_ON.match(text, m.end()).group(0)
+            paren = CITE_PARENTHESIS.match(text, m.end() + len(goes_on))
+            named = countries_named(text[m.start():m.end()] + goes_on + (paren.group(0) if paren else ''))
+            if named and form.country not in named:
+                continue
+            if form.open_name and goes_on.strip() and form.country not in named:
+                continue
+            for path in as_paths(form.to_path(m)):
+                hits.append({'at': m.start(), 'end': m.end(), 'path': here(path), 'citation': m.group(0).strip(),
+                             'country': form.country, 'named': form.country in named,
+                             'note': form.note(m, path) if form.note else None})
+    served: dict[str, bool] = {}
+
+    def kept(h: dict) -> bool:
+        rivals = [o for o in hits if o['country'] != h['country'] and o['at'] < h['end'] and h['at'] < o['end']]
+        if not rivals or h['named']:
+            return True
+        if any(o['named'] for o in rivals):
+            return False
+        for c in {h['country'], *(o['country'] for o in rivals)}:
+            if c not in served:
+                served[c] = citation_served(c)
+        return served[h['country']] or not any(served[o['country']] for o in rivals)
+
+    out = [h for h in hits if kept(h)]
+    for h in out:
+        del h['named']
+    return sorted(out, key=lambda h: h['at'])  # by place in the text; a list keeps its own order (the sort is stable)
+
+
+CITATION_FORMS = [(f.rx, f.to_path) for f in CITATION_REGISTRY]  # (regex, match -> path or paths): the bare forms
+
+
 MAX_CITATIONS = 100  # distinct provisions resolve_citations looks up in one call
 
 
@@ -3696,25 +3874,21 @@ def t_resolve_citations(args: dict) -> tuple[str, dict]:
     date = date_arg(args.get('date'))
     limit = num(args, 'max_results', 50, MAX_CITATIONS)
     matches, seen = [], set()
-    for rx, to_path in CITATION_FORMS:  # finding citations is cheap; looking each one up is not
-        for m in rx.finditer(text):
-            for path in as_paths(to_path(m)):  # a list: "artículos 103 y 107"
-                key = (here(path), m.group(0).strip())
-                if key not in seen:
-                    seen.add(key)
-                    matches.append((m.start(), *key))
-    for at, path, cited in ro_citations(text):
-        if (path, cited) not in seen:
-            seen.add((path, cited))
-            matches.append((at, path, cited))
-    matches.sort(key=lambda r: r[0])  # by place in the text; a list keeps its own order
-    found, states = [], {}
-    for at, path, cited in matches:
+    for h in citations_in(text):  # finding citations is cheap; looking each one up is not
+        if (h['path'], h['citation']) not in seen:
+            seen.add((h['path'], h['citation']))
+            matches.append(h)
+    found, states, left_out = [], {}, {}
+    for h in matches:
+        path = h['path']
         if path not in states and len(states) >= limit:  # each provision is looked up once, and only up to the limit
+            left_out.setdefault(path, h['citation'])
             continue
         if path not in states:
             states[path] = citation_state(date, path)
-        found.append({'citation': cited, 'path': path, 'at': at, **states[path]})
+        found.append({'citation': h['citation'], 'path': path, 'at': h['at'], **states[path],
+                      **({'note': h['note']} if h['note'] else {})})
+    shown_cut = max(0, len(found) - MAX_ITEMS)
     found = found[:MAX_ITEMS]
     if not found:
         return ('No citation this tree can resolve was found. Forms read: "11 U.S.C. § 1182(1)", "Art. 16a Abs. 1 GG", '
@@ -3730,9 +3904,17 @@ def t_resolve_citations(args: dict) -> tuple[str, dict]:
             detail += f"; next: {e['next_change']['law']} ({e['next_change']['in_force']})"
         lines.append(f"- {e['citation']} → {e['path']}: {e['status']}{detail}"
                      + (f"\n  Official text: {e['cite']['official_url']} ({e['cite']['shows']}); cite as: {e['cite']['pincite']}"
-                        if e.get('cite') and e['cite'].get('official_url') else ''))
+                        if e.get('cite') and e['cite'].get('official_url') else '')
+                     + (f"\n  Note: {e['note']}." if e.get('note') else ''))
     lines += sorted({e['how_to_add'] for e in found if e.get('how_to_add')})
-    return '\n'.join(lines), {'date': date, 'citations': found}
+    # Never cut silently: a brief read in part must say so, or the answer reads as every citation it holds.
+    if left_out:
+        lines.append(f"{len(left_out)} more citation(s) not looked up (the limit is {limit} provisions; the first not looked up: "
+                     f"{next(iter(left_out.values()))}); raise max_results (up to {MAX_CITATIONS}) or split the text.")
+    if shown_cut:
+        lines.append(f'{shown_cut} more mention(s) of these provisions not listed (at most {MAX_ITEMS} are).')
+    return '\n'.join(lines), {'date': date, 'citations': found, 'not_looked_up': len(left_out),
+                              **({'not_listed': shown_cut} if shown_cut else {})}
 
 
 def t_law_details(args: dict) -> tuple[str, dict]:
