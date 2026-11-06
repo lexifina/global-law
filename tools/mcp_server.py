@@ -1122,6 +1122,11 @@ def article_files(corpus: str, sha: str, folder: str) -> dict[str, list[str]]:
 ES_NORM_FIRST = re.compile(rf'^\s*(?P<norm>\D.*?)\s*,?\s+(?P<art>art(?:[íi]culo|\.)\s*\d+(?:[\s.]*(?:{NUMBER_SUFFIX})\b)?)\s*$', re.I)
 
 
+def as_paths(found: str | list[str]) -> list[str]:
+    """A citation form's answer as a list: one path, or the paths of a list of articles."""
+    return [found] if isinstance(found, str) else list(found)
+
+
 def cited_provisions(query: str, scope: str) -> list[tuple[str, str, str]]:
     """(path, heading, citation) for each provision a citation in the query names, read with resolve_citations' forms
     (CITATION_FORMS and the Romanian reader), that this tree holds within the scope; [] when there is none."""
@@ -1130,7 +1135,8 @@ def cited_provisions(query: str, scope: str) -> list[tuple[str, str, str]]:
     if m:
         forms += [f"{m.group('art')} de la {m.group('norm')}", f"{m.group('art')} del {m.group('norm')}"]
     for q in forms:
-        found = [(mm.start(), here(to_path(mm)), mm.group(0).strip()) for rx, to_path in CITATION_FORMS for mm in rx.finditer(q)]
+        found = [(mm.start(), here(p), mm.group(0).strip()) for rx, to_path in CITATION_FORMS for mm in rx.finditer(q)
+                 for p in as_paths(to_path(mm))]  # a form may give a list: "artículos 103 y 107 constitucionales"
         out, seen = [], set()
         for _, path, cite in sorted(found + ro_citations(q)):
             if path in seen or scope and not (path == scope or path.startswith(scope.rstrip('/') + '/')):
@@ -3688,8 +3694,7 @@ def t_resolve_citations(args: dict) -> tuple[str, dict]:
     matches, seen = [], set()
     for rx, to_path in CITATION_FORMS:  # finding citations is cheap; looking each one up is not
         for m in rx.finditer(text):
-            found_paths = to_path(m)
-            for path in [found_paths] if isinstance(found_paths, str) else found_paths:  # a list: "artículos 103 y 107"
+            for path in as_paths(to_path(m)):  # a list: "artículos 103 y 107"
                 key = (here(path), m.group(0).strip())
                 if key not in seen:
                     seen.add(key)

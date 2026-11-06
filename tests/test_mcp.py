@@ -1080,6 +1080,13 @@ class ScopeRules(unittest.TestCase):
         # An act named first does not take an article that names its own act.
         self.assertEqual([p.rsplit('/', 2)[1] for p in cite('artículo 48 de la LFT, artículo 50 del CFF')],
                          ['ley-federal-del-trabajo', 'codigo-fiscal-de-la-federacion'])
+        # find_provision reads the same forms: a list of articles is a list of paths, not one (audit row 66).
+        self.assertEqual(self.m.as_paths('a/b.md'), ['a/b.md'])
+        if corpus and (ROOT / corpus / '.git').exists():
+            for q in ('artículo 48 de la LFT', 'LFT, art. 48', 'artículos 103 y 107 constitucionales'):
+                found = self.m.cited_provisions(q, '')
+                self.assertTrue(found and all(p.startswith(corpus + '/') for p, *_ in found), q)
+            self.assertEqual(len(self.m.cited_provisions('artículos 103 y 107 constitucionales', '')), 2)
 
     def test_page_furniture_is_not_law(self):
         # Malta's consolidations come from print: running heads, page numbers, hyphens at line ends and a symbol
