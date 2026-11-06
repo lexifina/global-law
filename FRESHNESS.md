@@ -1,27 +1,44 @@
-# Freshness: how current each corpus is
+# Freshness: is it true right now?
+
+Law changes after a corpus is built. Every corpus here records when it was last checked against its official source,
+so an answer about today's law can say how current it is.
 
 <!-- freshness-summary -->
-**618 of 714 corpora current**, 1 pending a change, 81 stale, 14 unverified; 85.3% checked against their official source in the last 7 days, 98.0% in the last 30 (as of 2026-11-06).
+**619 of 714 corpora current** on 2026-11-06: 85.3% checked against their official source in the last 7 days, 98.0% in the last 30.
+
+| | Corpora | Current | Pending a change | Stale | Unverified | Checked in 7 days |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| All | 714 | 619 | 0 | 81 | 14 | 85.3% |
+| National | 210 | 121 | 0 | 81 | 8 | 57.6% |
+| Subnational | 504 | 498 | 0 | 0 | 6 | 96.8% |
+
+National law longest since a check: `united-states/federal/usc` (2026-10-27), `aland/national/acts` (2026-10-28), `angola/national/acts` (2026-10-28), `armenia/national/acts` (2026-10-28), `austria/bund/acts` (2026-10-28), `azerbaijan/national/acts` (2026-10-28).
+Never checked: `andorra/national/acts`, `bangladesh/national/acts`, `costa-rica/national/acts`, `germany/bund/acts`, `pakistan/national/acts`, `san-marino/national/acts`, `switzerland/bund/acts`, `tuvalu/national/acts` and 6 more.
 <!-- /freshness-summary -->
 
-Every corpus records when it was last checked against its official source: one row each in
-[data/freshness.tsv](data/freshness.tsv), totals in [data/freshness.json](data/freshness.json). When you ask about a
-date on or after that check, the MCP server's answers say how current the text is.
+## Check one
 
 ```
-python tools/freshness.py <corpus or provision path>    status, last check, official source
-python tools/freshness.py --stale                       corpora past their threshold
-python tools/freshness.py --summary
+python tools/freshness.py united-states/federal/usc                  a corpus: status, last check, official source
+python tools/freshness.py <corpus>/<path to a provision>             a provision: its act's own row, where published
+python tools/freshness.py --stale                                    every corpus past its threshold
 ```
 
-| Status | Meaning |
-| --- | --- |
-| `current` | checked within its threshold (7 days for national law, 30 for sub-national), and the newest commit is pinned |
-| `pending-change` | the corpus has a newer commit than the one pinned here |
-| `stale` | not checked within its threshold |
-| `unverified` | never checked against its source after it was built |
-| `source-unavailable` | due for a check, but the official source is not answering |
+The MCP server does this for you: when the date asked is on or after a corpus's last check, `read_law` ends with a note
+such as "united-states/federal/usc: stale, last checked against its official source on 2026-10-27 (10 days ago); later
+changes may be missing".
 
-Corpora that check every act publish a row per act, with any change the source reports that is not here yet
-([Romania](https://github.com/lexifina/romania-law#how-current-is-it)); `tools/freshness.py` reads them for a
-provision in a checked-out corpus. Only each country's official publication has legal force.
+## What the statuses mean
+
+| Status | Meaning | What to do |
+| --- | --- | --- |
+| `current` | checked within its threshold, and its newest commit is pinned here | rely on it as far as any consolidated text goes |
+| `pending-change` | the corpus has a newer commit than the one pinned here | read the corpus's own repository, or wait for the next pass |
+| `stale` | not checked within its threshold (7 days for national law, 30 for sub-national) | confirm against the official source |
+| `unverified` | never checked against its source after it was built | confirm against the official source |
+| `source-unavailable` | due for a check, but the official source is not answering | confirm once the source is back |
+
+`last_verified` is the day of the last check (`act-checks`: every act checked, as
+[Romania](https://github.com/lexifina/romania-law#how-current-is-it) does; `source-retrieval`: the day the build read
+the source; `stated`: the day the corpus states). Rows: [data/freshness.tsv](data/freshness.tsv); totals:
+[data/freshness.json](data/freshness.json). Only each country's official publication has legal force.

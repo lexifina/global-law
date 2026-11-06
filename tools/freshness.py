@@ -45,7 +45,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMA = 'global-law-freshness/1'
 STATUSES = ('current', 'pending-change', 'stale', 'unverified', 'source-unavailable')
-COLUMNS = ('path', 'status', 'last_verified', 'check_due', 'method', 'pinned', 'newest', 'acts', 'acts_current',
+COLUMNS = ('path', 'level', 'status','last_verified', 'check_due', 'method', 'pinned', 'newest', 'acts', 'acts_current',
            'acts_pending', 'acts_stale', 'acts_unverified', 'per_act', 'official_source')
 # Days a check stays good. A country's own law changes most and is read most; sub-national and municipal law is
 # checked less often. A corpus may state its own (`freshness_days` in corpus.json, carried into manifest.json).
@@ -140,7 +140,7 @@ def corpus_row(entry: dict, pinned: str | None, newest: str | None, today: dt.da
     else:
         status = 'current'
     return {
-        'path': entry['path'], 'status': status, 'last_verified': last.isoformat() if last else '',
+        'path': entry['path'], 'level': level(entry), 'status': status, 'last_verified': last.isoformat() if last else '',
         'check_due': due.isoformat() if due else '', 'method': method, 'pinned': pinned or '',
         'newest': newest or '', 'acts': act_count(own.get('totals', {}).get('acts') or entry.get('acts')),
         'acts_current': totals.get('current', ''), 'acts_pending': totals.get('pending-change', ''),
@@ -224,7 +224,7 @@ def write(root: Path = ROOT, heads: dict[str, str] | None = None, today: dt.date
     (root / 'data' / 'freshness.tsv').write_bytes(buf.getvalue().encode('utf-8'))
     (root / 'data' / 'freshness.json').write_bytes(
         (json.dumps(summary, ensure_ascii=False, indent=1) + '\n').encode('utf-8'))
-    update_readme(root, summary)
+    update_readme(root, summary, rows)
     return summary
 
 
@@ -238,9 +238,24 @@ def status_line(status: dict, summary: dict) -> str:
     when = (status.get('last_published') or status.get('generated') or '')[:16].replace('T', ' ')
     upd = '**Updates: running**' if status.get('updates') == 'running' else '**Updates: stalled**'
     moved = (status.get('published_last_24h') or {}).get('corpora_moved', 0)
-    held = len(status.get('held_back') or [])
-    return (f"{upd}, last published {when} UTC; {moved} corpus updates in the last 24 hours, {held} held back by a "
-            f"check; {f.get('current', 0)} of {n} corpora current (as of {(status.get('generated') or '')[:10]}).")
+    p24 = status.get('published_last_24h') or {}
+    held = status.get('held_back') or []
+    down = status.get('official_sources_unavailable') or []
+    last_ok = (status.get('last_successful_pass') or '')[:16].replace('T', ' ')
+    return '\n'.join([
+        f"{upd}: last published {when} UTC; status refreshed {(status.get('generated') or '')[:16].replace('T', ' ')} "
+        "UTC.", '',
+        '| | |', '| --- | --- |',
+        f"| Last 24 hours | {p24.get('commits', 0)} commit{'' if p24.get('commits') == 1 else 's'}: {moved} corpus updates, {p24.get('corpora_added', 0)} "
+        "corpora added |",
+        f"| Last successful pass | {last_ok or '-'} UTC" + ('' if status.get('last_pass_ok', True) else
+                                                            ' (the latest pass failed and is retried)') + ' |',
+        f"| Held back by a check | {_names(held)} |",
+        f"| Official sources not answering | " + (', '.join(f"{s.get('name')} (`{s.get('corpus')}`, since "
+                                                           f"{str(s.get('unavailable_since'))[:10]})" for s in down)
+                                                 or 'none') + ' |',
+        f"| Freshness | {f.get('current', 0)} of {n} corpora current, {f.get('stale', 0)} stale, "
+        f"{f.get('unverified', 0)} unverified ([FRESHNESS.md](FRESHNESS.md)) |"])
 
 
 PAGES = ('README.md', 'FRESHNESS.md', 'MONITORING.md')  # the pages whose marked lines this tool rewrites
@@ -294,15 +309,36 @@ def health(root: Path = ROOT, now: dt.datetime | None = None, max_age_h: float =
 README_BLOCK = re.compile(r'(<!-- freshness-summary -->\r?\n).*?(\r?\n<!-- /freshness-summary -->)', re.S)
 
 
-def update_readme(root: Path, summary: dict) -> bool:
-    """Rewrite the line between the freshness-summary markers (FRESHNESS.md); False when no page has them."""
+def _names(paths: list[str], most: int = 8) -> str:
+    shown = ', '.join(f'`{p}`' for p in paths[:most])
+    return shown + (f' and {len(paths) - most} more' if len(paths) > most else '') if paths else 'none'
+
+
+def freshness_block(summary: dict, rows: list[dict]) -> str:
+    """The generated part of FRESHNESS.md: the counts, a table by level, and the national corpora that need a check."""
     t = summary['totals']
     s = t.get('by_status', {})
-    line = (f"**{s.get('current', 0)} of {t['corpora']} corpora current**, {s.get('pending-change', 0)} pending a "
-            f"change, {s.get('stale', 0)} stale, {s.get('unverified', 0)} unverified; {t['pct_verified_7d']}% checked "
-            f"against their official source in the last 7 days, {t['pct_verified_30d']}% in the last 30 (as of "
-            f"{summary['as_of']}).")
-    return _rewrite(root, README_BLOCK, line)
+    out = [f"**{s.get('current', 0)} of {t['corpora']} corpora current** on {summary['as_of']}: "
+           f"{t['pct_verified_7d']}% checked against their official source in the last 7 days, "
+           f"{t['pct_verified_30d']}% in the last 30.", '',
+           '| | Corpora | Current | Pending a change | Stale | Unverified | Checked in 7 days |',
+           '| --- | ---: | ---: | ---: | ---: | ---: | ---: |']
+    for name, b in [('All', t)] + sorted(summary.get('by_level', {}).items()):
+        bs = b.get('by_status', {})
+        out.append(f"| {name.capitalize()} | {b.get('corpora', 0)} | {bs.get('current', 0)} | "
+                   f"{bs.get('pending-change', 0)} | {bs.get('stale', 0)} | {bs.get('unverified', 0)} | "
+                   f"{b.get('pct_verified_7d', 0)}% |")
+    stale = sorted((r for r in rows if r['status'] == 'stale'), key=lambda r: r.get('last_verified') or '')
+    first = [r for r in stale if r.get('level') == 'national'] or stale
+    out += ['', 'National law longest since a check: ' + (', '.join(f"`{r['path']}` ({r['last_verified']})"
+                                                                     for r in first[:6]) or 'none') + '.', '',
+            f"Never checked: {_names([r['path'] for r in rows if r['status'] == 'unverified'])}."]
+    return '\n'.join(out)
+
+
+def update_readme(root: Path, summary: dict, rows: list[dict] | None = None) -> bool:
+    """Rewrite the generated part of FRESHNESS.md (between its freshness-summary markers)."""
+    return _rewrite(root, README_BLOCK, freshness_block(summary, rows if rows is not None else read_rows(root)))
 
 
 def write_status(heartbeat: dict, root: Path = ROOT, now: dt.datetime | None = None, stalled_after_min: int = 45,

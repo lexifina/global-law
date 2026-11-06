@@ -177,8 +177,11 @@ class OnDisk(unittest.TestCase):
                                subjects=['Point submodules at the current country commits (7 corpora)'])
         mon = (self.root / 'MONITORING.md').read_text(encoding='utf-8')
         fre = (self.root / 'FRESHNESS.md').read_text(encoding='utf-8')
-        self.assertIn('**Updates: running**, last published 2026-11-06 14:20 UTC; 7 corpus updates', mon)
-        self.assertIn('corpora current**', fre)
+        self.assertIn('**Updates: running**: last published 2026-11-06 14:20 UTC', mon)
+        self.assertIn('1 commit: 7 corpus updates', mon)
+        self.assertIn('Official sources not answering | portal (`ro/national/acts`, since 2026-11-06)', mon)
+        self.assertIn('corpora current** on 2026-11-06', fre)
+        self.assertIn('| Subnational | 1 | 1 |', fre)
         self.assertNotIn('old', mon + fre)
 
     def test_health(self):
