@@ -20463,7 +20463,13 @@
       "history": "in-force",
       "derived": [
         "history"
-      ]
+      ],
+      "source": {
+        "publisher": "Direction de l'information légale et administrative (DILA)",
+        "dataset": "LEGI",
+        "url": "https://echanges.dila.gouv.fr/OPENDATA/LEGI/",
+        "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)"
+      }
     },
     {
       "path": "gabon/national/acts",
@@ -20557,6 +20563,34 @@
       ]
     },
     {
+      "path": "germany/bag/caselaw",
+      "url": "https://github.com/lexifina/germany-bag-caselaw.git",
+      "name": "Case law: Germany, Bundesarbeitsgericht",
+      "label": "Germany case law (Bundesarbeitsgericht)",
+      "language": "de",
+      "coverage": "5624 published decisions of the Bundesarbeitsgericht, one file and one commit each, dated the day decided; 52302 citations of federal law linked to germany-law (0 inside its record).",
+      "history": "in-force",
+      "history_from": "2010-01-19",
+      "record_to": "2020-08-28",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. The record ends at the corpus snapshot named in REPRODUCE.md.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/germany/bund/acts/<path>.jsonl",
+        "law_corpus": "germany/bund/acts"
+      },
+      "source": {
+        "publisher": "Bundesarbeitsgericht",
+        "dataset": "Corpus der Entscheidungen (BAG), Zenodo record 4006645",
+        "updated": "2020-08-28"
+      },
+      "licence": "CC0 1.0 (the decisions are official works, § 5 UrhG)",
+      "iso_path": "de/bag/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
       "path": "germany/bavaria/acts",
       "url": "https://github.com/lexifina/germany-bavaria-law.git",
       "name": "Bavaria",
@@ -20580,6 +20614,62 @@
         "history_from",
         "record_to"
       ]
+    },
+    {
+      "path": "germany/bfh/caselaw",
+      "url": "https://github.com/lexifina/germany-bfh-caselaw.git",
+      "name": "Case law: Germany, Bundesfinanzhof",
+      "label": "Germany case law (Bundesfinanzhof)",
+      "language": "de",
+      "coverage": "10885 published decisions of the Bundesfinanzhof, one file and one commit each, dated the day decided; 76530 citations of federal law linked to germany-law (0 inside its record).",
+      "history": "in-force",
+      "history_from": "2010-01-04",
+      "record_to": "2025-01-14",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. The record ends at the corpus snapshot named in REPRODUCE.md.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/germany/bund/acts/<path>.jsonl",
+        "law_corpus": "germany/bund/acts"
+      },
+      "source": {
+        "publisher": "Bundesfinanzhof",
+        "dataset": "Corpus der Entscheidungen (BFH), Zenodo record 14622341",
+        "updated": "2025-01-14"
+      },
+      "licence": "CC0 1.0 (the decisions are official works, § 5 UrhG)",
+      "iso_path": "de/bfh/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "germany/bpatg/caselaw",
+      "url": "https://github.com/lexifina/germany-bpatg-caselaw.git",
+      "name": "Case law: Germany, Bundespatentgericht",
+      "label": "Germany case law (Bundespatentgericht)",
+      "language": "de",
+      "coverage": "31203 published decisions of the Bundespatentgericht, one file and one commit each, dated the day decided; 92410 citations of federal law linked to germany-law (0 inside its record).",
+      "history": "in-force",
+      "history_from": "2000-01-05",
+      "record_to": "2025-07-08",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. The record ends at the corpus snapshot named in REPRODUCE.md.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/germany/bund/acts/<path>.jsonl",
+        "law_corpus": "germany/bund/acts"
+      },
+      "source": {
+        "publisher": "Bundespatentgericht",
+        "dataset": "Corpus der Entscheidungen (BPATG), Zenodo record 15754093",
+        "updated": "2025-07-08"
+      },
+      "licence": "CC0 1.0 (the decisions are official works, § 5 UrhG)",
+      "iso_path": "de/bpatg/caselaw",
+      "described_by": "corpus.json"
     },
     {
       "path": "germany/brandenburg/acts",
@@ -20669,6 +20759,62 @@
       "derived": [
         "history"
       ]
+    },
+    {
+      "path": "germany/bverfg/caselaw",
+      "url": "https://github.com/lexifina/germany-bverfg-caselaw.git",
+      "name": "Case law: Germany, Bundesverfassungsgericht",
+      "label": "Germany case law (Bundesverfassungsgericht)",
+      "language": "de",
+      "coverage": "9301 published decisions of the Bundesverfassungsgericht, one file and one commit each, dated the day decided; 78498 citations of federal law linked to germany-law (0 inside its record).",
+      "history": "in-force",
+      "history_from": "1951-09-09",
+      "record_to": "2025-09-22",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. The record ends at the corpus snapshot named in REPRODUCE.md.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/germany/bund/acts/<path>.jsonl",
+        "law_corpus": "germany/bund/acts"
+      },
+      "source": {
+        "publisher": "Bundesverfassungsgericht",
+        "dataset": "Corpus der Entscheidungen (BVERFG), Zenodo record 16932395",
+        "updated": "2025-09-22"
+      },
+      "licence": "CC0 1.0 (the decisions are official works, § 5 UrhG)",
+      "iso_path": "de/bverfg/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "germany/bverwg/caselaw",
+      "url": "https://github.com/lexifina/germany-bverwg-caselaw.git",
+      "name": "Case law: Germany, Bundesverwaltungsgericht",
+      "label": "Germany case law (Bundesverwaltungsgericht)",
+      "language": "de",
+      "coverage": "27200 published decisions of the Bundesverwaltungsgericht, one file and one commit each, dated the day decided; 237740 citations of federal law linked to germany-law (0 inside its record).",
+      "history": "in-force",
+      "history_from": "1997-02-26",
+      "record_to": "2024-03-13",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. The record ends at the corpus snapshot named in REPRODUCE.md.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/germany/bund/acts/<path>.jsonl",
+        "law_corpus": "germany/bund/acts"
+      },
+      "source": {
+        "publisher": "Bundesverwaltungsgericht",
+        "dataset": "Corpus der Entscheidungen (BVERWG), Zenodo record 10809039",
+        "updated": "2024-03-13"
+      },
+      "licence": "CC0 1.0 (the decisions are official works, § 5 UrhG)",
+      "iso_path": "de/bverwg/caselaw",
+      "described_by": "corpus.json"
     },
     {
       "path": "germany/north-rhine-westphalia/acts",
@@ -50566,6 +50712,142 @@
       ]
     },
     {
+      "path": "netherlands/centrale-raad-van-beroep/caselaw",
+      "url": "https://github.com/lexifina/netherlands-centrale-raad-van-beroep-caselaw.git",
+      "name": "Case law: Netherlands, Centrale Raad van Beroep",
+      "label": "Netherlands case law (Centrale Raad van Beroep)",
+      "language": "nl",
+      "coverage": "86834 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 12289 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1970-03-26",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/centrale-raad-van-beroep/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/college-van-beroep/caselaw",
+      "url": "https://github.com/lexifina/netherlands-college-van-beroep-caselaw.git",
+      "name": "Case law: Netherlands, College van Beroep voor het bedrijfsleven",
+      "label": "Netherlands case law (College van Beroep voor het bedrijfsleven)",
+      "language": "nl",
+      "coverage": "15537 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 2120 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1996-02-01",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/college-van-beroep/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/gerechtshoven/caselaw",
+      "url": "https://github.com/lexifina/netherlands-gerechtshoven-caselaw.git",
+      "name": "Case law: Netherlands, the gerechtshoven (courts of appeal)",
+      "label": "Netherlands case law (the gerechtshoven (courts of appeal))",
+      "language": "nl",
+      "coverage": "161154 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 30659 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1943-02-25",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/gerechtshoven/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/hoge-raad/caselaw",
+      "url": "https://github.com/lexifina/netherlands-hoge-raad-caselaw.git",
+      "name": "Case law: Netherlands, Hoge Raad (and its Parket)",
+      "label": "Netherlands case law (Hoge Raad (and its Parket))",
+      "language": "nl",
+      "coverage": "76891 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 23059 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1869-12-10",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/hoge-raad/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
       "path": "netherlands/national/acts",
       "url": "https://github.com/lexifina/netherlands-law.git",
       "name": "Netherlands",
@@ -50596,6 +50878,414 @@
         "history_from",
         "record_to"
       ]
+    },
+    {
+      "path": "netherlands/overige/caselaw",
+      "url": "https://github.com/lexifina/netherlands-overige-caselaw.git",
+      "name": "Case law: Netherlands, other courts (Caribbean courts and others)",
+      "label": "Netherlands case law (other courts (Caribbean courts and others))",
+      "language": "nl",
+      "coverage": "20123 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 73 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1977-09-27",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/overige/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/raad-van-state/caselaw",
+      "url": "https://github.com/lexifina/netherlands-raad-van-state-caselaw.git",
+      "name": "Case law: Netherlands, Raad van State",
+      "label": "Netherlands case law (Raad van State)",
+      "language": "nl",
+      "coverage": "96586 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 14337 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1995-01-10",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/raad-van-state/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/rechtbanken-amsterdam/caselaw",
+      "url": "https://github.com/lexifina/netherlands-rechtbanken-amsterdam-caselaw.git",
+      "name": "Case law: Netherlands, the rechtbanken (district courts): amsterdam",
+      "label": "Netherlands case law (the rechtbanken (district courts): amsterdam)",
+      "language": "nl",
+      "coverage": "43601 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 2532 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1995-06-22",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/rechtbanken-amsterdam/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/rechtbanken-gelderland/caselaw",
+      "url": "https://github.com/lexifina/netherlands-rechtbanken-gelderland-caselaw.git",
+      "name": "Case law: Netherlands, the rechtbanken (district courts): gelderland",
+      "label": "Netherlands case law (the rechtbanken (district courts): gelderland)",
+      "language": "nl",
+      "coverage": "34975 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 2594 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1995-01-06",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/rechtbanken-gelderland/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/rechtbanken-limburg/caselaw",
+      "url": "https://github.com/lexifina/netherlands-rechtbanken-limburg-caselaw.git",
+      "name": "Case law: Netherlands, the rechtbanken (district courts): limburg",
+      "label": "Netherlands case law (the rechtbanken (district courts): limburg)",
+      "language": "nl",
+      "coverage": "22038 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 1294 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1994-11-24",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/rechtbanken-limburg/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/rechtbanken-midden-nederland/caselaw",
+      "url": "https://github.com/lexifina/netherlands-rechtbanken-midden-nederland-caselaw.git",
+      "name": "Case law: Netherlands, the rechtbanken (district courts): midden nederland",
+      "label": "Netherlands case law (the rechtbanken (district courts): midden nederland)",
+      "language": "nl",
+      "coverage": "47710 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 2715 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1994-06-02",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/rechtbanken-midden-nederland/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/rechtbanken-noord-holland/caselaw",
+      "url": "https://github.com/lexifina/netherlands-rechtbanken-noord-holland-caselaw.git",
+      "name": "Case law: Netherlands, the rechtbanken (district courts): noord holland",
+      "label": "Netherlands case law (the rechtbanken (district courts): noord holland)",
+      "language": "nl",
+      "coverage": "39194 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 2383 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1997-04-04",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/rechtbanken-noord-holland/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/rechtbanken-noord-nederland/caselaw",
+      "url": "https://github.com/lexifina/netherlands-rechtbanken-noord-nederland-caselaw.git",
+      "name": "Case law: Netherlands, the rechtbanken (district courts): noord nederland",
+      "label": "Netherlands case law (the rechtbanken (district courts): noord nederland)",
+      "language": "nl",
+      "coverage": "23948 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 19348 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1996-05-02",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/rechtbanken-noord-nederland/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/rechtbanken-oost-brabant/caselaw",
+      "url": "https://github.com/lexifina/netherlands-rechtbanken-oost-brabant-caselaw.git",
+      "name": "Case law: Netherlands, the rechtbanken (district courts): oost brabant",
+      "label": "Netherlands case law (the rechtbanken (district courts): oost brabant)",
+      "language": "nl",
+      "coverage": "16326 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 1777 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1997-03-18",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/rechtbanken-oost-brabant/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/rechtbanken-overijssel/caselaw",
+      "url": "https://github.com/lexifina/netherlands-rechtbanken-overijssel-caselaw.git",
+      "name": "Case law: Netherlands, the rechtbanken (district courts): overijssel",
+      "label": "Netherlands case law (the rechtbanken (district courts): overijssel)",
+      "language": "nl",
+      "coverage": "22086 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 1109 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1996-08-28",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/rechtbanken-overijssel/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/rechtbanken-rotterdam/caselaw",
+      "url": "https://github.com/lexifina/netherlands-rechtbanken-rotterdam-caselaw.git",
+      "name": "Case law: Netherlands, the rechtbanken (district courts): rotterdam",
+      "label": "Netherlands case law (the rechtbanken (district courts): rotterdam)",
+      "language": "nl",
+      "coverage": "51493 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 6968 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1998-05-08",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/rechtbanken-rotterdam/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "netherlands/rechtbanken-zeeland-west-brabant/caselaw",
+      "url": "https://github.com/lexifina/netherlands-rechtbanken-zeeland-west-brabant-caselaw.git",
+      "name": "Case law: Netherlands, the rechtbanken (district courts): zeeland west brabant",
+      "label": "Netherlands case law (the rechtbanken (district courts): zeeland west brabant)",
+      "language": "nl",
+      "coverage": "47070 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 2244 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1990-10-12",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/rechtbanken-zeeland-west-brabant/caselaw",
+      "described_by": "corpus.json"
     },
     {
       "path": "new-zealand/national/acts",
