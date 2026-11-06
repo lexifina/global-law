@@ -2489,5 +2489,39 @@ class DescriptionExamplesResolve(unittest.TestCase):
                 self.assertTrue(any(self.m.scoped(c, ex) is not None for c in self.corpora), ex)
 
 
+class ListJurisdictionsExample(unittest.TestCase):
+    """Audit row 91: list_jurisdictions' example path is a provision, and a corpus's own notes at its root
+    (CHANGES.md) are not counted as provision files."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT))
+        from tests.test_law_fixtures import Tree, run
+        t = cls.t = Tree()
+        shutil.copy(ROOT / 'tools' / 'mcp_server.py', t.root / 'tools' / 'mcp_server.py')
+        (t.root / 'jurisdiction.json').write_text('{"name": "fixture", "jurisdictions": []}', encoding='utf-8')
+        run('add', 'jurisdiction.json', cwd=t.root)
+        c = t.corpus('aa/federal/code')
+        c.commit('Act 1 of 2010', {'CHANGES.md': '# Changes\n', 'title-1/1.md': 'Words.\n'}, In_force='2010-01-01',
+                 Kind='law')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def test_example_is_a_provision_and_notes_are_not_counted(self):
+        code = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server\n'
+                'r = mcp_server.handle({"jsonrpc": "2.0", "id": 1, "method": "tools/call", '
+                '"params": {"name": "list_jurisdictions", "arguments": {}}})["result"]\n'
+                'print(json.dumps(r["structuredContent"]["corpora"]))\n')
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', code], cwd=self.t.root, capture_output=True,
+                              encoding='utf-8', timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        row = next(c for c in json.loads(done.stdout) if c['path'] == 'aa/federal/code')
+        self.assertEqual(row['example_path'], 'aa/federal/code/title-1/1.md')
+        self.assertEqual(row['provision_files'], 1)
+
+
 if __name__ == '__main__':
     unittest.main()

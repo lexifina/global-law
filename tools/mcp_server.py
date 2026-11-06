@@ -1000,6 +1000,10 @@ def warmed() -> None:
 
 # --- tools ------------------------------------------------------------------------------------------------------------
 
+# A corpus's own notes at its root (CHANGES.md, SOURCES.md, FAQ.md): upper-case names beside the law, never a provision.
+ROOT_DOC = re.compile(r'[A-Z][A-Z0-9_-]*\.md')
+
+
 def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
     m = law.manifest()
     events = law.timeline()
@@ -1007,8 +1011,8 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
     for c in m['corpora']:
         own = [e for e in events if e.corpus == c['path'] and e.kind != 'documentation']
         first, last = (own[0].in_force, own[-1].in_force) if own else (None, None)
-        files = names_of(c['path'], corpus_head(c['path']))
-        example = files[0] if files else ''
+        files = [f for f in names_of(c['path'], corpus_head(c['path'])) if not ROOT_DOC.fullmatch(f)]
+        example = next((f for f in files if '/' in f), files[0] if files else '')  # a provision in a folder first
         info = {'path': c['path'], 'name': c['name'], 'language': c.get('language'), 'coverage': c.get('coverage'),
                 'provision_files': len(files), 'record_starts': first, 'last_change_in_record': last,
                 'record_to': c.get('record_to'), 'record_note': c.get('record_note'), 'changes': len(own),
