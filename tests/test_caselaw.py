@@ -293,6 +293,49 @@ class CaseLaw(unittest.TestCase):
         self.assertFalse(by_law['error'], by_law['text'])
         self.assertNotIn(CASES, by_law['text'])  # a law's name is not looked for among the decisions
 
+    # --- the rest of the feature list (global-law-feature-list.html): compare_dates, list_jurisdictions, resources, charts
+
+    def test_compare_dates_on_a_decision(self):
+        """compare_dates reads a decision as it reads a provision: the correction's words, and the correction among
+        what took effect in between."""
+        (cmp,) = self.calls(('compare_dates', {'path': f'{CASES}/{D1}', 'date_a': '2010-06-01', 'date_b': '2012-01-01'}))
+        self.assertFalse(cmp['error'], cmp['text'])
+        self.assertIn('gutgeheissen', cmp['text'])
+        self.assertIn('2011-01-01', cmp['text'])
+
+    def test_list_jurisdictions_names_case_law_as_court_decisions(self):
+        """list_jurisdictions lists a case-law corpus with its record's span and its latest decision, apart from the law."""
+        (lj,) = self.calls(('list_jurisdictions', {}))
+        self.assertFalse(lj['error'], lj['text'])
+        self.assertIn(CASES, lj['text'])
+        self.assertIn(LAW, lj['text'])
+        self.assertIn('2022-03-03', lj['text'])  # its latest decision, which the timeline of law no longer holds
+
+    def test_readme_resource_describes_case_law(self):
+        """The README an assistant reads (global-law://README.md) says what case law is and how to add and read it."""
+        text = (ROOT / 'README.md').read_text(encoding='utf-8')
+        self.assertIn('## Case law', text)
+        for words in ('switzerland/bund/caselaw', 'countries.py add switzerland/caselaw', 'check_precedent', 'Kind: court'):
+            self.assertIn(words, text)
+
+    def test_charts_leave_case_law_out(self):
+        """The chart pipeline's list of corpora (visualisations/src/law-drawn/fetch.py, read by every analysis through
+        corpora.json) leaves case law out: decisions counted as laws would swamp every chart."""
+        import importlib.util
+        import tempfile
+        spec = importlib.util.spec_from_file_location('chart_fetch', ROOT / 'visualisations' / 'src' / 'law-drawn' / 'fetch.py')
+        fetch = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(fetch)
+        with tempfile.TemporaryDirectory() as d:
+            gm = Path(d) / 'gitmodules.txt'
+            gm.write_text('[submodule "switzerland/bund/acts"]\n\tpath = switzerland/bund/acts\n'
+                          '\turl = https://github.com/lexifina/switzerland-law.git\n'
+                          '[submodule "switzerland/bund/caselaw"]\n\tpath = switzerland/bund/caselaw\n'
+                          '\turl = https://github.com/lexifina/switzerland-caselaw.git\n'
+                          '[submodule "switzerland/vaud/caselaw"]\n\tpath = switzerland/vaud/caselaw\n'
+                          '\turl = https://github.com/lexifina/switzerland-vaud-caselaw.git\n', encoding='utf-8')
+            self.assertEqual([p for p, _, _ in fetch.modules(gm)], ['switzerland/bund/acts'])
+
 
 if __name__ == '__main__':
     unittest.main()

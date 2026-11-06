@@ -74,6 +74,25 @@ Dates are YYYY-MM-DD. The first read of a corpus indexes its history once and ke
   corpora, run `git submodule sync` and `git submodule update --init`.
 - `manifest.json` and the `jurisdiction.json` files are written by `tools/describe.py`.
 
+## Case law
+
+Swiss court decisions sit beside the law: `switzerland/bund/caselaw` (the federal courts and bodies) and
+`switzerland/<canton>/caselaw` (each canton's courts), one file and one commit per published decision, dated the day it
+was decided. Each commit is a court ruling, not a law (`Kind: court`), so the tools credit it as one and leave it out of
+everything about law (`laws`, searches, change lists) unless you name case law. Each case-law corpus also files, under
+the law's own paths, the decisions that cite each article of federal law, with the version of the law in force on the
+day decided:
+
+```
+python tools/countries.py add switzerland/caselaw                   the case law (not added with switzerland)
+python tools/law.py show 2024-01-01 switzerland/bund/caselaw/<decision>.md
+python tools/law.py laws 2024-01-01 2024-01-31 switzerland/bund/caselaw   decisions given in a window
+```
+
+From an assistant, `check_precedent` lists the decisions that applied a provision and says whether the text each one
+applied is still the text in force; `what_else_changes` counts them; `find_provision` and `law_details` take a docket
+(`4A_123/2024`) or a BGE reference (`BGE 142 II 307`).
+
 ## How it is made
 
 The repository's history only grows: each commit adds corpora, moves their pins forward, or changes the tools and

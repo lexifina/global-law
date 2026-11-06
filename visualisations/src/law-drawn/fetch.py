@@ -8,14 +8,21 @@ HERE = Path(__file__).parent
 CL = HERE / "clones"
 
 
-def modules():
-    out = subprocess.run(["git", "config", "-f", str(HERE / "gitmodules.txt"), "--get-regexp", r"\.(path|url)$"], capture_output=True, text=True).stdout
+def is_caselaw(path, url):
+    """A court-decision corpus (switzerland/<level>/caselaw, lexifina/*-caselaw): the charts are about law, so they are
+    left out. Their commits are decisions, not laws; counted as laws they would swamp every chart (360,000 in one)."""
+    return path.rstrip("/").endswith("/caselaw") or url.rstrip("/").removesuffix(".git").endswith("-caselaw")
+
+
+def modules(gitmodules=None):
+    out = subprocess.run(["git", "config", "-f", str(gitmodules or HERE / "gitmodules.txt"), "--get-regexp", r"\.(path|url)$"], capture_output=True, text=True).stdout
     m = {}
     for line in out.splitlines():
         k, v = line.split(" ", 1)
         name, field = k.rsplit(".", 1)
         m.setdefault(name, {})[field] = v
-    return [(v["path"], v["url"].rstrip("/").removesuffix(".git").split("/")[-1], v["url"]) for v in m.values() if "path" in v and "url" in v]
+    return [(v["path"], v["url"].rstrip("/").removesuffix(".git").split("/")[-1], v["url"]) for v in m.values()
+            if "path" in v and "url" in v and not is_caselaw(v["path"], v["url"])]
 
 
 def one(item):
