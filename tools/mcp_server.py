@@ -191,7 +191,12 @@ def _look() -> tuple[str, tuple[str, ...]]:
     now = time.monotonic()
     if now - _head_seen[0] > 2.0:
         sha, names = law.git('rev-parse', 'HEAD').strip(), chosen()
-        _head_seen = (now, sha, tuple(c['path'] for c in _full_manifest(sha)['corpora'] if serving(c, names) is None))
+        corpora = _full_manifest(sha)['corpora']
+        # The first look asks git once or more per checked-out corpus (unreadable_why); with dozens checked out (the 27
+        # Swiss case-law corpora alone) asked one after another that was most of a quick call, so eight at a time.
+        with ThreadPoolExecutor(8) as pool:
+            why = list(pool.map(lambda c: serving(c, names), corpora))
+        _head_seen = (now, sha, tuple(c['path'] for c, w in zip(corpora, why) if w is None))
         if law.recheck_missing_futures():  # a future commit fetched since (as future_note asks): HEAD did not move
             for cached in (_timeline, _history, latest_text):
                 cached.cache_clear()
@@ -208,9 +213,10 @@ def _full_manifest(_head: str):
 
 
 @lru_cache(maxsize=4)
-def _timeline(_head: str, served: tuple[str, ...]):
+def _timeline(_head: str, served: tuple[str, ...], caselaw: bool = False):
     # law.timeline reads each corpus's own history, for the corpora law.manifest gives: here, the corpora served.
-    return tuple(_original_timeline())
+    # Case law is left out unless asked for (law.timeline's caselaw): a tool on one case-law corpus reads its own.
+    return tuple(_original_timeline(caselaw))
 
 
 @lru_cache(maxsize=4)
@@ -221,7 +227,7 @@ def _manifest(_head: str, served: tuple[str, ...]):
 
 # Every tool sees only the corpora served: those checked out, and of those the jurisdictions the user chose, if any.
 _original_timeline, _original_manifest = law.timeline, law.manifest
-law.timeline = lambda: list(_timeline(*_look()))  # law.py's own functions call these by name, so they share the cache
+law.timeline = lambda caselaw=False: list(_timeline(*_look(), caselaw))  # law.py's own functions call these by name, so they share the cache
 law.manifest = lambda: _manifest(*_look())
 
 
@@ -353,7 +359,7 @@ def record_floor(date: str, path: str) -> dict | None:
     try:
         first = (history_of(path) or [None])[0]
         corpus, _ = law.corpus_of(path)
-        start = next((e for e in law.timeline() if e.corpus == corpus and e.kind != 'documentation'), None)
+        start = next((e for e in law.corpus_timeline(corpus) if e.kind != 'documentation'), None)
     except (UserError, SystemExit):
         first, start = None, None
     # The corpus starts from a baseline that already holds the provision (the 2017 edition of the US Code holds §101):
@@ -1009,7 +1015,9 @@ def warm() -> None:
         except (SystemExit, OSError, subprocess.SubprocessError):  # not checked out: its tool call says so
             pass
     try:
-        corpora = [c['path'] for c in law.manifest()['corpora']]
+        # Case law is not warmed: a million decisions would hold the first calls about law behind them (one process,
+        # one interpreter lock); a call that reads case law reads its corpus then.
+        corpora = [c['path'] for c in law.manifest()['corpora'] if not law.is_caselaw(c)]
         aliases()
         # One git log and one file list per corpus, mostly waiting on git, so they run eight at a time.
         with ThreadPoolExecutor(8) as pool:
@@ -1048,6 +1056,9 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
     for c in m['corpora']:
         own = [e for e in events if e.corpus == c['path'] and e.kind != 'documentation']
         first, last = (own[0].in_force, own[-1].in_force) if own else (None, None)
+        if law.is_caselaw(c):  # not in the timeline: its record's span from its corpus.json and its latest decision
+            given = law.latest_decision(c['path'], '9999-12-31')
+            first, last = c.get('history_from'), given[1] if given else None
         files = [f for f in names_of(c['path'], corpus_head(c['path'])) if not ROOT_DOC.fullmatch(f)]
         example = next((f for f in files if '/' in f), files[0] if files else '')  # a provision in a folder first
         info = {'path': c['path'], 'name': c['name'], 'language': c.get('language'), 'coverage': c.get('coverage'),
@@ -2207,16 +2218,23 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
     for e in events:  # once: a corpus of case law adds a commit per decision, and every corpus read them all
         if e.kind != 'documentation':
             by_corpus.setdefault(e.corpus, []).append(e)
+    caselaw = [c['path'] for c in law.manifest()['corpora'] if law.is_caselaw(c)]
+    with ThreadPoolExecutor(8) as pool:  # case law is not in the timeline: one git log per corpus, eight at a time
+        given = dict(zip(caselaw, pool.map(lambda p: law.latest_decision(p, date), caselaw)))
     for c in law.manifest()['corpora']:
         own = by_corpus.get(c['path'], [])
         last = [e for e in own if e.in_force <= date]
         nxt = next((e for e in own if e.in_force > date), None)
-        notes = law.caveats(date, c['path'], events)
         decisions = law.is_caselaw(c)
+        notes = [] if decisions else law.caveats(date, c['path'], events)
+        sha = law.pinned(root, c['path']) if not decisions else None
+        if decisions and given.get(c['path']):  # the latest decision; the next one is not read (a walk of its history)
+            g = given[c['path']]
+            last, sha = [types.SimpleNamespace(law=g[0], in_force=g[1])], g[2]
         data.append({'corpus': c['path'], 'name': c['name'], 'last_change': last[-1].law if last else None,
                      'last_change_in_force': last[-1].in_force if last else None,
                      'next_change': nxt.law if nxt else None, 'next_change_in_force': nxt.in_force if nxt else None,
-                     'corpus_commit': law.pinned(root, c['path']), 'caveats': notes, 'case_law': decisions})
+                     'corpus_commit': sha, 'caveats': notes, 'case_law': decisions})
         rows.append(f"- {c['path']}: " + ((f'{last[-1].law} (latest decision), given {last[-1].in_force}' if decisions else
                                           f'{last[-1].law}, in force {last[-1].in_force}') if last else 'not yet in the record')
                     + (f'; next: {nxt.law} on {nxt.in_force}' if nxt else '') + ''.join(f' [{n}]' for n in notes))
@@ -2400,7 +2418,9 @@ def t_laws_between(args: dict) -> tuple[str, dict]:
     corpora, caselaw = by_kind(law.manifest()['corpora'], scope, args)
     subs = {c['path']: scoped(c['path'], scope) for c in corpora}
     inside = {c: touching(law.corpus_dir(c), s, 'HEAD') for c, s in subs.items() if s}  # a scope within a corpus
-    window = [e for e in law.timeline() if a <= e.in_force <= b and e.kind != 'documentation' and subs.get(e.corpus) is not None
+    # Case law is not in the timeline: a case-law corpus this call reads gives its own events.
+    source = law.timeline() + [e for c in corpora if law.is_caselaw(c) for e in law.corpus_timeline(c['path'])]
+    window = [e for e in source if a <= e.in_force <= b and e.kind != 'documentation' and subs.get(e.corpus) is not None
               and (e.corpus not in inside or e.corpus_commit in inside[e.corpus])]
     ends = sum(1 for e in window if e.kind == 'end')  # France's "Fin de vigueur": an end of validity, no law named
     every, left_out = laws_only([e for e in window if e.kind != 'end'])
@@ -2649,7 +2669,7 @@ def t_list_provisions(args: dict) -> tuple[str, dict]:
 
 
 def folder_span(corpus: str, date: str, inner: str) -> dict | None:
-    by_commit = {e.corpus_commit: e for e in law.timeline() if e.corpus == corpus}
+    by_commit = {e.corpus_commit: e for e in law.corpus_timeline(corpus)}
     # Newest first by in-force date: a corpus can append an older act after its tip.
     dated = sorted((by_commit[c] for c in law.git('log', '--format=%H', law.reachable_tip(corpus), '--', inner, cwd=law.corpus_dir(corpus)).split()
                     if c in by_commit and by_commit[c].kind != 'documentation' and by_commit[c].in_force <= date),
@@ -2686,7 +2706,7 @@ def list_folders(corpus: str, sha: str, base: str, items: list, folders: list[st
     """A folder of acts (Malta's sl/, a US title's chapters): one row per act with its title, its number of provision
     files and the last change to any of them, so "list the regulations under Cap. 586 and when each changed" is one call."""
     cwd = law.corpus_dir(corpus)
-    by_commit = {e.corpus_commit: e for e in law.timeline() if e.corpus == corpus}
+    by_commit = {e.corpus_commit: e for e in law.corpus_timeline(corpus)}
     rows = []
     shown = [(f, f'{base}/{f}'.strip('/')) for f in folders[:min(limit, FOLDER_ROWS)]]
     mine_of = {where: [p for p in items if p.startswith(where + '/')] for _, where in shown}
@@ -2729,6 +2749,9 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
     by_commit = {(e.corpus, e.corpus_commit): e for e in law.timeline()}
     hits, missing = [], []
     corpora, caselaw = by_kind([c for c in law.manifest()['corpora'] if scoped(c['path'], scope) is not None], scope, args)
+    for c in corpora:  # case law is not in the timeline: the case-law corpora read here give their own events
+        if law.is_caselaw(c):
+            by_commit.update({(e.corpus, e.corpus_commit): e for e in law.corpus_events(c['path'])})
     for c, cwd in checked_out(corpora, missing):
         sub = scoped(c['path'], scope)
         for sha in law.git('log', '--format=%H', '-i', '--fixed-strings', f'--grep={query}', *(['--', sub] if sub else []), cwd=cwd).split():
@@ -2761,6 +2784,9 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
     by_commit = {(e.corpus, e.corpus_commit): e for e in law.timeline()}
     found, missing, cut = [], [], False
     corpora, caselaw = by_kind([c for c in law.manifest()['corpora'] if scoped(c['path'], scope) is not None], scope, args)
+    for c in corpora:  # case law is not in the timeline: the case-law corpora read here give their own events
+        if law.is_caselaw(c):
+            by_commit.update({(e.corpus, e.corpus_commit): e for e in law.corpus_events(c['path'])})
     for c, cwd in checked_out(corpora, missing):
         sub = scoped(c['path'], scope)
         # --name-status with renames: a provision file renamed by a change (Malta's "Annex II" becoming the "Third
@@ -3897,28 +3923,31 @@ def ch_article_paths(m) -> list[str]:
 
 
 def _decision_key(text: str) -> str:
-    text = re.sub(r'^(?:ATF|DTF)\b', 'BGE', text.strip())
-    return re.sub(r'[\s]', '', text).upper()
+    """A docket or BGE reference as a key: letters and digits only, upper case, without BGE/ATF/DTF ("4A_123/2024" and
+    the file 4A_123-2024.md, "ATF 142 II 307" and the file 142-II-307.md give the same key)."""
+    text = re.sub(r'^(?:BGE|ATF|DTF)(?=[\s_-]|\d)', '', text.strip(), flags=re.I)
+    return re.sub(r'[^0-9A-Za-z]', '', text).upper()
 
 
 @lru_cache(maxsize=64)
 def _decisions(corpus: str, sha: str) -> dict[str, tuple[str, ...]]:
-    """Docket and BGE reference -> decision files, from a case-law corpus's Docket: and BGE: trailers (one git log)."""
+    """Docket and BGE reference -> decision files, by file name: a decision's file is named from its docket (or its
+    BGE reference), decisions/<court>/<year>/<docket>.md, with --<hash> after it where two share a name. One ls-tree
+    of the pinned commit: walking the Docket: trailers of every commit took minutes on the federal courts' 360,000."""
     out: dict[str, list[str]] = {}
-    keys: list[str] = []
-    for line in law.git('log', sha, '--format=@%(trailers:key=Docket,key=BGE,valueonly,separator=%x1f)', '--name-only',
-                        '--diff-filter=A', cwd=ROOT / corpus, check=False).splitlines():
-        if line.startswith('@'):
-            keys = [_decision_key(k) for k in line[1:].split('\x1f') if k.strip()]
-        elif line.strip().endswith('.md') and keys:
-            for k in keys:
-                out.setdefault(k, []).append(f'{corpus}/{line.strip()}')
+    for line in law.git('-c', 'core.quotePath=false', 'ls-tree', '-r', '--name-only', sha, '--', 'decisions',
+                        cwd=ROOT / corpus, check=False).splitlines():
+        name = line.rsplit('/', 1)[-1]
+        if name.endswith('.md'):
+            out.setdefault(_decision_key(name[:-3].split('--', 1)[0]), []).append(f'{corpus}/{line}')
     return {k: tuple(v) for k, v in out.items()}
 
 
 def ch_decision_paths(text: str) -> list[str]:
-    key = _decision_key(text)
-    return [p for corpus, sha in caselaw_pins() for p in _decisions(corpus, sha).get(key, ())]
+    key, pins = _decision_key(text), caselaw_pins()
+    with ThreadPoolExecutor(8) as pool:  # one ls-tree per corpus, the first time; cached per pin after
+        found = list(pool.map(lambda cp: _decisions(*cp).get(key, ()), pins))
+    return [p for paths in found for p in paths]
 
 
 class CitationForm:
@@ -4170,7 +4199,12 @@ def t_law_details(args: dict) -> tuple[str, dict]:
         world = next((e for e in law.timeline() if e.commit.startswith(commit.lower())), None)
         if world:
             commit, corpus = world.corpus_commit, world.corpus
-    corpora = [c['path'] for c in law.manifest()['corpora'] if not corpus or c['path'].startswith(corpus)]
+    # Case law is read for a decision (a docket or BGE reference, found by its file name), a commit, or a corpus
+    # that names case law; a law's name is not looked for among a million decisions' authors.
+    decided = ch_decision_paths(law_name) if law_name and CH_DECISION.search(law_name) else []
+    corpora = [c['path'] for c in law.manifest()['corpora'] if (not corpus or c['path'].startswith(corpus))
+               and (not law.is_caselaw(c) or commit or (corpus and law.names_caselaw(corpus))
+                    or any(p.startswith(c['path'] + '/') for p in decided))]
     if not corpora:
         raise UserError(f'No corpus {corpus!r}; see list_jurisdictions.')
     if not law_name and not commit:
@@ -4188,9 +4222,12 @@ def t_law_details(args: dict) -> tuple[str, dict]:
             ok = ok and git_run(['git', 'merge-base', '--is-ancestor', full, pin], cwd=cwd, capture_output=True).returncode == 0
             shas = [full] if ok else []
         else:
-            shas = law.git('log', pin, '--format=%H', f'--author={law_name}', '--fixed-strings', '-i', cwd=cwd).split()
-            if not shas and c in {p for p, _ in caselaw_pins()}:  # a decision by its BGE reference or docket (trailers)
-                shas = law.git('log', pin, '--format=%H', f'--grep=^(BGE|Docket): *{re.escape(law_name)}$', '-E', '-i', cwd=cwd).split()
+            mine = [p[len(c) + 1:] for p in decided if p.startswith(c + '/')]
+            if mine:  # a decision: the commit that added its file
+                shas = [law.git('log', '-1', '--format=%H', '--diff-filter=A', pin, '--', p, cwd=cwd).strip() for p in mine]
+                shas = [x for x in shas if x]
+            else:
+                shas = law.git('log', pin, '--format=%H', f'--author={law_name}', '--fixed-strings', '-i', cwd=cwd).split()
         for sha in shas[:10]:
             msg = law.git('show', '-s', '--format=%an%x1f%B', sha, cwd=cwd)
             author, _, body = msg.partition('\x1f')
@@ -4326,7 +4363,8 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
         if sub and not changed:
             continue
         mine = touching(cwd, sub, law.reachable_tip(c['path']))  # the laws below keep those in force in the window
-        laws, not_laws = laws_only([e for e in events if e.corpus == c['path'] and a < e.in_force <= b
+        own = law.corpus_timeline(c['path']) if law.is_caselaw(c) else events  # case law: not in the timeline
+        laws, not_laws = laws_only([e for e in own if e.corpus == c['path'] and a < e.in_force <= b
                                     and e.kind != 'documentation' and (not sub or e.corpus_commit in mine)])
         laws = [e.law for e in laws]
         kinds = {'A': 'added', 'M': 'changed', 'D': 'removed'}

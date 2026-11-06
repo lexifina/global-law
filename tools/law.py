@@ -269,8 +269,10 @@ def trailers(body: str) -> dict[str, str]:
     return {k: v[0] for k, v in trailers_all(body).items()}
 
 
-def timeline() -> list[Event]:
-    """Every dated commit of every corpus checked out, oldest in-force date first. Each corpus is read from its own
+def timeline(caselaw: bool = False) -> list[Event]:
+    """Every dated commit of every corpus checked out, oldest in-force date first. Bodies of case law (is_caselaw) are
+    left out unless `caselaw` is true: a commit per decision (about a million in Switzerland alone) would make every
+    answer about law read them; a read of one case-law corpus takes its own events (corpus_timeline, corpus_events). Each corpus is read from its own
     history at the commit the tree pins at HEAD (corpus_events).
 
     Until 2 November 2026 the tree recorded one root commit per law taking effect, and this read those. Since then the
@@ -278,7 +280,7 @@ def timeline() -> list[Event]:
     so its root history ends there and an old root commit can pin a corpus commit that no longer exists. Those root
     commits now only date a corpus commit that carries no date of its own (legacy_dates). A law that only changed
     acts already ended (ended_rows) is left out, as history() leaves its versions out."""
-    corpora = tuple(c['path'] for c in manifest()['corpora'])
+    corpora = tuple(c['path'] for c in manifest()['corpora'] if caselaw or not is_caselaw(c))
     key = ('timeline', _head() + '|' + ','.join(corpora))
     recheck_missing_futures()
     if key not in _CACHE:
@@ -286,6 +288,34 @@ def timeline() -> list[Event]:
         events.sort(key=lambda e: e.in_force)  # stable: each corpus keeps its own order within a day
         _CACHE[key] = events
     return list(_CACHE[key])  # type: ignore[arg-type]
+
+
+def corpus_timeline(corpus: str) -> list[Event]:
+    """One corpus's dated commits in in-force order: timeline() restricted to it, read without every other corpus
+    (and so the way to read a body of case law, which timeline() leaves out)."""
+    key = ('corpus-timeline', f'{corpus}@{_head()}')
+    if key not in _CACHE:
+        _CACHE[key] = sorted(law_events(corpus), key=lambda e: e.in_force)
+    return list(_CACHE[key])  # type: ignore[arg-type]
+
+
+def latest_decision(corpus: str, date: str) -> tuple[str, str, str] | None:
+    """(name, day, commit) of the last decision given on or before `date` in a body of case law, or None. Its decisions are
+    committed in the order given, each dated noon of its day (Europe/Zurich), so one `git log -n --before` finds it
+    without reading the corpus's history; days before 1970, which git dates 1970-01-01, are read from its index."""
+    cwd = ROOT / corpus
+    if not (cwd / '.git').exists() or not _readable(corpus, cwd):
+        return None
+    if date < '1970-01-02':
+        last = [e for e in corpus_events(corpus) if e.in_force <= date and e.kind not in ('documentation', 'end')]
+        return (last[-1].law, last[-1].in_force, last[-1].corpus_commit) if last else None
+    out = git('log', '-n', '8', f'--before={date}T23:59:59+01:00', '--format=%an%x1f%(trailers:key=In-force,valueonly,separator=%x2C)%x1f%H',
+              reachable_tip(corpus), cwd=cwd, check=False)
+    for line in out.splitlines():
+        name, day, sha = (line.split('') + ['', ''])[:3]
+        if name != MAINTAINER and ISO_DAY.match(day.strip()) and day.strip()[:10] <= date:
+            return name, day.strip()[:10], sha.strip()
+    return None
 
 
 def tip(corpus: str) -> str | None:
@@ -470,7 +500,12 @@ class Moment:
 def root_on(date: str, events: list[Event] | None = None) -> Moment | None:
     """The tree as in force on `date`, or None before every record. pinned() gives each corpus's commit in it."""
     events = events if events is not None else timeline()
-    return Moment(date) if events and events[0].in_force <= date else None
+    first = events[0].in_force if events else None
+    for c in manifest()['corpora']:  # case law is not in the timeline: its record starts where its corpus.json says
+        start = str(c.get('history_from') or '')[:10]
+        if is_caselaw(c) and ISO_DAY.match(start) and (ROOT / c['path'] / '.git').exists():
+            first = min(first or start, start)
+    return Moment(date) if first and first <= date else None
 
 
 def corpus_on(date: str, corpus: str) -> str | None:
@@ -3787,12 +3822,19 @@ def main(argv: list[str]) -> None:
         by_corpus: dict[str, list[Event]] = {}
         for e in events:  # once, not once per corpus: the timeline holds every corpus's commits
             by_corpus.setdefault(e.corpus, []).append(e)
+        # Case law is not in the timeline: one git log per corpus (latest_decision), eight at a time.
+        from concurrent.futures import ThreadPoolExecutor
+        cases = [c['path'] for c in manifest()['corpora'] if is_caselaw(c) and (ROOT / c['path'] / '.git').exists()]
+        with ThreadPoolExecutor(8) as pool:
+            decided = dict(zip(cases, pool.map(lambda p: latest_decision(p, args[0]), cases)))
         for corpus in manifest()['corpora']:
             own = by_corpus.get(corpus['path'], [])
             last = [e for e in own if e.in_force <= args[0] and e.kind not in ('documentation', 'end')]
-            state = ((f'{last[-1].law} (latest decision), given {last[-1].in_force}' if is_caselaw(corpus) else
-                      f'{last[-1].law}, in force {last[-1].in_force}') if last else 'not yet in the record') \
+            state = (f'{last[-1].law}, in force {last[-1].in_force}' if last else 'not yet in the record') \
                 if (ROOT / corpus['path'] / '.git').exists() else 'not checked out'
+            if corpus['path'] in decided:
+                given = decided[corpus['path']]
+                state = f'{given[0]} (latest decision), given {given[1]}' if given else 'no decision yet in the record'
             if corpus['path'] in unreadable():
                 state = 'checkout unfinished (no commit yet)'
             if corpus['path'] in behind():

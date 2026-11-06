@@ -260,6 +260,39 @@ class CaseLaw(unittest.TestCase):
         import mcp_server as m
         self.assertIn('check_precedent', m.PROMPTS['provision_on_a_date'][3])
 
+    # --- speed: case law stays out of the reads about law ----------------------------------------------------------
+
+    def test_timeline_keeps_case_law_out_unless_asked(self):
+        """A million decisions in law.timeline() made every tool about law 2-3 times slower and world_on_date pass its
+        120 s limit (measured 2026-11-06 with the 27 Swiss case-law corpora): case law is read only where asked for,
+        each corpus by its own events, and world by one git log per corpus (latest_decision)."""
+        code = ('import json, sys; sys.path.insert(0, "tools"); import law\n'
+                f'c = "{CASES}"\n'
+                'print(json.dumps([sorted({e.corpus for e in law.timeline()}), sorted({e.corpus for e in law.timeline(caselaw=True)}),'
+                ' (law.latest_decision(c, "2017-01-01") or [])[:2], law.latest_decision(c, "2009-01-01"),'
+                ' [e.law for e in law.corpus_timeline(c) if e.kind == "court"]]))\n')
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', code], cwd=self.t.root, capture_output=True,
+                              encoding='utf-8', timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        law_only, both, latest, none_yet, own = json.loads(done.stdout)
+        self.assertEqual(law_only, [LAW])
+        self.assertEqual(both, sorted([LAW, CASES]))
+        self.assertEqual(latest, ['Bundesgericht (BGE) BGE 142 II 307', '2016-06-01'])
+        self.assertIsNone(none_yet)
+        self.assertEqual(own, ['Bundesgericht 1C_100/2010', 'Bundesgericht (BGE) BGE 142 II 307', 'Bundesgericht 4A_123/2022'])
+
+    def test_world_on_date_and_law_details_find_decisions_without_the_timeline(self):
+        world, by_docket, by_law = self.calls(('world_on_date', {'date': '2017-01-01'}),
+                                              ('law_details', {'law': '4A_123/2022'}),
+                                              ('law_details', {'law': 'AS 2020 5'}))
+        row = next(r for r in world['data']['corpora'] if r['corpus'] == CASES)
+        self.assertEqual(row['last_change'], 'Bundesgericht (BGE) BGE 142 II 307')
+        self.assertTrue(row['case_law'])
+        self.assertFalse(by_docket['error'], by_docket['text'])
+        self.assertIn(f'{CASES}/{D3}', by_docket['text'])
+        self.assertFalse(by_law['error'], by_law['text'])
+        self.assertNotIn(CASES, by_law['text'])  # a law's name is not looked for among the decisions
+
 
 if __name__ == '__main__':
     unittest.main()
