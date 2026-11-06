@@ -5,8 +5,6 @@
 An expansion of the same for the US Code, [#1 on Hacker News (28/10/26)](https://news.ycombinator.com/item?id=50268380).
 Semantic, searchable law on a global scale.
 
-[![monitor](https://github.com/lexifina/global-law/actions/workflows/monitor.yml/badge.svg)](https://github.com/lexifina/global-law/actions/workflows/monitor.yml)
-
 <!-- status-summary -->
 **Updates: running**, last published 2026-11-06 15:15 UTC, 31 corpus updates in the last 24 hours ([data/status.json](data/status.json)). **Freshness:** 619 of 714 corpora current, 0 pending a change, 81 stale, 14 unverified; 85.3% checked against their official source in the last 7 days ([data/freshness.tsv](data/freshness.tsv)).
 <!-- /status-summary -->
@@ -155,8 +153,8 @@ New law reaches this repository in two steps, and both are watched:
 
 The [monitor](.github/workflows/monitor.yml) runs every hour on GitHub, apart from the machines that publish:
 `python tools/freshness.py --health` fails when `data/status.json` has not been refreshed for 2 hours, updates have
-stalled, or freshness has not been recomputed for a day. A failure alerts the maintainers and turns the badge at the
-top of this page red. You can run the same check on any clone.
+stalled, or freshness has not been recomputed for a day. A failure alerts the maintainers. You can run the same check
+on any clone.
 
 ## How it is made
 
