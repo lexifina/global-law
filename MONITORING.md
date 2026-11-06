@@ -1,7 +1,7 @@
 # Monitoring: whether updates are running
 
 <!-- status-summary -->
-**Updates: running**, last published 2026-11-06 15:49 UTC; 0 corpus updates in the last 24 hours, 0 held back by a check; 619 of 714 corpora current (as of 2026-11-06).
+**Updates: running**, last published 2026-11-06 16:38 UTC; 797 corpus updates in the last 24 hours, 1 held back by a check; 618 of 714 corpora current (as of 2026-11-06).
 <!-- /status-summary -->
 
 Each country's pipeline publishes new law as commits dated the day it takes effect. Every 15 minutes a pass here

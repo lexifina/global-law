@@ -1,7 +1,7 @@
 # Freshness: how current each corpus is
 
 <!-- freshness-summary -->
-**619 of 714 corpora current**, 0 pending a change, 81 stale, 14 unverified; 85.3% checked against their official source in the last 7 days, 98.0% in the last 30 (as of 2026-11-06).
+**618 of 714 corpora current**, 1 pending a change, 81 stale, 14 unverified; 85.3% checked against their official source in the last 7 days, 98.0% in the last 30 (as of 2026-11-06).
 <!-- /freshness-summary -->
 
 Every corpus records when it was last checked against its official source: one row each in
