@@ -87,6 +87,9 @@ Court decisions sit beside the law, one file and one commit per published decisi
   number and ECLI in the corpus's `decision-index.tsv`. These come from DILA's open data under the Licence Ouverte 2.0,
   which requires naming the source and the date of its last update: each corpus states that credit in its corpus.json,
   and `read_law` and `list_jurisdictions` give it as a `Credit:` line.
+- **Germany:** `germany/<court>/caselaw` (the Bundesverfassungsgericht, Bundesverwaltungsgericht, Bundesfinanzhof,
+  Bundesarbeitsgericht and Bundespatentgericht), each decision filed by its ECLI (or Aktenzeichen), with its
+  Aktenzeichen in the corpus's `decision-index.tsv`.
 
 Each commit is a court ruling, not a law (`Kind: court`), so the tools credit it as one and leave it out of everything
 about law (`laws`, searches, change lists) unless you name case law. Each case-law corpus also files, under the law's own
@@ -97,6 +100,7 @@ court names it (Dutch decisions often do), the version it applied:
 python tools/countries.py add switzerland/caselaw                   a country's case law (not added with switzerland)
 python tools/countries.py add netherlands/caselaw
 python tools/countries.py add france/caselaw
+python tools/countries.py add germany/caselaw
 python tools/law.py show 2024-01-01 switzerland/bund/caselaw/<decision>.md
 python tools/law.py laws 2024-01-01 2024-01-31 netherlands/caselaw   decisions given in a window
 ```
@@ -104,10 +108,11 @@ python tools/law.py laws 2024-01-01 2024-01-31 netherlands/caselaw   decisions g
 From an assistant, `check_precedent` lists the decisions that applied a provision and says whether the text each one
 applied is still the text in force; `what_else_changes` counts them; `find_provision` and `law_details` take an ECLI
 (`ECLI:NL:HR:2019:1234`), a Swiss docket (`4A_123/2024`), a BGE reference (`BGE 142 II 307`), a French pourvoi
-(`n° 18-12.345`), Conseil constitutionnel decision (`n° 2019-791 QPC`) or DILA id (`JURITEXT000041234567`);
-`resolve_citations` reads Dutch citations by abbreviation (`artikel 6:162 BW`, `art. 8:69 Awb`), French ones by code
-(`article 1240 du code civil`, `art. L. 1235-3 C. trav.`, `article 66 de la Constitution`) as it reads Swiss ones
-(`Art. 336 OR`).
+(`n° 18-12.345`), Conseil constitutionnel decision (`n° 2019-791 QPC`), DILA id (`JURITEXT000041234567`) or German
+Aktenzeichen (`1 BvR 123/20`, `VI ZR 123/20`, `2 C 12.19`); `resolve_citations` reads Dutch citations by abbreviation
+(`artikel 6:162 BW`, `art. 8:69 Awb`), French ones by code (`article 1240 du code civil`, `art. L. 1235-3 C. trav.`,
+`article 66 de la Constitution`) and German ones by official abbreviation (`§ 823 Abs. 1 BGB`, `§§ 280, 281 BGB`,
+`§ 13 SGB V`) as it reads Swiss ones (`Art. 336 OR`).
 
 ## How it is made
 

@@ -4177,6 +4177,88 @@ def fr_decision_paths(m) -> list[str]:
     return decision_paths(ref)
 
 
+# Germany ---------------------------------------------------------------------------------------------------------------
+DE_ACTS = 'germany/bund/acts'
+DE_ROMAN = {'I': 1, 'II': 2, 'III': 3, 'IV': 4, 'V': 5, 'VI': 6, 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10, 'XI': 11, 'XII': 12, 'XIV': 14}
+
+
+@lru_cache(maxsize=1)
+def de_aliases() -> dict:
+    """data/de-aliases.json: 'acts' (abbreviation key: no spaces, dots or hyphens, lower case, the books of the
+    Sozialgesetzbuch by number -> act folder of lexifina/germany-law) and 'forms' (key -> the abbreviations as written,
+    "SGB V" beside "SGB 5"). From germany-law's own verzeichnis.json (jurabk and amtabk); abbreviations two acts share are
+    left out, and the Grundgesetz is read by its own form ("Art. 3 Abs. 1 GG")."""
+    try:
+        return json.loads((ROOT / 'data' / 'de-aliases.json').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        try:
+            return json.loads(law.git('show', 'HEAD:data/de-aliases.json', check=False) or '{}')
+        except (ValueError, SystemExit, RuntimeError, OSError):
+            return {}
+
+
+def de_key(abbr: str) -> str:
+    s = re.sub(r'\bSGB\s+([IVX]+)\b', lambda m: f'SGB{DE_ROMAN.get(m.group(1), m.group(1))}', abbr.strip())
+    return re.sub(r'[\s.\-]', '', s).lower()
+
+
+_DE_QUAL = r'(?:Abs\.|Absatz|Satz|S\.|Nr\.|Nrn\.|Buchst\.|lit\.|Alt\.|Halbsatz|Halbs\.|Hs\.|Var\.|Unterabs\.)'
+
+
+def _de_para_rx():
+    """'§ 823 Abs. 1 BGB', '§§ 280, 281 BGB', '§ 15 Abs. 1 Satz 1 AsylG', '§ 13 SGB V': one or more §§ with their
+    Absatz/Satz/Nr., then an abbreviation the table holds (only real ones: "§ 1295 ABGB" or "Art. 106 StGB" is never read
+    as German). Bounded repetition, so a long run of numbers cannot make the match backtrack."""
+    t = de_aliases()
+    names = sorted({n for forms in t.get('forms', {}).values() for n in forms if len(n) >= 2}, key=lambda n: (-len(n), n))
+    abbr = '|'.join(re.escape(n) for n in names) or r'(?!x)x'
+    return re.compile(r'§§?\s*(?P<nums>\d+\s?[a-z]?(?:\s*(?:' + _DE_QUAL + r'\s*\d+[a-z]?|(?:,|und|bis|sowie|oder)\s*\d+\s?[a-z]?)){0,12})'
+                      r',?\s+(?:des\s+|der\s+)?(?P<abbr>' + abbr + r')(?![\wÄÖÜäöüß])')
+
+
+DE_PARA = _LazyRegex(_de_para_rx)
+# German dockets (Aktenzeichen): "1 BvR 123/20" (BVerfG), "VI ZR 123/20" (BGH), "2 C 12.19" (BVerwG), "IX R 12/19"
+# (BFH), "5 AZR 123/19" (BAG), "35 W (pat) 12/19" (BPatG): found in the case law served through each corpus's
+# decision-index.tsv.
+DE_DOCKET = re.compile(r'(?<![\w/.-])(?:\d{1,2}|[IVX]{1,5}a?)\s+(?:Bv[A-Z]|PBvU|ZR|ZB|StR|ARs?|KZR|KVR|EnVR|NotZ|AZR|ABR|AZB|AZN|'
+                       r'W\s?\(pat\)|Ni|VR|WB|WDS?|[ABCDEFKPRS])\s+\d{1,5}[/.]\d{2}(?![\d/.])')
+
+
+def de_corpus() -> tuple[str, str | None]:
+    """Germany's federal law in this tree (its path, and its pinned commit when this server serves it)."""
+    path = next((c['path'] for c in _full_manifest(head())['corpora'] if iso_code(c) == 'de' and not law.is_caselaw(c)
+                 and c['path'].endswith('/acts')), DE_ACTS)
+    served = any(c['path'] == path for c in law.manifest()['corpora']) and (ROOT / path / '.git').exists()
+    return path, (corpus_head(path) or None) if served else None
+
+
+@lru_cache(maxsize=256)
+def de_act_files(corpus: str, sha: str, folder: str) -> dict[str, str]:
+    """An act folder's provision files by number without leading zeros (bgb/0823a.md -> '823a')."""
+    out = {}
+    for n in names_of(corpus, sha):
+        if n.startswith(folder + '/') and n.endswith('.md') and n.count('/') == 1:
+            out.setdefault(re.sub(r'\d+', lambda d: str(int(d.group())), n[len(folder) + 1:-3].lower()), n)
+    return out
+
+
+def de_article_paths(m) -> list[str]:
+    """The files a German § citation names: the act by its official abbreviation (data/de-aliases.json), each § number
+    (not the Absatz, Satz or Nr.) by its file in that act's folder; where the record lacks the act, [] (unresolved)."""
+    folder = de_aliases().get('acts', {}).get(de_key(m.group('abbr')))
+    if not folder:
+        return []
+    corpus, sha = de_corpus()
+    files = de_act_files(corpus, sha, folder) if sha else {}
+    out = []
+    for q, n, suf in re.findall(r'(' + _DE_QUAL + r')?\s*(\d+)\s?([a-z]?)\b', m.group('nums')):
+        if q:
+            continue
+        k = f'{int(n)}{suf}'
+        out.append(f'{corpus}/{files[k]}' if k in files else f'{corpus}/{folder}/{int(n):04d}{suf}.md')
+    return out
+
+
 class CitationForm:
     """One citation form: `country` (ISO code), `rx` over free text, `to_path` from a match to a path or a list of
     paths ([] where the record cannot place it), `examples` of that country's citations it must claim. `open_name`:
@@ -4235,6 +4317,13 @@ CITATION_REGISTRY = [
     # decision-index.tsv (the files are named by DILA id).
     CitationForm('fr', FR_DECISION, fr_decision_paths,
                  ('JURITEXT000041234567', 'pourvoi n° 18-12.345', 'décision n° 2019-791 QPC', "CE, 10 juin 2020, n° 412345")),
+    # Germany: a § of any federal act by its official abbreviation ("§ 823 Abs. 1 BGB", "§§ 280, 281 BGB", "§ 13 SGB V"),
+    # from germany-law's verzeichnis.json (data/de-aliases.json); the Grundgesetz by its own form above.
+    CitationForm('de', DE_PARA, lambda m: de_article_paths(m),
+                 ('§ 823 Abs. 1 BGB', '§§ 280, 281 BGB', '§ 15 Abs. 1 Satz 1 AsylG', '§ 13 SGB V', '§ 242 StPO')),
+    # German decisions by Aktenzeichen, to the decision's file in the case law served (decision-index.tsv).
+    CitationForm('de', DE_DOCKET, lambda m: decision_paths(m.group(0)),
+                 ('1 BvR 123/20', 'VI ZR 123/20', '2 C 12.19', 'IX R 12/19', '5 AZR 123/19', '35 W (pat) 12/19')),
     # Every other country's ECLI, read the same way: its decisions resolve once a case-law corpus of that country is
     # served (decision_paths finds them by file name), and nothing is claimed for a country the tree has no case law of.
     *[CitationForm(cc, re.compile(rf'\bECLI:{cc.upper()}:[A-Z0-9]{{1,7}}:\d{{4}}:[A-Z0-9.]{{1,25}}(?![A-Za-z0-9])', re.I),
@@ -4459,7 +4548,8 @@ def t_law_details(args: dict) -> tuple[str, dict]:
     # Case law is read for a decision (a docket or BGE reference, found by its file name), a commit, or a corpus
     # that names case law; a law's name is not looked for among a million decisions' authors.
     fr = FR_DECISION.search(law_name) if law_name else None
-    decided = (fr_decision_paths(fr) if fr else decision_paths(law_name)) if law_name and (fr or DECISION_REF.search(law_name)) else []
+    decided = (fr_decision_paths(fr) if fr else decision_paths(law_name)) if law_name and (
+        fr or DECISION_REF.search(law_name) or DE_DOCKET.search(law_name)) else []
     corpora = [c['path'] for c in law.manifest()['corpora'] if (not corpus or c['path'].startswith(corpus))
                and (not law.is_caselaw(c) or commit or (corpus and law.names_caselaw(corpus))
                     or any(p.startswith(c['path'] + '/') for p in decided))]
