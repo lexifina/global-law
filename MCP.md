@@ -148,7 +148,7 @@ readers use:
 | `corpus` | ISO path, `<iso2>/<level>/<kind>`, for example `de/bremen/acts` (required) |
 | `name`, `language` | What it is, and its ISO 639-1 language |
 | `coverage` | One line on what the record holds, for example "every Act in force since 1947" |
-| `history` | `in-force` (each version from the day it took force), `current-only` (the source keeps no past versions), `replayed` (past versions rebuilt by applying each amending act), `as-enacted` (each law as first published, amendments not applied) or `metadata-only` (catalogue entries, no law text) |
+| `history` | `in-force` (each version from the day it took force), `current-only` (the source keeps no past versions), `replayed` (past versions rebuilt by applying each amending act), `as-enacted` (each law as first published, amendments not applied) or `metadata-only` (catalogue entries, no law text). Declare it: a repo with no `corpus.json` declares it in `data/repo.json`. A declared value is used as it is; only an undeclared one is guessed from the build's files, and a guess can be wrong (a publisher's text read as current text only). A record whose every version is the publisher's own compiled text (`Compilation-id:` or `Consolidated:`) is `in-force`, not `replayed` |
 | `history_from`, `record_to`, `checked_on` | Where the record starts, the day it is complete to, the day it was last checked |
 | `record_note` | Anything a reader must know about the record |
 | `in_force_trailer` | The trailer holding each change's in-force day (default `In-force`); `baseline_trailer` and `correction_trailer` if used |

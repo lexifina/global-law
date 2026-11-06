@@ -9,8 +9,8 @@ corpus.json, data/repo.json and jurisdiction.json from GitHub at the pinned comm
 A corpus is listed in manifest.json with its path, repository, name, code, language, coverage and dates, from its own
 corpus.json where it has one, else from data/repo.json and jurisdiction.json. A corpus with no corpus.json gets its
 history, history_from, record_to, checked_on, acts and coverage from what its build publishes (data/commits.csv,
-registry/data/ for acts appended later, REPRODUCE.md, the README's "metadata only" note outside its tables), and
-`derived` names those fields. A corpus that states no history from the standard's values takes the measured one in
+registry/data/ for acts appended later, REPRODUCE.md, the README's "metadata only" or "as enacted" note outside its
+tables), and `derived` names those fields; a history data/repo.json declares is kept as declared, never derived. A corpus that states no history from the standard's values takes the measured one in
 data/history-measured.tsv (also named in `derived`). future_branch names the branch tools/law.py reads laws not yet
 in force from, as data/future-pins.tsv records it (tools/future_pins.py); a future branch the repository has that is
 not read (behind main, or diverged) is named future_branch_unread instead. Every folder that holds a corpus, or a folder that does, gets a jurisdiction.json naming its level, its code
@@ -113,6 +113,10 @@ def fetch(repo: str, sha: str, name: str) -> dict:
 
 
 METADATA_ONLY = re.compile(r'metadata only|no law text|catalogue only', re.I)
+# The shared builder's README for a record of each act as enacted ("**Each Perda as enacted, not yet a history of
+# amendments.** ... its amendments are not applied ..."): its commits are the publisher's, Kind: publisher, so the rows
+# alone read as current text only (audit row 79: 19 Indonesian corpora).
+AS_ENACTED = re.compile(r'\bas enacted, not (?:yet )?a history of amendments|\bamendments are not applied\b', re.I)
 RETRIEVED = re.compile(r'written by the build on (\d{4}-\d{2}-\d{2}), the day the source data was retrieved')
 ISO_DAY = re.compile(r'\d{4}-\d{2}-\d{2}$')
 
@@ -129,7 +133,12 @@ def _rows(text: str) -> list[dict]:
             if (r.get('branch') or 'main') == 'main' and ISO_DAY.match(r.get('day') or '')]
 
 
-def from_build(repo: str, sha: str) -> dict:
+def says_as_enacted(readme: str) -> bool:
+    """The README says each act is held as enacted, later amendments not applied (outside its tables)."""
+    return any(AS_ENACTED.search(line) for line in readme.splitlines() if not line.lstrip().startswith('|'))
+
+
+def from_build(repo: str, sha: str, declared: str | None = None) -> dict:
     """What a corpus with no corpus.json says about its own record in the files its build publishes: data/commits.csv
     (one row per commit on main: day, kind, law, acts), REPRODUCE.md (the day the source was retrieved) and the README
     (a "metadata only" note). Acts appended to a corpus after its first build are documented apart, under registry/
@@ -138,7 +147,8 @@ def from_build(repo: str, sha: str) -> dict:
     (Serbia: 1 act in data/commits.csv, 9,749 in all). history is in-force when an act on main has more than one
     version; as-enacted when nearly every act's only version is credited to the law that made it; current-only when
     the only versions are the text as the publisher gave it; metadata-only when the README says the repository holds
-    no law text."""
+    no law text, as-enacted when it says each act is held as enacted. A history the corpus declares (`declared`, from
+    data/repo.json) is taken as it is: it is never guessed over, and the coverage line describes it."""
     readme, reproduce = fetch_text(repo, sha, 'README.md'), fetch_text(repo, sha, 'REPRODUCE.md')
     rows = _rows(fetch_text(repo, sha, 'data/commits.csv'))
     retrieved_days = RETRIEVED.findall(reproduce)
@@ -157,7 +167,9 @@ def from_build(repo: str, sha: str) -> dict:
                 seen.add((key, day))
                 rows.append({'day': day, 'kind': 'start' if i == 0 else 'law', 'law': key, 'acts': key})
     out: dict = {}
-    if says_metadata_only(readme):
+    if declared in HISTORY_VALUES:
+        out['history'] = declared
+    elif says_metadata_only(readme):
         out['history'] = 'metadata-only'
     if rows:
         acts: dict[str, int] = {}
@@ -172,7 +184,7 @@ def from_build(repo: str, sha: str) -> dict:
         if 'history' not in out:
             if any(n > 1 for n in acts.values()):
                 out['history'] = 'in-force'
-            elif starts and sum(1 for r in starts if r.get('law')) >= 0.9 * len(starts):
+            elif starts and sum(1 for r in starts if r.get('law')) >= 0.9 * len(starts) or says_as_enacted(readme):
                 out['history'] = 'as-enacted'
             else:
                 out['history'] = 'current-only'
@@ -185,7 +197,7 @@ def from_build(repo: str, sha: str) -> dict:
     elif rows:
         out['record_to'] = max(r['day'] for r in rows)
     if out:
-        out['derived'] = sorted(out)
+        out['derived'] = sorted(k for k in out if not (k == 'history' and declared in HISTORY_VALUES))
     return out
 
 
@@ -247,7 +259,8 @@ def describe(path: str, sha: str, repo: str) -> tuple[dict, dict]:
             entry['publisher'] = rj['publisher']
         if rj.get('future_branch'):
             entry['future_branch'] = rj['future_branch']
-        for k, v in from_build(repo, sha).items():  # only what the build files show; never overrides a stated field
+        # history: the corpus's own declaration in data/repo.json (corpus standard), over anything derived
+        for k, v in from_build(repo, sha, rj.get('history')).items():  # never overrides a stated field
             entry.setdefault(k, v)
     if entry.get('history') not in HISTORY_VALUES:
         # A history that is none of the standard's values: a phrase is kept as the coverage note, the measured value
