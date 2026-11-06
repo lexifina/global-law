@@ -121,12 +121,25 @@ class RecordStandard(unittest.TestCase):
     def setUp(self):
         self.d = Path(tempfile.mkdtemp(prefix='gl-standard-'))
         self.addCleanup(self.close)
+        # The refusals below are what --strict gives; by default they are warnings (see test_advisory_by_default).
+        self.addCleanup(setattr, check_corpus, 'STRICT', check_corpus.STRICT)
+        check_corpus.STRICT = True
 
     def close(self):
         def writable(func, path, _):
             os.chmod(path, 0o700)
             func(path)
         shutil.rmtree(self.d, onerror=writable)
+
+    def test_advisory_by_default(self):
+        # Alan, 6 Nov 2026: fast pinning comes first. Without --strict a record-standard problem is a warning, so the
+        # pointer loop (which calls problems() as it is) never holds a pin for one.
+        c = self.corpus({'history': 'in-force', 'publisher': 'Register'})
+        c.commit('Register', {'a/s1.md': 'two\n'}, In_force='2001-01-01', Kind='Wibble')
+        check_corpus.STRICT = False
+        fatal, warn = check_corpus.problems(c.path, UNTIL, None)
+        self.assertFalse([f for f in fatal if check_corpus.is_refusal(f)], fatal)
+        self.assertTrue(any(w.startswith('record standard (advisory') and 'kind' in w for w in warn), warn)
 
     def corpus(self, corpus_json: dict | None = None, repo_json: dict | None = None) -> Corpus:
         c = Corpus(self.d / f'repo{len(list(self.d.iterdir()))}')
@@ -205,10 +218,19 @@ class RecordStandard(unittest.TestCase):
                                   'pasal-001.md': 'one\n'}, In_force='2021-01-01', Kind='law')
         pin = c.commit('Perda 14/2015', {'perda-2015-014-pedagang-kaki-lima-6-november-2025-tahun/pasal-001.md': 'x\n'},
                        In_force='2016-03-15', Kind='law')
-        for p in (None, pin):  # a folder at HEAD: refused until it is renamed
-            refused, _ = self.refusals(c, p)
-            self.assertEqual([f.split(':')[0] for f in refused], ['refused (path)'], refused)
-            self.assertIn('2 folder(s)', refused[0])
+        refused, _ = self.refusals(c)  # not yet pinned: every cluttered folder is refused
+        self.assertEqual([f.split(':')[0] for f in refused], ['refused (path)'], refused)
+        self.assertIn('2 folder(s)', refused[0])
+        # Already pinned: kept as published, a warning only (renaming would cut the acts' dated history; Lamongan,
+        # 6 Nov 2026). A cluttered folder added after the pin is still refused.
+        refused, warn = self.refusals(c, pin)
+        self.assertEqual(refused, [])
+        self.assertTrue(any('2 pinned folder(s)' in w for w in warn), warn)
+        c.commit('Perda 1/2022', {'perda-2022-001-x-4-november-2022-tahun-2022-12-views-3-downloads/pasal-001.md': 'y\n'},
+                 In_force='2022-02-01', Kind='law')
+        refused, _ = self.refusals(c, pin)
+        self.assertEqual([f.split(':')[0] for f in refused], ['refused (path)'], refused)
+        self.assertIn('1 folder(s)', refused[0])
         for name in ('perda-2019-008-badan-usaha-milik-desa-10-november-2020-tahun-2019-73-views-72',
                      'perda-2021-015-penanggulangan-bencana-21-november', 'x-lihat-unduh'):
             self.assertTrue(check_corpus.PATH_FURNITURE.search(name), name)
@@ -219,11 +241,17 @@ class RecordStandard(unittest.TestCase):
     def test_exit_code_says_refused(self):
         c = self.corpus({'history': 'replayed'})
         c.commit('Act 1 of 2000', {'a/s1.md': 'one\n'}, In_force='2000-01-01', Kind='law', Compilation_id='C2000')
-        done = subprocess.run([sys.executable, '-X', 'utf8', str(HERE / 'tools' / 'check_corpus.py'), str(c.path),
-                               '--pin', c.commit('Lexifina', {'README.md': 'x\n'}, Kind='documentation'),
-                               '--until', UNTIL], capture_output=True, encoding='utf-8')
+        pin = c.commit('Lexifina', {'README.md': 'x\n'}, Kind='documentation')
+        cmd = [sys.executable, '-X', 'utf8', str(HERE / 'tools' / 'check_corpus.py'), str(c.path), '--pin', pin,
+               '--until', UNTIL]
+        env = {k: v for k, v in os.environ.items() if k != 'GITLAW_STRICT_RECORD'}
+        done = subprocess.run(cmd + ['--strict'], capture_output=True, encoding='utf-8', env=env)
         self.assertEqual(done.returncode, check_corpus.EXIT_REFUSED, done.stdout + done.stderr)
         self.assertIn('FAIL: refused (history):', done.stdout)
+        # Without --strict the same problem is a warning and the run passes: the pointer loop is never held by it.
+        done = subprocess.run(cmd, capture_output=True, encoding='utf-8', env=env)
+        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        self.assertIn('record standard (advisory', done.stdout)
 
 
 @unittest.skipUnless(SPAIN, 'set SPAIN_LAW_GIT to a clone of lexifina/spain-law (blob-less is enough)')

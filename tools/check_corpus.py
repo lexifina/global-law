@@ -8,14 +8,16 @@ out; warnings are reported but do not. The fields it checks are those in MCP.md 
 Needs only git and Python: a URL is cloned bare into a temporary folder. Several repos, or a global-law checkout
 (every corpus its manifest.json lists that is checked out there), are checked in one run and counted at the end.
 
-Exit 0: pass. Exit 3: refused by the record standard (each such line reads "FAIL: refused (<code>): ...", codes
-history, kind, publisher, as-enacted and path; see REFUSED below): the pin must not move. Exit 1: any other failure.
+Exit 0: pass. Exit 1: a failure. Record-standard problems (codes history, kind, publisher, as-enacted and path; see
+REFUSED below) are warnings by default, so they never hold a pin; with --strict (or GITLAW_STRICT_RECORD=1) they refuse:
+each line reads "FAIL: refused (<code>): ..." and the exit is 3.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import re
+import os
 import subprocess
 import sys
 import tempfile
@@ -65,6 +67,11 @@ _MONTHS = ('january|february|march|april|may|june|july|august|september|october|
 # "-21-november"). Lamongan: perda-2021-004-kawasan-tanpa-rokok-18-april-2022-tahun-2021-137-views-105-downloads.
 PATH_FURNITURE = re.compile(r'(?:^|-)\d+-(?:views|downloads)(?:-|$)|(?:^|-)lihat-unduh(?:-|$)'
                             r'|-\d{1,2}-(?:' + _MONTHS + r')(?:-\d{4})?-tahun(?:-|$)|-\d{1,2}-(?:' + _MONTHS + r')$')
+
+
+# Record-standard refusals are warnings unless strict: GITLAW_STRICT_RECORD=1 or --strict (a deliberate check, such as a
+# contributor's corpus before its first pin). The pointer loop calls problems() without it, so it never holds a pin.
+STRICT = os.environ.get('GITLAW_STRICT_RECORD') == '1'
 
 
 def refused(code: str, text: str) -> str:
@@ -465,6 +472,9 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
             fatal.append(f'history rewritten: the pinned commit {pin[:7]} is not an ancestor of main (main must be append-only)')
         elif reader() is not None:
             fatal.extend(act_ends_lost(repo, pin))
+    if not STRICT:   # advisory by default: reported, never holding a pin (fast pinning comes first, Alan 2026-11-06)
+        warn += [f'record standard (advisory; --strict refuses): {p[len(REFUSED) + 1:]}' for p in fatal if is_refusal(p)]
+        fatal = [p for p in fatal if not is_refusal(p)]
     return fatal, warn
 
 
@@ -539,6 +549,15 @@ def standard_problems(repo: Path, odd_kinds: dict[str, list[str]], derived: list
     # path: a listing page's furniture in a folder name changes with each page view, so a rebuild renames the act
     # and breaks every saved path (Lamongan, row 80).
     cluttered = path_furniture(repo)
+    if cluttered and new is not None and pin:
+        # Folders already pinned keep their names: renaming them would cut each act from its dated history (Lamongan,
+        # 6 Nov 2026), so they only warn, as pinned commits do; folders added since the pin are refused.
+        at_pin = set(git('ls-tree', '-r', '-d', '--name-only', pin, cwd=repo).stdout.splitlines())
+        old = [f for f in cluttered if f in at_pin]
+        if old:
+            warn.append(f'{len(old)} pinned folder(s) carry a listing page\'s furniture in their names, kept as '
+                        f'published (renaming would cut their dated history), e.g. {old[0]!r}')
+        cluttered = [f for f in cluttered if f not in at_pin]
     if cluttered:
         out.append(refused('path', f'{len(cluttered)} folder(s) carry a listing page\'s furniture in their names (view or '
                                    f'download counters, posting dates), e.g. {cluttered[0]!r}: a rebuild would rename '
@@ -842,7 +861,10 @@ def main() -> None:
     ap.add_argument('--until', default=None, help='the build date (default today)')
     ap.add_argument('--pin', default=None, help='the commit global-law pins now (default: read from global-law); '
                                                 'one repo only')
+    ap.add_argument('--strict', action='store_true', help='record-standard problems refuse (exit 3) instead of warning')
     a = ap.parse_args()
+    global STRICT
+    STRICT = STRICT or a.strict
     import datetime as dt
     until = a.until or dt.date.today().isoformat()
     repos, absent = targets(a.repo)
