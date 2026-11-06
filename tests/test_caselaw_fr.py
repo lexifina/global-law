@@ -315,6 +315,22 @@ class FrenchCaseLaw(unittest.TestCase):
         self.assertIn(f'{CASES}/{D2}', by_ecli['text'])
         self.assertIn('No decision', missing['text'])
 
+    def test_read_law_on_a_decision_skips_the_modifies_scan(self):
+        """read_law on a decision does not grep the corpus for Modifies: effects (none names a decision; 4.6 s on the
+        Cour de cassation's 530,000 commits), and still shows the decision and its credit."""
+        code = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server as m\n'
+                'def boom(*a, **k): raise AssertionError("modifies_in read for a decision")\n'
+                'm.modifies_in = boom\n'
+                f'r = m.handle({{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {{"name": "read_law", '
+                f'"arguments": {{"path": "{CASES}/{D2}", "date": "2023-01-01"}}}}}})["result"]\n'
+                'print(json.dumps({"error": r["isError"], "text": r["content"][0]["text"]}))\n')
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', code], cwd=self.t.root, capture_output=True,
+                              encoding='utf-8', timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        got = json.loads(done.stdout)
+        self.assertFalse(got['error'], got['text'])
+        self.assertIn('Licence Ouverte', got['text'])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -2164,8 +2164,12 @@ def beyond_the_words(date: str, path: str) -> list[str]:
                              + (f'on or after {starts[0]}' if starts else 'before, on or after its date')
                              + f', so for some cases pending on {date} a later text may govern (see applies_to_case).')
                 break
-    effects = [e for e in modifies_in(corpus, law.pinned('HEAD', corpus) or 'HEAD')
-               if rel.removesuffix('.md') in e['provision'] or e['provision'].endswith(f'/{section}') or f'§{section}' in e['provision']]
+    # A case-law corpus holds decisions, which no Modifies: effect names; its log --grep read the Cour de cassation's
+    # 530,000 commits for 4.6 s on every read_law of a decision (FR speed gate, 2026-11-06).
+    caselaw = any(c['path'] == corpus and law.is_caselaw(c) for c in law.manifest()['corpora'])
+    effects = [] if caselaw else [
+        e for e in modifies_in(corpus, law.pinned('HEAD', corpus) or 'HEAD')
+        if rel.removesuffix('.md') in e['provision'] or e['provision'].endswith(f'/{section}') or f'§{section}' in e['provision']]
     ended = sorted(e['from'] for e in effects if e['kind'] == 'ended' and e['from'])
     current: dict[tuple[str, str], dict] = {}
     for e in sorted(effects, key=lambda e: e['from'] or ''):
