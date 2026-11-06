@@ -50982,6 +50982,40 @@
       "described_by": "corpus.json"
     },
     {
+      "path": "netherlands/rechtbanken-den-haag/caselaw",
+      "url": "https://github.com/lexifina/netherlands-rechtbanken-den-haag-caselaw.git",
+      "name": "Case law: Netherlands, the rechtbanken (district courts): den haag",
+      "label": "Netherlands case law (the rechtbanken (district courts): den haag)",
+      "language": "nl",
+      "coverage": "108535 published decisions with text (uitspraken and conclusies), one file and one commit each, dated the day decided; 10948 citations of law linked to netherlands-law.",
+      "history": "in-force",
+      "history_from": "1986-12-09",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Decisions the courts publish only as metadata (no text) are not included. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/netherlands/national/acts/<act>/art-*.jsonl",
+        "law_corpus": "netherlands/national/acts",
+        "fields": [
+          "decided",
+          "text_date",
+          "name",
+          "court",
+          "citation",
+          "url",
+          "how",
+          "mentions",
+          "decision",
+          "law_commit"
+        ]
+      },
+      "iso_path": "nl/rechtbanken-den-haag/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
       "path": "netherlands/rechtbanken-gelderland/caselaw",
       "url": "https://github.com/lexifina/netherlands-rechtbanken-gelderland-caselaw.git",
       "name": "Case law: Netherlands, the rechtbanken (district courts): gelderland",
