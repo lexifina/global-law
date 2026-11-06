@@ -651,7 +651,7 @@ def scope_arg(args: dict, key: str = 'jurisdiction') -> str:
 
 def path_arg(value) -> str:
     if not isinstance(value, str) or not value.strip():
-        raise UserError('A path is needed, for example us/federal/usc/title-11/1182.md. Use find_provision to look one up.')
+        raise UserError('A path is needed, for example united-states/federal/usc/title-11/1182.md. Use find_provision to look one up.')
     if len(value) > MAX_TEXT or any(ord(ch) < 32 for ch in value):
         raise UserError('That path is too long or contains control characters.')
     path = here(law.norm(value.strip()))
@@ -2537,7 +2537,7 @@ def t_list_provisions(args: dict) -> tuple[str, dict]:
     """Browse a corpus: the provision files under a folder, with headings, as in force on a date."""
     prefix = here(law.norm((args.get('path') or '').strip()))
     if not prefix:
-        raise UserError('Give a corpus or a folder in one, for example us/federal/usc/title-11 or de/bund/grundgesetz.')
+        raise UserError('Give a corpus or a folder in one, for example united-states/federal/usc/title-11 or germany/bund/acts/grundgesetz.')
     corpus = next((c['path'] for c in law.manifest()['corpora'] if prefix == c['path'] or prefix.startswith(c['path'] + '/')), None)
     if corpus is None:  # a corpus this server leaves out says why, and how to add or fix it
         raise UserError(unserved_answer(prefix) or f'{prefix} is not a corpus or inside one; see list_jurisdictions.')
@@ -3928,9 +3928,9 @@ CHANGES_SHOWN = 300  # provisions changes_between lists across all corpora when 
 
 
 DATE = {'type': 'string', 'description': 'An in-force date, YYYY-MM-DD, or "today". Defaults to today.'}
-PATH = {'type': 'string', 'description': 'A provision file, for example us/federal/usc/title-11/1182.md, de/bund/grundgesetz/artikel/016a.md or gb/uk/send/uksi/2014/1530/regulation/13.md. Use find_provision to look one up.'}
-SCOPE = {'type': 'string', 'description': 'Optional jurisdiction prefix, for example "de", "us/federal" or "gb/uk/send".'}
-PAGE = {'max_chars': {'type': 'integer', 'description': 'Longest part of the text in one answer (default 40000, at least 1000, at most 100000). A longer text comes in parts.'},
+PATH = {'type': 'string', 'description': 'A provision file, for example united-states/federal/usc/title-11/1182.md, germany/bund/acts/grundgesetz/artikel/016a.md or united-kingdom/uk/legislation/uksi/2014/1530/regulation/13.md. Use find_provision to look one up.'}
+SCOPE = {'type': 'string', 'description': 'Optional jurisdiction prefix, for example "germany", "united-states/federal" or "united-kingdom/uk/legislation/uksi".'}
+PAGE = {'max_chars': {'type': 'integer', 'description': f'Longest part of the text in one answer (default {PAGE_CHARS}, at least {PAGE_LEAST}, at most {PAGE_MOST}). A longer text comes in parts.'},
         'offset': {'type': 'integer', 'description': 'Where the part starts, in characters: the offset the previous part gave for the next one (default 0).'}}
 RO = {'readOnlyHint': True, 'idempotentHint': True, 'openWorldHint': False}
 
@@ -3954,7 +3954,7 @@ TOOLS = [
     ('provision_history', 'Every law that changed a provision, oldest first, with its in-force, enacted or made, and published dates.',
      {'path': PATH}, ['path'], t_provision_history),
     ('laws_between', 'Every law that took effect between two dates, across all jurisdictions or one, in the order they took effect.',
-     {'start': DATE, 'end': DATE, 'jurisdiction': SCOPE, 'max_results': {'type': 'integer', 'description': 'At most this many (default 200, at most 500).'}},
+     {'start': DATE, 'end': DATE, 'jurisdiction': SCOPE, 'max_results': {'type': 'integer', 'description': f'At most this many (default 200, at most {MAX_ITEMS}).'}},
      ['start', 'end'], t_laws_between),
     ('search_law', 'Search the text of all the law in force on a date, across every jurisdiction or one. Plain text by default.',
      {'query': {'type': 'string', 'description': 'Words or a phrase; a regular expression if regex is true.'}, 'date': DATE, 'jurisdiction': SCOPE,
@@ -3962,7 +3962,7 @@ TOOLS = [
      ['query'], t_search_law),
     ('changes_between', 'Every provision whose text differs between two dates, in every jurisdiction or one, with the laws that changed them.',
      {'date_a': DATE, 'date_b': DATE, 'jurisdiction': SCOPE}, ['date_a', 'date_b'], t_changes_between),
-    ('list_provisions', 'Browse a corpus: the provision files under a corpus or folder (for example us/federal/usc/title-11), with headings, as in force on a date. For a folder of acts or instruments, by_folder gives one row each with its title and last change; a partial name lists the folders that start with it (mt/national/malta-law/sl/586. for every instrument made under Cap. 586).',
+    ('list_provisions', 'Browse a corpus: the provision files under a corpus or folder (for example united-states/federal/usc/title-11), with headings, as in force on a date. For a folder of acts or instruments, by_folder gives one row each with its title and last change; a partial name lists the folders that start with it (malta/national/acts/sl/586. for every instrument made under Cap. 586).',
      {'path': {'type': 'string', 'description': 'A corpus, a folder inside one, or the start of a folder name.'}, 'date': DATE,
       'by_folder': {'type': 'boolean', 'description': 'One row per sub-folder (an act or instrument) with its title and last change.'},
       'max_results': {'type': 'integer', 'description': 'At most this many (default 200).'}}, ['path'], t_list_provisions),
@@ -3989,7 +3989,7 @@ TOOLS = [
      {'law': {'type': 'string', 'description': 'The law as it appears as author, for example "Pub. L. 117-151", "36. Änderung", "S.I. 2020/471".'},
       'commit': {'type': 'string', 'description': 'Or a corpus commit hash, for example from provision_history.'}, 'corpus': SCOPE,
       'max_message_chars': {'type': 'integer', 'description': 'Cut each commit message at this many characters (default 3000).'},
-      'include_diffs': {'type': 'boolean', 'description': 'What the change did to each provision (default true; up to 60 provisions).'}}, [], t_law_details),
+      'include_diffs': {'type': 'boolean', 'description': f'What the change did to each provision (default true; up to {DIFF_PROVISIONS} provisions).'}}, [], t_law_details),
 ]
 HANDLERS = {name: fn for name, _, _, _, fn in TOOLS}
 PROPERTIES = {name: list(props) for name, _, props, _, _ in TOOLS}
@@ -4013,7 +4013,7 @@ PROMPTS = {
     'what_changed': (
         'What changed in a window', 'Every change in one jurisdiction or all between two dates, with the laws that made them.',
         [{'name': 'start', 'description': 'YYYY-MM-DD', 'required': True}, {'name': 'end', 'description': 'YYYY-MM-DD', 'required': True},
-         {'name': 'jurisdiction', 'description': 'Optional, e.g. "de" or "us/federal"', 'required': False}],
+         {'name': 'jurisdiction', 'description': 'Optional, e.g. "germany" or "united-states/federal"', 'required': False}],
         'Using the global-law tools: list the laws that took effect between {start} and {end} in {jurisdiction} (laws_between; '
         'empty jurisdiction means all), then the provisions whose text changed (changes_between). Group by law, with dates and sources.'),
 }
@@ -4147,7 +4147,7 @@ def _handle(method, mid, params: dict) -> dict:
         elif method == 'resources/templates/list':
             result = {'resourceTemplates': [{'uriTemplate': 'global-law://law/{path}?date={date}', 'name': 'law-on-date',
                                              'title': 'A provision as in force on a date', 'mimeType': 'text/markdown',
-                                             'description': 'For example global-law://law/us/federal/usc/title-11/1182.md?date=2022-07-01'}]}
+                                             'description': 'For example global-law://law/united-states/federal/usc/title-11/1182.md?date=2022-07-01'}]}
         elif method == 'prompts/list':
             result = {'prompts': [{'name': n, 'title': t, 'description': d, 'arguments': a} for n, (t, d, a, _) in PROMPTS.items()]}
         elif method == 'prompts/get':

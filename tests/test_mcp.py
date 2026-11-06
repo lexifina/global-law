@@ -2408,5 +2408,86 @@ class Romania(unittest.TestCase):
         self.assertFalse(r.get('isError'), r)
 
 
+class DescriptionExamplesResolve(unittest.TestCase):
+    """Audit row 89: the tool descriptions, the instructions and the prompts are the only paths a model sees before it
+    calls, so every example path or scope in them is a path of the tree now: a manifest corpus, a folder above one, or
+    a file or folder inside one, written as the manifest writes it, never through an alias (iso_path, LEGACY_CORPORA,
+    LEGACY_FOLDERS) that the server would quietly widen or move."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+        cls.corpora = _corpus_paths()
+
+    def texts(self) -> list[tuple[str, str]]:
+        """(where, text) for every description a client is shown."""
+        r = self.m.handle({'jsonrpc': '2.0', 'id': 1, 'method': 'tools/list', 'params': {}})['result']
+        out = [('instructions', self.m.INSTRUCTIONS)]
+        for tool in r['tools']:
+            out.append((tool['name'], tool['description']))
+            for name, prop in tool['inputSchema'].get('properties', {}).items():
+                out.append((f"{tool['name']}.{name}", prop.get('description', '')))
+        for name, (_, desc, prompt_args, text) in self.m.PROMPTS.items():
+            out += [(f'prompt {name}', desc), (f'prompt {name} text', text)]
+            out += [(f"prompt {name}.{a['name']}", a.get('description', '')) for a in prompt_args]
+        r = self.m.handle({'jsonrpc': '2.0', 'id': 2, 'method': 'resources/templates/list', 'params': {}})['result']
+        out += [('resource template', t.get('description', '')) for t in r['resourceTemplates']]
+        return out
+
+    def examples(self) -> list[tuple[str, str, str]]:
+        """(where, kind, example): every path-like word, and every quoted scope of a jurisdiction argument."""
+        found = []
+        for where, text in self.texts():
+            text = text.replace('global-law://law/', ' ')
+            for word in re.findall(r'(?<![\w/:.-])([a-z][a-z0-9-]*(?:/[\w.-]+)+)', text):
+                if word.endswith('.') and not re.search(r'/[\w-]*\d\.$', word):  # a sentence's full stop
+                    word = word[:-1]
+                found.append((where, 'file' if word.endswith('.md') else 'path', word))
+            if where.endswith(('.jurisdiction', '.corpus')):
+                found += [(where, 'scope', q) for q in re.findall(r'"([^"\s]+)"', text)]
+        return found
+
+    def test_there_are_examples_to_check(self):
+        kinds = {k for _, k, _ in self.examples()}
+        self.assertEqual(kinds, {'file', 'path', 'scope'})
+
+    def test_every_example_is_a_path_of_the_tree_now(self):
+        for where, kind, ex in self.examples():
+            with self.subTest(where=where, example=ex):
+                self.assertEqual(self.m.here(ex), ex, f'{where}: {ex!r} is an alias of {self.m.here(ex)!r}')
+                inside = [c for c in self.corpora if ex == c or ex.startswith(c + '/')]
+                above = [c for c in self.corpora if c.startswith(ex.rstrip('/') + '/')]
+                self.assertTrue(inside or above, f'{where}: {ex!r} is no corpus, folder above one, or path in one')
+                if kind == 'file':
+                    self.assertTrue(inside, f'{where}: {ex!r} is not inside a corpus')
+
+    def test_example_files_are_in_their_corpus(self):
+        """Checked against the corpus's checkout where it is here (a clone may hold only some countries)."""
+        for where, kind, ex in self.examples():
+            if kind == 'scope':
+                continue
+            corpus = max((c for c in self.corpora if ex == c or ex.startswith(c + '/')), key=len, default=None)
+            if corpus is None or not _checked_out(corpus) or ex == corpus:
+                continue
+            rel = ex[len(corpus) + 1:]
+            with self.subTest(where=where, example=ex):
+                names = subprocess.run(['git', '-C', str(ROOT / corpus), 'ls-tree', '-r', '--name-only', 'HEAD'],
+                                       capture_output=True, encoding='utf-8').stdout.splitlines()
+                self.assertTrue(any(n == rel or n.startswith(rel) for n in names), f'{where}: {ex!r} names no file')
+
+    def test_scopes_scope_what_they_say(self):
+        """A scope example is a country or level above corpora, a corpus, or a folder in one; never an old corpus
+        path the server widens to a bigger corpus (gb/uk/send meant all UK legislation)."""
+        for where, kind, ex in self.examples():
+            if kind != 'scope':
+                continue
+            with self.subTest(where=where, example=ex):
+                self.assertEqual(self.m.here(ex), ex, f'{where}: {ex!r} is an alias of {self.m.here(ex)!r}')
+                self.assertTrue(any(self.m.scoped(c, ex) is not None for c in self.corpora), ex)
+
+
 if __name__ == '__main__':
     unittest.main()
