@@ -13,7 +13,8 @@ jurisdictions chosen with `only`, if any.
   python3 tools/countries.py only --all           serve every corpus checked out
 
 A name is a country folder ("germany", "united kingdom"), an ISO code ("de"), a level ("united-states/federal") or a
-corpus path. On Windows, run it with `py` or `python`. A running MCP server sees a change within a few seconds.
+corpus path. Case law (court decisions) is added only by a name that asks for it: "switzerland/caselaw" (every Swiss
+court), "switzerland/bund/caselaw" (the federal courts), "switzerland/zurich/caselaw", or "caselaw" (all of it). On Windows, run it with `py` or `python`. A running MCP server sees a change within a few seconds.
 """
 from __future__ import annotations
 
@@ -53,7 +54,9 @@ def resolve(names: list[str]) -> list[dict]:
     """The corpora the names take in; stops with a suggestion for a name that takes in none."""
     found: list[dict] = []
     for name in names:
-        hits = [c for c in corpora() if law.matches(c, name)]
+        # Case law is taken in only by a name that asks for it ("switzerland/caselaw", a canton's caselaw, the corpus
+        # path): `add switzerland` fetches Swiss law, not the courts' decisions (several GB).
+        hits = [c for c in corpora() if law.takes_in(c, name)]
         if not hits:
             # Countries, and states, provinces and cities by their own names
             folders = sorted({c['path'].split('/')[0] for c in corpora()} | {c['path'].split('/')[1] for c in corpora()
@@ -131,9 +134,9 @@ def show() -> None:
     rows = []
     for c in corpora():
         here = checked_out(c)
-        served = here and (not names or any(law.matches(c, n) for n in names))
+        served = here and (not names or any(law.takes_in(c, n) for n in names))
         rows.append((c['path'], 'served' if served else 'checked out, not chosen' if here else 'not checked out',
-                     RECORD.get(c.get('history'), ''), c['name']))
+                     'court decisions' if law.is_caselaw(c) else RECORD.get(c.get('history'), ''), c['name']))
     width = max(len(p) for p, _, _, _ in rows)
     for path, state, record, name in rows:
         print(f'{path:<{width}}  {state:<24} {record:<14} {name[:70]}')

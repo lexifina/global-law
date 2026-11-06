@@ -95,6 +95,34 @@ What the model sees:
 A provision's history needs only its own corpus, so dates, authorship and history are the same with one country as
 with all of them.
 
+### Case law
+
+Some corpora hold court decisions, not law: `switzerland/bund/caselaw` (the federal courts and bodies) and
+`switzerland/<canton>/caselaw` (each canton's), one file and one commit per decision (`Kind: court`), dated the day it
+was given, with `Decided:`, `Published:`, `Court:`, `Docket:`, `BGE:`, `Source:` and one `Cites:` line per article of
+federal law it cites. `corpus.json` says `"kind": "judgments"`. They are several GB, so `countries.py add switzerland`
+does not fetch them: add them by name (`switzerland/caselaw` for every Swiss court, `switzerland/bund/caselaw`, a
+canton's, or `caselaw` for all).
+
+- A decision is read like a provision: `read_law`, `who_wrote`, `compare_dates`, `provision_history`,
+  `list_provisions`, and `law.py show`, `log`, `blame`, `words`, `diff` and `today` (a correction is its own commit, and
+  blame credits each line "court ruling, not a law" or "correction").
+- Lists and searches of law (`search_law`, `laws_between`, `changes_between`, `search_changes`, `phrase_history`, `law.py
+  laws`) leave case law out and say so on a "Not read" line; `kind: "judgments"` reads case law only, and a
+  `jurisdiction` that names case law reads it. `world_on_date` and `law.py world` give each case-law corpus's latest
+  decision.
+- `check_precedent` reads every served case-law corpus's overlay, `judgments/<law corpus>/<provision>.jsonl` (for
+  example `judgments/switzerland/bund/acts/101/art-029.jsonl`), as well as the corpus's and the tree's own. With many
+  decisions it checks the latest (`max_results`), comparing the words once per version of the text. Each row names the
+  decision's file (`decision`) and the law's commit in force on the decision day (`law_commit`).
+- `what_else_changes` adds the decisions that cite a provision (a count and the latest ten).
+- `resolve_citations` and `find_provision` read an article of any Swiss federal act by its official abbreviation in
+  German, French or Italian (`Art. 336 OR`, `art. 29 al. 2 Cst.`, `art. 106 cpv. 1 CP`), from Fedlex's abbreviations in
+  `data/swiss-aliases.json`; abbreviations cantons use for their own laws (`StG`, `KV`, `LPA`, ...) are left alone.
+  A decision is found by its BGE reference (`BGE 142 II 307`, `ATF`, `DTF`) or docket (`4A_123/2024`, `A-1234/2020`,
+  `BB.2020.123`), and `law_details` takes either.
+- `applies_to_case` on a decision says it is a court decision, not a law.
+
 ## How a date is read
 
 Each country's record is its own git history, and each commit there carries the day its change took effect. A

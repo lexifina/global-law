@@ -1009,6 +1009,41 @@ def matches(corpus: dict, name: str) -> bool:
 GENERIC_LEVELS = {'national', 'federal', 'bund', 'uk', 'central', 'state', 'acts', 'statutes'}
 
 
+# Case law: corpora of court decisions, not of law (lexifina/switzerland-caselaw and the cantons' -caselaw repos).
+# Each decision is one file and one commit (Kind: court), dated the day it was given. They are read like any corpus,
+# but lists and searches of law leave them out unless they are named: "switzerland" takes in Swiss law, and
+# "switzerland/caselaw", "switzerland/bund/caselaw", "caselaw" or the canton's case law takes in the decisions.
+CASELAW_KINDS = {'judgments', 'decisions', 'caselaw', 'case law', 'case-law', 'court', 'courts'}
+
+
+def is_caselaw(corpus: dict) -> bool:
+    """Whether a manifest entry is a body of court decisions: corpus.json's `kind`, or a corpus at <...>/caselaw."""
+    return str(corpus.get('kind') or '').strip().lower() in CASELAW_KINDS or corpus['path'].rstrip('/').endswith('/caselaw')
+
+
+def names_caselaw(name: str) -> bool:
+    """Whether a name asks for case law ("caselaw", "switzerland/caselaw", "switzerland/bund/caselaw/...")."""
+    plain = _plain(name)
+    return plain in CASELAW_KINDS or bool(re.search(r'(^|/)case-?law(/|$)', plain))
+
+
+def takes_in(corpus: dict, name: str) -> bool:
+    """matches(), with case law taken in only when the name asks for it: `countries.py add switzerland` and `laws ...
+    switzerland` mean Swiss law, not a million decisions. "switzerland/caselaw" takes in every Swiss case-law corpus
+    (federal and cantonal), "caselaw" every one in the tree."""
+    if not is_caselaw(corpus):
+        return matches(corpus, name)
+    if not names_caselaw(name):
+        return False
+    plain = _plain(name)
+    if plain in CASELAW_KINDS:
+        return True
+    if matches(corpus, name):
+        return True
+    above = re.sub(r'/?case-?law(/.*)?$', '', plain)  # "switzerland/caselaw" -> "switzerland"
+    return bool(above) and matches(corpus, above)
+
+
 def file_commit(date: str, path: str) -> str | None:
     """The commit whose version of a provision is in force on `date`. First the ordinary commit: of the dated commits
     that touch the file, the one with the greatest in-force date on or before `date`, a later commit winning a tie.
@@ -3755,7 +3790,8 @@ def main(argv: list[str]) -> None:
         for corpus in manifest()['corpora']:
             own = by_corpus.get(corpus['path'], [])
             last = [e for e in own if e.in_force <= args[0] and e.kind not in ('documentation', 'end')]
-            state = (f'{last[-1].law}, in force {last[-1].in_force}' if last else 'not yet in the record') \
+            state = ((f'{last[-1].law} (latest decision), given {last[-1].in_force}' if is_caselaw(corpus) else
+                      f'{last[-1].law}, in force {last[-1].in_force}') if last else 'not yet in the record') \
                 if (ROOT / corpus['path'] / '.git').exists() else 'not checked out'
             if corpus['path'] in unreadable():
                 state = 'checkout unfinished (no commit yet)'
@@ -3832,7 +3868,8 @@ def main(argv: list[str]) -> None:
         left_out: dict[str, int] = {}
         # Only the corpora the prefix takes in are read, not every corpus checked out.
         # A name takes in what countries.py and the MCP tools take in: a country, state, city, ISO code or old path.
-        chosen = {c['path'] for c in manifest()['corpora'] if not name or matches(c, name)}
+        chosen = {c['path'] for c in manifest()['corpora'] if (not name and not is_caselaw(c)) or (name and takes_in(c, name))}
+        decisions = bool(chosen) and all(is_caselaw(c) for c in manifest()['corpora'] if c['path'] in chosen)
         if name and not chosen:
             import difflib
             folders = sorted({c['path'].split('/')[0] for c in manifest()['corpora']}
@@ -3847,7 +3884,9 @@ def main(argv: list[str]) -> None:
         events = sorted((e for c in chosen for e in law_events(c)), key=lambda e: e.in_force) if name else timeline()
         for e in events:
             if args[0] <= e.in_force <= args[1] and e.corpus in chosen and e.kind != 'documentation':
-                if e.kind == 'law':
+                if decisions and e.kind == 'court':  # a case-law name: the decisions given in the window
+                    print(f'{e.in_force}  {e.corpus:<24} {e.law} (court decision)')
+                elif e.kind == 'law':
                     print(f'{e.in_force}  {e.corpus:<24} {e.law}')
                 else:
                     left_out[e.kind] = left_out.get(e.kind, 0) + 1
@@ -3863,6 +3902,10 @@ def main(argv: list[str]) -> None:
                  'uncredited': 'changes no law is named for',
                  'end': 'ends of validity no law is named for (versions that end with no successor)'}
         note(f'not listed, as they are not laws taking effect: {n} {names.get(k, k)}' for k, n in sorted(left_out.items()))
+        skipped = sorted(c['path'] for c in manifest()['corpora'] if is_caselaw(c) and c['path'] not in chosen
+                         and (not name or matches(c, name)))
+        note([f"case law is not listed (court decisions, not laws): {', '.join(skipped)}; name it to list its "
+              f"decisions, e.g. laws {args[0]} {args[1]} {skipped[0].rsplit('/caselaw', 1)[0]}/caselaw"] if skipped else [])
         note(n for n in (future_note(c) for c in sorted(chosen)) if n)
         note(_UNREADABLE.format(corpus=c) for c in unreadable() if c in chosen)
         note(_BEHIND.format(corpus=c, pin=p[:10]) for c, p in sorted(behind().items()) if c in chosen)

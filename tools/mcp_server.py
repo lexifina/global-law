@@ -147,6 +147,37 @@ def not_searched(missing: list[str]) -> str:
     return f"\nNot checked out, so not searched: {', '.join(missing)} (to add one: {COUNTRIES} add <path>)." if missing else ''
 
 
+def wants_judgments(args: dict) -> bool:
+    return text_arg(args, 'kind').lower() in law.CASELAW_KINDS
+
+
+def by_kind(corpora: list[dict], scope: str, args: dict) -> tuple[list[dict], list[str]]:
+    """Law or case law: the corpora a search or list over many corpora reads, and the case-law corpora it leaves out.
+    Court decisions are not law, and a million of them would crowd every answer about law, so case law is read only
+    when the call asks for it: kind "judgments", or a jurisdiction that names case law ("switzerland/bund/caselaw").
+    kind "judgments" reads case law only."""
+    judgments = wants_judgments(args)
+    kept, left = [], []
+    for c in corpora:
+        caselaw = law.is_caselaw(c)
+        if judgments:
+            if caselaw:
+                kept.append(c)
+        elif caselaw and not (scope and law.names_caselaw(scope)):
+            left.append(c['path'])
+        else:
+            kept.append(c)
+    return kept, left
+
+
+def caselaw_note(left: list[str]) -> str:
+    if not left:
+        return ''
+    return (f"\nNot read, as they hold court decisions, not law: {len(left)} body/bodies of case law "
+            f"({', '.join(left[:3])}{', ...' if len(left) > 3 else ''}); pass kind \"judgments\", or name one as the "
+            "jurisdiction, to read them.")
+
+
 # --- caching: every answer reads the same timeline and manifest; both change only when HEAD moves -----------------
 
 _head_seen: tuple[float, str, tuple[str, ...]] = (0.0, '', ())
@@ -213,7 +244,7 @@ def serving(corpus: dict, names: tuple[str, ...] | None = None) -> str | None:
     if not (ROOT / corpus['path'] / '.git').exists():
         return 'not checked out'
     names = chosen() if names is None else names
-    if names and not any(law.matches(corpus, n) for n in names):
+    if names and not any(law.takes_in(corpus, n) for n in names):
         return 'not chosen'
     return unreadable_why(corpus['path'])
 
@@ -636,6 +667,12 @@ def names_for(corpus: str) -> list[str]:
 def scope_arg(args: dict, key: str = 'jurisdiction') -> str:
     scope = here(text_arg(args, key).strip('/'))
     full = _full_manifest(head())['corpora']
+    if scope and law.names_caselaw(scope) and not any(scoped(c['path'], scope) is not None for c in full):
+        # "switzerland/caselaw" or "caselaw": every case-law corpus it takes in, read as case law
+        named = [c['path'] for c in full if law.takes_in(c, scope)]
+        if named:
+            args['kind'] = 'judgments'
+            return os.path.commonpath(named).replace('\\', '/') if len(named) > 1 else named[0]
     if scope and not any(scoped(c['path'], scope) is not None for c in full):
         # A state, province or city by its own name ("bremen"): scopes are path prefixes, so name its corpus.
         named = [c['path'] for c in full if law.matches(c, scope)]
@@ -1046,7 +1083,7 @@ def served_note(names: bool = False) -> str:
     full = _full_manifest(head())['corpora']
     total = len(full)
     note = f'\nServed here: {total - len(out)} of the {total} corpora in the tree; the other {len(out)} were not searched.'
-    stray = [n for n in chosen() if not any(law.matches(c, n) for c in full)]
+    stray = [n for n in chosen() if not any(law.takes_in(c, n) for c in full)]
     if stray:  # a misspelt choice would otherwise leave the server serving nothing, silently
         note += (f" The jurisdictions chosen include {', '.join(repr(n.strip()) for n in stray)}, which name nothing in "
                  f'this tree; `{COUNTRIES}` lists the names.')
@@ -1809,6 +1846,11 @@ def t_applies_to_case(args: dict) -> tuple[str, dict]:
     if commenced > date:
         raise UserError(f'The case is commenced on {commenced}, after the date asked about ({date}).')
     corpus, _ = law.corpus_of(path)
+    if any(law.is_caselaw(c) for c in law.manifest()['corpora'] if c['path'] == corpus):
+        return (f'{path} is a court decision, not a law: no change reaches a case through it, so applies_to_case does not '
+                'apply. For the law it applied, call law_details on it (its Cites: lines name each provision) and then '
+                'applies_to_case or check_precedent on those provisions.', {'path': path, 'commenced': commenced, 'date': date,
+                                                                           'court_decision': True, 'periods': []})
     hist = [h for h in history_of(path) if h['in_force'] <= date]
     if not hist and not history_of(path):
         raise UserError(explain(date, path))  # not in the record at any date
@@ -2161,15 +2203,22 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
     events = law.timeline()
     root = law.root_on(date, events)
     rows, data = [], []
+    by_corpus: dict[str, list] = {}
+    for e in events:  # once: a corpus of case law adds a commit per decision, and every corpus read them all
+        if e.kind != 'documentation':
+            by_corpus.setdefault(e.corpus, []).append(e)
     for c in law.manifest()['corpora']:
-        last = [e for e in events if e.corpus == c['path'] and e.in_force <= date and e.kind != 'documentation']
-        nxt = next((e for e in events if e.corpus == c['path'] and e.in_force > date and e.kind != 'documentation'), None)
+        own = by_corpus.get(c['path'], [])
+        last = [e for e in own if e.in_force <= date]
+        nxt = next((e for e in own if e.in_force > date), None)
         notes = law.caveats(date, c['path'], events)
+        decisions = law.is_caselaw(c)
         data.append({'corpus': c['path'], 'name': c['name'], 'last_change': last[-1].law if last else None,
                      'last_change_in_force': last[-1].in_force if last else None,
                      'next_change': nxt.law if nxt else None, 'next_change_in_force': nxt.in_force if nxt else None,
-                     'corpus_commit': law.pinned(root, c['path']), 'caveats': notes})
-        rows.append(f"- {c['path']}: " + (f'{last[-1].law}, in force {last[-1].in_force}' if last else 'not yet in the record')
+                     'corpus_commit': law.pinned(root, c['path']), 'caveats': notes, 'case_law': decisions})
+        rows.append(f"- {c['path']}: " + ((f'{last[-1].law} (latest decision), given {last[-1].in_force}' if decisions else
+                                          f'{last[-1].law}, in force {last[-1].in_force}') if last else 'not yet in the record')
                     + (f'; next: {nxt.law} on {nxt.in_force}' if nxt else '') + ''.join(f' [{n}]' for n in notes))
     return (f'The law on {date}' + ('' if root else ' (before every record)') + ':\n' + '\n'.join(rows),
             {'date': date, 'corpora': data})
@@ -2348,22 +2397,25 @@ def t_laws_between(args: dict) -> tuple[str, dict]:
     if a > b:
         a, b = b, a
     scope = scope_arg(args)
-    subs = {c['path']: scoped(c['path'], scope) for c in law.manifest()['corpora']}
+    corpora, caselaw = by_kind(law.manifest()['corpora'], scope, args)
+    subs = {c['path']: scoped(c['path'], scope) for c in corpora}
     inside = {c: touching(law.corpus_dir(c), s, 'HEAD') for c, s in subs.items() if s}  # a scope within a corpus
     window = [e for e in law.timeline() if a <= e.in_force <= b and e.kind != 'documentation' and subs.get(e.corpus) is not None
               and (e.corpus not in inside or e.corpus_commit in inside[e.corpus])]
     ends = sum(1 for e in window if e.kind == 'end')  # France's "Fin de vigueur": an end of validity, no law named
     every, left_out = laws_only([e for e in window if e.kind != 'end'])
+    if wants_judgments(args):  # case law: the decisions given in the window, by the day given
+        every, left_out = [e for e in window if e.kind == 'court'], {}
     rows = every[:num(args, 'max_results', 200, MAX_ITEMS)]  # oldest first; a long window is cut, and says so
     changed_counts([(e.corpus, e.corpus_commit) for e in rows])  # one git process per corpus, not one per row
     data = [{'in_force': e.in_force, 'corpus': e.corpus, 'law': e.law, 'summary': re.sub(r'^[^:]+:\s*', '', e.subject),
              'provisions_changed': changed_count(e.corpus, e.corpus_commit),
              'world_commit': e.commit[:12], 'corpus_commit': e.corpus_commit[:12]} for e in rows]  # short: every tool takes them
-    notes = ''.join('\n' + n for n in not_laws_note(left_out))
+    notes = ''.join('\n' + n for n in not_laws_note(left_out)) + caselaw_note(caselaw)
     if not data:
         return (f'No law took effect between {a} and {b}' + (f' in {scope}' if scope else '') + '.' + notes
                 + (f'\nNot listed: {ends} end(s) of validity no law is named for.' if ends else ''),
-                {'changes': [], 'not_laws': left_out, 'ends_not_listed': ends})
+                {'changes': [], 'not_laws': left_out, 'ends_not_listed': ends, 'case_law_not_read': caselaw})
     per_law: dict[str, int] = {}
     for d in data:
         per_law[d['law']] = per_law.get(d['law'], 0) + d['provisions_changed']
@@ -2376,7 +2428,7 @@ def t_laws_between(args: dict) -> tuple[str, dict]:
     return ('\n'.join(f"{d['in_force']}  {d['corpus']}  {d['law']} ({d['provisions_changed']} provisions): {d['summary']}" for d in data)
             + '\nMost provisions changed: ' + '; '.join(f'{k} ({v})' for k, v in top) + cut + notes), \
         {'changes': data, 'provisions_per_law': per_law, 'total': len(every), 'truncated': len(every) > len(rows),
-         'not_laws': left_out, 'ends_not_listed': ends}
+         'not_laws': left_out, 'ends_not_listed': ends, 'case_law_not_read': caselaw}
 
 
 # What law.py laws leaves out, named as it names them: a commit of these kinds is not a law taking effect that day.
@@ -2483,7 +2535,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     # in in-force order, else a tree of each file's version for the date, so older acts appended after the tip and
     # corrections are searched on the dates they apply.
     pins, left_out = [], []
-    for c in law.manifest()['corpora']:
+    corpora, caselaw = by_kind(law.manifest()['corpora'], scope, args)
+    for c in corpora:
         if not scope or scoped(c['path'], scope) is not None:
             try:
                 pins.append((c['path'], law.corpus_tree(date, c['path'])))
@@ -2491,8 +2544,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                 left_out.append(str(e.code))
     pins = [(c, sha) for c, sha in pins if sha]
     if not pins:
-        return f'Nothing is in the record on {date}.' + ''.join(f'\nLeft out: {n}' for n in left_out), \
-            {'results': [], 'left_out': left_out}
+        return f'Nothing is in the record on {date}.' + ''.join(f'\nLeft out: {n}' for n in left_out) + caselaw_note(caselaw), \
+            {'results': [], 'left_out': left_out, 'case_law_not_read': caselaw}
     # Official texts use typographic dashes and quotes ("COVID–19", “debtor”); plain searches match either form.
     pattern = safe_regex(query) if args.get('regex') else loose_pattern(query)
     flags = ['-E']
@@ -2524,7 +2577,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     summary = (f'{len(files)} provision(s) in force on {date} contain {query!r}' + (f' in {scope}' if scope else '')
                + (f'; showing {len(results)} line(s).' if results else '.'))
     lines = ([summary] + [f'Note: {n}' for n in notes] + [f'Left out: {n}' for n in left_out]
-             + [f"{r['path']}:{r['line']}: {r['text']}" for r in results])
+             + [f"{r['path']}:{r['line']}: {r['text']}" for r in results] + ([caselaw_note(caselaw).strip()] if caselaw else []))
     named = [e for e in aliases() if e.get('paths') and any(query.lower() == n.lower() for n in e['names'])]
     for e in named:  # a popular name: the law never uses it, but we know where it lives
         lines.append(f"'{query}' is a popular name, not words of the law: it refers to {', '.join(e['paths'])}. {e.get('note', '')}")
@@ -2551,7 +2604,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     return '\n'.join(lines), {'date': date, 'provisions': every_corpus_first(files, SEARCH_PATHS), 'provision_count': len(files),
                               'results': results,
                               'caveats': notes, 'related_changes': related,
-                              'popular_name_for': [p for e in named for p in e['paths']], 'left_out': left_out}
+                              'popular_name_for': [p for e in named for p in e['paths']], 'left_out': left_out,
+                              'case_law_not_read': caselaw}
 
 
 def t_list_provisions(args: dict) -> tuple[str, dict]:
@@ -2674,13 +2728,14 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
     limit = num(args, 'max_results', 30, 200)
     by_commit = {(e.corpus, e.corpus_commit): e for e in law.timeline()}
     hits, missing = [], []
-    corpora = [c for c in law.manifest()['corpora'] if scoped(c['path'], scope) is not None]
+    corpora, caselaw = by_kind([c for c in law.manifest()['corpora'] if scoped(c['path'], scope) is not None], scope, args)
     for c, cwd in checked_out(corpora, missing):
         sub = scoped(c['path'], scope)
         for sha in law.git('log', '--format=%H', '-i', '--fixed-strings', f'--grep={query}', *(['--', sub] if sub else []), cwd=cwd).split():
             e = by_commit.get((c['path'], sha))
             if e is not None and e.kind != 'documentation' and start <= e.in_force <= end:
                 hits.append((e, c['path'], sha, cwd))
+    missing_note = not_searched(missing) + caselaw_note(caselaw)
     hits.sort(key=lambda h: h[0].in_force)
     found = []
     for e, corpus, sha, cwd in hits[:limit]:  # only the changes shown are read in full
@@ -2688,10 +2743,10 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
         hit = next((l.strip() for l in body.splitlines() if query.lower() in l.lower()), '')
         found.append({'in_force': e.in_force, 'corpus': corpus, 'law': e.law, 'commit': sha, 'line': hit[:300]})
     if not found:
-        return f'No change in the record mentions {query!r}.' + not_searched(missing), {'changes': [], 'not_searched': missing}
+        return f'No change in the record mentions {query!r}.' + missing_note, {'changes': [], 'not_searched': missing, 'case_law_not_read': caselaw}
     return (f'{len(hits)} change(s) mention {query!r}' + (f'; the first {len(found)}' if len(hits) > len(found) else '') + ':\n'
-            + '\n'.join(f"{f['in_force']}  {f['corpus']}  {f['law']}: {f['line']}" for f in found) + not_searched(missing)), \
-        {'changes': found, 'total': len(hits), 'not_searched': missing}
+            + '\n'.join(f"{f['in_force']}  {f['corpus']}  {f['law']}: {f['line']}" for f in found) + missing_note), \
+        {'changes': found, 'total': len(hits), 'not_searched': missing, 'case_law_not_read': caselaw}
 
 
 def t_phrase_history(args: dict) -> tuple[str, dict]:
@@ -2705,7 +2760,7 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
     pattern = safe_regex(query) if args.get('regex') else loose_pattern(query)
     by_commit = {(e.corpus, e.corpus_commit): e for e in law.timeline()}
     found, missing, cut = [], [], False
-    corpora = [c for c in law.manifest()['corpora'] if scoped(c['path'], scope) is not None]
+    corpora, caselaw = by_kind([c for c in law.manifest()['corpora'] if scoped(c['path'], scope) is not None], scope, args)
     for c, cwd in checked_out(corpora, missing):
         sub = scoped(c['path'], scope)
         # --name-status with renames: a provision file renamed by a change (Malta's "Annex II" becoming the "Third
@@ -2754,7 +2809,7 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
                           'lines_added': max(after - before, 0), 'lines_removed': max(before - after, 0)})
     found.sort(key=lambda f: (f['in_force'], f['path']))
     note = not_searched(missing) + (f'\nOver {PHRASE_FILES} changed files in one corpus matched; only the oldest were '
-                                    'checked. Narrow it with a jurisdiction or a longer phrase.' if cut else '')
+                                    'checked. Narrow it with a jurisdiction or a longer phrase.' if cut else '') + caselaw_note(caselaw)
     if not found:
         return f'No change in the record added or removed text containing {query!r}.' + note, {'changes': [], 'not_searched': missing}
     start = [f for f in found if f['effect'] == 'present_at_start']
@@ -3300,6 +3355,12 @@ def t_what_else_changes(args: dict) -> tuple[str, dict]:
             groups.append({'kind': 'defines the same term itself', 'term': term, 'provisions': [
                 {'path': f'{corpus}/{n}', 'lines': [x for x in l if own.search(x)][:1]} for n, l in sorted(redefines.items())[:limit]],
                 'count': len(redefines)})
+    cited_by = [j for j in judgments_for(corpus, law.pinned('HEAD', corpus) or '', rel) if j['decided'] <= date]
+    if cited_by:  # case law: decisions are not provisions, but a change to the words changes what they decided on
+        groups.append({'kind': 'court decision(s) cite it (latest first; check_precedent compares the words)', 'term': '',
+                       'provisions': [{'path': j.get('decision') or j.get('url') or j['name'],
+                                       'lines': [f"{j['decided']} {j['name']}" + (f" ({j['how']})" if j.get('how') else '')]}
+                                      for j in cited_by[::-1][:10]], 'count': len(cited_by)})
     not_searched = (f'Citations were not searched: citations in this corpus are not recognised, as its own citation rule '
                     f'cannot be used: {unusable}. Only defined terms were checked.') if unusable else None
     if not groups:
@@ -3411,28 +3472,72 @@ def grep_files(corpus: str, sha: str, words: str) -> tuple[str, ...]:
     return tuple(line.removeprefix(f'{sha}:') for line in out.splitlines())
 
 
+def caselaw_pins() -> list[tuple[str, str]]:
+    """(corpus, pinned commit) of every case-law corpus this server serves."""
+    out = []
+    for c in law.manifest()['corpora']:
+        if law.is_caselaw(c) and (ROOT / c['path'] / '.git').exists():
+            sha = corpus_head(c['path'])
+            if sha:
+                out.append((c['path'], sha))
+    return out
+
+
+def read_blobs(cwd: Path, specs: list[str]) -> list[str]:
+    """Several <commit>:<path> files read by one git process (cat-file --batch); those not there are skipped."""
+    if not specs:
+        return []
+    done = git_run(['git', 'cat-file', '--batch'], cwd=cwd, input=('\n'.join(specs) + '\n').encode('utf-8'),
+                   capture_output=True, timeout=GIT_TIMEOUT)
+    out, data, i = [], done.stdout or b'', 0
+    while i < len(data):
+        nl = data.find(b'\n', i)
+        if nl < 0:
+            break
+        head_line = data[i:nl].split()
+        i = nl + 1
+        if len(head_line) == 3 and head_line[1] == b'blob':
+            size = int(head_line[2])
+            out.append(data[i:i + size].decode('utf-8', 'replace'))
+            i += size + 1
+    return out
+
+
 def judgments_for(corpus: str, sha: str, rel: str) -> list[dict]:
-    """Judgments recorded for a provision, if the corpus carries them: judgments/<provision path>.jsonl at its pinned
-    commit, one JSON object per line with at least "decided" (YYYY-MM-DD) and "name"; also "court", "citation", "url".
-    The file layout of the proposed judgment overlay (see the git-for-law census); no corpus carries it yet."""
+    """Judgments recorded for a provision: judgments/<provision path>.jsonl in the corpus at its pinned commit, in the
+    tree, and in every case-law corpus served (each overlay is filed under the law's corpus path:
+    judgments/switzerland/bund/acts/101/art-029.jsonl). One JSON object per line with at least "decided" (YYYY-MM-DD)
+    and "name"; also "court", "citation", "url", "how", "law_commit", and "decision" (the decision's file, given here
+    as its path in the tree). The case-law overlays are read in parallel, one git process per corpus."""
     name = f"{rel.removesuffix('.md')}.jsonl"
-    texts = []
+    texts: list[tuple[str, str]] = []
     specs = [(ROOT / corpus, f'{sha}:judgments/{name}')] + [(ROOT, f'HEAD:judgments/{c}/{name}') for c in names_for(corpus)]
     for cwd, spec in specs:  # the corpus's, then the tree's (filed under the corpus's current or any earlier path)
         done = git_run(['git', 'show', spec], cwd=cwd, capture_output=True, encoding='utf-8', timeout=GIT_TIMEOUT)
         if done.returncode == 0:
-            texts.append(done.stdout)
+            texts.append(('', done.stdout))
+    pins = caselaw_pins()
+    if pins:
+        names = names_for(corpus)
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            for c, got in zip([c for c, _ in pins], pool.map(
+                    lambda cp: read_blobs(ROOT / cp[0], [f'{cp[1]}:judgments/{n}/{name}' for n in names]), pins)):
+                texts += [(c, t) for t in got]
     out, seen = [], set()
-    for line in '\n'.join(texts).splitlines():
-        try:
-            j = json.loads(line)
-        except json.JSONDecodeError:
-            continue
-        if isinstance(j, dict) and isinstance(j.get('decided'), str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', j['decided']):
-            key = j.get('citation') or j.get('url') or (j['decided'], j.get('name'))
-            if key not in seen:
-                seen.add(key)
-                out.append({k: str(j[k])[:300] for k in ('decided', 'text_date', 'name', 'court', 'citation', 'url', 'how', 'law_commit') if k in j})
+    for source, text in texts:
+        for line in text.splitlines():
+            try:
+                j = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(j, dict) and isinstance(j.get('decided'), str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', j['decided']):
+                key = (j.get('citation') or j.get('url') or j.get('name'), j.get('court'), j['decided'])
+                if key not in seen:
+                    seen.add(key)
+                    row = {k: str(j[k])[:300] for k in ('decided', 'text_date', 'name', 'court', 'citation', 'url', 'how', 'law_commit') if k in j}
+                    if source and j.get('decision'):
+                        row['decision'] = f"{source}/{j['decision']}"
+                    out.append(row)
     return sorted(out, key=lambda j: j['decided'])
 
 
@@ -3449,16 +3554,26 @@ def t_check_precedent(args: dict) -> tuple[str, dict]:
         checks.append({'name': text_arg(args, 'case_name') or 'the decision', **precedent_status(path, date_arg(decided_arg), date)})
     sha = law.pinned('HEAD', corpus)
     recorded = judgments_for(corpus, sha, rel) if sha else []
-    for j in recorded[:num(args, 'max_results', 50, MAX_ITEMS)]:
-        if j['decided'] <= date:
-            # A court applies the text in force on the date that governs the case (often the day it was filed), which
-            # a record can give as text_date; otherwise the day of the decision stands in for it.
-            applied = j.get('text_date') if re.fullmatch(r'\d{4}-\d{2}-\d{2}', j.get('text_date', '')) else j['decided']
-            checks.append({**j, **precedent_status(path, applied, date), 'decided': j['decided'], 'text_date': applied})
+    # Case law can record thousands of decisions for one article (Art. 29 Abs. 2 BV): the latest are checked, and the
+    # words are compared once per version of the text, not once per decision.
+    upto = [j for j in recorded if j['decided'] <= date]
+    shown = upto[-num(args, 'max_results', 50, MAX_ITEMS):][::-1]
+    versions = [h['in_force'] for h in history_of(path)]
+    compared: dict[str, dict] = {}
+    for j in shown:
+        # A court applies the text in force on the date that governs the case (often the day it was filed), which
+        # a record can give as text_date; otherwise the day of the decision stands in for it.
+        applied = j.get('text_date') if re.fullmatch(r'\d{4}-\d{2}-\d{2}', j.get('text_date', '')) else j['decided']
+        version = max((v for v in versions if v <= applied), default='')
+        if version not in compared:
+            compared[version] = precedent_status(path, applied, date)
+        checks.append({**j, **compared[version], 'decided': j['decided'], 'text_date': applied})
     if not checks:
         return (f'No judgment is recorded for {path}. Give the date a decision was made ("decided") to check whether the text it '
                 'applied is still the text in force.', {'path': path, 'date': date, 'checks': [], 'judgments_recorded': 0})
-    lines = [f'{path}: the text each decision applied, against the text in force on {date}.']
+    lines = [f'{path}: the text each decision applied, against the text in force on {date}.'
+             + (f' {len(upto)} decisions are recorded; the latest {len(shown)} are checked (max_results for more).'
+                if len(upto) > len(shown) else '')]
     for c in checks:
         label = c.get('name', 'the decision') + (f" ({c['citation']})" if c.get('citation') else '') + f", decided {c['decided']}" + (f", applying the text of {c['text_date']}" if c.get('text_date') not in (None, c['decided']) else '')
         if not c['in_force_when_decided']:
@@ -3481,7 +3596,8 @@ def t_check_precedent(args: dict) -> tuple[str, dict]:
                                    'the decision may still govern there.' for m in c.get('removed_words_now_elsewhere', [])))
     lines.append('Same words is not same law: a later law can change how a provision applies without changing its words '
                  '(see read_law), and courts may read the same words differently.')
-    return '\n'.join(lines), {'path': path, 'date': date, 'checks': checks, 'judgments_recorded': len(recorded)}
+    return '\n'.join(lines), {'path': path, 'date': date, 'checks': checks, 'judgments_recorded': len(recorded),
+                              'judgments_up_to_date': len(upto)}
 
 
 # Mexico: the acts a Mexican brief names, by the abbreviation or title it uses, and the folder each is in. Only names
@@ -3691,6 +3807,120 @@ def mx_constitutional_paths(articles: str) -> list[str]:
 # civil" inside "Codul civil al Republicii Moldova"). citations_in() settles which country a citation belongs to by
 # the names it carries (CITATION_COUNTRY_MARKS) and by the corpora this server serves, never by the order of the forms;
 # tests/test_mcp.py CitationRegistry checks every example against every other country's forms.
+# Switzerland -------------------------------------------------------------------------------------------------------
+CH_ACTS = 'switzerland/bund/acts'
+class _LazyRegex:
+    """A regex compiled on first use, from data the tree holds (the Swiss abbreviations): built at import time it would
+    read git before the server knows its tree."""
+
+    def __init__(self, build):
+        self._build, self._rx = build, None
+
+    def rx(self):
+        if self._rx is None:
+            self._rx = self._build()
+        return self._rx
+
+    def finditer(self, text, *a):
+        return self.rx().finditer(text, *a)
+
+    def search(self, text, *a):
+        return self.rx().search(text, *a)
+
+    def match(self, text, *a):
+        return self.rx().match(text, *a)
+
+    @property
+    def pattern(self):
+        return self.rx().pattern
+
+
+def _ch_article_rx():
+    """An article and a federal act's abbreviation as Fedlex writes it ("OR", "Cst.", "StGB", "LTF"): only real
+    abbreviations, so another country's "art. 14 CE" or "Art. 16a GG" is never read as Swiss."""
+    names = sorted({n for rows in swiss_aliases().values() for _, _, n in rows
+                    if re.sub(r'[\s.]', '', n).upper() not in CH_NOT_FEDERAL and len(n) >= 2}, key=lambda n: (-len(n), n))
+    abbr = '|'.join(re.escape(n) for n in names) or r'(?!x)x'
+    return re.compile(r'(?<![\w.])[Aa]rt(?:ikel|icle|icolo|\.)?\s*(\d{1,4})\s?(bis|ter|quater|quinquies|sexies|septies|octies|[a-z])?(?![\w])'
+                      r'(?:\s*(?:Abs\.|Absatz|al\.|alinéa|cpv\.|capoverso|para\.)\s*\d+[a-z]*)?'
+                      r'(?:\s*(?:lit\.|let\.|Bst\.|Buchst\.|Ziff\.|ch\.|n\.|cifra)\s*\w+)?'
+                      r'\s*(?P<abbr>' + abbr + r')(?![\w])')
+
+
+CH_ARTICLE = _LazyRegex(_ch_article_rx)
+CH_DECISION = re.compile(r'\b(?:BGE|ATF|DTF)\s+\d{1,3}\s+(?:Ia|Ib|IV|V|III|II|I)\s+\d{1,4}\b'
+                         r'|\b\d{1,2}[A-Z]{1,2}[._]\d{1,5}/(?:18|19|20)\d{2}\b'
+                         r'|\b[A-F]-\d{1,5}/(?:19|20)\d{2}\b'
+                         r'|\b(?:BB|BG|RR|SK|CA|CN|BH|BP|CR)\.(?:19|20)\d{2}\.\d{1,4}\b')
+# Abbreviations cantons use for their own laws (a canton's tax act "StG", its constitution "KV", Geneva's procedure law
+# "LPA"): read as federal they would point at another act, so they are left alone.
+CH_NOT_FEDERAL = {'STG', 'KV', 'PBG', 'VG', 'PG', 'GVG', 'OG', 'LPA', 'LC', 'GG', 'LEX', 'POG', 'SG'}
+
+
+@lru_cache(maxsize=1)
+def swiss_aliases() -> dict[str, list[tuple[str, str, str]]]:
+    """Key (upper case, no spaces or dots) -> [(SR number, language, abbreviation as written)], from data/swiss-aliases.json."""
+    try:
+        table = json.loads((ROOT / 'data' / 'swiss-aliases.json').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        try:
+            table = json.loads(law.git('show', 'HEAD:data/swiss-aliases.json', check=False) or '{}')
+        except (ValueError, SystemExit, RuntimeError, OSError):
+            return {}
+    out: dict[str, list] = {}
+    for sr, v in table.items():
+        for lang, names in v.get('short', {}).items():
+            for n in names:
+                out.setdefault(re.sub(r'[\s.]', '', n).upper(), []).append((sr, lang, n))
+    return out
+
+
+def swiss_sr(abbr: str) -> str | None:
+    """The SR number of a federal act by its abbreviation as a text writes it, or None. Where acts share one, the act
+    whose abbreviation is written the same way (case and all) wins, then the German one, then the shorter SR number."""
+    key = re.sub(r'[\s.]', '', abbr).upper()
+    if key in CH_NOT_FEDERAL:
+        return None
+    rows = swiss_aliases().get(key, [])
+    if not rows:
+        return None
+    plain = abbr.replace('.', '').replace(' ', '')
+    exact = [r for r in rows if r[2].replace('.', '').replace(' ', '') == plain]
+    pool = exact or [r for r in rows if r[1] == 'de'] or rows
+    sr = sorted({r[0] for r in pool}, key=lambda x: (len(x), x))[0]
+    return None if sr.startswith('131.') else sr  # 131.*: the cantons' constitutions, filed in the SR
+
+
+def ch_article_paths(m) -> list[str]:
+    sr = swiss_sr(m.group('abbr'))
+    return [f'{CH_ACTS}/{sr}/art-{int(m.group(1)):03d}{(m.group(2) or "").lower()}.md'] if sr else []
+
+
+def _decision_key(text: str) -> str:
+    text = re.sub(r'^(?:ATF|DTF)\b', 'BGE', text.strip())
+    return re.sub(r'[\s]', '', text).upper()
+
+
+@lru_cache(maxsize=64)
+def _decisions(corpus: str, sha: str) -> dict[str, tuple[str, ...]]:
+    """Docket and BGE reference -> decision files, from a case-law corpus's Docket: and BGE: trailers (one git log)."""
+    out: dict[str, list[str]] = {}
+    keys: list[str] = []
+    for line in law.git('log', sha, '--format=@%(trailers:key=Docket,key=BGE,valueonly,separator=%x1f)', '--name-only',
+                        '--diff-filter=A', cwd=ROOT / corpus, check=False).splitlines():
+        if line.startswith('@'):
+            keys = [_decision_key(k) for k in line[1:].split('\x1f') if k.strip()]
+        elif line.strip().endswith('.md') and keys:
+            for k in keys:
+                out.setdefault(k, []).append(f'{corpus}/{line.strip()}')
+    return {k: tuple(v) for k, v in out.items()}
+
+
+def ch_decision_paths(text: str) -> list[str]:
+    key = _decision_key(text)
+    return [p for corpus, sha in caselaw_pins() for p in _decisions(corpus, sha).get(key, ())]
+
+
 class CitationForm:
     """One citation form: `country` (ISO code), `rx` over free text, `to_path` from a match to a path or a list of
     paths ([] where the record cannot place it), `examples` of that country's citations it must claim. `open_name`:
@@ -3713,9 +3943,17 @@ CITATION_REGISTRY = [
                  lambda m: f'gb/uk/send/ukpga/2014/6/section/{m.group(1)}.md', ('s. 42 CFA 2014', 'section 20 of the Children and Families Act 2014')),
     CitationForm('gb', re.compile(r'\b(?:reg\.|[Rr]egulation)\s*(\d+[A-Z]?)((?:\(\d+\))*)\s*(?:of\s+the\s+)?(?:SEND Regulations(?:\s*2014)?|Special Educational Needs and Disability Regulations 2014)'),
                  lambda m: f'gb/uk/send/uksi/2014/1530/regulation/{m.group(1)}.md', ('reg. 13 SEND Regulations 2014',)),
-    CitationForm('ch', re.compile(r'\bArt\.\s*(\d+[a-z]?)(?:\s*Abs\.\s*\d+[a-z]?)?(?:\s*(?:lit\.|Bst\.)\s*[a-z])?\s*(BV|DSG|SchKG)\b'),
-                 lambda m: f"ch/bund/swiss-law/{m.group(2).lower()}/art-{m.group(1).rjust(3 + (not m.group(1).isdigit()), '0')}.md",
-                 ('Art. 10a BV', 'Art. 8 Abs. 2 SchKG')),
+    # Switzerland: an article of any federal act by its official abbreviation, in German, French or Italian ("Art. 336
+    # OR", "art. 29 al. 2 Cst.", "art. 106 cpv. 1 CP", "Art. 8 Abs. 2 SchKG"): data/swiss-aliases.json, Fedlex's own
+    # abbreviations by SR number. Abbreviations cantons use for their own laws are not read as federal (swiss_sr).
+    CitationForm('ch', CH_ARTICLE, lambda m: ch_article_paths(m),
+                 ('Art. 10a BV', 'Art. 8 Abs. 2 SchKG', 'Art. 336 OR', 'art. 29 al. 2 Cst.', 'Art. 106 Abs. 1 StGB',
+                  'art. 8 let. a LEI', 'Art. 6bis ZGB')),
+    # Swiss decisions: "BGE 142 II 307" (ATF, DTF), a Federal Supreme Court docket ("4A_123/2024", "4C.237/1999"), a
+    # Federal Administrative Court docket ("A-1234/2020") or a Federal Criminal Court one ("BB.2020.123"), to the
+    # decision's file in the case law this server serves.
+    CitationForm('ch', CH_DECISION, lambda m: ch_decision_paths(m.group(0)),
+                 ('BGE 142 II 307', 'ATF 143 I 284', '4A_123/2024', '2C_215/2015', 'A-1234/2020', 'BB.2020.123')),
     # Malta: "article 11 of Cap. 586", "reg. 15 of S.L. 586.08" (a provision of a Chapter or of subsidiary legislation).
     CitationForm('mt', re.compile(r'\b(?:art(?:icle|\.)?|s\.|section|reg(?:ulation|\.)?)\s*(\d+[A-Z]?)(?:\(\w+\))*\s*(?:of\s+)?(?:the\s+)?'
                                   r'(?:Cap\.?\s*(\d+[A-Z]?)|S\.\s?L\.\s*(\d+)\.0*(\d+))\b', re.I),
@@ -3951,6 +4189,8 @@ def t_law_details(args: dict) -> tuple[str, dict]:
             shas = [full] if ok else []
         else:
             shas = law.git('log', pin, '--format=%H', f'--author={law_name}', '--fixed-strings', '-i', cwd=cwd).split()
+            if not shas and c in {p for p, _ in caselaw_pins()}:  # a decision by its BGE reference or docket (trailers)
+                shas = law.git('log', pin, '--format=%H', f'--grep=^(BGE|Docket): *{re.escape(law_name)}$', '-E', '-i', cwd=cwd).split()
         for sha in shas[:10]:
             msg = law.git('show', '-s', '--format=%an%x1f%B', sha, cwd=cwd)
             author, _, body = msg.partition('\x1f')
@@ -4072,7 +4312,8 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
     events = law.timeline()
     ra, rb = law.root_on(a, events), law.root_on(b, events)
     rows = []
-    for c in law.manifest()['corpora']:
+    corpora, caselaw = by_kind(law.manifest()['corpora'], scope, args)
+    for c in corpora:
         sub = scoped(c['path'], scope)
         if sub is None:
             continue
@@ -4092,7 +4333,8 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
         rows.append({'corpus': c['path'], 'laws': laws[:MAX_ITEMS], 'not_laws': not_laws, 'provision_count': len(changed), 'truncated': len(changed) > MAX_ITEMS,
                      'provisions': [{'path': f"{c['path']}/{p}", 'change': kinds.get(s[0], s)} for s, p in changed[:MAX_ITEMS]]})
     if not rows:
-        return f'Nothing changed between {a} and {b}' + (f' in {scope}' if scope else '') + '.', {'corpora': []}
+        return f'Nothing changed between {a} and {b}' + (f' in {scope}' if scope else '') + '.' + caselaw_note(caselaw), \
+            {'corpora': [], 'case_law_not_read': caselaw}
     # Dozens of corpora can each change thousands of files in a window: every corpus stays listed, with its count,
     # and the provisions shown share one budget (a whole list would run to hundreds of kilobytes).
     per = MAX_ITEMS if len(rows) == 1 else max(5, CHANGES_SHOWN // len(rows))
@@ -4111,7 +4353,8 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
                       + ' (not laws taking effect)' if r['not_laws'] else '') + '\n'
                    + '\n'.join(f"  {p['change']}: {p['path']}" for p in r['provisions'][:shown])
                    + (f"\n  ... {r['provision_count'] - shown} more; narrow with a jurisdiction" if r['provision_count'] > shown else ''))
-    return f'Changes after {a}, up to and including {b}:\n' + '\n'.join(out), {'date_a': a, 'date_b': b, 'corpora': rows}
+    return f'Changes after {a}, up to and including {b}:\n' + '\n'.join(out) + caselaw_note(caselaw), \
+        {'date_a': a, 'date_b': b, 'corpora': rows, 'case_law_not_read': caselaw}
 
 
 CHANGES_SHOWN = 300  # provisions changes_between lists across all corpora when several changed
@@ -4122,6 +4365,7 @@ PATH = {'type': 'string', 'description': 'A provision file, for example united-s
 SCOPE = {'type': 'string', 'description': 'Optional jurisdiction prefix, for example "germany", "united-states/federal" or "united-kingdom/uk/legislation/uksi".'}
 PAGE = {'max_chars': {'type': 'integer', 'description': f'Longest part of the text in one answer (default {PAGE_CHARS}, at least {PAGE_LEAST}, at most {PAGE_MOST}). A longer text comes in parts.'},
         'offset': {'type': 'integer', 'description': 'Where the part starts, in characters: the offset the previous part gave for the next one (default 0).'}}
+KIND = {'type': 'string', 'enum': ['law', 'judgments'], 'description': 'law (default): bodies of law only. judgments: court decisions (case law) only. Case law is also read when the jurisdiction names it (a path ending in /caselaw).'}
 RO = {'readOnlyHint': True, 'idempotentHint': True, 'openWorldHint': False}
 
 TOOLS = [
@@ -4144,20 +4388,20 @@ TOOLS = [
     ('provision_history', 'Every law that changed a provision, oldest first, with its in-force, enacted or made, and published dates.',
      {'path': PATH}, ['path'], t_provision_history),
     ('laws_between', 'Every law that took effect between two dates, across all jurisdictions or one, in the order they took effect.',
-     {'start': DATE, 'end': DATE, 'jurisdiction': SCOPE, 'max_results': {'type': 'integer', 'description': f'At most this many (default 200, at most {MAX_ITEMS}).'}},
+     {'start': DATE, 'end': DATE, 'jurisdiction': SCOPE, 'kind': KIND, 'max_results': {'type': 'integer', 'description': f'At most this many (default 200, at most {MAX_ITEMS}).'}},
      ['start', 'end'], t_laws_between),
     ('search_law', 'Search the text of all the law in force on a date, across every jurisdiction or one. Plain text by default.',
      {'query': {'type': 'string', 'description': 'Words or a phrase; a regular expression if regex is true.'}, 'date': DATE, 'jurisdiction': SCOPE,
-      'regex': {'type': 'boolean'}, 'case_sensitive': {'type': 'boolean'}, 'max_results': {'type': 'integer', 'description': 'Lines to return (default 30).'}},
+      'kind': KIND, 'regex': {'type': 'boolean'}, 'case_sensitive': {'type': 'boolean'}, 'max_results': {'type': 'integer', 'description': 'Lines to return (default 30).'}},
      ['query'], t_search_law),
     ('changes_between', 'Every provision whose text differs between two dates, in every jurisdiction or one, with the laws that changed them.',
-     {'date_a': DATE, 'date_b': DATE, 'jurisdiction': SCOPE}, ['date_a', 'date_b'], t_changes_between),
+     {'date_a': DATE, 'date_b': DATE, 'jurisdiction': SCOPE, 'kind': KIND}, ['date_a', 'date_b'], t_changes_between),
     ('list_provisions', 'Browse a corpus: the provision files under a corpus or folder (for example united-states/federal/usc/title-11), with headings, as in force on a date. For a folder of acts or instruments, by_folder gives one row each with its title and last change; a partial name lists the folders that start with it (malta/national/acts/sl/586. for every instrument made under Cap. 586).',
      {'path': {'type': 'string', 'description': 'A corpus, a folder inside one, or the start of a folder name.'}, 'date': DATE,
       'by_folder': {'type': 'boolean', 'description': 'One row per sub-folder (an act or instrument) with its title and last change.'},
       'max_results': {'type': 'integer', 'description': 'At most this many (default 200).'}}, ['path'], t_list_provisions),
     ('search_changes', 'Search the record of changes (each commit message: the law, its dates, what it did) rather than the text of the law. For example "temporary", "COVID", "Bundesrat".',
-     {'query': {'type': 'string'}, 'jurisdiction': SCOPE, 'start': DATE, 'end': DATE,
+     {'query': {'type': 'string'}, 'jurisdiction': SCOPE, 'kind': KIND, 'start': DATE, 'end': DATE,
       'max_results': {'type': 'integer', 'description': 'At most this many (default 30).'}}, ['query'], t_search_changes),
     ('resolve_citations', 'Read every citation in a piece of text (a brief, a judgment, an email) and resolve each to its provision, with its state on a date: in force or not, the law that last changed it, and the next change.',
      {'text': {'type': 'string', 'description': f'Up to {MAX_BRIEF} characters.'}, 'date': DATE,
@@ -4169,7 +4413,7 @@ TOOLS = [
     ('what_else_changes','Which provisions rely on, cite or use the definitions of this one, on a date: those that cite it, and those that use a term it defines (for example the provisions that use "debtor in possession"), with the definition\'s scope ("In this subchapter"). Use it before a text search when asked what depends on a provision or its definitions; a change to this provision can change what they mean.',
      {'path': PATH, 'date': DATE, 'max_results': {'type': 'integer', 'description': 'Provisions per group (default 40).'}}, ['path'], t_what_else_changes),
     ('phrase_history','When words came into the law and when they left it, at any date and in every jurisdiction: each change whose added or removed text contains them. Use it for things no longer in force (for example "COVID" in the Grundgesetz).',
-     {'query': {'type': 'string'}, 'jurisdiction': SCOPE, 'regex': {'type': 'boolean'},
+     {'query': {'type': 'string'}, 'jurisdiction': SCOPE, 'kind': KIND, 'regex': {'type': 'boolean'},
       'max_results': {'type': 'integer', 'description': 'At most this many (default 40).'}}, ['query'], t_phrase_history),
     ('applies_to_case','For a case commenced on one date, which later changes to a provision reach it (from any scope the record holds, such as "cases commenced on or after"), and the text that applies to it.',
      {'path': PATH, 'commenced': {'type': 'string', 'description': 'The day the case (or matter) was commenced, YYYY-MM-DD.'}, 'date': DATE,
@@ -4191,8 +4435,8 @@ PROMPTS = {
         [{'name': 'provision', 'description': 'A path, number or name, e.g. "11 U.S.C. 1182" or "Art. 16a GG"', 'required': True},
          {'name': 'date', 'description': 'YYYY-MM-DD', 'required': True}],
         'Using the global-law tools: find {provision} (find_provision), read it as in force on {date} (read_law), say which law '
-        'wrote each part (who_wrote), what has changed since (compare_dates to today), and what else relies on it '
-        '(what_else_changes). Cite the official sources the tools give, and pass on every note about the limits of the record.'),
+        'wrote each part (who_wrote), what has changed since (compare_dates to today), what else relies on it '
+        '(what_else_changes), and which court decisions applied it and whether their words still hold (check_precedent). Cite the official sources the tools give, and pass on every note about the limits of the record.'),
     'case_timeline': (
         'The law for a case', 'Which text of a provision governs a case commenced on a date, period by period.',
         [{'name': 'provision', 'description': 'A path, number or name', 'required': True},
