@@ -3943,11 +3943,100 @@ def _decisions(corpus: str, sha: str) -> dict[str, tuple[str, ...]]:
     return {k: tuple(v) for k, v in out.items()}
 
 
-def ch_decision_paths(text: str) -> list[str]:
+def decision_paths(text: str) -> list[str]:
+    """The decision files a reference names, in every case-law corpus served: a Swiss docket or BGE reference, or an
+    ECLI of any country (a file decisions/<court>/<year>/ECLI_NL_HR_2019_1234.md has the key of "ECLI:NL:HR:2019:1234")."""
     key, pins = _decision_key(text), caselaw_pins()
     with ThreadPoolExecutor(8) as pool:  # one ls-tree per corpus, the first time; cached per pin after
         found = list(pool.map(lambda cp: _decisions(*cp).get(key, ()), pins))
     return [p for paths in found for p in paths]
+
+
+ch_decision_paths = decision_paths  # the Swiss name, kept for callers that use it
+
+# European Case Law Identifier, any country: ECLI:<country>:<court>:<year>:<number> (ECLI:NL:HR:2019:1234,
+# ECLI:DE:BGH:2020:123456UVIZR1.19.0, ECLI:FR:CCASS:2021:C100123).
+ECLI = re.compile(r'\bECLI:[A-Z]{2}:[A-Z0-9]{1,7}:\d{4}:[A-Z0-9.]{1,25}(?![A-Za-z0-9])', re.I)
+ECLI_NL = re.compile(r'\bECLI:NL:[A-Z0-9]{1,7}:\d{4}:[A-Z0-9.]{1,25}(?![A-Za-z0-9])', re.I)
+DECISION_REF = re.compile(f'{CH_DECISION.pattern}|{ECLI.pattern}', re.I)
+
+
+# The Netherlands -----------------------------------------------------------------------------------------------------
+NL_ACTS = 'netherlands/national/acts'
+
+
+@lru_cache(maxsize=1)
+def nl_aliases() -> dict:
+    """data/nl-aliases.json: 'acts' (abbreviation key, upper case without spaces or dots -> act folder), 'forms' (key ->
+    the abbreviation as written), 'bw_books' (book -> folder of that book of the Burgerlijk Wetboek). Built from the act
+    READMEs of lexifina/netherlands-law: the official short title (citeertitel afkorting) and the BWB id of each act."""
+    try:
+        return json.loads((ROOT / 'data' / 'nl-aliases.json').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        try:
+            return json.loads(law.git('show', 'HEAD:data/nl-aliases.json', check=False) or '{}')
+        except (ValueError, SystemExit, RuntimeError, OSError):
+            return {}
+
+
+def _nl_article_rx():
+    """'artikel 6:162 BW', 'art. 8:69 Awb', 'artikel 3:40 lid 2 BW', 'art. 359a Sv', 'artikel 310 Sr': an article, its
+    lid/onder, then an abbreviation the table holds (only real ones, so "art. 14 CE" or "Art. 336 OR" is never Dutch)."""
+    t = nl_aliases()
+    names = sorted({n for forms in t.get('forms', {}).values() for n in forms if len(n) >= 2}, key=lambda n: (-len(n), n))
+    abbr = '|'.join(re.escape(n) for n in names + ['BW']) or r'(?!x)x'
+    return re.compile(r'(?<![\w.])[Aa]rt(?:ikel|\.)?\s*(?P<num>\d+[a-z]{0,3}(?::\d+[a-z]{0,3})?)(?![\w:])'
+                      r'(?:,?\s*(?:lid|leden)\s*\d+[a-z]?(?:\s*(?:en|,|-|t/m)\s*\d+[a-z]?)*)?'
+                      r'(?:,?\s*(?:aanhef\s+en\s+)?(?:onder|sub)\s*[a-z0-9]{1,3}°?)?'
+                      r',?\s*(?:van\s+(?:de|het)\s+)?(?P<abbr>' + abbr + r')(?![\w])')
+
+
+NL_ARTICLE = _LazyRegex(_nl_article_rx)
+
+
+def nl_corpus() -> tuple[str, str | None]:
+    """The Netherlands' law in this tree (its path, and its pinned commit when this server serves it)."""
+    path = next((c['path'] for c in _full_manifest(head())['corpora'] if iso_code(c) == 'nl' and not law.is_caselaw(c)), NL_ACTS)
+    served = any(c['path'] == path for c in law.manifest()['corpora']) and (ROOT / path / '.git').exists()
+    return path, (corpus_head(path) or None) if served else None
+
+
+def nl_article_key(number: str) -> str:
+    """'08-069a', '8:69a' and '8.69a' -> '8:69a'; '162' -> '162' (each part without its leading zeros)."""
+    return ':'.join(re.sub(r'^0+(?=\d)', '', p) for p in re.split(r'[:.\-]', number.strip().lower()) if p)
+
+
+@lru_cache(maxsize=256)
+def nl_act_files(corpus: str, sha: str, folder: str) -> dict[str, str]:
+    """An act folder's article files by article key (art-08-069a.md -> '8:69a')."""
+    out = {}
+    for n in names_of(corpus, sha):
+        if n.startswith(folder + '/art-') and n.endswith('.md') and n.count('/') == 1:
+            out.setdefault(nl_article_key(n[len(folder) + 5:-3]), n)
+    return out
+
+
+def nl_article_paths(m) -> list[str]:
+    """The file a Dutch citation names: the act by its abbreviation (a book of the BW by the number before the colon:
+    6:162 BW is Boek 6, article 162), the article by its number in that act's own file names; where the record lacks
+    the act, [] (left unresolved), and where it lacks the article, a path that says so when looked up."""
+    t, num, abbr = nl_aliases(), m.group('num'), m.group('abbr')
+    if re.sub(r'[\s.]', '', abbr).upper() == 'BW':
+        book, _, art = num.partition(':')
+        folder = t.get('bw_books', {}).get(book.lower()) if art else None
+    else:
+        folder, art = t.get('acts', {}).get(re.sub(r'[\s.]', '', abbr).upper()), num
+    if not folder or not art:
+        return []
+    corpus, sha = nl_corpus()
+    files = nl_act_files(corpus, sha, folder) if sha else {}
+    hit = files.get(nl_article_key(art))
+    if hit:
+        return [f'{corpus}/{hit}']
+    parts = nl_article_key(art).split(':')
+    guess = f"art-{int(re.match(r'\d+', parts[0]).group()):02d}-{parts[1].zfill(3)}" if len(parts) == 2 and parts[0][:1].isdigit() \
+        else f"art-{art.zfill(3) if art.isdigit() else art}"
+    return [f'{corpus}/{folder}/{guess}.md']
 
 
 class CitationForm:
@@ -3983,6 +4072,19 @@ CITATION_REGISTRY = [
     # decision's file in the case law this server serves.
     CitationForm('ch', CH_DECISION, lambda m: ch_decision_paths(m.group(0)),
                  ('BGE 142 II 307', 'ATF 143 I 284', '4A_123/2024', '2C_215/2015', 'A-1234/2020', 'BB.2020.123')),
+    # The Netherlands: an article of a Dutch act by its abbreviation ("artikel 6:162 BW", "art. 8:69 Awb", "artikel 3:40
+    # lid 2 BW", "art. 359a Sv"): data/nl-aliases.json, from the official short titles the act READMEs carry. The ECHR
+    # ("artikel 6 EVRM") and EU acts are not in the record and are left alone.
+    CitationForm('nl', NL_ARTICLE, lambda m: nl_article_paths(m),
+                 ('artikel 6:162 BW', 'art. 8:69 Awb', 'artikel 310 Sr', 'art. 359a Sv', 'artikel 3:40 lid 2 BW',
+                  'art. 7:658 BW')),
+    # Dutch decisions by ECLI ("ECLI:NL:HR:2019:1234"), to the decision's file in the case law this server serves.
+    CitationForm('nl', ECLI_NL, lambda m: decision_paths(m.group(0)), ('ECLI:NL:HR:2019:1234', 'ECLI:NL:RBAMS:2023:5678')),
+    # Every other country's ECLI, read the same way: its decisions resolve once a case-law corpus of that country is
+    # served (decision_paths finds them by file name), and nothing is claimed for a country the tree has no case law of.
+    *[CitationForm(cc, re.compile(rf'\bECLI:{cc.upper()}:[A-Z0-9]{{1,7}}:\d{{4}}:[A-Z0-9.]{{1,25}}(?![A-Za-z0-9])', re.I),
+                   lambda m: decision_paths(m.group(0)), (f'ECLI:{cc.upper()}:XX:2020:1',))
+      for cc in ('at', 'be', 'ch', 'de', 'es', 'fi', 'fr', 'it', 'pl', 'pt', 'si', 'cz', 'ee', 'ie', 'lv', 'gr', 'hr', 'mt', 'eu')],
     # Malta: "article 11 of Cap. 586", "reg. 15 of S.L. 586.08" (a provision of a Chapter or of subsidiary legislation).
     CitationForm('mt', re.compile(r'\b(?:art(?:icle|\.)?|s\.|section|reg(?:ulation|\.)?)\s*(\d+[A-Z]?)(?:\(\w+\))*\s*(?:of\s+)?(?:the\s+)?'
                                   r'(?:Cap\.?\s*(\d+[A-Z]?)|S\.\s?L\.\s*(\d+)\.0*(\d+))\b', re.I),
@@ -4201,7 +4303,7 @@ def t_law_details(args: dict) -> tuple[str, dict]:
             commit, corpus = world.corpus_commit, world.corpus
     # Case law is read for a decision (a docket or BGE reference, found by its file name), a commit, or a corpus
     # that names case law; a law's name is not looked for among a million decisions' authors.
-    decided = ch_decision_paths(law_name) if law_name and CH_DECISION.search(law_name) else []
+    decided = decision_paths(law_name) if law_name and DECISION_REF.search(law_name) else []
     corpora = [c['path'] for c in law.manifest()['corpora'] if (not corpus or c['path'].startswith(corpus))
                and (not law.is_caselaw(c) or commit or (corpus and law.names_caselaw(corpus))
                     or any(p.startswith(c['path'] + '/') for p in decided))]

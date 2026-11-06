@@ -13,8 +13,9 @@ jurisdictions chosen with `only`, if any.
   python3 tools/countries.py only --all           serve every corpus checked out
 
 A name is a country folder ("germany", "united kingdom"), an ISO code ("de"), a level ("united-states/federal") or a
-corpus path. Case law (court decisions) is added only by a name that asks for it: "switzerland/caselaw" (every Swiss
-court), "switzerland/bund/caselaw" (the federal courts), "switzerland/zurich/caselaw", or "caselaw" (all of it). On Windows, run it with `py` or `python`. A running MCP server sees a change within a few seconds.
+corpus path. Case law (court decisions) is added only by a name that asks for it: "<country>/caselaw" (every court of a country:
+"switzerland/caselaw", "netherlands/caselaw"), a corpus path ("switzerland/bund/caselaw", "netherlands/hoge-raad/caselaw"),
+or "caselaw" (all of it). On Windows, run it with `py` or `python`. A running MCP server sees a change within a few seconds.
 """
 from __future__ import annotations
 

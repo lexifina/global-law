@@ -76,22 +76,29 @@ Dates are YYYY-MM-DD. The first read of a corpus indexes its history once and ke
 
 ## Case law
 
-Swiss court decisions sit beside the law: `switzerland/bund/caselaw` (the federal courts and bodies) and
-`switzerland/<canton>/caselaw` (each canton's courts), one file and one commit per published decision, dated the day it
-was decided. Each commit is a court ruling, not a law (`Kind: court`), so the tools credit it as one and leave it out of
-everything about law (`laws`, searches, change lists) unless you name case law. Each case-law corpus also files, under
-the law's own paths, the decisions that cite each article of federal law, with the version of the law in force on the
-day decided:
+Court decisions sit beside the law, one file and one commit per published decision, dated the day it was decided:
+- **Switzerland:** `switzerland/bund/caselaw` (the federal courts and bodies) and `switzerland/<canton>/caselaw` (each
+  canton's courts).
+- **The Netherlands:** `netherlands/<court>/caselaw` (the Hoge Raad, the Raad van State, the Centrale Raad van Beroep,
+  the College van Beroep voor het bedrijfsleven, the courts of appeal and the district courts), each decision filed by
+  its ECLI.
+
+Each commit is a court ruling, not a law (`Kind: court`), so the tools credit it as one and leave it out of everything
+about law (`laws`, searches, change lists) unless you name case law. Each case-law corpus also files, under the law's own
+paths, the decisions that cite each article, with the version of the law in force on the day decided, and, where the
+court names it (Dutch decisions often do), the version it applied:
 
 ```
-python tools/countries.py add switzerland/caselaw                   the case law (not added with switzerland)
+python tools/countries.py add switzerland/caselaw                   a country's case law (not added with switzerland)
+python tools/countries.py add netherlands/caselaw
 python tools/law.py show 2024-01-01 switzerland/bund/caselaw/<decision>.md
-python tools/law.py laws 2024-01-01 2024-01-31 switzerland/bund/caselaw   decisions given in a window
+python tools/law.py laws 2024-01-01 2024-01-31 netherlands/caselaw   decisions given in a window
 ```
 
 From an assistant, `check_precedent` lists the decisions that applied a provision and says whether the text each one
-applied is still the text in force; `what_else_changes` counts them; `find_provision` and `law_details` take a docket
-(`4A_123/2024`) or a BGE reference (`BGE 142 II 307`).
+applied is still the text in force; `what_else_changes` counts them; `find_provision` and `law_details` take an ECLI
+(`ECLI:NL:HR:2019:1234`), a Swiss docket (`4A_123/2024`) or a BGE reference (`BGE 142 II 307`); `resolve_citations`
+reads Dutch citations by abbreviation (`artikel 6:162 BW`, `art. 8:69 Awb`) as it reads Swiss ones (`Art. 336 OR`).
 
 ## How it is made
 

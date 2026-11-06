@@ -1044,7 +1044,7 @@ def matches(corpus: dict, name: str) -> bool:
 GENERIC_LEVELS = {'national', 'federal', 'bund', 'uk', 'central', 'state', 'acts', 'statutes'}
 
 
-# Case law: corpora of court decisions, not of law (lexifina/switzerland-caselaw and the cantons' -caselaw repos).
+# Case law: corpora of court decisions, not of law (lexifina/*-caselaw: the Swiss courts, the Dutch courts, ...).
 # Each decision is one file and one commit (Kind: court), dated the day it was given. They are read like any corpus,
 # but lists and searches of law leave them out unless they are named: "switzerland" takes in Swiss law, and
 # "switzerland/caselaw", "switzerland/bund/caselaw", "caselaw" or the canton's case law takes in the decisions.
@@ -1064,8 +1064,8 @@ def names_caselaw(name: str) -> bool:
 
 def takes_in(corpus: dict, name: str) -> bool:
     """matches(), with case law taken in only when the name asks for it: `countries.py add switzerland` and `laws ...
-    switzerland` mean Swiss law, not a million decisions. "switzerland/caselaw" takes in every Swiss case-law corpus
-    (federal and cantonal), "caselaw" every one in the tree."""
+    switzerland` mean Swiss law, not a million decisions. "<country>/caselaw" ("switzerland/caselaw",
+    "netherlands/caselaw") takes in every case-law corpus of that country, "caselaw" every one in the tree."""
     if not is_caselaw(corpus):
         return matches(corpus, name)
     if not names_caselaw(name):
