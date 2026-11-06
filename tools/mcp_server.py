@@ -15,6 +15,7 @@ import difflib
 import hashlib
 import hmac
 import json
+import mmap
 import os
 import queue
 import re
@@ -715,7 +716,22 @@ def path_arg(value) -> str:
 def names_of(corpus: str, sha: str) -> tuple[str, ...]:
     """Every law file in a corpus at one commit (names only: cheap even for a large corpus)."""
     out = law.git('ls-tree', '-r', '--name-only', sha, cwd=ROOT / corpus).splitlines()
+    _NAMES_SEEN.add((corpus, sha))
     return tuple(n for n in out if n.endswith('.md') and not NOT_LAW.search(n))
+
+
+@lru_cache(maxsize=4096)
+def has_file(corpus: str, sha: str, rel: str) -> bool:
+    """Whether one law file is in a corpus at one commit: one ls-tree of that path. names_of lists every file and filters
+    it, 1.8 s for the Cour de cassation's 530,000 decisions, which every decision lookup paid (FR speed gate, 2026-11-06);
+    a corpus already listed is answered from that list."""
+    if names_of.cache_info().currsize and (corpus, sha) in _NAMES_SEEN:
+        return rel in names_of(corpus, sha)
+    out = law.git('-c', 'core.quotePath=false', 'ls-tree', '--name-only', sha, '--', rel, cwd=ROOT / corpus, check=False)
+    return out.strip() == rel and rel.endswith('.md') and not NOT_LAW.search(rel)
+
+
+_NAMES_SEEN: set = set()
 
 
 def provisions(corpus: str, sha: str, inner: str = '') -> list[str]:
@@ -1228,7 +1244,7 @@ def cited_provisions(query: str, scope: str) -> list[tuple[str, str, str]]:
             except SystemExit:
                 continue
             sha = corpus_head(corpus)
-            if sha and rel in names_of(corpus, sha):
+            if sha and has_file(corpus, sha, rel):
                 out.append((path, read_headings(corpus, sha, (rel,)).get(rel, ''), cite))
         if out:
             return out
@@ -1251,7 +1267,10 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         return '\n'.join(f"{r['path']}  {r['heading']}" for r in rows), {'results': rows}
     # A query that is only a decision's reference (an Aktenzeichen, a Swiss docket or BGE reference, an ECLI) and is in no
     # case law served is answered at once: a heading search for "1 BvR 1547/19" read every corpus for over 120 seconds.
-    ref = DE_DOCKET.fullmatch(query.strip()) or DECISION_REF.fullmatch(query.strip())
+    # French references too ("pourvoi n° 20-23.673", "JURITEXT000047023646"): without French case law served they took
+    # 29 and 39 s of heading search (FR speed gate, 2026-11-06).
+    ref = (DE_DOCKET.fullmatch(query.strip()) or DECISION_REF.fullmatch(query.strip())
+           or PL_DOCKET.fullmatch(query.strip()) or FR_DECISION.fullmatch(query.strip()))
     if ref:
         served = [c for c, _ in caselaw_pins()]
         return (f'No decision {query.strip()!r} in the case law this clone serves'
@@ -4008,7 +4027,7 @@ def _decisions(corpus: str, sha: str) -> dict[str, tuple[str, ...]]:
     # decision-index.tsv at its root: "<reference>\t<path>" per line (a pourvoi, a decision number, an ECLI).
     for line in law.git('show', f'{sha}:decision-index.tsv', cwd=ROOT / corpus, check=False).splitlines():
         ref, _, path = line.partition('\t')
-        if ref and path.strip() and not ref.startswith('#'):
+        if ref and path.strip() and not ref.startswith('#') and ref.strip().lower() != 'reference':  # the header line
             p = f'{corpus}/{path.strip()}'
             k = _decision_key(ref)
             if p not in out.get(k, ()):
@@ -4016,12 +4035,64 @@ def _decisions(corpus: str, sha: str) -> dict[str, tuple[str, ...]]:
     return {k: tuple(v) for k, v in out.items()}
 
 
+_DECISION_FILE_LOCK = threading.Lock()
+
+
+def _decision_index_file(corpus: str, sha: str) -> Path:
+    """The references of one case-law corpus at its pin as a sorted file, '<key>\\t<path>' per line, written once per pin
+    in the tree's cache (global-law-cache/decisions-<pin>.tsv). Building the map (_decisions) for the Cour de cassation
+    (530,000 decisions, 2 million references) takes about 10 s; every later process then looks a key up by binary
+    search without reading the rest (measured 2026-11-06: 12 s a lookup in a fresh process, under 0.1 s after)."""
+    f = law._store() / f'decisions-{sha}.tsv'
+    if not f.exists():
+        with _DECISION_FILE_LOCK:
+            if not f.exists():
+                lines = sorted(f'{k}\t{p}\n' for k, paths in _decisions(corpus, sha).items() for p in paths)
+                f.parent.mkdir(parents=True, exist_ok=True)
+                tmp = f.with_name(f'{f.name}.{os.getpid()}.part')
+                tmp.write_bytes(''.join(lines).encode('utf-8'))  # bytes: text mode on Windows would write CRLF
+                os.replace(tmp, f)
+    return f
+
+
+def _decision_lookup(corpus: str, sha: str, key: str) -> tuple[str, ...]:
+    """The decision files one key names in one corpus, by binary search of its sorted index file."""
+    if not key:
+        return ()
+    f = _decision_index_file(corpus, sha)
+    if f.stat().st_size == 0:
+        return ()
+    want = key.encode('utf-8') + b'\t'
+    with open(f, 'rb') as fh, mmap.mmap(fh.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+        lo, hi = 0, len(mm)
+        while lo < hi:  # the first line whose text is >= want
+            mid = (lo + hi) // 2
+            start = mm.rfind(b'\n', 0, mid) + 1
+            end = mm.find(b'\n', start)
+            end = len(mm) if end < 0 else end
+            if mm[start:end] + b'\n' < want:
+                lo = end + 1
+            else:
+                hi = start
+        out, pos = [], lo
+        while pos < len(mm):
+            end = mm.find(b'\n', pos)
+            end = len(mm) if end < 0 else end
+            line = mm[pos:end]
+            if not line.startswith(want):
+                break
+            out.append(line[len(want):].decode('utf-8'))
+            pos = end + 1
+    return tuple(out)
+
+
 def decision_paths(text: str) -> list[str]:
     """The decision files a reference names, in every case-law corpus served: a Swiss docket or BGE reference, or an
-    ECLI of any country (a file decisions/<court>/<year>/ECLI_NL_HR_2019_1234.md has the key of "ECLI:NL:HR:2019:1234")."""
+    ECLI of any country (a file decisions/<court>/<year>/ECLI_NL_HR_2019_1234.md has the key of "ECLI:NL:HR:2019:1234").
+    Each corpus is read from its sorted index file (_decision_index_file), built the first time a pin is asked."""
     key, pins = _decision_key(text), caselaw_pins()
-    with ThreadPoolExecutor(8) as pool:  # one ls-tree per corpus, the first time; cached per pin after
-        found = list(pool.map(lambda cp: _decisions(*cp).get(key, ()), pins))
+    with ThreadPoolExecutor(8) as pool:
+        found = list(pool.map(lambda cp: _decision_lookup(*cp, key), pins))
     return [p for paths in found for p in paths]
 
 
@@ -4162,8 +4233,12 @@ def fr_code_folder(words: str) -> str | None:
 FR_NUM = r'(?:[LRDA]\.?\s*\*?\s*)?\d{1,5}(?:-\d{1,5})*(?:\s+(?:bis|ter|quater|quinquies|sexies|septies|octies|nonies|decies))?'
 FR_NUMS = rf'(?P<nums>{FR_NUM}(?:\s*(?:,|et|à)\s*{FR_NUM})*)'
 FR_DETAIL = r'(?:,?\s*(?:alinéa|al\.)\s*\d+(?:er)?)?(?:,?\s*\d+°)?(?:,?\s*[IVX]+)?'
+# The code's name ends where the next citation starts ("... du code civil et l'article L. 1234-5 du code du travail"): it
+# used to run on to the next dot and swallow the second citation (measured 2026-11-06, the FR speed gate). Names with
+# " et " in them ("code des postes et des communications électroniques") still read whole.
+_FR_NEXT_CITE = r"(?!\s*(?:,|;|et|ou)\s+(?:de\s+|à\s+)?(?:l['’]\s*|les\s+|aux?\s+)?art(?:icles?\b|s?\.))"
 FR_CODE_ARTICLE = re.compile(rf"(?<![\w.])[Aa]rt(?:icles?|s?\.)\s*{FR_NUMS}{FR_DETAIL}\s+(?:du|de\s+la|de\s+l['’]|des)\s+"
-                             r"(?P<code>[Cc]ode\b[^\n.;:()\[\]]{0,90}|[Ll]ivre\s+des\s+procédures\s+fiscales)")
+                             rf"(?P<code>[Cc]ode\b(?:{_FR_NEXT_CITE}[^\n.;:()\[\]]){{0,90}}|[Ll]ivre\s+des\s+procédures\s+fiscales)")
 
 
 def _fr_abbr_rx():

@@ -276,7 +276,12 @@ class FrenchCaseLaw(unittest.TestCase):
                            ('article L. 4 du code du travail maritime', ['codes/code-du-travail-maritime/L4.md']),
                            ('art. L. 1235-3 C. trav.', ['codes/code-du-travail/L1235-3.md']),
                            ('art. L. 411-1 CJA', ['codes/code-de-justice-administrative/L411-1.md']),
-                           ('article 66 de la Constitution', ['constitution/constitution-1958/66.md'])):
+                           ('article 66 de la Constitution', ['constitution/constitution-1958/66.md']),
+                           # two citations in one sentence: the code's name stops where the next citation starts
+                           ("Vu l'article 1240 du code civil et l'article L. 1234-5 du code du travail.",
+                            ['codes/code-civil/1240.md', 'codes/code-du-travail/L1234-5.md']),
+                           ('article 9 du code civil, article 700 du code de procédure civile',
+                            ['codes/code-civil/9.md', 'codes/code-de-procedure-civile/700.md'])):
             got = [h['path'] for h in m.citations_in(text) if h['country'] == 'fr']
             self.assertEqual(got, [f'{LAW}/{w}' for w in want], text)
         for other in ('article 6 de la Convention européenne', 'article 5 de la Constitution fédérale', 'art. 106 CPC',
@@ -287,6 +292,28 @@ class FrenchCaseLaw(unittest.TestCase):
         for ref in ('pourvoi n° 18-12.345', 'n° 2019-791 QPC', "CE, 10 juin 2020, n° 412345", 'JURITEXT000041234567'):
             self.assertTrue(m.FR_DECISION.search(ref), ref)
         self.assertIsNone(m.FR_DECISION.search('n° 412345'))  # a bare number without its court is not read
+
+    # --- speed (FR speed gate, 2026-11-06) -------------------------------------------------------------------------
+
+    def test_decision_lookups_use_a_sorted_index_file_per_pin(self):
+        """A decision reference is looked up in a sorted file written once per corpus pin in the tree's cache, so a fresh
+        process does not rebuild the map (12 s a lookup on the Cour de cassation's 2 million references); a reference
+        the record lacks is answered at once, not by a heading search (29-39 s without French case law served)."""
+        first, = self.calls(('find_provision', {'query': 'pourvoi n° 21-20.200'}))
+        cache = Path(subprocess.run(['git', 'rev-parse', '--path-format=absolute', '--git-path', 'global-law-cache'],
+                                    cwd=self.t.root, capture_output=True, encoding='utf-8').stdout.strip())
+        files = sorted(cache.glob('decisions-*.tsv'))
+        self.assertTrue(files, 'no decisions-<pin>.tsv in the cache')
+        lines = files[0].read_text(encoding='utf-8').splitlines()
+        self.assertEqual(lines, sorted(lines))
+        self.assertFalse([l for l in lines if l.startswith(('REFERENCE\t', '\t'))], 'the header was read as a reference')
+        again, by_ecli, missing = self.calls(('find_provision', {'query': 'pourvoi n° 21-20.200'}),
+                                             ('find_provision', {'query': 'ECLI:FR:CCASS:2016:C200100'}),
+                                             ('find_provision', {'query': 'pourvoi n° 99-99.999'}))
+        self.assertIn(f'{CASES}/{D3}', first['text'])
+        self.assertEqual(first['text'], again['text'])
+        self.assertIn(f'{CASES}/{D2}', by_ecli['text'])
+        self.assertIn('No decision', missing['text'])
 
 
 if __name__ == '__main__':
