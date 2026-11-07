@@ -4956,6 +4956,9 @@ FI_GENITIVE = re.compile(r'(?<![\wÅÄÖåäö])(?P<stem>[A-Za-zÅÄÖåäö-]{3
 # not take ("586/2024" is an act of the Statute Book, though a diary number can read the same).
 FI_REFERENCE = re.compile(r'(?=.*\d)(?=.*(?:[/:]|\b(?:HO|HAO|LO|VakO)\s+\d{1,2}\.\d{1,2}\.\d{4}\b))[\w .:/()-]{3,60}')
 FI_ACT_NUMBER = re.compile(r'\d{1,5}/(?:18|19|20)\d{2}')
+# The court a Finnish decision's commit author starts with (finland/*/caselaw build.py NAMES).
+FI_AUTHOR_COURT = re.compile(r'^(?:Korkein oikeus|Korkein hallinto-oikeus|Hovioikeudet|Hallinto-oikeudet|Markkinaoikeus|'
+                             r'Työtuomioistuin|Vakuutusoikeus)\s+(?=\S)', re.I)
 # Finnish decisions: "KKO:2023:8", "KHO 2020:12", Swedish "HD:2023:8" / "HFD 2020:12", and the specialised courts
 # ("MAO:123/20", "TT:2019:5", "VakO 1234:2018" are named in the decision index as published).
 FI_DECISION = re.compile(r'(?<![\w:])(?P<court>KKO|KHO|HD|HFD|TT)[:\s](?P<year>(?:19|20)\d{2})[:\s](?P<num>\d{1,4})(?![\d:])')
@@ -5004,7 +5007,8 @@ def fi_genitive_folder(stem: str, end: str) -> str | None:
 def fi_reference_paths(text: str) -> list[str]:
     """The Finnish decisions any reference names that a Finnish decision index lists (FI_REFERENCE), in the Finnish case
     law served only; [] for a bare act number or a reference no index lists."""
-    ref = text.strip()
+    # A decision's commit author is its court and identifier ("Korkein oikeus KKO:1931-II-577"): the identifier is looked up.
+    ref = FI_AUTHOR_COURT.sub('', text.strip())
     if not FI_REFERENCE.fullmatch(ref) or FI_ACT_NUMBER.fullmatch(ref):
         return []
     key = _decision_key(ref)

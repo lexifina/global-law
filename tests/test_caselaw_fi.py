@@ -1,6 +1,6 @@
 """Finnish case law in the tree: a corpus of decisions of the Korkein oikeus (lexifina/finland-korkein-oikeus-caselaw
 and the other Finnish courts' -caselaw repos), read with the same tools as law, on a small tree built here: Finnish law
-(työsopimuslaki 7 luku 3 § in two versions, perustuslaki 21 §) and a case-law corpus (three decisions, a correction, a
+(työsopimuslaki 7 luku 3 § in two versions, perustuslaki 21 §) and a case-law corpus (four decisions, one dated by year only and appended late, a correction, a
 decision index, the judgment overlay with one row's text_date, and the CC BY 4.0 credit Finlex's licence asks for).
 
   python -m unittest tests.test_caselaw_fi -v
@@ -28,6 +28,7 @@ PL21 = f'{LAW}/perustuslaki/pykala-021.md'
 D1 = 'decisions/ennakkopaatokset/2010/KKO-2010-5.md'
 D2 = 'decisions/ennakkopaatokset/2016/KKO-2016-40.md'
 D3 = 'decisions/ennakkopaatokset/2023/KKO-2023-8.md'
+D4 = 'decisions/ennakkopaatokset/1931/KKO-1931-II-577.md'
 CREDIT = 'Source: Finlex (www.finlex.fi), Ministry of Justice of Finland; CC BY 4.0; retrieved 2026-11-07'
 CALL = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server\n'
         'out = []\n'
@@ -82,7 +83,12 @@ class FinnishCaseLaw(unittest.TestCase):
         c.commit('Korkein oikeus KKO:2023:8', {D3: decision('KKO:2023:8', 'Työnantaja oli vastuussa.')},
                  Kind='court', In_force='2023-02-02', Decided='2023-02-02', Court='Korkein oikeus', Docket='S2020/111',
                  ECLI='ECLI:FI:KKO:2023:8', Cites=f'{ART} (TSL 7 luku 3 §)')
-        url = 'https://www.finlex.fi/fi/oikeuskaytanto/korkein-oikeus/ennakkopaatokset/'
+        # A precedent Finlex gives the year of only, appended after the later ones (the 2026-11-07 backfill of 6,864):
+        # In-force 31 December of its year, Decided: the year, and an In-force-basis: saying so.
+        c.commit('Korkein oikeus KKO:1931-II-577', {D4: decision('KKO:1931-II-577', 'Puretun oy:n hallituksen jäsen velvoitettiin korvaamaan.')},
+                 Kind='court', In_force='1931-12-31', Decided='1931', Court='Korkein oikeus', Docket='KKO:1931-II-577',
+                 In_force_basis='year only: Finlex gives the year 1931 but not the day; dated 31 December 1931')
+        url ='https://www.finlex.fi/fi/oikeuskaytanto/korkein-oikeus/ennakkopaatokset/'
         rows = [{'decided': '2010-05-05', 'name': 'Korkein oikeus KKO:2010:5', 'court': 'Korkein oikeus', 'citation': 'ECLI:FI:KKO:2010:5',
                  'url': url + '2010/5', 'how': 'TSL 7 luku 3 §', 'mentions': 1, 'decision': D1},
                 {'decided': '2016-06-01', 'name': 'Korkein oikeus KKO:2016:40', 'court': 'Korkein oikeus', 'citation': 'ECLI:FI:KKO:2016:40',
@@ -93,7 +99,8 @@ class FinnishCaseLaw(unittest.TestCase):
         index = 'reference\tpath\n' + ''.join(f'{r}\t{p}\n' for r, p in (('KKO:2010:5', D1), ('ECLI:FI:KKO:2010:5', D1), ('S2009/12', D1),
                                                                               ('KKO:2016:40', D2), ('KKO:2023:8', D3), ('S2020/111', D3),
                                                                               ('MAO:94/2026', D2), ('586/2024', D2),
-                                                                              ('Helsingin HO 19.01.1977 418', D1)))
+                                                                              ('Helsingin HO 19.01.1977 418', D1),
+                                                                              ('KKO:1931-II-577', D4)))
         c.commit('Lexifina', {f'judgments/{LAW}/tyosopimuslaki/luku-07-pykala-003.jsonl': ''.join(json.dumps(r) + '\n' for r in rows),
                               'decision-index.tsv': index,
                               'corpus.json': json.dumps({'corpus': 'fi/korkein-oikeus/caselaw', 'kind': 'judgments', 'credit': CREDIT,
@@ -235,6 +242,28 @@ class FinnishCaseLaw(unittest.TestCase):
         self.assertNotIn(f'{CASES}/{D2}', act_no['text'])  # an act number is the law's, though a diary number reads the same
         self.assertNotIn(CASES, unknown['text'])
         self.assertIn(PL21, json.dumps(cites['data'], ensure_ascii=False))
+
+    def test_a_year_only_precedent_appended_late(self):
+        found, by_author, read, before, details, by_name, world = self.calls(
+            ('find_provision', {'query': 'KKO:1931-II-577'}),
+            ('find_provision', {'query': 'Korkein oikeus KKO:1931-II-577'}),
+            ('read_law', {'path': f'{CASES}/{D4}', 'date': '1932-01-01'}),
+            ('read_law', {'path': f'{CASES}/{D4}', 'date': '1931-06-01'}),
+            ('law_details', {'law': 'KKO:1931-II-577'}),
+            ('law_details', {'law': 'Korkein oikeus KKO:1931-II-577'}),  # as its commit author names it
+            ('world_on_date', {'date': '2024-01-01'}))
+        for a in (found, by_author, read, before, details, by_name, world):
+            self.assertFalse(a['error'], a['text'])
+        self.assertIn(f'{CASES}/{D4}', found['text'])
+        self.assertIn(f'{CASES}/{D4}', by_author['text'])
+        self.assertIn('Puretun oy:n', read['text'])
+        self.assertIn('1931-12-31', before['text'])  # not given yet on 1931-06-01: it first appears on 31 December
+        self.assertNotIn('Puretun oy:n', before['text'])
+        for d in (details, by_name):
+            self.assertIn('In-force-basis: year only', d['text'])
+            self.assertIn('Decided: 1931', d['text'])
+        self.assertIn('KKO:2023:8', world['text'])  # appended after it, the 1931 precedent is not the latest decision
+        self.assertNotIn('KKO:1931-II-577', world['text'])
 
     def test_finnish_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))
