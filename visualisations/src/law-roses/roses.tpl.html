@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roses of the Law</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f5f6f8; --surface-1: #fcfcfb; --surface-2: #f3f4f6; --ink: #0b0b0b; --ink-2: #52514e; --muted: #77756f; --rule: #e3e2de; --grid: #ecebe7;
+  --series-1: #2a78d6; --series-2: #eb6834;
+  --display: "Source Serif 4", Georgia, serif; --body: "IBM Plex Sans", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --bg: #111110; --surface-1: #1a1a19; --surface-2: #222220; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #8f8d85; --rule: #34332f; --grid: #2a2927;
+  --series-1: #3987e5; --series-2: #d95926; } }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #111110; --surface-1: #1a1a19; --surface-2: #222220; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #8f8d85; --rule: #34332f; --grid: #2a2927;
+  --series-1: #3987e5; --series-2: #d95926; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 var(--body); }
+main { max-width: 1080px; margin: 0 auto; padding: 32px 16px 64px; }
+header h1 { font: 600 34px/1.15 var(--display); margin: 0 0 8px; }
+header p { color: var(--ink-2); max-width: 72ch; margin: 0 0 6px; }
+nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 4px 18px; margin: 16px 0 6px; font-size: 13px; }
+nav a { color: var(--ink-2); text-decoration: none; padding: 2px 0; border-bottom: 1px solid var(--rule); }
+nav a:hover { color: var(--ink); }
+.theme { float: right; font: 12px var(--body); background: none; border: 1px solid var(--rule); color: var(--ink-2); border-radius: 8px; padding: 4px 10px; cursor: pointer; }
+figure { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 12px; margin: 28px 0 0; padding: 22px 22px 16px; }
+.eyebrow { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+figure h2 { font: 600 22px/1.25 var(--display); margin: 4px 0 6px; }
+.lede { color: var(--ink-2); margin: 0 0 12px; max-width: 78ch; }
+.lede b { color: var(--ink); font-weight: 600; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0 0 8px; font-size: 13px; color: var(--ink-2); }
+select { font: 13px var(--body); color: var(--ink); background: var(--surface-1); border: 1px solid var(--rule); border-radius: 8px; padding: 4px 8px; }
+svg { display: block; width: 100%; height: auto; font-family: var(--body); }
+svg text { fill: var(--ink-2); }
+svg .strong { fill: var(--ink); font-weight: 600; }
+.note { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; font-size: 12px; color: var(--ink-2); margin: 2px 0 8px; }
+.legend i { display: inline-block; vertical-align: -2px; margin-right: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; }
+.sl { width: 18px; height: 0; border-top: 2px solid; vertical-align: 3px !important; }
+#tip { position: fixed; pointer-events: none; background: var(--surface-1); color: var(--ink); border: 1px solid var(--rule); border-radius: 8px; padding: 7px 10px; font-size: 12.5px; box-shadow: 0 4px 16px rgba(0,0,0,.12); opacity: 0; transition: opacity .1s; max-width: 280px; z-index: 9; }
+#tip b { font-weight: 600; }
+#tip .m { color: var(--ink-2); }
+details { margin-top: 8px; font-size: 12.5px; color: var(--ink-2); }
+summary { cursor: pointer; }
+details table { border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
+details td, details th { padding: 2px 8px; border-bottom: 1px solid var(--grid); text-align: right; white-space: nowrap; }
+details td:first-child, details th:first-child { text-align: left; }
+.wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <button class="theme" id="theme">Light / dark</button>
+  <h1>Roses of the law</h1>
+  <p>Twenty questions about when law is made, when it starts, how it changes and how long it lasts, each drawn as one rose per jurisdiction. The first rose in every grid, in a box, is the typical jurisdiction: the mean of the others' shares. Hover any petal for its numbers; each figure has a table underneath.</p>
+  <p class="note" style="margin:0">Local drafts, not published. Data: every law repository in global-law, read from git metadata (questions 1–10: <code>visualisations/src/analysis11.json</code>, round 11; questions 11–20: a fresh read of every local law repository's commits and the provision files each one adds, changes or deletes, 7 November 2026; Romania left out). Each act counts once, so France's 150,000 acts and Japan's 30 weigh the same in the typical rose. A jurisdiction is shown when it has at least 30 dated acts for that question.</p>
+  <nav id="nav"></nav>
+</header>
+<div id="figs"></div>
+</main>
+<div id="tip"></div>
+<script>
+const DATA = __DATA__;
+const DATA2 = __DATA2__;
+const WD = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const WDF = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const FULL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DIM = [31,29,31,30,31,30,31,31,30,31,30,31];
+const DEC = d3.range(1890, 2030, 10), DECL = DEC.map(d => d === 1890 ? "before 1900" : d + "s");
+const LAGL = ["same day", "next day", "2–3 days", "4–7 days", "1–2 weeks", "2–4 weeks", "1–2 months", "2–4 months", "4–8 months", "8–17 months", "1½–3 years", "3 years or more"];
+const ord = n => n + (n % 10 === 1 && n !== 11 ? "st" : n % 10 === 2 && n !== 12 ? "nd" : n % 10 === 3 && n !== 13 ? "rd" : "th");
+const DAYS = d3.range(366).map(i => { const t = new Date(Date.UTC(2024, 0, 1 + i)); return [t.getUTCMonth(), t.getUTCDate()]; });
+const DAYL = DAYS.map(([m, d]) => `${d} ${FULL[m]}`);
+const pct = v => v == null ? "–" : (100 * v).toFixed(v < .1 ? 1 : 0) + "%";
+const fmt = d3.format(",");
+const days = v => v === 1 ? "1 day" : v < 60 ? fmt(Math.round(v)) + " days" : v < 730 ? (v / 30.44).toFixed(v < 300 ? 1 : 0) + " months" : (v / 365.25).toFixed(1) + " years";
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const sum = a => d3.sum(a);
+const norm = a => { const t = sum(a); return a.map(v => t ? v / t : 0); };
+const tip = d3.select("#tip");
+function showTip(ev, html) { tip.html(html).style("opacity", 1); const w = tip.node().offsetWidth, h = tip.node().offsetHeight;
+  let x = ev.clientX + 14, y = ev.clientY + 14; if (x + w > innerWidth - 8) x = ev.clientX - w - 14; if (y + h > innerHeight - 8) y = ev.clientY - h - 14;
+  tip.style("left", x + "px").style("top", y + "px"); }
+const hideTip = () => tip.style("opacity", 0);
+const meanOf = (rows, f) => { const n = f(rows[0]).length; return d3.range(n).map(k => d3.mean(rows, d => f(d)[k])); };
+const topK = (a, k = 1) => d3.sort(d3.range(a.length), i => -a[i]).slice(0, k);
+const name = d => `<b>${d.name}</b>`;
+
+// day of the month, corrected for months without a 29th, 30th or 31st
+const MONTHS_WITH = d3.range(1, 32).map(d => d <= 28 ? 12 : d === 29 ? 11.25 : d === 30 ? 11 : 7);
+// quarter clock: week of the quarter (1-13) for each day of the year
+const QWEEK = DAYS.map(([m, d]) => { const q0 = m - m % 3; let off = d - 1; for (let k = q0; k < m; k++) off += DIM[k]; return Math.min(12, Math.floor(off / 7)); });
+
+/* ---------- one generic rose grid ---------- */
+// cfg: id, n (petals), rows: [{name, fill:[], line:[]?, stack:[]?, raw}], scale: "sqrt"|"own"|"log", even, ticks:[[k,label]], tip(d,k), table
+function roses(cfg) {
+  const order = document.getElementById("o-" + cfg.id)?.value, scope = document.getElementById("s-" + cfg.id)?.value;
+  const pool = scope ? cfg.rows.filter(d => scope === "sub" ? d.sub : !d.sub) : cfg.rows;
+  const typical = cfg.typ ? cfg.typ(pool) : cfg.typical, CAP = 47;
+  const sorted = order ? d3.sort(pool, cfg.orders.find(o => o.key === order).by) : pool;
+  const list = [typical, ...sorted.slice(0, CAP)];
+  d3.select("#e-" + cfg.id).text(`${cfg.num} · ${cfg.eyebrow} · ${pool.length > CAP ? `first ${CAP} of ${pool.length}` : pool.length} jurisdictions`);
+  const cols = 6, cell = 165, gap = 26, W = cols * cell, rowsN = Math.ceil(list.length / cols), H = rowsN * (cell + gap) + 6;
+  const svg = d3.select("#f-" + cfg.id).attr("viewBox", `0 0 ${W} ${H}`); svg.selectAll("*").remove();
+  const R = cell / 2 - 22, stacked = !!typical.stack;
+  const arcIn = d3.arc().innerRadius(d => d.innerRadius).padAngle(cfg.n > 20 ? .015 : .03).cornerRadius(2);
+  const vals = list.flatMap(d => [...(d.fill || []), ...(d.line || []), ...(d.stack ? d.fill.map((v, k) => v + d.stack[k]) : [])]).filter(v => v != null);
+  const vmax = d3.max(vals) || 1;
+  const rShared = cfg.scale === "log" ? d3.scaleLog([1, vmax + 1], [5, R]).clamp(true) : d3.scaleSqrt([0, vmax], [0, R]);
+  const arc = d3.arc().innerRadius(0).padAngle(cfg.n > 40 ? 0 : cfg.n > 20 ? .015 : .03).cornerRadius(cfg.n > 40 ? 0 : 2);
+  const ang = k => [k / cfg.n * 2 * Math.PI, (k + 1) / cfg.n * 2 * Math.PI];
+  const c1 = css("--series-1"), c2 = css("--series-2"), ink2 = css("--ink-2"), rule = css("--rule"), s2 = css("--surface-2");
+  list.forEach((d, i) => {
+    const cx = (i % cols) * cell + cell / 2, cy = Math.floor(i / cols) * (cell + gap) + cell / 2 + gap - 4;
+    const g = svg.append("g").attr("transform", `translate(${cx},${cy})`);
+    const r = cfg.scale === "own" ? d3.scaleSqrt([0, d3.max(d.fill) || 1], [0, R]) : cfg.scale === "log" ? (v => rShared(v + 1)) : rShared;
+    if (i === 0) g.append("rect").attr("x", -cell / 2 + 3).attr("y", -cell / 2 - gap + 8).attr("width", cell - 6).attr("height", cell + gap - 2).attr("rx", 10)
+      .attr("fill", s2).attr("stroke", rule);
+    g.append("circle").attr("r", R).attr("fill", "none").attr("stroke", rule).attr("stroke-width", .8);
+    (cfg.rings || []).forEach(([v]) => g.append("circle").attr("r", r(v)).attr("fill", "none").attr("stroke", ink2).attr("stroke-opacity", .35).attr("stroke-dasharray", "2 3"));
+    if (cfg.even && cfg.scale !== "own") g.append("circle").attr("r", r(cfg.even)).attr("fill", "none").attr("stroke", ink2).attr("stroke-opacity", .6).attr("stroke-dasharray", "2 3");
+    const peak = d3.maxIndex(d.fill.map((v, k) => v == null ? -1 : v + (d.stack ? d.stack[k] : 0)));
+    d.fill.forEach((v, k) => {
+      const [a0, a1] = ang(k);
+      if (v == null) { if (cfg.scale === "log") g.append("circle").attr("cx", (R * .25) * Math.sin((a0 + a1) / 2)).attr("cy", -(R * .25) * Math.cos((a0 + a1) / 2)).attr("r", 1.2).attr("fill", rule); return; }
+      g.append("path").attr("d", arc({ startAngle: a0, endAngle: a1, outerRadius: Math.max(cfg.n > 40 ? .6 : 1.2, r(v)) }))
+        .attr("fill", c1).attr("fill-opacity", stacked || cfg.n > 40 ? .9 : k === peak ? 1 : .55);
+      if (d.stack && d.stack[k] > 0) g.append("path").attr("d", arcIn({ startAngle: a0, endAngle: a1, innerRadius: r(v) + (v > 0 ? 1 : 0), outerRadius: Math.max(r(v) + 2, r(v + d.stack[k])) })).attr("fill", c2).attr("fill-opacity", .9);
+    });
+    if (d.line) {
+      const pts = d.line.flatMap((v, k) => { const [a0, a1] = ang(k), rr = r(v); return [[a0, rr], [a1, rr]]; });
+      g.append("path").attr("d", d3.lineRadial().angle(p => p[0]).radius(p => p[1]).curve(d3.curveLinearClosed)(pts))
+        .attr("fill", "none").attr("stroke", c2).attr("stroke-width", 1.6).attr("stroke-linejoin", "round");
+    }
+    if (i === 0) (cfg.ticks || []).forEach(([k, t]) => { const a = cfg.tickAt ? cfg.tickAt(k) : (k + .5) / cfg.n * 2 * Math.PI, rr = R + 9;
+      g.append("text").attr("x", rr * Math.sin(a)).attr("y", -rr * Math.cos(a)).attr("text-anchor", "middle")
+        .attr("dy", ".32em").attr("font-size", 9).text(t); });
+    if (i === 0) (cfg.rings || []).forEach(([v, t], j) => g.append("text").attr("font-size", 8.5).text(t)
+      .attr("x", j === 0 ? r(v) + 2 : j === 2 ? -r(v) - 2 : 2).attr("y", j === 1 ? -r(v) - 2 : 9).attr("text-anchor", j === 2 ? "end" : "start"));
+    // hover targets: the whole wedge out to the rim
+    d.fill.forEach((v, k) => { const [a0, a1] = ang(k);
+      g.append("path").attr("d", d3.arc().innerRadius(0)({ startAngle: a0, endAngle: a1, outerRadius: R + 4 })).attr("fill", "transparent")
+        .on("mousemove", ev => showTip(ev, cfg.tip(d, k))).on("mouseleave", hideTip); });
+    g.append("text").attr("y", -cell / 2 - gap + 22).attr("text-anchor", "middle").attr("font-size", 12.5).attr("class", "strong").text(d.name);
+    if (d.note) g.append("text").attr("y", cell / 2 + 2).attr("text-anchor", "middle").attr("font-size", 10).text(d.note);
+  });
+  table(cfg, list);
+}
+function table(cfg, list) {
+  const t = d3.select("#t-" + cfg.id); t.html("");
+  const wide = cfg.n > 14;
+  t.append("tr").selectAll("th").data(["Jurisdiction", cfg.countLabel || "Acts", ...(wide ? ["First", "Second", "Third"] : cfg.labels)]).join("th").text(d => d);
+  list.forEach(d => {
+    const tot = d.fill.map((v, k) => v == null ? null : v + (d.stack ? d.stack[k] : 0));
+    const cells = wide ? topK(tot.map(v => v ?? -1), 3).map(k => `${cfg.labels[k]} (${(cfg.fmt || pct)(tot[k])})`) : tot.map(v => (cfg.fmt || pct)(v));
+    t.append("tr").selectAll("td").data([d.name, d.count == null ? "" : fmt(d.count), ...cells]).join("td").text(v => v);
+  });
+}
+
+/* ---------- the ten questions ---------- */
+const J = DATA;
+const enough = (d, f) => sum(f(d)) >= 30;
+const S = [];
+
+// 1 the weekday law is made
+{ const rows = J.filter(d => enough(d, x => x.awd)).map(d => ({ name: d.name, count: sum(d.awd), fill: norm(d.awd), line: norm(d.wd), raw: d.awd, raw2: d.wd }));
+  const typ = { name: "Typical", fill: meanOf(rows, d => d.fill), line: meanOf(rows, d => d.line) };
+  const twoDay = d3.sort(rows, d => -d3.sum(topK(d.fill, 2), k => d.fill[k]));
+  const t0 = twoDay[0], t0k = topK(t0.fill, 2).sort();
+  S.push({ id: "made-weekday", n: 7, labels: WDF, even: 1 / 7, rows, typical: typ, ticks: WD.map((t, k) => [k, t]), countLabel: "Acts with a date made",
+    eyebrow: "Weekdays", title: "The day of the week law is made",
+    lede: `Each rose shows the share of acts adopted, signed or enacted on each day of the week, Monday at twelve o'clock; the orange outline is the day the same acts start. Law is made on the days legislatures and cabinets sit: <b>${t0.name} makes ${pct(t0.fill[t0k[0]] + t0.fill[t0k[1]])} of its law on ${WDF[t0k[0]]}s and ${WDF[t0k[1]]}s</b>, and almost nothing is made at weekends (${pct(typ.fill[5] + typ.fill[6])} for the typical jurisdiction), while ${pct(typ.line[5] + typ.line[6])} of law starts on a Saturday or Sunday.`,
+    legend: [["sw", "--series-1", "share made that day"], ["sl", "--series-2", "share starting that day"], ["dash", "", "an even week (1/7 a day)"]],
+    orders: [{ key: "two", label: "two busiest days' share", by: d => -d3.sum(topK(d.fill, 2), k => d.fill[k]) }, { key: "wd", label: "first busiest day", by: d => d3.maxIndex(d.fill) }, { key: "n", label: "size of history", by: d => -d.count }],
+    tip: (d, k) => `${name(d)}<br>${WDF[k]}: <b>${pct(d.fill[k])}</b> made${d.raw ? ` <span class="m">(${fmt(d.raw[k])})</span>` : ""}<br>${pct(d.line[k])} start${d.raw2 ? ` <span class="m">(${fmt(d.raw2[k])})</span>` : ""}` }); }
+
+// 2 the weekday law starts
+{ const rows = J.filter(d => enough(d, x => x.wd)).map(d => ({ name: d.name, count: sum(d.wd), fill: norm(d.wd), raw: d.wd }));
+  const typ = { name: "Typical", fill: meanOf(rows, d => d.fill) };
+  const wk = d3.sort(rows, d => -(d.fill[5] + d.fill[6]))[0], one = d3.sort(rows, d => -d3.max(d.fill))[0];
+  S.push({ id: "start-weekday", n: 7, labels: WDF, even: 1 / 7, rows, typical: typ, ticks: WD.map((t, k) => [k, t]),
+    eyebrow: "Weekdays", title: "The day of the week law starts",
+    lede: `Starting days follow the gazette. Where law takes effect the day after publication, it starts on any day; where it starts on a fixed date, that date can fall at a weekend. <b>${one.name} starts ${pct(d3.max(one.fill))} of its law on a ${WDF[d3.maxIndex(one.fill)]}</b>, and ${wk.name} starts the most at weekends, ${pct(wk.fill[5] + wk.fill[6])}.`,
+    legend: [["sw", "--series-1", "share of acts starting that day (busiest day solid)"], ["dash", "", "an even week"]],
+    orders: [{ key: "max", label: "busiest day's share", by: d => -d3.max(d.fill) }, { key: "we", label: "weekend share", by: d => -(d.fill[5] + d.fill[6]) }, { key: "n", label: "size of history", by: d => -d.count }],
+    tip: (d, k) => `${name(d)}<br>${WDF[k]}: <b>${pct(d.fill[k])}</b>${d.raw ? ` <span class="m">(${fmt(d.raw[k])} acts)</span>` : ""}<br><span class="m">${(d.fill[k] * 7).toFixed(1)}× an even day</span>` }); }
+
+// 3 the month law is made
+{ const rows = J.filter(d => enough(d, x => x.amon)).map(d => ({ name: d.name, count: sum(d.amon), fill: norm(d.amon), line: norm(d.mon), raw: d.amon, raw2: d.mon }));
+  const typ = { name: "Typical", fill: meanOf(rows, d => d.fill), line: meanOf(rows, d => d.line) };
+  const dec = d3.sort(rows, d => -d.fill[11]);
+  S.push({ id: "made-month", n: 12, labels: FULL, even: 1 / 12, rows, typical: typ, ticks: [0, 3, 6, 9].map(k => [k, MON[k]]), countLabel: "Acts with a date made",
+    eyebrow: "Months", title: "Made in December, in force in January",
+    lede: `The month each act was made (blue) against the month it took effect (orange outline). Legislatures clear their desks before the winter and summer breaks, and the law they pass waits for the new year: <b>${dec[0].name} makes ${pct(dec[0].fill[11])} of its law in December and ${dec[1].name} ${pct(dec[1].fill[11])}</b>, while August is the quietest month for making law (${pct(typ.fill[7])} in the typical jurisdiction).`,
+    legend: [["sw", "--series-1", "share made that month"], ["sl", "--series-2", "share starting that month"], ["dash", "", "an even year (1/12)"]],
+    orders: [{ key: "dec", label: "December share", by: d => -d.fill[11] }, { key: "peak", label: "busiest month", by: d => d3.maxIndex(d.fill) }, { key: "n", label: "size of history", by: d => -d.count }],
+    tip: (d, k) => `${name(d)}<br>${FULL[k]}: <b>${pct(d.fill[k])}</b> made${d.raw ? ` <span class="m">(${fmt(d.raw[k])})</span>` : ""}<br>${pct(d.line[k])} start${d.raw2 ? ` <span class="m">(${fmt(d.raw2[k])})</span>` : ""}` }); }
+
+// 4 the day of the month law starts
+{ const rows = J.filter(d => enough(d, x => x.dom)).map(d => ({ name: d.name, count: sum(d.dom), fill: norm(d.dom.map((v, i) => v * 12 / MONTHS_WITH[i])), raw: d.dom }));
+  const typ = { name: "Typical", fill: meanOf(rows, d => d.fill) };
+  const first = d3.sort(rows, d => -d.fill[0]), hi = first.filter(d => d.fill[0] >= .5);
+  S.push({ id: "start-dom", n: 31, labels: d3.range(1, 32).map(ord), even: 1 / 31, rows, typical: typ, ticks: [[0, "1st"], [7, "8th"], [14, "15th"], [21, "22nd"]],
+    eyebrow: "Days of the month", title: "The first of the month",
+    lede: `The day of the month each act takes effect, the 1st at twelve o'clock, corrected so the 29th, 30th and 31st are not shortchanged by the months that lack them. <b>${hi.length} jurisdictions start half their law or more on the 1st</b>, led by ${first[0].name} (${pct(first[0].fill[0])}) and ${first[1].name} (${pct(first[1].fill[0])}); where law starts the day after it is published, the rose is round.`,
+    legend: [["sw", "--series-1", "share of acts starting that day of the month (busiest day solid)"], ["dash", "", "an even month (1/31)"]],
+    orders: [{ key: "first", label: "share on the 1st", by: d => -d.fill[0] }, { key: "n", label: "size of history", by: d => -d.count }],
+    tip: (d, k) => `${name(d)}<br>The ${ord(k + 1)}: <b>${pct(d.fill[k])}</b>${d.raw ? ` <span class="m">(${fmt(d.raw[k])} acts)</span>` : ""}${k >= 28 ? `<br><span class="m">corrected: only ${MONTHS_WITH[k]} months a year have a ${ord(k + 1)}</span>` : ""}` }); }
+
+// 5 the quarter clock
+{ const rows = J.filter(d => enough(d, x => x.doy)).map(d => { const w = d3.range(13).map(() => 0); d.doy.forEach((v, i) => w[QWEEK[i]] += v); return { name: d.name, count: sum(d.doy), fill: norm(w), raw: w }; });
+  const typ = { name: "Typical", fill: meanOf(rows, d => d.fill) };
+  const lead = d3.sort(rows, d => -d.fill[0]);
+  S.push({ id: "quarter", n: 13, labels: d3.range(1, 14).map(w => `week ${w} of the quarter`), even: 1 / 13, rows, typical: typ, ticks: [[0, "wk 1"], [4, "wk 5"], [8, "wk 9"]],
+    eyebrow: "Quarters", title: "The quarter clock",
+    lede: `The year folded into quarters: each rose runs from the first week of a quarter (1 January, 1 April, 1 July, 1 October) round to the thirteenth. Budgets, tax rules and reporting periods start with a quarter, so <b>the typical jurisdiction starts ${pct(typ.fill[0])} of its law in the first week of a quarter</b>, ${(typ.fill[0] * 13).toFixed(1)} times an even week; ${lead[0].name} starts ${pct(lead[0].fill[0])} there.`,
+    legend: [["sw", "--series-1", "share of acts starting that week of the quarter (busiest week solid)"], ["dash", "", "an even quarter (1/13 a week)"]],
+    orders: [{ key: "w1", label: "share in week 1", by: d => -d.fill[0] }, { key: "n", label: "size of history", by: d => -d.count }],
+    tip: (d, k) => `${name(d)}<br>Week ${k + 1} of the quarter: <b>${pct(d.fill[k])}</b>${d.raw ? ` <span class="m">(${fmt(d.raw[k])} acts)</span>` : ""}` }); }
+
+// 6 every day of the year
+{ const rows = J.filter(d => enough(d, x => x.doy)).map(d => ({ name: d.name, count: sum(d.doy), fill: norm(d.doy), raw: d.doy }));
+  rows.forEach(d => { const k = d3.maxIndex(d.fill); d.note = `peak ${DAYS[k][1]} ${MON[DAYS[k][0]]}, ${pct(d.fill[k])}`; });
+  const typ = { name: "Typical", fill: meanOf(rows, d => d.fill) }; const tk = topK(typ.fill, 3); typ.note = `peak ${DAYL[tk[0]]}`;
+  const notJan = rows.filter(d => d3.maxIndex(d.fill) !== 0);
+  const monthStart = d3.range(12).map(m => DAYS.findIndex(([mm, dd]) => mm === m && dd === 1));
+  S.push({ id: "every-day", n: 366, labels: DAYL, rows, typical: typ, scale: "own", ticks: [0, 3, 6, 9].map(m => [monthStart[m], MON[m]]), tickAt: k => k / 366 * 2 * Math.PI,
+    eyebrow: "Days of the year", title: "Every day of the year",
+    lede: `366 thin petals, one per calendar day, 1 January at twelve o'clock. Each rose is scaled to its own busiest day, so the spikes are each jurisdiction's fixed dates. <b>${rows.length - notJan.length} of ${rows.length} jurisdictions start more law on 1 January than on any other day</b>; the others peak on ${notJan.slice(0, 4).map(d => `${DAYL[d3.maxIndex(d.fill)]} (${d.name})`).join(", ")}${notJan.length > 4 ? " and more" : ""}. The typical jurisdiction's next busiest days are ${DAYL[tk[1]]} and ${DAYL[tk[2]]}.`,
+    legend: [["sw", "--series-1", "share of acts starting that day; each rose scaled to its busiest day"]],
+    orders: [{ key: "jan1", label: "share on 1 January", by: d => -d.fill[0] }, { key: "n", label: "size of history", by: d => -d.count }],
+    tip: (d, k) => `${name(d)}<br>${DAYL[k]}: <b>${pct(d.fill[k])}</b>${d.raw ? ` <span class="m">(${fmt(d.raw[k])} acts)</span>` : ""}` }); }
+
+// 7 the wait
+{ const rows = J.filter(d => enough(d, x => x.lagh)).map(d => ({ name: d.name, count: sum(d.lagh), fill: norm(d.lagh), raw: d.lagh, med: d.lag?.median, note: d.lag ? `median ${days(d.lag.median)}` : "" }));
+  const typ = { name: "Typical", fill: meanOf(rows, d => d.fill), note: `median of medians ${days(d3.median(rows, d => d.med))}` };
+  const same = d3.sort(rows, d => -d.fill[0]), slow = d3.sort(rows, d => -d.med);
+  S.push({ id: "wait", n: 12, labels: LAGL, rows, typical: typ, ticks: [[0, "same day"], [3, "a week"], [6, "1–2 mo"], [9, "a year"]], countLabel: "Acts with both dates",
+    eyebrow: "Waiting", title: "From the day law is made to the day it starts",
+    lede: `How long each act waited between being made and taking effect, on a doubling clock: same day at twelve o'clock, then the next day, 2–3 days, 4–7 days and so on, each step twice the last, round to three years and more. <b>${same[0].name} starts ${pct(same[0].fill[0])} of its law the day it is made; ${slow[0].name} waits a median ${days(slow[0].med)}</b>, and ${slow[1].name} ${days(slow[1].med)}. Roses that lean right wait days; roses that lean left wait months.`,
+    legend: [["sw", "--series-1", "share of acts in each waiting band (most common band solid)"]],
+    orders: [{ key: "med", label: "median wait", by: d => d.med }, { key: "same", label: "share starting the same day", by: d => -d.fill[0] }, { key: "n", label: "size of history", by: d => -d.count }],
+    tip: (d, k) => `${name(d)}<br>${LAGL[k]}: <b>${pct(d.fill[k])}</b>${d.raw ? ` <span class="m">(${fmt(d.raw[k])} acts)</span>` : ""}${d.med != null ? `<br><span class="m">median wait ${days(d.med)}</span>` : ""}` }); }
+
+// 8 the wait, decade by decade
+{ const rows = J.filter(d => d.lagdec.filter(Boolean).length >= 3).map(d => ({ name: d.name, count: sum(d.lagh), fill: d.lagdec.map(x => x ? x[0] : null), ns: d.lagdec.map(x => x ? x[1] : 0) }));
+  const typ = { name: "Typical", fill: DEC.map((_, k) => { const v = rows.map(d => d.fill[k]).filter(x => x != null); return v.length >= 3 ? d3.median(v) : null; }), note: "median across jurisdictions" };
+  S.push({ id: "wait-decade", n: DEC.length, labels: DECL, rows, typical: typ, scale: "log", fmt: v => v == null ? "–" : days(v), countLabel: "Acts with both dates",
+    rings: [[7, "a week"], [30, "a month"], [365, "a year"]], ticks: [[1, "1900s"], [6, "1950s"], [11, "2000s"]],
+    eyebrow: "Waiting, over time", title: "Is law starting sooner?",
+    lede: `The median wait between making and starting, for the acts in force from each decade, on a clock that runs from before 1900 at twelve o'clock to the 2020s just before it (decades with fewer than 10 acts are left out). The petal length is on a log scale, with dashed rings at a week, a month and a year. <b>Long waits in early decades are often the record, not the law</b>: an old act still in force is dated by when its current text started, which can be long after it was made.`,
+    legend: [["sw", "--series-1", "median wait for acts taking effect that decade (log scale)"], ["dash", "", "a week, a month, a year"]],
+    orders: [{ key: "n", label: "size of history", by: d => -d.count }, { key: "late", label: "median wait in the 2020s", by: d => -(d.fill[13] ?? -1) }],
+    tip: (d, k) => `${name(d)}<br>${DECL[k]}: ${d.fill[k] == null ? "too few acts" : `median <b>${days(d.fill[k])}</b>${d.ns ? ` <span class="m">(${fmt(d.ns[k])} acts)</span>` : ""}`}` }); }
+
+// 9 the decades of the law in the record
+{ const rows = J.filter(d => enough(d, x => x.dec)).map(d => ({ name: d.name, count: sum(d.dec), fill: norm(d.dec), raw: d.dec }));
+  rows.forEach(d => { let c = 0, k = 0; while (k < d.fill.length && c + d.fill[k] < .5) c += d.fill[k++]; d.mid = k; d.note = `half since the ${DECL[k]}`; });
+  const typ = { name: "Typical", fill: meanOf(rows, d => d.fill) };
+  const deep = d3.sort(rows, d => d.mid);
+  S.push({ id: "decades", n: DEC.length, labels: DECL, rows, typical: typ, ticks: [[1, "1900s"], [6, "1950s"], [11, "2000s"]],
+    eyebrow: "Decades", title: "How deep each record goes",
+    lede: `The decade each act in the record took effect, clockwise from before 1900 to the 2020s. A rose bunched just left of twelve o'clock is a young record of current law; a full rose is a long history. <b>The typical record has ${pct(typ.fill[13] + typ.fill[12])} of its acts from the 2010s and 2020s</b>; ${deep[0].name} and ${deep[1].name} reach furthest back, with half their acts from the ${DECL[deep[1].mid]} or earlier.`,
+    legend: [["sw", "--series-1", "share of the record's acts taking effect that decade (busiest decade solid)"]],
+    orders: [{ key: "mid", label: "how far back half the record goes", by: d => d.mid - d.fill[0] }, { key: "n", label: "size of history", by: d => -d.count }],
+    tip: (d, k) => `${name(d)}<br>${DECL[k]}: <b>${pct(d.fill[k])}</b>${d.raw ? ` <span class="m">(${fmt(d.raw[k])} acts)</span>` : ""}` }); }
+
+// 10 parliament or government
+{ const rows = J.filter(d => sum(d.par) + sum(d.exe) >= 30 && Math.min(sum(d.par), sum(d.exe)) >= 3).map(d => {
+    const t = sum(d.par) + sum(d.exe); return { name: d.name, count: t, fill: d.par.map(v => v / t), stack: d.exe.map(v => v / t), raw: d.par, raw2: d.exe, ex: sum(d.exe) / t, note: `${pct(sum(d.exe) / t)} by government` }; });
+  const typ = { name: "Typical", fill: meanOf(rows, d => d.fill), stack: meanOf(rows, d => d.stack) }; typ.note = `${pct(sum(typ.stack))} by government`;
+  const gov = d3.sort(rows, d => -d.ex);
+  S.push({ id: "maker", n: DEC.length, labels: DECL, rows, typical: typ, ticks: [[1, "1900s"], [6, "1950s"], [11, "2000s"]], countLabel: "Classified acts",
+    eyebrow: "Who makes law", title: "Parliament or government, decade by decade",
+    lede: `Each petal is a decade, clockwise from before 1900; its length is that decade's share of the record, split into acts of parliament (blue, inside) and acts of government, such as decrees, ordinances and regulations (orange, outside). Classified from each act's name, so unusual names are left out. <b>${gov[0].name} makes ${pct(gov[0].ex)} of its recorded law by government act, ${gov[1].name} ${pct(gov[1].ex)}</b>; in ${gov.at(-1).name} parliament makes ${pct(1 - gov.at(-1).ex)}.`,
+    legend: [["sw", "--series-1", "acts of parliament"], ["sw", "--series-2", "acts of government (decrees, ordinances, regulations)"]],
+    orders: [{ key: "ex", label: "government share", by: d => -d.ex }, { key: "n", label: "size of history", by: d => -d.count }],
+    tip: (d, k) => `${name(d)}, ${DECL[k]}<br>Parliament: <b>${pct(d.fill[k])}</b>${d.raw ? ` <span class="m">(${fmt(d.raw[k])})</span>` : ""}<br>Government: <b>${pct(d.stack[k])}</b>${d.raw2 ? ` <span class="m">(${fmt(d.raw2[k])})</span>` : ""}<br><span class="m">share of the jurisdiction's classified acts</span>` }); }
+
+/* ---------- ten more, from every local law repo's git history ---------- */
+const the = n => (["Bahamas", "Philippines", "Netherlands", "Gambia", "Comoros", "Maldives", "Isle of Man", "Cayman Islands", "Marshall Islands", "Solomon Islands", "Dominican Republic", "Czech Republic", "Central African Republic", "United States", "United Kingdom"].includes(n) ? "the " : "") + n;
+const fold = (a, n) => [...a.slice(0, n - 1), d3.sum(a.slice(n - 1))];
+const medBin = s => { let c = 0; for (let k = 0; k < s.length; k++) { c += s[k]; if (c >= .5) return k; } return s.length - 1; };
+const SIZEL = ["1 provision", "2–3 provisions", "4–7 provisions", "8–15 provisions", "16–31 provisions", "32–63 provisions", "64–127 provisions", "128–255 provisions", "256–511 provisions", "512–1,023 provisions", "1,024 provisions or more"];
+const YEARL = ["under a year", "1 year", "2–3 years", "4–7 years", "8–15 years", "16–31 years", "32–63 years", "64–127 years", "128 years or more"];
+const SINCEL = [...YEARL.slice(0, 7), "64 years or more"];
+const RESTL = [...LAGL.slice(0, 11), "3–6 years", "6–11 years", "11–22 years", "22–45 years", "45 years or more"];
+const VERL = ["never amended", "amended once", "2–3 amendments", "4–7 amendments", "8–15 amendments", "16–31 amendments", "32–63 amendments", "64 amendments or more"];
+// one round-2 question: f picks the counts; line optional; at least 30 counted
+function q2(id, f, extra = {}) {
+  const dropped = [];
+  const rows = DATA2.filter(d => d3.sum(f(d)) >= 30).filter(d => { const a = f(d); if (extra.copied && a[0] >= .995 * d3.sum(a)) { if (!d.sub) dropped.push(d.name); return false; } return true; }).map(d => {
+    const raw = f(d), r = { name: d.name.length > 26 ? d.name.slice(0, 25) + "…" : d.name, full: d.name, sub: d.sub, count: d3.sum(raw), fill: norm(raw), raw };
+    if (extra.line) { r.raw2 = extra.line(d); r.line = norm(r.raw2); }
+    return r; });
+  const typ = rs => { const t = { name: "Typical", fill: meanOf(rs, d => d.fill) }; if (extra.line) t.line = meanOf(rs, d => d.line); return t; };
+  const nat = rows.filter(d => !d.sub);
+  rows.forEach(d => { if (extra.note) d.note = extra.note(d); });
+  return { id, rows, typ, nat, T: typ(nat), dropped };
+}
+const tipShare = (labels, unit = "acts") => (d, k) => `<b>${d.full || d.name}</b><br>${labels[k]}: <b>${pct(d.fill[k])}</b>${d.raw ? ` <span class="m">(${fmt(d.raw[k])} ${unit})</span>` : ""}`;
+
+// 11 the gazette's day of the week
+{ const q = q2("gazette-weekday", d => d.pub_wd); const nat = q.nat, T = q.T;
+  const one = d3.sort(nat, d => -d3.max(d.fill))[0], we = d3.sort(nat, d => -(d.fill[5] + d.fill[6]))[0];
+  S.push({ ...q, n: 7, labels: WDF, even: 1 / 7, ticks: WD.map((t, k) => [k, t]), eyebrow: "Gazettes",
+    title: "The day the gazette comes out",
+    lede: `The weekday each act was published in its official gazette, Monday at twelve o'clock. Some gazettes appear on fixed days, others whenever there is law to print: <b>${one.full} publishes ${pct(d3.max(one.fill))} of its law on a ${WDF[d3.maxIndex(one.fill)]}</b>. The typical country publishes ${pct(T.fill[5] + T.fill[6])} at weekends; ${the(we.full)} the most, ${pct(we.fill[5] + we.fill[6])}.`,
+    legend: [["sw", "--series-1", "share of acts published that day (busiest day solid)"], ["dash", "", "an even week"]],
+    orders: [{ key: "max", label: "busiest day's share", by: d => -d3.max(d.fill) }, { key: "we", label: "weekend share", by: d => -(d.fill[5] + d.fill[6]) }, { key: "n", label: "size of history", by: d => -d.count }],
+    countLabel: "Acts with a publication date", tip: tipShare(WDF) }); }
+
+// 12 from the gazette to force
+{ const q = q2("gazette-force", d => d.pub_lag, { copied: true, note: d => `median ${LAGL[medBin(d.fill)]}` }); const nat = q.nat, T = q.T;
+  const same = d3.sort(nat, d => -(d.fill[0] + d.fill[1])), slow = d3.sort(nat, d => -medBin(d.fill));
+  S.push({ ...q, n: 12, labels: LAGL, ticks: [[0, "same day"], [3, "a week"], [6, "1–2 mo"], [9, "a year"]], eyebrow: "Waiting",
+    title: "From the gazette to force",
+    lede: `How long each act waited between publication and taking effect (the <i>vacatio legis</i>), on the same doubling clock as question 7. <b>${pct(T.fill[0] + T.fill[1])} of the typical country's law starts the day it is published or the next day</b>, and ${same[0].full} starts ${pct(same[0].fill[0] + same[0].fill[1])} that fast; ${slow[0].full} waits longest, a median of ${LAGL[medBin(slow[0].fill)]}. Left out: ${q.dropped.length} countries whose records give every act the same publication and in-force date (${q.dropped.join(", ")}), most likely one date copied into both.`,
+    legend: [["sw", "--series-1", "share of acts in each waiting band (most common band solid)"]],
+    orders: [{ key: "med", label: "median wait", by: d => medBin(d.fill) }, { key: "fast", label: "share starting within a day", by: d => -(d.fill[0] + d.fill[1]) }, { key: "n", label: "size of history", by: d => -d.count }],
+    countLabel: "Acts with both dates", tip: tipShare(LAGL) }); }
+
+// 13 from signature to the gazette
+{ const q = q2("sign-gazette", d => d.ad_pub, { copied: true, note: d => `median ${LAGL[medBin(d.fill)]}` }); const nat = q.nat, T = q.T;
+  const slow = d3.sort(nat, d => -medBin(d.fill)), fast = d3.sort(nat, d => -(d.fill[0] + d.fill[1]));
+  S.push({ ...q, n: 12, labels: LAGL, ticks: [[0, "same day"], [3, "a week"], [6, "1–2 mo"], [9, "a year"]], eyebrow: "Waiting",
+    title: "From signature to the gazette",
+    lede: `How long each act took between being adopted or signed and appearing in the gazette. <b>${fast[0].full} prints ${pct(fast[0].fill[0] + fast[0].fill[1])} of its law within a day of signing</b>; ${the(slow[0].full)} takes a median of ${LAGL[medBin(slow[0].fill)]}. The typical country's median is ${LAGL[medBin(T.fill)]}. Left out: ${q.dropped.length} countries whose records give every act the same signing and publication date (${q.dropped.join(", ")}).`,
+    legend: [["sw", "--series-1", "share of acts in each waiting band (most common band solid)"]],
+    orders: [{ key: "med", label: "median wait", by: d => medBin(d.fill) }, { key: "fast", label: "share printed within a day", by: d => -(d.fill[0] + d.fill[1]) }, { key: "n", label: "size of history", by: d => -d.count }],
+    countLabel: "Acts with both dates", tip: tipShare(LAGL) }); }
+
+// 14 the month law is repealed
+{ const q = q2("repeal-month", d => d.mon_rep, { line: d => d.mon_new }); const nat = q.nat, T = q.T;
+  const pk = d3.maxIndex(T.fill), jan = d3.sort(nat, d => -d.fill[0])[0];
+  S.push({ ...q, n: 12, labels: FULL, even: 1 / 12, ticks: [0, 3, 6, 9].map(k => [k, MON[k]]), eyebrow: "Repeal",
+    title: "The month law dies",
+    lede: `Acts that mostly delete provisions (repeals), by the month they take effect, against acts that mostly add new provisions (orange outline). Only 11 countries' records hold 30 or more such repeals; most keep repealed text rather than deleting the file. <b>For the typical country, ${FULL[pk]} is the busiest month for repeals (${pct(T.fill[pk])})</b>: old law is swept away on the same fixed dates new law starts. ${jan.full} does ${pct(jan.fill[0])} of its repealing in January.`,
+    legend: [["sw", "--series-1", "share of repealing acts that month"], ["sl", "--series-2", "share of acts adding new law that month"], ["dash", "", "an even year"]],
+    orders: [{ key: "jan", label: "January share", by: d => -d.fill[0] }, { key: "peak", label: "busiest month", by: d => d3.maxIndex(d.fill) }, { key: "n", label: "number of repeals", by: d => -d.count }],
+    countLabel: "Repealing acts", tip: (d, k) => `<b>${d.full || d.name}</b><br>${FULL[k]}: <b>${pct(d.fill[k])}</b> of repeals${d.raw ? ` <span class="m">(${fmt(d.raw[k])})</span>` : ""}<br>${pct(d.line[k])} of new law${d.raw2 ? ` <span class="m">(${fmt(d.raw2[k])})</span>` : ""}` }); }
+
+// 15 how big a change is
+{ const q = q2("size", d => d.size.slice(1), { note: d => `median ${SIZEL[medBin(d.fill)].replace(/ provisions?( or more)?/, "$1")}` }); const nat = q.nat, T = q.T;
+  const one = d3.sort(nat, d => -d.fill[0]), big = d3.sort(nat, d => -d3.sum(d.fill.slice(5)));
+  S.push({ ...q, n: 11, labels: SIZEL, ticks: [[0, "1"], [3, "8–15"], [6, "64–127"], [9, "512+"]], eyebrow: "Size",
+    title: "How much one act changes",
+    lede: `How many provisions each act adds, changes or removes, on a doubling clock from one provision at twelve o'clock to more than a thousand. <b>${pct(T.fill[0])} of the typical country's acts touch a single provision</b>; ${one[0].full} is the most surgical (${pct(one[0].fill[0])} single-provision), while ${pct(d3.sum(big[0].fill.slice(5)))} of ${big[0].full}'s acts touch 32 provisions or more. Part of each shape is how finely its repository splits law into files.`,
+    legend: [["sw", "--series-1", "share of acts touching that many provision files (most common band solid)"]],
+    orders: [{ key: "one", label: "share touching one provision", by: d => -d.fill[0] }, { key: "big", label: "share touching 32 or more", by: d => -d3.sum(d.fill.slice(5)) }, { key: "n", label: "size of history", by: d => -d.count }],
+    tip: tipShare(SIZEL) }); }
+
+// 16 how long a provision rests between changes
+{ const q = q2("rest", d => d.rest, { note: d => `median ${RESTL[medBin(d.fill)]}` }); const nat = q.nat, T = q.T;
+  const slow = d3.sort(nat, d => -medBin(d.fill)), fast = d3.sort(nat, d => medBin(d.fill));
+  S.push({ ...q, n: 16, labels: RESTL, ticks: [[0, "same day"], [4, "1–2 wk"], [8, "4–8 mo"], [13, "11–22 y"]], eyebrow: "Rhythm",
+    title: "How long a provision rests between changes",
+    lede: `For every amendment, the time since that provision last changed, on the doubling clock, here running on to 45 years and more. Roses heavy on the left are law rewritten rarely; heavy on the right, law rewritten again within weeks. <b>${slow[0].full}'s provisions rest longest between changes, a median of ${RESTL[medBin(slow[0].fill)]}</b>; ${fast[0].full}'s are changed again ${medBin(fast[0].fill) === 0 ? "on the same day, as a median, most likely several acts with one date touching the same provision" : `after a median of ${RESTL[medBin(fast[0].fill)]}`}. The typical country's median is ${RESTL[medBin(T.fill)]}.`,
+    legend: [["sw", "--series-1", "share of amendments by time since the provision last changed"]],
+    orders: [{ key: "med", label: "median rest", by: d => -medBin(d.fill) }, { key: "n", label: "number of amendments", by: d => -d.count }],
+    countLabel: "Amendments", tip: tipShare(RESTL, "amendments") }); }
+
+// 17 how long repealed law lived
+{ const q = q2("lifespan", d => fold(d.life, 9), { note: d => `median ${YEARL[medBin(d.fill)]}` }); const nat = q.nat, T = q.T;
+  const old = d3.sort(nat, d => -medBin(d.fill));
+  S.push({ ...q, n: 9, labels: YEARL, ticks: [[0, "<1 yr"], [3, "4–7 yrs"], [6, "32–63"], [8, "128+"]], eyebrow: "Lifespans",
+    title: "How long law lives",
+    lede: `For every provision repealed, how long it had been in the record, from under a year at twelve o'clock to more than a century. <b>In the typical country, ${pct(T.fill[0])} of repealed provisions lasted under a year</b>: temporary rules, transitional articles and corrections. ${old[0].full}'s repealed provisions lived longest, a median of ${YEARL[medBin(old[0].fill)]}. A record that starts late cuts lifespans short, so long lives show only where the history is deep.`,
+    legend: [["sw", "--series-1", "share of repealed provisions by how long they lasted"]],
+    orders: [{ key: "med", label: "median lifespan", by: d => -medBin(d.fill) }, { key: "young", label: "share gone within a year", by: d => -d.fill[0] }, { key: "n", label: "number of repeals", by: d => -d.count }],
+    countLabel: "Repealed provisions", tip: tipShare(YEARL, "provisions") }); }
+
+// 18 how old today's law is
+{ const q = q2("born", d => d.born, { note: d => `half since the ${DECL[medBin(d.fill)]}` }); const nat = q.nat, T = q.T;
+  const deep = d3.sort(nat, d => medBin(d.fill) - d.fill[0]);
+  S.push({ ...q, n: DEC.length, labels: DECL, ticks: [[1, "1900s"], [6, "1950s"], [11, "2000s"]], eyebrow: "Age",
+    title: "How old today's law is",
+    lede: `Every provision still in force, by the decade it first entered the record, clockwise from before 1900 to the 2020s. <b>${pct(T.fill[12] + T.fill[13])} of the typical country's current provisions entered the record in the 2010s or 2020s</b>; ${deep[0].full} and ${deep[1].full} carry the oldest law, with half their provisions from the ${medBin(deep[0].fill) === medBin(deep[1].fill) ? DECL[medBin(deep[0].fill)] : `${DECL[medBin(deep[0].fill)]} and the ${DECL[medBin(deep[1].fill)]}`} or earlier. A record that starts late makes its law look young.`,
+    legend: [["sw", "--series-1", "share of today's provisions first recorded that decade (busiest decade solid)"]],
+    orders: [{ key: "old", label: "oldest first", by: d => medBin(d.fill) - d.fill[0] }, { key: "n", label: "number of provisions", by: d => -d.count }],
+    countLabel: "Provisions in force", tip: tipShare(DECL, "provisions") }); }
+
+// 19 when today's text was last touched
+{ const q = q2("since", d => fold(d.since, 8), { note: d => `median ${SINCEL[medBin(d.fill)]}` }); const nat = q.nat, T = q.T;
+  const still = d3.sort(nat, d => -d3.sum(d.fill.slice(4)));
+  S.push({ ...q, n: 8, labels: SINCEL, ticks: [[0, "<1 yr"], [2, "2–3"], [4, "8–15"], [6, "32–63"]], eyebrow: "Age",
+    title: "When today's text was last touched",
+    lede: `Every provision in force, by how long ago its wording last changed. <b>${pct(T.fill[0])} of the typical country's current provisions changed in the last year</b>; in ${the(still[0].full)}, ${pct(d3.sum(still[0].fill.slice(4)))} have stood unchanged for 8 years or more. Where a record holds only current text, each provision's last change is the date of its act, so those roses lean old.`,
+    legend: [["sw", "--series-1", "share of today's provisions by time since their last change"]],
+    orders: [{ key: "still", label: "share unchanged 8+ years", by: d => -d3.sum(d.fill.slice(4)) }, { key: "fresh", label: "share changed this year", by: d => -d.fill[0] }, { key: "n", label: "number of provisions", by: d => -d.count }],
+    countLabel: "Provisions in force", tip: tipShare(SINCEL, "provisions") }); }
+
+// 20 how often a provision has been rewritten
+{ const q = q2("versions", d => fold(d.versions, 8), { note: d => `${pct(d.fill[0])} never amended` }); const nat = q.nat, T = q.T;
+  const churn = d3.sort(nat.filter(d => d.count >= 100), d => -d3.sum(d.fill.slice(3)));
+  S.push({ ...q, n: 8, labels: VERL, ticks: [[0, "never"], [1, "once"], [3, "4–7"], [5, "16–31"]], eyebrow: "Rewrites",
+    title: "How often a provision has been rewritten",
+    lede: `Every provision in force, by how many times it has been amended since it entered the record. <b>${pct(T.fill[0])} of the typical country's provisions have never been amended</b>. ${churn[0].full} rewrites most: ${pct(d3.sum(churn[0].fill.slice(3)))} of its provisions have been amended four times or more, and only ${pct(churn[0].fill[0])} never; then ${churn[1].full} (${pct(d3.sum(churn[1].fill.slice(3)))}) and ${churn[2].full} (${pct(d3.sum(churn[2].fill.slice(3)))}). Countries with fewer than 100 provisions are left out of that ranking.`,
+    legend: [["sw", "--series-1", "share of today's provisions by number of amendments"]],
+    orders: [{ key: "churn", label: "share amended 4+ times", by: d => -d3.sum(d.fill.slice(3)) }, { key: "never", label: "share never amended", by: d => -d.fill[0] }, { key: "n", label: "number of provisions", by: d => -d.count }],
+    countLabel: "Provisions in force", tip: tipShare(VERL, "provisions") }); }
+
+/* ---------- page ---------- */
+const figs = d3.select("#figs");
+S.forEach((c, i) => {
+  d3.select("#nav").append("a").attr("href", "#" + c.id).text(`${i + 1} · ${c.title}`);
+  const f = figs.append("figure").attr("id", c.id);
+  c.num = i + 1; f.append("span").attr("class", "eyebrow").attr("id", "e-" + c.id);
+  f.append("h2").text(c.title);
+  f.append("p").attr("class", "lede").html(c.lede);
+  const ctl = f.append("div").attr("class", "controls"); ctl.append("span").text("Order by");
+  const sel = ctl.append("select").attr("id", "o-" + c.id).on("change", () => roses(c));
+  c.orders.forEach(o => sel.append("option").attr("value", o.key).text(o.label));
+  if (c.typ && c.rows.some(d => d.sub)) { ctl.append("span").text("Show");
+    const sc = ctl.append("select").attr("id", "s-" + c.id).on("change", () => roses(c));
+    sc.append("option").attr("value", "nat").text(`countries (${c.rows.filter(d => !d.sub).length})`);
+    sc.append("option").attr("value", "sub").text(`states, regions and cities (${c.rows.filter(d => d.sub).length})`); }
+  const lg = f.append("div").attr("class", "legend");
+  c.legend.forEach(([k, v, t]) => { const s = lg.append("span");
+    if (k === "sw") s.append("i").attr("class", "sw").style("background", `var(${v})`);
+    else if (k === "sl") s.append("i").attr("class", "sl").style("border-color", `var(${v})`);
+    else s.append("i").attr("class", "sl").style("border-color", "var(--ink-2)").style("border-top-style", "dashed").style("border-top-width", "1.5px");
+    s.append("span").text(t); });
+  f.append("svg").attr("id", "f-" + c.id).attr("role", "img").attr("aria-label", c.title);
+  const det = f.append("details"); det.append("summary").text(c.n > 14 ? "Table: each jurisdiction's three busiest petals" : "Table: every petal");
+  det.append("div").attr("class", "wrap").append("table").attr("id", "t-" + c.id);
+});
+const all = () => S.forEach(roses);
+document.getElementById("theme").addEventListener("click", () => {
+  const root = document.documentElement, dark = getComputedStyle(root).colorScheme.includes("dark");
+  root.setAttribute("data-theme", dark ? "light" : "dark"); all(); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", all);
+all();
+</script>
+</body>
+</html>
