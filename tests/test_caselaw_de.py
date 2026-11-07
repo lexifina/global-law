@@ -304,6 +304,90 @@ class GermanCaseLaw(unittest.TestCase):
         self.assertIsNone(m.DE_PARA.search(long_run))
         self.assertLess(time.time() - t0, 2.0)
 
+    def test_bgh_and_bsg_aktenzeichen_forms(self):
+        """The BGH's and the BSG's Aktenzeichen (germany-bgh-bsg audit, 2026-11-07): the special senates write no senate
+        number ("KZR 46/19", "AnwZ (Brfg) 12/20"), and the BSG's form is "B 2 U 1/20 R"."""
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import mcp_server as m
+        for ref in ('VI ZR 123/20', 'VIa ZR 936/23', 'IX ZB 1/20', 'III ZA 1/20', '5 StR 231/03', '1 StR 100/51', '1 BGs 12/20',
+                    '2 ARs 12/20', 'KZR 46/19', 'KVR 1/20', 'EnVR 12/20', 'AnwZ(B) 12/99', 'AnwZ (Brfg) 12/20', 'NotZ(Brfg) 1/20',
+                    'AnwSt(R) 1/20', 'RiZ(R) 1/20', 'BLw 1/20', 'LwZR 1/20', 'GSSt 1/20', 'GSZ 1/20', 'StB 3/20', 'AK 12/20',
+                    'B 2 U 1/20 R', 'B 12 KR 3/19 B', 'B 1 KR 25/18 R', 'B 14 AS 1/20 R'):
+            self.assertTrue(m.DE_DOCKET.fullmatch(ref), ref)
+        for not_german in ('II AKa 12/20', 'I CSK 123/20', 'B 2 U', '1 Ob 123/20'):
+            self.assertIsNone(m.DE_DOCKET.fullmatch(not_german), not_german)
+
+
+BGH = 'germany/bgh/caselaw'
+B1 = 'decisions/bgh/2020/ECLI_DE_BGH_2020_150920UVIZR123.20.0.md'
+B2 = 'decisions/bgh/2021/KZR-46-19-2021-03-02.md'
+
+
+class GermanBGHCaseLaw(unittest.TestCase):
+    """BGH decisions by Aktenzeichen, with and without a senate number, in find_provision, law_details and
+    resolve_citations; a BSG Aktenzeichen in no case law served is answered at once."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT))
+        from tests.test_law_fixtures import Tree, run
+        t = cls.t = Tree()
+        for name in ('mcp_server.py', 'countries.py', 'freshness.py'):
+            shutil.copy(ROOT / 'tools' / name, t.root / 'tools' / name)
+        (t.root / 'data').mkdir()
+        for name in ('swiss-aliases.json', 'nl-aliases.json', 'fr-aliases.json', 'de-aliases.json'):
+            shutil.copy(ROOT / 'data' / name, t.root / 'data' / name)
+        (t.root / 'jurisdiction.json').write_text('{"name": "fixture", "jurisdictions": []}', encoding='utf-8')
+        manifest = {'corpora': [
+            {'path': LAW, 'name': 'German federal law', 'language': 'de', 'in_force_trailer': 'In-force', 'code': 'DE'},
+            {'path': BGH, 'name': 'Case law: Germany, Bundesgerichtshof', 'language': 'de', 'kind': 'judgments',
+             'in_force_trailer': 'In-force', 'correction_trailer': 'Corrected', 'code': 'DE'}]}
+        (t.root / 'manifest.json').write_text(json.dumps(manifest), encoding='utf-8')
+        run('add', 'jurisdiction.json', 'data', cwd=t.root)
+        t.corpus(LAW).commit('BGBl. I 2002, 42', {'bgb/0823.md': '(1) Wer vorsätzlich das Leben verletzt, haftet.\n'},
+                             In_force='2002-01-01', Kind='law')
+        c = t.corpus(BGH)
+        bgh = lambda title, text: f'---\ncourt: "Bundesgerichtshof"\n---\n\n# {title}\n\n## Entscheidung\n\n{text}\n'
+        c.commit('Bundesgerichtshof VI ZR 123/20', {B1: bgh('Bundesgerichtshof, VI ZR 123/20 vom 2020-09-15', 'Die Revision wird zurückgewiesen.')},
+                 Kind='court', In_force='2020-09-15', Decided='2020-09-15', Court='Bundesgerichtshof', Docket='VI ZR 123/20',
+                 ECLI='ECLI:DE:BGH:2020:150920UVIZR123.20.0')
+        c.commit('Bundesgerichtshof KZR 46/19', {B2: bgh('Bundesgerichtshof, KZR 46/19 vom 2021-03-02', 'Kartellsache.')},
+                 Kind='court', In_force='2021-03-02', Decided='2021-03-02', Court='Bundesgerichtshof', Docket='KZR 46/19')
+        index = 'reference\tpath\n' + ''.join(f'{r}\t{p}\n' for r, p in (
+            ('ECLI:DE:BGH:2020:150920UVIZR123.20.0', B1), ('VI ZR 123/20', B1), ('KZR 46/19', B2)))
+        c.commit('Lexifina', {'decision-index.tsv': index,
+                              'corpus.json': json.dumps({'corpus': 'de/bgh/caselaw', 'kind': 'judgments',
+                                                         'name': 'Case law: Germany, Bundesgerichtshof', 'in_force_trailer': 'In-force'})},
+                 Kind='documentation')
+        t.pin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.t.close()
+
+    def calls(self, *calls) -> list[dict]:
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', CALL], cwd=self.t.root, input=json.dumps(calls),
+                              capture_output=True, encoding='utf-8', timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        return json.loads(done.stdout)
+
+    def test_bgh_decisions_by_aktenzeichen(self):
+        civil, cartel, details, cites, bsg = self.calls(
+            ('find_provision', {'query': 'VI ZR 123/20'}),
+            ('find_provision', {'query': 'KZR 46/19'}),
+            ('law_details', {'law': 'KZR 46/19'}),
+            ('resolve_citations', {'text': 'Vgl. BGH, Urteil vom 15.09.2020 - VI ZR 123/20 und BGH, KZR 46/19.', 'date': '2023-01-01'}),
+            ('find_provision', {'query': 'B 2 U 1/20 R'}))
+        for a in (civil, cartel, details, cites, bsg):
+            self.assertFalse(a['error'], a['text'])
+        self.assertIn(f'{BGH}/{B1}', civil['text'])
+        self.assertIn(f'{BGH}/{B2}', cartel['text'])
+        self.assertIn(f'{BGH}/{B2}', details['text'])
+        text = json.dumps(cites['data'], ensure_ascii=False)
+        self.assertIn(f'{BGH}/{B1}', text)
+        self.assertIn(f'{BGH}/{B2}', text)
+        self.assertIn('No decision', bsg['text'])  # no BSG case law is served: answered at once, not searched
+
 
 if __name__ == '__main__':
     unittest.main()

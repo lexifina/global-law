@@ -4769,9 +4769,16 @@ def _de_para_rx():
 DE_PARA = _LazyRegex(_de_para_rx)
 # German dockets (Aktenzeichen): "1 BvR 123/20" (BVerfG), "VI ZR 123/20" (BGH), "2 C 12.19" (BVerwG), "IX R 12/19"
 # (BFH), "5 AZR 123/19" (BAG), "35 W (pat) 12/19" (BPatG): found in the case law served through each corpus's
-# decision-index.tsv.
-DE_DOCKET = re.compile(r'(?<![\w/.-])(?:\d{1,2}|[IVX]{1,5}a?)\s+(?:Bv[A-Z]|PBvU|ZR|ZB|StR|ARs?|KZR|KVR|EnVR|NotZ|AZR|ABR|AZB|AZN|'
-                       r'W\s?\(pat\)|Ni|VR|WB|WDS?|[ABCDEFKPRS])\s+\d{1,5}[/.]\d{2}(?![\d/.])')
+# decision-index.tsv. The BGH's special senates write no senate number ("KZR 46/19", "AnwZ (Brfg) 12/20", "NotZ(Brfg)
+# 1/20", "EnVR 12/20", "BLw 1/20", "GSSt 1/20", "StB 3/20", "AK 12/20"); its criminal senates arabic ("5 StR 231/03") and
+# its civil senates roman ones ("VIa ZR 936/23", "IX ZB 1/20", "III ZA 1/20", "V ZR (Ü) 1/20"); the Ermittlungsrichter
+# "1 BGs 12/20". The Bundessozialgericht: "B 2 U 1/20 R", "B 12 KR 3/19 B", "B 1 KR 25/18 R".
+DE_DOCKET = re.compile(r'(?<![\w/.-])(?:(?:\d{1,2}|[IVX]{1,5}a?)\s+(?:Bv[A-Z]|PBvU|ZR(?:\s?\(Ü\))?|ZB|ZA|StR|ARs?(?:\s?\((?:VZ|VS|Vollz)\))?|'
+                       r'ARZ|BGs|KZR|KVR|EnVR|NotZ|AZR|ABR|AZB|AZN|W\s?\(pat\)|Ni|VR|WB|WDS?|[ABCDEFKPRS])'
+                       r'|(?:AnwZ|AnwSt|NotZ|NotSt|RiZ|RiSt|StbSt|WpSt|PatAnwSt|PatAnwZ|AR)(?:\s?\((?:B|Brfg|R|P|Ri|Anw|Not)\))?'
+                       r'|AK|StB|EnVR|EnVZ|EnZR|EnZB|KZR|KVR|KVZ|KZB|KRB|KVB|BLw|LwZR|LwZB|LwZA|GSSt|GSZ|VGS)'
+                       r'\s+\d{1,5}[/.]\d{2}(?![\d/]|\.\d)'  # a full stop may end the sentence: "BGH, KZR 46/19."
+                       r'|(?<![\w/.-])B\s+\d{1,2}\s?[a-z]?\s+[A-Z]{1,3}\s+\d{1,5}/\d{2}\s+[A-Z]{1,2}(?![\w])')
 
 
 # United States decisions by reporter citation ("410 U.S. 113", "93 S. Ct. 705", "35 L. Ed. 2d 147", "550 F.3d 1",
@@ -5108,7 +5115,8 @@ CITATION_REGISTRY = [
                  ('§ 823 Abs. 1 BGB', '§§ 280, 281 BGB', '§ 15 Abs. 1 Satz 1 AsylG', '§ 13 SGB V', '§ 242 StPO')),
     # German decisions by Aktenzeichen, to the decision's file in the case law served (decision-index.tsv).
     CitationForm('de', DE_DOCKET, lambda m: decision_paths(m.group(0)),
-                 ('1 BvR 123/20', 'VI ZR 123/20', '2 C 12.19', 'IX R 12/19', '5 AZR 123/19', '35 W (pat) 12/19')),
+                 ('1 BvR 123/20', 'VI ZR 123/20', '2 C 12.19', 'IX R 12/19', '5 AZR 123/19', '35 W (pat) 12/19',
+                  '5 StR 231/03', 'KZR 46/19', 'AnwZ (Brfg) 12/20', 'B 2 U 1/20 R')),
     # Poland: an article of a code by its abbreviation ("art. 415 k.c.", "art. 22¹ § 1 k.p.", "art. 32 ust. 1 Konstytucji
     # RP"), to poland-law's files (data/pl-aliases.json); codes poland-law does not hold yet are left unresolved.
     CitationForm('pl', PL_ARTICLE, lambda m: pl_article_paths(m),

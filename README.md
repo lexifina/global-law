@@ -88,8 +88,10 @@ Court decisions sit beside the law, one file and one commit per published decisi
   which requires naming the source and the date of its last update: each corpus states that credit in its corpus.json,
   and `read_law` and `list_jurisdictions` give it as a `Credit:` line.
 - **Germany:** `germany/<court>/caselaw` (the Bundesverfassungsgericht, Bundesverwaltungsgericht, Bundesfinanzhof,
-  Bundesarbeitsgericht and Bundespatentgericht), each decision filed by its ECLI (or Aktenzeichen), with its
-  Aktenzeichen in the corpus's `decision-index.tsv`.
+  Bundesarbeitsgericht, Bundespatentgericht and Bundesgerichtshof), each decision filed by its ECLI (or Aktenzeichen),
+  with its Aktenzeichen in the corpus's `decision-index.tsv`. The Bundesgerichtshof's runs from 2000 (CE-BGH), with its
+  criminal senates' decisions of 1950-1999 (BGH-Strafsachen-20Jhd, read from scans). The Bundessozialgericht has no
+  open bulk source yet, so its case law is not here.
 - **Poland:** `poland/<court group>/caselaw` (the Sąd Najwyższy, the Trybunał Konstytucyjny, the Krajowa Izba
   Odwoławcza and the common courts by appellate region; SAOS carries no administrative-court judgments), from SAOS, each judgment filed by its case
   number (sygnatura) and SAOS id, with the sygnatura in the corpus's `decision-index.tsv`. Judgments are official
@@ -127,7 +129,7 @@ From an assistant, `check_precedent` lists the decisions that applied a provisio
 applied is still the text in force; `what_else_changes` counts them; `find_provision` and `law_details` take an ECLI
 (`ECLI:NL:HR:2019:1234`), a Dutch zaaknummer or LJN (`19/00135`, `200.123.456/01`, `LJN BK1234`), a Swiss docket (`4A_123/2024`), a BGE reference (`BGE 142 II 307`), a French pourvoi
 (`n° 18-12.345`), Conseil constitutionnel decision (`n° 2019-791 QPC`), DILA id (`JURITEXT000041234567`), German
-Aktenzeichen (`1 BvR 123/20`, `VI ZR 123/20`, `2 C 12.19`) or Polish sygnatura (`III KK 198/16`, `K 1/12`, `KIO 1039/16`)
+Aktenzeichen (`1 BvR 123/20`, `VI ZR 123/20`, `KZR 46/19`, `AnwZ (Brfg) 12/20`, `2 C 12.19`, the Bundessozialgericht's `B 2 U 1/20 R`) or Polish sygnatura (`III KK 198/16`, `K 1/12`, `KIO 1039/16`)
 or SAOS id (`SAOS 245361`); `resolve_citations` reads Dutch citations by abbreviation
 (`artikel 6:162 BW`, `art. 8:69 Awb`), French ones by code (`article 1240 du code civil`, `art. L. 1235-3 C. trav.`,
 `article 66 de la Constitution`) and German ones by official abbreviation (`§ 823 Abs. 1 BGB`, `§§ 280, 281 BGB`,
