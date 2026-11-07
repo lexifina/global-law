@@ -94,8 +94,12 @@ Court decisions sit beside the law, one file and one commit per published decisi
   open bulk source yet, so its case law is not here.
 - **Poland:** `poland/<court group>/caselaw` (the Sąd Najwyższy, the Trybunał Konstytucyjny, the Krajowa Izba
   Odwoławcza and the common courts by appellate region; SAOS carries no administrative-court judgments), from SAOS, each judgment filed by its case
-  number (sygnatura) and SAOS id, with the sygnatura in the corpus's `decision-index.tsv`. Judgments are official
-  documents outside copyright (Art. 4 of the Polish Copyright Act).
+  number (sygnatura) and SAOS id, with the sygnatura in the corpus's `decision-index.tsv`. The KIO's decisions after
+  SAOS's last (6 September 2018) come from the UZP portal orzeczenia.uzp.gov.pl, filed by sygnatura and portal id
+  (`UZP 30001`). SAOS's record of the Sąd Najwyższy ends on 22 June 2016 and of the Trybunał Konstytucyjny on 9 December
+  2015: their own sites (sn.pl, ipo.trybunal.gov.pl) cannot be read by a program, and the administrative courts'
+  database (orzeczenia.nsa.gov.pl) forbids crawling its search in robots.txt, so those are not here. Judgments are
+  official documents outside copyright (Art. 4 of the Polish Copyright Act).
 - **The United States:** `united-states/<court>/caselaw` (the Supreme Court; the courts of appeals `ca1` to `ca11`,
   `cadc` and `cafc`), from the Caselaw Access Project (CC0), each decision filed by its official reporter citation
   (`410-U-S-113.md`), with every parallel citation (`93 S. Ct. 705`) and its docket number in the corpus's
@@ -130,7 +134,7 @@ applied is still the text in force; `what_else_changes` counts them; `find_provi
 (`ECLI:NL:HR:2019:1234`), a Dutch zaaknummer or LJN (`19/00135`, `200.123.456/01`, `LJN BK1234`), a Swiss docket (`4A_123/2024`), a BGE reference (`BGE 142 II 307`), a French pourvoi
 (`n° 18-12.345`), Conseil constitutionnel decision (`n° 2019-791 QPC`), DILA id (`JURITEXT000041234567`), German
 Aktenzeichen (`1 BvR 123/20`, `VI ZR 123/20`, `KZR 46/19`, `AnwZ (Brfg) 12/20`, `2 C 12.19`, the Bundessozialgericht's `B 2 U 1/20 R`) or Polish sygnatura (`III KK 198/16`, `K 1/12`, `KIO 1039/16`)
-or SAOS id (`SAOS 245361`); `resolve_citations` reads Dutch citations by abbreviation
+or SAOS id (`SAOS 245361`) or UZP portal id (`UZP 30001`); `resolve_citations` reads Dutch citations by abbreviation
 (`artikel 6:162 BW`, `art. 8:69 Awb`), French ones by code (`article 1240 du code civil`, `art. L. 1235-3 C. trav.`,
 `article 66 de la Constitution`) and German ones by official abbreviation (`§ 823 Abs. 1 BGB`, `§§ 280, 281 BGB`,
 `§ 13 SGB V`) as it reads Swiss ones (`Art. 336 OR`).

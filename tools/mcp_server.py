@@ -4877,10 +4877,11 @@ PL_DOCKET = re.compile(r'(?<![\w/.-])(?:(?:[IVX]{1,5}\s+(?:A?Ca|A?Cz|CSKP?|CNPP?
 # looked up by name and nothing is claimed for one country's citation forms.
 PL_ANY_DOCKET = re.compile(r'(?<![\w/.-])[IVX]{1,5}\s+[A-Z][A-Za-z]{0,4}(?:/[A-Z][a-z]{1,2})?\s+\d{1,5}/\d{2}(?![\d/])')
 # A whole query that is a Trybunał Konstytucyjny case number with a one-letter or other repertory PL_DOCKET leaves out
-# ("K 1/20", "P 7/20", "U 2/19", "Kpt 1/17"), or a judgment's SAOS id ("SAOS 245361", as decision-index.tsv files it):
-# found by find_provision and law_details, never claimed in running text. Before 2026-11-07 "K 1/20" and "SAOS 245361"
-# fell through to the heading search of every corpus (120 s, then stopped).
-PL_REF = re.compile(r'(?:(?:K|P|U|S|W|T|Kpt|Kw|Uw|Tk|Pw|SK|Kp|Ts|Tw|Pp)\s+\d{1,5}/\d{2}|SAOS\s+\d{1,9})')
+# ("K 1/20", "P 7/20", "U 2/19", "Kpt 1/17"), or a judgment's SAOS id ("SAOS 245361", as decision-index.tsv files it) or a
+# KIO decision's UZP portal id ("UZP 30001", the decisions after SAOS's last of 2018-09-06): found by find_provision and
+# law_details, never claimed in running text. Before 2026-11-07 "K 1/20" and "SAOS 245361" fell through to the heading
+# search of every corpus (120 s, then stopped).
+PL_REF = re.compile(r'(?:(?:K|P|U|S|W|T|Kpt|Kw|Uw|Tk|Pw|SK|Kp|Ts|Tw|Pp)\s+\d{1,5}/\d{2}|(?:SAOS|UZP)\s+\d{1,9})')
 
 
 def pl_corpus() -> tuple[str, str | None]:

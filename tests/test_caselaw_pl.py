@@ -26,6 +26,10 @@ LAW = 'poland/national/acts'
 CASES = 'poland/sad-najwyzszy/caselaw'
 TK = 'poland/trybunal-konstytucyjny/caselaw'
 TK1 = 'decisions/trybunal-konstytucyjny/2016/K-1-16-2001.md'
+KIO = 'poland/krajowa-izba-odwolawcza/caselaw'
+K1 = 'decisions/krajowa-izba-odwolawcza/2018/KIO-1711-18-354890.md'  # SAOS's last (2018-09-06)
+K2 = 'decisions/krajowa-izba-odwolawcza/2025/KIO-100-25-uzp-30001.md'  # from orzeczenia.uzp.gov.pl, appended after SAOS's
+K3 = 'decisions/krajowa-izba-odwolawcza/2024/KIO-900-24-uzp-29001.md'  # a late upload, appended after K2: out of order
 ART = f'{LAW}/kodeks-cywilny/art-415.md'
 # words that left art. 416 in 2018 and are law in art. 417 after: check_precedent says where they went
 MOVED = 'Osoba prawna jest obowiązana do naprawienia szkody wyrządzonej z winy jej organu.'
@@ -63,7 +67,9 @@ class PolishCaseLaw(unittest.TestCase):
             {'path': CASES, 'name': 'Case law: Sąd Najwyższy', 'language': 'pl', 'kind': 'judgments',
              'in_force_trailer': 'In-force', 'correction_trailer': 'Corrected', 'code': 'PL'},
             {'path': TK, 'name': 'Case law: Trybunał Konstytucyjny', 'language': 'pl', 'kind': 'judgments',
-             'in_force_trailer': 'In-force', 'correction_trailer': 'Corrected', 'code': 'PL', 'history_from': '2016-06-01'}]}
+             'in_force_trailer': 'In-force', 'correction_trailer': 'Corrected', 'code': 'PL', 'history_from': '2016-06-01'},
+            {'path': KIO, 'name': 'Case law: Krajowa Izba Odwoławcza', 'language': 'pl', 'kind': 'judgments',
+             'in_force_trailer': 'In-force', 'correction_trailer': 'Corrected', 'code': 'PL', 'history_from': '2018-09-06'}]}
         (t.root / 'manifest.json').write_text(json.dumps(manifest), encoding='utf-8')
         run('add', 'jurisdiction.json', 'data', cwd=t.root)
         law = t.corpus(LAW)
@@ -114,6 +120,19 @@ class PolishCaseLaw(unittest.TestCase):
                   Kind='court', In_force='2016-06-01', Decided='2016-06-01', Court='Trybunał Konstytucyjny', Docket='K 1/16')
         run('commit', '-q', '--amend', '--no-edit', '--date=2016-06-01T12:00:00+0200', cwd=tk.path)
         tk.commit('Lexifina', {'decision-index.tsv': f'reference\tpath\nK 1/16\t{TK1}\nSAOS 2001\t{TK1}\n'}, Kind='documentation')
+        # The KIO: SAOS's decisions to 2018-09-06, then the UZP portal's appended after them (UZP: <portal id>), and a late
+        # upload of 2024 appended after one of 2025, as the nightly run appends them.
+        kio = t.corpus(KIO)
+        for path, day, docket, extra in ((K1, '2018-09-06', 'KIO 1711/18', {'SAOS': '354890'}),
+                                         (K2, '2025-01-15', 'KIO 100/25', {'UZP': '30001'}),
+                                         (K3, '2024-06-03', 'KIO 900/24', {'UZP': '29001'})):
+            kio.commit(f'Krajowa Izba Odwoławcza {docket}', {path: judgment(f'Krajowa Izba Odwoławcza, Wyrok, {day}, {docket}',
+                                                                                 'Izba oddala odwołanie.')},
+                       Kind='court', In_force=day, Decided=day, Court='Krajowa Izba Odwoławcza', Docket=docket, **extra)
+            run('commit', '-q', '--amend', '--no-edit', f'--date={day}T12:00:00+0100', cwd=kio.path)
+        kio.commit('Lexifina', {'decision-index.tsv': f'reference\tpath\nKIO 1711/18\t{K1}\nSAOS 354890\t{K1}\n'
+                                                      f'KIO 100/25\t{K2}\nUZP 30001\t{K2}\nKIO 900/24\t{K3}\nUZP 29001\t{K3}\n'},
+                   Kind='documentation')
         t.pin()
 
     @classmethod
@@ -288,6 +307,20 @@ class PolishCaseLaw(unittest.TestCase):
         self.assertIn(f'{TK}: Case law: Trybunał Konstytucyjny (pl; 1 decision files)', lj['text'])
         self.assertFalse(PL_REF_IN_TEXT(), 'a one-letter repertory is never read as a citation in running text')
 
+    def test_kio_decisions_from_the_uzp_portal_appended_out_of_order(self):
+        """The KIO after SAOS (orzeczenia.uzp.gov.pl): found by docket and by portal id, and a late upload appended after
+        a newer decision is not the latest decision (the latest day given is)."""
+        by_docket, by_uzp, lj, world = self.calls(('find_provision', {'query': 'KIO 100/25'}), ('find_provision', {'query': 'UZP 29001'}),
+                                                  ('list_jurisdictions', {}), ('world_on_date', {'date': '2024-12-31'}))
+        for a in (by_docket, by_uzp, lj, world):
+            self.assertFalse(a['error'], a['text'])
+        self.assertIn(f'{KIO}/{K2}', by_docket['text'])
+        self.assertIn(f'{KIO}/{K3}', by_uzp['text'])
+        rows = {c['path']: c for c in lj['data']['corpora']}
+        self.assertEqual(rows[KIO]['last_change_in_record'], '2025-01-15')
+        self.assertIn('KIO 900/24 (latest decision), given 2024-06-03', world['text'])
+        self.assertIn('KIO 100/25 (latest decision), given 2025-01-15', self.cli('world', '2026-01-01'))
+        self.assertIn('KIO 1711/18 (latest decision), given 2018-09-06', self.cli('world', '2019-01-01'))
 
     def test_a_search_of_case_law_stops_at_its_line_cap_and_says_so(self):
         code = CALL.replace('import mcp_server\n', 'import mcp_server; mcp_server.CASELAW_LINES = 1\n')
