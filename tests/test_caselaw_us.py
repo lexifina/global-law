@@ -28,6 +28,7 @@ FOLDER = 'decisions/supreme-court-of-the-united-states'
 D1 = f'{FOLDER}/2010/560-U-S-100.md'
 D2 = f'{FOLDER}/2016/578-U-S-200.md'
 D3 = f'{FOLDER}/2022/596-U-S-300.md'
+D5 = f'{FOLDER}/2014/573-U-S-500.md'  # committed after D3 (2022): out of the order given
 D4 = f'{FOLDER}/2012/567-U-S-400.md'  # front matter longer than 4,000 bytes, as Roe v. Wade's is
 CALL = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server\n'
         'out = []\n'
@@ -83,7 +84,11 @@ class UnitedStatesCaseLaw(unittest.TestCase):
         c.commit(f'{COURT} 596 U.S. 300', {D3: decision('In re Debtor', 'The definition in 11 U.S.C. § 1182(1) controls.')},
                  Kind='court', In_force='2022-03-03', Decided='2022-03-03', Court=COURT, Docket='21-200',
                  Citation='596 U.S. 300', Cites=f'{ART} (11 U.S.C. § 1182(1))')
-        url = 'https://static.case.law/us/'
+        # A backfill (CourtListener's decisions of 2014-2019 appended after CAP's of 2019): an older decision committed
+        # after a newer one, dated its own day.
+        c.commit(f'{COURT} 573 U.S. 500', {D5: decision('Late v. Backfill', 'The judgment is vacated.')}, Kind='court',
+                 In_force='2014-05-05', Decided='2014-05-05', Court=COURT, Docket='13-500', Citation='573 U.S. 500')
+        url ='https://static.case.law/us/'
         rows = [{'decided': '2010-05-05', 'name': 'Smith v. Jones', 'court': COURT, 'citation': '560 U.S. 100', 'url': url + '1',
                  'how': '11 U.S.C. § 1182', 'mentions': 1, 'decision': D1},
                 {'decided': '2016-06-01', 'name': 'Doe v. Roe', 'court': COURT, 'citation': '578 U.S. 200', 'url': url + '2',
@@ -306,6 +311,19 @@ class UnitedStatesCaseLaw(unittest.TestCase):
         store = subprocess.run(['git', 'rev-parse', '--path-format=absolute', '--git-path', 'global-law-cache'], cwd=self.t.root,
                                capture_output=True, encoding='utf-8').stdout.strip()
         self.assertTrue(list(Path(store).glob('headings-v1-united-states~supreme-court~caselaw-*.json')))
+
+    def test_latest_decision_when_older_decisions_are_appended_later(self):
+        """A decision of 2014 committed after one of 2022 (a backfill) is not the latest decision: world, world_on_date
+        and list_jurisdictions take the latest day given, not the last commit, when a corpus is out of the order given."""
+        self.assertIn('596 U.S. 300 (latest decision), given 2022-03-03', self.cli('world', '2025-01-01'))
+        self.assertIn('573 U.S. 500 (latest decision), given 2014-05-05', self.cli('world', '2015-01-01'))
+        self.assertIn('567 U.S. 400 (latest decision), given 2012-04-04', self.cli('world', '2013-01-01'))
+        world, lj = self.calls(('world_on_date', {'date': '2015-01-01'}), ('list_jurisdictions', {}))
+        self.assertIn('573 U.S. 500 (latest decision), given 2014-05-05', world['text'])
+        row = next(r for r in lj['data']['jurisdictions'] if r['path'] == CASES) if 'jurisdictions' in lj['data'] else None
+        self.assertIn('last change 2022-03-03', lj['text'])
+        if row:
+            self.assertEqual(row['last_change_in_record'], '2022-03-03')
 
     def test_us_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))

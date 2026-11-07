@@ -306,9 +306,14 @@ def latest_decision(corpus: str, date: str) -> tuple[str, str, str] | None:
     cwd = ROOT / corpus
     if not (cwd / '.git').exists() or not _readable(corpus, cwd):
         return None
+    days = _decision_days(corpus, cwd)
+    if days is not None:  # not committed in the order given: the latest day on or before the date, from every decision's
+        import bisect
+        i = bisect.bisect_right(days, (date, '￿'))
+        return (days[i - 1][1], days[i - 1][0], days[i - 1][2]) if i else None
     if date < '1970-01-02':
-        last = [e for e in corpus_events(corpus) if e.in_force <= date and e.kind not in ('documentation', 'end')]
-        return (last[-1].law, last[-1].in_force, last[-1].corpus_commit) if last else None
+        last = [e for e in corpus_events(corpus) if e.in_force <= date and e.kind not in ('documentation', 'end', 'correction')]
+        return max(((e.law, e.in_force, e.corpus_commit) for e in last), key=lambda f: f[1], default=None)
     # git reads no date after 2099 ("--before=9999-12-31" read as 2012-12-28 gave every case-law corpus that last
     # decision in list_jurisdictions): a later date needs no --before, and no commit is made after it.
     cutoff = f'{date}T23:59:59+01:00'
@@ -328,6 +333,78 @@ def latest_decision(corpus: str, date: str) -> tuple[str, str, str] | None:
 # A correction is appended after the decisions, dated its decision's day: it is not a decision given, and the 5514
 # Bundesarbeitsgericht corrections on top of that corpus would name whichever was fixed last (or be walked on every call).
 NOT_CORRECTION = ('--invert-grep', '--grep=^Kind: correction$')
+
+
+def _decision_days(corpus: str, cwd: Path) -> list[tuple[str, str, str]] | None:
+    """None when a body of case law is committed in the order its decisions were given (each decision's In-force day
+    on or after the one before it), as latest_decision's `git log -n` assumes. Otherwise every day a decision was given,
+    sorted, as (day, name, commit) of the last decision committed for that day: a backfill (US decisions of 2014-2019
+    from CourtListener appended after CAP's of 2019) puts older decisions after newer, and the last commit would be
+    named the latest decision. Read from the decisions' trailers once per pin and kept in global-law-cache; a pin that
+    moved forward reads only the commits added since."""
+    pin = reachable_tip(corpus)
+    key = ('decision-days', f'{corpus}@{pin}')
+    if key in _CACHE:
+        return _CACHE[key]  # type: ignore[return-value]
+    import os
+    store, name = _store(), corpus.replace('/', '~')
+    path = store / f'decision-days-{name}-{pin[:12]}.json'
+    data = None
+    try:
+        data = json.loads(path.read_text(encoding='utf-8'))
+        if data.get('pin') != pin:
+            data = None
+    except (OSError, ValueError):
+        data = None
+    if data is None:
+        base = None
+        for old in sorted(store.glob(f'decision-days-{name}-*.json'), key=lambda p: p.stat().st_mtime, reverse=True)[:3]:
+            try:
+                prev = json.loads(old.read_text(encoding='utf-8'))
+            except (OSError, ValueError):
+                continue
+            if prev.get('pin') and subprocess.run(['git', 'merge-base', '--is-ancestor', prev['pin'], pin], cwd=cwd,
+                                                  capture_output=True).returncode == 0:
+                base = prev
+                break
+        span = f"{base['pin']}..{pin}" if base else pin
+        out = git('log', '--reverse', *NOT_CORRECTION, '--format=%H%x1f%an%x1f%(trailers:key=In-force,valueonly,separator=%x2C)',
+                  span, cwd=cwd, check=False)
+        last, ordered = (base['last'], base['in_order']) if base else ('', True)
+        days = {d: (n, s) for d, n, s in base['days']} if base and base.get('days') is not None else None
+        new = []
+        for line in out.splitlines():
+            sha, author, day = (line.split('\x1f') + ['', ''])[:3]
+            day = day.strip()[:10]
+            if author == MAINTAINER or not ISO_DAY.fullmatch(day):
+                continue
+            new.append((day, author, sha))
+            if day < last:
+                ordered = False
+            last = max(last, day)
+        if not ordered and days is None:  # out of order from now on: every decision's day, read once from the start
+            days = {}
+            for line in git('log', '--reverse', *NOT_CORRECTION, '--format=%H%x1f%an%x1f%(trailers:key=In-force,valueonly,separator=%x2C)',
+                            pin, cwd=cwd, check=False).splitlines():
+                sha, author, day = (line.split('\x1f') + ['', ''])[:3]
+                day = day.strip()[:10]
+                if author != MAINTAINER and ISO_DAY.fullmatch(day):
+                    days[day] = (author, sha)
+        elif days is not None:
+            for day, author, sha in new:
+                days[day] = (author, sha)
+        data = {'pin': pin, 'in_order': ordered, 'last': last,
+                'days': None if ordered else sorted([d, n, s] for d, (n, s) in days.items())}
+        try:
+            store.mkdir(parents=True, exist_ok=True)
+            tmp = path.with_name(f'{path.name}.{os.getpid()}.tmp')
+            tmp.write_text(json.dumps(data, ensure_ascii=False), encoding='utf-8')
+            os.replace(tmp, path)
+        except OSError:
+            pass
+    result = None if data['in_order'] else [tuple(r) for r in data['days']]
+    _CACHE[key] = result
+    return result
 
 
 def _late_decisions(corpus: str, cwd: Path, cutoff: str, date: str) -> list[tuple[str, str, str]]:
