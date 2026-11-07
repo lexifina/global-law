@@ -1301,19 +1301,28 @@ def cited_provisions(query: str, scope: str) -> list[tuple[str, str, str]]:
     m = ES_NORM_FIRST.match(query)
     if m:
         forms += [f"{m.group('art')} de la {m.group('norm')}", f"{m.group('art')} del {m.group('norm')}"]
+    def held(item):
+        path, cite = item
+        try:
+            corpus, rel = law.corpus_of(path)
+        except SystemExit:
+            return None
+        sha = corpus_head(corpus)
+        if sha and has_file(corpus, sha, rel):
+            return path, read_headings(corpus, sha, (rel,)).get(rel, ''), cite
+        return None
+
     for q in forms:
-        out, seen = [], set()
+        todo, seen = [], set()
         for path, cite in ((h['path'], h['citation']) for h in citations_in(q)):  # a list gives several: "artículos 103 y 107"
             if path in seen or scope and not (path == scope or path.startswith(scope.rstrip('/') + '/')):
                 continue
             seen.add(path)
-            try:
-                corpus, rel = law.corpus_of(path)
-            except SystemExit:
-                continue
-            sha = corpus_head(corpus)
-            if sha and has_file(corpus, sha, rel):
-                out.append((path, read_headings(corpus, sha, (rel,)).get(rel, ''), cite))
+            todo.append((path, cite))
+        # Two git processes per hit, eight hits at a time: a US docket ("No. 70-18") names eleven decisions in seven
+        # courts, and one after another they took a second (US speed gate, 2026-11-07).
+        with ThreadPoolExecutor(min(8, len(todo) or 1)) as pool:
+            out = [r for r in pool.map(held, todo) if r]
         if out:
             return out
     return []

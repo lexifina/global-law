@@ -96,7 +96,7 @@ class UnitedStatesCaseLaw(unittest.TestCase):
                 {'decided': '2022-03-03', 'name': 'In re Debtor', 'court': COURT, 'citation': '596 U.S. 300', 'url': url + '3',
                  'how': '11 U.S.C. § 1182(1)', 'mentions': 1, 'decision': D3, 'law_commit': cls.v2022}]
         index = 'reference\tpath\n' + ''.join(f'{r}\t{p}\n' for r, p in (
-            ('560 U.S. 100', D1), ('130 S. Ct. 1000', D1), ('08-1234', D1), ('578 U.S. 200', D2), ('15-100', D2),
+            ('560 U.S. 100', D1), ('130 S. Ct. 1000', D1), ('08-1234', D1), ('578 U.S. 200', D2), ('15-100', D2), ('15-100', D4),
             ('596 U.S. 300', D3), ('142 S. Ct. 3000', D3), ('21-200', D3)))
         c.commit('Lexifina', {f'judgments/{LAW}/title-11/1182.jsonl': ''.join(json.dumps(r) + '\n' for r in rows),
                               'decision-index.tsv': index,
@@ -324,6 +324,14 @@ class UnitedStatesCaseLaw(unittest.TestCase):
         self.assertIn('last change 2022-03-03', lj['text'])
         if row:
             self.assertEqual(row['last_change_in_record'], '2022-03-03')
+
+    def test_a_docket_shared_by_several_decisions_lists_each_with_its_name(self):
+        """A docket number is not unique (No. 70-18 names eleven decisions in seven US courts): each is listed with its
+        heading, read side by side rather than two git processes per decision one after another (3.1 s, speed gate)."""
+        (found,) = self.calls(('find_provision', {'query': 'No. 15-100'}))
+        self.assertFalse(found['error'], found['text'])
+        self.assertIn(f'{CASES}/{D2}  Doe v. Roe', found['text'])
+        self.assertIn(f'{CASES}/{D4}  Longfront v. Heading', found['text'])
 
     def test_us_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))
