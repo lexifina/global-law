@@ -322,6 +322,24 @@ class PolishCaseLaw(unittest.TestCase):
         self.assertIn('KIO 100/25 (latest decision), given 2025-01-15', self.cli('world', '2026-01-01'))
         self.assertIn('KIO 1711/18 (latest decision), given 2018-09-06', self.cli('world', '2019-01-01'))
 
+    def test_served_note_with_case_law_chosen_by_path(self):
+        """Corpora chosen by their own paths (as countries.py only writes them) are not matched against every corpus
+        (1.0 s of world_on_date with 14 Polish case-law corpora), and a misspelt choice is still named."""
+        code = ('import os, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True\n'
+                'import mcp_server as m\n'
+                f'os.environ["GLOBAL_LAW_JURISDICTIONS"] = "{LAW},{CASES},{KIO}"\n'
+                'a = m.served_note()\n'
+                f'os.environ["GLOBAL_LAW_JURISDICTIONS"] = "{LAW},polandd/caselaw"\n'
+                'b = m.served_note()\n'
+                'print(repr(a)); print(repr(b))\n')
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', code], cwd=self.t.root, capture_output=True, encoding='utf-8',
+                              timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        a, b = done.stdout.splitlines()[:2]
+        self.assertNotIn('name nothing', a)
+        self.assertIn("'polandd/caselaw'", b)
+        self.assertIn('name nothing', b)
+
     def test_a_search_of_case_law_stops_at_its_line_cap_and_says_so(self):
         code = CALL.replace('import mcp_server\n', 'import mcp_server; mcp_server.CASELAW_LINES = 1\n')
         done = subprocess.run([sys.executable, '-X', 'utf8', '-c', code], cwd=self.t.root, capture_output=True, encoding='utf-8',

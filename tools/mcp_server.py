@@ -1208,7 +1208,10 @@ def served_note(names: bool = False) -> str:
     full = _full_manifest(head())['corpora']
     total = len(full)
     note = f'\nServed here: {total - len(out)} of the {total} corpora in the tree; the other {len(out)} were not searched.'
-    stray = [n for n in chosen() if not any(law.takes_in(c, n) for c in full)]
+    # A choice that is a corpus's own path names it (takes_in says so too); only the others are matched against every
+    # corpus. With 14 Polish case-law corpora chosen by path, the full match cost 1.0 s of a 1.7 s world_on_date.
+    paths = {c['path'] for c in full}
+    stray = [n for n in chosen() if law._plain(n) not in paths and not any(law.takes_in(c, n) for c in full)]
     if stray:  # a misspelt choice would otherwise leave the server serving nothing, silently
         note += (f" The jurisdictions chosen include {', '.join(repr(n.strip()) for n in stray)}, which name nothing in "
                  f'this tree; `{COUNTRIES}` lists the names.')
