@@ -2565,7 +2565,9 @@ def t_laws_between(args: dict) -> tuple[str, dict]:
               and (e.corpus not in inside or e.corpus_commit in inside[e.corpus])]
     ends = sum(1 for e in window if e.kind == 'end')  # France's "Fin de vigueur": an end of validity, no law named
     every, left_out = laws_only([e for e in window if e.kind != 'end'])
-    if wants_judgments(args):  # case law: the decisions given in the window, by the day given
+    # case law (kind "judgments", or a jurisdiction that names it, as law.py laws <country>/caselaw): the decisions
+    # given in the window, by the day given
+    if wants_judgments(args) or (scope and law.names_caselaw(scope)):
         every, left_out = [e for e in window if e.kind == 'court'], {}
     rows = every[:num(args, 'max_results', 200, MAX_ITEMS)]  # oldest first; a long window is cut, and says so
     changed_counts([(e.corpus, e.corpus_commit) for e in rows])  # one git process per corpus, not one per row

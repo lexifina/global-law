@@ -293,6 +293,23 @@ class FrenchCaseLaw(unittest.TestCase):
             self.assertTrue(m.FR_DECISION.search(ref), ref)
         self.assertIsNone(m.FR_DECISION.search('n° 412345'))  # a bare number without its court is not read
 
+    def test_laws_between_lists_decisions_when_the_jurisdiction_names_case_law(self):
+        """laws_between with a case-law jurisdiction ("france/caselaw", a court's corpus) lists the decisions given in the
+        window, as law.py laws does and the tool's description says; it answered "No law took effect ... not listed: 22
+        court rulings" (case-law audit 2026-11-07)."""
+        named, court, law_only = self.calls(
+            ('laws_between', {'start': '2016-01-01', 'end': '2022-12-31', 'jurisdiction': 'france/caselaw'}),
+            ('laws_between', {'start': '2016-01-01', 'end': '2022-12-31', 'jurisdiction': CASES}),
+            ('laws_between', {'start': '2016-01-01', 'end': '2022-12-31', 'jurisdiction': 'france'}))
+        for a in (named, court, law_only):
+            self.assertFalse(a['error'], a['text'])
+        for a in (named, court):
+            self.assertIn('Cour de cassation 15-10.100', a['text'])
+            self.assertIn('Cour de cassation 21-20.200', a['text'])
+            self.assertNotIn('Ordonnance n° 2016-131', a['text'])
+        self.assertIn('Ordonnance n° 2016-131', law_only['text'])
+        self.assertNotIn('21-20.200', law_only['text'].split('Not read')[0])
+
     def test_conseil_constitutionnel_decision_by_number_and_kind(self):
         """decision-index.tsv files a Conseil constitutionnel decision by its bare number ("2026-1225") and its ECLI, not
         by "2026-1225 QPC", so "n° 2026-1225 QPC" found nothing (case-law audit 2026-11-07). The ECLI picks the kind
