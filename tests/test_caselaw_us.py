@@ -333,6 +333,32 @@ class UnitedStatesCaseLaw(unittest.TestCase):
         self.assertIn(f'{CASES}/{D2}  Doe v. Roe', found['text'])
         self.assertIn(f'{CASES}/{D4}  Longfront v. Heading', found['text'])
 
+    def test_act_titles_are_not_read_from_case_law_unless_named(self):
+        """find_provision looks for an act by its title in law, not in case law unless the scope names it: reading the
+        14 US case-law corpora's folder titles on every query made "automatic stay" 2.6x slower (speed gate)."""
+        probe = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server\n'
+                 'seen = []\n'
+                 'real = mcp_server.folder_titles\n'
+                 'def spy(corpus, sha):\n'
+                 '    seen.append(corpus)\n'
+                 '    return real(corpus, sha)\n'
+                 'mcp_server.folder_titles = spy\n'
+                 'out = []\n'
+                 'for name, args in json.loads(sys.stdin.read()):\n'
+                 '    seen.clear()\n'
+                 '    r = mcp_server.handle({"jsonrpc": "2.0", "id": 1, "method": "tools/call", '
+                 '"params": {"name": name, "arguments": args}})["result"]\n'
+                 '    out.append({"error": r["isError"], "text": r["content"][0]["text"], "seen": sorted(set(seen))})\n'
+                 'print(json.dumps(out))\n')
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', probe], cwd=self.t.root, capture_output=True, encoding='utf-8',
+                              timeout=300, input=json.dumps([('find_provision', {'query': 'debtor definition'}),
+                                                             ('find_provision', {'query': '578 U.S. 200'})]))
+        self.assertEqual(done.returncode, 0, done.stderr)
+        plain, ref = json.loads(done.stdout)
+        self.assertFalse(plain['error'], plain['text'])
+        self.assertNotIn(CASES, plain['seen'])
+        self.assertIn(f'{CASES}/{D2}', ref['text'])
+
     def test_us_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))
         import mcp_server as m

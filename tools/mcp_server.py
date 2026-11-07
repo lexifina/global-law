@@ -1394,8 +1394,11 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
              'artículos', 'articulos', 'reg', 'reg.', 'regulation',
              'abs', 'abs.', 'alin', 'alin.', '§', 'para', 'para.', 'nr', 'nr.', 'din', 'of', 'the', 'and', 'si', 'și', 'privind', 'al', 'a'}
     rest = number_forms(rest)
+    # Acts are looked for by number and title in law, not in case law unless the scope names it: the titles of the 14
+    # US case-law corpora, read for every "automatic stay", made find_provision 2.6x slower (US speed gate, 2026-11-07).
     in_reach = [c['path'] for c in law.manifest()['corpora']
-                if not scope or c['path'].startswith(scope) or scope.startswith(c['path'] + '/')]
+                if (not scope or c['path'].startswith(scope) or scope.startswith(c['path'] + '/'))
+                and (not law.is_caselaw(c) or (scope and law.names_caselaw(scope)))]
     acts: list[str] = []  # the act folders the query names; the provision is looked for in them alone
     if not hint:
         # An act cited by kind, number and year ("Legea nr. 31/1990 art. 194", "OUG 195/2002"), or named by its title
