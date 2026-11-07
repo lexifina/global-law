@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewrites and Ages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f5f6f8; --surface-1: #fcfcfb; --surface-2: #f3f4f6; --ink: #0b0b0b; --ink-2: #52514e; --muted: #77756f; --rule: #e3e2de; --grid: #ecebe7;
+  --series-1: #2a78d6; --series-2: #eb6834; --s100: #dbe9fb; --s700: #0d366b; --empty: #e9e8e4; --never: #d9d8d3; --sea: #eef2f6;
+  --display: "Source Serif 4", Georgia, serif; --body: "IBM Plex Sans", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --bg: #111110; --surface-1: #1a1a19; --surface-2: #222220; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #8f8d85; --rule: #34332f; --grid: #2a2927;
+  --series-1: #3987e5; --series-2: #d95926; --s100: #1b2b40; --s700: #a9ccf6; --empty: #2a2927; --never: #3a3935; --sea: #161a1f; } }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #111110; --surface-1: #1a1a19; --surface-2: #222220; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #8f8d85; --rule: #34332f; --grid: #2a2927;
+  --series-1: #3987e5; --series-2: #d95926; --s100: #1b2b40; --s700: #a9ccf6; --empty: #2a2927; --never: #3a3935; --sea: #161a1f; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 var(--body); }
+main { max-width: 1080px; margin: 0 auto; padding: 32px 16px 64px; }
+header h1 { font: 600 34px/1.15 var(--display); margin: 0 0 8px; }
+header p { color: var(--ink-2); max-width: 74ch; margin: 0 0 6px; }
+h2.part { font: 600 26px/1.2 var(--display); margin: 44px 0 4px; }
+p.part { color: var(--ink-2); max-width: 74ch; margin: 0; }
+nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 4px 18px; margin: 16px 0 6px; font-size: 13px; }
+nav b { grid-column: 1 / -1; font-weight: 600; color: var(--ink); margin-top: 6px; }
+nav a { color: var(--ink-2); text-decoration: none; padding: 2px 0; border-bottom: 1px solid var(--rule); }
+nav a:hover { color: var(--ink); }
+.theme { float: right; font: 12px var(--body); background: none; border: 1px solid var(--rule); color: var(--ink-2); border-radius: 8px; padding: 4px 10px; cursor: pointer; }
+figure { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 12px; margin: 22px 0 0; padding: 22px 22px 16px; }
+.eyebrow { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+figure h3 { font: 600 22px/1.25 var(--display); margin: 4px 0 6px; }
+.lede { color: var(--ink-2); margin: 0 0 12px; max-width: 78ch; }
+.lede b { color: var(--ink); font-weight: 600; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0 0 8px; font-size: 13px; color: var(--ink-2); }
+select { font: 13px var(--body); color: var(--ink); background: var(--surface-1); border: 1px solid var(--rule); border-radius: 8px; padding: 4px 8px; }
+svg { display: block; width: 100%; height: auto; font-family: var(--body); }
+svg text { fill: var(--ink-2); }
+svg .strong { fill: var(--ink); font-weight: 600; }
+.note { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 12px; color: var(--ink-2); margin: 2px 0 10px; }
+.legend i { display: inline-block; vertical-align: -2px; margin-right: 5px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; }
+.sl { width: 18px; height: 0; border-top: 2px solid; vertical-align: 3px !important; }
+.ramp { width: 160px; height: 10px; border-radius: 3px; }
+#tip { position: fixed; pointer-events: none; background: var(--surface-1); color: var(--ink); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 16px rgba(0,0,0,.12); opacity: 0; transition: opacity .1s; width: 250px; z-index: 9; }
+#tip b { font-weight: 600; }
+#tip .m { color: var(--ink-2); }
+#tip .bar { display: flex; height: 8px; border-radius: 3px; overflow: hidden; margin: 6px 0 4px; }
+details { margin-top: 8px; font-size: 12.5px; color: var(--ink-2); }
+summary { cursor: pointer; }
+details table { border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
+details td, details th { padding: 2px 8px; border-bottom: 1px solid var(--grid); text-align: right; white-space: nowrap; }
+details td:first-child, details th:first-child { text-align: left; }
+.wrap { overflow-x: auto; max-height: 420px; overflow-y: auto; }
+.offmap { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11.5px; color: var(--ink-2); margin-top: 6px; }
+.offmap i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <button class="theme" id="theme">Light / dark</button>
+  <h1>Rewrites and ages</h1>
+  <p>Two questions about the law each country has in force today, five ways each: how often its provisions have been rewritten, and how old they are. Hover any mark for the country's numbers; every chart has a table.</p>
+  <p class="note" style="margin:0">Local drafts, not published. Data: the git history of every national law repository on this machine, read 7 November 2026: each provision file still present, the act that first added it and every act that changed it since. 145 countries with at least 30 provisions in force (Romania left out). <b>Both measures start where each record starts</b>: a country whose record begins in 2020, or holds only current text, shows young law that has rarely been amended, whatever its real history.</p>
+  <nav id="nav"></nav>
+</header>
+<div id="figs"></div>
+</main>
+<div id="tip"></div>
+<script>
+const DATA = __DATA__;
+const ATLAS = __ATLAS__;
+const OFFATLAS = { "Gibraltar": [-5.35, 36.14] };
+const VERL = ["never amended", "amended once", "2–3 times", "4–7 times", "8–15 times", "16–31 times", "32–63 times", "64 times or more"];
+const VERS = ["never", "1", "2–3", "4–7", "8–15", "16–31", "32–63", "64+"];
+const MID = [0, 1, 2.5, 5.5, 11.5, 23.5, 47.5, 80];
+const DEC = d3.range(1890, 2030, 10), DECL = DEC.map(d => d === 1890 ? "before 1900" : d + "s"), DECS = DEC.map(d => d === 1890 ? "<1900" : "’" + String(d).slice(2));
+const EDGE = [1860, ...d3.range(1900, 2030, 10), 2027]; // bin k spans EDGE[k]..EDGE[k+1]; "before 1900" drawn as 1860-1900
+const pct = v => v == null ? "–" : (100 * v).toFixed(v < .1 && v > 0 ? 1 : 0) + "%";
+const fmt = d3.format(",");
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const norm = a => { const t = d3.sum(a); return a.map(v => t ? v / t : 0); };
+const quant = (s, p) => { let c = 0; for (let k = 0; k < s.length; k++) { if (c + s[k] >= p) return EDGE[k] + (EDGE[k + 1] - EDGE[k]) * (s[k] ? (p - c) / s[k] : 0); c += s[k]; } return 2027; };
+const yr = y => y < 1900 ? "before 1900" : Math.round(y);
+
+const J = DATA.map(d => { const vs = norm(d.v), bs = norm(d.b);
+  return { ...d, vs, bs, ever: 1 - vs[0], heavy: d3.sum(vs.slice(3)), mean: d3.sum(vs, (s, k) => s * MID[k]),
+    med: quant(bs, .5), p10: quant(bs, .1), p25: quant(bs, .25), p75: quant(bs, .75), p90: quant(bs, .9), recent: bs[12] + bs[13] }; });
+const meanArr = f => d3.range(f(J[0]).length).map(k => d3.mean(J, d => f(d)[k]));
+const TYP = (() => { const vs = meanArr(d => d.vs), bs = meanArr(d => d.bs);
+  return { name: "Typical country", typical: true, n: null, vs, bs, ever: 1 - vs[0], heavy: d3.sum(vs.slice(3)), mean: d3.sum(vs, (s, k) => s * MID[k]),
+    med: quant(bs, .5), p10: quant(bs, .1), p25: quant(bs, .25), p75: quant(bs, .75), p90: quant(bs, .9), recent: bs[12] + bs[13] }; })();
+
+const tip = d3.select("#tip");
+function showTip(ev, html) { tip.html(html).style("opacity", 1); const w = tip.node().offsetWidth, h = tip.node().offsetHeight;
+  let x = ev.clientX + 14, y = ev.clientY + 14; if (x + w > innerWidth - 8) x = ev.clientX - w - 14; if (y + h > innerHeight - 8) y = ev.clientY - h - 14;
+  tip.style("left", x + "px").style("top", y + "px"); }
+const hideTip = () => tip.style("opacity", 0);
+const seq = () => d3.interpolateLab(css("--s100"), css("--s700"));
+const verCols = () => [css("--never"), ...d3.range(7).map(i => seq()(.18 + .82 * i / 6))];
+const decCols = () => d3.range(14).map(i => seq()(.1 + .9 * Math.pow((13 - i) / 13, .6))); // old = dark, recent = light; recent decades spaced wider, where most law sits
+const miniBar = (shares, cols) => `<div class="bar">${shares.map((s, k) => `<span style="width:${100 * s}%;background:${cols[k]}"></span>`).join("")}</div>`;
+const tipV = d => `<b>${d.name}</b>${d.n ? ` <span class="m">· ${fmt(d.n)} provisions</span>` : ""}${miniBar(d.vs, verCols())}Never amended <b>${pct(d.vs[0])}</b> · once ${pct(d.vs[1])}<br>4 times or more <b>${pct(d.heavy)}</b><br><span class="m">about ${d.mean.toFixed(1)} amendments per provision</span>`;
+const tipA = d => `<b>${d.name}</b>${d.n ? ` <span class="m">· ${fmt(d.n)} provisions</span>` : ""}${miniBar(d.bs, decCols())}Half its law entered the record before <b>${yr(d.med)}</b><br>Middle 80%: ${yr(d.p10)}–${yr(d.p90)}<br><span class="m">${pct(d.recent)} from the 2010s and 2020s</span>`;
+const by = { ever: (a, b) => b.ever - a.ever, heavy: (a, b) => b.heavy - a.heavy, never: (a, b) => b.vs[0] - a.vs[0], n: (a, b) => b.n - a.n, name: (a, b) => d3.ascending(a.name, b.name),
+  old: (a, b) => a.med - b.med, young: (a, b) => b.med - a.med, recent: (a, b) => b.recent - a.recent, mean: (a, b) => b.mean - a.mean };
+const sel = id => document.getElementById(id)?.value;
+const ext = (arr, f) => d3.sort(arr, f);
+const R = { typ: TYP }; // ranked helpers for ledes
+R.ever = ext(J, d => -d.ever); R.heavy = ext(J.filter(d => d.n >= 100), d => -d.heavy); R.old = ext(J, d => d.med); R.young = ext(J, d => -d.med);
+
+/* ---------- figure scaffolding ---------- */
+const FIGS = [];
+function fig(part, id, eyebrow, title, lede, opts = {}) { FIGS.push({ part, id, eyebrow, title, lede, ...opts }); }
+function table(id, cols, rows) {
+  const t = d3.select("#t-" + id); t.html("");
+  t.append("tr").selectAll("th").data(cols).join("th").text(d => d);
+  rows.forEach(r => t.append("tr").selectAll("td").data(r).join("td").text(v => v));
+}
+const tableV = id => table(id, ["Country", "Provisions", ...VERS, "4+ times", "Mean"], [TYP, ...d3.sort(J, d => d.name)].map(d => [d.name, d.n ? fmt(d.n) : "", ...d.vs.map(pct), pct(d.heavy), d.mean.toFixed(1)]));
+const tableA = id => table(id, ["Country", "Provisions", "Median year", "10th pct", "90th pct", ...DECS], [TYP, ...d3.sort(J, d => d.name)].map(d => [d.name, d.n ? fmt(d.n) : "", yr(d.med), yr(d.p10), yr(d.p90), ...d.bs.map(pct)]));
+
+/* ---------- maps ---------- */
+const land = topojson.feature(ATLAS, ATLAS.objects.countries).features.filter(f => f.properties.name !== "Antarctica");
+function drawMap(id, value, col, tipf) {
+  const W = 1000, H = 500, svg = d3.select("#f-" + id).attr("viewBox", `0 0 ${W} ${H}`); svg.selectAll("*").remove();
+  const proj = d3.geoNaturalEarth1().fitExtent([[4, 4], [W - 4, H - 4]], { type: "FeatureCollection", features: land }), path = d3.geoPath(proj);
+  svg.append("path").attr("d", path({ type: "Sphere" })).attr("fill", css("--sea"));
+  const byAtlas = new Map(J.filter(d => d.atlas).map(d => [d.atlas, d]));
+  const surf = css("--surface-1"), empty = css("--empty");
+  const small = [];
+  land.forEach(f => { const d = byAtlas.get(f.properties.name);
+    const p = svg.append("path").attr("d", path(f)).attr("fill", d ? col(value(d)) : empty).attr("stroke", surf).attr("stroke-width", .5);
+    if (d) { p.style("cursor", "default").on("mousemove", ev => showTip(ev, tipf(d))).on("mouseleave", hideTip);
+      if (path.area(f) < 25) small.push([path.centroid(f), d]); } });
+  J.filter(d => OFFATLAS[d.name]).forEach(d => small.push([proj(OFFATLAS[d.name]), d]));
+  small.forEach(([c, d]) => svg.append("circle").attr("cx", c[0]).attr("cy", c[1]).attr("r", 4).attr("fill", col(value(d))).attr("stroke", surf).attr("stroke-width", 1.2)
+    .on("mousemove", ev => showTip(ev, tipf(d))).on("mouseleave", hideTip));
+}
+function rampLegend(id, col, domain, fmtv, label) {
+  const el = d3.select("#lg-" + id); el.html("");
+  const s = el.append("span"); s.append("span").text(fmtv(domain[0]) + " ").style("margin-right", "4px");
+  s.append("i").attr("class", "ramp").style("background", `linear-gradient(90deg, ${d3.range(0, 1.001, .1).map(t => col(domain[0] + t * (domain[1] - domain[0]))).join(",")})`);
+  s.append("span").text(" " + fmtv(domain[1]));
+  el.append("span").text(label);
+  el.append("span").html(`<i class="sw" style="background:${css("--empty")}"></i>no repository on this machine`);
+}
+
+/* ---------- ranked rows (shared by stacked bars, dumbbells, heatmap) ---------- */
+function rowsFrom(selId, def) { return [TYP, ...d3.sort(J, by[sel(selId) || def])]; }
+function nameCol(svg, list, m, rh, tipf) {
+  list.forEach((d, i) => svg.append("text").attr("x", m.l - 8).attr("y", m.t + i * rh + rh / 2 + (d.typical ? 0 : 8)).attr("dy", ".32em").attr("text-anchor", "end")
+    .attr("font-size", 11).attr("class", d.typical ? "strong" : null).text(d.name).on("mousemove", ev => showTip(ev, tipf(d))).on("mouseleave", hideTip));
+}
+
+/* =================== PART 1: REWRITES =================== */
+// R1 map
+fig("r", "r-map", "Rewrites · 1 · map", "Where provisions get rewritten",
+  `The share of each country's provisions in force that have been amended at least once since they entered the record. <b>${R.ever[0].name} has amended ${pct(R.ever[0].ever)} of its provisions and ${R.ever[1].name} ${pct(R.ever[1].ever)}</b>; the typical country ${pct(TYP.ever)}. Small countries are drawn as dots.`,
+  { draw: id => { const max = d3.max(J, d => d.ever), col = d3.scaleSequentialSqrt([0, max], seq());
+      rampLegend(id, col, [0, max], pct, "share of provisions amended at least once (square-root scale)"); drawMap(id, d => d.ever, col, tipV); tableV(id); } });
+
+// R2 stacked bars
+fig("r", "r-bars", "Rewrites · 2 · stacked bars", "Every country's provisions, by how often they have been amended",
+  `One bar per country, its provisions in force split by number of amendments: grey for never amended, then darker blue for each doubling. <b>The typical country has never amended ${pct(TYP.vs[0])} of its provisions</b>; ${R.heavy[0].name} has amended ${pct(R.heavy[0].heavy)} of its provisions four times or more.`,
+  { controls: [["o-r-bars", "Order by", [["ever", "share ever amended"], ["heavy", "share amended 4+ times"], ["mean", "amendments per provision"], ["n", "number of provisions"], ["name", "name"]]]],
+    legendV: true,
+    draw: id => { const list = rowsFrom("o-r-bars", "ever"), cols = verCols();
+      const m = { l: 170, r: 70, t: 22, b: 8 }, rh = 13, W = 1000, H = m.t + list.length * rh + 8 + m.b, x = d3.scaleLinear([0, 1], [m.l, W - m.r]);
+      const svg = d3.select("#f-" + id).attr("viewBox", `0 0 ${W} ${H}`); svg.selectAll("*").remove();
+      [0, .25, .5, .75, 1].forEach(t => { svg.append("text").attr("x", x(t)).attr("y", 12).attr("text-anchor", "middle").attr("font-size", 10.5).text(pct(t));
+        svg.append("line").attr("x1", x(t)).attr("x2", x(t)).attr("y1", 18).attr("y2", H - m.b).attr("stroke", css("--grid")); });
+      svg.append("text").attr("x", W - 2).attr("y", 12).attr("text-anchor", "end").attr("font-size", 10.5).text("provisions");
+      list.forEach((d, i) => { const y = m.t + i * rh + (d.typical ? 0 : 8); let c = 0;
+        d.vs.forEach((s, k) => { if (s > 0) svg.append("rect").attr("x", x(c)).attr("y", y + 1.5).attr("width", Math.max(0, x(c + s) - x(c) - (s > .004 ? 1 : 0))).attr("height", rh - 3).attr("fill", cols[k]); c += s; });
+        if (d.typical) svg.append("rect").attr("x", x(0) - 2).attr("y", y).attr("width", x(1) - x(0) + 4).attr("height", rh).attr("fill", "none").attr("stroke", css("--series-2")).attr("rx", 3);
+        svg.append("rect").attr("x", x(0)).attr("y", y).attr("width", x(1) - x(0)).attr("height", rh).attr("fill", "transparent").on("mousemove", ev => showTip(ev, tipV(d))).on("mouseleave", hideTip);
+        if (d.n) svg.append("text").attr("x", W - m.r + 8).attr("y", y + rh / 2).attr("dy", ".32em").attr("font-size", 10.5).text(fmt(d.n)); });
+      nameCol(svg, list, m, rh, tipV); tableV(id); } });
+
+// R3 scatter
+fig("r", "r-scatter", "Rewrites · 3 · scatter", "Breadth against depth",
+  `Across: how much of the law has ever been amended (breadth). Up: how much has been amended four times or more (depth). Circle area: provisions in force. Countries up and to the right rewrite widely and repeatedly; countries along the bottom touch many provisions once. <b>${R.heavy[0].name}, ${R.heavy[1].name} and ${R.heavy[2].name} rewrite deepest.</b>`,
+  { draw: id => { const W = 1000, H = 560, m = { l: 56, r: 24, t: 16, b: 46 };
+      const svg = d3.select("#f-" + id).attr("viewBox", `0 0 ${W} ${H}`); svg.selectAll("*").remove();
+      const x = d3.scaleLinear([0, 1], [m.l, W - m.r]), y = d3.scaleSqrt([0, Math.min(1, d3.max(J, d => d.heavy) * 1.08)], [H - m.b, m.t]).nice(), r = d3.scaleSqrt([0, d3.max(J, d => d.n)], [2.5, 26]);
+      x.ticks(5).forEach(t => { svg.append("line").attr("x1", x(t)).attr("x2", x(t)).attr("y1", m.t).attr("y2", H - m.b).attr("stroke", css("--grid"));
+        svg.append("text").attr("x", x(t)).attr("y", H - m.b + 16).attr("text-anchor", "middle").attr("font-size", 11).text(pct(t)); });
+      [0, .01, .05, .1, .2, .3].filter(t => t <= y.domain()[1]).forEach(t => { svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y(t)).attr("y2", y(t)).attr("stroke", css("--grid"));
+        svg.append("text").attr("x", m.l - 8).attr("y", y(t)).attr("dy", ".32em").attr("text-anchor", "end").attr("font-size", 11).text(pct(t)); });
+      svg.append("text").attr("x", (m.l + W - m.r) / 2).attr("y", H - 8).attr("text-anchor", "middle").attr("font-size", 12).text("share of provisions amended at least once →");
+      svg.append("text").attr("transform", `translate(14,${(m.t + H - m.b) / 2}) rotate(-90)`).attr("text-anchor", "middle").attr("font-size", 12).text("share amended four times or more (square-root scale) →");
+      const c1 = css("--series-1"), surf = css("--surface-1");
+      d3.sort(J, d => -d.n).forEach(d => svg.append("circle").attr("cx", x(d.ever)).attr("cy", y(d.heavy)).attr("r", r(d.n)).attr("fill", c1).attr("fill-opacity", .45).attr("stroke", surf).attr("stroke-width", 1.2)
+        .on("mousemove", ev => showTip(ev, tipV(d))).on("mouseleave", hideTip));
+      svg.append("circle").attr("cx", x(TYP.ever)).attr("cy", y(TYP.heavy)).attr("r", 6).attr("fill", css("--series-2")).attr("stroke", surf).attr("stroke-width", 2).on("mousemove", ev => showTip(ev, tipV(TYP))).on("mouseleave", hideTip);
+      svg.append("line").attr("x1", x(TYP.ever)).attr("x2", x(TYP.ever) + 30).attr("y1", y(TYP.heavy) - 6).attr("y2", y(TYP.heavy) - 60).attr("stroke", css("--series-2"));
+      svg.append("text").attr("x", x(TYP.ever) + 34).attr("y", y(TYP.heavy) - 64).attr("font-size", 11.5).attr("class", "strong").text("typical country");
+      const placed = [[x(TYP.ever) + 34, y(TYP.heavy) - 64, 100]];
+      // labels: the most notable, kept apart
+      const lab = [...new Set([...R.heavy.slice(0, 7), ...R.ever.slice(0, 5), ...d3.sort(J, d => -d.n).slice(0, 8), ...d3.sort(J.filter(d => d.n >= 300), d => d.ever).slice(0, 3)])];
+      lab.forEach(d => { const right = x(d.ever) > W - 140, px = right ? x(d.ever) - r(d.n) - 3 : x(d.ever) + r(d.n) + 3, py = y(d.heavy), w = d.name.length * 6;
+        const x0 = right ? px - w : px;
+        if (placed.some(([a, b, ww]) => x0 < a + ww && a < x0 + w && Math.abs(b - py) < 13)) return; placed.push([x0, py, w]);
+        svg.append("text").attr("x", px).attr("y", py).attr("dy", ".32em").attr("text-anchor", right ? "end" : "start").attr("font-size", 11).attr("pointer-events", "none").text(d.name); });
+      tableV(id); } });
+
+// R4 beeswarm
+fig("r", "r-swarm", "Rewrites · 4 · beeswarm", "Amendments per provision",
+  `Each dot is a country, placed by the average number of times its provisions in force have been amended (log scale), sized by how many provisions it has. <b>The typical country averages ${TYP.mean.toFixed(1)} amendments per provision</b>; ${ext(J.filter(d => d.n >= 100), d => -d.mean)[0].name} averages ${ext(J.filter(d => d.n >= 100), d => -d.mean)[0].mean.toFixed(1)}. Averages are estimated from each band's midpoint.`,
+  { draw: id => { const W = 1000, H = 440, m = { l: 30, r: 30, t: 30, b: 40 }, cy = (m.t + H - m.b) / 2 + 6;
+      const svg = d3.select("#f-" + id).attr("viewBox", `0 0 ${W} ${H}`); svg.selectAll("*").remove();
+      const x = d3.scaleLog([.01, Math.max(10, d3.max(J, d => d.mean) * 1.2)], [m.l, W - m.r]).clamp(true), r = d3.scaleSqrt([0, d3.max(J, d => d.n)], [3, 18]);
+      [.01, .03, .1, .3, 1, 3, 10, 30].filter(t => t <= x.domain()[1]).forEach(t => { svg.append("line").attr("x1", x(t)).attr("x2", x(t)).attr("y1", m.t).attr("y2", H - m.b).attr("stroke", css("--grid"));
+        svg.append("text").attr("x", x(t)).attr("y", H - m.b + 16).attr("text-anchor", "middle").attr("font-size", 11).text(t); });
+      svg.append("text").attr("x", W / 2).attr("y", H - 6).attr("text-anchor", "middle").attr("font-size", 12).text("average amendments per provision in force (log scale)");
+      const nodes = J.map(d => ({ d, x: x(Math.max(.01, d.mean)), y: cy, r: r(d.n) }));
+      const sim = d3.forceSimulation(nodes).force("x", d3.forceX(n => x(Math.max(.01, n.d.mean))).strength(1)).force("y", d3.forceY(cy).strength(.06)).force("c", d3.forceCollide(n => n.r + 1)).stop();
+      for (let i = 0; i < 320; i++) sim.tick();
+      const tx = x(TYP.mean);
+      svg.append("line").attr("x1", tx).attr("x2", tx).attr("y1", m.t - 10).attr("y2", H - m.b).attr("stroke", css("--series-2")).attr("stroke-width", 2).attr("stroke-dasharray", "4 3");
+      svg.append("text").attr("x", tx + 6).attr("y", m.t - 2).attr("font-size", 11.5).attr("class", "strong").text(`typical country, ${TYP.mean.toFixed(1)}`);
+      const c1 = css("--series-1"), surf = css("--surface-1"), col = d3.scaleSequentialLog([.01, x.domain()[1]], seq());
+      nodes.forEach(n => svg.append("circle").attr("cx", n.x).attr("cy", n.y).attr("r", n.r).attr("fill", col(Math.max(.01, n.d.mean))).attr("stroke", surf).attr("stroke-width", 1)
+        .on("mousemove", ev => showTip(ev, tipV(n.d))).on("mouseleave", hideTip));
+      const used = [];
+      [...new Set(d3.sort(nodes, n => -n.r).slice(0, 10).concat(d3.sort(nodes, n => -n.d.mean).slice(0, 3)))].forEach((n, i) => {
+        if (n.r < 9 && !(n.d.mean >= d3.sort(J, d => -d.mean)[2].mean)) return;
+        const w = n.d.name.length * 6.2; let ly = n.y - n.r - 6, k = 0;
+        while (used.some(([a, b]) => Math.abs(a - n.x) < (w + 40) / 2 && Math.abs(b - ly) < 13) && k < 6) { ly -= 14; k++; }
+        used.push([n.x, ly]);
+        if (ly < n.y - n.r - 8) svg.append("line").attr("x1", n.x).attr("x2", n.x).attr("y1", ly + 3).attr("y2", n.y - n.r - 1).attr("stroke", css("--muted")).attr("stroke-width", .8);
+        svg.append("text").attr("x", n.x).attr("y", ly).attr("text-anchor", "middle").attr("font-size", 10.5).attr("class", "strong").attr("pointer-events", "none").text(n.d.name); });
+      const zeros = J.filter(d => d.mean < .01).length;
+      if (zeros) svg.append("text").attr("x", x(.01) + 2).attr("y", m.t + 6).attr("font-size", 10.5).text(`${zeros} countries with no amendment in the record`);
+      tableV(id); } });
+
+// R5 cumulative curves
+fig("r", "r-curves", "Rewrites · 5 · cumulative curves", "How quickly each country's law accumulates amendments",
+  `For each country, the share of its provisions amended at most a given number of times. A curve that starts high is law left alone; a curve that climbs slowly is law rewritten again and again. The orange curve is the typical country. <b>Hover a curve, or pick a country, to follow it.</b>`,
+  { controls: [["f-r-curves-follow", "Follow", null]],
+    draw: id => { const W = 1000, H = 480, m = { l: 56, r: 150, t: 16, b: 46 };
+      const svg = d3.select("#f-" + id).attr("viewBox", `0 0 ${W} ${H}`); svg.selectAll("*").remove();
+      const X = ["0", "1", "≤3", "≤7", "≤15", "≤31", "≤63", "all"], x = d3.scalePoint(d3.range(8), [m.l, W - m.r]), y = d3.scaleLinear([0, 1], [H - m.b, m.t]);
+      X.forEach((t, k) => { svg.append("line").attr("x1", x(k)).attr("x2", x(k)).attr("y1", m.t).attr("y2", H - m.b).attr("stroke", css("--grid"));
+        svg.append("text").attr("x", x(k)).attr("y", H - m.b + 16).attr("text-anchor", "middle").attr("font-size", 11).text(t); });
+      [0, .01, .05, .1, .2, .3].filter(t => t <= y.domain()[1]).forEach(t => { svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y(t)).attr("y2", y(t)).attr("stroke", css("--grid"));
+        svg.append("text").attr("x", m.l - 8).attr("y", y(t)).attr("dy", ".32em").attr("text-anchor", "end").attr("font-size", 11).text(pct(t)); });
+      svg.append("text").attr("x", (m.l + W - m.r) / 2).attr("y", H - 8).attr("text-anchor", "middle").attr("font-size", 12).text("times amended");
+      svg.append("text").attr("transform", `translate(14,${(m.t + H - m.b) / 2}) rotate(-90)`).attr("text-anchor", "middle").attr("font-size", 12).text("share of provisions amended at most that often");
+      const cum = d => { let c = 0; return d.vs.map(s => c += s); };
+      const line = d3.line().x((v, k) => x(k)).y(v => y(v)).curve(d3.curveMonotoneX);
+      const g = svg.append("g"), ink = css("--ink-2"), c1 = css("--series-1"), c2 = css("--series-2");
+      const paths = J.map(d => ({ d, p: g.append("path").attr("d", line(cum(d))).attr("fill", "none").attr("stroke", ink).attr("stroke-opacity", .16).attr("stroke-width", 1) }));
+      const lab = svg.append("text").attr("font-size", 12).attr("class", "strong");
+      const hi = svg.append("path").attr("fill", "none").attr("stroke", c1).attr("stroke-width", 2.5);
+      svg.append("path").attr("d", line(cum(TYP))).attr("fill", "none").attr("stroke", c2).attr("stroke-width", 2.5);
+      svg.append("text").attr("x", x(0) + 6).attr("y", y(TYP.vs[0]) - 8).attr("font-size", 11.5).attr("class", "strong").style("fill", c2).text(`typical: ${pct(TYP.vs[0])} never amended`);
+      const follow = d => { if (!d) { hi.attr("d", null); lab.text(""); return; } const c = cum(d); hi.attr("d", line(c)); const k = c.findIndex(v => v >= .9);
+        lab.attr("x", x(Math.max(1, k)) + 8).attr("y", y(c[Math.max(1, k)]) + 14).text(`${d.name}: ${pct(d.vs[0])} never`); };
+      const selEl = document.getElementById("f-r-curves-follow");
+      if (!selEl.options.length) { selEl.append(new Option("—", "")); d3.sort(J, d => d.name).forEach(d => selEl.append(new Option(d.name, d.name))); selEl.value = R.heavy[0].name;
+        selEl.addEventListener("change", () => follow(J.find(d => d.name === selEl.value))); }
+      follow(J.find(d => d.name === selEl.value));
+      // hover: nearest curve at the pointer's column
+      svg.append("rect").attr("x", m.l).attr("y", m.t).attr("width", W - m.r - m.l).attr("height", H - m.b - m.t).attr("fill", "transparent")
+        .on("mousemove", ev => { const [px, py] = d3.pointer(ev), k = Math.max(0, Math.min(7, Math.round((px - m.l) / x.step()))), v = y.invert(py);
+          const d = d3.least(J, d => Math.abs(cum(d)[k] - v)); follow(d); showTip(ev, tipV(d)); })
+        .on("mouseleave", () => { hideTip(); follow(J.find(d => d.name === selEl.value)); });
+      tableV(id); } });
+
+/* =================== PART 2: AGE =================== */
+// A1 map
+fig("a", "a-map", "Age · 1 · map", "How old each country's law in force is",
+  `Each country coloured by the median year its provisions in force entered the record: half its current law is older than this, half newer. Darker is older. <b>${R.old[0].name} (${yr(R.old[0].med)}) and ${R.old[1].name} (${yr(R.old[1].med)}) hold the oldest law</b>; the typical country's median is ${yr(TYP.med)}.`,
+  { draw: id => { const lo = Math.max(1900, Math.floor(d3.min(J, d => d.med) / 10) * 10), col = d3.scaleSequential([2026, lo], seq()).clamp(true);
+      rampLegend(id, col, [lo, 2026], v => v, "median year today's provisions entered the record (older is darker)"); drawMap(id, d => d.med, col, tipA); tableA(id); } });
+
+// A2 stacked by decade
+fig("a", "a-bars", "Age · 2 · stacked bars", "Today's law, layer by layer",
+  `One bar per country, its provisions in force split by the decade each entered the record, oldest (darkest) on the left. <b>${pct(TYP.recent)} of the typical country's law entered the record in the 2010s or 2020s.</b> Long dark bars are deep records; nearly white bars are records that start recently.`,
+  { controls: [["o-a-bars", "Order by", [["old", "oldest first"], ["recent", "share from 2010s–2020s"], ["n", "number of provisions"], ["name", "name"]]]], legendA: true,
+    draw: id => { const list = rowsFrom("o-a-bars", "old"), cols = decCols();
+      const m = { l: 170, r: 70, t: 22, b: 8 }, rh = 13, W = 1000, H = m.t + list.length * rh + 8 + m.b, x = d3.scaleLinear([0, 1], [m.l, W - m.r]);
+      const svg = d3.select("#f-" + id).attr("viewBox", `0 0 ${W} ${H}`); svg.selectAll("*").remove();
+      [0, .25, .5, .75, 1].forEach(t => { svg.append("text").attr("x", x(t)).attr("y", 12).attr("text-anchor", "middle").attr("font-size", 10.5).text(pct(t));
+        svg.append("line").attr("x1", x(t)).attr("x2", x(t)).attr("y1", 18).attr("y2", H - m.b).attr("stroke", css("--grid")); });
+      svg.append("text").attr("x", W - 2).attr("y", 12).attr("text-anchor", "end").attr("font-size", 10.5).text("provisions");
+      list.forEach((d, i) => { const y = m.t + i * rh + (d.typical ? 0 : 8); let c = 0;
+        d.bs.forEach((s, k) => { if (s > 0) svg.append("rect").attr("x", x(c)).attr("y", y + 1.5).attr("width", Math.max(0, x(c + s) - x(c) - (s > .004 ? 1 : 0))).attr("height", rh - 3).attr("fill", cols[k]); c += s; });
+        if (d.typical) svg.append("rect").attr("x", x(0) - 2).attr("y", y).attr("width", x(1) - x(0) + 4).attr("height", rh).attr("fill", "none").attr("stroke", css("--series-2")).attr("rx", 3);
+        svg.append("rect").attr("x", x(0)).attr("y", y).attr("width", x(1) - x(0)).attr("height", rh).attr("fill", "transparent").on("mousemove", ev => showTip(ev, tipA(d))).on("mouseleave", hideTip);
+        if (d.n) svg.append("text").attr("x", W - m.r + 8).attr("y", y + rh / 2).attr("dy", ".32em").attr("font-size", 10.5).text(fmt(d.n)); });
+      nameCol(svg, list, m, rh, tipA); tableA(id); } });
+
+// A3 range bars on a time axis
+fig("a", "a-range", "Age · 3 · ranges on a timeline", "The span of each country's law",
+  `Each country on a timeline: the thin bar covers the middle 80% of its provisions in force by the year they entered the record, the thick bar the middle half, the dot the median. <b>Most countries' law sits in a narrow band of recent decades; a few reach back across a century.</b>`,
+  { controls: [["o-a-range", "Order by", [["old", "oldest first"], ["young", "youngest first"], ["n", "number of provisions"], ["name", "name"]]]],
+    draw: id => { const list = rowsFrom("o-a-range", "old");
+      const m = { l: 170, r: 30, t: 24, b: 8 }, rh = 13, W = 1000, H = m.t + list.length * rh + 8 + m.b, x = d3.scaleLinear([1860, 2027], [m.l, W - m.r]);
+      const svg = d3.select("#f-" + id).attr("viewBox", `0 0 ${W} ${H}`); svg.selectAll("*").remove();
+      svg.append("rect").attr("x", x(1860)).attr("y", 18).attr("width", x(1900) - x(1860)).attr("height", H - m.b - 18).attr("fill", css("--surface-2"));
+      [1880, 1900, 1925, 1950, 1975, 2000, 2025].forEach(t => { svg.append("text").attr("x", x(t)).attr("y", 12).attr("text-anchor", "middle").attr("font-size", 10.5).text(t === 1880 ? "before 1900" : t);
+        if (t !== 1880) svg.append("line").attr("x1", x(t)).attr("x2", x(t)).attr("y1", 18).attr("y2", H - m.b).attr("stroke", css("--grid")); });
+      const c1 = css("--series-1"), c2 = css("--series-2"), lite = seq()(.35);
+      list.forEach((d, i) => { const y = m.t + i * rh + rh / 2 + (d.typical ? 0 : 8), col = d.typical ? c2 : c1;
+        svg.append("line").attr("x1", x(d.p10)).attr("x2", x(d.p90)).attr("y1", y).attr("y2", y).attr("stroke", d.typical ? c2 : lite).attr("stroke-width", 3).attr("stroke-linecap", "round");
+        svg.append("line").attr("x1", x(d.p25)).attr("x2", x(d.p75)).attr("y1", y).attr("y2", y).attr("stroke", col).attr("stroke-opacity", .55).attr("stroke-width", 7).attr("stroke-linecap", "round");
+        svg.append("circle").attr("cx", x(d.med)).attr("cy", y).attr("r", 3.6).attr("fill", col).attr("stroke", css("--surface-1")).attr("stroke-width", 1.2);
+        svg.append("rect").attr("x", m.l).attr("y", y - rh / 2).attr("width", W - m.r - m.l).attr("height", rh).attr("fill", "transparent").on("mousemove", ev => showTip(ev, tipA(d))).on("mouseleave", hideTip); });
+      nameCol(svg, list, m, rh, tipA); tableA(id); } });
+
+// A4 heatmap
+fig("a", "a-heat", "Age · 4 · heatmap", "Countries by decades",
+  `Each row a country, each column a decade, each cell the share of the country's provisions in force that entered the record that decade. The diagonal drift from top left to bottom right is the age of each record. <b>Cells at a quarter or more are labelled.</b>`,
+  { controls: [["o-a-heat", "Order by", [["old", "oldest first"], ["recent", "share from 2010s–2020s"], ["n", "number of provisions"], ["name", "name"]]]],
+    draw: id => { const list = rowsFrom("o-a-heat", "old");
+      const m = { l: 170, r: 70, t: 24, b: 8 }, rh = 13, W = 1000, cw = (W - m.l - m.r) / 14, H = m.t + list.length * rh + 8 + m.b;
+      const svg = d3.select("#f-" + id).attr("viewBox", `0 0 ${W} ${H}`); svg.selectAll("*").remove();
+      const col = d3.scaleSequentialSqrt([0, .6], seq()).clamp(true), empty = css("--empty"), surf = css("--surface-1");
+      DECL.forEach((t, k) => svg.append("text").attr("x", m.l + k * cw + cw / 2).attr("y", 14).attr("text-anchor", "middle").attr("font-size", 10.5).text(k === 0 ? "pre-1900" : t));
+      svg.append("text").attr("x", W - m.r + 8).attr("y", 14).attr("font-size", 10.5).text("provisions");
+      list.forEach((d, i) => { const y = m.t + i * rh + (d.typical ? 0 : 8);
+        d.bs.forEach((s, k) => { svg.append("rect").attr("x", m.l + k * cw + .5).attr("y", y + .5).attr("width", cw - 1).attr("height", rh - 1).attr("rx", 2).attr("fill", s > 0 ? col(s) : empty)
+            .attr("stroke", d.typical ? css("--series-2") : null)
+            .on("mousemove", ev => showTip(ev, `<b>${d.name}</b>, ${DECL[k]}<br><b>${pct(s)}</b> of its provisions in force${d.n ? ` <span class="m">(${fmt(Math.round(s * d.n))})</span>` : ""}`)).on("mouseleave", hideTip);
+          if (s >= .25) svg.append("text").attr("x", m.l + k * cw + cw / 2).attr("y", y + rh / 2).attr("dy", ".34em").attr("text-anchor", "middle").attr("font-size", 9).attr("pointer-events", "none")
+            .style("fill", s > .4 ? surf : css("--ink")).text(Math.round(100 * s)); });
+        if (d.n) svg.append("text").attr("x", W - m.r + 8).attr("y", y + rh / 2).attr("dy", ".32em").attr("font-size", 10.5).text(fmt(d.n)); });
+      nameCol(svg, list, m, rh, tipA);
+      const lg = d3.select("#lg-" + id); lg.html(""); const s = lg.append("span"); s.append("span").text("0 ");
+      s.append("i").attr("class", "ramp").style("background", `linear-gradient(90deg, ${d3.range(0, 1.001, .1).map(t => col(t * .6)).join(",")})`); s.append("span").text(" 60%+ of the country's provisions");
+      tableA(id); } });
+
+// A5 small multiples
+fig("a", "a-small", "Age · 5 · small multiples", "An age profile for every country",
+  `One small chart per country: its provisions in force by decade, from before 1900 on the left to the 2020s on the right, each scaled to its own tallest decade. The orange line marks the median year. Ordered from oldest to youngest law.`,
+  { controls: [["o-a-small", "Order by", [["old", "oldest first"], ["young", "youngest first"], ["n", "number of provisions"], ["name", "name"]]]],
+    draw: id => { const list = rowsFrom("o-a-small", "old"), cols = 8, cw = 125, ch = 78, W = cols * cw, H = Math.ceil(list.length / cols) * ch + 4;
+      const svg = d3.select("#f-" + id).attr("viewBox", `0 0 ${W} ${H}`); svg.selectAll("*").remove();
+      const c1 = css("--series-1"), c2 = css("--series-2"), rule = css("--rule"), cs = decCols();
+      list.forEach((d, i) => { const gx = (i % cols) * cw, gy = Math.floor(i / cols) * ch, g = svg.append("g").attr("transform", `translate(${gx},${gy})`);
+        const iw = cw - 16, ih = 38, x = d3.scaleLinear([1860, 2027], [6, 6 + iw]), y = d3.scaleLinear([0, d3.max(d.bs)], [0, ih]);
+        if (d.typical) g.append("rect").attr("x", 1).attr("y", 1).attr("width", cw - 4).attr("height", ch - 4).attr("rx", 8).attr("fill", css("--surface-2")).attr("stroke", rule);
+        g.append("text").attr("x", 8).attr("y", 15).attr("font-size", 10.5).attr("class", "strong").text(d.name.length > 15 ? d.name.slice(0, 14) + "…" : d.name);
+        g.append("text").attr("x", cw - 10).attr("y", 15).attr("text-anchor", "end").attr("font-size", 9.5).text(yr(d.med) === "before 1900" ? "<1900" : yr(d.med));
+        g.append("line").attr("x1", 6).attr("x2", 6 + iw).attr("y1", 22 + ih).attr("y2", 22 + ih).attr("stroke", rule);
+        d.bs.forEach((s, k) => { if (s > 0) g.append("rect").attr("x", x(EDGE[k]) + .5).attr("y", 22 + ih - y(s)).attr("width", Math.max(.5, x(EDGE[k + 1]) - x(EDGE[k]) - 1)).attr("height", y(s)).attr("fill", cs[k]); });
+        g.append("line").attr("x1", x(d.med)).attr("x2", x(d.med)).attr("y1", 20).attr("y2", 22 + ih).attr("stroke", c2).attr("stroke-width", 1.5);
+        if (i === 0) [[1880, "<1900"], [1950, "1950"], [2020, "2020s"]].forEach(([t, l]) => g.append("text").attr("x", x(t)).attr("y", 22 + ih + 10).attr("text-anchor", "middle").attr("font-size", 8.5).text(l));
+        g.append("rect").attr("width", cw).attr("height", ch).attr("fill", "transparent").on("mousemove", ev => showTip(ev, tipA(d))).on("mouseleave", hideTip); });
+      tableA(id); } });
+
+/* ---------- page ---------- */
+const nav = d3.select("#nav"), figs = d3.select("#figs");
+[["r", "How often each country rewrites its provisions", `Every provision in force, by how many times it has been amended since it entered the record. ${pct(TYP.vs[0])} of the typical country's provisions have never been amended.`],
+ ["a", "How old today's law is", `Every provision in force, by when it entered the record. The typical country's median is ${yr(TYP.med)}.`]].forEach(([p, t, sub]) => {
+  nav.append("b").text(t);
+  figs.append("h2").attr("class", "part").attr("id", "part-" + p).text(t); figs.append("p").attr("class", "part").text(sub);
+  FIGS.filter(f => f.part === p).forEach(c => {
+    nav.append("a").attr("href", "#" + c.id).text(c.eyebrow.split(" · ").slice(1).join(" · ").replace(/^\d+ · /, (s) => s) + " — " + c.title);
+    const f = figs.append("figure").attr("id", c.id);
+    f.append("span").attr("class", "eyebrow").text(c.eyebrow);
+    f.append("h3").text(c.title);
+    f.append("p").attr("class", "lede").html(c.lede);
+    if (c.controls) { const ctl = f.append("div").attr("class", "controls");
+      c.controls.forEach(([sid, label, opts]) => { ctl.append("span").text(label); const s = ctl.append("select").attr("id", sid);
+        if (opts) { opts.forEach(([v, l]) => s.append("option").attr("value", v).text(l)); s.on("change", () => c.draw(c.id)); } }); }
+    const lg = f.append("div").attr("class", "legend").attr("id", "lg-" + c.id);
+    f.append("svg").attr("id", "f-" + c.id).attr("role", "img").attr("aria-label", c.title);
+    const det = f.append("details"); det.append("summary").text("Table: every country");
+    det.append("div").attr("class", "wrap").append("table").attr("id", "t-" + c.id);
+  });
+});
+function legends() {
+  FIGS.forEach(c => { const lg = d3.select("#lg-" + c.id);
+    if (c.legendV) { lg.html(""); verCols().forEach((col, k) => lg.append("span").html(`<i class="sw" style="background:${col}"></i>${VERL[k]}`));
+      lg.append("span").html(`<i class="sw" style="background:none;border:1.5px solid ${css("--series-2")}"></i>typical country`); }
+    if (c.legendA) { lg.html(""); decCols().forEach((col, k) => { if (k % 2 === 0 || k === 13) lg.append("span").html(`<i class="sw" style="background:${col}"></i>${DECL[k]}`); });
+      lg.append("span").html(`<i class="sw" style="background:none;border:1.5px solid ${css("--series-2")}"></i>typical country`); }
+    if (c.id === "r-scatter") lg.html(`<span><i class="sw" style="background:${css("--series-1")};opacity:.5;border-radius:50%"></i>a country (area: provisions in force)</span><span><i class="sw" style="background:${css("--series-2")};border-radius:50%"></i>typical country</span>`);
+    if (c.id === "r-swarm") lg.html(`<span><i class="sw" style="background:${css("--series-1")};border-radius:50%"></i>a country (area: provisions in force; darker: more amendments)</span><span><i class="sl" style="border-color:${css("--series-2")};border-top-style:dashed"></i>typical country</span>`);
+    if (c.id === "r-curves") lg.html(`<span><i class="sl" style="border-color:${css("--ink-2")};opacity:.4"></i>a country</span><span><i class="sl" style="border-color:${css("--series-1")}"></i>followed country</span><span><i class="sl" style="border-color:${css("--series-2")}"></i>typical country</span>`);
+    if (c.id === "a-range") lg.html(`<span><i class="sl" style="border-color:${seq()(.35)};border-top-width:3px"></i>middle 80% of provisions</span><span><i class="sl" style="border-color:${css("--series-1")};opacity:.55;border-top-width:7px"></i>middle half</span><span><i class="sw" style="background:${css("--series-1")};border-radius:50%"></i>median</span><span><i class="sl" style="border-color:${css("--series-2")}"></i>typical country</span>`);
+    if (c.id === "a-small") lg.html(`<span><i class="sw" style="background:${decCols()[2]}"></i>older decades darker</span><span><i class="sl" style="border-color:${css("--series-2")}"></i>median year</span>`);
+  });
+}
+const all = () => { legends(); FIGS.forEach(c => c.draw(c.id)); };
+document.getElementById("theme").addEventListener("click", () => {
+  const root = document.documentElement, dark = getComputedStyle(root).colorScheme.includes("dark");
+  root.setAttribute("data-theme", dark ? "light" : "dark"); all(); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", all);
+all();
+</script>
+</body>
+</html>
