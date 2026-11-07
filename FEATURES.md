@@ -53,9 +53,6 @@ Each entry gives the question it answers, how to call it, an example and its lim
 | `viz.law-in-motion` | Law in Motion | How the world's law grows and waits, in charts |
 | `viz.law-drawn` | Law, Drawn | Calendars and growth of law-making, in ten charts |
 | `viz.life-of-a-provision` | The Life of a Provision | How single provisions are amended and survive |
-| `viz.romanian-law-drawn` | Romanian Law, Drawn | Who makes Romania's law, in 26 charts |
-| `viz.the-romanian-record` | The Romanian Record | Four more Romanian charts |
-| `viz.legal-system-bridges` | Legal System Bridges | Which provisions do the same job in another country? |
 | `readers` | /watch readers | Read and replay the law in a browser |
 | `setup.mcp` | Assistant setup | How an assistant connects to a clone |
 
@@ -340,24 +337,6 @@ Self-contained pages built from the record. They load fonts and d3 from the web.
 *How single provisions are amended and survive.*
 
 - **Shows:** Five charts: amendment and survival of provisions, the EU law each country cites, each country's biggest day in law.
-
-### Romanian Law, Drawn (`viz.romanian-law-drawn`)
-
-*Who makes Romania's law.*
-
-- **Shows:** 26 charts: Parliament against the government's ordinances, the codes, the Constitutional Court, the Fiscal Code, the Official Gazette, Romania against its neighbours, Spain and all of global law.
-
-### The Romanian Record (`viz.the-romanian-record`)
-
-*Four more Romanian charts.*
-
-- **Shows:** The 1991 Constitution against its 2003 revision, Official Gazette issue numbers since 1991, the ministries named in government decisions, the lines of Romania's codes.
-
-### Legal System Bridges (`viz.legal-system-bridges`)
-
-*Which provisions do the same job in another country?*
-
-- **Shows:** 308 judged matches between German, Swiss, UK and US provisions, checked against Constitute's topic tags and a hand-written answer key. Its pipeline is in the lexifina repository (`scripts/global-law/bridges`), not in global-law.
 
 ## Readers and setup
 
