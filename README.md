@@ -112,6 +112,16 @@ Court decisions sit beside the law, one file and one commit per published decisi
   courts as they are fetched), each decision text filed by its RIS document number, with its Geschäftszahl and ECLI in
   the corpus's `decision-index.tsv`; the Rechtssätze (headnote summaries) are not taken. From RIS under CC BY 4.0
   ("Datenquelle: RIS", the `Credit:` line). Citations of the B-VG and the DSG link to austria-law, which holds those two.
+- **Brazil:** `brazil/stj-<section>/caselaw` (the Superior Tribunal de Justiça's acórdãos, by section: the Primeira
+  Seção (public law), the Segunda Seção (private law), the Terceira Seção (criminal law) and the Corte Especial) and
+  `brazil/stj-monocraticas-<section>-<2021-2023|2024-2026>/caselaw` (its monocratic decisions), from the STJ's open-data
+  portal under CC BY, credited to the STJ (the `Credit:` line), and its Termo de Uso for open data; court decisions are
+  also outside copyright (Lei 9.610/1998, art. 8, IV). Each decision is filed by class, number and document number
+  (`REsp-1772086-402787831.md`), with its process (`REsp 1.772.086`), the appeal decided (`EDcl no REsp 1.772.086`) and
+  its registration number in the corpus's `decision-index.tsv`; dated the day decided as its text gives it, else the
+  day published (`Date-basis: published`). From January 2021: the portal's 2008-2020 dataset is not fetched (about 12
+  hours at its 10 s crawl delay), and it has no texts for February to April 2022. The STF (no bulk open data) and the
+  TCU are not here.
 
 Each commit is a court ruling, not a law (`Kind: court`), so the tools credit it as one and leave it out of everything
 about law (`laws`, searches, change lists) unless you name case law. Each case-law corpus also files, under the law's own
@@ -125,6 +135,7 @@ python tools/countries.py add france/caselaw
 python tools/countries.py add germany/caselaw
 python tools/countries.py add poland/caselaw
 python tools/countries.py add united-states/caselaw
+python tools/countries.py add brazil/caselaw
 python tools/law.py show 2024-01-01 switzerland/bund/caselaw/<decision>.md
 python tools/law.py laws 2024-01-01 2024-01-31 netherlands/caselaw   decisions given in a window
 ```
@@ -134,10 +145,11 @@ applied is still the text in force; `what_else_changes` counts them; `find_provi
 (`ECLI:NL:HR:2019:1234`), a Dutch zaaknummer or LJN (`19/00135`, `200.123.456/01`, `LJN BK1234`), a Swiss docket (`4A_123/2024`), a BGE reference (`BGE 142 II 307`), a French pourvoi
 (`n° 18-12.345`), Conseil constitutionnel decision (`n° 2019-791 QPC`), DILA id (`JURITEXT000041234567`), German
 Aktenzeichen (`1 BvR 123/20`, `VI ZR 123/20`, `KZR 46/19`, `AnwZ (Brfg) 12/20`, `2 C 12.19`, the Bundessozialgericht's `B 2 U 1/20 R`) or Polish sygnatura (`III KK 198/16`, `K 1/12`, `KIO 1039/16`)
-or SAOS id (`SAOS 245361`) or UZP portal id (`UZP 30001`); `resolve_citations` reads Dutch citations by abbreviation
+or SAOS id (`SAOS 245361`) or UZP portal id (`UZP 30001`) or a Brazilian process (`REsp 1.772.086/SP`, `AgInt no AREsp 2.123.456/SP`); `resolve_citations` reads Dutch citations by abbreviation
 (`artikel 6:162 BW`, `art. 8:69 Awb`), French ones by code (`article 1240 du code civil`, `art. L. 1235-3 C. trav.`,
 `article 66 de la Constitution`) and German ones by official abbreviation (`§ 823 Abs. 1 BGB`, `§§ 280, 281 BGB`,
-`§ 13 SGB V`) as it reads Swiss ones (`Art. 336 OR`).
+`§ 13 SGB V`) and Brazilian ones (`art. 1.022 do CPC`, `art. 5º, LV, da CF`, `art. 33 da Lei n. 11.343/2006`,
+`(CPC, art. 1.022)`) as it reads Swiss ones (`Art. 336 OR`).
 
 ## How it is made
 
