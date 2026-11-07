@@ -286,5 +286,61 @@ class DutchCaseLaw(unittest.TestCase):
             self.assertTrue(m.DECISION_REF.search(ref), ref)
 
 
+class NightlyAppends(unittest.TestCase):
+    """Decisions a nightly run appends: dated the day decided (author date) but committed the day the run made them
+    (committer date), after the corpus was built with both dates the day decided. `git log --before` reads the committer
+    date, so world and world_on_date named the last decision of the build (2026-04-24 on every Dutch court) for any day
+    before the run, and missed old decisions published late."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT))
+        from tests.test_law_fixtures import Tree, run
+        t = cls.t = Tree()
+        manifest = {'corpora': [{'path': CASES, 'name': 'Case law: Hoge Raad', 'language': 'nl', 'kind': 'judgments',
+                                 'in_force_trailer': 'In-force', 'correction_trailer': 'Corrected', 'code': 'NL'}]}
+        (t.root / 'manifest.json').write_text(json.dumps(manifest), encoding='utf-8')
+        c = t.corpus(CASES)
+
+        def commit(name, path, decided, committed, author='Hoge Raad'):
+            f = c.path / path
+            f.parent.mkdir(parents=True, exist_ok=True)
+            f.write_text(decision(name, 'Tekst.'), encoding='utf-8')
+            run('add', path, cwd=c.path)
+            env = {'GIT_AUTHOR_NAME': f'{author} {name}', 'GIT_AUTHOR_EMAIL': 'x@caselaw.invalid',
+                   'GIT_AUTHOR_DATE': f'{decided}T12:00:00+01:00', 'GIT_COMMITTER_NAME': 'Lexifina',
+                   'GIT_COMMITTER_EMAIL': 'corpus@lexifina.com', 'GIT_COMMITTER_DATE': f'{committed}T12:00:00+01:00'}
+            run('commit', '-q', '-m', f'{author} {name}\n\nKind: court\nIn-force: {decided}\nDecided: {decided}\nECLI: {name}\n',
+                cwd=c.path, env=env)
+
+        # The build: committed the day decided.
+        commit('ECLI:NL:HR:1995:1', 'decisions/hr/1995/ECLI_NL_HR_1995_1.md', '1995-06-01', '1995-06-01')
+        commit('ECLI:NL:HR:2026:1', 'decisions/hr/2026/ECLI_NL_HR_2026_1.md', '2026-04-24', '2026-04-24')
+        # The nightly run of 2026-11-06: decisions of May and October, and one of 1995 published late.
+        commit('ECLI:NL:HR:2026:2', 'decisions/hr/2026/ECLI_NL_HR_2026_2.md', '2026-05-15', '2026-11-06')
+        commit('ECLI:NL:HR:1995:2', 'decisions/hr/1995/ECLI_NL_HR_1995_2.md', '1995-12-20', '2026-11-06')
+        commit('ECLI:NL:HR:2026:3', 'decisions/hr/2026/ECLI_NL_HR_2026_3.md', '2026-10-30', '2026-11-06')
+        t.pin()
+        cls.law = t.law()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.law.close_readers()
+        cls.t.close()
+
+    def test_world_reads_decisions_committed_after_the_day(self):
+        latest = lambda day: (self.law.latest_decision(CASES, day) or ('', ''))[:2]  # noqa: E731
+        self.assertEqual(latest('2026-11-01'), ('Hoge Raad ECLI:NL:HR:2026:3', '2026-10-30'))
+        self.assertEqual(latest('2026-06-01'), ('Hoge Raad ECLI:NL:HR:2026:2', '2026-05-15'))
+        self.assertEqual(latest('2026-05-01'), ('Hoge Raad ECLI:NL:HR:2026:1', '2026-04-24'))
+        self.assertEqual(latest('1996-01-01'), ('Hoge Raad ECLI:NL:HR:1995:2', '1995-12-20'))
+        self.assertEqual(latest('1995-07-01'), ('Hoge Raad ECLI:NL:HR:1995:1', '1995-06-01'))
+        self.assertEqual(latest('9999-12-31'), ('Hoge Raad ECLI:NL:HR:2026:3', '2026-10-30'))
+        self.assertIsNone(self.law.latest_decision(CASES, '1990-01-01'))
+        out, err, code = self.t.cli('world', '2026-11-01')
+        self.assertEqual(code, 0, err)
+        self.assertIn('ECLI:NL:HR:2026:3 (latest decision), given 2026-10-30', out)
+
+
 if __name__ == '__main__':
     unittest.main()

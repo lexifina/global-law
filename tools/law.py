@@ -310,15 +310,45 @@ def latest_decision(corpus: str, date: str) -> tuple[str, str, str] | None:
         last = [e for e in corpus_events(corpus) if e.in_force <= date and e.kind not in ('documentation', 'end')]
         return (last[-1].law, last[-1].in_force, last[-1].corpus_commit) if last else None
     # git reads no date after 2099 ("--before=9999-12-31" read as 2012-12-28 gave every case-law corpus that last
-    # decision in list_jurisdictions): a later date needs no --before.
-    before = [f'--before={date}T23:59:59+01:00'] if date < '2100' else []
-    out = git('log', '-n', '8', *before, '--format=%an%x1f%(trailers:key=In-force,valueonly,separator=%x2C)%x1f%H',
+    # decision in list_jurisdictions): a later date needs no --before, and no commit is made after it.
+    cutoff = f'{date}T23:59:59+01:00'
+    later = date < '2100'
+    found = _late_decisions(corpus, cwd, cutoff, date) if later else []
+    out = git('log', '-n', '8', *([f'--before={cutoff}'] if later else []),
+              '--format=%an%x1f%(trailers:key=In-force,valueonly,separator=%x2C)%x1f%H',
               reachable_tip(corpus), cwd=cwd, check=False)
     for line in out.splitlines():
-        name, day, sha = (line.split('') + ['', ''])[:3]
+        name, day, sha = (line.split('\x1f') + ['', ''])[:3]
         if name != MAINTAINER and ISO_DAY.match(day.strip()) and day.strip()[:10] <= date:
-            return name, day.strip()[:10], sha.strip()
-    return None
+            found.append((name, day.strip()[:10], sha.strip()))
+            break
+    return max(found, key=lambda f: f[1]) if found else None  # on a tie, the one committed later
+
+
+def _late_decisions(corpus: str, cwd: Path, cutoff: str, date: str) -> list[tuple[str, str, str]]:
+    """The latest decision given on or before `date` but committed after it. A nightly run appends each new decision
+    dated the day decided (author date) and committed the day it ran (committer date), and `git log --before` reads the
+    committer date: the Dutch decisions of 2026-04-24 to 11-05, appended on 11-06, were missing from world on any day
+    before 11-06. Only commits made after the cutoff are read, newest first, down to the first decision committed on
+    its own day (author and committer dates equal: the build, which `--before` reads), where the walk stops."""
+    fmt = '--format=%ct%x1f%at%x1f%an%x1f%(trailers:key=In-force,valueonly,separator=%x2C)%x1f%H'
+    found: list[tuple[str, str, str]] = []
+    skip, n = 0, 500  # in growing pages, as git is run to completion (the MCP server's time limits): no stream to cut
+    while True:
+        lines = git('log', f'--since={cutoff}', f'--skip={skip}', '-n', str(n), fmt, reachable_tip(corpus), cwd=cwd,
+                    check=False).splitlines()
+        for line in lines:
+            ct, at, name, day, sha = (line.split('\x1f') + [''] * 4)[:5]
+            if name == MAINTAINER:
+                continue
+            if ct == at:
+                return found
+            day = day.strip()[:10]
+            if ISO_DAY.match(day) and day <= date and (not found or day > found[0][1]):
+                found = [(name, day, sha.strip())]
+        if len(lines) < n:
+            return found
+        skip, n = skip + n, n * 2
 
 
 def tip(corpus: str) -> str | None:
