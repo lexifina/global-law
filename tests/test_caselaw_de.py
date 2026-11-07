@@ -261,11 +261,13 @@ class GermanCaseLaw(unittest.TestCase):
         t = Tree()
         try:
             c = t.corpus('germany/bag/caselaw')
-            for i, day in enumerate(('2010-03-24', '2015-06-01', '2020-06-23')):
-                (c.path / f'd{i}.md').write_text(f'# {day}\n', encoding='utf-8')
+            # the last commit: a correction of the 2015 decision, appended later (as the corpus's 5514 are)
+            for i, day, kind in ((0, '2010-03-24', 'court'), (1, '2015-06-01', 'court'), (2, '2020-06-23', 'court'),
+                                 (1, '2015-06-01', 'correction')):
+                (c.path / f'd{i}.md').write_text(f'# {day} {kind}\n', encoding='utf-8')
                 run('add', f'd{i}.md', cwd=c.path)
                 stamp = f'{day}T12:00:00+01:00'
-                run('commit', '-q', '-m', f'Bundesarbeitsgericht {i} AZR {i}/{day[2:4]}\n\nKind: court\nIn-force: {day}\n',
+                run('commit', '-q', '-m', f'Bundesarbeitsgericht {i} AZR {i}/{day[2:4]}\n\nKind: {kind}\nIn-force: {day}\n',
                     cwd=c.path, env={'GIT_AUTHOR_NAME': f'Bundesarbeitsgericht {i} AZR', 'GIT_AUTHOR_EMAIL': 'c@x.invalid',
                                      'GIT_AUTHOR_DATE': stamp, 'GIT_COMMITTER_NAME': 'Lexifina',
                                      'GIT_COMMITTER_EMAIL': 'corpus@lexifina.com', 'GIT_COMMITTER_DATE': stamp})

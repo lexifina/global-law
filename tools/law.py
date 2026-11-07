@@ -314,7 +314,7 @@ def latest_decision(corpus: str, date: str) -> tuple[str, str, str] | None:
     cutoff = f'{date}T23:59:59+01:00'
     later = date < '2100'
     found = _late_decisions(corpus, cwd, cutoff, date) if later else []
-    out = git('log', '-n', '8', *([f'--before={cutoff}'] if later else []),
+    out = git('log', '-n', '8', *([f'--before={cutoff}'] if later else []), *NOT_CORRECTION,
               '--format=%an%x1f%(trailers:key=In-force,valueonly,separator=%x2C)%x1f%H',
               reachable_tip(corpus), cwd=cwd, check=False)
     for line in out.splitlines():
@@ -323,6 +323,11 @@ def latest_decision(corpus: str, date: str) -> tuple[str, str, str] | None:
             found.append((name, day.strip()[:10], sha.strip()))
             break
     return max(found, key=lambda f: f[1]) if found else None  # on a tie, the one committed later
+
+
+# A correction is appended after the decisions, dated its decision's day: it is not a decision given, and the 5514
+# Bundesarbeitsgericht corrections on top of that corpus would name whichever was fixed last (or be walked on every call).
+NOT_CORRECTION = ('--invert-grep', '--grep=^Kind: correction$')
 
 
 def _late_decisions(corpus: str, cwd: Path, cutoff: str, date: str) -> list[tuple[str, str, str]]:
@@ -335,7 +340,7 @@ def _late_decisions(corpus: str, cwd: Path, cutoff: str, date: str) -> list[tupl
     found: list[tuple[str, str, str]] = []
     skip, n = 0, 500  # in growing pages, as git is run to completion (the MCP server's time limits): no stream to cut
     while True:
-        lines = git('log', f'--since={cutoff}', f'--skip={skip}', '-n', str(n), fmt, reachable_tip(corpus), cwd=cwd,
+        lines = git('log', f'--since={cutoff}', f'--skip={skip}', '-n', str(n), *NOT_CORRECTION, fmt, reachable_tip(corpus), cwd=cwd,
                     check=False).splitlines()
         for line in lines:
             ct, at, name, day, sha = (line.split('\x1f') + [''] * 4)[:5]
