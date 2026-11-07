@@ -1364,6 +1364,19 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                          'score': 100})
         if rows:
             return '\n'.join(f"{r['path']}  {r['heading']}" for r in rows), {'results': rows}
+    # A Finnish decision by any other reference its corpus's decision index lists: a diary number ("S2020/111",
+    # "0012/1/15"), the specialised courts' numbers ("MAO:94/2026", "TT:1981-152", "VakO 26.10.1976/7216:75") and the
+    # courts of appeal's ("Helsingin HO 19.01.1977 418"). Looked up only in the Finnish case law served; a bare act
+    # number ("586/2024") is left to the law, and a reference found nowhere falls through to the heading search.
+    fi_ref = query.strip()
+    if FI_REFERENCE.fullmatch(fi_ref) and not FI_ACT_NUMBER.fullmatch(fi_ref):
+        key = _decision_key(fi_ref)
+        fi_pins = [cp for cp in caselaw_pins() if cp[0].startswith('finland/')]
+        found = [path for c, sha in fi_pins for path in _decision_lookup(c, sha, key)]
+        if found:
+            rows = [{'path': path, 'heading': f'{fi_ref}  (a reference in the decision index)', 'score': 100}
+                    for path in dict.fromkeys(found)][:limit]
+            return '\n'.join(f"{r['path']}  {r['heading']}" for r in rows), {'results': rows}
     ref = (DE_DOCKET.fullmatch(query.strip()) or DECISION_REF.fullmatch(query.strip())
            or NL_DOCKET.fullmatch(query.strip())
            or PL_DOCKET.fullmatch(query.strip()) or PL_REF.fullmatch(query.strip()) or FR_DECISION.fullmatch(query.strip())
@@ -4935,6 +4948,10 @@ FI_GENITIVE = re.compile(r'(?<![\wÅÄÖåäö])(?P<stem>[A-Za-zÅÄÖåäö-]{3
                          r'(?:\s+(?:luvun|luku)\s+(?P<b>\d{1,4}[a-z]?))?\s*§')
 # Finnish decisions: "KKO:2023:8", "KHO 2020:12", Swedish "HD:2023:8" / "HFD 2020:12", and the specialised courts
 # ("MAO:123/20", "TT:2019:5", "VakO 1234:2018" are named in the decision index as published).
+# Any other Finnish decision reference, for find_provision (a digit and a "/" or ":" in at most 60 characters), and the
+# act number it must not take ("586/2024" is an act of the Statute Book, though a diary number can read the same).
+FI_REFERENCE = re.compile(r'(?=.*\d)(?=.*[/:])[\w .:/()-]{3,60}')
+FI_ACT_NUMBER = re.compile(r'\d{1,5}/(?:18|19|20)\d{2}')
 FI_DECISION = re.compile(r'(?<![\w:])(?P<court>KKO|KHO|HD|HFD|TT)[:\s](?P<year>(?:19|20)\d{2})[:\s](?P<num>\d{1,4})(?![\d:])')
 
 

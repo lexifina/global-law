@@ -91,7 +91,8 @@ class FinnishCaseLaw(unittest.TestCase):
                  'citation': 'ECLI:FI:KKO:2023:8', 'url': url + '2023/8', 'how': 'TSL 7 luku 3 §', 'mentions': 1, 'decision': D3,
                  'law_commit': cls.v2019}]
         index = 'reference\tpath\n' + ''.join(f'{r}\t{p}\n' for r, p in (('KKO:2010:5', D1), ('ECLI:FI:KKO:2010:5', D1), ('S2009/12', D1),
-                                                                              ('KKO:2016:40', D2), ('KKO:2023:8', D3), ('S2020/111', D3)))
+                                                                              ('KKO:2016:40', D2), ('KKO:2023:8', D3), ('S2020/111', D3),
+                                                                              ('MAO:94/2026', D2), ('586/2024', D2)))
         c.commit('Lexifina', {f'judgments/{LAW}/tyosopimuslaki/luku-07-pykala-003.jsonl': ''.join(json.dumps(r) + '\n' for r in rows),
                               'decision-index.tsv': index,
                               'corpus.json': json.dumps({'corpus': 'fi/korkein-oikeus/caselaw', 'kind': 'judgments', 'credit': CREDIT,
@@ -214,6 +215,21 @@ class FinnishCaseLaw(unittest.TestCase):
         self.assertIn(ART, text)
         self.assertIn(PL21, text)
         self.assertIn(f'{CASES}/{D1}', text)
+
+    def test_decisions_by_diary_number_and_the_genitive_constitution(self):
+        diary, mao, act_no, unknown, cites = self.calls(
+            ('find_provision', {'query': 'S2020/111'}),
+            ('find_provision', {'query': 'MAO:94/2026'}),
+            ('find_provision', {'query': '586/2024'}),
+            ('find_provision', {'query': 'S1999/1'}),
+            ('resolve_citations', {'text': 'perustuslain 21 §:n 1 momentti', 'date': '2024-01-01'}))
+        for a in (diary, mao, act_no, unknown, cites):
+            self.assertFalse(a['error'], a['text'])
+        self.assertIn(f'{CASES}/{D3}', diary['text'])
+        self.assertIn(f'{CASES}/{D2}', mao['text'])
+        self.assertNotIn(f'{CASES}/{D2}', act_no['text'])  # an act number is the law's, though a diary number reads the same
+        self.assertNotIn(CASES, unknown['text'])
+        self.assertIn(PL21, json.dumps(cites['data'], ensure_ascii=False))
 
     def test_finnish_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))
