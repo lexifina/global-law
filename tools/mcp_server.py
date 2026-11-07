@@ -4025,6 +4025,11 @@ def judgments_for(corpus: str, sha: str, rel: str) -> list[dict]:
     judgments/switzerland/bund/acts/101/art-029.jsonl). One JSON object per line with at least "decided" (YYYY-MM-DD)
     and "name"; also "court", "citation", "url", "how", "law_commit", and "decision" (the decision's file, given here
     as its path in the tree). The case-law overlays are read in parallel, one git process per corpus."""
+    return judgment_rows(judgment_texts(corpus, sha, rel))
+
+
+def judgment_texts(corpus: str, sha: str, rel: str) -> list[tuple[str, str]]:
+    """(case-law corpus or '', text) of every overlay file judgments_for reads for a provision."""
     name = f"{rel.removesuffix('.md')}.jsonl"
     texts: list[tuple[str, str]] = []
     specs = [(ROOT / corpus, f'{sha}:judgments/{name}')] + [(ROOT, f'HEAD:judgments/{c}/{name}') for c in names_for(corpus)]
@@ -4041,9 +4046,14 @@ def judgments_for(corpus: str, sha: str, rel: str) -> list[dict]:
                                           + [f"{cp[1]}:judgments/{n}/{name.removesuffix('.jsonl')}.{y}.jsonl" for n in names
                                              for y in INDEX_YEARS]), pins)):
                 texts += [(c, t) for t in got]
+    return texts
+
+
+def judgment_rows(texts: list[tuple[str, str]], lines_of=None) -> list[dict]:
+    """The rows of overlay texts, each decision once, oldest first (lines_of: the lines to read of each text)."""
     out, seen = [], set()
-    for source, text in texts:
-        for line in text.splitlines():
+    for i, (source, text) in enumerate(texts):
+        for line in (lines_of[i] if lines_of is not None else text.splitlines()):
             try:
                 j = json.loads(line)
             except json.JSONDecodeError:
@@ -4059,6 +4069,42 @@ def judgments_for(corpus: str, sha: str, rel: str) -> list[dict]:
     return sorted(out, key=lambda j: j['decided'])
 
 
+JUDGMENTS_COUNTED = int(os.environ.get('GLOBAL_LAW_JUDGMENTS_COUNTED', '20000'))  # overlay rows above which check_precedent
+# counts lines and reads only the latest (the variable is for tests)
+_DECIDED = re.compile(r'"decided":\s*"(\d{4}-\d{2}-\d{2})"')
+
+
+def judgments_counted(corpus: str, sha: str, rel: str, date: str, latest: int) -> tuple[int, int, list[dict]]:
+    """(rows recorded, rows decided on or before `date`, the latest `latest` of those, oldest first). An article courts cite
+    in hundreds of thousands of decisions (art. 1.022 of the Brazilian CPC: 614,000 rows) is not parsed row by row: the
+    rows are counted and the latest picked by their "decided" field, and only those are read (counts then include a
+    decision filed twice, which the small overlays, read whole, count once)."""
+    texts = judgment_texts(corpus, sha, rel)
+    if sum(t.count('\n') for _, t in texts) <= JUDGMENTS_COUNTED:
+        rows = judgment_rows(texts)
+        upto = [j for j in rows if j['decided'] <= date]
+        return len(rows), len(upto), upto[-latest:] if latest else []
+    import heapq
+    total = n_upto = 0
+    keep = []  # (decided, text index, line)
+    for i, (_, text) in enumerate(texts):
+        for line in text.splitlines():
+            m = _DECIDED.search(line)
+            if not m:
+                continue
+            total += 1
+            if m.group(1) <= date:
+                n_upto += 1
+                if len(keep) < latest * 2:
+                    heapq.heappush(keep, (m.group(1), i, line))
+                elif m.group(1) > keep[0][0]:
+                    heapq.heapreplace(keep, (m.group(1), i, line))
+    lines_of = [[] for _ in texts]
+    for _, i, line in keep:
+        lines_of[i].append(line)
+    return total, n_upto, judgment_rows(texts, lines_of)[-latest:] if latest else []
+
+
 def t_check_precedent(args: dict) -> tuple[str, dict]:
     """A judgment applied a provision on the day it was decided. Is the text it applied the text in force on another
     date (today by default), and if not, which laws changed it? Lists the judgments the record holds, if any."""
@@ -4071,11 +4117,10 @@ def t_check_precedent(args: dict) -> tuple[str, dict]:
     if decided_arg not in (None, ''):
         checks.append({'name': text_arg(args, 'case_name') or 'the decision', **precedent_status(path, date_arg(decided_arg), date)})
     sha = law.pinned('HEAD', corpus)
-    recorded = judgments_for(corpus, sha, rel) if sha else []
     # Case law can record thousands of decisions for one article (Art. 29 Abs. 2 BV): the latest are checked, and the
     # words are compared once per version of the text, not once per decision.
-    upto = [j for j in recorded if j['decided'] <= date]
-    shown = upto[-num(args, 'max_results', 50, MAX_ITEMS):][::-1]
+    n_recorded, n_upto, latest_rows = judgments_counted(corpus, sha, rel, date, num(args, 'max_results', 50, MAX_ITEMS)) if sha else (0, 0, [])
+    shown = latest_rows[::-1]
     versions = [h['in_force'] for h in history_of(path)]
     compared: dict[str, dict] = {}
     for j in shown:
@@ -4097,8 +4142,8 @@ def t_check_precedent(args: dict) -> tuple[str, dict]:
         return (f'No judgment is recorded for {path}. Give the date a decision was made ("decided") to check whether the text it '
                 'applied is still the text in force.', {'path': path, 'date': date, 'checks': [], 'judgments_recorded': 0})
     lines = [f'{path}: the text each decision applied, against the text in force on {date}.'
-             + (f' {len(upto)} decisions are recorded; the latest {len(shown)} are checked (max_results for more).'
-                if len(upto) > len(shown) else '')]
+             + (f' {n_upto} decisions are recorded; the latest {len(shown)} are checked (max_results for more).'
+                if n_upto > len(shown) else '')]
     for c in checks:
         label = c.get('name', 'the decision') + (f" ({c['citation']})" if c.get('citation') else '') + f", decided {c['decided']}" + (f", applying the text of {c['text_date']}" if c.get('text_date') not in (None, c['decided']) else '')
         if not c['in_force_when_decided']:
@@ -4121,8 +4166,8 @@ def t_check_precedent(args: dict) -> tuple[str, dict]:
                                    'the decision may still govern there.' for m in c.get('removed_words_now_elsewhere', [])))
     lines.append('Same words is not same law: a later law can change how a provision applies without changing its words '
                  '(see read_law), and courts may read the same words differently.')
-    return '\n'.join(lines), {'path': path, 'date': date, 'checks': checks, 'judgments_recorded': len(recorded),
-                              'judgments_up_to_date': len(upto)}
+    return '\n'.join(lines), {'path': path, 'date': date, 'checks': checks, 'judgments_recorded': n_recorded,
+                              'judgments_up_to_date': n_upto}
 
 
 # Mexico: the acts a Mexican brief names, by the abbreviation or title it uses, and the folder each is in. Only names

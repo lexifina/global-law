@@ -283,6 +283,20 @@ class BrazilianCaseLaw(unittest.TestCase):
         self.assertEqual(prec['data']['judgments_recorded'], 4)
         self.assertIn('AREsp 2.500.001', [c['citation'] for c in prec['data']['checks']])
 
+    def test_check_precedent_counts_a_large_overlay(self):
+        """Above JUDGMENTS_COUNTED rows check_precedent counts the rows and reads only the latest: same answer."""
+        import os
+        args = json.dumps([('check_precedent', {'path': ART, 'date': '2026-01-01', 'max_results': 2})])
+        runs = []
+        for limit in ('20000', '0'):
+            done = subprocess.run([sys.executable, '-X', 'utf8', '-c', CALL], cwd=self.t.root, input=args, capture_output=True,
+                                  encoding='utf-8', timeout=300, env={**os.environ, 'GLOBAL_LAW_JUDGMENTS_COUNTED': limit})
+            self.assertEqual(done.returncode, 0, done.stderr)
+            runs.append(json.loads(done.stdout)[0]['data'])
+        whole, counted = runs
+        self.assertEqual((counted['judgments_recorded'], counted['judgments_up_to_date']), (4, 4))
+        self.assertEqual([c['citation'] for c in counted['checks']], [c['citation'] for c in whole['checks']])
+
     def test_brazilian_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))
         import mcp_server as m
