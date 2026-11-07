@@ -90,8 +90,8 @@ Court decisions sit beside the law, one file and one commit per published decisi
 - **Germany:** `germany/<court>/caselaw` (the Bundesverfassungsgericht, Bundesverwaltungsgericht, Bundesfinanzhof,
   Bundesarbeitsgericht and Bundespatentgericht), each decision filed by its ECLI (or Aktenzeichen), with its
   Aktenzeichen in the corpus's `decision-index.tsv`.
-- **Poland:** `poland/<court group>/caselaw` (the Sąd Najwyższy, the Trybunał Konstytucyjny, the administrative courts,
-  the Krajowa Izba Odwoławcza and the common courts by appellate region), from SAOS, each judgment filed by its case
+- **Poland:** `poland/<court group>/caselaw` (the Sąd Najwyższy, the Trybunał Konstytucyjny, the Krajowa Izba
+  Odwoławcza and the common courts by appellate region; SAOS carries no administrative-court judgments), from SAOS, each judgment filed by its case
   number (sygnatura) and SAOS id, with the sygnatura in the corpus's `decision-index.tsv`. Judgments are official
   documents outside copyright (Art. 4 of the Polish Copyright Act).
 - **The United States:** `united-states/<court>/caselaw` (the Supreme Court; the courts of appeals `ca1` to `ca11`,
