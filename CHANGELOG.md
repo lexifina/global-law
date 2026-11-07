@@ -9,6 +9,7 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 7 November 2026
+- **Fixed (here), check_precedent on a changed article.** Where the words a court applied have left the article, `check_precedent` looks for them elsewhere in the law (`removed_words_now_elsewhere`) by up to five eight-word windows per removed passage, each a `git grep` over the whole corpus: on Polish case law, art. 22¹ k.p. took 5.6 s (15 greps of poland-law's 57,000 files). All windows now go into one grep per check (`grep_windows`), and the first window found per passage is kept as before; same answers on the real data (five articles compared), 5.1 s -> 2.1 s in process. Test: `test_check_precedent_finds_where_the_applied_words_went` (tests/test_caselaw_pl.py, now 10); every case-law suite, DocFigures, DescriptionExamplesResolve and the cross-country citation tests pass (100).
 - **Added (Finland, Austria). Case law of Finland and Austria, read with the tools of the law.** Finnish decisions
   (`finland/<court>/caselaw`, from finlex.fi, CC BY 4.0 credited to Finlex) and Austrian decision texts
   (`austria/<court>/caselaw`, from RIS OGD, CC BY 4.0, "Datenquelle: RIS"). `resolve_citations` and `find_provision` read

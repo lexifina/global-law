@@ -3609,19 +3609,47 @@ def moved_words(path: str, then: str, now: str, date: str) -> list[dict]:
     if sha is None:
         return []
     old, new = re.findall(r'\S+', then), re.findall(r'\S+', now)
-    found = []
+    passages = []
     for op, a0, a1, _, _ in difflib.SequenceMatcher(None, old, new, autojunk=False).get_opcodes():
-        if op not in ('delete', 'replace') or a1 - a0 < 8 or len(found) >= 5:
+        if op not in ('delete', 'replace') or a1 - a0 < 8:
             continue
         # A few eight-word windows: the first takes in the words just before the cut, since a diff often keeps one
         # word of a phrase ("business") and cuts the rest; then windows through the passage.
-        for start in [max(0, a0 - 3)] + list(range(a0, a1 - 7, 6))[:4]:
-            words = ' '.join(old[start:start + 8])
-            where = [f'{corpus}/{n}' for n in grep_files(corpus, sha, words) if n != rel and not NOT_LAW.search(n)]
+        passages.append([' '.join(old[s:s + 8]) for s in [max(0, a0 - 3)] + list(range(a0, a1 - 7, 6))[:4]])
+    # Every window of every passage in one grep of the corpus (a grep per window was a pass over the whole corpus each,
+    # seconds on a large one); then, per passage, the first window found, as before.
+    hits = grep_windows(corpus, sha, tuple(dict.fromkeys(w for p in passages for w in p)))
+    found = []
+    for windows in passages:
+        if len(found) >= 5:
+            break
+        for words in windows:
+            where = [f'{corpus}/{n}' for n in hits.get(words.lower(), ()) if n != rel and not NOT_LAW.search(n)]
             if where:
                 found.append({'words': words, 'now_in': where[:10]})
                 break
     return found
+
+
+@lru_cache(maxsize=256)
+def grep_windows(corpus: str, sha: str, windows: tuple[str, ...]) -> dict[str, tuple[str, ...]]:
+    """Which files hold each phrase (case-insensitive, fixed strings), by one git grep for all of them: window (lower
+    case) -> files. A phrase that spans a line break is not found, as with grep_files."""
+    if not windows:
+        return {}
+    args = ['git', 'grep', '-F', '-i', '-I', '-o', '--full-name']
+    for w in windows:
+        args += ['-e', w]
+    out = git_run(args + [sha, '--', '*.md'], cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace').stdout
+    want = {re.sub(r'\s+', ' ', w).lower(): w.lower() for w in windows}
+    files: dict[str, dict[str, None]] = {}
+    for line in out.splitlines():
+        rest = line.removeprefix(f'{sha}:')
+        name, sep, match = rest.partition(':')
+        key = want.get(re.sub(r'\s+', ' ', match).lower()) if sep else None
+        if key:
+            files.setdefault(key, {})[name] = None
+    return {k: tuple(v) for k, v in files.items()}
 
 
 @lru_cache(maxsize=256)

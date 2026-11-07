@@ -25,6 +25,8 @@ sys.dont_write_bytecode = True
 LAW = 'poland/national/acts'
 CASES = 'poland/sad-najwyzszy/caselaw'
 ART = f'{LAW}/kodeks-cywilny/art-415.md'
+# words that left art. 416 in 2018 and are law in art. 417 after: check_precedent says where they went
+MOVED = 'Osoba prawna jest obowiązana do naprawienia szkody wyrządzonej z winy jej organu.'
 D1 = 'decisions/sad-najwyzszy/2010/II-CSK-100-10-1001.md'
 D2 = 'decisions/sad-najwyzszy/2016/IV-CSK-200-16-1002.md'
 D3 = 'decisions/sad-najwyzszy/2022/I-CSKP-300-21-1003.md'
@@ -63,10 +65,14 @@ class PolishCaseLaw(unittest.TestCase):
         law.commit('Dz.U. 1964 nr 16 poz. 93', {'kodeks-cywilny/art-415.md': '# Art. 415\n\nKto z winy swej wyrządził drugiemu szkodę, '
                                                                             'obowiązany jest do jej naprawienia.\n',
                                                 'kodeks-pracy/art-022-1.md': '# Art. 22¹\n\nPracodawca żąda danych osobowych.\n',
-                                                'konstytucja/art-032.md': '# Art. 32\n\nWszyscy są wobec prawa równi.\n'},
+                                                'konstytucja/art-032.md': '# Art. 32\n\nWszyscy są wobec prawa równi.\n',
+                                                'kodeks-cywilny/art-416.md': f'# Art. 416\n\n{MOVED}\n',
+                                                'kodeks-cywilny/art-417.md': '# Art. 417\n\nSkarb Państwa odpowiada za szkodę.\n'},
                    In_force='2009-01-01', Kind='law')
         cls.v2018 = law.commit('Dz.U. 2018 poz. 1', {'kodeks-cywilny/art-415.md': '# Art. 415\n\nKto z winy swej wyrządził drugiemu '
-                                                                                 'szkodę, obowiązany jest do jej naprawienia w całości.\n'},
+                                                                                 'szkodę, obowiązany jest do jej naprawienia w całości.\n',
+                                                     'kodeks-cywilny/art-416.md': '# Art. 416\n\n(uchylony)\n',
+                                                     'kodeks-cywilny/art-417.md': f'# Art. 417\n\nSkarb Państwa odpowiada za szkodę. {MOVED}\n'},
                                In_force='2018-01-01', Kind='law')
         c = t.corpus(CASES)
         c.commit('Sąd Najwyższy II CSK 100/10', {D1: judgment('Odpowiedzialność deliktowa', 'Skarga kasacyjna zostaje oddalona.\nWina jest wykazana.')},
@@ -88,7 +94,10 @@ class PolishCaseLaw(unittest.TestCase):
                  'url': 'https://www.sn.pl/3', 'how': 'art. 415 k.c.', 'mentions': 1, 'decision': D3, 'law_commit': cls.v2018}]
         index = ''.join(f'{ref}\t{p}\n' for ref, p in (('II CSK 100/10', D1), ('SAOS 1001', D1), ('IV CSK 200/16', D2),
                                                          ('SAOS 1002', D2), ('I CSKP 300/21', D3), ('SAOS 1003', D3)))
+        moved = {'decided': '2012-02-02', 'name': 'Sąd Najwyższy II CSK 100/10', 'court': 'Sąd Najwyższy', 'citation': 'II CSK 100/10',
+                 'url': 'https://www.sn.pl/1', 'how': 'art. 416 k.c.', 'mentions': 1, 'decision': D1}
         c.commit('Lexifina', {f'judgments/{LAW}/kodeks-cywilny/art-415.jsonl': ''.join(json.dumps(r) + '\n' for r in rows),
+                              f'judgments/{LAW}/kodeks-cywilny/art-416.jsonl': json.dumps(moved) + '\n',
                               'decision-index.tsv': 'reference\tpath\n' + index,
                               'corpus.json': json.dumps({'corpus': 'pl/sad-najwyzszy/caselaw', 'kind': 'judgments',
                                                          'name': 'Case law: Sąd Najwyższy', 'in_force_trailer': 'In-force'})},
@@ -163,6 +172,13 @@ class PolishCaseLaw(unittest.TestCase):
         self.assertEqual(by['IV CSK 200/16']['decision'], f'{CASES}/{D2}')
         self.assertFalse(else_['error'], else_['text'])
         self.assertIn('court decision(s) cite it', else_['text'])
+
+    def test_check_precedent_finds_where_the_applied_words_went(self):
+        prec = self.calls(('check_precedent', {'path': f'{LAW}/kodeks-cywilny/art-416.md', 'date': '2023-01-01'}))[0]
+        self.assertFalse(prec['error'], prec['text'])
+        check = prec['data']['checks'][0]
+        self.assertFalse(check['same_words'])
+        self.assertEqual([m['now_in'] for m in check['removed_words_now_elsewhere']][:1], [[f'{LAW}/kodeks-cywilny/art-417.md']])
 
     def test_a_judgment_is_read_like_a_provision(self):
         path = f'{CASES}/{D1}'
