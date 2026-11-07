@@ -26,6 +26,8 @@ sys.dont_write_bytecode = True
 
 LAW = 'brazil/national/acts'
 CASES = 'brazil/stj-segunda-secao/caselaw'
+MONO = 'brazil/stj-monocraticas-segunda-secao-2024-2026/caselaw'
+M1 = 'decisions/2024/05/06/AREsp-2500001-200001.md'
 ART = f'{LAW}/codigo-civil/art-0186.md'
 MOVED = 'Também comete ato ilícito o titular de um direito que, ao exercê-lo, excede manifestamente os limites.'
 D1 = 'decisions/2021/resp/REsp-1772086-100001.md'
@@ -67,6 +69,8 @@ class BrazilianCaseLaw(unittest.TestCase):
         manifest = {'corpora': [
             {'path': LAW, 'name': 'Brazil', 'language': 'pt', 'in_force_trailer': 'In-force', 'code': 'BR'},
             {'path': CASES, 'name': 'Case law: Brazil, Superior Tribunal de Justiça, the Segunda Seção', 'language': 'pt',
+             'kind': 'judgments', 'in_force_trailer': 'In-force', 'correction_trailer': 'Corrected', 'code': 'BR'},
+            {'path': MONO, 'name': 'Case law: STJ monocratic decisions, Segunda Seção, 2024-2026', 'language': 'pt',
              'kind': 'judgments', 'in_force_trailer': 'In-force', 'correction_trailer': 'Corrected', 'code': 'BR'}]}
         (t.root / 'manifest.json').write_text(json.dumps(manifest), encoding='utf-8')
         run('add', 'jurisdiction.json', 'data', cwd=t.root)
@@ -120,6 +124,15 @@ class BrazilianCaseLaw(unittest.TestCase):
                               'corpus.json': json.dumps({'corpus': 'br/stj-segunda-secao/caselaw', 'kind': 'judgments',
                                                          'name': 'Case law: STJ Segunda Seção', 'in_force_trailer': 'In-force'})},
                  Kind='documentation')
+        # A monocratic corpus that splits its index and overlay by year (decision-index-2024.tsv, art-0186.2024.jsonl), as
+        # the large ones do to keep each file under GitHub's 100 MB.
+        m = t.corpus(MONO)
+        m.commit('STJ AREsp 2.500.001', {M1: acordao('STJ, Decisão, AREsp 2.500.001, 2024-05-06', 'DECISÃO\nAgravo não conhecido. Dano moral.')},
+                 Kind='court', In_force='2024-05-06', Published='2024-05-06', Court='Superior Tribunal de Justiça', Docket='AREsp 2.500.001')
+        row = {'decided': '2024-05-06', 'name': 'STJ AREsp 2.500.001', 'court': 'Superior Tribunal de Justiça', 'citation': 'AREsp 2.500.001',
+               'url': 'https://dadosabertos.web.stj.jus.br/', 'how': 'art. 186 do CC', 'mentions': 1, 'decision': M1, 'law_commit': cls.v2022}
+        m.commit('Lexifina', {f'judgments/{LAW}/codigo-civil/art-0186.2024.jsonl': json.dumps(row, ensure_ascii=False) + '\n',
+                              'decision-index-2024.tsv': f'reference\tpath\nAREsp 2.500.001\t{M1}\nSTJ 200001\t{M1}\n'}, Kind='documentation')
         t.pin()
 
     @classmethod
@@ -180,7 +193,7 @@ class BrazilianCaseLaw(unittest.TestCase):
         prec, else_ = self.calls(('check_precedent', {'path': ART, 'date': '2026-01-01'}),
                                  ('what_else_changes', {'path': ART, 'date': '2026-01-01'}))
         self.assertFalse(prec['error'], prec['text'])
-        self.assertEqual(prec['data']['judgments_recorded'], 3)
+        self.assertEqual(prec['data']['judgments_recorded'], 4)  # three acórdãos, one monocratic decision (by year)
         by = {c['citation']: c for c in prec['data']['checks']}
         self.assertFalse(by['REsp 1.772.086']['same_words'])  # decided before the 2022 change
         self.assertTrue(by['REsp 1.999.999']['same_words'])
@@ -261,6 +274,14 @@ class BrazilianCaseLaw(unittest.TestCase):
                      f'{CASES}/{D1}'):
             self.assertIn(want, paths)
         self.assertFalse([p for p in paths if p and '9999' in p], paths)  # a law brazil-law does not hold
+
+    def test_a_corpus_split_by_year(self):
+        """decision-index-<year>.tsv and judgments/<law>/<article>.<year>.jsonl are read as the single files are."""
+        found, prec = self.calls(('find_provision', {'query': 'AREsp 2.500.001/SP'}), ('check_precedent', {'path': ART, 'date': '2026-01-01'}))
+        self.assertFalse(found['error'], found['text'])
+        self.assertIn(f'{MONO}/{M1}', found['text'])
+        self.assertEqual(prec['data']['judgments_recorded'], 4)
+        self.assertIn('AREsp 2.500.001', [c['citation'] for c in prec['data']['checks']])
 
     def test_brazilian_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))

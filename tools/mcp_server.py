@@ -4014,6 +4014,11 @@ def read_blobs(cwd: Path, specs: list[str]) -> list[str]:
     return out
 
 
+# Years a case-law corpus may split its decision index and its overlay files by (decision-index-2024.tsv,
+# judgments/<law>/<article>.2024.jsonl): one file per year keeps each under GitHub's 100 MB limit.
+INDEX_YEARS = range(1950, 2051)
+
+
 def judgments_for(corpus: str, sha: str, rel: str) -> list[dict]:
     """Judgments recorded for a provision: judgments/<provision path>.jsonl in the corpus at its pinned commit, in the
     tree, and in every case-law corpus served (each overlay is filed under the law's corpus path:
@@ -4032,7 +4037,9 @@ def judgments_for(corpus: str, sha: str, rel: str) -> list[dict]:
         names = names_for(corpus)
         with ThreadPoolExecutor(max_workers=8) as pool:
             for c, got in zip([c for c, _ in pins], pool.map(
-                    lambda cp: read_blobs(ROOT / cp[0], [f'{cp[1]}:judgments/{n}/{name}' for n in names]), pins)):
+                    lambda cp: read_blobs(ROOT / cp[0], [f'{cp[1]}:judgments/{n}/{name}' for n in names]
+                                          + [f"{cp[1]}:judgments/{n}/{name.removesuffix('.jsonl')}.{y}.jsonl" for n in names
+                                             for y in INDEX_YEARS]), pins)):
                 texts += [(c, t) for t in got]
     out, seen = [], set()
     for source, text in texts:
@@ -4434,7 +4441,9 @@ def _decisions(corpus: str, sha: str) -> dict[str, tuple[str, ...]]:
             out.setdefault(_decision_key(name[:-3].split('--', 1)[0]), []).append(f'{corpus}/{line}')
     # A corpus whose files are named by another id (France: the DILA id) lists its other references in
     # decision-index.tsv at its root: "<reference>\t<path>" per line (a pourvoi, a decision number, an ECLI).
-    for line in law.git('show', f'{sha}:decision-index.tsv', cwd=ROOT / corpus, check=False).splitlines():
+    # A large corpus splits its index by year (decision-index-2024.tsv ...: GitHub takes no file over 100 MB).
+    index_files = read_blobs(ROOT / corpus, [f'{sha}:decision-index.tsv'] + [f'{sha}:decision-index-{y}.tsv' for y in INDEX_YEARS])
+    for line in (l for text in index_files for l in text.splitlines()):
         ref, _, path = line.partition('\t')
         if ref and path.strip() and not ref.startswith('#') and ref.strip().lower() != 'reference':  # the header line
             p = f'{corpus}/{path.strip()}'
