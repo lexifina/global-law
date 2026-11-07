@@ -3585,7 +3585,7 @@ def word_diff(a: str, b: str) -> str:
     return '\n'.join(out)
 
 
-def precedent_status(path: str, decided: str, date: str) -> dict:
+def precedent_status(path: str, decided: str, date: str, defer_moved: bool = False) -> dict:
     """Whether the words a court applied on `decided` are the words in force on `date`, and which laws changed them.
     Only the words of the law count, not a file's metadata; changes that left the words alone are listed as such."""
     then, now = law_words(run_law(law.text_on, decided, path)), law_words(run_law(law.text_on, date, path))
@@ -3593,10 +3593,73 @@ def precedent_status(path: str, decided: str, date: str) -> dict:
     corpus, _ = law.corpus_of(path)
     since = [{'law': h['law'], 'in_force': h['in_force'], 'what': change_note(commit_body(corpus, h['commit']), path)} for h in between]
     same = then is not None and now is not None and then.split() == now.split()  # words, not indentation or line breaks
-    moved = [] if same or then is None else moved_words(path, then, now or '', date)
+    if defer_moved:  # the caller looks for the moved words of several versions in one grep (moved_words_many)
+        moved = ('defer', then, now or '') if not (same or then is None) else []
+    else:
+        moved = [] if same or then is None else moved_words(path, then, now or '', date)
     return {'decided': decided, 'date': date, 'in_force_when_decided': then is not None, 'in_force_on_date': now is not None,
             'same_words': same, 'laws_since': since, 'changes': '' if same or then is None or now is None else word_diff(then, now)[:3000],
             'removed_words_now_elsewhere': moved}
+
+
+def moved_words_many(path: str, pairs: list[tuple[str, str]], date: str) -> list[list[dict]]:
+    """moved_words for several (then, now) pairs of one provision, by one grep of the corpus for all of them: a
+    provision amended often (art. 22¹ k.p.) has a version per decision checked, and a grep each took 0.5 s apiece.
+
+    A corpus in in-force order is grepped as in force on the date (a prefix of its commits). Any other would need a
+    tree built for the date (0.75 s on poland-law), so its tip is grepped instead and each file found is read as in
+    force on the date, kept only if it holds the words then: no file is named that did not hold them on the date,
+    though one that held them then and not at the tip is missed."""
+    corpus, rel = law.corpus_of(path)
+    per = [removed_passages(then, now) for then, now in pairs]
+    windows = tuple(dict.fromkeys(w for passages in per for p in passages for w in p))
+    if not windows:
+        return [[] for _ in pairs]
+    if law.in_order(corpus):
+        sha = law.pinned(law.root_on(date, law.timeline()), corpus)
+        hits = grep_windows(corpus, sha, windows) if sha else {}
+    else:
+        sha = law.pinned('HEAD', corpus)
+        hits = grep_windows(corpus, sha, windows) if sha else {}
+        texts: dict[str, str] = {}
+
+        def held(n: str, words: str) -> bool:
+            if n not in texts:
+                try:
+                    texts[n] = re.sub(r'\s+', ' ', law.text_on(date, f'{corpus}/{n}') or '').lower()
+                except SystemExit:
+                    texts[n] = ''
+            return re.sub(r'\s+', ' ', words).lower() in texts[n]
+        hits = {w: tuple([n for n in files if n != rel and not NOT_LAW.search(n)][:10])
+                for w, files in hits.items()}
+        hits = {w: tuple(n for n in files if held(n, w)) for w, files in hits.items()}
+    return [first_found(passages, hits, corpus, rel) for passages in per]
+
+
+def removed_passages(then: str, now: str) -> list[list[str]]:
+    """Per passage of eight or more words removed from `then`, the eight-word windows to look for: the first takes in
+    the words just before the cut, since a diff often keeps one word of a phrase ("business") and cuts the rest; then
+    windows through the passage."""
+    old, new = re.findall(r'\S+', then), re.findall(r'\S+', now)
+    passages = []
+    for op, a0, a1, _, _ in difflib.SequenceMatcher(None, old, new, autojunk=False).get_opcodes():
+        if op in ('delete', 'replace') and a1 - a0 >= 8:
+            passages.append([' '.join(old[s:s + 8]) for s in [max(0, a0 - 3)] + list(range(a0, a1 - 7, 6))[:4]])
+    return passages
+
+
+def first_found(passages: list[list[str]], hits: dict, corpus: str, rel: str) -> list[dict]:
+    """Per passage, the first window found elsewhere in the corpus (at most five passages)."""
+    found = []
+    for windows in passages:
+        if len(found) >= 5:
+            break
+        for words in windows:
+            where = [f'{corpus}/{n}' for n in hits.get(words.lower(), ()) if n != rel and not NOT_LAW.search(n)]
+            if where:
+                found.append({'words': words, 'now_in': where[:10]})
+                break
+    return found
 
 
 def moved_words(path: str, then: str, now: str, date: str) -> list[dict]:
@@ -3753,8 +3816,15 @@ def t_check_precedent(args: dict) -> tuple[str, dict]:
         applied = j.get('text_date') if re.fullmatch(r'\d{4}-\d{2}-\d{2}', j.get('text_date', '')) else j['decided']
         version = max((v for v in versions if v <= applied), default='')
         if version not in compared:
-            compared[version] = precedent_status(path, applied, date)
-        checks.append({**j, **compared[version], 'decided': j['decided'], 'text_date': applied})
+            compared[version] = precedent_status(path, applied, date, defer_moved=True)
+        checks.append((j, version, applied))
+    deferred = [v for v, st in compared.items() if isinstance(st['removed_words_now_elsewhere'], tuple)]
+    if deferred:
+        pairs = [compared[v]['removed_words_now_elsewhere'][1:] for v in deferred]
+        for v, found in zip(deferred, moved_words_many(path, pairs, date)):
+            compared[v]['removed_words_now_elsewhere'] = found
+    checks = [c if isinstance(c, dict) else {**c[0], **compared[c[1]], 'decided': c[0]['decided'], 'text_date': c[2]}
+              for c in checks]
     if not checks:
         return (f'No judgment is recorded for {path}. Give the date a decision was made ("decided") to check whether the text it '
                 'applied is still the text in force.', {'path': path, 'date': date, 'checks': [], 'judgments_recorded': 0})
