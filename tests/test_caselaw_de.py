@@ -250,6 +250,34 @@ class GermanCaseLaw(unittest.TestCase):
         self.assertEqual(miss['data']['results'], [])
         self.assertLess(time.time() - t0, 30)
 
+    def test_list_jurisdictions_gives_each_case_law_corpus_its_latest_decision(self):
+        """git misread --before=9999-12-31 (the "latest ever" date), so list_jurisdictions gave every German court's last
+        decision as 2012-12-30 or so (case-law audit, 2026-11-07); the fixture's last decision is 2022-03-03."""
+        (lj,) = self.calls(('list_jurisdictions', {}))
+        row = next(c for c in lj['data']['corpora'] if c['path'] == CASES)
+        self.assertEqual(row['last_change_in_record'], '2022-03-03')
+        # The shared fixture dates every commit 2001; the bug needs decisions committed on their own (later) days.
+        from tests.test_law_fixtures import Tree, run
+        t = Tree()
+        try:
+            c = t.corpus('germany/bag/caselaw')
+            for i, day in enumerate(('2010-03-24', '2015-06-01', '2020-06-23')):
+                (c.path / f'd{i}.md').write_text(f'# {day}\n', encoding='utf-8')
+                run('add', f'd{i}.md', cwd=c.path)
+                stamp = f'{day}T12:00:00+01:00'
+                run('commit', '-q', '-m', f'Bundesarbeitsgericht {i} AZR {i}/{day[2:4]}\n\nKind: court\nIn-force: {day}\n',
+                    cwd=c.path, env={'GIT_AUTHOR_NAME': f'Bundesarbeitsgericht {i} AZR', 'GIT_AUTHOR_EMAIL': 'c@x.invalid',
+                                     'GIT_AUTHOR_DATE': stamp, 'GIT_COMMITTER_NAME': 'Lexifina',
+                                     'GIT_COMMITTER_EMAIL': 'corpus@lexifina.com', 'GIT_COMMITTER_DATE': stamp})
+            t.pin()
+            got = t.law().latest_decision('germany/bag/caselaw', '9999-12-31')
+            self.assertEqual(got[1] if got else None, '2020-06-23')
+        finally:
+            try:
+                t.close()
+            except OSError:  # Windows: a git reader the module started may still hold the folder
+                pass
+
     def test_german_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))
         import mcp_server as m
