@@ -310,6 +310,18 @@ class FrenchCaseLaw(unittest.TestCase):
         self.assertIn('Ordonnance n° 2016-131', law_only['text'])
         self.assertNotIn('21-20.200', law_only['text'].split('Not read')[0])
 
+    def test_phrase_history_in_case_law_reads_each_year_and_dates_by_first_version(self):
+        """phrase_history in case law greps the corpus by year folder, side by side, and dates each decision by its first
+        version from the index (the Cour de cassation: 69 s -> 19 s for "préjudice d'anxiété"; case-law audit
+        2026-11-07). Every year is read, and a corrected decision keeps its first version's day."""
+        dommage, faute = self.calls(('phrase_history', {'query': 'dommage', 'kind': 'judgments'}),
+                                    ('phrase_history', {'query': 'La faute est', 'jurisdiction': 'france/caselaw'}))
+        for a in (dommage, faute):
+            self.assertFalse(a['error'], a['text'])
+        self.assertIn(f'2016-06-01  added    {CASES}/{D2}  by Cour de cassation 15-10.100', dommage['text'])
+        self.assertIn(f'2010-05-05  added    {CASES}/{D1}  by Cour de cassation 09-12.345', faute['text'])
+        self.assertNotIn(ART, dommage['text'])
+
     def test_conseil_constitutionnel_decision_by_number_and_kind(self):
         """decision-index.tsv files a Conseil constitutionnel decision by its bare number ("2026-1225") and its ECLI, not
         by "2026-1225 QPC", so "n° 2026-1225 QPC" found nothing (case-law audit 2026-11-07). The ECLI picks the kind

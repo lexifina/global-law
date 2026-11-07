@@ -3110,6 +3110,41 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
 PHRASE_FILES = 3000  # changed files phrase_history checks per corpus
 
 
+CASELAW_GREPS = 12  # git grep processes one case-law corpus is read with, side by side
+
+
+def caselaw_grep_counts(cwd: Path, head: str, pattern: str, specs: list[str]) -> dict[str, int]:
+    """'<file>': matching lines, for every decision file at `head` that holds the pattern. git grep reads a tree on one
+    thread, so a large corpus is read in parts, by the folders two levels down (decisions/<court>/<year>), up to
+    CASELAW_GREPS processes at once: the Cour de cassation's 530,000 decisions took 50 s in one process, 13 s in 12
+    (FR audit, 2026-11-07). The call's deadline is carried into each worker thread."""
+    parts = [specs]
+    if specs == ['decisions/*.md']:
+        courts = law.git('ls-tree', '-d', '--name-only', head, 'decisions/', cwd=cwd, check=False).splitlines()
+        years = law.git('ls-tree', '-d', '--name-only', head, *[f'{c}/' for c in courts], cwd=cwd, check=False).splitlines() if courts else []
+        folders = years + [c for c in courts if not any(y.startswith(c + '/') for y in years)]
+        if len(folders) > 1:
+            parts = [[f'{f}/*.md' for f in folders[i::CASELAW_GREPS]] for i in range(min(CASELAW_GREPS, len(folders)))]
+            # files directly in decisions/ or in a court's folder (not in a year) are read by the first part
+            parts[0] += [':(glob)decisions/*.md', *{f':(glob){f.rsplit("/", 1)[0]}/*.md' for f in folders if f.count('/') > 1}]
+    deadline = getattr(_call, 'deadline', 0.0)
+    cancel = getattr(_call, 'cancel', None)
+
+    def one(part):
+        _call.deadline, _call.cancel = deadline, cancel
+        return git_run(['git', 'grep', '-c', '-I', '-i', '-E', '-e', pattern, head, '--', *part], cwd=cwd,
+                       capture_output=True, encoding='utf-8', errors='replace').stdout
+
+    lines = {}
+    with ThreadPoolExecutor(len(parts)) as pool:
+        for out in pool.map(one, parts):
+            for line in out.splitlines():
+                name, _, n = line.removeprefix(head + ':').rpartition(':')
+                if n.isdigit():
+                    lines[name] = int(n)
+    return lines
+
+
 def caselaw_phrase(c: dict, cwd: Path, pattern: str, sub: str | None, by_commit: dict) -> tuple[list[dict], bool]:
     """phrase_history in one case-law corpus. Each decision is one file written once, so the decisions that brought the
     words in are the files that hold them at the pin (one git grep), each dated by its own first version; only the
@@ -3118,12 +3153,7 @@ def caselaw_phrase(c: dict, cwd: Path, pattern: str, sub: str | None, by_commit:
     courts together never finished."""
     specs = [f'{sub}/*.md'] if sub else ['decisions/*.md']
     head = corpus_head(c['path'])
-    lines = {}
-    for line in git_run(['git', 'grep', '-c', '-I', '-i', '-E', '-e', pattern, head, '--', *specs], cwd=cwd,
-                        capture_output=True, encoding='utf-8', errors='replace').stdout.splitlines():
-        name, _, n = line.removeprefix(head + ':').rpartition(':')
-        if n.isdigit():
-            lines[name] = int(n)
+    lines = caselaw_grep_counts(cwd, head, pattern, specs)
     names = sorted(lines)
     cut = len(names) > PHRASE_FILES
     names = names[:PHRASE_FILES]
@@ -3145,8 +3175,20 @@ def caselaw_phrase(c: dict, cwd: Path, pattern: str, sub: str | None, by_commit:
                 pairs.append((sha, parent, fields[-1], e, fields[1]))
     corrected = {p[2] for p in pairs}
     found = []
+    # Each file's first version straight from the corpus index: law.history() also reads every version's text for a
+    # repeal notice, which no decision is (95 ms a file: 476 decisions of the Cour de cassation took 45 s; FR audit).
+    ix = law._index(c['path'])
+    rows = ix['rows']
+
+    def first_version(name):
+        for order, _blob, _mode in ix['files'].get(name, []):
+            r = rows[order]
+            if r[4] not in ('documentation', 'correction') and r[5]:
+                return {'commit': r[0], 'law': r[1], 'in_force': r[5]}
+        return None
+
     for name in sorted(set(names) | corrected):
-        first = next((h for h in law.history(f"{c['path']}/{name}") if h.get('kind') != 'correction'), None)
+        first = first_version(name)
         if first is None:
             continue
         n = lines.get(name, 0)
