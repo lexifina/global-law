@@ -1152,8 +1152,9 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
             info['credit'] = credit
         data.append(info)
         # Some manifests leave language or coverage empty (Romania): leave the words out rather than print "Covers .".
-        rows.append(f"- {c['path']}: {c['name']} ({c['language'] + '; ' if c.get('language') else ''}{len(files)} provision files; "
-                    f"{len(own)} changes)." + (f" Covers {c['coverage']}." if c.get('coverage') else '')
+        # Case law is not in the timeline, so its "changes" were always 0: it gives its decision files instead.
+        counted = (f"{len(files)} decision files" if law.is_caselaw(c) else f"{len(files)} provision files; {len(own)} changes")
+        rows.append(f"- {c['path']}: {c['name']} ({c['language'] + '; ' if c.get('language') else ''}{counted})." + (f" Covers {c['coverage']}." if c.get('coverage') else '')
                     + f" Record from {first}; last change {last}"
                     + (f"; complete to {info['complete_to']}. {c.get('record_note', '')}" if info['complete_to'] else '.')
                     + f" Example path: {info['example_path']}" + (f" Credit: {credit}." if credit else ''))
@@ -2684,6 +2685,9 @@ def every_corpus_first(paths, limit: int) -> list[str]:
     return sorted(out)
 
 
+CASELAW_LINES = 2000  # matching lines search_law reads from case law before it stops and gives a floor
+
+
 def t_search_law(args: dict) -> tuple[str, dict]:
     query = text_arg(args, 'query')
     if not query:
@@ -2711,13 +2715,52 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     flags = ['-E']
     if not args.get('case_sensitive'):
         flags.append('-i')
+    # Bodies of case law are grepped side by side and each with git's own threads: the 14 Polish corpora (515,000
+    # judgments) one after another, one thread each, took over 120 s for "naprawienia szkody" (PL audit, 2026-11-07).
+    # Even so a common phrase reads every judgment (about 70 s), so case law is read only until CASELAW_LINES lines have
+    # matched, and the answer says the count is a floor.
+    judged = {c['path'] for c in law.manifest()['corpora'] if law.is_caselaw(c)}
+    matched = [0]
+    lock = threading.Lock()
+    cut = set()
+    deadline = getattr(_call, 'deadline', 0.0)
+
+    def grep(pin):
+        corpus, sha = pin
+        if corpus not in judged:
+            return corpus, sha, git_run(['git', 'grep', '--threads=1', '-n', '-I', *flags, '-e', pattern, sha, '--', '*.md'],
+                                        cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT)
+        _call.deadline = deadline
+        checkpoint()
+        lines = []
+        with lock:
+            if matched[0] >= CASELAW_LINES:
+                cut.add(corpus)
+                return corpus, sha, subprocess.CompletedProcess([], 0, '', '')
+        with subprocess.Popen(['git', '-c', 'core.quotepath=off', 'grep', '-n', '-I', *flags, '-e', pattern, sha, '--', '*.md'],
+                              cwd=ROOT / corpus, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                              encoding='utf-8', errors='replace') as proc:
+            for line in proc.stdout:
+                lines.append(line.rstrip('\n'))
+                with lock:
+                    matched[0] += 1
+                    full = matched[0] >= CASELAW_LINES
+                if full or (deadline and time.monotonic() > deadline):
+                    cut.add(corpus)
+                    proc.kill()
+                    break
+            err = proc.stderr.read() if corpus not in cut else ''
+            code = proc.wait()
+        done = subprocess.CompletedProcess(proc.args, 0 if corpus in cut else code, '\n'.join(lines), err)
+        return corpus, sha, done
+
     hits = []
-    for corpus, sha in pins:
-        done = git_run(['git', 'grep', '--threads=1', '-n', '-I', *flags, '-e', pattern, sha, '--', '*.md'], cwd=ROOT / corpus,
-                       capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT)
-        if done.returncode not in (0, 1):
-            raise UserError(f'Search failed: {done.stderr.strip()[:300]}')
-        hits += [f'{corpus}/{line.removeprefix(sha + ":")}' for line in done.stdout.splitlines()]
+    with ThreadPoolExecutor(4 if any(c in judged for c, _ in pins) else 1) as pool:
+        for corpus, sha, done in pool.map(grep, pins):
+            if done.returncode not in (0, 1):
+                raise UserError(f'Search failed: {done.stderr.strip()[:300]}')
+            hits += [f'{corpus}/{line.removeprefix(sha + ":")}' for line in done.stdout.splitlines()]
+    checkpoint()
     results, files = [], set()
     for line in hits:
         path, _, rest = line.partition(':')
@@ -2736,6 +2779,10 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     notes = sorted({n for r in results for n in law.caveats(date, law.corpus_of(r['path'])[0])})
     summary = (f'{len(files)} provision(s) in force on {date} contain {query!r}' + (f' in {scope}' if scope else '')
                + (f'; showing {len(results)} line(s).' if results else '.'))
+    if cut:  # case law read only in part: the count is a floor
+        summary = (f'At least {summary[0].lower()}{summary[1:]} The search of case law stopped after {CASELAW_LINES} matching lines; '
+                   f'not read to the end: {", ".join(sorted(cut))}. Name one court\'s corpus as the jurisdiction, or use '
+                   'more words, to read further.')
     lines = ([summary] + [f'Note: {n}' for n in notes] + [f'Left out: {n}' for n in left_out]
              + [f"{r['path']}:{r['line']}: {r['text']}" for r in results] + ([caselaw_note(caselaw).strip()] if caselaw else []))
     named = [e for e in aliases() if e.get('paths') and any(query.lower() == n.lower() for n in e['names'])]
@@ -2765,7 +2812,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                               'results': results,
                               'caveats': notes, 'related_changes': related,
                               'popular_name_for': [p for e in named for p in e['paths']], 'left_out': left_out,
-                              'case_law_not_read': caselaw}
+                              'case_law_not_read': caselaw, 'case_law_read_in_part': sorted(cut)}
 
 
 def t_list_provisions(args: dict) -> tuple[str, dict]:

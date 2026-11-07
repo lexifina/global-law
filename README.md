@@ -126,8 +126,9 @@ python tools/law.py laws 2024-01-01 2024-01-31 netherlands/caselaw   decisions g
 From an assistant, `check_precedent` lists the decisions that applied a provision and says whether the text each one
 applied is still the text in force; `what_else_changes` counts them; `find_provision` and `law_details` take an ECLI
 (`ECLI:NL:HR:2019:1234`), a Swiss docket (`4A_123/2024`), a BGE reference (`BGE 142 II 307`), a French pourvoi
-(`n° 18-12.345`), Conseil constitutionnel decision (`n° 2019-791 QPC`), DILA id (`JURITEXT000041234567`) or German
-Aktenzeichen (`1 BvR 123/20`, `VI ZR 123/20`, `2 C 12.19`); `resolve_citations` reads Dutch citations by abbreviation
+(`n° 18-12.345`), Conseil constitutionnel decision (`n° 2019-791 QPC`), DILA id (`JURITEXT000041234567`), German
+Aktenzeichen (`1 BvR 123/20`, `VI ZR 123/20`, `2 C 12.19`) or Polish sygnatura (`III KK 198/16`, `K 1/12`, `KIO 1039/16`)
+or SAOS id (`SAOS 245361`); `resolve_citations` reads Dutch citations by abbreviation
 (`artikel 6:162 BW`, `art. 8:69 Awb`), French ones by code (`article 1240 du code civil`, `art. L. 1235-3 C. trav.`,
 `article 66 de la Constitution`) and German ones by official abbreviation (`§ 823 Abs. 1 BGB`, `§§ 280, 281 BGB`,
 `§ 13 SGB V`) as it reads Swiss ones (`Art. 336 OR`).

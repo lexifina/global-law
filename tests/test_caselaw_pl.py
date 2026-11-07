@@ -285,7 +285,22 @@ class PolishCaseLaw(unittest.TestCase):
         rows = {c['path']: c for c in lj['data']['corpora']}
         self.assertEqual(rows[TK]['last_change_in_record'], '2016-06-01')
         self.assertEqual(rows[CASES]['last_change_in_record'], '2022-03-03')
+        self.assertIn(f'{TK}: Case law: Trybunał Konstytucyjny (pl; 1 decision files)', lj['text'])
         self.assertFalse(PL_REF_IN_TEXT(), 'a one-letter repertory is never read as a citation in running text')
+
+
+    def test_a_search_of_case_law_stops_at_its_line_cap_and_says_so(self):
+        code = CALL.replace('import mcp_server\n', 'import mcp_server; mcp_server.CASELAW_LINES = 1\n')
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', code], cwd=self.t.root, capture_output=True, encoding='utf-8',
+                              input=json.dumps([('search_law', {'query': 'a', 'date': '2023-01-01', 'kind': 'judgments'}),
+                                                ('search_law', {'query': 'szkod', 'date': '2023-01-01'})]), timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        capped, law_only = json.loads(done.stdout)
+        self.assertFalse(capped['error'], capped['text'])
+        self.assertTrue(capped['text'].startswith('At least '), capped['text'])
+        self.assertTrue(capped['data']['case_law_read_in_part'])
+        self.assertFalse(law_only['data']['case_law_read_in_part'])
+        self.assertIn(ART, law_only['text'])
 
 
 def PL_REF_IN_TEXT():
