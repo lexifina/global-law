@@ -91,6 +91,7 @@ class DutchCaseLaw(unittest.TestCase):
                  'citation': 'ECLI:NL:HR:2022:200', 'url': url + 'ECLI:NL:HR:2022:200', 'how': 'Burgerlijk Wetboek Boek 6 162',
                  'mentions': 1, 'decision': D3, 'law_commit': cls.v2020}]
         c.commit('Lexifina', {f'judgments/{LAW}/bw-boek-6/art-162.jsonl': ''.join(json.dumps(r) + '\n' for r in rows),
+                              'decision-index.tsv': f'reference\tpath\n09/01234\t{D1}\n15/00100\t{D2}\n21/00200\t{D3}\nBK1234\t{D1}\n',
                               'corpus.json': json.dumps({'corpus': 'nl/hoge-raad/caselaw', 'kind': 'judgments',
                                                          'name': 'Case law: Hoge Raad', 'in_force_trailer': 'In-force'})},
                  Kind='documentation')
@@ -237,6 +238,27 @@ class DutchCaseLaw(unittest.TestCase):
         self.assertEqual(rows(toe), [('2016-06-01', 'added', f'{CASES}/{D2}')])
         self.assertEqual(rows(gegrond), [('2010-05-05', 'added', f'{CASES}/{D1}'), ('2011-01-01', 'removed', f'{CASES}/{D1}')])
         self.assertEqual(rows(verworpen), [('2011-01-01', 'added', f'{CASES}/{D1}')])
+
+    def test_decisions_by_zaaknummer_and_ljn(self):
+        """A Dutch decision by its zaaknummer or LJN (decision-index.tsv): find_provision and law_details find it at once;
+        a zaaknummer not in the record is answered at once too, not by a heading search of every decision (over 8
+        minutes with the Dutch courts served)."""
+        docket, ljn, details, none = self.calls(
+            ('find_provision', {'query': '09/01234'}), ('find_provision', {'query': 'LJN BK1234'}),
+            ('law_details', {'law': '15/00100'}), ('find_provision', {'query': '99/09999'}))
+        for a in (docket, ljn, details, none):
+            self.assertFalse(a['error'], a['text'])
+        self.assertTrue(docket['text'].startswith(f'{CASES}/{D1}'), docket['text'])
+        self.assertTrue(ljn['text'].startswith(f'{CASES}/{D1}'), ljn['text'])
+        self.assertIn('Hoge Raad 15/00100', details['text'])
+        self.assertIn('No decision', none['text'])
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import mcp_server as m
+        for ref in ('19/00135', '24/1067 PW', '201901234/1/A2', '200.123.456/01', '21-000854-26', 'C/13/785683',
+                    'C/13/785683 / HA ZA 26-301', 'CUR2024H00259', 'LJN BK1234'):
+            self.assertTrue(m.NL_DOCKET.fullmatch(ref), ref)
+        for other in ('S.I. 2020/471', 'art. 6:162 BW', 'Stcrt. 2019, 70272', '1 BvR 123/20', 'II CSK 123/20'):
+            self.assertIsNone(m.NL_DOCKET.fullmatch(other), other)
 
     def test_decisions_by_ecli_and_dutch_citations(self):
         found, details, cites = self.calls(

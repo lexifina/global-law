@@ -1344,7 +1344,19 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             rows.append({'path': p, 'heading': read_headings(corpus, corpus_head(corpus), (rel,)).get(rel, ''), 'score': 100})
         if rows:
             return '\n'.join(f"{r['path']}  {r['heading']}" for r in rows), {'results': rows}
+    if NL_DOCKET.fullmatch(query.strip()):
+        rows = []
+        for path in nl_docket_paths(query)[:limit]:
+            corpus, rel = law.corpus_of(path)
+            if scope and not (path == scope or path.startswith(scope.rstrip('/') + '/')):
+                continue
+            head = read_headings(corpus, corpus_head(corpus), (rel,)).get(rel, '')
+            rows.append({'path': path, 'heading': f'{head}  (zaaknummer or LJN {query.strip()!r}, decision-index.tsv)'.lstrip(),
+                         'score': 100})
+        if rows:
+            return '\n'.join(f"{r['path']}  {r['heading']}" for r in rows), {'results': rows}
     ref = (DE_DOCKET.fullmatch(query.strip()) or DECISION_REF.fullmatch(query.strip())
+           or NL_DOCKET.fullmatch(query.strip())
            or PL_DOCKET.fullmatch(query.strip()) or PL_REF.fullmatch(query.strip()) or FR_DECISION.fullmatch(query.strip())
            or US_REPORTER.fullmatch(query.strip()) or US_DOCKET.fullmatch(query.strip())
            or FI_DECISION.fullmatch(query.strip()) or AT_DOCKET.fullmatch(query.strip()))
@@ -4479,6 +4491,23 @@ DECISION_REF = re.compile(f'{CH_DECISION.pattern}|{ECLI.pattern}', re.I)
 
 # The Netherlands -----------------------------------------------------------------------------------------------------
 NL_ACTS = 'netherlands/national/acts'
+# A Dutch decision by its zaaknummer or LJN, as a whole query (find_provision) or a law name (law_details): the Hoge
+# Raad's and other courts' short numbers ("19/00135", "24/1067 PW"), the Raad van State's ("201901234/1/A2"), the courts
+# of appeal's ("200.123.456/01"), a parketnummer ("21-000854-26"), a rechtbank's ("C/13/785683", "HA ZA 26-301",
+# "C/13/785683 / HA ZA 26-301"), the Caribbean courts' ("CUR2024H00259"), an LJN ("LJN BK1234", the id before ECLI).
+# Each corpus lists them in decision-index.tsv. Not a citation form: "12/2019" in a brief is a month as often as a case.
+NL_DOCKET = re.compile(r'(?<![\w/.-])(?:\d{2}/\d{2,5}(?:\s?[A-Z]{1,8}(?:-[A-Z]{1,8})?)?|\d{9,12}/\d{1,2}(?:/[A-Z]{1,2}\d?)?'
+                       r'|\d{3}\.\d{3}\.\d{3}(?:/\d{2})?|\d{2}-\d{6}-\d{2}'
+                       r'|C/\d{2}/\d{5,8}(?:\s*/\s*(?:[A-Z]{2,5}\s){1,2}\d{2}-\d{1,6})?|(?:[A-Z]{2,5}\s){1,2}\d{2}[/-]\d{1,6}'
+                       r'|(?:CUR|AUA|BON|SXM|EUS|SAB)\d{4}[A-Z]?\d{5}|(?:LJN:?\s*)[A-Z]{2}\d{4})(?![\w/.-])')
+
+
+def nl_docket_paths(text: str) -> list[str]:
+    """The Dutch decisions a zaaknummer or LJN names, in the case law served (decision-index.tsv); a zaaknummer is not
+    unique across courts, so it can name several."""
+    return decision_paths(re.sub(r'^LJN:?\s*', '', text.strip(), flags=re.I))
+
+
 
 
 @lru_cache(maxsize=1)
@@ -5313,6 +5342,8 @@ def t_law_details(args: dict) -> tuple[str, dict]:
         fr or fi or DECISION_REF.search(law_name) or DE_DOCKET.search(law_name) or PL_DOCKET.search(law_name)
         or US_REPORTER.search(law_name) or US_DOCKET.search(law_name) or AT_DOCKET.search(law_name)
         or PL_ANY_DOCKET.search(law_name) or PL_REF.fullmatch(law_name.strip())) else []
+    if law_name and not decided and NL_DOCKET.fullmatch(law_name.strip()):
+        decided = nl_docket_paths(law_name)
     corpora = [c['path'] for c in law.manifest()['corpora'] if (not corpus or c['path'].startswith(corpus))
                and (not law.is_caselaw(c) or commit or (corpus and law.names_caselaw(corpus))
                     or any(p.startswith(c['path'] + '/') for p in decided))]
