@@ -223,6 +223,21 @@ class DutchCaseLaw(unittest.TestCase):
         self.assertNotIn(f'{CASES}/', phrase['text'].split('Not read')[0])
         self.assertNotIn(f'{CASES}/', between['text'].split('Not read')[0])
 
+    def test_phrase_history_in_case_law(self):
+        """phrase_history in case law: the decisions that hold the words, each dated the day decided, and what a
+        correction added or removed (read from the files at the pin and the corrections alone, not a pickaxe search of
+        every decision, which passed 120 s on the Hoge Raad)."""
+        toe, gegrond, verworpen = self.calls(
+            ('phrase_history', {'query': 'toegerekend', 'jurisdiction': 'netherlands/caselaw'}),
+            ('phrase_history', {'query': 'is ongegrond', 'jurisdiction': CASES}),
+            ('phrase_history', {'query': 'wordt verworpen', 'jurisdiction': 'netherlands/caselaw'}))
+        for a in (toe, gegrond, verworpen):
+            self.assertFalse(a['error'], a['text'])
+        rows = lambda a: [(c['in_force'], c['effect'], c['path']) for c in a['data']['changes']]  # noqa: E731
+        self.assertEqual(rows(toe), [('2016-06-01', 'added', f'{CASES}/{D2}')])
+        self.assertEqual(rows(gegrond), [('2010-05-05', 'added', f'{CASES}/{D1}'), ('2011-01-01', 'removed', f'{CASES}/{D1}')])
+        self.assertEqual(rows(verworpen), [('2011-01-01', 'added', f'{CASES}/{D1}')])
+
     def test_decisions_by_ecli_and_dutch_citations(self):
         found, details, cites = self.calls(
             ('find_provision', {'query': 'ECLI:NL:HR:2022:200'}),

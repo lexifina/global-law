@@ -2976,7 +2976,16 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
     for c in corpora:  # case law is not in the timeline: the case-law corpora read here give their own events
         if law.is_caselaw(c):
             by_commit.update({(e.corpus, e.corpus_commit): e for e in law.corpus_events(c['path'])})
-    for c, cwd in checked_out(corpora, missing):
+    pairs_of = [(c, cwd) for c, cwd in checked_out(corpora, missing)]
+    cases = [(c, cwd) for c, cwd in pairs_of if law.is_caselaw(c)]
+    if cases:  # each case-law corpus by its own way (caselaw_phrase), side by side: git grep is most of the time
+        with ThreadPoolExecutor(min(8, len(cases))) as pool:
+            for rows, over in pool.map(lambda cc: caselaw_phrase(cc[0], cc[1], pattern, scoped(cc[0]['path'], scope), by_commit), cases):
+                found += rows
+                cut = cut or over
+    for c, cwd in pairs_of:
+        if law.is_caselaw(c):
+            continue
         sub = scoped(c['path'], scope)
         # --name-status with renames: a provision file renamed by a change (Malta's "Annex II" becoming the "Third
         # Schedule") is counted under its old name before and its new name after, so a move is not read as an addition.
@@ -3037,6 +3046,61 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
 
 
 PHRASE_FILES = 3000  # changed files phrase_history checks per corpus
+
+
+def caselaw_phrase(c: dict, cwd: Path, pattern: str, sub: str | None, by_commit: dict) -> tuple[list[dict], bool]:
+    """phrase_history in one case-law corpus. Each decision is one file written once, so the decisions that brought the
+    words in are the files that hold them at the pin (one git grep), each dated by its own first version; only the
+    corrections can have changed them since, and only those commits are diffed (git log --no-walk). The pickaxe search
+    of every commit, as for law, diffed each of the Hoge Raad's 80,000 decisions and passed 120 seconds; the Dutch
+    courts together never finished."""
+    specs = [f'{sub}/*.md'] if sub else ['decisions/*.md']
+    head = corpus_head(c['path'])
+    lines = {}
+    for line in git_run(['git', 'grep', '-c', '-I', '-i', '-E', '-e', pattern, head, '--', *specs], cwd=cwd,
+                        capture_output=True, encoding='utf-8', errors='replace').stdout.splitlines():
+        name, _, n = line.removeprefix(head + ':').rpartition(':')
+        if n.isdigit():
+            lines[name] = int(n)
+    names = sorted(lines)
+    cut = len(names) > PHRASE_FILES
+    names = names[:PHRASE_FILES]
+    fixes = [e.corpus_commit for e in law.corpus_events(c['path']) if e.kind == 'correction']
+    pairs = []
+    if fixes:
+        out = git_run(['git', 'log', '--no-walk=unsorted', '--stdin', '--format=@%H %P', '--name-status', '-i', '-E', f'-G{pattern}',
+                       '--', *specs], cwd=cwd, input='\n'.join(fixes) + '\n', capture_output=True, encoding='utf-8',
+                      errors='replace').stdout
+        sha = parent = None
+        for line in out.splitlines():
+            if line.startswith('@'):
+                sha, _, parents = line[1:].partition(' ')
+                parent = parents.split()[0] if parents.split() else None
+                continue
+            fields = line.strip().split('\t')
+            e = by_commit.get((c['path'], sha))
+            if len(fields) >= 2 and e is not None:
+                pairs.append((sha, parent, fields[-1], e, fields[1]))
+    corrected = {p[2] for p in pairs}
+    found = []
+    for name in sorted(set(names) | corrected):
+        first = next((h for h in law.history(f"{c['path']}/{name}") if h.get('kind') != 'correction'), None)
+        if first is None:
+            continue
+        n = lines.get(name, 0)
+        if name in corrected:  # what its first version held (a correction may have added or removed the words)
+            n = grep_counts(cwd, pattern, [(first['commit'], None, name)]).get((first['commit'], name), 0)
+        if n:
+            found.append({'in_force': first['in_force'], 'corpus': c['path'], 'law': first['law'], 'path': f"{c['path']}/{name}",
+                          'effect': 'added', 'lines_added': n, 'lines_removed': 0})
+    counts = grep_counts(cwd, pattern, pairs)
+    for sha, parent, name, e, old in pairs:
+        after, before = counts.get((sha, name), 0), counts.get((parent, old), 0) if parent else 0
+        if after != before:
+            found.append({'in_force': e.in_force, 'corpus': c['path'], 'law': f'{e.law} (correction)', 'path': f"{c['path']}/{name}",
+                          'effect': 'added' if after > before else 'removed',
+                          'lines_added': max(after - before, 0), 'lines_removed': max(before - after, 0)})
+    return found, cut
 
 
 def former_folders(corpus: str, sub: str) -> list[str]:
