@@ -157,6 +157,8 @@ made.
 
 ## Videos
 
+[See all videos](videos/)
+
 https://github.com/user-attachments/assets/6020acb1-53f3-4b65-94a4-fe132b867358
 
 https://github.com/user-attachments/assets/3e3076d7-cfb4-4e0a-8552-2926a630fc8e
