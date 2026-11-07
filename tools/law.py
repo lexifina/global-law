@@ -309,7 +309,10 @@ def latest_decision(corpus: str, date: str) -> tuple[str, str, str] | None:
     if date < '1970-01-02':
         last = [e for e in corpus_events(corpus) if e.in_force <= date and e.kind not in ('documentation', 'end')]
         return (last[-1].law, last[-1].in_force, last[-1].corpus_commit) if last else None
-    out = git('log', '-n', '8', f'--before={date}T23:59:59+01:00', '--format=%an%x1f%(trailers:key=In-force,valueonly,separator=%x2C)%x1f%H',
+    # git reads no date after 2099 ("--before=9999-12-31" read as 2012-12-28 gave every case-law corpus that last
+    # decision in list_jurisdictions): a later date needs no --before.
+    before = [f'--before={date}T23:59:59+01:00'] if date < '2100' else []
+    out = git('log', '-n', '8', *before, '--format=%an%x1f%(trailers:key=In-force,valueonly,separator=%x2C)%x1f%H',
               reachable_tip(corpus), cwd=cwd, check=False)
     for line in out.splitlines():
         name, day, sha = (line.split('') + ['', ''])[:3]

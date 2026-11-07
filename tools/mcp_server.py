@@ -1304,8 +1304,15 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     # case law served is answered at once: a heading search for "1 BvR 1547/19" read every corpus for over 120 seconds.
     # French references too ("pourvoi n° 20-23.673", "JURITEXT000047023646"): without French case law served they took
     # 29 and 39 s of heading search (FR speed gate, 2026-11-06). US reporter citations and docket numbers likewise.
+    if PL_REF.fullmatch(query.strip()):
+        rows = []
+        for p in decision_paths(query.strip())[:limit]:
+            corpus, rel = law.corpus_of(p)
+            rows.append({'path': p, 'heading': read_headings(corpus, corpus_head(corpus), (rel,)).get(rel, ''), 'score': 100})
+        if rows:
+            return '\n'.join(f"{r['path']}  {r['heading']}" for r in rows), {'results': rows}
     ref = (DE_DOCKET.fullmatch(query.strip()) or DECISION_REF.fullmatch(query.strip())
-           or PL_DOCKET.fullmatch(query.strip()) or FR_DECISION.fullmatch(query.strip())
+           or PL_DOCKET.fullmatch(query.strip()) or PL_REF.fullmatch(query.strip()) or FR_DECISION.fullmatch(query.strip())
            or US_REPORTER.fullmatch(query.strip()) or US_DOCKET.fullmatch(query.strip())
            or FI_DECISION.fullmatch(query.strip()) or AT_DOCKET.fullmatch(query.strip()))
     if ref:
@@ -4581,6 +4588,11 @@ PL_DOCKET = re.compile(r'(?<![\w/.-])(?:(?:[IVX]{1,5}\s+(?:A?Ca|A?Cz|CSKP?|CNPP?
 # Any sygnatura, single-letter divisions too ("I C 123/20", "II K 336/17"), for law_details only, where a decision is
 # looked up by name and nothing is claimed for one country's citation forms.
 PL_ANY_DOCKET = re.compile(r'(?<![\w/.-])[IVX]{1,5}\s+[A-Z][A-Za-z]{0,4}(?:/[A-Z][a-z]{1,2})?\s+\d{1,5}/\d{2}(?![\d/])')
+# A whole query that is a Trybunał Konstytucyjny case number with a one-letter or other repertory PL_DOCKET leaves out
+# ("K 1/20", "P 7/20", "U 2/19", "Kpt 1/17"), or a judgment's SAOS id ("SAOS 245361", as decision-index.tsv files it):
+# found by find_provision and law_details, never claimed in running text. Before 2026-11-07 "K 1/20" and "SAOS 245361"
+# fell through to the heading search of every corpus (120 s, then stopped).
+PL_REF = re.compile(r'(?:(?:K|P|U|S|W|T|Kpt|Kw|Uw|Tk|Pw|SK|Kp|Ts|Tw|Pp)\s+\d{1,5}/\d{2}|SAOS\s+\d{1,9})')
 
 
 def pl_corpus() -> tuple[str, str | None]:
@@ -5069,7 +5081,7 @@ def t_law_details(args: dict) -> tuple[str, dict]:
                else decision_paths(re.sub(r'^\s*Nos?\.\s+', '', law_name))) if law_name and (
         fr or fi or DECISION_REF.search(law_name) or DE_DOCKET.search(law_name) or PL_DOCKET.search(law_name)
         or US_REPORTER.search(law_name) or US_DOCKET.search(law_name) or AT_DOCKET.search(law_name)
-        or PL_ANY_DOCKET.search(law_name)) else []
+        or PL_ANY_DOCKET.search(law_name) or PL_REF.fullmatch(law_name.strip())) else []
     corpora = [c['path'] for c in law.manifest()['corpora'] if (not corpus or c['path'].startswith(corpus))
                and (not law.is_caselaw(c) or commit or (corpus and law.names_caselaw(corpus))
                     or any(p.startswith(c['path'] + '/') for p in decided))]

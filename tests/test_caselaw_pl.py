@@ -24,6 +24,8 @@ sys.dont_write_bytecode = True
 
 LAW = 'poland/national/acts'
 CASES = 'poland/sad-najwyzszy/caselaw'
+TK = 'poland/trybunal-konstytucyjny/caselaw'
+TK1 = 'decisions/trybunal-konstytucyjny/2016/K-1-16-2001.md'
 ART = f'{LAW}/kodeks-cywilny/art-415.md'
 # words that left art. 416 in 2018 and are law in art. 417 after: check_precedent says where they went
 MOVED = 'Osoba prawna jest obowiązana do naprawienia szkody wyrządzonej z winy jej organu.'
@@ -48,6 +50,7 @@ class PolishCaseLaw(unittest.TestCase):
     def setUpClass(cls):
         sys.path.insert(0, str(ROOT))
         from tests.test_law_fixtures import Tree, run
+        globals()['run'] = run
         t = cls.t = Tree()
         for name in ('mcp_server.py', 'countries.py', 'freshness.py'):
             shutil.copy(ROOT / 'tools' / name, t.root / 'tools' / name)
@@ -58,7 +61,9 @@ class PolishCaseLaw(unittest.TestCase):
         manifest = {'corpora': [
             {'path': LAW, 'name': 'Polish law', 'language': 'pl', 'in_force_trailer': 'In-force', 'code': 'PL'},
             {'path': CASES, 'name': 'Case law: Sąd Najwyższy', 'language': 'pl', 'kind': 'judgments',
-             'in_force_trailer': 'In-force', 'correction_trailer': 'Corrected', 'code': 'PL'}]}
+             'in_force_trailer': 'In-force', 'correction_trailer': 'Corrected', 'code': 'PL'},
+            {'path': TK, 'name': 'Case law: Trybunał Konstytucyjny', 'language': 'pl', 'kind': 'judgments',
+             'in_force_trailer': 'In-force', 'correction_trailer': 'Corrected', 'code': 'PL', 'history_from': '2016-06-01'}]}
         (t.root / 'manifest.json').write_text(json.dumps(manifest), encoding='utf-8')
         run('add', 'jurisdiction.json', 'data', cwd=t.root)
         law = t.corpus(LAW)
@@ -102,6 +107,13 @@ class PolishCaseLaw(unittest.TestCase):
                               'corpus.json': json.dumps({'corpus': 'pl/sad-najwyzszy/caselaw', 'kind': 'judgments',
                                                          'name': 'Case law: Sąd Najwyższy', 'in_force_trailer': 'In-force'})},
                  Kind='documentation')
+        # The Trybunał Konstytucyjny: a one-letter repertory ("K 1/16") and a commit dated the day given, after 2012, as
+        # the real corpora are (list_jurisdictions read "--before=9999-12-31" as 2012-12-28 and missed it).
+        tk = t.corpus(TK)
+        tk.commit('Trybunał Konstytucyjny K 1/16', {TK1: judgment('Wyrok Trybunału', 'Przepis jest zgodny z Konstytucją.')},
+                  Kind='court', In_force='2016-06-01', Decided='2016-06-01', Court='Trybunał Konstytucyjny', Docket='K 1/16')
+        run('commit', '-q', '--amend', '--no-edit', '--date=2016-06-01T12:00:00+0200', cwd=tk.path)
+        tk.commit('Lexifina', {'decision-index.tsv': f'reference\tpath\nK 1/16\t{TK1}\nSAOS 2001\t{TK1}\n'}, Kind='documentation')
         t.pin()
 
     @classmethod
@@ -261,6 +273,25 @@ class PolishCaseLaw(unittest.TestCase):
         for ref in ('II CSK 123/20', 'I ACa 456/19', 'II OSK 123/20', 'III SA/Wa 1234/19', 'SK 12/20', 'KIO 1234/20'):
             self.assertTrue(m.PL_DOCKET.search(ref), ref)
             self.assertFalse(m.DE_DOCKET.search(ref), ref)
+
+    def test_constitutional_tribunal_numbers_saos_ids_and_the_latest_decision(self):
+        by_k, by_saos, details, lj = self.calls(('find_provision', {'query': 'K 1/16'}), ('find_provision', {'query': 'SAOS 2001'}),
+                                                ('law_details', {'law': 'K 1/16'}), ('list_jurisdictions', {}))
+        for a in (by_k, by_saos, details, lj):
+            self.assertFalse(a['error'], a['text'])
+        self.assertIn(f'{TK}/{TK1}', by_k['text'])
+        self.assertIn(f'{TK}/{TK1}', by_saos['text'])
+        self.assertIn('Trybunał Konstytucyjny K 1/16', details['text'])
+        rows = {c['path']: c for c in lj['data']['corpora']}
+        self.assertEqual(rows[TK]['last_change_in_record'], '2016-06-01')
+        self.assertEqual(rows[CASES]['last_change_in_record'], '2022-03-03')
+        self.assertFalse(PL_REF_IN_TEXT(), 'a one-letter repertory is never read as a citation in running text')
+
+
+def PL_REF_IN_TEXT():
+    sys.path.insert(0, str(ROOT / 'tools'))
+    import mcp_server as m
+    return [h for h in m.citations_in('Wyrok TK K 1/16 oraz 2 K 123/20 und S 1/20.') if h['country'] == 'pl']
 
 
 if __name__ == '__main__':
