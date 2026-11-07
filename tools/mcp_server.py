@@ -3775,12 +3775,13 @@ def t_what_else_changes(args: dict) -> tuple[str, dict]:
             groups.append({'kind': 'defines the same term itself', 'term': term, 'provisions': [
                 {'path': f'{corpus}/{n}', 'lines': [x for x in l if own.search(x)][:1]} for n, l in sorted(redefines.items())[:limit]],
                 'count': len(redefines)})
-    cited_by = [j for j in judgments_for(corpus, law.pinned('HEAD', corpus) or '', rel) if j['decided'] <= date]
-    if cited_by:  # case law: decisions are not provisions, but a change to the words changes what they decided on
+    # the decisions on or before the date: counted, and the latest ten read (an article can have 600,000 rows)
+    _, n_cited, cited_by = judgments_counted(corpus, law.pinned('HEAD', corpus) or '', rel, date, 10)
+    if n_cited:  # case law: decisions are not provisions, but a change to the words changes what they decided on
         groups.append({'kind': 'court decision(s) cite it (latest first; check_precedent compares the words)', 'term': '',
                        'provisions': [{'path': j.get('decision') or j.get('url') or j['name'],
                                        'lines': [f"{j['decided']} {j['name']}" + (f" ({j['how']})" if j.get('how') else '')]}
-                                      for j in cited_by[::-1][:10]], 'count': len(cited_by)})
+                                      for j in cited_by[::-1][:10]], 'count': n_cited})
     not_searched = (f'Citations were not searched: citations in this corpus are not recognised, as its own citation rule '
                     f'cannot be used: {unusable}. Only defined terms were checked.') if unusable else None
     if not groups:
