@@ -162,7 +162,7 @@ made.
 
 - [FEATURES.md](FEATURES.md): every feature, and what every corpus here must support (`git blame`, `law.py`, the MCP tools)
 - [FAQ.md](FAQ.md): questions and answers · [CONTRIBUTING.md](CONTRIBUTING.md): proposing changes · [MCP.md](MCP.md): the MCP server · [REPRODUCE.md](REPRODUCE.md): how it was built · [CHANGELOG.md](CHANGELOG.md)
-- [FRESHNESS.md](FRESHNESS.md): how current each corpus is · [MONITORING.md](MONITORING.md): whether updates are running
+- [FRESHNESS.md](FRESHNESS.md): how current each corpus is · [MONITORING.md](MONITORING.md): whether updates are running · [WATCHING.md](WATCHING.md): how each official source is watched for changes
 - [performance/](performance/): how fast the tools are, measured
 - [visualisations/](visualisations/): charts and bridges across the world's law
 - Tests: `python -m unittest discover -s tests`

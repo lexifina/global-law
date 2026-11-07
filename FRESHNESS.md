@@ -43,3 +43,6 @@ changes may be missing".
 [Romania](https://github.com/lexifina/romania-law#how-current-is-it) does; `source-retrieval`: the day the build read
 the source; `stated`: the day the corpus states). Rows: [data/freshness.tsv](data/freshness.tsv); totals:
 [data/freshness.json](data/freshness.json). Only each country's official publication has legal force.
+
+To replace build dates with daily checks, each corpus can watch its official source for changes: see
+[WATCHING.md](WATCHING.md).
