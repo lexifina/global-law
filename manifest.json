@@ -20428,6 +20428,171 @@
       "future_branch": "future"
     },
     {
+      "path": "france/conseil-constitutionnel/caselaw",
+      "url": "https://github.com/lexifina/france-conseil-constitutionnel-caselaw.git",
+      "name": "Case law: France, the Conseil constitutionnel",
+      "label": "France case law (the Conseil constitutionnel)",
+      "language": "fr",
+      "coverage": "7423 decisions with text from the DILA base(s) CONSTIT, one file and one commit each, dated the day decided; 19381 citations of law linked to france-law.",
+      "history": "in-force",
+      "history_from": "1958-11-22",
+      "record_to": "2026-11-05",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/france/national/acts/<path>.jsonl",
+        "law_corpus": "france/national/acts"
+      },
+      "source": {
+        "publisher": "Direction de l'information légale et administrative (DILA)",
+        "producer": "Conseil constitutionnel",
+        "dataset": "CONSTIT",
+        "url": "https://echanges.dila.gouv.fr/OPENDATA/",
+        "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+        "updated": "2026-11-05",
+        "last_update": "2026-11-05"
+      },
+      "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+      "credit": "Source: DILA, base CONSTIT; producer: Conseil constitutionnel; Licence Ouverte 2.0 (Etalab); last update 2026-11-05",
+      "iso_path": "fr/conseil-constitutionnel/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "france/conseil-d-etat/caselaw",
+      "url": "https://github.com/lexifina/france-conseil-d-etat-caselaw.git",
+      "name": "Case law: France, the Conseil d'État",
+      "label": "France case law (the Conseil d'État)",
+      "language": "fr",
+      "coverage": "169656 decisions with text from the DILA base(s) JADE, one file and one commit each, dated the day decided; 259439 citations of law linked to france-law.",
+      "history": "in-force",
+      "history_from": "1875-02-19",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/france/national/acts/<path>.jsonl",
+        "law_corpus": "france/national/acts"
+      },
+      "source": {
+        "publisher": "Direction de l'information légale et administrative (DILA)",
+        "producer": "Conseil d'État",
+        "dataset": "JADE",
+        "url": "https://echanges.dila.gouv.fr/OPENDATA/",
+        "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+        "updated": "2026-11-06",
+        "last_update": "2026-11-06"
+      },
+      "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+      "credit": "Source: DILA, base JADE; producer: Conseil d'État; Licence Ouverte 2.0 (Etalab); last update 2026-11-06",
+      "iso_path": "fr/conseil-d-etat/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "france/cour-de-cassation/caselaw",
+      "url": "https://github.com/lexifina/france-cour-de-cassation-caselaw.git",
+      "name": "Case law: France, the Cour de cassation",
+      "label": "France case law (the Cour de cassation)",
+      "language": "fr",
+      "coverage": "530372 decisions with text from the DILA base(s) CASS (decisions published in the Bulletin) and INCA (unpublished decisions), one file and one commit each, dated the day decided; 1222610 citations of law linked to france-law.",
+      "history": "in-force",
+      "history_from": "1805-09-29",
+      "record_to": "2026-11-05",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/france/national/acts/<path>.jsonl",
+        "law_corpus": "france/national/acts"
+      },
+      "source": {
+        "publisher": "Direction de l'information légale et administrative (DILA)",
+        "producer": "Cour de cassation",
+        "dataset": "CASS (decisions published in the Bulletin) and INCA (unpublished decisions)",
+        "url": "https://echanges.dila.gouv.fr/OPENDATA/",
+        "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+        "updated": "2026-11-05",
+        "last_update": "2026-11-05"
+      },
+      "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+      "credit": "Source: DILA, base CASS (decisions published in the Bulletin) and INCA (unpublished decisions); producer: Cour de cassation; Licence Ouverte 2.0 (Etalab); last update 2026-11-05",
+      "iso_path": "fr/cour-de-cassation/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "france/cours-administratives-d-appel/caselaw",
+      "url": "https://github.com/lexifina/france-cours-administratives-d-appel-caselaw.git",
+      "name": "Case law: France, the cours administratives d'appel",
+      "label": "France case law (the cours administratives d'appel)",
+      "language": "fr",
+      "coverage": "217534 decisions with text from the DILA base(s) JADE, one file and one commit each, dated the day decided; 456675 citations of law linked to france-law.",
+      "history": "in-force",
+      "history_from": "1989-01-31",
+      "record_to": "2026-11-05",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/france/national/acts/<path>.jsonl",
+        "law_corpus": "france/national/acts"
+      },
+      "source": {
+        "publisher": "Direction de l'information légale et administrative (DILA)",
+        "producer": "Conseil d'État",
+        "dataset": "JADE",
+        "url": "https://echanges.dila.gouv.fr/OPENDATA/",
+        "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+        "updated": "2026-11-05",
+        "last_update": "2026-11-05"
+      },
+      "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+      "credit": "Source: DILA, base JADE; producer: Conseil d'État; Licence Ouverte 2.0 (Etalab); last update 2026-11-05",
+      "iso_path": "fr/cours-administratives-d-appel/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
+      "path": "france/cours-d-appel/caselaw",
+      "url": "https://github.com/lexifina/france-cours-d-appel-caselaw.git",
+      "name": "Case law: France, the cours d'appel (courts of appeal)",
+      "label": "France case law (the cours d'appel (courts of appeal))",
+      "language": "fr",
+      "coverage": "72929 decisions with text from the DILA base(s) CAPP (decisions of the cours d'appel and of first-instance courts), one file and one commit each, dated the day decided; 262520 citations of law linked to france-law.",
+      "history": "in-force",
+      "history_from": "0201-02-24",
+      "record_to": "2026-11-05",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/france/national/acts/<path>.jsonl",
+        "law_corpus": "france/national/acts"
+      },
+      "source": {
+        "publisher": "Direction de l'information légale et administrative (DILA)",
+        "producer": "Cour de cassation",
+        "dataset": "CAPP (decisions of the cours d'appel and of first-instance courts)",
+        "url": "https://echanges.dila.gouv.fr/OPENDATA/",
+        "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+        "updated": "2026-11-05",
+        "last_update": "2026-11-05"
+      },
+      "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+      "credit": "Source: DILA, base CAPP (decisions of the cours d'appel and of first-instance courts); producer: Cour de cassation; Licence Ouverte 2.0 (Etalab); last update 2026-11-05",
+      "iso_path": "fr/cours-d-appel/caselaw",
+      "described_by": "corpus.json"
+    },
+    {
       "path": "france/national/acts",
       "url": "https://github.com/lexifina/france-law.git",
       "name": "French law: every consolidated text in DILA's LEGI base (the Constitution, the codes, laws, ordinances, decrees and orders), article by article",
@@ -20470,6 +20635,39 @@
         "url": "https://echanges.dila.gouv.fr/OPENDATA/LEGI/",
         "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)"
       }
+    },
+    {
+      "path": "france/tribunaux-administratifs/caselaw",
+      "url": "https://github.com/lexifina/france-tribunaux-administratifs-caselaw.git",
+      "name": "Case law: France, the tribunaux administratifs and other administrative courts",
+      "label": "France case law (the tribunaux administratifs and other administrative courts)",
+      "language": "fr",
+      "coverage": "175843 decisions with text from the DILA base(s) JADE, one file and one commit each, dated the day decided; 675632 citations of law linked to france-law.",
+      "history": "in-force",
+      "history_from": "1873-02-08",
+      "record_to": "2026-11-06",
+      "checked_on": "2026-11-06",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/france/national/acts/<path>.jsonl",
+        "law_corpus": "france/national/acts"
+      },
+      "source": {
+        "publisher": "Direction de l'information légale et administrative (DILA)",
+        "producer": "Conseil d'État",
+        "dataset": "JADE",
+        "url": "https://echanges.dila.gouv.fr/OPENDATA/",
+        "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+        "updated": "2026-11-06",
+        "last_update": "2026-11-06"
+      },
+      "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+      "credit": "Source: DILA, base JADE; producer: Conseil d'État; Licence Ouverte 2.0 (Etalab); last update 2026-11-06",
+      "iso_path": "fr/tribunaux-administratifs/caselaw",
+      "described_by": "corpus.json"
     },
     {
       "path": "gabon/national/acts",
