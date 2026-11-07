@@ -28,6 +28,7 @@ FOLDER = 'decisions/supreme-court-of-the-united-states'
 D1 = f'{FOLDER}/2010/560-U-S-100.md'
 D2 = f'{FOLDER}/2016/578-U-S-200.md'
 D3 = f'{FOLDER}/2022/596-U-S-300.md'
+D4 = f'{FOLDER}/2012/567-U-S-400.md'  # front matter longer than 4,000 bytes, as Roe v. Wade's is
 CALL = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server\n'
         'out = []\n'
         'for name, args in json.loads(sys.stdin.read()):\n'
@@ -72,6 +73,10 @@ class UnitedStatesCaseLaw(unittest.TestCase):
                  Citation='560 U.S. 100', Cites=f'{ART} (11 U.S.C. § 1182)')
         c.commit(f'{COURT} 560 U.S. 100', {D1: decision('Smith v. Jones', 'The judgment is reversed.\nIt is so ordered.')},
                  Kind='correction', In_force='2011-01-01', Corrected='2011-01-01', Docket='08-1234')
+        long_front = ('---\ncourt: "' + COURT + '"\ncites_cases: [' + ', '.join(f'"{n} U. S. {n}"' for n in range(1, 400)) + ']\n---\n\n'
+                      '# Longfront v. Heading\n\n## Majority\n\nThe judgment is affirmed.\n')
+        c.commit(f'{COURT} 567 U.S. 400', {D4: long_front}, Kind='court', In_force='2012-04-04', Decided='2012-04-04', Court=COURT,
+                 Docket='11-400', Citation='567 U.S. 400')
         c.commit(f'{COURT} 578 U.S. 200', {D2: decision('Doe v. Roe', 'A small business debtor under 11 U.S.C. § 1182 may elect.')},
                  Kind='court', In_force='2016-06-01', Decided='2016-06-01', Court=COURT, Docket='15-100',
                  Citation='578 U.S. 200', Cites=f'{ART} (11 U.S.C. § 1182)')
@@ -253,6 +258,54 @@ class UnitedStatesCaseLaw(unittest.TestCase):
             self.assertFalse(a['error'], a['text'])
         self.assertNotIn(f'{CASES}/', plain['text'])
         self.assertIn(f'{CASES}/{D2}', ref['text'])
+
+    def test_phrase_history_and_folders_read_case_law_from_its_index(self):
+        """phrase_history in case law is one git grep of the pinned tree, each decision dated by the commit that added
+        it, and list_provisions dates a folder of decisions from the corpus index: `git log -G` and `git log -- <folder>`
+        walk every commit, over 120 s and 20 s for the 328,000 US Supreme Court decisions (audit, 2026-11-07)."""
+        probe = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server\n'
+                 'seen = []\n'
+                 'real = mcp_server.law.git\n'
+                 'def spy(*a, **k):\n'
+                 '    seen.append([str(x) for x in a])\n'
+                 '    return real(*a, **k)\n'
+                 'mcp_server.law.git = spy\n'
+                 'out = []\n'
+                 'for name, args in json.loads(sys.stdin.read()):\n'
+                 '    r = mcp_server.handle({"jsonrpc": "2.0", "id": 1, "method": "tools/call", '
+                 '"params": {"name": name, "arguments": args}})["result"]\n'
+                 '    out.append({"error": r["isError"], "text": r["content"][0]["text"], "data": r.get("structuredContent", {})})\n'
+                 'print(json.dumps({"out": out, "seen": seen}))\n')
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', probe], cwd=self.t.root, capture_output=True, encoding='utf-8',
+                              timeout=300, input=json.dumps([
+                                  ('phrase_history', {'query': 'small business debtor', 'jurisdiction': 'united-states/caselaw'}),
+                                  ('list_provisions', {'path': f'{CASES}/{FOLDER}/2016', 'date': '2023-01-01'}),
+                                  ('list_provisions', {'path': f'{CASES}/{FOLDER}', 'date': '2023-01-01', 'by_folder': True})]))
+        self.assertEqual(done.returncode, 0, done.stderr)
+        got = json.loads(done.stdout)
+        phrase, year, court = got['out']
+        for a in (phrase, year, court):
+            self.assertFalse(a['error'], a['text'])
+        self.assertEqual([(c['path'], c['in_force'], c['effect']) for c in phrase['data']['changes']],
+                         [(f'{CASES}/{D2}', '2016-06-01', 'added')])
+        self.assertIn('in the record from 2016-06-01', year['text'])
+        rows = {r['folder']: r for r in court['data']['folders']}
+        self.assertEqual(rows[f'{CASES}/{FOLDER}/2010']['last_change']['in_force'], '2011-01-01')  # the correction
+        self.assertEqual(rows[f'{CASES}/{FOLDER}/2022']['last_change']['in_force'], '2022-03-03')
+        walks = [a for a in got['seen'] if a and a[0] == 'log' and (any(x.startswith('-G') for x in a) or a[-2:-1] == ['--'])]
+        self.assertEqual(walks, [])
+
+    def test_a_decision_with_long_front_matter_is_found_by_its_name(self):
+        """The heading index read only a file's first 4,000 bytes, and a US decision's front matter lists every case it
+        cites: Roe v. Wade (410 U.S. 113) was not found by its name. The index of a body of case law is kept on disk."""
+        first, again = self.calls(('find_provision', {'query': 'Longfront v. Heading', 'jurisdiction': CASES}),
+                                  ('find_provision', {'query': 'Longfront v. Heading', 'jurisdiction': 'united-states/caselaw'}))
+        for a in (first, again):
+            self.assertFalse(a['error'], a['text'])
+            self.assertIn(f'{CASES}/{D4}', a['text'])
+        store = subprocess.run(['git', 'rev-parse', '--path-format=absolute', '--git-path', 'global-law-cache'], cwd=self.t.root,
+                               capture_output=True, encoding='utf-8').stdout.strip()
+        self.assertTrue(list(Path(store).glob('headings-v1-united-states~supreme-court~caselaw-*.json')))
 
     def test_us_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))

@@ -11,6 +11,7 @@ changes nothing.
 """
 from __future__ import annotations
 
+import bisect
 import difflib
 import hashlib
 import hmac
@@ -797,6 +798,20 @@ def heading_index(corpus: str, sha: str, wait: bool = True) -> dict[str, str] | 
             checkpoint()
         return _index_done.get(key)
     out: dict[str, str] = {}
+    # A body of case law keeps its heading index on disk, keyed by the pin: reading every decision for it took 110 s
+    # for the 328,000 US Supreme Court decisions, in every fresh process (US case-law audit, 2026-11-07).
+    disk = None
+    try:
+        if law.is_caselaw(law.corpus_info(corpus)):
+            disk = law._store() / f"headings-v1-{corpus.replace('/', '~')}-{sha[:12]}.json"
+            out = json.loads(disk.read_text(encoding='utf-8'))
+            with _index_lock:
+                _index_done[key] = out
+                _index_building.pop(key, None)
+            building.set()
+            return out
+    except (OSError, ValueError, StopIteration):
+        out = {}
     try:
         names = names_of(corpus, sha)
         proc = subprocess.Popen(['git', 'cat-file', '--batch'], cwd=ROOT / corpus, stdin=subprocess.PIPE,
@@ -808,17 +823,34 @@ def heading_index(corpus: str, sha: str, wait: bool = True) -> dict[str, str] | 
             header = proc.stdout.readline().split()
             if len(header) < 3 or header[1] != b'blob':
                 continue
-            body = proc.stdout.read(int(header[2]) + 1)[:4000].decode('utf-8', 'replace')
+            raw = proc.stdout.read(int(header[2]) + 1)
+            body = raw[:4000].decode('utf-8', 'replace')
             lines = body.splitlines()
             at = next((i for i, l in enumerate(lines[:20]) if l.startswith('#')), None)
+            if at is None and raw.startswith(b'---'):
+                # Front matter longer than the window (a US decision lists every case it cites there: Roe v. Wade's
+                # heading sits past 4,000 bytes): the window starts after it instead.
+                end = raw.find(b'\n---', 3)
+                if end > 0:
+                    body = raw[end + 4:end + 4004].decode('utf-8', 'replace')
+                    lines = body.splitlines()
+                    at = next((i for i, l in enumerate(lines[:20]) if l.startswith('#')), None)
             if at is None:
-                title = re.search(r'^(?:title|heading): (.+)$', body, re.M)
+                title = re.search(r'^(?:title|heading): (.+)$', raw[:4000].decode('utf-8', 'replace'), re.M)
                 out[name] = title.group(1).strip() if title else ''
                 continue
             heading = lines[at].lstrip('#').strip()
             nxt = next((l for l in lines[at + 1:at + 3] if l.strip()), '')
             out[name] = f'{heading} — {nxt.strip()}' if _subtitle(nxt) else heading
         proc.wait()
+        if disk is not None and proc.returncode == 0 and out:
+            try:
+                disk.parent.mkdir(parents=True, exist_ok=True)
+                tmp = disk.with_name(f'{disk.name}.{os.getpid()}.tmp')
+                tmp.write_text(json.dumps(out, ensure_ascii=False), encoding='utf-8')
+                os.replace(tmp, disk)
+            except OSError:
+                pass
     except (OSError, ValueError, subprocess.SubprocessError):
         out = {}
     with _index_lock:
@@ -2860,7 +2892,7 @@ def t_list_provisions(args: dict) -> tuple[str, dict]:
 def folder_span(corpus: str, date: str, inner: str) -> dict | None:
     by_commit = {e.corpus_commit: e for e in law.corpus_timeline(corpus)}
     # Newest first by in-force date: a corpus can append an older act after its tip.
-    dated = sorted((by_commit[c] for c in law.git('log', '--format=%H', law.reachable_tip(corpus), '--', inner, cwd=law.corpus_dir(corpus)).split()
+    dated = sorted((by_commit[c] for c in folder_commits(corpus, inner)
                     if c in by_commit and by_commit[c].kind != 'documentation' and by_commit[c].in_force <= date),
                    key=lambda e: e.in_force, reverse=True)
     if not dated:
@@ -2872,6 +2904,29 @@ def folder_span(corpus: str, date: str, inner: str) -> dict | None:
     return {'first': {'law': first.law, 'in_force': first.in_force, 'kind': first.kind},
             'last_change': {'law': last.law, 'in_force': last.in_force, 'kind': last.kind}, 'changes': len(dated),
             'summary': f'As a whole: {start}; {tail}.'}
+
+
+_FOLDER_FILES: dict = {}  # folder_commits: one case-law corpus's file paths, sorted, for the pin it was read at
+
+
+def folder_commits(corpus: str, inner: str) -> list[str]:
+    """The commits that touched files under a folder, up to the pin. For case law, read from the corpus index (every
+    file's versions) instead of `git log -- <folder>`, which walks every commit's tree: a year of US Supreme Court
+    decisions took 20 s that way, over 328,000 commits (US case-law audit, 2026-11-07)."""
+    if law.is_caselaw({'path': corpus, **(law.corpus_info(corpus) or {})}):
+        ix = law._index(corpus)
+        if ix.get('files') and not ix.get('focused'):
+            key = (corpus, ix.get('at') or ix.get('pin'))
+            if _FOLDER_FILES.get('key') != key:  # the files in path order, once per corpus pin: a folder is a slice
+                _FOLDER_FILES.update(key=key, files=sorted(ix['files']))
+            files, rows, inner = _FOLDER_FILES['files'], ix['rows'], inner.strip('/')
+            out = [rows[o][0] for o, *_ in ix['files'].get(inner, [])]
+            i = bisect.bisect_left(files, inner + '/')
+            while i < len(files) and files[i].startswith(inner + '/'):
+                out += [rows[o][0] for o, *_ in ix['files'][files[i]]]
+                i += 1
+            return out
+    return law.git('log', '--format=%H', law.reachable_tip(corpus), '--', inner, cwd=law.corpus_dir(corpus)).split()
 
 
 FOLDER_ROWS = 100  # folders list_provisions summarises with a title and a last change
@@ -2898,7 +2953,14 @@ def list_folders(corpus: str, sha: str, base: str, items: list, folders: list[st
     by_commit = {e.corpus_commit: e for e in law.corpus_timeline(corpus)}
     rows = []
     shown = [(f, f'{base}/{f}'.strip('/')) for f in folders[:min(limit, FOLDER_ROWS)]]
-    mine_of = {where: [p for p in items if p.startswith(where + '/')] for _, where in shown}
+    # Each file under its folder in one pass (a folder per row scanned all items: 33 million prefix tests, 8 s, for the
+    # 221 year folders of 328,000 US Supreme Court decisions).
+    groups: dict[str, list] = {}
+    for p in items:
+        rest = p[len(base):].strip('/')
+        if '/' in rest:
+            groups.setdefault(rest.split('/')[0], []).append(p)
+    mine_of = {where: groups.get(f, []) for f, where in shown}
     # A folder's title: its title.md, else its own heading file, else its first file's heading, read in one git call.
     firsts = {where: next((p for p in mine if p.endswith('/title.md')), mine[0] if mine else None) for where, mine in mine_of.items()}
     heads = read_headings(corpus, sha, tuple(p for p in firsts.values() if p))
@@ -2906,7 +2968,7 @@ def list_folders(corpus: str, sha: str, base: str, items: list, folders: list[st
         mine, first = mine_of[where], firsts[where]
         is_title = bool(first) and first.endswith('/title.md')
         title = (heads.get(first, '') if is_title else '') or folder_title(cwd, sha, where) or (heads.get(first, '') if first else '')
-        changes = law.git('log', '--format=%H', law.reachable_tip(corpus), '--', where, cwd=cwd).split()
+        changes = folder_commits(corpus, where)
         dated = sorted((by_commit[c] for c in changes if c in by_commit and by_commit[c].kind != 'documentation'
                         and by_commit[c].in_force <= date), key=lambda e: e.in_force, reverse=True)
         last, first = (dated[0], dated[-1]) if dated else (None, None)
