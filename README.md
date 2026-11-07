@@ -98,6 +98,14 @@ Court decisions sit beside the law, one file and one commit per published decisi
   `cadc` and `cafc`), from the Caselaw Access Project (CC0), each decision filed by its official reporter citation
   (`410-U-S-113.md`), with every parallel citation (`93 S. Ct. 705`) and its docket number in the corpus's
   `decision-index.tsv`.
+- **Finland:** `finland/<court>/caselaw` (the Korkein oikeus, the Korkein hallinto-oikeus and the other courts Finlex
+  publishes), each decision filed by its identifier (`KKO-2023-8.md`), with its ECLI and diary number in the corpus's
+  `decision-index.tsv`, Finnish text and the Swedish text where published. From finlex.fi under CC BY 4.0, credited to
+  Finlex, Ministry of Justice of Finland (the `Credit:` line).
+- **Austria:** `austria/<court>/caselaw` (the Verfassungsgerichtshof first; the OGH, the VwGH and the administrative
+  courts as they are fetched), each decision text filed by its RIS document number, with its Geschäftszahl and ECLI in
+  the corpus's `decision-index.tsv`; the Rechtssätze (headnote summaries) are not taken. From RIS under CC BY 4.0
+  ("Datenquelle: RIS", the `Credit:` line). Citations of the B-VG and the DSG link to austria-law, which holds those two.
 
 Each commit is a court ruling, not a law (`Kind: court`), so the tools credit it as one and leave it out of everything
 about law (`laws`, searches, change lists) unless you name case law. Each case-law corpus also files, under the law's own

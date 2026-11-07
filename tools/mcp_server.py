@@ -1271,7 +1271,8 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     # 29 and 39 s of heading search (FR speed gate, 2026-11-06). US reporter citations and docket numbers likewise.
     ref = (DE_DOCKET.fullmatch(query.strip()) or DECISION_REF.fullmatch(query.strip())
            or PL_DOCKET.fullmatch(query.strip()) or FR_DECISION.fullmatch(query.strip())
-           or US_REPORTER.fullmatch(query.strip()) or US_DOCKET.fullmatch(query.strip()))
+           or US_REPORTER.fullmatch(query.strip()) or US_DOCKET.fullmatch(query.strip())
+           or FI_DECISION.fullmatch(query.strip()) or AT_DOCKET.fullmatch(query.strip()))
     if ref:
         served = [c for c, _ in caselaw_pins()]
         return (f'No decision {query.strip()!r} in the case law this clone serves'
@@ -4475,6 +4476,123 @@ def pl_article_paths(m) -> list[str]:
     return [f'{corpus}/{folder}/art-{pad}.md']
 
 
+# Finland --------------------------------------------------------------------------------------------------------------
+FI_ACTS = 'finland/national/acts'
+
+
+@lru_cache(maxsize=1)
+def fi_aliases() -> dict:
+    """data/fi-aliases.json: 'aliases' (the abbreviations Finnish courts write -> act folder of lexifina/finland-law:
+    "TSL", "PL", "MK", "TuotevastuuL" ...) and 'titles' (an act's one-word name, lower case, nominative -> folder:
+    "työsopimuslaki", "maakaari"). Built from finland-law's acts.csv; acts finland-law leaves out (the Criminal Code, the
+    Code of Judicial Procedure) are absent, so their citations stay unresolved rather than guessed."""
+    try:
+        return json.loads((ROOT / 'data' / 'fi-aliases.json').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        try:
+            return json.loads(law.git('show', 'HEAD:data/fi-aliases.json', check=False) or '{}')
+        except (ValueError, SystemExit, RuntimeError, OSError):
+            return {}
+
+
+def _fi_abbr_rx():
+    """'TSL 7 luku 3 §', 'PL 21 §', 'TuotevastuuL 5 § 1 mom', 'MK 2 luvun 9 §': an abbreviation the table holds, a
+    number, an optional chapter ('luku'/'luvun') and section, then '§'."""
+    names = sorted(fi_aliases().get('aliases', {}), key=lambda n: (-len(n), n))
+    alt = '|'.join(re.escape(n) for n in names) or r'(?!x)x'
+    return re.compile(r'(?<![\wÅÄÖåäö])(?P<abbr>' + alt + r')\s+(?P<a>\d{1,3}[a-z]?)(?:\s+(?:luku|luvun)\s+(?P<b>\d{1,4}[a-z]?))?\s*§')
+
+
+FI_ABBR = _LazyRegex(_fi_abbr_rx)
+# 'työsopimuslain 7 luvun 3 §', 'tuotevastuulain 5 §:n', 'maakaaren 2 luvun 9 §': an act named in the genitive.
+FI_GENITIVE = re.compile(r'(?<![\wÅÄÖåäö])(?P<stem>[A-Za-zÅÄÖåäö-]{3,40}?)(?P<end>lain|kaaren)\s+(?P<a>\d{1,3}[a-z]?)'
+                         r'(?:\s+(?:luvun|luku)\s+(?P<b>\d{1,4}[a-z]?))?\s*§')
+# Finnish decisions: "KKO:2023:8", "KHO 2020:12", Swedish "HD:2023:8" / "HFD 2020:12", and the specialised courts
+# ("MAO:123/20", "TT:2019:5", "VakO 1234:2018" are named in the decision index as published).
+FI_DECISION = re.compile(r'(?<![\w:])(?P<court>KKO|KHO|HD|HFD|TT)[:\s](?P<year>(?:19|20)\d{2})[:\s](?P<num>\d{1,4})(?![\d:])')
+
+
+def fi_corpus() -> tuple[str, str | None]:
+    """Finland's law in this tree (its path, and its pinned commit when this server serves it)."""
+    path = next((c['path'] for c in _full_manifest(head())['corpora'] if iso_code(c) == 'fi' and not law.is_caselaw(c)
+                 and c['path'].endswith('/acts')), FI_ACTS)
+    served = any(c['path'] == path for c in law.manifest()['corpora']) and (ROOT / path / '.git').exists()
+    return path, (corpus_head(path) or None) if served else None
+
+
+@lru_cache(maxsize=256)
+def fi_act_files(corpus: str, sha: str, folder: str) -> dict[str, str]:
+    """An act folder's section files: luku-07-pykala-003.md -> '7:3', pykala-005a.md -> '5a'."""
+    out = {}
+    for n in names_of(corpus, sha):
+        m = re.fullmatch(re.escape(folder) + r'/(?:luku-0*(\d+[a-z]?)-)?pykala-0*(\d+[a-z]*)\.md', n)
+        if m:
+            out.setdefault(f'{m.group(1)}:{m.group(2)}' if m.group(1) else m.group(2), n)
+    return out
+
+
+def fi_paths(folder: str | None, a: str, b: str | None) -> list[str]:
+    """The section a Finnish citation names: with a chapter ('7 luku 3 §') the file luku-07-pykala-003.md, without one
+    pykala-021.md; [] where the record lacks the act."""
+    if not folder:
+        return []
+    key = f'{a.lower()}:{b.lower()}' if b else a.lower()
+    corpus, sha = fi_corpus()
+    files = fi_act_files(corpus, sha, folder) if sha else {}
+    if key in files:
+        return [f'{corpus}/{files[key]}']
+    if b:
+        ca, cb = re.match(r'(\d+)([a-z]?)', a), re.match(r'(\d+)([a-z]?)', b)
+        return [f'{corpus}/{folder}/luku-{int(ca.group(1)):02d}{ca.group(2)}-pykala-{int(cb.group(1)):03d}{cb.group(2)}.md']
+    ca = re.match(r'(\d+)([a-z]?)', a)
+    return [f'{corpus}/{folder}/pykala-{int(ca.group(1)):03d}{ca.group(2)}.md']
+
+
+def fi_genitive_folder(stem: str, end: str) -> str | None:
+    return fi_aliases().get('titles', {}).get(stem.lower() + {'lain': 'laki', 'kaaren': 'kaari'}[end])
+
+
+def fi_decision_paths(m) -> list[str]:
+    court = {'HD': 'KKO', 'HFD': 'KHO'}.get(m.group('court'), m.group('court'))
+    return decision_paths(f"{court}:{m.group('year')}:{m.group('num')}")
+
+
+# Austria --------------------------------------------------------------------------------------------------------------
+AT_ACTS = 'austria/bund/acts'
+# "Art 7 B-VG", "Art. 140 Abs. 1 B-VG", "Artikel 18 Abs 2 B-VG": the Federal Constitutional Act; "§ 1 DSG", "§ 4 Abs 1
+# DSG": the Data Protection Act. austria-law holds these two; other Austrian acts are not read yet. German law has no
+# act abbreviated DSG or B-VG, so these never claim a German citation.
+AT_BVG = re.compile(r'\bArt(?:ikel|\.)?\s*(?P<num>\d{1,3}[a-z]?)(?:\s*Abs\.?\s*\d{1,2}[a-z]?)?(?:\s*(?:Z|lit\.?)\s*[\w.]{1,4})?\s*B-VG(?![\w-])')
+AT_DSG = re.compile(r'§\s*(?P<num>\d{1,3}[a-z]?)(?:\s*Abs\.?\s*\d{1,2}[a-z]?)?(?:\s*(?:Z|lit\.?)\s*[\w.]{1,4})?\s*DSG(?![\w-])')
+# Austrian Geschäftszahlen: VfGH "G 123/2024", "E 1471/2026", "V 12/2023"; OGH "1 Ob 123/20a", "15 Os 12/21m",
+# "9 ObA 45/22k"; VwGH "Ra 2020/01/0123", "Ro 2019/02/0001"; found in the case law served (decision-index.tsv).
+AT_DOCKET = re.compile(r'(?<![\w/.-])(?:\d{1,2}\s+(?:Ob|Os|ObA|ObS|Bkd|Fsc|Nc|Ns)\s+\d{1,4}/\d{2}[a-z]|(?:Ra|Ro|Fr)\s+\d{4}/\d{2}/\d{4}'
+                       r'|[GEVKWU]\s+\d{1,5}/\d{4}(?:-\d{1,3})?)(?![\w/])')
+
+
+def at_corpus() -> tuple[str, str | None]:
+    path = next((c['path'] for c in _full_manifest(head())['corpora'] if iso_code(c) == 'at' and not law.is_caselaw(c)
+                 and c['path'].endswith('/acts')), AT_ACTS)
+    served = any(c['path'] == path for c in law.manifest()['corpora']) and (ROOT / path / '.git').exists()
+    return path, (corpus_head(path) or None) if served else None
+
+
+def at_bvg_paths(m) -> list[str]:
+    n = re.match(r'(\d+)([a-z]?)', m.group('num'))
+    corpus, _ = at_corpus()
+    return [f'{corpus}/b-vg/art-{int(n.group(1)):03d}{n.group(2)}.md']
+
+
+def at_dsg_paths(m) -> list[str]:
+    corpus, sha = at_corpus()
+    n = re.match(r'(\d+)([a-z]?)', m.group('num'))
+    want = f'par-{int(n.group(1)):04d}{n.group(2)}.md'
+    for p in (names_of(corpus, sha) if sha else ()):
+        if p.startswith('dsg/') and p.endswith('/' + want):
+            return [f'{corpus}/{p}']
+    return [f'{corpus}/dsg/{want}']
+
+
 class CitationForm:
     """One citation form: `country` (ISO code), `rx` over free text, `to_path` from a match to a path or a list of
     paths ([] where the record cannot place it), `examples` of that country's citations it must claim. `open_name`:
@@ -4553,6 +4671,20 @@ CITATION_REGISTRY = [
     # Polish judgments by case number (sygnatura), to the judgment's file in the case law served (decision-index.tsv).
     CitationForm('pl', PL_DOCKET, lambda m: decision_paths(m.group(0)),
                  ('II CSK 123/20', 'I ACa 456/19', 'II OSK 123/20', 'III SA/Wa 1234/19', 'SK 12/20', 'KIO 1234/20')),
+    # Finland: a section of an act by the abbreviation courts write ("TSL 7 luku 3 §", "PL 21 §") or by the act's name in
+    # the genitive ("työsopimuslain 7 luvun 3 §"), to finland-law's files (data/fi-aliases.json); acts finland-law leaves
+    # out (RL, OK) stay unresolved.
+    CitationForm('fi', FI_ABBR, lambda m: fi_paths(fi_aliases().get('aliases', {}).get(m.group('abbr')), m.group('a'), m.group('b')),
+                 ('TSL 7 luku 3 §', 'PL 21 §', 'MK 2 luku 9 §', 'TuotevastuuL 5 §')),
+    CitationForm('fi', FI_GENITIVE, lambda m: fi_paths(fi_genitive_folder(m.group('stem'), m.group('end')), m.group('a'), m.group('b')),
+                 ('työsopimuslain 7 luvun 3 §', 'tuotevastuulain 5 §', 'maakaaren 2 luvun 9 §')),
+    # Finnish precedents: "KKO:2023:8", "KHO 2020:12", "HD:2023:8" (decision-index.tsv).
+    CitationForm('fi', FI_DECISION, fi_decision_paths, ('KKO:2023:8', 'KHO 2020:12', 'HD:2023:8')),
+    # Austria: "Art 7 B-VG", "Art. 140 Abs. 1 B-VG", "§ 1 DSG" (the acts austria-law holds), and Geschäftszahlen.
+    CitationForm('at', AT_BVG, at_bvg_paths, ('Art 7 B-VG', 'Art. 140 Abs. 1 B-VG', 'Artikel 18 Abs 2 B-VG')),
+    CitationForm('at', AT_DSG, at_dsg_paths, ('§ 1 DSG', '§ 4 Abs 1 DSG')),
+    CitationForm('at', AT_DOCKET, lambda m: decision_paths(m.group(0)),
+                 ('G 123/2024', 'E 1471/2026', '1 Ob 123/20a', '15 Os 12/21m', 'Ra 2020/01/0123')),
     # Every other country's ECLI, read the same way: its decisions resolve once a case-law corpus of that country is
     # served (decision_paths finds them by file name), and nothing is claimed for a country the tree has no case law of.
     *[CitationForm(cc, re.compile(rf'\bECLI:{cc.upper()}:[A-Z0-9]{{1,7}}:\d{{4}}:[A-Z0-9.]{{1,25}}(?![A-Za-z0-9])', re.I),
@@ -4777,9 +4909,11 @@ def t_law_details(args: dict) -> tuple[str, dict]:
     # Case law is read for a decision (a docket or BGE reference, found by its file name), a commit, or a corpus
     # that names case law; a law's name is not looked for among a million decisions' authors.
     fr = FR_DECISION.search(law_name) if law_name else None
-    decided = (fr_decision_paths(fr) if fr else decision_paths(re.sub(r'^\s*Nos?\.\s+', '', law_name))) if law_name and (
-        fr or DECISION_REF.search(law_name) or DE_DOCKET.search(law_name) or PL_DOCKET.search(law_name)
-        or US_REPORTER.search(law_name) or US_DOCKET.search(law_name)
+    fi = FI_DECISION.search(law_name) if law_name and not fr else None
+    decided = (fr_decision_paths(fr) if fr else fi_decision_paths(fi) if fi
+               else decision_paths(re.sub(r'^\s*Nos?\.\s+', '', law_name))) if law_name and (
+        fr or fi or DECISION_REF.search(law_name) or DE_DOCKET.search(law_name) or PL_DOCKET.search(law_name)
+        or US_REPORTER.search(law_name) or US_DOCKET.search(law_name) or AT_DOCKET.search(law_name)
         or PL_ANY_DOCKET.search(law_name)) else []
     corpora = [c['path'] for c in law.manifest()['corpora'] if (not corpus or c['path'].startswith(corpus))
                and (not law.is_caselaw(c) or commit or (corpus and law.names_caselaw(corpus))
