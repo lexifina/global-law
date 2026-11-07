@@ -243,6 +243,17 @@ class UnitedStatesCaseLaw(unittest.TestCase):
         self.assertEqual(miss['data']['results'], [])
         self.assertLess(time.time() - t0, 30)
 
+    def test_heading_search_reads_case_law_only_when_named(self):
+        """find_provision's heading search left case law out unless its scope names it: reading a million US decisions'
+        headings for "automatic stay" took 110 s (US speed gate, 2026-11-07). A decision is still found by reference."""
+        plain, scoped, ref = self.calls(('find_provision', {'query': 'small business debtor'}),
+                                        ('find_provision', {'query': 'small business debtor', 'jurisdiction': 'united-states/caselaw'}),
+                                        ('find_provision', {'query': '578 U.S. 200'}))
+        for a in (plain, scoped, ref):
+            self.assertFalse(a['error'], a['text'])
+        self.assertNotIn(f'{CASES}/', plain['text'])
+        self.assertIn(f'{CASES}/{D2}', ref['text'])
+
     def test_us_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))
         import mcp_server as m

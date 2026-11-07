@@ -831,7 +831,9 @@ def heading_index(corpus: str, sha: str, wait: bool = True) -> dict[str, str] | 
 def index_served() -> bool:
     """Whether the corpora served are few enough to index by heading (one or a few countries): a clone with every
     country greps instead, rather than read millions of files."""
-    corpora = [c['path'] for c in law.manifest()['corpora'] if (ROOT / c['path'] / '.git').exists()]
+    # Case law is not searched by heading unless a query's scope names it, so its files do not count: listing a million
+    # US decisions here on every find_provision took 6 s (US speed gate, 2026-11-07).
+    corpora = [c['path'] for c in law.manifest()['corpora'] if (ROOT / c['path'] / '.git').exists() and not law.is_caselaw(c)]
     return sum(len(names_of(c, s)) for c in corpora if (s := corpus_head(c))) <= INDEX_FILES
 
 
@@ -1092,18 +1094,51 @@ def warmed() -> None:
 ROOT_DOC = re.compile(r'[A-Z][A-Z0-9_-]*\.md')
 
 
+def caselaw_files(corpus: str, sha: str | None) -> tuple[int, str]:
+    """(decision files, one example) of a case-law corpus at its pin, from the tree's cache (caselaw-files-<pin>.json),
+    written the first time: listing every file of 14 US case-law corpora (a million decisions) on each call made
+    list_jurisdictions 8 times slower (US speed gate, 2026-11-07)."""
+    if not sha:
+        return 0, ''
+    f = law._store() / f'caselaw-files-{sha}.json'
+    try:
+        got = json.loads(f.read_text(encoding='utf-8'))
+        return int(got['n']), got['example']
+    except (OSError, ValueError, KeyError):
+        pass
+    files = [n for n in names_of(corpus, sha) if not ROOT_DOC.fullmatch(n)]
+    example = next((n for n in files if n.startswith('decisions/')), files[0] if files else '')
+    try:
+        f.parent.mkdir(parents=True, exist_ok=True)
+        tmp = f.with_name(f'{f.name}.{os.getpid()}.part')
+        tmp.write_bytes(json.dumps({'n': len(files), 'example': example}).encode('utf-8'))
+        os.replace(tmp, f)
+    except OSError:
+        pass
+    return len(files), example
+
+
 def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
     m = law.manifest()
     events = law.timeline()
     rows, data = [], []
+    # The latest decision of each case-law corpus, one git log each, eight at a time (14 US corpora one after another
+    # took 1.4 s: US speed gate, 2026-11-07).
+    cl = [c['path'] for c in m['corpora'] if law.is_caselaw(c)]
+    with ThreadPoolExecutor(8) as pool:
+        latest = dict(zip(cl, pool.map(lambda p: law.latest_decision(p, '9999-12-31'), cl)))
     for c in m['corpora']:
         own = [e for e in events if e.corpus == c['path'] and e.kind != 'documentation']
         first, last = (own[0].in_force, own[-1].in_force) if own else (None, None)
         if law.is_caselaw(c):  # not in the timeline: its record's span from its corpus.json and its latest decision
-            given = law.latest_decision(c['path'], '9999-12-31')
+            given = latest.get(c['path'])
             first, last = c.get('history_from'), given[1] if given else None
-        files = [f for f in names_of(c['path'], corpus_head(c['path'])) if not ROOT_DOC.fullmatch(f)]
-        example = next((f for f in files if '/' in f), files[0] if files else '')  # a provision in a folder first
+        if law.is_caselaw(c):  # a million decision files: counted once per pin, from the cache (caselaw_files)
+            n_files, example = caselaw_files(c['path'], corpus_head(c['path']))
+            files = range(n_files)
+        else:
+            files = [f for f in names_of(c['path'], corpus_head(c['path'])) if not ROOT_DOC.fullmatch(f)]
+            example = next((f for f in files if '/' in f), files[0] if files else '')  # a provision in a folder first
         info = {'path': c['path'], 'name': c['name'], 'language': c.get('language'), 'coverage': c.get('coverage'),
                 'provision_files': len(files), 'record_starts': first, 'last_change_in_record': last,
                 'record_to': c.get('record_to'), 'record_note': c.get('record_note'), 'changes': len(own),
@@ -1384,6 +1419,11 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     for c in law.manifest()['corpora']:
         if not corpus_in_scope(c['path']):
             continue
+        # Case law is searched by heading only when the scope names it ("united-states/caselaw", a court's corpus): its
+        # decisions are found by reference above, and reading a million decisions' headings for "automatic stay" took
+        # 110 s (US speed gate, 2026-11-07).
+        if law.is_caselaw(c) and not (scope and (law.names_caselaw(scope) or scope.startswith(c['path']))):
+            continue
         sha = corpus_head(c['path'])
         names = [n for n in names_of(c['path'], sha) if in_scope(f"{c['path']}/{n}")]
         if not names:
@@ -1466,6 +1506,10 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         # grep began, and a finder needs only where the words are; read_law gives the text on a date.)
         for c in law.manifest()['corpora']:
             if not corpus_in_scope(c['path']):
+                continue
+            # Case law's text is grepped only when the scope names it, as its headings are: a grep of a million
+            # decisions for a phrase found in no law heading would run past the time limit.
+            if law.is_caselaw(c) and not (scope and (law.names_caselaw(scope) or scope.startswith(c['path']))):
                 continue
             sha = corpus_head(c['path'])
             if not sha or not (ROOT / c['path'] / '.git').exists():
@@ -4816,12 +4860,25 @@ CITATION_FORMS = [(f.rx, f.to_path) for f in CITATION_REGISTRY]  # (regex, match
 MAX_CITATIONS = 100  # distinct provisions resolve_citations looks up in one call
 
 
+def _caselaw_corpus(corpus: str) -> bool:
+    return any(c['path'] == corpus and law.is_caselaw(c) for c in law.manifest()['corpora'])
+
+
 def citation_state(date: str, path: str) -> dict:
     try:
         corpus, rel = law.corpus_of(path)
     except SystemExit:
         shut = unserved_answer(path)
         return {'status': 'not served here', 'how_to_add': shut} if shut else {'status': 'not in this tree'}
+    if _caselaw_corpus(corpus):
+        # A decision is not in force or out of force: say what it is, from one object lookup. Listing the corpus to
+        # test membership and reading its law-style history took 3-4 s a citation on the US courts' million decisions
+        # (US speed gate, 2026-11-07).
+        sha = corpus_head(corpus)
+        held = sha and git_run(['git', 'cat-file', '-e', f'{sha}:{rel}'], cwd=ROOT / corpus, capture_output=True,
+                               timeout=GIT_TIMEOUT).returncode == 0
+        return {'status': 'court decision' if held else 'not in the record at any date', 'last_change': None, 'next_change': None,
+                'caveats': [], 'cite': None}
     if rel not in names_of(corpus, corpus_head(corpus)):
         return {'status': 'not in the record at any date'}
     st = status_of(date, path)
