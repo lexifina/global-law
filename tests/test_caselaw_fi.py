@@ -92,7 +92,8 @@ class FinnishCaseLaw(unittest.TestCase):
                  'law_commit': cls.v2019}]
         index = 'reference\tpath\n' + ''.join(f'{r}\t{p}\n' for r, p in (('KKO:2010:5', D1), ('ECLI:FI:KKO:2010:5', D1), ('S2009/12', D1),
                                                                               ('KKO:2016:40', D2), ('KKO:2023:8', D3), ('S2020/111', D3),
-                                                                              ('MAO:94/2026', D2), ('586/2024', D2)))
+                                                                              ('MAO:94/2026', D2), ('586/2024', D2),
+                                                                              ('Helsingin HO 19.01.1977 418', D1)))
         c.commit('Lexifina', {f'judgments/{LAW}/tyosopimuslaki/luku-07-pykala-003.jsonl': ''.join(json.dumps(r) + '\n' for r in rows),
                               'decision-index.tsv': index,
                               'corpus.json': json.dumps({'corpus': 'fi/korkein-oikeus/caselaw', 'kind': 'judgments', 'credit': CREDIT,
@@ -217,14 +218,18 @@ class FinnishCaseLaw(unittest.TestCase):
         self.assertIn(f'{CASES}/{D1}', text)
 
     def test_decisions_by_diary_number_and_the_genitive_constitution(self):
-        diary, mao, act_no, unknown, cites = self.calls(
+        diary, mao, act_no, unknown, cites, appeal, details = self.calls(
             ('find_provision', {'query': 'S2020/111'}),
             ('find_provision', {'query': 'MAO:94/2026'}),
             ('find_provision', {'query': '586/2024'}),
             ('find_provision', {'query': 'S1999/1'}),
-            ('resolve_citations', {'text': 'perustuslain 21 §:n 1 momentti', 'date': '2024-01-01'}))
-        for a in (diary, mao, act_no, unknown, cites):
+            ('resolve_citations', {'text': 'perustuslain 21 §:n 1 momentti', 'date': '2024-01-01'}),
+            ('find_provision', {'query': 'Helsingin HO 19.01.1977 418'}),
+            ('law_details', {'law': 'S2020/111'}))
+        for a in (diary, mao, act_no, unknown, cites, appeal, details):
             self.assertFalse(a['error'], a['text'])
+        self.assertIn(f'{CASES}/{D1}', appeal['text'])
+        self.assertIn('Korkein oikeus KKO:2023:8', details['text'])
         self.assertIn(f'{CASES}/{D3}', diary['text'])
         self.assertIn(f'{CASES}/{D2}', mao['text'])
         self.assertNotIn(f'{CASES}/{D2}', act_no['text'])  # an act number is the law's, though a diary number reads the same
