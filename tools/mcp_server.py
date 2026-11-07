@@ -5043,6 +5043,8 @@ TOOLS = [
       'include_diffs': {'type': 'boolean', 'description': f'What the change did to each provision (default true; up to {DIFF_PROVISIONS} provisions).'}}, [], t_law_details),
 ]
 HANDLERS = {name: fn for name, _, _, _, fn in TOOLS}
+# Tools that read one file named by `path`: run under law.focus() so a case-law decision needs no corpus-wide index.
+FOCUSED_TOOLS = ('read_law', 'who_wrote', 'compare_dates', 'provision_history', 'applies_to_case')
 PROPERTIES = {name: list(props) for name, _, props, _, _ in TOOLS}
 
 # Ready-made research tasks a client can offer its user (prompts/list); each names the tools to use, in order.
@@ -5223,7 +5225,11 @@ def _handle(method, mid, params: dict) -> dict:
             started = time.monotonic()
             _call.deadline = started + GIT_TIMEOUT
             try:
-                text, data = HANDLERS[name](args)
+                # A read of one file: a case-law decision is answered from its own commits, not its corpus's whole
+                # index (law.focus; a cold Cour de cassation index took ~100 s of the 120 s limit, 2026-11-06).
+                one = name in FOCUSED_TOOLS and isinstance(args.get('path'), str) and args['path'].strip()
+                with law.focus(path_arg(args['path'])) if one else law.focus():
+                    text, data = HANDLERS[name](args)
                 if name != 'list_jurisdictions' and not args.get('path') and not args.get('jurisdiction'):
                     # An answer over every jurisdiction says which it could not search: else "nothing found" would
                     # read as nothing in the law of a country this clone does not hold.

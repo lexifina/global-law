@@ -8,6 +8,9 @@ Status words:
 - **Open:** found and reported, not yet fixed.
 - **Checked:** a test that passed.
 
+## 7 November 2026
+- **Fixed (here), a cold read of one decision.** The first read of a case-law corpus built its whole index: one `git log --raw` of every commit and file, which for the Cour de cassation (530,372 decisions) took 5 min 46 s for one `law.py show` on a cold clone, past the assistant tools' 120 s limit (the open item of 6 November). A read of single files (`law.py show`, `log`, `blame`, `words`, `diff`, `today`; MCP `read_law`, `who_wrote`, `compare_dates`, `provision_history`, `applies_to_case`) now runs under `law.focus()`: for a case-law corpus whose index is not built yet, it reads only the commits that touch those files (`git log -- <path>`), and the record notes (where the record starts, changes ahead, unknown kinds) come from one `git log` of the messages without file lists (`_light_index`, kept on disk beside the indexes). The focused index is kept in memory only and keys its own caches, so a long-running server never takes it for the whole corpus; laws and whole-corpus reads still build the full index. Measured on the Cour de cassation (a loaded machine): `law.py show` 346 s -> 36 s cold, 18 s warm, same output; MCP `read_law` 38 s cold, 19 s warm. Most of what is left is `git log -- <path>` walking the history; a commit-graph with changed-path filters in the corpus checkout (`git commit-graph write --reachable --changed-paths`) cuts it further. Test: `test_a_decision_is_read_without_the_corpus_index` (no index written; output identical to the whole-index read, CLI and MCP).
+
 ## 6 November 2026
 - **Added (United States). US case law read with the tools of the law.** Decisions of the Supreme Court and the federal
   courts of appeals (`united-states/<court>/caselaw`, from the Caselaw Access Project, CC0) are found by reporter

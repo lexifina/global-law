@@ -357,10 +357,57 @@ def corpus_events(corpus: str) -> list[Event]:
         return []
     _CACHE.pop(('behind', corpus), None)
     ix = _index(corpus)
+    if ix.get('focused'):  # a read of single decisions: the corpus's dated commits without the per-file index
+        ix = _light_index(corpus, cwd, ix['pin'])
     key = ('corpus-events', f"{corpus}@{_at(ix)}")
     if key not in _CACHE:
         _CACHE[key] = [Event(r[0], corpus, r[0], r[1], r[5], r[4], r[3]) for r in ix['rows'] if r[5]]
     return _CACHE[key]  # type: ignore[return-value]
+
+
+def _light_index(corpus: str, cwd: Path, sha: str) -> dict:
+    """Every commit of a case-law corpus as the corpus index keeps it (rows, unknown kinds) but without its files: one
+    `git log` of the messages, no per-commit file list, which is what makes the whole index slow (the Cour de
+    cassation: ~20 s against ~100+ s). What the record notes need (where the record starts and ends, changes ahead)
+    for a read of one decision (focus()). Kept on disk beside the indexes, keyed by the pin."""
+    key = ('index-light', f'{corpus}@{sha}')
+    if key in _CACHE:
+        return _CACHE[key]  # type: ignore[return-value]
+    import pickle
+    store = _store()
+    path = store / f"{corpus.replace('/', '~')}.v{INDEX_VERSION}.{sha[:12]}.light"
+    data = None
+    try:
+        with open(path, 'rb') as f:
+            data = pickle.load(f)
+        if data.get('v') != _index_version() or data.get('pin') != sha:
+            data = None
+    except Exception:
+        data = None
+    if data is None:
+        info = corpus_info(corpus)
+        fmt = '--format=%x1d%H%x1f%an%x1f%aI%x1f%s%x1f%(trailers:only,unfold)%x1e'
+        raw = git('log', '--reverse', fmt, sha, cwd=cwd)
+        rows, unknown = [], set()
+        for chunk in raw.split('\x1d')[1:]:
+            head = chunk.partition('\x1e')[0]
+            commit, author, when, subject, block = head.split('\x1f', 4)
+            row, odd = _derive(info, commit, author, when, subject, block)
+            if odd:
+                unknown.add(odd)
+            rows.append(row)
+        data = {'v': _index_version(), 'pin': sha, 'rows': rows, 'unknown': unknown, 'at': f'{sha}~light'}
+        try:
+            import os
+            store.mkdir(parents=True, exist_ok=True)
+            tmp = path.with_name(f'{path.name}.{os.getpid()}.tmp')
+            with open(tmp, 'wb') as f:
+                pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+            os.replace(tmp, path)
+        except OSError:
+            pass
+    _CACHE[key] = data
+    return data
 
 
 def law_events(corpus: str) -> list[Event]:
@@ -1629,7 +1676,10 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
     if own and missing and info.get('history') not in ('metadata-only',) and not is_caselaw({'path': corpus, **info}):
         out.append(f"{corpus}: this record changes the text on each change's in-force date only; it does not hold "
                    f"{', '.join(missing)}, so the text shown may not be the whole law that applied on {date}.")
-    odd = _index(corpus)['unknown'] if own else set()
+    ix_ = _index(corpus) if own else None
+    if ix_ is not None and ix_.get('focused'):  # a read of single decisions: the corpus's kinds, read lightly
+        ix_ = _light_index(corpus, ROOT / corpus, ix_['pin'])
+    odd = ix_['unknown'] if own else set()
     if odd:
         out.append(f"{corpus}: commit kind(s) not recognised, read as laws: {', '.join(sorted(odd))}.")
     return out
@@ -2911,12 +2961,16 @@ def _redate(data: dict, rows: list, block: str) -> None:
             data.setdefault('retroactive', set()).add(r[0])
 
 
-def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = frozenset()) -> None:
+def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = frozenset(),
+            paths: tuple = ()) -> None:
     """Add the commits in `revs` to a corpus index, oldest first: one `git log --raw` for every commit and file.
-    Commits in `skip` are left out (a forked future branch's copies of main's commits: _future_index)."""
+    Commits in `skip` are left out (a forked future branch's copies of main's commits: _future_index). With `paths`,
+    only the commits that touch those files, and only their changes (a case-law decision read on its own:
+    _focused_index)."""
     info = corpus_info(corpus)
     fmt = '--format=%x1d%H%x1f%an%x1f%aI%x1f%s%x1f%(trailers:only,unfold)%x1e'
-    raw = git('log', '--reverse', '--raw', '--find-renames=100%', '--no-abbrev', fmt, revs, cwd=cwd)
+    raw = git('log', '--reverse', '--raw', '--find-renames=100%', '--no-abbrev', fmt, revs,
+              *(['--', *paths] if paths else []), cwd=cwd)
     legacy = None
     rows, files = data['rows'], data['files']
     put_back = dict(data.get('withdrawn_versions') or {})  # path -> the versions a documentation commit withdrew
@@ -3012,6 +3066,9 @@ def _main_index(corpus: str) -> dict:
     key = ('index', f'{corpus}@{sha}')
     if key in _CACHE:
         return _CACHE[key]  # type: ignore[return-value]
+    focused = _focused_index(corpus, cwd, sha)
+    if focused is not None:
+        return focused
     if not _has_commit(corpus, cwd, sha):
         raise SystemExit(f'{corpus}: this checkout does not have the commit the tree pins ({sha[:10]}), so the law it '
                          f'holds cannot be read as of now. Run: git submodule update --init -- {corpus}')
@@ -3080,6 +3137,74 @@ def _main_index(corpus: str) -> dict:
     return data
 
 
+_FOCUS: dict[str, tuple[str, ...]] = {}  # corpus -> the files a call reads (focus())
+
+
+class focus:
+    """`with focus(path, ...):` a read of single files. For a case-law corpus whose index is not built yet, the reads
+    inside use an index of just those files' commits (_focused_index) instead of the whole corpus's: one decision
+    is one file and usually one commit, while the corpus index walks every decision (the Cour de cassation's 530k
+    commits took ~100 s cold, past the assistant tools' 120 s limit once the rest of a call was added; 2026-11-06).
+    Laws are not affected: their reads need every commit (Redates:, restatements, act ends)."""
+
+    def __init__(self, *paths: str):
+        self.by = {}
+        for p in paths:
+            try:
+                corpus, rel = corpus_of(p)
+            except (SystemExit, Exception):
+                continue
+            self.by.setdefault(corpus, []).append(rel)
+        self.saved = {}
+
+    def __enter__(self):
+        for corpus, rels in self.by.items():
+            self.saved[corpus] = _FOCUS.get(corpus)
+            _FOCUS[corpus] = tuple(sorted(set(rels)))
+        return self
+
+    def __exit__(self, *exc):
+        for corpus, old in self.saved.items():
+            if old is None:
+                _FOCUS.pop(corpus, None)
+            else:
+                _FOCUS[corpus] = old
+        return False
+
+
+def _focused_index(corpus: str, cwd: Path, sha: str) -> dict | None:
+    """The index of only the focused files of a case-law corpus (focus()), when its whole index is not on disk for
+    this pin yet; None otherwise (the whole index is then read or built as before). Same shape as _main_index's, its
+    rows only the commits that touch those files, in history order, so each file's versions, kinds and dates read the
+    same; kept in memory only, never written as the corpus's index."""
+    rels = _FOCUS.get(corpus)
+    if not rels:
+        return None
+    try:
+        info = corpus_info(corpus)
+    except Exception:
+        return None
+    if not is_caselaw({'path': corpus, **info}):
+        return None
+    name = corpus.replace('/', '~')
+    store = _store()
+    if (store / f'{name}.v{INDEX_VERSION}.{sha[:12]}.index').is_file():
+        return None  # built already: one file load, and it holds everything
+    key = ('index-focus', f'{corpus}@{sha}:{"|".join(rels)}')
+    if key in _CACHE:
+        return _CACHE[key]  # type: ignore[return-value]
+    if not _has_commit(corpus, cwd, sha):
+        return None
+    # 'at' keys every cache built from this index (_at), so nothing derived from a few files is later taken for the
+    # whole corpus by a long-running reader (the assistant server).
+    data = {'v': _index_version(), 'pin': sha, 'rows': [], 'files': {}, 'unknown': set(), 'moves': {}, 'withdrawn': {},
+            'restates': {}, 'pos': {}, 'retroactive': set(), 'focused': rels,
+            'at': f'{sha}~focus:{"|".join(rels)}'}
+    _extend(corpus, cwd, data, sha, paths=rels)
+    _CACHE[key] = data
+    return data
+
+
 def _prune_indexes(store: Path, name: str, keep: Path) -> None:
     """Remove a corpus's indexes this one replaces: earlier pins of this version, the names used before (one piece
     until 4 November 2026, then one per version), other versions unused for a week, and .tmp files over an hour old.
@@ -3093,7 +3218,7 @@ def _prune_indexes(store: Path, name: str, keep: Path) -> None:
         try:
             age = now - f.stat().st_mtime
             this_version = f.name.startswith(f'{name}.v{INDEX_VERSION}.')
-            if (f.suffix == '.tmp' and age > 3600) or (f.suffix in ('.index', '.pickle') and (
+            if (f.suffix == '.tmp' and age > 3600) or (f.suffix in ('.index', '.pickle', '.light') and (
                     this_version or not f.name.startswith(f'{name}.v') or age > 7 * 86400)):
                 f.unlink()
         except OSError:
@@ -3817,6 +3942,12 @@ def main(argv: list[str]) -> None:
         args[0], args[2] = day(args[0]), norm(args[2])
     if command == 'log':
         args[0] = norm(args[0])
+    at = {'show': 1, 'blame': 1, 'words': 1, 'today': 1, 'log': 0, 'diff': 2}.get(command)
+    with focus(args[at]) if at is not None else focus():  # one file read: a decision needs no whole-corpus index
+        _run(command, args)
+
+
+def _run(command: str, args: list[str]) -> None:
     note = lambda lines: [print(f'Note: {line}', file=sys.stderr) for line in lines]  # noqa: E731
     if command == 'world':
         events = timeline()

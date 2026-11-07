@@ -296,6 +296,33 @@ class CaseLaw(unittest.TestCase):
         self.assertFalse(by_law['error'], by_law['text'])
         self.assertNotIn(CASES, by_law['text'])  # a law's name is not looked for among the decisions
 
+    # --- a cold read of one decision builds no whole-corpus index (law.focus) -------------------------------------------
+
+    def test_a_decision_is_read_without_the_corpus_index(self):
+        """law.py show/log/blame on a decision, and MCP read_law/who_wrote/compare_dates/provision_history, answer from
+        the decision's own commits when the case-law corpus's index is not built (a cold Cour de cassation index took
+        ~100 s, 2026-11-06). The answers are the same as with the whole index."""
+        store = self.t.root / '.git' / 'global-law-cache'
+        name = CASES.replace('/', '~')
+        built = lambda: sorted(p.name for p in store.glob(f'{name}.*.index')) if store.is_dir() else []  # noqa: E731
+        for p in store.glob(f'{name}.*') if store.is_dir() else []:
+            p.unlink()  # cold: no index of the case-law corpus on disk
+        path = f'{CASES}/{D1}'
+        cmds = [('show', '2012-01-01', path), ('show', '2010-06-01', path), ('log', path), ('blame', '2012-01-01', path),
+                ('words', '2012-01-01', path), ('diff', '2010-06-01', '2012-01-01', path), ('today', '2010-06-01', path)]
+        cold = [self.t.cli(*c) for c in cmds]
+        calls = (('read_law', {'path': path, 'date': '2012-01-01'}), ('who_wrote', {'path': path, 'date': '2012-01-01'}),
+                 ('compare_dates', {'path': path, 'date_a': '2010-06-01', 'date_b': '2012-01-01'}),
+                 ('provision_history', {'path': path}))
+        cold_mcp = self.calls(*calls)
+        self.assertEqual(built(), [], 'a read of one decision wrote the case-law corpus index')
+        self.cli('laws', '2000-01-01', '2030-01-01', CASES)  # a whole-corpus read: the index is built now
+        self.assertTrue(built(), 'the whole-corpus read built no index')
+        self.assertEqual(cold, [self.t.cli(*c) for c in cmds])
+        warm_mcp = self.calls(*calls)
+        for a, b in zip(cold_mcp, warm_mcp):
+            self.assertEqual((a['error'], a['text']), (b['error'], b['text']))
+
     # --- the rest of the feature list (global-law-feature-list.html): compare_dates, list_jurisdictions, resources, charts
 
     def test_compare_dates_on_a_decision(self):
