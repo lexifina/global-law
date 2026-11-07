@@ -197,12 +197,21 @@ class AustrianCaseLaw(unittest.TestCase):
         self.assertIn(ART, text)
         self.assertIn(DSG4, text)
 
+    def test_decisions_as_ris_writes_them(self):
+        nospace, docnum = self.calls(('find_provision', {'query': 'G100/2015'}),
+                                     ('find_provision', {'query': 'JFT_20240303_24G00123_00'}))
+        for a in (nospace, docnum):
+            self.assertFalse(a['error'], a['text'])
+        self.assertIn(f'{CASES}/{D2}', nospace['text'])
+        self.assertIn(f'{CASES}/{D3}', docnum['text'])
+
     def test_austrian_citation_forms(self):
         sys.path.insert(0, str(ROOT / 'tools'))
         import mcp_server as m
         self.assertEqual(m.AT_BVG.search('Art. 140 Abs. 1 B-VG').group('num'), '140')
         self.assertEqual(m.AT_DSG.search('§ 4 Abs 1 DSG').group('num'), '4')
-        for ref in ('G 123/2024', '1 Ob 123/20a', '15 Os 12/21m', 'Ra 2020/01/0123'):
+        for ref in ('G 123/2024', 'G123/2024', '1 Ob 123/20a', '15 Os 12/21m', 'Ra 2020/01/0123', 'JFT_20131003_11G00088_00',
+                    'JJT_20200101_OGH0002_0010OB00123_20A0000_000'):
             self.assertTrue(m.AT_DOCKET.fullmatch(ref), ref)
         # German law is not read as Austrian, nor Austrian as German.
         for other in ('§ 823 Abs. 1 BGB', 'Art. 3 Abs. 1 GG', '1 BvR 123/20', 'VI ZR 123/20'):

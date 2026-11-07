@@ -5023,9 +5023,11 @@ AT_ACTS = 'austria/bund/acts'
 AT_BVG = re.compile(r'\bArt(?:ikel|\.)?\s*(?P<num>\d{1,3}[a-z]?)(?:\s*Abs\.?\s*\d{1,2}[a-z]?)?(?:\s*(?:Z|lit\.?)\s*[\w.]{1,4})?\s*B-VG(?![\w-])')
 AT_DSG = re.compile(r'§\s*(?P<num>\d{1,3}[a-z]?)(?:\s*Abs\.?\s*\d{1,2}[a-z]?)?(?:\s*(?:Z|lit\.?)\s*[\w.]{1,4})?\s*DSG(?![\w-])')
 # Austrian Geschäftszahlen: VfGH "G 123/2024", "E 1471/2026", "V 12/2023"; OGH "1 Ob 123/20a", "15 Os 12/21m",
-# "9 ObA 45/22k"; VwGH "Ra 2020/01/0123", "Ro 2019/02/0001"; found in the case law served (decision-index.tsv).
+# "9 ObA 45/22k"; VwGH "Ra 2020/01/0123", "Ro 2019/02/0001"; found in the case law served (decision-index.tsv). RIS
+# writes the VfGH's without the space ("G88/2011"), and names each decision text by its document number
+# ("JFT_20131003_11G00088_00", "JJT_20200101_OGH0002_0010OB00123_20A0000_000"), which is the decision's file name.
 AT_DOCKET = re.compile(r'(?<![\w/.-])(?:\d{1,2}\s+(?:Ob|Os|ObA|ObS|Bkd|Fsc|Nc|Ns)\s+\d{1,4}/\d{2}[a-z]|(?:Ra|Ro|Fr)\s+\d{4}/\d{2}/\d{4}'
-                       r'|[GEVKWU]\s+\d{1,5}/\d{4}(?:-\d{1,3})?)(?![\w/])')
+                       r'|[GEVKWU]\s?\d{1,5}/\d{4}(?:-\d{1,3})?|J[A-Z]{2}_\d{8}_[A-Z0-9_]{6,48})(?![\w/])')
 
 
 def at_corpus() -> tuple[str, str | None]:
