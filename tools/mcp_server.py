@@ -1377,7 +1377,8 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
            or NL_DOCKET.fullmatch(query.strip())
            or PL_DOCKET.fullmatch(query.strip()) or PL_REF.fullmatch(query.strip()) or FR_DECISION.fullmatch(query.strip())
            or US_REPORTER.fullmatch(query.strip()) or US_DOCKET.fullmatch(query.strip())
-           or FI_DECISION.fullmatch(query.strip()) or AT_DOCKET.fullmatch(query.strip()))
+           or FI_DECISION.fullmatch(query.strip()) or AT_DOCKET.fullmatch(query.strip())
+           or BR_DOCKET.fullmatch(query.strip()))
     if ref:
         served = [c for c, _ in caselaw_pins()]
         return (f'No decision {query.strip()!r} in the case law this clone serves'
@@ -5054,6 +5055,138 @@ def at_dsg_paths(m) -> list[str]:
     return [f'{corpus}/dsg/{want}']
 
 
+# Brazil ---------------------------------------------------------------------------------------------------------------
+BR_ACTS = 'brazil/national/acts'
+# The short names Brazilian courts write, to brazil-law's act folders (kept only where the folder exists). A bare "CPC"
+# or "CC" is the code in force today; "CPC/73", "CC/16" name the old ones.
+BR_ABBR = {'CF': 'constituicao', 'CF/88': 'constituicao', 'CRFB': 'constituicao', 'CRFB/88': 'constituicao',
+           'CC': 'codigo-civil', 'CC/02': 'codigo-civil', 'CC/16': 'codigo-civil-de-1916',
+           'CPC': 'codigo-de-processo-civil', 'CPC/15': 'codigo-de-processo-civil', 'NCPC': 'codigo-de-processo-civil',
+           'CPC/73': 'codigo-de-processo-civil-de-1973', 'CP': 'codigo-penal', 'CPP': 'codigo-de-processo-penal', 'CLT': 'clt',
+           'CDC': 'codigo-de-defesa-do-consumidor', 'CTN': 'codigo-tributario-nacional', 'ECA': 'estatuto-da-crianca-e-do-adolescente',
+           'CTB': 'codigo-de-transito-brasileiro', 'CPM': 'decreto-lei-1001-de-1969', 'LEP': 'lei-de-execucao-penal'}
+_BR_NUM = r'(?:\d{1,2}(?:\.\d{3})+|\d{1,5})'
+_BR_ART1 = _BR_NUM + r'(?:\s?[ºo°ª])?(?:\s?-\s?[A-Z](?![a-zà-ú]))?'
+_BR_QUAL = (r'(?:\s*,?\s*(?:§§?\s*\d{1,3}[ºo°]?(?:\s*(?:e|,)\s*\d{1,3}[ºo°]?){0,4}|caput|par[áa]grafo\s+[úu]nico|inc(?:isos?|s?\.)\s*[IVXLC]{1,7}'
+            r'|[IVXLC]{1,7}(?![\w])|al[íi]neas?\s*"?[a-z]"?|"[a-z]"|\b[a-z]\b(?![\w-]))){0,8}')
+_BR_ABBR = (r'CF\s*/\s*(?:88|1988)|CRFB\s*/\s*(?:88|1988)|CRFB|CF|CPC\s*/\s*(?:2015|15|1973|73)|NCPC|CPC|CC\s*/\s*(?:2002|02|1916|16)|CC|'
+            r'CPP|CPM|CP|CLT|CDC|CTN|ECA|CTB|LEP|ADCT')
+_BR_NAME = (r'Constitui[çc][ãa]o(?:\s+Federal|\s+da\s+Rep[úu]blica)?(?:\s+de\s+1988)?|Carta\s+Magna|'
+            r'C[óo]digo\s+(?:de\s+Processo\s+Civil|Civil|Penal\s+Militar|Penal|de\s+Processo\s+Penal|Tribut[áa]rio\s+Nacional|'
+            r'de\s+Defesa\s+do\s+Consumidor|de\s+Tr[âa]nsito\s+Brasileiro)(?:\s+de\s+(?:1973|2015|1916|2002))?|'
+            r'Consolida[çc][ãa]o\s+das\s+Leis\s+do\s+Trabalho|Estatuto\s+da\s+Crian[çc]a\s+e\s+do\s+Adolescente|Lei\s+de\s+Execu[çc][ãa]o\s+Penal')
+_BR_LAW = (r'(?P<kind>Lei\s+Complementar|Lei|Decreto-[Ll]ei|LC|DL)\s*(?:[Ff]ederal\s*)?(?:n(?:[º°o.]|\.º|úmero){0,3}\s*)?'
+           r'(?P<lnum>\d{1,2}(?:\.\d{3})+|\d{1,5})\s*(?:/\s*|,?\s*de\s+(?:\d{1,2}[ºo°]?\s+de\s+[a-zç]+\s+de\s+)?)(?P<year>\d{4}|\d{2})(?!\d)')
+# "art. 1.022 do CPC", "arts. 186 e 927 do Código Civil", "art. 5º, LV, da CF", "art. 105, III, a, da CF/88", "art. 28-A
+# do CPP", "art. 33 da Lei n. 11.343/2006", "art. 1º-F da Lei 9.494/97": the articles, their parts, then the act.
+BR_ARTICLE = re.compile(r'\bart(?:igo)?s?\.?\s*(?P<arts>' + _BR_ART1 + r'(?:\s*(?:,|e)\s*' + _BR_ART1 + r'){0,8})' + _BR_QUAL
+                        + r'\s*,?\s*(?:todos\s+|ambos\s+)?(?:d[oa]s?|desta|deste)\s+(?:(?P<abbr>' + _BR_ABBR + r')(?![\w/])|(?P<name>'
+                        + _BR_NAME + r')|' + _BR_LAW + r')')
+# "(CPC, art. 1.022)", "(CF, art. 5º, LV)": the act first.
+BR_ARTICLE_REVERSE = re.compile(r'\(\s*(?P<abbr>' + _BR_ABBR + r')\s*,\s*arts?\.\s*(?P<arts>' + _BR_ART1 + r'(?:\s*(?:,|e)\s*' + _BR_ART1 + r'){0,6})')
+_BR_ONE_ART = re.compile(r'(' + _BR_NUM + r')(?:\s?[ºo°ª])?(?:\s?-\s?([A-Z]))?')
+_BR_NAME_KEY = [(r'^constitui|^carta', 'CF'), (r'processo civil.*1973', 'CPC/73'), (r'processo civil', 'CPC'), (r'civil.*1916', 'CC/16'),
+                (r'^c[óo]digo civil', 'CC'), (r'penal militar', 'CPM'), (r'processo penal', 'CPP'), (r'penal', 'CP'), (r'tribut', 'CTN'),
+                (r'consumidor', 'CDC'), (r'tr[âa]nsito', 'CTB'), (r'consolida', 'CLT'), (r'crian', 'ECA'), (r'execu', 'LEP')]
+# STJ (and STF) process references: "REsp 1.772.086/SP", "AgInt no AREsp 2.123.456/SP", "EDcl nos EDcl no AgRg no HC
+# 123.456", "RHC 98.765", "EREsp 1.234.567". Classes that are also code abbreviations or common words (CC, MS, AR, Ag,
+# MC, IF, CR, Pet, Inq) are claimed only with the state after a slash ("CC 123.456/SP").
+_BR_CLASS = (r'REsp|AREsp|EREsp|EAREsp|RHC|HC|RMS|RO|Rcl|SLS|SEC|HDE|APn|IDC|SS|SL|PUIL|ProAfR|TutPrv|RvCr|EAg|AgRg\s+no\s+Ag|'
+             r'RE|ARE|ADI|ADC|ADPF|ADO|Rcl')
+_BR_RECURSO = r'(?:(?:AgInt|AgRg|EDcl|EDv|EAg|EmbExeMS|QO|Pet|AgReg|ED|EI)\s+(?:n[oa]s?|em)\s+)'
+BR_DOCKET = re.compile(r'(?<![\w/.-])(?P<rec>' + _BR_RECURSO + r'{0,4})(?P<cls>(?:' + _BR_CLASS + r')\s+(?P<num>\d{1,3}(?:\.\d{3})+|\d{1,7})'
+                       r'|(?:CC|MS|AR|Ag|MC|IF|CR|Pet|Inq)\s+(?P<num2>\d{1,3}(?:\.\d{3})+|\d{1,7})(?=\s*/\s*[A-Z]{2}\b))'
+                       r'(?:\s*/\s*(?P<uf>[A-Z]{2})\b)?')
+
+
+def br_corpus() -> tuple[str, str | None]:
+    """Brazil's federal law in this tree (its path, and its pinned commit when this server serves it)."""
+    path = next((c['path'] for c in _full_manifest(head())['corpora'] if iso_code(c) == 'br' and not law.is_caselaw(c)
+                 and c['path'].endswith('/national/acts')), BR_ACTS)
+    served = any(c['path'] == path for c in law.manifest()['corpora']) and (ROOT / path / '.git').exists()
+    return path, (corpus_head(path) or None) if served else None
+
+
+@lru_cache(maxsize=8)
+def br_law_numbers(corpus: str, sha: str) -> dict[str, str]:
+    """'LEI/11343/2006' -> 'lei-de-drogas', from the act titles brazil-law lists in data/versions.json ("Lei de Drogas
+    (Lei nº 11.343, de 23 de agosto de 2006)"); kinds LEI, LCP (Lei Complementar), DEL (Decreto-Lei)."""
+    try:
+        acts = json.loads(law.git('show', f'{sha}:data/versions.json', cwd=ROOT / corpus, check=False) or '{}').get('acts', [])
+    except ValueError:
+        acts = []
+    kinds = {'Lei Complementar': 'LCP', 'Lei': 'LEI', 'Decreto-Lei': 'DEL'}
+    out = {}
+    for x in acts:
+        m = re.search(r'\((Lei Complementar|Lei|Decreto-Lei)\s+n[ºo°.]?\s*([\d.]+)\s*,\s*de\s+[^)]*?(\d{4})\)', x.get('title', ''))
+        if m:
+            out.setdefault(f"{kinds[m.group(1)]}/{int(m.group(2).replace('.', ''))}/{m.group(3)}", x['slug'])
+    return out
+
+
+@lru_cache(maxsize=256)
+def br_act_files(corpus: str, sha: str, folder: str) -> dict[str, str]:
+    """An act folder's article files by number: art-0186.md -> '186', art-028-a.md -> '28-a', adct-art-010.md -> 'adct:10'."""
+    out = {}
+    for n in names_of(corpus, sha):
+        m = re.fullmatch(re.escape(folder) + r'/(adct-)?art-(\d+(?:-[a-z])?)\.md', n)
+        if m:
+            num, _, let = m.group(2).partition('-')
+            out.setdefault(('adct:' if m.group(1) else '') + str(int(num)) + (f'-{let}' if let else ''), n)
+    return out
+
+
+def br_folder(m) -> str | None:
+    d = m.groupdict()
+    if d.get('abbr'):
+        k = re.sub(r'\s', '', d['abbr']).upper()
+        k = {'CF/1988': 'CF/88', 'CRFB/1988': 'CRFB/88', 'CPC/2015': 'CPC/15', 'CPC/1973': 'CPC/73', 'CC/2002': 'CC/02',
+             'CC/1916': 'CC/16', 'ADCT': 'CF'}.get(k, k)
+        return BR_ABBR.get(k)
+    if d.get('name'):
+        n = m.group('name').lower()
+        key = next((k for rx, k in _BR_NAME_KEY if re.search(rx, n)), None)
+        return BR_ABBR.get(key) if key else None
+    if d.get('lnum'):
+        corpus, sha = br_corpus()
+        kind = {'lei complementar': 'LCP', 'lc': 'LCP', 'lei': 'LEI', 'decreto-lei': 'DEL', 'dl': 'DEL'}[re.sub(r'\s+', ' ', d['kind'].lower())]
+        y = d['year'] if len(d['year']) == 4 else (('20' if int(d["year"]) <= int(time.strftime("%y")) else '19') + d['year'])
+        return br_law_numbers(corpus, sha).get(f"{kind}/{int(d['lnum'].replace('.', ''))}/{y}") if sha else None
+    return None
+
+
+def br_article_paths(m) -> list[str]:
+    """The files a Brazilian article citation names: the act by its short name, its name or its number and year, each
+    article by number and letter (art. 1.022 do CPC is codigo-de-processo-civil/art-1022.md, art. 28-A do CPP
+    codigo-de-processo-penal/art-028-a.md); [] where the record lacks the act."""
+    folder = br_folder(m)
+    if not folder:
+        return []
+    corpus, sha = br_corpus()
+    files = br_act_files(corpus, sha, folder) if sha else {}
+    adct = re.sub(r'\s', '', m.groupdict().get('abbr') or '').upper() == 'ADCT'
+    out = []
+    for a in _BR_ONE_ART.finditer(m.group('arts')):
+        key = ('adct:' if adct else '') + str(int(a.group(1).replace('.', ''))) + (f'-{a.group(2).lower()}' if a.group(2) else '')
+        if key in files:
+            out.append(f'{corpus}/{files[key]}')
+        elif not sha:
+            width = 4 if folder in ('codigo-civil', 'codigo-de-processo-civil', 'codigo-civil-de-1916', 'codigo-de-processo-civil-de-1973') else 3
+            out.append(f"{corpus}/{folder}/{'adct-' if adct else ''}art-{int(a.group(1).replace('.', '')):0{width}d}"
+                       + (f'-{a.group(2).lower()}' if a.group(2) else '') + '.md')
+    return out
+
+
+def br_decision_paths(m) -> list[str]:
+    """The decisions a process reference names in the Brazilian case law served (decision-index.tsv): the appeal decided
+    as written ("EDcl no REsp 1.772.086"), else every decision of the process ("REsp 1.772.086"); the state after the
+    slash is not part of the reference."""
+    cls = re.sub(r'\s+', ' ', m.group('cls')).strip()
+    rec = re.sub(r'\s+', ' ', m.group('rec') or '').strip()
+    found = decision_paths(f'{rec} {cls}') if rec else []
+    return found or decision_paths(cls)
+
+
 class CitationForm:
     """One citation form: `country` (ISO code), `rx` over free text, `to_path` from a match to a path or a list of
     paths ([] where the record cannot place it), `examples` of that country's citations it must claim. `open_name`:
@@ -5133,6 +5266,17 @@ CITATION_REGISTRY = [
     # Polish judgments by case number (sygnatura), to the judgment's file in the case law served (decision-index.tsv).
     CitationForm('pl', PL_DOCKET, lambda m: decision_paths(m.group(0)),
                  ('II CSK 123/20', 'I ACa 456/19', 'II OSK 123/20', 'III SA/Wa 1234/19', 'SK 12/20', 'KIO 1234/20')),
+    # Brazil: an article by the code's short name or name, or by the law's number and year ("art. 1.022 do CPC", "art. 5º,
+    # LV, da CF", "arts. 186 e 927 do Código Civil", "art. 33 da Lei n. 11.343/2006"), and the act-first form "(CPC, art.
+    # 1.022)", to brazil-law's files; acts brazil-law does not hold are left unresolved.
+    CitationForm('br', BR_ARTICLE, lambda m: br_article_paths(m),
+                 ('art. 1.022 do CPC', 'art. 5º, LV, da CF', 'arts. 186 e 927 do Código Civil', 'art. 33 da Lei n. 11.343/2006',
+                  'art. 28-A do CPP', 'art. 105, III, a, da CF/88')),
+    CitationForm('br', BR_ARTICLE_REVERSE, lambda m: br_article_paths(m), ('(CPC, art. 1.022)', '(CF, art. 5º, LV)')),
+    # Brazilian decisions by process ("REsp 1.772.086/SP", "AgInt no AREsp 2.123.456/SP", "HC 123.456"), to the decision
+    # files in the case law served (decision-index.tsv).
+    CitationForm('br', BR_DOCKET, lambda m: br_decision_paths(m),
+                 ('REsp 1.772.086/SP', 'AgInt no AREsp 2.123.456/SP', 'HC 123.456', 'EDcl no REsp 1.772.086', 'CC 123.456/SP')),
     # Finland: a section of an act by the abbreviation courts write ("TSL 7 luku 3 §", "PL 21 §") or by the act's name in
     # the genitive ("työsopimuslain 7 luvun 3 §"), to finland-law's files (data/fi-aliases.json); acts finland-law leaves
     # out (RL, OK) stay unresolved.
@@ -5390,6 +5534,8 @@ def t_law_details(args: dict) -> tuple[str, dict]:
         fr or fi or DECISION_REF.search(law_name) or DE_DOCKET.search(law_name) or PL_DOCKET.search(law_name)
         or US_REPORTER.search(law_name) or US_DOCKET.search(law_name) or AT_DOCKET.search(law_name)
         or PL_ANY_DOCKET.search(law_name) or PL_REF.fullmatch(law_name.strip())) else []
+    if law_name and not decided and BR_DOCKET.fullmatch(law_name.strip()):  # "REsp 1.772.086/SP", "AgInt no AREsp 2.123.456"
+        decided = br_decision_paths(BR_DOCKET.fullmatch(law_name.strip()))
     if law_name and not decided and NL_DOCKET.fullmatch(law_name.strip()):
         decided = nl_docket_paths(law_name)
     if law_name and not decided:  # a Finnish diary number or court reference ("S2020/111", "MAO:94/2026")
