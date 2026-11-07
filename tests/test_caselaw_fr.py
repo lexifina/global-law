@@ -293,6 +293,30 @@ class FrenchCaseLaw(unittest.TestCase):
             self.assertTrue(m.FR_DECISION.search(ref), ref)
         self.assertIsNone(m.FR_DECISION.search('n° 412345'))  # a bare number without its court is not read
 
+    def test_conseil_constitutionnel_decision_by_number_and_kind(self):
+        """decision-index.tsv files a Conseil constitutionnel decision by its bare number ("2026-1225") and its ECLI, not
+        by "2026-1225 QPC", so "n° 2026-1225 QPC" found nothing (case-law audit 2026-11-07). The ECLI picks the kind
+        where two decisions of different kinds share a number (2010-28 QPC and 2010-28 AN)."""
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import mcp_server as m
+        index = {'2026-1225': ['cc/2026/CONSTEXT1.md'], 'ECLI:FR:CC:2026:2026.1225.QPC': ['cc/2026/CONSTEXT1.md'],
+                 '2010-28': ['cc/2010/QPC.md', 'cc/2010/AN.md'], 'ECLI:FR:CC:2010:2010.28.QPC': ['cc/2010/QPC.md'],
+                 'ECLI:FR:CC:2011:2010.28.AN': ['cc/2010/AN.md'], 'ECLI:FR:CC:1979:78.101.DC': ['cc/1979/DC.md'],
+                 '99-1': ['cc/1999/bare.md']}
+        keyed = {m._decision_key(k): v for k, v in index.items()}
+        real = m.decision_paths
+        m.decision_paths = lambda text: list(keyed.get(m._decision_key(text), []))
+        try:
+            def paths(text):
+                return m.fr_decision_paths(m.FR_DECISION.search(text))
+            self.assertEqual(paths('décision n° 2026-1225 QPC du 16 octobre 2026'), ['cc/2026/CONSTEXT1.md'])
+            self.assertEqual(paths('n° 2010-28 QPC'), ['cc/2010/QPC.md'])
+            self.assertEqual(paths('n° 2010-28 AN'), ['cc/2010/AN.md'])  # decided the year after its number's
+            self.assertEqual(paths('n° 78-101 DC'), ['cc/1979/DC.md'])
+            self.assertEqual(paths('n° 99-1 DC'), ['cc/1999/bare.md'])  # no ECLI recorded: the bare number
+        finally:
+            m.decision_paths = real
+
     # --- speed (FR speed gate, 2026-11-06) -------------------------------------------------------------------------
 
     def test_decision_lookups_use_a_sorted_index_file_per_pin(self):

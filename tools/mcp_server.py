@@ -4441,8 +4441,22 @@ def fr_abbr_folder(abbr: str) -> str | None:
     return f'codes/{folder}' if folder else None
 
 
+def fr_cc_paths(ref: str) -> list[str]:
+    """A Conseil constitutionnel decision ("2019-791 QPC", "78-101 DC"). decision-index.tsv files it by its bare number
+    ("2019-791"), which 154 pairs of decisions of different kinds share, and by its ECLI
+    ("ECLI:FR:CC:2019:2019.791.QPC", the year being the year decided: the number's year or the next). The ECLI picks
+    the kind; the bare number answers where no ECLI is recorded."""
+    num, kind = ref.split()[:2]
+    y, seq = num.split('-', 1)
+    year = int(y) if len(y) == 4 else 1900 + int(y)
+    by_ecli = [p for yy in (year, year + 1) for p in decision_paths(f'ECLI:FR:CC:{yy}:{y}.{seq}.{kind.upper()}')]
+    return list(dict.fromkeys(by_ecli)) or decision_paths(ref) or decision_paths(num)
+
+
 def fr_decision_paths(m) -> list[str]:
-    ref = m.group('pv') or m.group('cc') or m.group('ce') or m.group(0)
+    if m.group('cc'):
+        return fr_cc_paths(m.group('cc'))
+    ref = m.group('pv') or m.group('ce') or m.group(0)
     return decision_paths(ref)
 
 
