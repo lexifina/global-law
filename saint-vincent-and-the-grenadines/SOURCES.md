@@ -1,5 +1,7 @@
 # Sources for Saint Vincent and the Grenadines
 
+The law built from these sources is in [lexifina/saint-vincent-and-the-grenadines-law](https://github.com/lexifina/saint-vincent-and-the-grenadines-law), which global-law reads at `saint-vincent-and-the-grenadines/national/acts/`; its [REPRODUCE.md](https://github.com/lexifina/saint-vincent-and-the-grenadines-law/blob/main/REPRODUCE.md) gives the sources it was built from and how.
+
 From the World Law Sources register, 28 October 2026. Each row was checked against the source’s own pages, an official description, or an Internet Archive copy where a site blocks automated readers. “Unconfirmed” rows could not be checked that way.
 
 | Source | Kind | Past versions by date | Names the amending act | API or bulk | Format and licence | Notes | Checked | robots.txt for AI agents |

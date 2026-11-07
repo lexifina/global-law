@@ -423,10 +423,13 @@ def main(argv: list[str]) -> int:
         body['path'] = folder
         body['jurisdictions'] = sorted(f for f in folders if f.rsplit('/', 1)[0] == folder and '/' in f)
         body['corpora'] = sorted(p for p in tree if p.rsplit('/', 1)[0] == folder)
+        # the kinds of history (CORPUS-STANDARD.md) the corpora in this folder or below it hold
+        body['histories'] = sorted({c['history'] for c in corpora if c['path'].startswith(f'{folder}/') and c.get('history')})
     world = read('')
     # every country folder in the tree (one with only its SOURCES.md included); a folder no longer in it drops out
     world['jurisdictions'] = sorted({f for f in world.get('jurisdictions', []) if f'{f}/jurisdiction.json' in files}
                                     | {f for f in folders if '/' not in f})
+    world['histories'] = sorted({c['history'] for c in corpora if c.get('history')})
     for c in corpora:  # a corpus's code and ISO path, in the same form as its folder's
         cc = country_code(c['path'])
         parts = c['path'].split('/')
