@@ -72608,6 +72608,35 @@
       ]
     },
     {
+      "path": "united-states/delaware/caselaw",
+      "url": "https://github.com/lexifina/united-states-delaware-caselaw.git",
+      "name": "Case law: United States, the Supreme Court of Delaware",
+      "label": "United States case law (the Supreme Court of Delaware)",
+      "language": "en",
+      "coverage": "7446 published opinions with text, one file and one commit each, dated the day decided; 22 citations of the US Code linked to united-states/federal/usc.",
+      "history": "in-force",
+      "history_from": "1792-08-01",
+      "record_to": "2026-11-08",
+      "checked_on": "2026-11-08",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day. Read from Delaware Reports (to 1966) and, after them, the Atlantic Reporter (West). The head matter (syllabi, headnotes, counsel) is left out: it is the publisher's text, not the court's. Every decision is a published opinion (precedential_status: published); CAP records no other status. CAP is a closed archive (its last volumes are of 2018-2020): no nightly runner appends to this repo. The US Code record holds only some titles, so most statute citations are not linked.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
+        "law_corpus": "united-states/federal/usc"
+      },
+      "source": {
+        "publisher": "Caselaw Access Project (Harvard Law School Library)",
+        "url": "https://static.case.law/",
+        "licence": "CC0 1.0",
+        "reporters": "Delaware Reports (to 1966) and, after them, the Atlantic Reporter (West)"
+      },
+      "iso_path": "us/delaware/caselaw",
+      "described_by": "corpus.json",
+      "code": "US-DE"
+    },
+    {
       "path": "united-states/district-of-columbia/statutes",
       "url": "https://github.com/lexifina/united-states-district-of-columbia-law.git",
       "name": "Code of the District of Columbia",
