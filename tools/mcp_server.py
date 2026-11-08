@@ -1176,6 +1176,12 @@ def caselaw_files(corpus: str, sha: str | None) -> tuple[int, str]:
 
 def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
     m = law.manifest()
+    # A jurisdiction narrows the list ("united-states", "united-states/caselaw", "switzerland/bund/caselaw"): with every
+    # court of every country served (106 case-law corpora), the whole list passes the answer's length and is cut.
+    scope = scope_arg(args)
+    if scope:
+        m = {**m, 'corpora': [c for c in m['corpora'] if c['path'] == scope or c['path'].startswith(scope.rstrip('/') + '/')
+                              or law.takes_in(c, scope)]}
     events = law.timeline()
     rows, data = [], []
     # The latest decision of each case-law corpus: from the case-law index (no git process), else one git log each,
@@ -1211,7 +1217,8 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
         counted = (f"{len(files)} decision files" if law.is_caselaw(c) else f"{len(files)} provision files; {len(own)} changes")
         rows.append(f"- {c['path']}: {c['name']} ({c['language'] + '; ' if c.get('language') else ''}{counted})." + (f" Covers {c['coverage']}." if c.get('coverage') else '')
                     + f" Record from {first}; last change {last}"
-                    + (f"; complete to {info['complete_to']}. {c.get('record_note', '')}" if info['complete_to'] else '.')
+                    + (f"; complete to {info['complete_to']}." + ('' if law.is_caselaw(c) else f" {c.get('record_note', '')}")
+                       if info['complete_to'] else '.')
                     + f" Example path: {info['example_path']}" + (f" Credit: {credit}." if credit else ''))
     tree = json.loads(law.git('show', 'HEAD:jurisdiction.json'))
     text = ('Paths are country (ISO 3166-1) / level / corpus / file. Dates are in-force dates (YYYY-MM-DD).\n'
@@ -2676,7 +2683,10 @@ def t_laws_between(args: dict) -> tuple[str, dict]:
     subs = {c['path']: scoped(c['path'], scope) for c in corpora}
     inside = {c: touching(law.corpus_dir(c), s, 'HEAD') for c, s in subs.items() if s}  # a scope within a corpus
     # Case law is not in the timeline: a case-law corpus this call reads gives its own events.
-    source = law.timeline() + [e for c in corpora if law.is_caselaw(c) for e in law.corpus_timeline(c['path'])]
+    # Only the case-law corpora in the scope: reading every one served (the Cour de cassation's 530,000 decisions for a
+    # month of Nevada's) ran past the time limit (US state case-law audit, 2026-11-08).
+    source = law.timeline() + [e for c in corpora if law.is_caselaw(c) and subs.get(c['path']) is not None
+                               for e in law.corpus_timeline(c['path'])]
     window = [e for e in source if a <= e.in_force <= b and e.kind != 'documentation' and subs.get(e.corpus) is not None
               and (e.corpus not in inside or e.corpus_commit in inside[e.corpus])]
     ends = sum(1 for e in window if e.kind == 'end')  # France's "Fin de vigueur": an end of validity, no law named
@@ -4933,8 +4943,12 @@ DE_DOCKET = re.compile(r'(?<![\w/.-])(?:(?:\d{1,2}|[IVX]{1,5}a?)\s+(?:Bv[A-Z]|PB
 # the case law served through each corpus's decision-index.tsv. "11 U.S.C. § 1182" is not a reporter citation: the
 # reporter must be followed by a page number.
 US_REPORTER = re.compile(r"(?<![\w.§])\d{1,4}\s+(?:U\.\s?S\.|S\.\s?Ct\.|L\.\s?Ed\.(?:\s?2d)?|F\.(?:\s?(?:2d|3d|4th))?|"
-                         r"F\.\s?Supp\.(?:\s?(?:2d|3d))?|F\.\s?App['’]x|Fed\.\s?Appx\.?)\s+\d{1,5}(?![\w])")
-US_DOCKET = re.compile(r'\bNos?\.\s+\d{1,2}-\d{1,5}(?:-[A-Z]{1,3})?\b')
+                         r"F\.\s?Supp\.(?:\s?(?:2d|3d))?|F\.\s?App['’]x|Fed\.\s?Appx\.?"
+                         # The states' highest courts (CAP): their official reports and West's regional reporters.
+                         r"|Cal\.(?:\s?(?:2d|3d|4th|5th))?|Cal\.\s?Rptr\.(?:\s?(?:2d|3d))?|Cal\.\s?Unrep\.|N\.\s?Y\.(?:\s?(?:2d|3d))?"
+                         r"|N\.\s?Y\.\s?S\.(?:\s?(?:2d|3d))?|N\.\s?E\.(?:\s?(?:2d|3d))?|Del\.(?:\s?Cas\.)?|A\.(?:\s?(?:2d|3d))?|Mass\."
+                         r"|Nev\.|P\.(?:\s?(?:2d|3d))?)\s+\d{1,5}(?![\w])")
+US_DOCKET = re.compile(r'\bNos?\.\s+(?:\d{1,2}-\d{1,5}(?:-[A-Z]{1,3})?|(?:[A-Z]{1,3})?\d{3,7})\b')  # "No. 70-18"; a state court's "No. 61308", "No. S219881"
 
 
 def de_corpus() -> tuple[str, str | None]:
@@ -5680,8 +5694,10 @@ def t_law_details(args: dict) -> tuple[str, dict]:
     # that names case law; a law's name is not looked for among a million decisions' authors.
     fr = FR_DECISION.search(law_name) if law_name else None
     fi = FI_DECISION.search(law_name) if law_name and not fr else None
+    # A US reporter citation or docket number names US decisions only ("No. 197" is also a French and a Swiss number).
+    us_only = 'united-states/' if law_name and (US_REPORTER.fullmatch(law_name.strip()) or US_DOCKET.fullmatch(law_name.strip())) else ''
     decided = (fr_decision_paths(fr) if fr else fi_decision_paths(fi) if fi
-               else decision_paths(re.sub(r'^\s*Nos?\.\s+', '', law_name))) if law_name and (
+               else decision_paths(re.sub(r'^\s*Nos?\.\s+', '', law_name), us_only)) if law_name and (
         fr or fi or DECISION_REF.search(law_name) or DE_DOCKET.search(law_name) or PL_DOCKET.search(law_name)
         or US_REPORTER.search(law_name) or US_DOCKET.search(law_name) or AT_DOCKET.search(law_name)
         or PL_ANY_DOCKET.search(law_name) or PL_REF.fullmatch(law_name.strip())) else []
@@ -5897,7 +5913,7 @@ RO = {'readOnlyHint': True, 'idempotentHint': True, 'openWorldHint': False}
 
 TOOLS = [
     ('list_jurisdictions', 'List every jurisdiction and body of law in the tree, with how far each record reaches and an example path. Start here.',
-     {}, [], t_list_jurisdictions),
+     {'jurisdiction': SCOPE}, [], t_list_jurisdictions),
     ('find_provision', 'Find the file path of a provision by its number ("1182", "Art. 16a", "reg 13") or words from its heading ("debtor", "Asylrecht").',
      {'query': {'type': 'string', 'description': 'A section, article or regulation number, or heading words.'}, 'jurisdiction': SCOPE,
       'max_results': {'type': 'integer', 'description': 'At most this many (default 15).'}}, ['query'], t_find_provision),
@@ -6086,7 +6102,12 @@ def _handle(method, mid, params: dict) -> dict:
             match = next((r for r in resources() if r['uri'] == uri), None)
             law_uri = (re.fullmatch(r'global-law://law/(.+?)(?:\?date=(\d{4}-\d{2}-\d{2}))?(?:[?&]offset=(\d{1,9}))?', uri)
                        if isinstance(uri, str) else None)
-            if match:
+            if match and name == 'manifest.json':
+                # Every corpus the tree pins, as the tools read it: manifest.json lists those it held on 2 November 2026,
+                # and each corpus added since describes itself (law.with_unlisted).
+                result = {'contents': [{'uri': uri, 'mimeType': match['mimeType'],
+                                        'text': json.dumps(_full_manifest(head()), ensure_ascii=False, indent=1)}]}
+            elif match:
                 result = {'contents': [{'uri': uri, 'mimeType': match['mimeType'], 'text': law.git('show', f'HEAD:{name}')}]}
             elif law_uri and '?' in law_uri.group(1):  # a parameter the template does not take, read into the path
                 return error(mid, -32602, 'The law template takes ?date=YYYY-MM-DD and offset=<characters>, nothing else: '

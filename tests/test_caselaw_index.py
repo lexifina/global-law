@@ -72,8 +72,7 @@ class CaseLawIndex(unittest.TestCase):
         manifest = {'corpora': [
             {'path': LAW, 'name': 'United States Code', 'language': 'en', 'in_force_trailer': 'In-force', 'code': 'US'},
             {'path': SC, 'name': 'Case law: Supreme Court of the United States', **cases},
-            {'path': CA, 'name': 'Case law: Court of Appeals for the Ninth Circuit', **cases},
-            {'path': FR, 'name': 'Case law: Conseil constitutionnel', **{**cases, 'language': 'fr', 'code': 'FR'}}]}
+            {'path': CA, 'name': 'Case law: Court of Appeals for the Ninth Circuit', **cases}]}  # FR: pinned, not listed
         (t.root / 'manifest.json').write_text(json.dumps(manifest), encoding='utf-8')
         run('add', 'jurisdiction.json', 'data', cwd=t.root)
         law = t.corpus(LAW)
@@ -236,6 +235,29 @@ class CaseLawIndex(unittest.TestCase):
             self.assertEqual([r['text'] for r in got], [r['text'] for r in again])
         finally:
             pass
+
+    def test_6_state_reporters_and_dockets(self):
+        # The states' highest courts (CAP): official reports, West's regional reporters, a state docket number.
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import mcp_server
+        for cite in ('123 Nev. 105', '1 Cal. 5th 233', '57 Cal. 2d 1', '465 P.2d 133', '159 P.3d 1086', '30 N.Y.3d 1', '1 N.Y.2d 5',
+                     '90 N.E.3d 1', '310 A.2d 1', '25 A.3d 1', '1 Del. 1', '470 Mass. 1'):
+            self.assertTrue(mcp_server.US_REPORTER.fullmatch(cite), cite)
+        for docket in ('No. 61308', 'No. S221852', 'No. 70-18'):
+            self.assertTrue(mcp_server.US_DOCKET.fullmatch(docket), docket)
+        self.assertFalse(mcp_server.US_DOCKET.fullmatch('No. 12'))
+
+    def test_5_list_jurisdictions_by_jurisdiction_and_the_whole_manifest(self):
+        got = self.calls(('list_jurisdictions', {'jurisdiction': 'france'}), ('list_jurisdictions', {}))
+        self.assertIn(FR, got[0]['text'])
+        self.assertNotIn(SC, got[0]['text'])
+        self.assertIn(SC, got[1]['text'])
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c',
+                               'import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server\n'
+                               'r = mcp_server.handle({"jsonrpc": "2.0", "id": 1, "method": "resources/read", '
+                               '"params": {"uri": "global-law://manifest.json"}})\n'
+                               'print(r["result"]["contents"][0]["text"])'], cwd=self.t.root, capture_output=True, encoding='utf-8', timeout=300)
+        self.assertIn(FR, done.stdout, 'a corpus pinned after manifest.json was written is in the manifest resource')
 
     def test_4_a_long_overlay_is_counted_from_its_summary(self):
         # With the rows counted rather than read (GLOBAL_LAW_JUDGMENTS_COUNTED below the 2,500 rows), check_precedent and
