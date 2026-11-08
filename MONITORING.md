@@ -5,15 +5,15 @@ change as a commit dated the day it takes effect. Then, every 15 minutes, a pass
 and publishes the result below.
 
 <!-- status-summary -->
-**Updates: running**: last published 2026-11-08 17:05 UTC; status refreshed 2026-11-08 17:05 UTC.
+**Updates: running**: last published 2026-11-08 17:17 UTC; status refreshed 2026-11-08 17:17 UTC.
 
 | | |
 | --- | --- |
-| Last 24 hours | 310 commits: 52 corpus updates, 145 corpora added |
-| Last successful pass | 2026-11-08 17:05 UTC |
-| Held back by a check | `united-states-new-york-appellate-1714-1933-caselaw`, `united-states-new-york-appellate-1934-1991-caselaw`, `united-states-supreme-court-caselaw` |
+| Last 24 hours | 309 commits: 52 corpus updates, 146 corpora added |
+| Last successful pass | 2026-11-08 17:17 UTC |
+| Held back by a check | `united-states-supreme-court-caselaw` |
 | Official sources not answering | none |
-| Freshness | 820 of 969 corpora current, 134 stale, 14 unverified ([FRESHNESS.md](FRESHNESS.md)) |
+| Freshness | 819 of 969 corpora current, 134 stale, 14 unverified ([FRESHNESS.md](FRESHNESS.md)) |
 <!-- /status-summary -->
 
 ## What each pass does
