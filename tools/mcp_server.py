@@ -4948,7 +4948,7 @@ US_REPORTER = re.compile(r"(?<![\w.§])\d{1,4}\s+(?:U\.\s?S\.|S\.\s?Ct\.|L\.\s?E
                          r"|Cal\.(?:\s?(?:2d|3d|4th|5th))?|Cal\.\s?Rptr\.(?:\s?(?:2d|3d))?|Cal\.\s?Unrep\.|N\.\s?Y\.(?:\s?(?:2d|3d))?"
                          r"|N\.\s?Y\.\s?S\.(?:\s?(?:2d|3d))?|N\.\s?E\.(?:\s?(?:2d|3d))?|Del\.(?:\s?Cas\.)?|A\.(?:\s?(?:2d|3d))?|Mass\."
                          r"|Nev\.|P\.(?:\s?(?:2d|3d))?)\s+\d{1,5}(?![\w])")
-US_DOCKET = re.compile(r'\bNos?\.\s+(?:\d{1,2}-\d{1,5}(?:-[A-Z]{1,3})?|(?:[A-Z]{1,3})?\d{3,7})\b')  # "No. 70-18"; a state court's "No. 61308", "No. S219881"
+US_DOCKET = re.compile(r'\bNos?\.\s+(?:\d{1,2}-\d{1,5}(?:-[A-Z]{1,3})?|\d{1,4},\s?(?:19|20)\d{2}|(?:19|20)\d{2}-\d{1,5}|(?:[A-Z]{1,3})?\d{3,7})\b')  # "No. 70-18"; a state court's "No. 61308", "No. S219881", Delaware's "No. 389, 2008", New York's "No. 2019-775"
 
 
 def de_corpus() -> tuple[str, str | None]:
