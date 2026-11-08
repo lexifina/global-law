@@ -5784,7 +5784,10 @@ def t_law_details(args: dict) -> tuple[str, dict]:
             if mine:  # a decision: the commit that added its file, for at most ten, by one walk of the history (a
                 # docket shared by many decisions took a walk each: 141 s for "No. 1234" in a CAP corpus, 2026-11-08)
                 mine = mine[:10]
-                out = law.git('-c', 'core.quotePath=false', 'log', '--diff-filter=A', '--format=%x1e%H', '--name-only', pin, '--', *mine, cwd=cwd)
+                # one decision: the walk stops at the commit that added it (the newest such, as below), not at the root
+                # (the Supreme Court's 383,000 commits: 8 s to the root, 1 s to a 2023 decision)
+                out = law.git('-c', 'core.quotePath=false', 'log', '--diff-filter=A', *(['-n', '1'] if len(mine) == 1 else []),
+                              '--format=%x1e%H', '--name-only', pin, '--', *mine, cwd=cwd)
                 added = {}
                 for block in out.split('\x1e')[1:]:
                     sha, _, names = block.partition('\n')
@@ -5814,7 +5817,11 @@ def t_law_details(args: dict) -> tuple[str, dict]:
         for f in found[:3]:  # what each provision's words did, so one call answers "what did this law change"
             f['diffs'] = change_diffs(f['corpus'], f['commit'], f['provisions'])
     for f in found:  # paths as they are now, which the other tools take (the commit may predate a move)
-        moved, cut = law.moves(f['corpus']), len(f['corpus']) + 1
+        # Case law: a decision file is written once at its path and not moved, so the corpus's full history index (which
+        # moves reads: 55 s for the Supreme Court's 383,000 commits on a new pin) is not built for it.
+        moved = {} if law.is_caselaw({'path': f['corpus'], **next((c for c in law.manifest()['corpora'] if c['path'] == f['corpus']), {})}) \
+            else law.moves(f['corpus'])
+        cut = len(f['corpus']) + 1
         now = {p: f"{f['corpus']}/{moved.get(p[cut:], p[cut:])}" for p in f['provisions']}
         f['provisions'] = [now[p] for p in f['provisions']]
         for d in f.get('diffs') or []:
