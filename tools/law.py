@@ -1080,6 +1080,12 @@ def read_blobs_of(rows: list[tuple[str, str]]) -> list[tuple[str, str]]:
     return [(c, t) for (c, _), t in zip(rows, read_texts_of(rows)) if t is not None]
 
 
+# corpora one git process reads through alternates: each alternate's packs are opened on its first object, about
+# 10 ms each, so the overlays of 130 US courts took 1.3 s in one process (US speed gate, 2026-11-08); in parts of 16,
+# eight at a time, the opening is shared out.
+CAT_DIRS = 16
+
+
 def read_texts_of(rows: list[tuple[str, str]]) -> list[str | None]:
     """The text of each (corpus, object) given (a blob id, or <commit>:<path>), None where it is missing, read by one
     git process for all the corpora (read_blobs_of)."""
@@ -1092,14 +1098,22 @@ def read_texts_of(rows: list[tuple[str, str]]) -> list[str | None]:
     dirs: list[list[str]] = [[]]
     for c, blob in rows:  # one process for all, unless the alternates would pass the environment's size (32 KB on Windows)
         d = (idx['corpora'].get(c) or {}).get('objects') or _objects_dir(ROOT / c) or ''
-        if d not in dirs[-1] and sum(len(x) + 1 for x in dirs[-1]) + len(d) > 20_000:
+        if d not in dirs[-1] and (sum(len(x) + 1 for x in dirs[-1]) + len(d) > 20_000 or len(dirs[-1]) >= CAT_DIRS):
             groups.append([])
             dirs.append([])
         if d not in dirs[-1]:
             dirs[-1].append(d)
         groups[-1].append((c, blob))
-    for group, ds in zip(groups, dirs):
-        got = _cat_batch(ROOT / group[0][0], [b for _, b in group], env={'GIT_ALTERNATE_OBJECT_DIRECTORIES': os.pathsep.join(ds[1:])})
+    def one(gd):
+        group, ds = gd
+        return _cat_batch(ROOT / group[0][0], [b for _, b in group], env={'GIT_ALTERNATE_OBJECT_DIRECTORIES': os.pathsep.join(ds[1:])})
+    if len(groups) == 1:
+        parts = [one((groups[0], dirs[0]))]
+    else:
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(min(8, len(groups))) as pool:
+            parts = list(pool.map(one, zip(groups, dirs)))
+    for got in parts:
         out += [data.decode('utf-8', 'replace') if kind == b'blob' and data is not None else None for kind, data in got]
     return out
 
