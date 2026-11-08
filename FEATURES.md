@@ -10,7 +10,7 @@ Each entry gives the question it answers, how to call it, an example and its lim
 - **Provision**: One article or section of an act. In the tree each provision is usually one file, for example `germany/bund/acts/grundgesetz/artikel/013.md`.
 - **Amending law**: A later law that changes the words of a provision. In the record, each amending law is the author of the change.
 - **In force**: The day a text starts to apply. Every date in this tree is that day, not the day the law was passed or published.
-- **Corpus**: One body of law, usually one country's acts, kept as its own git history. The tree pins 715; a clone holds the ones you add.
+- **Corpus**: One body of law, usually one country's acts, kept as its own git history; a court's decisions are corpora too. `list_jurisdictions` and `tools/countries.py` count those the tree pins at the time of asking; a clone holds the ones you add.
 - **Record starts**: Most corpora hold history only from some date. Before it, the answer is "the record does not reach back", not "no law".
 - **Current only**: Some corpora hold today's text alone, because the publisher keeps no past versions. They answer what the law says now, not what it said.
 - **As enacted**: Some corpora hold each law as first published, with later amendments not applied.
@@ -58,7 +58,7 @@ Each entry gives the question it answers, how to call it, an example and its lim
 
 ## Command line: tools/law.py
 
-Eight commands, run in a terminal inside a clone (`python tools/law.py …`). Standard library only, offline, plain text. Each answer ends with the record's limits that apply: where the record starts, current-only text, capture days, act ends and repeal notices.
+Eight commands that read the law, plus `law.py caselaw-index`, which indexes the case law checked out after a pull (see the README), run in a terminal inside a clone (`python tools/law.py …`). Standard library only, offline, plain text. Each answer ends with the record's limits that apply: where the record starts, current-only text, capture days, act ends and repeal notices.
 
 ### law.py show (`cli.show`)
 
@@ -150,7 +150,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 
 - **Does:** Turns a number ("1182", "Art. 16a", "reg 13"), heading words ("debtor", "Asylrecht") or a popular name into a path. Reads citations through the same per-country registry as resolve_citations.
 - **Arguments:** `query`, `jurisdiction`
-- **Limits:** Popular names come from aliases.json (17 entries). The heading index covers up to 400,000 files, with a text search beyond.
+- **Limits:** Popular names come from aliases.json, and the abbreviations lawyers and courts write for acts from the tables in `data/` (`de-`, `nl-`, `fr-`, `pl-`, `fi-` and `swiss-aliases.json`). The heading index covers up to 400,000 files, with a text search beyond.
 
 ### list_provisions (`mcp.list_provisions`)
 
@@ -255,7 +255,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 
 - **Does:** Reads every citation in a text (a brief, a judgment, an email) and resolves each to its provision with its state on a date: in force or not, the law that last changed it, the next change. Citation forms are declared by country in one registry, so one country's form never takes another's citation. It also says how many it left out.
 - **Arguments:** `text`, `date`
-- **Covers:** US Code, Grundgesetz, Swiss BV, DSG and SchKG, UK Children and Families Act 2014 and SEND Regulations 2014, Malta, Spain (including "art. 1.902 CC" and lists of articles), Romania, Moldova, Mexico, Australia.
+- **Covers:** law: US Code; Grundgesetz and German federal acts by abbreviation ("§ 823 BGB"); every Swiss federal act by abbreviation, in German, French or Italian; UK Children and Families Act 2014 and SEND Regulations 2014; Dutch acts ("artikel 6:162 BW"); French codes and the Constitution of 1958; Polish acts; Finnish acts; Austrian B-VG and DSG; Brazilian acts ("art. 1.022 do CPC"); Malta; Spain (including "art. 1.902 CC" and lists of articles); Romania; Moldova; Mexico; Australia's Corporations Regulations. Decisions: US reporter citations and docket numbers, Swiss BGE and dockets, German, French, Polish, Finnish, Austrian and Brazilian dockets, and ECLI for the countries whose case law the tree holds.
 - **Limits:** Up to 50,000 characters and 100 provisions. Citations to acts outside the registry are not found and not reported as misses.
 
 ### check_precedent (`mcp.check_precedent`)
@@ -264,7 +264,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 
 - **Does:** Compares a provision's words on the day a court decided with a later date (today by default), and lists the laws that changed it. Also lists the judgments the record holds for that provision.
 - **Arguments:** `path`, `decided`, `date`
-- **Limits:** Judgment data covers 2 provisions (11 U.S.C. §1182, UK CFA 2014 s.42). The comparison works for any provision given a date. It compares words only.
+- **Limits:** Judgments come from the overlay each case-law corpus keeps (`judgments/<law corpus>/<provision>.jsonl`, the decisions that cite a provision), for the case law your clone serves, plus the hand-checked sample in this tree's `judgments/`. The comparison works for any provision given a date. It compares words only.
 
 ### applies_to_case (`mcp.applies_to_case`)
 

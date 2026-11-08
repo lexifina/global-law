@@ -194,11 +194,14 @@ rest are not here yet.
 
 ### Is case law included?
 
-Not yet, beyond a first hand-checked sample of judgments in `judgments/`; it is the next thing to be added. For now
-this is legislation and regulations. Some corpora record court decisions that change the text itself, such as a constitutional
-court striking a provision down (`Kind:` court ruling), because they are part of the text's history. For case law,
-see the Free Law Project (US), Find Case Law (England and Wales) and AustLII. The `check_precedent` tool takes a
-judgment's own quotation of a provision and says whether the law still reads that way, which is where the two meet.
+Yes, for the courts of the countries listed under "Case law" in the README, with more being added. Each court's
+decisions are a corpus of their own (`<country>/<court>/caselaw`), one file and one commit per decision, dated the day
+it was decided, and each keeps an overlay of the provisions its decisions cite. `check_precedent` reads that overlay:
+it lists the decisions that applied a provision and says whether the text they applied is still the law.
+`resolve_citations` and `find_provision` read decisions by their docket number, reporter citation or ECLI. There is no
+"cited by" between decisions yet. Separately, some law corpora record court decisions that change the text itself,
+such as a constitutional court striking a provision down (`Kind:` court ruling), because they are part of the text's
+history. For courts not here yet, see the Free Law Project (US), Find Case Law (England and Wales) and AustLII.
 Case law can change what a provision means without changing a word, which a record of text cannot show.
 
 ### Are laws kept in their original language?
@@ -264,8 +267,8 @@ commit says so (`Kind:` with no law named) rather than guessing one.
 
 In two layers. Each country repository is extended from its official publisher as the publisher releases new law,
 appending commits and never rewriting earlier ones. How often depends on the country, and each corpus records how far
-its record goes and when it was last checked (`record_to`, `checked_on` in `manifest.json`): 695 of the 710 were
-checked between 28 October and 3 November 2026. This repository then moves each submodule's
+its record goes and when it was last checked (`record_to`, `checked_on` in `manifest.json`); FRESHNESS.md gives
+today's count of corpora checked in the last 7 and 30 days. This repository then moves each submodule's
 pin forward to its repository's new commits, every few minutes, by fast-forward only.
 
 ### How do I know a record is current for my question?

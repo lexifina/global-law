@@ -1201,7 +1201,8 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
             files = [f for f in names_of(c['path'], corpus_head(c['path'])) if not ROOT_DOC.fullmatch(f)]
             example = next((f for f in files if '/' in f), files[0] if files else '')  # a provision in a folder first
         info = {'path': c['path'], 'name': c['name'], 'language': c.get('language'), 'coverage': c.get('coverage'),
-                'provision_files': len(files), 'record_starts': first, 'last_change_in_record': last,
+                'history': c.get('history'), 'provision_files': len(files), 'record_starts': first,
+                'last_change_in_record': last,
                 'record_to': c.get('record_to'), 'record_note': c.get('record_note'), 'changes': len(own),
                 'example_path': f"{c['path']}/{example}"}
         # Complete to the later of the record's last date and the day it was checked against its source, as law.py's
@@ -5408,7 +5409,7 @@ CITATION_REGISTRY = [
                  ('BGE 142 II 307', 'ATF 143 I 284', '4A_123/2024', '2C_215/2015', 'A-1234/2020', 'BB.2020.123')),
     # The Netherlands: an article of a Dutch act by its abbreviation ("artikel 6:162 BW", "art. 8:69 Awb", "artikel 3:40
     # lid 2 BW", "art. 359a Sv"): data/nl-aliases.json, from the official short titles the act READMEs carry. The ECHR
-    # ("artikel 6 EVRM") and EU acts are not in the record and are left alone.
+    # ("artikel 6 EVRM") is not in the record, and EU acts have no citation form here yet; both are left alone.
     CitationForm('nl', NL_ARTICLE, lambda m: nl_article_paths(m),
                  ('artikel 6:162 BW', 'art. 8:69 Awb', 'artikel 310 Sr', 'art. 359a Sv', 'artikel 3:40 lid 2 BW',
                   'art. 7:658 BW')),
@@ -6041,8 +6042,8 @@ INSTRUCTIONS = (
     '(what_else_changes); which text applies to a case filed on a date (applies_to_case); who wrote the words '
     '(who_wrote); when words entered or left the law (phrase_history); whether a decision\'s text is still in force '
     '(check_precedent); every citation in a brief (resolve_citations). '
-    'Coverage is partial: each corpus holds only the law its description names (for example some US Code titles, or '
-    'selected UK provisions), over a stated period, so "nothing found" means nothing in the record, not nothing in the '
+    'Coverage is partial: each corpus holds only the law its description names (for example some acts of a country, or '
+    'a court\'s decisions from a stated year), over a stated period, so "nothing found" means nothing in the record, not nothing in the '
     'law. Every answer states the limits of its record (where a record starts or ends); pass them on to the user. '
     'Dates are the dates each record gives a change: the day it took effect, or for a first version the day it was '
     'enacted or made. The text is copied from official publishers; for anything that matters, read the original. '

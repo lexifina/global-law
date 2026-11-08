@@ -424,7 +424,7 @@ them offers:
 Where others are ahead:
 - **Coverage.** legalize.dev has 32 jurisdictions; the UK servers have all UK legislation.
 - **Freshness.** Change feeds and pending amendments.
-- **Case law.** CourtListener, Open Legal Data and uk-legal-mcp have case law with citation networks and "cited by". This tree has only a first, hand-checked sample of judgments (`judgments/`, read by `check_precedent`).
+- **Case law.** CourtListener, Open Legal Data and uk-legal-mcp have case law with citation networks and "cited by". This tree holds the decisions of several countries' courts, each with an overlay of the provisions its decisions cite (read by `check_precedent`), but no citations between decisions yet.
 - **Parliamentary history.**
 - **Hosted access.** Some run as hosted servers with OAuth, while this one runs locally from a clone.
 
