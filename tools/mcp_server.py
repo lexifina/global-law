@@ -5729,6 +5729,10 @@ def t_law_details(args: dict) -> tuple[str, dict]:
         decided = nl_docket_paths(law_name)
     if law_name and not decided:  # a Finnish diary number or court reference ("S2020/111", "MAO:94/2026")
         decided = fi_reference_paths(law_name)
+    # A docket number many courts share ("No. 1600": dozens of US courts): the first five decisions are read, each by
+    # one walk of its corpus's history, and the rest named (each walk took seconds: 120 s and more for all of them).
+    more_decided = decided[5:]
+    decided = decided[:5]
     corpora = [c['path'] for c in law.manifest()['corpora'] if (not corpus or c['path'].startswith(corpus))
                and (not law.is_caselaw(c) or commit or (corpus and law.names_caselaw(corpus))
                     or any(p.startswith(c['path'] + '/') for p in decided))]
@@ -5786,7 +5790,10 @@ def t_law_details(args: dict) -> tuple[str, dict]:
                        + (f['message'][:cap] + (f'\n[... {len(f["message"]) - cap} more characters; raise max_message_chars]' if len(f['message']) > cap else ''))
                        + '\n\nProvisions changed: ' + (', '.join(f['provisions']) or 'none (documentation only)')
                        + diff_summary(f.get('diffs')) for f in found)
-    return text, {'changes': found}
+    if more_decided:
+        text += (f'\n\n{len(more_decided)} more decisions have this reference, not read here (give the citation or the path): '
+                 + ', '.join(more_decided[:20]) + (' ...' if len(more_decided) > 20 else ''))
+    return text, {'changes': found, **({'more_decisions': more_decided[:MAX_ITEMS]} if more_decided else {})}
 
 
 DIFF_PROVISIONS, DIFF_CHARS = 60, 700  # provisions law_details diffs per law, and characters of diff per provision
