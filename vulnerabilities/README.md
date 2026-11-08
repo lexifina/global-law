@@ -2,10 +2,6 @@
 
 <p>Each case is a logical mistake in the law itself, laid out as a legal zero-day in the sense of <a href="https://arxiv.org/html/2508.10050v1">Legal Zero-Days: A Novel Risk Vector for Advanced AI Systems</a>: the rule, what the official text says, why the two don't fit, what follows, who could use it, and the strongest objections, each rated.</p>
 
-<h2>Everything the detectors flagged, by category</h2>
-
-<p>Across the 107 corpora, the detectors flagged about 82,000 candidate defects. Most are corpus build errors or lawful once read in context; the cases below are the ones that survived model review and an official-source check.</p>
-
 <table>
 <tr><th>Category</th><th>What it is</th><th>Flagged</th></tr>
 <tr><td>Lapsed time limits</td><td>Text still applying a rule "until" a date that has passed</td><td>26,028</td></tr>
