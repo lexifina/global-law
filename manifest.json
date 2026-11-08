@@ -73101,6 +73101,35 @@
       ]
     },
     {
+      "path": "united-states/massachusetts/caselaw",
+      "url": "https://github.com/lexifina/united-states-massachusetts-caselaw.git",
+      "name": "Case law: United States, the Supreme Judicial Court of Massachusetts",
+      "label": "United States case law (the Supreme Judicial Court of Massachusetts)",
+      "language": "en",
+      "coverage": "61196 published opinions with text, one file and one commit each, dated the day decided; 107 citations of the US Code linked to united-states/federal/usc.",
+      "history": "in-force",
+      "history_from": "1768-03-01",
+      "record_to": "2026-11-08",
+      "checked_on": "2026-11-08",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day. Read from Massachusetts Reports (Mass., 1804-2017, with its nominative reporters). The head matter (syllabi, headnotes, counsel) is left out: it is the publisher's text, not the court's. Every decision is a published opinion (precedential_status: published); CAP records no other status. CAP is a closed archive (its last volumes are of 2018-2020): no nightly runner appends to this repo. The US Code record holds only some titles, so most statute citations are not linked.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
+        "law_corpus": "united-states/federal/usc"
+      },
+      "source": {
+        "publisher": "Caselaw Access Project (Harvard Law School Library)",
+        "url": "https://static.case.law/",
+        "licence": "CC0 1.0",
+        "reporters": "Massachusetts Reports (Mass., 1804-2017, with its nominative reporters)"
+      },
+      "iso_path": "us/massachusetts/caselaw",
+      "described_by": "corpus.json",
+      "code": "US-MA"
+    },
+    {
       "path": "united-states/michigan/acts",
       "url": "https://github.com/lexifina/united-states-michigan-law.git",
       "name": "United States (Michigan)",
@@ -73335,6 +73364,34 @@
       "derived": [
         "history"
       ]
+    },
+    {
+      "path": "united-states/new-york/caselaw",
+      "url": "https://github.com/lexifina/united-states-new-york-caselaw.git",
+      "name": "Case law: United States, the New York Court of Appeals",
+      "label": "United States case law (the New York Court of Appeals)",
+      "language": "en",
+      "coverage": "90472 published opinions with text, one file and one commit each, dated the day decided; 35 citations of the US Code linked to united-states/federal/usc.",
+      "history": "in-force",
+      "history_from": "1800-12-02",
+      "record_to": "2026-11-08",
+      "checked_on": "2026-11-08",
+      "in_force_trailer": "In-force",
+      "correction_trailer": "Corrected",
+      "record_note": "Court decisions, not laws: every commit is Kind: court. In-force is the day decided. Commits before 1970 are dated 1970-01-01, a second apart; In-force holds the real day. Read from New York Reports (N.Y., N.Y.2d; published under contract) and, after N.Y.2d, the North Eastern Reporter (West). The head matter (syllabi, headnotes, counsel) is left out: it is the publisher's text, not the court's. Every decision is a published opinion (precedential_status: published); CAP records no other status. CAP is a closed archive (its last volumes are of 2018-2020): no nightly runner appends to this repo. The US Code record holds only some titles, so most statute citations are not linked.",
+      "kind": "judgments",
+      "overlay": {
+        "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
+        "law_corpus": "united-states/federal/usc"
+      },
+      "source": {
+        "publisher": "Caselaw Access Project (Harvard Law School Library)",
+        "url": "https://static.case.law/",
+        "licence": "CC0 1.0",
+        "reporters": "New York Reports (N.Y., N.Y.2d; published under contract) and, after N.Y.2d, the North Eastern Reporter (West)"
+      },
+      "iso_path": "us/new-york/caselaw",
+      "described_by": "corpus.json"
     },
     {
       "path": "united-states/north-carolina/acts",
