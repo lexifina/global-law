@@ -138,7 +138,14 @@ python tools/countries.py add united-states/caselaw
 python tools/countries.py add brazil/caselaw
 python tools/law.py show 2024-01-01 switzerland/bund/caselaw/<decision>.md
 python tools/law.py laws 2024-01-01 2024-01-31 netherlands/caselaw   decisions given in a window
+python tools/law.py caselaw-index                                   after a pull: index the case law checked out
 ```
+
+The tools read case law through one index of every case-law corpus checked out (latest decisions by day, judgment
+overlays, decision counts, and a Bloom filter of docket keys), kept in `.git/global-law-cache` once per set of pins, so a
+call costs the same with 10 or 200 case-law corpora. `law.py caselaw-index` builds it after an update, reading only
+the decisions added since the last pins; a running MCP server builds it in the background when it starts and when the
+pins move. Until it is built, each corpus is read on its own, as before.
 
 From an assistant, `check_precedent` lists the decisions that applied a provision and says whether the text each one
 applied is still the text in force; `what_else_changes` counts them; `find_provision` and `law_details` take an ECLI

@@ -183,6 +183,7 @@ def caselaw_note(left: list[str]) -> str:
 # --- caching: every answer reads the same timeline and manifest; both change only when HEAD moves -----------------
 
 _head_seen: tuple[float, str, tuple[str, ...]] = (0.0, '', ())
+_warming_caselaw = False  # set by a running server (start_warming): it keeps the case-law index current as pins move
 
 
 def _look() -> tuple[str, tuple[str, ...]]:
@@ -198,7 +199,10 @@ def _look() -> tuple[str, tuple[str, ...]]:
         # Swiss case-law corpora alone) asked one after another that was most of a quick call, so eight at a time.
         with ThreadPoolExecutor(8) as pool:
             why = list(pool.map(lambda c: serving(c, names), corpora))
+        moved = _warming_caselaw and _head_seen[1] not in ('', sha)
         _head_seen = (now, sha, tuple(c['path'] for c, w in zip(corpora, why) if w is None))
+        if moved:  # pins moved under a running server: the case-law index of the new pins, in the background
+            threading.Thread(target=warm_caselaw, name='warm-caselaw', daemon=True).start()
         if law.recheck_missing_futures():  # a future commit fetched since (as future_note asks): HEAD did not move
             for cached in (_timeline, _history, latest_text):
                 cached.cache_clear()
@@ -1112,6 +1116,18 @@ def start_warming() -> None:
     # The heading index takes longer (half a minute on Romania) and only find_provision needs it, which waits for it
     # there; no other call waits.
     threading.Thread(target=lambda: (thread.join(), warm_index()), name='warm-index', daemon=True).start()
+    # The case-law index of the corpora served at their pins (law.caselaw_index): read once per pin, so after an update
+    # only the new decisions are read; calls read each corpus as before until it is built.
+    global _warming_caselaw
+    _warming_caselaw = True
+    threading.Thread(target=warm_caselaw, name='warm-caselaw', daemon=True).start()
+
+
+def warm_caselaw() -> None:
+    try:
+        law.caselaw_index('yes')
+    except Exception:  # noqa: BLE001 (calls read each corpus without it)
+        pass
 
 
 def warmed() -> None:
@@ -1132,6 +1148,10 @@ def caselaw_files(corpus: str, sha: str | None) -> tuple[int, str]:
     list_jurisdictions 8 times slower (US speed gate, 2026-11-07)."""
     if not sha:
         return 0, ''
+    idx = law.caselaw_index('join')  # the case-law index counts them once per pin, for every corpus at once
+    info = (idx or {}).get('corpora', {}).get(corpus)
+    if info and info.get('pin') == sha:
+        return int(info['files']), info['example']
     f = law._store() / f'caselaw-files-{sha}.json'
     try:
         got = json.loads(f.read_text(encoding='utf-8'))
@@ -1154,11 +1174,10 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
     m = law.manifest()
     events = law.timeline()
     rows, data = [], []
-    # The latest decision of each case-law corpus, one git log each, eight at a time (14 US corpora one after another
-    # took 1.4 s: US speed gate, 2026-11-07).
+    # The latest decision of each case-law corpus: from the case-law index (no git process), else one git log each,
+    # eight at a time (14 US corpora one after another took 1.4 s: US speed gate, 2026-11-07).
     cl = [c['path'] for c in m['corpora'] if law.is_caselaw(c)]
-    with ThreadPoolExecutor(8) as pool:
-        latest = dict(zip(cl, pool.map(lambda p: law.latest_decision(p, '9999-12-31'), cl)))
+    latest = law.latest_decisions('9999-12-31', cl)
     for c in m['corpora']:
         own = [e for e in events if e.corpus == c['path'] and e.kind != 'documentation']
         first, last = (own[0].in_force, own[-1].in_force) if own else (None, None)
@@ -1296,7 +1315,7 @@ def as_paths(found: str | list[str]) -> list[str]:
     return [found] if isinstance(found, str) else list(found)
 
 
-def cited_provisions(query: str, scope: str) -> list[tuple[str, str, str]]:
+def cited_provisions(query: str, scope: str, limit: int = MAX_ITEMS) -> list[tuple[str, str, str]]:
     """(path, heading, citation) for each provision a citation in the query names, read with resolve_citations' forms
     (citations_in: every country's forms, one country per citation), that this tree holds within the scope; [] when
     there is none."""
@@ -1322,10 +1341,35 @@ def cited_provisions(query: str, scope: str) -> list[tuple[str, str, str]]:
                 continue
             seen.add(path)
             todo.append((path, cite))
-        # Two git processes per hit, eight hits at a time: a US docket ("No. 70-18") names eleven decisions in seven
-        # courts, and one after another they took a second (US speed gate, 2026-11-07).
-        with ThreadPoolExecutor(min(8, len(todo) or 1)) as pool:
-            out = [r for r in pool.map(held, todo) if r]
+        # Only as many as can be shown are checked: a docket number held by many courts (a citation read in every one
+        # of 170 case-law corpora) would start two git processes for each.
+        todo = todo[:2 * limit]
+        # Decisions found in the case-law index: their headings read by one git process for all their corpora.
+        decided = {}
+
+        def split(path):
+            try:
+                return law.corpus_of(path)
+            except SystemExit:
+                return None, None
+        parts = {p: split(p) for p, _ in todo}
+        cases = [(p, c) for p, c in todo if parts[p][0] and corpus_head(parts[p][0]) and _caselaw_corpus(parts[p][0])] \
+            if law.caselaw_index('no') is not None else []
+        if cases:
+            specs = [(parts[p][0], f'{corpus_head(parts[p][0])}:{parts[p][1]}') for p, _ in cases]
+            for (p, cite), text in zip(cases, law.read_texts_of(specs)):
+                if text is not None:
+                    heading = next((l.lstrip('#').strip() for l in text.splitlines() if l.startswith('#')), '')
+                    title = re.search(r'^(?:title|heading): (.+)$', text, re.M)
+                    decided[p] = (p, heading or (title.group(1) if title else ''), cite)
+                else:
+                    decided[p] = None
+        # Else two git processes per hit, eight hits at a time: a US docket ("No. 70-18") names eleven decisions in
+        # seven courts, and one after another they took a second (US speed gate, 2026-11-07).
+        rest = [t for t in todo if t[0] not in decided]
+        with ThreadPoolExecutor(min(8, len(rest) or 1)) as pool:
+            got = dict(zip([p for p, _ in rest], pool.map(held, rest)))
+        out = [r for r in (decided[p] if p in decided else got.get(p) for p, _ in todo) if r]
         if out:
             return out
     return []
@@ -1340,7 +1384,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     # A query that is a citation ("artículo 155 de la Constitución", "art. 14 CE", "Art. 10a BV", "11 U.S.C. § 1182")
     # is read as resolve_citations reads it, and the provision it names comes first: a heading search finds another
     # norm's article 155 (Spain has thousands of norms).
-    cited = cited_provisions(query, scope)
+    cited = cited_provisions(query, scope, limit)
     if cited:
         rows = [{'path': p, 'heading': f'{h}  (read as the citation "{c}", as resolve_citations reads it)'.lstrip(), 'score': 100}
                 for p, h, c in cited[:limit]]
@@ -2429,8 +2473,7 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
         if e.kind != 'documentation':
             by_corpus.setdefault(e.corpus, []).append(e)
     caselaw = [c['path'] for c in law.manifest()['corpora'] if law.is_caselaw(c)]
-    with ThreadPoolExecutor(8) as pool:  # case law is not in the timeline: one git log per corpus, eight at a time
-        given = dict(zip(caselaw, pool.map(lambda p: law.latest_decision(p, date), caselaw)))
+    given = law.latest_decisions(date, caselaw)  # case law is not in the timeline: the case-law index, else a git log each
     for c in law.manifest()['corpora']:
         own = by_corpus.get(c['path'], [])
         last = [e for e in own if e.in_force <= date]
@@ -4038,7 +4081,12 @@ def judgment_texts(corpus: str, sha: str, rel: str) -> list[tuple[str, str]]:
         done = git_run(['git', 'show', spec], cwd=cwd, capture_output=True, encoding='utf-8', timeout=GIT_TIMEOUT)
         if done.returncode == 0:
             texts.append(('', done.stdout))
-    pins = caselaw_pins()
+    # The case-law overlays: from the case-law index when it is built (one sorted file names the corpora that hold a
+    # file for this provision, and one git process reads them all); else one git process per corpus.
+    rows = law.caselaw_overlay_rows([f"{n}/{rel.removesuffix('.md')}" for n in names_for(corpus)])
+    pins = caselaw_pins() if rows is None else []
+    if rows:
+        texts += law.read_blobs_of(rows)
     if pins:
         names = names_for(corpus)
         with ThreadPoolExecutor(max_workers=8) as pool:
@@ -4467,11 +4515,7 @@ def ch_article_paths(m) -> list[str]:
     return [f'{CH_ACTS}/{sr}/art-{int(m.group(1)):03d}{(m.group(2) or "").lower()}.md'] if sr else []
 
 
-def _decision_key(text: str) -> str:
-    """A docket or BGE reference as a key: letters and digits only, upper case, without BGE/ATF/DTF ("4A_123/2024" and
-    the file 4A_123-2024.md, "ATF 142 II 307" and the file 142-II-307.md give the same key)."""
-    text = re.sub(r'^(?:BGE|ATF|DTF)(?=[\s_-]|\d)', '', text.strip(), flags=re.I)
-    return re.sub(r'[^0-9A-Za-z]', '', text).upper()
+_decision_key = law.decision_key  # a docket or BGE reference as a key (law.py, which builds the case-law index)
 
 
 @lru_cache(maxsize=64)
@@ -4523,8 +4567,12 @@ def _decision_lookup(corpus: str, sha: str, key: str) -> tuple[str, ...]:
     """The decision files one key names in one corpus, by binary search of its sorted index file."""
     if not key:
         return ()
-    f = _decision_index_file(corpus, sha)
-    if f.stat().st_size == 0:
+    return _lookup_in(_decision_index_file(corpus, sha), key)
+
+
+def _lookup_in(f: Path, key: str) -> tuple[str, ...]:
+    """The paths one key names in one sorted docket file ('<key>\\t<path>' per line), by binary search."""
+    if not f.exists() or f.stat().st_size == 0:
         return ()
     want = key.encode('utf-8') + b'\t'
     with open(f, 'rb') as fh, mmap.mmap(fh.fileno(), 0, access=mmap.ACCESS_READ) as mm:
@@ -4550,11 +4598,18 @@ def _decision_lookup(corpus: str, sha: str, key: str) -> tuple[str, ...]:
     return tuple(out)
 
 
-def decision_paths(text: str) -> list[str]:
+def decision_paths(text: str, within: str = '') -> list[str]:
     """The decision files a reference names, in every case-law corpus served: a Swiss docket or BGE reference, or an
     ECLI of any country (a file decisions/<court>/<year>/ECLI_NL_HR_2019_1234.md has the key of "ECLI:NL:HR:2019:1234").
-    Each corpus is read from its sorted index file (_decision_index_file), built the first time a pin is asked."""
-    key, pins = _decision_key(text), caselaw_pins()
+    Each corpus is read from its sorted index file (_decision_index_file), built the first time a pin is asked. With
+    the case-law index built (law.caselaw_index), only the corpora whose Bloom filter may hold the key are opened."""
+    key = _decision_key(text)
+    if not key:
+        return []
+    candidates = law.bloom_candidates(key)
+    if candidates is not None:
+        return [p for c, f in candidates if c.startswith(within) for p in _lookup_in(Path(f), key)]
+    pins = [cp for cp in caselaw_pins() if cp[0].startswith(within)]
     with ThreadPoolExecutor(8) as pool:
         found = list(pool.map(lambda cp: _decision_lookup(*cp, key), pins))
     return [p for paths in found for p in paths]
@@ -5321,9 +5376,10 @@ CITATION_REGISTRY = [
                  ('art. 415 k.c.', 'art. 22¹ § 1 k.p.', 'art. 58 § 1 i 2 k.c.', 'art. 189 k.p.c.', 'art. 32 ust. 1 Konstytucji RP',
                   'art. 148 § 1 k.k.')),
     # United States decisions by reporter citation and by docket number (decision-index.tsv).
-    CitationForm('us', US_REPORTER, lambda m: decision_paths(m.group(0)),
+    # A US citation names a US decision: other countries' references with the same letters and digits ("70-18") are not it.
+    CitationForm('us', US_REPORTER, lambda m: decision_paths(m.group(0), 'united-states/'),
                  ('410 U.S. 113', '93 S. Ct. 705', '35 L. Ed. 2d 147', '550 F.3d 1', '123 F. Supp. 2d 45', "200 F. App'x 3")),
-    CitationForm('us', US_DOCKET, lambda m: decision_paths(re.sub(r'^Nos?\.\s+', '', m.group(0))),
+    CitationForm('us', US_DOCKET, lambda m: decision_paths(re.sub(r'^Nos?\.\s+', '', m.group(0)), 'united-states/'),
                  ('No. 70-18', 'Nos. 19-1392')),
     # Polish judgments by case number (sygnatura), to the judgment's file in the case law served (decision-index.tsv).
     CitationForm('pl', PL_DOCKET, lambda m: decision_paths(m.group(0)),

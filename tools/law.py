@@ -15,6 +15,7 @@ later reads load that index, and a pin that moves forward adds only its new comm
   python tools/law.py today 2022-07-01 united-states/federal/usc/title-11/1182.md   is it worded the same today?
   python tools/law.py log united-states/federal/usc/title-11/1182.md   every law that changed a file, with its dates
   python tools/law.py laws 1990-01-01 1990-12-31 [germany]       laws that took force in a window, by jurisdiction
+  python tools/law.py caselaw-index     after an update: index the case law checked out (read once per pin)
 
 Run `git submodule update --init` once first. Dates are in-force dates read from each commit's In-force trailer,
 so dates before 1970 work even though git cannot store them as commit dates.
@@ -57,14 +58,21 @@ def _head() -> str:
 
 def _gitdirs(top: Path) -> tuple[Path, Path] | None:
     """A checkout's git folder and the folder it shares objects and refs with (the same unless it is a worktree),
-    read from .git: a folder, or a file naming one (submodules and worktrees). None when there is neither."""
+    read from .git: a folder, or a file naming one (submodules and worktrees). None when there is neither. Kept for
+    the process once found (where a checkout keeps its git folder does not move under a running reader): asked of
+    every case-law corpus on every call, Path.resolve's file system calls cost 0.8 ms a corpus on Windows."""
+    import os
+    key = ('gitdirs', str(top))
+    if key in _CACHE:
+        return _CACHE[key]  # type: ignore[return-value]
     try:
         dot = top / '.git'
-        gitdir = dot if dot.is_dir() else (top / dot.read_text().split('gitdir:', 1)[1].strip()).resolve()
-        common = (gitdir / (gitdir / 'commondir').read_text().strip()).resolve() if (gitdir / 'commondir').exists() else gitdir
-        return gitdir, common
+        gitdir = dot if dot.is_dir() else Path(os.path.normpath(top / dot.read_text().split('gitdir:', 1)[1].strip()))
+        common = Path(os.path.normpath(gitdir / (gitdir / 'commondir').read_text().strip())) if (gitdir / 'commondir').exists() else gitdir
     except (OSError, IndexError):
         return None
+    _CACHE[key] = (gitdir, common)
+    return gitdir, common
 
 
 def _head_from_files(top: Path = ROOT) -> str | None:
@@ -431,6 +439,574 @@ def _late_decisions(corpus: str, cwd: Path, cutoff: str, date: str) -> list[tupl
         if len(lines) < n:
             return found
         skip, n = skip + n, n * 2
+
+
+# --- the case-law index: what the tools read of every case-law corpus, kept once per set of pins --------------------
+#
+# Reading each case-law corpus on every call (a git log for its latest decision, a cat-file for its judgment overlay,
+# a file list for its count, a docket file per corpus) made the cost of a call grow with the number of corpora: about
+# 70 more US courts would have put six features of the speed gate over 2 s (US case-law sizing, 2026-11-07). Instead,
+# each corpus is read once per pin into small files in global-law-cache (cl-v1-<corpus>-<pin>.*), a pin that moved
+# forward reading only its new commits, and the corpora served are joined into one index per set of pins
+# (cl-set-v1-<hash>.*). A call then reads one summary, one sorted file of decision days, one sorted file of judgment
+# overlays and one Bloom filter of docket keys, whatever the number of corpora. `law.py caselaw-index` builds it after
+# an update (the MCP server also builds it in the background when it starts); until it is built, calls read each
+# corpus as before.
+
+CASELAW_INDEX_V = 1
+_CL_NOT_FILE = re.compile(r'(^|/)(README|LICENSE|REPRODUCE|KORREKTUREN|CHANGELOG|RESEARCH)[^/]*$|(^|/)(tools|tests|data|build|\.github)/'
+                          r'|^[A-Z][A-Z0-9_-]*\.md$')  # as the MCP server's NOT_LAW and ROOT_DOC: a corpus's own docs
+_CL_JUDGMENTS = re.compile(r'^judgments/(.+?)(?:\.(?:19[5-9]\d|20[0-4]\d|2050))?\.jsonl$')  # split by year as INDEX_YEARS
+_CL_INDEX_FILE = re.compile(r'^decision-index(?:-(?:19[5-9]\d|20[0-4]\d|2050))?\.tsv$')
+_CL_LOG = '--format=%H%x1f%an%x1f%(trailers:key=In-force,valueonly,separator=%x2C)'
+BLOOM_BITS_PER_KEY, BLOOM_HASHES = 10, 7  # about 1% false positives: one corpus in a hundred is read for nothing
+
+
+def decision_key(text: str) -> str:
+    """A docket or BGE reference as a key: letters and digits only, upper case, without BGE/ATF/DTF ("4A_123/2024" and
+    the file 4A_123-2024.md, "ATF 142 II 307" and the file 142-II-307.md give the same key)."""
+    text = re.sub(r'^(?:BGE|ATF|DTF)(?=[\s_-]|\d)', '', text.strip(), flags=re.I)
+    return re.sub(r'[^0-9A-Za-z]', '', text).upper()
+
+
+def _cl_name(corpus: str) -> str:
+    return corpus.replace('/', '~')
+
+
+def _write_atomic(path: Path, data: bytes) -> None:
+    import os
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f'{path.name}.{os.getpid()}.part')
+    tmp.write_bytes(data)
+    os.replace(tmp, path)
+
+
+def _git_bytes(args: list[str], cwd: Path, data: bytes | None = None) -> bytes:
+    done = subprocess.run(['git', *args], cwd=cwd, input=data, capture_output=True)
+    if done.returncode:
+        raise RuntimeError(f"git {' '.join(args[:4])}: {done.stderr.decode('utf-8', 'replace').strip()[:300]}")
+    return done.stdout
+
+
+def _cat_batch(cwd: Path, specs: list[str], env: dict | None = None) -> list[tuple[bytes, bytes | None]]:
+    """(type, content) for each spec (<blob or commit>, or <commit>:<path>), by one `git cat-file --batch`; (b'missing',
+    None) for one not there. A partial clone is never asked to fetch what is missing (GIT_NO_LAZY_FETCH)."""
+    import os
+    if not specs:
+        return []
+    run_env = {**os.environ, 'GIT_NO_LAZY_FETCH': '1', **(env or {})}
+    done = subprocess.run(['git', 'cat-file', '--batch'], cwd=cwd, input=('\n'.join(specs) + '\n').encode('utf-8'),
+                          capture_output=True, env=run_env)
+    out, data, i = [], done.stdout or b'', 0
+    while i < len(data) and len(out) < len(specs):
+        nl = data.find(b'\n', i)
+        if nl < 0:
+            break
+        head = data[i:nl].split()
+        i = nl + 1
+        if len(head) == 3 and head[2].isdigit():
+            size = int(head[2])
+            out.append((head[1], data[i:i + size]))
+            i += size + 1
+        else:
+            out.append((b'missing', None))
+    return out + [(b'missing', None)] * (len(specs) - len(out))
+
+
+def _bloom_positions(key: bytes, m: int, k: int) -> list[int]:
+    import hashlib
+    h = hashlib.blake2b(key, digest_size=16).digest()
+    a, b = int.from_bytes(h[:8], 'little'), int.from_bytes(h[8:], 'little') | 1
+    return [(a + i * b) % m for i in range(k)]
+
+
+def _bloom_build(keys, n: int, base: bytes | None = None) -> bytes:
+    """A Bloom filter of docket keys: b'GLB1', the bit count (8 bytes), the hash count (1 byte), the bits. `base`, a
+    filter of an earlier pin, is copied and added to while it has room (keys only grow: the repos are append-only)."""
+    if base is not None:
+        m, k = int.from_bytes(base[4:12], 'little'), base[12]
+        bits = bytearray(base[13:])
+    else:
+        m = max(1024, (BLOOM_BITS_PER_KEY * max(n, 1) + 7) // 8 * 8)
+        k = BLOOM_HASHES
+        bits = bytearray(m // 8)
+    for key in keys:
+        for p in _bloom_positions(key, m, k):
+            bits[p >> 3] |= 1 << (p & 7)
+    return b'GLB1' + m.to_bytes(8, 'little') + bytes([k]) + bytes(bits)
+
+
+def _decision_lines_full(corpus: str, pin: str, cwd: Path, tree: list[tuple[str, str]]) -> list[bytes]:
+    """Every '<key>\\t<corpus>/<file>\\n' of a corpus at a pin, as the docket lookups read it: a decision's file is named
+    from its docket (decisions/<court>/<year>/<docket>.md, --<hash> after it where two share a name), and a corpus whose
+    files are named by another id lists its other references in decision-index.tsv (or one file a year)."""
+    lines = set()
+    index_blobs = []
+    for path, blob in tree:
+        if path.startswith('decisions/') and path.endswith('.md'):
+            name = path.rsplit('/', 1)[-1]
+            lines.add(f'{decision_key(name[:-3].split("--", 1)[0])}\t{corpus}/{path}\n'.encode('utf-8'))
+        elif _CL_INDEX_FILE.match(path):
+            index_blobs.append(blob)
+    for _, text in _cat_batch(cwd, index_blobs):
+        lines.update(_index_tsv_lines(corpus, (text or b'').decode('utf-8', 'replace').splitlines()))
+    return sorted(lines)
+
+
+def _index_tsv_lines(corpus: str, rows) -> set[bytes]:
+    out = set()
+    for line in rows:
+        ref, _, path = line.partition('\t')
+        if ref and path.strip() and not ref.startswith('#') and ref.strip().lower() != 'reference':  # the header line
+            out.add(f'{decision_key(ref)}\t{corpus}/{path.strip()}\n'.encode('utf-8'))
+    return out
+
+
+def _sorted_merge(old: Path, new: list[bytes]) -> bytes:
+    import heapq
+    with open(old, 'rb') as fh:
+        merged = heapq.merge(fh, sorted(new))
+        out, last = [], None
+        for line in merged:
+            if line != last:
+                out.append(line)
+                last = line
+    return b''.join(out)
+
+
+def _cl_files(corpus: str, pin: str) -> dict[str, Path]:
+    store, stem = _store(), f'cl-v{CASELAW_INDEX_V}-{_cl_name(corpus)}-{pin[:12]}'
+    return {'json': store / f'{stem}.json', 'days': store / f'{stem}.days.tsv', 'overlay': store / f'{stem}.overlay.tsv',
+            'decisions': store / f'decisions-{pin}.tsv', 'bloom': store / f'decisions-{pin}.bloom'}
+
+
+def _cl_base(corpus: str, pin: str, cwd: Path) -> dict | None:
+    """The record of an earlier pin of this corpus that `pin` descends from, to read only the commits added since."""
+    for old in sorted(_store().glob(f'cl-v{CASELAW_INDEX_V}-{_cl_name(corpus)}-*.json'), key=lambda p: p.stat().st_mtime,
+                      reverse=True)[:4]:
+        try:
+            rec = json.loads(old.read_text(encoding='utf-8'))
+        except (OSError, ValueError):
+            continue
+        f = _cl_files(corpus, rec.get('pin', ''))
+        if (rec.get('pin') and rec['pin'] != pin and all(f[k].exists() for k in ('days', 'overlay', 'decisions'))
+                and subprocess.run(['git', 'merge-base', '--is-ancestor', rec['pin'], pin], cwd=cwd,
+                                   capture_output=True).returncode == 0):
+            return rec
+    return None
+
+
+def _days_rows(cwd: Path, span: str) -> list[tuple[str, str, str]]:
+    """(day, commit, name) of each decision committed in a span, oldest first: corrections and the maintainer's
+    documentation commits left out, as latest_decision leaves them out."""
+    out = []
+    raw = _git_bytes(['log', '--reverse', *NOT_CORRECTION, _CL_LOG, span], cwd).decode('utf-8', 'replace')
+    for line in raw.splitlines():
+        sha, author, day = (line.split('\x1f') + ['', ''])[:3]
+        day = day.strip()[:10]
+        if author != MAINTAINER and ISO_DAY.fullmatch(day):
+            out.append((day, sha.strip(), author.replace('\t', ' ')))
+    return out
+
+
+def caselaw_record(corpus: str, pin: str, cwd: Path) -> dict:
+    """One case-law corpus at one pin, read once and kept: its decision files (count and an example), its decisions by
+    day (the last committed for each day, as latest_decision names it), its judgment overlay files (judgments/<law
+    path>[.<year>].jsonl and their blobs), and its docket file with a Bloom filter of its keys. From the record of an
+    earlier pin when there is one (git diff and git log of the commits since), else from one ls-tree and one git log."""
+    f = _cl_files(corpus, pin)
+    try:
+        rec = json.loads(f['json'].read_text(encoding='utf-8'))
+        if rec.get('pin') == pin and all(f[k].exists() for k in ('days', 'overlay', 'decisions', 'bloom')):
+            return rec
+    except (OSError, ValueError):
+        pass
+    base = _cl_base(corpus, pin, cwd)
+    if base is not None:
+        rec = _cl_update(corpus, pin, cwd, base, f)
+    else:
+        rec = _cl_build(corpus, pin, cwd, f)
+    _write_atomic(f['json'], json.dumps(rec, ensure_ascii=False).encode('utf-8'))
+    # Keep the last few pins of each corpus (the base of the next update is among them); an older pin's files go.
+    for old in sorted(_store().glob(f'cl-v{CASELAW_INDEX_V}-{_cl_name(corpus)}-*.json'), key=lambda p: p.stat().st_mtime)[:-3]:
+        try:
+            gone = json.loads(old.read_text(encoding='utf-8')).get('pin', '')
+        except (OSError, ValueError):
+            gone = ''
+        if gone and gone != pin:
+            for p in _cl_files(corpus, gone).values():
+                p.unlink(missing_ok=True)
+        old.unlink(missing_ok=True)
+    return rec
+
+
+def _write_days(path: Path, days: dict[str, tuple[str, str]]) -> None:
+    _write_atomic(path, ''.join(f'{d}\t{s}\t{n}\n' for d, (s, n) in sorted(days.items())).encode('utf-8'))
+
+
+def _cl_build(corpus: str, pin: str, cwd: Path, f: dict[str, Path]) -> dict:
+    raw = _git_bytes(['-c', 'core.quotePath=false', 'ls-tree', '-r', pin], cwd).decode('utf-8', 'replace')
+    tree, files, example, overlay = [], 0, '', []
+    for line in raw.splitlines():
+        meta, _, path = line.partition('\t')
+        parts = meta.split()
+        if len(parts) != 3 or parts[1] != 'blob':
+            continue
+        tree.append((path, parts[2]))
+        m = _CL_JUDGMENTS.match(path)
+        if m:
+            overlay.append(f'{m.group(1)}\t{parts[2]}\t{path}\n')
+        elif path.endswith('.md') and not _CL_NOT_FILE.search(path):
+            files += 1
+            if not example or (path.startswith('decisions/') and not example.startswith('decisions/')):
+                example = path
+    days: dict[str, tuple[str, str]] = {}
+    for d, s, n in _days_rows(cwd, pin):
+        days[d] = (s, n)
+    _write_days(f['days'], days)
+    _write_atomic(f['overlay'], ''.join(sorted(overlay)).encode('utf-8'))
+    if not f['decisions'].exists():
+        lines = _decision_lines_full(corpus, pin, cwd, tree)
+        _write_atomic(f['decisions'], b''.join(lines))
+    _write_bloom(f)
+    return {'v': CASELAW_INDEX_V, 'corpus': corpus, 'pin': pin, 'files': files, 'example': example, 'days': len(days)}
+
+
+def _write_bloom(f: dict[str, Path], base: Path | None = None, new: list[bytes] | None = None) -> None:
+    if base is not None and base.exists() and new is not None:
+        data = base.read_bytes()
+        m = int.from_bytes(data[4:12], 'little')
+        keys = {l.split(b'\t', 1)[0] for l in new}
+        with open(f['decisions'], 'rb') as fh:
+            n_now = sum(1 for _ in fh)
+        if n_now * BLOOM_BITS_PER_KEY <= m * 1.5:  # still room: add the new keys to the earlier filter
+            _write_atomic(f['bloom'], _bloom_build(keys, len(keys), data))
+            return
+    keys = set()
+    with open(f['decisions'], 'rb') as fh:
+        for line in fh:
+            keys.add(line.split(b'\t', 1)[0])
+    _write_atomic(f['bloom'], _bloom_build(keys, len(keys)))
+
+
+def _cl_update(corpus: str, pin: str, cwd: Path, base: dict, f: dict[str, Path]) -> dict:
+    b = _cl_files(corpus, base['pin'])
+    raw = _git_bytes(['-c', 'core.quotePath=false', 'diff', '--raw', '--no-renames', '--no-abbrev', '-z', base['pin'], pin], cwd)
+    parts = raw.split(b'\0')
+    files, example = base['files'], base['example']
+    overlay = {}
+    for line in b['overlay'].read_text(encoding='utf-8').splitlines():
+        key, blob, path = line.split('\t')
+        overlay[path] = (key, blob)
+    new_lines: list[bytes] = []
+    rebuild = False
+    i = 0
+    while i + 1 < len(parts):
+        meta, path = parts[i].decode('utf-8', 'replace'), parts[i + 1].decode('utf-8', 'replace')
+        i += 2
+        fields = meta.lstrip(':').split()
+        if len(fields) < 5:
+            continue
+        old_blob, new_blob, status = fields[2], fields[3], fields[4][:1]
+        m = _CL_JUDGMENTS.match(path)
+        if m:
+            if status == 'D':
+                overlay.pop(path, None)
+            else:
+                overlay[path] = (m.group(1), new_blob)
+            continue
+        if path.endswith('.md') and not _CL_NOT_FILE.search(path):
+            files += {'A': 1, 'D': -1}.get(status, 0)
+            if status == 'D' and path == example:
+                example = ''
+        if path.startswith('decisions/') and path.endswith('.md'):
+            if status == 'D':
+                rebuild = True
+            elif status == 'A':
+                name = path.rsplit('/', 1)[-1]
+                new_lines.append(f'{decision_key(name[:-3].split("--", 1)[0])}\t{corpus}/{path}\n'.encode('utf-8'))
+        elif _CL_INDEX_FILE.match(path):
+            if status == 'A':
+                text = (_cat_batch(cwd, [new_blob])[0][1] or b'').decode('utf-8', 'replace')
+                new_lines += sorted(_index_tsv_lines(corpus, text.splitlines()))
+            elif status == 'M':
+                diff = _git_bytes(['diff', '--no-color', '-U0', old_blob, new_blob], cwd).decode('utf-8', 'replace')
+                body = [l for l in diff.splitlines() if l[:1] in '+-' and not l.startswith(('+++', '---'))]
+                if any(l.startswith('-') for l in body):
+                    rebuild = True
+                new_lines += sorted(_index_tsv_lines(corpus, [l[1:] for l in body if l.startswith('+')]))
+            else:
+                rebuild = True
+    if not example:
+        rec = _cl_build(corpus, pin, cwd, f)  # the example was deleted: read the tree once more
+        return rec
+    days: dict[str, tuple[str, str]] = {}
+    for line in b['days'].read_text(encoding='utf-8').splitlines():
+        d, s, n = (line.split('\t') + ['', ''])[:3]
+        days[d] = (s, n)
+    for d, s, n in _days_rows(cwd, f"{base['pin']}..{pin}"):
+        days[d] = (s, n)
+    _write_days(f['days'], days)
+    _write_atomic(f['overlay'], ''.join(sorted(f'{k}\t{v}\t{p}\n' for p, (k, v) in overlay.items())).encode('utf-8'))
+    if rebuild:
+        tree = []
+        for line in _git_bytes(['-c', 'core.quotePath=false', 'ls-tree', '-r', pin], cwd).decode('utf-8', 'replace').splitlines():
+            meta, _, path = line.partition('\t')
+            p = meta.split()
+            if len(p) == 3 and p[1] == 'blob':
+                tree.append((path, p[2]))
+        _write_atomic(f['decisions'], b''.join(_decision_lines_full(corpus, pin, cwd, tree)))
+        _write_bloom(f)
+    else:
+        _write_atomic(f['decisions'], _sorted_merge(b['decisions'], new_lines))
+        _write_bloom(f, b['bloom'], new_lines)
+    return {'v': CASELAW_INDEX_V, 'corpus': corpus, 'pin': pin, 'files': files, 'example': example, 'days': len(days),
+            'from': base['pin']}
+
+
+def _cl_served() -> list[tuple[str, str, Path]]:
+    """(corpus, pinned commit, checkout) of every case-law corpus served and readable, without a git process when each
+    checkout is at the commit the tree pins (read from its .git files)."""
+    out = []
+    for c in manifest()['corpora']:
+        if not is_caselaw(c):
+            continue
+        cwd = ROOT / c['path']
+        if not (cwd / '.git').exists() or not _readable(c['path'], cwd):
+            continue
+        pin = reachable_tip(c['path'])
+        if pin == 'HEAD':
+            pin = _head_from_files(cwd) or git('rev-parse', 'HEAD', cwd=cwd).strip()
+        out.append((c['path'], pin, cwd))
+    return out
+
+
+def _objects_dir(cwd: Path) -> str | None:
+    dirs = _gitdirs(cwd)
+    return str(dirs[1] / 'objects') if dirs else None
+
+
+def caselaw_index(build: str = 'no') -> dict | None:
+    """The index of the case-law corpora served, at their pins: a summary (per corpus: pin, files, example, latest
+    decision, its decision days' bytes in the days file, its Bloom filter's bytes, its docket file, its objects
+    folder), with the days, overlay and Bloom files beside it. build: 'no' gives it only if it is built; 'join' also
+    joins it when every corpus's record is there (a second or less); 'yes' also reads any corpus not yet read."""
+    served = _cl_served()
+    if not served:
+        return None
+    import hashlib
+    h = hashlib.sha1('\n'.join(f'{c}@{p}' for c, p, _ in sorted(served)).encode('utf-8')).hexdigest()[:16]
+    key = ('caselaw-index', h)
+    if key in _CACHE:
+        return _CACHE[key]  # type: ignore[return-value]
+    store = _store()
+    summary = store / f'cl-set-v{CASELAW_INDEX_V}-{h}.json'
+    try:
+        idx = json.loads(summary.read_text(encoding='utf-8'))
+        if idx.get('v') == CASELAW_INDEX_V and all((store / idx[k]).exists() for k in ('days_file', 'overlay_file', 'bloom_file')):
+            idx['dir'] = str(store)
+            _CACHE[key] = idx
+            return idx
+    except (OSError, ValueError, KeyError):
+        pass
+    if build == 'no':
+        return None
+    if build == 'join' and not all(_cl_files(c, p)['json'].exists() for c, p, _ in served):
+        return None
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(8) as pool:
+        records = list(pool.map(lambda s: caselaw_record(*s), served))
+    stem = f'cl-set-v{CASELAW_INDEX_V}-{h}'
+    corpora: dict[str, dict] = {}
+    days_parts, bloom_parts, overlay = [], [], []
+    at_days = at_bloom = 0
+    for (c, p, cwd), rec in zip(served, records):
+        f = _cl_files(c, p)
+        days = f['days'].read_bytes()
+        last = days.rstrip(b'\n').rsplit(b'\n', 1)[-1].decode('utf-8') if days.strip() else ''
+        bloom = f['bloom'].read_bytes()
+        corpora[c] = {'pin': p, 'files': rec['files'], 'example': rec['example'], 'days': [at_days, at_days + len(days)],
+                      'latest': last.split('\t') if last else None, 'decisions': f['decisions'].name,
+                      'bloom': [at_bloom, int.from_bytes(bloom[4:12], 'little'), bloom[12]], 'objects': _objects_dir(cwd)}
+        days_parts.append(days)
+        at_days += len(days)
+        bloom_parts.append(bloom[13:])
+        at_bloom += len(bloom) - 13
+        for line in f['overlay'].read_text(encoding='utf-8').splitlines():
+            k, blob, _ = line.split('\t')
+            overlay.append(f'{k}\t{c}\t{blob}\n')
+    _write_atomic(store / f'{stem}.days.tsv', b''.join(days_parts))
+    _write_atomic(store / f'{stem}.bloom', b''.join(bloom_parts))
+    _write_atomic(store / f'{stem}.overlay.tsv', ''.join(sorted(overlay)).encode('utf-8'))
+    idx = {'v': CASELAW_INDEX_V, 'hash': h, 'corpora': corpora, 'days_file': f'{stem}.days.tsv',
+           'overlay_file': f'{stem}.overlay.tsv', 'bloom_file': f'{stem}.bloom'}
+    _write_atomic(summary, json.dumps(idx, ensure_ascii=False).encode('utf-8'))
+    for old in sorted(store.glob(f'cl-set-v{CASELAW_INDEX_V}-*.json'), key=lambda p: p.stat().st_mtime)[:-4]:
+        for ext in ('.json', '.days.tsv', '.overlay.tsv', '.bloom'):
+            (store / (old.name[:-5] + ext)).unlink(missing_ok=True)
+    idx['dir'] = str(store)
+    _CACHE[key] = idx
+    return idx
+
+
+def _mm_lines(path: Path, start: int, end: int, prefix: bytes, last_le: bool = False):
+    """Lines of a sorted file between byte offsets that start with `prefix` (binary search); with last_le, the last
+    line whose text sorts at or before `prefix` instead. `path` may be an mmap already open."""
+    import mmap
+    if end <= start:
+        return [] if not last_le else None
+    if isinstance(path, mmap.mmap):
+        return _mm_search(path, start, end, prefix, last_le)
+    with open(path, 'rb') as fh, mmap.mmap(fh.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+        return _mm_search(mm, start, end, prefix, last_le)
+
+
+def _mm_search(mm, start: int, end: int, prefix: bytes, last_le: bool):
+    lo, hi = start, end
+    if last_le:
+        # the first line whose first len(prefix) bytes sort after prefix; the line before it is the answer
+        while lo < hi:
+            mid = (lo + hi) // 2
+            s = mm.rfind(b'\n', start, mid) + 1 if mid > start else start
+            s = max(s, start)
+            e = mm.find(b'\n', s, end)
+            e = end if e < 0 else e
+            if mm[s:s + len(prefix)] <= prefix:
+                lo = e + 1
+            else:
+                hi = s
+        if lo <= start:
+            return None
+        s = mm.rfind(b'\n', start, lo - 1) + 1
+        s = max(s, start)
+        return mm[s:lo - 1].decode('utf-8', 'replace')
+    while lo < hi:
+        mid = (lo + hi) // 2
+        s = mm.rfind(b'\n', start, mid) + 1 if mid > start else start
+        s = max(s, start)
+        e = mm.find(b'\n', s, end)
+        e = end if e < 0 else e
+        if mm[s:e] + b'\n' < prefix:
+            lo = e + 1
+        else:
+            hi = s
+    out, pos = [], lo
+    while pos < end:
+        e = mm.find(b'\n', pos, end)
+        e = end if e < 0 else e
+        line = mm[pos:e]
+        if not line.startswith(prefix):
+            break
+        out.append(line.decode('utf-8', 'replace'))
+        pos = e + 1
+    return out
+
+
+def latest_decisions(date: str, corpora: list[str]) -> dict[str, tuple[str, str, str] | None]:
+    """latest_decision for many case-law corpora: from the case-law index when it is built (no git process), else
+    one git log per corpus, eight at a time."""
+    idx = caselaw_index('join')
+    if idx is not None:
+        import mmap
+        days_file = Path(idx['dir']) / idx['days_file']
+        out: dict[str, tuple[str, str, str] | None] = {}
+        rest = []
+        fh = open(days_file, 'rb')  # one file, opened once, whatever the number of corpora
+        mm = mmap.mmap(fh.fileno(), 0, access=mmap.ACCESS_READ) if days_file.stat().st_size else None
+        for c in corpora:
+            info = idx['corpora'].get(c)
+            if info is None:
+                rest.append(c)
+                continue
+            latest = info.get('latest')
+            if latest and latest[0] <= date:
+                d, s, n = (latest + ['', ''])[:3]
+            else:
+                line = _mm_lines(mm, info['days'][0], info['days'][1], date.encode('utf-8'), last_le=True) if mm else None
+                if not line:
+                    out[c] = None
+                    continue
+                d, s, n = (line.split('\t') + ['', ''])[:3]
+            out[c] = (n, d, s)
+        if mm is not None:
+            mm.close()
+        fh.close()
+        if rest:
+            out.update(_latest_each(date, rest))
+        return out
+    return _latest_each(date, corpora)
+
+
+def _latest_each(date: str, corpora: list[str]) -> dict[str, tuple[str, str, str] | None]:
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(8) as pool:
+        return dict(zip(corpora, pool.map(lambda p: latest_decision(p, date), corpora)))
+
+
+def caselaw_overlay_rows(keys: list[str]) -> list[tuple[str, str]] | None:
+    """(corpus, blob) of every judgment overlay file the case-law corpora served hold for these keys (a law path
+    without .jsonl: "united-states/federal/usc/title-11/362"), from the index; None when it is not built."""
+    idx = caselaw_index('join')
+    if idx is None:
+        return None
+    path = Path(idx['dir']) / idx['overlay_file']
+    size = path.stat().st_size
+    out = []
+    for k in keys:
+        for line in _mm_lines(path, 0, size, f'{k}\t'.encode('utf-8')):
+            _, corpus, blob = line.split('\t')
+            out.append((corpus, blob))
+    return out
+
+
+def read_blobs_of(rows: list[tuple[str, str]]) -> list[tuple[str, str]]:
+    """(corpus, text) of blobs held by several case-law corpora, read by one git process: the first corpus's
+    `git cat-file --batch` with the others' object folders as alternates."""
+    return [(c, t) for (c, _), t in zip(rows, read_texts_of(rows)) if t is not None]
+
+
+def read_texts_of(rows: list[tuple[str, str]]) -> list[str | None]:
+    """The text of each (corpus, object) given (a blob id, or <commit>:<path>), None where it is missing, read by one
+    git process for all the corpora (read_blobs_of)."""
+    if not rows:
+        return []
+    idx = caselaw_index('no') or {'corpora': {}}
+    import os
+    out: list[str | None] = []
+    groups: list[list[tuple[str, str]]] = [[]]
+    dirs: list[list[str]] = [[]]
+    for c, blob in rows:  # one process for all, unless the alternates would pass the environment's size (32 KB on Windows)
+        d = (idx['corpora'].get(c) or {}).get('objects') or _objects_dir(ROOT / c) or ''
+        if d not in dirs[-1] and sum(len(x) + 1 for x in dirs[-1]) + len(d) > 20_000:
+            groups.append([])
+            dirs.append([])
+        if d not in dirs[-1]:
+            dirs[-1].append(d)
+        groups[-1].append((c, blob))
+    for group, ds in zip(groups, dirs):
+        got = _cat_batch(ROOT / group[0][0], [b for _, b in group], env={'GIT_ALTERNATE_OBJECT_DIRECTORIES': os.pathsep.join(ds[1:])})
+        out += [data.decode('utf-8', 'replace') if kind == b'blob' and data is not None else None for kind, data in got]
+    return out
+
+
+def bloom_candidates(key: str) -> list[tuple[str, str]] | None:
+    """(corpus, its docket file) of the case-law corpora whose Bloom filter may hold a key: the only docket files a
+    lookup opens. None when the index is not built."""
+    idx = caselaw_index('join')
+    if idx is None:
+        return None
+    import mmap
+    k = key.encode('utf-8')
+    out = []
+    path = Path(idx['dir']) / idx['bloom_file']
+    if path.stat().st_size == 0:
+        return []
+    with open(path, 'rb') as fh, mmap.mmap(fh.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+        for c, info in idx['corpora'].items():
+            off, m, nk = info['bloom']
+            if all(mm[off + (p >> 3)] & (1 << (p & 7)) for p in _bloom_positions(k, m, nk)):
+                out.append((c, str(Path(idx['dir']) / info['decisions'])))
+    return out
 
 
 def tip(corpus: str) -> str | None:
@@ -2002,7 +2578,7 @@ def file_notes(date: str, path: str) -> list[str]:
     return out
 
 
-USAGE = {'world': 1, 'show': 2, 'blame': 2, 'words': 2, 'today': 2, 'diff': 3, 'log': 1, 'laws': 2}
+USAGE = {'world': 1, 'show': 2, 'blame': 2, 'words': 2, 'today': 2, 'diff': 3, 'log': 1, 'laws': 2, 'caselaw-index': 0}
 
 
 def day(value: str) -> str:
@@ -3077,15 +3653,34 @@ def _redate(data: dict, rows: list, block: str) -> None:
 
 
 def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = frozenset(),
-            paths: tuple = ()) -> None:
+            paths: tuple = (), keep: bool = False) -> None:
     """Add the commits in `revs` to a corpus index, oldest first: one `git log --raw` for every commit and file.
     Commits in `skip` are left out (a forked future branch's copies of main's commits: _future_index). With `paths`,
     only the commits that touch those files, and only their changes (a case-law decision read on its own:
     _focused_index)."""
     info = corpus_info(corpus)
     fmt = '--format=%x1d%H%x1f%an%x1f%aI%x1f%s%x1f%(trailers:only,unfold)%x1e'
-    raw = git('log', '--reverse', '--raw', '--find-renames=100%', '--no-abbrev', fmt, revs,
-              *(['--', *paths] if paths else []), cwd=cwd)
+    # keep: the log of two fixed commits (a future branch read beside main, _future_index, in every process) is kept
+    # on disk, gzipped: reading Brazil's future branch took 1.1 s of each call (2026-11-08).
+    disk = _store() / f'future-log-v1-{_cl_name(corpus)}-{revs.replace("..", "-")}.txt.gz' if keep and not paths and re.fullmatch(r'[0-9a-f]{40}\.\.[0-9a-f]{40}', revs) else None
+    raw = None
+    if disk is not None and disk.exists():
+        import gzip
+        try:
+            raw = gzip.decompress(disk.read_bytes()).decode('utf-8')
+        except (OSError, ValueError, EOFError):
+            raw = None
+    if raw is None:
+        raw = git('log', '--reverse', '--raw', '--find-renames=100%', '--no-abbrev', fmt, revs,
+                  *(['--', *paths] if paths else []), cwd=cwd)
+        if disk is not None:
+            import gzip
+            try:
+                _write_atomic(disk, gzip.compress(raw.encode('utf-8'), 6))
+                for old in sorted(_store().glob(f'future-log-v1-{_cl_name(corpus)}-*.txt.gz'), key=lambda f: f.stat().st_mtime)[:-3]:
+                    old.unlink(missing_ok=True)
+            except OSError:
+                pass
     legacy = None
     rows, files = data['rows'], data['files']
     put_back = dict(data.get('withdrawn_versions') or {})  # path -> the versions a documentation commit withdrew
@@ -3591,12 +4186,30 @@ def _future_check(corpus: str, cwd: Path, pin: str, fut: str) -> dict:
     and only once the checkout has the commit."""
     key = ('future-check', f'{corpus}@{pin}+{fut}')
     if key not in _CACHE:
-        linear = subprocess.run(['git', 'merge-base', '--is-ancestor', pin, fut], cwd=cwd,
-                                capture_output=True).returncode == 0
+        # Kept on disk too, keyed by both commits (a check of two fixed commits never changes): read in every fresh
+        # process it cost 1.4 s a call on Swiss law and 9 s on law.py world with three forked branches (2026-11-07).
         trailer = corpus_info(corpus).get('in_force_trailer') or 'In-force'
-        skip, diverged = (frozenset(), ()) if linear else _replays(cwd, pin, fut, trailer)
-        unread = () if linear or diverged else _unread(cwd, pin, fut, skip)
-        _CACHE[key] = {'linear': linear, 'skip': skip, 'diverged': diverged, 'unread': unread}
+        disk = _store() / f'future-check-v1-{_cl_name(corpus)}-{pin[:16]}-{fut[:16]}-{trailer}.json'
+        got = None
+        try:
+            raw = json.loads(disk.read_text(encoding='utf-8'))
+            if raw.get('pin') == pin and raw.get('fut') == fut:
+                got = {'linear': bool(raw['linear']), 'skip': frozenset(raw['skip']), 'diverged': tuple(raw['diverged']),
+                       'unread': tuple(raw['unread'])}
+        except (OSError, ValueError, KeyError, TypeError):
+            got = None
+        if got is None:
+            linear = subprocess.run(['git', 'merge-base', '--is-ancestor', pin, fut], cwd=cwd,
+                                    capture_output=True).returncode == 0
+            skip, diverged = (frozenset(), ()) if linear else _replays(cwd, pin, fut, trailer)
+            unread = () if linear or diverged else _unread(cwd, pin, fut, skip)
+            got = {'linear': linear, 'skip': skip, 'diverged': diverged, 'unread': unread}
+            try:
+                _write_atomic(disk, json.dumps({'pin': pin, 'fut': fut, 'linear': linear, 'skip': sorted(skip),
+                                                'diverged': list(diverged), 'unread': list(unread)}).encode('utf-8'))
+            except (OSError, TypeError):
+                pass
+        _CACHE[key] = got
     return _CACHE[key]  # type: ignore[return-value]
 
 
@@ -3746,7 +4359,7 @@ def _future_index(corpus: str, cwd: Path, data: dict, branch: str, fut: str) -> 
         if k in data:
             over[k] = type(data[k])(data[k])
     before = len(over['rows'])
-    _extend(corpus, cwd, over, f'{pin}..{fut}', skip=skip)
+    _extend(corpus, cwd, over, f'{pin}..{fut}', skip=skip, keep=True)
     over['at'] = f'{pin}+{fut}'
     over['future'] = {'branch': branch, 'sha': fut, 'linear': linear, 'commits': len(over['rows']) - before,
                       'replays_skipped': len(check['skip']), 'unread': len(check['unread'])}
@@ -3918,7 +4531,11 @@ def _has_commit(corpus: str, cwd: Path, sha: str) -> bool:
     than a git process each time."""
     key = ('has-commit', f'{corpus}@{sha}')
     if not _CACHE.get(key):
-        if hasattr(subprocess, 'Popen'):
+        if sha and len(sha) == 40 and sha == _head_from_files(cwd):
+            # The commit the checkout is at, read from its .git files: there, without a git process. Asking each of
+            # 170 case-law corpora's readers on every call made a call's cost grow with the number of corpora.
+            _CACHE[key] = True
+        elif hasattr(subprocess, 'Popen'):
             _CACHE[key] = _batch_read(corpus, cwd, f'{sha}^{{commit}}')[0] == b'commit'
         else:
             _CACHE[key] = subprocess.run(['git', 'cat-file', '-e', f'{sha}^{{commit}}'], cwd=cwd,
@@ -4064,17 +4681,23 @@ def main(argv: list[str]) -> None:
 
 def _run(command: str, args: list[str]) -> None:
     note = lambda lines: [print(f'Note: {line}', file=sys.stderr) for line in lines]  # noqa: E731
+    if command == 'caselaw-index':
+        import time
+        t = time.time()
+        idx = caselaw_index('yes')
+        n = len(idx['corpora']) if idx else 0
+        print(f'case-law index: {n} corpora' + (f" ({idx['hash']})" if idx else ' (no case law checked out)') + f', {time.time() - t:.1f} s')
+        return
     if command == 'world':
         events = timeline()
         print(f'The law on {args[0]}' + ('' if root_on(args[0], events) else ' (nothing in force yet)') + ':')
         by_corpus: dict[str, list[Event]] = {}
         for e in events:  # once, not once per corpus: the timeline holds every corpus's commits
             by_corpus.setdefault(e.corpus, []).append(e)
-        # Case law is not in the timeline: one git log per corpus (latest_decision), eight at a time.
-        from concurrent.futures import ThreadPoolExecutor
+        # Case law is not in the timeline: its latest decisions from the case-law index (caselaw_index), else one git log
+        # per corpus (latest_decision), eight at a time.
         cases = [c['path'] for c in manifest()['corpora'] if is_caselaw(c) and (ROOT / c['path'] / '.git').exists()]
-        with ThreadPoolExecutor(8) as pool:
-            decided = dict(zip(cases, pool.map(lambda p: latest_decision(p, args[0]), cases)))
+        decided = latest_decisions(args[0], cases)
         for corpus in manifest()['corpora']:
             own = by_corpus.get(corpus['path'], [])
             last = [e for e in own if e.in_force <= args[0] and e.kind not in ('documentation', 'end')]
