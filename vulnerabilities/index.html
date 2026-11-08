@@ -57,6 +57,28 @@ td.r{white-space:nowrap;font-weight:500}
 
 <h1>Legal exploits: 5 worked-through examples and 82,000 issues flagged by type</h1>
 <p class="lede">Each case is a logical mistake in the law itself, laid out as a legal zero-day in the sense of <a href="https://arxiv.org/html/2508.10050v1">Legal Zero-Days: A Novel Risk Vector for Advanced AI Systems</a>: the rule, what the official text says, why the two don't fit, what follows, who could use it, and the strongest objections, each rated.</p>
+<h2 style="margin-top:28px">Everything the detectors flagged, by category</h2>
+<p>Across the 107 corpora, the detectors flagged about 82,000 candidate defects. Most are corpus build errors or lawful once read in context; the cases below are the ones that survived model review and an official-source check.</p>
+<table>
+<tr><th>Category</th><th>What it is</th><th class="r">Flagged</th></tr>
+<tr><td>Lapsed time limits</td><td>Text still applying a rule "until" a date that has passed</td><td class="r">26,028</td></tr>
+<tr><td>Repeal gaps</td><td>A provision repealed before its replacement took effect</td><td class="r">15,876</td></tr>
+<tr><td>Dead currencies</td><td>Amounts still stated in pesetas, marks, lire, cruzeiros and the like</td><td class="r">8,394</td></tr>
+<tr><td>References to repealed placeholders</td><td>Provisions pointing at a section that survives only as "(repealed)"</td><td class="r">7,078</td></tr>
+<tr><td>Same-day conflicts</td><td>Two amendments changing the same provision on the same day</td><td class="r">6,161</td></tr>
+<tr><td>Retroactive or pre-publication dates</td><td>Rules in force before they were made or published</td><td class="r">5,769</td></tr>
+<tr><td>Citations of repealed acts (Spain)</td><td>Laws in force citing acts that are no longer in force</td><td class="r">3,857</td></tr>
+<tr><td>Empty periods</td><td>Time-limited rules extended only after they had run out</td><td class="r">2,373</td></tr>
+<tr><td>Stale amounts</td><td>An amount changed in one place but not where it is repeated</td><td class="r">2,361</td></tr>
+<tr><td>Duplicate numbering</td><td>Two units with the same number in one provision</td><td class="r">1,905</td></tr>
+<tr><td>Missing paragraphs (Germany)</td><td>References to a paragraph that the cited section does not have</td><td class="r">791</td></tr>
+<tr><td>Failed amendments</td><td>Publisher notes that an amendment could not be carried out</td><td class="r">524</td></tr>
+<tr><td>References to deleted provisions</td><td>Provisions pointing at a section that no longer exists</td><td class="r">451</td></tr>
+<tr><td>Missing enabling power</td><td>Regulations citing a power that did not exist when they were made</td><td class="r">197</td></tr>
+<tr><td>Organic-law reserve (Spain)</td><td>Ordinary instruments changing an organic law</td><td class="r">158</td></tr>
+<tr><td>Dead fines (Germany)</td><td>Fine catalogues pointing at deleted sections</td><td class="r">66</td></tr>
+</table>
+<h2 style="margin-top:44px">5 in-depth examples</h2>
 <section class="case" id="de-awaffv">
 <div class="tag">1 · Germany · General Weapons Regulation (AWaffV), § 34 no. 11</div>
 <h2>The fine for using a shut-down shooting range points at a deleted rule</h2>
@@ -404,27 +426,6 @@ td.r{white-space:nowrap;font-weight:500}
 </ul>
 </section>
 </details>
-<h2 style="margin-top:44px">Everything the detectors flagged, by category</h2>
-<p>Across the 107 corpora, the detectors flagged about 82,000 candidate defects. Most are corpus build errors or lawful once read in context; the cases above are the ones that survived model review and an official-source check.</p>
-<table>
-<tr><th>Category</th><th>What it is</th><th class="r">Flagged</th></tr>
-<tr><td>Lapsed time limits</td><td>Text still applying a rule "until" a date that has passed</td><td class="r">26,028</td></tr>
-<tr><td>Repeal gaps</td><td>A provision repealed before its replacement took effect</td><td class="r">15,876</td></tr>
-<tr><td>Dead currencies</td><td>Amounts still stated in pesetas, marks, lire, cruzeiros and the like</td><td class="r">8,394</td></tr>
-<tr><td>References to repealed placeholders</td><td>Provisions pointing at a section that survives only as "(repealed)"</td><td class="r">7,078</td></tr>
-<tr><td>Same-day conflicts</td><td>Two amendments changing the same provision on the same day</td><td class="r">6,161</td></tr>
-<tr><td>Retroactive or pre-publication dates</td><td>Rules in force before they were made or published</td><td class="r">5,769</td></tr>
-<tr><td>Citations of repealed acts (Spain)</td><td>Laws in force citing acts that are no longer in force</td><td class="r">3,857</td></tr>
-<tr><td>Empty periods</td><td>Time-limited rules extended only after they had run out</td><td class="r">2,373</td></tr>
-<tr><td>Stale amounts</td><td>An amount changed in one place but not where it is repeated</td><td class="r">2,361</td></tr>
-<tr><td>Duplicate numbering</td><td>Two units with the same number in one provision</td><td class="r">1,905</td></tr>
-<tr><td>Missing paragraphs (Germany)</td><td>References to a paragraph that the cited section does not have</td><td class="r">791</td></tr>
-<tr><td>Failed amendments</td><td>Publisher notes that an amendment could not be carried out</td><td class="r">524</td></tr>
-<tr><td>References to deleted provisions</td><td>Provisions pointing at a section that no longer exists</td><td class="r">451</td></tr>
-<tr><td>Missing enabling power</td><td>Regulations citing a power that did not exist when they were made</td><td class="r">197</td></tr>
-<tr><td>Organic-law reserve (Spain)</td><td>Ordinary instruments changing an organic law</td><td class="r">158</td></tr>
-<tr><td>Dead fines (Germany)</td><td>Fine catalogues pointing at deleted sections</td><td class="r">66</td></tr>
-</table>
 <div class="method" style="margin-top:28px">
 <h3 style="margin-top:0">How these were found</h3>
 <p class="m">The <a href="https://github.com/lexifina/global-law">global-law repo</a> stores each country's law as a git history. Detectors read all 107 corpora at once, without writing to them, and looked for: references to provisions that have been deleted or survive only as "(repealed)" placeholders, especially inside fine and penalty lists; publisher notes saying an amendment could not be carried out; commencement dates earlier than publication; and rules extended only after they had run out. A language model sorted the candidates into corpus errors, harmless cases and candidate defects, a second model argued against each survivor, and the strongest were checked by hand against gazettes, consolidated texts and parliamentary papers.</p>

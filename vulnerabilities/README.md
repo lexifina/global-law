@@ -2,6 +2,32 @@
 
 <p>Each case is a logical mistake in the law itself, laid out as a legal zero-day in the sense of <a href="https://arxiv.org/html/2508.10050v1">Legal Zero-Days: A Novel Risk Vector for Advanced AI Systems</a>: the rule, what the official text says, why the two don't fit, what follows, who could use it, and the strongest objections, each rated.</p>
 
+<h2>Everything the detectors flagged, by category</h2>
+
+<p>Across the 107 corpora, the detectors flagged about 82,000 candidate defects. Most are corpus build errors or lawful once read in context; the cases below are the ones that survived model review and an official-source check.</p>
+
+<table>
+<tr><th>Category</th><th>What it is</th><th>Flagged</th></tr>
+<tr><td>Lapsed time limits</td><td>Text still applying a rule "until" a date that has passed</td><td>26,028</td></tr>
+<tr><td>Repeal gaps</td><td>A provision repealed before its replacement took effect</td><td>15,876</td></tr>
+<tr><td>Dead currencies</td><td>Amounts still stated in pesetas, marks, lire, cruzeiros and the like</td><td>8,394</td></tr>
+<tr><td>References to repealed placeholders</td><td>Provisions pointing at a section that survives only as "(repealed)"</td><td>7,078</td></tr>
+<tr><td>Same-day conflicts</td><td>Two amendments changing the same provision on the same day</td><td>6,161</td></tr>
+<tr><td>Retroactive or pre-publication dates</td><td>Rules in force before they were made or published</td><td>5,769</td></tr>
+<tr><td>Citations of repealed acts (Spain)</td><td>Laws in force citing acts that are no longer in force</td><td>3,857</td></tr>
+<tr><td>Empty periods</td><td>Time-limited rules extended only after they had run out</td><td>2,373</td></tr>
+<tr><td>Stale amounts</td><td>An amount changed in one place but not where it is repeated</td><td>2,361</td></tr>
+<tr><td>Duplicate numbering</td><td>Two units with the same number in one provision</td><td>1,905</td></tr>
+<tr><td>Missing paragraphs (Germany)</td><td>References to a paragraph that the cited section does not have</td><td>791</td></tr>
+<tr><td>Failed amendments</td><td>Publisher notes that an amendment could not be carried out</td><td>524</td></tr>
+<tr><td>References to deleted provisions</td><td>Provisions pointing at a section that no longer exists</td><td>451</td></tr>
+<tr><td>Missing enabling power</td><td>Regulations citing a power that did not exist when they were made</td><td>197</td></tr>
+<tr><td>Organic-law reserve (Spain)</td><td>Ordinary instruments changing an organic law</td><td>158</td></tr>
+<tr><td>Dead fines (Germany)</td><td>Fine catalogues pointing at deleted sections</td><td>66</td></tr>
+</table>
+
+<h2>5 in-depth examples</h2>
+
 <p><sub><b>1 · Germany · General Weapons Regulation (AWaffV), § 34 no. 11</b></sub></p>
 
 <h2>The fine for using a shut-down shooting range points at a deleted rule</h2>
@@ -460,30 +486,6 @@
 
 <hr>
 </details>
-
-<h2>Everything the detectors flagged, by category</h2>
-
-<p>Across the 107 corpora, the detectors flagged about 82,000 candidate defects. Most are corpus build errors or lawful once read in context; the cases above are the ones that survived model review and an official-source check.</p>
-
-<table>
-<tr><th>Category</th><th>What it is</th><th>Flagged</th></tr>
-<tr><td>Lapsed time limits</td><td>Text still applying a rule "until" a date that has passed</td><td>26,028</td></tr>
-<tr><td>Repeal gaps</td><td>A provision repealed before its replacement took effect</td><td>15,876</td></tr>
-<tr><td>Dead currencies</td><td>Amounts still stated in pesetas, marks, lire, cruzeiros and the like</td><td>8,394</td></tr>
-<tr><td>References to repealed placeholders</td><td>Provisions pointing at a section that survives only as "(repealed)"</td><td>7,078</td></tr>
-<tr><td>Same-day conflicts</td><td>Two amendments changing the same provision on the same day</td><td>6,161</td></tr>
-<tr><td>Retroactive or pre-publication dates</td><td>Rules in force before they were made or published</td><td>5,769</td></tr>
-<tr><td>Citations of repealed acts (Spain)</td><td>Laws in force citing acts that are no longer in force</td><td>3,857</td></tr>
-<tr><td>Empty periods</td><td>Time-limited rules extended only after they had run out</td><td>2,373</td></tr>
-<tr><td>Stale amounts</td><td>An amount changed in one place but not where it is repeated</td><td>2,361</td></tr>
-<tr><td>Duplicate numbering</td><td>Two units with the same number in one provision</td><td>1,905</td></tr>
-<tr><td>Missing paragraphs (Germany)</td><td>References to a paragraph that the cited section does not have</td><td>791</td></tr>
-<tr><td>Failed amendments</td><td>Publisher notes that an amendment could not be carried out</td><td>524</td></tr>
-<tr><td>References to deleted provisions</td><td>Provisions pointing at a section that no longer exists</td><td>451</td></tr>
-<tr><td>Missing enabling power</td><td>Regulations citing a power that did not exist when they were made</td><td>197</td></tr>
-<tr><td>Organic-law reserve (Spain)</td><td>Ordinary instruments changing an organic law</td><td>158</td></tr>
-<tr><td>Dead fines (Germany)</td><td>Fine catalogues pointing at deleted sections</td><td>66</td></tr>
-</table>
 
 <p><b>How these were found</b></p>
 
