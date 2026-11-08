@@ -241,7 +241,8 @@ class CaseLawIndex(unittest.TestCase):
         sys.path.insert(0, str(ROOT / 'tools'))
         import mcp_server
         for cite in ('123 Nev. 105', '1 Cal. 5th 233', '57 Cal. 2d 1', '465 P.2d 133', '159 P.3d 1086', '30 N.Y.3d 1', '1 N.Y.2d 5',
-                     '90 N.E.3d 1', '310 A.2d 1', '25 A.3d 1', '1 Del. 1', '470 Mass. 1'):
+                     '90 N.E.3d 1', '310 A.2d 1', '25 A.3d 1', '1 Del. 1', '470 Mass. 1',
+                     '6 Dakota 494', '2 Am. Samoa 2d 100', '57 Ill. App. 3d 12', '12 So. 2d 3', '100 B.R. 1'):  # every CAP reporter (data/us-reporters.json)
             self.assertTrue(mcp_server.US_REPORTER.fullmatch(cite), cite)
         for docket in ('No. 61308', 'No. S221852', 'No. 70-18', 'No. 389, 2008', 'No. 2019-775'):
             self.assertTrue(mcp_server.US_DOCKET.fullmatch(docket), docket)

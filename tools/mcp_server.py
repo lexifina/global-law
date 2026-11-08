@@ -4492,6 +4492,9 @@ class _LazyRegex:
     def match(self, text, *a):
         return self.rx().match(text, *a)
 
+    def fullmatch(self, text, *a):
+        return self.rx().fullmatch(text, *a)
+
     @property
     def pattern(self):
         return self.rx().pattern
@@ -4942,12 +4945,31 @@ DE_DOCKET = re.compile(r'(?<![\w/.-])(?:(?:\d{1,2}|[IVX]{1,5}a?)\s+(?:Bv[A-Z]|PB
 # "123 F. Supp. 2d 45", "200 F. App'x 3") and by docket number written with "No." ("No. 70-18", "Nos. 19-1392"), found in
 # the case law served through each corpus's decision-index.tsv. "11 U.S.C. § 1182" is not a reporter citation: the
 # reporter must be followed by a page number.
-US_REPORTER = re.compile(r"(?<![\w.§])\d{1,4}\s+(?:U\.\s?S\.|S\.\s?Ct\.|L\.\s?Ed\.(?:\s?2d)?|F\.(?:\s?(?:2d|3d|4th))?|"
+_US_REPORTER_FIXED = (r"(?<![\w.§])\d{1,4}\s+(?:U\.\s?S\.|S\.\s?Ct\.|L\.\s?Ed\.(?:\s?2d)?|F\.(?:\s?(?:2d|3d|4th))?|"
                          r"F\.\s?Supp\.(?:\s?(?:2d|3d))?|F\.\s?App['’]x|Fed\.\s?Appx\.?"
                          # The states' highest courts (CAP): their official reports and West's regional reporters.
                          r"|Cal\.(?:\s?(?:2d|3d|4th|5th))?|Cal\.\s?Rptr\.(?:\s?(?:2d|3d))?|Cal\.\s?Unrep\.|N\.\s?Y\.(?:\s?(?:2d|3d))?"
                          r"|N\.\s?Y\.\s?S\.(?:\s?(?:2d|3d))?|N\.\s?E\.(?:\s?(?:2d|3d))?|Del\.(?:\s?Cas\.)?|A\.(?:\s?(?:2d|3d))?|Mass\."
                          r"|Nev\.|P\.(?:\s?(?:2d|3d))?)\s+\d{1,5}(?![\w])")
+
+
+def _us_reporter_rx():
+    """A US reporter citation ("410 U.S. 113", "6 Dakota 494", "57 Ill. App. 3d 12"): the forms above, and every reporter
+    name a Caselaw Access Project citation gives (data/us-reporters.json, 740 names), so that any CAP decision is found by
+    its citation."""
+    names = []
+    try:
+        names = json.loads((ROOT / 'data' / 'us-reporters.json').read_text(encoding='utf-8')).get('reporters', [])
+    except (OSError, ValueError):
+        pass
+    extra = '|'.join(re.escape(n).replace(r'\ ', r'\s?').replace(r'\.', r'\.\s?') for n in sorted(names, key=len, reverse=True))
+    fixed = _US_REPORTER_FIXED
+    if extra:
+        fixed = fixed.replace(r')\s+\d{1,5}(?![\w])', '|' + extra + r')\s+\d{1,5}(?![\w])')
+    return re.compile(fixed)
+
+
+US_REPORTER = _LazyRegex(_us_reporter_rx)
 US_DOCKET = re.compile(r'\bNos?\.\s+(?:\d{1,2}-\d{1,5}(?:-[A-Z]{1,3})?|\d{1,4},\s?(?:19|20)\d{2}|(?:19|20)\d{2}-\d{1,5}|(?:[A-Z]{1,3})?\d{3,7})\b')  # "No. 70-18"; a state court's "No. 61308", "No. S219881", Delaware's "No. 389, 2008", New York's "No. 2019-775"
 
 
@@ -5728,9 +5750,16 @@ def t_law_details(args: dict) -> tuple[str, dict]:
             shas = [full] if ok else []
         else:
             mine = [p[len(c) + 1:] for p in decided if p.startswith(c + '/')]
-            if mine:  # a decision: the commit that added its file
-                shas = [law.git('log', '-1', '--format=%H', '--diff-filter=A', pin, '--', p, cwd=cwd).strip() for p in mine]
-                shas = [x for x in shas if x]
+            if mine:  # a decision: the commit that added its file, for at most ten, by one walk of the history (a
+                # docket shared by many decisions took a walk each: 141 s for "No. 1234" in a CAP corpus, 2026-11-08)
+                mine = mine[:10]
+                out = law.git('-c', 'core.quotePath=false', 'log', '--diff-filter=A', '--format=%x1e%H', '--name-only', pin, '--', *mine, cwd=cwd)
+                added = {}
+                for block in out.split('\x1e')[1:]:
+                    sha, _, names = block.partition('\n')
+                    for n in names.split('\n'):
+                        added.setdefault(n.strip(), sha.strip())
+                shas = list(dict.fromkeys(added[p] for p in mine if added.get(p)))
             else:
                 shas = law.git('log', pin, '--format=%H', f'--author={law_name}', '--fixed-strings', '-i', cwd=cwd).split()
         for sha in shas[:10]:
