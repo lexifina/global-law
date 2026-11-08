@@ -1188,6 +1188,7 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
     # eight at a time (14 US corpora one after another took 1.4 s: US speed gate, 2026-11-07).
     cl = [c['path'] for c in m['corpora'] if law.is_caselaw(c)]
     latest = law.latest_decisions('9999-12-31', cl)
+    cl_set, short = set(cl), []
     for c in m['corpora']:
         own = [e for e in events if e.corpus == c['path'] and e.kind != 'documentation']
         first, last = (own[0].in_force, own[-1].in_force) if own else (None, None)
@@ -1221,10 +1222,20 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
                     + (f"; complete to {info['complete_to']}." + ('' if law.is_caselaw(c) else f" {c.get('record_note', '')}")
                        if info['complete_to'] else '.')
                     + f" Example path: {info['example_path']}" + (f" Credit: {credit}." if credit else ''))
+        short.append(f"- {c['path']}: {c['name'].removeprefix('Case law: ')} ({counted}; {first} to {last})." if law.is_caselaw(c) else rows[-1])
+    # Every US court in the Caselaw Access Project is a corpus of its own (about 150): their full rows passed the
+    # answer's length and were cut (124 KB for "united-states/caselaw"). Past the length case law gets one short line
+    # each, and its structured entry keeps path, name, span and an example; read_law on corpus.json gives the rest.
+    if len('\n'.join(rows)) > MAX_ANSWER - 4000:
+        rows = short
+        keep = ('path', 'provision_files', 'record_starts', 'last_change_in_record')
+        data = [{**{k: d[k] for k in keep if k in d}, 'name': d['name'].removeprefix('Case law: ')} if d['path'] in cl_set else d for d in data]
     tree = json.loads(law.git('show', 'HEAD:jurisdiction.json'))
     text = ('Paths are country (ISO 3166-1) / level / corpus / file. Dates are in-force dates (YYYY-MM-DD).\n'
             + '\n'.join(rows) + served_note(names=True))
-    return text, {'corpora': data, 'not_served': not_served(), 'chosen': list(chosen()), 'tree': tree,
+    # Scoped, only the corpora left out within the scope (732 of a 916-corpus tree were 91 KB on their own).
+    left = [c for c in not_served() if not scope or c['path'] == scope or c['path'].startswith(scope.rstrip('/') + '/')]
+    return text, {'corpora': data, 'not_served': left, 'chosen': list(chosen()), 'tree': tree,
                   'scheme': m.get('scheme'), 'date_rule': m.get('date_rule')}
 
 
@@ -3222,6 +3233,19 @@ def caselaw_grep_counts(cwd: Path, head: str, pattern: str, specs: list[str]) ->
             parts = [[f'{f}/*.md' for f in folders[i::CASELAW_GREPS]] for i in range(min(CASELAW_GREPS, len(folders)))]
             # files directly in decisions/ or in a court's folder (not in a year) are read by the first part
             parts[0] += [':(glob)decisions/*.md', *{f':(glob){f.rsplit("/", 1)[0]}/*.md' for f in folders if f.count('/') > 1}]
+    # A Windows command line holds 32,767 characters: New York's other courts (204,000 decisions, 330 courts by year)
+    # gave parts of 60,000 and git did not start (WinError 206). Long parts are cut to about 20,000 characters each.
+    short = []
+    for part in parts:
+        cur, size = [], 0
+        for spec in part:
+            if cur and size + len(spec) + 3 > 20_000:
+                short.append(cur)
+                cur, size = [], 0
+            cur.append(spec)
+            size += len(spec) + 3
+        short.append(cur)
+    parts = short
     deadline = getattr(_call, 'deadline', 0.0)
     cancel = getattr(_call, 'cancel', None)
 
@@ -3231,7 +3255,7 @@ def caselaw_grep_counts(cwd: Path, head: str, pattern: str, specs: list[str]) ->
                        capture_output=True, encoding='utf-8', errors='replace').stdout
 
     lines = {}
-    with ThreadPoolExecutor(len(parts)) as pool:
+    with ThreadPoolExecutor(min(CASELAW_GREPS, len(parts))) as pool:
         for out in pool.map(one, parts):
             for line in out.splitlines():
                 name, _, n = line.removeprefix(head + ':').rpartition(':')
@@ -5741,12 +5765,14 @@ def t_law_details(args: dict) -> tuple[str, dict]:
         raise UserError(f'No corpus {corpus!r}; see list_jurisdictions.')
     if not law_name and not commit:
         raise UserError('Give a law (for example "Pub. L. 117-151", "36. Änderung", "S.I. 2020/471") or a commit.')
-    found = []
     missing: list[str] = []
-    for entry, cwd in checked_out([{'path': c} for c in corpora], missing):
+
+    def one(entry_cwd) -> list[dict]:
+        entry, cwd = entry_cwd
+        found: list[dict] = []
         c, pin = entry['path'], corpus_head(entry['path'])
         if not pin:
-            continue
+            return found
         # Only the history the tree pins is read: not other branches or unreachable drafts in a maintainer's clone.
         if commit:
             ok = git_run(['git', 'cat-file', '-e', f'{commit}^{{commit}}'], cwd=cwd, capture_output=True).returncode == 0
@@ -5774,6 +5800,13 @@ def t_law_details(args: dict) -> tuple[str, dict]:
             files = [f"{c}/{l.split(chr(9))[-1]}" for l in changed if l.strip() and not NOT_LAW.search(l.split('\t')[-1])]
             found.append({'corpus': c, 'commit': sha, 'law': author, 'message': body.strip(), 'trailers': law.trailers(body),
                           'trailers_all': law.trailers_all(body), 'provisions': files})
+        return found
+
+    # Each corpus is its own git processes: read eight at a time, in the manifest's order (the five decisions of a
+    # shared docket in five CAP corpora took 5.9 s one after another, 2026-11-08).
+    todo = list(checked_out([{'path': c} for c in corpora], missing))
+    with ThreadPoolExecutor(min(8, len(todo) or 1)) as pool:
+        found = [f for part in pool.map(one, todo) for f in part]
     if not found:
         raise UserError(f'No change in the record by {law_name or commit!r}. Use laws_between to list laws by date.' + not_searched(missing))
     cap = max(500, num(args, 'max_message_chars', 3000, 50000))

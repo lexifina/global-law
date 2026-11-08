@@ -260,6 +260,36 @@ class CaseLawIndex(unittest.TestCase):
                                'print(r["result"]["contents"][0]["text"])'], cwd=self.t.root, capture_output=True, encoding='utf-8', timeout=300)
         self.assertIn(FR, done.stdout, 'a corpus pinned after manifest.json was written is in the manifest resource')
 
+    def test_7_many_courts_list_short_and_grep_in_short_command_lines(self):
+        # About 150 US case-law corpora (every CAP court): past the answer's length each is one short line, and every
+        # one is still named (the full rows were cut, from Pennsylvania on). Run with the length held small.
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c',
+                               'import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server\n'
+                               'mcp_server.MAX_ANSWER = 4500\n'
+                               'print(json.dumps(mcp_server.t_list_jurisdictions({})))'], cwd=self.t.root, capture_output=True,
+                              encoding='utf-8', timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        text, data = json.loads(done.stdout)
+        for path in (SC, CA, LAW):
+            self.assertIn(path, text)
+        self.assertIn('(4 decision files; ', text)
+        sc = next(c for c in data['corpora'] if c['path'] == SC)
+        self.assertNotIn('record_note', sc)
+        self.assertTrue(sc['name'].startswith('Supreme Court'))
+        # A git grep over thousands of court/year folders stays under Windows's 32,767-character command line
+        # (New York's other courts: WinError 206).
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import mcp_server
+        seen = []
+        real = mcp_server.git_run
+        mcp_server.git_run = lambda cmd, **kw: (seen.append(len(' '.join(cmd))), subprocess.CompletedProcess(cmd, 0, '', ''))[1]
+        try:
+            mcp_server.caselaw_grep_counts(self.t.root, 'HEAD', 'x', [f'decisions/court-number-{i:05d}-of-a-long-name/2000/*.md' for i in range(3000)])
+        finally:
+            mcp_server.git_run = real
+        self.assertGreater(len(seen), 1)
+        self.assertLess(max(seen), 32_000)
+
     def test_4_a_long_overlay_is_counted_from_its_summary(self):
         # With the rows counted rather than read (GLOBAL_LAW_JUDGMENTS_COUNTED below the 2,500 rows), check_precedent and
         # what_else_changes give the same answer from the index's summary of the long file as from the file itself.
