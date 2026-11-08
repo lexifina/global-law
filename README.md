@@ -102,7 +102,7 @@ each country's usual form (`Art. 336 OR`, `§ 823 Abs. 1 BGB`, `article 1240 du 
 - [FRESHNESS.md](FRESHNESS.md): how current each corpus is · [MONITORING.md](MONITORING.md): whether updates are running · [WATCHING.md](WATCHING.md): how each official source is watched for changes
 - [performance/](performance/): how fast the tools are, measured
 - [visualisations/](visualisations/): charts and bridges across the world's law
-- [Vulnerabilities](vulnerabilities/): five drafting mistakes in the law as published, walked through ([summary page](vulnerabilities/index.html))
+- [Vulnerabilities](vulnerabilities/): Mistakes in legislation as published
 - Tests: `python -m unittest discover -s tests`
 
 ## Videos
