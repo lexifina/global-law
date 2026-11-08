@@ -113,9 +113,14 @@ class CaseLawIndex(unittest.TestCase):
         for path, (cite, day) in zip(cls.ca_paths, [('900 F.3d 1', '2018-07-01'), ('920 F.3d 2', '2019-03-04')]):
             ca.commit(f'{ccourt} {cite}', {path: decision(ccourt, 'In re Stay', 'The automatic stay applies.')}, Kind='court',
                       In_force=day, Decided=day, Court=ccourt, Citation=cite)
+        # A long overlay file (2,500 rows, more than SUM_ROWS): the index keeps its summary, which check_precedent reads
+        # when the rows are many (test_4).
+        many = ''.join(json.dumps({'decided': f'{2000 + i % 20}-{1 + i % 12:02d}-{1 + i % 28:02d}', 'name': f'Case {i}', 'court': ccourt,
+                                   'citation': f'{i} F.3d {i}', 'url': f'{url}m{i}'}) + '\n' for i in range(2500))
         ca.commit('Lexifina', {f'judgments/{LAW}/title-11/362.2018.jsonl': json.dumps(
             {'decided': '2018-07-01', 'name': 'In re Stay', 'court': ccourt, 'citation': '900 F.3d 1', 'url': url + '9',
-             'decision': cls.ca_paths[0]}) + '\n', 'decision-index.tsv': 'reference\tpath\n900 F.3d 1\t' + cls.ca_paths[0] + '\n'},
+             'decision': cls.ca_paths[0]}) + '\n', f'judgments/{LAW}/title-11/1182.2019.jsonl': many,
+            'decision-index.tsv': 'reference\tpath\n900 F.3d 1\t' + cls.ca_paths[0] + '\n'},
             Kind='documentation')
         fr = t.corpus(FR)
         fr.commit('Conseil constitutionnel 09-100', {'decisions/cc/2009/09-100.md': decision('Conseil constitutionnel', 'Décision 09-100', 'Texte.')},
@@ -161,7 +166,7 @@ class CaseLawIndex(unittest.TestCase):
         self.assertFalse(list(self.store().glob('cl-set-*')), 'a call builds no index: the update step does')
         built = self.cli('caselaw-index')
         self.assertIn('case-law index: 3 corpora', built)
-        self.assertEqual(len(list(self.store().glob('cl-set-v1-*.json'))), 1)
+        self.assertEqual(len(list(self.store().glob('cl-set-v2-*.json'))), 1)
         after = self.calls(*self.CHECKS)
         for (name, args), b, a in zip(self.CHECKS, before, after):
             self.assertEqual(b['text'], a['text'], f'{name} {args}')
@@ -207,7 +212,7 @@ class CaseLawIndex(unittest.TestCase):
             self.assertIn('In re Newer', stale)  # before the update step: each corpus read as before, at its new pin
             self.cli('caselaw-index')
             pin = self.git('rev-parse', 'HEAD', cwd=ca.path)
-            rec = json.loads(next(self.store().glob(f'cl-v1-united-states~ca9~caselaw-{pin[:12]}.json')).read_text(encoding='utf-8'))
+            rec = json.loads(next(self.store().glob(f'cl-v2-united-states~ca9~caselaw-{pin[:12]}.json')).read_text(encoding='utf-8'))
             self.assertEqual(rec.get('from'), old_pin, 'read from the record of the earlier pin')
             self.assertEqual(rec['files'], 3)
             full = self.store() / f'decisions-{pin}.tsv'
@@ -220,7 +225,7 @@ class CaseLawIndex(unittest.TestCase):
             self.assertIn('In re Newer', got[3]['text'])
             self.assertIn('In re Stay', got[3]['text'])
             # the same answers as a full read of the new pin
-            for p in self.store().glob('cl-v1-united-states~ca9~*'):
+            for p in self.store().glob('cl-v2-united-states~ca9~*'):
                 p.unlink()
             for p in self.store().glob('cl-set-*'):
                 p.unlink()
@@ -231,6 +236,28 @@ class CaseLawIndex(unittest.TestCase):
             self.assertEqual([r['text'] for r in got], [r['text'] for r in again])
         finally:
             pass
+
+    def test_4_a_long_overlay_is_counted_from_its_summary(self):
+        # With the rows counted rather than read (GLOBAL_LAW_JUDGMENTS_COUNTED below the 2,500 rows), check_precedent and
+        # what_else_changes give the same answer from the index's summary of the long file as from the file itself.
+        checks = [('check_precedent', {'path': ART, 'date': '2024-01-01'}), ('check_precedent', {'path': ART, 'date': '2010-06-01'}),
+                  ('check_precedent', {'path': ART, 'date': '2024-01-01', 'max_results': 400}),
+                  ('what_else_changes', {'path': ART, 'date': '2024-01-01'})]
+
+        def run(*calls):
+            import os
+            done = subprocess.run([sys.executable, '-X', 'utf8', '-c', CALL], cwd=self.t.root, input=json.dumps(calls),
+                                  capture_output=True, encoding='utf-8', timeout=300,
+                                  env={**os.environ, 'GLOBAL_LAW_JUDGMENTS_COUNTED': '1000'})
+            self.assertEqual(done.returncode, 0, done.stderr)
+            return [r['text'] for r in json.loads(done.stdout)]
+        self.drop_index()
+        read = run(*checks)
+        self.cli('caselaw-index')
+        sums = ''.join(p.read_text(encoding='utf-8') for p in self.store().glob('cl-set-v2-*.sums.tsv'))
+        self.assertIn('"rows": 2500', sums)
+        self.assertEqual(read, run(*checks))
+        self.assertIn('decisions are recorded; the latest 50 are checked', read[0])
 
 
 if __name__ == '__main__':

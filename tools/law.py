@@ -453,7 +453,10 @@ def _late_decisions(corpus: str, cwd: Path, cutoff: str, date: str) -> list[tupl
 # an update (the MCP server also builds it in the background when it starts); until it is built, calls read each
 # corpus as before.
 
-CASELAW_INDEX_V = 1
+CASELAW_INDEX_V = 2  # 2: overlay files with their line counts, and summaries of the long ones
+SUM_ROWS = 2000  # overlay rows in one file above which the index keeps its summary (rows by day, the latest SUM_TAIL rows)
+SUM_TAIL = 300
+_DECIDED_ROW = re.compile(rb'"decided":\s*"(\d{4}-\d{2}-\d{2})"')
 _CL_NOT_FILE = re.compile(r'(^|/)(README|LICENSE|REPRODUCE|KORREKTUREN|CHANGELOG|RESEARCH)[^/]*$|(^|/)(tools|tests|data|build|\.github)/'
                           r'|^[A-Z][A-Z0-9_-]*\.md$')  # as the MCP server's NOT_LAW and ROOT_DOC: a corpus's own docs
 _CL_JUDGMENTS = re.compile(r'^judgments/(.+?)(?:\.(?:19[5-9]\d|20[0-4]\d|2050))?\.jsonl$')  # split by year as INDEX_YEARS
@@ -577,7 +580,52 @@ def _sorted_merge(old: Path, new: list[bytes]) -> bytes:
 def _cl_files(corpus: str, pin: str) -> dict[str, Path]:
     store, stem = _store(), f'cl-v{CASELAW_INDEX_V}-{_cl_name(corpus)}-{pin[:12]}'
     return {'json': store / f'{stem}.json', 'days': store / f'{stem}.days.tsv', 'overlay': store / f'{stem}.overlay.tsv',
-            'decisions': store / f'decisions-{pin}.tsv', 'bloom': store / f'decisions-{pin}.bloom'}
+            'sums': store / f'{stem}.sums.tsv', 'decisions': store / f'decisions-{pin}.tsv', 'bloom': store / f'decisions-{pin}.bloom'}
+
+
+def _overlay_stats(cwd: Path, blobs: list[str]) -> tuple[dict[str, int], dict[str, str]]:
+    """(lines of each overlay blob, and for a long one, its summary as JSON: rows, rows by day decided, and its latest
+    SUM_TAIL rows as written), read SUM_BATCH blobs to a git process. An article cited in hundreds of thousands of
+    decisions (art. 1.022 of the Brazilian CPC: 614,000 rows) is then counted and its latest decisions read from the
+    summary, not from its files on each call."""
+    import heapq
+    lines: dict[str, int] = {}
+    sums: dict[str, str] = {}
+    todo = sorted(set(blobs))
+    for i in range(0, len(todo), 200):
+        part = todo[i:i + 200]
+        for blob, (kind, data) in zip(part, _cat_batch(cwd, part)):
+            if data is None:
+                continue
+            n = data.count(b'\n') + (0 if data.endswith(b'\n') or not data else 1)
+            lines[blob] = n
+            if n < SUM_ROWS:
+                continue
+            hist: dict[str, int] = {}
+            tail: list = []
+            rows = 0
+            for line in data.splitlines():
+                m = _DECIDED_ROW.search(line)
+                if not m:
+                    continue
+                d = m.group(1).decode('ascii')
+                rows += 1
+                hist[d] = hist.get(d, 0) + 1
+                if len(tail) < SUM_TAIL:
+                    heapq.heappush(tail, (d, line))
+                elif (d, line) > tail[0]:  # the latest by day, ties by the row itself (as judgments_counted picks)
+                    heapq.heapreplace(tail, (d, line))
+            sums[blob] = json.dumps({'rows': rows, 'hist': sorted(hist.items()),
+                                     'tail': [l.decode('utf-8', 'replace') for _, l in sorted(tail)]}, ensure_ascii=False)
+    return lines, sums
+
+
+def _write_overlay(f: dict[str, Path], rows: list[tuple[str, str, str]], lines: dict[str, int], sums: dict[str, str]) -> None:
+    """The corpus's overlay files, '<law key>\\t<blob>\\t<path>\\t<lines>' sorted, and the summaries of the long ones,
+    '<blob>\\t<summary>' sorted by blob."""
+    _write_atomic(f['overlay'], ''.join(sorted(f'{k}\t{b}\t{p}\t{lines.get(b, 0)}\n' for k, b, p in rows)).encode('utf-8'))
+    used = {b for _, b, _ in rows}
+    _write_atomic(f['sums'], ''.join(f'{b}\t{sums[b]}\n' for b in sorted(sums) if b in used).encode('utf-8'))
 
 
 def _cl_base(corpus: str, pin: str, cwd: Path) -> dict | None:
@@ -589,7 +637,7 @@ def _cl_base(corpus: str, pin: str, cwd: Path) -> dict | None:
         except (OSError, ValueError):
             continue
         f = _cl_files(corpus, rec.get('pin', ''))
-        if (rec.get('pin') and rec['pin'] != pin and all(f[k].exists() for k in ('days', 'overlay', 'decisions'))
+        if (rec.get('pin') and rec['pin'] != pin and all(f[k].exists() for k in ('days', 'overlay', 'sums', 'decisions'))
                 and subprocess.run(['git', 'merge-base', '--is-ancestor', rec['pin'], pin], cwd=cwd,
                                    capture_output=True).returncode == 0):
             return rec
@@ -617,7 +665,7 @@ def caselaw_record(corpus: str, pin: str, cwd: Path) -> dict:
     f = _cl_files(corpus, pin)
     try:
         rec = json.loads(f['json'].read_text(encoding='utf-8'))
-        if rec.get('pin') == pin and all(f[k].exists() for k in ('days', 'overlay', 'decisions', 'bloom')):
+        if rec.get('pin') == pin and all(f[k].exists() for k in ('days', 'overlay', 'sums', 'decisions', 'bloom')):
             return rec
     except (OSError, ValueError):
         pass
@@ -655,7 +703,7 @@ def _cl_build(corpus: str, pin: str, cwd: Path, f: dict[str, Path]) -> dict:
         tree.append((path, parts[2]))
         m = _CL_JUDGMENTS.match(path)
         if m:
-            overlay.append(f'{m.group(1)}\t{parts[2]}\t{path}\n')
+            overlay.append((m.group(1), parts[2], path))
         elif path.endswith('.md') and not _CL_NOT_FILE.search(path):
             files += 1
             if not example or (path.startswith('decisions/') and not example.startswith('decisions/')):
@@ -664,7 +712,7 @@ def _cl_build(corpus: str, pin: str, cwd: Path, f: dict[str, Path]) -> dict:
     for d, s, n in _days_rows(cwd, pin):
         days[d] = (s, n)
     _write_days(f['days'], days)
-    _write_atomic(f['overlay'], ''.join(sorted(overlay)).encode('utf-8'))
+    _write_overlay(f, overlay, *_overlay_stats(cwd, [b for _, b, _ in overlay]))
     if not f['decisions'].exists():
         lines = _decision_lines_full(corpus, pin, cwd, tree)
         _write_atomic(f['decisions'], b''.join(lines))
@@ -695,9 +743,12 @@ def _cl_update(corpus: str, pin: str, cwd: Path, base: dict, f: dict[str, Path])
     parts = raw.split(b'\0')
     files, example = base['files'], base['example']
     overlay = {}
+    lines: dict[str, int] = {}
     for line in b['overlay'].read_text(encoding='utf-8').splitlines():
-        key, blob, path = line.split('\t')
+        key, blob, path, n = line.split('\t')
         overlay[path] = (key, blob)
+        lines[blob] = int(n)
+    sums = dict(l.split('\t', 1) for l in b['sums'].read_text(encoding='utf-8').splitlines() if '\t' in l)
     new_lines: list[bytes] = []
     rebuild = False
     i = 0
@@ -747,7 +798,10 @@ def _cl_update(corpus: str, pin: str, cwd: Path, base: dict, f: dict[str, Path])
     for d, s, n in _days_rows(cwd, f"{base['pin']}..{pin}"):
         days[d] = (s, n)
     _write_days(f['days'], days)
-    _write_atomic(f['overlay'], ''.join(sorted(f'{k}\t{v}\t{p}\n' for p, (k, v) in overlay.items())).encode('utf-8'))
+    got_lines, new_sums = _overlay_stats(cwd, [v for _, v in overlay.values() if v not in lines])
+    lines.update(got_lines)
+    sums.update(new_sums)
+    _write_overlay(f, [(k, v, p) for p, (k, v) in overlay.items()], lines, sums)
     if rebuild:
         tree = []
         for line in _git_bytes(['-c', 'core.quotePath=false', 'ls-tree', '-r', pin], cwd).decode('utf-8', 'replace').splitlines():
@@ -762,6 +816,24 @@ def _cl_update(corpus: str, pin: str, cwd: Path, base: dict, f: dict[str, Path])
         _write_bloom(f, b['bloom'], new_lines)
     return {'v': CASELAW_INDEX_V, 'corpus': corpus, 'pin': pin, 'files': files, 'example': example, 'days': len(days),
             'from': base['pin']}
+
+
+def caselaw_vouched(paths: list[str]) -> frozenset:
+    """Of these checked-out case-law corpora, those the case-law index built for their pins vouches for (each was read
+    at its pin when the index was built): a reader can serve them without asking each checkout whether it has its
+    pin, which cost a file-system walk per corpus on every call. Empty when no index matches the pins."""
+    import hashlib
+    key = ('cl-vouched', _head() + '|' + ','.join(sorted(paths)))
+    if key not in _CACHE:
+        pinned = sorted((p, tip(p) or '') for p in paths)
+        h = hashlib.sha1('\n'.join(f'{c}@{p}' for c, p in pinned).encode('utf-8')).hexdigest()[:16]
+        try:
+            idx = json.loads((_store() / f'cl-set-v{CASELAW_INDEX_V}-{h}.json').read_text(encoding='utf-8'))
+            got = frozenset(c for c, info in idx.get('corpora', {}).items() if info.get('pin') == tip(c))
+        except (OSError, ValueError, AttributeError):
+            got = frozenset()
+        _CACHE[key] = got
+    return _CACHE[key]  # type: ignore[return-value]
 
 
 def _cl_served() -> list[tuple[str, str, Path]]:
@@ -791,24 +863,43 @@ def caselaw_index(build: str = 'no') -> dict | None:
     decision, its decision days' bytes in the days file, its Bloom filter's bytes, its docket file, its objects
     folder), with the days, overlay and Bloom files beside it. build: 'no' gives it only if it is built; 'join' also
     joins it when every corpus's record is there (a second or less); 'yes' also reads any corpus not yet read."""
+    import hashlib
+    corpora = manifest()['corpora']
+    quick = ('caselaw-index-quick', f'{_head()}|{id(corpora)}|{len(corpora)}')
+    if build != 'yes' and quick in _CACHE:  # asked once per corpus by some calls (list_jurisdictions): once a process
+        return _CACHE[quick]  # type: ignore[return-value]
+    store = _store()
+
+    def load(h: str) -> dict | None:
+        try:
+            idx = json.loads((store / f'cl-set-v{CASELAW_INDEX_V}-{h}.json').read_text(encoding='utf-8'))
+            if idx.get('v') == CASELAW_INDEX_V and all((store / idx[k]).exists() for k in ('days_file', 'overlay_file', 'bloom_file', 'sums_file')):
+                idx['dir'] = str(store)
+                return idx
+        except (OSError, ValueError, KeyError):
+            pass
+        return None
+
+    # With each checkout at the commit the tree pins (the usual case) the hash comes from the pins alone, and no file
+    # of any checkout is read: the index was built from those commits, read in the checkouts then.
+    pinned = sorted((c['path'], tip(c['path']) or '') for c in corpora if is_caselaw(c) and (ROOT / c['path'] / '.git').exists())
+    if pinned and build != 'yes':
+        idx = load(hashlib.sha1('\n'.join(f'{c}@{p}' for c, p in pinned).encode('utf-8')).hexdigest()[:16])
+        if idx is not None:
+            _CACHE[quick] = idx
+            return idx
     served = _cl_served()
     if not served:
+        _CACHE[quick] = None
         return None
-    import hashlib
     h = hashlib.sha1('\n'.join(f'{c}@{p}' for c, p, _ in sorted(served)).encode('utf-8')).hexdigest()[:16]
     key = ('caselaw-index', h)
     if key in _CACHE:
         return _CACHE[key]  # type: ignore[return-value]
-    store = _store()
-    summary = store / f'cl-set-v{CASELAW_INDEX_V}-{h}.json'
-    try:
-        idx = json.loads(summary.read_text(encoding='utf-8'))
-        if idx.get('v') == CASELAW_INDEX_V and all((store / idx[k]).exists() for k in ('days_file', 'overlay_file', 'bloom_file')):
-            idx['dir'] = str(store)
-            _CACHE[key] = idx
-            return idx
-    except (OSError, ValueError, KeyError):
-        pass
+    idx = load(h)
+    if idx is not None:
+        _CACHE[key] = _CACHE[quick] = idx
+        return idx
     if build == 'no':
         return None
     if build == 'join' and not all(_cl_files(c, p)['json'].exists() for c, p, _ in served):
@@ -818,7 +909,7 @@ def caselaw_index(build: str = 'no') -> dict | None:
         records = list(pool.map(lambda s: caselaw_record(*s), served))
     stem = f'cl-set-v{CASELAW_INDEX_V}-{h}'
     corpora: dict[str, dict] = {}
-    days_parts, bloom_parts, overlay = [], [], []
+    days_parts, bloom_parts, overlay, sums = [], [], [], []
     at_days = at_bloom = 0
     for (c, p, cwd), rec in zip(served, records):
         f = _cl_files(c, p)
@@ -833,19 +924,21 @@ def caselaw_index(build: str = 'no') -> dict | None:
         bloom_parts.append(bloom[13:])
         at_bloom += len(bloom) - 13
         for line in f['overlay'].read_text(encoding='utf-8').splitlines():
-            k, blob, _ = line.split('\t')
-            overlay.append(f'{k}\t{c}\t{blob}\n')
+            k, blob, _, n = line.split('\t')
+            overlay.append(f'{k}\t{c}\t{blob}\t{n}\n')
+        sums += f['sums'].read_text(encoding='utf-8').splitlines(keepends=True)
     _write_atomic(store / f'{stem}.days.tsv', b''.join(days_parts))
+    _write_atomic(store / f'{stem}.sums.tsv', ''.join(sorted(set(sums))).encode('utf-8'))
     _write_atomic(store / f'{stem}.bloom', b''.join(bloom_parts))
     _write_atomic(store / f'{stem}.overlay.tsv', ''.join(sorted(overlay)).encode('utf-8'))
     idx = {'v': CASELAW_INDEX_V, 'hash': h, 'corpora': corpora, 'days_file': f'{stem}.days.tsv',
-           'overlay_file': f'{stem}.overlay.tsv', 'bloom_file': f'{stem}.bloom'}
-    _write_atomic(summary, json.dumps(idx, ensure_ascii=False).encode('utf-8'))
+           'overlay_file': f'{stem}.overlay.tsv', 'bloom_file': f'{stem}.bloom', 'sums_file': f'{stem}.sums.tsv'}
+    _write_atomic(store / f'cl-set-v{CASELAW_INDEX_V}-{h}.json', json.dumps(idx, ensure_ascii=False).encode('utf-8'))
     for old in sorted(store.glob(f'cl-set-v{CASELAW_INDEX_V}-*.json'), key=lambda p: p.stat().st_mtime)[:-4]:
-        for ext in ('.json', '.days.tsv', '.overlay.tsv', '.bloom'):
+        for ext in ('.json', '.days.tsv', '.overlay.tsv', '.bloom', '.sums.tsv'):
             (store / (old.name[:-5] + ext)).unlink(missing_ok=True)
     idx['dir'] = str(store)
-    _CACHE[key] = idx
+    _CACHE[key] = _CACHE[quick] = idx
     return idx
 
 
@@ -949,13 +1042,35 @@ def caselaw_overlay_rows(keys: list[str]) -> list[tuple[str, str]] | None:
     idx = caselaw_index('join')
     if idx is None:
         return None
+    return [(e['corpus'], e['blob']) for e in caselaw_overlay_entries(keys, idx)]
+
+
+def caselaw_overlay_entries(keys: list[str], idx: dict | None = None) -> list[dict] | None:
+    """Every judgment overlay file the case-law corpora served hold for these keys, as {corpus, blob, lines, summary}
+    (summary: rows, rows by day decided, the latest SUM_TAIL rows; for a file of SUM_ROWS rows or more, else None).
+    None when the index is not built."""
+    idx = idx or caselaw_index('join')
+    if idx is None:
+        return None
+    import mmap
     path = Path(idx['dir']) / idx['overlay_file']
     size = path.stat().st_size
     out = []
-    for k in keys:
-        for line in _mm_lines(path, 0, size, f'{k}\t'.encode('utf-8')):
-            _, corpus, blob = line.split('\t')
-            out.append((corpus, blob))
+    if not size:
+        return out
+    with open(path, 'rb') as fh, mmap.mmap(fh.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+        for k in keys:
+            for line in _mm_lines(mm, 0, size, f'{k}\t'.encode('utf-8')):
+                _, corpus, blob, n = line.split('\t')
+                out.append({'corpus': corpus, 'blob': blob, 'lines': int(n), 'summary': None})
+    long = [e for e in out if e['lines'] >= SUM_ROWS]
+    sums = Path(idx['dir']) / idx['sums_file']
+    if long and sums.stat().st_size:
+        with open(sums, 'rb') as fh, mmap.mmap(fh.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+            for e in long:
+                got = _mm_lines(mm, 0, len(mm), f"{e['blob']}\t".encode('ascii'))
+                if got:
+                    e['summary'] = json.loads(got[0].split('\t', 1)[1])
     return out
 
 

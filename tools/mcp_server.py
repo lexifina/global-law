@@ -197,8 +197,10 @@ def _look() -> tuple[str, tuple[str, ...]]:
         corpora = _full_manifest(sha)['corpora']
         # The first look asks git once or more per checked-out corpus (unreadable_why); with dozens checked out (the 27
         # Swiss case-law corpora alone) asked one after another that was most of a quick call, so eight at a time.
+        # Case-law corpora the case-law index vouches for at their pins are served without those questions.
+        vouched = law.caselaw_vouched([c['path'] for c in corpora if law.is_caselaw(c) and (ROOT / c['path'] / '.git').exists()])
         with ThreadPoolExecutor(8) as pool:
-            why = list(pool.map(lambda c: serving(c, names), corpora))
+            why = list(pool.map(lambda c: serving(c, names, vouched), corpora))
         moved = _warming_caselaw and _head_seen[1] not in ('', sha)
         _head_seen = (now, sha, tuple(c['path'] for c, w in zip(corpora, why) if w is None))
         if moved:  # pins moved under a running server: the case-law index of the new pins, in the background
@@ -249,7 +251,7 @@ def chosen() -> tuple[str, ...]:
     return tuple(n for n in re.split(r'[,;\n]+', raw) if n.strip())
 
 
-def serving(corpus: dict, names: tuple[str, ...] | None = None) -> str | None:
+def serving(corpus: dict, names: tuple[str, ...] | None = None, vouched: frozenset = frozenset()) -> str | None:
     """None when the corpus is served, else why not: 'not checked out', 'not chosen', or a checkout that cannot be read
     at the commit the tree pins (a key of UNREADABLE), which law.py's world and laws leave out and name too: one such
     corpus narrows an answer over every corpus, and does not fail it (issues #7 and #11)."""
@@ -258,6 +260,8 @@ def serving(corpus: dict, names: tuple[str, ...] | None = None) -> str | None:
     names = chosen() if names is None else names
     if names and not any(law.takes_in(corpus, n) for n in names):
         return 'not chosen'
+    if corpus['path'] in vouched:  # read at its pin when the case-law index was built (law.caselaw_vouched)
+        return None
     return unreadable_why(corpus['path'])
 
 
@@ -4072,8 +4076,9 @@ def judgments_for(corpus: str, sha: str, rel: str) -> list[dict]:
     return judgment_rows(judgment_texts(corpus, sha, rel))
 
 
-def judgment_texts(corpus: str, sha: str, rel: str) -> list[tuple[str, str]]:
-    """(case-law corpus or '', text) of every overlay file judgments_for reads for a provision."""
+def judgment_own_texts(corpus: str, sha: str, rel: str) -> list[tuple[str, str]]:
+    """('', text) of the overlay files the law's own corpus and the tree hold for a provision (filed under the corpus's
+    current or any earlier path)."""
     name = f"{rel.removesuffix('.md')}.jsonl"
     texts: list[tuple[str, str]] = []
     specs = [(ROOT / corpus, f'{sha}:judgments/{name}')] + [(ROOT, f'HEAD:judgments/{c}/{name}') for c in names_for(corpus)]
@@ -4081,6 +4086,13 @@ def judgment_texts(corpus: str, sha: str, rel: str) -> list[tuple[str, str]]:
         done = git_run(['git', 'show', spec], cwd=cwd, capture_output=True, encoding='utf-8', timeout=GIT_TIMEOUT)
         if done.returncode == 0:
             texts.append(('', done.stdout))
+    return texts
+
+
+def judgment_texts(corpus: str, sha: str, rel: str) -> list[tuple[str, str]]:
+    """(case-law corpus or '', text) of every overlay file judgments_for reads for a provision."""
+    name = f"{rel.removesuffix('.md')}.jsonl"
+    texts = judgment_own_texts(corpus, sha, rel)
     # The case-law overlays: from the case-law index when it is built (one sorted file names the corpora that hold a
     # file for this provision, and one git process reads them all); else one git process per corpus.
     rows = law.caselaw_overlay_rows([f"{n}/{rel.removesuffix('.md')}" for n in names_for(corpus)])
@@ -4127,31 +4139,52 @@ def judgments_counted(corpus: str, sha: str, rel: str, date: str, latest: int) -
     """(rows recorded, rows decided on or before `date`, the latest `latest` of those, oldest first). An article courts cite
     in hundreds of thousands of decisions (art. 1.022 of the Brazilian CPC: 614,000 rows) is not parsed row by row: the
     rows are counted and the latest picked by their "decided" field, and only those are read (counts then include a
-    decision filed twice, which the small overlays, read whole, count once)."""
-    texts = judgment_texts(corpus, sha, rel)
-    if sum(t.count('\n') for _, t in texts) <= JUDGMENTS_COUNTED:
+    decision filed twice, which the small overlays, read whole, count once). With the case-law index built, a long
+    overlay file (SUM_ROWS rows or more) is counted from its summary there and its latest rows taken from it, unless
+    the date asks for older rows than the summary keeps: it is then read as before."""
+    entries = law.caselaw_overlay_entries([f"{n}/{rel.removesuffix('.md')}" for n in names_for(corpus)])
+    summed: list[dict] = []
+    if entries is None:
+        texts = judgment_texts(corpus, sha, rel)
+    else:
+        texts = judgment_own_texts(corpus, sha, rel)
+        if sum(t.count('\n') for _, t in texts) + sum(e['lines'] for e in entries) > JUDGMENTS_COUNTED:
+            for e in entries:
+                sm = e['summary']
+                if not sm:
+                    continue
+                upto_here = sum(n for d, n in sm['hist'] if d <= date)
+                tail = [l for l in sm['tail'] if (m := _DECIDED.search(l)) and m.group(1) <= date]
+                if len(tail) >= min(upto_here, latest * 2):  # the summary holds every row this answer can show
+                    summed.append({**e, 'upto': upto_here, 'tail_upto': tail})
+        texts += law.read_blobs_of([(e['corpus'], e['blob']) for e in entries
+                                    if not any(e['blob'] == x['blob'] and e['corpus'] == x['corpus'] for x in summed)])
+    if not summed and sum(t.count('\n') for _, t in texts) <= JUDGMENTS_COUNTED:
         rows = judgment_rows(texts)
         upto = [j for j in rows if j['decided'] <= date]
         return len(rows), len(upto), upto[-latest:] if latest else []
     import heapq
-    total = n_upto = 0
+    total = sum(e['summary']['rows'] for e in summed)
+    n_upto = sum(e['upto'] for e in summed)
+    texts = texts + [(e['corpus'], '\n'.join(e['tail_upto'])) for e in summed]
     keep = []  # (decided, text index, line)
     for i, (_, text) in enumerate(texts):
         for line in text.splitlines():
             m = _DECIDED.search(line)
             if not m:
                 continue
-            total += 1
+            tail_text = i >= len(texts) - len(summed)
+            total += 0 if tail_text else 1
             if m.group(1) <= date:
-                n_upto += 1
+                n_upto += 0 if tail_text else 1
                 if len(keep) < latest * 2:
-                    heapq.heappush(keep, (m.group(1), i, line))
-                elif m.group(1) > keep[0][0]:
-                    heapq.heapreplace(keep, (m.group(1), i, line))
-    lines_of = [[] for _ in texts]
-    for _, i, line in keep:
-        lines_of[i].append(line)
-    return total, n_upto, judgment_rows(texts, lines_of)[-latest:] if latest else []
+                    heapq.heappush(keep, (m.group(1), line, i))
+                elif (m.group(1), line) > keep[0][:2]:  # ties broken by the row itself, as the index summary picks them
+                    heapq.heapreplace(keep, (m.group(1), line, i))
+    # The rows kept, in the order of their day and then the row itself, whichever file each came from (the index's
+    # summary of a long file, or the file): the same decisions are shown either way.
+    picked = [(texts[i][0], line) for _, line, i in sorted(keep)]
+    return total, n_upto, judgment_rows(picked)[-latest:] if latest else []
 
 
 def t_check_precedent(args: dict) -> tuple[str, dict]:
