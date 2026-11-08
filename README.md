@@ -95,13 +95,6 @@ applied is still in force, and `what_else_changes` counts them. `find_provision`
 references (an ECLI, a docket or case number, a reporter citation), and `resolve_citations` reads citations of law in
 each country's usual form (`Art. 336 OR`, `§ 823 Abs. 1 BGB`, `article 1240 du code civil`).
 
-## How it is made
-
-The repository's history only grows: each commit adds corpora, moves their pins forward, or changes the tools and
-documentation. `tools/verify.py` checks it. Up to 29 October 2026 it was built from scratch as one commit per law in
-the order the changes took force; that history is kept, frozen, and [REPRODUCE.md](REPRODUCE.md) records how it was
-made.
-
 ## More
 
 - [FEATURES.md](FEATURES.md): every feature, and what every corpus here must support (`git blame`, `law.py`, the MCP tools)
