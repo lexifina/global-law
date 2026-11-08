@@ -8,11 +8,11 @@
 
 <p><i>German law fines anyone who keeps using a shooting range after the authority has shut it down for dangerous defects, "contrary to § 12(2) sentence 2". § 12 was deleted in 2020. The ban itself moved into the Weapons Act, but the list of fines was never updated, so breaking the ban carries no fine at all.</i></p>
 
-<h3>Step 1 · The rule</h3>
+<p><b>Step 1 · The rule</b></p>
 
 <p>A fine may only be imposed if a law defined the offence before the act (Basic Law art. 103(2); Administrative Offences Act § 3). Where a fine provision refers to a duty set out elsewhere (a "blanket" provision), the duty it points to must exist, and courts may not fill the gap by analogy (Federal Constitutional Court, 2 BvL 1/12, 21 September 2016, on the Beef Labelling Act).</p>
 
-<h3>Step 2 · What the text says</h3>
+<p><b>Step 2 · What the text says</b></p>
 
 <blockquote>„Ordnungswidrig im Sinne des § 53 Abs. 1 Nr. 23 des Waffengesetzes handelt, wer vorsätzlich oder fahrlässig … 11. <b>entgegen § 12 Abs. 2 Satz 2</b> eine Schießstätte betreibt oder benutzt"<br><sub>AWaffV § 34 no. 11, current official text</sub></blockquote>
 
@@ -20,7 +20,7 @@
 
 <p>What § 12(2) sentence 2 used to say: <i>„Der weitere Betrieb oder die Benutzung der Schießstätte ist im Falle der Untersagung nach Satz 1 verboten."</i> (Once the authority bans a range under sentence 1, running or using it is prohibited.)</p>
 
-<h3>Step 3 · How it happened</h3>
+<p><b>Step 3 · How it happened</b></p>
 
 <ol>
 <li><b>17 February 2020:</b> the Third Act amending weapons law (BGBl. I S. 166), art. 4c, deletes AWaffV § 12 with effect from 1 September 2020.</li>
@@ -28,19 +28,19 @@
 <li>Nobody updates the fine list. AWaffV § 34 no. 11 still points at § 12(2) sentence 2, and the Weapons Act's own fine list (§ 53(1) WaffG) does not mention § 27a.</li>
 </ol>
 
-<h3>Step 4 · Why the two don't fit</h3>
+<p><b>Step 4 · Why the two don't fit</b></p>
 
 <p>The fine provision's only trigger is acting "contrary to § 12(2) sentence 2". That sentence no longer exists, so there is nothing to act contrary to. The ban that does exist (§ 27a WaffG) has no fine attached anywhere. A court cannot read "§ 12 AWaffV" as "§ 27a WaffG": that would be analogy against the person fined, which art. 103(2) forbids.</p>
 
-<h3>Step 5 · Consequence</h3>
+<p><b>Step 5 · Consequence</b></p>
 
 <p>Since 1 September 2020, running or using a shooting range after the authority has banned it for dangerous defects is unlawful, but cannot be fined.</p>
 
-<h3>Step 6 · The exploit</h3>
+<p><b>Step 6 · The exploit</b></p>
 
 <p>A gun club's range is shut down because its bullet trap is defective. The club keeps shooting there. The authority issues a fine notice under § 34 no. 11 AWaffV. The club appeals: the provision points at a deleted sentence, the real ban carries no fine, and the notice must be quashed.</p>
 
-<h3>Follow-up considerations</h3>
+<p><b>Follow-up considerations</b></p>
 
 <table>
 <tr><th>Objection</th><th>Defeats the claim?</th></tr>
@@ -51,7 +51,7 @@
 
 <p><b>Verdict:</b> a textbook "dead fine". A single cross-reference has been wholly dead since September 2020, and the duty visibly moved somewhere the fine list never mentions. A formal link in the chain is broken, and the effect is binary: no fine can be imposed.</p>
 
-<h3>Sources</h3>
+<p><b>Sources</b></p>
 
 <ul>
 <li>AWaffV § 34: <a href="https://www.gesetze-im-internet.de/awaffv/__34.html">gesetze-im-internet.de/awaffv/__34.html</a> · § 12: <a href="https://www.gesetze-im-internet.de/awaffv/__12.html">gesetze-im-internet.de/awaffv/__12.html</a></li>
@@ -67,11 +67,11 @@
 
 <p><i>The 2024 Annual Tax Act tells tax offices to pass taxpayer data to "a coordinating body of a Land under § 50c of the Money Laundering Act". There is no § 50c. The bill that was supposed to create it lapsed when the 20th Bundestag ended, and the official federal publisher notes that § 50c does not exist.</i></p>
 
-<h3>Step 1 · The rule</h3>
+<p><b>Step 1 · The rule</b></p>
 
 <p>Tax data is protected by tax secrecy (AO § 30). Passing it to another authority interferes with the right to informational self-determination and needs a clear statute that names the recipient and the purpose (BVerfG, census judgment; GDPR art. 6(3)).</p>
 
-<h3>Step 2 · What the statute book shows</h3>
+<p><b>Step 2 · What the statute book shows</b></p>
 
 <blockquote>„Die Finanzbehörden übermitteln einer <b>Koordinierenden Stelle eines Landes nach § 50c des Geldwäschegesetzes</b> …"<br><sub>AO § 31b(3a), in force since 6 December 2024</sub></blockquote>
 
@@ -79,7 +79,7 @@
 
 <blockquote>„Änderung durch Art. 41 Nr. 1 G v. 2.12.2024 I Nr. 387 mWv 6.12.2024 ist <b>nicht ausführbar, da § 50c nicht vorhanden ist</b>."<br><sub>Official note on gesetze-im-internet.de (Federal Ministry of Justice), Stand 29.6.2026</sub></blockquote>
 
-<h3>Step 3 · How it happened</h3>
+<p><b>Step 3 · How it happened</b></p>
 
 <ol>
 <li><b>2023:</b> the Financial Crime Act bill (BT-Drs. 20/9648) proposes a new GwG § 50c creating Länder "coordinating bodies".</li>
@@ -88,15 +88,15 @@
 <li><b>Up to the 29 June 2026 version:</b> no repair.</li>
 </ol>
 
-<h3>Step 4 · Why the two don't fit</h3>
+<p><b>Step 4 · Why the two don't fit</b></p>
 
 <p>The data-transfer power names its recipient only by reference to § 50c. Without § 50c there is no federal definition of who the "coordinating body" is, and the purpose clause in § 55(3b) refers to a task (§ 50c(2) no. 5) that does not exist. The formal chain that authorises an interference is broken at one link.</p>
 
-<h3>Step 5 · Consequence and exploit</h3>
+<p><b>Step 5 · Consequence and exploit</b></p>
 
 <p>Any transfer of tax data made under AO § 31b(3a) lacks a sufficiently specific legal basis. An art dealer or high-value goods trader who is identified for anti-money-laundering supervision through a tax-data sweep can challenge the supervisory measures and any fine as resting on unlawfully transferred data, and can demand erasure of the data.</p>
 
-<h3>Follow-up considerations</h3>
+<p><b>Follow-up considerations</b></p>
 
 <table>
 <tr><th>Objection</th><th>Defeats the claim?</th></tr>
@@ -107,7 +107,7 @@
 
 <p><b>Verdict:</b> a clean legal zero-day. The defect is documented by the federal publisher itself and has gone unrepaired for 18 months. The payoff for an individual is limited by Germany's lenient rules on using improperly obtained evidence.</p>
 
-<h3>Sources</h3>
+<p><b>Sources</b></p>
 
 <ul>
 <li>GwG with the failed-amendment note: <a href="https://www.gesetze-im-internet.de/gwg_2017/BJNR182210017.html">gesetze-im-internet.de</a></li>
@@ -123,13 +123,13 @@
 
 <p><i>Brazil lets employers make under-18s work overtime only in tightly limited cases, and says that "the provisions of art. 375, the sole paragraph of art. 376, art. 378 and art. 384" apply. All four have been repealed. The duty to notify the labour authority within 48 hours lived in one of them.</i></p>
 
-<h3>Step 1 · The rule</h3>
+<p><b>Step 1 · The rule</b></p>
 
 <blockquote>„Parágrafo único. Aplica-se à prorrogação do trabalho do menor o disposto no art. 375, <b>no parágrafo único do art. 376</b>, no art. 378 e no art. 384 desta Consolidação."<br><sub>CLT art. 413 (Câmara dos Deputados, consolidated text)</sub></blockquote>
 
 <blockquote>„A prorrogação extraordinária de que trata este artigo <b>deverá ser comunicada por escrito à autoridade competente, dentro do prazo de quarenta e oito horas</b>."<br><sub>CLT art. 376, sole paragraph, original text</sub></blockquote>
 
-<h3>Step 2 · What happened</h3>
+<p><b>Step 2 · What happened</b></p>
 
 <ol>
 <li><b>1989:</b> arts. 375 and 378 repealed (Lei 7.855/1989).</li>
@@ -138,19 +138,19 @@
 <li><b>Today:</b> art. 413 still applies all four.</li>
 </ol>
 
-<h3>Step 3 · Why the two don't fit</h3>
+<p><b>Step 3 · Why the two don't fit</b></p>
 
 <p>Brazil's Constitution says nobody is obliged to do anything except by law (art. 5 II), and administrative fines need an existing legal duty. Art. 413 imports its notice duty by pointing at art. 376's sole paragraph, which has not existed for 25 years, and there is no fallback notice rule left in the CLT.</p>
 
-<h3>Step 4 · Consequence</h3>
+<p><b>Step 4 · Consequence</b></p>
 
 <p>The substantive limits on minors' overtime still apply directly under art. 413 (force majeure only, a 12-hour day, a 25% premium, work that is essential). The duty to tell the labour inspectorate within 48 hours has no text of its own to stand on.</p>
 
-<h3>Step 5 · The exploit</h3>
+<p><b>Step 5 · The exploit</b></p>
 
 <p>A labour inspector fines a supermarket for not reporting that it kept 17-year-olds on after a flood. The employer contests the fine: the only source of the notice duty is a repealed sole paragraph, and a penalty cannot be built on a deleted rule.</p>
 
-<h3>Follow-up considerations</h3>
+<p><b>Follow-up considerations</b></p>
 
 <table>
 <tr><th>Objection</th><th>Defeats the claim?</th></tr>
@@ -161,7 +161,7 @@
 
 <p><b>Verdict:</b> a pure dangling reference: one sentence, four dead pointers, 25 years unrepaired. The effect is narrow (one reporting duty), and a court could rescue it by treating the reference as static.</p>
 
-<h3>Sources</h3>
+<p><b>Sources</b></p>
 
 <ul>
 <li>CLT, consolidated: <a href="https://www2.camara.leg.br/legin/fed/declei/1940-1949/decreto-lei-5452-1-maio-1943-415500-normaatualizada-pe.html">camara.leg.br</a></li>
@@ -176,11 +176,11 @@
 
 <p><i>Switzerland lets the authorities make plant growers, importers and traders pay the cost of pest control if they evaded "the duties under Article 151". Article 151 was repealed on 1 January 2025, and the cost clause was not updated in the 2026 or 2027 versions.</i></p>
 
-<h3>Step 1 · The rule</h3>
+<p><b>Step 1 · The rule</b></p>
 
 <p>A public charge, including a cost-recovery charge, needs a basis in a formal statute that names who pays and why (Federal Constitution arts. 5 and 127).</p>
 
-<h3>Step 2 · What the text says</h3>
+<p><b>Step 2 · What the text says</b></p>
 
 <blockquote>„Wer Pflanzenmaterial produziert, einführt oder in Verkehr bringt und sich vorsätzlich oder fahrlässig <b>den Pflichten nach Artikel 151</b> entzieht, kann zur Übernahme der Kosten herangezogen werden."<br><sub>LwG art. 154(2), consolidations of 1 January 2026 and 1 January 2027</sub></blockquote>
 
@@ -188,7 +188,7 @@
 
 <p>What art. 151 used to require: observe the principles of plant protection (para. 1), and in particular report especially dangerous pests (para. 2).</p>
 
-<h3>Step 3 · How it happened</h3>
+<p><b>Step 3 · How it happened</b></p>
 
 <ol>
 <li><b>16 June 2023:</b> Parliament reorganises the plant-protection chapter (AS 2024 623, in force 1 January 2025) and repeals art. 151.</li>
@@ -196,15 +196,15 @@
 <li>Art. 154(2), the cost clause, still says "duties under Article 151".</li>
 </ol>
 
-<h3>Step 4 · Why the two don't fit</h3>
+<p><b>Step 4 · Why the two don't fit</b></p>
 
 <p>Since 1 January 2025 there are no "duties under Article 151". The cost clause's trigger points at an empty article.</p>
 
-<h3>Step 5 · Consequence and exploit</h3>
+<p><b>Step 5 · Consequence and exploit</b></p>
 
 <p>A nursery that fails to report a quarantine pest is billed by the canton for the cost of eradicating it under art. 154(2). It contests the bill: it cannot have evaded "duties under Article 151", because there are none.</p>
 
-<h3>Follow-up considerations</h3>
+<p><b>Follow-up considerations</b></p>
 
 <table>
 <tr><th>Objection</th><th>Defeats the claim?</th></tr>
@@ -215,7 +215,7 @@
 
 <p><b>Verdict:</b> a clean dangling reference in a charging provision, confirmed on Fedlex and unrepaired across two consolidations. Weaker than a fine, because a court may correct it as an editorial slip for the reporting duty.</p>
 
-<h3>Sources</h3>
+<p><b>Sources</b></p>
 
 <ul>
 <li>LwG, consolidation of 1 January 2026: <a href="https://fedlex.data.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/1998/3033_3033_3033/20260101/de/html/fedlex-data-admin-ch-eli-cc-1998-3033_3033_3033-20260101-de-html-1.html">Fedlex filestore</a> (same path with 20270101 for 2027)</li>
@@ -229,11 +229,11 @@
 
 <p><i>The Dutch decree raising every criminal fine ceiling says it entered into force on 1 January 2022. It was published on 5 January 2022. A penalty cannot apply before it is published, so the decree's own commencement clause is wrong for its first four days.</i></p>
 
-<h3>Step 1 · The rule</h3>
+<p><b>Step 1 · The rule</b></p>
 
 <p>No heavier penalty than the one that applied when the offence was committed (Criminal Code art. 1(1); ECHR art. 7). A generally binding rule binds only once it has been published (Constitution art. 88).</p>
 
-<h3>Step 2 · What the text says</h3>
+<p><b>Step 2 · What the text says</b></p>
 
 <blockquote>„Dit besluit treedt in werking met ingang van 1 januari 2022."<br><sub>Stb. 2022, 7, art. II</sub></blockquote>
 
@@ -245,15 +245,15 @@
 <tr><td>4</td><td>€21,750</td><td>€22,500</td></tr><tr><td>5</td><td>€87,000</td><td>€90,000</td></tr><tr><td>6</td><td>€870,000</td><td>€900,000</td></tr>
 </table>
 
-<h3>Step 3 · Why the two don't fit</h3>
+<p><b>Step 3 · Why the two don't fit</b></p>
 
 <p>The decree's explanatory note says the new maxima apply only to offences committed after entry into force. But entry into force is dated four days before publication. Every other indexation decree was published weeks before 1 January: Stb. 2019, 399 (11 November), Stb. 2023, 450 (7 December), Stb. 2025, 401 (1 December). 2022 is the outlier.</p>
 
-<h3>Step 4 · Consequence and exploit</h3>
+<p><b>Step 4 · Consequence and exploit</b></p>
 
 <p>For offences committed on 1–4 January 2022 the old maxima apply. A company fined €900,000 (category 6) for an offence on 3 January 2022 can have the fine cut to €870,000.</p>
 
-<h3>Follow-up considerations</h3>
+<p><b>Follow-up considerations</b></p>
 
 <table>
 <tr><th>Objection</th><th>Defeats the claim?</th></tr>
@@ -263,7 +263,7 @@
 
 <p><b>Verdict:</b> a clean, documented commencement error with a tiny window (4 days) and a small effect (+3.4%). It shows the kind of mistake a machine can find across a whole statute book.</p>
 
-<h3>Sources</h3>
+<p><b>Sources</b></p>
 
 <ul>
 <li>Stb. 2022, 7: <a href="https://zoek.officielebekendmakingen.nl/stb-2022-7.html">officielebekendmakingen.nl</a> · for comparison: <a href="https://zoek.officielebekendmakingen.nl/stb-2019-399.html">Stb. 2019, 399</a>, <a href="https://zoek.officielebekendmakingen.nl/stb-2023-450.html">Stb. 2023, 450</a>, <a href="https://zoek.officielebekendmakingen.nl/stb-2025-401.html">Stb. 2025, 401</a></li>
@@ -297,13 +297,13 @@
 
 <p><i>Switzerland's moratorium on genetically modified crops ran out on 31 December 2025. Its extension only took effect on 1 August 2026, and it was not made retroactive. For seven months, nothing in Swiss law barred an authorisation to grow GM crops commercially.</i></p>
 
-<h3>Step 1 · The rule</h3>
+<p><b>Step 1 · The rule</b></p>
 
 <blockquote>„Für das Inverkehrbringen von gentechnisch veränderten Pflanzen … zu landwirtschaftlichen, gartenbaulichen oder waldwirtschaftlichen Zwecken dürfen <b>für den Zeitraum bis zum 31. Dezember 2025</b> keine Bewilligungen erteilt werden."<br><sub>GTG art. 37a, version in force 1 Jan 2022 – 31 Jul 2026 (Fedlex)</sub></blockquote>
 
 <p>In English: no authorisations for GM plants for farming, horticulture or forestry, <i>until 31 December 2025</i>. After that date, the ordinary route in GTG art. 12 applies: GM plants may be placed on the market with a federal authorisation.</p>
 
-<h3>Step 2 · What happened</h3>
+<p><b>Step 2 · What happened</b></p>
 
 <ol>
 <li><b>20 June 2025:</b> Parliament adopts the extension to 2030 (parliamentary initiative 24.443).</li>
@@ -315,21 +315,21 @@
 
 <p><b>Timeline:</b> moratorium in force → no moratorium · 212 days → extended to 2030<br><sub>2025 · 1 Jan 2026 · 31 Jul 2026 · 1 Aug 2026 →</sub></p>
 
-<h3>Step 3 · Why the two don't fit</h3>
+<p><b>Step 3 · Why the two don't fit</b></p>
 
 <p>A ban needs a rule in force. From 1 January to 31 July 2026 art. 37a still sat in the statute book, but its only operative words were "until 31 December 2025". No urgent federal law, transitional clause or other act covered the gap; the extension law changed the date only from 1 August.</p>
 
 <p>The gap was foreseen and avoidable. In its opinion of 29 January 2025 the Federal Council wrote that if entry into force on 1 January 2026 slipped, <i>„könnte das Parlament die Vorlage maximal ein Jahr rückwirkend in Kraft setzen"</i> (Parliament could put it into force up to a year retroactively). That is exactly what happened in 2022, when the previous extension was put into force <i>„rückwirkend auf den 1. Januar 2022"</i> (AS 2022 415). In 2026 nobody did it.</p>
 
-<h3>Step 4 · Consequence</h3>
+<p><b>Step 4 · Consequence</b></p>
 
 <p>For 212 days, the GTG's ordinary authorisation regime applied to GM crops without the moratorium: an application to the Federal Office for Agriculture had to be examined on its merits, not refused under art. 37a.</p>
 
-<h3>Step 5 · The exploit</h3>
+<p><b>Step 5 · The exploit</b></p>
 
 <p>A seed company files a complete dossier on 5 January 2026 for a GM maize variety already authorised in the EU. The authority cannot refuse it under art. 37a. If an authorisation is granted before 1 August, it was lawfully granted, and the revived moratorium only bars <i>new</i> authorisations ("dürfen … keine Bewilligungen erteilt werden"); it does not revoke existing ones.</p>
 
-<h3>Follow-up considerations</h3>
+<p><b>Follow-up considerations</b></p>
 
 <table>
 <tr><th>Objection</th><th>Defeats the claim?</th></tr>
@@ -341,7 +341,7 @@
 
 <p><b>Verdict:</b> the legal gap is certain; every date is in an official record. The exploit was legally open but practically very hard to use, because an authorisation had to be granted (not just applied for) inside the window. No application is known.</p>
 
-<h3>Sources</h3>
+<p><b>Sources</b></p>
 
 <ul>
 <li>AS 2026 417 (extension, in force 1 Aug 2026): <a href="https://fedlex.data.admin.ch/eli/oc/2026/417">fedlex.data.admin.ch/eli/oc/2026/417</a></li>
@@ -357,11 +357,11 @@
 
 <p><i>France allowed AI analysis of CCTV footage as an experiment "until 31 March 2025". The first extension was struck down; the second took effect on 22 March 2026 and simply replaced "31 March 2025" with "31 December 2027". For 356 days there was no legal basis for the technology.</i></p>
 
-<h3>Step 1 · The rule</h3>
+<p><b>Step 1 · The rule</b></p>
 
 <p>Art. 10 of the Olympics law authorised, "à titre expérimental et jusqu'au 31 mars 2025", algorithmic processing of images from video-protection cameras to detect predefined events in real time. Processing personal data by the State needs a legal basis in force (art. 34 of the Constitution; the Data Protection Act; the EU Law Enforcement Directive).</p>
 
-<h3>Step 2 · What happened</h3>
+<p><b>Step 2 · What happened</b></p>
 
 <ol>
 <li><b>31 March 2025:</b> the experiment ends.</li>
@@ -372,19 +372,19 @@
 
 <p><b>Timeline:</b> experiment → no legal basis · 1 Apr 2025 – 21 Mar 2026 → revived to 2027<br><sub>2024 · 31 Mar 2025 · 22 Mar 2026 · → 2027</sub></p>
 
-<h3>Step 3 · Why the two don't fit</h3>
+<p><b>Step 3 · Why the two don't fit</b></p>
 
 <p>The 2026 law amends a date that had already passed. Rewriting "31 March 2025" as "31 December 2027" a year later does not make the authorisation exist for the year in between; French law does not apply retroactively unless it says so (Civil Code art. 2), and art. 47 does not say so. The applicants told the Conseil constitutionnel that the experiment had "pris fin" (§ 178); the Council upheld the renewal for the future (§§ 179–181) without addressing the interval.</p>
 
-<h3>Step 4 · Consequence</h3>
+<p><b>Step 4 · Consequence</b></p>
 
 <p>Any algorithmic video analysis carried out by the police, RATP or SNCF between 1 April 2025 and 21 March 2026 would have been processing of personal data without a legal basis.</p>
 
-<h3>Step 5 · The exploit</h3>
+<p><b>Step 5 · The exploit</b></p>
 
 <p>A person stopped and searched at a station in, say, October 2025 after an automated "abnormal behaviour" alert challenges the stop: the alert came from an unlawful processing operation, so the stop had no lawful trigger, and anything found is open to an exclusion argument. Separately, anyone can ask the CNIL to sanction an operator that kept the system running.</p>
 
-<h3>Follow-up considerations</h3>
+<p><b>Follow-up considerations</b></p>
 
 <table>
 <tr><th>Objection</th><th>Defeats the claim?</th></tr>
@@ -395,7 +395,7 @@
 
 <p><b>Verdict:</b> the gap is certain and documented in the Journal officiel and two constitutional decisions. Whether anyone can use it depends on whether the systems ran during the gap, which no official source answers.</p>
 
-<h3>Sources</h3>
+<p><b>Sources</b></p>
 
 <ul>
 <li>CC 2025-878 DC (first extension struck): <a href="https://www.conseil-constitutionnel.fr/decision/2025/2025878DC.htm">conseil-constitutionnel.fr</a></li>
@@ -411,13 +411,13 @@
 
 <p><i>Spain bans church institutions from selling movable heritage to private buyers, but only through temporary renewals. The 2016 renewal ended on 31 December 2016; the next one ran "from the entry into force of this law", 29 June 2017. For the first half of 2017, unlisted church heritage could be lawfully sold.</i></p>
 
-<h3>Step 1 · The rule</h3>
+<p><b>Step 1 · The rule</b></p>
 
 <blockquote>„En los diez años siguientes a la entrada en vigor de esta Ley, lo dispuesto en el artículo 28.1 de la misma se entenderá referido a <b>los bienes muebles integrantes del Patrimonio Histórico Español en posesión de las instituciones eclesiásticas</b>."<br><sub>Ley 16/1985, disposición transitoria quinta (BOE)</sub></blockquote>
 
 <p>Art. 28.1 says such goods "no podrán transmitirse por título oneroso o gratuito ni cederse a particulares ni a entidades mercantiles" (cannot be sold or given to private persons or companies). Permanently, it covers only formally listed items; the transitional provision extends it to <i>all</i> church-held movable heritage, but only for limited periods, renewed by later laws.</p>
 
-<h3>Step 2 · What happened</h3>
+<p><b>Step 2 · What happened</b></p>
 
 <ol>
 <li><b>Ley 48/2015</b> (2016 budget law, additional provision 95): one-year renewal from 1 January 2016, so to <b>31 December 2016</b>.</li>
@@ -427,19 +427,19 @@
 
 <p><b>Timeline:</b> ban (2016) → no extended ban · 179 days → ban renewed for one year<br><sub>2016 · 1 Jan 2017 · 29 Jun 2017 · → 2018</sub></p>
 
-<h3>Step 3 · Why the two don't fit</h3>
+<p><b>Step 3 · Why the two don't fit</b></p>
 
 <p>The 2017 renewal deliberately counted from its own entry into force, not from 1 January. It did not reach back. Between 1 January and 28 June 2017 only listed items (BIC or Inventario General) were protected.</p>
 
-<h3>Step 4 · Consequence</h3>
+<p><b>Step 4 · Consequence</b></p>
 
 <p>Any unlisted altarpiece, chalice, painting or carving held by a parish, diocese or religious order could be sold or donated to a private buyer during those six months without breaching the Heritage Act.</p>
 
-<h3>Step 5 · The exploit</h3>
+<p><b>Step 5 · The exploit</b></p>
 
 <p>A dealer buys a set of unlisted baroque silverware from a convent in March 2017. In 2026 the State or a regional government tries to void the sale under the Heritage Act. The dealer shows the sale date: the extended ban was not in force, and the sale stands.</p>
 
-<h3>Follow-up considerations</h3>
+<p><b>Follow-up considerations</b></p>
 
 <table>
 <tr><th>Objection</th><th>Defeats the claim?</th></tr>
@@ -450,7 +450,7 @@
 
 <p><b>Verdict:</b> clean and confirmed from the BOE's own version notes. It is also a pattern: later renewals appear to leave further gaps (about 6 days in 2018, possibly most of 2019–2021, 28 days in May 2026, when the renewing decree's preamble itself says <i>„Ante la finalización del plazo previsto…"</i>).</p>
 
-<h3>Sources</h3>
+<p><b>Sources</b></p>
 
 <ul>
 <li>Ley 16/1985, consolidated, with the history of DT 5: <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1985-12534">boe.es</a></li>
@@ -485,6 +485,6 @@
 <tr><td>Dead fines (Germany)</td><td>Fine catalogues pointing at deleted sections</td><td>66</td></tr>
 </table>
 
-<h3>How these were found</h3>
+<p><b>How these were found</b></p>
 
 <p>The <a href="https://github.com/lexifina/global-law">global-law repo</a> stores each country's law as a git history. Detectors read all 107 corpora at once, without writing to them, and looked for: references to provisions that have been deleted or survive only as "(repealed)" placeholders, especially inside fine and penalty lists; publisher notes saying an amendment could not be carried out; commencement dates earlier than publication; and rules extended only after they had run out. A language model sorted the candidates into corpus errors, harmless cases and candidate defects, a second model argued against each survivor, and the strongest were checked by hand against gazettes, consolidated texts and parliamentary papers.</p>
