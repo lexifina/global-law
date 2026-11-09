@@ -173,8 +173,8 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 
 *Every jurisdiction on one day?*
 
-- **Does:** For one date, the last change in force in each served corpus and the next one.
-- **Arguments:** `date`
+- **Does:** For one date, the last change in force in each served corpus and the next one. A `jurisdiction` narrows it to one country or corpus (a question about France does not list every US court), and `kind` to laws or judgments.
+- **Arguments:** `date`, `jurisdiction`, `kind`
 
 ### who_wrote (`mcp.who_wrote`)
 

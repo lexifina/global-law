@@ -545,23 +545,40 @@ def _decision_lines_full(corpus: str, pin: str, cwd: Path, tree: list[tuple[str,
     files are named by another id lists its other references in decision-index.tsv (or one file a year)."""
     lines = set()
     index_blobs = []
+    same = _same_decision(cwd, next((b for p, b in tree if p == 'decision-relations.tsv'), None))
     for path, blob in tree:
         if path.startswith('decisions/') and path.endswith('.md'):
             name = path.rsplit('/', 1)[-1]
-            lines.add(f'{decision_key(name[:-3].split("--", 1)[0])}\t{corpus}/{path}\n'.encode('utf-8'))
+            lines.add(f'{decision_key(name[:-3].split("--", 1)[0])}\t{corpus}/{same.get(path, path)}\n'.encode('utf-8'))
         elif _CL_INDEX_FILE.match(path):
             index_blobs.append(blob)
     for _, text in _cat_batch(cwd, index_blobs):
-        lines.update(_index_tsv_lines(corpus, (text or b'').decode('utf-8', 'replace').splitlines()))
+        lines.update(_index_tsv_lines(corpus, (text or b'').decode('utf-8', 'replace').splitlines(), same))
     return sorted(lines)
 
 
-def _index_tsv_lines(corpus: str, rows) -> set[bytes]:
+def _same_decision(cwd: Path, blob: str | None) -> dict[str, str]:
+    """A case-law corpus's decision-relations.tsv (path, relation, target, note): each file that is the same decision as
+    another ('same-decision-as') -> the file kept. The docket file names the kept file for both, so a citation of either
+    finds one decision; a file moved to another corpus ('moved-to') is gone from the tree with its index rows."""
+    if not blob:
+        return {}
+    data = (_cat_batch(cwd, [blob])[0][1] or b'').decode('utf-8', 'replace')
+    out = {}
+    for line in data.splitlines()[1:]:
+        a = line.split('\t')
+        if len(a) >= 3 and a[1].strip() == 'same-decision-as' and a[0] and a[2].strip():
+            out[a[0]] = a[2].strip()
+    return out
+
+
+def _index_tsv_lines(corpus: str, rows, same: dict[str, str] | None = None) -> set[bytes]:
     out = set()
     for line in rows:
         ref, _, path = line.partition('\t')
         if ref and path.strip() and not ref.startswith('#') and ref.strip().lower() != 'reference':  # the header line
-            out.add(f'{decision_key(ref)}\t{corpus}/{path.strip()}\n'.encode('utf-8'))
+            path = (same or {}).get(path.strip(), path.strip())
+            out.add(f'{decision_key(ref)}\t{corpus}/{path}\n'.encode('utf-8'))
     return out
 
 
@@ -657,6 +674,24 @@ def _days_rows(cwd: Path, span: str) -> list[tuple[str, str, str]]:
     return out
 
 
+def _cl_redates(cwd: Path, span: str) -> dict[str, str]:
+    """The maintainer's `Redates: <commit> <YYYY-MM-DD>` trailers in a span of a case-law corpus (a decision its source
+    misdated: CAP's few wrong New York and Kentucky days): commit -> its day."""
+    raw = _git_bytes(['log', f'--author={MAINTAINER}', '--grep=^Redates:', '--format=%B%x1e', span], cwd).decode('utf-8', 'replace')
+    return {m.group(1): m.group(3) for m in REDATES.finditer(raw) if ISO_DAY.fullmatch(m.group(3))}
+
+
+def _apply_redates(days: dict[str, tuple[str, str]], redates: dict[str, str]) -> None:
+    """Each redated decision moved to its day in the days file (day -> the last decision committed that day)."""
+    if not redates:
+        return
+    for d, (sha, n) in list(days.items()):
+        new = next((day for c, day in redates.items() if sha.startswith(c)), None)
+        if new and new != d:
+            del days[d]
+            days.setdefault(new, (sha, n))
+
+
 def caselaw_record(corpus: str, pin: str, cwd: Path) -> dict:
     """One case-law corpus at one pin, read once and kept: its decision files (count and an example), its decisions by
     day (the last committed for each day, as latest_decision names it), its judgment overlay files (judgments/<law
@@ -711,6 +746,7 @@ def _cl_build(corpus: str, pin: str, cwd: Path, f: dict[str, Path]) -> dict:
     days: dict[str, tuple[str, str]] = {}
     for d, s, n in _days_rows(cwd, pin):
         days[d] = (s, n)
+    _apply_redates(days, _cl_redates(cwd, pin))
     _write_days(f['days'], days)
     _write_overlay(f, overlay, *_overlay_stats(cwd, [b for _, b, _ in overlay]))
     if not f['decisions'].exists():
@@ -770,6 +806,8 @@ def _cl_update(corpus: str, pin: str, cwd: Path, base: dict, f: dict[str, Path])
             files += {'A': 1, 'D': -1}.get(status, 0)
             if status == 'D' and path == example:
                 example = ''
+        if path == 'decision-relations.tsv':  # duplicates named or changed: the docket file is read again
+            rebuild = True
         if path.startswith('decisions/') and path.endswith('.md'):
             if status == 'D':
                 rebuild = True
@@ -797,6 +835,7 @@ def _cl_update(corpus: str, pin: str, cwd: Path, base: dict, f: dict[str, Path])
         days[d] = (s, n)
     for d, s, n in _days_rows(cwd, f"{base['pin']}..{pin}"):
         days[d] = (s, n)
+    _apply_redates(days, _cl_redates(cwd, f"{base['pin']}..{pin}"))
     _write_days(f['days'], days)
     got_lines, new_sums = _overlay_stats(cwd, [v for _, v in overlay.values() if v not in lines])
     lines.update(got_lines)

@@ -72,6 +72,7 @@ class Tree:
         run('config', 'core.autocrlf', 'false', cwd=self.root)
         (self.root / 'tools').mkdir()
         shutil.copy(HERE / 'tools' / 'law.py', self.root / 'tools' / 'law.py')
+        shutil.copy(HERE / 'tools' / 'usc_cite.py', self.root / 'tools' / 'usc_cite.py')  # mcp_server.py imports it
         (self.root / 'manifest.json').write_text(json.dumps({'corpora': []}), encoding='utf-8')
         self.corpora: dict[str, Corpus] = {}
 

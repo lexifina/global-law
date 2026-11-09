@@ -110,7 +110,16 @@ canton's, or `caselaw` for all).
 - Lists and searches of law (`search_law`, `laws_between`, `changes_between`, `search_changes`, `phrase_history`, `law.py
   laws`) leave case law out and say so on a "Not read" line; `kind: "judgments"` reads case law only, and a
   `jurisdiction` that names case law reads it. `world_on_date` and `law.py world` give each case-law corpus's latest
-  decision.
+  decision; `world_on_date` takes a `jurisdiction` and a `kind`.
+- Case law is read for at most 60 s of a call (`GLOBAL_LAW_CASELAW_SECONDS`): `search_law`, `phrase_history` and
+  `search_changes` over many courts then answer with what they read and name the corpora left out ("Partial: ..."). At
+  most half the machine's cores run `git grep` at once, each with at most 8 threads.
+- US citations: `resolve_citations` reads every section of a US Code list or range ("11 U.S.C. §§ 361, 363(e), and
+  364", "9 U.S.C. §§ 1-16"), never a page stamp ("USCA4 ... Pg: 3") or a subsection digit; a citation under an older
+  numbering ("11 U.S.C. § 110(e) (1976)") is reported apart, not linked to today's section; a docket shared by many
+  decisions is settled by the citation, name, year or court beside it, or named as ambiguous with its first five; a
+  state statute is named as not held; the same decision filed twice (`decision-relations.tsv`) resolves once; a
+  decision cited on a date before it was decided says so, and a date CAP gives by month or year only is shown as such.
 - `check_precedent` reads every served case-law corpus's overlay, `judgments/<law corpus>/<provision>.jsonl` (for
   example `judgments/switzerland/bund/acts/101/art-029.jsonl`), as well as the corpus's and the tree's own. With many
   decisions it checks the latest (`max_results`), comparing the words once per version of the text. Each row names the
