@@ -1146,6 +1146,29 @@ def warmed() -> None:
 ROOT_DOC = re.compile(r'[A-Z][A-Z0-9_-]*\.md')
 
 
+def law_files(corpus: str, sha: str | None) -> tuple[int, str]:
+    """(provision files, one in a folder) of a body of law at its pin, kept in the tree's cache (law-files-<pin>.json)
+    the first time: listing France's 811,000 files took 2.5 s of list_jurisdictions's 3.4 s on every call."""
+    if not sha:
+        return 0, ''
+    f = law._store() / f'law-files-{sha}.json'
+    try:
+        got = json.loads(f.read_text(encoding='utf-8'))
+        return int(got['n']), got['example']
+    except (OSError, ValueError, KeyError):
+        pass
+    files = [n for n in names_of(corpus, sha) if not ROOT_DOC.fullmatch(n)]
+    example = next((n for n in files if '/' in n), files[0] if files else '')  # a provision in a folder first
+    try:
+        f.parent.mkdir(parents=True, exist_ok=True)
+        tmp = f.with_name(f'{f.name}.{os.getpid()}.part')
+        tmp.write_bytes(json.dumps({'n': len(files), 'example': example}).encode('utf-8'))
+        os.replace(tmp, f)
+    except OSError:
+        pass
+    return len(files), example
+
+
 def caselaw_files(corpus: str, sha: str | None) -> tuple[int, str]:
     """(decision files, one example) of a case-law corpus at its pin, from the tree's cache (caselaw-files-<pin>.json),
     written the first time: listing every file of 14 US case-law corpora (a million decisions) on each call made
@@ -1204,8 +1227,8 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
             n_files, example = caselaw_files(c['path'], corpus_head(c['path']))
             files = range(n_files)
         else:
-            files = [f for f in names_of(c['path'], corpus_head(c['path'])) if not ROOT_DOC.fullmatch(f)]
-            example = next((f for f in files if '/' in f), files[0] if files else '')  # a provision in a folder first
+            n_files, example = law_files(c['path'], corpus_head(c['path']))
+            files = range(n_files)
         info = {'path': c['path'], 'name': c['name'], 'language': c.get('language'), 'coverage': c.get('coverage'),
                 'history': c.get('history'), 'provision_files': len(files), 'record_starts': first,
                 'last_change_in_record': last,
@@ -4061,6 +4084,27 @@ def grep_windows(corpus: str, sha: str, windows: tuple[str, ...]) -> dict[str, t
     case) -> files. A phrase that spans a line break is not found, as with grep_files."""
     if not windows:
         return {}
+    # Kept in the store by commit and phrases (a commit's files never change): check_precedent on art. 22¹ k.p. greps
+    # Polish law for the same passages each call, 0.44 s of its 1.5 s (Poland speed gate, 2026-11-09).
+    import hashlib
+    key = hashlib.sha1(json.dumps([corpus, sha, list(windows)], ensure_ascii=False).encode('utf-8')).hexdigest()
+    kept = law._store() / 'grep-windows' / f'{key}.json'
+    try:
+        return {k: tuple(v) for k, v in json.loads(kept.read_text(encoding='utf-8')).items()}
+    except (OSError, ValueError, AttributeError):
+        pass
+    got = _grep_windows(corpus, sha, windows)
+    try:
+        kept.parent.mkdir(parents=True, exist_ok=True)
+        tmp = kept.with_name(f'{kept.name}.{os.getpid()}.tmp')
+        tmp.write_text(json.dumps(got, ensure_ascii=False), encoding='utf-8')
+        os.replace(tmp, kept)
+    except OSError:
+        pass
+    return got
+
+
+def _grep_windows(corpus: str, sha: str, windows: tuple[str, ...]) -> dict[str, tuple[str, ...]]:
     args = ['git', 'grep', '-F', '-i', '-I', '-o', '--full-name']
     for w in windows:
         args += ['-e', w]
@@ -4209,6 +4253,10 @@ def judgments_counted(corpus: str, sha: str, rel: str, date: str, latest: int) -
                 tail = [l for l in sm['tail'] if (m := _DECIDED.search(l)) and m.group(1) <= date]
                 if len(tail) >= min(upto_here, latest * 2):  # the summary holds every row this answer can show
                     summed.append({**e, 'upto': upto_here, 'tail_upto': tail})
+                else:  # a date before the summary's rows: the file sorted by day, kept beside the blob (law.rows_upto)
+                    rows = law.rows_upto(e['corpus'], e['blob'], date, latest * 2)
+                    if rows is not None:
+                        summed.append({**e, 'upto': upto_here, 'tail_upto': rows})
         texts += law.read_blobs_of([(e['corpus'], e['blob']) for e in entries
                                     if not any(e['blob'] == x['blob'] and e['corpus'] == x['corpus'] for x in summed)])
     if not summed and sum(t.count('\n') for _, t in texts) <= JUDGMENTS_COUNTED:

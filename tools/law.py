@@ -1126,6 +1126,59 @@ def read_texts_of(rows: list[tuple[str, str]]) -> list[str | None]:
 
 
 _HEX40 = re.compile(r'[0-9a-f]{40}')
+_COMMIT_PATH = re.compile(r'[0-9a-f]{40}:.+')
+
+
+def rows_upto(corpus: str, blob: str, date: str, n: int) -> list[str] | None:
+    """The last `n` rows of an overlay file decided on or before `date`, in the order of their day and then the row
+    itself (as judgments_counted picks them), from the file sorted once by day and kept in the store beside the blob
+    (<blob>.byday: "<decided> TAB <row>" lines): a long file's summary keeps only its latest rows, so a date before them
+    read the whole file on each call (art. 1.022 of the Brazilian CPC: two files of 46 MB, 0.6 s of git and the parse
+    of 614,000 rows, Brazil speed gate 2026-11-09). None when the blob cannot be read."""
+    import mmap
+    import os
+    if not _HEX40.fullmatch(blob):
+        return None
+    path = _store() / 'blobs' / blob[:2] / f'{blob}.byday'
+    if not path.exists():
+        text = read_texts_of([(corpus, blob)])[0]
+        if text is None:
+            return None
+        rows = []
+        for line in text.encode('utf-8').splitlines():
+            m = _DECIDED_ROW.search(line)
+            if m:
+                rows.append((m.group(1), line))
+        rows.sort()
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            tmp = path.with_name(f'{path.name}.{os.getpid()}.tmp')
+            tmp.write_bytes(b''.join(d + b'\t' + line + b'\n' for d, line in rows))
+            os.replace(tmp, path)
+        except OSError:
+            return [line.decode('utf-8', 'replace') for d, line in rows if d.decode() <= date][-n:]
+    size = path.stat().st_size
+    if not size or n <= 0:
+        return []
+    key = date.encode('ascii')
+    with open(path, 'rb') as fh, mmap.mmap(fh.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+        lo, hi = 0, size  # the start of the first line decided after the date
+        while lo < hi:
+            mid = (lo + hi) // 2
+            st = mm.rfind(b'\n', 0, mid) + 1
+            en = mm.find(b'\n', st)
+            en = size if en < 0 else en
+            if mm[st:st + 10] <= key:
+                lo = en + 1
+            else:
+                hi = st
+        end, out = min(lo, size), []
+        pos = end - 1  # the newline that ends the last row on or before the date
+        while pos > 0 and len(out) < n:
+            st = mm.rfind(b'\n', 0, pos) + 1
+            out.append(mm[st:pos].split(b'\t', 1)[1].decode('utf-8', 'replace'))
+            pos = st - 1
+    return out[::-1]
 
 
 def _read_texts_git(rows: list[tuple[str, str]]) -> list[str | None]:
@@ -4717,6 +4770,18 @@ def _has_commit(corpus: str, cwd: Path, sha: str) -> bool:
 def read_object(corpus: str, spec: str) -> str | None:
     """A file's text by blob id or <commit>:<path>, or None. One long-lived `git cat-file --batch` per corpus, so
     reading many files costs no process each; where processes can only be run one at a time, one `git cat-file`."""
+    # A blob id, or a full commit id and a path, names one text for ever: kept in the store once read, so a call that
+    # reads a few versions from several corpora starts no reader for them (check_precedent on art. 22¹ k.p.: 12 reads,
+    # 0.5 s of its 1.1 s, Poland speed gate 2026-11-09).
+    kept = None
+    if _HEX40.fullmatch(spec) or _COMMIT_PATH.fullmatch(spec):
+        import hashlib
+        name = spec if ':' not in spec else hashlib.sha1(spec.encode('utf-8')).hexdigest() + '.at'
+        kept = _store() / 'blobs' / name[:2] / name
+        try:
+            return kept.read_bytes().decode('utf-8', 'replace').replace('\r\n', '\n').replace('\r', '\n')
+        except OSError:
+            pass
     cwd = corpus_dir(corpus)
     if not hasattr(subprocess, 'Popen'):
         done = subprocess.run(['git', 'cat-file', 'blob', spec], cwd=cwd, capture_output=True)
@@ -4727,6 +4792,15 @@ def read_object(corpus: str, spec: str) -> str | None:
             return None
     if data is None:
         return None
+    if kept is not None and len(data) <= BLOB_CACHE_MAX:
+        try:
+            import os
+            kept.parent.mkdir(parents=True, exist_ok=True)
+            tmp = kept.with_name(f'{kept.name}.{os.getpid()}.tmp')
+            tmp.write_bytes(data)
+            os.replace(tmp, kept)
+        except OSError:
+            pass
     # As `git show` read in text mode gave it: line ends as \n.
     return data.decode('utf-8', 'replace').replace('\r\n', '\n').replace('\r', '\n')
 
