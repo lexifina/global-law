@@ -16,3 +16,6 @@ import LegalProofs
 #print axioms Legal.consolidate_perm
 #print axioms Legal.same_key_conflict
 #print axioms Legal.replace_missing_noop
+#print axioms Legal.USTax.scheduleTax_step
+#print axioms Legal.USTax.investment_cliff_8045
+#print axioms Legal.USTax.Generated.Cliffs000.all_hold
