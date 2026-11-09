@@ -28,7 +28,7 @@ python ingest/textscan.py && python ingest/refscan.py && python ingest/refscan.p
 python ingest/headings.py
 python detectors/trailer_only.py run && python detectors/rank.py run && python detectors/text_detectors.py run
 python detectors/ref_detectors.py run && python detectors/placeholder_ref.py run && python detectors/late_extension.py run
-python detectors/owi_de.py run && python detectors/subref_de.py run && python detectors/notes_scan.py run
+python detectors/owi_de.py run && python detectors/dead_fine.py run && python detectors/subref_de.py run && python detectors/notes_scan.py run
 python detectors/currency_scan.py run && python detectors/dup_labels.py run && python detectors/es_crossref.py run
 python release/build_release.py out                 # the list, in every format
 ```
@@ -43,6 +43,31 @@ The model steps (`triage/`) need an OpenAI-compatible Responses API: set `LLM_BA
 | triage/ | model review: artefact, lawful or candidate defect; a second model argues against each survivor; case files |
 | bench/ | the accuracy benchmark below, with its samples and labels |
 | release/ | builds the published list and the confirmed cases |
+
+## Dead fines in every language (dead_fine)
+
+`detectors/dead_fine.py` generalises `owi_de.py` (Germany only) to every corpus: it finds penalty provisions (an offence, a
+fine, an administrative infraction, in any language) and flags each reference in them to a provision of the same act that
+is now only a repeal placeholder or was deleted. A penalty needs an existing statutory basis, so that part cannot be
+enforced. Before a full run, check it in three ways:
+
+| Check | Command | Result now |
+|---|---|---|
+| Unit tests: small acts in German, Spanish, Portuguese, French and English, including the false positives seen on real corpora | `python -m unittest discover -s tests` | 17/17 pass |
+| Live check on the real acts behind the confirmed dead fines, and on acts that produced false positives before (another act's section with the same number) | `python bench/dead_fine_bench.py` | 9/9 found, 6/6 false positives avoided |
+| Recognising penalty provisions, against model-labelled gold (about 1,070 provisions per set, half with a penalty word, half at random, from every corpus) | `python bench/penal_bench.py score --set holdout` | precision 94%, recall 74% (tuning set before the work: recall 52%) |
+
+To redraw or relabel the penalty sets: `python bench/penal_bench.py sample --set tuning` and `label --set tuning` (needs the
+model settings above); the held-out set (`--set holdout`) was scored once, after tuning on the other set.
+
+Known limits:
+- Recognition is weakest in Brazil, Malta, Thailand and Guinea on the held-out set, where penalties are often stated in a
+  separate article or a closing 'Pena' line beyond the provision's text.
+- Two bugs found while building this, fixed here but not yet in the shared code: `ingest/refscan.refs()` skips a file's
+  first line as a heading, so corpora without heading lines (Brazil: 'Art. 347 - ...') lose references in a provision's
+  first sentence; and `placeholder_ref.py` finds the text before a reference with `ctx.split(key)`, which cuts at the
+  key's first occurrence ('1831/2003' for 'Artikel 3'). Fixing them in the shared code will change other detectors'
+  counts, so they should go in with the next full run and a fresh benchmark score.
 
 ## How accurate the detectors are
 
