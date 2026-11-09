@@ -1,5 +1,3 @@
-<h1>Legal exploits: 5 worked-through examples and 74,000 issues flagged by type</h1>
-
 https://github.com/user-attachments/assets/152471be-a534-48f0-be6d-cdd98aacfa58
 
 <p>Each case is a logical mistake in the law itself, laid out as a legal zero-day in the sense of <a href="https://arxiv.org/html/2508.10050v1">Legal Zero-Days: A Novel Risk Vector for Advanced AI Systems</a>: the rule, what the official text says, why the two don't fit, what follows, who could use it, and the strongest objections, each rated. We first present the categories of error by number; the five in-depth examples are linked under More.</p>
