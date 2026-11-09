@@ -4,6 +4,20 @@ The code that produced the vulnerability list: it reads the law corpora of this 
 them, runs detectors over their git histories and current texts, has a language model sort the candidates, and builds the
 published list. Python 3.11+, git, and `pip install duckdb pyarrow psutil` (psutil optional).
 
+```mermaid
+flowchart LR
+  A["Corpora of this repository<br/>read-only mirrors, pinned"] --> B["Index<br/>every file change, date, amount, reference"]
+  B --> C["16 detectors<br/>history and current text"]
+  C --> D["Model review<br/>artefact · lawful · defect"]
+  D --> E["Second model<br/>argues against each survivor"]
+  E --> F["Hand check<br/>against official sources"]
+  C --> G["Published list<br/>CSV · JSONL · Parquet · HTML"]
+  D --> G
+  F --> G
+```
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="img/funnel-dark.svg"><img alt="74,301 flags raised, 6,310 reviewed by a model, 593 possible defects after review, 25 confirmed against official sources" src="img/funnel-light.svg" width="100%"></picture>
+
 ## Run it
 
 ```sh
@@ -42,6 +56,12 @@ while improving the code, and a held-out set (seed 11), used only to score. Held
 | References to numbered provisions of the same act | 37% / 33% | **84% / 71%** | 1253 |
 | Repeal placeholders (provision is only 'Repealed', '(weggefallen)', ...) | 92% / 63% | **89% / 77%** | 87 |
 | End dates of a rule ('until 31 December 2025') | 93% / 27% | **87% / 42%** | 48 |
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="img/accuracy-dark.svg"><img alt="Precision and recall of each step on the held-out set, original code against current code" src="img/accuracy-light.svg" width="100%"></picture>
+
+The reference step by jurisdiction (held-out set, jurisdictions with at least 15 gold references):
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="img/languages-dark.svg"><img alt="Reference recall per jurisdiction on the held-out set, original code against current code" src="img/languages-light.svg" width="100%"></picture>
 
 What changed, in short:
 - **References.** Separate words were read as suffixes ('section 10 of' as `10of`, 'artículo 458 y' as `458y`). Lists and
