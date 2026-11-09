@@ -1,6 +1,6 @@
 https://github.com/user-attachments/assets/6f43621b-a186-4e16-9144-6946de279a03
 
-<p>Each case is a logical mistake in the law itself, laid out as a legal zero-day in the sense of <a href="https://arxiv.org/html/2508.10050v1">Legal Zero-Days: A Novel Risk Vector for Advanced AI Systems</a>: the rule, what the official text says, why the two don't fit, what follows, who could use it, and the strongest objections, each rated. We first present the categories of error by number; the five in-depth examples are linked under More.</p>
+<p>Each case is a logical mistake in the law itself, ranging from mechanical mistakes to <a href="https://arxiv.org/html/2508.10050v1">legal zero-days</a> (essentially loopholes). We present errors by category and frequency, provide five in-depth examples, and lay out an overall <a href="TAXONOMY.md">taxonomy</a> for finding legislative errors.</p>
 
 <table>
 <tr><th>Category</th><th>What it is</th><th>Flagged</th></tr>
@@ -38,5 +38,15 @@ https://github.com/user-attachments/assets/6f43621b-a186-4e16-9144-6946de279a03
 <p><b>Are these real loopholes?</b> They are drafting mistakes confirmed against official sources, but none has been tested in court; this is theoretical research.</p>
 
 <p><b>How were they found?</b> Detectors read the git history of 107 national law corpora in this repository, language models filtered the 74,000 flags, and the strongest survivors were checked by hand against gazettes and consolidated texts.</p>
+
+<p><b>Isn't a lot of this deliberate? Law is grey on purpose.</b> Often, yes. The detectors look for mechanical mistakes, not grey areas: a reference to a section that was repealed or renumbered, a fine that points at a deleted rule, a rule in force before it was published. Whether a gap is a mistake or a choice is a legal judgement, so every review gives a verdict, and most flags turn out to be lawful, cured, intended or errors in a corpus rather than defects in the law.</p>
+
+<p><b>Courts read law by its purpose, history and case law. Isn't a check of the text alone dangerous?</b> Courts do read purpose, context and precedent, which is why each case lists the strongest objections and rates them, and why none is presented as settled. The cases shown are ones where that reading has least room, such as fines, which need an exact statutory basis. A flag is a prompt for a lawyer or a legislature to look, not legal advice. This repository also holds case law for many jurisdictions, so a flag can be checked against the decisions that apply it.</p>
+
+<p><b>Doesn't version-controlled law already exist?</b> In places. legislation.gov.uk shows each UK act as it stood on any date, and the District of Columbia publishes its code on GitHub, where a resident once fixed a typo in the law with a pull request. Amending acts are already written as diffs ('insert ...', 'omit ...'). What is missing is coverage: the same versioned format for every jurisdiction, so the same checks run everywhere at once, and <code>git blame</code> shows which law wrote each word.</p>
+
+<p><b>The law isn't software. Why apply software-style checks?</b> It isn't, and these checks do not try to prove a statute correct. They work like a linter: they catch the mechanical slips (references that point nowhere, impossible dates, amendments that could not be carried out) that drafters would fix if they saw them.</p>
+
+<p><b>Who benefits, and will legislators ever adopt this?</b> It needs no one's adoption: published law is public, so anyone can run the checks. Finding these mistakes used to take legal training and time; publishing them puts pressure on legislatures to repair them, and lets everyone, not only well-advised insiders, see where the text fails.</p>
 
 <p><b>Can I report a correction?</b> Yes: open an issue in this repository with the provision and an official source.</p>
