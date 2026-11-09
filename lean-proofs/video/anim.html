@@ -132,7 +132,7 @@ function sTheorem(t) {
   g.fillStyle = C.green; rrect(x0, y, (x1 - x0) * Math.min(p, cut) , 54, 8); g.fill();
   if (p > cut) { g.fillStyle = C.red; rrect(x0 + (x1 - x0) * cut, y, (x1 - x0) * (p - cut), 54, 8); g.fill(); }
   g.restore();
-  text('fine applies', x0 + 20, y + 37, `600 24px ${SANS}`, '#0d1117', 'left', f * p);
+  text('fine applies', x0 + 20, y + 37, `600 24px ${SANS}`, '#0d1117', 'left', f * clamp((p - .2) / .1));
   if (p > cut + .1) text('fine cannot apply', x0 + (x1 - x0) * cut + 20, y + 37, `600 24px ${SANS}`, '#0d1117', 'left', f);
   text('2020-09-01', x0 + (x1 - x0) * cut, y + 96, `500 22px ${MONO}`, C.ink, 'center', f * p);
   const q = ease(seg(t, a + 6, a + 7));
