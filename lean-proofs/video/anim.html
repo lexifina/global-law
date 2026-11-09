@@ -174,21 +174,36 @@ function sCatch(t) {
   badge(1450, 790, '✓ fixed', C.green, f * easeOut(seg(t, a + 5, a + 5.4)));
 }
 
-const DOTS = (() => { const r = rng(11), out = []; const N = 6741, cols = 113; for (let i = 0; i < N; i++) {
-  const v = r(); out.push({ i, c: v < 308 / 6741 ? 're' : (v < 6530 / 6741 ? 'ok' : 'no'), x: i % cols, y: Math.floor(i / cols), d: r() }); } return out; })();
+const KINDS = [['ref', 6741, 6530, C.green, 'references (from corpus history)'], ['pre', 5769, 5769, C.blue, 'in force before made'],
+  ['gap', 1760, 1760, C.amber, 'empty periods'], ['para', 630, 630, C.violet, 'missing paragraphs']];
+const DOTS = (() => { const r = rng(11), out = []; let i = 0; const cols = 180;
+  for (const [k, n, ok, col] of KINDS) for (let j = 0; j < n; j++, i++) {
+    const re = k === 'ref' && r() < 308 / 6741;
+    out.push({ x: i % cols, y: Math.floor(i / cols), d: r(), col: j < ok ? (re ? '#ffffff' : col) : '#4a5566' }); }
+  return out; })();
 function sScale(t) {
   const a = 46.4, b = 54.4, f = fadeIO(t, a, b); if (f <= 0) return;
-  caption(t, a, b, '6 · EVERY FLAG, NOT JUST FIVE', 'lake build checks 6,741 references in about 10 seconds', C.green);
-  const p = seg(t, a + .6, a + 4.2), x0 = 140, y0 = 290, s = 9;
+  caption(t, a, b, '6 · EVERY FLAG, NOT JUST FIVE', 'lake build checks 14,900 flags in about 10 seconds', C.green);
+  const p = seg(t, a + .6, a + 4.2), x0 = 140, y0 = 280, s = 5.6;
   for (const dt of DOTS) {
-    const on = dt.d < p * 1.05 ? 1 : 0; if (!on) { g.fillStyle = C.faint; } else g.fillStyle = dt.c === 'ok' ? C.green : dt.c === 're' ? C.amber : '#4a5566';
-    g.globalAlpha = f * (on ? 1 : .5); g.fillRect(x0 + dt.x * s, y0 + dt.y * s, s - 3, s - 3);
+    const on = dt.d < p * 1.05;
+    g.globalAlpha = f * (on ? 1 : .35); g.fillStyle = on ? dt.col : C.faint;
+    g.fillRect(x0 + dt.x * s, y0 + dt.y * s, s - 1.4, s - 1.4);
   }
   g.globalAlpha = 1;
-  const k = easeOut(seg(t, a + 1, a + 4.4)), lx = 1250;
-  text(fmt(6530 * k), lx, 360, `700 64px ${SERIF}`, C.green, 'left', f); text('certified: target gone, citing provision still in force', lx, 396, `400 22px ${SANS}`, C.muted, 'left', f);
-  text(fmt(308 * k), lx, 500, `700 64px ${SERIF}`, C.amber, 'left', f); text('re-enacted: legislature kept the dead reference', lx, 536, `400 22px ${SANS}`, C.muted, 'left', f);
-  text(fmt(259 * k), lx, 640, `700 64px ${SERIF}`, C.ink, 'left', f); text('never reviewed: the next leads', lx, 676, `400 22px ${SANS}`, C.muted, 'left', f);
+  const k = easeOut(seg(t, a + 1, a + 4.4)), lx = 1180;
+  text(fmt(14689 * k), lx, 340, `700 62px ${SERIF}`, C.ink, 'left', f);
+  text('certified by Lean, in four kinds', lx, 376, `400 22px ${SANS}`, C.muted, 'left', f);
+  KINDS.forEach(([kk, n, ok, col, lab], i) => {
+    const y = 440 + i * 50, q = f * easeOut(seg(t, a + 1.4 + i * .3, a + 2 + i * .3));
+    g.save(); g.globalAlpha = q; g.fillStyle = col; rrect(lx, y - 20, 22, 22, 4); g.fill(); g.restore();
+    text(fmt(ok), lx + 40, y, `600 26px ${MONO}`, C.ink, 'left', q);
+    text(lab, lx + 170, y, `400 24px ${SANS}`, C.muted, 'left', q);
+  });
+  const q2 = f * easeOut(seg(t, a + 3, a + 3.6));
+  g.save(); g.globalAlpha = q2; g.fillStyle = '#ffffff'; rrect(lx, 680, 22, 22, 4); g.fill(); g.restore();
+  text('308 dead references the legislature kept', lx + 40, 700, `400 24px ${SANS}`, C.ink, 'left', q2);
+  text('259 never reviewed: the next leads', lx + 40, 736, `600 24px ${SANS}`, C.amber, 'left', q2);
   text('$ python tools/check.py germany/bund/acts awaffv/0034.md', 140, 930, `400 26px ${MONO}`, C.ink, 'left', f * easeOut(seg(t, a + 4.6, a + 5.2)));
   text('PROVED  points at awaffv/0012.md, gone since 2020-09-01', 140, 975, `600 26px ${MONO}`, C.green, 'left', f * easeOut(seg(t, a + 5.4, a + 5.8)));
 }
@@ -196,7 +211,7 @@ function sScale(t) {
 function sEnd(t) {
   const a = 54.2, f = easeOut(seg(t, a, a + 1)); if (f <= 0) return;
   text('What it helps us do', W / 2, 330, `600 30px ${SANS}`, C.amber, 'center', f);
-  const items = ['Prove a flagged mistake follows from the record', 'Rank leads the legislature itself kept', 'Test every objection as a theorem', 'Re-check everything when the law changes'];
+  const items = ['Prove a flagged mistake follows from the record', 'Rank the leads the legislature itself kept', 'Test every objection as a theorem', 'Re-check everything when the law changes'];
   items.forEach((s, i) => text(s, W / 2, 430 + i * 74, `600 46px ${SERIF}`, C.ink, 'center', f * easeOut(seg(t, a + .3 + i * .25, a + .9 + i * .25))));
   text('global-law / lean-proofs  ·  lake build', W / 2, 800, `500 30px ${MONO}`, C.muted, 'center', f * easeOut(seg(t, a + 1.6, a + 2.4)));
 }
