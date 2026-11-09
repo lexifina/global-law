@@ -164,6 +164,26 @@ ceiling it never reaches, the net-income landscape with the §32(i) cliff (a fam
 search sweeping it, the Saver's Credit terraces and the marriage merge. `python video/render_tax.py` writes
 `video/out/us-tax-film.mp4`.
 
+## US federal tax: six loopholes
+
+[LegalProofs/USTax/Loopholes/](LegalProofs/USTax/Loopholes) models six lawful, reported structures and proves, for every
+amount, the fact each one rests on; then it runs them on reported or illustrative figures.
+
+| File | Structure | Proved for all inputs | Worked figure |
+|---|---|---|---|
+| [Roth.lean](LegalProofs/USTax/Loopholes/Roth.lean) | Founder shares in a Roth IRA (§408A) | growth is never taxed; the limit ignores value | $1,700 → $5B: $1,189,999,595 of tax never due |
+| [StepUp.lean](LegalProofs/USTax/Loopholes/StepUp.lean) | Buy, borrow, die (§§1001, 1014) | a borrowing plan pays no income tax, by induction over the years; the step-up erases every gain | heirs get $3.74B instead of $2.98B |
+| [GRAT.lean](LegalProofs/USTax/Loopholes/GRAT.lean) | Zeroed-out GRAT (§2702, *Walton*) | the gift is $0 for every amount and §7520 rate; nothing leaks | +40%/+30%: $57.3M to heirs untaxed; bad years: all back |
+| [QSBS.lean](LegalProofs/USTax/Loopholes/QSBS.lean) | Stacking §1202 across trusts; §643(f) | merging taxpayers never lowers the tax | $150M exit: $32.13M → $0; careless trusts: $21.42M |
+| [SALT.lean](LegalProofs/USTax/Loopholes/SALT.lean) | The SALT torpedo; PTET (Notice 2020-75) | every $1,000 from $500k to $600k removes $300 of deduction | 45.5% marginal rate; S-corp owner saves $33,300 |
+| [ACA.lean](LegalProofs/USTax/Loopholes/ACA.lean) | 400% premium-credit cliff (§36B, 2026) | no credit above 400% of poverty; capped at 9.96% below | $1 of income costs $23,402; $1 into an IRA wins it back |
+
+[Playbook.lean](LegalProofs/USTax/Loopholes/Playbook.lean) puts them together: $1 billion of pay owes $393,460,310 of
+federal tax (`salary_billion`); $1 billion of founder's stock handled with the structures above owes $0 of income tax
+(`founder_billion`). `lake env lean LegalProofs/USTax/Loopholes/Search.lean` maps each one into `tools/out/loopholes.json`;
+`python tools/loopholes_writeup.py` writes the write-up, [us-tax-loopholes.html](us-tax-loopholes.html), and
+[video/loophole_film.html](video/loophole_film.html) (`python video/render_loopholes.py`) is an 88-second film of all six.
+
 ## What a proof here does and does not show
 
 Lean checks that each conclusion follows from the dated facts and the rule as defined. It does not check the facts or

@@ -1,0 +1,290 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=block">
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#04070d}
+canvas{position:absolute;inset:0}
+#ov{position:absolute;inset:0;pointer-events:none;color:#eef1f5;font-family:'IBM Plex Sans',sans-serif}
+.k{position:absolute;left:120px;top:96px;font:600 22px 'IBM Plex Sans';letter-spacing:.22em;text-transform:uppercase}
+.t{position:absolute;left:120px;top:132px;font:600 58px/1.1 'Source Serif 4',serif;max-width:1350px;text-shadow:0 2px 30px rgba(0,0,0,.7)}
+.s{position:absolute;left:122px;top:212px;font:400 26px 'IBM Plex Sans';color:#a6b5cc;max-width:1200px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud{position:absolute;right:120px;top:100px;text-align:right;font:500 22px 'JetBrains Mono',monospace;color:#a6b5cc;line-height:1.7;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud b{font:700 56px 'Source Serif 4',serif;color:#eef1f5;display:block;line-height:1.1}
+.lab{position:absolute;transform:translate(-50%,-150%);white-space:nowrap;font:600 21px 'JetBrains Mono',monospace;padding:5px 11px;border-radius:9px;background:rgba(6,12,22,.66);border:1px solid rgba(140,170,210,.28);backdrop-filter:blur(6px)}
+#code.right{left:auto;right:120px}
+#code{position:absolute;left:120px;bottom:110px;padding:20px 26px;border-radius:16px;background:rgba(8,14,26,.74);border:1px solid rgba(120,160,220,.25);backdrop-filter:blur(10px);font:400 22px/1.6 'JetBrains Mono',monospace;color:#d8e2f2;white-space:pre}
+#code .kw{color:#c792ea}#code .n{color:#f78c6c}#code .c{color:#5c6b80}#code .ok{color:#5fd3a0;font-weight:600}
+#big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#big .bk{font:600 26px 'IBM Plex Sans';letter-spacing:.3em;color:#f2b24a;text-transform:uppercase}
+#big .bt{font:700 108px/1.05 'Source Serif 4',serif;margin:22px 0 18px;text-shadow:0 0 70px rgba(80,220,160,.25)}
+#big .bs{font:400 32px 'IBM Plex Sans';color:#a8b8d0}
+#end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#end .row{font:600 38px/1.5 'Source Serif 4',serif}
+#end .row span{color:#5fd3a0;font-family:'JetBrains Mono',monospace;font-size:34px;margin-right:16px}
+#end .foot{margin-top:34px;font:500 26px 'JetBrains Mono',monospace;color:#8fa2bd}
+#fade{position:absolute;inset:0;background:#000}
+.big2{position:absolute;transform:translate(-50%,-50%);font:700 96px 'Source Serif 4',serif;text-shadow:0 0 40px rgba(0,0,0,.8)}
+.lab.sm{font-size:17px;padding:3px 8px}
+</style></head><body>
+<div id="ov">
+  <div id="big"><div class="bk">Lean 4 · US tax code · 2025–2026</div><div class="bt">Six loopholes,<br>proved</div><div class="bs">two ways to make a billion dollars</div></div>
+  <div class="k" id="k"></div><div class="t" id="tt"></div><div class="s" id="ss"></div>
+  <div id="hud"></div><div id="code"></div><div id="labels"></div>
+  <div id="end"></div><div id="fade"></div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const L = window.LH;
+const W = 1920, H = 1080, DUR = 88;
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const fadeIO = (t, a, b, d = .6) => seg(t, a, a + d) * (1 - seg(t, b - d, b));
+const fmt = n => Math.round(n).toLocaleString('en-US');
+const mill = n => n >= 1e9 ? '$' + (n / 1e9).toFixed(2) + 'B' : '$' + (n / 1e6).toFixed(1) + 'M';
+function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rng(2026);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1); renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#04070d'); scene.fog = new THREE.FogExp2('#04070d', 0.0018);
+const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 6000);
+const composer = new EffectComposer(renderer); composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), .8, .55, .45); composer.addPass(bloom); composer.addPass(new OutputPass());
+scene.add(new THREE.HemisphereLight('#9fc3ff', '#120a06', .6));
+const sun = new THREE.DirectionalLight('#ffe6c4', 1.3); sun.position.set(-80, 140, 60); scene.add(sun);
+const rim = new THREE.DirectionalLight('#5fe0ff', .5); rim.position.set(120, 40, -140); scene.add(rim);
+
+const spriteTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.3, 'rgba(255,255,255,.7)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+const ptsMat = (size, op = 1) => new THREE.PointsMaterial({ size, map: spriteTex, vertexColors: true, transparent: true, opacity: op, depthWrite: false, blending: THREE.AdditiveBlending });
+const glow = (r, c) => new THREE.Mesh(new THREE.IcosahedronGeometry(r, 4), new THREE.MeshBasicMaterial({ color: c, transparent: true }));
+const solid = (c, e = .25, op = 1) => new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: e, roughness: .4, metalness: .15, transparent: op < 1, opacity: op });
+const glass = (c = '#7cc7ff', op = .12) => new THREE.MeshStandardMaterial({ color: c, transparent: true, opacity: op, roughness: .1, metalness: .2, depthWrite: false, side: THREE.DoubleSide });
+const edges = (m, c) => { const e = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), new THREE.LineBasicMaterial({ color: c, transparent: true })); m.add(e); return e; };
+const box = (w, h, d, mat) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+// a unit box whose origin is its bottom face, so scale.y grows it upwards
+const ubox = (w, d, mat) => { const g = new THREE.BoxGeometry(w, 1, d); g.translate(0, .5, 0); return new THREE.Mesh(g, mat); };
+
+{ const n = 6000, p = new Float32Array(n * 3), c = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { const th = R() * 6.283, ph = Math.acos(2 * R() - 1), r = 1500 + R() * 2000; p.set([3000 + r * Math.sin(ph) * Math.cos(th), Math.abs(r * Math.cos(ph)) - 300, r * Math.sin(ph) * Math.sin(th)], i * 3);
+    const b = .2 + R() * .45; c.set([b * .8, b * .9, b], i * 3); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(p, 3)); g.setAttribute('color', new THREE.BufferAttribute(c, 3)); scene.add(new THREE.Points(g, ptsMat(5, .8))); }
+const grid = (x, size = 220, c1 = '#16314d', c2 = '#0b1726') => { const g = new THREE.GridHelper(size, 44, c1, c2); g.position.set(x, -.02, 0); g.material.transparent = true; g.material.opacity = .5; scene.add(g); return g; };
+
+// ============ 1. two billions ============
+const G1 = new THREE.Group(); scene.add(G1); grid(0);
+const TH = 60, payTax = L.billion.salary / 1e9;
+const towers = [-18, 18].map((x, i) => { const g = new THREE.Group(); g.position.x = x; G1.add(g);
+  const shell = box(14, TH, 14, glass()); shell.position.y = TH / 2; edges(shell, '#7cc7ff'); g.add(shell);
+  const gold = ubox(13, 13, solid('#f2b24a', .35)); g.add(gold);
+  const red = ubox(13.2, 13.2, solid('#ff5a46', .6)); g.add(red);
+  return { g, gold, red, x }; });
+
+// ============ 2. the Roth vault ============
+const G2 = new THREE.Group(); G2.position.set(1000, 0, 0); scene.add(G2); grid(1000);
+const vault = box(44, 44, 44, glass('#5fe0ff', .07)); vault.position.y = 22; G2.add(vault); const vaultE = edges(vault, '#5fe0ff');
+const nugget = box(1, 1, 1, solid('#ffcc55', .55)); G2.add(nugget);
+const RAIN = 900, rainPos = new Float32Array(RAIN * 3), rainCol = new Float32Array(RAIN * 3), rain0 = [];
+for (let i = 0; i < RAIN; i++) rain0.push([(R() - .5) * 60, 50 + R() * 140, (R() - .5) * 60, 14 + R() * 10]);
+const rainGeo = new THREE.BufferGeometry(); rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3)); rainGeo.setAttribute('color', new THREE.BufferAttribute(rainCol, 3));
+G2.add(new THREE.Points(rainGeo, ptsMat(1.6)));
+const rothV = k => 1700 * Math.pow(5e9 / 1700, k);
+const rothSide = v => 1 + 38 * (Math.log10(v) - Math.log10(1700)) / (Math.log10(5e9) - Math.log10(1700));
+
+// ============ 3. buy, borrow, die ============
+const G3 = new THREE.Group(); G3.position.set(2000, 0, 0); scene.add(G3); grid(2000);
+const life = L.life.slice(0, 31), YX = y => -60 + y * 4, VY = v => v / 1.2e10 * 70;
+function ribbon(key, z, col) { const n = life.length, pos = new Float32Array(n * 2 * 3), colA = new Float32Array(n * 2 * 3), idx = [];
+  for (let i = 0; i < n; i++) { pos.set([YX(i), 0, z, YX(i), VY(life[i][key]), z], i * 6); }
+  for (let i = 0; i < n - 1; i++) { const a = 2 * i; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.BufferAttribute(colA, 3)); g.setIndex(idx);
+  const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: .82, side: THREE.DoubleSide, depthWrite: false }));
+  G3.add(m); const c = new THREE.Color(col); for (let i = 0; i < n * 2; i++) colA.set([c.r * (i % 2 ? 1 : .25), c.g * (i % 2 ? 1 : .25), c.b * (i % 2 ? 1 : .25)], i * 3);
+  const top = new THREE.Line(new THREE.BufferGeometry().setFromPoints(life.map((r, i) => V(YX(i), VY(r[key]), z))), new THREE.LineBasicMaterial({ color: col })); G3.add(top);
+  return { m, g, colA, top, n }; }
+const rbVal = ribbon('borrowValue', 0, '#ff7a4a'), rbDebt = ribbon('debt', 8, '#9b6bff'), rbSell = ribbon('sellValue', -10, '#5c6b80');
+const walker = glow(1.6, '#ffffff'); G3.add(walker);
+const stepPlane = box(4.2, 1, 1, new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: .0 })); G3.add(stepPlane);
+const greenC = new THREE.Color('#3fdc9a'), redC = new THREE.Color('#ff7a4a');
+
+// ============ 4. GRAT payoff surface ============
+const G4 = new THREE.Group(); G4.position.set(3000, 0, 0); scene.add(G4); grid(3000);
+const gf = L.grat.factors, gh = L.grat.heirs, GN = gf.length, gmax = Math.max(...gh.flat()), GP = 3.2;
+const cells = [];
+for (let i = 0; i < GN; i++) for (let j = 0; j < GN; j++) { const v = gh[i][j];
+  const m = ubox(GP * .86, GP * .86, v > 0 ? solid('#3fdc9a', .25 + .45 * v / gmax) : solid('#273444', .05));
+  m.position.set((j - (GN - 1) / 2) * GP, 0, -(i - (GN - 1) / 2) * GP); G4.add(m); cells.push({ m, i, j, h: v > 0 ? .6 + 30 * v / gmax : .25 }); }
+const giftPlane = box(GN * GP + 4, .08, GN * GP + 4, new THREE.MeshBasicMaterial({ color: '#fff6d8', transparent: true, opacity: .0, depthWrite: false })); giftPlane.position.y = .35; G4.add(giftPlane);
+const hi = cells.find(c => gf[c.i] === 14000 && gf[c.j] === 13000);
+const hiGlow = glow(1.1, '#ffffff'); G4.add(hiGlow);
+
+// ============ 5. QSBS stacking ============
+const G5 = new THREE.Group(); G5.position.set(4000, 0, 0); scene.add(G5); grid(4000);
+const MU = .3, CAPH = 15 * MU; // $1M = 0.3 units; the cap is $15M
+const ceil5 = box(80, .12, 16, new THREE.MeshBasicMaterial({ color: '#5fe0ff', transparent: true, opacity: .22, depthWrite: false })); ceil5.position.y = CAPH; G5.add(ceil5); edges(ceil5, '#5fe0ff');
+const names = ['founder', 'spouse', 'A', 'B', 'C', 'A', 'B', 'C', 'GC', 'GC'];
+const slices = names.map((n, k) => { const m = ubox(5, 5, solid('#3fdc9a', .3)); m.scale.y = CAPH; G5.add(m); return { m, k, n }; });
+const overRed = ubox(5.3, 5.3, solid('#ff5a46', .55)); G5.add(overRed);
+const rowX = k => -29 + k * 6.4;
+
+// ============ 6. SALT skyline ============
+const G6 = new THREE.Group(); G6.position.set(5000, 0, 0); scene.add(G6); grid(5000);
+const salt = L.salt, bars = salt.map(([w, r], i) => { const band = r > 4000; const m = ubox(.9, 5, solid(band ? '#ff5a46' : '#3b82f6', band ? .7 : .2)); m.position.x = -50 + i; G6.add(m); return { m, h: r / 100 * .8, band }; });
+
+// ============ 7. ACA cliff ============
+const G7 = new THREE.Group(); G7.position.set(6000, 0, 0); scene.add(G7); grid(6000);
+const AX = m => (m - 84600) / 400, AY = c => c / 1000 * 1.1;
+const plateau = new THREE.Shape(); { const pts = L.aca.filter(([m]) => m <= 84600); plateau.moveTo(AX(70000), 0); pts.forEach(([m, c]) => plateau.lineTo(AX(m), AY(c))); plateau.lineTo(AX(84600), AY(23402)); plateau.lineTo(AX(84600), 0); }
+const pg7 = new THREE.ExtrudeGeometry(plateau, { depth: 16, bevelEnabled: false }); pg7.translate(0, 0, -8);
+const mesa = new THREE.Mesh(pg7, solid('#2563eb', .18)); G7.add(mesa); edges(mesa, '#8ab4ff');
+const cliffEdge = box(.4, AY(23402), 16.4, new THREE.MeshBasicMaterial({ color: '#ff5a46' })); cliffEdge.position.set(AX(84600) + .2, AY(23402) / 2, 0); G7.add(cliffEdge);
+const floor7 = box(AX(110000) - AX(84600), .3, 16, solid('#1d2a3a', .1)); floor7.position.set((AX(110000) + AX(84600)) / 2, .15, 0); G7.add(floor7);
+const pair7 = [glow(1.1, '#ffffff'), glow(1.1, '#ffd27a')]; pair7.forEach(p => G7.add(p));
+const coin7 = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.6, .35, 48), solid('#ffcc55', .6)); coin7.rotation.x = Math.PI / 2; G7.add(coin7);
+
+// ============ overlay ============
+const $ = id => document.getElementById(id);
+const pool = [];
+function label(i, text, v3, a, color = '', cls = 'lab') { while (pool.length <= i) { const d = document.createElement('div'); $('labels').appendChild(d); pool.push(d); }
+  const d = pool[i]; d.className = cls; const p = v3.clone().project(camera); if (a <= .01 || p.z > 1) { d.style.opacity = 0; return; }
+  d.textContent = text; d.style.color = color; d.style.left = ((p.x + 1) / 2 * W) + 'px'; d.style.top = ((1 - p.y) / 2 * H) + 'px'; d.style.opacity = a; }
+function caption(k, c, t, s, a) { $('k').textContent = k; $('k').style.color = c; $('tt').textContent = t; $('ss').textContent = s; for (const id of ['k', 'tt', 'ss']) $(id).style.opacity = a; }
+const hud = (h, a) => { $('hud').innerHTML = h; $('hud').style.opacity = a; };
+const code = (h, a, right = false) => { $('code').innerHTML = h; $('code').style.opacity = a; $('code').className = right ? 'right' : ''; };
+const kw = s => `<span class="kw">${s}</span>`, ok = s => `<span class="ok">${s}</span>`, nn = s => `<span class="n">${s}</span>`;
+
+const S = { t1: 7, t2: 15.5, t3: 28.5, t4: 42, t5: 55, t6: 67.5, t7: 74, t8: 81 };
+function camAt(t) {
+  if (t < S.t2) { const a = t * .03; return [V(-30 + 150 * Math.sin(-.35 + a), 48, 150 * Math.cos(-.35 + a)), V(-34, 24, 0)]; }
+  if (t < S.t3) { const a = (t - S.t2) * .05, k = ease(seg(t, S.t2, S.t2 + 6)); const r = 150 - 40 * k; return [V(1000 + r * Math.sin(.6 + a), 70 - 10 * k, r * Math.cos(.6 + a)), V(1000, 20, 0)]; }
+  if (t < S.t4) { const k = ease(seg(t, S.t3, S.t4)); return [V(2000 - 30 + 40 * k, 30 + 6 * k, 120 - 10 * k), V(2000 - 6 + 10 * k, 14 + 6 * k, 0)]; }
+  if (t < S.t5) { const a = (t - S.t4) * .06; return [V(3000 + 95 * Math.sin(-.8 + a), 62, 95 * Math.cos(-.8 + a)), V(3000, 6, 0)]; }
+  if (t < S.t6) { const k = ease(seg(t, 58, 61)); return [V(4000 + 20 - 3 * (t - S.t5), 34 - 14 * k, 150 - 78 * k), V(4000 - 4 * k, 22 - 18 * k, 0)]; }
+  if (t < S.t7) { const a = (t - S.t6) * .04; return [V(5000 + 50 * Math.sin(-.3 + a), 40, 125), V(5000, 27, 0)]; }
+  if (t < S.t8) { const a = (t - S.t7) * .05; return [V(6000 + 4 + 20 * Math.sin(a), 30, 100), V(6000 + 6, 17, 0)]; }
+  const a = (t - S.t8) * .03; return [V(3000 + 120 * Math.sin(a), 90, 120 * Math.cos(a)), V(3000, 0, 0)];
+}
+
+window.render = function (t) {
+  const cuts = [S.t2, S.t3, S.t4, S.t5, S.t6, S.t7, S.t8];
+  let f = Math.max(1 - seg(t, 0, 1.2), seg(t, DUR - 1, DUR));
+  for (const c of cuts) f = Math.max(f, seg(t, c - .5, c) * (1 - seg(t, c + .1, c + .8)));
+  $('fade').style.opacity = f;
+  $('big').style.opacity = fadeIO(t, .8, 6.6, 1); $('big').style.transform = `translateY(${(1 - easeOut(seg(t, .8, 3))) * 30}px)`;
+
+  // 1. towers
+  G1.visible = t > 6.6 && t < S.t2 + .2;
+  towers.forEach((tw, i) => { const fill = easeOut(seg(t, 7.4 + i * .3, 9.4)); tw.gold.scale.y = Math.max(.01, TH * fill);
+    const red = i === 0 ? TH * payTax * ease(seg(t, 9, 11.5)) : 0.01; tw.red.scale.y = Math.max(.01, red); tw.red.position.y = TH - red; tw.red.visible = i === 0 && red > .1; });
+  // 2. roth
+  G2.visible = t > S.t2 - .2 && t < S.t3 + .2; const rk = ease(seg(t, 17.5, 25)); const rv = rothV(rk); const side = rothSide(rv);
+  nugget.scale.set(side, side, side); nugget.position.y = side / 2; nugget.rotation.y = t * .2;
+  for (let i = 0; i < RAIN; i++) { const [x, y0, z, sp] = rain0[i]; const yy = y0 - sp * Math.max(0, t - 18); const stop = 44.5;
+    const inside = Math.abs(x) < 22 && Math.abs(z) < 22; const y = inside ? Math.max(stop, yy) : yy; const stuck = inside && yy <= stop;
+    const fade = stuck ? clamp(1 - (stop - yy) / 25) : (yy < 0 ? 0 : 1);
+    rainPos.set([x, y, z], i * 3); rainCol.set([1 * fade, .3 * fade, .25 * fade], i * 3); }
+  rainGeo.attributes.position.needsUpdate = rainGeo.attributes.color.needsUpdate = true;
+  vaultE.material.color.set(t > 19 ? '#9ff0ff' : '#5fe0ff');
+  // 3. buy, borrow, die
+  G3.visible = t > S.t3 - .2 && t < S.t4 + .2; const yrs = 30 * ease(seg(t, 29.5, 37.5)); const n3 = Math.max(2, Math.floor(yrs) + 2);
+  for (const r of [rbVal, rbDebt, rbSell]) { r.g.setDrawRange(0, Math.min(r.n - 1, n3 - 1) * 6); r.top.geometry.setDrawRange(0, Math.min(r.n, n3)); }
+  const stepK = seg(t, 38.2, 39.6);
+  for (let i = 0; i < rbVal.n; i++) { const c = redC.clone().lerp(greenC, clamp(stepK * 1.4 - (30 - i) / 60)); for (const s of [0, 1]) { const b = s ? 1 : .25; rbVal.colA.set([c.r * b, c.g * b, c.b * b], (2 * i + s) * 3); } }
+  rbVal.g.attributes.color.needsUpdate = true; rbVal.top.material.color.copy(redC.clone().lerp(greenC, stepK));
+  const yi = Math.min(30, yrs), r0 = life[Math.floor(yi)], r1 = life[Math.min(30, Math.floor(yi) + 1)], fr = yi - Math.floor(yi);
+  walker.position.set(YX(yi), VY(r0.borrowValue + (r1.borrowValue - r0.borrowValue) * fr) + 1.8, 0);
+  stepPlane.position.set(YX(30), VY(life[30].borrowValue) * stepK / 2, 0); stepPlane.scale.set(1, Math.max(.01, VY(life[30].borrowValue) * stepK), 18);
+  stepPlane.material.opacity = .5 * Math.sin(Math.PI * stepK);
+  // 4. GRAT
+  G4.visible = t > S.t4 - .2 && t < S.t5 + .2 || t > S.t8 - .2;
+  const gt = t > S.t8 ? 60 : t; cells.forEach(c => { const k = easeOut(seg(gt, 43 + (c.i + c.j) * .06, 44.2 + (c.i + c.j) * .06)); c.m.scale.y = Math.max(.01, c.h * k); });
+  giftPlane.material.opacity = .1 * seg(t, 47, 48.5) * (t > S.t8 ? 0 : 1); hiGlow.position.set(hi.m.position.x, hi.h + 1.6, hi.m.position.z); hiGlow.visible = t > 50 && t < S.t5;
+  // 5. QSBS
+  G5.visible = t > S.t5 - .2 && t < S.t6 + .2; const split = ease(seg(t, 58.5, 61.5)), merge = ease(seg(t, 63, 65));
+  slices.forEach(s => { const k = s.k; let x = 0, y = k * CAPH;
+    x = x + (rowX(k) - x) * split; y = y * (1 - split);
+    if (k >= 2) { const grp = k <= 4 ? 0 : (k <= 7 ? 1 : 2); const tx = [rowX(3), rowX(6), rowX(8.5)][grp]; const ty = (k - [2, 5, 8][grp]) * CAPH;
+      if (grp < 2) { x = x + (tx - x) * merge; y = y + (ty - y) * merge; } }
+    s.m.position.set(x, y, 0); const over = y > CAPH - .01; s.m.material.color.set(over ? '#ff5a46' : '#3fdc9a'); s.m.material.emissive.set(over ? '#ff5a46' : '#3fdc9a'); });
+  overRed.visible = false;
+  // 6. SALT
+  G6.visible = t > S.t6 - .2 && t < S.t7 + .2; bars.forEach((b, i) => { const k = easeOut(seg(t, 68.2 + i * .018, 69 + i * .018)); b.m.scale.y = Math.max(.01, b.h * k); });
+  // 7. ACA
+  G7.visible = t > S.t7 - .2 && t < S.t8 + .2; const walk = seg(t, 75, 77), fall = seg(t, 77, 77.6), lift = ease(seg(t, 78.6, 79.6));
+  const mx = AX(80000) + (AX(84601) - AX(80000)) * walk; let my = AY(23402) + 1.2; if (fall > 0) my = my - (AY(23402)) * easeOut(fall); if (lift > 0) my = .3 + 1.2 + (AY(23402) - .3) * lift;
+  pair7.forEach((p, i) => p.position.set(mx - (lift > 0 ? 2.2 * lift : 0) + i * 2.4, my, 0));
+  coin7.visible = t > 77.8 && t < 79.8; coin7.position.set(mx + 1, 30 - 28 * ease(seg(t, 77.8, 78.6)), 0); coin7.rotation.z = t * 5;
+
+  const [cp, cl] = camAt(t); camera.position.copy(cp); camera.lookAt(cl);
+  composer.render();
+
+  // ---- overlay ----
+  let li = 0; code('', 0); hud('', 0);
+  if (t > S.t1 && t < S.t2) {
+    caption('Two ways to make a billion dollars', '#f2b24a', 'One is paid it. The other owns it.', 'Federal tax on each, computed and proved in Lean.', fadeIO(t, S.t1 + .2, S.t2 - .1));
+    label(li++, '$1 billion of pay', towers[0].g.position.clone().add(V(0, TH + 5, 0)), fadeIO(t, 8, S.t2 - .1), '#ffd27a');
+    label(li++, '$1 billion of stock', towers[1].g.position.clone().add(V(0, TH + 5, 0)), fadeIO(t, 8, S.t2 - .1), '#ffd27a');
+    label(li++, 'tax $' + fmt(L.billion.salary * ease(seg(t, 9, 11.5))), towers[0].g.position.clone().add(V(0, TH * (1 - payTax / 2), 9)), fadeIO(t, 9, S.t2 - .1), '#ff8a75');
+    label(li++, 'tax $0', towers[1].g.position.clone().add(V(0, TH * .8, 9)), fadeIO(t, 11.5, S.t2 - .1), '#5fd3a0');
+    code(`${kw('theorem')} salary_billion : wageTax 1000000000 = ${nn('393460310')}\n${kw('theorem')} founder_billion : founderIncomeTax = ${nn('0')}  ${ok('✓')}`, fadeIO(t, 11.8, S.t2 - .1)); }
+  else if (t > S.t2 && t < S.t3) {
+    caption('1 · §408A · the Roth IRA', '#ffcc55', 'A $5 billion retirement account', 'The limit is on what goes in. Nothing limits what it becomes, and nothing that comes out is taxed.', fadeIO(t, S.t2 + .3, S.t3 - .1));
+    hud(t < 25.6 ? `inside the Roth<b>$${fmt(rv)}</b>tax owed $0` : `the same gain, taxable<b style="color:#ff6a55">$${fmt(L.thiel.taxable)}</b>owed in the Roth: $0`, fadeIO(t, 17.2, S.t3 - .1));
+    label(li++, rv < 1e4 ? '$1,700 of PayPal founder shares, 1999' : (rk < .99 ? 'growing, untaxed' : '$5 billion by 2019 (ProPublica)'), G2.position.clone().add(V(0, side + 3, 0)), fadeIO(t, 17, S.t3 - .1), '#ffd27a');
+    label(li++, 'tax', G2.position.clone().add(V(-16, 52, 10)), fadeIO(t, 19, 24) , '#ff8a75', 'lab sm');
+    code(`${kw('theorem')} roth_growth_never_taxed (cost value : Nat) :\n    cashOutTax .roth cost value = ${nn('0')}   ${ok('✓ for every amount')}`, fadeIO(t, 21, S.t3 - .1)); }
+  else if (t > S.t3 && t < S.t4) {
+    caption('2 · §§1001, 1014 · buy, borrow, die', '#ff8a6a', 'Never sell. Borrow. Die holding it.', 'A founder with $1 billion of shares spends $20 million a year for 30 years.', fadeIO(t, S.t3 + .3, S.t4 - .1));
+    const yr = Math.floor(yi), rr = life[yr];
+    hud(stepK < .5 ? `year ${yr} · shares ${mill(rr.borrowValue)} · debt ${mill(rr.debt)}<b>$0</b>income tax (selling: ${mill(rr.sellTax)})` : `heirs' basis = value at death<b style="color:#5fd3a0">gain $0</b>heirs get ${mill(life[30].borrowHeirs)} vs ${mill(life[30].sellHeirs)}`, fadeIO(t, 29.6, S.t4 - .1));
+    label(li++, 'shares, never sold', G3.position.clone().add(V(YX(Math.min(yi, 24)), VY(life[Math.floor(Math.min(yi, 24))].borrowValue) + 4, 0)), fadeIO(t, 31, 38), '#ff9a75');
+    label(li++, 'debt', G3.position.clone().add(V(YX(Math.min(yi, 26)), VY(life[Math.floor(Math.min(yi, 26))].debt) + 3, 8)), fadeIO(t, 32, S.t4 - .1), '#b79bff');
+    label(li++, 'selling instead', G3.position.clone().add(V(YX(Math.min(yi, 18)), VY(life[Math.floor(Math.min(yi, 18))].sellValue) + 3, -10)), fadeIO(t, 33, 38), '#8fa2bd', 'lab sm');
+    if (t > 38) label(li++, '§1014: death resets the basis', G3.position.clone().add(V(YX(30) - 16, VY(life[30].borrowValue) - 2, 0)), fadeIO(t, 38.2, S.t4 - .1), '#ffffff');
+    code(`${kw('theorem')} borrow_plan_no_income_tax (spend growth rate years : Nat) … :\n    (live (borrowYear spend growth rate) years s).incomeTax = ${nn('0')}\n${kw('theorem')} step_up_erases (h : Holding) : gainOnSale (inherit h) = ${nn('0')}  ${ok('✓')}`, fadeIO(t, 33.5, S.t4 - .1)); }
+  else if (t > S.t4 && t < S.t5) {
+    caption('3 · §2702 · the zeroed-out GRAT', '#5fd3a0', 'A bet you cannot lose', '$100 million in trust for two years. Every pair of returns from −30% to +60%.', fadeIO(t, S.t4 + .3, S.t5 - .1));
+    hud(t < 50 ? `gift tax<b style="color:#ffe28a">$0</b>in all 361 outcomes` : `+40%, then +30%<b style="color:#5fd3a0">$57.3M</b>to the heirs, untaxed`, fadeIO(t, 46, S.t5 - .1));
+    label(li++, 'grey: a wash, all back to the grantor', G4.position.clone().add(V(-14, 2, 18)), fadeIO(t, 46.5, S.t5 - .1), '#a6b5cc', 'lab sm');
+    label(li++, 'green: passes to the heirs', G4.position.clone().add(V(16, 24, -16)), fadeIO(t, 46.5, S.t5 - .1), '#5fd3a0', 'lab sm');
+    code(`${kw('theorem')} zero_gift (P r : Nat) : gift P r = ${nn('0')}\n${ok('✓ every amount, every §7520 rate')}`, fadeIO(t, 47.5, S.t5 - .1), true); }
+  else if (t > S.t5 && t < S.t6) {
+    caption('4 · §1202 · §643(f) · startup stock', '#5fe0ff', t < 62.6 ? 'Ten trusts, no tax' : 'Unless every trust is for the same child', t < 62.6 ? 'A $150 million exit. Each separate taxpayer excludes $15 million. Trusts for children A, B, C and a grandchild.' : '§643(f) treats trusts with one grantor and one beneficiary as one.', fadeIO(t, S.t5 + .3, S.t6 - .1));
+    hud(t < 58.6 ? `one taxpayer<b style="color:#ff6a55">$32,130,000</b>tax on the exit` : t < 63 ? `ten taxpayers<b style="color:#5fd3a0">$0</b>stacking ✓` : `trusts merged<b style="color:#ff6a55">$21,420,000</b>naive ✓`, fadeIO(t, 56, S.t6 - .1));
+    label(li++, '$15M cap per taxpayer', G5.position.clone().add(V(-30, CAPH + 1.2, 8)), fadeIO(t, 56, S.t6 - .1), '#9ff0ff', 'lab sm');
+    if (t > 60.4 && t < 63) slices.forEach(s => label(li++, s.n, G5.position.clone().add(s.m.position).add(V(0, CAPH + 1, 2.6)), fadeIO(t, 60.4, 63), '#d8e2f2', 'lab sm'));
+    code(`${kw('theorem')} merge_costs (g₁ g₂ : Nat) :\n    taxOn g₁ 0 + taxOn g₂ 0 ≤ taxOn (g₁ + g₂) 0   ${ok('✓')}`, fadeIO(t, 59, S.t6 - .1)); }
+  else if (t > S.t6 && t < S.t7) {
+    caption('5 · §164(b)(7) · the SALT cap', '#ff8a6a', 'The 45.5% band', 'Federal marginal rate, $300k to $800k of pay, high-tax state. And the business owner who skips it.', fadeIO(t, S.t6 + .3, S.t7 - .1));
+    hud(t < 71 ? `$500k to $600k<b style="color:#ff6a55">45.5%</b>torpedo_band ✓` : `S-corp owner, $1M<b style="color:#5fd3a0">−$33,300</b>pays the state tax in the company`, fadeIO(t, 68.5, S.t7 - .1));
+    label(li++, '45.5%', G6.position.clone().add(V(-50 + 50, bars[50].h + 3, 0)), fadeIO(t, 69.5, S.t7 - .1), '#ff8a75'); }
+  else if (t > S.t7 && t < S.t8) {
+    caption('6 · §36B (2026) · health insurance', '#8ab4ff', 'The $23,402 dollar', 'A couple aged 60. At $84,600 the premium credit pays $23,402. At $84,601, nothing.', fadeIO(t, S.t7 + .3, S.t8 - .1));
+    hud(t < 77.2 ? `income $${fmt(80000 + 4601 * walk)}<b>$23,402</b>premium credit` : t < 78.8 ? `one dollar more<b style="color:#ff6a55">−$23,402</b>credit 84601 = 0 ✓` : `one dollar into an IRA<b style="color:#5fd3a0">+$23,402</b>ira_dollar ✓`, fadeIO(t, 75, S.t8 - .1));
+    label(li++, '400% of poverty', G7.position.clone().add(V(AX(84600) + 12, AY(23402) * .55, 0)), fadeIO(t, 75, S.t8 - .1), '#ff8a75', 'lab sm');
+    if (coin7.visible) label(li++, '$1 IRA', G7.position.clone().add(coin7.position).add(V(0, 3, 0)), 1, '#ffd27a', 'lab sm'); }
+  else caption('', '', '', '', 0);
+  for (let i = li; i < pool.length; i++) pool[i].style.opacity = 0;
+
+  const ea = seg(t, S.t8 + .4, S.t8 + 1.4) * (1 - seg(t, DUR - 1, DUR));
+  $('end').innerHTML = [
+    '$1,700 in a Roth became $5 billion: $0 tax, for any growth', 'Borrow, never sell: $0 income tax, for any plan',
+    'A zeroed-out GRAT is a $0 gift, for every amount and rate', 'Ten trusts take a $150M exit from $32M of tax to $0',
+    '$1 between $500k and $600k costs 45.5¢; the owner deducts it all', '$1 into an IRA wins back $23,402 of health credit']
+    .map(r => `<div class="row"><span>✓</span>${r}</div>`).join('') + `<div class="foot">six loopholes · each a theorem checked by Lean · lean-proofs/USTax/Loopholes</div>`;
+  $('end').style.opacity = ea; $('end').style.background = `rgba(4,7,13,${.7 * ea})`;
+};
+window.DUR = DUR;
+document.fonts.ready.then(() => { window.render(0); window.READY = true; });
+</script></body></html>
