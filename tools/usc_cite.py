@@ -30,13 +30,16 @@ import re
 # (Pub. L. 94-553), effective 1978-01-01; before it the Copyright Act of 1909. Title 35: the Patent Act of 1952 (Pub. L.
 # 82-593), effective 1953-01-01. Title 9: enacted as positive law 1947-07-30 (Pub. L. 80-282). Titles 1 and 4: 1947-07-30
 # (Pub. L. 80-278, 80-279). Title 3: 1948-06-25 (Pub. L. 80-771). Title 13: 1954-08-31 (Pub. L. 83-740). Title 39: the
-# Postal Reorganization Act (Pub. L. 91-375), effective 1971-07-01.
+# Postal Reorganization Act (Pub. L. 91-375), effective 1971-07-01. Title 26: the Internal Revenue Code of 1954 (ch. 736, 68A Stat. 3),
+# enacted 1954-08-16; before it "26 U.S.C." numbered the Internal Revenue Code of 1939 (26 U.S.C. § 23 of 1950 is the
+# 1939 Code's deductions, not today's adoption credit). The 1986 Code kept the 1954 numbering (Pub. L. 99-514 § 2).
 RECODIFIED = {1: '1947-07-30', 3: '1948-06-25', 4: '1947-07-30', 9: '1947-07-30', 11: '1979-10-01', 13: '1954-08-31',
-              17: '1978-01-01', 35: '1953-01-01', 39: '1971-07-01'}
+              17: '1978-01-01', 26: '1954-08-16', 35: '1953-01-01', 39: '1971-07-01'}
 RECODIFIED_BY = {1: 'title 1 enacted as positive law (1947)', 3: 'title 3 enacted as positive law (1948)',
                  4: 'title 4 enacted as positive law (1947)', 9: 'title 9 enacted as positive law (1947)',
                  11: 'the Bankruptcy Reform Act of 1978 (in effect 1979-10-01); before it, 11 U.S.C. numbered the Bankruptcy Act of 1898',
                  13: 'title 13 enacted as positive law (1954)', 17: 'the Copyright Act of 1976 (in effect 1978-01-01); before it, the Copyright Act of 1909',
+                 26: 'the Internal Revenue Code of 1954 (enacted 1954-08-16); before it, 26 U.S.C. numbered the Internal Revenue Code of 1939',
                  35: 'the Patent Act of 1952 (in effect 1953-01-01)', 39: 'the Postal Reorganization Act (in effect 1971-07-01)'}
 # Sections added after their title's recodification and before the US Code record starts (2017-2018), by the law that
 # added them: a decision before that day cites some other text under the number (or none).

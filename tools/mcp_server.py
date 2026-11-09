@@ -1521,7 +1521,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             r = rank_docket(dq.group('d'), query, 0, len(query), scope or ('united-states/' if us_form else ''))
             paths = r['candidates']
         else:
-            paths = collapse_duplicates([p for p in decision_paths(query.strip(), scope or 'united-states/')])[0]
+            paths = collapse_duplicates(cited_as(decision_paths(query.strip(), scope or 'united-states/'), query.strip()))[0]
         paths = [p for p in paths if not scope or p == scope or p.startswith(scope.rstrip('/') + '/')]
         if paths:
             meta = decision_meta(paths[:limit])
@@ -1685,6 +1685,11 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     matched_line: dict[str, dict[str, str]] = {}
     head_best: dict[tuple[str, str], int] = {}
     indexed = index_served()
+    # Case law left unread for the time (CASELAW_SECONDS, caselaw_grep): said in the answer, and in a corpus whose
+    # headings were not all read, a decision is a hit only by its heading or its number, never by the words of its
+    # path ("court", "states"), which matched unrelated decisions when the time ran out (cap-reverify N4).
+    _call.skipped = []
+    cut_short: set[str] = set()
     for c in law.manifest()['corpora']:
         if not corpus_in_scope(c['path']):
             continue
@@ -1739,7 +1744,10 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             else:
                 pattern = '^(#|heading:|title:).*(' + '|'.join(re.escape(w) for w in plain) + ')'
                 if law.is_caselaw(c):  # in parts, side by side: New York's other courts' 204,000 headings took 19 s in one
+                    before = len(_call.skipped)
                     out = caselaw_grep(ROOT / c['path'], sha, ['-i', '-I', '-E', '-e', pattern], ['decisions/*.md'])
+                    if len(_call.skipped) > before:
+                        cut_short.add(c['path'])
                 else:
                     out = git_run(['git', 'grep', '-i', '-I', '-E', '-e', pattern, sha, '--', '*.md'], cwd=ROOT / c['path'],
                                   capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT).stdout.splitlines()
@@ -1765,6 +1773,8 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         exact = headed_hits | {n for n in scores if n not in by_heading and any(stem_of(n) in (x, x.lstrip('0')) for x in numbers)}
         if exact and not plain:  # "art. 1" is art-001.md, not every art-NNN-1.md beside it
             scores = {n: v for n, v in scores.items() if n in exact}
+        if c['path'] in cut_short:
+            scores = {n: v for n, v in scores.items() if n in exact or (c['path'], n) in head_best}
         best = sorted((n for n in scores if scores[n]), key=lambda n: (-scores[n], n))[:limit * 3]
         index = heading_index(c['path'], sha, wait=False) if indexed else None  # with the title under the heading
         heads = {n: index.get(n, '') for n in best} if index else read_headings(c['path'], sha, tuple(best)) if best else {}
@@ -1782,6 +1792,8 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             # Case law's text is grepped only when the scope names it, as its headings are: a grep of a million
             # decisions for a phrase found in no law heading would run past the time limit.
             if law.is_caselaw(c) and not (scope and (law.names_caselaw(scope) or scope.startswith(c['path']))):
+                continue
+            if c['path'] in cut_short:  # its time is spent: any word of the query in any decision is no hit (N4)
                 continue
             sha = corpus_head(c['path'])
             if not sha or not (ROOT / c['path'] / '.git').exists():
@@ -1810,10 +1822,15 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     seen: set[str] = set()
     found = [r for r in found if not (r[1] in seen or seen.add(r[1]))]
     hits = [{'path': p, 'heading': h, 'score': s} for s, p, h in found[:limit]]
+    unread = sum(_call.skipped)
+    partial = (f'\nPartial: {unread} part(s) of the case law ({len(cut_short)} corpora) were not read within the '
+               f'{CASELAW_SECONDS:g} s this answer may spend on case law; decisions whose headings were not read are not '
+               'listed. Narrow the scope to one court, or ask again.') if unread else ''
+    extra = {'partial': {'parts_not_read': unread, 'corpora': sorted(cut_short)}} if unread else {}
     if not hits:
         return (f'No provision matches {query!r}.' + missing_act(number_forms(query))
-                + ' Try list_jurisdictions for the layout, or search_law for words in the text.'), {'results': []}
-    return '\n'.join(f"{h['path']}  {h['heading']}" for h in hits), {'results': hits}
+                + ' Try list_jurisdictions for the layout, or search_law for words in the text.' + partial), {'results': [], **extra}
+    return '\n'.join(f"{h['path']}  {h['heading']}" for h in hits) + partial, {'results': hits, **extra}
 
 
 
@@ -4490,6 +4507,66 @@ def judgments_counted(corpus: str, sha: str, rel: str, date: str, latest: int) -
     return total, n_upto, judgment_rows(picked)[-latest:] if latest else []
 
 
+def overlays_before(corpus: str, rel: str) -> list[str]:
+    """The case-law corpora whose judgment overlay of `corpus` was built before `rel` was in its record: their
+    corpus.json gives the law commit the overlay read (overlay.law_commit) and that commit lacks the file; for an
+    overlay that names none, when no corpus files a row under the provision's folder (overlay_folder_rows). US
+    title 26 came into the record after the overlays were built (2026-11-09), and check_precedent said "no judgment
+    is recorded" for sections CAP opinions cite 157,000 times."""
+    pins = caselaw_pins()
+    if not pins:
+        return []
+    texts = law.read_texts_of([(c, f'{sha}:corpus.json') for c, sha in pins])
+    held: dict[str, bool] = {}
+    out, older = [], []
+    for (c, _), t in zip(pins, texts):
+        try:
+            ov = (json.loads(t or '{}').get('overlay') or {})
+        except ValueError:
+            continue
+        if ov.get('law_corpus') != corpus:
+            continue
+        built = str(ov.get('law_commit') or '')
+        if re.fullmatch(r'[0-9a-f]{7,40}', built):
+            if built not in held:  # a commit this clone of the record does not hold says nothing either way
+                known = not git_run(['git', 'cat-file', '-e', f'{built}^{{commit}}'], cwd=ROOT / corpus, capture_output=True).returncode
+                held[built] = not known or not git_run(['git', 'cat-file', '-e', f'{built}:{rel}'], cwd=ROOT / corpus,
+                                                       capture_output=True).returncode
+            if not held[built]:
+                out.append(c)
+            continue
+        older.append(c)
+    # An overlay that names no law commit (built before 2026-11-09): when no case-law corpus served files a single row
+    # under the provision's folder (title-26/) in the case-law index, its links were not built.
+    if older and not overlay_folder_rows(f"{corpus}/{rel.rsplit('/', 1)[0]}/"):
+        out += older
+    return out
+
+
+def overlay_folder_rows(prefix: str) -> bool:
+    """Whether any case-law corpus served files an overlay under a law folder ('united-states/federal/usc/title-26/'),
+    by one binary search of the case-law index; True when the index is not built (then nothing is claimed)."""
+    idx = law.caselaw_index('join')
+    if idx is None:
+        return True
+    f = Path(idx['dir']) / idx['overlay_file']
+    if not f.exists() or not f.stat().st_size:
+        return False
+    want = prefix.encode('utf-8')
+    with open(f, 'rb') as fh, mmap.mmap(fh.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+        lo, hi = 0, len(mm)
+        while lo < hi:  # the first line that sorts at or after the prefix
+            mid = (lo + hi) // 2
+            s = mm.rfind(b'\n', 0, mid) + 1
+            e = mm.find(b'\n', s)
+            e = len(mm) if e < 0 else e
+            if mm[s:e] < want:
+                lo = e + 1
+            else:
+                hi = s
+        return mm[lo:lo + len(want)] == want
+
+
 def t_check_precedent(args: dict) -> tuple[str, dict]:
     """A judgment applied a provision on the day it was decided. Is the text it applied the text in force on another
     date (today by default), and if not, which laws changed it? Lists the judgments the record holds, if any."""
@@ -4524,6 +4601,13 @@ def t_check_precedent(args: dict) -> tuple[str, dict]:
     checks = [c if isinstance(c, dict) else {**c[0], **compared[c[1]], 'decided': c[0]['decided'], 'text_date': c[2]}
               for c in checks]
     if not checks:
+        unbuilt = overlays_before(corpus, rel)
+        if unbuilt:
+            return (f'No judgment links to {path} yet: {len(unbuilt)} case-law corpora (for example {", ".join(unbuilt[:3])}) built '
+                    'their links to this record before this provision was in it, so their decisions that cite it are not '
+                    'linked yet; "no judgment" here does not mean no court cited it. Give the date a decision was made '
+                    '("decided") to check whether the text it applied is still the text in force.',
+                    {'path': path, 'date': date, 'checks': [], 'judgments_recorded': 0, 'links_not_built': unbuilt})
         return (f'No judgment is recorded for {path}. Give the date a decision was made ("decided") to check whether the text it '
                 'applied is still the text in force.', {'path': path, 'date': date, 'checks': [], 'judgments_recorded': 0})
     lines = [f'{path}: the text each decision applied, against the text in force on {date}.'
@@ -5267,6 +5351,22 @@ _US_REPORTER_FIXED = (r"(?<![\w.§])\d{1,4}\s+(?:U\.\s?S\.|S\.\s?Ct\.|L\.\s?Ed\.
                          r"|(?<![\w-])(?:19|20)\d{2}-(?:NMCA|NMSC|NMCERT|Ohio)-\d{1,6}(?![\w])")
 
 
+def _reporter_name_rx(name: str) -> str:
+    """A reporter's name as a pattern: spaces optional, and a full stop optional after an abbreviation of two letters or
+    more ("Wall", "Or", "CCPA") but kept after a single letter ("P.", "F.", "N.E.", "A. 2d"): "2 P 47" in a German
+    decision is no citation of the Pacific Reporter (it resolved to 2 Idaho 47, cap-reverify N6)."""
+    out = []
+    prev = ''
+    for tok in re.findall(r'[^.]+|\.', name):
+        if tok == '.':
+            single = re.search(r'(?<![A-Za-z])[A-Za-z]$', prev)
+            out.append(r'\.\s?' if single else r'\.?\s?')
+        else:
+            out.append(re.escape(tok).replace(r'\ ', r'\s?'))
+        prev = tok
+    return ''.join(out)
+
+
 def _us_reporter_rx():
     """A US reporter citation ("410 U.S. 113", "6 Dakota 494", "57 Ill. App. 3d 12"): the forms above, and every reporter
     name a Caselaw Access Project citation gives (data/us-reporters.json, 740 names), so that any CAP decision is found by
@@ -5277,7 +5377,7 @@ def _us_reporter_rx():
     except (OSError, ValueError):
         pass
     # a name's full stops may be left out ("13 Wall 335", "335 Or 154", "49 CCPA 1234"): the key drops them anyway
-    extra = '|'.join(re.escape(n).replace(r'\ ', r'\s?').replace(r'\.', r'\.?\s?') for n in sorted(names, key=len, reverse=True))
+    extra = '|'.join(_reporter_name_rx(n) for n in sorted(names, key=len, reverse=True))
     fixed = _US_REPORTER_FIXED
     if extra:
         fixed = fixed.replace(r')(?:\s?\((?:2d|3d|4th)\))?\s*,?\s+\d{1,5}(?![\w])', '|' + extra + r')(?:\s?\((?:2d|3d|4th)\))?\s*,?\s+\d{1,5}(?![\w])', 1)
@@ -5292,13 +5392,39 @@ US_REPORTER_ALIASES = [(re.compile(r'\bTexas\b'), 'Tex.'), (re.compile(r'\bOh\.?
 
 def us_cite_paths(cite: str) -> list[str]:
     """The decisions a US reporter citation names, under the reporter's other names when the one written finds none."""
-    paths = decision_paths(cite, 'united-states/')
+    paths = cited_as(decision_paths(cite, 'united-states/'), cite)
     for rx, to in US_REPORTER_ALIASES:
         if paths:
             break
         if rx.search(cite):
-            paths = decision_paths(rx.sub(to, cite), 'united-states/')
+            alias = rx.sub(to, cite)
+            paths = cited_as(decision_paths(alias, 'united-states/'), alias)
     return paths
+
+
+def cited_as(paths: list[str], cite: str) -> list[str]:
+    """The decisions of `paths` a reporter citation names, not a docket that reads the same once the key drops its
+    punctuation: "91 P. 481" (and "91 Pac. 481", read as "91 P. 481") has the key of the Massachusetts Appeals Court's
+    docket 91-P-481, and 37,303 US dockets have that shape (cap-reverify N7). A file named by the citation is taken as
+    it is; another (found through decision-index.tsv) is kept when its front matter lists the citation, or does not
+    give the key as its docket."""
+    key = _decision_key(cite)
+    check = [p for p in paths if _decision_key(p.rsplit('/', 1)[-1].removesuffix('.md').split('--', 1)[0]) != key]
+    if not check:
+        return paths
+    meta = decision_meta(check)
+
+    def ok(p: str) -> bool:
+        m = meta.get(p)
+        if m is None:
+            return True
+        if key in {_decision_key(str(c)) for c in (m.get('citations') or [])}:
+            return True
+        docket = m.get('docket')
+        parts = docket if isinstance(docket, list) else re.split(r'\s*[,;()]\s*|\s+and\s+', str(docket or ''))
+        return key not in {_decision_key(str(d)) for d in [docket if not isinstance(docket, list) else '', *parts] if d}
+
+    return [p for p in paths if p not in check or ok(p)]
 
 
 US_REPORTER = _LazyRegex(_us_reporter_rx)
@@ -5862,12 +5988,28 @@ def decision_meta(paths: list[str]) -> dict[str, dict]:
             by.setdefault((corpus, sha), []).append((p, rel))
     out: dict[str, dict] = {}
     rows = [(corpus, f'{sha}:{rel}', p) for (corpus, sha), items in by.items() for p, rel in items]
+    # A file at a pinned commit never changes: kept (cited_as, then collapse_duplicates, read the same files in one call)
+    todo = []
+    for row in rows:
+        got = _META_SEEN.get(row[:2])
+        if got is not None:
+            out[row[2]] = dict(got)
+        else:
+            todo.append(row)
     # one git process for every corpus (law.read_texts_of): a docket shared by 45 decisions in 30 courts took 13 s
     # with a cat-file each (US speed gate, 2026-11-09)
-    for (_, _, p), text in zip(rows, law.read_texts_of([(c, spec) for c, spec, _ in rows])):
+    for (c, spec, p), text in zip(todo, law.read_texts_of([(c, spec) for c, spec, _ in todo])):
         if text is not None:
             out[p] = _fm(text[:20000])
+            with _META_LOCK:
+                if len(_META_SEEN) > 20000:
+                    _META_SEEN.clear()
+                _META_SEEN[(c, spec)] = out[p]
     return out
+
+
+_META_SEEN: dict[tuple[str, str], dict] = {}
+_META_LOCK = threading.Lock()
 
 
 @lru_cache(maxsize=512)
@@ -5896,9 +6038,38 @@ def decision_relation(path: str) -> tuple[str, str] | None:
     kind, target = r
     if kind == 'same-decision-as':
         return kind, f'{corpus}/{target}'
+    return kind, moved_target(corpus, target)
+
+
+def moved_target(corpus: str, target: str) -> str:
+    """The path in this tree of a moved-to row's target. The builders write '<repo>/<path>' with the repo's short name
+    in its country ('ca9/decisions/...' in united-states/federal-special/caselaw: lexifina/united-states-ca9-caselaw,
+    pinned at united-states/ca9/caselaw); the repo's full name ('united-states-ca9-caselaw/...') and a path already in
+    this tree are read too. Keyed by repo name, 'ca9' fell through and 1,404 moved paths read as 'not inside a corpus'."""
     repo, _, rest = target.partition('/')
-    by_repo = {c['path'].replace('/', '-'): c['path'] for c in law.manifest()['corpora']}
-    return kind, (f'{by_repo[repo]}/{rest}' if repo in by_repo else here(target))
+    paths, by_repo = _corpus_by_repo()
+    country = corpus.split('/', 1)[0]
+    for cand in (f'{country}/{repo}/caselaw', *by_repo.get(repo, ())):
+        if cand in paths:
+            return f'{cand}/{rest}'
+    return here(target)
+
+
+_BY_REPO: dict = {}
+
+
+def _corpus_by_repo() -> tuple[set, dict[str, tuple[str, ...]]]:
+    """(every corpus path, repo name -> corpus paths): the name from the corpus's url ('united-states-ca9-caselaw') and
+    its path with dashes. Once per manifest (the manifest is read again when the tree's head moves)."""
+    m = law._whole_manifest()
+    if _BY_REPO.get('m') is not m:
+        out: dict[str, list[str]] = {}
+        for c in m['corpora']:
+            name = re.sub(r'\.git$', '', (c.get('url') or '').rstrip('/').rsplit('/', 1)[-1])
+            for k in {name, c['path'].replace('/', '-')} - {''}:
+                out.setdefault(k, []).append(c['path'])
+        _BY_REPO.update(m=m, paths={c['path'] for c in m['corpora']}, by={k: tuple(v) for k, v in out.items()})
+    return _BY_REPO['paths'], _BY_REPO['by']
 
 
 def follow_relations(paths: list[str]) -> list[str]:
@@ -5988,7 +6159,8 @@ def _docket_norm(d: str) -> str:
 
 
 def _dockets_of(fm_docket) -> set[str]:
-    parts = fm_docket if isinstance(fm_docket, list) else re.split(r'\s*(?:[,;&]|\band\b)\s*', str(fm_docket or ''))
+    # a comma between digits with three after it is a thousands comma ("8,545"), not a list
+    parts = fm_docket if isinstance(fm_docket, list) else re.split(r'\s*(?:[;&]|,(?!\d{3}(?!\d))|\band\b)\s*', str(fm_docket or ''))
     return {_docket_norm(x) for x in parts if x and re.search(r'\d', x)}
 
 
@@ -5996,6 +6168,11 @@ DOCKET_LIST = 5  # decisions an ambiguous docket names in the answer
 # A query that is a docket alone: "No. 1389", "Docket No. 77-440", "1170253", "S219881", "2:19-cv-01234", "19-1392".
 DOCKET_QUERY = re.compile(r'\s*(?:(?:Docket|Case|Civ\.|Cr\.|Civil\s+Action)\s+)?(?:Nos?\.\s*)?'
                           r'(?P<d>(?:[A-Z]{1,3}-?)?\d{1,4}-\d{1,7}(?:-[A-Z]{1,4})?|[A-Z]{1,3}\d{4,8}|\d{5,10}|\d{1,2}:\d{2}-[a-z]{2,3}-\d{2,6}(?:-[A-Z]{1,4})?'
+                          # the forms CAP gives besides: "No. 8,545" (a thousands comma), "CAAP-12-0000127", "CR-1-83-100",
+                          # "YY-28" (letters, then numbers between hyphens), "95-503C" (a letter after the number); before
+                          # these were read as dockets they went to the heading search and came back as French decrees
+                          # (cap-reverify, 2026-11-09)
+                          r'|\d{1,3}(?:,\d{3})+|[A-Z]{2,5}(?:-\d{1,8}){1,4}(?:-?[A-Z]{1,3})?|\d{1,4}-\d{1,7}[A-Z]{1,3}'
                           r'|(?<=No\.\s)\d{1,4}|(?<=No\.)\d{1,4})\s*')
 # A US reporter citation's shape ("8 Bush 587", "1 Tyng 570", "154 U.S. App. D.C. 1") or a public-domain citation
 # ("2004-NMCA-020"): looked up as a decision even where the reporter list lacks the name.

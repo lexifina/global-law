@@ -4919,6 +4919,14 @@ def _same_day_steps(hist: list[dict], day: str, chosen: str) -> list[str]:
     words step through them, in commit order. Only the versions appended after the restated commit count; left out
     are versions a later commit restates, deletions and correction overlays."""
     last = next((h for h in hist if h['commit'] == chosen and h['in_force'] == day and not h.get('corrects')), None)
+    if last is not None and last['kind'] == 'correction' and not last.get('restates'):
+        # A Kind: correction commit carries the In-force day of the version it corrects (the US case-law repos'
+        # 99,364 corrections: a decision's text redone from CAP's head matter, a court renamed), so it wins that day;
+        # stepping only to it credited every line of the opinion to the correction. The day's earlier versions come
+        # first, in commit order, so the correction is credited only with the lines it changed.
+        return [h['commit'] for h in hist
+                if h['in_force'] == day and h['order'] < last['order'] and h.get('blob') and not h.get('corrects')
+                and not h.get('ends') and not h.get('repeal_notice')]
     if last is None or not last.get('restates') or last.get('restated_because') != 'it had to be restated':
         return []
     restated = [h['restates'] for h in hist if h.get('restates')]

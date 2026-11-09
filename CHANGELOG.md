@@ -9,6 +9,14 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 9 November 2026
+- **Fixed (US case law and the tools), what a re-verification of the fixes below found.**
+  - **Moved decisions.** A `moved-to` row names its target by the repository's short name (`ca9/decisions/...`); it is now read in the corpus that repository is pinned at (`united-states/ca9/caselaw`). The 1,404 moved paths had answered "not inside a corpus" in `read_law`, `provision_history`, `who_wrote`, `compare_dates` and `applies_to_case`.
+  - **Title 26.** The case-law overlays are rebuilt against the US Code record with title 26. A citation of the Internal Revenue Code of 1939 (a decision before 1954-08-16, or a pre-1954 edition) is not linked to today's section. `check_precedent` says when a provision came into the record after a case-law corpus built its links (`overlay.law_commit` in its `corpus.json`), instead of "No judgment is recorded".
+  - **Corrections.** A `Kind: correction` commit carries the In-force day of the version it corrects, so it won that day and `who_wrote`, `blame` and `words` credited the whole opinion to it. The day's earlier versions are now stepped through first: a correction is credited only with the lines it changed.
+  - **Ranges.** A range ("§§ 101-1330") no longer links either end as a cited section in the overlays: its ends are no more cited than the sections between them. `resolve_citations` still reports the range.
+  - **Out of time.** When `find_provision` runs out of its time for case law, it says so, and in a court whose headings were not all read it lists a decision only by its heading or number, never by the words of its path.
+  - **Reporters.** A reporter of one letter keeps its full stop ("2 P 47" in a German decision is no citation of the Pacific Reporter). A reporter citation no longer finds a docket that reads the same without punctuation ("91 Pac. 481" and the Massachusetts docket 91-P-481).
+  - **Dockets.** "No. 8,545", "No. CAAP-12-0000127", "No. CR-1-83-100" and "No. 95-503C" are read as US dockets and never fall through to the heading search, which had answered with French decrees.
 - **Fixed (US case law and the tools), how US decisions link to the US Code, after two independent checks.**
   - The case-law builders and `resolve_citations` now read US Code citations with one reader, `tools/usc_cite.py`:
     - **PACER page stamps.** "USCA4 Appeal: ... Pg: 3" and "13 USCA11" are no longer read as 3 U.S.C.A. § 4 or 13 U.S.C.A. § 11. These were 14,114 false overlay rows in 5,703 decisions.
