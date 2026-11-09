@@ -5258,7 +5258,11 @@ _US_REPORTER_FIXED = (r"(?<![\w.§])\d{1,4}\s+(?:U\.\s?S\.|S\.\s?Ct\.|L\.\s?Ed\.
                          r"|Pac\.(?:\s?(?:2d|3d))?|U\.\s?S\.(?=\s?,)"
                          # nominative reporters CAP cites by the reporter's name alone (cap-deep-check reporter_coverage, 2026-11-09)
                          r"|Watts(?:\s?&\s?Serg\.)?|Port\.|Denio|Root|Gill(?:\s?&\s?J\.)?|Grant|Day|Rawle|Miles|Posey|Keyes|Minor|Gunby"
-                         r"|Kirby|Handy|Vaux|Cow\.|McGrath|Bush|Tyng|Cai\.(?:\s?Cas\.)?|Wall\.)\s*,?\s+\d{1,5}(?![\w])"
+                         r"|Kirby|Handy|Vaux|Cow\.|McGrath|Bush|Tyng|Cai\.(?:\s?Cas\.)?|Wall\.?"
+                         # the names older opinions use for reporters CAP files under another ("134 Texas 415", "128 Oh St 129")
+                         r"|Texas|Oh\.?\s?St\.?|Okla\.\s?Cr\.|App\.\s?Div\.(?:\s?2d)?|CCPA)"
+                         # "60 S. W. (2d) 429", "100 F. (2d) 5": the series in parentheses
+                         r"(?:\s?\((?:2d|3d|4th)\))?\s*,?\s+\d{1,5}(?![\w])"
                          # public-domain citations: "2004-NMCA-020", "2010-NMSC-001", "2008-Ohio-1234"
                          r"|(?<![\w-])(?:19|20)\d{2}-(?:NMCA|NMSC|NMCERT|Ohio)-\d{1,6}(?![\w])")
 
@@ -5272,11 +5276,29 @@ def _us_reporter_rx():
         names = json.loads((ROOT / 'data' / 'us-reporters.json').read_text(encoding='utf-8')).get('reporters', [])
     except (OSError, ValueError):
         pass
-    extra = '|'.join(re.escape(n).replace(r'\ ', r'\s?').replace(r'\.', r'\.\s?') for n in sorted(names, key=len, reverse=True))
+    # a name's full stops may be left out ("13 Wall 335", "335 Or 154", "49 CCPA 1234"): the key drops them anyway
+    extra = '|'.join(re.escape(n).replace(r'\ ', r'\s?').replace(r'\.', r'\.?\s?') for n in sorted(names, key=len, reverse=True))
     fixed = _US_REPORTER_FIXED
     if extra:
-        fixed = fixed.replace(r')\s*,?\s+\d{1,5}(?![\w])', '|' + extra + r')\s*,?\s+\d{1,5}(?![\w])', 1)
+        fixed = fixed.replace(r')(?:\s?\((?:2d|3d|4th)\))?\s*,?\s+\d{1,5}(?![\w])', '|' + extra + r')(?:\s?\((?:2d|3d|4th)\))?\s*,?\s+\d{1,5}(?![\w])', 1)
     return re.compile(fixed)
+
+
+# Another name for a reporter than the one CAP files it under: tried when the citation as written finds nothing.
+US_REPORTER_ALIASES = [(re.compile(r'\bTexas\b'), 'Tex.'), (re.compile(r'\bOh\.?\s?St\.?'), 'Ohio St.'), (re.compile(r'\bPac\.'), 'P.'),
+                       (re.compile(r'\bSouth\.'), 'So.'), (re.compile(r'\bFed\.(?!\s?(?:Cl|Appx|R))'), 'F.'), (re.compile(r'\bWn\.'), 'Wash.'),
+                       (re.compile(r'\bOkla\.\s?Cr\.'), 'Okla. Crim.'), (re.compile(r'\bApp\.\s?Div\.'), 'A.D.')]
+
+
+def us_cite_paths(cite: str) -> list[str]:
+    """The decisions a US reporter citation names, under the reporter's other names when the one written finds none."""
+    paths = decision_paths(cite, 'united-states/')
+    for rx, to in US_REPORTER_ALIASES:
+        if paths:
+            break
+        if rx.search(cite):
+            paths = decision_paths(rx.sub(to, cite), 'united-states/')
+    return paths
 
 
 US_REPORTER = _LazyRegex(_us_reporter_rx)
@@ -5934,7 +5956,7 @@ def us_reporter_hits(text: str) -> list[dict]:
     filed in another court's corpus, decision-relations.tsv) folded into the decision kept."""
     out = []
     for m in US_REPORTER.finditer(text):
-        paths = [p for p in decision_paths(m.group(0), 'united-states/') if not re.search(r'/synthetic-\d+/', p) or SYNTH_OK]
+        paths = [p for p in us_cite_paths(m.group(0)) if not re.search(r'/synthetic-\d+/', p) or SYNTH_OK]
         kept, dup = collapse_duplicates(paths)
         for p in kept:
             folded = [d for d, k in dup.items() if k == p]

@@ -126,8 +126,14 @@ class ResolverForms(unittest.TestCase):
 
     def test_d7_reporter_variants(self):
         for text in ('22 Wn.2d 1', '100 F. (2d) 5', '50 Fed. 7', '20 South. 3', '30 Pac. 9', '410 U. S., 113', '8 Bush 587',
-                     '1 Tyng 570', '3 Watts 12', '2004-NMCA-020', '2010-NMSC-001', '13 Wall. 335'):
+                     '1 Tyng 570', '3 Watts 12', '2004-NMCA-020', '2010-NMSC-001', '13 Wall. 335', '13 Wall 335', '60 S. W. (2d) 429',
+                     '134 Texas 415', '128 Oh St 129', '10 Okla. Cr. 79', '242 App. Div. 471', '49 CCPA 1234'):
             self.assertTrue(self.m.US_REPORTER.search(text), text)
+        alias = lambda cite: next((rx.sub(to, cite) for rx, to in self.m.US_REPORTER_ALIASES if rx.search(cite)), cite)
+        self.assertEqual(alias('134 Texas 415'), '134 Tex. 415')
+        self.assertEqual(alias('128 Oh St 129'), '128 Ohio St. 129')
+        self.assertEqual(alias('242 App. Div. 471'), '242 A.D. 471')
+        self.assertEqual(alias('133 Pac. 1134'), '133 P. 1134')
         self.assertIsNone(self.m.US_REPORTER.search('11 U.S.C. § 1182'))
 
     def test_d3_not_dockets(self):
