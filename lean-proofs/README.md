@@ -119,6 +119,12 @@ the rules themselves:
 So the guarantee is: if these facts are right and this is the rule, the vulnerability follows. A proof is no stronger
 than its model.
 
+## Video
+
+[video/anim.html](video/anim.html) is a one-minute explainer (git history → facts → rule → theorem → objections → every
+flag), drawn on a canvas and rendered frame by frame: `python video/render.py` writes `video/out/lean-proofs.mp4`
+(needs `pip install playwright imageio-ffmpeg`; encodes on an NVIDIA GPU when one is present).
+
 ## Next steps
 
 - Feed the 259 re-enacted, unreviewed leads into the model review and official-source checks.

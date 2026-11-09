@@ -1,0 +1,207 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=block">
+<style>html,body{margin:0;background:#0d1117;overflow:hidden}canvas{display:block}</style>
+</head><body><canvas id="c" width="1920" height="1080"></canvas>
+<script>
+const W = 1920, H = 1080, cv = document.getElementById('c'), g = cv.getContext('2d');
+const SERIF = "'Source Serif 4', Georgia, serif", SANS = "'IBM Plex Sans', system-ui, sans-serif", MONO = "'JetBrains Mono', monospace";
+const C = { bg: '#0d1117', panel: '#121a25', ink: '#eef1f5', muted: '#8b96a8', faint: '#2a3442', rule: '#243041',
+  amber: '#f2b24a', red: '#ef6a55', blue: '#6aa8ff', green: '#5fd3a0', violet: '#b48cff', kw: '#c792ea', ty: '#82aaff', num: '#f78c6c', cm: '#5c6b80' };
+const DUR = 58;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const fadeIO = (t, a, b, f = .6) => Math.min(easeOut(seg(t, a, a + f)), 1 - ease(seg(t, b - f, b)));
+const fmt = n => Math.round(n).toLocaleString('en-US');
+function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rng(7);
+const LINES = Array.from({ length: 60 }, () => ({ x: R() * W, y: R() * H, w: 100 + R() * 480, s: 5 + R() * 18, a: .025 + R() * .05 }));
+
+function text(s, x, y, font, color, align = 'left', alpha = 1) {
+  if (alpha <= 0) return; g.save(); g.globalAlpha *= alpha; g.font = font; g.fillStyle = color; g.textAlign = align; g.fillText(s, x, y); g.restore();
+}
+function rrect(x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+function background(t) {
+  const gr = g.createRadialGradient(W * .7, H * .15, 40, W * .5, H * .5, W * .95);
+  gr.addColorStop(0, '#151f2e'); gr.addColorStop(1, C.bg); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  for (const l of LINES) { const x = ((l.x - t * l.s) % (W + 700) + W + 700) % (W + 700) - 600; g.fillStyle = `rgba(160,180,210,${l.a})`; rrect(x, l.y, l.w, 4, 2); g.fill(); }
+}
+function caption(t, a, b, kicker, line, color = C.amber) {
+  const f = fadeIO(t, a, b);
+  text(kicker, 140, 150, `600 24px ${SANS}`, color, 'left', f);
+  text(line, 140, 214, `600 52px ${SERIF}`, C.ink, 'left', f);
+}
+
+// --- tiny Lean syntax colouring ---
+const KW = new Set(['def', 'theorem', 'structure', 'where', 'fun', 'if', 'then', 'else', 'by', 'intro', 'exact', 'simp', 'decide', 'have', 'match', 'with', 'example', 'abbrev', 'namespace', 'end', 'import']);
+function codeLine(s, x, y, alpha, size = 27) {
+  g.save(); g.globalAlpha *= alpha; g.font = `400 ${size}px ${MONO}`;
+  const toks = s.match(/(--.*$)|("[^"]*")|(\b\d+\b)|([A-Za-z_][A-Za-z0-9_.']*)|(\s+)|(.)/g) || [];
+  let cx = x;
+  for (const tk of toks) {
+    let col = C.ink;
+    if (tk.startsWith('--')) col = C.cm; else if (tk.startsWith('"')) col = C.green;
+    else if (/^\d+$/.test(tk)) col = C.num; else if (KW.has(tk)) col = C.kw;
+    else if (/^(Bool|Date|Provision|History|RefFlag|BlanketRule|Nat|Option|String)$/.test(tk)) col = C.ty;
+    else if (/^[∀→≤=∧&|:⟨⟩]$/.test(tk) || tk === ':=' ) col = C.blue;
+    g.fillStyle = col; g.fillText(tk, cx, y); cx += g.measureText(tk).width;
+  }
+  g.restore();
+}
+function codeBox(x, y, w, lines, t0, t, alpha, speed = 55, title = '') {
+  const h = 70 + lines.length * 44;
+  g.save(); g.globalAlpha = alpha; g.fillStyle = C.panel; rrect(x, y, w, h, 14); g.fill(); g.strokeStyle = C.rule; g.lineWidth = 2; g.stroke();
+  ['#ef6a55', '#f2b24a', '#5fd3a0'].forEach((c, i) => { g.fillStyle = c; g.beginPath(); g.arc(x + 26 + i * 22, y + 24, 6, 0, 7); g.fill(); });
+  if (title) { g.font = `500 20px ${MONO}`; g.fillStyle = C.muted; g.textAlign = 'right'; g.fillText(title, x + w - 22, y + 31); }
+  g.restore();
+  let budget = Math.max(0, (t - t0) * speed);
+  lines.forEach((ln, i) => {
+    const n = Math.min(ln.length, Math.floor(budget)); budget -= ln.length;
+    if (n > 0) codeLine(ln.slice(0, n), x + 30, y + 82 + i * 44, alpha);
+  });
+  return h;
+}
+function badge(x, y, label, color, alpha, sub) {
+  if (alpha <= 0) return;
+  g.save(); g.globalAlpha = alpha; g.fillStyle = color; rrect(x, y, 330, 64, 32); g.fill();
+  g.font = `700 30px ${SANS}`; g.fillStyle = '#0d1117'; g.textAlign = 'center'; g.fillText(label, x + 165, y + 43); g.restore();
+  if (sub) text(sub, x + 165, y + 100, `400 22px ${MONO}`, C.muted, 'center', alpha);
+}
+
+// ---------------- scenes ----------------
+function sTitle(t) {
+  const f = fadeIO(t, 0, 4.6, .9), rise = (1 - easeOut(seg(t, 0, 1.5))) * 36;
+  text('LEAN 4 · GLOBAL-LAW / LEAN-PROOFS', W / 2, 420 + rise, `600 28px ${SANS}`, C.amber, 'center', f);
+  text('Proving the bugs in the law', W / 2, 550 + rise, `700 100px ${SERIF}`, C.ink, 'center', f);
+  text('From a corpus record to a machine-checked theorem', W / 2, 640 + rise, `400 36px ${SANS}`, C.muted, 'center', f * easeOut(seg(t, .7, 2)));
+}
+
+function sHistory(t) {
+  const a = 4.4, b = 13.4, f = fadeIO(t, a, b); if (f <= 0) return;
+  caption(t, a, b, '1 · FACTS FROM GIT HISTORY', 'Every change to a provision is a dated commit');
+  // git timeline
+  const x0 = 140, x1 = 880, y = 470;
+  g.save(); g.globalAlpha = f; g.strokeStyle = C.faint; g.lineWidth = 4; g.beginPath(); g.moveTo(x0, y); g.lineTo(x1, y); g.stroke(); g.restore();
+  const commits = [[.08, '2019-06-10', 'record starts', C.green], [.5, '2020-06-30', 'text changed', C.green], [.86, '2020-09-01', '§ 12 (weggefallen)', C.red]];
+  commits.forEach(([q, d, l, col], i) => {
+    const p = easeOut(seg(t, a + .6 + i * .7, a + 1.2 + i * .7)); if (p <= 0) return;
+    const x = x0 + (x1 - x0) * q;
+    g.save(); g.globalAlpha = f * p; g.fillStyle = col; g.beginPath(); g.arc(x, y, 13 * p, 0, 7); g.fill(); g.restore();
+    text(d, x, y - 40, `500 22px ${MONO}`, C.muted, 'center', f * p);
+    text(l, x, y + 54, `600 24px ${SANS}`, col, 'center', f * p);
+  });
+  text('germany-law · awaffv/0012.md', x0, y + 130, `400 24px ${MONO}`, C.muted, 'left', f * easeOut(seg(t, a + 1, a + 2)));
+  const ap = ease(seg(t, a + 3, a + 3.8));
+  g.save(); g.globalAlpha = f * ap; g.strokeStyle = C.blue; g.lineWidth = 5; g.beginPath(); g.moveTo(920, y); g.lineTo(920 + 70 * ap, y); g.stroke(); g.restore();
+  codeBox(1020, 360, 760, ['-- generated by tools/gen_facts.py', 'def target : History :=', '  [(20200901, false),', '   (20190610, true)]'], a + 3.4, t, f * easeOut(seg(t, a + 3.2, a + 3.8)), 60, 'Generated.lean');
+  text('No dates typed by hand: the generator reads the corpus record.', 140, 900, `400 30px ${SANS}`, C.muted, 'left', f * easeOut(seg(t, a + 5.5, a + 6.3)));
+}
+
+function sRule(t) {
+  const a = 13.2, b = 21.6, f = fadeIO(t, a, b); if (f <= 0) return;
+  caption(t, a, b, '2 · THE LEGAL RULE IS A DEFINITION', 'A fine applies only if the rule it names exists');
+  codeBox(140, 300, 1640, [
+    '-- a fine defined by reference: "contrary to § 12(2)"',
+    'structure BlanketRule where',
+    '  rule : Provision       -- the fine itself',
+    '  pointsAt : Provision   -- the duty it names',
+    '',
+    'def BlanketRule.applicable b d : Bool :=',
+    '  inForce b.rule d && inForce b.pointsAt d   -- read as written'
+  ], a + .6, t, f, 70, 'Basic.lean');
+  text('Change the rule, and Lean shows exactly which conclusions stop holding.', 140, 860, `400 30px ${SANS}`, C.muted, 'left', f * easeOut(seg(t, a + 5.4, a + 6.2)));
+}
+
+function sTheorem(t) {
+  const a = 21.4, b = 32.4, f = fadeIO(t, a, b); if (f <= 0) return;
+  caption(t, a, b, '3 · THE THEOREM', 'From 1 Sep 2020 the shooting-range fine cannot apply');
+  codeBox(140, 280, 1640, [
+    'theorem fine_dead : ∀ d, 20200901 ≤ d → fine.applicable d = false :=',
+    '  dead_reference fine deletedOn duty_deleted',
+    '',
+    'theorem banned_but_unfineable : ∀ d, 20200901 ≤ d →',
+    '    inForce waffg27a_2 d = true ∧ fine.applicable d = false'
+  ], a + .5, t, f, 75, 'Cases/AWaffV.lean');
+  const ok = easeOut(seg(t, a + 3.4, a + 3.9));
+  badge(1450, 600, '✓ proved', C.green, f * ok, 'axioms: propext');
+  // timeline
+  const x0 = 140, x1 = 1780, y = 740, cut = .42, p = ease(seg(t, a + 4.2, a + 5.6));
+  g.save(); g.globalAlpha = f;
+  g.fillStyle = C.green; rrect(x0, y, (x1 - x0) * Math.min(p, cut) , 54, 8); g.fill();
+  if (p > cut) { g.fillStyle = C.red; rrect(x0 + (x1 - x0) * cut, y, (x1 - x0) * (p - cut), 54, 8); g.fill(); }
+  g.restore();
+  text('fine applies', x0 + 20, y + 37, `600 24px ${SANS}`, '#0d1117', 'left', f * p);
+  if (p > cut + .1) text('fine cannot apply', x0 + (x1 - x0) * cut + 20, y + 37, `600 24px ${SANS}`, '#0d1117', 'left', f);
+  text('2020-09-01', x0 + (x1 - x0) * cut, y + 96, `500 22px ${MONO}`, C.ink, 'center', f * p);
+  const q = ease(seg(t, a + 6, a + 7));
+  g.save(); g.globalAlpha = f * q; g.fillStyle = C.blue; rrect(x0 + (x1 - x0) * cut, y + 120, (x1 - x0) * (1 - cut) * q, 34, 8); g.fill(); g.restore();
+  text('the ban itself is still in force (WaffG § 27a)', x0 + (x1 - x0) * cut + 20, y + 144, `600 22px ${SANS}`, '#0d1117', 'left', f * q);
+}
+
+function sObjection(t) {
+  const a = 32.2, b = 40.2, f = fadeIO(t, a, b); if (f <= 0) return;
+  caption(t, a, b, '4 · OBJECTIONS ARE THEOREMS TOO', 'What if a court read § 12 as § 27a?', C.violet);
+  codeBox(140, 290, 1640, [
+    'def fineReadByAnalogy : BlanketRule := { rule := fine34_11, pointsAt := waffg27a_2 }',
+    '',
+    'theorem analogy_would_rescue : ∀ d, 20200901 ≤ d → fineReadByAnalogy.applicable d = true'
+  ], a + .5, t, f, 80, 'Cases/AWaffV.lean');
+  const s = ease(seg(t, a + 3.4, a + 4.2));
+  // toggle
+  const tx = 140, ty = 620;
+  text('Rule: no analogy against the person fined', tx + 120, ty + 38, `500 30px ${SANS}`, C.ink, 'left', f);
+  g.save(); g.globalAlpha = f; g.fillStyle = s > .5 ? C.faint : C.green; rrect(tx, ty, 90, 50, 25); g.fill();
+  g.fillStyle = C.ink; g.beginPath(); g.arc(tx + 25 + 40 * (1 - s), ty + 25, 19, 0, 7); g.fill(); g.restore();
+  const x0 = 140, x1 = 1780, y = 740, cut = .42;
+  g.save(); g.globalAlpha = f; g.fillStyle = C.green; rrect(x0, y, (x1 - x0) * cut, 54, 8); g.fill();
+  g.fillStyle = s > .5 ? C.green : C.red; rrect(x0 + (x1 - x0) * cut, y, (x1 - x0) * (1 - cut), 54, 8); g.fill(); g.restore();
+  text(s > .5 ? 'with analogy: the fine applies again' : 'fine cannot apply', x0 + (x1 - x0) * cut + 20, y + 37, `600 24px ${SANS}`, '#0d1117', 'left', f);
+  text('The vulnerability is exactly the no-analogy rule plus the stale reference.', 140, 900, `400 30px ${SANS}`, C.muted, 'left', f * easeOut(seg(t, a + 5, a + 5.8)));
+}
+
+function sCatch(t) {
+  const a = 40, b = 46.6, f = fadeIO(t, a, b); if (f <= 0) return;
+  caption(t, a, b, '5 · LEAN CATCHES OUR MISTAKES', 'It refused a false theorem about dates', C.red);
+  codeBox(140, 300, 1640, [
+    'theorem retroactive_closes_gap : ∀ d, … → retroactive.binds d = true',
+    '-- omega could not prove the goal: counterexample  20251232 ≤ d ≤ 20260100'
+  ], a + .5, t, f, 85, 'Cases/GMOGap.lean');
+  const p = easeOut(seg(t, a + 2.6, a + 3.2));
+  text('YYYYMMDD numbers like 20251299 sit between two dates without being dates.', 140, 560, `400 32px ${SANS}`, C.ink, 'left', f * p);
+  codeBox(140, 610, 1640, ['theorem no_date_between_years (v : ValidDate) : ¬ (… < v.num ∧ v.num < …)'], a + 3.8, t, f * easeOut(seg(t, a + 3.6, a + 4)), 85, 'Calendar.lean');
+  badge(1450, 790, '✓ fixed', C.green, f * easeOut(seg(t, a + 5, a + 5.4)));
+}
+
+const DOTS = (() => { const r = rng(11), out = []; const N = 6741, cols = 113; for (let i = 0; i < N; i++) {
+  const v = r(); out.push({ i, c: v < 308 / 6741 ? 're' : (v < 6530 / 6741 ? 'ok' : 'no'), x: i % cols, y: Math.floor(i / cols), d: r() }); } return out; })();
+function sScale(t) {
+  const a = 46.4, b = 54.4, f = fadeIO(t, a, b); if (f <= 0) return;
+  caption(t, a, b, '6 · EVERY FLAG, NOT JUST FIVE', 'lake build checks 6,741 references in about 10 seconds', C.green);
+  const p = seg(t, a + .6, a + 4.2), x0 = 140, y0 = 290, s = 9;
+  for (const dt of DOTS) {
+    const on = dt.d < p * 1.05 ? 1 : 0; if (!on) { g.fillStyle = C.faint; } else g.fillStyle = dt.c === 'ok' ? C.green : dt.c === 're' ? C.amber : '#4a5566';
+    g.globalAlpha = f * (on ? 1 : .5); g.fillRect(x0 + dt.x * s, y0 + dt.y * s, s - 3, s - 3);
+  }
+  g.globalAlpha = 1;
+  const k = easeOut(seg(t, a + 1, a + 4.4)), lx = 1250;
+  text(fmt(6530 * k), lx, 360, `700 64px ${SERIF}`, C.green, 'left', f); text('certified: target gone, citing provision still in force', lx, 396, `400 22px ${SANS}`, C.muted, 'left', f);
+  text(fmt(308 * k), lx, 500, `700 64px ${SERIF}`, C.amber, 'left', f); text('re-enacted: legislature kept the dead reference', lx, 536, `400 22px ${SANS}`, C.muted, 'left', f);
+  text(fmt(259 * k), lx, 640, `700 64px ${SERIF}`, C.ink, 'left', f); text('never reviewed: the next leads', lx, 676, `400 22px ${SANS}`, C.muted, 'left', f);
+  text('$ python tools/check.py germany/bund/acts awaffv/0034.md', 140, 930, `400 26px ${MONO}`, C.ink, 'left', f * easeOut(seg(t, a + 4.6, a + 5.2)));
+  text('PROVED  points at awaffv/0012.md, gone since 2020-09-01', 140, 975, `600 26px ${MONO}`, C.green, 'left', f * easeOut(seg(t, a + 5.4, a + 5.8)));
+}
+
+function sEnd(t) {
+  const a = 54.2, f = easeOut(seg(t, a, a + 1)); if (f <= 0) return;
+  text('What it helps us do', W / 2, 330, `600 30px ${SANS}`, C.amber, 'center', f);
+  const items = ['Prove a flagged mistake follows from the record', 'Rank leads the legislature itself kept', 'Test every objection as a theorem', 'Re-check everything when the law changes'];
+  items.forEach((s, i) => text(s, W / 2, 430 + i * 74, `600 46px ${SERIF}`, C.ink, 'center', f * easeOut(seg(t, a + .3 + i * .25, a + .9 + i * .25))));
+  text('global-law / lean-proofs  ·  lake build', W / 2, 800, `500 30px ${MONO}`, C.muted, 'center', f * easeOut(seg(t, a + 1.6, a + 2.4)));
+}
+
+window.render = t => { g.clearRect(0, 0, W, H); background(t); sTitle(t); sHistory(t); sRule(t); sTheorem(t); sObjection(t); sCatch(t); sScale(t); sEnd(t); };
+window.DUR = DUR;
+document.fonts.ready.then(() => { window.READY = true; render(0); });
+</script></body></html>
