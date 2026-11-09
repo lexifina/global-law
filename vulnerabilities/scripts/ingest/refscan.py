@@ -118,20 +118,38 @@ def _expand(body: str, m, first: str):
         if r and r.group(1) and re.match(r"[-‑]\d+[-‑]\d", body[pos:pos + 12]):
             break  # "7-17-3" is a section number, not a range
         if r and r.group(1):
-            hi = int(r.group(1))
+            hi = int(r.group(1).replace(".", ""))   # '1.048' (Brazilian thousands) is article 1048
             if prev < hi <= prev + 30:
                 keys += [str(x) for x in range(prev + 1, hi)] + [key(r.group(1), r.group(2), r.group(3))]
                 prev, pos = hi, r.end(); continue
         l = LISTNUM.match(body, pos)
         if l and l.group(1):
-            keys.append(key(l.group(1), l.group(2), l.group(3))); prev, pos = int(l.group(1)), l.end(); continue
+            keys.append(key(l.group(1), l.group(2), l.group(3))); prev, pos = int(l.group(1).replace(".", "")), l.end(); continue
         break
     return keys, pos
 
 
+def before_ref(ctx: str, tail: str) -> str:
+    """the text just before a reference's number. refs() returns ctx = 120 characters either side and tail = the 70 after
+    the match, so the match ends where the tail starts. ctx.split(key) would cut at the key's first occurrence instead
+    ('1831/2003' for 'Artikel 3')."""
+    t = re.sub(r"\s+", " ", tail)[:40]
+    end = ctx.rfind(t) if t.strip() else len(ctx)
+    if end < 0:
+        end = len(ctx)
+    return re.sub(r"\d[\d.]*[\s\-]?(?:[A-Za-z]{1,2}|bis|ter|quater)?\s*$", "", ctx[:end])
+
+
 def refs(text: str):
     """(key, context, tail) for every reference to a numbered provision in the body of a provision file."""
-    body = text.split("\n", 1)[1] if "\n" in text else ""
+    # the first line is skipped only when it is a heading: some corpora (Brazil: 'Art. 347 - ...') have no heading line
+    # and keep the provision's opening sentence there. The provision's own label is filtered by the caller (key == own).
+    if text.lstrip().startswith("#"):
+        body = text.split("\n", 1)[1] if "\n" in text else ""
+    else:
+        first, _, rest = text.partition("\n")
+        first = re.sub(rf"(?i)^\s*(?:{UNIT})\s*{NUM}\s*[.\-–—:)]*", " ", first, count=1)   # drop the leading 'Art. 347 -'
+        body = first + "\n" + rest
     body = "\n".join(l for l in body.splitlines() if "|" not in l)  # tables list other laws' articles
     seen_spans = []
     for rx in (REF, NORDIC, PRE, ARMENIAN, CJK, ARABIC, THAI, MONGOL):
@@ -300,7 +318,12 @@ def one_fileact(c: dict):
 
 
 def _one(a):
-    return one(*a)
+    """one corpus; a failure is reported and that corpus skipped, so one odd line cannot sink a run of hundreds."""
+    try:
+        return one(*a)
+    except Exception as e:
+        print(f"error in {a[0]['repo'] if a and isinstance(a[0], dict) else a}: {type(e).__name__}: {e}", flush=True)
+        return (f"FAILED {a[0]['repo'] if a and isinstance(a[0], dict) else a}"[:36], 0, 0, 0, 0)
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ingest"))
 from common import FINDINGS, CORPUS, FLAGS, WORKERS, pins, lower_priority
-from refscan import refs, path_key, act_of, is_external
+from refscan import refs, path_key, act_of, is_external, before_ref
 
 GONE = re.compile(r"(?i)\b(weggefallen|aufgehoben|revogad[oa]|derogad[oa]|abrogé|abrogée|abrogato|abrogata|repealed|deleted|omitted|"
                   r"mülga|upphävd|upphävs|kumottu|kumottiin|ophævet|opphevet|утратил|утратила|zrušen|zrušeno|uchylony|uchylona|"
@@ -86,7 +86,7 @@ def one(c):
             continue
         for k, ctx, tail in refs(t):
             h = holders.get((a, k))
-            if not h or h[0] == path or EXTERNAL.match(tail) or is_external(ctx.split(k, 1)[0] if k in ctx else "", tail):
+            if not h or h[0] == path or EXTERNAL.match(tail) or is_external(before_ref(ctx, tail), tail):
                 continue
             out.append({"corpus": c["path"], "repo": c["repo"], "path": path, "ref": k, "target": h[0], "target_text": h[1],
                         "context": ctx, "penal": bool(PENAL.search(ctx) or PENAL.search(t[:400]))})

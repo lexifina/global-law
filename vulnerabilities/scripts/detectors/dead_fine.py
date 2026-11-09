@@ -15,7 +15,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ingest"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import FINDINGS, CORPUS, FLAGS, INDEX, WORKERS, pins, lower_priority
-from refscan import refs, path_key, act_of, is_external
+from refscan import refs, path_key, act_of, is_external, before_ref
 from placeholder_ref import is_placeholder, EXTERNAL
 
 # A provision is a penalty provision if it creates an offence or a fine. Cues are whole phrases, not single words such as
@@ -128,10 +128,10 @@ def scan_act(files: dict[str, str], deleted: set[str] | frozenset = frozenset())
             continue
         # refs() skips the first line as a heading; corpora without heading lines (Brazil: 'Art. 347 - ...') keep the
         # provision's opening sentence there, so give them an empty heading.
-        for k, ctx, tail in refs(t if t.lstrip().startswith("#") else "\n" + t):
+        for k, ctx, tail in refs(t):
             if k == own:
                 continue
-            before = _before(ctx, tail)
+            before = before_ref(ctx, tail)
             if EXTERNAL.match(tail) or is_external(before, tail) or OTHER_ACT_TAIL.match(tail) or OLD_VERSION.search(ctx):
                 continue
             fam = _family(before)

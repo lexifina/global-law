@@ -19,7 +19,7 @@ def main() -> None:
     run = sys.argv[1] if len(sys.argv) > 1 else "run1"
     f = FINDINGS / run
     con = duckdb.connect()
-    con.sql("set threads to 8")
+    con.sql(f"set threads to {int(__import__('os').environ.get('LE_DUCKDB_THREADS') or 8)}")
     I = INDEX.as_posix()
     con.sql(f"create view changes as select * from '{I}/changes/*.parquet'")
     con.sql(f"create view root as select * from '{I}/root.parquet'")

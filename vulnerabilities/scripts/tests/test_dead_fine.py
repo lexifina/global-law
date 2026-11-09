@@ -133,5 +133,25 @@ class PenalCue(unittest.TestCase):
             self.assertFalse(is_penal(s), s)
 
 
+class RefscanRegressions(unittest.TestCase):
+    """bugs met on the full run of 732 corpora."""
+
+    def test_thousands_dot_in_a_list(self):
+        from refscan import refs
+        ks = [k for k, _, _ in refs("# Art. 1\n\nNos termos dos arts. 1.048, 1.049 e 1.050 deste Código.\n")]
+        self.assertTrue({"1048", "1049", "1050"} <= set(ks), ks)
+
+    def test_thousands_dot_in_a_range(self):
+        from refscan import refs
+        ks = [k for k, _, _ in refs("# Art. 1\n\nAplica-se o disposto nos arts. 1.048 a 1.050.\n")]
+        self.assertIn("1048", ks)
+
+    def test_first_line_without_heading_is_read(self):
+        from refscan import refs
+        ks = [k for k, _, _ in refs("Art. 347 - Os químicos sem as condições do art. 325 incorrerão na multa.\n")]
+        self.assertIn("325", ks)
+        self.assertNotIn("347", ks)
+
+
 if __name__ == "__main__":
     unittest.main()

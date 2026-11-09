@@ -6,16 +6,19 @@ Writes pins.json: the global-law root sha and each corpus's pinned sha, so a run
 reproducible even if repos are force-pushed meanwhile. Never writes to the live repos.
 """
 from __future__ import annotations
-import configparser, json, shutil, sys, time
+import configparser, json, os, re, shutil, subprocess, sys, time
 from concurrent.futures import ThreadPoolExecutor
 from common import CACHE_LIVE, CORPUS, GLOBAL, GLOBAL_LIVE, PINS, WORKERS, git, lower_priority
+
+
+SKIP = re.compile(os.environ.get("LE_SKIP_CORPORA", r"(?i)caselaw|judgment|^united-kingdom|^romania"))
 
 
 def main() -> None:
     lower_priority()
     t0 = time.time()
     CORPUS.mkdir(parents=True, exist_ok=True)
-    origin = str(GLOBAL_LIVE) if (GLOBAL_LIVE / ".git").exists() else "https://github.com/lexifina/global-law"
+    origin = os.environ.get("GLOBAL_LAW_ORIGIN") or (str(GLOBAL_LIVE) if (GLOBAL_LIVE / ".git").exists() else "https://github.com/lexifina/global-law")
     if not GLOBAL.exists():
         git("clone", "--bare", "-q", "--single-branch", "--no-tags", origin, str(GLOBAL))
     else:
@@ -29,7 +32,7 @@ def main() -> None:
     for line in git("ls-tree", "-r", head, cwd=GLOBAL).splitlines():
         meta, path = line.split("\t", 1)
         mode, kind, sha = meta.split()
-        if mode == "160000":
+        if mode == "160000" and not SKIP.search(path):
             gitlinks[path] = sha
     manifest = json.loads(git("show", f"{head}:manifest.json", cwd=GLOBAL))
     manifest = manifest["corpora"] if isinstance(manifest, dict) else manifest
@@ -46,6 +49,10 @@ def main() -> None:
                 git("fetch", "-q", "--no-tags", str(src), "+refs/heads/*:refs/heads/*", cwd=dst)
         else:
             git("clone", "--bare", "-q", "--no-tags", str(src), str(dst))  # local: hardlinks objects
+        if git("cat-file", "-e", f"{sha}^{{commit}}", cwd=dst, check=False) != "" or \
+                subprocess.run(["git", "cat-file", "-e", f"{sha}^{{commit}}"], cwd=dst, capture_output=True).returncode:
+            # the local cache is older than the pin: fetch the rest from the corpus's own remote
+            git("fetch", "-q", "--no-tags", url[path], "+refs/heads/*:refs/heads/*", cwd=dst)
         git("cat-file", "-e", f"{sha}^{{commit}}", cwd=dst)
         m = man.get(path, {})
         return {"path": path, "repo": repo, "sha": sha, "name": m.get("name"), "code": m.get("code"),

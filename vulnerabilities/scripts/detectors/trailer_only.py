@@ -71,7 +71,7 @@ def main() -> None:
     out = FINDINGS / run
     out.mkdir(parents=True, exist_ok=True)
     con = duckdb.connect()
-    con.sql("set threads to 8")
+    con.sql(f"set threads to {int(__import__('os').environ.get('LE_DUCKDB_THREADS') or 8)}")
     con.sql(f"create view changes as select * from '{(INDEX / 'changes').as_posix()}/*.parquet'")
     con.sql(f"create view root as select *, row_number() over () seq from '{(INDEX / 'root.parquet').as_posix()}'")
     con.sql(f"create view commits as select * from '{(INDEX / 'commits').as_posix()}/*.parquet'")

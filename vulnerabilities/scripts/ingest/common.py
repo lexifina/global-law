@@ -16,6 +16,17 @@ WORKERS = int(os.environ.get("LE_WORKERS", str(max(1, (os.cpu_count() or 4) // 2
 
 IDLE = os.environ.get("LE_PRIORITY", "").lower() == "idle"   # use only spare cycles on a shared machine
 GIT_GREP_THREADS = os.environ.get("LE_GREP_THREADS", "4")
+DUCKDB_THREADS = int(os.environ.get("LE_DUCKDB_THREADS", "0"))   # cap DuckDB on a shared machine (0 = DuckDB default)
+if DUCKDB_THREADS:
+    import duckdb as _duckdb
+    _connect = _duckdb.connect
+
+    def _capped_connect(*a, **k):
+        con = _connect(*a, **k)
+        con.execute(f"set threads to {DUCKDB_THREADS}")
+        return con
+    _duckdb.connect = _capped_connect
+    _duckdb.execute(f"set threads to {DUCKDB_THREADS}")   # the default connection behind duckdb.sql()
 FLAGS = 0
 if sys.platform == "win32":
     FLAGS = (0x00000040 if IDLE else 0x00004000) | 0x08000000  # IDLE or BELOW_NORMAL_PRIORITY_CLASS | CREATE_NO_WINDOW

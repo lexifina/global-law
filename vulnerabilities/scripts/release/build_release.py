@@ -16,7 +16,11 @@ from pathlib import Path
 import duckdb
 
 ROOT = Path(__file__).resolve().parents[1]
-F1, F2, F3 = ROOT / "findings" / "run1", ROOT / "findings" / "run2", ROOT / "findings" / "run3"
+import os
+PREV = Path(os.environ.get("LE_PREV_FINDINGS", ROOT / "findings"))       # earlier runs, for their model reviews
+F1, F2, F3 = PREV / "run1", PREV / "run2", ROOT / "findings" / os.environ.get("LE_RUN", "run3")
+sys.path.insert(0, str(ROOT))
+import taxonomy as T  # noqa: E402
 
 
 def latest(name):
@@ -46,8 +50,8 @@ CATS = {  # detector key -> (category name, what it is)
     "organic_reserve": ("Organic-law reserve (Spain)", "Ordinary instruments changing an organic law"),
     "dead_fine": ("Dead fines (Germany)", "Fine catalogues pointing at deleted sections"),
 }
-COLS = ["id", "category", "detector", "jurisdiction", "corpus", "path", "date", "reference", "summary", "score",
-        "review", "review_note", "url"]
+COLS = ["id", "category", "detector", "taxonomy", "taxonomy_name", "verdict", "jurisdiction", "corpus", "path", "date",
+        "reference", "summary", "score", "review", "review_note", "url"]
 
 
 def s(v, n=600):
@@ -89,18 +93,18 @@ def run1_id(det, row):
 
 def collect():
     reviews = {}
-    for r in rows_jsonl(F1 / "triage.jsonl"):
+    for r in (rows_jsonl(F1 / "triage.jsonl") if (F1 / "triage.jsonl").exists() else []):
         v, rb = r.get("verify") or {}, r.get("rebut") or {}
         verdict = v.get("verdict", "")
         if verdict == "candidate_defect":
             verdict = "candidate_defect, survived rebuttal" if rb.get("survives") else "candidate_defect, rebutted"
         reviews[r["id"]] = (verdict, s(v.get("reason"), 400))
-    for r in rows_jsonl(F2 / "dead_act_ref_triage.jsonl"):
+    for r in (rows_jsonl(F2 / "dead_act_ref_triage.jsonl") if (F2 / "dead_act_ref_triage.jsonl").exists() else []):
         reviews[("dead_act_ref", r["row"]["path"], r["row"]["cited_id"])] = (r["j"]["verdict"], s(r["j"]["one_line"], 400))
-    for r in rows_jsonl(F2 / "late_extension_triage.jsonl"):
+    for r in (rows_jsonl(F2 / "late_extension_triage.jsonl") if (F2 / "late_extension_triage.jsonl").exists() else []):
         k = ("late_extension", r["row"]["corpus"], r["row"]["path"], r["row"]["old_until"])
         reviews[k] = (r["j"]["verdict"] + ("" if r["j"]["gap_real"] else ", gap not real"), s(r["j"]["one_line"], 400))
-    for r in rows_jsonl(F2 / "placeholder_triage.jsonl"):
+    for r in (rows_jsonl(F2 / "placeholder_triage.jsonl") if (F2 / "placeholder_triage.jsonl").exists() else []):
         reviews[("placeholder_ref", r["row"]["path"], r["row"]["ref"])] = (r["j"]["verdict"], s(r["j"]["one_line"], 400))
 
     out = []
@@ -114,7 +118,9 @@ def collect():
             "reference": s(ref, 300), "summary": s(summary), "score": None if score is None else round(float(score), 3),
             "review": rv[0], "review_note": rv[1], "url": url(corpus, path)})
 
-    for f in sorted(glob.glob(str(F1 / "ranked_*.parquet"))):
+    for f in sorted(glob.glob(str(F3 / "ranked_*.parquet"))):
+        if Path(f).stem == "ranked_dead_act_ref":
+            continue
         det = Path(f).stem.replace("ranked_", "")
         f = latest(Path(f).name)
         for r in rows_parquet(f):
@@ -133,7 +139,7 @@ def collect():
                 add(det, r["corpus"], r["path"], r.get("until"), r.get("last_law"), r.get("why") or r.get("context"), r.get("score"), rk)
             elif det == "stale_amount":
                 add(det, r["corpus"], r["path"], r.get("in_force"), f"{r.get('old')} → {r.get('new')}", r.get("why"), r.get("score"), rk)
-    for r in rows_parquet(F2 / "ranked_dead_act_ref.parquet"):
+    for r in rows_parquet(latest("ranked_dead_act_ref.parquet")):
         add("dead_act_ref", r["corpus"], r["path"], r.get("citing_last_change"), f"{r['cite']} ({r.get('cited_title')})", r.get("why"), r.get("score"),
             ("dead_act_ref", r["path"], r["cited_id"]))
     for r in rows_jsonl(latest("late_extension.jsonl")):
@@ -141,18 +147,20 @@ def collect():
             f"ran until {r['old_until']}; extended to {r['new_until']} by an amendment in force {r['extended_in_force']} ({r['gap_days']} days later)",
             None, ("late_extension", r["corpus"], r["path"], r["old_until"]))
     for fn, det in [("publisher_flag", "publisher_flag"), ("dead_currency", "dead_currency")]:
-        for r in rows_jsonl(F2 / f"{fn}.jsonl"):
+        for r in rows_jsonl(latest(f"{fn}.jsonl")):
             add(det, r["corpus"], r["path"], "", f"line {r.get('line')}", r.get("text"))
     for r in rows_jsonl(latest("dup_label.jsonl")):
         add("dup_label", r["corpus"], r["path"], "", f"{r['label']} ×{r['n']}", " | ".join(r.get("lines") or []))
     for r in rows_jsonl(latest("missing_paragraph.jsonl")):
         add("missing_paragraph", r["corpus"], r["path"], "", f"{r['ref']} → {r['target']} (has {','.join(r.get('target_paras') or [])})", r.get("line"))
     for r in rows_jsonl(latest("dead_fine.jsonl")):
-        add("dead_fine", r["corpus"], r["path"], "", f"{r['ref']}: {r['problem']}", r.get("line"))
+        status = r.get("target_status") or r.get("problem", "")
+        add("dead_fine", r["corpus"], r["path"], "", f"{r['ref']}: {status}" + (f" → {r['target']}" if r.get("target") else ""),
+            r.get("line") or r.get("context"), r.get("score"))
     for r in rows_jsonl(latest("placeholder_ref.jsonl")):
         add("placeholder_ref", r["corpus"], r["path"], "", f"{r['ref']} → {r['target']}", f"{r.get('target_text')} | {r.get('context')}",
             None, ("placeholder_ref", r["path"], r["ref"]))
-    for r in rows_jsonl(F2 / "organic_reserve.jsonl"):
+    for r in (rows_jsonl(latest("organic_reserve.jsonl")) if any((d / "organic_reserve.jsonl").exists() for d in (F3, F2)) else []):
         j = r.get("j") or {}
         out.append({"id": hashlib.sha1(f"organic_reserve|{r['law']}|{r['lo']}".encode()).hexdigest()[:12],
                     "category": CATS["organic_reserve"][0], "detector": "organic_reserve", "jurisdiction": "spain",
@@ -164,6 +172,19 @@ def collect():
     for r in out:
         if r["id"] not in seen:
             seen.add(r["id"]); uniq.append(r)
+    tr = {}
+    trp = F3 / "taxonomy_review.jsonl"
+    if trp.exists():
+        for x in rows_jsonl(trp):
+            tr[x["id"]] = x
+    for r in uniq:
+        code, v = T.classify(r["detector"], r)
+        x = tr.get(r["id"])
+        if x:
+            code = x.get("category") or code
+            v = x.get("final_verdict") or x.get("verdict") or v
+            r["review"] = x.get("review_label", r["review"]); r["review_note"] = s(x.get("one_line") or x.get("reason"), 400)
+        r["taxonomy"], r["taxonomy_name"], r["verdict"] = code, T.C[code]["name"] if code in T.C else "", v
     return uniq
 
 

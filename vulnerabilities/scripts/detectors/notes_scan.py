@@ -8,7 +8,7 @@ import json, subprocess, sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ingest"))
-from common import GIT_GREP_THREADS, FINDINGS, CORPUS, FLAGS, pins, lower_priority
+from common import GIT_GREP_THREADS, FINDINGS, CORPUS, FLAGS, pins, lower_priority, WORKERS
 
 PAT = "|".join([
     r"could not be executed", r"was not executed", r"cannot be executed", r"could not be given effect",
@@ -47,7 +47,7 @@ def main() -> None:
     f = FINDINGS / run; f.mkdir(parents=True, exist_ok=True)
     cs = [c for c in pins()["corpora"] if not c["repo"].startswith(("united-kingdom", "romania"))]
     n = 0
-    with ThreadPoolExecutor(8) as ex, (f / "publisher_flag.jsonl").open("w", encoding="utf-8") as fh:
+    with ThreadPoolExecutor(WORKERS) as ex, (f / "publisher_flag.jsonl").open("w", encoding="utf-8") as fh:
         for rows in ex.map(one, cs):
             for r in rows:
                 fh.write(json.dumps(r, ensure_ascii=False) + "\n"); n += 1

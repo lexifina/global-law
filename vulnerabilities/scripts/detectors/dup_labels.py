@@ -5,7 +5,7 @@ import collections, json, re, subprocess, sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ingest"))
-from common import FINDINGS, CORPUS, FLAGS, pins, lower_priority
+from common import FINDINGS, CORPUS, FLAGS, pins, lower_priority, WORKERS
 
 LAB = re.compile(r"^\s*(?:#+\s*|\*\*|- )?(§+\s*\d+[º°o]?(?:[-‑ ]?[A-Z]{1,2}\b)?|(?:Art\.|Artigo|Artículo|Article|Articolo|Artikel|Art)\s+\d+[º°o]?(?:[-‑ ]?(?:[A-Z]{1,2}|bis|ter|quater|quáter|quinquies|sexies|septies|octies|nonies|decies))?\b"
                  r"|Par[áa]grafo [úu]nico|Párrafo\s+\d+[º°o]?)", re.I)
@@ -45,7 +45,7 @@ def main() -> None:
     f = FINDINGS / run
     cs = [c for c in pins()["corpora"] if not c["repo"].startswith(("united-kingdom", "romania"))]
     n = 0
-    with ThreadPoolExecutor(10) as ex, (f / "dup_label.jsonl").open("w", encoding="utf-8") as fh:
+    with ThreadPoolExecutor(WORKERS) as ex, (f / "dup_label.jsonl").open("w", encoding="utf-8") as fh:
         for rows in ex.map(one, cs):
             for r in rows:
                 fh.write(json.dumps(r, ensure_ascii=False) + "\n"); n += 1

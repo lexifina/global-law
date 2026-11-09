@@ -280,6 +280,18 @@ FAILED = re.compile(r"(?i)nicht ausführbar|ging ins leere|could not be executed
                     r"non exécutable|n'a pu être|niet uitvoerbaar|no (?:ha )?podido")
 
 
+def _is_penal(text: str) -> bool:
+    """the penalty recogniser tested in bench/penal_bench.py (held-out precision 94%, recall 74%)."""
+    import sys
+    from pathlib import Path
+    d = str(Path(__file__).resolve().parent / "detectors"); i = str(Path(__file__).resolve().parent / "ingest")
+    for p in (d, i):
+        if p not in sys.path:
+            sys.path.insert(0, p)
+    from dead_fine import is_penal
+    return is_penal(text)
+
+
 def verdict(review: str) -> str:
     r = (review or "").lower()
     if not r:
@@ -302,7 +314,7 @@ def classify(detector: str, row: dict | None = None) -> tuple[str, str]:
     row = row or {}
     code = DETECTORS.get(detector, "E4")
     text = " ".join(str(row.get(k) or "") for k in ("summary", "reference", "context"))
-    if code == "A1" and SANCTION.search(text):
+    if code == "A1" and (SANCTION.search(text) or _is_penal(text)):
         code = "A2"
     v = verdict(row.get("review", ""))
     if detector == "publisher_flag" and not FAILED.search(text):
