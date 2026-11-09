@@ -4,6 +4,36 @@
 `tools/law.py` answers, with the limits of each record stated on every answer. It uses only Python's standard library
 and git, reads the repository and changes nothing.
 
+## Hosted: nothing to download
+
+Lexifina runs this server at **https://mcp.lexifina.com/mcp** with every public country loaded, refreshed from these
+repositories about every 40 minutes. Add it to any MCP client that speaks Streamable HTTP. No account or key is needed.
+
+```sh
+claude mcp add --transport http global-law https://mcp.lexifina.com/mcp
+```
+
+| Client | How |
+|---|---|
+| Claude Code | The command above; add `--scope project` to write it to the folder's `.mcp.json` |
+| Claude | Add a custom connector with the URL |
+| Cursor | `mcp.json`: `{ "mcpServers": { "global-law": { "url": "https://mcp.lexifina.com/mcp" } } }` |
+| VS Code | `.vscode/mcp.json`: `{ "servers": { "global-law": { "type": "http", "url": "https://mcp.lexifina.com/mcp" } } }` |
+
+It has the same tools and gives the same answers as a clone. It only reads and keeps no session. Each network address
+may make 60 tool calls a minute and 10,000 a day, one at a time and one tool call per request. Every answer comes within
+95 seconds; a call that needs longer is stopped and says how to narrow it. The server logs which tool was called and
+how long it took, never what was asked.
+
+- [Docs, limits and errors](https://lexifina.com/api/global-law)
+- [Ask it in Lexifina](https://app.lexifina.com/law), with nothing to set up
+- [The law API](https://lexifina.com/api/global-law), to call it from your own code with a Lexifina key that has the
+  Law permission (`law:read`)
+- [Status](https://status.lexifina.com)
+- [Films](https://lexifina.com/watch) of the hosted server and of the API
+
+Set it up yourself, as below, to work offline or to keep every question on your own machine.
+
 ## Set up
 
 You need git and Python 3.9 or newer (macOS's own `python3` will do). Nothing else to install.
