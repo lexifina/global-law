@@ -49,8 +49,10 @@ PROBE = ('import json, subprocess, sys; sys.path.insert(0, "tools"); sys.dont_wr
          'rows = law.caselaw_overlay_rows(["united-states/federal/usc/title-11/362"])\n'
          'n_lookup = len(started)\n'
          'texts = law.read_blobs_of(rows)\n'
-         'print(json.dumps({"lookup": n_lookup, "read": len(started) - n_lookup, "latest": latest, "cands": [c for c, _ in cands],\n'
-         '                  "rows": rows, "texts": len(texts), "started": started}))\n')
+         'n_read = len(started)\n'
+         'again = law.read_blobs_of(rows)\n'  # kept in the store by blob id: no git process the second time
+         'print(json.dumps({"lookup": n_lookup, "read": n_read - n_lookup, "again": len(started) - n_read, "same": again == texts,\n'
+         '                  "latest": latest, "cands": [c for c, _ in cands], "rows": rows, "texts": len(texts), "started": started}))\n')
 
 
 def decision(court: str, title: str, text: str) -> str:
@@ -181,12 +183,15 @@ class CaseLawIndex(unittest.TestCase):
 
     def test_2_a_call_starts_no_git_process_per_corpus(self):
         self.cli('caselaw-index')
+        shutil.rmtree(self.store() / 'blobs', ignore_errors=True)
         done = subprocess.run([sys.executable, '-X', 'utf8', '-c', PROBE], cwd=self.t.root, capture_output=True, encoding='utf-8',
                               timeout=300)
         self.assertEqual(done.returncode, 0, done.stderr)
         got = json.loads(done.stdout)
         self.assertEqual(got['lookup'], 0, 'latest decisions, Bloom filter and overlay rows are read without git')
         self.assertEqual(got['read'], 1, f"one git process reads the overlays of both corpora: {got['started']}")
+        self.assertEqual(got['again'], 0, 'a blob read once is read from the store')
+        self.assertTrue(got['same'])
         self.assertEqual(sorted(c for c, _ in got['rows']), [CA, SC])
         self.assertEqual(got['texts'], 2)
         self.assertEqual(got['latest'][SC][1], '2022-03-03')

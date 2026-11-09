@@ -1086,11 +1086,49 @@ def read_blobs_of(rows: list[tuple[str, str]]) -> list[tuple[str, str]]:
 CAT_DIRS = 16
 
 
+BLOB_CACHE_MAX = 32 << 20  # bytes: a blob up to this size that read_texts_of reads is kept in the store, by its id
+
+
 def read_texts_of(rows: list[tuple[str, str]]) -> list[str | None]:
     """The text of each (corpus, object) given (a blob id, or <commit>:<path>), None where it is missing, read by one
-    git process for all the corpora (read_blobs_of)."""
+    git process for all the corpora (read_blobs_of). A blob, named by its id, is kept in the store once read (an id
+    names one text for ever): the 130 overlay files of 11 U.S.C. 362 in as many US courts cost 0.5 s of git on each
+    call, opening 130 object stores (US speed gate, 2026-11-09)."""
     if not rows:
         return []
+    import os
+    store = _store() / 'blobs'
+    out: list[str | None] = [None] * len(rows)
+    todo = []
+    for i, (c, obj) in enumerate(rows):
+        if _HEX40.fullmatch(obj):
+            try:
+                out[i] = (store / obj[:2] / obj).read_bytes().decode('utf-8', 'replace')
+                continue
+            except OSError:
+                pass
+        todo.append(i)
+    if todo:
+        got = _read_texts_git([rows[i] for i in todo])
+        for i, text in zip(todo, got):
+            out[i] = text
+            obj = rows[i][1]
+            if text is not None and _HEX40.fullmatch(obj) and len(text) <= BLOB_CACHE_MAX:
+                try:  # a cache: a store that cannot be written to reads the blob again next time
+                    dest = store / obj[:2] / obj
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    tmp = dest.with_name(f'{obj}.{os.getpid()}.tmp')
+                    tmp.write_bytes(text.encode('utf-8'))
+                    os.replace(tmp, dest)
+                except OSError:
+                    pass
+    return out
+
+
+_HEX40 = re.compile(r'[0-9a-f]{40}')
+
+
+def _read_texts_git(rows: list[tuple[str, str]]) -> list[str | None]:
     idx = caselaw_index('no') or {'corpora': {}}
     import os
     out: list[str | None] = []
