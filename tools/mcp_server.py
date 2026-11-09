@@ -1189,8 +1189,13 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
     cl = [c['path'] for c in m['corpora'] if law.is_caselaw(c)]
     latest = law.latest_decisions('9999-12-31', cl)
     cl_set, short = set(cl), []
+    # the events grouped once: with 241 case-law corpora listed, scanning every event for each corpus took 2.3 s
+    by_corpus: dict[str, list] = {}
+    for e in events:
+        if e.kind != 'documentation':
+            by_corpus.setdefault(e.corpus, []).append(e)
     for c in m['corpora']:
-        own = [e for e in events if e.corpus == c['path'] and e.kind != 'documentation']
+        own = by_corpus.get(c['path'], [])
         first, last = (own[0].in_force, own[-1].in_force) if own else (None, None)
         if law.is_caselaw(c):  # not in the timeline: its record's span from its corpus.json and its latest decision
             given = latest.get(c['path'])
@@ -1613,9 +1618,12 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 lines = [(n, h) for n in names if (h := index.get(n)) and any(w in fold(h) for w in folded_words)]
             else:
                 pattern = '^(#|heading:|title:).*(' + '|'.join(re.escape(w) for w in plain) + ')'
-                out = git_run(['git', 'grep', '-i', '-I', '-E', '-e', pattern, sha, '--', '*.md'], cwd=ROOT / c['path'],
-                              capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT).stdout
-                lines = [line.removeprefix(f'{sha}:').partition(':')[::2] for line in out.splitlines()]
+                if law.is_caselaw(c):  # in parts, side by side: New York's other courts' 204,000 headings took 19 s in one
+                    out = caselaw_grep(ROOT / c['path'], sha, ['-i', '-I', '-E', '-e', pattern], ['decisions/*.md'])
+                else:
+                    out = git_run(['git', 'grep', '-i', '-I', '-E', '-e', pattern, sha, '--', '*.md'], cwd=ROOT / c['path'],
+                                  capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT).stdout.splitlines()
+                lines = [line.removeprefix(f'{sha}:').partition(':')[::2] for line in out]
             # With the index, words are matched without diacritics or case, so "raspundere" finds "Răspunderea" and
             # either Romanian s/t (comma or cedilla) matches the other.
             plain_here = [fold(w) for w in plain] if index is not None else plain
@@ -3219,20 +3227,25 @@ PHRASE_FILES = 3000  # changed files phrase_history checks per corpus
 CASELAW_GREPS = 12  # git grep processes one case-law corpus is read with, side by side
 
 
-def caselaw_grep_counts(cwd: Path, head: str, pattern: str, specs: list[str]) -> dict[str, int]:
-    """'<file>': matching lines, for every decision file at `head` that holds the pattern. git grep reads a tree on one
+def caselaw_grep(cwd: Path, head: str, flags: list[str], specs: list[str]) -> list[str]:
+    """The output lines of `git grep <flags> <head> -- <specs>` over a case-law corpus. git grep reads a tree on one
     thread, so a large corpus is read in parts, by the folders two levels down (decisions/<court>/<year>), up to
     CASELAW_GREPS processes at once: the Cour de cassation's 530,000 decisions took 50 s in one process, 13 s in 12
     (FR audit, 2026-11-07). The call's deadline is carried into each worker thread."""
     parts = [specs]
     if specs == ['decisions/*.md']:
+        top = law.git('ls-tree', '--name-only', head, 'decisions/', cwd=cwd, check=False).splitlines()
         courts = law.git('ls-tree', '-d', '--name-only', head, 'decisions/', cwd=cwd, check=False).splitlines()
+        inside = law.git('ls-tree', '--name-only', head, *[f'{c}/' for c in courts], cwd=cwd, check=False).splitlines() if courts else []
         years = law.git('ls-tree', '-d', '--name-only', head, *[f'{c}/' for c in courts], cwd=cwd, check=False).splitlines() if courts else []
         folders = years + [c for c in courts if not any(y.startswith(c + '/') for y in years)]
         if len(folders) > 1:
-            parts = [[f'{f}/*.md' for f in folders[i::CASELAW_GREPS]] for i in range(min(CASELAW_GREPS, len(folders)))]
-            # files directly in decisions/ or in a court's folder (not in a year) are read by the first part
-            parts[0] += [':(glob)decisions/*.md', *{f':(glob){f.rsplit("/", 1)[0]}/*.md' for f in folders if f.count('/') > 1}]
+            # Folders as plain prefixes, which git grep prunes the tree by: a glob each ("<folder>/*.md") is matched
+            # against every file, and 400 of them made New York's other courts' 204,000 headings take 19 s.
+            parts = [[f':(literal){f}/' for f in folders[i::CASELAW_GREPS]] for i in range(min(CASELAW_GREPS, len(folders)))]
+            # files directly in decisions/ or in a court's folder (not in a year) are read by the first part, by name
+            folder_set = set(courts) | set(years)
+            parts[0] += [f':(literal){f}' for f in [*top, *inside] if f not in folder_set and f.endswith('.md')]
     # A Windows command line holds 32,767 characters: New York's other courts (204,000 decisions, 330 courts by year)
     # gave parts of 60,000 and git did not start (WinError 206). Long parts are cut to about 20,000 characters each.
     short = []
@@ -3251,16 +3264,20 @@ def caselaw_grep_counts(cwd: Path, head: str, pattern: str, specs: list[str]) ->
 
     def one(part):
         _call.deadline, _call.cancel = deadline, cancel
-        return git_run(['git', 'grep', '-c', '-I', '-i', '-E', '-e', pattern, head, '--', *part], cwd=cwd,
+        return git_run(['git', 'grep', *flags, head, '--', *part], cwd=cwd,
                        capture_output=True, encoding='utf-8', errors='replace').stdout
 
-    lines = {}
     with ThreadPoolExecutor(min(CASELAW_GREPS, len(parts))) as pool:
-        for out in pool.map(one, parts):
-            for line in out.splitlines():
-                name, _, n = line.removeprefix(head + ':').rpartition(':')
-                if n.isdigit():
-                    lines[name] = int(n)
+        return [line for out in pool.map(one, parts) for line in out.splitlines()]
+
+
+def caselaw_grep_counts(cwd: Path, head: str, pattern: str, specs: list[str]) -> dict[str, int]:
+    """'<file>': matching lines, for every decision file at `head` that holds the pattern (caselaw_grep)."""
+    lines = {}
+    for line in caselaw_grep(cwd, head, ['-c', '-I', '-i', '-E', '-e', pattern], specs):
+        name, _, n = line.removeprefix(head + ':').rpartition(':')
+        if n.isdigit():
+            lines[name] = int(n)
     return lines
 
 
