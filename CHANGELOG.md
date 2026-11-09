@@ -8,6 +8,18 @@ Status words:
 - **Open:** found and reported, not yet fixed.
 - **Checked:** a test that passed.
 
+## 9 November 2026
+- **Added (US), every court in the Caselaw Access Project.** 151 repos, `lexifina/united-states-*-caselaw`, with 6,886,382 decisions from CAP's bulk data (static.case.law), all pinned. There is one repo per state's highest court, its appellate courts and its other courts; federal district courts are grouped by circuit, with bankruptcy and the special federal courts in their own repos; territories and tribal courts are included. New York's appellate courts are split into three eras. The 14 federal repos and the 5 first state repos took their CAP decisions append-only. Every repo passes `check_corpus --strict` and the 44-item feature audit.
+- **Fixed (here, all case law), what 151 more case-law corpora showed.**
+  - `list_jurisdictions` gives case law one short line each once the full list passes the answer's length; it had been cut from Pennsylvania on. A scoped list names only the corpora left out within its scope, and the events are grouped once.
+  - `law_details` reads a shared docket's corpora side by side. For a single decision it stops at the commit that added it, and it skips the moves index for case law (599 U.S. 736 took over 120 s, now 2 s).
+  - git grep command lines are kept under Windows's 32,767 characters: `phrase_history` crashed on New York's other courts. A case-law heading search reads its folders side by side, by plain prefixes rather than a glob each.
+  - Case law has no repeal notices, so it is not scanned for them: `list_provisions` on a year of New York appellate decisions took 48 s, and under load passed 120 s and so never kept its result.
+  - Blobs, law versions (`<commit>:<path>`) and grep results named by commit are kept in the store. An overlay file is sorted by day once, for dates before its summary's rows. A body of law's file count is kept per pin.
+  - **Checked:** the US gate, with all 241 real case-law corpora and with 70 synthetic ones more, passes with no feature over 1.5x or 2 s: `check_precedent` on 11 U.S.C. 362 went from 2.84 s to 1.15 s, and `resolve_citations` is at 1.66 s. Each other country's gate has no feature over 1.5x from case law. The earlier open items, art. 22¹ k.p. and art. 1.022 CPC on a past date, are now at their times without case law.
+  - **Open:** features over 2 s without any case law, from the law itself (for example NL and FR `phrase_history`, FR `search_law`, DE `world_on_date`); they fail the "or" rule whatever the case law.
+  - Tests: tests/test_caselaw_index.py (7).
+
 ## 8 November 2026
 - **Fixed (here, docs), statements the case law and the growth of the tree had made stale.**
   - FEATURES.md no longer states a corpus count (it said 715). It points at `list_jurisdictions` and `countries.py`, as `tools/doc_figures.py` asks.
