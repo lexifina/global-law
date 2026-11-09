@@ -187,7 +187,9 @@ works tax-free after the pre-tax IRA money has been moved into the 401(k).
 - `roth_ceiling`: Roth gain less tax never exceeds $77,000 plus the after-tax money already held.
 
 [Found.lean](LegalProofs/USTax/Retirement/Found.lean) re-checks the search's plan ($77,000 into Roth accounts, no tax)
-and proves it optimal from `roth_ceiling`. The model's limits are listed at the top of
+and proves it optimal from `roth_ceiling`. [video/retire_film.html](video/retire_film.html) is a 72-second film of it, drawn from the real search tree
+(`lake env lean LegalProofs/USTax/Retirement/Search.lean` writes it; `python video/render_retire.py` renders
+`video/out/backdoor-roth-search.mp4`). The model's limits are listed at the top of
 [Rules.lean](LegalProofs/USTax/Retirement/Rules.lean); the main one is that the pro-rata rule is applied at the time of
 each conversion, where the Code uses the year-end value of all IRAs.
 

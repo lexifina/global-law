@@ -1,0 +1,265 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=block">
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#04070d}
+canvas{position:absolute;inset:0}
+#ov{position:absolute;inset:0;pointer-events:none;color:#eef1f5;font-family:'IBM Plex Sans',sans-serif}
+.k{position:absolute;left:120px;top:96px;font:600 22px 'IBM Plex Sans';letter-spacing:.22em;text-transform:uppercase}
+.t{position:absolute;left:120px;top:132px;font:600 58px/1.1 'Source Serif 4',serif;max-width:1350px;text-shadow:0 2px 30px rgba(0,0,0,.7)}
+.s{position:absolute;left:122px;top:212px;font:400 26px 'IBM Plex Sans';color:#a6b5cc;max-width:1200px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud{position:absolute;right:120px;top:100px;text-align:right;font:500 22px 'JetBrains Mono',monospace;color:#a6b5cc;line-height:1.7;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud b{font:700 56px 'Source Serif 4',serif;color:#eef1f5;display:block;line-height:1.1}
+.lab{position:absolute;transform:translate(-50%,-150%);white-space:nowrap;font:600 21px 'JetBrains Mono',monospace;padding:5px 11px;border-radius:9px;background:rgba(6,12,22,.66);border:1px solid rgba(140,170,210,.28);backdrop-filter:blur(6px)}
+#code.right{left:auto;right:120px}
+#code{position:absolute;left:120px;bottom:110px;padding:20px 26px;border-radius:16px;background:rgba(8,14,26,.74);border:1px solid rgba(120,160,220,.25);backdrop-filter:blur(10px);font:400 22px/1.6 'JetBrains Mono',monospace;color:#d8e2f2;white-space:pre}
+#code .kw{color:#c792ea}#code .n{color:#f78c6c}#code .c{color:#5c6b80}#code .ok{color:#5fd3a0;font-weight:600}
+#big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#big .bk{font:600 26px 'IBM Plex Sans';letter-spacing:.3em;color:#f2b24a;text-transform:uppercase}
+#big .bt{font:700 108px/1.05 'Source Serif 4',serif;margin:22px 0 18px;text-shadow:0 0 70px rgba(80,220,160,.25)}
+#big .bs{font:400 32px 'IBM Plex Sans';color:#a8b8d0}
+#end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#end .row{font:600 38px/1.55 'Source Serif 4',serif}
+#end .row span{color:#5fd3a0;font-family:'JetBrains Mono',monospace;font-size:34px;margin-right:16px}
+#end .foot{margin-top:34px;font:500 26px 'JetBrains Mono',monospace;color:#8fa2bd}
+#fade{position:absolute;inset:0;background:#000}
+.big2{position:absolute;transform:translate(-50%,-50%);font:700 96px 'Source Serif 4',serif;text-shadow:0 0 40px rgba(0,0,0,.8)}
+.lab.sm{font-size:17px;padding:3px 8px}
+.node{position:absolute;transform:translate(-50%,-50%);text-align:center;font:600 22px 'IBM Plex Sans';white-space:nowrap;text-shadow:0 2px 14px #000}
+.node small{display:block;font:500 15px 'JetBrains Mono';color:#8fa2bd}
+#card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#card .c1{font:600 24px 'IBM Plex Sans';letter-spacing:.24em;text-transform:uppercase;color:#f2b24a}
+#card .c2{font:600 54px/1.25 'Source Serif 4',serif;max-width:1400px;margin-top:20px}
+#card .c3{font:400 28px 'IBM Plex Sans';color:#a8b8d0;margin-top:22px;max-width:1300px}
+</style></head><body>
+<div id="ov">
+  <div id="big"><div class="bk">Lean 4 · 26 U.S.C. §§408A, 408(d), 402A, 415</div><div class="bt">A blind search<br>finds the backdoor</div><div class="bs">the retirement rules, written as moves; every plan they allow, explored</div></div>
+  <div id="nodes"></div>
+  <div class="k" id="k"></div><div class="t" id="tt"></div><div class="s" id="ss"></div>
+  <div id="hud"></div><div id="code"></div><div id="labels"></div>
+  <div id="card"></div><div id="end"></div><div id="fade"></div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const D = window.RT, N = D.nodes;
+const W = 1920, H = 1080, DUR = 72;
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const fadeIO = (t, a, b, d = .6) => seg(t, a, a + d) * (1 - seg(t, b - d, b));
+const fmt = n => Math.round(n).toLocaleString('en-US');
+function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rng(408);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1); renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#04070d');
+const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 8000);
+const composer = new EffectComposer(renderer); composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), .85, .5, .3); composer.addPass(bloom); composer.addPass(new OutputPass());
+scene.add(new THREE.HemisphereLight('#9fc3ff', '#120a06', .7));
+const sun = new THREE.DirectionalLight('#ffe6c4', 1.2); sun.position.set(-80, 140, 60); scene.add(sun);
+const spriteTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.3, 'rgba(255,255,255,.7)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+const ptsMat = (size, op = 1) => new THREE.PointsMaterial({ size, map: spriteTex, vertexColors: true, transparent: true, opacity: op, depthWrite: false, blending: THREE.AdditiveBlending });
+const glow = (r, c) => new THREE.Mesh(new THREE.IcosahedronGeometry(r, 4), new THREE.MeshBasicMaterial({ color: c, transparent: true }));
+{ const n = 5000, p = new Float32Array(n * 3), c = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { const th = R() * 6.283, ph = Math.acos(2 * R() - 1), r = 1800 + R() * 2000; p.set([r * Math.sin(ph) * Math.cos(th), r * Math.cos(ph), r * Math.sin(ph) * Math.sin(th)], i * 3);
+    const b = .2 + R() * .4; c.set([b * .8, b * .9, b], i * 3); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(p, 3)); g.setAttribute('color', new THREE.BufferAttribute(c, 3)); scene.add(new THREE.Points(g, ptsMat(5, .7))); }
+
+const ACT = ['Roth IRA contribution', 'traditional IRA contribution', 'convert to Roth', 'roll IRA into 401(k)', 'elective deferral', 'after-tax 401(k) contribution', 'in-plan Roth rollover'];
+const pathOf = i => { const p = []; while (i > 0) { p.push(i); i = N[i][0]; } return p.reverse(); };
+const codes = i => pathOf(i).map(j => N[j][2]).join(',');
+const BEST = N.findIndex(n => n[3] === 77000 && n[4] === 0);
+const PRORATA = N.findIndex((n, i) => n[1] === 2 && codes(i) === '1,2');
+const BACKDOOR = N.findIndex((n, i) => n[1] === 3 && codes(i) === '1,3,2' && n[4] === 0);
+
+// ================= 1. the rules as a map =================
+const MAP = new THREE.Group(); MAP.position.set(0, 0, -2000); scene.add(MAP);
+const acc = { cash: V(-70, 0, 0), ira: V(-15, 30, 0), roth: V(55, 0, 0), k401: V(-15, -32, 0), kat: V(20, -40, 0) };
+const accName = { cash: ['Cash', 'savings'], ira: ['Traditional IRA', '$100,000 pre-tax'], roth: ['Roth', 'tax-free for good'], k401: ['401(k)', 'pre-tax'], kat: ['401(k)', 'after-tax'] };
+const accCol = { cash: '#d8e2f2', ira: '#ff9a5c', roth: '#5fd3a0', k401: '#7cc7ff', kat: '#b79bff' };
+const spheres = {}; for (const k in acc) { const s = glow(3, accCol[k]); s.position.copy(acc[k]); MAP.add(s); spheres[k] = s; }
+const EDGES = [['cash', 'roth', '§408A(c)(3): $0 above $165,000', '#ff5a46', 0], ['cash', 'ira', '§408(o): any income', '#ffcc55', 1], ['ira', 'roth', '§408A(d)(3): pro rata, §408(d)(2)', '#ffcc55', 2],
+  ['ira', 'k401', '§408(d)(3)(A)(ii): pre-tax only', '#ffcc55', 3], ['cash', 'k401', '§402(g): $23,500', '#ffcc55', 4], ['cash', 'kat', '§415(c): $70,000', '#ffcc55', 5], ['kat', 'roth', '§402A(c)(4)', '#ffcc55', 6]];
+const edgeObjs = EDGES.map(([a, b, lab, col, code], i) => { const p0 = acc[a], p1 = acc[b]; const mid = p0.clone().add(p1).multiplyScalar(.5).add(V(0, 0, 14 + 6 * (i % 3)));
+  const curve = new THREE.QuadraticBezierCurve3(p0, mid, p1); const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 48, .35, 8, false), new THREE.MeshBasicMaterial({ color: col, transparent: true }));
+  MAP.add(tube); const dot = glow(.9, '#ffffff'); MAP.add(dot); return { curve, tube, dot, lab, code, mid: curve.getPoint(.5), i }; });
+
+// ================= 2. the search tree =================
+const TREE = new THREE.Group(); scene.add(TREE);
+const kids = N.map(() => []); N.forEach((n, i) => { if (i > 0) kids[n[0]].push(i); });
+const size = new Array(N.length).fill(1); for (let i = N.length - 1; i > 0; i--) size[N[i][0]] += size[i];
+const ang = new Float64Array(N.length), lo = new Float64Array(N.length), hi = new Float64Array(N.length); lo[0] = 0; hi[0] = 2 * Math.PI;
+for (let i = 0; i < N.length; i++) { let a = lo[i]; const span = hi[i] - lo[i]; ang[i] = (lo[i] + hi[i]) / 2; for (const k of kids[i]) { const w = span * size[k] / (size[i] - 1); lo[k] = a; hi[k] = a + w; a += w; } }
+const RAD = d => d === 0 ? 0 : 18 + d * 26;
+const treePos = new Float32Array(N.length * 3), scatPos = new Float32Array(N.length * 3), curPos = new Float32Array(N.length * 3), col = new Float32Array(N.length * 3);
+const SX = 1 / 1000 * .9, SY = 1 / 1000 * .9;
+N.forEach((n, i) => { const r = RAD(n[1]); treePos.set([r * Math.cos(ang[i]), (R() - .5) * 2 * n[1], r * Math.sin(ang[i])], i * 3);
+  scatPos.set([-80 + n[3] * SX + (R() - .5) * .8, n[4] * SY + (R() - .5) * .8, (R() - .5) * 6], i * 3);
+  const c = n[4] > 0 ? new THREE.Color('#ff7a4a').multiplyScalar(.45 + .55 * Math.min(1, n[4] / 100000)) : (n[3] > 0 ? new THREE.Color('#3fdc9a').multiplyScalar(.35 + .65 * n[3] / 77000) : new THREE.Color('#4a6a9a'));
+  col.set([c.r, c.g, c.b], i * 3); });
+curPos.set(treePos);
+const tgeo = new THREE.BufferGeometry(); tgeo.setAttribute('position', new THREE.BufferAttribute(curPos, 3)); tgeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+const treePts = new THREE.Points(tgeo, new THREE.PointsMaterial({ size: 1.5, map: spriteTex, vertexColors: true, transparent: true, opacity: .9, depthWrite: false })); TREE.add(treePts);
+const epos = new Float32Array((N.length - 1) * 6), ecol = new Float32Array((N.length - 1) * 6);
+for (let i = 1; i < N.length; i++) { const p = N[i][0]; epos.set([treePos[p * 3], treePos[p * 3 + 1], treePos[p * 3 + 2], treePos[i * 3], treePos[i * 3 + 1], treePos[i * 3 + 2]], (i - 1) * 6);
+  ecol.set([col[i * 3] * .35, col[i * 3 + 1] * .35, col[i * 3 + 2] * .35, col[i * 3] * .35, col[i * 3 + 1] * .35, col[i * 3 + 2] * .35], (i - 1) * 6); }
+const egeo = new THREE.BufferGeometry(); egeo.setAttribute('position', new THREE.BufferAttribute(epos, 3)); egeo.setAttribute('color', new THREE.BufferAttribute(ecol, 3));
+const treeEdges = new THREE.LineSegments(egeo, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: .3, depthWrite: false })); TREE.add(treeEdges);
+const firstAt = []; { let d = 0; for (let i = 0; i < N.length; i++) { while (N[i][1] > d) { firstAt[++d] = i; } } firstAt[6] = N.length; }
+const root = glow(2.2, '#ffffff'); TREE.add(root);
+function pathLine(idx, color) { const pts = [V(0, 0, 0), ...pathOf(idx).map(j => V(treePos[j * 3], treePos[j * 3 + 1], treePos[j * 3 + 2]))];
+  const curve = new THREE.CatmullRomCurve3(pts); const m = new THREE.Mesh(new THREE.TubeGeometry(curve, 160, .7, 10, false), new THREE.MeshBasicMaterial({ color, transparent: true }));
+  TREE.add(m); return { m, pts }; }
+const bestLine = pathLine(BEST, '#ffd27a'), backLine = pathLine(BACKDOOR, '#5fd3a0'), proLine = pathLine(PRORATA, '#ff5a46');
+const bestDots = bestLine.pts.slice(1).map(() => { const g = glow(1.6, '#ffd27a'); TREE.add(g); return g; });
+// the ceiling: Roth gain − tax = $77,000 in the scatter plane
+const ceil = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ color: '#ffd27a', transparent: true, opacity: .0, side: THREE.DoubleSide, depthWrite: false }));
+TREE.add(ceil);
+const ceilLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(-80 + 77000 * SX, 0, 0), V(-80 + 177000 * SX, 100000 * SY, 0)]), new THREE.LineBasicMaterial({ color: '#ffd27a', transparent: true }));
+TREE.add(ceilLine);
+{ const a = V(-80 + 77000 * SX, 0, 0), b = V(-80 + 187000 * SX, 110000 * SY, 0); ceil.position.copy(a.clone().add(b).multiplyScalar(.5)); ceil.scale.set(a.distanceTo(b), 26, 1);
+  ceil.rotation.set(Math.PI / 2, 0, 0); ceil.rotateZ(0); ceil.lookAt(ceil.position.clone().add(V(-1, 1, 0))); ceil.rotateZ(Math.PI / 2); }
+const axes = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([V(-80, 0, 0), V(85, 0, 0), V(-80, 0, 0), V(-80, 95, 0)]), new THREE.LineBasicMaterial({ color: '#5c6b80', transparent: true }));
+TREE.add(axes);
+
+// ================= 3. the pro-rata tanks =================
+const TK = new THREE.Group(); TK.position.set(2000, 0, 0); scene.add(TK);
+const tankAt = { ira: V(-40, 0, 0), roth: V(40, 0, 0), k401: V(0, -6, -46) };
+for (const [k, p] of Object.entries(tankAt)) { const m = new THREE.Mesh(new THREE.CylinderGeometry(12, 12, 34, 48, 1, true), new THREE.MeshStandardMaterial({ color: '#7cc7ff', transparent: true, opacity: .1, side: THREE.DoubleSide, depthWrite: false }));
+  m.position.copy(p).add(V(0, 17, 0)); TK.add(m); const e = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.CylinderGeometry(12, 12, 34, 24, 1, true)), new THREE.LineBasicMaterial({ color: '#7cc7ff', transparent: true, opacity: .35 })); e.position.copy(m.position); TK.add(e); }
+const NP = 1070, pp = new Float32Array(NP * 3), pc = new Float32Array(NP * 3), home = [];
+for (let i = 0; i < NP; i++) { const r = Math.sqrt(R()) * 10, a = R() * 6.283; home.push([r * Math.cos(a), 2 + R() * 28, r * Math.sin(a)]);
+  const c = i < 1000 ? new THREE.Color('#ff8a4a') : new THREE.Color('#6ab8ff'); pc.set([c.r, c.g, c.b], i * 3); }
+const pgeo = new THREE.BufferGeometry(); pgeo.setAttribute('position', new THREE.BufferAttribute(pp, 3)); pgeo.setAttribute('color', new THREE.BufferAttribute(pc, 3));
+TK.add(new THREE.Points(pgeo, ptsMat(1.5)));
+// conversion A (no roll-in): 70 particles drawn at random from all 1,070: about 65 orange, 5 blue
+const drawA = []; { const idx = [...Array(NP).keys()]; for (let k = 0; k < 70; k++) { const j = k + Math.floor(R() * (NP - k)); [idx[k], idx[j]] = [idx[j], idx[k]]; drawA.push(idx[k]); } }
+const inA = new Set(drawA);
+function tankPos(i, t) {
+  const h = home[i]; const ira = tankAt.ira, roth = tankAt.roth, k = tankAt.k401;
+  const fly = (from, to, s) => { const e = ease(s); const p = from.clone().lerp(to, e); p.y += Math.sin(Math.PI * e) * 18; return p; };
+  const at = (base) => V(base.x + h[0], base.y + h[1], base.z + h[2]);
+  if (t < 40.2) { // scene A
+    if (inA.has(i)) { const s = seg(t, 35.5 + (drawA.indexOf(i) % 20) * .05, 37.3 + (drawA.indexOf(i) % 20) * .05); return fly(at(ira), V(roth.x + h[0] * .6, 2 + h[1] * .3, h[2] * .6), s); }
+    return at(ira); }
+  // scene B: reset; pre-tax (orange) rolls to the 401(k), then the blue converts
+  if (i < 1000) { const s = seg(t, 42 + (i % 40) * .03, 43.8 + (i % 40) * .03); return fly(at(ira), V(k.x + h[0], k.y + h[1], k.z + h[2]), s); }
+  const s = seg(t, 44.6 + (i - 1000) * .01, 46 + (i - 1000) * .01); return fly(at(ira), V(roth.x + h[0] * .6, 2 + h[1] * .3, h[2] * .6), s);
+}
+
+// ================= overlay helpers =================
+const $ = id => document.getElementById(id);
+const pool = [];
+function label(i, text, v3, a, color = '', cls = 'lab') { while (pool.length <= i) { const d = document.createElement('div'); $('labels').appendChild(d); pool.push(d); }
+  const d = pool[i]; d.className = cls; const p = v3.clone().project(camera); if (a <= .01 || p.z > 1) { d.style.opacity = 0; return; }
+  d.innerHTML = text; d.style.color = color; d.style.left = ((p.x + 1) / 2 * W) + 'px'; d.style.top = ((1 - p.y) / 2 * H) + 'px'; d.style.opacity = a; }
+function caption(k, c, t, s, a) { $('k').textContent = k; $('k').style.color = c; $('tt').textContent = t; $('ss').textContent = s; for (const id of ['k', 'tt', 'ss']) $(id).style.opacity = a; }
+const hud = (h, a) => { $('hud').innerHTML = h; $('hud').style.opacity = a; };
+const code = (h, a, right = false) => { $('code').innerHTML = h; $('code').style.opacity = a; $('code').className = right ? 'right' : ''; };
+const kw = s => `<span class="kw">${s}</span>`, ok = s => `<span class="ok">${s}</span>`, nn = s => `<span class="n">${s}</span>`, cm = s => `<span class="c">${s}</span>`;
+
+const T = { map: 6, tree: 17, tanks: 33, ceil: 47.5, cong: 60, end: 65 };
+function camAt(t) {
+  if (t < T.tree) { const a = (t - T.map) * .025; return [V(20 * Math.sin(a), 18, -2000 + 195), V(-5, 12, -2000)]; }
+  if (t < T.tanks) { const k = ease(seg(t, T.tree, 27)), a = t * .05; const r = 290 - 40 * k; return [V(r * Math.sin(a), 170 - 40 * k, r * Math.cos(a)), V(0, -10, 0)]; }
+  if (t < T.ceil) { return [V(2000 + 8 * Math.sin(t * .2), 62, 165), V(2000, 24, -8)]; }
+  if (t < T.end) { const k = ease(seg(t, T.ceil, 51)); const a0 = t * .05; const from = V(220 * Math.sin(a0), 150, 220 * Math.cos(a0)); const to = V(-22 + 14 * Math.sin((t - 51) * .12), 36, 245);
+    return [from.lerp(to, k), V(0, 0, 0).lerp(V(-22, 36, 0), k)]; }
+  return [V(-22, 36, 245), V(-22, 36, 0)];
+}
+
+window.render = function (t) {
+  const cuts = [T.tree, T.tanks, T.ceil];
+  let f = Math.max(1 - seg(t, 0, 1.2), seg(t, DUR - 1, DUR), seg(t, T.map - .4, T.map) * (1 - seg(t, T.map + .1, T.map + .8)));
+  for (const c of cuts) f = Math.max(f, seg(t, c - .5, c) * (1 - seg(t, c + .1, c + .8)));
+  $('fade').style.opacity = f;
+  $('big').style.opacity = fadeIO(t, .8, 5.6, 1); $('big').style.transform = `translateY(${(1 - easeOut(seg(t, .8, 3))) * 30}px)`;
+
+  // map
+  MAP.visible = t > T.map - .2 && t < T.tree + .2;
+  edgeObjs.forEach(e => { const k = seg(t, 7 + e.i * .45, 7.6 + e.i * .45); e.tube.material.opacity = k * (e.code === 0 ? (.5 + .5 * Math.sin(t * 6)) : 1);
+    e.dot.position.copy(e.curve.getPoint((t * .35 + e.i * .13) % 1)); e.dot.visible = k > .9 && e.code !== 0; });
+  // tree
+  TREE.visible = t > T.tree - .2 && t < T.tanks + .2 || t > T.ceil - .2;
+  const grow = t < T.ceil ? 1 + 4.999 * ease(seg(t, 18, 26.5)) : 6;
+  const dd = Math.floor(grow), frac = grow - dd; const nShow = dd >= 6 ? N.length : Math.floor(firstAt[dd] + (firstAt[dd + 1] - firstAt[dd]) * frac);
+  tgeo.setDrawRange(0, nShow); egeo.setDrawRange(0, Math.max(0, nShow - 1) * 2);
+  const morph = ease(seg(t, 49, 53));
+  if (t > T.ceil - .3) { for (let i = 0; i < curPos.length; i++) curPos[i] = treePos[i] + (scatPos[i] - treePos[i]) * morph; tgeo.attributes.position.needsUpdate = true; }
+  else if (curPos[0] !== treePos[0] || morph === 0) { curPos.set(treePos); tgeo.attributes.position.needsUpdate = true; }
+  treeEdges.material.opacity = .3 * (1 - morph) * (1 - .5 * seg(t, 24, 27));
+  root.visible = morph < .05;
+  const hb = seg(t, 27.2, 29.5), hb2 = seg(t, 29.2, 30.6), hb3 = seg(t, 30.4, 31.6);
+  bestLine.m.material.opacity = hb * (1 - morph); backLine.m.material.opacity = hb3 * (1 - morph) * .9; proLine.m.material.opacity = hb3 * (1 - morph) * .9;
+  bestLine.m.visible = t < T.tanks + .2; backLine.m.visible = proLine.m.visible = t < T.tanks + .2;
+  bestDots.forEach((g, i) => { g.position.copy(bestLine.pts[i + 1]); g.visible = hb > (i + 1) / 6 && t < T.tanks + .2; });
+  ceil.material.opacity = .14 * seg(t, 53.5, 55); ceilLine.material.opacity = seg(t, 53.5, 55); axes.material.opacity = morph;
+  // tanks
+  TK.visible = t > T.tanks - .2 && t < T.ceil + .2;
+  for (let i = 0; i < NP; i++) { const p = tankPos(i, t); pp.set([p.x, p.y, p.z], i * 3); }
+  pgeo.attributes.position.needsUpdate = true;
+
+  const scat = t > T.ceil - .3; bloom.strength = scat || (t > 24 && t < T.tanks) ? .45 : .85; bloom.threshold = scat || (t > 24 && t < T.tanks) ? .7 : .3;
+  const [cp, cl] = camAt(t); camera.position.copy(cp); camera.lookAt(cl);
+  composer.render();
+
+  // ---- overlay ----
+  let li = 0; code('', 0); hud('', 0); $('card').style.opacity = 0;
+  const nodesEl = $('nodes'); nodesEl.style.opacity = MAP.visible ? fadeIO(t, T.map + .3, T.tree - .1) : 0;
+  if (MAP.visible) { nodesEl.innerHTML = Object.keys(acc).map(k => { const p = acc[k].clone().add(MAP.position).add(V(0, 8, 0)).project(camera);
+    return `<div class="node" style="left:${(p.x + 1) / 2 * W}px;top:${(1 - p.y) / 2 * H}px;color:${accCol[k]}">${accName[k][0]}<small>${accName[k][1]}</small></div>`; }).join(''); }
+  if (t > T.map && t < T.tree) {
+    caption('The rules, as moves', '#f2b24a', 'Seven moves, each from its own section', 'A single filer earning $250,000. No strategy is written in: only what each provision permits and taxes.', fadeIO(t, T.map + .3, T.tree - .1));
+    edgeObjs.forEach(e => label(li++, e.lab, e.mid.clone().add(MAP.position), seg(t, 7.4 + e.i * .45, 8 + e.i * .45) * fadeIO(t, 7, T.tree - .1), e.code === 0 ? '#ff8a75' : '#ffd27a', 'lab sm'));
+    code(`${kw('def')} step (magi : Nat) (s : Acct) : Act → Option Acct\n  ${cm('-- e.g. §408(d)(2): a conversion carries basis in proportion to all IRAs')}\n  | .convert a => … n := a * s.basis / s.ira …`, fadeIO(t, 11, T.tree - .1)); }
+  else if (t > T.tree && t < T.tanks) {
+    caption('Search.lean', '#5fe0ff', t < 27 ? 'Every plan the rules allow' : 'What the search found', t < 27 ? 'Breadth-first over every sequence of moves. Green: money into Roth at no tax. Orange: tax incurred.' : 'Five moves, $77,000 into Roth accounts, no tax. Nobody told it how.', fadeIO(t, T.tree + .3, T.tanks - .1));
+    const shown = [1, 15, 139, 1007, 6887, 47653][Math.min(5, dd - 1)] + (dd < 6 ? Math.floor(frac * ([14, 124, 868, 5880, 40766][Math.min(4, dd - 1)])) : 0);
+    hud(t < 27 ? `positions explored<b>${fmt(Math.min(nShow, N.length))}</b>depth ${Math.min(5, dd)} · 345,075 at depth 6` : `best plan found<b style="color:#ffd27a">+$77,000</b>to Roth · $0 tax`, fadeIO(t, 18, T.tanks - .1));
+    if (t > 27.4) { pathOf(BEST).forEach((j, k) => label(li++, `${k + 1}. ${ACT[N[j][2]]}`, bestLine.pts[k + 1].clone().add(V(0, 4, 0)), seg(t, 27.6 + k * .45, 28.2 + k * .45) * fadeIO(t, 27.4, T.tanks - .1), '#ffd27a', 'lab sm')); }
+    if (t > 30.4) { label(li++, 'backdoor: roll-in first, $0 tax', backLine.pts[backLine.pts.length - 1].clone().add(V(0, -4, 0)), fadeIO(t, 30.6, T.tanks - .1), '#5fd3a0', 'lab sm');
+      label(li++, 'no roll-in: $6,543 taxed', proLine.pts[proLine.pts.length - 1].clone().add(V(0, -4, 0)), fadeIO(t, 30.6, T.tanks - .1), '#ff8a75', 'lab sm'); } }
+  else if (t > T.tanks && t < T.ceil) {
+    const B = t > 40.6;
+    caption('§408(d)(2) · the pro-rata rule', '#ff9a5c', B ? 'Unless the pre-tax money leaves first' : 'A conversion takes from every IRA at once', B ? '§408(d)(3)(A)(ii): only pre-tax money may roll into a 401(k). It goes; the $7,000 left is all basis.' : '$7,000 of after-tax money in an IRA that also holds $100,000 pre-tax. Convert $7,000: it is 93% pre-tax.', fadeIO(t, T.tanks + .3, T.ceil - .1));
+    label(li++, 'IRA', TK.position.clone().add(tankAt.ira).add(V(0, 40, 0)), fadeIO(t, 33.6, T.ceil - .1), '#ff9a5c'); label(li++, 'Roth', TK.position.clone().add(tankAt.roth).add(V(0, 40, 0)), fadeIO(t, 33.6, T.ceil - .1), '#5fd3a0');
+    label(li++, '401(k)', TK.position.clone().add(tankAt.k401).add(V(0, 40, 0)), fadeIO(t, 41, T.ceil - .1), '#7cc7ff');
+    label(li++, '● pre-tax $100,000 &nbsp; <span style="color:#6ab8ff">● after-tax $7,000</span>', TK.position.clone().add(V(-40, -6, 14)), fadeIO(t, 34, T.ceil - .1), '#ff8a4a', 'lab sm');
+    hud(!B ? (t < 37.5 ? `convert $7,000<b>…</b>` : `of $7,000 converted<b style="color:#ff6a55">$6,543 taxed</b>without_roll_in ✓`) : (t < 46 ? `roll $100,000 into the 401(k)<b>$0 taxed</b>` : `then convert $7,000<b style="color:#5fd3a0">$0 taxed</b>income_limit_void ✓`), fadeIO(t, 35, T.ceil - .1));
+    code(B ? `${kw('theorem')} income_limit_void (magi : Nat) (s : Acct) (hm : dedHi ≤ magi) … :\n    ∃ s', run magi s (plan s) = some s' ∧ s'.roth = s.roth + s.basis + iraLimit ∧ s'.taxed = s.taxed` :
+      `${kw('theorem')} no_escape … (ha : acts.all noPlanIn) … (empty : s'.ira = 0) :\n    s'.taxed - s.taxed = (s.ira - s.basis) + (s'.deducted - s.deducted)\n${cm('-- every order, size and number of conversions: proved by induction')}`, fadeIO(t, B ? 41 : 37.6, B ? T.ceil - .1 : 40.4)); }
+  else if (t > T.ceil && t < T.cong) {
+    caption('roth_ceiling', '#ffd27a', 'No plan does better', 'All 47,653 positions, by Roth gain (across) and tax incurred (up). Proved for every sequence of moves: gain minus tax never passes $77,000.', fadeIO(t, T.ceil + .3, T.cong - .1));
+    label(li++, 'Roth gain −  tax = $77,000', V(-80 + 130000 * SX, 53000 * SY + 4, 0), fadeIO(t, 54, T.cong - .1), '#ffd27a', 'lab sm');
+    label(li++, 'the plan the search found', V(-80 + 77000 * SX, -5, 0), fadeIO(t, 54.5, T.cong - .1), '#ffd27a', 'lab sm');
+    label(li++, 'Roth gain →', V(60, -5, 0), fadeIO(t, 52.5, T.cong - .1), '#8fa2bd', 'lab sm'); label(li++, 'tax ↑', V(-80, 98, 0), fadeIO(t, 52.5, T.cong - .1), '#8fa2bd', 'lab sm');
+    code(`${kw('theorem')} roth_ceiling (magi : Nat) (acts : List Act) : ∀ s s', …\n    s'.roth + … ≤ s.roth + s.basis + s.planAfterTax + iraLimit + additionsLimit + s'.taxed\n${ok('✓ induction over every list of moves')}`, fadeIO(t, 55, T.cong - .1), true); }
+  else if (t > T.cong && t < T.end) {
+    caption('', '', '', '', 0);
+    $('card').innerHTML = `<div class="c1">November 2021</div><div class="c2">The House passed a bill that would have closed both routes.<br>The provision was dropped. Both are still open.</div><div class="c3">The search did not need to be told they exist.</div>`;
+    $('card').style.opacity = fadeIO(t, T.cong + .3, T.end - .1); $('card').style.background = `rgba(4,7,13,${.72 * fadeIO(t, T.cong + .3, T.end - .1)})`; }
+  else caption('', '', '', '', 0);
+  for (let i = li; i < pool.length; i++) pool[i].style.opacity = 0;
+
+  const ea = seg(t, T.end + .4, T.end + 1.4) * (1 - seg(t, DUR - 1, DUR));
+  $('end').innerHTML = ['The rules, written from the statute, with no strategy in them', 'A blind search finds the backdoor and mega-backdoor Roth',
+    'Proved for every plan: pre-tax money leaves only taxed or via the 401(k)', 'Proved for every income: the Roth income limit stops no one', 'Proved: $77,000 a year is the most, and the search’s plan reaches it']
+    .map(r => `<div class="row"><span>✓</span>${r}</div>`).join('') + `<div class="foot">lean-proofs/LegalProofs/USTax/Retirement</div>`;
+  $('end').style.opacity = ea; $('end').style.background = `rgba(4,7,13,${.75 * ea})`;
+};
+window.DUR = DUR;
+document.fonts.ready.then(() => { window.render(0); window.READY = true; });
+</script></body></html>

@@ -87,3 +87,38 @@ def start : Acct := ⟨100000, 0, 0, 0, 0, 100000, 0, 0, 0, 0, 0⟩
   search 140000 6 start (fun | .afterTax _ | .inPlanRoth _ => false | _ => true)
 
 end Legal.USTax.Retirement.Search
+
+namespace Legal.USTax.Retirement.Search
+open Legal.USTax.Retirement
+
+def actCode : Act → Nat
+  | .rothContrib _ => 0 | .tradContrib _ => 1 | .convert _ => 2 | .rollIn _ => 3 | .defer _ => 4 | .afterTax _ => 5
+  | .inPlanRoth _ => 6
+
+/-- The search tree to depth 5 for the film: each position with its parent, depth, move, Roth gain and tax. -/
+def exportTree (magi depth : Nat) (s0 : Acct) : IO Unit := do
+  let mut frontier : Array (Nat × Acct) := #[(0, s0)]
+  let mut seen : Std.HashMap Acct Unit := {}
+  let mut rows : Array String := #["[-1,0,-1,0,0]"]
+  let mut counts : Array Nat := #[]
+  for d in [1:depth + 1] do
+    let mut next : Array (Nat × Acct) := #[]
+    for (id, s) in frontier do
+      for m in moves s do
+        match step magi s m with
+        | none => pure ()
+        | some s' =>
+          if !seen.contains s' then
+            seen := seen.insert s' ()
+            let nid := rows.size
+            rows := rows.push s!"[{id},{d},{actCode m},{s'.roth - s0.roth},{s'.taxed - s0.taxed}]"
+            next := next.push (nid, s')
+    frontier := next
+    counts := counts.push next.size
+  IO.FS.writeFile "tools/out/retirement_tree.json"
+    s!"\{\"counts\":{counts.toList},\"nodes\":[{",".intercalate rows.toList}]}"
+  IO.println s!"tree: {rows.size} positions"
+
+#eval exportTree 250000 5 start
+
+end Legal.USTax.Retirement.Search
