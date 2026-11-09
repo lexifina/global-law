@@ -4858,25 +4858,32 @@ class _LazyRegex:
     """A regex compiled on first use, from data the tree holds (the Swiss abbreviations): built at import time it would
     read git before the server knows its tree."""
 
-    def __init__(self, build):
+    def __init__(self, build, pre: str | None = None):
+        # `pre`: words every match holds ("§", "art"): a text without them is answered without compiling the regex,
+        # which for the German, Swiss and other article forms took 0.7 s of a fresh process's first find_provision
+        # ("410 U.S. 113" at 1.51x its time without case law, US speed gate 2026-11-09)
         self._build, self._rx = build, None
+        self._pre = re.compile(pre) if pre else None
 
     def rx(self):
         if self._rx is None:
             self._rx = self._build()
         return self._rx
 
+    def _none(self, text) -> bool:
+        return self._pre is not None and isinstance(text, str) and not self._pre.search(text)
+
     def finditer(self, text, *a):
-        return self.rx().finditer(text, *a)
+        return iter(()) if self._none(text) else self.rx().finditer(text, *a)
 
     def search(self, text, *a):
-        return self.rx().search(text, *a)
+        return None if self._none(text) else self.rx().search(text, *a)
 
     def match(self, text, *a):
-        return self.rx().match(text, *a)
+        return None if self._none(text) else self.rx().match(text, *a)
 
     def fullmatch(self, text, *a):
-        return self.rx().fullmatch(text, *a)
+        return None if self._none(text) else self.rx().fullmatch(text, *a)
 
     @property
     def pattern(self):
@@ -4895,7 +4902,7 @@ def _ch_article_rx():
                       r'\s*(?P<abbr>' + abbr + r')(?![\w])')
 
 
-CH_ARTICLE = _LazyRegex(_ch_article_rx)
+CH_ARTICLE = _LazyRegex(_ch_article_rx, r'[Aa]rt')
 CH_DECISION = re.compile(r'\b(?:BGE|ATF|DTF)\s+\d{1,3}\s+(?:Ia|Ib|IV|V|III|II|I)\s+\d{1,4}\b'
                          r'|\b\d{1,2}[A-Z]{1,2}[._]\d{1,5}/(?:18|19|20)\d{2}\b'
                          r'|\b[A-F]-\d{1,5}/(?:19|20)\d{2}\b'
@@ -5107,7 +5114,7 @@ def _nl_article_rx():
                       r',?\s*(?:van\s+(?:de|het)\s+)?(?P<abbr>' + abbr + r')(?![\w])')
 
 
-NL_ARTICLE = _LazyRegex(_nl_article_rx)
+NL_ARTICLE = _LazyRegex(_nl_article_rx, r'[Aa]rt|\d[a-z]{0,3}:\d')
 
 
 def nl_corpus() -> tuple[str, str | None]:
@@ -5214,7 +5221,7 @@ def _fr_abbr_rx():
     return re.compile(rf"(?<![\w.])[Aa]rt(?:icles?|s?\.)\s*{FR_NUMS}{FR_DETAIL}\s*,?\s*(?:du\s+)?(?P<abbr>{abbr or '(?!x)x'})(?![\w])")
 
 
-FR_ABBR_ARTICLE = _LazyRegex(_fr_abbr_rx)
+FR_ABBR_ARTICLE = _LazyRegex(_fr_abbr_rx, r'[Aa]rt')
 FR_CONSTITUTION = re.compile(rf"(?<![\w.])[Aa]rt(?:icles?|s?\.)\s*(?P<nums>\d{{1,3}}(?:-\d{{1,2}})?(?:\s*(?:,|et)\s*\d{{1,3}}(?:-\d{{1,2}})?)*)"
                              r"(?:,?\s*(?:alinéa|al\.)\s*\d+(?:er)?)?\s+de\s+la\s+Constitution(?:\s+du\s+4\s+octobre\s+1958)?(?![\w])"
                              # another state's constitution, in French ("Constitution fédérale", "... cantonale", "belge")
@@ -5312,7 +5319,7 @@ def _de_para_rx():
                       r',?\s+(?:des\s+|der\s+)?(?P<abbr>' + abbr + r')(?![\wÄÖÜäöüß])')
 
 
-DE_PARA = _LazyRegex(_de_para_rx)
+DE_PARA = _LazyRegex(_de_para_rx, '§')
 # German dockets (Aktenzeichen): "1 BvR 123/20" (BVerfG), "VI ZR 123/20" (BGH), "2 C 12.19" (BVerwG), "IX R 12/19"
 # (BFH), "5 AZR 123/19" (BAG), "35 W (pat) 12/19" (BPatG): found in the case law served through each corpus's
 # decision-index.tsv. The BGH's special senates write no senate number ("KZR 46/19", "AnwZ (Brfg) 12/20", "NotZ(Brfg)
@@ -5587,7 +5594,7 @@ def _fi_abbr_rx():
     return re.compile(r'(?<![\wÅÄÖåäö])(?P<abbr>' + alt + r')\s+(?P<a>\d{1,3}[a-z]?)(?:\s+(?:luku|luvun)\s+(?P<b>\d{1,4}[a-z]?))?\s*§')
 
 
-FI_ABBR = _LazyRegex(_fi_abbr_rx)
+FI_ABBR = _LazyRegex(_fi_abbr_rx, '§')
 # 'työsopimuslain 7 luvun 3 §', 'tuotevastuulain 5 §:n', 'maakaaren 2 luvun 9 §': an act named in the genitive.
 FI_GENITIVE = re.compile(r'(?<![\wÅÄÖåäö])(?P<stem>[A-Za-zÅÄÖåäö-]{3,40}?)(?P<end>lain|kaaren)\s+(?P<a>\d{1,3}[a-z]?)'
                          r'(?:\s+(?:luvun|luku)\s+(?P<b>\d{1,4}[a-z]?))?\s*§')
