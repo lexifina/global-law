@@ -228,6 +228,20 @@ class Fixtures(unittest.TestCase):
         cav = ' '.join(self.law.caveats('2000-01-01', 'cc/national/acts'))
         self.assertIn('only the text as the publisher gave it', cav)
 
+    def test_a_part_said_to_be_metadata_only_is_not_a_catalogue(self):
+        # romania's README says "decisions about criminal matters are metadata only": that names a part of a record
+        # with text, so its Civil Code articles must not be read as catalogue entries.
+        key, real = ('metadata-only', 'aa/national/acts'), self.law.read_object
+        for readme, expected in (('Decisions about criminal matters are metadata only.', False),
+                                 ('**Metadata only, no law text.** A catalogue.', True)):
+            self.law._CACHE.pop(key, None)
+            self.law.read_object = lambda *a, text=readme: text
+            try:
+                self.assertEqual(self.law._metadata_only('aa/national/acts'), expected, readme)
+            finally:
+                self.law.read_object = real
+                self.law._CACHE.pop(key, None)
+
     def test_law_not_yet_in_force_on_main(self):
         p = 'ff/national/acts/act/a.md'
         self.assertEqual(self.show(TODAY, p), 'Now.\n')

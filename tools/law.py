@@ -4943,7 +4943,9 @@ def _metadata_only(corpus: str) -> bool:
     key = ('metadata-only', corpus)
     if key not in _CACHE:
         text = read_object(corpus, f"{_index(corpus)['pin']}:README.md") or ''
-        _CACHE[key] = bool(re.search(r'metadata only|no law text|catalogue only', text, re.I))
+        # "<some kind of act> are metadata only" names a part of a record with text, not the record (romania's README:
+        # "decisions about criminal matters are metadata only" put the catalogue note on every Civil Code article).
+        _CACHE[key] = bool(re.search(r'(?<!are )metadata only|no law text|catalogue only', text, re.I))
     return bool(_CACHE[key])
 
 
