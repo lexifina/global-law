@@ -30,6 +30,7 @@ https://github.com/user-attachments/assets/a31a767e-3c3a-4ecd-9fc5-aae29cbab77f
 <li><a href="EXAMPLES.md">5 in-depth examples</a>: the five mistakes walked through step by step, further confirmed mistakes, and empty periods</li>
 <li><a href="data/confirmed.csv">Confirmed cases</a> (<a href="data/confirmed.json">JSON</a>): every case checked against official sources, with links</li>
 <li><a href="data/">Full list of flags</a>: all of them as CSV, JSON Lines and Parquet, with counts <a href="data/by_category.csv">by category</a> and <a href="data/by_jurisdiction.csv">by jurisdiction</a>, the <a href="data/reviewed.csv">model-reviewed subset</a>, and <a href="data/html/index.html">browsable HTML pages</a></li>
+<li><a href="scripts/">Scripts</a>: the detectors, the model review and the accuracy benchmark, with how often each step finds what it should</li>
 </ul>
 
 <h2>FAQ</h2>
