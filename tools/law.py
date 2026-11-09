@@ -2980,7 +2980,11 @@ NOTICE_MAX_BYTES = 6000
 
 def notice_patterns(corpus: str) -> tuple | None:
     """The corpus's own notice patterns (corpus.json `repeal_notice`: a regex or a list of them, matched against a
-    whole line once its number is set aside), or None when the corpus turns the rule off (`"repeal_notice": false`)."""
+    whole line once its number is set aside), or None when the corpus turns the rule off (`"repeal_notice": false`).
+    Case law has none: a decision is not a repeal notice, and scanning New York's 249,000 appellate decisions for one
+    took 44 s (list_provisions of a year's folder, which passed 120 s and so never kept its result)."""
+    if is_caselaw({'path': corpus, 'kind': corpus_info(corpus).get('kind')}):
+        return None
     ix = _index(corpus)
     key = ('notice-patterns', f"{corpus}@{_at(ix)}")
     if key not in _CACHE:
