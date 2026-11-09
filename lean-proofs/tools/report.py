@@ -26,7 +26,13 @@ def main() -> None:
     byj = collections.Counter(r["corpus"].split("/")[0] for r in cert)
     leads = sorted([r for r in reen if meta.get(r["id"], ("",))[0] in ("", None)],
                    key=lambda r: (r["corpus"], -r["dead_from"]))
-    cats = sorted({r["category"] for r in fl})
+    more = json.loads((HERE / "out" / "certificates_more.json").read_text(encoding="utf-8"))
+    for key, cat in (("gaps", "Empty periods"), ("prepub", "Retroactive or pre-publication dates"), ("paras", "Missing paragraphs (Germany)")):
+        for r in more[key]:
+            bycat[(cat, r["certified"])] += 1
+    total = len(fl) + sum(len(more[k]) for k in ("gaps", "prepub", "paras"))
+    total_cert = len(cert) + sum(r["certified"] for k in ("gaps", "prepub", "paras") for r in more[k])
+    cats = sorted({c for c, _ in bycat})
     rows_cat = "".join(f"<tr><td>{E(c)}</td><td class=r>{bycat[(c, True)] + bycat[(c, False)]:,}</td><td class=r>{bycat[(c, True)]:,}</td></tr>" for c in cats)
     rows_j = "".join(f"<tr><td>{E(j)}</td><td class=r>{n:,}</td></tr>" for j, n in byj.most_common())
     rows_l = "".join(
@@ -47,7 +53,7 @@ table{{width:100%;border-collapse:collapse;font-size:13px}}th,td{{text-align:lef
 <p>Every flagged reference whose corpus record shows the target gone while the citing provision is still in force on {iso(d['today'])} is <b>certified</b>:
 Lean evaluates the certificate itself, and the theorem <code>RefFlag.certified_sound</code> proves that a certified reference cannot apply on any date from the target's removal.
 A certificate is about the corpus record: where the record is wrong (a corpus build error), so is the certificate.</p>
-<div class=g><div class=s><b>{len(fl):,}</b>reference flags checked</div><div class=s><b>{len(cert):,}</b>certified by Lean</div>
+<div class=g><div class=s><b>{total:,}</b>flags checked by Lean, in four kinds</div><div class=s><b>{total_cert:,}</b>certified</div><div class=s><b>{len(cert):,}</b>references certified from the corpus history</div>
 <div class=s><b>{len(reen):,}</b>citing provision rewritten after the target had gone</div><div class=s><b>{len(leads):,}</b>of those never reviewed: next leads</div></div>
 <h2>By category</h2><div class=t><table><tr><th>Category</th><th class=r>Flags</th><th class=r>Certified</th></tr>{rows_cat}</table></div>
 <h2>Certified, by jurisdiction</h2><div class=t><table><tr><th>Jurisdiction</th><th class=r>Certified</th></tr>{rows_j}</table></div>

@@ -10,3 +10,6 @@ import LegalProofs
 #print axioms Legal.retroactive_jan1_closes_gap
 #print axioms Legal.missing_paragraph
 #print axioms Legal.void_without_power
+#print axioms Legal.GapFlag.certified_sound
+#print axioms Legal.PrepubFlag.certified_sound
+#print axioms Legal.ParaFlag.certified_sound

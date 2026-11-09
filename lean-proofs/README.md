@@ -75,13 +75,32 @@ A certificate is about the corpus record, not the law: where a corpus records a 
 wrong too. That is why the strongest leads are the re-enacted ones, where the legislature rewrote the citing provision
 after its target had gone and kept the reference.
 
+### The other flag kinds
+
+[LegalProofs/Certificates.lean](LegalProofs/Certificates.lean) gives three more kinds of flag a certificate and a
+soundness theorem, and [tools/gen_more.py](tools/gen_more.py) generates them from the facts in each flag:
+
+| Kind | Certificate | Soundness theorem | Flags | Certified |
+|---|---|---|---|---|
+| Empty periods | the first real day after the old end date falls before the extension took effect | `GapFlag.certified_sound`: the rule did not bind that day | 1,760 | 1,760 |
+| Pre-publication dates | stated in force before the instrument was made | `PrepubFlag.certified_sound`: it does not bind on its own start date, whenever it was published | 5,769 | 5,769 |
+| Missing paragraphs | the cited section lacks the paragraph today | `ParaFlag.certified_sound`: a rule naming it cannot apply today | 630 | 630 |
+
+In all, Lean checks **14,900 flags** and certifies **14,689**. For these three kinds every flag certifies, because the
+detectors raise a flag exactly when its facts show the defect: here a certificate confirms that the facts imply the
+defect under the formal rule, and gives each flag a precise statement. The reference certificates carry more weight,
+because they rebuild each provision's history from the corpus instead of trusting the flag. 130 missing-paragraph flags
+name paragraphs such as "1a" and are not modelled yet.
+
 ## Tools
 
 ```sh
-python tools/gen_facts.py                 # regenerate LegalProofs/Generated/ from the corpora (needs LE_HOME, below)
+python tools/gen_facts.py                 # reference flags, from the corpora (needs LE_HOME, below)
+python tools/gen_more.py                  # empty periods, pre-publication dates, missing paragraphs
 lake build                                # Lean checks every proof and every certificate (about 10 seconds)
 python tools/check.py germany/bund/acts awaffv/0034.md   # one provision: writes and checks its theorems
 python tools/report.py                    # tools/out/report.html: what was certified, and the leads
+python tools/diff.py OLD.json NEW.json      # after the corpora move: new dead references, and flags no longer certified
 ```
 
 `gen_facts.py` reads the corpus index and read-only mirrors built by [../vulnerabilities/scripts/](../vulnerabilities/scripts/)
