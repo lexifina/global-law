@@ -139,6 +139,31 @@ germany/bund/acts awaffv/0034.md: 1 flagged reference(s), all theorems checked b
 - [LegalProofs/Structure.lean](LegalProofs/Structure.lean): sections with numbered paragraphs (`missing_paragraph`) and
   regulations that must rest on a power in force on the day they are made (`void_without_power`).
 
+## US federal income tax: cliffs and penalties
+
+[LegalProofs/USTax/](LegalProofs/USTax) is an executable model of 2025 federal income tax for one household (FICA,
+AGI, standard deduction, the §1 rate schedule, the EITC with the §32(i) investment-income limit, the Child Tax Credit,
+and the Saver's Credit tiers of §25B), with figures from Rev. Proc. 2024-40 as amended by Pub. L. 119-21. The same
+definitions are both proved about and run.
+
+- [Schedule.lean](LegalProofs/USTax/Schedule.lean) proves `scheduleTax_step`: for every filing status and every income,
+  one more dollar of taxable income never adds more than one dollar of tax. The rate schedule on its own has no cliffs.
+- [Cliffs.lean](LegalProofs/USTax/Cliffs.lean) proves where the rest of the code does have them: $1 of interest costs a
+  married family of five $8,045 (`investment_cliff_8045`); $1 of wages costs a saving couple $799
+  (`savers_cliff_799`), and $1 more into an IRA wins back $800 (`ira_dollar_value`); marrying costs two single parents
+  $3,511 a year (`marriage_penalty_3511`).
+- [Search.lean](LegalProofs/USTax/Search.lean) runs the model over about 2 million households, one dollar at a time
+  (`lake env lean LegalProofs/USTax/Search.lean`), and writes every point where earning more leaves a household with
+  less to `tools/out/`. `python tools/gen_tax_certs.py` turns the 889 cliffs found into
+  [Generated/](LegalProofs/USTax/Generated) files that Lean re-checks with `decide` on every build.
+- `python tools/tax_writeup.py` writes the full write-up, [us-tax-cliffs.html](us-tax-cliffs.html), with charts and
+  the limits of the model (no state tax, no benefits outside the tax code, statutory EITC formula rather than tables).
+
+[video/tax_film.html](video/tax_film.html) is an 80-second film of this work: the bracket staircase under a 100%
+ceiling it never reaches, the net-income landscape with the §32(i) cliff (a family's marble rolls off it at $11,951), the
+search sweeping it, the Saver's Credit terraces and the marriage merge. `python video/render_tax.py` writes
+`video/out/us-tax-film.mp4`.
+
 ## What a proof here does and does not show
 
 Lean checks that each conclusion follows from the dated facts and the rule as defined. It does not check the facts or

@@ -1,0 +1,272 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=block">
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#04070d}
+canvas{position:absolute;inset:0}
+#ov{position:absolute;inset:0;pointer-events:none;color:#eef1f5;font-family:'IBM Plex Sans',sans-serif}
+.k{position:absolute;left:120px;top:96px;font:600 22px 'IBM Plex Sans';letter-spacing:.22em;text-transform:uppercase}
+.t{position:absolute;left:120px;top:132px;font:600 58px/1.1 'Source Serif 4',serif;max-width:1350px;text-shadow:0 2px 30px rgba(0,0,0,.7)}
+.s{position:absolute;left:122px;top:212px;font:400 26px 'IBM Plex Sans';color:#a6b5cc;max-width:1200px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud{position:absolute;right:120px;top:100px;text-align:right;font:500 22px 'JetBrains Mono',monospace;color:#a6b5cc;line-height:1.7;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud b{font:700 56px 'Source Serif 4',serif;color:#eef1f5;display:block;line-height:1.1}
+.lab{position:absolute;transform:translate(-50%,-150%);white-space:nowrap;font:600 21px 'JetBrains Mono',monospace;padding:5px 11px;border-radius:9px;background:rgba(6,12,22,.66);border:1px solid rgba(140,170,210,.28);backdrop-filter:blur(6px)}
+#code.right{left:auto;right:120px}
+#code{position:absolute;left:120px;bottom:110px;padding:20px 26px;border-radius:16px;background:rgba(8,14,26,.74);border:1px solid rgba(120,160,220,.25);backdrop-filter:blur(10px);font:400 22px/1.6 'JetBrains Mono',monospace;color:#d8e2f2;white-space:pre}
+#code .kw{color:#c792ea}#code .n{color:#f78c6c}#code .c{color:#5c6b80}#code .ok{color:#5fd3a0;font-weight:600}
+#big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#big .bk{font:600 26px 'IBM Plex Sans';letter-spacing:.3em;color:#f2b24a;text-transform:uppercase}
+#big .bt{font:700 108px/1.05 'Source Serif 4',serif;margin:22px 0 18px;text-shadow:0 0 70px rgba(80,220,160,.25)}
+#big .bs{font:400 32px 'IBM Plex Sans';color:#a8b8d0}
+#end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#end .row{font:600 46px/1.55 'Source Serif 4',serif}
+#end .row span{color:#5fd3a0;font-family:'JetBrains Mono',monospace;font-size:34px;margin-right:16px}
+#end .foot{margin-top:34px;font:500 26px 'JetBrains Mono',monospace;color:#8fa2bd}
+#fade{position:absolute;inset:0;background:#000}
+.big2{position:absolute;transform:translate(-50%,-50%);font:700 96px 'Source Serif 4',serif;text-shadow:0 0 40px rgba(0,0,0,.8)}
+</style></head><body>
+<div id="ov">
+  <div id="big"><div class="bk">Lean 4 · US tax code · 2025</div><div class="bt">Finding the cliffs<br>in the tax code</div><div class="bs">with a theorem prover</div></div>
+  <div class="k" id="k"></div><div class="t" id="tt"></div><div class="s" id="ss"></div>
+  <div id="hud"></div><div id="code"></div><div id="labels"></div>
+  <div class="big2" id="big2"></div>
+  <div id="end"></div><div id="fade"></div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const T = window.TAX;
+const W = 1920, H = 1080, DUR = 80;
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const fadeIO = (t, a, b, f = .7) => Math.min(easeOut(seg(t, a, a + f)), 1 - ease(seg(t, b - f, b)));
+const fmt = n => Math.round(n).toLocaleString('en-US');
+function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rng(1040);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1); renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#04070d'); scene.fog = new THREE.FogExp2('#04070d', 0.0022);
+const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 5000);
+const composer = new EffectComposer(renderer); composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), 0.95, 0.6, 0.2); composer.addPass(bloom); composer.addPass(new OutputPass());
+scene.add(new THREE.HemisphereLight('#9fc3ff', '#120a06', .55));
+const sun = new THREE.DirectionalLight('#ffe6c4', 1.6); sun.position.set(-80, 140, 60); scene.add(sun);
+const rim = new THREE.DirectionalLight('#5fe0ff', .6); rim.position.set(120, 40, -140); scene.add(rim);
+
+const spriteTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.3, 'rgba(255,255,255,.7)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+const ptsMat = (size, op = 1) => new THREE.PointsMaterial({ size, map: spriteTex, vertexColors: true, transparent: true, opacity: op, depthWrite: false, blending: THREE.AdditiveBlending });
+const glow = (r, c) => new THREE.Mesh(new THREE.IcosahedronGeometry(r, 4), new THREE.MeshBasicMaterial({ color: c, transparent: true }));
+
+// starfield
+{ const n = 6000, p = new Float32Array(n * 3), c = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { const th = R() * 6.283, ph = Math.acos(2 * R() - 1), r = 900 + R() * 1500; p.set([r * Math.sin(ph) * Math.cos(th), Math.abs(r * Math.cos(ph)) - 200, r * Math.sin(ph) * Math.sin(th)], i * 3);
+    const b = .2 + R() * .45; c.set([b * .8, b * .9, b], i * 3); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(p, 3)); g.setAttribute('color', new THREE.BufferAttribute(c, 3)); scene.add(new THREE.Points(g, ptsMat(4, .8))); }
+
+// ================= 1. bracket staircase =================
+const stairs = new THREE.Group(); stairs.position.set(0, 0, -600); scene.add(stairs);
+const BR = [[0, 11925, 10], [11925, 48475, 12], [48475, 103350, 22], [103350, 197300, 24], [197300, 250525, 32], [250525, 626350, 35], [626350, 760000, 37]];
+const sx = x => (Math.log10(1 + x / 4000)) * 46 - 60; // compress the long brackets
+const stepMeshes = BR.map(([a, b, r], i) => { const w = sx(b) - sx(a); const h = r * .9;
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w - .6, h, 26), new THREE.MeshStandardMaterial({ color: '#2a5d8a', emissive: '#0d2a46', metalness: .2, roughness: .25, transparent: true, opacity: .85 }));
+  m.position.set(sx(a) + w / 2, h / 2, 0); const e = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), new THREE.LineBasicMaterial({ color: '#7cc7ff', transparent: true })); m.add(e);
+  stairs.add(m); return { m, e, r, h, x0: sx(a), x1: sx(b) }; });
+const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(130, 30), new THREE.MeshBasicMaterial({ color: '#ff4a3a', transparent: true, opacity: .14, side: THREE.DoubleSide, depthWrite: false }));
+ceiling.rotation.x = -Math.PI / 2; ceiling.position.set(sx(380000) - 20, 62, 0); stairs.add(ceiling);
+const ceilEdge = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(130, 30)), new THREE.LineBasicMaterial({ color: '#ff6a55' }));
+ceilEdge.rotation.x = -Math.PI / 2; ceilEdge.position.copy(ceiling.position); stairs.add(ceilEdge);
+const climber = glow(1.6, '#ffe28a'); stairs.add(climber);
+
+// ================= 2. tax landscape (computed by the Lean model) =================
+const rows = T.landscape.rows, NZ = rows.length, NX = rows[0].length, wStep = T.landscape.wageStep, iStep = T.landscape.interestStep;
+const SXL = 1.0, SZL = 0.95, HY = 2.6 / 1000; // units: x per wage column, z per interest row, y per dollar
+const land = new THREE.Group(); scene.add(land);
+const geo = new THREE.PlaneGeometry((NX - 1) * SXL, (NZ - 1) * SZL, NX - 1, NZ - 1); geo.rotateX(-Math.PI / 2);
+const pos = geo.attributes.position, colArr = new Float32Array(pos.count * 3);
+const target = new Float32Array(pos.count);
+const val = (i, j) => rows[j][i] - i * wStep - j * iStep;
+for (let j = 0; j < NZ; j++) for (let i = 0; i < NX; i++) {
+  const k = (NZ - 1 - j) * NX + i; // plane rows go +z downward after rotation; put interest growing away from camera
+  const v = val(i, j); target[k] = v * HY;
+  const t = Math.min(1, Math.abs(v) / 8000) ** .7;
+  const c = v >= 0 ? new THREE.Color().setHSL(.42, .6, .10 + .26 * t) : new THREE.Color().setHSL(.05, .75, .10 + .24 * t);
+  const cliff = j > 0 && Math.abs(val(i, j) - val(i, j - 1)) > 1500;
+  if (cliff) c.set('#ff5a46');
+  colArr.set([c.r, c.g, c.b], k * 3);
+}
+geo.setAttribute('color', new THREE.BufferAttribute(colArr, 3));
+const landMesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .55, metalness: .1, flatShading: true, emissive: '#000000' }));
+land.add(landMesh);
+const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geo), new THREE.LineBasicMaterial({ color: '#7fd7ff', transparent: true, opacity: .08, blending: THREE.AdditiveBlending, depthWrite: false }));
+land.add(wire);
+const L0 = V(-(NX - 1) * SXL / 2, 0, (NZ - 1) * SZL / 2); // world position of wages 0, interest 0
+const landPt = (wages, interest, lift = 0) => { const i = wages / wStep, j = interest / iStep; const ii = Math.min(NX - 1, Math.round(i)), jj = Math.min(NZ - 1, Math.round(j));
+  return V(L0.x + i * SXL, val(ii, jj) * HY * landRise + lift, L0.z - j * SZL); };
+let landRise = 0;
+const cliffZ = L0.z - (11950 / iStep) * SZL;
+// the family marble (single parent, two children) at the plateau's best wages
+const famWages = T.famWages;
+const marble = glow(1.5, '#ffffff'); land.add(marble);
+const trailN = 40, trailPos = new Float32Array(trailN * 3), trailCol = new Float32Array(trailN * 3);
+const trailGeo = new THREE.BufferGeometry(); trailGeo.setAttribute('position', new THREE.BufferAttribute(trailPos, 3)); trailGeo.setAttribute('color', new THREE.BufferAttribute(trailCol, 3));
+land.add(new THREE.Points(trailGeo, ptsMat(2.2)));
+// scanning plane + pins
+const scan = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ color: '#5fe0ff', transparent: true, opacity: .06, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending }));
+scan.scale.set((NZ - 1) * SZL + 10, 70, 1); scan.rotation.y = Math.PI / 2; land.add(scan);
+const scanEdge = new THREE.Mesh(new THREE.BoxGeometry(.5, .5, (NZ - 1) * SZL + 10), new THREE.MeshBasicMaterial({ color: '#9ff0ff' })); land.add(scanEdge);
+const pinWages = T.pins; // wages (single, 2 kids) where the interest cliff costs money
+const pins = pinWages.map(w => { const g = new THREE.Group(); const stem = new THREE.Mesh(new THREE.CylinderGeometry(.12, .12, 1, 6), new THREE.MeshBasicMaterial({ color: '#ff5a46' }));
+  const head = glow(.75, '#ff5a46'); g.add(stem, head); land.add(g); return { g, stem, head, w }; });
+
+// ================= 3. Saver's Credit terraces =================
+const sav = new THREE.Group(); sav.position.set(0, 0, 600); scene.add(sav);
+const ledges = [[50, 22], [20, 10], [10, 4]].map(([r, h], i) => { const m = new THREE.Mesh(new THREE.BoxGeometry(30, 3, 26), new THREE.MeshStandardMaterial({ color: '#1d3b5c', emissive: '#0b1c30', roughness: .4 }));
+  m.position.set(-40 + i * 32, h, 0); const e = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), new THREE.LineBasicMaterial({ color: '#f2b24a' })); m.add(e); sav.add(m); return { m, r, h }; });
+const couple = [glow(1.4, '#ffffff'), glow(1.4, '#ffd27a')]; couple.forEach(c => sav.add(c));
+const coin = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.4, .5, 48), new THREE.MeshStandardMaterial({ color: '#ffcc55', emissive: '#a06400', metalness: .9, roughness: .25 }));
+coin.rotation.x = Math.PI / 2; sav.add(coin);
+
+// ================= 4. marriage =================
+const mar = new THREE.Group(); mar.position.set(600, 0, 0); scene.add(mar);
+const dome = (c) => { const m = new THREE.Mesh(new THREE.SphereGeometry(10, 64, 32, 0, 6.283, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: .25, roughness: .35, transparent: true, opacity: .92 }));
+  mar.add(m); return m; };
+const dA = dome('#3fbf8f'), dB = dome('#3fbf8f'), dM = dome('#5fe0ff');
+const barA = new THREE.Mesh(new THREE.BoxGeometry(6, 1, 6), new THREE.MeshStandardMaterial({ color: '#3fbf8f', emissive: '#1e6b4f' }));
+const barM = new THREE.Mesh(new THREE.BoxGeometry(6, 1, 6), new THREE.MeshStandardMaterial({ color: '#5fe0ff', emissive: '#1e5e6e' }));
+mar.add(barA, barM);
+const gapBox = new THREE.Mesh(new THREE.BoxGeometry(6.3, 1, 6.3), new THREE.MeshBasicMaterial({ color: '#ff5a46', transparent: true, opacity: .55 })); mar.add(gapBox);
+
+// ================= overlay helpers =================
+const $ = id => document.getElementById(id);
+const labelsEl = $('labels'); const pool = [];
+function label(i, text, v3, a, color = '') { while (pool.length <= i) { const d = document.createElement('div'); d.className = 'lab'; labelsEl.appendChild(d); pool.push(d); }
+  const d = pool[i]; const p = v3.clone().project(camera); if (a <= .01 || p.z > 1) { d.style.opacity = 0; return; }
+  d.textContent = text; d.style.color = color; d.style.left = ((p.x + 1) / 2 * W) + 'px'; d.style.top = ((1 - p.y) / 2 * H) + 'px'; d.style.opacity = a; }
+function caption(k, c, t, s, a) { $('k').textContent = k; $('k').style.color = c; $('tt').textContent = t; $('ss').textContent = s; for (const id of ['k', 'tt', 'ss']) $(id).style.opacity = a; }
+function hud(h, a) { $('hud').innerHTML = h; $('hud').style.opacity = a; }
+function code(h, a, right = false) { $('code').innerHTML = h; $('code').style.opacity = a; $('code').className = right ? 'right' : ''; }
+
+function camAt(t) {
+  const sp = stairs.position;
+  if (t < 8) { const a = t * .05; return [V(sp.x - 40 + 160 * Math.cos(1.1 + a), 80 - t * 2, sp.z + 160 * Math.sin(1.1 + a)), V(sp.x, 30, sp.z)]; }
+  if (t < 18.4) { const k = ease(seg(t, 8, 18.4)); return [V(sp.x - 120 + 150 * k, 34 + 26 * k, sp.z + 150 - 30 * k), V(sp.x + 10 * k, 30 + 18 * k, sp.z)]; }
+  if (t < 36) { const k = ease(seg(t, 18.4, 26)), k2 = ease(seg(t, 26, 36));
+    const p0 = V(-120, 150, 210), p1 = V(-30, 70, 110), p2 = V(20, 36, cliffZ + 70);
+    const p = p0.clone().lerp(p1, k).lerp(p2, k2); const l = V(0, 0, 0).lerp(V(-20, 10, cliffZ), k2); return [p, l]; }
+  if (t < 48) { const a = (t - 36) * .05; return [V(-160 * Math.cos(.9 + a), 120, 150 + 30 * Math.sin(a)), V(0, 0, cliffZ * .5)]; }
+  if (t < 60) { const s = sav.position; return [V(s.x - 10 + 12 * Math.sin((t - 48) * .1), s.y + 34, s.z + 92), V(s.x - 6, s.y + 12, s.z)]; }
+  if (t < 70) { const m = mar.position; return [V(m.x + 70 * Math.sin((t - 60) * .06), m.y + 40, m.z + 92), V(m.x, m.y + 12, m.z)]; }
+  const a = (t - 70) * .04; return [V(-200 * Math.cos(.7 + a), 210, 200 * Math.sin(.7 + a) + 60), V(0, 0, 0)];
+}
+
+window.render = function (t) {
+  $('fade').style.opacity = Math.max(1 - seg(t, 0, 1.2), seg(t, 17.8, 18.4) * (1 - seg(t, 18.6, 19.6)), seg(t, 47.4, 48) * (1 - seg(t, 48.2, 49.2)),
+    seg(t, 59.4, 60) * (1 - seg(t, 60.2, 61.2)), seg(t, 69.4, 70) * (1 - seg(t, 70.2, 71.2)), seg(t, 79, 80));
+  const bigA = fadeIO(t, .8, 7.4, 1); $('big').style.opacity = bigA; $('big').style.transform = `translateY(${(1 - easeOut(seg(t, .8, 3))) * 30}px)`;
+
+  // ---- staircase ----
+  stairs.visible = t < 18.6;
+  stepMeshes.forEach((s, i) => { const k = easeOut(seg(t, 1 + i * .45, 2.2 + i * .45)); s.m.scale.y = Math.max(.001, k); s.m.position.y = s.h * k / 2;
+    s.m.material.emissiveIntensity = 1 + .6 * Math.sin(t * 2 + i); });
+  const cu = seg(t, 9.5, 16.5); // climber walks the staircase
+  const xx = stepMeshes[0].x0 + (stepMeshes[6].x1 - stepMeshes[0].x0) * cu; const st = stepMeshes.find(s => xx >= s.x0 && xx <= s.x1) || stepMeshes[6];
+  climber.position.set(xx, st.h + 2, 0); climber.visible = t > 9.3;
+  ceiling.material.opacity = .1 + .08 * Math.sin(t * 3) * seg(t, 10, 11);
+
+  // ---- landscape ----
+  land.visible = t > 18 && t < 48.2 || t > 70;
+  landRise = ease(seg(t, 19, 23.5));
+  for (let k = 0; k < pos.count; k++) pos.setY(k, target[k] * landRise);
+  pos.needsUpdate = true; geo.computeVertexNormals();
+  wire.geometry.dispose(); if (land.visible) { wire.geometry = new THREE.WireframeGeometry(geo); }
+  // marble: rides the plateau along interest, then falls off at the cliff
+  const mk = seg(t, 27.5, 33.5); const fall = seg(t, 32.3, 33.6);
+  const mInterest = 2000 + 9950 * Math.min(1, mk * 1.08); const mp = landPt(famWages, mInterest, 1.6);
+  if (fall > 0) { const after = landPt(famWages, 12100, 1.6); mp.z = cliffZ - 1 - fall * 4; mp.y = mp.y + (after.y - mp.y) * ease(fall); }
+  marble.position.copy(mp); marble.visible = t > 27 && t < 47;
+  for (let i = 0; i < trailN; i++) { const q = Math.max(0, t - i * .05); const k2 = seg(q, 27.5, 33.5); const pp = landPt(famWages, 2000 + 9950 * Math.min(1, k2 * 1.08), 1.6);
+    trailPos.set([pp.x, pp.y, pp.z], i * 3); const b = marble.visible ? (1 - i / trailN) * .8 : 0; trailCol.set([b, b, b], i * 3); }
+  trailGeo.attributes.position.needsUpdate = true; trailGeo.attributes.color.needsUpdate = true;
+  // scanning plane
+  const sk = seg(t, 37.4, 44.4); const scanX = L0.x - 4 + ((NX - 1) * SXL + 8) * sk;
+  scan.visible = scanEdge.visible = t > 37.2 && t < 45; scan.position.set(scanX, 20, L0.z - (NZ - 1) * SZL / 2); scanEdge.position.copy(scan.position); scanEdge.position.y += 35;
+  scan.material.opacity = .06 * (1 - seg(t, 44.4, 45));
+  pins.forEach(pn => { const p = landPt(pn.w, 11950, 0); const x = p.x; const up = seg(t, 37.4 + (x - L0.x) / ((NX - 1) * SXL + 8) * 7, 37.4 + (x - L0.x) / ((NX - 1) * SXL + 8) * 7 + .6);
+    const hgt = 3 + 9 * easeOut(up); pn.g.position.set(p.x, p.y, cliffZ); pn.stem.scale.y = hgt; pn.stem.position.y = hgt / 2; pn.head.position.y = hgt;
+    const ok = seg(t, 44.6, 45.6); pn.head.material.color.set(ok > 0 ? '#5fd3a0' : '#ff5a46'); pn.stem.material.color.set(ok > 0 ? '#5fd3a0' : '#ff5a46');
+    pn.g.visible = up > 0 && t < 48.2; });
+
+  // ---- saver's terraces ----
+  sav.visible = t > 47.6 && t < 60.4; const at = t - 48;
+  const L = ledges[0], L2 = ledges[1];
+  const edgeX = L.m.position.x + 13;
+  const push = seg(at, 3.2, 4.4), back = seg(at, 7.4, 8.8);
+  couple.forEach((c, i) => { let x = edgeX - 6 + i * 3.2 + push * 9, y = L.h + 3;
+    if (push > .35) y = L.h + 3 - (L.h - L2.h) * ease((push - .35) / .65);
+    if (back > 0) { x = x - back * 9; y = y + (L.h + 3 - y) * ease(back); }
+    c.position.set(x, y + .5 * Math.sin(t * 4 + i), 0); });
+  coin.visible = at > 6 && at < 9.6; const ck = seg(at, 6, 7.5);
+  coin.position.set(edgeX + 4, 40 - 30 * ease(ck), 0); coin.rotation.z = t * 4;
+
+  // ---- marriage ----
+  mar.visible = t > 59.6 && t < 70.4; const mt = t - 60;
+  const merge = ease(seg(mt, 3, 5.5));
+  dA.position.set(-22 + 22 * merge, 0, 0); dB.position.set(22 - 22 * merge, 0, 0);
+  dA.scale.setScalar(1 - .2 * merge); dB.scale.setScalar(1 - .2 * merge); dA.visible = dB.visible = merge < .98;
+  dM.visible = merge > .4; dM.position.set(0, 0, 0); dM.scale.set(1.27, 1.27 * (45485 / 48996), 1.27); dM.material.opacity = .92 * seg(merge, .4, 1);
+  const bw = 30; barA.position.set(-bw, 0, 18); barM.position.set(bw, 0, 18);
+  const hA = 48996 / 1000, hM = 45485 / 1000, bk = ease(seg(mt, 5.6, 7));
+  barA.scale.y = Math.max(.01, hA * .5 * bk); barA.position.y = barA.scale.y / 2; barM.scale.y = Math.max(.01, hM * .5 * bk); barM.position.y = barM.scale.y / 2;
+  gapBox.visible = bk > .9; gapBox.scale.y = (hA - hM) * .5; gapBox.position.set(bw, hM * .5 + gapBox.scale.y / 2, 18); gapBox.material.opacity = .4 + .3 * Math.sin(t * 5);
+
+  const inLand = t > 18.4 && t < 48;
+  bloom.threshold = inLand ? .62 : .2; bloom.strength = inLand ? .55 : .95; sun.intensity = inLand ? 1.1 : 1.6;
+  const [cp, cl] = camAt(t); camera.position.copy(cp); camera.lookAt(cl);
+  composer.render();
+
+  // ---- overlay ----
+  let li = 0; code('', 0); hud('', 0); $('big2').style.opacity = 0;
+  if (t > 8.2 && t < 18.3) { caption('IRC §1 · the 2025 rate schedule', '#7cc7ff', 'Seven brackets, one invariant', 'One more dollar never costs more than a dollar of income tax. Proved for every income.', fadeIO(t, 8.4, 18));
+    code(`<span class="kw">theorem</span> scheduleTax_step (s : Status) (x : Nat) :\n    scheduleTax s (x + 1) ≤ scheduleTax s x + 1\n<span class="ok">✓ proved for all incomes, all filing statuses</span>`, fadeIO(t, 11, 18), true);
+    stepMeshes.forEach((s, i) => label(li++, s.r + '%', stairs.position.clone().add(V((s.x0 + s.x1) / 2, s.h, 13)), fadeIO(t, 2 + i * .45, 18) * (t > 8.6 ? 1 : 0), '#bfe3ff'));
+    label(li++, '100% — never reached', stairs.position.clone().add(ceiling.position), fadeIO(t, 10.5, 18), '#ff8a75'); }
+  else if (t > 19 && t < 47.8) {
+    if (t < 37) caption('§32(i) · investment income', '#ff8a6a', 'A mesa with a cliff', 'What the tax system adds or takes for a single parent of two, over wages and interest. Computed by the Lean model.', fadeIO(t, 19.4, 36.8));
+    else caption('Lean, searching', '#5fe0ff', 'Two million households, one dollar at a time', 'Every cliff the search finds becomes a theorem the kernel re-checks.', fadeIO(t, 37.2, 47.6));
+    if (t > 27 && t < 36.6) { const after = t > 33.2; label(li++, after ? 'interest $11,951' : 'interest ' + '$' + fmt(2000 + 9950 * Math.min(1, seg(t, 27.5, 33.5) * 1.08)), marble.position.clone().add(V(0, 2, 0)), fadeIO(t, 27.4, 36.6), after ? '#ff8a75' : '#ffffff');
+      hud(after ? `one dollar of interest<b style="color:#ff6a55">−$${fmt(T.famDrop)}</b>EITC lost under §32(i)` : `wages $${fmt(famWages)}<b>$${fmt(T.famEitc)}</b>EITC`, fadeIO(t, 27.6, 36.6)); }
+    if (t > 37) { const k = seg(t, 37.4, 44.4); hud(t < 44.6 ? `households evaluated<b>${fmt(2040000 * k)}</b>cliffs found <span style="color:#ff6a55">${fmt(889 * k)}</span>` : `kernel<b style="color:#5fd3a0">✓ 889 proved</b>build: 7 seconds`, fadeIO(t, 37.4, 47.6));
+      code(t < 44.6 ? `<span class="c">-- Search.lean: the same model, run</span>\n<span class="kw">for</span> w <span class="kw">in</span> [0:120000] <span class="kw">do</span>\n  <span class="kw">if</span> net (w + 1) &lt; net w <span class="kw">then</span> record w` : `<span class="kw">theorem</span> investment_cliff_8045 :\n    net ⟨.mfj, 3, 18000, 11951, 0⟩ + <span class="n">8045</span> =\n    net ⟨.mfj, 3, 18000, 11950, 0⟩ := <span class="kw">by</span> decide  <span class="ok">✓</span>`, fadeIO(t, 38, 47.6)); }
+    label(li++, '$11,950', landPt(0, 11950, 4), fadeIO(t, 24, 36.6), '#ff8a75'); }
+  else if (t > 48.2 && t < 60.2) { const at2 = t - 48;
+    caption('§25B · the Saver’s Credit', '#f2b24a', at2 < 6 ? 'Three tiers, hard edges' : 'An IRA dollar worth $800', at2 < 6 ? 'A married couple saving $4,000: AGI $47,500 earns the 50% credit, $47,501 only 20%.' : 'Contributing one more dollar pulls AGI back under the tier.', fadeIO(t, 48.4, 59.8));
+    ledges.forEach((l, i) => label(li++, l.r + '% credit', sav.position.clone().add(l.m.position).add(V(0, 2, 13)), fadeIO(t, 48.6, 59.8), '#ffd27a'));
+    if (at2 > 4.2 && at2 < 7.6) hud(`one dollar of wages<b style="color:#ff6a55">−$799</b>savers_cliff_799 ✓`, fadeIO(t, 52.2, 55.6, .3));
+    if (at2 > 8.4) hud(`one dollar into an IRA<b style="color:#5fd3a0">+$800</b>ira_dollar_value ✓`, fadeIO(t, 56.4, 59.8, .3)); }
+  else if (t > 60.2 && t < 70.2) { const mt2 = t - 60;
+    caption('The marriage penalty', '#5fe0ff', 'Two returns become one', 'Two single parents, one child and $20,000 each, filing as heads of household, then jointly.', fadeIO(t, 60.4, 69.8));
+    if (mt2 < 5.4) { label(li++, '$24,498', mar.position.clone().add(dA.position).add(V(0, 10, 0)), fadeIO(t, 61, 65.2), '#a8f0d0'); label(li++, '$24,498', mar.position.clone().add(dB.position).add(V(0, 10, 0)), fadeIO(t, 61, 65.2), '#a8f0d0'); }
+    else { label(li++, 'apart $48,996', mar.position.clone().add(V(-30, 26, 18)), fadeIO(t, 65.8, 69.8), '#a8f0d0'); label(li++, 'married $45,485', mar.position.clone().add(V(30, 24, 18)), fadeIO(t, 65.8, 69.8), '#9ff0ff');
+      hud(`a year<b style="color:#ff6a55">−$3,511</b>marriage_penalty_3511 ✓`, fadeIO(t, 66.4, 69.8)); } }
+  else caption('', '', '', '', 0);
+  for (let i = li; i < pool.length; i++) pool[i].style.opacity = 0;
+
+  const ea = seg(t, 71, 72) * (1 - seg(t, 79, 80));
+  $('end').innerHTML = `<div class="row"><span>✓</span>No bracket takes the whole extra dollar: proved for every income</div><div class="row"><span>✓</span>$1 of interest can cost a family $8,045</div><div class="row"><span>✓</span>$1 of wages can cost $799; $1 into an IRA can return $800</div><div class="row"><span>✓</span>Marrying can cost $3,511 a year</div><div class="foot">889 cliffs found by search · each re-proved by Lean · lean-proofs/USTax</div>`;
+  $('end').style.opacity = ea; $('end').style.background = `rgba(4,7,13,${.62 * ea})`;
+};
+window.DUR = DUR;
+document.fonts.ready.then(() => { window.render(0); window.READY = true; });
+</script></body></html>
