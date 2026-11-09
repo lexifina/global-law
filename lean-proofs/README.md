@@ -52,6 +52,58 @@ afterwards. Where the vulnerability depends on a contested premise, the countera
   apply again.
 - `GMOGap.retroactive_closes_gap`: had the extension been made retroactive, there would be no gap.
 
+## Checking every flag, not just five
+
+[LegalProofs/History.lean](LegalProofs/History.lean) builds provisions from their corpus record (each dated change,
+newest first) and defines a **certificate** for a reference flag: the target's record ends with it gone, and the citing
+provision is still in force today. `RefFlag.certified_sound` proves, once for all flags, that a certified reference
+cannot apply on any date from the target's removal.
+
+[tools/gen_facts.py](tools/gen_facts.py) writes those records straight from the corpora for every reference flag in
+[../vulnerabilities/data/](../vulnerabilities/data/) (references to repealed placeholders, references to deleted
+provisions, dead fines) into [LegalProofs/Generated/](LegalProofs/Generated/). Each generated file ends with a theorem
+saying which of its flags are certified, and Lean evaluates every certificate itself when it builds.
+
+| | Flags |
+|---|---|
+| Reference flags checked | 6,741 |
+| Certified by Lean | 6,530 |
+| Citing provision rewritten after the target had gone (`RefFlag.reenacted`) | 308 |
+| Of those, never reviewed by a model: the next leads | 259 |
+
+A certificate is about the corpus record, not the law: where a corpus records a repeal wrongly, the certificate is
+wrong too. That is why the strongest leads are the re-enacted ones, where the legislature rewrote the citing provision
+after its target had gone and kept the reference.
+
+## Tools
+
+```sh
+python tools/gen_facts.py                 # regenerate LegalProofs/Generated/ from the corpora (needs LE_HOME, below)
+lake build                                # Lean checks every proof and every certificate (about 10 seconds)
+python tools/check.py germany/bund/acts awaffv/0034.md   # one provision: writes and checks its theorems
+python tools/report.py                    # tools/out/report.html: what was certified, and the leads
+```
+
+`gen_facts.py` reads the corpus index and read-only mirrors built by [../vulnerabilities/scripts/](../vulnerabilities/scripts/)
+(`ingest/sync.py`, `ingest/extract.py`); set `LE_HOME` to that workspace. Output goes only to `LegalProofs/Generated/`
+and `tools/out/` (git-ignored).
+
+Example:
+
+```
+$ python tools/check.py germany/bund/acts awaffv/0034.md
+germany/bund/acts awaffv/0034.md: 1 flagged reference(s), all theorems checked by Lean
+  PROVED  points at awaffv/0012.md, gone since 2020-09-01: cannot apply on any date from then on, yet still in force on 2026-11-09
+```
+
+## More of the model
+
+- [LegalProofs/Calendar.lean](LegalProofs/Calendar.lean): real calendar dates. `no_date_between_years` shows that no
+  real date falls between 31 December and the next 1 January, and `retroactive_jan1_closes_gap` proves the gap closure
+  that fails for raw `YYYYMMDD` numbers.
+- [LegalProofs/Structure.lean](LegalProofs/Structure.lean): sections with numbered paragraphs (`missing_paragraph`) and
+  regulations that must rest on a power in force on the day they are made (`void_without_power`).
+
 ## What a proof here does and does not show
 
 Lean checks that each conclusion follows from the dated facts and the rule as defined. It does not check the facts or
@@ -69,8 +121,6 @@ than its model.
 
 ## Next steps
 
-- Derive the facts from the corpora instead of typing them in: generate each `Provision` from a corpus's git history at
-  a pinned commit, so a theorem breaks when the law (or a corpus error) changes.
-- Model provisions with structure (paragraphs, sentences) to cover missing-paragraph references, and add the
-  enabling-power rule (a regulation is void if the power it cites did not exist when it was made).
-- Replace `YYYYMMDD` numbers with real calendar dates, so theorems range over valid dates only.
+- Feed the 259 re-enacted, unreviewed leads into the model review and official-source checks.
+- Generate paragraph-level records from the corpora, to certify the missing-paragraph flags.
+- Generate regulation records (date made, power cited) from gazette preambles, to certify enabling-power flags.
