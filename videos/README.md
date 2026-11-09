@@ -9,4 +9,3 @@ Click a file to play it.
 - [git-repo.mp4](git-repo.mp4): the law as a git repository
 - [charts.mp4](charts.mp4): the charts in [visualisations/](../visualisations/)
 - [one-country.mp4](one-country.mp4): one country's law
-- [vulnerabilities.mp4](vulnerabilities.mp4): the kinds of mistake found in the law as published (see [vulnerabilities/](../vulnerabilities/))

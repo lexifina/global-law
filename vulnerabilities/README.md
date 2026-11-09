@@ -1,6 +1,6 @@
 <h1>Legal exploits: 5 worked-through examples and 82,000 issues flagged by type</h1>
 
-<p><a href="../videos/vulnerabilities.mp4"><img src="vulnerabilities.webp" alt="Animated summary of the vulnerability types" width="100%"></a><br><sub>Click to play the full video.</sub></p>
+https://github.com/user-attachments/assets/fdcb3e7f-54a6-4c36-b843-7beb7b9a9442
 
 <p>Each case is a logical mistake in the law itself, laid out as a legal zero-day in the sense of <a href="https://arxiv.org/html/2508.10050v1">Legal Zero-Days: A Novel Risk Vector for Advanced AI Systems</a>: the rule, what the official text says, why the two don't fit, what follows, who could use it, and the strongest objections, each rated. We first present the categories of error by number; the five in-depth examples are linked under More.</p>
 
