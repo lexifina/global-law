@@ -92,6 +92,22 @@ defect under the formal rule, and gives each flag a precise statement. The refer
 because they rebuild each provision's history from the corpus instead of trusting the flag. 130 missing-paragraph flags
 name paragraphs such as "1a" and are not modelled yet.
 
+## A semantics of amending acts
+
+[LegalProofs/Amendments.lean](LegalProofs/Amendments.lean) formalises how the corpora are built: a statute maps
+provision keys to texts, an amendment is an instruction (insert, replace, repeal), and a day's consolidation applies the
+day's instructions in order. Two vulnerability kinds then become theorems about that process rather than definitions:
+
+| Theorem | Statement |
+|---|---|
+| `replace_missing_noop`, `repeal_missing_noop` | An instruction aimed at a provision that does not exist changes nothing: the statute after it is the statute before (the GwG § 50c case). |
+| `commute` | Instructions on different provisions commute. |
+| `consolidate_perm` | If no two of a day's instructions touch the same provision, every order of applying them gives the same statute (proved by induction over permutations). |
+| `same_key_conflict` | Two different replacements of one existing provision give different statutes in the two orders. |
+
+Together the last two say exactly when a day's amendments are ambiguous: the criterion behind the same-day-conflict
+detector is now a theorem.
+
 ## Tools
 
 ```sh
@@ -140,7 +156,14 @@ than its model.
 
 ## Video
 
-[video/anim.html](video/anim.html) is a one-minute explainer (git history → facts → rule → theorem → objections → every
+[video/film.html](video/film.html) is the film: a 72-second, GPU-rendered three.js piece (bloom, real data) in which
+every one of the 14,900 flags is a star in a galaxy of jurisdictions, the shooting-range reference beam dies as § 12 is
+deleted, the real dependency graph of `fine_dead` (exported from Lean by [tools/DepTree.lean](tools/DepTree.lean):
+50 constants, 116 edges) assembles and is checked, amendments hit statutes in both orders, and a verification wave sweeps
+the galaxy. `python tools/video_data.py` packages the data; `python video/render_film.py` writes
+`video/out/lean-proofs-film.mp4`.
+
+[video/anim.html](video/anim.html) is the earlier, simpler explainer (git history → facts → rule → theorem → objections → every
 flag), drawn on a canvas and rendered frame by frame: `python video/render.py` writes `video/out/lean-proofs.mp4`
 (needs `pip install playwright imageio-ffmpeg`; encodes on an NVIDIA GPU when one is present).
 

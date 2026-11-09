@@ -1,0 +1,340 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=block">
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#03060c}
+canvas{position:absolute;inset:0}
+#ov{position:absolute;inset:0;pointer-events:none;color:#eef1f5;font-family:'IBM Plex Sans',sans-serif}
+.k{position:absolute;left:120px;top:96px;font:600 22px 'IBM Plex Sans';letter-spacing:.22em;text-transform:uppercase}
+.t{position:absolute;left:120px;top:132px;font:600 58px/1.1 'Source Serif 4',serif;max-width:1300px;text-shadow:0 2px 30px rgba(0,0,0,.6)}
+.s{position:absolute;left:122px;top:212px;font:400 26px 'IBM Plex Sans';color:#9fb0c8;max-width:1100px}
+#hud{position:absolute;right:120px;top:100px;text-align:right;font:500 22px 'JetBrains Mono',monospace;color:#9fb0c8;line-height:1.7}
+#hud b{font:700 54px 'Source Serif 4',serif;color:#eef1f5;display:block;line-height:1.1}
+.lab{position:absolute;transform:translate(-50%,-140%);white-space:nowrap;font:600 20px 'JetBrains Mono',monospace;padding:4px 10px;border-radius:8px;background:rgba(6,12,22,.62);border:1px solid rgba(140,170,210,.25);backdrop-filter:blur(6px)}
+.lab.small{font:500 15px 'JetBrains Mono',monospace;padding:2px 7px;color:#cfe0ff}
+#code{position:absolute;right:110px;bottom:120px;width:760px;padding:22px 26px;border-radius:16px;background:rgba(8,14,26,.72);border:1px solid rgba(120,160,220,.25);backdrop-filter:blur(10px);font:400 21px/1.62 'JetBrains Mono',monospace;color:#d8e2f2;white-space:pre}
+#code .kw{color:#c792ea}#code .n{color:#f78c6c}#code .c{color:#5c6b80}#code .ok{color:#5fd3a0;font-weight:600}
+#big{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#big .bk{font:600 26px 'IBM Plex Sans';letter-spacing:.3em;color:#f2b24a;text-transform:uppercase}
+#big .bt{font:700 118px/1.05 'Source Serif 4',serif;margin:22px 0 18px;text-shadow:0 0 60px rgba(120,170,255,.25)}
+#big .bs{font:400 32px 'IBM Plex Sans';color:#a8b8d0}
+#end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#end .row{font:600 50px/1.5 'Source Serif 4',serif}
+#end .row span{color:#5fd3a0}
+#fade{position:absolute;inset:0;background:#000}
+.sym{position:absolute;transform:translate(-50%,-50%);font:700 120px 'Source Serif 4',serif}
+</style></head><body>
+<div id="ov">
+  <div id="big"><div class="bk">Lean 4 · global-law</div><div class="bt">Proving the bugs<br>in the law</div><div class="bs">14,900 flagged defects, checked by a theorem prover</div></div>
+  <div class="k" id="k"></div><div class="t" id="tt"></div><div class="s" id="ss"></div>
+  <div id="hud"></div><div id="code"></div><div id="labels"></div>
+  <div class="sym" id="sym"></div>
+  <div id="end"></div>
+  <div id="fade"></div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const DATA = window.DATA;
+const W = 1920, H = 1080, DUR = 72;
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const fadeIO = (t, a, b, f = .7) => Math.min(easeOut(seg(t, a, a + f)), 1 - ease(seg(t, b - f, b)));
+const fmt = n => Math.round(n).toLocaleString('en-US');
+function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rng(20261109);
+const gauss = () => { let u = 0, v = 0; while (u === 0) u = R(); v = R(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2831853 * v); };
+
+// ---------------- renderer ----------------
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#03060c'); scene.fog = new THREE.FogExp2('#03060c', 0.0009);
+const camera = new THREE.PerspectiveCamera(42, W / H, 0.1, 6000);
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), 1.15, 0.65, 0.12); composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+const COL = { ref: new THREE.Color('#5fd3a0'), pre: new THREE.Color('#6aa8ff'), gap: new THREE.Color('#f2b24a'), para: new THREE.Color('#b48cff'),
+  dead: new THREE.Color('#ff5a46'), dim: new THREE.Color('#3a4b66'), white: new THREE.Color('#ffffff'), cyan: new THREE.Color('#5fe0ff') };
+
+// soft round sprite for points
+const spriteTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.25, 'rgba(255,255,255,.85)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+function pointsMat(size, opacity = 1) { return new THREE.PointsMaterial({ size, map: spriteTex, vertexColors: true, transparent: true, opacity, depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true }); }
+
+// ---------------- starfield ----------------
+{ const n = 9000, p = new Float32Array(n * 3), c = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { const v = V(gauss(), gauss(), gauss()).normalize().multiplyScalar(1400 + R() * 2200); p.set([v.x, v.y, v.z], i * 3);
+    const b = .25 + R() * .5; c.set([b * .8, b * .9, b], i * 3); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(p, 3)); g.setAttribute('color', new THREE.BufferAttribute(c, 3));
+  scene.add(new THREE.Points(g, pointsMat(5, .9))); }
+
+// ---------------- galaxy: one star per flag ----------------
+const J = DATA.jurisdictions;
+J.forEach((j, i) => { const a = i * 2.399963 + .4, r = 70 + 52 * Math.sqrt(i); j.total = j.ref + j.pre + j.gap + j.para;
+  j.center = V(r * Math.cos(a), (R() - .5) * 14, r * Math.sin(a)); j.size = 5 + Math.sqrt(j.total) * .42; });
+const germany = J.find(j => j.name === 'germany');
+const FL = []; // {pos, kind, reen, cert}
+J.forEach(j => {
+  const add = (kind, n, extra = () => ({})) => { for (let k = 0; k < n; k++) { const s = j.size * (.35 + .65 * Math.abs(gauss()) * .7);
+    const v = V(gauss(), gauss() * .32, gauss()).normalize().multiplyScalar(s * Math.pow(R(), .5)).add(j.center); FL.push({ pos: v, kind, j, ...extra(k) }); } };
+  add('ref', j.ref, k => ({ reen: k < j.reen, cert: k >= j.reen ? k < j.ref_cert : true }));
+  add('pre', j.pre, () => ({ cert: true })); add('gap', j.gap, () => ({ cert: true })); add('para', j.para, () => ({ cert: true }));
+});
+const flagGeo = new THREE.BufferGeometry();
+const flagPos = new Float32Array(FL.length * 3), flagCol = new Float32Array(FL.length * 3);
+FL.forEach((f, i) => flagPos.set([f.pos.x, f.pos.y, f.pos.z], i * 3));
+flagGeo.setAttribute('position', new THREE.BufferAttribute(flagPos, 3)); flagGeo.setAttribute('color', new THREE.BufferAttribute(flagCol, 3));
+const flagPts = new THREE.Points(flagGeo, pointsMat(3.4)); scene.add(flagPts);
+// spiral dust
+const dustN = 26000, dustPos = new Float32Array(dustN * 3), dustCol = new Float32Array(dustN * 3);
+for (let i = 0; i < dustN; i++) { const arm = i % 3, s = R(), ang = arm * 2.094 + s * 7.5, r = 40 + s * 560;
+  const v = V(r * Math.cos(ang) + gauss() * (8 + s * 30), gauss() * (3 + s * 9), r * Math.sin(ang) + gauss() * (8 + s * 30));
+  dustPos.set([v.x, v.y, v.z], i * 3); const b = .08 + R() * .16; dustCol.set([b * .7, b * .85, b * 1.25], i * 3); }
+{ const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(dustPos, 3)); g.setAttribute('color', new THREE.BufferAttribute(dustCol, 3));
+  scene.add(new THREE.Points(g, pointsMat(2.6))); }
+const core = new THREE.Mesh(new THREE.SphereGeometry(10, 32, 32), new THREE.MeshBasicMaterial({ color: '#fff3d6' })); core.scale.setScalar(1); scene.add(core);
+
+// reference arcs (dead references inside each jurisdiction)
+const arcs = []; const SEGS = 18;
+J.forEach(j => { const refs = FL.filter(f => f.j === j && f.kind === 'ref'); const n = Math.min(Math.ceil(refs.length / 5), 160);
+  for (let k = 0; k < n; k++) { const a = refs[Math.floor(R() * refs.length)], b = refs[Math.floor(R() * refs.length)]; if (a === b) continue;
+    arcs.push({ a: a.pos, b: b.pos, d: R(), j }); } });
+const arcPos = new Float32Array(arcs.length * SEGS * 6), arcCol = new Float32Array(arcs.length * SEGS * 6);
+arcs.forEach((r, i) => { const mid = r.a.clone().add(r.b).multiplyScalar(.5); mid.y += r.a.distanceTo(r.b) * .45 + 2;
+  const curve = new THREE.QuadraticBezierCurve3(r.a, mid, r.b); const pts = curve.getPoints(SEGS);
+  for (let s = 0; s < SEGS; s++) arcPos.set([pts[s].x, pts[s].y, pts[s].z, pts[s + 1].x, pts[s + 1].y, pts[s + 1].z], (i * SEGS + s) * 6); });
+const arcGeo = new THREE.BufferGeometry(); arcGeo.setAttribute('position', new THREE.BufferAttribute(arcPos, 3)); arcGeo.setAttribute('color', new THREE.BufferAttribute(arcCol, 3));
+scene.add(new THREE.LineSegments(arcGeo, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false })));
+
+// ---------------- hero: AWaffV § 34 → § 12 ----------------
+const hero = new THREE.Group(); hero.position.copy(germany.center).add(V(0, 52, 0)); scene.add(hero);
+const glowSphere = (r, color) => new THREE.Mesh(new THREE.IcosahedronGeometry(r, 4), new THREE.MeshBasicMaterial({ color }));
+const s34 = glowSphere(2.2, '#eaf2ff'), s12 = glowSphere(2.2, '#7dffb8'), s27 = glowSphere(1.8, '#6aa8ff');
+s34.position.set(-16, 0, 0); s12.position.set(16, -2, 2); s27.position.set(10, 13, -14); hero.add(s34, s12, s27);
+const beamCurve = new THREE.QuadraticBezierCurve3(s34.position.clone(), V(0, 9, 2), s12.position.clone());
+const beam = new THREE.Mesh(new THREE.TubeGeometry(beamCurve, 120, .5, 14), new THREE.MeshBasicMaterial({ color: '#5fe0ff', transparent: true })); hero.add(beam);
+const flowN = 60, flowPos = new Float32Array(flowN * 3), flowCol = new Float32Array(flowN * 3);
+const flowGeo = new THREE.BufferGeometry(); flowGeo.setAttribute('position', new THREE.BufferAttribute(flowPos, 3)); flowGeo.setAttribute('color', new THREE.BufferAttribute(flowCol, 3));
+hero.add(new THREE.Points(flowGeo, pointsMat(2.6)));
+const ring = new THREE.Mesh(new THREE.RingGeometry(.9, 1, 96), new THREE.MeshBasicMaterial({ color: '#ff7a5c', transparent: true, side: THREE.DoubleSide })); ring.position.copy(s12.position); hero.add(ring);
+const burstN = 500, burstDir = [], burstPos = new Float32Array(burstN * 3), burstCol = new Float32Array(burstN * 3);
+for (let i = 0; i < burstN; i++) burstDir.push(V(gauss(), gauss(), gauss()).normalize().multiplyScalar(4 + R() * 14));
+const burstGeo = new THREE.BufferGeometry(); burstGeo.setAttribute('position', new THREE.BufferAttribute(burstPos, 3)); burstGeo.setAttribute('color', new THREE.BufferAttribute(burstCol, 3));
+hero.add(new THREE.Points(burstGeo, pointsMat(1.1)));
+
+// ---------------- proof tree (real Lean dependency graph of fine_dead) ----------------
+const G = DATA.graphs['Legal.AWaffV.fine_dead'];
+const treeOrigin = V(0, -900, 0);
+const treeShift = V(-34, 0, 0); const tree = new THREE.Group(); tree.position.copy(treeOrigin).add(treeShift); scene.add(tree);
+const maxD = Math.max(...G.nodes.map(n => n.depth));
+const byD = {}; G.nodes.forEach(n => (byD[n.depth] = byD[n.depth] || []).push(n));
+const NP = {};
+Object.entries(byD).forEach(([d, ns]) => { d = +d; ns.forEach((n, i) => { const a = i / ns.length * 6.2831853 + d * .7, r = d === 0 ? 0 : 10 + d * 13;
+  NP[n.id] = V(r * Math.cos(a), 34 - d * 19, r * Math.sin(a)); n.legal = n.id.startsWith('Legal'); }); });
+const nodeMeshes = {};
+G.nodes.forEach(n => { const m = glowSphere(n.depth === 0 ? 2.6 : (n.legal ? 1.25 : .7), n.depth === 0 ? '#ffffff' : (n.legal ? '#f2c46a' : '#5f8fd8'));
+  m.position.copy(NP[n.id]); tree.add(m); nodeMeshes[n.id] = m; });
+const edges = G.edges.filter(([a, b]) => NP[a] && NP[b]);
+const ePos = new Float32Array(edges.length * 6), eCol = new Float32Array(edges.length * 6);
+edges.forEach(([a, b], i) => ePos.set([NP[a].x, NP[a].y, NP[a].z, NP[b].x, NP[b].y, NP[b].z], i * 6));
+const eGeo = new THREE.BufferGeometry(); eGeo.setAttribute('position', new THREE.BufferAttribute(ePos, 3)); eGeo.setAttribute('color', new THREE.BufferAttribute(eCol, 3));
+tree.add(new THREE.LineSegments(eGeo, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false })));
+const pulseN = edges.length * 2, pulsePos = new Float32Array(pulseN * 3), pulseCol = new Float32Array(pulseN * 3);
+const pGeo = new THREE.BufferGeometry(); pGeo.setAttribute('position', new THREE.BufferAttribute(pulsePos, 3)); pGeo.setAttribute('color', new THREE.BufferAttribute(pulseCol, 3));
+tree.add(new THREE.Points(pGeo, pointsMat(2.2)));
+const rootRing = new THREE.Mesh(new THREE.RingGeometry(.95, 1, 128), new THREE.MeshBasicMaterial({ color: '#5fd3a0', transparent: true, side: THREE.DoubleSide }));
+rootRing.position.copy(NP['Legal.AWaffV.fine_dead']); rootRing.rotation.x = Math.PI / 2; tree.add(rootRing);
+
+// ---------------- amendments: statutes as slab columns ----------------
+const amOrigin = V(0, 900, 0); const am = new THREE.Group(); am.position.copy(amOrigin); scene.add(am);
+function column(x) { const g = new THREE.Group(); g.position.x = x; const slabs = [];
+  for (let i = 0; i < 8; i++) { const m = new THREE.Mesh(new THREE.BoxGeometry(16, 1.7, 6), new THREE.MeshBasicMaterial({ color: '#16233a', transparent: true }));
+    m.position.y = 9 - i * 2.4; const e = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), new THREE.LineBasicMaterial({ color: '#4c6fa8', transparent: true }));
+    m.add(e); g.add(m); slabs.push(m); }
+  am.add(g); return { g, slabs }; }
+const L = column(-17), Rc = column(17), C3 = column(0);
+const patch = c => { const m = new THREE.Mesh(new THREE.BoxGeometry(16.4, .5, 6.4), new THREE.MeshBasicMaterial({ color: c, transparent: true })); am.add(m); return m; };
+const pA = [patch('#f2b24a'), patch('#f2b24a')], pB = [patch('#5fe0ff'), patch('#5fe0ff')], pC = [patch('#ff5ad1'), patch('#ff5ad1')], pD = [patch('#7dff8a'), patch('#7dff8a')], pG = patch('#f2b24a');
+const ghost = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(16, 1.7, 6)), new THREE.LineDashedMaterial({ color: '#ff6a55', dashSize: .6, gapSize: .5, transparent: true }));
+ghost.computeLineDistances(); am.add(ghost);
+const ghostFill = new THREE.Mesh(new THREE.BoxGeometry(16, 1.7, 6), new THREE.MeshBasicMaterial({ color: '#ff3b2a', transparent: true, opacity: .12, depthWrite: false })); ghost.add(ghostFill);
+
+// ---------------- overlay helpers ----------------
+const $ = id => document.getElementById(id);
+const labels = $('labels'); const labPool = [];
+function label(i, text, v3, alpha, cls = '', color = '') { while (labPool.length <= i) { const d = document.createElement('div'); d.className = 'lab'; labels.appendChild(d); labPool.push(d); }
+  const d = labPool[i]; const p = v3.clone().project(camera);
+  if (alpha <= 0.01 || p.z > 1) { d.style.opacity = 0; return; }
+  d.className = 'lab ' + cls; d.textContent = text; d.style.color = color || ''; d.style.left = ((p.x + 1) / 2 * W) + 'px'; d.style.top = ((1 - p.y) / 2 * H) + 'px'; d.style.opacity = alpha; }
+function caption(kicker, color, title, sub, a) { $('k').textContent = kicker; $('k').style.color = color; $('tt').textContent = title; $('ss').textContent = sub;
+  for (const id of ['k', 'tt', 'ss']) $(id).style.opacity = a; }
+function hud(html, a) { $('hud').innerHTML = html; $('hud').style.opacity = a; }
+
+// camera keyframes
+function camAt(t) {
+  const G0 = V(0, 0, 0);
+  const gc = germany.center.clone(), hc = hero.position.clone();
+  const orbit = (rad, h, ang, target) => [V(target.x + rad * Math.cos(ang), target.y + h, target.z + rad * Math.sin(ang)), target];
+  if (t < 15) { const a = .3 + t * .035; const rad = 980 - 360 * ease(seg(t, 0, 15)); return orbit(rad, 420 - 120 * ease(seg(t, 0, 15)), a, G0); }
+  if (t < 20) { const k = ease(seg(t, 15, 20)); const [p0, l0] = orbit(620, 300, .3 + 15 * .035, G0); const p1 = hc.clone().add(V(-6, 22, 78));
+    return [p0.lerp(p1, k), G0.clone().lerp(hc, k)]; }
+  if (t < 31.4) { const a = (t - 20) * .045; return [hc.clone().add(V(-6 + 30 * Math.sin(a), 22 - (t - 20) * .6, 78 * Math.cos(a))), hc.clone()]; }
+  if (t < 46) { const a = (t - 31) * .12; const r = 175 - 25 * ease(seg(t, 31, 44)); const tg = treeOrigin.clone().add(treeShift).add(V(30, 12, 0)); return [V(tg.x + r * Math.cos(a), tg.y + 40 - 18 * ease(seg(t, 31, 44)), tg.z + r * Math.sin(a)), tg]; }
+  if (t < 58.6) { const tg = amOrigin.clone().add(V(0, 4, 0)); return [tg.clone().add(V(-16 * Math.sin((t - 46) * .08), 7, 76)), tg]; }
+  const k = ease(seg(t, 58.6, 64)); const a = .9 + (t - 58.6) * .035; const rad = 900 - 240 * k;
+  return [V(rad * Math.cos(a), 520 - 190 * k, rad * Math.sin(a)), G0];
+}
+
+const codeHTML = `<span class="c">-- Cases/AWaffV.lean</span>
+<span class="kw">theorem</span> fine_dead : ∀ d, <span class="n">20200901</span> ≤ d →
+    fine.applicable d = false :=
+  dead_reference fine deletedOn duty_deleted
+
+<span class="c">-- Basic.lean</span>
+<span class="kw">theorem</span> dead_reference (b : BlanketRule) (r : Date)
+    (h : repealedFrom b.pointsAt r) :
+    ∀ d, r ≤ d → b.applicable d = false := <span class="kw">by</span>
+  intro d hd
+  simp [BlanketRule.applicable, inForce, h d hd]`;
+
+window.render = function (t) {
+  // ---- intro / fade ----
+  $('fade').style.opacity = Math.max(1 - seg(t, 0, 1.2), seg(t, 30.6, 31.2) * (1 - seg(t, 31.4, 32.4)), seg(t, 45.2, 45.8) * (1 - seg(t, 46, 47)),
+    seg(t, 58, 58.6) * (1 - seg(t, 58.8, 59.8)), seg(t, 71, 72));
+  const bigA = fadeIO(t, .8, 7.6, 1); $('big').style.opacity = bigA; $('big').style.transform = `translateY(${(1 - easeOut(seg(t, .8, 3))) * 30}px)`;
+
+  // ---- galaxy colours ----
+  const galaxyVis = t < 31 || t > 58.4;
+  flagPts.visible = galaxyVis; flagPts.material.size = t > 58 ? 4.4 : 3.4;
+  const wave = (t - 60) * 140; // verification wave radius
+  for (let i = 0; i < FL.length; i++) { const f = FL[i]; let c = COL.dim, b = .55;
+    if (t > 58.4) { const r = Math.hypot(f.pos.x, f.pos.z); const h = r < wave ? 1 : 0; const edge = Math.max(0, 1 - Math.abs(r - wave) / 30);
+      c = h ? (f.cert ? (f.reen ? COL.white : COL[f.kind]) : COL.dim) : COL.dim; b = h ? (.85 + edge * 2.2 + (f.reen ? .6 + .4 * Math.sin(t * 6 + i) : 0)) : .45; }
+    else if (t > 8.5 && f.kind === 'ref') { const k = seg(t, 9 + f.pos.length() / 420, 10 + f.pos.length() / 420); c = COL.dead; b = .45 + 1.1 * k; if (k === 0) c = COL.dim; }
+    if (t > 17.5 && t < 31.4) b *= 1 - .88 * seg(t, 17.5, 19.5);
+    flagCol[i * 3] = c.r * b; flagCol[i * 3 + 1] = c.g * b; flagCol[i * 3 + 2] = c.b * b; }
+  flagGeo.attributes.color.needsUpdate = true;
+  core.visible = galaxyVis; core.scale.setScalar(1 + .06 * Math.sin(t * 2));
+  // arcs: grow then turn red
+  for (let i = 0; i < arcs.length; i++) { const r = arcs[i]; const grow = seg(t, 8.6 + r.d * 3, 9.6 + r.d * 3), red = seg(t, 11.5 + r.d * 2.5, 12.3 + r.d * 2.5), fadeOut = 1 - seg(t, 16, 19);
+    for (let s = 0; s < SEGS; s++) { const on = s / SEGS < grow ? 1 : 0; const flick = red > 0 ? (.55 + .45 * Math.sin(t * 9 + i * 1.7 + s)) : 1;
+      const c = COL.cyan.clone().lerp(COL.dead, red); const b = on * .55 * flick * fadeOut * (t > 58 ? 0 : 1);
+      arcCol.set([c.r * b, c.g * b, c.b * b, c.r * b, c.g * b, c.b * b], (i * SEGS + s) * 6); } }
+  arcGeo.attributes.color.needsUpdate = true;
+
+  // ---- hero ----
+  const heroVis = t > 14 && t < 31.4; hero.visible = heroVis;
+  const T0 = 24.6; // § 12 goes
+  const dead = seg(t, T0, T0 + .4);
+  s12.scale.setScalar(Math.max(0.0001, 1 - ease(seg(t, T0, T0 + .5))) * (1 + .08 * Math.sin(t * 5)));
+  s34.scale.setScalar(1 + .06 * Math.sin(t * 3));
+  s27.visible = t > 27.2; s27.scale.setScalar(easeOut(seg(t, 27.2, 28.2)) * (1 + .08 * Math.sin(t * 4)));
+  beam.material.color.copy(COL.cyan.clone().lerp(COL.dead, dead)); beam.material.opacity = (dead > 0 ? (.35 + .35 * Math.abs(Math.sin(t * 13))) : .9) * easeOut(seg(t, 19, 20.5));
+  for (let i = 0; i < flowN; i++) { const u = ((i / flowN) + (dead > 0 ? (T0 - 20) : (t - 20)) * .22) % 1; const p = beamCurve.getPoint(u);
+    flowPos.set([p.x, p.y, p.z], i * 3); const b = (1 - dead * .85) * easeOut(seg(t, 19, 20.5)); const c = dead > 0 ? COL.dead : COL.white; flowCol.set([c.r * b, c.g * b, c.b * b], i * 3); }
+  flowGeo.attributes.position.needsUpdate = true; flowGeo.attributes.color.needsUpdate = true;
+  const rk = seg(t, T0, T0 + 2.2); ring.scale.setScalar(.1 + rk * 26); ring.material.opacity = (1 - rk) * (rk > 0 ? 1 : 0); ring.lookAt(camera.position);
+  for (let i = 0; i < burstN; i++) { const k = easeOut(seg(t, T0, T0 + 3)); const p = s12.position.clone().addScaledVector(burstDir[i], k);
+    burstPos.set([p.x, p.y, p.z], i * 3); const b = (rk > 0 ? 1 : 0) * (1 - seg(t, T0 + .3, T0 + 3.5)) * 1.6; burstCol.set([1 * b, .45 * b, .3 * b], i * 3); }
+  burstGeo.attributes.position.needsUpdate = true; burstGeo.attributes.color.needsUpdate = true;
+
+  // ---- proof tree ----
+  tree.visible = t > 31 && t < 46;
+  const tb = t - 32;
+  G.nodes.forEach(n => { const appear = seg(tb, (maxD - n.depth) * 1.35, (maxD - n.depth) * 1.35 + .8); const m = nodeMeshes[n.id];
+    const ign = n.depth === 0 ? seg(t, 40.6, 41.2) : 0; m.scale.setScalar(Math.max(.0001, easeOut(appear)) * (1 + ign * .8 + (n.depth === 0 ? .1 * Math.sin(t * 4) : 0))); });
+  edges.forEach(([a, b], i) => { const da = G.nodes.find(n => n.id === a).depth; const on = seg(tb, (maxD - da) * 1.35 - .4, (maxD - da) * 1.35 + .6);
+    const glow = seg(t, 38.4, 41) ; const c = COL.cyan.clone().lerp(COL.ref, glow); const k = on * (.45 + .9 * glow);
+    eCol.set([c.r * k, c.g * k, c.b * k, c.r * k * .5, c.g * k * .5, c.b * k * .5], i * 6); });
+  eGeo.attributes.color.needsUpdate = true;
+  for (let i = 0; i < pulseN; i++) { const e = edges[i % edges.length]; const u = ((t * .7 + i * .137) % 1); const pa = NP[e[1]], pb = NP[e[0]];  // flow from dependency up to user
+    const p = pa.clone().lerp(pb, u); pulsePos.set([p.x, p.y, p.z], i * 3); const k = seg(t, 38.2, 39.5) * (1 - seg(t, 44.5, 45.5)) * 1.4; pulseCol.set([.5 * k, 1 * k, .75 * k], i * 3); }
+  pGeo.attributes.position.needsUpdate = true; pGeo.attributes.color.needsUpdate = true;
+  const rr = seg(t, 41, 43.5); rootRing.scale.setScalar(2 + rr * 40); rootRing.material.opacity = rr > 0 ? (1 - rr) : 0;
+
+  // ---- amendments ----
+  am.visible = t > 45.5 && t < 58.8;
+  const at = t - 46;
+  const base = new THREE.Color('#16233a');
+  const setCols = (col, cols) => col.slabs.forEach((s, i) => { s.material.color.copy(cols[i] || base); });
+  const fly = (m, col, idx, ta, tb2, color, alpha = 1) => { const k = ease(seg(at, ta, tb2)); const target = col.g.position.x; const y0 = 48, y1 = col.slabs[idx].position.y;
+    m.position.set(target, y0 + (y1 - y0) * k, 0); m.material.opacity = alpha * (k > 0 && k < 1 ? 1 : 0) * (at >= ta ? 1 : 0); m.material.color.set(color); return k >= 1; };
+  // beat 1 (0-4.6): A=§3 amber, B=§6 cyan ; left A then B, right B then A
+  // beat 2 (4.8-9): C=§4 magenta, D=§4 green ; left C then D, right D then C
+  // beat 3 (9.2-12.6): one column, patch aimed at § 50c (ghost) -> nothing changes
+  const b1 = at < 4.8, b2 = at >= 4.8 && at < 9.2, b3 = at >= 9.2;
+  L.g.visible = Rc.g.visible = !b3; C3.g.visible = b3; ghost.visible = b3;
+  [...pA, ...pB, ...pC, ...pD, pG].forEach(p => p.material.opacity = 0);
+  if (b1) { const aL = fly(pA[0], L, 2, .4, 1.4, '#f2b24a'), bL = fly(pB[0], L, 5, 1.7, 2.7, '#5fe0ff'), bR = fly(pB[1], Rc, 5, .4, 1.4, '#5fe0ff'), aR = fly(pA[1], Rc, 2, 1.7, 2.7, '#f2b24a');
+    const cl = []; if (aL) cl[2] = new THREE.Color('#f2b24a'); if (bL) cl[5] = new THREE.Color('#5fe0ff'); setCols(L, cl);
+    const cr = []; if (aR) cr[2] = new THREE.Color('#f2b24a'); if (bR) cr[5] = new THREE.Color('#5fe0ff'); setCols(Rc, cr); }
+  if (b2) { const a2 = at - 4.8; const cL = fly(pC[0], L, 3, 4.8 + .3, 4.8 + 1.3, '#ff5ad1'), dL = fly(pD[0], L, 3, 4.8 + 1.6, 4.8 + 2.6, '#7dff8a');
+    const dR = fly(pD[1], Rc, 3, 4.8 + .3, 4.8 + 1.3, '#7dff8a'), cR = fly(pC[1], Rc, 3, 4.8 + 1.6, 4.8 + 2.6, '#ff5ad1');
+    const cl = []; cl[3] = dL ? new THREE.Color('#7dff8a') : (cL ? new THREE.Color('#ff5ad1') : null); setCols(L, cl);
+    const cr = []; cr[3] = cR ? new THREE.Color('#ff5ad1') : (dR ? new THREE.Color('#7dff8a') : null); setCols(Rc, cr); }
+  if (b3) { ghost.position.set(0, C3.slabs[3].position.y - 1.2, 0); C3.slabs.forEach((s, i) => { s.position.y = (9 - i * 2.4) + (i >= 4 ? -2.4 : 0); });
+    ghost.position.y = 9 - 4 * 2.4; ghost.material.opacity = .6 + .4 * Math.sin(at * 6);
+    const k = ease(seg(at, 9.6, 11)); pG.position.set(0, 48 - (48 - ghost.position.y) * k - (k >= 1 ? (at - 11) * 14 : 0), 0); ghostFill.material.opacity = .18 + .2 * (.5 + .5 * Math.sin(at * 6));
+    pG.material.opacity = (at > 9.6 ? 1 : 0) * (1 - seg(at, 11, 11.8)); setCols(C3, []); }
+  const eq = b1 && at > 3 ? '=' : (b2 && at > 7.5 ? '≠' : ''); $('sym').textContent = eq; $('sym').style.color = eq === '=' ? '#5fd3a0' : '#ff5a46';
+  const symA = b1 ? fadeIO(at, 3, 4.7, .4) : b2 ? fadeIO(at, 7.5, 9.1, .4) : 0; $('sym').style.opacity = symA; $('sym').style.left = '960px'; $('sym').style.top = '560px';
+
+  // ---- camera ----
+  const [cp, cl] = camAt(t); camera.position.copy(cp); camera.lookAt(cl);
+  composer.render();
+
+  // ---- overlay text ----
+  let li = 0;
+  if (t > 8.2 && t < 17.5) caption('Every flag is a star · one cluster per jurisdiction', '#ff8a6a', 'References that point at nothing', '6,741 provisions refer to a provision their own law has repealed', fadeIO(t, 8.4, 17.2));
+  else if (t > 19 && t < 31.2) caption('Germany · General Weapons Regulation', '#5fe0ff', 'A fine aimed at a deleted rule', 'AWaffV § 34 no. 11 fines whoever acts “contrary to § 12(2)”', fadeIO(t, 19.6, 31));
+  else if (t > 31.6 && t < 45.6) caption('The real proof, exported from Lean', '#5fd3a0', 'fine_dead: ' + (G.nodes.length) + ' constants, ' + G.edges.length + ' dependencies', 'Every step checked by Lean’s kernel. Axioms used: propext.', fadeIO(t, 32.2, 45.2));
+  else if (t > 46 && t < 58.6) { const at2 = t - 46; if (at2 < 4.8) caption('A semantics of amending acts', '#f2b24a', 'Different provisions: any order, same law', 'consolidate_perm, proved by induction over permutations', fadeIO(t, 46.4, 50.7, .4));
+    else if (at2 < 9.2) caption('A semantics of amending acts', '#ff5ad1', 'Same provision: the order changes the law', 'same_key_conflict: why same-day conflicts are real ambiguities', fadeIO(t, 50.8, 55.1, .4));
+    else caption('A semantics of amending acts', '#ff6a55', 'An amendment to § 50c, which never existed', 'replace_missing_noop: the statute after is the statute before', fadeIO(t, 55.2, 58.4, .4)); }
+  else if (t > 59 && t < 70) caption('lake build · about 10 seconds', '#5fd3a0', 'Every flag, checked', '', fadeIO(t, 59.6, 69.5));
+  else caption('', '', '', '', 0);
+  // hero labels + date
+  if (heroVis) { const a = fadeIO(t, 20.4, 31);
+    const wp = v => v.clone().applyMatrix4(hero.matrixWorld);
+    label(li++, 'AWaffV § 34 no. 11 · the fine', wp(s34.position), a);
+    label(li++, t < T0 ? '§ 12(2) · the duty' : '§ 12 (weggefallen)', wp(s12.position), a, '', t < T0 ? '#7dffb8' : '#ff7a5c');
+    label(li++, 'WaffG § 27a · the ban now · no fine attached', wp(s27.position), a * easeOut(seg(t, 27.4, 28.2)), '', '#9cc4ff');
+    const d0 = new Date(Date.UTC(2019, 5, 10)).getTime(), d1 = new Date(Date.UTC(2021, 2, 1)).getTime();
+    const cur = new Date(d0 + (d1 - d0) * seg(t, 20.4, 28.4)); const iso = cur.toISOString().slice(0, 10);
+    hud(`corpus date<b>${iso}</b>${t > T0 ? '<span style="color:#ff7a5c">§ 12 deleted · 2020-09-01</span>' : 'germany-law · awaffv/'}`, a); }
+  else if (tree.visible) { tree.updateMatrixWorld();
+    const KEY = new Set(['Legal.AWaffV.fine_dead', 'Legal.dead_reference', 'Legal.AWaffV.duty_deleted', 'Legal.AWaffV.deletedOn', 'Legal.AWaffV.fine', 'Legal.repealedFrom', 'Legal.inForce', 'Legal.BlanketRule.applicable', 'Legal.AWaffV.duty12_2']);
+    G.nodes.filter(n => KEY.has(n.id)).forEach(n => { const appear = seg(tb, (maxD - n.depth) * 1.35 + .4, (maxD - n.depth) * 1.35 + 1.2);
+      label(li++, n.id.replace('Legal.AWaffV.', '').replace('Legal.', ''), NP[n.id].clone().add(tree.position), appear * fadeIO(t, 32, 45.4) * (n.depth === 0 ? 1 : .9), n.depth === 0 ? '' : 'small', n.depth === 0 ? '#5fd3a0' : ''); });
+    hud(t > 41 ? `kernel<b style="color:#5fd3a0">✓ checked</b>axioms: propext` : `building proof<b>${Math.round(G.nodes.length * seg(tb, 0, maxD * 1.35 + 1))}</b>constants`, fadeIO(t, 32.4, 45.2)); }
+  else if (am.visible) { const at3 = t - 46;
+    if (at3 < 9.2) { label(li++, 'order A → B', L.g.position.clone().add(amOrigin).add(V(0, 13, 0)), fadeIO(t, 46.4, 55, .3), 'small'); label(li++, 'order B → A', Rc.g.position.clone().add(amOrigin).add(V(0, 13, 0)), fadeIO(t, 46.4, 55, .3), 'small'); }
+    else label(li++, 'GwG § 50c: never enacted', ghost.position.clone().add(amOrigin).add(V(10, 0, 0)), fadeIO(t, 55.6, 58.3, .3), '', '#ff7a5c');
+    hud('', 0); }
+  else if (t > 59) { const k = easeOut(seg(t, 60, 66));
+    hud(`checked<b>${fmt(DATA.totals.checked * k)}</b>certified <span style="color:#5fd3a0">${fmt(DATA.totals.certified * k)}</span><br>legislature kept the dead reference <span style="color:#fff">${fmt(DATA.totals.reenacted * k)}</span>`, fadeIO(t, 59.6, 69.6)); }
+  else hud('', 0);
+  for (let i = li; i < labPool.length; i++) labPool[i].style.opacity = 0;
+  $('code').innerHTML = codeHTML; $('code').style.opacity = tree.visible ? fadeIO(t, 34, 45.2) : 0;
+  // end card
+  const ea = seg(t, 66.4, 67.4) * (1 - seg(t, 71, 72));
+  $('end').innerHTML = `<div class="row"><span>✓</span> Prove a flagged mistake follows from the record</div><div class="row"><span>✓</span> Rank the leads the legislature itself kept</div><div class="row"><span>✓</span> Turn every objection into a theorem</div><div class="row"><span>✓</span> Re-check everything when the law changes</div>`;
+  $('end').style.opacity = ea; $('end').style.background = `rgba(3,6,12,${.55 * ea})`;
+  if (ea > 0) { caption('', '', '', '', 0); hud('', 0); }
+};
+window.DUR = DUR;
+document.fonts.ready.then(() => { window.render(0); window.READY = true; });
+</script></body></html>

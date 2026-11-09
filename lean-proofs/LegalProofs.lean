@@ -3,6 +3,7 @@ import LegalProofs.History
 import LegalProofs.Calendar
 import LegalProofs.Structure
 import LegalProofs.Certificates
+import LegalProofs.Amendments
 import LegalProofs.Cases.AWaffV
 import LegalProofs.Cases.GwG50c
 import LegalProofs.Cases.CLT413

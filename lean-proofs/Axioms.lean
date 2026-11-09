@@ -13,3 +13,6 @@ import LegalProofs
 #print axioms Legal.GapFlag.certified_sound
 #print axioms Legal.PrepubFlag.certified_sound
 #print axioms Legal.ParaFlag.certified_sound
+#print axioms Legal.consolidate_perm
+#print axioms Legal.same_key_conflict
+#print axioms Legal.replace_missing_noop
