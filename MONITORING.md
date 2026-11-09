@@ -5,12 +5,12 @@ change as a commit dated the day it takes effect. Then, every 15 minutes, a pass
 and publishes the result below.
 
 <!-- status-summary -->
-**Updates: running**: last published 2026-11-09 13:49 UTC; status refreshed 2026-11-09 13:49 UTC.
+**Updates: running**: last published 2026-11-09 14:02 UTC; status refreshed 2026-11-09 14:02 UTC.
 
 | | |
 | --- | --- |
-| Last 24 hours | 300 commits: 54 corpus updates, 120 corpora added |
-| Last successful pass | 2026-11-09 13:49 UTC |
+| Last 24 hours | 334 commits: 39 corpus updates, 101 corpora added |
+| Last successful pass | 2026-11-09 14:02 UTC |
 | Held back by a check | none |
 | Official sources not answering | none |
 | Freshness | 822 of 972 corpora current, 135 stale, 14 unverified ([FRESHNESS.md](FRESHNESS.md)) |
