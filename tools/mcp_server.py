@@ -1367,13 +1367,25 @@ def _heading_index(corpus: str, sha: str, wait: bool = True, build: bool = True,
 
 def _index_read_headings(corpus: str, sha: str, names, out: dict[str, str]) -> bool:
     """Read into `out` the heading of each named file at a commit, in one `git cat-file --batch` read as a stream.
-    False when git failed."""
+    False when git failed. Files are asked for by blob id, from one listing of the commit: asked for as
+    `<commit>:<path>`, git walks the tree from its root for every file, and a corpus with a folder per act at its
+    root (the Netherlands: 35,000 folders) read 120 files a second, three hours for its 254,000 against 15 s."""
+    try:
+        listed = law.git('ls-tree', '-r', '-z', sha, cwd=ROOT / corpus)
+    except (SystemExit, OSError, ValueError, subprocess.SubprocessError):
+        return False
+    blobs = {}
+    for row in listed.split('\0'):
+        meta, tab, path = row.partition('\t')
+        if tab and meta[7:11] == 'blob':
+            blobs[path] = meta[12:]
+    names = [n for n in names if n in blobs]  # a name not at this commit has no heading
     proc = subprocess.Popen(['git', 'cat-file', '--batch'], cwd=ROOT / corpus, stdin=subprocess.PIPE,
                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
 
     def feed(p=proc):
         try:
-            p.stdin.write(''.join(f'{sha}:{n}\n' for n in names).encode('utf-8'))
+            p.stdin.write(''.join(f'{blobs[n]}\n' for n in names).encode('utf-8'))
             p.stdin.close()
         except (OSError, ValueError):  # git has gone (stopped below, or it failed): nothing left to feed
             pass
