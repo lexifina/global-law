@@ -2040,8 +2040,10 @@ def act_title(corpus: str, rel: str) -> str:
     for f in folders:
         if f in titles:
             return titles[f]
-        if f == 'grundgesetz' and 'gg' in titles:  # Germany's index files the Grundgesetz as gg, as its publisher does
-            return titles['gg']
+        if f == 'grundgesetz':  # Germany's index files the Grundgesetz as gg, as its publisher does; since the
+            # 2026-10-28 rebuild it is not in the index at all (its own record), and the pincite read "Artikel 1,
+            # germany-law" (found 2026-11-10 by the global-law skill's tests)
+            return titles.get('gg') or 'Grundgesetz für die Bundesrepublik Deutschland (GG)'
     for f in folders[:2]:
         heading = read_headings(corpus, sha, (f'{f}/README.md',)).get(f'{f}/README.md')
         if heading and heading.strip().lower() != f.rsplit('/', 1)[-1].lower():  # not "# Artikel" over artikel/
