@@ -6833,6 +6833,17 @@ def t_law_details(args: dict) -> tuple[str, dict]:
                 whole = re.compile(rf'(?<![\w.]){re.escape(law_name.strip())}(?![\w])', re.I)
                 rows = law.git('log', pin, '--format=%H%x1f%an', f'--author={law_name}', '--fixed-strings', '-i', cwd=cwd).splitlines()
                 shas = [r.split('\x1f', 1)[0] for r in rows if '\x1f' in r and whole.search(r.split('\x1f', 1)[1])]
+                if not shas and corpus and len(law_name.strip()) >= 8 and not law.is_caselaw(entry):
+                    # A law's full title, which its message holds and its short name does not: "Gesetz zur Ergänzung
+                    # des Grundgesetzes" is "7. Änderung (1956)" (and the 4th and 10th). Only when a corpus is named, so
+                    # the read is bounded. The title as a whole line first: as part of a line, the newest match was
+                    # "Siebzehntes Gesetz zur Ergänzung des Grundgesetzes".
+                    title = law_name.strip()
+
+                    def grep(*how):
+                        return law.git('log', pin, '-n', '10', '--format=%H', '-i', *how, cwd=cwd).split()
+                    shas = ((grep('--perl-regexp', f'--grep=^\\Q{title}\\E\\s*$') if '\\E' not in title else [])
+                            or grep(f'--grep={title}', '--fixed-strings'))
         for sha in shas[:10]:
             msg = law.git('show', '-s', '--format=%an%x1f%B', sha, cwd=cwd)
             author, _, body = msg.partition('\x1f')
