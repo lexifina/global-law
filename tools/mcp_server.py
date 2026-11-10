@@ -808,6 +808,13 @@ def names_of(corpus: str, sha: str) -> tuple[str, ...]:
     return tuple(n for n in out if n.endswith('.md') and not NOT_LAW.search(n))
 
 
+@lru_cache(maxsize=8)  # a few large corpora: France's acts are 812,000 names, about 130 MB as a dict
+def stems_of(corpus: str, sha: str) -> dict[str, str]:
+    """stem_of for every name of names_of, worked out once per pinned commit: find_provision matched a number against
+    each file's stem, recomputed on every call (about a second for France's acts)."""
+    return {n: stem_of(n) for n in names_of(corpus, sha)}
+
+
 @lru_cache(maxsize=4096)
 def has_file(corpus: str, sha: str, rel: str) -> bool:
     """Whether one law file is in a corpus at one commit: one ls-tree of that path. names_of lists every file and filters
@@ -1727,6 +1734,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             continue
         sha = corpus_head(c['path'])
         names = [n for n in names_of(c['path'], sha) if in_scope(f"{c['path']}/{n}")]
+        stems = stems_of(c['path'], sha) if number_rx and names else None
         if not names:
             continue
         scores: dict[str, int] = {}
@@ -1739,7 +1747,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         by_heading = heading_numbers(c['path'], sha, names) if numbers and (narrow or indexed) else {}
         headed_hits = set()
         for name in names:
-            stem = stem_of(name)
+            stem = stems[name] if stems else ''  # only a number is matched against it
             score = 0
             headed = by_heading.get(name)
             if headed is not None and headed in wanted:
@@ -1799,7 +1807,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             for (cp, name), gain in head_best.items():
                 if cp == c['path']:
                     scores[name] = scores.get(name, 0) + gain
-        exact = headed_hits | {n for n in scores if n not in by_heading and any(stem_of(n) in (x, x.lstrip('0')) for x in numbers)}
+        exact = headed_hits | {n for n in scores if n not in by_heading and any((stems[n] if stems else stem_of(n)) in (x, x.lstrip('0')) for x in numbers)}
         if exact and not plain:  # "art. 1" is art-001.md, not every art-NNN-1.md beside it
             scores = {n: v for n, v in scores.items() if n in exact}
         if c['path'] in cut_short:
