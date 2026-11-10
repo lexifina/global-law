@@ -28,6 +28,7 @@ import traceback
 import types
 import unicodedata
 import warnings
+from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 from pathlib import Path
@@ -92,6 +93,38 @@ _GREP_SEM = threading.BoundedSemaphore(GREP_SLOTS)
 # Case law is read for at most this many seconds of a call; then the corpora and parts not yet read are left out and
 # the answer says so (search_law, phrase_history, find_provision over every US court took 120 s and more cold).
 CASELAW_SECONDS = float(os.environ.get('GLOBAL_LAW_CASELAW_SECONDS', '60'))
+
+
+# A search of every body of law (search_law with no jurisdiction) starts no further corpus once fewer than this many
+# seconds of the call are left, and says which it did not read: a common word over every country ran past the call's
+# time and the caller got no answer at all (2026-11-10). The corpora already being read have this long to finish.
+LAW_SEARCH_MARGIN = float(os.environ.get('GLOBAL_LAW_SEARCH_MARGIN', '25'))
+
+# A server that keeps the text of a commit as plain files may answer a git grep from them. When set, it is called as
+# grep_rewrite(cmd, cwd) with the argv and folder of a `git grep` of one revision that the tools are about to run,
+# and returns the (cmd, cwd) to run instead, or the same pair to leave it. It is asked for the greps that are not
+# run through git_run (search_law over case law starts git itself, to read its output as it comes) and for those of
+# case law in parts (caselaw_grep). The command it returns may print lines without the "<revision>:" before the path
+# (git grep --no-index): what reads them takes either form.
+grep_rewrite = None
+
+
+def rewritten_grep(cmd: list, cwd) -> tuple[list, object]:
+    """(cmd, cwd) as grep_rewrite gives them; unchanged when there is no hook, or it fails or gives anything else."""
+    hook = grep_rewrite
+    if hook is None:
+        return cmd, cwd
+    try:
+        new_cmd, new_cwd = hook(list(cmd), cwd)
+    except Exception:  # noqa: BLE001 (a host's hook must not fail a search that git can answer)
+        return cmd, cwd
+    return (list(new_cmd), new_cwd) if new_cmd and new_cwd else (cmd, cwd)
+
+
+def law_search_time_up() -> bool:
+    """Whether fewer than LAW_SEARCH_MARGIN seconds of this call are left (never, outside a call's deadline)."""
+    deadline = getattr(_call, 'deadline', 0.0)
+    return bool(deadline) and time.monotonic() > deadline - LAW_SEARCH_MARGIN
 
 
 def caselaw_time_up() -> bool:
@@ -1081,9 +1114,21 @@ def read_headings(corpus: str, sha: str, names: tuple[str, ...]) -> dict[str, st
 
 
 INDEX_FILES = 400_000  # law files a server indexes by heading at start; past this (most of the world) it greps instead
+# The heading index of every corpus is kept on disk, one file per pinned commit (heading_index_file), so a server of
+# the whole world, which builds none while it answers, reads the file where one has been stored (store_heading_index,
+# heading_index_if_built): find_provision by words over Romania's 1.84 million files grepped every blob, past any
+# call's time (2026-11-10). The version is in the file's name: an index for a new commit starts from an earlier
+# commit's file, so a change to how a heading is read must change the version, or old headings are carried on.
+HEADINGS_V = 2
+INDEX_FILES_KEPT = 3  # index files kept per corpus, the newest: two servers may share the folder at different commits
+# Headings kept in memory, over all the indexes loaded; past it the corpora used longest ago are dropped (and read
+# from disk again when asked), so a query over every country cannot grow the server without limit.
+INDEX_HEADINGS_KEPT = int(os.environ.get('GLOBAL_LAW_INDEX_HEADINGS', '16000000'))
 _index_lock = threading.Lock()
 _index_building: dict[tuple[str, str], threading.Event] = {}
-_index_done: dict[tuple[str, str], dict[str, str]] = {}
+_index_phase: dict[tuple[str, str], str] = {}  # 'load' (reading the file) or 'build', for a key in _index_building
+_index_done: OrderedDict[tuple[str, str], dict[str, str]] = OrderedDict()  # least recently used first
+_index_folded: dict[tuple[str, str], tuple[dict, dict]] = {}  # (the index, its headings folded): folded_headings
 
 
 def _subtitle(line: str) -> bool:
@@ -1097,68 +1142,242 @@ def heading_index(corpus: str, sha: str, wait: bool = True) -> dict[str, str] | 
     """Every law file's heading, with the title on the line after it where there is one, read once per pinned
     commit and kept in memory: git grep over a commit reads every file each time (26 seconds on Romania's 137,000),
     and the title line under a heading never matched a heading search at all. None when `wait` is false and the
-    index is not built yet. Built by one `git cat-file --batch`, read as a stream."""
+    index is not built yet. Read from its file on disk when there is one (heading_index_file); else built by one
+    `git cat-file --batch`, read as a stream, of the files that differ from an earlier commit's index when one is
+    on disk, and stored."""
+    return _heading_index(corpus, sha, wait=wait)
+
+
+def heading_index_if_built(corpus: str, sha: str) -> dict[str, str] | None:
+    """The heading index when it need not be built: from memory, else read from its file on disk; None when there is
+    no file. It never builds one and never waits for a build (it does wait while another thread reads the file).
+    For a server of every country, which greps where no index has been stored (store_heading_index)."""
+    return _heading_index(corpus, sha, build=False)
+
+
+def store_heading_index(corpus: str, sha: str) -> bool:
+    """Make sure the heading index of a corpus at one commit is on disk, building it if it is not (from an earlier
+    commit's file where it can), without keeping it in memory. True when the file is there afterwards. For a server's
+    background thread: it runs under no call's deadline, and calls for one corpus and commit at once build once."""
+    disk = heading_index_file(corpus, sha)
+    if not disk.is_file():
+        _heading_index(corpus, sha, keep=False)
+        if not disk.is_file():
+            with _index_lock:
+                held = _index_done.get((corpus, sha))
+            if held is not None:  # built in memory by a call, and not written then
+                _index_write(disk, held)
+    return disk.is_file()
+
+
+def heading_index_file(corpus: str, sha: str) -> Path:
+    """The file a corpus's heading index at one commit is kept in: {file name: heading} as JSON, in the tree's cache
+    folder, never changed once written."""
+    return law._store() / f"headings-v{HEADINGS_V}-{corpus.replace('/', '~')}-{sha[:12]}.json"
+
+
+def folded_headings(corpus: str, sha: str, index: dict[str, str]) -> dict[str, str]:
+    """An index's headings folded (fold), for the files that have one: made on the first search of the index and kept
+    with it, so a search by words is substring tests. Folding each heading on every call was 1.84 million folds a
+    call for Romania."""
     key = (corpus, sha)
     with _index_lock:
-        if key in _index_done:
-            return _index_done[key]
-        building = _index_building.get(key)
-        mine = building is None
+        kept = _index_folded.get(key)
+    if kept is not None and kept[0] is index:
+        return kept[1]
+    folded = {n: fold(h) for n, h in index.items() if h}
+    with _index_lock:
+        if _index_done.get(key) is index:  # kept only beside the index it was made from, and dropped with it
+            kept = _index_folded.get(key)
+            if kept is not None and kept[0] is index:
+                return kept[1]
+            _index_folded[key] = (index, folded)
+    return folded
+
+
+def _index_keep(key: tuple[str, str], out: dict[str, str]) -> None:
+    """Keep an index in memory as the one used last, and drop the ones used longest ago while more than
+    INDEX_HEADINGS_KEPT headings are held (never the one just kept). Called with _index_lock held."""
+    _index_done[key] = out
+    _index_done.move_to_end(key)
+    total = sum(len(v) for v in _index_done.values())
+    while total > INDEX_HEADINGS_KEPT and len(_index_done) > 1:
+        oldest = next(iter(_index_done))
+        total -= len(_index_done.pop(oldest))
+        _index_folded.pop(oldest, None)
+
+
+def _index_files(disk: Path, rest: str = r'[0-9a-f]{12}\.json') -> list[Path]:
+    """The index files of the corpus `disk` is for (any commit), newest first; or its files of another form of name."""
+    stem = disk.name[:-len('0123456789ab.json')]
+    found = []
+    try:
+        with os.scandir(disk.parent) as entries:
+            for e in entries:
+                if e.name.startswith(stem) and re.fullmatch(rest, e.name[len(stem):]):
+                    try:
+                        found.append((e.stat().st_mtime, e.name))
+                    except OSError:  # removed meanwhile (another server shares the folder)
+                        pass
+    except OSError:
+        return []
+    return [disk.parent / name for _, name in sorted(found, reverse=True)]
+
+
+def _index_read(disk: Path) -> dict[str, str] | None:
+    try:
+        with open(disk, encoding='utf-8') as f:
+            out = json.load(f)
+    except (OSError, ValueError):
+        return None
+    return out if isinstance(out, dict) else None
+
+
+def _index_write(disk: Path, out: dict[str, str]) -> bool:
+    """Store an index: written under a name of this process and thread, then moved into place, so no reader sees a
+    part of it and no file is changed where it lies (a second server may hold the same file by a hard link). Then
+    the corpus's files past the INDEX_FILES_KEPT newest are removed, never the one just stored."""
+    tmp = disk.with_name(f'{disk.name}.{os.getpid()}.{threading.get_ident()}.tmp')
+    try:
+        if not disk.is_file():
+            disk.parent.mkdir(parents=True, exist_ok=True)
+            tmp.write_text(json.dumps(out, ensure_ascii=False), encoding='utf-8')
+            os.replace(tmp, disk)
+    except (OSError, ValueError):
+        try:
+            tmp.unlink()
+        except OSError:
+            pass
+        return disk.is_file()
+    day_ago = time.time() - 86400
+    for old in _index_files(disk)[INDEX_FILES_KEPT:] + _index_files(disk, r'[0-9a-f]{12}\.json\.\d+\.\d+\.tmp'):
+        try:
+            if old != disk and (old.suffix == '.json' or old.stat().st_mtime < day_ago):  # a temp file: one left behind
+                old.unlink()
+        except OSError:
+            pass
+    return True
+
+
+def _index_from_earlier(corpus: str, sha: str, names: tuple[str, ...], disk: Path) -> dict[str, str] | None:
+    """The index at `sha` made from the newest index on disk for another commit of the corpus: the headings of the
+    files whose blobs differ between the two commits (git diff-tree) are read, the rest are taken over, and files no
+    longer there are left out; the same index as reading every file gives. None when there is no earlier file, git
+    cannot compare the commits (the earlier one is not in this checkout), or reading fails: then every file is read."""
+    stem = len(disk.name) - len('0123456789ab.json')
+    for old in _index_files(disk)[:INDEX_FILES_KEPT]:
+        if old == disk:
+            continue
+        try:
+            diff = git_run(['git', 'diff-tree', '-r', '--name-only', '--no-renames', '-z', old.name[stem:stem + 12], sha],
+                           cwd=ROOT / corpus, capture_output=True, timeout=GIT_TIMEOUT)
+            if diff.returncode:
+                continue
+            changed = set(diff.stdout.decode('utf-8').split('\0'))
+        except (OSError, ValueError, subprocess.SubprocessError):
+            continue
+        earlier = _index_read(old)
+        if earlier is None:
+            continue
+        # A file the earlier index does not hold is read as well, whatever git says of it.
+        need = [n for n in names if n in changed or n not in earlier]
+        fresh: dict[str, str] = {}
+        if need and not _index_read_headings(corpus, sha, need, fresh):
+            return None
+        read = set(need)
+        return {n: fresh[n] if n in read else earlier[n] for n in names if n not in read or n in fresh}  # in the order of names, as a full build
+    return None
+
+
+def _index_build(corpus: str, sha: str, disk: Path) -> dict[str, str] | None:
+    """The heading index read from git: from an earlier commit's file and what differs, else every file. None when
+    git failed part-way."""
+    names = names_of(corpus, sha)
+    out = _index_from_earlier(corpus, sha, names, disk)
+    if out is None:
+        out = {}
+        if not _index_read_headings(corpus, sha, names, out):
+            return None
+    return out
+
+
+def _heading_index(corpus: str, sha: str, wait: bool = True, build: bool = True, keep: bool = True) -> dict[str, str] | None:
+    """heading_index (the defaults), heading_index_if_built (build false: read from memory or disk, never built) and
+    store_heading_index (keep false: on disk afterwards, not in memory). One thread at a time reads or builds a
+    corpus's index at a commit; the others wait for it (not when `wait` is false, and never for a build when `build`
+    is false) and then look again."""
+    key = (corpus, sha)
+    disk = heading_index_file(corpus, sha)
+    for _ in range(2):
+        with _index_lock:
+            if key in _index_done:
+                _index_done.move_to_end(key)
+                return _index_done[key]
+        if not build and not disk.is_file():
+            return None
+        with _index_lock:
+            if key in _index_done:
+                _index_done.move_to_end(key)
+                return _index_done[key]
+            building = _index_building.get(key)
+            mine = building is None
+            if mine:
+                building = _index_building[key] = threading.Event()
+                _index_phase[key] = 'load'
         if mine:
-            building = _index_building[key] = threading.Event()
-    if not mine:
+            break
         if not wait:
             return None
-        while not building.wait(0.25):
+        while True:
+            if not build and _index_phase.get(key) == 'build':
+                return None
+            if building.wait(0.25):
+                break
             checkpoint()
-        return _index_done.get(key)
-    out: dict[str, str] = {}
-    # A body of case law keeps its heading index on disk, keyed by the pin: reading every decision for it took 110 s
-    # for the 328,000 US Supreme Court decisions, in every fresh process (US case-law audit, 2026-11-07).
-    disk = None
-    # Whatever happens below, the key stops being marked as building and those waiting are woken (finish); only a
-    # build that ran to its end is kept. A build that failed (the call's time ran out while listing the files, git
-    # could not start) used to be kept as an empty index for the life of the process, and one stopped by anything
-    # else left the key marked for good, so every later call waited on it.
-    built, proc = False, None
-
-    def finish():
+    else:  # waited twice for another thread, and neither left an index: the caller greps, as when there is none
         with _index_lock:
-            if built:
-                _index_done[key] = out
+            return _index_done.get(key)
+    # Whatever happens below, the key stops being marked as building and those waiting are woken; only an index read
+    # or built to its end is kept. A build that failed (the call's time ran out while listing the files, git could
+    # not start) used to be kept as an empty index for the life of the process, and one stopped by anything else
+    # left the key marked for good, so every later call waited on it.
+    out = None
+    try:
+        if not keep and disk.is_file():  # stored while this thread waited
+            return None
+        out = _index_read(disk)
+        if out is None and build:
+            with _index_lock:
+                _index_phase[key] = 'build'
+            out = _index_build(corpus, sha, disk)
+            if out is not None:
+                _index_write(disk, out)
+        return out  # None when not built: the caller greps, as when there is no index
+    except (OSError, ValueError, subprocess.SubprocessError):
+        out = None
+        return None
+    finally:
+        with _index_lock:
+            if out is not None and keep:
+                _index_keep(key, out)
             _index_building.pop(key, None)
+            _index_phase.pop(key, None)
         building.set()
-        if proc is not None and proc.poll() is None:  # stopped part-way: git is not left running
-            try:
-                proc.kill()
-                proc.stdout.close()
-                proc.wait(5)
-            except (OSError, ValueError, subprocess.SubprocessError):
-                pass
 
-    try:
-        if law.is_caselaw(law.corpus_info(corpus)):
-            disk = law._store() / f"headings-v1-{corpus.replace('/', '~')}-{sha[:12]}.json"
-            out = json.loads(disk.read_text(encoding='utf-8'))
-            built = True
-            finish()
-            return out
-    except (OSError, ValueError, StopIteration):
-        out = {}
-    except BaseException:
-        finish()
-        raise
-    try:
-        names = names_of(corpus, sha)
-        proc = subprocess.Popen(['git', 'cat-file', '--batch'], cwd=ROOT / corpus, stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
 
-        def feed(p=proc):
-            try:
-                p.stdin.write(''.join(f'{sha}:{n}\n' for n in names).encode('utf-8'))
-                p.stdin.close()
-            except (OSError, ValueError):  # git has gone (stopped above, or it failed): nothing left to feed
-                pass
+def _index_read_headings(corpus: str, sha: str, names, out: dict[str, str]) -> bool:
+    """Read into `out` the heading of each named file at a commit, in one `git cat-file --batch` read as a stream.
+    False when git failed."""
+    proc = subprocess.Popen(['git', 'cat-file', '--batch'], cwd=ROOT / corpus, stdin=subprocess.PIPE,
+                            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+
+    def feed(p=proc):
+        try:
+            p.stdin.write(''.join(f'{sha}:{n}\n' for n in names).encode('utf-8'))
+            p.stdin.close()
+        except (OSError, ValueError):  # git has gone (stopped below, or it failed): nothing left to feed
+            pass
+    try:
         feeder = threading.Thread(target=feed, daemon=True)
         feeder.start()
         for name in names:
@@ -1184,20 +1403,16 @@ def heading_index(corpus: str, sha: str, wait: bool = True) -> dict[str, str] | 
             heading = lines[at].lstrip('#').strip()
             nxt = next((l for l in lines[at + 1:at + 3] if l.strip()), '')
             out[name] = f'{heading} — {nxt.strip()}' if _subtitle(nxt) else heading
-        built = proc.wait() == 0
-        if disk is not None and proc.returncode == 0 and out:
-            try:
-                disk.parent.mkdir(parents=True, exist_ok=True)
-                tmp = disk.with_name(f'{disk.name}.{os.getpid()}.tmp')
-                tmp.write_text(json.dumps(out, ensure_ascii=False), encoding='utf-8')
-                os.replace(tmp, disk)
-            except OSError:
-                pass
-    except (OSError, ValueError, subprocess.SubprocessError):
-        built = False
+        proc.stdout.close()
+        return proc.wait() == 0
     finally:
-        finish()
-    return out if built else None  # not built: the caller greps, as when there is no index
+        if proc.poll() is None:  # stopped part-way: git is not left running
+            try:
+                proc.kill()
+                proc.stdout.close()
+                proc.wait(5)
+            except (OSError, ValueError, subprocess.SubprocessError):
+                pass
 
 
 def index_served() -> bool:
@@ -2137,11 +2352,12 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 scores[name] = score
         if plain:
             # The heading index (in memory, built once per pinned commit) when the corpora served are few enough; else
-            # git grep over the commit's headings.
-            index = heading_index(c['path'], sha) if indexed else None
+            # the index where one is stored on disk for this commit, else git grep over the commit's headings.
+            index = heading_index(c['path'], sha) if indexed else heading_index_if_built(c['path'], sha)
             if index is not None:
                 folded_words = [fold(w) for w in plain]
-                lines = [(n, h) for n in names if (h := index.get(n)) and any(w in fold(h) for w in folded_words)]
+                folded_heads = folded_headings(c['path'], sha, index)  # folded once per index, not once per call
+                lines = [(n, index[n]) for n in names if (f := folded_heads.get(n)) and any(w in f for w in folded_words)]
             else:
                 pattern = '^(#|heading:|title:).*(' + '|'.join(re.escape(w) for w in plain) + ')'
                 if law.is_caselaw(c):  # in parts, side by side: New York's other courts' 204,000 headings took 19 s in one
@@ -2196,7 +2412,8 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         # Files in the order a reader counts them (section-2 before section-10); past NATURAL_MOST names, by name.
         best = sorted(live, key=(lambda n: (-scores[n], natural(n))) if len(live) <= NATURAL_MOST else
                       (lambda n: (-scores[n], n)))[:(offset + limit) * 3]
-        index = heading_index(c['path'], sha, wait=False) if indexed else None  # with the title under the heading
+        # With the title under the heading. (A server that does not index reads a stored index only for rows to show.)
+        index = heading_index(c['path'], sha, wait=False) if indexed else heading_index_if_built(c['path'], sha) if best else None
         heads = {n: index.get(n, '') for n in best} if index else read_headings(c['path'], sha, tuple(best)) if best else {}
         lines_here = matched_line.get(c['path'], {})
         # A file's first heading may be only structure ("PART III", "Title III"): show the heading line that matched.
@@ -3644,8 +3861,9 @@ def t_search_law(args: dict) -> tuple[str, dict]:
             _GREP_SEM.release()
 
     def case_grep(corpus, sha, lines):
-        with subprocess.Popen(['git', '-c', 'core.quotepath=off', 'grep', f'--threads={GREP_THREADS}', '-n', '-I', *flags, '-e', pattern, sha, '--', '*.md'],
-                              cwd=ROOT / corpus, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        cmd, cwd = rewritten_grep(['git', '-c', 'core.quotepath=off', 'grep', f'--threads={GREP_THREADS}', '-n', '-I', *flags, '-e', pattern, sha, '--', '*.md'],
+                                  ROOT / corpus)
+        with subprocess.Popen(cmd, cwd=cwd, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                               encoding='utf-8', errors='replace') as proc:
             # A corpus that matches little is read to its end before git prints: stopped where the case-law time ends.
             left = (deadline - max(0.0, GIT_TIMEOUT - CASELAW_SECONDS) - time.monotonic()) if deadline else 0
@@ -3689,7 +3907,13 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         # One corpus's matches as the answer uses them, worked out in the worker: the files that match, and the first
         # `limit` lines (no answer shows more), so a common word's hundreds of thousands of lines are not all kept, as
         # one string and again as a list, until the corpora before this one have answered.
+        # A body of law is not started once the call's time is nearly up and at least one has been read (so a search
+        # of one corpus is always made): the answer names it as not read, and its counts are floors.
+        if pin[0] not in judged and law_read[0] and law_search_time_up():
+            return pin[0], None, [], [], 0
         corpus, sha, done = grep(pin)
+        if corpus not in judged:
+            law_read[0] += 1
         if done.returncode not in (0, 1):
             return corpus, done, [], [], 0
         ask = placed_elsewhere(corpus)
@@ -3716,10 +3940,15 @@ def t_search_law(args: dict) -> tuple[str, dict]:
 
     results, files, owners, n_lines = [], set(), {}, 0
     offset = offset_arg(args)
+    law_read = [0]  # bodies of law read so far (a count the workers share)
+    late = []  # bodies of law not read for the time (law_search_time_up), in the order they would have been read
     # Law corpora side by side too, four at a time, each git grep within GREP_SLOTS (git_run): one after another, a
     # search of every country waited for each corpus in turn.
     with ThreadPoolExecutor(4) as pool:
         for corpus, done, paths, rows, count in pool_map(pool, searched, pins):
+            if done is None:
+                late.append(corpus)
+                continue
             if done.returncode not in (0, 1):
                 raise UserError(f'Search failed: {done.stderr.strip()[:300]}')
             files.update(paths)
@@ -3729,14 +3958,15 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                 results.append(row)
                 owners[owner] = None
     checkpoint()
-    past_end(offset, n_lines)
+    if not late:  # with bodies of law not read, an offset past the lines read is not past the end
+        past_end(offset, n_lines)
     # The matching lines in parts: they come in one order (corpus by corpus, file by file), so offset goes on from
-    # where the answer before stopped. Case law read only in part gives a floor, not a total.
-    place = page_of(None if cut or unread else n_lines, len(results), offset, at_least=n_lines)
+    # where the answer before stopped. Case law read only in part, or law not all read, gives a floor, not a total.
+    place = page_of(None if cut or unread or late else n_lines, len(results), offset, at_least=n_lines)
     notes = short_caveats(sorted({n for corpus in owners for n in law.caveats(date, corpus)}))  # once a corpus, not once a line
     summary = (f'{len(files)} provision(s) in force on {date} contain {query!r}' + (f' in {scope}' if scope else '')
                + (f'; showing {len(results)} line(s).' if results else '.'))
-    headline = (f"{'At least ' if cut or unread else ''}{len(files)} provision(s) in force on {date} contain {query!r}"
+    headline = (f"{'At least ' if cut or unread or late else ''}{len(files)} provision(s) in force on {date} contain {query!r}"
                 + (f' in {scope}' if scope else '') + f', on {n_lines} line(s).')
     stopped = []  # why the search of case law is not whole, and how to read further: in the text and in `hints`
     if cut:  # case law read only in part: the count is a floor
@@ -3748,8 +3978,16 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         stopped.append(f'Partial: {len(unread)} case-law corpora were not read within the {int(CASELAW_SECONDS)} s this answer may '
                        f'spend on case law ({", ".join(sorted(unread)[:5])}{" ..." if len(unread) > 5 else ""}); give a jurisdiction to read them.')
         summary += f' {stopped[-1]}'
+    not_read = []
+    if late:  # law not all read: the counts are floors, and the line names what was left
+        n_law = sum(1 for c, _ in pins if c not in judged)
+        not_read.append(f'Partial: {len(late)} of {n_law} bodies of law were not read within the time this answer may take '
+                        f'({", ".join(late[:5])}{" ..." if len(late) > 5 else ""}); give a jurisdiction to read them.')
+        stopped.append(not_read[0])
+        if not cut:
+            summary = f'At least {summary[0].lower()}{summary[1:]}'
     more = more_note(place, 'lines')
-    lines = ([summary] + ([more] if more else []) + [f'Note: {n}' for n in notes] + [f'Left out: {n}' for n in left_out]
+    lines = ([summary] + not_read + ([more] if more else []) + [f'Note: {n}' for n in notes] + [f'Left out: {n}' for n in left_out]
              + [f"{r['path']}:{r['line']}: {r['text']}" for r in results] + ([caselaw_note(caselaw).strip()] if caselaw else []))
     hints = []  # guidance that is not a row or a note on the record: in the text, and in the structured answer as `hints`
     named = [e for e in aliases() if e.get('paths') and any(query.lower() == n.lower() for n in e['names'])]
@@ -3762,7 +4000,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                      'what_else_changes with its path: a text search misses citation forms and defined terms.')
     lines += hints
     related = []
-    if not results and not offset and not args.get('regex'):
+    if not results and not offset and not args.get('regex') and not late:  # (not with the call's time nearly up)
         # The words may name a reform rather than appear in its text ("Schuldenbremse"); try the change notes.
         _, found = t_search_changes({'query': query, 'jurisdiction': scope, 'end': date, 'max_results': 10})
         related = found['changes']
@@ -3783,7 +4021,9 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                               'caveats': notes, 'related_changes': related,
                               'popular_name_for': [p for e in named for p in e['paths']], 'left_out': left_out,
                               **caselaw_fields(caselaw), 'case_law_read_in_part': sorted(cut),
-                              'case_law_unread_for_time': sorted(unread), **({'hints': hints} if hints else {})}
+                              'case_law_unread_for_time': sorted(unread),
+                              **({'law_unread_for_time': late[:20], 'law_unread_count': len(late)} if late else {}),
+                              **({'hints': hints} if hints else {})}
 
 
 def t_list_provisions(args: dict) -> tuple[str, dict]:
@@ -4253,8 +4493,8 @@ def caselaw_grep(cwd: Path, head: str, flags: list[str], specs: list[str]) -> li
             caselaw_skipped()
             return ''
         # one thread each: the parts already run side by side (CASELAW_GREPS processes)
-        return git_run(['git', 'grep', '--threads=1', *flags, head, '--', *part], cwd=cwd,
-                       capture_output=True, encoding='utf-8', errors='replace').stdout
+        cmd, where = rewritten_grep(['git', 'grep', '--threads=1', *flags, head, '--', *part], cwd)
+        return git_run(cmd, cwd=where, capture_output=True, encoding='utf-8', errors='replace').stdout
 
     with ThreadPoolExecutor(min(CASELAW_GREPS, len(parts))) as pool:
         return [line for out in pool_map(pool, one, parts) for line in out.splitlines()]

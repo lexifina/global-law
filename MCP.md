@@ -280,6 +280,21 @@ canton's, or `caselaw` for all).
 - Case law is read for at most 60 s of a call (`GLOBAL_LAW_CASELAW_SECONDS`): `search_law`, `phrase_history` and
   `search_changes` over many courts then answer with what they read and name the corpora left out ("Partial: ..."). At
   most half the machine's cores run `git grep` at once, each with at most 8 threads.
+- A `search_law` of many bodies of law starts no further one once fewer than 25 s of the call are left
+  (`GLOBAL_LAW_SEARCH_MARGIN`), and at least one has been read. The answer is then a floor: the text starts "At least N
+  provision(s) ..." and has one line "Partial: K of M bodies of law were not read within the time this answer may take
+  (a, b, c ...); give a jurisdiction to read them."; `page.total` is `null` with `page.total_at_least`;
+  `law_unread_for_time` names the first 20 corpora not read, in the order they would have been read, and
+  `law_unread_count` says how many there are (both fields are present only in such an answer). The corpora are read in
+  one order, so the ones read are the first of them and `offset` goes on through their lines. A search of one corpus
+  is always made in full.
+- The heading index `find_provision` matches words against is kept on disk for every corpus
+  (`headings-v2-<corpus>-<commit>.json` in the tree's cache folder, the three newest per corpus), and an index for a
+  new commit reads only the files that differ from an earlier one's. A clone of a few countries builds it at start, as
+  before. A server of every country builds none while it answers: it reads a stored index where there is one
+  (`store_heading_index` makes it, for a host to call in the background) and greps the headings where there is not.
+  At most 16 million headings are held in memory (`GLOBAL_LAW_INDEX_HEADINGS`); the corpora used longest ago are
+  dropped first.
 - US citations: `resolve_citations` reads every section of a US Code list or range ("11 U.S.C. §§ 361, 363(e), and
   364", "9 U.S.C. §§ 1-16"), never a page stamp ("USCA4 ... Pg: 3") or a subsection digit; a citation under an older
   numbering ("11 U.S.C. § 110(e) (1976)") is reported apart, not linked to today's section; a docket shared by many
@@ -519,7 +534,7 @@ Each answer is a text (`content[0].text`) and the same facts as fields (`structu
 ```
 
 `next_offset` is `null` on the last part. `total` is `null`, with a floor in `total_at_least`, when the search stopped
-before it knew (case law read in part, or `find_provision` over many matches). The text says the same: "Showing files
+before it knew (case law read in part, bodies of law not read for the time, or `find_provision` over many matches). The text says the same: "Showing files
 1 to 200 of 238; pass offset 200 for the next." Rows come in one order on every call, so parts do not overlap. The
 earlier fields stay (`count`, `total`, `truncated`, `provision_count`). If a structured list is cut to fit the answer
 (`cut`), `page.next_offset` is the row after the last one it still holds. `what_else_changes` skips `offset` rows in

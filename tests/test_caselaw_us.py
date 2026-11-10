@@ -310,7 +310,7 @@ class UnitedStatesCaseLaw(unittest.TestCase):
             self.assertIn(f'{CASES}/{D4}', a['text'])
         store = subprocess.run(['git', 'rev-parse', '--path-format=absolute', '--git-path', 'global-law-cache'], cwd=self.t.root,
                                capture_output=True, encoding='utf-8').stdout.strip()
-        self.assertTrue(list(Path(store).glob('headings-v1-united-states~supreme-court~caselaw-*.json')))
+        self.assertTrue(list(Path(store).glob('headings-v2-united-states~supreme-court~caselaw-*.json')))
 
     def test_latest_decision_when_older_decisions_are_appended_later(self):
         """A decision of 2014 committed after one of 2022 (a backfill) is not the latest decision: world, world_on_date

@@ -3127,5 +3127,286 @@ class TestToolSurface(unittest.TestCase):
             self.assertIn('countries.py add', self.err('list_provisions', path=unserved))
 
 
+PW_C = 'palau/national/acts'
+
+
+class StoredIndexAndPartialSearch(unittest.TestCase):
+    """For a server of every country (2026-11-10): the heading index of every corpus is kept on disk and built from
+    an earlier commit's; a server that builds none reads a stored one (heading_index_if_built, store_heading_index);
+    a search of every body of law stops in time and says what it did not read; and a host may answer a git grep from
+    plain files (grep_rewrite). The index files of these tests go to a folder of their own, not the tree's cache."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def setUp(self):
+        import tempfile
+        from unittest import mock
+        m = self.m
+        self.mock = mock
+        self.folder = tempfile.TemporaryDirectory()
+        self.addCleanup(self.folder.cleanup)
+        real = m.heading_index_file
+        patch = mock.patch.object(m, 'heading_index_file', lambda c, s: Path(self.folder.name) / real(c, s).name)
+        patch.start()
+        self.addCleanup(patch.stop)
+        with m._index_lock:
+            held = dict(m._index_done), dict(m._index_folded)
+        self.forget()
+
+        def restore():
+            with m._index_lock:
+                m._index_done.clear()
+                m._index_folded.clear()
+                m._index_done.update(held[0])
+                m._index_folded.update(held[1])
+        self.addCleanup(restore)
+
+    def forget(self):
+        with self.m._index_lock:
+            self.m._index_done.clear()
+            self.m._index_folded.clear()
+
+    def rev(self, corpus, spec='HEAD'):
+        return subprocess.run(['git', 'rev-parse', spec], cwd=ROOT / corpus, capture_output=True, text=True, check=True).stdout.strip()
+
+    def file(self, corpus, sha):
+        return self.m.heading_index_file(corpus, sha)
+
+    def test_an_index_built_from_an_earlier_commits_equals_one_built_from_scratch(self):
+        m = self.m
+        read, real = [], m._index_read_headings
+
+        def counting(corpus, sha, names, out):
+            read.append(len(names))
+            return real(corpus, sha, names, out)
+        for corpus, back in ((IE_C, 'HEAD~200'), (PW_C, 'HEAD~30'), (FI_TT, 'HEAD~200')):
+            if not _checked_out(corpus):
+                continue
+            with self.subTest(corpus=corpus), self.mock.patch.object(m, '_index_read_headings', counting):
+                head, old = self.rev(corpus), self.rev(corpus, back)
+                self.assertTrue(m.store_heading_index(corpus, head))
+                whole = self.file(corpus, head).read_bytes()
+                files = read[-1]
+                self.assertNotIn((corpus, head), m._index_done)  # stored, not kept in memory
+                os.remove(self.file(corpus, head))
+                self.assertTrue(m.store_heading_index(corpus, old))
+                del read[:]
+                self.assertTrue(m.store_heading_index(corpus, head))
+                self.assertEqual(self.file(corpus, head).read_bytes(), whole)
+                self.assertEqual(len(read), 1)
+                self.assertLess(read[0], files)  # only the files that differ were read
+                # an earlier file for a commit git does not know: every file is read, with the same result
+                os.remove(self.file(corpus, head))
+                os.replace(self.file(corpus, old), self.file(corpus, '0123456789ab'))
+                del read[:]
+                self.assertTrue(m.store_heading_index(corpus, head))
+                self.assertEqual((self.file(corpus, head).read_bytes(), read), (whole, [files]))
+                self.assertEqual(m.heading_index(corpus, head), json.loads(whole))
+
+    @needs(PW_C)
+    def test_three_index_files_are_kept_for_a_corpus(self):
+        m, head = self.m, self.rev(PW_C)
+        stem = self.file(PW_C, head).name[:-len('0123456789ab.json')]
+        folder = Path(self.folder.name)
+        for i in range(5):
+            (folder / f'{stem}{i:012x}.json').write_text('{}')
+            os.utime(folder / f'{stem}{i:012x}.json', (time.time() - 1000 + i,) * 2)
+        other = folder / f"{stem[:-1]}-more-{0:012x}.json"  # a corpus whose name starts the same
+        other.write_text('{}')
+        left_behind = folder / f'{stem}{7:012x}.json.1.2.tmp'
+        left_behind.write_text('x')
+        os.utime(left_behind, (time.time() - 3 * 86400,) * 2)
+        self.assertTrue(m.store_heading_index(PW_C, head))
+        self.assertEqual(sorted(p.name for p in folder.iterdir()),
+                         sorted([self.file(PW_C, head).name, f'{stem}{3:012x}.json', f'{stem}{4:012x}.json', other.name]))
+
+    @needs(IE_C)
+    def test_a_stored_index_is_read_and_never_built_by_a_query(self):
+        import threading
+        m, head = self.m, self.rev(IE_C)
+        builds, real = [], m._index_build
+
+        def slow(corpus, sha, disk):
+            builds.append(sha)
+            time.sleep(0.3)
+            return real(corpus, sha, disk)
+        with self.mock.patch.object(m, '_index_build', slow):
+            self.assertIsNone(m.heading_index_if_built(IE_C, head))
+            self.assertEqual(builds, [])
+            first = threading.Thread(target=m.store_heading_index, args=(IE_C, head))
+            first.start()
+            time.sleep(0.1)
+            started = time.monotonic()
+            self.assertIsNone(m.heading_index_if_built(IE_C, head))  # a build is under way: not waited for
+            self.assertLess(time.monotonic() - started, 0.2)
+            stored = []
+            others = [threading.Thread(target=lambda: stored.append(m.store_heading_index(IE_C, head))) for _ in range(8)]
+            for t in others:
+                t.start()
+            for t in [first, *others]:
+                t.join()
+            self.assertEqual((stored, len(builds)), ([True] * 8, 1))  # built once
+            self.assertNotIn((IE_C, head), m._index_done)
+            got = []
+            readers = [threading.Thread(target=lambda: got.append(m.heading_index_if_built(IE_C, head))) for _ in range(8)]
+            for t in readers:
+                t.start()
+            for t in readers:
+                t.join()
+            self.assertEqual(len({id(g) for g in got}), 1)  # read from disk once
+            self.assertEqual(len(got[0]), len(m.names_of(IE_C, head)))
+            self.assertIs(m.heading_index(IE_C, head), got[0])
+            self.assertEqual(len(builds), 1)
+
+    @needs(IE_C, PW_C, FI_TT)
+    def test_indexes_in_memory_are_bounded(self):
+        m = self.m
+        ie, pw, fi = self.rev(IE_C), self.rev(PW_C), self.rev(FI_TT)
+        for corpus, sha in ((IE_C, ie), (PW_C, pw), (FI_TT, fi)):
+            self.assertTrue(m.store_heading_index(corpus, sha))
+        room = len(m.names_of(IE_C, ie)) + len(m.names_of(FI_TT, fi)) + 10  # not Palau's as well
+        with self.mock.patch.object(m, 'INDEX_HEADINGS_KEPT', room):
+            m.heading_index_if_built(PW_C, pw)
+            m.heading_index_if_built(FI_TT, fi)
+            m.folded_headings(PW_C, pw, m.heading_index_if_built(PW_C, pw))  # Palau is the one used last
+            m.heading_index_if_built(IE_C, ie)
+            self.assertEqual(([k[0] for k in m._index_done], [k[0] for k in m._index_folded]), ([PW_C, IE_C], [PW_C]))
+        with self.mock.patch.object(m, 'INDEX_HEADINGS_KEPT', 10):
+            self.assertIsNotNone(m.heading_index_if_built(FI_TT, fi))  # one larger than the bound is kept, alone
+            self.assertEqual(([k[0] for k in m._index_done], m._index_folded), ([FI_TT], {}))
+
+    @needs(IE_C)
+    def test_find_provision_reads_a_stored_index_on_a_server_that_does_not_index(self):
+        m, head = self.m, self.rev(IE_C)
+        greps, run = [], m.git_run
+
+        def spy(cmd, **kw):
+            if 'grep' in cmd:
+                greps.append(cmd)
+            return run(cmd, **kw)
+        ask = {'query': 'protected disclosure', 'jurisdiction': 'ireland'}
+        with self.mock.patch.object(m, 'git_run', spy):
+            with self.mock.patch.object(m, 'index_served', lambda: False):
+                m.t_find_provision(dict(ask))
+                self.assertEqual(len(greps), 1)  # no index stored: the headings are grepped, as before
+                self.assertIn('^(#|heading:|title:)', ' '.join(greps[0]))
+                self.assertNotIn((IE_C, head), m._index_done)
+                self.assertTrue(m.store_heading_index(IE_C, head))
+                del greps[:]
+                stored = m.t_find_provision(dict(ask))
+                self.assertEqual(greps, [])
+                self.assertIn((IE_C, head), m._index_folded)
+            self.forget()
+            self.assertEqual(m.t_find_provision(dict(ask)), stored)  # as a clone that indexes answers
+        index = m.heading_index(IE_C, head)
+        words = [m.fold(w) for w in ('protected', 'disclosure')]
+        folded = m.folded_headings(IE_C, head, index)
+        self.assertIs(m.folded_headings(IE_C, head, index), folded)
+        self.assertEqual([n for n, h in index.items() if h and any(w in m.fold(h) for w in words)],
+                         [n for n in index if (f := folded.get(n)) and any(w in f for w in words)])
+
+    @needs(IE_C, PW_C)
+    def test_a_search_of_every_body_of_law_stops_in_time(self):
+        m, pool = self.m, self.m.ThreadPoolExecutor
+        ask = {'query': 'narcotic', 'max_results': 7}
+        whole = m.t_search_law(dict(ask))
+        ireland = m.t_search_law({**ask, 'jurisdiction': IE_C, 'max_results': 200})[1]
+        self.assertTrue({p.split('/')[0] for p in whole[1]['provisions']} >= {'ireland', 'palau'})
+        self.assertNotIn('law_unread_count', whole[1])
+        # One corpus at a time, and the call's time counted as nearly up from the start: the first body of law is
+        # read, the rest are not started.
+        with self.mock.patch.object(m, 'ThreadPoolExecutor', lambda n: pool(1)), self.mock.patch.object(m, 'LAW_SEARCH_MARGIN', 10 ** 6):
+            self.assertEqual(m.t_search_law(dict(ask)), whole)  # outside a call's deadline nothing stops
+            m._call.deadline = time.monotonic() + 600
+            try:
+                text, data = m.t_search_law(dict(ask))
+                self.assertEqual((data['law_unread_for_time'], data['law_unread_count']), ([PW_C], 1))
+                self.assertIn(f'\nPartial: 1 of 2 bodies of law were not read within the time this answer may take ({PW_C}); '
+                              'give a jurisdiction to read them.\n', text)
+                self.assertEqual(text.count('Partial:'), 1)
+                self.assertTrue(text.startswith(f"At least {ireland['provision_count']} provision(s)"), text[:80])
+                self.assertTrue(data['summary'].startswith('At least '))
+                self.assertIn('Partial: 1 of 2', data['hints'][0])
+                self.assertEqual(data['provision_count'], ireland['provision_count'])
+                self.assertEqual((data['page']['total'], data['page']['total_at_least']), (None, ireland['page']['total']))
+                self.assertIn(f"of at least {ireland['page']['total']}", text)
+                seen, offset = [], 0  # the parts of the corpora read follow on without overlap
+                while offset is not None:
+                    part = m.t_search_law({**ask, 'offset': offset})[1]
+                    self.assertEqual(part['law_unread_for_time'], [PW_C])
+                    seen += part['results']
+                    offset = part['page']['next_offset']
+                self.assertEqual(seen, ireland['results'])
+                past = m.t_search_law({**ask, 'offset': 10 ** 6})[1]  # not "past the end": the end is not known
+                self.assertEqual((past['results'], past['page']['total']), ([], None))
+                # case law read as well is not counted among the bodies of law
+                if _checked_out(FI_TT):
+                    self.assertIn('Partial: 1 of 2 bodies of law', m.t_search_law({**ask, 'kind': 'all'})[0])
+                # one corpus asked for is always read, and answers as ever
+                one = m.t_search_law({**ask, 'jurisdiction': PW_C})
+                self.assertNotIn('law_unread_count', one[1])
+            finally:
+                m._call.deadline = 0.0
+            self.assertEqual(one, m.t_search_law({**ask, 'jurisdiction': PW_C}))
+
+    @needs(FI_TT)
+    def test_a_host_may_answer_a_grep_from_plain_files(self):
+        import io
+        import tarfile
+        import threading
+        m = self.m
+        search = {'query': 'irtisanomisaika', 'jurisdiction': FI_TT, 'max_results': 20}
+        find = {'query': 'irtisanominen', 'jurisdiction': FI_TT}
+        phrase = {'query': 'koeaikapurku', 'jurisdiction': FI_TT}
+
+        def answers():
+            self.forget()
+            with self.mock.patch.object(m, 'index_served', lambda: False):  # find_provision greps the headings
+                return m.t_search_law(dict(search)), m.t_find_provision(dict(find)), m.t_phrase_history(dict(phrase))
+        plain = answers()
+        self.assertTrue(plain[0][1]['results'] and plain[1][1]['results'] and plain[2][1]['changes'])
+        seen = []
+
+        def same(cmd, cwd):
+            seen.append((cmd, cwd))
+            return cmd, cwd
+        with self.mock.patch.object(m, 'grep_rewrite', same):
+            self.assertEqual(answers(), plain)
+        self.assertTrue(seen)
+        for cmd, cwd in seen:  # one revision, just before "--" (search_law's is the corpus as in force today)
+            self.assertEqual((cmd[0], Path(cwd)), ('git', ROOT / FI_TT))
+            self.assertRegex(cmd[cmd.index('--') - 1], '^[0-9a-f]{40}$')
+            self.assertIn('grep', cmd[1:4])
+        self.assertTrue(any(cmd[cmd.index('--') + 1:] == ['*.md'] for cmd, _ in seen))  # search_law
+        self.assertTrue(any(cmd[cmd.index('--') + 1].startswith(':(literal)decisions/') for cmd, _ in seen))  # in parts
+        # Each revision as plain files, and every grep run over them with --no-index: lines come without "<revision>:".
+        asked, failed, one_at_a_time = [], [], threading.Lock()
+
+        def from_files(cmd, cwd):
+            g, dd = cmd.index('grep'), cmd.index('--')
+            files = Path(self.folder.name) / cmd[dd - 1]
+            try:
+                with one_at_a_time:
+                    if not files.exists():
+                        done = subprocess.run(['git', 'archive', '--format=tar', cmd[dd - 1]], cwd=cwd, capture_output=True, check=True)
+                        with tarfile.open(fileobj=io.BytesIO(done.stdout)) as tar:
+                            tar.extractall(files, members=[t for t in tar.getmembers() if t.isfile() and t.name.endswith('.md') and '..' not in t.name])
+            except Exception as e:  # the tools would fall back to git, and the test would prove nothing
+                failed.append(repr(e))
+                raise
+            asked.append(cmd)
+            return [*cmd[:g + 1], '--no-index', *cmd[g + 1:dd - 1], *cmd[dd:]], str(files)
+        with self.mock.patch.object(m, 'grep_rewrite', from_files):
+            self.assertEqual(answers(), plain)
+        self.assertEqual((failed, len(asked)), ([], len(seen)))
+        with self.mock.patch.object(m, 'grep_rewrite', lambda cmd, cwd: 1 / 0):  # a hook that fails: git answers
+            self.assertEqual(answers(), plain)
+
+
 if __name__ == '__main__':
     unittest.main()
