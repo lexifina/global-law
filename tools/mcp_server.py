@@ -8444,7 +8444,7 @@ def fit_result(structured: dict) -> dict:
 def tool_list() -> list[dict]:
     return [{'name': n, 'title': n.replace('_', ' ').capitalize(), 'description': d,
              'inputSchema': {'type': 'object', 'properties': p, 'required': r, 'additionalProperties': False},
-             'annotations': RO} for n, d, p, r, _ in TOOLS]
+             'annotations': {'title': n.replace('_', ' ').capitalize(), **RO}} for n, d, p, r, _ in TOOLS]
 
 
 def resources() -> list[dict]:
