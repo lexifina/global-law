@@ -754,6 +754,15 @@ def scope_arg(args: dict, key: str = 'jurisdiction') -> str:
             scope = named[0]
         elif named:
             scope = os.path.commonpath(named).replace('\\', '/') or scope
+    if scope and not any(scoped(c['path'], scope) is not None for c in full):
+        # A scope that is in no corpus at all ("germanyy", "../etc") answered "nothing took effect in germanyy", which
+        # reads as no law where there is only a typo (found by the hosted server's security probe, 2026-11-10).
+        countries = sorted({c['path'].split('/')[0] for c in full})
+        near = difflib.get_close_matches(scope.split('/')[0].lower(), countries, n=3, cutoff=0.8)
+        raise UserError(f'No jurisdiction {scope[:120]!r} in the record'
+                        + (f' (did you mean {" or ".join(near)}?)' if near else '')
+                        + '. A jurisdiction is a country or a path prefix such as germany or united-states/federal; '
+                          'list_jurisdictions lists them.')
     shut = scope and unserved_answer(scope)
     if shut:
         raise UserError(shut)
