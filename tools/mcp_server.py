@@ -7829,7 +7829,7 @@ PAGE = {'max_chars': {'type': 'integer', 'description': f'Longest part of the te
 OFFSET = {'type': 'integer', 'description': 'Rows to skip: the next_offset the answer before gave in "page" (default 0).'}
 KIND = {'type': 'string', 'enum': ['laws', 'judgments', 'all', 'law'], 'description': 'laws (default; "law" is read the same): law only. judgments: court decisions (case law) only. all: both. A jurisdiction that names case law (a path ending in /caselaw) reads it too.'}
 REGEX = {'type': 'boolean', 'description': 'Read query as a regular expression (POSIX extended, as git grep -E reads it) instead of plain text (default false).'}
-RO = {'readOnlyHint': True, 'idempotentHint': True, 'openWorldHint': False}
+RO = {'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False}
 
 
 def at_most(default: int, most: int, what: str = 'At most this many') -> dict:
