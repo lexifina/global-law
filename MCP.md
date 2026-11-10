@@ -15,7 +15,7 @@ and git, reads the repository and changes nothing.
     - [Gemini CLI](#gemini-cli)
     - [Grok Build](#grok-build)
     - [Cline](#cline)
-    - [Claude (web, desktop and mobile)](#claude-web-desktop-and-mobile)
+    - [Claude (web and desktop)](#claude-web-and-desktop)
     - [ChatGPT](#chatgpt)
     - [Any other client](#any-other-client)
   - [What the hosted server does](#what-the-hosted-server-does)
@@ -53,8 +53,8 @@ changes, check citations) for the clients that take plugins. Every other client 
 | [Gemini CLI](#gemini-cli) | `gemini extensions install https://github.com/lexifina/global-law-plugin` |
 | [Grok Build](#grok-build) | Install **global-law** from the plugin marketplace |
 | [Cline](#cline) | Add a remote server with the URL |
-| [Claude](#claude-web-desktop-and-mobile) | Add a custom connector with the URL |
-| [ChatGPT](#chatgpt) | Add a custom connector with the URL |
+| [Claude](#claude-web-and-desktop) | **Customize**, **Connectors**, **Add custom connector** |
+| [ChatGPT](#chatgpt) | [chatgpt.com/plugins](https://chatgpt.com/plugins), **Add custom MCP server** |
 | [Any other client](#any-other-client) | Add a remote MCP server with the URL |
 
 #### Claude Code
@@ -123,13 +123,26 @@ In the MCP Servers panel, add a remote server named `global-law` with the URL. I
 { "mcpServers": { "global-law": { "type": "streamableHttp", "url": "https://global-law.lexifina.com/mcp" } } }
 ```
 
-#### Claude (web, desktop and mobile)
+#### Claude (web and desktop)
 
-In Settings, under Connectors, add a custom connector with the URL `https://global-law.lexifina.com/mcp`. It needs no sign-in.
+1. Open **Customize**, then **Connectors**.
+2. Select **+ Add**, then **Add custom connector**.
+3. Give it a name (Global law) and the URL `https://global-law.lexifina.com/mcp`, then **Continue**.
+4. Under **Authentication**, choose **No sign in**, then **Add**.
+5. In a chat, select **+**, then **Connectors**, and turn Global law on.
+
+On a Team or Enterprise plan an owner adds it first, under **Organization settings**, then **Connectors** (**Add**,
+**Custom**, **Web**); members then connect it from **Customize**. The free plan allows one custom connector.
 
 #### ChatGPT
 
-In Settings, under Connectors, add a custom connector (an MCP server) with the URL `https://global-law.lexifina.com/mcp` and no authentication.
+1. Open [chatgpt.com/plugins](https://chatgpt.com/plugins).
+2. Select the plus button, then **Add custom MCP server**.
+3. Give it a name and a description, and under **Connection** enter the URL `https://global-law.lexifina.com/mcp`.
+4. For authentication choose none, accept the warning, then **Create as a plugin**.
+5. Install it, start a new chat, type `@` and pick it.
+
+Whether your account can add a custom server depends on its plan and workspace settings.
 
 #### Any other client
 
