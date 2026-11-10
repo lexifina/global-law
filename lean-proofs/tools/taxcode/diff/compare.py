@@ -1,6 +1,6 @@
 """Compare the Lean model with PolicyEngine-US and Tax-Calculator, household by household.
 
-    python compare.py households.json lean.json pe.json tc.json report.json
+    python compare.py households.json lean.json pe.json tc.json report.json [ustaxes.json]
 
 Quantities compared (all 2025, federal):
   agi           adjusted gross income
@@ -19,6 +19,7 @@ import json, sys
 from collections import Counter, defaultdict
 
 hs, lean, pe, tc = (json.load(open(p, encoding="utf-8")) for p in sys.argv[1:5])
+ut = json.load(open(sys.argv[6], encoding="utf-8")) if len(sys.argv) > 6 else None
 TOL = 10
 
 
@@ -42,6 +43,14 @@ def tc_q(r):
             "actc": r["c11070"], "nonref": r["c07100"], "incomeTax": r["iitax"]}
 
 
+def ut_q(r):
+    """UsTaxes (run_ustaxes.ts). It reports no total of nonrefundable credits, so that quantity is not compared."""
+    if r is None or "error" in r:
+        return None
+    return {"agi": r["agi"], "taxable": r["taxableIncome"], "taxBefore": r["taxBeforeCredits"], "eitc": r["eitc"],
+            "actc": r["actc"], "incomeTax": r["incomeTax"]}
+
+
 QS = ["agi", "taxable", "taxBefore", "eitc", "actc", "nonref", "incomeTax"]
 
 
@@ -58,13 +67,15 @@ def tc_unsupported(h):
     return set()
 rows, stats = [], defaultdict(Counter)
 for i, h in enumerate(hs):
-    L = lean_q(lean[i]); P = pe_q(pe[i]); T = tc_q(tc[i])
-    row = {"i": i, "filing": h["filing"], "deps": len(h["dependents"]), "wages": h["wages"], "lean": L, "pe": P, "tc": T}
+    L = lean_q(lean[i]); P = pe_q(pe[i]); T = tc_q(tc[i]); U = ut_q(ut[i]) if ut else None
+    row = {"i": i, "filing": h["filing"], "deps": len(h["dependents"]), "wages": h["wages"], "lean": L, "pe": P, "tc": T, "ut": U}
     skip_tc = tc_unsupported(h)
     for q in QS:
-        for name, other in (("pe", P), ("tc", T)):
+        for name, other in (("pe", P), ("tc", T)) + ((("ut", U),) if ut else ()):
             if name == "tc" and q in skip_tc:
                 stats[f"{name}:{q}"]["n/a"] += 1
+                continue
+            if name == "ut" and other is not None and q not in other:
                 continue
             if other is None:
                 stats[f"{name}:{q}"]["error"] += 1
@@ -84,8 +95,11 @@ json.dump({"tolerance": TOL, "stats": {k: dict(v) for k, v in stats.items()}, "r
 print(f"{len(hs)} households, tolerance ${TOL}")
 for q in QS:
     line = [f"{q:10}"]
-    for name in ("pe", "tc", "pe-vs-tc"):
+    for name in ("pe", "tc") + (("ut",) if ut else ()) + ("pe-vs-tc",):
         c = stats[f"{name}:{q}"]
-        n = (sum(c.values()) - c["n/a"]) or 1
+        n = (sum(c.values()) - c["n/a"])
+        if n == 0:
+            line.append(f"{name}: —")
+            continue
         line.append(f"{name}: {c['agree']}/{n} agree" + (f" ({c['n/a']} n/a)" if c["n/a"] else ""))
     print("  " + " | ".join(line))
