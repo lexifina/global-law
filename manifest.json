@@ -6152,12 +6152,12 @@
       "iso_path": "ba-05/acts",
       "in_force_trailer": "In-force",
       "described_by": "data/repo.json",
-      "acts": 4,
-      "history_from": "2023-12-12",
+      "acts": 33,
+      "history_from": "2014-01-25",
       "history": "as-enacted",
-      "coverage": "4 acts, 4 dated versions from 2023-12-12 to 2026-02-27; each act as enacted, later changes not applied",
-      "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "coverage": "33 acts, 33 dated versions from 2014-01-25 to 2026-06-12; each act as enacted, later changes not applied",
+      "record_to": "2026-11-10",
+      "checked_on": "2026-11-10",
       "derived": [
         "acts",
         "checked_on",
@@ -6165,7 +6165,28 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "freshness": {
+        "schema": "ba-05-freshness/1",
+        "as_of": "2026-11-10",
+        "checked_against_official_source": "2026-11-09",
+        "totals": {
+          "acts": 33,
+          "by_status": {
+            "current": 29,
+            "pending-change": 4,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "Službene novine Bosansko-podrinjskog kantona Goražde",
+            "last_successful_check": "2026-11-09"
+          }
+        ]
+      }
     },
     {
       "path": "bosnia-and-herzegovina/federation/central-bosnia-canton/acts",
@@ -21699,7 +21720,7 @@
       "correction_trailer": "In-Kraft-laut-Fussnote",
       "history_from": "1949-05-24",
       "record_to": "2026-10-28",
-      "record_note": "Grundgesetz from 1949 (DocPatch reconciled with the official text, then Gesetze im Internet); all other federal law from 10 June 2019 (Gesetze im Internet via QuantLaw's daily archive). Checked against Gesetze im Internet on 28 October 2026, the day the record runs to.",
+      "record_note": "Grundgesetz from 1949 (DocPatch reconciled with the official text, then Gesetze im Internet); all other federal law from 10 June 2019 (Gesetze im Internet via QuantLaw's daily archive). Checked against Gesetze im Internet on the record_to day.",
       "has_future_branch": false,
       "tool": "python tools/stand_am.py DATE [ARTICLE ...] | python tools/stand_am.py DATE --gesetz <act>",
       "citation": {
@@ -47784,7 +47805,7 @@
       "name": "Montenegro",
       "label": "Montenegro",
       "language": "",
-      "coverage": "31743 acts, 31764 dated versions from 1992-01-15 to 2026-11-10",
+      "coverage": "31799 acts, 31820 dated versions from 1992-01-15 to 2026-11-10",
       "in_force_trailer": "In-force",
       "record_to": "2026-11-10",
       "record_note": "Publisher: Službeni list Crne Gore.",
@@ -47797,7 +47818,7 @@
       "iso_path": "me/acts",
       "publisher": "Službeni list Crne Gore",
       "described_by": "data/repo.json",
-      "acts": 31743,
+      "acts": 31799,
       "history_from": "1992-01-15",
       "history": "in-force",
       "checked_on": "2026-11-10",
@@ -47808,7 +47829,32 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "freshness": {
+        "schema": "me-freshness/1",
+        "as_of": "2026-11-10",
+        "checked_against_official_source": "2026-11-10",
+        "totals": {
+          "acts": 31779,
+          "by_status": {
+            "current": 2125,
+            "pending-change": 15,
+            "stale": 0,
+            "unverified": 29639,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "Službeni list Crne Gore, legal information system (PIS): act pages",
+            "last_successful_check": "2026-11-10"
+          },
+          {
+            "source": "Službeni list Crne Gore, PIS: listings of every act (status, issue)",
+            "last_successful_check": "2026-11-09"
+          }
+        ]
+      }
     },
     {
       "path": "morocco/national/acts",
@@ -72686,7 +72732,7 @@
       "name": "Case law: United States, the federal bankruptcy courts and bankruptcy appellate panels",
       "label": "United States case law (the federal bankruptcy courts and bankruptcy appellate panels)",
       "language": "en",
-      "coverage": "66379 published decisions, one file each, dated the day decided: 66364 with their opinion text and 15 with CAP head matter only (CAP holds no opinion text for them); 134121 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "66379 published decisions, one file each, dated the day decided: 66364 with their opinion text and 15 with CAP head matter only (CAP holds no opinion text for them); 134052 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1891-06-18",
       "record_to": "2026-11-08",
@@ -72698,7 +72744,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -72729,7 +72775,7 @@
       "name": "Case law: United States, the federal district courts of the First Circuit",
       "label": "United States case law (the federal district courts of the First Circuit)",
       "language": "en",
-      "coverage": "33915 published decisions, one file each, dated the day decided: 33731 with their opinion text and 184 with CAP head matter only (CAP holds no opinion text for them); 5142 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "33915 published decisions, one file each, dated the day decided: 33731 with their opinion text and 184 with CAP head matter only (CAP holds no opinion text for them); 5139 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1792-01-01",
       "record_to": "2026-11-08",
@@ -72741,7 +72787,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -72772,7 +72818,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the First Circuit",
       "label": "United States case law (the United States Court of Appeals for the First Circuit)",
       "language": "en",
-      "coverage": "24361 published decisions, one file each, dated the day decided: 24359 with their opinion text and 2 with CAP head matter only (CAP holds no opinion text for them); 3716 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "24361 published decisions, one file each, dated the day decided: 24359 with their opinion text and 2 with CAP head matter only (CAP holds no opinion text for them); 3701 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1878-05-22",
       "record_to": "2026-11-06",
@@ -72784,7 +72830,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -72857,7 +72903,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the Tenth Circuit",
       "label": "United States case law (the United States Court of Appeals for the Tenth Circuit)",
       "language": "en",
-      "coverage": "49846 published decisions, one file each, dated the day decided: 49843 with their opinion text and 3 with CAP head matter only (CAP holds no opinion text for them); 5307 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "49846 published decisions, one file each, dated the day decided: 49843 with their opinion text and 3 with CAP head matter only (CAP holds no opinion text for them); 5303 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1929-06-05",
       "record_to": "2026-11-06",
@@ -72869,7 +72915,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -72899,7 +72945,7 @@
       "name": "Case law: United States, the federal district courts of the Eleventh Circuit",
       "label": "United States case law (the federal district courts of the Eleventh Circuit)",
       "language": "en",
-      "coverage": "28817 published decisions, one file each, dated the day decided: 28783 with their opinion text and 34 with CAP head matter only (CAP holds no opinion text for them); 5708 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "28817 published decisions, one file each, dated the day decided: 28783 with their opinion text and 34 with CAP head matter only (CAP holds no opinion text for them); 5707 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1805-12-18",
       "record_to": "2026-11-08",
@@ -72911,7 +72957,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -72942,7 +72988,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the Eleventh Circuit",
       "label": "United States case law (the United States Court of Appeals for the Eleventh Circuit)",
       "language": "en",
-      "coverage": "56171 published decisions, one file each, dated the day decided: 56170 with their opinion text and 1 with CAP head matter only (CAP holds no opinion text for them); 5970 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "56171 published decisions, one file each, dated the day decided: 56170 with their opinion text and 1 with CAP head matter only (CAP holds no opinion text for them); 5965 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1981-11-03",
       "record_to": "2026-11-06",
@@ -72954,7 +73000,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73027,7 +73073,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the Second Circuit",
       "label": "United States case law (the United States Court of Appeals for the Second Circuit)",
       "language": "en",
-      "coverage": "79624 published decisions, one file each, dated the day decided: 79610 with their opinion text and 14 with CAP head matter only (CAP holds no opinion text for them); 8264 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "79624 published decisions, one file each, dated the day decided: 79610 with their opinion text and 14 with CAP head matter only (CAP holds no opinion text for them); 8179 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1820-01-01",
       "record_to": "2026-11-06",
@@ -73039,7 +73085,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73069,7 +73115,7 @@
       "name": "Case law: United States, the federal district courts of the Third Circuit",
       "label": "United States case law (the federal district courts of the Third Circuit)",
       "language": "en",
-      "coverage": "53049 published decisions, one file each, dated the day decided: 52896 with their opinion text and 153 with CAP head matter only (CAP holds no opinion text for them); 10297 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "53049 published decisions, one file each, dated the day decided: 52896 with their opinion text and 153 with CAP head matter only (CAP holds no opinion text for them); 10289 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1783-05-01",
       "record_to": "2026-11-08",
@@ -73081,7 +73127,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73112,7 +73158,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the Third Circuit",
       "label": "United States case law (the United States Court of Appeals for the Third Circuit)",
       "language": "en",
-      "coverage": "55373 published decisions, one file each, dated the day decided: 55373 with their opinion text and 0 with CAP head matter only (CAP holds no opinion text for them); 6927 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "55373 published decisions, one file each, dated the day decided: 55373 with their opinion text and 0 with CAP head matter only (CAP holds no opinion text for them); 6904 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1843-04-01",
       "record_to": "2026-11-06",
@@ -73124,7 +73170,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73197,7 +73243,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the Fourth Circuit",
       "label": "United States case law (the United States Court of Appeals for the Fourth Circuit)",
       "language": "en",
-      "coverage": "96415 published decisions, one file each, dated the day decided: 96412 with their opinion text and 3 with CAP head matter only (CAP holds no opinion text for them); 5029 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "96415 published decisions, one file each, dated the day decided: 96412 with their opinion text and 3 with CAP head matter only (CAP holds no opinion text for them); 5009 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1892-04-12",
       "record_to": "2026-11-06",
@@ -73209,7 +73255,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73239,7 +73285,7 @@
       "name": "Case law: United States, the federal district courts of the Fifth Circuit",
       "label": "United States case law (the federal district courts of the Fifth Circuit)",
       "language": "en",
-      "coverage": "28758 published decisions, one file each, dated the day decided: 28726 with their opinion text and 32 with CAP head matter only (CAP holds no opinion text for them); 5921 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "28758 published decisions, one file each, dated the day decided: 28726 with their opinion text and 32 with CAP head matter only (CAP holds no opinion text for them); 5917 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1796-01-01",
       "record_to": "2026-11-08",
@@ -73251,7 +73297,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73282,7 +73328,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the Fifth Circuit",
       "label": "United States case law (the United States Court of Appeals for the Fifth Circuit)",
       "language": "en",
-      "coverage": "125656 published decisions, one file each, dated the day decided: 125654 with their opinion text and 2 with CAP head matter only (CAP holds no opinion text for them); 9956 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "125656 published decisions, one file each, dated the day decided: 125654 with their opinion text and 2 with CAP head matter only (CAP holds no opinion text for them); 9937 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1891-11-27",
       "record_to": "2026-11-06",
@@ -73294,7 +73340,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73324,7 +73370,7 @@
       "name": "Case law: United States, the federal district courts of the Sixth Circuit",
       "label": "United States case law (the federal district courts of the Sixth Circuit)",
       "language": "en",
-      "coverage": "35104 published decisions, one file each, dated the day decided: 34981 with their opinion text and 123 with CAP head matter only (CAP holds no opinion text for them); 7141 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "35104 published decisions, one file each, dated the day decided: 34981 with their opinion text and 123 with CAP head matter only (CAP holds no opinion text for them); 7137 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1802-01-01",
       "record_to": "2026-11-08",
@@ -73336,7 +73382,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73367,7 +73413,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the Sixth Circuit",
       "label": "United States case law (the United States Court of Appeals for the Sixth Circuit)",
       "language": "en",
-      "coverage": "59864 published decisions, one file each, dated the day decided: 59863 with their opinion text and 1 with CAP head matter only (CAP holds no opinion text for them); 7119 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "59864 published decisions, one file each, dated the day decided: 59863 with their opinion text and 1 with CAP head matter only (CAP holds no opinion text for them); 7101 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1868-01-01",
       "record_to": "2026-11-06",
@@ -73379,7 +73425,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73409,7 +73455,7 @@
       "name": "Case law: United States, the federal district courts of the Seventh Circuit",
       "label": "United States case law (the federal district courts of the Seventh Circuit)",
       "language": "en",
-      "coverage": "38012 published decisions, one file each, dated the day decided: 37941 with their opinion text and 71 with CAP head matter only (CAP holds no opinion text for them); 7992 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "38012 published decisions, one file each, dated the day decided: 37941 with their opinion text and 71 with CAP head matter only (CAP holds no opinion text for them); 7985 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1808-01-01",
       "record_to": "2026-11-08",
@@ -73421,7 +73467,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73452,7 +73498,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the Seventh Circuit",
       "label": "United States case law (the United States Court of Appeals for the Seventh Circuit)",
       "language": "en",
-      "coverage": "54733 published decisions, one file each, dated the day decided: 54728 with their opinion text and 5 with CAP head matter only (CAP holds no opinion text for them); 7789 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "54733 published decisions, one file each, dated the day decided: 54728 with their opinion text and 5 with CAP head matter only (CAP holds no opinion text for them); 7770 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1892-03-08",
       "record_to": "2026-11-06",
@@ -73464,7 +73510,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73494,7 +73540,7 @@
       "name": "Case law: United States, the federal district courts of the Eighth Circuit",
       "label": "United States case law (the federal district courts of the Eighth Circuit)",
       "language": "en",
-      "coverage": "30175 published decisions, one file each, dated the day decided: 30116 with their opinion text and 59 with CAP head matter only (CAP holds no opinion text for them); 4668 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "30175 published decisions, one file each, dated the day decided: 30116 with their opinion text and 59 with CAP head matter only (CAP holds no opinion text for them); 4662 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1802-03-23",
       "record_to": "2026-11-08",
@@ -73506,7 +73552,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73537,7 +73583,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the Eighth Circuit",
       "label": "United States case law (the United States Court of Appeals for the Eighth Circuit)",
       "language": "en",
-      "coverage": "68476 published decisions, one file each, dated the day decided: 68470 with their opinion text and 6 with CAP head matter only (CAP holds no opinion text for them); 5849 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "68476 published decisions, one file each, dated the day decided: 68470 with their opinion text and 6 with CAP head matter only (CAP holds no opinion text for them); 5841 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1873-12-10",
       "record_to": "2026-11-06",
@@ -73549,7 +73595,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73579,7 +73625,7 @@
       "name": "Case law: United States, the federal district courts of the Ninth Circuit",
       "label": "United States case law (the federal district courts of the Ninth Circuit)",
       "language": "en",
-      "coverage": "42252 published decisions, one file each, dated the day decided: 42198 with their opinion text and 54 with CAP head matter only (CAP holds no opinion text for them); 8567 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "42252 published decisions, one file each, dated the day decided: 42198 with their opinion text and 54 with CAP head matter only (CAP holds no opinion text for them); 8566 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1808-01-11",
       "record_to": "2026-11-08",
@@ -73591,7 +73637,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73622,7 +73668,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the Ninth Circuit",
       "label": "United States case law (the United States Court of Appeals for the Ninth Circuit)",
       "language": "en",
-      "coverage": "154783 published decisions, one file each, dated the day decided: 154772 with their opinion text and 11 with CAP head matter only (CAP holds no opinion text for them); 14546 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "154783 published decisions, one file each, dated the day decided: 154772 with their opinion text and 11 with CAP head matter only (CAP holds no opinion text for them); 14506 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1854-04-29",
       "record_to": "2026-11-06",
@@ -73634,7 +73680,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73707,7 +73753,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the District of Columbia Circuit",
       "label": "United States case law (the United States Court of Appeals for the District of Columbia Circuit)",
       "language": "en",
-      "coverage": "31634 published decisions, one file each, dated the day decided: 31569 with their opinion text and 55 with CAP head matter only (CAP holds no opinion text for them); 3056 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "31634 published decisions, one file each, dated the day decided: 31569 with their opinion text and 55 with CAP head matter only (CAP holds no opinion text for them); 3029 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1840-11-28",
       "record_to": "2026-11-06",
@@ -73719,7 +73765,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73749,7 +73795,7 @@
       "name": "Case law: United States, the United States Court of Appeals for the Federal Circuit",
       "label": "United States case law (the United States Court of Appeals for the Federal Circuit)",
       "language": "en",
-      "coverage": "33581 published decisions, one file each, dated the day decided: 33571 with their opinion text and 18 with CAP head matter only (CAP holds no opinion text for them); 11713 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "33581 published decisions, one file each, dated the day decided: 33571 with their opinion text and 18 with CAP head matter only (CAP holds no opinion text for them); 11686 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1982-10-28",
       "record_to": "2026-11-06",
@@ -73761,7 +73807,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -73791,7 +73837,7 @@
       "name": "Case law: United States, the intermediate appellate courts of California",
       "label": "United States case law (the intermediate appellate courts of California)",
       "language": "en",
-      "coverage": "101047 published decisions, one file each, dated the day decided: 101035 with their opinion text and 12 with CAP head matter only (CAP holds no opinion text for them); 1333 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "101047 published decisions, one file each, dated the day decided: 101035 with their opinion text and 12 with CAP head matter only (CAP holds no opinion text for them); 1331 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1837-06-25",
       "record_to": "2026-11-08",
@@ -73803,7 +73849,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -74827,7 +74873,7 @@
       "name": "Case law: United States, the intermediate appellate courts of Georgia",
       "label": "United States case law (the intermediate appellate courts of Georgia)",
       "language": "en",
-      "coverage": "101981 published decisions, one file each, dated the day decided: 101967 with their opinion text and 14 with CAP head matter only (CAP holds no opinion text for them); 385 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "101981 published decisions, one file each, dated the day decided: 101967 with their opinion text and 14 with CAP head matter only (CAP holds no opinion text for them); 384 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1906-12-04",
       "record_to": "2026-11-08",
@@ -74839,7 +74885,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -75239,7 +75285,7 @@
       "name": "Case law: United States, the intermediate appellate courts of Illinois",
       "label": "United States case law (the intermediate appellate courts of Illinois)",
       "language": "en",
-      "coverage": "124880 published decisions, one file each, dated the day decided: 124679 with their opinion text and 201 with CAP head matter only (CAP holds no opinion text for them); 728 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "124880 published decisions, one file each, dated the day decided: 124679 with their opinion text and 201 with CAP head matter only (CAP holds no opinion text for them); 725 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1771-10-12",
       "record_to": "2026-11-08",
@@ -75251,7 +75297,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -78683,7 +78729,7 @@
       "name": "Case law: United States, the intermediate appellate courts of South Carolina",
       "label": "United States case law (the intermediate appellate courts of South Carolina)",
       "language": "en",
-      "coverage": "10645 published decisions, one file each, dated the day decided: 10638 with their opinion text and 7 with CAP head matter only (CAP holds no opinion text for them); 95 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "10645 published decisions, one file each, dated the day decided: 10638 with their opinion text and 7 with CAP head matter only (CAP holds no opinion text for them); 94 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1796-01-01",
       "record_to": "2026-11-08",
@@ -78695,7 +78741,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
@@ -78907,7 +78953,7 @@
       "name": "Case law: United States, the Supreme Court of the United States",
       "label": "United States case law (the Supreme Court of the United States)",
       "language": "en",
-      "coverage": "386132 published decisions, one file each, dated the day decided: 337770 with their opinion text and 48362 with CAP head matter only (CAP holds no opinion text for them); 2905 citations of the US Code linked to united-states/federal/usc.",
+      "coverage": "386132 published decisions, one file each, dated the day decided: 337770 with their opinion text and 48362 with CAP head matter only (CAP holds no opinion text for them); 2799 citations of the US Code linked to united-states/federal/usc.",
       "history": "in-force",
       "history_from": "1791-01-01",
       "record_to": "2026-11-06",
@@ -78919,7 +78965,7 @@
       "overlay": {
         "path": "judgments/united-states/federal/usc/<title>/<section>.jsonl",
         "law_corpus": "united-states/federal/usc",
-        "rebuilt": "2026-11-09",
+        "rebuilt": "2026-11-10",
         "reader": "tools/usc_cite.py: a page stamp (\"USCA4\") is no citation, \"(a)(4)\" a subsection, a range (\"§§ 101-1330\", \"§§ 1 through 16\") links neither end (its ends are no more cited than the sections between them); a citation under an older numbering (before the title was recodified, before the section was added, an earlier edition, \"former\") is not linked; one row per decision (decision-relations.tsv duplicates left out)",
         "law_commit": "f33a539ca52fde0166d681830d03e812e05d288f",
         "titles": [
