@@ -6201,7 +6201,10 @@ DOCKET_QUERY = re.compile(r'\s*(?:(?:Docket|Case|Civ\.|Cr\.|Civil\s+Action)\s+)?
                           r'|(?<=No\.\s)\d{1,4}|(?<=No\.)\d{1,4})\s*')
 # A US reporter citation's shape ("8 Bush 587", "1 Tyng 570", "154 U.S. App. D.C. 1") or a public-domain citation
 # ("2004-NMCA-020"): looked up as a decision even where the reporter list lacks the name.
-US_CITE_SHAPE = re.compile(r"\d{1,4}\s+[A-Z][A-Za-z.&' ]{0,30}?(?:\s?(?:2d|3d|4th|5th))?\s*\d{1,5}|(?:19|20)\d{2}-[A-Z]{2,8}-\d{1,6}")
+US_CITE_SHAPE = re.compile(r"\d{1,4}\s+[A-Z][A-Za-z.&' ]{0,30}?(?:\s?(?:2d|3d|4th|5th))?\s*\d{1,5}|(?:19|20)\d{2}-[A-Z]{2,8}-\d{1,6}"
+                           # a state's own public-domain citation: "2017 IL 121124", "2018 IL App (1st) 162345-U",
+                           # "2019 ND 12", "2016 Ark. 5" (cap-fix audit: "2017 IL 121124" answered with 1 U.S.C. headings)
+                           r"|(?:19|20)\d{2}\s+(?:[A-Z]{2}|Ark\.|Ohio)(?:\s+App\.?(?:\s+\(\d(?:st|nd|rd|th|d)\))?)?\s+\d{1,6}(?:-U)?")
 
 
 def rank_docket(docket: str, text: str, at: int, end: int, within: str = 'united-states/') -> dict:
