@@ -1,0 +1,240 @@
+[
+ {
+  "id": "owners_base",
+  "family": "owners",
+  "moves": [],
+  "text": "Business owners, doing nothing: the baseline."
+ },
+ {
+  "id": "owners_kid_wages",
+  "family": "owners",
+  "moves": [
+   [
+    "kidWage",
+    0,
+    43,
+    15750,
+    1
+   ]
+  ],
+  "text": "Business owners pay each child up to $15,750 a year (within the reasonable cap for the age) while the business runs; each child puts what it can in a Roth IRA."
+ },
+ {
+  "id": "owners_convert",
+  "family": "owners",
+  "moves": [
+   [
+    "convAmt",
+    0,
+    43,
+    100000
+   ]
+  ],
+  "text": "Business owners convert $100,000 of IRA to Roth every year until the IRAs are empty."
+ },
+ {
+  "id": "owners_best",
+  "family": "owners",
+  "moves": [
+   [
+    "kidWage",
+    0,
+    43,
+    15750,
+    1
+   ],
+   [
+    "convAmt",
+    0,
+    43,
+    100000
+   ],
+   [
+    "kidHarvestTo",
+    0,
+    43,
+    48350
+   ],
+   [
+    "kidWage",
+    15,
+    20,
+    7000,
+    1
+   ],
+   [
+    "giftAnnual",
+    10,
+    11,
+    38000
+   ]
+  ],
+  "text": "Business owners, the greedy search's best plan: children's wages and Roth IRAs, $100,000 conversions, children's gains realised up to their 0% band, a later wage, one annual-exclusion gift."
+ },
+ {
+  "id": "retirees_base",
+  "family": "retirees",
+  "moves": [],
+  "text": "Early retirees, doing nothing."
+ },
+ {
+  "id": "retirees_convert",
+  "family": "retirees",
+  "moves": [
+   [
+    "convAmt",
+    0,
+    34,
+    50000
+   ]
+  ],
+  "text": "Early retirees convert $50,000 a year."
+ },
+ {
+  "id": "retirees_best",
+  "family": "retirees",
+  "moves": [
+   [
+    "convAmt",
+    0,
+    34,
+    50000
+   ],
+   [
+    "convAmt",
+    12,
+    34,
+    200000
+   ],
+   [
+    "convTo",
+    7,
+    12,
+    96950
+   ],
+   [
+    "bunch",
+    0,
+    34,
+    1,
+    1
+   ]
+  ],
+  "text": "Early retirees, the greedy search's best plan: conversions sized by period, and charity given in shares."
+ },
+ {
+  "id": "earners_base",
+  "family": "earners",
+  "moves": [],
+  "text": "High earners, doing nothing (their estate pays estate tax)."
+ },
+ {
+  "id": "earners_gift",
+  "family": "earners",
+  "moves": [
+   [
+    "giftLump",
+    0,
+    1,
+    500000
+   ]
+  ],
+  "text": "High earners give $500,000 of shares to the children at once."
+ },
+ {
+  "id": "earners_best",
+  "family": "earners",
+  "moves": [
+   [
+    "giftLump",
+    0,
+    1,
+    500000
+   ],
+   [
+    "convTo",
+    0,
+    47,
+    394600
+   ],
+   [
+    "bunch",
+    0,
+    47,
+    1,
+    1
+   ],
+   [
+    "convAmt",
+    25,
+    27,
+    50000
+   ],
+   [
+    "convTo",
+    18,
+    21,
+    206700
+   ]
+  ],
+  "text": "High earners, the greedy search's best plan: the gift, conversions to the top of the 24% row, charity in shares."
+ },
+ {
+  "id": "investors_base",
+  "family": "investors",
+  "moves": [],
+  "text": "Investors living on an $8 million portfolio, doing nothing."
+ },
+ {
+  "id": "investors_shares",
+  "family": "investors",
+  "moves": [
+   [
+    "bunch",
+    0,
+    40,
+    1,
+    1
+   ]
+  ],
+  "text": "Investors give their usual $30,000 a year to charity in appreciated shares instead of cash."
+ },
+ {
+  "id": "investors_best",
+  "family": "investors",
+  "moves": [
+   [
+    "bunch",
+    0,
+    40,
+    1,
+    1
+   ],
+   [
+    "giftAnnual",
+    5,
+    8,
+    38000
+   ],
+   [
+    "convAmt",
+    0,
+    40,
+    25000
+   ],
+   [
+    "kidHarvestTo",
+    17,
+    40,
+    48350
+   ],
+   [
+    "convTo",
+    25,
+    40,
+    501050
+   ]
+  ],
+  "text": "Investors, the greedy search's best plan: charity in shares, annual-exclusion gifts while the children are 15 to 18, conversions, the children's gains realised in their 0% band."
+ }
+]
