@@ -1,6 +1,9 @@
 """Which law wrote each drafting finding? Blame against the united-states-law git history.
 
-    python tools/taxcode/blame.py <out dir> <united-states-law clone>
+    python tools/taxcode/blame.py <out dir> <united-states-law clone> [revision]
+
+With a revision (e.g. the history-full branch pinned at a commit), only that commit's history is searched; without one,
+every ref in the clone is (`--all`).
 
 For every finding in findings.csv, search the history of its section's file (title-26/<section>.md) for the commit that
 first introduced the finding's words (`git log -S`, oldest first); the commit message names the public law. Writes
@@ -12,6 +15,7 @@ from collections import Counter
 from pathlib import Path
 
 out, repo = Path(sys.argv[1]), Path(sys.argv[2])
+REV = [sys.argv[3]] if len(sys.argv) > 3 else ["--all"]
 rows = list(csv.DictReader(open(out / "findings.csv", encoding="utf-8")))
 
 
@@ -40,7 +44,7 @@ for r in rows:
     if f and len(n) >= 8:
         key = (f, n)
         if key not in cache:
-            p = subprocess.run(["git", "-C", str(repo), "log", "--all", "--reverse", "--format=%h|%ad|%s", "--date=short",
+            p = subprocess.run(["git", "-C", str(repo), "log", *REV, "--reverse", "--format=%h|%ad|%s", "--date=short",
                                 "-S", n, "--", f], capture_output=True, text=True, encoding="utf-8")
             first = (p.stdout.strip().splitlines() or [""])[0]
             cache[key] = first
