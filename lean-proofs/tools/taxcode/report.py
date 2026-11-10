@@ -42,7 +42,7 @@ for f in findings:
     p = byid.get(f["citing"], {})
     text = p.get("text", "")
     phrase = f["detail"].split(" — ")[0]
-    i = text.find(phrase[:25]) if phrase else -1
+    i = text.replace("†", " ").find(phrase[:25]) if phrase else -1  # the parser reads with footnote marks blanked
     ctx = text[max(0, i - 160):i + 160] if i >= 0 else text[:300]
     fns = p.get("footnotes", [])
     rows.append({

@@ -32,8 +32,13 @@ structure Prov where
   id : String
   kind : String
   parent : Option String
+  /-- The XML element of the parent: two provisions enacted with the same designation share one identifier, and
+  each has its own subdivisions. -/
+  parentElement : Option String
   num : Option String
   status : String
+  /-- In force: the element and every element above it in force (for any element with this identifier). -/
+  active : Option Bool
   heading : String
   text : String
   refs : Array String
@@ -52,13 +57,15 @@ def Rel.fromJson (j : Json) : Except String Rel := do
 def Prov.fromJson (j : Json) : Except String Prov := do
   let parent := (j.getObjValAs? String "parent").toOption
   let num := (j.getObjValAs? String "num").toOption
+  let parentElement := (j.getObjValAs? String "parentElement").toOption
+  let active := (j.getObjValAs? Bool "active").toOption
   let refs ← j.getObjValAs? (Array String) "refs"
   let relJ ← j.getObjValAs? (Array Json) "rel"
   let rel ← relJ.mapM Rel.fromJson
   let secJ ← j.getObjValAs? (Array Json) "secrefs"
   let secrefs ← secJ.mapM Rel.fromJson
-  return ⟨← j.getObjValAs? String "id", ← j.getObjValAs? String "kind", parent, num,
-    ← j.getObjValAs? String "status", ← j.getObjValAs? String "heading", ← j.getObjValAs? String "text", refs, rel, secrefs⟩
+  return ⟨← j.getObjValAs? String "id", ← j.getObjValAs? String "kind", parent, parentElement, num,
+    ← j.getObjValAs? String "status", active, ← j.getObjValAs? String "heading", ← j.getObjValAs? String "text", refs, rel, secrefs⟩
 
 structure Code where
   release : String
@@ -68,6 +75,9 @@ structure Code where
   all : Std.HashMap String String
 
 def Code.inForce (c : Code) (id : String) : Bool :=
+  match c.byId.get? id with
+  | some { active := some a, .. } => a
+  | _ =>
   -- a provision is in force if it and every ancestor are
   let rec go (fuel : Nat) (id : String) : Bool :=
     match fuel, c.byId.get? id with

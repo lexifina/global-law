@@ -50,7 +50,13 @@ def checkRefs (c : Code) : Array Finding := Id.run do
         match statusOf c r with
         | none =>
           let (anc, miss) := nearestExisting c r
-          out := out.push ⟨"dangling-ref", p.id, r, s!"nearest existing: {anc} ({miss} level(s) missing)"⟩
+          -- below a provision that is itself repealed or omitted, the subdivisions are simply not printed
+          match statusOf c anc with
+          | some s => if anc != "" && s != "in-force" then
+                        out := out.push ⟨"ref-to-inactive", p.id, r, s!"under {anc} ({s})"⟩
+                      else
+                        out := out.push ⟨"dangling-ref", p.id, r, s!"nearest existing: {anc} ({miss} level(s) missing)"⟩
+          | none => out := out.push ⟨"dangling-ref", p.id, r, s!"nearest existing: {anc} ({miss} level(s) missing)"⟩
         | some "in-force" => pure ()
         | some s => out := out.push ⟨"ref-to-inactive", p.id, r, s⟩
       for w in p.rel ++ p.secrefs do
@@ -64,7 +70,12 @@ def checkRefs (c : Code) : Array Finding := Id.run do
         match readings.findSome? (statusOf c) with
         | none =>
           let (anc, miss) := nearestExisting c w.target
-          out := out.push ⟨pre ++ "dangling-word-ref", p.id, w.target, s!"{w.phrase} — nearest existing: {anc} ({miss} level(s) missing)"⟩
+          match statusOf c anc with
+          | some s => if anc != "" && s != "in-force" then
+                        out := out.push ⟨pre ++ "word-ref-to-inactive", p.id, w.target, s!"{w.phrase} — under {anc} ({s})"⟩
+                      else
+                        out := out.push ⟨pre ++ "dangling-word-ref", p.id, w.target, s!"{w.phrase} — nearest existing: {anc} ({miss} level(s) missing)"⟩
+          | none => out := out.push ⟨pre ++ "dangling-word-ref", p.id, w.target, s!"{w.phrase} — nearest existing: {anc} ({miss} level(s) missing)"⟩
         | some s => out := out.push ⟨pre ++ "word-ref-to-inactive", p.id, w.target, s!"{w.phrase} — {s}"⟩
   return out
 
@@ -72,10 +83,11 @@ def checkDuplicates (c : Code) : Array Finding := Id.run do
   let mut seen : Std.HashMap String String := {}
   let mut out := #[]
   for p in c.provs do
-    if !c.inForce p.id then continue
+    -- the element itself must be in force (a repealed chapter can share its identifier with the chapter now in force)
+    if !c.inForce p.id || p.status != "in-force" then continue
     match p.parent, p.num with
     | some par, some n =>
-      let k := par ++ "#" ++ n
+      let k := (p.parentElement.getD par) ++ "#" ++ n
       match seen.get? k with
       | some first => out := out.push ⟨"duplicate-designation", p.id, first, s!"designation ({n}) used twice under {par}"⟩
       | none => seen := seen.insert k p.id
