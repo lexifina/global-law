@@ -3551,7 +3551,7 @@ class SearchByIndex(unittest.TestCase):
     def test_parts_follow_on_as_greps_do(self):
         index = FilesIndex(self.m)
         for ask in ({'query': 'bankruptcy', 'kind': 'all', 'max_results': 150}, {'query': 'ulkopuolista', 'kind': 'all', 'max_results': 100},
-                    {'query': 'olbiil era kelulau', 'max_results': 30}):
+                    {'query': 'olbiil era kelulau', 'max_results': 30}, {'query': 'extradition', 'kind': 'all', 'max_results': 110}):
             with self.subTest(ask=ask):
                 plain, parts = self.pages(None, **ask), self.pages(index, **ask)
                 self.assertGreater(len(plain), 3)
@@ -3562,6 +3562,78 @@ class SearchByIndex(unittest.TestCase):
                 self.assertEqual(parts[-1], (plain[-1][0], {**plain[-1][1], 'matched_by': 'index'}))  # the last part knows the total
                 with self.assertRaises(self.m.UserError):  # past the end, as without the index
                     self.by(index, **ask, offset=plain[-1][1]['page']['total'])
+
+    @needs(IE_C, PW_C, FI_TT)
+    def test_corpora_after_the_part_are_not_read(self):
+        m, index = self.m, FilesIndex(self.m)
+        order = [c['path'] for c in m.law.manifest()['corpora'] if c['path'] in (IE_C, PW_C, FI_TT)]  # the answer's order
+        self.assertEqual(order, [FI_TT, IE_C, PW_C])
+        # a common word over every corpus: one git grep, of the first corpus's first files
+        text, data = self.by(index, query='on', kind='all', max_results=5)
+        self.assertEqual([Path(cwd) for _, cwd in self.greps], [ROOT / FI_TT])
+        self.assertLessEqual(len(self.files_named()), 25)
+        self.assertTrue(all(len(index.matching('on', c)) > 100 for c in order))
+        self.assertEqual(data['provision_count'], sum(len(index.matching('on', c)) for c in order))
+        self.assertEqual((len(data['results']), data['page']['total'], data['page']['next_offset']), (5, None, 5))
+        self.assertEqual(data['results'], self.by(index, query='on', jurisdiction=FI_TT, max_results=5)[1]['results'])
+        self.assertFalse(text.startswith('At least'))
+        self.assertIn('Showing lines 1 to 5 of at least ', text)
+        # the list of provisions names files of the corpora not read as well, each asked of the index once, for a share
+        self.assertEqual(len(data['provisions']), m.SEARCH_PATHS)
+        self.assertEqual({'/'.join(p.split('/')[:3]) for p in data['provisions']}, set(order))
+        del index.calls[:]
+        self.by(index, query='on', kind='all', max_results=5)
+        asked = [c for c in index.calls if c[0] == 'paths']
+        self.assertEqual([(c[2], c[3] is None) for c in asked], [(FI_TT, True), (FI_TT, False), (IE_C, True), (PW_C, True)])
+        self.assertEqual(sum(c[4] for c in asked[1:]), m.SEARCH_PATHS - 25)
+        # and of no more corpora than SEARCH_INDEX_TOP_UPS: the list is then shorter, and says so
+        with self.mock.patch.object(m, 'SEARCH_INDEX_TOP_UPS', 1), self.mock.patch.object(m, 'SEARCH_INDEX_FILES', 40):
+            del index.calls[:]
+            text, data = self.by(index, query='on', kind='all', max_results=5)
+            self.assertEqual([(c[2], c[4]) for c in index.calls if c[0] == 'paths'], [(FI_TT, 25), (FI_TT, 40)])
+            self.assertEqual(len(data['provisions']), 65)
+            self.assertIn(f"\nThe structured answer lists 65 of {data['provision_count']} matching provisions;", text)
+        # a part that ends in a later corpus reads the corpora before it to their ends; one within the first reads it alone
+        self.assertEqual(index.matching('extradition', FI_TT), [])
+        first = self.by(None, query='extradition', jurisdiction=IE_C)[1]['page']['total']
+        every = self.by(None, query='extradition', kind='all', max_results=200, offset=first - 100)[1]
+        self.assertGreater(every['page']['total'], first + 2)
+        text, data = self.by(index, query='extradition', kind='all', offset=first - 1, max_results=2)
+        self.assertEqual({Path(cwd) for _, cwd in self.greps}, {ROOT / IE_C, ROOT / PW_C})
+        self.assertEqual(data['results'], every['results'][99:101])
+        self.assertEqual([r['path'].startswith(IE_C) for r in data['results']], [True, False])
+        self.assertEqual((data['page']['total'], data['page']['next_offset']), (every['page']['total'], first + 1))
+        text, data = self.by(index, query='extradition', kind='all', offset=first - 3, max_results=2)  # within the first
+        self.assertEqual({Path(cwd) for _, cwd in self.greps}, {ROOT / IE_C})
+        self.assertEqual((data['results'], data['page']['total'], data['page']['next_offset']), (every['results'][97:99], None, first - 1))
+        self.assertEqual(data['provision_count'], len(index.matching('extradition', IE_C)) + len(index.matching('extradition', PW_C)))
+        self.assertTrue(any(p.startswith(PW_C) for p in data['provisions']))
+        # a corpus the index leaves out is grepped whole, as ever, and those after the part still are not read
+        text, data = self.by(FilesIndex(m, hold={PW_C, FI_TT}), query='on', kind='all', max_results=5)
+        self.assertEqual([cmd[cmd.index('--') + 1:] for cmd, cwd in self.greps if Path(cwd) != ROOT / FI_TT], [['*.md']])
+        self.assertEqual({Path(cwd) for _, cwd in self.greps}, {ROOT / FI_TT, ROOT / IE_C})
+        self.assertEqual(data['provision_count'], self.by(None, query='on', jurisdiction=IE_C)[1]['provision_count']
+                         + len(index.matching('on', PW_C)) + len(index.matching('on', FI_TT)))
+
+    @needs(IE_C, PW_C)
+    def test_no_match_in_every_jurisdiction_does_not_read_the_change_notes(self):
+        m, index = self.m, FilesIndex(self.m)
+        real, asked = m.t_search_changes, []
+
+        def changes(args):
+            asked.append(args)
+            return real(args)
+        with self.mock.patch.object(m, 't_search_changes', changes):
+            text, data = self.by(index, query='zzqqxx nothing here')
+            self.assertEqual((asked, data['related_changes'], data['provision_count']), ([], [], 0))
+            self.assertEqual(data['hints'], ['The words were matched as whole words. To match part of a word, pass regex true.'])
+            self.assertNotIn('change note', text)
+            text, data = self.by(index, query='zzqqxx nothing here', jurisdiction='palau')  # one jurisdiction: read
+            self.assertEqual(len(asked), 1)
+            self.assertIn('Nor does any change note.', text)
+            self.assertIn('matched as whole words', data['hints'][0])
+            self.by(None, query='zzqqxx nothing here')  # without an index, as ever
+            self.assertEqual(len(asked), 2)
 
     @needs(IE_C)
     def test_git_reads_only_the_files_a_part_needs(self):
@@ -3644,19 +3716,25 @@ class SearchByIndex(unittest.TestCase):
                 index = FilesIndex(m)
                 index.paths = paths
                 # each corpus with the words is grepped whole; the case law, without them, still has the index's word for it
-                far = {**ask, 'offset': 300}  # (far enough for a second list of Ireland's files to be asked for)
-                for a in (ask, far) if name != 'again' else (far,):
-                    whole = self.by(None, **a)
-                    self.assertEqual(self.by(index, **a), (whole[0], {**whole[1], 'matched_by': 'index'}))
-                    self.assertIn(['*.md'], [cmd[cmd.index('--') + 1:] for cmd, cwd in self.greps if Path(cwd) == ROOT / IE_C])
-                    self.assertEqual({Path(cwd) for cmd, cwd in self.greps}, {ROOT / IE_C, ROOT / PW_C})
+                far = {**ask, 'offset': 480}  # (far enough for a second list of Ireland's files, and for Palau's lines)
+                whole = self.by(None, **far)
+                self.assertEqual(self.by(index, **far), (whole[0], {**whole[1], 'matched_by': 'index'}))
+                self.assertIn(['*.md'], [cmd[cmd.index('--') + 1:] for cmd, cwd in self.greps if Path(cwd) == ROOT / IE_C])
+                self.assertEqual({Path(cwd) for cmd, cwd in self.greps}, {ROOT / IE_C, ROOT / PW_C})
+                if name != 'again':  # a first part: Ireland grepped whole fills it, and Palau's file is counted unread
+                    got = self.by(index, **ask)[1]
+                    self.assertEqual((got['results'], got['provision_count']), (plain[1]['results'], plain[1]['provision_count']))
+                    self.assertEqual([cmd[cmd.index('--') + 1:] for cmd, cwd in self.greps], [['*.md']])
         # a file the index counts for words that run over a line break: a provision more, and no line
         index = FilesIndex(m)
         extra = next(n for n in sorted(index.corpus(PW_C)) if n not in index.matching('bankruptcy', PW_C))
         with self.mock.patch.object(index, 'matching', lambda q, c: sorted(set(FilesIndex.matching(index, q, c)) | ({extra} if c == PW_C else set()))):
             text, data = self.by(index, **ask)
-        self.assertEqual((data['provision_count'], data['results']), (plain[1]['provision_count'] + 1, plain[1]['results']))
-        self.assertIn(f'{PW_C}/{extra}', self.by(index, **{**ask, 'offset': 400, 'max_results': 200})[1]['provisions'] + data['provisions'])
+            self.assertEqual((data['provision_count'], data['results']), (plain[1]['provision_count'] + 1, plain[1]['results']))
+            self.assertIn(f'{PW_C}/{extra}', data['provisions'])  # (not read for this part: named by the index)
+            self.assertNotIn(extra, self.files_named())
+            self.assertIn(f'{PW_C}/{extra}', self.by(index, **{**ask, 'offset': 400, 'max_results': 200})[1]['provisions'])
+            self.assertIn(extra, self.files_named())
         # a file search_law does not count (a corpus's own documentation) is neither counted nor read
         index = FilesIndex(m)
         with self.mock.patch.object(index, 'matching', lambda q, c: sorted(set(FilesIndex.matching(index, q, c)) | ({'README.md', ':x.md'} if c == PW_C else set()))), \
@@ -3687,7 +3765,7 @@ class SearchByIndex(unittest.TestCase):
         with self.mock.patch.object(m, 'ThreadPoolExecutor', lambda n: pool(1)), self.mock.patch.object(m, 'LAW_SEARCH_MARGIN', 10 ** 6):
             m._call.deadline = time.monotonic() + 600
             try:
-                text, data = self.by(index, **ask)
+                text, data = self.by(index, **{**ask, 'max_results': 200})  # (a part that needs Palau's lines too)
                 self.assertEqual((data['law_unread_for_time'], data['matched_by']), ([PW_C], 'index'))
                 self.assertTrue(text.startswith('At least ') and data['page']['total'] is None)
                 # a body of law without the words takes no time: it is never left unread, nor counted as the one read

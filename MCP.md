@@ -305,8 +305,15 @@ canton's, or `caselaw` for all).
   - The lines are those grep gives, in the same order, so `offset` goes on as before. Their total is not known until a
     part reaches the last file: until then `page.total` is `null` with `page.total_at_least`, and the text says
     "Showing lines A to B of at least N".
-  - `provisions` lists the files read and then the next the index names, up to 200; when it holds fewer than match,
-    the text says "The structured answer lists K of N matching provisions".
+  - The lines come corpus by corpus, so a corpus is read only when the corpora before it leave room on the page: one
+    that comes after the page is counted by the index and not read (a first page of a common word over every
+    jurisdiction reads the first corpus's first files). The total of lines is exact on the part that reads the last
+    matching file.
+  - `provisions` lists the files read and then the next the index names, up to 200, the corpora not read sharing the
+    room (at most 30 of them are asked); when it holds fewer than match, the text says "The structured answer lists K
+    of N matching provisions".
+  - A search of every jurisdiction (no `jurisdiction`) that matches nothing does not go on to the change notes, which
+    takes reading every corpus's history; `related_changes` is then empty. A search with a `jurisdiction` still does.
 - The heading index `find_provision` matches words against is kept on disk for every corpus
   (`headings-v2-<corpus>-<commit>.json` in the tree's cache folder, the three newest per corpus), and an index for a
   new commit reads only the files that differ from an earlier one's. A clone of a few countries builds it at start, as
