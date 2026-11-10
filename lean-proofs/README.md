@@ -193,6 +193,54 @@ and proves it optimal from `roth_ceiling`. [video/retire_film.html](video/retire
 [Rules.lean](LegalProofs/USTax/Retirement/Rules.lean); the main one is that the pro-rata rule is applied at the time of
 each conversion, where the Code uses the year-end value of all IRAs.
 
+## Grantor trusts: two tests of who owns a trust
+
+[LegalProofs/USTax/Trusts/](LegalProofs/USTax/Trusts) writes two tests separately, over a single trust power
+described by what it does, who holds it, in what capacity and under what standard:
+- the income-tax test of whether the grantor owns a trust (§§672–677);
+- the estate-tax test of whether it is in the grantor's estate (§§2036–2038, 2042).
+
+Neither test refers to the other. [Search.lean](LegalProofs/USTax/Trusts/Search.lean) classifies all 20,100 instruments
+of one or two powers. Most fall where both tests agree, but 9,648 are "defective" (the grantor pays the income tax,
+the property is out of the estate) and 333 are traps (in the estate, but not the grantor's for income tax). The search
+then scores every plan on every instrument for a founder's $50 million stake over 20 years. The best it finds is the
+technique practitioners use: sell the asset to a trust containing a nonfiduciary power to substitute property, then
+swap it back for cash just before death so that it takes a stepped-up basis. On those assumptions the heirs receive
+$259.5 million against $177.2 million for keeping the asset.
+
+[Sale.lean](LegalProofs/USTax/Trusts/Sale.lean) proves, for every path of growth and yield:
+- `defective_neutral`: the defective trust is income-tax neutral. The family is exactly as rich, after exactly the same
+  income tax, as if the grantor had kept the asset.
+- `estate_shrinks`: the estate is smaller by exactly what the trust holds net of the note.
+- `swap_never_worse`: with the swap, the heirs never do worse than keeping the asset.
+- `no_swap_cost`: without the swap, the gap is precisely the capital-gains tax on the carried-over basis.
+- `trap_never_better`: selling to a trap trust is never better than keeping the asset.
+
+[Found.lean](LegalProofs/USTax/Trusts/Found.lean) re-checks the search's results. The model's simplifications are at
+the top of [Rules.lean](LegalProofs/USTax/Trusts/Rules.lean). In practice the swap power alone is not relied on, because
+whether a power is held "in a nonfiduciary capacity" is a question of fact, and Rev. Rul. 2008-22 protects it only if
+the trustee must confirm that the values are equal.
+
+## The wash-sale rule's reach
+
+[LegalProofs/USTax/WashSale/](LegalProofs/USTax/WashSale) executes trade sequences under §1091: a loss on stock or
+securities is disallowed if a substantially identical acquisition falls within 30 days either side, and the loss is
+added to the replacement's basis. [Theorems.lean](LegalProofs/USTax/WashSale/Theorems.lean) proves, for every sequence
+of trades:
+- `deferral_not_forgiveness`: once every position is closed, the gain recognised equals cash in minus cash out, so every
+  disallowed loss has come back.
+- `outside_scope`: assets that are not stock or securities never have a loss disallowed.
+- `outside_window`: an acquisition 31 or more days from the sale never counts as a replacement.
+
+[Search.lean](LegalProofs/USTax/WashSale/Search.lean) asks which trades recognise a loss without leaving the market,
+and finds three answers ([Found.lean](LegalProofs/USTax/WashSale/Found.lean)):
+- switch to a fund that tracks a different index of the same market;
+- for a single stock, which has no substitute, double up 31 days before selling;
+- for bitcoin, which is property and not a security (Notice 2014-21), sell and buy back the same day.
+
+Whether two index funds are "substantially identical" has never been settled by the IRS, and is modelled as data.
+Bills to extend §1091 to digital assets have been introduced since 2021; none is law as of November 2026.
+
 ## What a proof here does and does not show
 
 Lean checks that each conclusion follows from the dated facts and the rule as defined. It does not check the facts or
