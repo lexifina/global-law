@@ -9,6 +9,22 @@ Status words:
 - **Checked:** a test that passed.
 
 ## 10 November 2026
+- **Fixed (the tools), a corpus that moves its folders (a layout move) keeps its corrections, its future branch and its
+  old paths.** Before rolling the kind/year/number layout (romania-law's) out to every corpus, a forward layout commit
+  on japan-law (8,982 law folders renamed, `act/1896/089/` for the Civil Code; no text changed) was read with these
+  tools and compared with the record before it, on 17 reads (`find_provision`, `provision_history`, `read_law` on
+  four dates, `who_wrote`), by the new paths and by the old ones.
+  - **Corrections name the paths of their own day.** A correction's `Files:` and `Act-path:` were matched against the
+    path read, so after the move `read_law` on a corrected act found no version on past days and `who_wrote` lost the
+    corrections' credits. They are now read through the moves (`_moved_fix`, `_earlier_names`), and a version read by
+    commit (blame) falls back to the file's earlier name at that commit (`read_version`).
+  - **A future branch that forked before the move.** Its law commits touch the old paths and its merge of the moved
+    main shows no renames, so a change not yet in force was lost from `read_law` and `provision_history`. A law commit
+    read after a documentation commit moved its path is now the moved file's (`_extend`).
+  - **Old paths still read.** A path from before the move (`minpo/art-005.md`) is read at its new place, a folder by
+    the folder its files moved to (`path_arg`).
+  - **Checked:** 17/17 answers the same as before the move, by new and by old paths; with git alone, `git blame`
+    and `git log --follow` credit the same laws across the move.
 - **Fixed (the tools), a server of every country: `find_provision` by words, and a search of every jurisdiction.**
   - **The heading index is on disk for every corpus.** On a server of the whole world `find_provision` with words grepped the headings of every blob of the commit: Romania's 1.84 million files took more than 120 s, so it never answered. The index of headings was kept on disk for case law only. It is now kept for every corpus (`headings-v2-<corpus>-<commit>.json` in the cache folder, written under a temporary name and moved into place, the three newest per corpus). An index for a new commit starts from an earlier commit's file and reads only the files `git diff-tree` names (checked: the same bytes as a build from scratch, on the Irish acts from 200 and 1,500 commits back, Palau and the Finnish labour court; 2.0 s from scratch, 0.2 s from 200 commits back).
   - **A server that builds no index reads a stored one.** `heading_index_if_built` gives the index from memory or from its file and never builds; `store_heading_index` makes the file without keeping the index in memory, for a host to call in the background (calls for one corpus at once build once). `find_provision` uses the stored index where there is one and greps where there is not. A clone of a few countries answers as before.

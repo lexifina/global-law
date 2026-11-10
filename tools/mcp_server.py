@@ -1044,7 +1044,24 @@ def path_arg(value) -> str:
     shut = unserved_answer(path)
     if shut:
         raise UserError(shut)
-    run_law(law.corpus_of, path)
+    corpus, rel = run_law(law.corpus_of, path)
+    # A path from before a corpus's layout move (japan-law's minpo/art-005.md, now act/1896/089/art-005.md) reads at
+    # its new place: a file by the move recorded for it, a folder (an act) by the folder its files moved to.
+    if '/caselaw/' not in path:
+        now = run_law(law.moves, corpus).get(rel)
+        if now is None:
+            folders = run_law(law._folder_moves, corpus)
+            whole = rel.rstrip('/')
+            if whole in folders:
+                now = folders[whole]
+            else:  # the longest moved folder the path is inside
+                parts = whole.split('/')
+                for i in range(len(parts) - 1, 0, -1):
+                    if '/'.join(parts[:i]) in folders:
+                        now = folders['/'.join(parts[:i])] + '/' + '/'.join(parts[i:])
+                        break
+        if now:
+            return f'{corpus}/{now}'
     if '/caselaw/decisions/' in path:  # a decision moved to another corpus (decision-relations.tsv) is read at its new place
         moved = decision_relation(path)
         if moved and moved[0] == 'moved-to':

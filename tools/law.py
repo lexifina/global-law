@@ -1451,14 +1451,58 @@ def corrections(corpus: str) -> list[dict]:
         return []
     ix = _index(corpus)
     if ix.get('focused'):  # a few files' commits, read for one call: not kept
-        return [r[9] for r in ix['rows'] if r[9]]
+        return [_moved_fix(corpus, r[9]) for r in ix['rows'] if r[9]]
     # Once per reading of the index: every read of a provision asks (file_commit), and each pass went through every
     # commit of the corpus.
     key = ('corrections', f"{corpus}@{_at(ix)}")
     got = _CACHE.get(key)
     if got is None:
-        got = _CACHE[key] = tuple(r[9] for r in ix['rows'] if r[9])
+        got = _CACHE[key] = tuple(_moved_fix(corpus, r[9]) for r in ix['rows'] if r[9])
     return list(got)  # type: ignore[arg-type]
+
+
+def _earlier_names(corpus: str, rel: str) -> set[str]:
+    """A file's path now and every path a documentation commit moved it from (moves() inverted)."""
+    mv = moves(corpus)
+    if not mv:
+        return {rel}
+    key = ('moved-from', f"{corpus}@{_at(_index(corpus))}")
+    if key not in _CACHE:
+        inv: dict[str, list[str]] = {}
+        for old, new in mv.items():
+            inv.setdefault(new, []).append(old)
+        _CACHE[key] = inv
+    return {rel, *_CACHE[key].get(rel, [])}  # type: ignore[union-attr]
+
+
+def _folder_moves(corpus: str) -> dict[str, str]:
+    """old folder -> new folder, from the file moves of a layout commit (japan-law's 129AC0000000089/art-005.md ->
+    act/1896/089/art-005.md gives 129AC0000000089 -> act/1896/089): the part of each path before the tail both share."""
+    mv = moves(corpus)
+    key = ('folder-moves', f"{corpus}@{_at(_index(corpus))}")
+    if key not in _CACHE:
+        out: dict[str, str] = {}
+        for old, new in mv.items():
+            a, b = old.split('/'), new.split('/')
+            while len(a) > 1 and len(b) > 1 and a[-1] == b[-1]:
+                a, b = a[:-1], b[:-1]
+            if a != b:
+                out.setdefault('/'.join(a), '/'.join(b))
+        _CACHE[key] = out
+    return _CACHE[key]  # type: ignore[return-value]
+
+
+def _moved_fix(corpus: str, fix: dict) -> dict:
+    """A correction as the paths are now: its Files: and Act-path: name the paths of its own day, and a later
+    documentation commit may have moved them (a layout move). Unchanged when nothing moved."""
+    mv = moves(corpus)
+    if not mv:
+        return fix
+    out = dict(fix)
+    out['files'] = [mv.get(f, f) for f in fix.get('files') or []]
+    if fix.get('act_path'):
+        out['act_path'] = _folder_moves(corpus).get(fix['act_path'], fix['act_path'])
+    return out
 
 
 def act_next(corpus: str, paths: list[str], after: str) -> str | None:
@@ -1667,17 +1711,19 @@ def file_index(corpus: str) -> tuple[dict, list]:
                 versions.append((cut[0], cut[1], None, mode))
     cwd = corpus_dir(corpus)
     overlays = []
-    wanted = {order: [f for f in r[9]['files'] if f not in touched.get(order, {})] for order, r in enumerate(rows) if r[9]}
+    mv = moves(corpus)  # Files: names paths as they were that day; the index keys them as they are now
+    wanted = {order: [f for f in r[9]['files'] if mv.get(f, f) not in touched.get(order, {})] for order, r in enumerate(rows) if r[9]}
     at = _named_at(ix, cwd, wanted)
     for order, r in enumerate(rows):
         fix = r[9]
         if not fix:
             continue
         files = dict(touched.get(order, {}))
-        files.update(at.get(order, {}))  # named but unchanged: their text at the correction commit is the tip's
+        files.update({mv.get(p, p): v for p, v in at.get(order, {}).items()})  # named but unchanged: their text at the correction commit is the tip's
         if fix['files']:
-            files = {p: v for p, v in files.items() if p in fix['files']}
-        overlays.append((fix, order, files))
+            names = {mv.get(f, f) for f in fix['files']}
+            files = {p: v for p, v in files.items() if p in names}
+        overlays.append((_moved_fix(corpus, fix), order, files))
     _CACHE[key] = (index, overlays)
     return index, overlays
 
@@ -3106,9 +3152,10 @@ def _history(corpus: str, rel: str) -> list[dict]:
                         'reason': fix['reason']})
         out.append(row)
     seen = {r['commit'] for r in out}
+    names = _earlier_names(corpus, rel)  # Files: names the path of its own day, before any layout move
     for order, r in enumerate(rows):
         fix = r[9]
-        if fix and rel in fix['files'] and r[0] not in seen:
+        if fix and r[0] not in seen and any(n in fix['files'] for n in names):
             out.append({'commit': r[0], 'law': r[1], 'in_force': fix['from'], 'kind': 'correction', 'enacted': None,
                         'published': None, 'order': order, 'corrects': fix['corrects'], 'until': fix['to'],
                         'supersedes': fix['supersedes'], 'reason': fix['reason']})
@@ -4183,6 +4230,13 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = fro
                 files.setdefault(new, []).append((order, f[3], f[1]))  # f[1]: the new side's mode (f[2] is a blob id)
                 continue
             path = _unquote(paths[0])
+            if data['moves'] and path in data['moves'] and row[4] != 'documentation':
+                # A law commit read after a documentation commit moved its path (a future branch that forked before
+                # a layout move, read over the moved main: japan-law's mishiko): its version is the moved file's.
+                seen_ = {path}
+                while path in data['moves'] and data['moves'][path] not in seen_:
+                    path = data['moves'][path]
+                    seen_.add(path)
             if row[4] == 'documentation' and f[4].startswith('D'):
                 # Deleted by a commit that is not a law: withdrawn (romania-law's Withdraws:, an act that never
                 # belonged). Its versions leave the record on every day; read by in-force day alone, the act stayed
@@ -5112,7 +5166,13 @@ def read_version(path: str, commit: str) -> str | None:
     row = next((h for h in reversed(history(path)) if h['commit'] == commit and 'blob' in h), None)
     if row is not None:
         return read_object(corpus, row['blob']) if row['blob'] else None
-    return read_object(corpus, f'{commit}:{rel}')
+    found = read_object(corpus, f'{commit}:{rel}')
+    if found is None:  # a version from before a layout move: the file had its earlier name at that commit
+        for name in sorted(_earlier_names(corpus, rel) - {rel}):
+            found = read_object(corpus, f'{commit}:{name}')
+            if found is not None:
+                break
+    return found
 
 
 def versions_in_force(date: str, path: str) -> list[tuple[str, str]]:
