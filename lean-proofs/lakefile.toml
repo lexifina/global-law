@@ -4,3 +4,10 @@ defaultTargets = ["LegalProofs"]
 
 [[lean_lib]]
 name = "LegalProofs"
+
+[[lean_lib]]
+name = "TaxCode"
+
+[[lean_exe]]
+name = "taxcheck"
+root = "TaxCode.Main"
