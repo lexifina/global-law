@@ -2898,7 +2898,10 @@ def t_laws_between(args: dict) -> tuple[str, dict]:
         every, left_out = [e for e in window if e.kind == 'court'], {}
     rows = every[:num(args, 'max_results', 200, MAX_ITEMS)]  # oldest first; a long window is cut, and says so
     changed_counts([(e.corpus, e.corpus_commit) for e in rows])  # one git process per corpus, not one per row
-    data = [{'in_force': e.in_force, 'corpus': e.corpus, 'law': e.law, 'summary': re.sub(r'^[^:]+:\s*', '', e.subject),
+    # A law's subject is "<law>: <what it did>"; a decision's is its name, which may hold a colon of its own ("Isaiah
+    # 61:1, Inc. v. City of Bridgeport" was listed as "1, Inc. v. City of Bridgeport")
+    data = [{'in_force': e.in_force, 'corpus': e.corpus, 'law': e.law,
+             'summary': e.subject if e.kind == 'court' else re.sub(r'^[^:]+:\s*', '', e.subject),
              'provisions_changed': changed_count(e.corpus, e.corpus_commit),
              'world_commit': e.commit[:12], 'corpus_commit': e.corpus_commit[:12]} for e in rows]  # short: every tool takes them
     notes = ''.join('\n' + n for n in not_laws_note(left_out)) + caselaw_note(caselaw)
