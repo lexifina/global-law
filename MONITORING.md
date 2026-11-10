@@ -5,13 +5,13 @@ change as a commit dated the day it takes effect. Then, every 15 minutes, a pass
 and publishes the result below.
 
 <!-- status-summary -->
-**Updates: running**: last published 2026-11-10 00:49 UTC; status refreshed 2026-11-10 00:49 UTC.
+**Updates: running**: last published 2026-11-10 01:09 UTC; status refreshed 2026-11-10 01:09 UTC.
 
 | | |
 | --- | --- |
-| Last 24 hours | 627 commits: 27 corpus updates, 2 corpora added |
-| Last successful pass | 2026-11-10 00:49 UTC |
-| Held back by a check | `united-states-new-york-appellate-1714-1933-caselaw` |
+| Last 24 hours | 651 commits: 48 corpus updates, 2 corpora added |
+| Last successful pass | 2026-11-10 01:09 UTC |
+| Held back by a check | `united-states-new-york-appellate-1934-1991-caselaw`, `united-states-new-york-appellate-1992-2018-caselaw` |
 | Official sources not answering | none |
 | Freshness | 810 of 972 corpora current, 147 stale, 14 unverified ([FRESHNESS.md](FRESHNESS.md)) |
 <!-- /status-summary -->
