@@ -7208,6 +7208,17 @@ def handle(msg: dict) -> dict | None:
     return reply
 
 
+def _lone_surrogate(value) -> bool:
+    """Whether an argument (a string, or a list or object of them) holds a lone UTF-16 surrogate."""
+    if isinstance(value, str):
+        return any('\ud800' <= ch <= '\udfff' for ch in value)
+    if isinstance(value, list):
+        return any(_lone_surrogate(v) for v in value)
+    if isinstance(value, dict):
+        return any(_lone_surrogate(k) or _lone_surrogate(v) for k, v in value.items())
+    return False
+
+
 def _handle(method, mid, params: dict) -> dict:
     try:
         if method in ('tools/call', 'resources/read'):
@@ -7281,6 +7292,11 @@ def _handle(method, mid, params: dict) -> dict:
             if unknown:  # the schema says additionalProperties: false; a misspelt argument should not pass silently
                 return error(mid, -32602, f"Unknown argument(s) for {name}: {', '.join(map(str, unknown))[:300]}. "
                              f"It takes: {', '.join(PROPERTIES[name]) or 'no arguments'}.")
+            broken = sorted(k for k, v in args.items() if _lone_surrogate(v))
+            if broken:  # JSON may carry "\ud800", which is no character: git's arguments cannot hold it (an internal error)
+                return {'jsonrpc': '2.0', 'id': mid, 'result': {'content': [{'type': 'text', 'text':
+                        f"{', '.join(map(str, broken))[:200]}: not valid text (it holds a lone surrogate, U+D800 to U+DFFF)."}],
+                        'isError': True}}
             started = time.monotonic()
             _call.deadline = started + GIT_TIMEOUT
             try:

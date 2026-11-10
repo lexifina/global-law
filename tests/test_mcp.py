@@ -1954,6 +1954,16 @@ class Helpers(unittest.TestCase):
         import mcp_server
         cls.m = mcp_server
 
+    def test_a_lone_surrogate_is_refused_before_any_work(self):
+        # JSON may carry "\ud800"; in a query it reached git's arguments and was an internal error (hosted fuzz, 2026-11-10)
+        bad = chr(0xD800)
+        for args in ({'query': bad}, {'query': 'ok', 'jurisdiction': [bad]}, {'query': {bad: 1}}):
+            reply = self.m.answer({'jsonrpc': '2.0', 'id': 1, 'method': 'tools/call',
+                                   'params': {'name': 'find_provision', 'arguments': args}})
+            self.assertTrue(reply['result']['isError'], reply)
+            self.assertIn('lone surrogate', reply['result']['content'][0]['text'])
+        self.assertFalse(self.m._lone_surrogate({'query': 'Würde 😀 ¹'}))
+
     def test_article_number_forms(self):
         self.assertEqual(self.m.number_forms('art. 6^1'), 'art. 6-1')
         self.assertEqual(self.m.number_forms('art. 6¹'), 'art. 6-1')
