@@ -1995,6 +1995,18 @@ class Helpers(unittest.TestCase):
         self.assertEqual(self.m.number_forms('S.L. 586.08'), 'S.L. 586.08')  # not a thousands dot
         self.assertEqual(self.m.stem_of('lege/2009/287/art-0194.md'), '194')
         self.assertEqual(self.m.stem_of('lege/1990/31/art-006-1.md'), '6-1')
+        for name, stem in (('codes/x/a31.md', '31'), ('art59.md', '59'), ('arta5.md', 'arta5'), ('a.md', 'a'),
+                           ('art.md', 'art'), ('00a5.md', '5'), ('art-art5.md', '5'), ('1182.md', '1182')):
+            self.assertEqual(self.m.stem_of(name), stem, name)
+
+    def test_fold_drops_case_and_diacritics_only(self):
+        # The fast path (ASCII, str.translate) gives what the character-by-character form gave.
+        import unicodedata
+        for text in ('Constituția', 'Răspunderea civilă', 'Ţară şi ţărm', 'Kündigung', 'responsabilité', 'Ελληνικά',
+                     'Закон', 'ﬁnal', 'Ⅻ', 'PLAIN ascii 123', '', 'é', '日本'):
+            slow = ''.join(ch for ch in unicodedata.normalize('NFKD', text.lower()) if not unicodedata.combining(ch))
+            self.assertEqual(self.m.fold(text), slow, text)
+        self.assertEqual(self.m.fold('Constituția'), 'constitutia')
 
     def test_act_citations(self):
         for text, kind, n, y in (('Legea nr. 31/1990', 'Legea', '31', '1990'), ('OUG 195/2002', 'OUG', '195', '2002'),

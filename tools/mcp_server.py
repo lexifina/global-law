@@ -675,9 +675,17 @@ def safe_regex(pattern: str) -> str:
     return pattern
 
 
+# Every combining mark, for str.translate: find_provision folds each heading in scope (812,000 for France's acts), and
+# a character-by-character generator spent about 4 s of a 6 s call on it (speed profile, 2026-11-10).
+_COMBINING = dict.fromkeys(cp for cp in range(sys.maxunicode + 1) if unicodedata.combining(chr(cp)))
+
+
 def fold(text: str) -> str:
     """Lower case without diacritics ("Constituția" -> "constitutia"), for matching words against file names."""
-    return ''.join(ch for ch in unicodedata.normalize('NFKD', text.lower()) if not unicodedata.combining(ch))
+    low = text.lower()
+    if low.isascii():  # NFKD leaves ASCII as it is, and it has no combining marks
+        return low
+    return unicodedata.normalize('NFKD', low).translate(_COMBINING)
 
 
 def iso_code(corpus: dict) -> str:
@@ -1384,9 +1392,17 @@ STRUCTURAL = re.compile(r'\s*(?:(?:PART|Part|TITLE|Title|SCHEDULE|Schedule|CHAPT
 def stem_of(name: str) -> str:
     """A file's number as a query writes it: art-0194.md is 194, art-006-1.md is 6-1, 1182.md is 1182; Spain's a31.md
     and Luxembourg's art59.md are 31 and 59 (a letter prefix before a digit; no other corpus names files so)."""
-    stem = re.sub(r'\.md$', '', name.rsplit('/', 1)[-1]).lower().lstrip('0').removeprefix('art-').lstrip('0')
-    return re.sub(r'^(?:art|a)(?=\d)', '', stem).lstrip('0')
+    # String methods, not re.sub: it runs once for every file in scope (838,000 a call for France's acts).
+    stem = name.rsplit('/', 1)[-1].removesuffix('.md').lower().lstrip('0').removeprefix('art-').lstrip('0')
+    if stem.startswith('art') and stem[3:4].isdecimal():
+        stem = stem[3:]
+    elif stem.startswith('a') and stem[1:2].isdecimal():
+        stem = stem[1:]
+    return stem.lstrip('0')
 
+
+# A file numbered as an article (artikel/016a.md, art-016a.md), for find_provision's "Art. 16a".
+ARTICLE_FILE = re.compile(r'(^|/)(artikel|article|articolo|artigo|articulo|art)[-/_]?')
 
 # "bis", "ter" ...: an article inserted after another keeps its number with this word ("Artículo 31 bis").
 NUMBER_SUFFIX = r'bis|ter|qu[aá]ter|quinquies|sexies|septies|octies|nonies|decies'
@@ -1691,6 +1707,8 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     plain = [w for w in words if w not in numbers]
     article_query = bool(re.search(r'(?<![\w.])(art\.?|artikel|article|articolo|articolul|artigo|art[ií]culo)(?![\w])', query, re.I))
     plain_folded = [fold(w) for w in plain]
+    # Compiled once for the call, not once for each file in scope.
+    number_rx = [(n, n.lstrip('0'), re.compile(rf'(^|[^0-9a-z]){re.escape(n)}([^0-9a-z]|$)')) for n in numbers]
     matched_line: dict[str, dict[str, str]] = {}
     head_best: dict[tuple[str, str], int] = {}
     indexed = index_served()
@@ -1727,16 +1745,18 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             if headed is not None and headed in wanted:
                 score += 10
                 headed_hits.add(name)
-            for n in numbers:
-                if stem == n or stem == n.lstrip('0'):
+            low = name.lower() if numbers else ''
+            for n, n_bare, n_rx in number_rx:
+                if stem == n or stem == n_bare:
                     score += 10 if headed is None else 0 if headed in wanted else 2
-                elif re.search(rf'(^|[^0-9a-z]){re.escape(n)}([^0-9a-z]|$)', name.lower()):
+                elif n_rx.search(low):
                     score += 2
-            folded = fold(name)  # "Constituția" names constitutia/: folders are spelt without diacritics
-            score += sum(1 for w in plain_folded if w in folded)
+            if plain_folded:
+                folded = fold(name)  # "Constituția" names constitutia/: folders are spelt without diacritics
+                score += sum(1 for w in plain_folded if w in folded)
             # "Art. 16a" names an article: files numbered as articles (artikel/016a.md, art-016a.md) come before a
             # § 16a of some other act (all of German federal law sits beside the Grundgesetz).
-            if score and article_query and re.search(r'(^|/)(artikel|article|articolo|artigo|articulo|art)[-/_]?', name.lower()):
+            if score and article_query and ARTICLE_FILE.search(low or name.lower()):
                 score += 3
             if score and acts:  # the act the query names best first (the code in force before an older one)
                 full = f"{c['path']}/{name}"
