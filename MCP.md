@@ -4,22 +4,138 @@
 `tools/law.py` answers, with the limits of each record stated on every answer. It uses only Python's standard library
 and git, reads the repository and changes nothing.
 
+## Contents
+
+- [Hosted: nothing to download](#hosted-nothing-to-download)
+  - [Install on each client](#install-on-each-client)
+    - [Claude Code](#claude-code)
+    - [Codex](#codex)
+    - [Cursor](#cursor)
+    - [VS Code](#vs-code)
+    - [Gemini CLI](#gemini-cli)
+    - [Grok Build](#grok-build)
+    - [Cline](#cline)
+    - [Claude (web, desktop and mobile)](#claude-web-desktop-and-mobile)
+    - [ChatGPT](#chatgpt)
+    - [Any other client](#any-other-client)
+  - [What the hosted server does](#what-the-hosted-server-does)
+- [Set up](#set-up)
+- [Only some countries](#only-some-countries)
+  - [Case law](#case-law)
+- [How a date is read](#how-a-date-is-read)
+- [How a corpus describes itself](#how-a-corpus-describes-itself)
+- [Tools](#tools)
+- [Citing the official text](#citing-the-official-text)
+- [Long provisions and long calls](#long-provisions-and-long-calls)
+- [Protocol](#protocol)
+- [Security](#security)
+- [What to tell the user](#what-to-tell-the-user)
+- [Compared with other law MCP servers](#compared-with-other-law-mcp-servers)
+- [Tests](#tests)
+
 ## Hosted: nothing to download
 
 Lexifina runs this server at **https://global-law.lexifina.com/mcp** with every public country loaded, refreshed from these
 repositories about every 40 minutes. Add it to any MCP client that speaks Streamable HTTP. No account or key is needed.
 Its first address, `mcp.lexifina.com`, is now the Lexifina app's own MCP server: clients set up with it should switch to the address above.
 
+### Install on each client
+
+The [Global law plugin](https://github.com/lexifina/global-law-plugin) packages the server with three skills (read a provision on a date, trace its
+changes, check citations) for the clients that take plugins. Every other client needs only the URL.
+
+| Client | Quickest way |
+|---|---|
+| [Claude Code](#claude-code) | `/plugin marketplace add lexifina/global-law-plugin` |
+| [Codex](#codex) | `codex plugin marketplace add lexifina/global-law-plugin` |
+| [Cursor](#cursor) | [Install in Cursor](https://cursor.com/en/install-mcp?name=global-law&config=eyJ1cmwiOiJodHRwczovL2dsb2JhbC1sYXcubGV4aWZpbmEuY29tL21jcD9jbGllbnQ9Y3Vyc29yLWJ1dHRvbiJ9) |
+| [VS Code](#vs-code) | [Install in VS Code](https://vscode.dev/redirect/mcp/install?name=global-law&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fglobal-law.lexifina.com%2Fmcp%3Fclient%3Dvscode-button%22%7D) |
+| [Gemini CLI](#gemini-cli) | `gemini extensions install https://github.com/lexifina/global-law-plugin` |
+| [Grok Build](#grok-build) | Install **global-law** from the plugin marketplace |
+| [Cline](#cline) | Add a remote server with the URL |
+| [Claude](#claude-web-desktop-and-mobile) | Add a custom connector with the URL |
+| [ChatGPT](#chatgpt) | Add a custom connector with the URL |
+| [Any other client](#any-other-client) | Add a remote MCP server with the URL |
+
+#### Claude Code
+
+The plugin (the server, the skills and four commands):
+
+```
+/plugin marketplace add lexifina/global-law-plugin
+/plugin install global-law@global-law
+```
+
+The server alone; add `--scope project` to write it to the folder's `.mcp.json`:
+
 ```sh
 claude mcp add --transport http global-law https://global-law.lexifina.com/mcp
 ```
 
-| Client | How |
-|---|---|
-| Claude Code | The command above; add `--scope project` to write it to the folder's `.mcp.json` |
-| Claude | Add a custom connector with the URL |
-| Cursor | `mcp.json`: `{ "mcpServers": { "global-law": { "url": "https://global-law.lexifina.com/mcp" } } }` |
-| VS Code | `.vscode/mcp.json`: `{ "servers": { "global-law": { "type": "http", "url": "https://global-law.lexifina.com/mcp" } } }` |
+#### Codex
+
+The plugin (the server and the skills):
+
+```sh
+codex plugin marketplace add lexifina/global-law-plugin
+codex plugin add global-law@global-law
+```
+
+The server alone:
+
+```sh
+codex mcp add global-law --url https://global-law.lexifina.com/mcp
+```
+
+#### Cursor
+
+[Install in Cursor](https://cursor.com/en/install-mcp?name=global-law&config=eyJ1cmwiOiJodHRwczovL2dsb2JhbC1sYXcubGV4aWZpbmEuY29tL21jcD9jbGllbnQ9Y3Vyc29yLWJ1dHRvbiJ9), or install **Global law** from the Cursor Marketplace, or add it to `mcp.json` yourself:
+
+```json
+{ "mcpServers": { "global-law": { "url": "https://global-law.lexifina.com/mcp" } } }
+```
+
+#### VS Code
+
+[Install in VS Code](https://vscode.dev/redirect/mcp/install?name=global-law&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fglobal-law.lexifina.com%2Fmcp%3Fclient%3Dvscode-button%22%7D), or run **MCP: Add Server** and give the URL, or add it to `.vscode/mcp.json`:
+
+```json
+{ "servers": { "global-law": { "type": "http", "url": "https://global-law.lexifina.com/mcp" } } }
+```
+
+#### Gemini CLI
+
+The extension (the server and the guidance from the skills):
+
+```sh
+gemini extensions install https://github.com/lexifina/global-law-plugin
+```
+
+#### Grok Build
+
+Install **global-law** from the plugin marketplace.
+
+#### Cline
+
+In the MCP Servers panel, add a remote server named `global-law` with the URL. In `cline_mcp_settings.json`:
+
+```json
+{ "mcpServers": { "global-law": { "type": "streamableHttp", "url": "https://global-law.lexifina.com/mcp" } } }
+```
+
+#### Claude (web, desktop and mobile)
+
+In Settings, under Connectors, add a custom connector with the URL `https://global-law.lexifina.com/mcp`. It needs no sign-in.
+
+#### ChatGPT
+
+In Settings, under Connectors, add a custom connector (an MCP server) with the URL `https://global-law.lexifina.com/mcp` and no authentication.
+
+#### Any other client
+
+Add a remote MCP server with the URL `https://global-law.lexifina.com/mcp` (Streamable HTTP, no authentication).
+
+### What the hosted server does
 
 It has the same tools and gives the same answers as a clone. It only reads and keeps no session. Each network address
 may make 60 tool calls a minute and 10,000 a day, one at a time and one tool call per request. Every answer comes within
