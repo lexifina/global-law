@@ -8,7 +8,7 @@ and git, reads the repository and changes nothing.
 
 Lexifina runs this server at **https://global-law.lexifina.com/mcp** with every public country loaded, refreshed from these
 repositories about every 40 minutes. Add it to any MCP client that speaks Streamable HTTP. No account or key is needed.
-The earlier address, `https://mcp.lexifina.com/mcp`, still works for clients already set up with it.
+Its first address, `mcp.lexifina.com`, is now the Lexifina app's own MCP server: clients set up with it should switch to the address above.
 
 ```sh
 claude mcp add --transport http global-law https://global-law.lexifina.com/mcp
