@@ -141,15 +141,15 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *What can I ask about?*
 
 - **Does:** Every jurisdiction and body of law in the tree: which are served by this clone, how far each record reaches, its history type, an example path, and what is left out and why. The tool to start with.
-- **Arguments:** none
-- **Limits:** Only checked-out corpora are served; the rest are listed with the command that adds them.
+- **Arguments:** `jurisdiction` (optional: that jurisdiction's corpora only)
+- **Limits:** Only checked-out corpora are served; the rest are listed with the command that adds them (a hosted server, `GLOBAL_LAW_HOSTED=1`, says they are not available on it).
 
 ### find_provision (`mcp.find_provision`)
 
 *Where is "Art. 16a" or "automatic stay"?*
 
 - **Does:** Turns a number ("1182", "Art. 16a", "reg 13"), heading words ("debtor", "Asylrecht") or a popular name into a path. Reads citations through the same per-country registry as resolve_citations.
-- **Arguments:** `query`, `jurisdiction`
+- **Arguments:** `query`, `jurisdiction`, `max_results`, `offset`
 - **Limits:** Popular names come from aliases.json, and the abbreviations lawyers and courts write for acts from the tables in `data/` (`de-`, `nl-`, `fr-`, `pl-`, `fi-` and `swiss-aliases.json`). The heading index covers up to 400,000 files, with a text search beyond.
 
 ### list_provisions (`mcp.list_provisions`)
@@ -157,7 +157,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *What is in this act, as it stood then?*
 
 - **Does:** The provision files under a corpus or folder on a date, with headings. `by_folder` gives one row per act with its title and last change. A partial name lists folders that start with it (`malta/national/acts/sl/586.` lists every instrument made under Cap. 586).
-- **Arguments:** `path`, `date`, `by_folder`
+- **Arguments:** `path`, `date`, `by_folder`, `max_results`, `offset`
 - **Limits:** No chapter or part boundaries: the record does not hold them.
 
 ### read_law (`mcp.read_law`)
@@ -165,7 +165,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *What did it say, who last changed it, what changes next?*
 
 - **Does:** The text in force on a date, the law that last changed it, the next change (including enacted future changes), sources, a cite block, the latest text, and notes on what the answer does not cover.
-- **Arguments:** `path`, `date`, `include_text`
+- **Arguments:** `path` (a provision file, or a folder to read an act's provisions in order) or `paths` (up to 20 files), `date`, `include_text`, `max_chars`, `offset`
 - **Example:** `read_law path=argentina/national/acts/ley-25326/art-007.md date=2015-03-01`
 - **Limits:** Before a consolidated record starts, `in_force` is null and the answer says where the record starts. Text comes in 40,000-character parts.
 
@@ -205,7 +205,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *What took effect in this window?*
 
 - **Does:** Every law that took effect between two dates, in all jurisdictions or one, in order, with the number of provisions each changed.
-- **Arguments:** `start`, `end`, `jurisdiction`, `max_results`
+- **Arguments:** `start`, `end` (both days included), `jurisdiction`, `kind`, `max_results`, `offset`
 - **Limits:** Up to 500 laws.
 
 ### search_law (`mcp.search_law`)
@@ -213,7 +213,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *Where do these words appear in the law in force then?*
 
 - **Does:** Searches the text of all law in force on a date, across every jurisdiction or one. Plain text matches typographic dashes and quotes; a regex is optional. A miss falls back to the change notes.
-- **Arguments:** `query`, `date`, `jurisdiction`, `case_sensitive`, `max_results`
+- **Arguments:** `query`, `date`, `jurisdiction`, `kind`, `regex`, `case_sensitive`, `max_results`, `offset`
 - **Limits:** Exact words or a regex, not meaning. 200 provisions, shared round-robin across corpora.
 
 ### changes_between (`mcp.changes_between`)
@@ -221,7 +221,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *What changed between two dates, everywhere?*
 
 - **Does:** Every provision added, changed or removed between two dates, with the laws that changed them.
-- **Arguments:** `date_a`, `date_b`, `jurisdiction`
+- **Arguments:** `date_a`, `date_b`, `jurisdiction`, `kind`
 - **Limits:** 300 provisions shown across corpora. Current-only corpora show nothing.
 
 ### search_changes (`mcp.search_changes`)
@@ -229,7 +229,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *Which changes mention "temporary" or "COVID"?*
 
 - **Does:** Searches the record of changes (each commit message: the law, its dates, what it did), not the text of the law.
-- **Arguments:** `query`, `start`, `end`, `jurisdiction`
+- **Arguments:** `query`, `start`, `end` (both days included), `jurisdiction`, `kind`, `max_results`, `offset`
 - **Limits:** Change notes vary by corpus; many say only "Stand am …".
 
 ### phrase_history (`mcp.phrase_history`)
@@ -237,7 +237,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *When did these words enter or leave the law?*
 
 - **Does:** Each change whose added or removed text contains the words, with in-force dates, in every jurisdiction or one. Renames are followed. Finds words no longer in force.
-- **Arguments:** `query`, `jurisdiction`, `regex`
+- **Arguments:** `query`, `jurisdiction`, `kind`, `regex`, `max_results`, `offset`
 - **Example:** "datos sensibles": Chile 1999-08-28, Argentina 2000-11-11, Uruguay 2008-08-28, Peru 2011-07-04, Colombia 2012-10-18 (one country per call).
 - **Limits:** 3,000 changed files per corpus. Across many corpora in one call it can reach the 120-second limit.
 
@@ -246,7 +246,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *What did this one law change?*
 
 - **Does:** The full record of one law: its commit message with every trailer (enacted, in force, published, sources, scope), the provisions it changed, and what it did to each one's words (a word diff, "layout only" or "text moved between provisions").
-- **Arguments:** `law` (for example "Pub. L. 117-151", "36. Änderung") and `corpus`
+- **Arguments:** `law` (for example "Pub. L. 117-151", "36. Änderung") and `jurisdiction` (`corpus`, its name before, is still read)
 - **Limits:** 10 commits per corpus and word diffs for up to 60 provisions.
 
 ### resolve_citations (`mcp.resolve_citations`)
@@ -279,7 +279,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *What relies on this provision?*
 
 - **Does:** Provisions that cite this one, and provisions that use a term it defines (for example "debtor in possession"), with the definition's scope ("In this subchapter"), on a date.
-- **Arguments:** `path`, `date`, `max_results`
+- **Arguments:** `path`, `date`, `max_results`, `offset`
 - **Limits:** Within the same act or folder only. English definition forms only; one-word terms skipped.
 
 ## AI assistant prompts and resources

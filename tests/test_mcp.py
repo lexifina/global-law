@@ -259,7 +259,8 @@ class McpServer(unittest.TestCase):
             refused('phrase_history', query=bad, regex=True)
         # pathspec wildcards would make git walk every file; folders are not law text
         refused('provision_history', path=P('us/federal/usc/*'))
-        self.assertIn('not a provision file', refused('read_law', path=P('us/federal/usc/title-11')))
+        # (read_law reads a folder since 2026-11-10: its provisions in order; a folder that holds none is refused)
+        self.assertIn('not a provision file', refused('read_law', path=P('us/federal/usc/title-11/no-such-folder')))
         # arguments the schema does not name, and values of the wrong shape
         self.assertEqual(self.s.send('tools/call', {'name': 'read_law', 'arguments': {'path': USC, 'pth': 'x'}})['error']['code'], -32602)
         refused('who_wrote', path=USC, granularity=5)
@@ -327,7 +328,7 @@ class McpServer(unittest.TestCase):
         import json
         r = self.s.call('applies_to_case', path=P('us/federal/usc/title-11/362.md'), commenced='2004-06-01')['structuredContent']
         self.assertTrue(r['periods'][0].get('not_in_record'))
-        self.assertIn('Gap: the record starts on 2018-01-12', r['summary'])
+        self.assertIn('Gap: the record starts on 2018-01-12', ' '.join(r['explanation']))
         self.assertNotIn('2017 edition', ' '.join(c['law'] for c in r['changes']))
         self.assertLess(len(json.dumps(r)), len(json.dumps(r['text'])) + 10000)  # one copy of the text; period texts only when asked for
         self.assertNotIn('text', r['periods'][-1])
@@ -369,7 +370,7 @@ class McpServer(unittest.TestCase):
         rows = [d for c in r for d in c.get('diffs', [])]
         usc = [d for d in rows if d['path'] == USC]
         self.assertTrue(usc and usc[0]['effect'] == 'words changed' and '7,500,000' in ' '.join(d['diff'] for d in usc))
-        self.assertIn("What each provision's words did", self.s.call('law_details', law='Pub. L. 117-151', corpus=P('us/federal/usc'))['structuredContent']['summary'])
+        self.assertIn("What each provision's words did", self.text(self.s.call('law_details', law='Pub. L. 117-151', corpus=P('us/federal/usc'))))
         bare = self.s.call('law_details', law='Pub. L. 117-151', corpus=P('us/federal/usc'), include_diffs=False)['structuredContent']['changes']
         self.assertNotIn('diffs', bare[0])
 
@@ -406,7 +407,7 @@ class McpServer(unittest.TestCase):
     def test_before_a_baseline_is_outside_the_record(self):
         # §101 enters the US record with the 2017 edition: before it, the record is silent, the law was not.
         r = self.s.call('read_law', path=P('us/federal/usc/title-11/101.md'), date='2010-01-01')['structuredContent']
-        self.assertIn('where this record starts, not the day it came into force', r['summary'])
+        self.assertIn('where this record starts, not the day it came into force', r['why'])
         # The fields say so too: unknown, not "not in force" (issue #17).
         self.assertIsNone(r['in_force'])
         self.assertFalse(r['in_record'])
@@ -448,11 +449,11 @@ class McpServer(unittest.TestCase):
         self.assertIsNone(before['in_force'])
         self.assertFalse(before['in_record'])
         self.assertEqual(before['record_starts'], '2018-01-01')
-        self.assertIn('a revision of an act already in force then', before['summary'])
+        self.assertIn('a revision of an act already in force then', before['why'])
         after = self.s.call('read_law', path=p, date='2018-01-01', include_text=False)['structuredContent']
         self.assertTrue(after['in_force'])
         early = self.s.call('read_law', path=p, date='1980-01-01', include_text=False)['structuredContent']
-        if 'adopted only on' in early['summary']:  # data/acts.json with adopted days (china-law e681287)
+        if 'adopted only on' in early['why']:  # data/acts.json with adopted days (china-law e681287)
             self.assertIs(early['in_force'], False)
 
     @needs(US_C)
@@ -468,7 +469,7 @@ class McpServer(unittest.TestCase):
         line = [l for l in lines if 'small business debtor' in l['text']][0]
         self.assertEqual(('116-54' in line['law'], '116-136' in line['restored_by']), (True, True))
         self.assertEqual(self.s.call('who_wrote', path=USC, date='2022-05-01', granularity='line')['structuredContent']['latest']['state'], 'same')
-        self.assertIn('what_else_changes', self.s.call('search_law', query='1182', jurisdiction='us')['structuredContent']['summary'])
+        self.assertIn('what_else_changes', ' '.join(self.s.call('search_law', query='1182', jurisdiction='us')['structuredContent']['hints']))
         # A case filed in May 2022: Pub. L. 117-151 covers it from its start, so the first period is not settled.
         first = self.s.call('applies_to_case', path=USC, commenced='2022-05-01')['structuredContent']['periods'][0]
         self.assertIn('117-151', first['reached_back_over_by'][0])
@@ -643,8 +644,8 @@ class McpServer(unittest.TestCase):
         self.assertTrue(r['periods'][1]['certain'])
         self.assertFalse(r['periods'][2]['certain'])
         self.assertIn('7,500,000', r['text'])
-        self.assertIn('Not decided by this data', r['summary'])
-        self.assertIn('Landgraf', r['summary'])
+        self.assertIn('Not decided by this data', ' '.join(r['explanation']))
+        self.assertIn('Landgraf', ' '.join(r['explanation']))
 
     @needs(DE_C)
     def test_search_knows_popular_names(self):
@@ -785,7 +786,7 @@ class McpServer(unittest.TestCase):
         sbd = self.s.call('phrase_history', query='small business debtor', jurisdiction='us')['structuredContent']
         first = [c for c in sbd['changes'] if c['path'] == P('us/federal/usc/title-11/101.md')][0]
         self.assertEqual((first['in_force'], first['effect']), ('2018-01-12', 'present_at_start'))
-        self.assertIn('before the record begins', sbd['summary'])
+        self.assertIn('before the record begins', ' '.join(sbd['notes']))
 
     @needs(US_C)
     def test_changes_between(self):
@@ -2859,6 +2860,271 @@ class TestResolveCitations(unittest.TestCase):
             said, data = self.m.t_resolve_citations({'text': text, 'max_results': 20, 'date': '2026-11-01'})
             self.assertEqual(data['not_looked_up'], 0)
             self.assertNotIn('not looked up', said)
+
+
+IE_C, FI_TT = 'ireland/national/acts', 'finland/tyotuomioistuin/caselaw'
+DPA = f'{IE_C}/data-protection-act-2018'
+EFFECTS_SHORT = 'the text shown may not be the whole law that applied'
+
+
+class TestToolSurface(unittest.TestCase):
+    """What a model or an API caller sees (2026-11-10): `summary` is a headline, lists come in parts (`offset`, `page`),
+    read_law reads several provisions, an act found by name is one row, the note on what a record does not hold is one
+    sentence said once, `kind` and `jurisdiction` are read alike everywhere, and a hosted server names no command."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def call(self, tool, **args):
+        r = self.m.answer({'jsonrpc': '2.0', 'id': 1, 'method': 'tools/call', 'params': {'name': tool, 'arguments': args}})
+        self.assertIn('result', r, r)
+        return r['result']
+
+    def ok(self, tool, **args):
+        res = self.call(tool, **args)
+        self.assertFalse(res.get('isError'), res['content'][0]['text'])
+        return res['content'][0]['text'], res['structuredContent']
+
+    def err(self, tool, **args):
+        res = self.call(tool, **args)
+        self.assertTrue(res.get('isError'), res['content'][0]['text'][:200])
+        return res['content'][0]['text']
+
+    # --- no corpus needed ---
+
+    def test_page_of(self):
+        m = self.m
+        self.assertEqual(m.page_of(10, 10, 0), {'total': 10, 'shown': 10, 'offset': 0, 'next_offset': None})
+        self.assertEqual(m.page_of(25, 10, 10), {'total': 25, 'shown': 10, 'offset': 10, 'next_offset': 20})
+        self.assertEqual(m.page_of(None, 10, 0, at_least=45),
+                         {'total': None, 'shown': 10, 'offset': 0, 'next_offset': 10, 'total_at_least': 45})
+        self.assertEqual(m.more_note(m.page_of(10, 10, 0)), '')
+        self.assertIn('pass offset 20 for the next', m.more_note(m.page_of(25, 10, 10)))
+        with self.assertRaises(m.UserError):
+            m.offset_arg({'offset': -1})
+        with self.assertRaises(m.UserError):
+            m.offset_arg({'offset': 30}, 25)
+
+    def test_natural_order_and_act_ties(self):
+        m = self.m
+        self.assertEqual(sorted(['section-10.md', 'section-2.md', 'section-1.md', 'long-title.md'], key=m.natural),
+                         ['long-title.md', 'section-1.md', 'section-2.md', 'section-10.md'])
+        scores = {f'data-protection-act-2018/section-{i}.md': 3 for i in range(1, 6)}
+        scores.update({'data-protection-act-2018/section-2.md': 13, 'other-act/section-1.md': 1})
+        ties = m.act_ties(scores, set(), ['data', 'protection', 'act'])
+        self.assertEqual(list(ties), ['data-protection-act-2018'])
+        self.assertEqual((ties['data-protection-act-2018'][0], len(ties['data-protection-act-2018'][1])), (3, 4))
+        self.assertEqual(m.act_ties(scores, set(scores), ['data']), {})  # matched by their headings: not the act's name
+
+    def test_case_law_left_out_is_that_of_the_scope(self):
+        m = self.m
+        corpora = ([{'path': f'x/court-{i}/caselaw', 'kind': 'judgments'} for i in range(7)]
+                   + [{'path': 'x/national/acts'}, {'path': 'y/national/caselaw'}, {'path': 'x/national/caselaw'}])
+        self.assertEqual(len(m.by_kind(corpora, '', {})[1]), 9)
+        self.assertEqual(m.by_kind(corpora, 'x/national/acts', {})[1], ['x/national/caselaw'])
+        left = m.by_kind(corpora, 'x', {})[1]
+        self.assertEqual((len(left), 'y/national/caselaw' in left), (8, False))
+        fields = m.caselaw_fields(left)
+        self.assertEqual((len(fields['case_law_not_read']), fields['case_law_not_read_count']), (3, 8))
+        self.assertEqual(len(m.by_kind(corpora, '', {'kind': 'all'})[0]), 10)
+        self.assertEqual(len(m.by_kind(corpora, '', {'kind': 'judgments'})[0]), 9)
+
+    def test_kind_words(self):
+        m = self.m
+        self.assertEqual([m.kind_arg({'kind': k}) for k in ('law', 'laws', 'Judgments', 'caselaw', 'all', '')],
+                         ['laws', 'laws', 'judgments', 'judgments', 'all', 'laws'])
+        self.assertEqual(m.kind_arg({}, 'all'), 'all')
+        with self.assertRaises(m.UserError):
+            m.kind_arg({'kind': 'cases'})
+
+    def test_short_caveats(self):
+        m = self.m
+        long = ("x/national/acts: this record changes the text on each change's in-force date only; it does not hold "
+                + ', '.join(m.law.EFFECTS.values()) + ', so the text shown may not be the whole law that applied on 2020-01-01.')
+        short = ('x/national/acts: the text shown may not be the whole law that applied; this record does not hold changes to '
+                 'how a provision applies, commencement conditions or transitional rules.')
+        self.assertEqual(m.short_caveats([long, long.replace('2020', '2021')]), [short])
+        other = long.replace('x/national', 'y/national')
+        self.assertTrue(m.short_caveats([long, other])[0].startswith('x/national/acts, y/national/acts: '))
+        runs = 'a/b/c: the record runs to 2026-10-01, checked on 2026-10-28. Publisher: X.'
+        fresh = 'a/b/c: stale, last checked against its official source on 2026-10-28 (13 days ago); later changes may be missing.'
+        self.assertEqual(m.short_caveats([runs], fresh),
+                         ['a/b/c: the record runs to 2026-10-01; stale, last checked against its official source on 2026-10-28 '
+                          '(13 days ago); later changes may be missing. Publisher: X.'])
+        self.assertEqual(m.short_caveats([runs]), [runs])
+        for words in m.law.EFFECTS.values():  # the full explanation, once: list_jurisdictions and the instructions
+            self.assertIn(words, m.RECORD_LIMITS)
+        self.assertIn(m.RECORD_LIMITS, m.INSTRUCTIONS)
+
+    def test_schemas(self):
+        tools = {t['name']: t for t in self.m.tool_list()}
+        for name in ('find_provision', 'search_law', 'laws_between', 'list_provisions', 'search_changes', 'phrase_history', 'what_else_changes'):
+            self.assertIn('offset', tools[name]['inputSchema']['properties'], name)
+        for tool in tools.values():
+            for name, prop in tool['inputSchema']['properties'].items():
+                self.assertTrue(prop.get('description'), f"{tool['name']}.{name}")
+                if name == 'max_results':
+                    self.assertRegex(prop['description'], r'default \d+, at most \d+', tool['name'])
+                if name == 'kind':
+                    self.assertEqual(set(prop['enum']), {'laws', 'law', 'judgments', 'all'})
+        self.assertIn('jurisdiction', tools['law_details']['inputSchema']['properties'])
+        self.assertNotIn('corpus', tools['law_details']['inputSchema']['properties'])
+        self.assertEqual(self.m.ALIASES['law_details'], {'corpus': 'jurisdiction'})
+        self.assertIn('both days included', tools['laws_between']['description'])
+        self.assertIn('both days included', tools['search_changes']['description'])
+        self.assertIn('after date_a, up to and including date_b', tools['compare_dates']['description'])
+        self.assertIn('after date_a, up to and including date_b', tools['changes_between']['description'])
+        self.assertNotIn('Defaults to today', tools['search_changes']['inputSchema']['properties']['start']['description'])
+        self.assertLess(len(tools['who_wrote']['inputSchema']['properties']['path']['description']), 110)
+        self.assertIn('docket', tools['find_provision']['description'])
+        self.assertTrue(tools['check_precedent']['description'].startswith('The judgments the record holds for a provision'))
+        self.assertIn('paths', tools['read_law']['inputSchema']['properties'])
+
+    def test_hosted_instructions(self):
+        code = "import sys; sys.path.insert(0, 'tools'); sys.dont_write_bytecode = True; import mcp_server as M; print(M.INSTRUCTIONS)"
+
+        def instructions(flag):
+            return subprocess.run([sys.executable, '-c', code], cwd=ROOT, capture_output=True, text=True, encoding='utf-8',
+                                  env={**os.environ, 'GLOBAL_LAW_HOSTED': flag, 'PYTHONUTF8': '1'}).stdout
+        plain, hosted = instructions(''), instructions('1')
+        self.assertIn('A clone may hold only some countries', plain)  # the sentence a hosted wrapper may look for
+        self.assertIn('give the user the command', plain)
+        self.assertNotIn('command', hosted)
+        self.assertIn('not available on this server', hosted)
+
+    # --- on the Irish acts (and the Finnish Labour Court for case law) ---
+
+    @needs(IE_C)
+    def test_summary_is_a_headline(self):
+        s2 = f'{DPA}/section-2.md'
+        for tool, args in (('read_law', {'path': s2}), ('laws_between', {'start': '2024-01-01', 'end': '2024-12-31', 'jurisdiction': 'ireland'}),
+                           ('search_law', {'query': 'personal data breach', 'jurisdiction': 'ireland'}), ('list_provisions', {'path': DPA}),
+                           ('who_wrote', {'path': s2}), ('applies_to_case', {'path': s2, 'commenced': '2023-01-01'})):
+            with self.subTest(tool=tool):
+                text, data = self.ok(tool, **args)
+                self.assertEqual(list(data)[0], 'summary')
+                self.assertLess(len(data['summary']), 900)
+                self.assertNotIn('\n', data['summary'])
+        text, data = self.ok('read_law', path=s2)
+        self.assertTrue(text.endswith(data['text']))
+        self.assertEqual(json.dumps(data, ensure_ascii=False).count('“Act of 1988” means the Data Protection Act 1988'), 1)
+        self.assertEqual([h['law'] for h in data['history']][-1], 'Data Protection Act 2018')
+        self.assertEqual(data['changes_count'], len(self.ok('provision_history', path=s2)[1]['changes']))
+        text, data = self.ok('search_law', query='section 2', jurisdiction='ireland', max_results=3)
+        self.assertTrue(any('what_else_changes' in h for h in data['hints']))
+        text, data = self.ok('who_wrote', path=s2)
+        self.assertIn(data['marked'], text)
+
+    @needs(IE_C)
+    def test_caveats_once(self):
+        s2 = f'{DPA}/section-2.md'
+        for tool, args in (('read_law', {'path': s2}), ('who_wrote', {'path': s2}), ('world_on_date', {'jurisdiction': 'ireland'}),
+                           ('compare_dates', {'path': s2, 'date_a': '2019-01-01', 'date_b': 'today'}),
+                           ('search_law', {'query': 'personal data breach', 'jurisdiction': 'ireland'})):
+            with self.subTest(tool=tool):
+                text, data = self.ok(tool, **args)
+                self.assertNotIn("in-force date only", text)
+                self.assertEqual(text.count(EFFECTS_SHORT), 1)
+                self.assertEqual(json.dumps(data, ensure_ascii=False).count(EFFECTS_SHORT), 1)
+                for c in data['caveats']:
+                    self.assertEqual(text.count(c), 1, c)
+        text, data = self.ok('list_jurisdictions', jurisdiction='ireland')
+        self.assertIn(self.m.RECORD_LIMITS, text)
+        self.assertNotIn('tree', data)
+        self.assertNotIn('Served here', text)
+
+    @needs(IE_C)
+    def test_lists_in_parts(self):
+        for tool, key, args in (('list_provisions', 'provisions', {'path': DPA, 'max_results': 100}),
+                                ('laws_between', 'changes', {'start': '2024-01-01', 'end': '2024-02-28', 'jurisdiction': 'ireland', 'max_results': 10}),
+                                ('search_law', 'results', {'query': 'personal data breach', 'jurisdiction': 'ireland', 'max_results': 9}),
+                                ('search_changes', 'changes', {'query': 'Data Protection', 'jurisdiction': 'ireland', 'max_results': 10})):
+            with self.subTest(tool=tool):
+                seen, offset = [], 0
+                while offset is not None and len(seen) < 60:
+                    text, data = self.ok(tool, **{**args, 'offset': offset})
+                    self.assertEqual((data['page']['offset'], data['page']['shown']), (offset, len(data[key])))
+                    if data['page']['next_offset'] is not None:
+                        self.assertIn(f"pass offset {data['page']['next_offset']}", text)
+                    seen += [json.dumps(r, sort_keys=True) for r in data[key]]
+                    offset = data['page']['next_offset']
+                self.assertEqual(len(seen), len(set(seen)))
+                whole = self.ok(tool, **{**args, 'max_results': 100})[1][key]
+                self.assertEqual(seen[:len(whole)], [json.dumps(r, sort_keys=True) for r in whole][:len(seen)])
+        self.assertIn('past the end', self.err('list_provisions', path=DPA, offset=5000))
+
+    @needs(IE_C)
+    def test_read_several(self):
+        paths = [f'{DPA}/section-{n}.md' for n in (1, 2, 3)]
+        text, data = self.ok('read_law', paths=paths)
+        self.assertEqual([p['path'] for p in data['provisions']], paths)
+        for p in data['provisions']:
+            self.assertIn(self.m.law.text_on(data['date'], p['path']).rstrip('\n'), data['text'])
+        self.assertEqual(text.count(EFFECTS_SHORT), 1)
+        text, data = self.ok('read_law', path=DPA, include_text=False)
+        names = [p['path'].rsplit('/', 1)[-1] for p in data['provisions']]
+        self.assertEqual(names, sorted(names, key=self.m.natural))
+        self.assertEqual(len(names), min(data['folder_files'], self.m.READ_FOLDER))
+        self.assertIn('not both', self.err('read_law', path=paths[0], paths=paths))
+        self.assertIn(f'1 to {self.m.READ_MANY}', self.err('read_law', paths=paths * 7))
+
+    @needs(IE_C)
+    def test_an_act_by_name_is_one_row(self):
+        text, data = self.ok('find_provision', query='Data Protection Act 2018', jurisdiction='ireland')
+        first = data['results'][0]
+        self.assertEqual((first['path'], first['kind'], first['title']), (DPA, 'act', 'Data Protection Act 2018'))
+        self.assertFalse([r for r in data['results'] if r['path'].startswith(DPA + '/')])
+        text, data = self.ok('list_provisions', path=DPA)
+        names = [p['path'].rsplit('/', 1)[-1] for p in data['provisions']]
+        self.assertLess(names.index('section-2.md'), names.index('section-10.md'))
+        row = next(p for p in data['provisions'] if p['path'].endswith('/section-2.md'))
+        self.assertEqual((row['heading'], row['heading_from']), ('Interpretation', 'first line of the text'))
+
+    @needs(IE_C)
+    def test_kind_and_jurisdiction(self):
+        law_name = 'Local Government (Mayor of Limerick) and Miscellaneous Provisions Act 2024'
+        a = self.ok('law_details', law=law_name, jurisdiction='ireland', include_diffs=False)[1]['changes']
+        b = self.ok('law_details', law=law_name, corpus='ireland', include_diffs=False)[1]['changes']
+        self.assertEqual(a, b)
+        for tool, args in (('search_law', {'query': 'x'}), ('laws_between', {'start': '2024-01-01', 'end': '2024-01-02'}),
+                           ('search_changes', {'query': 'x'}), ('phrase_history', {'query': 'x'}), ('world_on_date', {})):
+            self.assertIn('kind is "laws" (or "law"), "judgments" or "all"', self.err(tool, kind='cases', jurisdiction='ireland', **args))
+        one = self.ok('laws_between', start='2024-01-01', end='2024-01-31', jurisdiction='ireland', kind='law')[1]
+        two = self.ok('laws_between', start='2024-01-01', end='2024-01-31', jurisdiction='ireland', kind='laws')[1]
+        self.assertEqual(one['changes'], two['changes'])
+
+    @needs(IE_C, FI_TT)
+    def test_ireland_does_not_name_the_finnish_court(self):
+        for tool, args in (('search_law', {'query': 'personal data breach'}), ('laws_between', {'start': '2024-01-01', 'end': '2024-03-31'}),
+                           ('changes_between', {'date_a': '2024-03-01', 'date_b': '2024-04-30'})):
+            with self.subTest(tool=tool):
+                text, data = self.ok(tool, jurisdiction='ireland', **args)
+                self.assertNotIn('finland', text)
+                self.assertEqual((data['case_law_not_read'], data['case_law_not_read_count']), ([], 0))
+                text, data = self.ok(tool, **args)
+                self.assertIn(FI_TT, data['case_law_not_read'])
+                self.assertIn('judgments', data['case_law_how'])
+
+    @needs(IE_C)
+    def test_hosted_wording(self):
+        self.m.HOSTED = True
+        try:
+            text, data = self.ok('search_changes', query='zzzqqq')
+            self.assertNotIn('countries.py', text)
+            unserved = next((c for c in _corpus_paths() if not _checked_out(c)), None)
+            if unserved:
+                self.assertIn('not available on this server', text)
+                self.assertNotIn('countries.py', self.ok('list_jurisdictions')[0])
+                self.assertIn('not available on this server', self.err('list_provisions', path=unserved))
+        finally:
+            self.m.HOSTED = False
+        unserved = next((c for c in _corpus_paths() if not _checked_out(c)), None)
+        if unserved:
+            self.assertIn('countries.py add', self.err('list_provisions', path=unserved))
 
 
 if __name__ == '__main__':

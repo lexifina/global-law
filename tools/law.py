@@ -26,7 +26,9 @@ import difflib
 import json
 import re
 import subprocess
+import subprocess as _subprocess  # the module itself: a reader (the MCP server) replaces `subprocess` with run() only
 import sys
+import threading
 import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
@@ -52,8 +54,36 @@ def _head() -> str:
     now = time.monotonic()
     seen = _CACHE.get(('head-at', ''))
     if not seen or now - seen[0] > 1.0:  # type: ignore[index]
-        _CACHE[('head-at', '')] = (now, _head_from_files() or git('rev-parse', 'HEAD').strip())
-    return _CACHE[('head-at', '')][1]  # type: ignore[index]
+        head = _head_from_files() or git('rev-parse', 'HEAD').strip()
+        if seen and seen[1] != head:  # type: ignore[index]
+            _forget_other_heads(head, seen[1])  # type: ignore[index]
+        _CACHE[('head-at', '')] = seen = (now, head)
+    return seen[1]  # type: ignore[index]
+
+
+# What is kept per HEAD of the tree: keyed by the commit alone, by "<commit>|...", or by "<corpus>@<commit>".
+_HEAD_KEYS = frozenset(('root', 'manifest', 'tips', 'legacy', 'moved', 'countries', 'country-names', 'future-pins'))
+_HEAD_LED_KEYS = frozenset(('timeline', 'cl-vouched', 'caselaw-index-quick'))
+
+
+def _forget_other_heads(head: str, before: str) -> None:
+    """HEAD moved: drop what this process keeps for earlier commits of the tree (a long-running reader sees pins move
+    several times an hour, and each kept a manifest, the pins and a timeline of every corpus for good). The commit
+    HEAD moved from is kept one move longer: a call that has just stored something under it reads it back."""
+    for k in list(_CACHE):
+        if len(k) != 2 or not isinstance(k[1], str):
+            continue
+        kind, at = k
+        if kind in _HEAD_KEYS:
+            gone = at not in (head, before)
+        elif kind in _HEAD_LED_KEYS:
+            gone = not at.startswith((head + '|', before + '|'))
+        elif kind == 'corpus-timeline':
+            gone = not at.endswith(('@' + head, '@' + before))
+        else:
+            continue
+        if gone:
+            _CACHE.pop(k, None)
 
 
 def _gitdirs(top: Path) -> tuple[Path, Path] | None:
@@ -234,6 +264,43 @@ class Event:
     subject: str
 
 
+class _Events(list):
+    """A list of events that is kept and never changed once made (a corpus's events at one reading of its index, a
+    timeline): what is worked out from it is kept on it (`memo`), so it lasts exactly as long as the list does and a
+    new pin or index starts afresh. Entries are set whole and never changed, so threads may share them."""
+    __slots__ = ('memo',)
+
+    def __init__(self, items=()):
+        super().__init__(items)
+        self.memo: dict = {}
+
+
+def _kept(events, name, make):
+    """make() for a list of events, worked out once when the list is a kept one (_Events)."""
+    memo = getattr(events, 'memo', None)
+    if memo is None:
+        return make()
+    got = memo.get(name)
+    if got is None:
+        got = memo[name] = make()
+    return got
+
+
+def by_corpus(events: list[Event]) -> dict[str, list[Event]]:
+    """corpus -> its events in `events`, in their order there, documentation left out: grouped once for a kept list
+    (a timeline of every corpus), so a reader of one corpus does not go through the events of all of them."""
+    def group():
+        out: dict[str, list[Event]] = {}
+        for e in events:
+            if e.kind != 'documentation':
+                got = out.get(e.corpus)
+                if got is None:
+                    got = out[e.corpus] = _Events()
+                got.append(e)
+        return out
+    return _kept(events, 'by-corpus', group)
+
+
 _TRAILER = re.compile(r'^([A-Z][A-Za-z0-9-]*): (.*)$')
 
 
@@ -291,20 +358,22 @@ def timeline(caselaw: bool = False) -> list[Event]:
     corpora = tuple(c['path'] for c in manifest()['corpora'] if caselaw or not is_caselaw(c))
     key = ('timeline', _head() + '|' + ','.join(corpora))
     recheck_missing_futures()
-    if key not in _CACHE:
+    events = _CACHE.get(key)  # read once: another thread may drop it (a future commit arrived, HEAD moved)
+    if events is None:
         events = [e for c in corpora for e in law_events(c)]
         events.sort(key=lambda e: e.in_force)  # stable: each corpus keeps its own order within a day
         _CACHE[key] = events
-    return list(_CACHE[key])  # type: ignore[arg-type]
+    return list(events)  # type: ignore[arg-type]
 
 
 def corpus_timeline(corpus: str) -> list[Event]:
     """One corpus's dated commits in in-force order: timeline() restricted to it, read without every other corpus
     (and so the way to read a body of case law, which timeline() leaves out)."""
     key = ('corpus-timeline', f'{corpus}@{_head()}')
-    if key not in _CACHE:
-        _CACHE[key] = sorted(law_events(corpus), key=lambda e: e.in_force)
-    return list(_CACHE[key])  # type: ignore[arg-type]
+    events = _CACHE.get(key)
+    if events is None:
+        events = _CACHE[key] = sorted(law_events(corpus), key=lambda e: e.in_force)
+    return list(events)  # type: ignore[arg-type]
 
 
 def latest_decision(corpus: str, date: str) -> tuple[str, str, str] | None:
@@ -945,7 +1014,7 @@ def caselaw_index(build: str = 'no') -> dict | None:
         return None
     from concurrent.futures import ThreadPoolExecutor
     with ThreadPoolExecutor(8) as pool:
-        records = list(pool.map(lambda s: caselaw_record(*s), served))
+        records = list(pool.map(carry(lambda s: caselaw_record(*s)), served))
     stem = f'cl-set-v{CASELAW_INDEX_V}-{h}'
     corpora: dict[str, dict] = {}
     days_parts, bloom_parts, overlay, sums = [], [], [], []
@@ -1072,7 +1141,7 @@ def latest_decisions(date: str, corpora: list[str]) -> dict[str, tuple[str, str,
 def _latest_each(date: str, corpora: list[str]) -> dict[str, tuple[str, str, str] | None]:
     from concurrent.futures import ThreadPoolExecutor
     with ThreadPoolExecutor(8) as pool:
-        return dict(zip(corpora, pool.map(lambda p: latest_decision(p, date), corpora)))
+        return dict(zip(corpora, pool.map(carry(lambda p: latest_decision(p, date)), corpora)))
 
 
 def caselaw_overlay_rows(keys: list[str]) -> list[tuple[str, str]] | None:
@@ -1242,7 +1311,7 @@ def _read_texts_git(rows: list[tuple[str, str]]) -> list[str | None]:
     else:
         from concurrent.futures import ThreadPoolExecutor
         with ThreadPoolExecutor(min(8, len(groups))) as pool:
-            parts = list(pool.map(one, zip(groups, dirs)))
+            parts = list(pool.map(carry(one), zip(groups, dirs)))
     for got in parts:
         out += [data.decode('utf-8', 'replace') if kind == b'blob' and data is not None else None for kind, data in got]
     return out
@@ -1311,7 +1380,7 @@ def corpus_events(corpus: str) -> list[Event]:
         ix = _light_index(corpus, cwd, ix['pin'])
     key = ('corpus-events', f"{corpus}@{_at(ix)}")
     if key not in _CACHE:
-        _CACHE[key] = [Event(r[0], corpus, r[0], r[1], r[5], r[4], r[3]) for r in ix['rows'] if r[5]]
+        _CACHE[key] = _Events(Event(r[0], corpus, r[0], r[1], r[5], r[4], r[3]) for r in ix['rows'] if r[5])
     return _CACHE[key]  # type: ignore[return-value]
 
 
@@ -1380,7 +1449,16 @@ def corrections(corpus: str) -> list[dict]:
     Act-path: names the act, whose next ordinary commit ends an open range."""
     if not corpus_events(corpus):
         return []
-    return [r[9] for r in _index(corpus)['rows'] if r[9]]
+    ix = _index(corpus)
+    if ix.get('focused'):  # a few files' commits, read for one call: not kept
+        return [r[9] for r in ix['rows'] if r[9]]
+    # Once per reading of the index: every read of a provision asks (file_commit), and each pass went through every
+    # commit of the corpus.
+    key = ('corrections', f"{corpus}@{_at(ix)}")
+    got = _CACHE.get(key)
+    if got is None:
+        got = _CACHE[key] = tuple(r[9] for r in ix['rows'] if r[9])
+    return list(got)  # type: ignore[arg-type]
 
 
 def act_next(corpus: str, paths: list[str], after: str) -> str | None:
@@ -1508,24 +1586,36 @@ def root_on(date: str, events: list[Event] | None = None) -> Moment | None:
 def corpus_on(date: str, corpus: str) -> str | None:
     """The corpus commit in force on `date`: the last of its dated commits before the first one dated after `date`
     (a prefix, as the corpora record changes in the order they took force)."""
-    found = None
-    for event in corpus_events(corpus):
-        if event.in_force > date:
-            break
-        found = event.corpus_commit
-    return found
+    events = corpus_events(corpus)
+
+    def latest_so_far():  # the latest in-force day up to each event: it first passes a date at the first event after it
+        out, top = [], ''
+        for e in events:
+            if e.in_force > top:
+                top = e.in_force
+            out.append(top)
+        return tuple(out)
+    import bisect
+    i = bisect.bisect_right(_kept(events, 'latest-so-far', latest_so_far), date)  # the first event dated after `date`
+    return events[i - 1].corpus_commit if i else None
 
 
 def in_order(corpus: str) -> bool:
     """Whether a corpus's history is in in-force order with no corrections: then the commit-order prefix (corpus_on)
     is exactly the corpus as in force on a date, and no tree has to be built."""
-    last = ''
-    for e in corpus_events(corpus):
-        if e.kind == 'documentation':
-            continue
-        if e.in_force < last:
-            return False
-        last = e.in_force
+    events = corpus_events(corpus)
+
+    def out_of_order():
+        last = ''
+        for e in events:
+            if e.kind == 'documentation':
+                continue
+            if e.in_force < last:
+                return 'yes'
+            last = e.in_force
+        return 'no'
+    if _kept(events, 'out-of-order', out_of_order) == 'yes':
+        return False
     # A corpus that moved or withdrew files reads a past date under the files' current paths, which only a built tree
     # gives: its commit-order prefix still holds the old paths and the withdrawn acts.
     ix = _index(corpus)
@@ -1729,8 +1819,8 @@ def _tree_store() -> Path:
     d = _TREES['dir']
     if not (d / 'objects').is_dir() or not (d / 'owner').is_file():
         _make_tree_store(d)  # swept by another process: the same place, so git's alternate path holds again
-        for k in [k for k in _CACHE if k[0] == 'tree']:  # its trees went with it; built again when next asked
-            _CACHE.pop(k)
+        for k in [k for k in list(_CACHE) if k[0] == 'tree']:  # its trees went with it; built again when next asked
+            _CACHE.pop(k, None)
         _restart_readers()
         _TREES['beat'] = time.time()
     elif time.time() - _TREES['beat'] > TREE_STORE_BEAT:
@@ -1774,10 +1864,62 @@ def corpus_tree(date: str, corpus: str) -> str | None:
     prefix; any other (older acts appended after the tip, corrections) is a tree built from file_index for the date."""
     if in_order(corpus):
         return corpus_on(date, corpus)
-    key = ('tree', f'{corpus}@{_at(_index(corpus))}@{date}')
+    ix = _index(corpus)
+    # The tree changes only on the days _tree_days lists, so it is built, and kept, for the last of them on or
+    # before `date`: one tree per day the corpus changed, not one per date asked (and not a new one each morning).
+    days = _tree_days(corpus, ix)
+    if days is not None:
+        import bisect
+        i = bisect.bisect_right(days, date)
+        if not i:
+            return None  # before every version and correction: nothing is in force
+        date = days[i - 1]
+    key = ('tree', f'{corpus}@{_at(ix)}@{date}')
     _trees_alive()  # a swept store drops the cached trees, so the one asked for is built again below
-    if key in _CACHE:
-        return _CACHE[key]  # type: ignore[return-value]
+    got = _CACHE.get(key, _MISSING)
+    if got is not _MISSING:
+        return got  # type: ignore[return-value]
+    # One build of a tree at a time: its git index file is named after the key, and two dates asked at once may now
+    # be the same day's tree.
+    with _TREE_LOCKS[hash(key) % len(_TREE_LOCKS)]:
+        return _built_tree(date, corpus, key)
+
+
+_TREE_LOCKS = tuple(threading.Lock() for _ in range(64))
+
+
+def _tree_days(corpus: str, ix: dict) -> tuple | None:
+    """Every day on which corpus_tree's answer can change, in order: the in-force day of each version of each file
+    (file_index: act ends included), the first day of each correction, and the day after its last day for each file
+    it covers. corpus_tree picks a version by `day <= date` and applies a correction when `from <= date <= end`, so two
+    dates with the same last such day on or before them give the same tree. None when an end is not a calendar day
+    (its day after cannot be named): each date then has its own tree, as before. Once per reading of the index."""
+    key = ('tree-days', f'{corpus}@{_at(ix)}')
+    got = _CACHE.get(key)
+    if got is None:
+        import datetime as dt
+        index, overlays = file_index(corpus)
+        days = {v[0] for versions in index.values() for v in versions}
+        try:
+            ends = set()
+            for fix, _, files in overlays:
+                days.add(fix['from'])
+                ends.update(correction_end(corpus, fix, path) for path in files)
+            for end in ends:
+                if end < '9999-12-31':  # no date asked is after it
+                    days.add((dt.date.fromisoformat(end) + dt.timedelta(days=1)).isoformat())
+            got = tuple(sorted(days))
+        except (ValueError, OverflowError):
+            got = False
+        _CACHE[key] = got
+    return None if got is False else got  # type: ignore[return-value]
+
+
+def _built_tree(date: str, corpus: str, key: tuple) -> str | None:
+    """corpus_tree's tree for a day it changes on, built unless another thread has just built it."""
+    got = _CACHE.get(key, _MISSING)
+    if got is not _MISSING:
+        return got  # type: ignore[return-value]
     index, overlays = file_index(corpus)
     chosen: dict[str, tuple] = {}
     for path, versions in index.items():
@@ -1903,7 +2045,7 @@ def _readable(corpus: str, cwd: Path) -> bool:
 
 def unreadable() -> list[str]:
     """The corpora left out of a whole-tree read because their checkout has no commit yet."""
-    return sorted(k[1] for k, ok in _CACHE.items() if k[0] == 'readable' and not ok)
+    return sorted(k[1] for k, ok in list(_CACHE.items()) if k[0] == 'readable' and not ok)
 
 
 _BEHIND = ('{corpus} is behind the tree: its checkout does not have the commit the tree pins ({pin}), so it is left '
@@ -1913,7 +2055,7 @@ _BEHIND = ('{corpus} is behind the tree: its checkout does not have the commit t
 def behind() -> dict[str, str]:
     """The corpora left out of a whole-tree read because their checkout lacks the commit the tree pins: corpus ->
     that commit."""
-    return {k[1]: v for k, v in _CACHE.items() if k[0] == 'behind'}  # type: ignore[misc]
+    return {k[1]: v for k, v in list(_CACHE.items()) if k[0] == 'behind'}  # type: ignore[misc]
 
 
 def _shallow(cwd: Path) -> bool:
@@ -1949,7 +2091,7 @@ _SHALLOW = ('{corpus} is a shallow clone (--depth), so its history is cut and it
 
 def shallow() -> list[str]:
     """The corpora left out of a whole-tree read because their clone is shallow."""
-    return sorted(k[1] for k, ok in _CACHE.items() if k[0] == 'full-history' and not ok)
+    return sorted(k[1] for k, ok in list(_CACHE.items()) if k[0] == 'full-history' and not ok)
 
 
 def _require_full_history(corpus: str, cwd: Path) -> None:
@@ -2107,6 +2249,8 @@ def text_on(date: str, path: str) -> str | None:
 
 
 GIT_DIFF_ABOVE = 1_000_000  # line pairs above which git's histogram diff matches the lines instead of difflib
+GIT_DIFF_SECONDS = 60  # one git diff of long files (_GitDiffs) is waited for this long; then difflib, as without git
+waiting = None  # set by a reader (the MCP server's checkpoint): called while waiting for git; raises to stop the wait
 
 
 def _git_line_opcodes(a: list[str], b: list[str]) -> list[tuple[str, int, int, int, int]] | None:
@@ -2220,8 +2364,10 @@ class _GitDiffs:
                 (d / 'b' / f'{k:06d}').write_bytes(data(b))
             cmd, env = _hermetic_git(d)
             self.out = open(d / 'out', 'wb')
-            self.proc = subprocess.Popen([*cmd, 'diff', *_GIT_DIFF_OPTIONS, 'a', 'b'], cwd=d, env=env,
-                                         stdout=self.out, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+            # The real subprocess module: under the MCP server `subprocess` is a namespace with run() only, Popen
+            # raised AttributeError here, and every long file was matched by difflib (most of a minute on one).
+            self.proc = _subprocess.Popen([*cmd, 'diff', *_GIT_DIFF_OPTIONS, 'a', 'b'], cwd=d, env=env,
+                                          stdout=self.out, stderr=_subprocess.DEVNULL, stdin=_subprocess.DEVNULL)
         except (OSError, AttributeError, UnicodeError):
             self.close()
 
@@ -2241,7 +2387,22 @@ class _GitDiffs:
         if self.proc is None:
             self.close()
             return [None] * len(self.pairs)
-        code = self.proc.wait()
+        import time
+        stop = time.monotonic() + GIT_DIFF_SECONDS
+        try:
+            while True:  # a bounded wait: stopped with the call (waiting), and never longer than GIT_DIFF_SECONDS
+                try:
+                    code = self.proc.wait(0.25)
+                    break
+                except _subprocess.TimeoutExpired:
+                    if waiting is not None:
+                        waiting()
+                    if time.monotonic() > stop:
+                        self.close()
+                        return [None] * len(self.pairs)
+        except BaseException:
+            self.close()
+            raise
         self.out.close()
         raw = Path(self.dir.name, 'out').read_bytes()
         self.close()
@@ -2548,8 +2709,26 @@ def diff_between(date_a: str, date_b: str, path: str) -> str:
     return ''.join(f'{explain_missing(d, path)}\n' for d in gone) + out if out else out
 
 
+_BY_PATH: dict = {}  # id(a manifest) -> (the manifest, how many corpora it had, {path: its entry}), for corpus_info
+
+
 def corpus_info(corpus: str) -> dict:
-    return next(c for c in manifest()['corpora'] if c['path'] == corpus)
+    """A corpus's entry in the manifest (StopIteration when it has none, as a search of the list gave). Looked up by
+    path in a table made once per manifest: asked many times a call, and a scan of the list read every corpus."""
+    m = manifest()
+    corpora = m['corpora']
+    hit = _BY_PATH.get(id(m))
+    if hit is None or hit[0] is not m or hit[1] != len(corpora):
+        table: dict[str, dict] = {}
+        for c in corpora:
+            table.setdefault(c['path'], c)  # the first of a path, as the scan found
+        if len(_BY_PATH) >= 16:  # a few manifests at a time (a host's scoped calls each have their own)
+            _BY_PATH.clear()
+        hit = _BY_PATH[id(m)] = (m, len(corpora), table)  # holds the manifest, so its id is not used again meanwhile
+    found = hit[2].get(corpus)
+    if found is None:
+        return next(c for c in corpora if c['path'] == corpus)
+    return found
 
 
 # What a corpus may model beyond its text (corpus.json `effects`, corpus standard): anything not listed, answers name.
@@ -2569,13 +2748,19 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
     """What a reader must know about a date in one corpus: before its record starts or after it ends, what kind of
     record it is (current text only, a list of acts without their text), and changes on main not yet in force.
     Reads only this corpus (`events`, if given, may hold others: only this corpus's are used)."""
-    own = [e for e in (events if events is not None else corpus_events(corpus)) if e.corpus == corpus and e.kind != 'documentation']
+    given = events if events is not None else corpus_events(corpus)
+
+    def read():  # one pass, kept with a kept list: own events, the first by day, their days in order, all baselines?
+        mine = [e for e in given if e.corpus == corpus and e.kind != 'documentation']
+        return (mine, min(mine, key=lambda e: e.in_force) if mine else None, tuple(sorted(e.in_force for e in mine)),
+                all(e.kind == 'baseline' for e in mine))
+    own, first, days, only_baselines = _kept(given, ('caveats', corpus), read)
+    import bisect
     info = corpus_info(corpus)
     out = []
     if (ROOT / corpus / '.git').exists() and not _readable(corpus, ROOT / corpus):
         return [_UNREADABLE.format(corpus=corpus)]
     if own:
-        first = min(own, key=lambda e: e.in_force)
         if date < first.in_force:
             out.append(f"{corpus}: the record starts on {first.in_force} ({first.law}); nothing earlier is in it.")
     # The record covers every day up to the later of its last change and the day it was checked against the source;
@@ -2587,7 +2772,7 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
         checked = f", checked on {info['checked_on']}" if info.get('checked_on') else ''
         out.append(f"{corpus}: the record runs to {info.get('record_to') or covered}{checked}. {info.get('record_note', '')}".rstrip())
     elif not covered and own:
-        last = max((e.in_force for e in own if e.in_force <= today), default=None)
+        last = days[bisect.bisect_right(days, today) - 1] if days and days[0] <= today else None
         if last and date > last:
             out.append(f"{corpus}: the latest change in this record took force on {last}; it does not say whether it "
                        "covers later changes.")
@@ -2602,14 +2787,14 @@ def caveats(date: str, corpus: str, events: list[Event] | None = None) -> list[s
     # Starting texts only read as current text, unless the corpus says each is its act as enacted (audit row 79: the
     # Indonesian builder credits each Perda as enacted to the publisher, Kind: publisher, dated by the Perda's own day).
     current_only = info.get('history') == 'current-only' or (
-        info.get('history') != 'as-enacted' and own and all(e.kind == 'baseline' for e in own))
+        info.get('history') != 'as-enacted' and own and only_baselines)
     if current_only and (not covered or date < covered):
         out.append(f"{corpus}: this record holds only the text as the publisher gave it on the day it was read; an "
                    "earlier date shows that text only from that day, not as the law was in force before.")
     if own and _metadata_only(corpus):
         out.append(f"{corpus}: this record lists acts (titles, numbers, dates) without their text, so what it shows "
                    "is a catalogue entry, not the law.")
-    ahead = sum(1 for e in own if e.in_force > today)
+    ahead = len(days) - bisect.bisect_right(days, today)
     fut = _index(corpus).get('future') if own else None
     if ahead and fut:
         out.append(f"{corpus}: {ahead} change(s) in this record (main and its {fut['branch']} branch, recorded at "
@@ -4110,7 +4295,44 @@ def _main_index(corpus: str) -> dict:
     return data
 
 
-_FOCUS: dict[str, tuple[str, ...]] = {}  # corpus -> the files a call reads (focus())
+class _Focus(threading.local):
+    """corpus -> the files a call reads (focus()), for the thread that set it: a reader that answers several calls at
+    once (the MCP server under a host) must not see, or pop, another call's focus. A thread that works for a focused
+    call takes the focus with it (carry())."""
+
+    def __init__(self):
+        self.by: dict[str, tuple[str, ...]] = {}
+
+    def get(self, corpus, default=None):
+        return self.by.get(corpus, default)
+
+    def pop(self, corpus, default=None):
+        return self.by.pop(corpus, default)
+
+    def __setitem__(self, corpus, rels) -> None:
+        self.by[corpus] = rels
+
+
+_FOCUS = _Focus()
+carry_more = None  # set by a reader (the MCP server): fn -> fn, called in the thread that hands the work out
+
+
+def carry(fn):
+    """fn to run in another thread (a pool worker) as part of this thread's work: with this thread's focus, and with
+    whatever a reader adds through `carry_more` (the MCP server: its call's deadline and cancel event, so the git
+    commands the worker starts stop with the call)."""
+    by = dict(_FOCUS.by)
+    if carry_more is not None:
+        fn = carry_more(fn)
+
+    def run(*a, **k):
+        old = _FOCUS.by
+        _FOCUS.by = dict(by)
+        try:
+            return fn(*a, **k)
+        finally:
+            _FOCUS.by = old
+    return run
 
 
 class focus:
@@ -4202,9 +4424,9 @@ def _forget_other_pins(corpus: str, sha: str) -> None:
     """Drop what this process keeps for earlier pins of a corpus (a long-running reader, such as the MCP server, sees
     pins move several times an hour; each index of a large corpus holds hundreds of MB)."""
     mine = f'{corpus}@'
-    for k in [k for k in _CACHE if len(k) == 2 and isinstance(k[1], str) and k[1].startswith(mine)
+    for k in [k for k in list(_CACHE) if len(k) == 2 and isinstance(k[1], str) and k[1].startswith(mine)
               and not k[1].startswith(mine + sha)]:
-        v = _CACHE.pop(k)
+        v = _CACHE.pop(k, None)
         if k[0] == 'index' and isinstance(v, dict) and isinstance(v.get('files'), _Files):
             v['files'].close()
 
@@ -4562,9 +4784,9 @@ def _index(corpus: str) -> dict:
         _future_arrived(corpus, data['pin'], fut)  # fetched since (as future_note asks): read it from now on
     if key not in _CACHE:
         mine = f"{corpus}@{data['pin']}+"  # what this process kept for an earlier future pin of the same main pin
-        for k in [k for k in _CACHE if len(k) == 2 and isinstance(k[1], str) and k[1].startswith(mine)
+        for k in [k for k in list(_CACHE) if len(k) == 2 and isinstance(k[1], str) and k[1].startswith(mine)
                   and not k[1].startswith(mine + fut)]:
-            _CACHE.pop(k)
+            _CACHE.pop(k, None)
         cwd = corpus_dir(corpus)
         if _has_commit(corpus, cwd, fut):
             _CACHE[key] = _future_index(corpus, cwd, data, branch, fut)
@@ -4581,10 +4803,10 @@ def _future_arrived(corpus: str, pin: str, fut: str) -> None:
     caches keyed <corpus>@<pin> without the +<future>, but not main's own index, which the merged reading is built
     on, and every timeline), so the next read builds the merged reading."""
     at = f'{corpus}@{pin}'
-    for k in [k for k in _CACHE if len(k) == 2 and isinstance(k[1], str)
+    for k in [k for k in list(_CACHE) if len(k) == 2 and isinstance(k[1], str)
               and (k[0] == 'timeline' or (k[1].startswith(at) and not k[1].startswith(at + '+')
                                           and k != ('index', at)))]:
-        _CACHE.pop(k)
+        _CACHE.pop(k, None)
     _CACHE.pop(('index', f'{at}+{fut}'), None)
     _CACHE.pop(('future-missing', f'{at}+{fut}'), None)
 
@@ -4594,7 +4816,7 @@ def recheck_missing_futures() -> bool:
     MCP server's own caches: whether any recorded future commit the checkout lacked when it was last read is there
     now (its main-only caches are then dropped). One line to each such corpus's batch reader."""
     arrived = False
-    for k in [k for k in _CACHE if k[0] == 'future-missing']:
+    for k in [k for k in list(_CACHE) if k[0] == 'future-missing']:
         at, fut = str(k[1]).rsplit('+', 1)
         corpus, pin = at.rsplit('@', 1)
         if _has_commit(corpus, corpus_dir(corpus), fut):
@@ -4700,6 +4922,9 @@ class _Files:
         _OPEN_INDEXES.append(self._f)
         self._shards: dict[int, tuple[dict, list]] = {}
         self._ordered: list | None = None
+        # The pieces are read with seek() then read() on the one file: two threads reading at once took each other's
+        # place in it (UnpicklingError, EOFError "Ran out of input"). One reader at a time.
+        self._reading = threading.Lock()
 
     def close(self) -> None:
         if self._f in _OPEN_INDEXES:
@@ -4708,28 +4933,35 @@ class _Files:
 
     def _piece(self, i: int) -> dict:
         if i not in self._shards:
-            at, n = self._offsets[i]
-            self._f.seek(at)
-            raw = self._f.read(n)
-            if len(raw) != n:
-                raise OSError(f'{self._path}: index cut short')
-            self._shards[i] = _unpickle(raw)
+            with self._reading:
+                if i not in self._shards:
+                    at, n = self._offsets[i]
+                    self._f.seek(at)
+                    raw = self._f.read(n)
+                    if len(raw) != n:
+                        raise OSError(f'{self._path}: index cut short')
+                    self._shards[i] = _unpickle(raw)
         return self._shards[i][0]
 
     def _all(self) -> list[tuple[str, list]]:
         """Every (path, versions), in the order they were indexed."""
         if self._ordered is None:
-            if len(self._shards) < len(self._offsets):
-                for i, (at, n) in enumerate(self._offsets):
-                    if i not in self._shards:
-                        self._f.seek(at)
-                        self._shards[i] = _unpickle(self._f.read(n))
-            placed: list = [None] * sum(len(self._shards[i][1]) for i in self._shards)
-            for files, places in self._shards.values():
-                for kv, at in zip(files.items(), places):
-                    placed[at] = kv
-            self._ordered = placed
+            with self._reading:
+                if self._ordered is None:
+                    self._ordered = self._all_read()
         return self._ordered
+
+    def _all_read(self) -> list[tuple[str, list]]:
+        if len(self._shards) < len(self._offsets):
+            for i, (at, n) in enumerate(self._offsets):
+                if i not in self._shards:
+                    self._f.seek(at)
+                    self._shards[i] = _unpickle(self._f.read(n))
+        placed: list = [None] * sum(len(self._shards[i][1]) for i in self._shards)
+        for files, places in self._shards.values():
+            for kv, at in zip(files.items(), places):
+                placed[at] = kv
+        return placed
 
     def get(self, rel, default=None):
         return self._piece(_shard(rel)).get(rel, default) if isinstance(rel, str) else default
@@ -4868,8 +5100,8 @@ def close_readers() -> None:
     for f in _OPEN_INDEXES:  # and the index files they hold open
         f.close()
     _OPEN_INDEXES.clear()
-    for k in [k for k in _CACHE if k[0] == 'index']:
-        _CACHE.pop(k)
+    for k in [k for k in list(_CACHE) if k[0] == 'index']:
+        _CACHE.pop(k, None)
 
 
 def read_version(path: str, commit: str) -> str | None:

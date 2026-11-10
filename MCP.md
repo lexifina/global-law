@@ -251,6 +251,11 @@ What the model sees:
 - A path or `jurisdiction` in a country left out gets an error naming the command that adds it. `resolve_citations`
   marks such a citation `not served here`, and `find_provision` flags an alias that points to one.
 - The server's instructions tell the model to pass that command to the user, not to answer from memory.
+- A server whose users cannot add a corpus (a hosted one) sets `GLOBAL_LAW_HOSTED=1` in its environment. No answer
+  then names `countries.py`: a corpus the server does not hold is "not available on this server", in
+  `list_jurisdictions`, in the "Served here" note, in the error for a path or `jurisdiction` it does not hold, in
+  `find_provision`'s answer for a decision it cannot find, and in the instructions.
+- `list_jurisdictions` with a `jurisdiction` that is served in full says nothing about the rest of the tree.
 
 A provision's history needs only its own corpus, so dates, authorship and history are the same with one country as
 with all of them.
@@ -268,8 +273,9 @@ canton's, or `caselaw` for all).
   `list_provisions`, and `law.py show`, `log`, `blame`, `words`, `diff` and `today` (a correction is its own commit, and
   blame credits each line "court ruling, not a law" or "correction").
 - Lists and searches of law (`search_law`, `laws_between`, `changes_between`, `search_changes`, `phrase_history`, `law.py
-  laws`) leave case law out and say so on a "Not read" line; `kind: "judgments"` reads case law only, and a
-  `jurisdiction` that names case law reads it. `world_on_date` and `law.py world` give each case-law corpus's latest
+  laws`) leave case law out and say so on a "Not read" line, which counts the case law of the jurisdiction asked and
+  names up to three of its corpora (`case_law_not_read_count`, `case_law_not_read`); `kind: "judgments"` reads case
+  law only, `kind: "all"` reads both, and a `jurisdiction` that names case law reads it. `world_on_date` and `law.py world` give each case-law corpus's latest
   decision; `world_on_date` takes a `jurisdiction` and a `kind`.
 - Case law is read for at most 60 s of a call (`GLOBAL_LAW_CASELAW_SECONDS`): `search_law`, `phrase_history` and
   `search_changes` over many courts then answer with what they read and name the corpora left out ("Partial: ..."). At
@@ -454,29 +460,71 @@ its title and last change.
 
 | Tool | What it answers |
 | --- | --- |
-| `list_jurisdictions` | Every jurisdiction and body of law, how far each record reaches, how many provisions, and an example path. Start here. |
-| `find_provision` | The path of a provision from its number ("1182", "Art. 16a", "reg 13"), a popular name from `aliases.json` ("Schuldenbremse", "automatic stay", "EHC plan") or a topic found in the text. |
-| `list_provisions` | The provisions under a corpus or folder, with headings, as in force on a date. |
-| `read_law` | (`include_text: false` for a cheap check of dates, laws and sources.) A provision's text on a date, with the law that last changed it, the next change, sources to cite and the record's limits. It says whether the words are still the same at the end of the record (`latest`). `in_force` is `true` or `false`, or `null` with `in_record: false` and `record_starts` when the date is before the record's first version of the provision and that version is a consolidated text, not the law taking effect: the record does not know, so a program should not answer. It adds "not the whole answer" notes where a later law reaches back over the date, or an effect changes how the provision applies without changing its words (`Modifies:`). |
+| `list_jurisdictions` | Every jurisdiction and body of law, how far each record reaches, how many provisions, and an example path. Start here. It carries the full note on what a record does not hold (`record_limits`). With a `jurisdiction` it lists that jurisdiction's corpora only, without the tree of every country (`tree`), and without the "Served here" note when all of them are served. |
+| `find_provision` | The path of a provision from its number ("1182", "Art. 16a", "reg 13"), a popular name from `aliases.json` ("Schuldenbremse", "automatic stay", "EHC plan") or a topic found in the text. An act named by its title ("Data Protection Act 2018") is one row, its folder (`kind: "act"`, with `title` and `files`), not a row for each of its files; a file that matches by more than the act's name keeps its own row above it. A court decision is found by its docket number or citation. Files are in the order a reader counts them (section-2 before section-10), and a provision with no heading line is shown by its first line of text (`heading_from`). |
+| `list_provisions` | The provisions under a corpus or folder, with headings (or the first line of text, `heading_from`), in natural order, as in force on a date. |
+| `read_law` | (`include_text: false` for a cheap check of dates, laws and sources.) A provision's text on a date, with the law that last changed it, the next change, sources to cite and the record's limits. It says whether the words are still the same at the end of the record (`latest`), and lists its changes in brief, newest first (`history`: law, in-force date and commit of up to 20, with `changes_count`). `in_force` is `true` or `false`, or `null` with `in_record: false` and `record_starts` when the date is before the record's first version of the provision and that version is a consolidated text, not the law taking effect: the record does not know, so a program should not answer. It adds "not the whole answer" notes where a later law reaches back over the date, or an effect changes how the provision applies without changing its words (`Modifies:`). **Several provisions in one call:** `paths` (up to 20 files), or a folder as `path` (an act: its provisions in natural order, the first 200). Their texts come one after another, each under a `=== <path> (...) ===` line, in parts as one text (`offset`, `max_chars`); `provisions` gives each one's last change, length and place in the text, and the notes on each corpus's record come once. A read of one path gives its official link and every note on it. |
 | `world_on_date` | Every jurisdiction on one date: the last change in force in each, and the next. |
-| `who_wrote` | Which law wrote each word (or line), with words per law. Words brought back when a temporary change ended stay with the law that first wrote them (`restored_by` names the law that brought them back). |
-| `compare_dates` | A word-level diff between two dates and the laws that took effect in between. |
+| `who_wrote` | Which law wrote each word (or line), with words per law. The marked text is in the text answer and in `marked` (`[n]` opens a run by the law with `mark` n in `laws`). Words brought back when a temporary change ended stay with the law that first wrote them (`restored_by` names the law that brought them back). |
+| `compare_dates` | A word-level diff of a provision's text on `date_a` and on `date_b`, and the laws that took effect after `date_a`, up to and including `date_b`. |
 | `provision_history` | Every law that changed a provision, with its in-force, enacted or made, and published dates and its sources. |
-| `laws_between` | Every law that took effect in a window, with how many provisions each changed. |
+| `laws_between` | Every law that took effect in a window, `start` and `end` both included, with how many provisions each changed. |
 | `search_law` | Search the text of all the law in force on a date. |
-| `changes_between` | Every provision whose text differs between two dates, with the laws that changed them. |
-| `search_changes` | Search the record of changes (the commit messages) rather than the text. |
+| `changes_between` | Every provision whose text on `date_b` differs from its text on `date_a`, with the laws that took effect after `date_a`, up to and including `date_b`. |
+| `search_changes` | Search the record of changes (the commit messages) rather than the text. `start` and `end` are both included; without them, every date, changes not yet in force included. |
 | `what_else_changes` | The provisions that rely on this one: those that cite it, and those that use a multi-word term it defines. It gives a scoped definition's scope ("In this subchapter"), and lists apart uses nearer another definition of the same term. |
 | `resolve_citations` | Every citation in a piece of text (a brief, a judgment), resolved to its provision, with its state on a date. |
-| `check_precedent` | For case law: which recorded judgments apply a provision, and is the text each court applied on the day it decided still the text in force? If not, which laws changed it. Compares the words of the law only, and names changes that left the words alone. |
+| `check_precedent` | The judgments the record holds for a provision, each checked: is the text the court applied on the day it decided still the text in force? If not, which laws changed it. Also checks any one decision by its day (`decided`). Compares the words of the law only, and names changes that left the words alone. |
 | `phrase_history` | When words came into the law and when they left it, at any date: for things no longer in force. Words already in a record's first text are `present_at_start`. |
-| `applies_to_case` | For a case commenced on a date, which later changes reach it, from any scope the record holds. |
-| `law_details` | The full record of one law's change: every trailer and every provision it changed. |
+| `applies_to_case` | For a case commenced on a date, which later changes reach it, from any scope the record holds. The reasoning (the gap before a record starts, each period, what the record does not decide) is in the text and in `explanation`. |
+| `law_details` | The full record of one law's change: every trailer and every provision it changed. `jurisdiction` narrows it (`corpus`, its name before, is still read). |
 
 Resources: `global-law://README.md`, `REPRODUCE.md`, `CHANGELOG.md` and `manifest.json`.
 
 Prompts (ready-made research tasks): `provision_on_a_date`, `case_timeline` and `what_changed`. A resource template
 `global-law://law/{path}?date={date}&offset={n}` gives any provision as in force on a date.
+
+### What an answer holds
+
+Each answer is a text (`content[0].text`) and the same facts as fields (`structuredContent`).
+
+- **`summary` is a headline**: what was found (how many, on which date, in which scope) and, for an answer in parts,
+  where the next part starts. It is not the text answer: the rows, the law's text, the notes on the record and each
+  piece of guidance are fields of their own, so nothing is sent twice. A client that reads only the fields has
+  `caveats` (the notes on the record), `hints` or `notes` (guidance the text gives in words: which tool answers the
+  question better, how citations were found), `explanation` (`applies_to_case`), `why` (`read_law` with no text),
+  `not_searched_note` (corpora this server did not search) and `case_law_how`.
+- **Arguments are named alike.** `jurisdiction` narrows every tool that takes a scope. `kind` is `laws` (`law` is read
+  the same), `judgments` or `all`; any other word is refused. `max_results` states its default and its cap in each
+  tool's schema.
+- **Windows.** `laws_between` and `search_changes` include both days of the window. `compare_dates` and
+  `changes_between` compare the text on `date_a` with the text on `date_b`, and name the laws that took effect after
+  `date_a`, up to and including `date_b`.
+- **Case law not read.** A list or search of law names the case law it left out: `case_law_not_read_count` and up to
+  three of the corpora (`case_law_not_read`), those of the jurisdiction asked. A question about Ireland does not name
+  another country's courts.
+- **What a record does not hold** is said once per answer, in one sentence: "<corpus>: the text shown may not be the
+  whole law that applied; this record does not hold changes to how a provision applies, commencement conditions or
+  transitional rules." `list_jurisdictions` and the server's instructions give the full explanation. How far a record
+  runs and when it was last checked against its source are one line ("the record runs to ...; stale, last checked
+  ... on ...").
+
+### Lists in parts
+
+`find_provision`, `search_law`, `laws_between`, `list_provisions`, `search_changes`, `phrase_history` and
+`what_else_changes` take `offset` (rows to skip, default 0) and answer with `page`:
+
+```json
+"page": {"total": 238, "shown": 200, "offset": 0, "next_offset": 200}
+```
+
+`next_offset` is `null` on the last part. `total` is `null`, with a floor in `total_at_least`, when the search stopped
+before it knew (case law read in part, or `find_provision` over many matches). The text says the same: "Showing files
+1 to 200 of 238; pass offset 200 for the next." Rows come in one order on every call, so parts do not overlap. The
+earlier fields stay (`count`, `total`, `truncated`, `provision_count`). If a structured list is cut to fit the answer
+(`cut`), `page.next_offset` is the row after the last one it still holds. `what_else_changes` skips `offset` rows in
+each of its groups, and `page.total` is its largest group. `read_law`, `compare_dates` and `who_wrote` page their text
+by characters, as below.
 
 ## Citing the official text
 
