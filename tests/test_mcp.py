@@ -1964,6 +1964,21 @@ class Helpers(unittest.TestCase):
             self.assertIn('lone surrogate', reply['result']['content'][0]['text'])
         self.assertFalse(self.m._lone_surrogate({'query': 'Würde 😀 ¹'}))
 
+    def test_a_git_failure_past_the_deadline_is_the_time_limit(self):
+        # A git command cut off at the deadline fails as RuntimeError: an "internal error" before (hosted fuzz, 2026-11-10)
+        def failing(args):
+            raise RuntimeError('git grep: killed')
+        saved, timeout = self.m.HANDLERS['what_else_changes'], self.m.GIT_TIMEOUT
+        self.m.HANDLERS['what_else_changes'] = failing
+        try:
+            for limit, expected in ((0, 'took longer than'), (600, 'Internal error')):
+                self.m.GIT_TIMEOUT = limit
+                reply = self.m.answer({'jsonrpc': '2.0', 'id': 1, 'method': 'tools/call',
+                                       'params': {'name': 'what_else_changes', 'arguments': {}}})
+                self.assertIn(expected, reply['result']['content'][0]['text'])
+        finally:
+            self.m.HANDLERS['what_else_changes'], self.m.GIT_TIMEOUT = saved, timeout
+
     def test_list_provisions_path_must_be_text(self):
         # A number, a list or an object as the path was an internal error (AttributeError) (hosted fuzz, 2026-11-10)
         for path in (-1, 1.5, True, ['x'], {'a': 1}):

@@ -7357,6 +7357,13 @@ def _handle(method, mid, params: dict) -> dict:
                 result = {'content': [{'type': 'text', 'text': str(e.code if e.code is not None else e)[:500]}], 'isError': True}
             except subprocess.TimeoutExpired:
                 result = {'content': [{'type': 'text', 'text': f'That took longer than {GIT_TIMEOUT} seconds and was stopped; narrow it with a jurisdiction, a path or a shorter window.'}], 'isError': True}
+            except RuntimeError:
+                # A git command stopped at the call's deadline (killed, or cut short) fails as law.git's RuntimeError:
+                # past the deadline that is the time limit, not an internal error (hosted fuzz: changes_between over
+                # every jurisdiction, 80.7 s, 2026-11-10).
+                if not _call.deadline or time.monotonic() < _call.deadline:
+                    raise
+                result = {'content': [{'type': 'text', 'text': f'That took longer than {GIT_TIMEOUT} seconds and was stopped; narrow it with a jurisdiction, a path or a shorter window.'}], 'isError': True}
             finally:
                 _call.deadline = 0.0
             audit(name, args, started, 'error' if result.get('isError') else 'ok')
