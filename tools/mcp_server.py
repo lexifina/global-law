@@ -1054,6 +1054,33 @@ ACT_CITE = re.compile(r'(?<![\w.])(?:(?P<kind>' + '|'.join(p for p, _ in ACT_KIN
                       r'\s*(?:/\s*|\s+din\s+(?:\d{1,2}\s+[a-zăâîșşțţ]+\s+)?)(?P<y>(?:1[89]|20)\d{2})(?!\d)', re.I)
 
 
+@lru_cache(maxsize=64)
+def act_folder_index(corpus: str, sha: str) -> dict[tuple[str, str], list[str]]:
+    """The corpus's <kind>/<year>/<number> folders by (year, number), sorted, once per pinned commit: act_folders
+    listed every folder of the corpus's files for each citation (Romania's 1.8 million names, about half a second)."""
+    out: dict[tuple[str, str], list[str]] = {}
+    for f in {n.rsplit('/', 1)[0] for n in names_of(corpus, sha) if '/' in n}:
+        if f.count('/') == 2:
+            _, year, number = f.split('/')
+            out.setdefault((year, number), []).append(f)
+    return {key: sorted(v) for key, v in out.items()}
+
+
+@lru_cache(maxsize=1024)
+def _names_sorted(corpus: str, sha: str) -> bool:
+    names = names_of(corpus, sha)
+    return all(names[i] <= names[i + 1] for i in range(len(names) - 1))
+
+
+def names_under(corpus: str, sha: str, folder: str) -> list[str] | tuple[str, ...]:
+    """names_of's names under one folder, in their order. git lists a tree sorted, so a bisect finds them; a list not
+    sorted (never seen) is filtered as before."""
+    names, pre = names_of(corpus, sha), folder + '/'
+    if _names_sorted(corpus, sha):  # '0' follows '/': every name starting with folder/ sorts before folder0
+        return names[bisect.bisect_left(names, pre):bisect.bisect_left(names, folder + '0')]
+    return [n for n in names if n.startswith(pre)]
+
+
 def act_folders(query: str, corpora: list[str]) -> tuple[list[str], str]:
     """The act folders a citation in the query names ("Legea nr. 31/1990" -> romania/national/acts/lege/1990/31), and
     the query without that citation. Folders are <kind>/<year>/<number>, as the corpora lay them out; a kind written
@@ -1066,14 +1093,12 @@ def act_folders(query: str, corpora: list[str]) -> tuple[list[str], str]:
     if m.group('kind'):
         k = m.group('kind').lower()
         kind = next((v for p, v in ACT_KINDS if re.fullmatch(p, k, re.I)), None)
-    tail = f"/{m.group('y')}/{m.group('n')}"
     found = []
     for corpus in corpora:
         sha = corpus_head(corpus)
         if not sha:
             continue
-        folders = {n.rsplit('/', 1)[0] for n in names_of(corpus, sha) if '/' in n}
-        hits = sorted(f for f in folders if f.endswith(tail) and f.count('/') == 2)
+        hits = list(act_folder_index(corpus, sha).get((m.group('y'), m.group('n')), ()))
         if kind and any(f.split('/')[0] == kind for f in hits):
             hits = [f for f in hits if f.split('/')[0] == kind]
         found += [f'{corpus}/{f}' for f in hits]
@@ -1093,6 +1118,13 @@ def missing_act(query: str) -> str:
             'shows the acts of that year it holds.')
 
 
+@lru_cache(maxsize=64)
+def folded_titles(corpus: str, sha: str) -> dict[str, list[str]]:
+    """folder_titles' names, folded and with single spaces, once per pinned commit: act_by_title folded every title of
+    the corpus for each citation (Romania's, about 93,000 a call)."""
+    return {folder: [' '.join(fold(name).split()) for name in info['names']] for folder, info in folder_titles(corpus, sha).items()}
+
+
 def act_by_title(words: list[str], corpora: list[str], phrase: str) -> list[tuple[int, str, str]]:
     """Acts whose title is what the query names ("Codul civil", "legea societatilor"): (score, folder, title). A title
     that starts with the words as a phrase ranks first ("Codul civil (Legea nr. 287/2009)", not "Legea nr. 71/2011
@@ -1100,24 +1132,25 @@ def act_by_title(words: list[str], corpora: list[str], phrase: str) -> list[tupl
     one holding every word."""
     if not words:
         return []
-    want = [fold(w) for w in words]
+    want = [re.compile(rf'(?<!\w){re.escape(fold(w))}') for w in words]
     folded_phrase = ' '.join(fold(phrase).split())
+    as_phrase = re.compile(rf'(?<!\w){re.escape(folded_phrase)}(?!\w)')
     out = []
     for corpus in corpora:
         sha = corpus_head(corpus)
         if not sha:
             continue
+        folded = folded_titles(corpus, sha)
         for folder, info in folder_titles(corpus, sha).items():
             best = None
-            for name in info['names']:
-                t = ' '.join(fold(name).split())
-                if not all(re.search(rf'(?<!\w){re.escape(w)}', t) for w in want):
+            for t in folded[folder]:
+                if not all(w.search(t) for w in want):
                     continue
                 if t == folded_phrase:
                     score = 70  # the code's own name: "Codul civil"
                 elif t.startswith(folded_phrase) and not t[len(folded_phrase)].isalnum():
                     score = 60
-                elif re.search(rf'(?<!\w){re.escape(folded_phrase)}(?!\w)', t):
+                elif as_phrase.search(t):
                     score = 30
                 else:
                     score = 12
@@ -4793,7 +4826,7 @@ def ro_article_paths(m: re.Match, country: str = 'ro') -> list[str]:
     folder = folders[0]
     corpus = next(c for c in corpora if folder == c or folder.startswith(c + '/'))
     inner = folder[len(corpus) + 1:]
-    files = [n for n in names_of(corpus, corpus_head(corpus)) if not inner or n.startswith(inner + '/')]
+    files = names_under(corpus, corpus_head(corpus), inner) if inner else names_of(corpus, corpus_head(corpus))
     hit = next((n for n in files if stem_of(n) == want), None)
     return [f'{corpus}/{hit}' if hit else f"{folder}/art-{number.zfill(3)}{'-' + sup if sup else ''}.md"]
 
