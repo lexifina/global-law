@@ -1964,6 +1964,14 @@ class Helpers(unittest.TestCase):
             self.assertIn('lone surrogate', reply['result']['content'][0]['text'])
         self.assertFalse(self.m._lone_surrogate({'query': 'Würde 😀 ¹'}))
 
+    def test_list_provisions_path_must_be_text(self):
+        # A number, a list or an object as the path was an internal error (AttributeError) (hosted fuzz, 2026-11-10)
+        for path in (-1, 1.5, True, ['x'], {'a': 1}):
+            reply = self.m.answer({'jsonrpc': '2.0', 'id': 1, 'method': 'tools/call',
+                                   'params': {'name': 'list_provisions', 'arguments': {'path': path}}})
+            self.assertTrue(reply['result']['isError'], reply)
+            self.assertIn('must be text', reply['result']['content'][0]['text'])
+
     def test_article_number_forms(self):
         self.assertEqual(self.m.number_forms('art. 6^1'), 'art. 6-1')
         self.assertEqual(self.m.number_forms('art. 6¹'), 'art. 6-1')

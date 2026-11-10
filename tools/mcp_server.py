@@ -3174,7 +3174,11 @@ def t_search_law(args: dict) -> tuple[str, dict]:
 
 def t_list_provisions(args: dict) -> tuple[str, dict]:
     """Browse a corpus: the provision files under a folder, with headings, as in force on a date."""
-    prefix = here(law.norm((args.get('path') or '').strip()))
+    # Checked as every path is: a number or a list here was an internal error, and ".." passed the corpus test
+    # (hosted fuzz, 2026-11-10).
+    prefix = here(law.norm(text_arg(args, 'path')))
+    if '..' in prefix.split('/'):
+        raise UserError('Paths are relative to the tree, with no "..".')
     if not prefix:
         raise UserError('Give a corpus or a folder in one, for example united-states/federal/usc/title-11 or germany/bund/acts/grundgesetz.')
     corpus = next((c['path'] for c in law.manifest()['corpora'] if prefix == c['path'] or prefix.startswith(c['path'] + '/')), None)
