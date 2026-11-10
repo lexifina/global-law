@@ -747,7 +747,28 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "freshness": {
+        "schema": "al-freshness/1",
+        "as_of": "2026-11-10",
+        "checked_against_official_source": "2026-11-09",
+        "totals": {
+          "acts": 17812,
+          "by_status": {
+            "current": 17299,
+            "pending-change": 511,
+            "stale": 0,
+            "unverified": 2,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "Qendra e Botimeve Zyrtare (qbz.gov.al), open API",
+            "last_successful_check": "2026-11-09"
+          }
+        ]
+      }
     },
     {
       "path": "algeria/national/acts",
@@ -16631,7 +16652,28 @@
       "acts": [
         "Ustav Republike Hrvatske (NN 56/1990, 135/1997, 113/2000, 28/2001, 76/2010, 5/2014)"
       ],
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "freshness": {
+        "schema": "hr-freshness/1",
+        "as_of": "2026-11-10",
+        "checked_against_official_source": "2026-11-10",
+        "totals": {
+          "acts": 20594,
+          "by_status": {
+            "current": 12874,
+            "pending-change": 4244,
+            "stale": 0,
+            "unverified": 3476,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "Narodne novine, službeni dio (narodne-novine.nn.hr)",
+            "last_successful_check": "2026-11-10"
+          }
+        ]
+      }
     },
     {
       "path": "cuba/national/acts",
@@ -47805,7 +47847,7 @@
       "name": "Montenegro",
       "label": "Montenegro",
       "language": "",
-      "coverage": "31799 acts, 31820 dated versions from 1992-01-15 to 2026-11-10",
+      "coverage": "31823 acts, 31844 dated versions from 1992-01-15 to 2026-11-10",
       "in_force_trailer": "In-force",
       "record_to": "2026-11-10",
       "record_note": "Publisher: Službeni list Crne Gore.",
@@ -47818,7 +47860,7 @@
       "iso_path": "me/acts",
       "publisher": "Službeni list Crne Gore",
       "described_by": "data/repo.json",
-      "acts": 31799,
+      "acts": 31823,
       "history_from": "1992-01-15",
       "history": "in-force",
       "checked_on": "2026-11-10",
@@ -47835,9 +47877,9 @@
         "as_of": "2026-11-10",
         "checked_against_official_source": "2026-11-10",
         "totals": {
-          "acts": 31779,
+          "acts": 31815,
           "by_status": {
-            "current": 2125,
+            "current": 2161,
             "pending-change": 15,
             "stale": 0,
             "unverified": 29639,
