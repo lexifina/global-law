@@ -288,6 +288,25 @@ canton's, or `caselaw` for all).
   `law_unread_count` says how many there are (both fields are present only in such an answer). The corpora are read in
   one order, so the ones read are the first of them and `offset` goes on through their lines. A search of one corpus
   is always made in full.
+- A host that keeps a full-text index of today's text may give it to `search_law` (`mcp_server.search_index`, an
+  object with `counts(query, corpora, case_law)` and `paths(query, corpus, after, size)`; the comment above it in
+  `tools/mcp_server.py` is the contract). The index says how many files of each corpus hold the words and names them
+  in path order; `git grep` then reads only the files a page of lines needs, and a corpus with no such file starts no
+  git at all. It is asked only for a plain search of the text in force today: a `regex`, a `case_sensitive` search, a
+  search on a past `date`, a `jurisdiction` that is a folder within a corpus, and any corpus the index leaves out are
+  grepped as ever, and so is everything when the index does not answer. What differs in an answer the index helped
+  with:
+  - `matched_by` is `"index"` (the field is absent otherwise).
+  - `provision_count` is the index's count and is exact: the answer does not say "At least" for it. The index matches
+    the words as a phrase of whole words, whatever the case or the diacritics, where grep matches parts of words too
+    ("narcoti" finds nothing; `regex: true` greps). It also counts a file in which the phrase runs over a line break;
+    such a file gives no line. An answer with no match says "The words were matched as whole words. To match part of a
+    word, pass regex true." (in `hints` as well).
+  - The lines are those grep gives, in the same order, so `offset` goes on as before. Their total is not known until a
+    part reaches the last file: until then `page.total` is `null` with `page.total_at_least`, and the text says
+    "Showing lines A to B of at least N".
+  - `provisions` lists the files read and then the next the index names, up to 200; when it holds fewer than match,
+    the text says "The structured answer lists K of N matching provisions".
 - The heading index `find_provision` matches words against is kept on disk for every corpus
   (`headings-v2-<corpus>-<commit>.json` in the tree's cache folder, the three newest per corpus), and an index for a
   new commit reads only the files that differ from an earlier one's. A clone of a few countries builds it at start, as
