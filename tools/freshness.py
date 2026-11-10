@@ -514,7 +514,7 @@ def note(path: str, today: dt.date | None = None, root: Path = ROOT) -> str:
     if not row.get('last_verified'):
         # "since", not "never ... after": a corpus may say it was checked when it was built (germany/bund/acts: "Checked
         # against Gesetze im Internet on the record_to day"), and "never checked" beside that read as a contradiction.
-        return f"{row['path']}: not checked against {src} since it was built; later changes may be missing."
+        return f"{row['path']}: not re-checked against {src} since it was built; later changes may be missing."
     n = (today - day(row['last_verified'])).days
     line = f"{row['path']}: {st}, last checked against {src} on {row['last_verified']} ({n} days ago)"
     if st == 'pending-change':
