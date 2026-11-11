@@ -1,0 +1,221 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2020-9 (2014)",
+  "taxYear": 2014,
+  "note": "Magana 2014 education credit (claimed 1,000). Court: no evidence she paid tuition in 2014 (she was a student and paid tuition in 2013). Encoded as the found fact: petitioner as student with 0 qualified expenses paid in 2014. Filing single for 2014 (opinion). No income figures.",
+  "facts": {
+   "filing": "single",
+   "students": [
+    {
+     "name": "petitioner",
+     "qualifiedExpenses": 0
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "educationCredits",
+    "value": 0,
+    "note": "not entitled to the education credit for 2014"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-9 (2015)",
+  "taxYear": 2015,
+  "note": "Magana. No income figures in the opinion. Respondent conceded two of three children are qualifying children (ages not stated; default age 0 used, they lived with petitioner all year). Unmarried to the children's father, who lived in the household, did not claim the children and did not file HOH; petitioner paid most household expenses and had the greater AGI (AGIs not stated; 2 vs 1 used ordinally).",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "child1",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true,
+     "livedWithWholeYear": true
+    },
+    {
+     "name": "child2",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true,
+     "livedWithWholeYear": true
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "child1",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 2
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 1,
+      "claims": false
+     }
+    ]
+   },
+   {
+    "child": "child2",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 2
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 1,
+      "claims": false
+     }
+    ]
+   }
+  ],
+  "expected": [
+   {
+    "item": "filingStatus",
+    "text": "hoh",
+    "note": "she properly filed as head of household for 2015 and 2016"
+   },
+   {
+    "item": "headOfHousehold",
+    "flag": true
+   },
+   {
+    "item": "qualifyingChild:child1",
+    "flag": true,
+    "note": "conceded"
+   },
+   {
+    "item": "qualifyingChild:child2",
+    "flag": true,
+    "note": "conceded"
+   },
+   {
+    "item": "hohQualifyingPerson:child1",
+    "flag": true
+   },
+   {
+    "item": "tieBreaker:child1",
+    "text": "petitioner"
+   },
+   {
+    "item": "tieBreaker:child2",
+    "text": "petitioner"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-9 (2016)",
+  "taxYear": 2016,
+  "note": "Magana. No income figures in the opinion. Respondent conceded two of three children are qualifying children (ages not stated; default age 0 used, they lived with petitioner all year). Unmarried to the children's father, who lived in the household, did not claim the children and did not file HOH; petitioner paid most household expenses and had the greater AGI (AGIs not stated; 2 vs 1 used ordinally).",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "child1",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true,
+     "livedWithWholeYear": true
+    },
+    {
+     "name": "child2",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true,
+     "livedWithWholeYear": true
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "child1",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 2
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 1,
+      "claims": false
+     }
+    ]
+   },
+   {
+    "child": "child2",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 2
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 1,
+      "claims": false
+     }
+    ]
+   }
+  ],
+  "expected": [
+   {
+    "item": "filingStatus",
+    "text": "hoh",
+    "note": "she properly filed as head of household for 2015 and 2016"
+   },
+   {
+    "item": "headOfHousehold",
+    "flag": true
+   },
+   {
+    "item": "qualifyingChild:child1",
+    "flag": true,
+    "note": "conceded"
+   },
+   {
+    "item": "qualifyingChild:child2",
+    "flag": true,
+    "note": "conceded"
+   },
+   {
+    "item": "hohQualifyingPerson:child1",
+    "flag": true
+   },
+   {
+    "item": "tieBreaker:child1",
+    "text": "petitioner"
+   },
+   {
+    "item": "tieBreaker:child2",
+    "text": "petitioner"
+   }
+  ]
+ }
+]

@@ -1,0 +1,183 @@
+{
+ "generated": "2026-11-11",
+ "claimed": "95/110 computable issues match (summary.json)",
+ "check1_blind_reencoding": {
+  "sample": "14 of the 37 cases with >=1 match, random (seed 20261111, blind_sample.json)",
+  "cases": 14,
+  "items": 88,
+  "blind_match": 75,
+  "blind_not_computed": 2,
+  "original_match": 84,
+  "both_match": 75,
+  "original_only": 9,
+  "blind_only": 0,
+  "blind_equals_original_value": 78,
+  "divergence_classes": {
+   "concession-echo": 1,
+   "both-miss": 4,
+   "name-format": 2,
+   "redaction-removed-fact": 1,
+   "representation-choice": 1,
+   "original-circular": 3,
+   "ambiguous-fact": 1
+  },
+  "blind_match_counting_name_format": 77,
+  "original_matches_reproduced_blind": "75/84 raw; 77/84 counting the 2 tie-breaker name-format cases",
+  "original_matches_not_reproduced_by_cause": {
+   "concession-echo": 1,
+   "name-format": 2,
+   "redaction-removed-fact": 1,
+   "representation-choice": 1,
+   "original-circular": 3,
+   "ambiguous-fact": 1
+  }
+ },
+ "check2_holdout": {
+  "selection": "495 DAWSON hits -> 58 read -> 29 eligible -> 16 drawn at random (4 issue groups x 4); see holdout/selection_log.json, draw.json",
+  "framework": "current shared build, unchanged",
+  "cases": 16,
+  "items": 111,
+  "blind_match": 65,
+  "blind_not_computed": 10,
+  "classes": {
+   "facts-not-stated": 17,
+   "excluded-concession": 7,
+   "match": 65,
+   "encoder-legal-error": 6,
+   "rounding": 2,
+   "excluded-key-item-misuse": 4,
+   "encoding-assumption": 1,
+   "near-miss": 1,
+   "model-gap": 2,
+   "redaction-removed-fact": 4,
+   "court-figure-inconsistent": 2
+  },
+  "scorable_items": 100,
+  "match_rate_scorable": "65/100",
+  "match_or_within_5_dollars": "68/100",
+  "items_where_needed_facts_are_in_the_opinion": 79,
+  "match_rate_where_facts_stated": "65/79",
+  "match_or_within_5_where_facts_stated": "68/79",
+  "by_kind": {
+   "flag": {
+    "scorable": 46,
+    "match": 36,
+    "facts_missing": 4,
+    "within_5": 0
+   },
+   "zero": {
+    "scorable": 21,
+    "match": 21,
+    "facts_missing": 0,
+    "within_5": 0
+   },
+   "nonzero": {
+    "scorable": 33,
+    "match": 8,
+    "facts_missing": 17,
+    "within_5": 3
+   }
+  }
+ },
+ "check3_inferred_fact_audit": {
+  "matches": 95,
+  "by_class": {
+   "A": 24,
+   "B": 34,
+   "C": 24,
+   "D": 13
+  },
+  "A_nontrivial": 3,
+  "A_nontrivial_items": [
+   "tcmemo-2019-41[0]",
+   "tcmemo-2023-2[1]",
+   "tcmemo-2023-37[0]"
+  ],
+  "spot_checked_matches": 43,
+  "claimed_rate": "95/110 = 86.4%",
+  "rate_excluding_D": "82/97 = 84.5% (D removed from numerator and denominator)",
+  "rate_A_plus_B_excluding_C_D": "58/73 = 79.5%",
+  "rate_A_only": "24/110 = 21.8%",
+  "rate_A_nontrivial_only": "3/110 = 2.7%",
+  "unfair_nonmatch_labels": 5,
+  "unfair_nonmatch_items": [
+   "tcmemo-2019-41[1] (mismatch)",
+   "tcmemo-2023-141[2] (mismatch)",
+   "tcsumm-2020-18[5] (mismatch)",
+   "tcsumm-2023-25[1] (not-encodable)",
+   "tcsumm-2023-25[4] (mismatch)"
+  ],
+  "match_label_concerns": 17,
+  "match_label_concern_items": [
+   "tcmemo-2019-41[0]",
+   "tcmemo-2019-41[2]",
+   "tcmemo-2022-77[1]",
+   "tcmemo-2023-2[1]",
+   "tcmemo-2023-37[2]",
+   "tcmemo-2023-37[3]",
+   "tcmemo-2024-23[2]",
+   "tcmemo-2024-23[3]",
+   "tcmemo-2025-23[0]",
+   "tcmemo-2025-23[1]",
+   "tcsumm-2019-8[0]",
+   "tcsumm-2022-10[1]",
+   "tcsumm-2023-35[3]",
+   "tcsumm-2023-35[4]",
+   "tcsumm-2023-35[6]",
+   "tcsumm-2024-22[1]",
+   "tcsumm-2024-22[6]"
+  ],
+  "relabel_concerns_total": 22,
+  "hidden_disagreement_in_judgment_or_not_encodable": "None found: no judgment/not-encodable label hides a Lean figure that contradicts a court figure. One not-encodable (tcsumm-2023-25[1]) hides a model gap.",
+  "encoding_errors_found_in_matches": [
+   {
+    "id": "tcsumm-2020-14",
+    "field": "earlyDistributions[0].ageInSeparationYear",
+    "was": 43,
+    "now": 31,
+    "comment": "Encoder used the 1999 Northrop Grumman separation; the Boeing plan was Rockwell's (separation 1987; age ~31 from 'unemployed since 2002, when he was 46'). Fixed 2026-11-11, rerun: still 2,517 / 2,517 (any age < 55 gives the same result), so both matches stand, but the encoding was wrong. Flagged by the video agent; cases/tcsumm-2020-14.json had the right figure (~31)."
+   }
+  ]
+ },
+ "check4_code_audit": {
+  "case_specific_logic": "none: citation never read by decideCase; no case-keyed branches",
+  "case_figures_in_source": "unit tests only: PremiumCredit.lean lines ~208-216 (#guard on T.C. Memo. 2023-2: 95,249 / 7,205; T.C. Memo. 2019-41: 70,065 / 8,472) and comments citing those cases (lines 10-11). Rulings.lean and Tests.lean embed case encodings as regression tests (not in the computation path).",
+  "coincident_numbers": "all other hits are published parameters (HHS poverty lines 15,730/15,930, Rev. Proc. applicable figure 634, day counts 365/366)",
+  "hits_file": "code_audit_number_hits.json"
+ },
+ "check5_oracle": {
+  "items": 132,
+  "itemsAllThreeComputed": 124,
+  "allThreeAgree": 114,
+  "allThreeExact": 85,
+  "itemsWithCourt": 21,
+  "itemsWithCourtAllThreeComputed": 15,
+  "allThreeAgreeWithCourt": 12,
+  "leanAgreesWithCourt": 18,
+  "policyengineAgreesWithCourt": 14,
+  "taxcalcAgreesWithCourt": 14,
+  "itemsPeComputed": 124,
+  "itemsTcComputed": 124,
+  "peAgreesWithLean": 114,
+  "tcAgreesWithLean": 114
+ },
+ "extra_pre_case_framework": {
+  "method": "original encodings run through commit 2e1e6ecae8d (framework before any case was encoded), built in an isolated export",
+  "items": 210,
+  "current_match": 192,
+  "by_current_and_base": {
+   "current_differs|base-differs": 9,
+   "current_differs|base-not-computed": 2,
+   "current_differs|base-year-unsupported": 7,
+   "current_match|base-differs": 5,
+   "current_match|base-not-computed": 25,
+   "current_match|base-ok": 63,
+   "current_match|base-year-unsupported": 99
+  },
+  "base_errors": {}
+ },
+ "encoding_fixes": [
+  "tcsumm-2020-14: ageInSeparationYear 43 -> 31 (wrong employer); result unchanged; Rulings.lean needs regenerating",
+  "tcsumm-2024-12 (not applied): oracle shows the encoding omits the sec. 199A QBI deduction (4,232 for 2018; 2,060 for 2019); with it Lean gives the court deficiencies exactly"
+ ]
+}

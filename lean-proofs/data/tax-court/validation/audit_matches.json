@@ -1,0 +1,2504 @@
+{
+ "method": "Hand classification of every verdict from case.json/result.json, with opinion text grepped (validation/scripts/audit_grep.py) for key inputs. Classes: A computed, B rule-from-judgment-input, C echo/tautology, D inferred-from-answer. When in doubt, the weaker class.",
+ "totals": {
+  "matches": 95,
+  "by_class": {
+   "A": 24,
+   "B": 34,
+   "C": 24,
+   "D": 13
+  },
+  "A_nontrivial": 3,
+  "A_nontrivial_items": [
+   "tcmemo-2019-41[0]",
+   "tcmemo-2023-2[1]",
+   "tcmemo-2023-37[0]"
+  ],
+  "spot_checked_matches": 43,
+  "claimed_rate": "95/110 = 86.4%",
+  "rate_excluding_D": "82/97 = 84.5% (D removed from numerator and denominator)",
+  "rate_A_plus_B_excluding_C_D": "58/73 = 79.5%",
+  "rate_A_only": "24/110 = 21.8%",
+  "rate_A_nontrivial_only": "3/110 = 2.7%",
+  "unfair_nonmatch_labels": 5,
+  "unfair_nonmatch_items": [
+   "tcmemo-2019-41[1] (mismatch)",
+   "tcmemo-2023-141[2] (mismatch)",
+   "tcsumm-2020-18[5] (mismatch)",
+   "tcsumm-2023-25[1] (not-encodable)",
+   "tcsumm-2023-25[4] (mismatch)"
+  ],
+  "match_label_concerns": 17,
+  "match_label_concern_items": [
+   "tcmemo-2019-41[0]",
+   "tcmemo-2019-41[2]",
+   "tcmemo-2022-77[1]",
+   "tcmemo-2023-2[1]",
+   "tcmemo-2023-37[2]",
+   "tcmemo-2023-37[3]",
+   "tcmemo-2024-23[2]",
+   "tcmemo-2024-23[3]",
+   "tcmemo-2025-23[0]",
+   "tcmemo-2025-23[1]",
+   "tcsumm-2019-8[0]",
+   "tcsumm-2022-10[1]",
+   "tcsumm-2023-35[3]",
+   "tcsumm-2023-35[4]",
+   "tcsumm-2023-35[6]",
+   "tcsumm-2024-22[1]",
+   "tcsumm-2024-22[6]"
+  ],
+  "relabel_concerns_total": 22,
+  "hidden_disagreement_in_judgment_or_not_encodable": "None found: no judgment/not-encodable label hides a Lean figure that contradicts a court figure. One not-encodable (tcsumm-2023-25[1]) hides a model gap.",
+  "encoding_errors_found_in_matches": [
+   {
+    "id": "tcsumm-2020-14",
+    "field": "earlyDistributions[0].ageInSeparationYear",
+    "was": 43,
+    "now": 31,
+    "comment": "Encoder used the 1999 Northrop Grumman separation; the Boeing plan was Rockwell's (separation 1987; age ~31 from 'unemployed since 2002, when he was 46'). Fixed 2026-11-11, rerun: still 2,517 / 2,517 (any age < 55 gives the same result), so both matches stand, but the encoding was wrong. Flagged by the video agent; cases/tcsumm-2020-14.json had the right figure (~31)."
+   }
+  ]
+ },
+ "matches": [
+  {
+   "id": "tcmemo-2019-41",
+   "issue_index": 0,
+   "issue": "Premium tax credit eligibility: MAGI includes all Social Security received despite §86(e) election; excess APTC",
+   "items": [
+    "premiumTaxCredit",
+    "excessAdvancePtc",
+    "householdIncome",
+    "povertyLine"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "hidden-item-mismatch",
+    "outcome-stipulated",
+    "excess-equals-input-APTC"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"parties have stipulated that $70,065.80 exceeds 400%\" of FPL. Lean householdIncome 75,509 vs court 70,066, yet verdict match."
+  },
+  {
+   "id": "tcmemo-2019-41",
+   "issue_index": 2,
+   "issue": "Unreported wages 5,207 and unemployment 237 (conceded)",
+   "items": [
+    "wages",
+    "unemployment"
+   ],
+   "class": "C",
+   "flags": [
+    "concession"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"no court amount to compare, so this is a fact-level check only.\""
+  },
+  {
+   "id": "tcmemo-2019-83",
+   "issue_index": 0,
+   "issue": "Was the $524,981.89 IRA distribution rolled over within 60 days?",
+   "items": [
+    "rolloverIncludible"
+   ],
+   "class": "B",
+   "flags": [
+    "spot-checked",
+    "rule-trivial (days<=60)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: check received \"58 days after petitioner received the IRA distribution\"; bookkeeping-error finding encoded as days 58."
+  },
+  {
+   "id": "tcmemo-2020-101",
+   "issue_index": 0,
+   "issue": "IRA distributions 54,500 fully taxable (no 60-day rollover waiver for 15,000)",
+   "items": [
+    "rolloverIncludible"
+   ],
+   "class": "B",
+   "flags": [
+    "judgment-input (waiverGranted false)",
+    "output-equals-input"
+   ],
+   "inferred_facts": [],
+   "evidence": "Waiver refusal encoded as waiverGranted false; includible = the 15,000 rolled amount."
+  },
+  {
+   "id": "tcmemo-2020-101",
+   "issue_index": 2,
+   "issue": "§72(t) additional tax",
+   "items": [
+    "earlyDistributionTax"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"additional tax of $5,051 (10% x $50,507)\"; 3,993 exception amount is a judgment input."
+  },
+  {
+   "id": "tcmemo-2022-77",
+   "issue_index": 0,
+   "issue": "Whether $69,880 of 'family support' paid to a former spouse is deductible alimony under Sec. 215",
+   "items": [
+    "alimonyDeduction"
+   ],
+   "class": "C",
+   "flags": [
+    "conclusion-encoded-as-fact (childSupport = paid)"
+   ],
+   "inferred_facts": [],
+   "evidence": "childSupport set to the whole 69,888 payment, which forces deduction 0; diagnosis: \"legal characterisation, encoded as the childSupport fact, not computed\"."
+  },
+  {
+   "id": "tcmemo-2022-77",
+   "issue_index": 1,
+   "issue": "Sec. 6662(a) accuracy-related penalty ($4,892)",
+   "items": [
+    "accuracyPenalty"
+   ],
+   "class": "C",
+   "flags": [
+    "concession"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"Concession, not a computed holding; encoded as expected 0 for completeness.\""
+  },
+  {
+   "id": "tcmemo-2023-141",
+   "issue_index": 1,
+   "issue": "Sec. 72(t) additional tax",
+   "items": [
+    "earlyDistributionTax"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: additional tax of $1,439 under 72(t); 10% x stated 14,386."
+  },
+  {
+   "id": "tcmemo-2023-2",
+   "issue_index": 0,
+   "issue": "Taxable Social Security / AGI",
+   "items": [
+    "taxableSocialSecurity",
+    "agi",
+    "householdIncome"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "reproduces-return-figures"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: AGI $91,274 = pensions $68,750 + taxable SS $22,524; 85% cap of 26,499; MAGI 95,249 a sum."
+  },
+  {
+   "id": "tcmemo-2023-2",
+   "issue_index": 1,
+   "issue": "PTC eligibility: household income 598% of FPL; repay all APTC",
+   "items": [
+    "premiumTaxCredit",
+    "excessAdvancePtc",
+    "povertyLine",
+    "fplPercent"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "hidden-item-mismatch (fplPercent 598 vs 401, convention)",
+    "excess-equals-input-APTC"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"household income of $95,249 was 598% of the FPL\"; Lean prints 401 (Form 8962 convention)."
+  },
+  {
+   "id": "tcmemo-2023-2",
+   "issue_index": 3,
+   "issue": "Deficiency",
+   "items": [
+    "deficiency"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "duplicate-of-issue-1",
+    "deficiency-equals-input-APTC"
+   ],
+   "inferred_facts": [],
+   "evidence": "All other facts identical as filed and corrected, so deficiency = APTC input 7,205."
+  },
+  {
+   "id": "tcmemo-2023-37",
+   "issue_index": 0,
+   "issue": "Taxable portion of 32,808 railroad retirement benefits (treated as SS) on a 2019 joint return",
+   "items": [
+    "taxableSocialSecurity"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "plug: otherIncome residual 6,724 reproduces stated MAGI"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion computes \"$27,981\" uncapped vs \"$27,887 ($32,808 x 0.85)\"; MAGI 53,456 stated. Lean redoes the court's two-tier arithmetic."
+  },
+  {
+   "id": "tcmemo-2023-37",
+   "issue_index": 1,
+   "issue": "Modified AGI / AGI",
+   "items": [
+    "agi"
+   ],
+   "class": "C",
+   "flags": [
+    "expected-not-stated-by-court",
+    "derived-from-model-output"
+   ],
+   "inferred_facts": [
+    "otherIncome -1,465 residual (character not stated)"
+   ],
+   "evidence": "Diagnosis: \"Expected AGI is derived (court's MAGI + taxable SS), not stated.\""
+  },
+  {
+   "id": "tcmemo-2023-37",
+   "issue_index": 2,
+   "issue": "Omitted dividends 282",
+   "items": [
+    "ordinaryDividends"
+   ],
+   "class": "C",
+   "flags": [
+    "concession"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"Concession encoded as a fact.\""
+  },
+  {
+   "id": "tcmemo-2023-37",
+   "issue_index": 3,
+   "issue": "Unreported retirement income adjustment 11,344",
+   "items": [
+    "pensions"
+   ],
+   "class": "C",
+   "flags": [
+    "concession"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"IRS concession encoded by leaving taxable pensions as reported.\""
+  },
+  {
+   "id": "tcmemo-2024-20",
+   "issue_index": 0,
+   "issue": "A.V. qualifying child (abode about 60 days)",
+   "items": [
+    "qualifyingChild:AV",
+    "eicChild:AV"
+   ],
+   "class": "B",
+   "flags": [
+    "spot-checked",
+    "assumed-age-17"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"A.V. lived with petitioner for approximately 60 days during 2020\"; abode test 120 <= 366."
+  },
+  {
+   "id": "tcmemo-2024-20",
+   "issue_index": 1,
+   "issue": "Head of household",
+   "items": [
+    "hohQualifyingPerson:AV",
+    "filingStatus"
+   ],
+   "class": "B",
+   "flags": [
+    "assumed-fact (paidOverHalfHouseholdCost true, not found)",
+    "follows-from-issue-0"
+   ],
+   "inferred_facts": [],
+   "evidence": "Note: \"paidOverHalfHouseholdCost not found; set true so that the abode finding alone decides\"."
+  },
+  {
+   "id": "tcmemo-2024-23",
+   "issue_index": 2,
+   "issue": "Unreported interest 33 and dividends 38",
+   "items": [
+    "taxableInterest",
+    "ordinaryDividends"
+   ],
+   "class": "C",
+   "flags": [
+    "concession"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"Concession encoded\"."
+  },
+  {
+   "id": "tcmemo-2024-23",
+   "issue_index": 3,
+   "issue": "Accuracy-related penalty",
+   "items": [
+    "accuracyPenalty"
+   ],
+   "class": "C",
+   "flags": [
+    "concession",
+    "nothing-computed"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"Concession; nothing to compute.\""
+  },
+  {
+   "id": "tcmemo-2024-67",
+   "issue_index": 1,
+   "issue": "Taxable income / regular tax (single)",
+   "items": [
+    "taxableIncome",
+    "regularTax"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked"
+   ],
+   "inferred_facts": [
+    "capital gain 32,227 taxed as ordinary (longTermGain 0): character not stated, chosen to reproduce 60,569"
+   ],
+   "evidence": "Note: \"IRS taxed the capital gain at ordinary rates (60,569 = ordinary tax on 242,512), so longTermGain 0.\" Opinion never states gain character."
+  },
+  {
+   "id": "tcmemo-2024-67",
+   "issue_index": 2,
+   "issue": "MFS rate used in the notice was harmless",
+   "items": [
+    "regularTax (mfs variant)"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked"
+   ],
+   "inferred_facts": [
+    "longTermGain 0 as above"
+   ],
+   "evidence": "Opinion itself states single and MFS rates give the same tax; Lean reruns with the same back-solved inputs."
+  },
+  {
+   "id": "tcmemo-2024-67",
+   "issue_index": 3,
+   "issue": "Sec. 72(t) additional tax",
+   "items": [
+    "earlyDistributionTax"
+   ],
+   "class": "A",
+   "flags": [
+    "trivial-arithmetic"
+   ],
+   "inferred_facts": [],
+   "evidence": "10% x 2,417 = 241.70."
+  },
+  {
+   "id": "tcmemo-2024-67",
+   "issue_index": 4,
+   "issue": "Deficiency",
+   "items": [
+    "deficiency",
+    "totalTax"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked"
+   ],
+   "inferred_facts": [
+    "longTermGain 0 as above"
+   ],
+   "evidence": "Deficiency 60,811 = regular tax (inferred character) + 242."
+  },
+  {
+   "id": "tcmemo-2024-67",
+   "issue_index": 5,
+   "issue": "Sec. 6651(a)(1) failure to file",
+   "items": [
+    "failureToFile"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "notice-figure-as-input (sfrTax 60,811; stated in opinion)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: withholding $42,961 \"generating a net underpayment of $17,850\"; FTF = 22.5% x stated 17,850."
+  },
+  {
+   "id": "tcmemo-2024-67",
+   "issue_index": 6,
+   "issue": "Sec. 6651(a)(2) failure to pay",
+   "items": [
+    "failureToPay"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "notice-figure-as-input (sfrTax; stated)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: FTP $3,659 \"calculated with reference to petitioner's net underpayment of $17,850\"; 41 months x 0.5%."
+  },
+  {
+   "id": "tcmemo-2024-67",
+   "issue_index": 7,
+   "issue": "Sec. 6654 addition",
+   "items": [
+    "estimatedTaxAddition",
+    "estimatedRequiredAnnual"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked",
+    "tuned-parameter"
+   ],
+   "inferred_facts": [
+    "due dates set to the 15th because that reproduces 424 (printed dates give 422)",
+    "no prior-year return assumed (opinion silent)"
+   ],
+   "evidence": "Diagnosis: \"with the statutory ... dates ... 424 = 423.76, so dueDates is set to the 15th.\""
+  },
+  {
+   "id": "tcmemo-2025-116",
+   "issue_index": 0,
+   "issue": "Angela Davis (wife's sister, 64) as EIC qualifying child",
+   "items": [
+    "qualifyingChild:AngelaDavis",
+    "eicChild:AngelaDavis"
+   ],
+   "class": "B",
+   "flags": [
+    "age-test-real (64, not disabled)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Abode and disability \"burden-of-proof findings ... encoded as facts\"; Lean adds the age/disability test."
+  },
+  {
+   "id": "tcmemo-2025-23",
+   "issue_index": 0,
+   "issue": "Unreported $99 interest income includible",
+   "items": [
+    "taxableInterest"
+   ],
+   "class": "C",
+   "flags": [
+    "concession"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"Conceded receipt; encoded as fact and included\"."
+  },
+  {
+   "id": "tcmemo-2025-23",
+   "issue_index": 1,
+   "issue": "Unreported $56,673 retirement distribution includible",
+   "items": [
+    "pensions"
+   ],
+   "class": "C",
+   "flags": [
+    "concession"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"Conceded receipt; encoded as pensions\"."
+  },
+  {
+   "id": "tcmemo-2025-23",
+   "issue_index": 2,
+   "issue": "§72(t) 10% additional tax",
+   "items": [
+    "earlyDistributionTax"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"10% additional tax of $5,667\"; 10% x stated 56,673."
+  },
+  {
+   "id": "tcmemo-2025-23",
+   "issue_index": 3,
+   "issue": "Deficiency",
+   "items": [
+    "deficiency"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked"
+   ],
+   "inferred_facts": [
+    "filing status single (not in opinion; only status reproducing 18,064)",
+    "otherIncome 50,514 backed out from TI 37,964 + assumed single standard deduction"
+   ],
+   "evidence": "Diagnosis: \"Matches only under an INFERRED single filing status\". Opinion text: no \"single\" or \"filing status\"."
+  },
+  {
+   "id": "tcmemo-2025-23",
+   "issue_index": 4,
+   "issue": "Substantial understatement",
+   "items": [
+    "understatement",
+    "substantialUnderstatement"
+   ],
+   "class": "D",
+   "flags": [
+    "depends-on-issue-3"
+   ],
+   "inferred_facts": [
+    "single status as above"
+   ],
+   "evidence": "Understatement equals the D-class deficiency; threshold test itself is mechanical."
+  },
+  {
+   "id": "tcmemo-2025-23",
+   "issue_index": 5,
+   "issue": "§6751(b) supervisory approval",
+   "items": [
+    "6751(b) approval"
+   ],
+   "class": "C",
+   "flags": [
+    "finding-echo (automaticallyCalculated true)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"Court's finding encoded as fact.\""
+  },
+  {
+   "id": "tcmemo-2025-31",
+   "issue_index": 0,
+   "issue": "Is J.M.A. petitioner's qualifying child / dependent?",
+   "items": [
+    "qualifyingChild:JMA",
+    "dependent:JMA"
+   ],
+   "class": "B",
+   "flags": [
+    "some-real-logic (QR excluded as QC of another)"
+   ],
+   "inferred_facts": [],
+   "evidence": "0 days with petitioner; no 152(e) release; father's qualifying child."
+  },
+  {
+   "id": "tcmemo-2025-31",
+   "issue_index": 1,
+   "issue": "Child tax credit for J.M.A.",
+   "items": [
+    "ctcChild:JMA"
+   ],
+   "class": "B",
+   "flags": [
+    "follows-from-issue-0"
+   ],
+   "inferred_facts": [],
+   "evidence": "Age 16 passes; residency input fails."
+  },
+  {
+   "id": "tcsumm-2019-23",
+   "issue_index": 0,
+   "issue": "J.V./L.V. eligible foster children (court custody order 2010)",
+   "items": [
+    "qualifyingChild:JV/LV"
+   ],
+   "class": "B",
+   "flags": [
+    "assumed-age-16"
+   ],
+   "inferred_facts": [],
+   "evidence": "Foster placement finding encoded as relationship fosterChild."
+  },
+  {
+   "id": "tcsumm-2019-23",
+   "issue_index": 1,
+   "issue": "Tie-breaker vs Ms. Madrigal (grandmother, no income)",
+   "items": [
+    "tieBreaker:JV",
+    "tieBreaker:LV"
+   ],
+   "class": "B",
+   "flags": [
+    "spot-checked",
+    "real-logic (152(c)(4) higher-AGI tie-breaker)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: children \"treated as the qualifying children of the taxpayer with the higher adjusted gross income\"; AGI $12,893."
+  },
+  {
+   "id": "tcsumm-2019-23",
+   "issue_index": 2,
+   "issue": "Dependency exemptions for J.V. and L.V.",
+   "items": [
+    "dependent:JV/LV"
+   ],
+   "class": "B",
+   "flags": [
+    "follows-from-issue-0-1"
+   ],
+   "inferred_facts": [],
+   "evidence": "Dependency follows from QC + tie-breaker."
+  },
+  {
+   "id": "tcsumm-2019-23",
+   "issue_index": 4,
+   "issue": "Head of household",
+   "items": [
+    "headOfHousehold",
+    "filingStatus"
+   ],
+   "class": "B",
+   "flags": [
+    "follows-from-issue-0-1"
+   ],
+   "inferred_facts": [],
+   "evidence": "Unmarried; paid all household expenses (finding)."
+  },
+  {
+   "id": "tcsumm-2019-23",
+   "issue_index": 5,
+   "issue": "EIC with two qualifying children",
+   "items": [
+    "eicChild:*"
+   ],
+   "class": "B",
+   "flags": [
+    "follows-from-issue-0-1",
+    "EIC amount not compared"
+   ],
+   "inferred_facts": [],
+   "evidence": "Flags only; EIC amount 5,150 has no court comparator."
+  },
+  {
+   "id": "tcsumm-2019-23",
+   "issue_index": 6,
+   "issue": "Child tax credit for J.V. and L.V.",
+   "items": [
+    "ctcChild:JV/LV"
+   ],
+   "class": "B",
+   "flags": [
+    "age<17 test (ages assumed 16)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Both under 17."
+  },
+  {
+   "id": "tcsumm-2019-24",
+   "issue_index": 0,
+   "issue": "AOTC for daughter ET in 2015 after AOTC elections for ET in 2011-2014",
+   "items": [
+    "aotcEligible:ET",
+    "aotcEligible:EMT"
+   ],
+   "class": "B",
+   "flags": [
+    "rule-trivial (4 prior years)",
+    "EMT half is a concession"
+   ],
+   "inferred_facts": [],
+   "evidence": "AOTC claimed 2011-2014 -> 25A(i)(2) bar; EMT conceded."
+  },
+  {
+   "id": "tcsumm-2019-29",
+   "issue_index": 0,
+   "issue": "Are the three children qualifying children (CTC)?",
+   "items": [
+    "qualifyingChild/dependent/ctcChild x3"
+   ],
+   "class": "B",
+   "flags": [
+    "relationship test"
+   ],
+   "inferred_facts": [
+    "ages 9 assumed"
+   ],
+   "evidence": "Unrelated children fail 152(c)(1)(A); 9 flags from one fact."
+  },
+  {
+   "id": "tcsumm-2019-29",
+   "issue_index": 2,
+   "issue": "Is Mr. Steed a qualifying relative?",
+   "items": [
+    "dependent:Steed"
+   ],
+   "class": "B",
+   "flags": [
+    "spot-checked",
+    "assumed support false (not found)",
+    "legally doubtful (SSI as gross income)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"SSI ... $8,796 for the year, which exceeds the section 151(d) exemption amount of $3,800\"."
+  },
+  {
+   "id": "tcsumm-2019-33",
+   "issue_index": 1,
+   "issue": "HSA distributions ($634) includible and subject to 20% additional tax",
+   "items": [
+    "hsaIncludible",
+    "hsaAdditionalTax"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "judgment-input (no qualified expenses)"
+   ],
+   "inferred_facts": [
+    "age under 65 assumed"
+   ],
+   "evidence": "Opinion: \"$634 in HSA distributions\"; includible = copy, 20% x 634 = 127."
+  },
+  {
+   "id": "tcsumm-2019-33",
+   "issue_index": 2,
+   "issue": "Deficiency for 2015",
+   "items": [
+    "deficiency"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked"
+   ],
+   "inferred_facts": [
+    "HOH status (not stated)",
+    "one under-17 CTC child (not stated)",
+    "taxShown 0 derived"
+   ],
+   "evidence": "Note: \"HOH with one under-17 child (CTC) reproduces the notice's $10,518 exactly\". Opinion: no \"head of household\", no \"child\"."
+  },
+  {
+   "id": "tcsumm-2019-8",
+   "issue_index": 0,
+   "issue": "Unreported $25 interest income",
+   "items": [
+    "taxableInterest",
+    "agi"
+   ],
+   "class": "C",
+   "flags": [
+    "concession",
+    "agi-derived-not-stated"
+   ],
+   "inferred_facts": [],
+   "evidence": "Expected AGI note: \"derived ... (not stated by the court)\"."
+  },
+  {
+   "id": "tcsumm-2019-8",
+   "issue_index": 1,
+   "issue": "Unreported $2,994 W-2G gambling winnings; gambling losses offset",
+   "items": [
+    "gamblingLossDeduction",
+    "deduction",
+    "netTax"
+   ],
+   "class": "B",
+   "flags": [
+    "judgment-input (losses 0)",
+    "alt-holding: std vs itemized comparison",
+    "netTax derived not stated"
+   ],
+   "inferred_facts": [
+    "HOH from the 9,250 standard deduction"
+   ],
+   "evidence": "Main: unsubstantiated losses encoded 0; alternative compares 2,994 itemized with 9,250 standard."
+  },
+  {
+   "id": "tcsumm-2019-8",
+   "issue_index": 2,
+   "issue": "$6,500 IRA deduction for pretax state retirement contributions",
+   "items": [
+    "iraDeduction"
+   ],
+   "class": "C",
+   "flags": [
+    "conclusion-encoded-as-fact (ira.contribution 0)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"The characterization ... is the court's legal finding taken as input.\""
+  },
+  {
+   "id": "tcsumm-2020-14",
+   "issue_index": 0,
+   "issue": "Sec. 72(t) on 25,170 Boeing lump sum; age-55 separation exception",
+   "items": [
+    "earlyDistributionTax"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "exception-logic (age-55 separation, SEPP)"
+   ],
+   "inferred_facts": [
+    "separation age 43 (opinion: left Rockwell 1987, Northrop 1999; age not stated)"
+   ],
+   "evidence": "Opinion: \"10% additional tax of $2,517\"; 59 but not 59-1/2; separation long before 55."
+  },
+  {
+   "id": "tcsumm-2020-14",
+   "issue_index": 1,
+   "issue": "Deficiency",
+   "items": [
+    "deficiency"
+   ],
+   "class": "A",
+   "flags": [
+    "trivial-arithmetic",
+    "duplicate-of-issue-0"
+   ],
+   "inferred_facts": [],
+   "evidence": "Deficiency is the 72(t) tax alone."
+  },
+  {
+   "id": "tcsumm-2020-18",
+   "issue_index": 1,
+   "issue": "2014 sec. 6662(a) penalty (substantial understatement)",
+   "items": [
+    "accuracyPenalty",
+    "substantialUnderstatement"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "notice-figure-as-input"
+   ],
+   "inferred_facts": [
+    "taxShown 723 back-solved = notice total tax 8,967 - deficiency 8,244"
+   ],
+   "evidence": "Note: \"tax shown = required - deficiency (derived) ... consistency checks only\"; penalty = 20% x stated deficiency."
+  },
+  {
+   "id": "tcsumm-2020-18",
+   "issue_index": 3,
+   "issue": "2015 sec. 6662(a) penalty (substantial understatement)",
+   "items": [
+    "accuracyPenalty",
+    "substantialUnderstatement"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "notice-figure-as-input"
+   ],
+   "inferred_facts": [
+    "taxShown 4,383 back-solved from notice"
+   ],
+   "evidence": "Same construction for 2015: 20% x 18,011 = 3,602.20 (respondent's table figure)."
+  },
+  {
+   "id": "tcsumm-2020-25",
+   "issue_index": 1,
+   "issue": "Qualifying child A.D.B. / J.N.B.",
+   "items": [
+    "qualifyingChild:ADB/JNB"
+   ],
+   "class": "B",
+   "flags": [
+    "judgment-input (no common-law marriage -> unrelated)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Relationship fails on the credibility finding."
+  },
+  {
+   "id": "tcsumm-2020-25",
+   "issue_index": 2,
+   "issue": "Qualifying relative A.D.B. / J.N.B.",
+   "items": [
+    "qualifyingRelative:ADB/JNB"
+   ],
+   "class": "B",
+   "flags": [
+    "judgment-input (support not shown)"
+   ],
+   "inferred_facts": [],
+   "evidence": "livedWithWholeYear false and support false encoded as found."
+  },
+  {
+   "id": "tcsumm-2020-25",
+   "issue_index": 3,
+   "issue": "Dependency exemptions",
+   "items": [
+    "dependent:ADB/JNB"
+   ],
+   "class": "B",
+   "flags": [
+    "follows-from-issue-1-2"
+   ],
+   "inferred_facts": [],
+   "evidence": "Follows from QC and QR failing."
+  },
+  {
+   "id": "tcsumm-2020-25",
+   "issue_index": 4,
+   "issue": "Head of household",
+   "items": [
+    "headOfHousehold",
+    "filingStatus"
+   ],
+   "class": "B",
+   "flags": [
+    "follows-from-issue-1-2"
+   ],
+   "inferred_facts": [],
+   "evidence": "Unmarried, no qualifying person -> single."
+  },
+  {
+   "id": "tcsumm-2020-25",
+   "issue_index": 5,
+   "issue": "Child tax credit and additional CTC",
+   "items": [
+    "ctcNonrefundable",
+    "refundableCtc"
+   ],
+   "class": "B",
+   "flags": [
+    "follows-from-issue-1"
+   ],
+   "inferred_facts": [],
+   "evidence": "No 152(c) qualifying child."
+  },
+  {
+   "id": "tcsumm-2020-25",
+   "issue_index": 6,
+   "issue": "Earned income credit (no qualifying child)",
+   "items": [
+    "eic",
+    "earnedIncome"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "court-stated-comparison"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"Mr. Brzyski earned $16,788 ... This amount is above the cap\" of $14,880."
+  },
+  {
+   "id": "tcsumm-2020-5",
+   "issue_index": 0,
+   "issue": "Taxable social security benefits",
+   "items": [
+    "taxableSocialSecurity"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "cap binds by wide margin"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"$22,790 (representing 85% of the Social Security benefits of $26,812\"; wages 50,248 and IRA 17,410 stated."
+  },
+  {
+   "id": "tcsumm-2020-5",
+   "issue_index": 1,
+   "issue": "Sec. 86(e) lump-sum election",
+   "items": [
+    "lumpSumElection"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked"
+   ],
+   "inferred_facts": [
+    "2014 priorModifiedIncome 43,138: a lower bound back-solved from the petitioners' own 8,306 figure"
+   ],
+   "evidence": "Note: \"requires 2014 modified income >= 43,138 ... that lower bound is encoded as priorModifiedIncome.\""
+  },
+  {
+   "id": "tcsumm-2020-5",
+   "issue_index": 2,
+   "issue": "Sec. 72(t) on 17,410 IRA distribution (spouse's disability)",
+   "items": [
+    "earlyDistributionTax"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "expected-not-stated-by-court"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion states the 10% rule but no \"1,741\"; expected is the encoder's 10% x 17,410."
+  },
+  {
+   "id": "tcsumm-2020-9",
+   "issue_index": 0,
+   "issue": "HOH filing status 2016",
+   "items": [
+    "filingStatus",
+    "headOfHousehold",
+    "qualifyingChild x2",
+    "tieBreaker x2"
+   ],
+   "class": "B",
+   "flags": [
+    "QCs conceded",
+    "placeholder AGIs 2 vs 1",
+    "tie-breaker moot (father did not claim)"
+   ],
+   "inferred_facts": [
+    "ages default 0"
+   ],
+   "evidence": "Note: \"AGIs not stated; 2 vs 1 used ordinally\"."
+  },
+  {
+   "id": "tcsumm-2020-9",
+   "issue_index": 1,
+   "issue": "HOH filing status 2015",
+   "items": [
+    "same 7 items, 2015"
+   ],
+   "class": "B",
+   "flags": [
+    "duplicate-of-issue-0"
+   ],
+   "inferred_facts": [
+    "ages default 0"
+   ],
+   "evidence": "Identical facts to the 2016 entry."
+  },
+  {
+   "id": "tcsumm-2021-26",
+   "issue_index": 1,
+   "issue": "CTC and ACTC",
+   "items": [
+    "ctcChild x3"
+   ],
+   "class": "B",
+   "flags": [
+    "spot-checked",
+    "age test from birth years",
+    "same-finding-labelled-judgment-in-issue-0"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"T.G., born in 2000, S.G, born in 2007, and O.G., born in 2010\"; residency is a credibility finding."
+  },
+  {
+   "id": "tcsumm-2021-26",
+   "issue_index": 2,
+   "issue": "EIC",
+   "items": [
+    "eicChild x3"
+   ],
+   "class": "B",
+   "flags": [
+    "same-finding-labelled-judgment-in-issue-0",
+    "EIC amount not computed"
+   ],
+   "inferred_facts": [],
+   "evidence": "Residency finding decides; tie-breaker not addressed."
+  },
+  {
+   "id": "tcsumm-2021-41",
+   "issue_index": 0,
+   "issue": "Tie-breaker: grandchildren I.M.E. and P.A.E. claimed by both petitioner (grandfather) and their mother",
+   "items": [
+    "tieBreaker:IME",
+    "tieBreaker:PAE"
+   ],
+   "class": "B",
+   "flags": [
+    "real-logic (parent beats non-parent)"
+   ],
+   "inferred_facts": [
+    "days approximate (290, 75)",
+    "IME age 5 assumed"
+   ],
+   "evidence": "Parent claimant wins under 152(c)(4)(A)(i)."
+  },
+  {
+   "id": "tcsumm-2021-41",
+   "issue_index": 1,
+   "issue": "Dependency exemptions for I.M.E. and P.A.E.",
+   "items": [
+    "dependent",
+    "qualifyingRelative"
+   ],
+   "class": "B",
+   "flags": [
+    "follows-from-issue-0"
+   ],
+   "inferred_facts": [],
+   "evidence": "152(d)(1)(D): qualifying child of another."
+  },
+  {
+   "id": "tcsumm-2021-41",
+   "issue_index": 2,
+   "issue": "Head of household status",
+   "items": [
+    "hohQualifyingPerson",
+    "filingStatus"
+   ],
+   "class": "B",
+   "flags": [
+    "follows-from-issue-0"
+   ],
+   "inferred_facts": [],
+   "evidence": "No qualifying person -> single."
+  },
+  {
+   "id": "tcsumm-2021-41",
+   "issue_index": 3,
+   "issue": "Additional child tax credit",
+   "items": [
+    "ctcChild",
+    "refundableCtc"
+   ],
+   "class": "B",
+   "flags": [
+    "follows-from-issue-0"
+   ],
+   "inferred_facts": [],
+   "evidence": "No qualifying child."
+  },
+  {
+   "id": "tcsumm-2021-41",
+   "issue_index": 4,
+   "issue": "EIC (with or without qualifying children)",
+   "items": [
+    "eic"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "court-stated-comparison",
+    "AGI encoded as wages"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: AGI and \"earned income both exceeded the phaseout amount of $14,820 for 2015\"."
+  },
+  {
+   "id": "tcsumm-2021-6",
+   "issue_index": 1,
+   "issue": "Is petitioner liable for the 10% sec. 72(t) additional tax on the distribution?",
+   "items": [
+    "earlyDistributionTax"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"additional tax of $10,947 under section 72(t)\"; 10% x 109,471."
+  },
+  {
+   "id": "tcsumm-2021-9",
+   "issue_index": 0,
+   "issue": "Are 2016 SS benefits repaid from 2020 includible in 2016?",
+   "items": [
+    "taxableSocialSecurity"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "cap binds by wide margin"
+   ],
+   "inferred_facts": [
+    "single assumed (irrelevant here)"
+   ],
+   "evidence": "Opinion: SS benefits of $13,024 taxable; 85% x 15,322 with 82,395 Schedule C profit."
+  },
+  {
+   "id": "tcsumm-2021-9",
+   "issue_index": 1,
+   "issue": "Notice deficiency (consistency check)",
+   "items": [
+    "deficiency (notice consistency check)"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked"
+   ],
+   "inferred_facts": [
+    "filing status single (opinion silent: no \"single\", no \"joint\")"
+   ],
+   "evidence": "Note: \"Filing status not stated; single assumed\"; the 3,992 income-tax figure depends on status."
+  },
+  {
+   "id": "tcsumm-2022-10",
+   "issue_index": 1,
+   "issue": "Tax on the remaining income (pension + wages over the limit) after the exclusion",
+   "items": [
+    "qualitative: pension and excess wages taxable"
+   ],
+   "class": "C",
+   "flags": [
+    "no-court-figure (Rule 155)",
+    "compared-to-encoder-hand-computation"
+   ],
+   "inferred_facts": [
+    "72(t) on pension kept although opinion never mentions 72(t); age assumed"
+   ],
+   "evidence": "Court \"states the rule, not the amount\"; Lean 6,891 matched only against a hand computation."
+  },
+  {
+   "id": "tcsumm-2022-10",
+   "issue_index": 4,
+   "issue": "Notice deficiency (consistency check)",
+   "items": [
+    "deficiency (notice consistency check)"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked"
+   ],
+   "inferred_facts": [
+    "10% 72(t) on 20,069 pension (opinion has no \"72(t)\" or \"10%\"); age not stated"
+   ],
+   "evidence": "Diagnosis: \"Shows the notice included a 72(t) tax the opinion never mentions.\""
+  },
+  {
+   "id": "tcsumm-2023-13",
+   "issue_index": 0,
+   "issue": "Do the 2020 'restoring' contributions make the $71,147 withdrawal a nontaxable rollover?",
+   "items": [
+    "rolloverIncludible"
+   ],
+   "class": "B",
+   "flags": [
+    "assumed rolledOver amount and days (bounds)",
+    "output-equals-input distribution"
+   ],
+   "inferred_facts": [
+    "rolledOver 71,147 assumed",
+    "days 366 lower bound"
+   ],
+   "evidence": "Diagnosis: \"amount not stated; full amount assumed\"; court applied no 60-day analysis."
+  },
+  {
+   "id": "tcsumm-2023-13",
+   "issue_index": 2,
+   "issue": "Is petitioners liable for the 10% sec. 72(t) additional tax on the early distributions?",
+   "items": [
+    "earlyDistributionTax"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"10% additional tax on premature distributions of $11,533\"; 10% x 115,325."
+  },
+  {
+   "id": "tcsumm-2023-13",
+   "issue_index": 3,
+   "issue": "Notice deficiency (consistency proxy)",
+   "items": [
+    "deficiency"
+   ],
+   "class": "D",
+   "flags": [
+    "spot-checked"
+   ],
+   "inferred_facts": [
+    "otherIncome 139,100 fitted so MFJ schedule reproduces 38,213"
+   ],
+   "evidence": "Note: \"Base taxable income $115,100 ... is NOT found: it is the value at which ... reproduces the notice\"."
+  },
+  {
+   "id": "tcsumm-2023-25",
+   "issue_index": 0,
+   "issue": "Are the lapsed Prudential policy amounts (13,214 + 5,366) gross income for 2017?",
+   "items": [
+    "lapseIncome",
+    "agi"
+   ],
+   "class": "C",
+   "flags": [
+    "spot-checked",
+    "inputs-are-court-figures (loanExtinguished = found excess, premiums 0)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: Forms 1099-R \"$13,214 and $5,366\"; expected 18,580 is their sum."
+  },
+  {
+   "id": "tcsumm-2023-3",
+   "issue_index": 0,
+   "issue": "Is the $15,000 attorney-fee payment alimony?",
+   "items": [
+    "alimonyDeduction"
+   ],
+   "class": "B",
+   "flags": [
+    "spot-checked",
+    "judgment-input (noPostDeathLiability false)",
+    "rule-trivial",
+    "total 116,419 = allowed+conceded copy"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: fees payable \"until paid in full\"; survival-of-liability reading entered as a fact."
+  },
+  {
+   "id": "tcsumm-2023-35",
+   "issue_index": 3,
+   "issue": "Beavercreek property: allocation of half-share taxes/interest and expenses (5/12 rental, 7/12 itemized/personal)",
+   "items": [
+    "net rent / itemized share"
+   ],
+   "class": "C",
+   "flags": [
+    "computed-outside-Lean (encoder arithmetic)",
+    "no-court-total"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"Allocation is arithmetic on found facts, done in the encoding (framework has no Schedule E)\"."
+  },
+  {
+   "id": "tcsumm-2023-35",
+   "issue_index": 4,
+   "issue": "Maryland property deductions",
+   "items": [
+    "net rent"
+   ],
+   "class": "C",
+   "flags": [
+    "computed-outside-Lean (encoder arithmetic)",
+    "no-court-total"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"Rental netting done in the encoding (no Schedule E in framework).\""
+  },
+  {
+   "id": "tcsumm-2023-35",
+   "issue_index": 5,
+   "issue": "Alimony $3,000 (stipulated)",
+   "items": [
+    "alimonyIncluded"
+   ],
+   "class": "C",
+   "flags": [
+    "stipulation-echo"
+   ],
+   "inferred_facts": [
+    "direction (received) and instrument date assumed"
+   ],
+   "evidence": "Note: \"alimony 3,000 (stipulated; direction not stated) encoded as alimonyReceived\"."
+  },
+  {
+   "id": "tcsumm-2023-35",
+   "issue_index": 6,
+   "issue": "Filing status / exemptions (conceded)",
+   "items": [
+    "filingStatus",
+    "dependentsCounted",
+    "exemptions"
+   ],
+   "class": "C",
+   "flags": [
+    "concession"
+   ],
+   "inferred_facts": [
+    "two placeholder dependents"
+   ],
+   "evidence": "Diagnosis: \"Concessions; dependents not described in opinion\"."
+  },
+  {
+   "id": "tcsumm-2023-35",
+   "issue_index": 7,
+   "issue": "Sec. 6651(a)(1) addition to tax for failure to file",
+   "items": [
+    "failureToFileApplies"
+   ],
+   "class": "B",
+   "flags": [
+    "rule-trivial (no return by extended due date)",
+    "amount unchecked"
+   ],
+   "inferred_facts": [],
+   "evidence": "Applies flag only; \"Amount unchecked: court gives none\"."
+  },
+  {
+   "id": "tcsumm-2024-10",
+   "issue_index": 0,
+   "issue": "Sec. 72(t) on 137,024; first-time homebuyer exception",
+   "items": [
+    "earlyDistributionTax"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "judgment-input (plan not shown to be IRA)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: deficiency \"$13, 702\" (spaced in text) = 10% x 137,024; homebuyer exception IRA-only."
+  },
+  {
+   "id": "tcsumm-2024-10",
+   "issue_index": 1,
+   "issue": "Deficiency",
+   "items": [
+    "deficiency"
+   ],
+   "class": "A",
+   "flags": [
+    "trivial-arithmetic",
+    "duplicate-of-issue-0"
+   ],
+   "inferred_facts": [],
+   "evidence": "Deficiency is the 72(t) tax alone."
+  },
+  {
+   "id": "tcsumm-2024-15",
+   "issue_index": 0,
+   "issue": "$14,000 IRA deduction for 401(k) deferrals",
+   "items": [
+    "iraDeduction"
+   ],
+   "class": "C",
+   "flags": [
+    "conclusion-encoded-as-fact (contribution 0)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"'401(k) deferral is not a sec. 219 contribution' is the court's characterization, taken as input.\""
+  },
+  {
+   "id": "tcsumm-2024-19",
+   "issue_index": 0,
+   "issue": "2020 gambling loss deduction beyond the $6,653 respondent allowed",
+   "items": [
+    "gamblingLossDeduction"
+   ],
+   "class": "C",
+   "flags": [
+    "spot-checked",
+    "answer-encoded-as-input (losses = 61,929)"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: loss \"at least equal to her winnings\" (Cohan); losses encoded = winnings, so the cap returns the input."
+  },
+  {
+   "id": "tcsumm-2024-22",
+   "issue_index": 0,
+   "issue": "Unreported wages",
+   "items": [
+    "wages"
+   ],
+   "class": "C",
+   "flags": [
+    "spot-checked",
+    "stipulation-echo",
+    "court figure 174,995 inconsistency ignored"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"Petitioners stipulated that they received wages of $206,609\"; Lean wages = input."
+  },
+  {
+   "id": "tcsumm-2024-22",
+   "issue_index": 1,
+   "issue": "Overstated withholding 7,689",
+   "items": [
+    "withholding excluded"
+   ],
+   "class": "C",
+   "flags": [
+    "no-output-compared",
+    "framework-design"
+   ],
+   "inferred_facts": [],
+   "evidence": "Diagnosis: \"the jurisdictional holding itself is not an output.\""
+  },
+  {
+   "id": "tcsumm-2024-22",
+   "issue_index": 4,
+   "issue": "Reservist travel expenses 29,445",
+   "items": [
+    "adjustments"
+   ],
+   "class": "C",
+   "flags": [
+    "spot-checked",
+    "stipulation-echo"
+   ],
+   "inferred_facts": [],
+   "evidence": "Opinion: \"parties stipulated that Mr. Lucas incurred $2,433\"; expected adjustments 2,433 = input."
+  },
+  {
+   "id": "tcsumm-2024-22",
+   "issue_index": 6,
+   "issue": "Accuracy-related penalty",
+   "items": [
+    "accuracyPenaltyApplies"
+   ],
+   "class": "B",
+   "flags": [
+    "court-left-substantiality-to-Rule-155",
+    "partial-facts",
+    "judgment-inputs (approval, no reasonable cause)"
+   ],
+   "inferred_facts": [
+    "as-filed standard deduction assumed"
+   ],
+   "evidence": "Court: liable \"to the extent the understatement ... is substantial\"; Lean substantiality computed on partial facts."
+  },
+  {
+   "id": "tcsumm-2024-4",
+   "issue_index": 0,
+   "issue": "Sec. 72(t) on 10,342; emergency-expense exception",
+   "items": [
+    "earlyDistributionTax"
+   ],
+   "class": "A",
+   "flags": [
+    "spot-checked",
+    "trivial-arithmetic",
+    "expected-not-stated-by-court",
+    "date-gated exception logic"
+   ],
+   "inferred_facts": [
+    "age 52 (opinion: \"early 50s\")"
+   ],
+   "evidence": "Opinion gives no \"1,034\" and no \"10%\"; expected is the encoder's 10% x 10,342."
+  }
+ ],
+ "other_labels": [
+  {
+   "id": "tcmemo-2019-41",
+   "issue_index": 1,
+   "issue": "§86(e) lump-sum election: taxable Social Security 4,084 on the return (AGI 38,497, stipulated)",
+   "label": "mismatch",
+   "cause": null,
+   "fair": false,
+   "comment": "Labelled court/IRS arithmetic, but 4,084 follows from the IRS worksheet's whole-dollar line rounding, which is correct procedure; the 1-dollar gap is a model rounding-convention gap. priorModifiedIncome 0 is itself inferred from 4,084."
+  },
+  {
+   "id": "tcmemo-2019-41",
+   "issue_index": 3,
+   "issue": "Accuracy-related penalty on the unreported items only (conceded)",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair, but conceded items are not-encodable here while similar concessions elsewhere are counted as matches (inconsistent counting)."
+  },
+  {
+   "id": "tcmemo-2019-41",
+   "issue_index": 4,
+   "issue": "Deficiency",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2020-101",
+   "issue_index": 1,
+   "issue": "Higher-education exception: 3,993 of IRA proceeds used for qualified expenses",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcmemo-2020-101",
+   "issue_index": 3,
+   "issue": "Accuracy-related penalty: reasonable cause",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcmemo-2020-101",
+   "issue_index": 4,
+   "issue": "§6751(b) supervisory approval for AUR penalty",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2020-101",
+   "issue_index": 5,
+   "issue": "$747 529 plan payment",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2022-77",
+   "issue_index": 2,
+   "issue": "Deficiency for 2016",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2023-141",
+   "issue_index": 0,
+   "issue": "Unreported dividends 90, capital gain distributions 644, retirement distribution 14,386",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2023-141",
+   "issue_index": 2,
+   "issue": "Deficiency",
+   "label": "mismatch",
+   "cause": null,
+   "fair": false,
+   "comment": "Labelled court/IRS arithmetic, but the $2 gap (3,276 vs IRS 3,274) is unexplained; nothing shown proves an IRS error (qualified-dividend share and table rounding are unknowns). Should be \"unexplained\"."
+  },
+  {
+   "id": "tcmemo-2023-2",
+   "issue_index": 2,
+   "issue": "Whether coverage was canceled in February 2016",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcmemo-2023-37",
+   "issue_index": 4,
+   "issue": "Additional Schedule E rental loss (30,763 on amended return vs 8,189 original)",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2023-56",
+   "issue_index": 0,
+   "issue": "Is $7,824 interest on a child-support arrearage (taxable) or child support?",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2023-56",
+   "issue_index": 1,
+   "issue": "Deficiency",
+   "label": "mismatch",
+   "cause": null,
+   "fair": true,
+   "comment": "Supported: opinion gives only the 7,824 item; 3,473 > 39.6% of it, so other return facts are needed."
+  },
+  {
+   "id": "tcmemo-2024-20",
+   "issue_index": 2,
+   "issue": "EIC without a qualifying child",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2024-23",
+   "issue_index": 0,
+   "issue": "Whether 12,666 of workers' compensation that offset 2019 SS benefits is a 'social security benefit' (benefits treated as received = 19,866)",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2024-23",
+   "issue_index": 1,
+   "issue": "Taxable SS benefits for 2019",
+   "label": "mismatch",
+   "cause": null,
+   "fair": true,
+   "comment": "Supported: needs non-SS MAGI >= 46,874, not in opinion; court adopted the 85% ratio by agreement."
+  },
+  {
+   "id": "tcmemo-2024-23",
+   "issue_index": 4,
+   "issue": "2018 deficiency (petition 108 days late)",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2024-67",
+   "issue_index": 0,
+   "issue": "Gross income 254,512 from third-party reports",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2025-116",
+   "issue_index": 1,
+   "issue": "Weight of uncorroborated (credible) testimony",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcmemo-2025-116",
+   "issue_index": 2,
+   "issue": "Deficiency 3,686",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcmemo-2025-23",
+   "issue_index": 6,
+   "issue": "Reasonable cause",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcmemo-2025-23",
+   "issue_index": 7,
+   "issue": "Accuracy-related penalty amount",
+   "label": "mismatch",
+   "cause": null,
+   "fair": true,
+   "comment": "Honest model-gap: unclaimed withholding reduces the underpayment (Reg. 1.6664-2), not modelled."
+  },
+  {
+   "id": "tcmemo-2025-23",
+   "issue_index": 8,
+   "issue": "Offset of denied 2017 refund claim against 2021 liability",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2019-23",
+   "issue_index": 3,
+   "issue": "Maria Terrones (19) qualifying child: student status",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2019-23",
+   "issue_index": 7,
+   "issue": "Accuracy-related penalty",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2019-24",
+   "issue_index": 1,
+   "issue": "Deficiency for 2015",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2019-29",
+   "issue_index": 1,
+   "issue": "Are the children qualifying relatives (household members)?",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2019-29",
+   "issue_index": 3,
+   "issue": "Sec. 6662(a) penalty",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2019-33",
+   "issue_index": 0,
+   "issue": "Unreported A-1 wages ($58,712) includible in 2015 gross income",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2019-33",
+   "issue_index": 3,
+   "issue": "Sec. 6662(a) accuracy-related penalty ($2,104)",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair, but conceded items are not-encodable here while similar concessions elsewhere are counted as matches (inconsistent counting)."
+  },
+  {
+   "id": "tcsumm-2019-33",
+   "issue_index": 4,
+   "issue": "Sec. 6673 penalty",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2019-8",
+   "issue_index": 3,
+   "issue": "Deficiency",
+   "label": "mismatch",
+   "cause": null,
+   "fair": true,
+   "comment": "Supported: exemptions/credits on the return not stated; 836 gap."
+  },
+  {
+   "id": "tcsumm-2020-18",
+   "issue_index": 0,
+   "issue": "2014 deficiency (disallowed Schedule C deductions, unreported income, SE tax)",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair: deficiency is tautological (taxShown back-solved); rightly not a match."
+  },
+  {
+   "id": "tcsumm-2020-18",
+   "issue_index": 2,
+   "issue": "2015 deficiency (disallowed Schedule C deductions, unreported income, SE tax)",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair: tautological deficiency."
+  },
+  {
+   "id": "tcsumm-2020-18",
+   "issue_index": 4,
+   "issue": "2016 deficiency (disallowed Schedule C deductions, unreported income, SE tax)",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair: tautological deficiency."
+  },
+  {
+   "id": "tcsumm-2020-18",
+   "issue_index": 5,
+   "issue": "2016 sec. 6662(a) penalty (substantial understatement)",
+   "label": "mismatch",
+   "cause": null,
+   "fair": false,
+   "comment": "Diagnosis calls 1,860.60 a court error; it is respondent's determined penalty in the opinion's table. A reduced penalty base (20% x 9,303) is equally consistent; error not demonstrated."
+  },
+  {
+   "id": "tcsumm-2020-25",
+   "issue_index": 0,
+   "issue": "Common-law marriage to Daniela (stepchild relationship)",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2020-25",
+   "issue_index": 7,
+   "issue": "Deficiency",
+   "label": "mismatch",
+   "cause": null,
+   "fair": true,
+   "comment": "Supported: fn. 17 says earned income > AGI, implying unstated adjustments (~4,000 reproduces 7,816)."
+  },
+  {
+   "id": "tcsumm-2020-25",
+   "issue_index": 8,
+   "issue": "Accuracy-related penalty",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair, but conceded items are not-encodable here while similar concessions elsewhere are counted as matches (inconsistent counting)."
+  },
+  {
+   "id": "tcsumm-2020-9",
+   "issue_index": 2,
+   "issue": "Education credit $1,000 for 2014",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair; inconsistent with tcsumm-2024-15[0] / tcsumm-2019-8[2], where the same pattern (finding encoded as 0 -> credit/deduction 0) is counted as match."
+  },
+  {
+   "id": "tcsumm-2020-9",
+   "issue_index": 3,
+   "issue": "Accuracy-related penalties 2014-2016",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair, but conceded items are not-encodable here while similar concessions elsewhere are counted as matches (inconsistent counting)."
+  },
+  {
+   "id": "tcsumm-2021-2",
+   "issue_index": 0,
+   "issue": "Husband treated as receiving $35,999 of social security benefits for 2014 (incl. $7,723 workers' compensation offset)",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2021-2",
+   "issue_index": 1,
+   "issue": "2017+ repayment of $49,170 does not reduce 2014 income",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2021-2",
+   "issue_index": 2,
+   "issue": "Deficiency $9,717",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2021-2",
+   "issue_index": 3,
+   "issue": "§6662(a) penalty",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair, but conceded items are not-encodable here while similar concessions elsewhere are counted as matches (inconsistent counting)."
+  },
+  {
+   "id": "tcsumm-2021-26",
+   "issue_index": 0,
+   "issue": "Niece/nephews qualifying children (dependency exemptions)",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair, but inconsistent: the same residency finding drives issues 1-2, which are counted as matches."
+  },
+  {
+   "id": "tcsumm-2021-41",
+   "issue_index": 5,
+   "issue": "Accuracy-related penalty $1,291",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair, but conceded items are not-encodable here while similar concessions elsewhere are counted as matches (inconsistent counting)."
+  },
+  {
+   "id": "tcsumm-2021-6",
+   "issue_index": 0,
+   "issue": "Is the $109,471 retirement distribution, paid over to the former employer as restitution, includible in 2016 gross income?",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2021-6",
+   "issue_index": 2,
+   "issue": "Is petitioner liable for the sec. 6651(a)(1) addition to tax (return due 2017-04-18, filed 2017-09-04)?",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2021-6",
+   "issue_index": 3,
+   "issue": "Sec. 6662(a) accuracy-related penalty ($3,551)",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair, but conceded items are not-encodable here while similar concessions elsewhere are counted as matches (inconsistent counting)."
+  },
+  {
+   "id": "tcsumm-2022-10",
+   "issue_index": 0,
+   "issue": "Is petitioner a qualified individual (330-day physical presence + foreign tax home, abode not in US) entitled to the sec. 911(a)(1) exclusion of his Saudi wages?",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Conservative: Lean exclusion 101,300 equals the court; qualification rests on judgment inputs."
+  },
+  {
+   "id": "tcsumm-2022-10",
+   "issue_index": 2,
+   "issue": "Sec. 6651(a)(1) failure-to-file addition",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2022-10",
+   "issue_index": 3,
+   "issue": "Sec. 6651(a)(2) failure-to-pay addition on the SFR (sec. 6651(g)(2))",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2022-17",
+   "issue_index": 0,
+   "issue": "§911 foreign earned income exclusion for Iraq wages, 2014 and 2015",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2022-17",
+   "issue_index": 1,
+   "issue": "§6662(a) penalties 2014 and 2015",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2022-23",
+   "issue_index": 0,
+   "issue": "Tier 1 RRB excludable as workers' compensation?",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2022-23",
+   "issue_index": 1,
+   "issue": "Taxable tier 1 benefits",
+   "label": "mismatch",
+   "cause": null,
+   "fair": true,
+   "comment": "Supported: other MAGI >= 51,255 needed, not stated."
+  },
+  {
+   "id": "tcsumm-2022-23",
+   "issue_index": 2,
+   "issue": "Hartford 4,406 disability payments",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2023-13",
+   "issue_index": 1,
+   "issue": "Is the $44,178 deemed distribution on the defaulted plan loan includible in 2018 gross income?",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2023-25",
+   "issue_index": 1,
+   "issue": "Schedule E rental loss on the Signal Mountain Property (claimed 77,675, conceded to 25,000)",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": false,
+   "comment": "Not-encodable hides a model gap: diagnosis says the sec. 280A facts are mechanical (47 personal days > 14). A computable issue the framework cannot do is excluded from the 110 denominator instead of counted as a model-gap miss."
+  },
+  {
+   "id": "tcsumm-2023-25",
+   "issue_index": 2,
+   "issue": "sec. 6651(a)(1) failure-to-file addition",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2023-25",
+   "issue_index": 3,
+   "issue": "sec. 6651(a)(2) failure-to-pay addition (SFR under sec. 6020(b))",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2023-25",
+   "issue_index": 4,
+   "issue": "sec. 6654 estimated-tax addition",
+   "label": "mismatch",
+   "cause": null,
+   "fair": false,
+   "comment": "Labelled court/IRS arithmetic, but diagnosis itself says it is a rate-convention difference on a notice reconstruction whose withholding 3,537 was back-solved; not a demonstrated IRS error and not a court holding."
+  },
+  {
+   "id": "tcsumm-2023-35",
+   "issue_index": 0,
+   "issue": "Surplus & Adventure (Sch. C) deductions: car/truck, depreciation, other expenses",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2023-35",
+   "issue_index": 1,
+   "issue": "Fibre Arts (Sch. C) deductions",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2023-35",
+   "issue_index": 2,
+   "issue": "STEAM Works: activity not engaged in for profit; any deductions?",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2023-6",
+   "issue_index": 0,
+   "issue": "Relief under §6015(b) and (c)",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2023-6",
+   "issue_index": 1,
+   "issue": "Equitable relief under §6015(f)",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2024-11",
+   "issue_index": 0,
+   "issue": "Are 2019 SSD benefits ($32,862) social security benefits includible under sec. 86, or excluded under sec. 104(a)(1)-(3) / no constructive receipt?",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2024-11",
+   "issue_index": 1,
+   "issue": "Taxable amount of SS benefits and deficiency",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2024-11",
+   "issue_index": 2,
+   "issue": "Sec. 6662(a) accuracy-related penalty",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair, but conceded items are not-encodable here while similar concessions elsewhere are counted as matches (inconsistent counting)."
+  },
+  {
+   "id": "tcsumm-2024-12",
+   "issue_index": 0,
+   "issue": "2018 unreported Ward wages 9,994 and NJ state tax refund 354",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2024-12",
+   "issue_index": 1,
+   "issue": "Schedule C commissions/fees (6,000; 5,500), car and truck (26,978; 32,190), other expenses (8,920; 5,820), 2018 and 2019",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2024-12",
+   "issue_index": 2,
+   "issue": "Deficiency 2018",
+   "label": "mismatch",
+   "cause": null,
+   "fair": true,
+   "comment": "facts-not-stated supported: status/withholding not in opinion; IRS penalty and FTF bases themselves imply different bases (6,910; 3,732)."
+  },
+  {
+   "id": "tcsumm-2024-12",
+   "issue_index": 3,
+   "issue": "Deficiency 2019",
+   "label": "mismatch",
+   "cause": null,
+   "fair": true,
+   "comment": "facts-not-stated supported: only Schedule C items found for 2019."
+  },
+  {
+   "id": "tcsumm-2024-12",
+   "issue_index": 4,
+   "issue": "Sec. 6651(a)(1) addition 2018 (filed 2020-04-17, extended due date 2019-10-15)",
+   "label": "mismatch",
+   "cause": null,
+   "fair": true,
+   "comment": "Supported: 933 = 25% x 3,732 implies unfound timely credits."
+  },
+  {
+   "id": "tcsumm-2024-12",
+   "issue_index": 5,
+   "issue": "Sec. 6662(a) negligence penalty 2018",
+   "label": "mismatch",
+   "cause": null,
+   "fair": true,
+   "comment": "Supported: 1,382 = 20% x 6,910, base not in opinion."
+  },
+  {
+   "id": "tcsumm-2024-12",
+   "issue_index": 6,
+   "issue": "Sec. 6662(a) negligence penalty 2019",
+   "label": "mismatch",
+   "cause": null,
+   "fair": true,
+   "comment": "Supported: 849 = 20% x 4,244; gap is the deficiency gap."
+  },
+  {
+   "id": "tcsumm-2024-12",
+   "issue_index": 7,
+   "issue": "Sec. 6673(a)(1) frivolous-position penalty",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2024-15",
+   "issue_index": 1,
+   "issue": "Interest relief",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2024-19",
+   "issue_index": 1,
+   "issue": "§6662(a) accuracy-related penalty, 2020",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Fair as judgment, but note negligence=true was supplied by the encoder (court named no ground); on stated facts Lean finds no substantial understatement."
+  },
+  {
+   "id": "tcsumm-2024-19",
+   "issue_index": 2,
+   "issue": "Concessions: mortgage interest $7,200, car and truck $9,315, noncash charity $3,050; all other 2020/2021 issues settled",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2024-22",
+   "issue_index": 2,
+   "issue": "Medical expense deduction 35,310",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2024-22",
+   "issue_index": 3,
+   "issue": "Noncash charitable contributions 85,000",
+   "label": "judgment",
+   "cause": null,
+   "fair": true,
+   "comment": "Decisive step is a weighing/credibility/substantiation finding; no hidden computable disagreement found."
+  },
+  {
+   "id": "tcsumm-2024-22",
+   "issue_index": 5,
+   "issue": "Innocent spouse relief for Ms. Lucas",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  },
+  {
+   "id": "tcsumm-2025-3",
+   "issue_index": 0,
+   "issue": "Do intervenor's objections (unfairness; wish to amend the return and claim offsetting deductions) defeat petitioner's sec. 6015(c) relief for 2019?",
+   "label": "not-encodable",
+   "cause": null,
+   "fair": true,
+   "comment": "No computable court figure or outside framework scope; no hidden disagreement found."
+  }
+ ],
+ "plugs": [
+  {
+   "case": "tcmemo-2023-37",
+   "field": "facts/asFiled.otherIncome = -1,465",
+   "stated": false,
+   "note": "Schedule E loss -8,189 (stated) + 6,724 unidentified residual back-solved so non-SS MAGI equals the court's 53,456; residual character not in opinion."
+  },
+  {
+   "case": "tcmemo-2025-23",
+   "field": "facts/asFiled.otherIncome = 50,514",
+   "stated": false,
+   "note": "Backed out from stated TI 37,964 + 12,550 single standard deduction; status single inferred because only it reproduces 18,064."
+  },
+  {
+   "case": "tcsumm-2023-13 (entry 2)",
+   "field": "facts/asFiled.otherIncome = 139,100",
+   "stated": false,
+   "note": "Fitted base: the value at which the 2018 MFJ schedule reproduces the notice deficiency 38,213."
+  },
+  {
+   "case": "tcmemo-2024-67",
+   "field": "facts.longTermGain = 0",
+   "stated": false,
+   "note": "Capital gain character not stated; set to ordinary because that reproduces 60,569."
+  },
+  {
+   "case": "tcmemo-2024-67",
+   "field": "estimated.dueDates (statutory 15th, not printed dates)",
+   "stated": false,
+   "note": "Chosen because it gives 424; printed due dates give 422."
+  },
+  {
+   "case": "tcmemo-2024-67",
+   "field": "sfrTax = 60,811",
+   "stated": true,
+   "note": "Opinion states total tax liability 60,811 (= the notice deficiency, an output figure)."
+  },
+  {
+   "case": "tcsumm-2020-18 (3 years)",
+   "field": "facts.otherTaxes = 8,967 / 22,394 / 15,939 and taxShown = 723 / 4,383 / 5,608",
+   "stated": "otherTaxes yes (notice total tax quoted); taxShown no",
+   "note": "Total tax entered as a plug; taxShown back-solved = total - deficiency, so deficiencies are tautological."
+  },
+  {
+   "case": "tcsumm-2019-33",
+   "field": "taxShown = 0; filing hoh; one CTC child",
+   "stated": false,
+   "note": "Derived/inferred: HOH + one under-17 child chosen because they reproduce 10,518 exactly."
+  },
+  {
+   "case": "tcsumm-2019-33",
+   "field": "facts.itemizedDeductions = 9,250",
+   "stated": true,
+   "note": "Opinion: itemized deductions of $9,250 (equals the 2015 HOH standard deduction)."
+  },
+  {
+   "case": "tcsumm-2023-25",
+   "field": "sfrTax = 9,910",
+   "stated": false,
+   "note": "Notice deficiency used as SFR tax; opinion never states the SFR tax."
+  },
+  {
+   "case": "tcsumm-2023-25 (entry 2)",
+   "field": "estimated.withholding = 3,537; currentTax 9,910",
+   "stated": false,
+   "note": "Withholding back-solved so 22.5% x 6,373 = notice FTF 1,434."
+  },
+  {
+   "case": "tcmemo-2019-41",
+   "field": "ssLumpSums.priorModifiedIncome = 0 (x4)",
+   "stated": false,
+   "note": "Inferred from the stipulated 4,084 itself."
+  },
+  {
+   "case": "tcsumm-2020-5",
+   "field": "ssLumpSums.priorModifiedIncome = 43,138",
+   "stated": false,
+   "note": "Lower bound back-solved from the petitioners' 8,306 figure."
+  },
+  {
+   "case": "tcmemo-2023-141",
+   "field": "otherNonrefundableCredits = 2,278",
+   "stated": true,
+   "note": "Opinion: \"tax credits of $2,278\"; nature not stated."
+  },
+  {
+   "case": "tcsumm-2022-10 (entry 2)",
+   "field": "otherIncome = 2,286 (COD); earlyDistributions 72(t) on pension",
+   "stated": "COD yes; 72(t) no",
+   "note": "72(t) tax never mentioned in opinion; included because the notice reconstruction needs it."
+  },
+  {
+   "case": "tcsumm-2023-35",
+   "field": "otherIncome 17,012; itemizedDeductions 25,891; otherTaxes 660",
+   "stated": "inputs yes, totals encoder-computed",
+   "note": "Rental netting and itemized allocation done by the encoder; 660 stated as notice 72(t)-type tax."
+  },
+  {
+   "case": "tcsumm-2024-22",
+   "field": "adjustments 2,433; otherIncome 4,962; itemizedDeductions 32,563",
+   "stated": true,
+   "note": "All stated/stipulated; expected deduction and adjustments equal these inputs (echo)."
+  },
+  {
+   "case": "tcsumm-2024-12",
+   "field": "adjustments 2,500; otherIncome 354",
+   "stated": true,
+   "note": "Student loan interest and NJ refund stated."
+  },
+  {
+   "case": "tcmemo-2022-77",
+   "field": "asFiled.adjustments 69,880; facts.adjustments 0; alimonyPaid.childSupport = paid",
+   "stated": "adjustments yes; childSupport is the legal conclusion",
+   "note": "childSupport = whole payment forces the expected 0."
+  },
+  {
+   "case": "tcsumm-2019-8",
+   "field": "asFiled.adjustments 6,500; itemizedDeductions 0",
+   "stated": true,
+   "note": "Claimed IRA deduction stated."
+  },
+  {
+   "case": "tcsumm-2024-15",
+   "field": "adjustments 0; ira.contribution 0",
+   "stated": "conclusion",
+   "note": "Contribution 0 forces iraDeduction 0."
+  },
+  {
+   "case": "tcsumm-2020-9",
+   "field": "tieBreakers agi 2 vs 1",
+   "stated": false,
+   "note": "Ordinal placeholders; AGIs not stated."
+  },
+  {
+   "case": "tcmemo-2024-20",
+   "field": "status.paidOverHalfHouseholdCost = true",
+   "stated": false,
+   "note": "Not found; set so abode alone decides."
+  }
+ ]
+}

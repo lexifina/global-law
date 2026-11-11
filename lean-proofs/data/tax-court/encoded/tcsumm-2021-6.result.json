@@ -1,0 +1,47 @@
+{
+ "id": "tcsumm-2021-6",
+ "citation": "T.C. Summary Opinion 2021-6",
+ "issues": [
+  {
+   "issue": "Is the $109,471 retirement distribution, paid over to the former employer as restitution, includible in 2016 gross income?",
+   "provision": "secs. 61(a), 402(a), 72",
+   "court": "includible (109,471)",
+   "lean": "109471 included as pensions (input)",
+   "verdict": "not-encodable",
+   "diagnosis": "Whether a distribution applied to restitution was 'received' is a characterisation on disputed facts (constructive receipt / assignment); the framework takes income items as inputs, so the court's finding is encoded as the fact (pensions 109,471).",
+   "snippet": "the record establishes that the proceeds from the distribution were paid to him and then, through Mr. Eisenhauer, transferred to his former employer"
+  },
+  {
+   "issue": "Is petitioner liable for the 10% sec. 72(t) additional tax on the distribution?",
+   "provision": "sec. 72(t)(1), (2)(A)(i); sec. 4974(c)",
+   "court": 10947,
+   "lean": "10947",
+   "verdict": "match",
+   "diagnosis": "Age 43, ESOP/401(k) qualified plan, no exception shown: 10% x 109,471 = 10,947.10 -> 10,947, matching the notice amount the court sustained.",
+   "snippet": "the withdrawal does not fit within any of the statutory exceptions, and the entire distribution is subject to the 10% additional tax."
+  },
+  {
+   "issue": "Is petitioner liable for the sec. 6651(a)(1) addition to tax (return due 2017-04-18, filed 2017-09-04)?",
+   "provision": "sec. 6651(a)(1)",
+   "court": "does not apply (0)",
+   "lean": "failureToFileApplies false; failureToFile 0",
+   "verdict": "judgment",
+   "diagnosis": "Production met (parties agree return was late: due 2017-04-18, filed 2017-09-04); reasonable cause encoded as found, so the flag is false and the amount 0. The decisive step is the court's credibility finding about his efforts to file while incarcerated, not a computation. The notice's 2,772 cannot be checked without its underpayment base.",
+   "snippet": "petitioner has shown he had reasonable cause for failing to timely file his 2016 return and that his failure was not due to willful neglect."
+  },
+  {
+   "issue": "Sec. 6662(a) accuracy-related penalty ($3,551)",
+   "provision": "sec. 6662(a)",
+   "court": 0,
+   "lean": null,
+   "verdict": "not-encodable",
+   "diagnosis": "Conceded by respondent; not decided, so not encoded.",
+   "snippet": "Respondent concedes that petitioner is not liable for the sec. 6662(a) accuracy-related penalty."
+  }
+ ],
+ "deficiency": {
+  "court": 39649,
+  "lean": null
+ },
+ "notes": "Decision for respondent on the 39,649 deficiency, but the opinion does not give filing status, the other income on the return, or the tax shown, so the deficiency cannot be recomputed (Lean on the distribution alone: regular tax 20,792 + 72(t) 10,947 = 31,739 as single, which is not comparable). The 21,894 withholding credit allowed in the notice affects the balance due, not the deficiency. All expected items matched (exit 0). No framework gap found."
+}

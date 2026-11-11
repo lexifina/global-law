@@ -1,0 +1,746 @@
+[
+ {
+  "citation": "T.C. Memo. 2020-101",
+  "taxYear": 2016,
+  "note": "Filing status and other income not stated; only the IRA items are encoded (default single). $747 529 item conceded by respondent, omitted. Deficiency left to Rule 155, not stated.",
+  "facts": {
+   "iraDistributions": 54500,
+   "withholding": 3800,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 54500,
+     "plan": "ira",
+     "higherEducationExpenses": 3993
+    }
+   ]
+  },
+  "asFiled": {
+   "iraDistributions": 39500,
+   "withholding": 3800,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 24664,
+     "plan": "ira"
+    }
+   ]
+  },
+  "accuracy": {
+   "reasonableCause": true
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 5051,
+    "note": "10% x $50,507"
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 0,
+    "note": "reasonable cause (court's finding)"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2023-2",
+  "taxYear": 2016,
+  "note": "Section 36B not modelled: the excess APTC the court held repayable in full ($7,205; household income 598% of FPL) is given as otherTaxes. Son's age not stated.",
+  "facts": {
+   "filing": "hoh",
+   "pensions": 68750,
+   "socialSecurity": 26499,
+   "itemizedDeductions": 28751,
+   "itemize": true,
+   "withholding": 13750,
+   "otherTaxes": 7205,
+   "dependents": [
+    {
+     "name": "son",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "hoh",
+   "pensions": 68750,
+   "socialSecurity": 26499,
+   "itemizedDeductions": 28751,
+   "itemize": true,
+   "withholding": 13750,
+   "dependents": [
+    {
+     "name": "son",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 22524,
+    "note": "return figure the court adopted for MAGI"
+   },
+   {
+    "item": "agi",
+    "value": 91274
+   },
+   {
+    "item": "deficiency",
+    "value": 7205
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2024-20",
+  "taxYear": 2020,
+  "note": "No income figures in the opinion. A.V. a minor (age not stated; 17 used). paidOverHalfHouseholdCost not found; set true so that the abode finding alone decides, as in the opinion.",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "AV",
+     "relationship": "descendantOfChild",
+     "age": 17,
+     "daysWithTaxpayer": 60
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "expected": [
+   {
+    "item": "qualifyingChild:AV",
+    "flag": false
+   },
+   {
+    "item": "eicChild:AV",
+    "flag": false
+   },
+   {
+    "item": "hohQualifyingPerson:AV",
+    "flag": false
+   },
+   {
+    "item": "filingStatus",
+    "text": "single"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2025-116",
+  "taxYear": 2022,
+  "note": "No income figures; the $3,686 deficiency cannot be recomputed. Ms. Davis is the wife's sister (relationship agreed by the parties; encoded as sibling on the joint return). Residency and disability not proved.",
+  "facts": {
+   "filing": "mfj",
+   "dependents": [
+    {
+     "name": "AngelaDavis",
+     "relationship": "sibling",
+     "age": 64,
+     "youngerThanTaxpayer": false,
+     "disabled": false,
+     "livedWithMoreThanHalfYear": false
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "qualifyingChild:AngelaDavis",
+    "flag": false
+   },
+   {
+    "item": "eicChild:AngelaDavis",
+    "flag": false
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2019-23",
+  "taxYear": 2015,
+  "note": "J.V./L.V. eligible foster children (court placement 2010), under 17 (16 used). Ms. Madrigal (their grandmother, no income) is the competing non-parent claimant. Maria 19, not a student. Rule 155: no deficiency stated.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 12893,
+   "dependents": [
+    {
+     "name": "JV",
+     "relationship": "fosterChild",
+     "age": 16,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "LV",
+     "relationship": "fosterChild",
+     "age": 16,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "Maria",
+     "relationship": "child",
+     "age": 19,
+     "student": false,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "JV",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "daysResided": 365,
+      "agi": 12893
+     },
+     {
+      "name": "Madrigal",
+      "daysResided": 365,
+      "agi": 0
+     }
+    ]
+   },
+   {
+    "child": "LV",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "daysResided": 365,
+      "agi": 12893
+     },
+     {
+      "name": "Madrigal",
+      "daysResided": 365,
+      "agi": 0
+     }
+    ]
+   }
+  ],
+  "accuracy": {
+   "reasonableCause": true
+  },
+  "taxShown": 0,
+  "expected": [
+   {
+    "item": "tieBreaker:JV",
+    "text": "petitioner"
+   },
+   {
+    "item": "tieBreaker:LV",
+    "text": "petitioner"
+   },
+   {
+    "item": "qualifyingChild:Maria",
+    "flag": false
+   },
+   {
+    "item": "eicChild:Maria",
+    "flag": false
+   },
+   {
+    "item": "eicChild:JV",
+    "flag": true
+   },
+   {
+    "item": "eicChild:LV",
+    "flag": true
+   },
+   {
+    "item": "ctcChild:JV",
+    "flag": true
+   },
+   {
+    "item": "ctcChild:LV",
+    "flag": true
+   },
+   {
+    "item": "filingStatus",
+    "text": "hoh"
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 0
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2019-33",
+  "taxYear": 2015,
+  "note": "Filing status not stated (two $4,000 exemptions claimed: single with one dependent assumed). Corrected wages = $24,366 reported + $58,712 A-1 (return omitted A-1 wages). HSA distribution as otherIncome; section 223(f)(4) 20% tax ($127) as otherTaxes. Itemized $9,250 as filed. Penalty conceded.",
+  "facts": {
+   "wages": 83078,
+   "otherIncome": 634,
+   "otherTaxes": 127,
+   "itemizedDeductions": 9250,
+   "itemize": true,
+   "dependents": [
+    {
+     "name": "unknown",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "asFiled": {
+   "wages": 24366,
+   "itemizedDeductions": 9250,
+   "itemize": true,
+   "dependents": [
+    {
+     "name": "unknown",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 10518
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-18 (2014)",
+  "taxYear": 2014,
+  "note": "Income detail not in the opinion: the total tax required per the notice ($8967, quoted by the court) is given as otherTaxes; tax shown = required - deficiency (derived).",
+  "facts": {
+   "otherTaxes": 8967
+  },
+  "taxShown": 723,
+  "accuracy": {
+   "supervisoryApproval": true
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 8244
+   },
+   {
+    "item": "understatement",
+    "value": 8244
+   },
+   {
+    "item": "substantialUnderstatement",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 1649,
+    "note": "court states $1,648.80"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-18 (2015)",
+  "taxYear": 2015,
+  "note": "Income detail not in the opinion: the total tax required per the notice ($22394, quoted by the court) is given as otherTaxes; tax shown = required - deficiency (derived).",
+  "facts": {
+   "otherTaxes": 22394
+  },
+  "taxShown": 4383,
+  "accuracy": {
+   "supervisoryApproval": true
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 18011
+   },
+   {
+    "item": "understatement",
+    "value": 18011
+   },
+   {
+    "item": "substantialUnderstatement",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 3602,
+    "note": "court states $3,602.20"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-18 (2016)",
+  "taxYear": 2016,
+  "note": "Income detail not in the opinion: the total tax required per the notice ($15939, quoted by the court) is given as otherTaxes; tax shown = required - deficiency (derived).",
+  "facts": {
+   "otherTaxes": 15939
+  },
+  "taxShown": 5608,
+  "accuracy": {
+   "supervisoryApproval": true
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 10331
+   },
+   {
+    "item": "understatement",
+    "value": 10331
+   },
+   {
+    "item": "substantialUnderstatement",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 1861,
+    "note": "court states $1,860.60"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-9 (2015)",
+  "taxYear": 2015,
+  "note": "No income figures. Two of three children conceded as qualifying children (ages not stated). Unmarried; paid most household expenses. The father lived there but did not claim them.",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "child1",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    },
+    {
+     "name": "child2",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "child1",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "claims": false
+     }
+    ]
+   }
+  ],
+  "expected": [
+   {
+    "item": "filingStatus",
+    "text": "hoh"
+   },
+   {
+    "item": "hohQualifyingPerson:child1",
+    "flag": true
+   },
+   {
+    "item": "tieBreaker:child1",
+    "text": "petitioner"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-9 (2016)",
+  "taxYear": 2016,
+  "note": "No income figures. Two of three children conceded as qualifying children (ages not stated). Unmarried; paid most household expenses. The father lived there but did not claim them.",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "child1",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    },
+    {
+     "name": "child2",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "child1",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "claims": false
+     }
+    ]
+   }
+  ],
+  "expected": [
+   {
+    "item": "filingStatus",
+    "text": "hoh"
+   },
+   {
+    "item": "hohQualifyingPerson:child1",
+    "flag": true
+   },
+   {
+    "item": "tieBreaker:child1",
+    "text": "petitioner"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2021-41",
+  "taxYear": 2015,
+  "note": "AGI $15,545 as amended (composition not found; encoded as wages; the court found earned income also exceeds $14,820). The mother, Ms. Kapoor (joint return with her spouse), claimed both children. Days resided approximate (March-Dec; P.A.E. from fall birth). I.M.E. age not stated (5 used).",
+  "facts": {
+   "filing": "hoh",
+   "wages": 15545,
+   "dependents": [
+    {
+     "name": "IME",
+     "relationship": "descendantOfChild",
+     "age": 5,
+     "livedWithMoreThanHalfYear": true,
+     "qualifyingChildOfAnother": true
+    },
+    {
+     "name": "PAE",
+     "relationship": "descendantOfChild",
+     "age": 0,
+     "livedWithMoreThanHalfYear": true,
+     "qualifyingChildOfAnother": true
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "IME",
+    "taxpayer": "Gopi",
+    "claimants": [
+     {
+      "name": "Gopi",
+      "daysResided": 290,
+      "agi": 15545
+     },
+     {
+      "name": "Kapoor",
+      "isParent": true,
+      "daysResided": 290
+     }
+    ]
+   },
+   {
+    "child": "PAE",
+    "taxpayer": "Gopi",
+    "claimants": [
+     {
+      "name": "Gopi",
+      "daysResided": 75,
+      "agi": 15545
+     },
+     {
+      "name": "Kapoor",
+      "isParent": true,
+      "daysResided": 75
+     }
+    ]
+   }
+  ],
+  "expected": [
+   {
+    "item": "tieBreaker:IME",
+    "text": "Kapoor"
+   },
+   {
+    "item": "tieBreaker:PAE",
+    "text": "Kapoor"
+   },
+   {
+    "item": "dependent:IME",
+    "flag": false
+   },
+   {
+    "item": "dependent:PAE",
+    "flag": false
+   },
+   {
+    "item": "qualifyingRelative:IME",
+    "flag": false
+   },
+   {
+    "item": "filingStatus",
+    "text": "single"
+   },
+   {
+    "item": "eic",
+    "value": 0
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2022-10",
+  "taxYear": 2016,
+  "note": "Section 911 not modelled: wages encoded net of the 2016 limit ($109,024 - $101,300 = $7,724) WITHOUT the 911(f) stacking rule, so the tax is understated. No return filed (SFR). Amounts left to Rule 155; no court figures to compare.",
+  "facts": {
+   "wages": 7724,
+   "pensions": 20069
+  },
+  "taxShown": 0,
+  "lateness": {
+   "asOf": "2022-06-23",
+   "assertsFailureToPay": true
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-13",
+  "taxYear": 2018,
+  "note": "Other income not stated; only the distributions are encoded. Mr. Ghaly under 59 1/2; age at separation from service not found.",
+  "facts": {
+   "filing": "mfj",
+   "pensions": 115325,
+   "withholding": 14229,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 115325,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 11533
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-13 [consistency proxy, NOT a finding]",
+  "taxYear": 2018,
+  "note": "Base taxable income $115,100 (AGI $139,100 less $24,000 standard deduction) is NOT found: it is the value at which the 2018 MFJ schedule reproduces the notice's income-tax increase ($38,213 - $11,533 = $26,680).",
+  "facts": {
+   "filing": "mfj",
+   "otherIncome": 139100,
+   "pensions": 115325,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 115325,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "otherIncome": 139100
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 38213
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-35",
+  "taxYear": 2017,
+  "note": "Best-effort corrected return from the stipulations and the court's allowances: Maryland rent $21,000 less $2,896.98 less half taxes/interest = $12,201; Beavercreek $7,437.35 less 5/12 of $1,199.36 and of half taxes/interest = $4,811; Fibre Arts loss -$4,705 and S&A profit $329 (netted; SE tax nil under $400); alimony $3,000 treated as received; capital gain assumed long-term. Itemized: Oakwood taxes+interest, 7/12 of half Beavercreek taxes+interest, $90 charity = $25,891. Two dependents implied by three exemptions (not described). Retirement distributions' $660 notice tax not explained. No court deficiency or addition amount: Rule 155.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 59510,
+   "pensions": 52433,
+   "taxableInterest": 14,
+   "capitalGain": 3417,
+   "longTermGain": 3417,
+   "otherIncome": 15636,
+   "itemizedDeductions": 25891,
+   "itemize": true,
+   "withholding": 5050,
+   "dependents": [
+    {
+     "name": "dep1",
+     "livedWithMoreThanHalfYear": true
+    },
+    {
+     "name": "dep2",
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "taxShown": 0,
+  "lateness": {
+   "extension": true,
+   "asOf": "2023-12-18",
+   "assertsFailureToPay": false
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-11",
+  "taxYear": 2019,
+  "note": "Other income not stated; the taxable amount and deficiency are not stated. Only the benefits are encoded.",
+  "facts": {
+   "filing": "mfj",
+   "socialSecurity": 32862
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "socialSecurity": 3214
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-19",
+  "taxYear": 2020,
+  "note": "Only wages, W-2G winnings (otherIncome) and the gambling losses the court allowed (itemized) are found; other itemized items, Schedule C and the settled issues are not stated. Redetermined deficiency left to Rule 155.",
+  "facts": {
+   "wages": 20901,
+   "otherIncome": 61929,
+   "itemizedDeductions": 61929,
+   "itemize": true
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Summary Opinion 2025-3",
+  "taxYear": 2019,
+  "note": "Sole issue: section 6015(c) relief (conceded by the IRS; intervenor's objections rejected). No return figures in the opinion.",
+  "facts": {
+   "filing": "mfj"
+  },
+  "expected": []
+ }
+]

@@ -1,0 +1,54 @@
+{
+ "id": "tcsumm-2021-2",
+ "citation": "T.C. Summary Opinion 2021-2",
+ "issues": [
+  {
+   "issue": "Husband treated as receiving $35,999 of social security benefits for 2014 (incl. $7,723 workers' compensation offset)",
+   "provision": "§86(d)(3)",
+   "court": "yes: $35,999 treated as benefits for 2014",
+   "lean": "socialSecurity input; the §86(d)(3) characterisation is made outside the framework (input-level)",
+   "verdict": "not-encodable",
+   "diagnosis": "Framework takes benefits as a number; it has no §86(d)(3) workers'-compensation-offset rule, so the holding is an input, not a computation. Taxable amount not stated by the court.",
+   "snippet": "Under section 86 petitioner husband is taxed as if he received $35,999 in Social Security disability benefits for 2014."
+  },
+  {
+   "issue": "2017+ repayment of $49,170 does not reduce 2014 income",
+   "provision": "§451(a); §1341; §86(d)(2)",
+   "court": "no reduction for 2014",
+   "lean": "not modelled (year of inclusion / claim of right)",
+   "verdict": "not-encodable",
+   "diagnosis": "Timing-of-inclusion rule for a cash-method taxpayer; framework has no multi-year or §1341 model.",
+   "snippet": "Petitioners' repayments in 2017 of benefits received in 2014 do not affect their 2014 tax liability."
+  },
+  {
+   "issue": "Deficiency $9,717",
+   "provision": "§6211",
+   "court": "9717",
+   "lean": null,
+   "verdict": "not-encodable",
+   "diagnosis": "Rerun 57b55431cca: 2014 now runs, but the opinion states no other income, deductions or the return as filed, so the 9,717 deficiency cannot be recomputed (with benefits alone provisional income 18,000 < 32,000 gives 0 taxable). Arithmetic: 85% x 35,999 = 30,599; 9,717/30,599 = 31.8% average rate implies other taxable income near the 2014 MFJ 28%/33% boundary (226,850), roughly 219,000. Inference only.",
+   "snippet": "Respondent determined that petitioners had an income tax deficiency of $9,717 for taxable year 2014."
+  },
+  {
+   "issue": "§6662(a) penalty",
+   "provision": "§6662(a)",
+   "court": "conceded by respondent",
+   "lean": "not encoded",
+   "verdict": "not-encodable",
+   "diagnosis": "Conceded; no holding to compute.",
+   "snippet": "Respondent concedes that petitioners are not liable for the accuracy-related penalty under sec. 6662(a)."
+  }
+ ],
+ "deficiency": {
+  "court": 9717,
+  "lean": null
+ },
+ "notes": "Rerun 2c5b6354943: runs (exit 0, no expected items). Deficiency not encodable: other income absent from the opinion. The framework now has a sec. 86(e) field (ssLumpSums), but it is not used here: the court did not discuss the election, and neither 2013 modified income nor 2014 other income is in the opinion (SSA-1099 shows $18,599 attributable to 2013), so nothing about it can be computed or compared.",
+ "frameworkGaps": [
+  {
+   "provision": "§86(d)(3)",
+   "missing": "workers' compensation offset counted as a social security benefit",
+   "suggestedFix": "add socialSecurityWorkersCompOffset to ReturnFacts, added to benefits in taxableSocialSecurity"
+  }
+ ]
+}

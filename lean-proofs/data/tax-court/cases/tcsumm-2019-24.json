@@ -1,0 +1,59 @@
+{
+  "id": "tcsumm-2019-24",
+  "citation": "T.C. Summary Opinion 2019-24",
+  "case_name": "Milton H. Thomas II and Priscilla Snelling Thomas v. Commissioner",
+  "docket_numbers": ["21655-17S"],
+  "judge": "Panuthos",
+  "date": "2019-08-26",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "fc9f8a34-722a-468f-8d42-44e85d1dd23c",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/21655-17",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/21655-17/fc9f8a34-722a-468f-8d42-44e85d1dd23c/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "tax_years": [2015],
+  "taxpayer": {
+    "filing_status_claimed": "married filing jointly",
+    "state": "Georgia",
+    "notes": "Two daughters, ET and EMT, both in postsecondary education in 2015."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {"year": 2015, "deficiency": 5000, "penalties": [], "additions": []}
+    ],
+    "adjustments": ["disallowed nonrefundable education credit of $3,000 and refundable American Opportunity Credit of $2,000 for failure to supply supporting information"],
+    "contested_by_taxpayer": "American Opportunity Credit for daughter ET",
+    "conceded": [
+      "Respondent conceded petitioners substantiated $2,885 of education expenses for 2015",
+      "Respondent conceded petitioners are entitled to the American Opportunity Credit for younger daughter EMT"
+    ]
+  },
+  "findings_of_fact": [
+    {"fact_id": "F1", "issue_refs": ["I1"], "fact": "ET enrolled at Columbus State University from fall 2011 through fall 2015; nine semesters plus summer school (4 1/2 years); bachelor's degree December 2015",
+     "values": {"student": "ET", "enrollment_start": "fall 2011", "enrollment_end": "fall 2015", "semesters": 9, "graduated": "2015-12"},
+     "snippet": "ET, was enrolled at Columbus State University in Columbus, Georgia, from fall 2011 through fall 2015.", "locator": "p. 3"},
+    {"fact_id": "F2", "issue_refs": ["I1"], "fact": "On Form 8863 for 2015 petitioners claimed nonrefundable education credit of $3,000 and refundable AOC of $2,000 for ET and EMT",
+     "values": {"nonrefundable_claimed": 3000, "refundable_claimed": 2000},
+     "snippet": "petitioners claimed the nonrefundable education credit of $3,000 and the refundable American Opportunity Credit of $2,000.", "locator": "p. 3"},
+    {"fact_id": "F3", "issue_refs": ["I1"], "fact": "AOC claimed for ET for 2011 (also for petitioner wife), and solely for ET for 2012-2014; five taxable years total for ET (2011-2015)",
+     "values": {"prior_aoc_years_for_ET": [2011, 2012, 2013, 2014], "prior_year_count": 4},
+     "snippet": "In total petitioners claimed the American Opportunity Credit in relation to ET's postsecondary education for five taxable years (2011 through 2015).", "locator": "p. 3"},
+    {"fact_id": "F4", "issue_refs": ["I1"], "fact": "Petitioners had claimed and received the AOC for ET for four taxable years 2011 through 2014",
+     "values": {"prior_years_claimed_and_received": 4},
+     "snippet": "The record shows that by 2015 petitioners had claimed and received the American Opportunity Credit for four taxable years (2011 through 2014)", "locator": "p. 6"}
+  ],
+  "issues": [
+    {"issue_id": "I1", "tags": ["education_credit_25a"],
+     "question": "Are petitioners entitled to the American Opportunity Credit for 2015 with respect to daughter ET, for whom the credit was claimed for 2011-2014?",
+     "provisions": ["26 U.S.C. §25A(i)(2)", "§25A(b)(2)(A)", "§25A(i)(1)", "§25A(i)(5)"],
+     "holding": "No; the credit is allowed for only four taxable years per eligible student and was already claimed for ET for 2011-2014",
+     "prevailing_party": "respondent",
+     "amount_determined": {"description": "education expenses conceded by respondent", "amount": 2885},
+     "rule_155": true,
+     "computable": true,
+     "computable_reason": "Four-prior-taxable-years limit of §25A(i)(2)/(b)(2)(A) applied to count of prior elections"}
+  ],
+  "decision": {"text": "Decision will be entered under Rule 155.", "summary": "AOC for ET disallowed for 2015 (four-year limit); AOC for EMT and $2,885 expenses allowed by concession"},
+  "notes": "Amounts rounded to nearest dollar. Notice of deficiency dated October 2, 2017. Facts partly stipulated."
+}

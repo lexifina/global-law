@@ -1,0 +1,11 @@
+import random,json
+strata={
+ 'family_status':['10031-17','10104-18','10198-17','10406-17','12807-15','23461-17','6448-24','24305-18S'],
+ 'socsec_ptc':['1044-25','11390-25','3621-22S','24551-18S','1468-20S','8380-22S','20268-19S'],
+ 'retirement_72t':['2090-18S','5367-18S','22664-18S','16983-24','4464-21','7871-23','11872-22'],
+ 'other_covered':['10750-20S','8755-18S','13323-18S','6561-23S','10416-20S','4398-24','24311-18S'],
+}
+rng=random.Random(20261111)
+draw={k:sorted(rng.sample(sorted(v),4)) for k,v in strata.items()}
+json.dump({'seed':20261111,'method':'eligible candidates grouped into 4 issue strata; 4 drawn per stratum with random.Random(seed).sample(sorted(stratum),4)','strata':strata,'drawn':draw},open(r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\holdout\draw.json','w'),indent=1)
+print(json.dumps(draw,indent=1))

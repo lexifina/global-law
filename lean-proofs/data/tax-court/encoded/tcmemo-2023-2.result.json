@@ -1,0 +1,54 @@
+{
+ "id": "tcmemo-2023-2",
+ "citation": "T.C. Memo. 2023-2 (Henry v. Commissioner)",
+ "issues": [
+  {
+   "issue": "Taxable Social Security / AGI",
+   "provision": "§86; §36B(d)(2)(B)(iii)",
+   "court": "taxable SS 22,524; AGI 91,274; MAGI 95,249",
+   "lean": "taxable SS 22,524; AGI 91,274; householdIncome 95,249",
+   "verdict": "match",
+   "diagnosis": "Framework §86 computation reproduces the return figure (85% x 26,499 = 22,524). §36B household income = 91,274 + 3,975 = 95,249 now computed and matches.",
+   "snippet": "her MAGI for 2016 was $95,249"
+  },
+  {
+   "issue": "PTC eligibility: household income 598% of FPL; repay all APTC",
+   "provision": "§36B(c)(1)(A), (d)(2), (d)(3); §36B(f)(2)",
+   "court": "household income 95,249; FPL 15,930; 598%; not eligible; repay all 7,205 APTC",
+   "lean": "householdIncome 95,249; povertyLine 15,930; fplPercent 401; premiumTaxCredit 0; excessAdvancePtc 7,205",
+   "verdict": "match",
+   "diagnosis": "facts.ptc: family 2, Florida, enrolled premiums 7,788 (11 x 708), APTC 7,205 (11 x 655); benchmark premium not stated (irrelevant over 400%). All amounts match. fplPercent item differs (598 vs 401) by convention only: 95,249 / 15,930 = 5.979 -> 598%, while Form 8962 line 5 (which Lean reproduces) enters 401 for anything over 400%. Same eligibility result; no cap applies at >=400%.",
+   "snippet": "Petitioner's household income of $95,249 was 598% of the FPL during 2016"
+  },
+  {
+   "issue": "Whether coverage was canceled in February 2016",
+   "provision": "§36B; burden of proof",
+   "court": "not proved; APTC paid through November",
+   "lean": "n/a",
+   "verdict": "judgment",
+   "diagnosis": "Factual/credibility finding; the court credited Marketplace records over testimony.",
+   "snippet": "petitioner was unable to offer any documentation to corroborate her contention"
+  },
+  {
+   "issue": "Deficiency",
+   "provision": "§6211; §36B(f)(2)(A)",
+   "court": "7,205",
+   "lean": "7,205",
+   "verdict": "match",
+   "diagnosis": "Now computed: corrected total tax 14,959 = 7,754 as filed + 7,205 excess APTC from facts.ptc (otherTaxes workaround removed).",
+   "snippet": "results in a deficiency in her income tax of that same amount for 2016"
+  }
+ ],
+ "deficiency": {
+  "court": 7205,
+  "lean": 7205
+ },
+ "notes": "Rerun with facts.ptc (commits 402a5fdbb47/f918d6f6fc9); otherTaxes 7,205 removed. 7/8 checks match; fplPercent 598 vs 401 is the Form 8962 line-5 convention (over 400% entered as 401). Deficiency 7,205 still matches, now computed. Son's age not stated; filing status not in issue.",
+ "frameworkGaps": [
+  {
+   "provision": "§36B(d)(3) / Form 8962 line 5",
+   "missing": "fplPercent caps at 401 for income over 400%; opinions state the true ratio (here 598%).",
+   "suggestedFix": "Optional: expose the uncapped ratio (100*h/F) as a separate item, e.g. fplPercentActual."
+  }
+ ]
+}

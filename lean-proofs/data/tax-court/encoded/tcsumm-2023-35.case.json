@@ -1,0 +1,75 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2023-35",
+  "taxYear": 2017,
+  "note": "Polete. No return filed (SFR). Corrected return from stipulations + allowances. Schedule C: S&A 10,404-7,595-2,480.27 = 328.73; Fibre Arts 3,238-7,595 (COGS as stipulated)-348.05 = -4,705.05; net -4,376 (no SE tax). Maryland rent 21,000-2,896.98-1/2(2,887.33+8,917.28) = 12,200.72; Beavercreek 7,437.35-5/12(1,199.36)-5/12*1/2(4,715.32+5,490.90) = 4,811.32; alimony 3,000 (stipulated; direction not stated) encoded as alimonyReceived (instrument date not stated; separated May 2017, used 2017-05-01; sec. 71(b) requirements taken as met by stipulation); otherIncome = rents 17,012. Itemized: Oakwood 13,560.03+9,264.48 + 7/12*5,103.11 + 90 = 25,891.32. HOH and three exemptions conceded (two dependents, not described). Capital gain character not stated (assumed long-term). $660 early-distribution tax kept as otherTaxes (court: 'purely computational'). Deficiency and 6651(a)(1) left to Rule 155.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 59510,
+   "pensions": 52433,
+   "taxableInterest": 14,
+   "capitalGain": 3417,
+   "longTermGain": 3417,
+   "seProfit": -4376,
+   "otherIncome": 17012,
+   "itemizedDeductions": 25891,
+   "itemize": true,
+   "otherTaxes": 660,
+   "withholding": 5050,
+   "estimatedPayments": 0,
+   "dependents": [
+    {
+     "name": "dep1",
+     "age": 10,
+     "livedWithMoreThanHalfYear": true
+    },
+    {
+     "name": "dep2",
+     "age": 10,
+     "livedWithMoreThanHalfYear": true
+    }
+   ],
+   "alimonyReceived": [
+    {
+     "executed": "2017-05-01",
+     "paid": 3000
+    }
+   ]
+  },
+  "taxShown": 0,
+  "lateness": {
+   "extension": true,
+   "asOf": "2023-12-18",
+   "assertsFailureToPay": false,
+   "reasonableCauseFiling": false,
+   "productionMet": true
+  },
+  "expected": [
+   {
+    "item": "filingStatus",
+    "text": "hoh",
+    "note": "conceded: entitled to Head of Household filing status"
+   },
+   {
+    "item": "dependentsCounted",
+    "value": 2,
+    "note": "three personal exemptions conceded = self + 2"
+   },
+   {
+    "item": "exemptions",
+    "value": 12150,
+    "note": "3 x $4,050 (2017), no phase-out below HOH threshold; derived from 'three personal exemptions'"
+   },
+   {
+    "item": "alimonyIncluded",
+    "value": 3000,
+    "note": "stipulated alimony $3,000"
+   },
+   {
+    "item": "failureToFileApplies",
+    "flag": true,
+    "note": "production met (no return by 10/15/2018; SFR not a return, sec. 6651(g)(1)); no reasonable cause claimed"
+   }
+  ]
+ }
+]

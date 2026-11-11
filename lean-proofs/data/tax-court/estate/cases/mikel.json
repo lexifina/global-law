@@ -1,0 +1,102 @@
+{
+  "id": "tcmemo-2015-64",
+  "slug": "mikel",
+  "caption": "Israel Mikel v. Commissioner; Erna Mikel v. Commissioner (consolidated)",
+  "citation": "T.C. Memo. 2015-64",
+  "date": "2015-04-06",
+  "docket_numbers": [
+    "16538-13",
+    "16563-13"
+  ],
+  "judge": "Lauber",
+  "tax_type": "gift",
+  "gift_year": 2007,
+  "source": {
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/16538-13",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/16538-13/261a7451-3ad6-4fac-8712-e00ada406f33/public-document-download-url",
+    "dawson_docket_entry_id": "261a7451-3ad6-4fac-8712-e00ada406f33",
+    "document_title": "MEMORANDUM OPINION, JUDGE LAUBER T.C. MEMO. 2015-64 (AN APPROPRIATE ORDER WILL BE ISSUED)",
+    "raw_text": "raw/mikel.txt",
+    "raw_pdf": "raw/mikel.pdf",
+    "retrieved": "2026-11-11"
+  },
+  "posture": "Cross-motions for partial summary judgment (facts deemed established for the motions).",
+  "found_facts": [
+    {
+      "fact": "Notice determined against each petitioner a deficiency and a 6651(a)(1) addition",
+      "values": {
+        "deficiency_each": 268950,
+        "addition_6651a1_each": 67238
+      },
+      "snippet": "determined against each petitioner a tax deficiency of $268,950 and a late-filing addition to tax under section 6651(a)(1) of $67,238.",
+      "locator": "pp. 1-2"
+    },
+    {
+      "fact": "Each spouse's 2007 gift to the trust",
+      "values": {
+        "gift_each": 1631000,
+        "total_transferred": 3262000
+      },
+      "snippet": "During 2007 each petitioner made to a family trust a gift with an asserted value of $1,631,000.",
+      "locator": "p. 2; total $3,262,000 at p. 3"
+    },
+    {
+      "fact": "Annual exclusions claimed: 60 beneficiaries x $12,000",
+      "values": {
+        "claimed_exclusion_each": 720000,
+        "per_donee_exclusion_2007": 12000,
+        "beneficiaries": 60
+      },
+      "snippet": "each petitioner claimed under section 2503(b) an annual exclusion of $720,000. The claimed annual exclusions of $720,000 were based on the contention that each petitioner's gift included a $12,000 gift of a present interest to each of the trust's 60 beneficiaries.",
+      "locator": "p. 2"
+    },
+    {
+      "fact": "Gift-splitting consent; no gift tax reported after unified credit",
+      "snippet": "The Forms 709 included consents by each petitioner that the gifts were to be \"considered as made one-half by each of [us].\" ... After application of unified credits, the Forms 709 reported no gift tax due.",
+      "locator": "pp. 7-8"
+    },
+    {
+      "fact": "2007 per-donee exclusion",
+      "snippet": "for gifts made during 2007, the exclusion was $12,000 per donee. Rev. Proc. 2006-53, sec. 3.32",
+      "locator": "pp. 9-10"
+    },
+    {
+      "fact": "Returns filed late (Dec. 15, 2011) for 2007",
+      "snippet": "Neither petitioner timely filed Form 709 ... for 2007. On December 15, 2011, after being contacted by the IRS, each petitioner submitted a separate Form 709",
+      "locator": "p. 7"
+    }
+  ],
+  "issue": "Whether the gifts to the trust were gifts of present interests (Crummey withdrawal rights) qualifying for the sec. 2503(b) annual exclusion, given an in terrorem clause and a beth din arbitration provision.",
+  "holding": "Present interests; petitioners' motion for partial summary judgment granted, respondent's denied. Each beneficiary held a legally enforceable withdrawal right. The exact number of beneficiaries was left open (fn. 2: 'not material to this opinion'); valuation not at issue.",
+  "stated_tax_figures": {
+    "deficiency_each": 268950,
+    "addition_6651a1_each": 67238
+  },
+  "recomputation": {
+    "what": "Deficiency = gift tax on 1,631,000 with no exclusions, minus gift tax on 1,631,000 - 720,000 (zero after unified credit); assumes no prior taxable gifts (opinion mentions none).",
+    "steps": [
+      "2007 sec. 2001(c) table: tentative tax(x) = 555,800 + 45% x (x - 1,500,000) for x > 1,500,000",
+      "tentative tax(1,631,000) = 555,800 + 58,950 = 614,750",
+      "sec. 2505 credit (2007, $1,000,000 exemption) = tentative tax(1,000,000) = 345,800",
+      "gift tax with exclusions disallowed = 614,750 - 345,800 = 268,950 == stated deficiency",
+      "with 60 x 12,000 = 720,000 exclusions: taxable gift 911,000 < 1,000,000 -> tax 0 (matches 'no gift tax due')",
+      "sec. 6651(a)(1) at 25% max: 0.25 x 268,950 = 67,237.50 -> $67,238 == stated addition"
+    ],
+    "reconciles": true,
+    "court_outcome_effect": "Holding sustains the exclusions in principle, so the deficiency falls to 0 if 60 present-interest donees are established (number left open)."
+  },
+  "judgment_vs_computation": {
+    "judgment": [
+      "legal question: present vs future interest (enforceability of Crummey right)",
+      "number of beneficiaries not finally resolved"
+    ],
+    "computation": [
+      "exclusion = beneficiaries x per-donee amount",
+      "taxable gift, tentative tax, unified credit, late-filing addition"
+    ]
+  },
+  "caveats": [
+    "Summary-judgment opinion; final decision figures are not in the opinion.",
+    "Assumes no pre-2007 taxable gifts; opinion is silent."
+  ]
+}

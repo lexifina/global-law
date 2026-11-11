@@ -1,0 +1,68 @@
+{
+ "id": "tcsumm-2023-25",
+ "citation": "T.C. Summary Opinion 2023-25",
+ "issues": [
+  {
+   "issue": "Are the lapsed Prudential policy amounts (13,214 + 5,366) gross income for 2017?",
+   "provision": "sec. 61(a)(9), sec. 72(e)",
+   "court": "includible: 18,580",
+   "lean": "lapseIncome 18580 (policyLapses: 13,214 + 5,366); agi 18580",
+   "verdict": "match",
+   "diagnosis": "Encoded with facts.policyLapses (sec. 72(e)(2),(5),(6): loan extinguished + cash - investment in the contract). The court found only the excess per policy (loan repaid less premiums paid, as Prudential computed and petitioner did not dispute), so each policy is encoded as loanExtinguished = that excess, premiumsPaid 0; lapseIncome is identical for any split. Lean's rule (constructive receipt of the cash value applied to the loan; no-cash irrelevant) matches the court's reasoning. Checks lapseIncome 18,580 and agi 18,580 pass.",
+   "snippet": "The amounts constructively received in excess of his investments in the contracts are therefore includible in gross income."
+  },
+  {
+   "issue": "Schedule E rental loss on the Signal Mountain Property (claimed 77,675, conceded to 25,000)",
+   "provision": "sec. 280A(a), (d)(1), (d)(2)(A),(C), (d)(3)(A); sec. 262",
+   "court": "no deduction allowed (0)",
+   "lean": "not modelled; no Schedule E item encoded",
+   "verdict": "not-encodable",
+   "diagnosis": "Framework has no Schedule E / sec. 280A dwelling-unit test. Facts are mechanical: 47 personal-use days (1 Jan-16 Feb) > max(14, 10% of fair-rental days = 0), plus below-FMV rental to daughter counts as personal use, so the unit is a residence and sec. 212 deductions are barred. Encoding the disallowed loss as absent gives the same result.",
+   "snippet": "Petitioner resided at the property from January 1 until February 16, 2017, exceeding the 14- day maximum for this reason alone."
+  },
+  {
+   "issue": "sec. 6651(a)(1) failure-to-file addition",
+   "provision": "sec. 6651(a)(1)",
+   "court": "liable (notice: 1,434)",
+   "lean": "failureToFileApplies true (no return, reasonableCauseFiling false); amount 210 on the partial income only, not comparable",
+   "verdict": "judgment",
+   "diagnosis": "Holding flag failureToFileApplies matches. Decisive step is the court's finding that incarceration/ignorance is not reasonable cause (input), so verdict stays judgment. Amount not computable: notice base includes unstated 'inter alia' income, withholding and status; notice figures consistent with net tax 6,373: FTF 22.5% x 6,373 = 1,434.",
+   "snippet": "Incarceration  is not a reasonable cause for failure to file."
+  },
+  {
+   "issue": "sec. 6651(a)(2) failure-to-pay addition (SFR under sec. 6020(b))",
+   "provision": "sec. 6651(a)(2), (g)(2)",
+   "court": "liable (notice: 1,147)",
+   "lean": "failureToPayApplies true (SFR via sfrTax, unpaid, reasonableCausePayment false); 131 on partial income",
+   "verdict": "judgment",
+   "diagnosis": "Holding flag failureToPayApplies matches. Needs an SFR for sec. 6651(g)(2): the court found a valid sec. 6020(b) SFR but not its tax, so sfrTax is set to 9,910 (the notice deficiency, inferred) only to mark the SFR. Decisive step is no reasonable cause (judgment). Amount: 1,147 = 18% x 6,373 implies 36 months (to about April 2021), not computable from findings.",
+   "snippet": "As with the failure to file a return, incarceration is not a reasonable cause for the failure to pay tax."
+  },
+  {
+   "issue": "sec. 6654 estimated-tax addition",
+   "provision": "sec. 6654(a), (d)(1)(B)",
+   "court": "liable (notice: 143)",
+   "lean": "145 on the notice reconstruction (required annual 8,919 = 90% x 9,910; no prior return, no payments; withholding 3,537 inferred); estimatedTaxApplies true",
+   "verdict": "mismatch",
+   "diagnosis": "Liability: court finding (2017 tax liability, no 2016/2017 return, no estimated payments; no reasonable-cause exception) - required annual 8,919 matches. Amount is a notice figure (Rule 155), checked via a reconstruction entry: tax 9,910 (the deficiency), withholding 3,537 inferred from FTF 22.5% x 6,373 = 1,434. Shortfall 1,345.50 per installment; at 4% flat to 15 Apr 2018 (967 installment-days): 1,345.5 x 4% x 967/365 = 142.59 -> 143. Lean applies the 5% 2018 Q2 rate for 1-15 Apr 2018 (+4 x 1,345.5 x 1% x 14/365 = 2.06) -> 145. Difference is the Form 2210 worksheet convention (one rate through 15 April) vs the quarterly sec. 6621 rate; not an encoding error. Holding flag estimatedTaxApplies (no waiver, production met) matches on the reconstruction; in the main entry Lean's tax on the found income alone (818) would fall under the sec. 6654(e)(1) 1,000 floor, so the flag is checked only on the reconstruction.",
+   "snippet": "petitioner had a tax liability for the 2017 tax year, that petitioner did not file a return for the 2017 or 2016 tax year"
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": null
+ },
+ "notes": "Decision under Rule 155; notice deficiency 9,910 and additions 1,434 / 1,147 / 143 cannot be recomputed from the court's findings because the notice included other income ('inter alia') and status, age and withholding are not stated. Rerun f918d6f6fc9: lapsed policies now encoded with facts.policyLapses (match, 18,580). Second case entry is a notice reconstruction for sec. 6654 (estimated {currentTax 9,910, withholding 3,537 inferred}): required annual 8,919 matches, addition 145 vs notice 143 (2.06 from the 5% rate for 1-15 Apr 2018 vs 4% flat). Runner exit 1 (that one item). The single inferred withholding 3,537 makes the notice's FTF 1,434 and sec. 6654 143 (at 4% flat) mutually consistent; FTP 1,147 = 18% x 6,373 implies 36 months, i.e. computed to about April 2021. Schedule E (sec. 280A) still not modelled. Rerun 7175885f197: holding flags failureToFileApplies / failureToPayApplies (main) and estimatedTaxApplies (reconstruction) all match; sfrTax 9,910 inferred to mark the SFR.",
+ "frameworkGaps": [
+  {
+   "provision": "sec. 6654(a) / Form 2210 rate periods",
+   "missing": "IRS Form 2210 worksheets (and so notice figures) apply one rate through 15 April of the next year; Lean applies the actual quarterly rate (2018 Q2 5%), giving +2 here",
+   "suggestedFix": "optional flag to use the Form 2210 rate-period convention, or accept as a convention difference"
+  },
+  {
+   "provision": "sec. 280A (Schedule E dwelling-unit test)",
+   "missing": "not modelled",
+   "suggestedFix": "unchanged"
+  }
+ ]
+}

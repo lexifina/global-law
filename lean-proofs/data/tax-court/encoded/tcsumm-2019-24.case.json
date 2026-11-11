@@ -1,0 +1,32 @@
+{
+ "citation": "T.C. Summary Opinion 2019-24",
+ "taxYear": 2015,
+ "note": "Thomas (MFJ). Sole issue: AOTC for daughter ET in 2015. AOTC claimed for ET in 2011, 2012, 2013 and 2014 (four prior taxable years), so sec. 25A(i)(2) bars a 5th year. ET enrolled fall 2011-fall 2015 (4.5 years, graduated Dec 2015): at the start of 2015 she had not completed four years, so completedFirstFourYears false. Respondent conceded the AOTC for EMT (first year fall 2015) and 2,885 of substantiated 2015 education expenses (split between students not stated; encoded on EMT, ET 0). As filed: nonrefundable education credit 3,000 and refundable AOTC 2,000. No income, tax or deficiency figures (Rule 155).",
+ "facts": {
+  "filing": "mfj",
+  "students": [
+   {
+    "name": "ET",
+    "qualifiedExpenses": 0,
+    "aotcPriorYears": 4
+   },
+   {
+    "name": "EMT",
+    "qualifiedExpenses": 2885,
+    "aotcPriorYears": 0
+   }
+  ]
+ },
+ "expected": [
+  {
+   "item": "aotcEligible:ET",
+   "flag": false,
+   "note": "not entitled: AOTC claimed for ET for four prior taxable years (sec. 25A(i)(2))"
+  },
+  {
+   "item": "aotcEligible:EMT",
+   "flag": true,
+   "note": "conceded by respondent"
+  }
+ ]
+}

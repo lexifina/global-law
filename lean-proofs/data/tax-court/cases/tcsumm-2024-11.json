@@ -1,0 +1,128 @@
+{
+  "id": "tcsumm-2024-11",
+  "citation": "T.C. Summary Opinion 2024-11",
+  "case_name": "Jon K. Palsgaard and Kimberly A. Kelly v. Commissioner",
+  "docket_numbers": [
+    "14225-22S"
+  ],
+  "judge": "Fried",
+  "date": "2024-07-01",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "912f41fc-5a54-4a1e-a939-af48510851ae",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/14225-22",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/14225-22/912f41fc-5a54-4a1e-a939-af48510851ae/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2019
+  ],
+  "taxpayer": {
+    "filing_status_claimed": "married filing jointly",
+    "state": "California",
+    "notes": "Kimberly Kelly, physician disabled since March 2009, receiving SSD since 2010; same arguments rejected in Palsgaard, T.C. Memo. 2018-82."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2019,
+        "deficiency": null,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": null
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "increased taxable Social Security disability benefits based on Form SSA-1099 showing $32,862"
+    ],
+    "contested_by_taxpayer": "Taxability of SSD benefits (claimed exclusion under §104(a)(1)-(3), no constructive receipt)",
+    "conceded": [
+      "Respondent: section 6662(a) accuracy-related penalty"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Petitioner disabled by physical injury in March 2009",
+      "values": {
+        "disability_start": "2009-03",
+        "disabled_72m7": true
+      },
+      "snippet": "until March 2009, when she suffered a physical injury that left her disabled within the meaning of section 72(m)(7).",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "SSD benefits totaling $32,862 received in 2019",
+      "values": {
+        "ssd_benefits_2019": 32862
+      },
+      "snippet": "Petitioner received SSD benefits totaling $32,862 in 2019.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Joint return reported SSD benefits of $3,214, of which $2,732 taxable",
+      "values": {
+        "reported_benefits": 3214,
+        "reported_taxable": 2732
+      },
+      "snippet": "took the position that only $ 2,732 of that amount was subject to federal income tax.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Benefits received under a government-sponsored insurance program, not by lawsuit or settlement",
+      "values": {
+        "received_via_litigation_or_settlement": false
+      },
+      "snippet": "Petitioner did not receive her SSD benefits by prosecution of a lawsuit or by settlement of litigation.",
+      "locator": "p. 3"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "social_security_86"
+      ],
+      "question": "Must petitioners include petitioner's 2019 Social Security disability benefits in gross income under §86, or are they excluded under §104(a)?",
+      "provisions": [
+        "26 U.S.C. §61(a)",
+        "§86(a), (b), (d)(1)(A)",
+        "§104(a)(1), (2), (3)"
+      ],
+      "holding": "Includible: SSD benefits are social security benefits under §86(d)(1)(A); they are not 'damages' under §104(a)(2); other arguments rejected as in prior Palsgaard cases",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "SSD benefits received",
+        "amount": 32862
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Legal classification: title II monthly benefits are §86 social security benefits, not §104 damages; taxable portion follows the §86 formula (not computed in opinion)."
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered for respondent with respect to the deficiency and for petitioners with respect to the section 6662(a) accuracy-related penalty.",
+    "summary": "Deficiency sustained (SSD benefits taxable under §86); penalty conceded by respondent."
+  },
+  "notes": "Deficiency amount and taxable portion of benefits not stated in opinion; other income/MAGI needed for §86 computation not given. Unreported income foundation established via SSA-1099 transcript."
+}

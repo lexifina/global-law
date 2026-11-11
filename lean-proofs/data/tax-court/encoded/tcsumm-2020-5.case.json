@@ -1,0 +1,44 @@
+{
+ "citation": "T.C. Summary Opinion 2020-5",
+ "taxYear": 2015,
+ "note": "Merrell. Joint. Wages 50,248, IRA distribution 17,410 (Mr., under 59 1/2, not disabled; wife's disability irrelevant), SS 26,812 (wife), interest 43 conceded, 5,000 IRA deduction disallowed. Bankruptcy legal fees disallowed (amount not stated; omitted). No sec. 86(e) election shown. sec. 86(e): 9,772 of the 26,812 was otherwise payable in 2014 (found). No 2014 return in evidence; petitioners' unprocessed amended 2014 return reported 8,306 = 85% x 9,772, which requires 2014 modified income >= 43,138 (MFJ: 0.85 x (MAGI + 4,886 - 44,000) + 4,886 >= 8,306); that lower bound is encoded as priorModifiedIncome. Rerun 2c5b6354943.",
+ "facts": {
+  "filing": "mfj",
+  "wages": 50248,
+  "iraDistributions": 17410,
+  "socialSecurity": 26812,
+  "taxableInterest": 43,
+  "earlyDistributions": [
+   {
+    "amountIncludible": 17410,
+    "plan": "ira",
+    "disabled": false
+   }
+  ],
+  "ssLumpSums": [
+   {
+    "year": 2014,
+    "amount": 9772,
+    "priorModifiedIncome": 43138,
+    "priorBenefits": 0,
+    "priorTaxable": 0,
+    "priorFiling": "mfj"
+   }
+  ]
+ },
+ "expected": [
+  {
+   "item": "taxableSocialSecurity",
+   "value": 22790
+  },
+  {
+   "item": "earlyDistributionTax",
+   "value": 1741
+  },
+  {
+   "item": "lumpSumElection",
+   "flag": false,
+   "note": "election would not alter liability"
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+{
+  "citation": "T.C. Memo. 2026-93",
+  "taxYear": 2021,
+  "note": "Joint 2021 return. Court finds $229,857 of IRA distributions (cash $37,460 + $120,013, stock $72,384) received before 59 1/2, no §72(t)(2) exception. Reported AGI is redacted (chiefly the wife's wages); the spouse's wages are back-solved from the stated reported tax liability of $20,528 at 2021 MFJ rates with the standard deduction (see inferred). Tax shown = $20,528. §6662: supervisory approval found, no reasonable cause. The CTC adjustment in the notice (unchallenged) is not encoded: children and credit amounts not stated.",
+  "facts": {
+    "filing": "mfj",
+    "taxpayerAge": 50,
+    "spouseAge": 50,
+    "wagesSpouse": 157059,
+    "iraDistributions": 229857,
+    "claimCTC": false,
+    "earlyDistributions": [
+      { "amountIncludible": 229857, "plan": "ira", "attained59Half": false }
+    ]
+  },
+  "asFiled": {
+    "filing": "mfj",
+    "taxpayerAge": 50,
+    "spouseAge": 50,
+    "wagesSpouse": 157059,
+    "claimCTC": false
+  },
+  "taxShown": 20528,
+  "accuracy": { "supervisoryApproval": true, "reasonableCause": false },
+  "expected": [],
+  "inferred": [
+    "wagesSpouse 157059: reported AGI redacted; back-solved from the stated reported tax liability $20,528 (2021 MFJ schedule, $25,100 standard deduction, no other income or credits) - an assumption, not a finding",
+    "taxpayerAge/spouseAge 50: only 'under 59 1/2' is found",
+    "claimCTC false: the child tax credit claimed on the return and adjusted by the IRS (unchallenged) has no stated facts"
+  ],
+  "unencodable": [
+    "IRS child tax credit adjustment (footnote 2): number of children and amounts not stated",
+    "whether $20,528 'tax liability' is before or after refundable credits is not stated"
+  ]
+}

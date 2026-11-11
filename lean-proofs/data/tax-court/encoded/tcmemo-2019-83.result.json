@@ -1,0 +1,20 @@
+{
+ "id": "tcmemo-2019-83",
+ "citation": "T.C. Memo. 2019-83",
+ "issues": [
+  {
+   "issue": "Was the $524,981.89 IRA distribution rolled over within 60 days?",
+   "provision": "sec. 408(d)(3)(A), (I); Rev. Proc. 2003-16",
+   "court": "yes (bookkeeping error; alt. automatic hardship waiver)",
+   "lean": "rolloverIncludible 0 (days 58); alt. ground 0 (days 62 + waiverGranted)",
+   "verdict": "match",
+   "diagnosis": "Rerun 2c5b6354943 with rollovers: distribution 524,982 rolled over in full. Primary holding encoded as days 58 (Wood bookkeeping error: check received by Capital Guardian on day 58) -> includible 0; alternative ground days 62 + waiverGranted true (Rev. Proc. 2003-16 automatic waiver) -> 0. Whether the late booking is a bookkeeping error and whether the automatic waiver applies are findings (judgment inputs); the exclusion itself is now computed. Notice check (day 62, no waiver): Lean 524,982 vs notice 524,980, the 2-dollar gap the court itself flags (fn. 5).",
+   "snippet": "we find that the late recording is due to a bookkeeping error."
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": null
+ },
+ "notes": "Rerun 2c5b6354943: 3 variants; holding and alternative ground match (rolloverIncludible 0); notice-position variant differs by 2 (524,982 vs 524,980, fn. 5: record unclear). Rule 155; HSA items conceded; penalty conceded. No other 2014 income in the opinion, so no deficiency is computed."
+}

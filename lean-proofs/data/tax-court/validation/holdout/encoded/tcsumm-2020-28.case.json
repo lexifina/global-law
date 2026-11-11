@@ -1,0 +1,56 @@
+[
+{
+  "citation": "T.C. Summ. Op. 2020-28 (2015)",
+  "taxYear": 2015,
+  "note": "Santillan 2015. Filing status: claimed single; legally married all year under California law, no decree of divorce or separate maintenance, separated during 2015 (moved to his mother's home; wife and children stayed in the family home); spouse filed her own return as HOH. Income: reported gross income 70,915 encoded as wages (travel reimbursements of 4,670 not in W-2 wages and not reported; NOD did not adjust them, so not added). Itemized deductions: respondent allowed 17,975 plus conceded real estate taxes 727 and points 1,802 = 20,504; petitioner conceded 8,888 mortgage interest/points. Unreimbursed employee expenses (26,969 claimed): findings show no substantiation for vehicle, travel, meals, business expenses, dues, phone; credible testimony on protective clothing/supplies (Home Depot 499 + other retailers 618 in 2015) but no showing that reimbursement was sought and denied under the employer's reimbursement policy, so no employee expense is included (any allowance would also face the 2% floor, ~1,418, above 1,117). Accuracy penalty conceded: not encoded. asFiled: single, wages 70,915, Schedule A total 55,947 (itemized).",
+  "facts": {
+    "filing": "single",
+    "wages": 70915,
+    "itemizedDeductions": 20504,
+    "itemize": true
+  },
+  "status": {
+    "marriedAtYearEnd": true,
+    "legallySeparated": false,
+    "jointReturn": false,
+    "spouseAbsentLastSixMonths": true,
+    "paidOverHalfHouseholdCost": false
+  },
+  "asFiled": {
+    "filing": "single",
+    "wages": 70915,
+    "itemizedDeductions": 55947,
+    "itemize": true
+  },
+  "expected": [],
+  "inferred": ["reported gross income 70,915 treated entirely as wages", "spouseAbsentLastSixMonths true (he moved out during 2015; exact month not stated) - moot as no child lived with him", "employee business expenses allowed = 0 (reading of findings re reimbursement policy and substantiation)"],
+  "unencodable": ["employee business expense allowance (§162/§274(d), reimbursement-policy rule, 2% floor) is not modelled: given only as the itemized total", "travel reimbursements excluded from income (accountable plan question not modelled; not adjusted in NOD)"]
+},
+{
+  "citation": "T.C. Summ. Op. 2020-28 (2016)",
+  "taxYear": 2016,
+  "note": "Santillan 2016. Married all year, not legally separated, living apart from spouse (separated in 2015); spouse filed as HOH. Claimed single. Reported gross income 76,024 encoded as wages (travel reimbursements 7,650 not in W-2 and not reported; not adjusted). State refund 2,234 conceded by respondent as not includible. Itemized deductions allowed by respondent: 20,510. Unreimbursed employee expenses (31,372 claimed) included at 0: same findings as 2015 (protective clothing/supplies Home Depot 916 + other 609 credible but no showing reimbursement sought/denied; 2% floor ~1,520). Accuracy penalty conceded. asFiled: single, wages 76,024, Schedule A total 53,894.",
+  "facts": {
+    "filing": "single",
+    "wages": 76024,
+    "itemizedDeductions": 20510,
+    "itemize": true
+  },
+  "status": {
+    "marriedAtYearEnd": true,
+    "legallySeparated": false,
+    "jointReturn": false,
+    "spouseAbsentLastSixMonths": true,
+    "paidOverHalfHouseholdCost": false
+  },
+  "asFiled": {
+    "filing": "single",
+    "wages": 76024,
+    "itemizedDeductions": 53894,
+    "itemize": true
+  },
+  "expected": [],
+  "inferred": ["reported gross income 76,024 treated entirely as wages", "employee business expenses allowed = 0"],
+  "unencodable": ["employee business expense allowance not modelled beyond the itemized total", "travel reimbursements excluded from income (not adjusted in NOD)"]
+}
+]

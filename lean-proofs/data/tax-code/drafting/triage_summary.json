@@ -1,0 +1,100 @@
+{
+ "release": "119-138",
+ "original_run": {
+  "findings": 389,
+  "by_verdict": {
+   "confirmed": 135,
+   "false alarm": 153,
+   "intended": 101
+  },
+  "by_class_and_verdict": {
+   "dangling-ref": {
+    "false alarm": 15,
+    "intended": 4,
+    "confirmed": 4
+   },
+   "dangling-word-ref": {
+    "confirmed": 75,
+    "false alarm": 110,
+    "intended": 51
+   },
+   "duplicate-designation": {
+    "confirmed": 9,
+    "false alarm": 7
+   },
+   "historical-dangling-word-ref": {
+    "intended": 29,
+    "false alarm": 2
+   },
+   "historical-word-ref-to-inactive": {
+    "intended": 13
+   },
+   "ref-to-inactive": {
+    "false alarm": 4
+   },
+   "unbalanced-parentheses": {
+    "confirmed": 30
+   },
+   "word-ref-to-inactive": {
+    "intended": 3,
+    "confirmed": 9,
+    "false alarm": 14
+   },
+   "wrong-level-word": {
+    "confirmed": 8,
+    "intended": 1,
+    "false alarm": 1
+   }
+  }
+ },
+ "after_parser_fixes": {
+  "findings": 257,
+  "by_verdict": {
+   "confirmed": 138,
+   "false alarm": 21,
+   "intended": 98
+  },
+  "by_class_and_verdict": {
+   "dangling-ref": {
+    "false alarm": 10,
+    "intended": 1,
+    "confirmed": 3
+   },
+   "dangling-word-ref": {
+    "confirmed": 70,
+    "false alarm": 1,
+    "intended": 7
+   },
+   "duplicate-designation": {
+    "confirmed": 9,
+    "false alarm": 2
+   },
+   "historical-dangling-word-ref": {
+    "intended": 25
+   },
+   "historical-word-ref-to-inactive": {
+    "intended": 46,
+    "confirmed": 1
+   },
+   "ref-to-inactive": {
+    "false alarm": 7,
+    "intended": 3,
+    "confirmed": 1
+   },
+   "unbalanced-parentheses": {
+    "confirmed": 30
+   },
+   "word-ref-to-inactive": {
+    "confirmed": 16,
+    "intended": 15,
+    "false alarm": 1
+   },
+   "wrong-level-word": {
+    "confirmed": 8,
+    "intended": 1
+   }
+  },
+  "new_findings": 3,
+  "removed_findings": 135
+ }
+}

@@ -1,0 +1,49 @@
+BLIND ENCODING BRIEF (validation run, 2026-11-11)
+
+Goal: encode a US Tax Court opinion's FINDINGS OF FACT as a case JSON for a Lean tax model, WITHOUT knowing the court's answers.
+This is a blind test of whether the model, given only facts, reproduces the court's figures. Your job is to encode facts
+faithfully, not to reach any particular result.
+
+Inputs you MAY read
+- Your redacted opinion(s): C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\blind\redacted\<id>.txt
+  (holdings, conclusions and result figures have been removed and replaced by [REDACTED ...] markers).
+- The schema (sanitized copy of the Lean framework): C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\blind\schema\
+  Start with Case.lean (the Case JSON schema, FromJson readers, defaults), Return.lean (ReturnFacts fields),
+  Dependents.lean / FilingStatus.lean (people and status facts), Penalties.lean (accuracy/lateness facts),
+  EarlyDistribution.lean, Retirement.lean, Education.lean, PremiumCredit.lean, Income.lean, Extra/*.lean as needed.
+  Hypothetical examples: schema\example_cases_hypothetical.json.
+
+Inputs you MUST NOT open (doing so invalidates the test): anything under
+  C:\Users\alany\Documents\tax-formalization-data\taxcourt\encoded\, ...\taxcourt\cases\ (full texts and extracted holdings),
+  ...\taxcourt\summary.json, ...\taxcourt\index.json, ...\taxcourt\validation\ other than blind\redacted\<your ids>, blind\schema\, and your own output files,
+  ...\taxcourt\blog-sections\, C:\Users\alany\Documents\global-law-lean\lean-proofs\tools\taxcourt\,
+  the original LegalProofs\USTax\TaxCourt\*.lean and LegalProofs\USTax\TaxCourt.lean (use the sanitized schema copy instead),
+  and do not search the web or any other copy of the opinion. Do not grep the disk for the case citation or docket.
+
+What to encode
+- facts: the return as the findings say it should be (income items, ages, filing status claimed, dependents with relationship,
+  age, months/days lived with the taxpayer, support, SSN, etc.), using the court's FINDINGS (including findings the court
+  makes in its discussion, e.g. "we find the child lived with petitioner for more than half the year", credibility-based
+  findings, reasonable cause found / not found, supervisory approval found / not found). Such judgment findings are inputs.
+- status (when filing status is in issue), asFiled (the return as filed, from the stated return figures) or taxShown,
+  sfrTax for substitute returns, accuracy / lateness / estimated facts, tieBreakers, rollovers, etc. — whatever the
+  findings support.
+- Do NOT reverse-engineer facts from any outcome figure; if a fact is not stated, leave the field at its default and say so
+  in "note". Do not guess amounts to make things work. Where the redacted text leaves a fact you need genuinely unknown,
+  record that in "inferred" (see below) only if you made an assumption; prefer leaving it out.
+- expected: leave as [] (the comparison is done afterwards by someone else).
+- Dependents: use "name" as written in the opinion (initials like "A.B." or "son"); keep order of appearance.
+
+Run (sanity check only — to make sure the JSON parses and computes):
+  cd C:\Users\alany\Documents\global-law-lean\lean-proofs
+  PATH=$HOME/.elan/bin:$PATH lake env lean --run LegalProofs/USTax/TaxCourt/Run.lean <your case.json> <out.json>
+  (Bash tool; exit 2 = bad JSON/schema -> fix. Never run `lake build`. At most 2 lean processes at a time.)
+  Do not tune facts to change the computed output; only fix parse/schema errors or clear transcription errors.
+
+Output per case (UTF-8, LF):
+  C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\<set>\encoded\<id>.case.json  — the Case JSON (expected: []),
+    plus two extra top-level keys the runner ignores: "inferred": [list of any facts you assumed rather than read],
+    "unencodable": [issues you could not express in the schema, one line each].
+  and the runner output next to it as <id>.out.json.
+  (<set> is "blind" for re-encodings, "holdout" for new cases; your task message says which.)
+Report back: per case, one line of what you encoded, the computed deficiency/penalty figures, and any doubts.

@@ -1,0 +1,29 @@
+{
+ "citation": "T.C. Summary Opinion 2020-14",
+ "taxYear": 2015,
+ "note": "Only issue: §72(t) 10% tax on the $25,170 Boeing (Rockwell) qualified-plan lump sum received Nov 2015 at age 59 (not 59-1/2). Petitioner separated from Rockwell in 1987, before age 55; no other exception argued. The $7,080 Northrop SEPP distribution is not in issue. Return otherwise as filed (other income items not stated; only pensions $32,250 encoded, which are reported on both versions, so the deficiency is the §72(t) tax).",
+ "facts": {
+  "filing": "mfj",
+  "taxpayerAge": 59,
+  "pensions": 32250,
+  "earlyDistributions": [
+   {
+    "amountIncludible": 25170,
+    "plan": "qualifiedPlan",
+    "attained59Half": false,
+    "ageInSeparationYear": 31
+   }
+  ]
+ },
+ "asFiled": {
+  "filing": "mfj",
+  "taxpayerAge": 59,
+  "pensions": 32250
+ },
+ "expected": [],
+ "inferred": [
+  "ageInSeparationYear 31: computed from 'was 46 years old in 2002' and separation from Rockwell in 1987 (any value under 55 gives the same rule outcome)",
+  "spouse age and the return's other income items not stated (defaults / omitted)"
+ ],
+ "unencodable": []
+}

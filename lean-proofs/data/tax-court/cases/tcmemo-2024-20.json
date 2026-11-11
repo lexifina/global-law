@@ -1,0 +1,158 @@
+{
+  "id": "tcmemo-2024-20",
+  "citation": "T.C. Memo. 2024-20",
+  "case_name": "Susan D. Turner v. Commissioner",
+  "docket_numbers": [
+    "19487-22"
+  ],
+  "judge": "Carluzzo",
+  "date": "2024-02-08",
+  "opinion_type": "memorandum",
+  "source": {
+    "dawson_docket_entry_id": "39c8aa4d-a9d6-4e0d-9cfb-b7b3342c1fb3",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/19487-22",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/19487-22/39c8aa4d-a9d6-4e0d-9cfb-b7b3342c1fb3/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "suitability_reason": "EITC qualifying-child residency test and HOH half-year abode test decided mechanically on found days of residence (about 60 days).",
+  "tax_years": [
+    2020
+  ],
+  "taxpayer": {
+    "filing_status_claimed": "head of household",
+    "state": "Illinois",
+    "notes": "Unmarried grandmother and court-appointed guardian (since 2007) of minor grandchild A.V."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2020,
+        "deficiency": null,
+        "penalties": [],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "disallowed earned income credit claimed with A.V. as qualifying child",
+      "changed filing status from head of household to single and adjusted standard deduction"
+    ],
+    "contested_by_taxpayer": "Claims A.V. is her qualifying child for EITC and HOH.",
+    "conceded": []
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1",
+        "I2"
+      ],
+      "fact": "Petitioner is A.V.'s grandmother and court-appointed guardian since 2007",
+      "values": {
+        "relationship": "grandchild",
+        "guardian_since": 2007
+      },
+      "snippet": "Petitioner is the grandmother of A.V. 1 and has been A.V.’s court appointed guardian since 2007.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "At close of 2020 petitioner was unmarried and A.V. was a minor",
+      "values": {
+        "taxpayer_married_end_of_year": false,
+        "child_minor_end_of_year": true
+      },
+      "snippet": "As of the close of 2020, petitioner was not married and A.V. was a minor.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1",
+        "I2"
+      ],
+      "fact": "A.V. lived at a friend's house most of the year and with petitioner approximately 60 days in 2020",
+      "values": {
+        "days_with_taxpayer": 60,
+        "more_than_half_year": false
+      },
+      "snippet": "For most of the year, A.V. lived at a friend’s house. A.V. lived with petitioner for approximately 60 days during 2020.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "A.V. was not employed in 2020; petitioner helped pay A.V.'s rent, phone, clothing, food, transportation and other expenses",
+      "values": {
+        "child_employed": false
+      },
+      "snippet": "A.V. was not employed during 2020.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "No individual other than A.V. is suggested as a qualifying child",
+      "values": {
+        "other_qualifying_children": 0
+      },
+      "snippet": "Petitioner does not suggest that any individual other than A.V. fits the definition of her qualifying child.",
+      "locator": "p. 3"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "eitc_32",
+        "qualifying_child_152c"
+      ],
+      "question": "Is petitioner entitled to the 2020 EITC as an eligible individual with A.V. as qualifying child?",
+      "provisions": [
+        "26 U.S.C. §32(a), (c)(1)(A)(i), (c)(3)(A)",
+        "§152(c)(1)-(3)"
+      ],
+      "holding": "No; A.V. did not share petitioner's principal place of abode for more than one-half of 2020. No finding on credit for an eligible individual without a qualifying child (left to Rule 155).",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "none stated",
+        "amount": null
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Residency test: ~60 days is not more than one-half of the year."
+    },
+    {
+      "issue_id": "I2",
+      "tags": [
+        "head_of_household_2b"
+      ],
+      "question": "Does petitioner qualify for head of household filing status for 2020?",
+      "provisions": [
+        "§2(b)(1)",
+        "§63(c)(2)(B), (4)"
+      ],
+      "holding": "No; her home was not the principal place of abode for more than half of 2020 of a qualifying child or dependent; single status and corresponding standard deduction sustained.",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "none stated",
+        "amount": null
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Half-year abode test fails on 60 days."
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "EITC with qualifying child denied; HOH denied (single status); Rule 155 computation may reflect no-child EITC if parties agree."
+  },
+  "notes": "Some facts stipulated. Deficiency amount not stated in opinion. Footnote 2: court makes no finding whether petitioner qualifies for the EITC without a qualifying child; parties may reflect it in Rule 155 computations. Burden on petitioner."
+}

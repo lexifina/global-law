@@ -1,0 +1,27 @@
+{
+  "citation": "T.C. Summary Opinion 2020-6",
+  "taxYear": 2016,
+  "note": "2016. Distributions found: $1,375 from a §401(k) account (Fidelity) and $85,025 from an employer retirement plan (Northern Trust), total $86,400; return reported $45,025 of taxable pensions and annuities. No §72(t) exception shown (age not stated) - §72(t) applied to both distributions. §6662: penalty automatically calculated by AUR (no written supervisory approval described); no reasonable cause shown. Filing status, other income and any §72(t) tax reported on the return are not stated.",
+  "facts": {
+    "filing": "single",
+    "pensions": 86400,
+    "earlyDistributions": [
+      { "amountIncludible": 1375, "plan": "qualifiedPlan", "attained59Half": false },
+      { "amountIncludible": 85025, "plan": "qualifiedPlan", "attained59Half": false }
+    ]
+  },
+  "asFiled": {
+    "filing": "single",
+    "pensions": 45025
+  },
+  "accuracy": { "supervisoryApproval": false, "automaticallyCalculated": true, "reasonableCause": false },
+  "expected": [],
+  "inferred": [
+    "filing status single: not stated in the redacted opinion",
+    "no other income: only the $45,025 of pensions and annuities is stated as reported",
+    "the whole $86,400 treated as fully taxable and subject to §72(t); the return as filed treated as reporting no §72(t) tax (not stated)"
+  ],
+  "unencodable": [
+    "petitioner's age and any §72(t)(2) exception are not stated; encoded as no exception per the finding that none was shown"
+  ]
+}

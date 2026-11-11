@@ -1,0 +1,74 @@
+{
+  "id": "tcmemo-2023-141",
+  "citation": "T.C. Memo. 2023-141",
+  "case_name": "Danielle Monique Scott v. Commissioner",
+  "docket_numbers": ["15210-22"],
+  "judge": "Lauber",
+  "date": "2023-11-28",
+  "opinion_type": "memorandum",
+  "source": {
+    "dawson_docket_entry_id": "da9bb520-a6e7-4e58-b5af-3a067cb91c02",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/15210-22",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/15210-22/da9bb520-a6e7-4e58-b5af-3a067cb91c02/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "tax_years": [2019],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "New York",
+    "notes": "Pro se; decided on respondent's unopposed Motion for Summary Judgment; facts deemed admitted under Rule 90(c). Standard deduction of $18,350 reported (consistent with head of household for 2019, but status not stated)."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {"year": 2019, "deficiency": 4713, "penalties": [], "additions": []}
+    ],
+    "adjustments": [
+      "unreported ordinary dividends $90",
+      "unreported capital gain distributions $644",
+      "unreported taxable retirement distribution $14,386",
+      "additional withholding credits of $1,877 from Form 1099-R applied",
+      "section 72(t) additional tax $1,439"
+    ],
+    "contested_by_taxpayer": "General disagreement (similar income for 10 years; retirement investments taxed before contribution); no error assigned to unreported income items",
+    "conceded": ["Unreported income items deemed conceded by failure to assign error (Rule 34(b)(1)(G)) and deemed admitted (Rule 90(c))"]
+  },
+  "findings_of_fact": [
+    {"fact_id": "F1", "issue_refs": ["I1"], "fact": "2019 return reported wages $75,157, standard deduction $18,350, taxable income $56,807, credits $2,278, tax $4,662, withholding $11,462, overpayment $6,800",
+     "values": {"wages": 75157, "standard_deduction": 18350, "taxable_income": 56807, "credits": 2278, "tax_reported": 4662, "withholding_w2": 11462, "overpayment_reported": 6800},
+     "snippet": "reporting wages of $75,157 , a standard deduction of $18,350, taxable income of $56,807 , tax credits of $2,278, and a tax liability of $4,662.", "locator": "p. 2"},
+    {"fact_id": "F2", "issue_refs": ["I1"], "fact": "Form 1099-DIV: unreported ordinary dividends $90 and capital gain distributions $644",
+     "values": {"ordinary_dividends": 90, "capital_gain_distributions": 644},
+     "snippet": "petitioner had received but failed to report ordinary divi- dends and capital gain distributions of $90 and $644, respectively.", "locator": "p. 2"},
+    {"fact_id": "F3", "issue_refs": ["I1", "I2"], "fact": "Form 1099-R from Fidelity: unreported $14,386 taxable gross retirement distribution, distribution code 1 (early, no known exception)",
+     "values": {"retirement_distribution": 14386, "distribution_code": "1", "payer": "Fidelity Investments"},
+     "snippet": "Fidelity entered Distribution Code 1, in- dicating an “[e]arly distribution, no known exception.”", "locator": "p. 2"},
+    {"fact_id": "F4", "issue_refs": ["I1"], "fact": "Notice of deficiency issued March 21, 2022; after $1,877 additional withholding credits, tentative tax $3,274 plus $1,439 section 72(t) tax",
+     "values": {"notice_date": "2022-03-21", "additional_withholding_1099r": 1877, "tentative_tax": 3274, "sec72t_tax": 1439},
+     "snippet": "After applying $1 ,877 of additional withholding credits shown on the Form 1099 –R, the IRS determined a tentative tax of $3,274.", "locator": "p. 2"},
+    {"fact_id": "F5", "issue_refs": ["I2"], "fact": "Petitioner under 59 1/2 at distribution (per Fidelity's records); no evidence of any 72(t)(2) exception",
+     "values": {"under_59_5": true, "exception_shown": false},
+     "snippet": "according to Fidel- ity’s business records, petitioner was under age 59-1/2 at the time of the distribution.", "locator": "p. 6"}
+  ],
+  "issues": [
+    {"issue_id": "I1", "tags": ["other_income_inclusion_61", "ira_distribution_income_408d"],
+     "question": "Must petitioner include in 2019 gross income unreported dividends ($90), capital gain distributions ($644) and a $14,386 retirement distribution?",
+     "provisions": ["26 U.S.C. §61(a)(3), (7)", "§72(a)(1)", "§408(d)(1)", "§6201(d)"],
+     "holding": "Yes; deemed admissions establish receipt and taxability; unreported income determinations sustained on summary judgment",
+     "prevailing_party": "respondent",
+     "amount_determined": {"description": "unreported income items", "amount": null},
+     "rule_155": false,
+     "computable": true,
+     "computable_reason": "Amounts conclusively established; inclusion follows mechanically (no basis shown)"},
+    {"issue_id": "I2", "tags": ["early_distribution_72t"],
+     "question": "Is petitioner liable for the 10% additional tax under section 72(t) of $1,439 on the $14,386 distribution?",
+     "provisions": ["26 U.S.C. §72(t)(1)", "§72(t)(2)(A)(i)"],
+     "holding": "Yes; under 59 1/2 and no exception shown",
+     "prevailing_party": "respondent",
+     "amount_determined": {"description": "section 72(t) additional tax", "amount": 1439},
+     "rule_155": false,
+     "computable": true,
+     "computable_reason": "Age under 59 1/2 with no exception; 10% of $14,386 rounds to $1,439"}
+  ],
+  "decision": {"text": "An appropriate order and decision will be entered.", "summary": "Summary judgment for respondent; deficiency of $4,713 including $1,439 section 72(t) tax sustained"},
+  "notes": "Decided on summary judgment with deemed admissions; petitioner never responded. Age is inferred from Form 1099-R code 1, not a birth date. Derived: 10% x $14,386 = $1,438.60. Some snippets preserve PDF hyphenation artifacts ('divi- dends', 'in- dicating', 'Fidel- ity') as they appear in the text."
+}

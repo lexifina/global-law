@@ -1,0 +1,47 @@
+{
+ "citation": "T.C. Summary Opinion 2020-25",
+ "taxYear": 2016,
+ "note": "Petitioner claimed HoH, exemptions, CTC/ACTC and EIC for A.D.B. (7) and J.N.B. (11), children of Daniela. Court found no common-law marriage, so the children are not his stepchildren (unrelated); residence with him for more than half of 2016 not shown; over-half support not shown. Accuracy penalty conceded by respondent (not encoded). Earned income $16,788 encoded as wages (form of earnings not stated).",
+ "facts": {
+  "filing": "hoh",
+  "wages": 16788,
+  "dependents": [
+   {
+    "name": "A.D.B.",
+    "relationship": "unrelated",
+    "age": 7,
+    "livedWithMoreThanHalfYear": false,
+    "livedWithWholeYear": false,
+    "taxpayerProvidedOverHalfSupport": false
+   },
+   {
+    "name": "J.N.B.",
+    "relationship": "unrelated",
+    "age": 11,
+    "livedWithMoreThanHalfYear": false,
+    "livedWithWholeYear": false,
+    "taxpayerProvidedOverHalfSupport": false
+   }
+  ]
+ },
+ "status": {
+  "marriedAtYearEnd": false
+ },
+ "asFiled": {
+  "filing": "hoh",
+  "wages": 16788,
+  "dependents": [
+   { "name": "A.D.B.", "relationship": "stepchild", "age": 7, "livedWithMoreThanHalfYear": true },
+   { "name": "J.N.B.", "relationship": "stepchild", "age": 11, "livedWithMoreThanHalfYear": true }
+  ]
+ },
+ "expected": [],
+ "inferred": [
+  "earned income $16,788 treated as wages (no SE income stated)",
+  "as-filed return encoded as claiming both children as qualifying children (stepchildren living with him over half the year) with HoH, CTC/ACTC and EIC, matching the claims described; the refund figure itself is redacted",
+  "taxpayer age left at default 40 (not stated); withholding not stated"
+ ],
+ "unencodable": [
+  "paidOverHalfHouseholdCost not found either way; left default false (immaterial once no qualifying person)"
+ ]
+}

@@ -1,0 +1,204 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2021-6",
+  "taxYear": 2016,
+  "note": "Wenk. 2016 full distribution of 109,471 from ESOP/401(k) plan (qualified plan, sec. 4974(c)), age 43, no sec. 72(t)(2) exception shown; Federal withholding 21,894. Inclusion in gross income under secs. 402(a)/61 over the 'never benefited' (restitution) argument is a characterisation finding, encoded as the amount found (pensions). Filing status and other income are not stated in the opinion: filing left at the framework default and no deficiency expected (39,649 not computable from the findings). Return filed 2017-09-04 (due 2017-04-18), no extension; court found reasonable cause for late filing (credibility of testimony: a judgment, encoded as a fact). sec. 6651(a)(2) not in issue. sec. 6662 penalty conceded by respondent.",
+  "facts": {
+   "taxpayerAge": 43,
+   "pensions": 109471,
+   "withholding": 21894,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 109471,
+     "plan": "qualifiedPlan",
+     "attained59Half": false
+    }
+   ]
+  },
+  "lateness": {
+   "filed": "2017-09-04",
+   "dueDate": "2017-04-18",
+   "reasonableCauseFiling": true,
+   "assertsFailureToPay": false
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 10947,
+    "note": "10% x 109,471 = 10,947.10"
+   },
+   {
+    "item": "failureToFile",
+    "value": 0,
+    "note": "reasonable cause found (credibility judgment)"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2022-10",
+  "taxYear": 2016,
+  "note": "Morgan. No 2016 return (stipulated); SFR under sec. 6020(b). Court: physical presence (330 days) and foreign tax home (abode in Saudi Arabia) found, so sec. 911 exclusion allowed up to the sec. 911(b)(2)(D) 2016 limit of 101,300 (full year). Sec. 911 is not modelled: wages encoded net of the limit (109,024 - 101,300 = 7,724) WITHOUT the sec. 911(f) stacking rule, so regular tax is understated. Pension 20,069 not foreign earned income (sec. 911(b)(1)(B)(i)); the notice's sec. 72(t) tax on it (implied by the 28,932 reconstruction) was not conceded, so it is kept (age not stated; under 59 1/2 assumed). Respondent conceded the 2,286 COD income and sec. 6654. Divorced 2006, unmarried: single. No reasonable cause shown for (a)(1)/(a)(2). Amounts left to Rule 155; no court figures to compare.",
+  "facts": {
+   "filing": "single",
+   "wages": 7724,
+   "pensions": 20069,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 20069,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "taxShown": 0,
+  "lateness": {
+   "asOf": "2022-06-23",
+   "reasonableCauseFiling": false,
+   "reasonableCausePayment": false,
+   "assertsFailureToPay": true
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Summary Opinion 2022-10 (notice reconstruction: no sec. 911 exclusion, incl. later-conceded 2,286 COD income)",
+  "taxYear": 2016,
+  "note": "Consistency check of the notice/SFR deficiency of 28,932, not a court holding. Wages 109,024 + pension 20,069 + COD 2,286, single, standard deduction and one exemption, plus 10% sec. 72(t) on the pension.",
+  "facts": {
+   "filing": "single",
+   "wages": 109024,
+   "pensions": 20069,
+   "otherIncome": 2286,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 20069,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "taxShown": 0,
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 28932
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-13",
+  "taxYear": 2018,
+  "note": "Other income not stated; only the distributions are encoded. Mr. Ghaly under 59 1/2; age at separation from service not found.",
+  "facts": {
+   "filing": "mfj",
+   "pensions": 115325,
+   "withholding": 14229,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 115325,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 11533
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-13 [consistency proxy, NOT a finding]",
+  "taxYear": 2018,
+  "note": "Base taxable income $115,100 (AGI $139,100 less $24,000 standard deduction) is NOT found: it is the value at which the 2018 MFJ schedule reproduces the notice's income-tax increase ($38,213 - $11,533 = $26,680).",
+  "facts": {
+   "filing": "mfj",
+   "otherIncome": 139100,
+   "pensions": 115325,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 115325,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "otherIncome": 139100
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 38213
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-25",
+  "taxYear": 2017,
+  "note": "Doggart. No 2017 return filed; IRS prepared a sec. 6020(b) SFR on or around 2020-03-09; notice 2020-11-30. Findings encoded: constructive distributions on lapse of two Prudential life policies, 13,214 + 5,366 = 18,580 includible (sec. 72(e) excess over investment in the contract; characterisation not modelled, encoded as otherIncome at the amount found). Schedule E rental loss on the Signal Mountain Property disallowed under sec. 280A(a),(d) (personal use 1 Jan - 16 Feb 2017 = 47 days > 14, plus below-FMV rental to daughter): not modelled, so no Schedule E item is encoded (the disallowed deduction is simply absent). Filing status, age, withholding and the other income the notice included ('inter alia') are not stated, so the 9,910 deficiency and the 1,434 / 1,147 / 143 additions are not computable and are not in expected; framework default filing used. sec. 6651(a)(1) and (a)(2) sustained: incarceration / ignorance not reasonable cause (judgment, encoded as reasonableCause false). sec. 6654 (143) sustained: not modelled. Decision under Rule 155. asOf set to the notice date for illustration only.",
+  "facts": {
+   "otherIncome": 18580
+  },
+  "lateness": {
+   "asOf": "2020-11-30",
+   "reasonableCauseFiling": false,
+   "reasonableCausePayment": false,
+   "assertsFailureToPay": true
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-35",
+  "taxYear": 2017,
+  "note": "Polete. No return filed (SFR). Corrected return from stipulations + allowances. Schedule C: S&A 10,404-7,595-2,480.27 = 328.73; Fibre Arts 3,238-7,595 (COGS as stipulated)-348.05 = -4,705.05; net -4,376 (no SE tax). Maryland rent 21,000-2,896.98-1/2(2,887.33+8,917.28) = 12,200.72; Beavercreek 7,437.35-5/12(1,199.36)-5/12*1/2(4,715.32+5,490.90) = 4,811.32; alimony 3,000 read as received (direction not stated) -> otherIncome 20,012. Itemized: Oakwood 13,560.03+9,264.48 + 7/12*5,103.11 + 90 = 25,891.32. HOH and three exemptions conceded (two dependents, not described). Capital gain character not stated (assumed long-term). $660 early-distribution tax kept as otherTaxes (court: 'purely computational'). Deficiency and 6651(a)(1) left to Rule 155.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 59510,
+   "pensions": 52433,
+   "taxableInterest": 14,
+   "capitalGain": 3417,
+   "longTermGain": 3417,
+   "seProfit": -4376,
+   "otherIncome": 20012,
+   "itemizedDeductions": 25891,
+   "itemize": true,
+   "otherTaxes": 660,
+   "withholding": 5050,
+   "estimatedPayments": 0,
+   "dependents": [
+    {
+     "name": "dep1",
+     "age": 10,
+     "livedWithMoreThanHalfYear": true
+    },
+    {
+     "name": "dep2",
+     "age": 10,
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "taxShown": 0,
+  "lateness": {
+   "extension": true,
+   "asOf": "2023-12-18",
+   "assertsFailureToPay": false,
+   "reasonableCauseFiling": false
+  },
+  "expected": [
+   {
+    "item": "filingStatus",
+    "text": "hoh",
+    "note": "conceded: entitled to Head of Household filing status"
+   },
+   {
+    "item": "dependentsCounted",
+    "value": 2,
+    "note": "three personal exemptions conceded = self + 2"
+   },
+   {
+    "item": "exemptions",
+    "value": 12150,
+    "note": "3 x $4,050 (2017), no phase-out below HOH threshold; derived from 'three personal exemptions'"
+   }
+  ]
+ }
+]

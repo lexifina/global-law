@@ -1,0 +1,42 @@
+{
+ "citation": "T.C. Summary Opinion 2022-7 (Ibrahim)",
+ "taxYear": 2017,
+ "note": "Petitioner's income (physician wages etc.) is not stated, so income is 0 and the deficiency/penalty amounts cannot be computed meaningfully; the encoding captures the alimony holding facts. Claimed $50,000 alimony deduction (HoH return). Payments under the Sept 17, 2016 separation agreement as amended May 11, 2017; $48,800 paid in 2017 ($1,200 in 2016). Cash, under instrument, not same household (conceded). No express termination at payee death; Missouri statutory termination rule held inapplicable because payments not shown to be statutory maintenance -> noPostDeathLiability false. Accuracy: written supervisory approval before first communication found; no reasonable cause; no substantial authority.",
+ "facts": {
+  "filing": "hoh",
+  "alimonyPaid": [
+   {
+    "executed": "2016-09-17",
+    "paid": 48800,
+    "underInstrument": true,
+    "noNonAlimonyDesignation": true,
+    "notSameHousehold": true,
+    "noPostDeathLiability": false
+   }
+  ]
+ },
+ "asFiled": {
+  "filing": "hoh",
+  "alimonyPaid": [
+   {
+    "executed": "2016-09-17",
+    "paid": 50000
+   }
+  ]
+ },
+ "accuracy": {
+  "assertsSubstantialUnderstatement": true,
+  "reasonableCause": false,
+  "supervisoryApproval": true,
+  "authorityOrDisclosure": 0
+ },
+ "expected": [],
+ "inferred": [
+  "noPostDeathLiability=false inferred from findings that the instruments lack a death-termination clause and the payments were not shown to be statutory maintenance (so Mo. Rev. Stat. 452.370(3) does not terminate them)",
+  "HoH filing status kept as claimed (not in issue)"
+ ],
+ "unencodable": [
+  "Petitioner's income and the as-filed tax are not stated: deficiency and penalty amounts not computable",
+  "Instruments state neither party pays maintenance - possible (b)(1)(B) designation not separately found; left true"
+ ]
+}

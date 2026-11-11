@@ -1,0 +1,19 @@
+{
+  "citation": "T.C. Memo. 2020-96",
+  "taxYear": 2014,
+  "note": "Bethune. Issues: dependency exemptions and CTC for N.K. and C.K., and HOH status. Findings: petitioner divorced (Feb 2006), unmarried at end of 2014; children N.K. and C.K. (her daughters, minors at the October 2018 trial, so under 19 in 2014) did not live with her for more than half of 2014 (lived with custodial father); father claimed both on his own 2014 return and never amended. Court found the father did sign a Form 8332 (dated 4/12/17) releasing 2014 exemptions; it was not attached to her paper return and was first given to the IRS on May 1, 2017 (after the SNOD). Encoded releasedUnder152e = true on the strength of that signed Form 8332; whether a post-filing, unattached Form 8332 suffices (and the July 2015 order statement) is the legal question and cannot be expressed beyond this flag. No income, deduction or tax figures are stated in the redacted text, so no asFiled/taxShown is given and no deficiency is computed; income left at 0.",
+  "facts": {
+    "filing": "hoh",
+    "dependents": [
+      {"name": "N.K.", "relationship": "child", "age": 12, "livedWithMoreThanHalfYear": false, "releasedUnder152e": true},
+      {"name": "C.K.", "relationship": "child", "age": 12, "livedWithMoreThanHalfYear": false, "releasedUnder152e": true}
+    ]
+  },
+  "status": {
+    "marriedAtYearEnd": false,
+    "paidOverHalfHouseholdCost": false
+  },
+  "expected": [],
+  "inferred": ["ages set to 12 as placeholders: only 'minors at the time of trial' (Oct 2018) is stated, so both were under 19 at end of 2014", "paidOverHalfHouseholdCost left false: not found (moot since no qualifying person lived with her)"],
+  "unencodable": ["validity of the Form 8332 signed in 2017 but not attached to the return (Reg. 1.152-4(e)) and of the July 2015 order statement: encoded only as releasedUnder152e = true", "custodial parent's own competing claim on his 2014 return (no field for a released child also claimed by the custodial parent)", "no income or tax figures in the opinion: deficiency amount not computable"]
+}

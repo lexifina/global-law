@@ -1,0 +1,161 @@
+{
+  "id": "tcmemo-2024-23",
+  "citation": "T.C. Memo. 2024-23",
+  "case_name": "Donald Ecret and Kristen Ecret v. Commissioner",
+  "docket_numbers": [
+    "5238-22"
+  ],
+  "judge": "Lauber",
+  "date": "2024-02-14",
+  "opinion_type": "memorandum",
+  "source": {
+    "dawson_docket_entry_id": "c1de09f9-4ba5-4830-9d74-46ef523b9319",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/5238-22",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/5238-22/c1de09f9-4ba5-4830-9d74-46ef523b9319/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2019
+  ],
+  "taxpayer": {
+    "filing_status_claimed": "married filing jointly",
+    "state": "New York",
+    "notes": "Wife, a former registered nurse disabled in 2014, received about $42,000/yr New York workers' compensation and SSDI subject to workers' compensation offset (42 U.S.C. §424a)."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2019,
+        "deficiency": 6859,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": null
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "increased base of Social Security benefits by $49,128 ($1,080 withholding + $48,048 workers' compensation offset) under sec. 86(d)(3)",
+      "gross income increased by $41,759 ($49,128 x .85)"
+    ],
+    "contested_by_taxpayer": "Taxability of Social Security benefits not paid in cash because of workers' compensation offset",
+    "conceded": [
+      "Petitioners conceded unreported taxable interest of $33 and dividends of $38",
+      "Respondent conceded Social Security benefits treated as received in 2019 are only $19,866 (not $55,248); retroactive benefits attributable to 2016-2018 not taxed in 2019",
+      "Respondent conceded the accuracy-related penalty"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Wife received approximately $42,000 of New York workers' compensation annually 2014-2019",
+      "values": {
+        "workers_comp_annual_approx": 42000
+      },
+      "snippet": "approximately $42,000 of such benefits annually through 2019, the tax year at issue.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "SSA: effective January 2018 ACE $5,074; 80% of ACE $4,059 per month; annual cap $48,708",
+      "values": {
+        "ace_monthly": 5074,
+        "eighty_pct_ace_monthly": 4059,
+        "annual_cap": 48708
+      },
+      "snippet": "80% of her monthly ACE was $4,059. On an annual basis,",
+      "locator": "p. 6"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "2019 Form SSA-1099: total benefits $55,248, of which $19,866 attributable to 2019 and $35,382 retroactive to 2016-2018",
+      "values": {
+        "total_benefits_2019_form": 55248,
+        "attributable_to_2019": 19866,
+        "retroactive_2016_2018": 35382
+      },
+      "snippet": "It indicated that she had total Social Security benefits of $55,248, of which $19,866 was attributable to 2019.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "2019: $6,120 paid in cash, $1,080 voluntary withholding, $48,048 not paid due to workers' compensation offset",
+      "values": {
+        "cash_paid": 6120,
+        "withholding": 1080,
+        "offset_total": 48048
+      },
+      "snippet": "The balance of the $55,248 in benefits, or $48,048, was not paid on account of the “workers’ compensation offset.”",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Of 2019-attributable benefits, $12,666 was offset by workers' compensation ($6,120 + $1,080 + $12,666 = $19,866)",
+      "values": {
+        "offset_2019_portion": 12666
+      },
+      "snippet": "The SSA did not disburse the remaining $12,666 on account of the workers’ compensation offset .",
+      "locator": "p. 7"
+    },
+    {
+      "fact_id": "F6",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Petitioners reported $5,202 taxable Social Security (85% of $6,120); 85% inclusion ratio applies (not disputed)",
+      "values": {
+        "reported_taxable_ss": 5202,
+        "inclusion_ratio": 0.85
+      },
+      "snippet": "They appear to have calculated this sum as 85% of the $6,120 cash payment from the SSA.",
+      "locator": "p. 3"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "social_security_86"
+      ],
+      "question": "Under sec. 86(d)(3), is petitioner wife treated as receiving $19,866 of Social Security benefits in 2019 (including $12,666 offset by workers' compensation), and what amount is taxable?",
+      "provisions": [
+        "26 U.S.C. §86(a)-(d)",
+        "§86(d)(3)",
+        "§104(a)(1)",
+        "42 U.S.C. §424a(a)"
+      ],
+      "holding": "Yes; benefits of $19,866 include the $12,666 workers' compensation offset; 85% inclusion gives taxable benefits of $16,886; petitioners must include an additional $11,684 ($16,886 - $5,202)",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "additional taxable Social Security benefits",
+        "amount": 11684
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Sec. 86(d)(3) adds offset amount to benefits; 85% of $19,866 = $16,886 less $5,202 reported"
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "Taxable Social Security benefits for 2019 are $16,886 (additional $11,684); respondent conceded retroactive portion and penalty; petitioners conceded $33 interest and $38 dividends"
+  },
+  "notes": "Legal question; facts undisputed. 85% inclusion ratio applied by agreement (other income not detailed). 2018 year dismissed for lack of jurisdiction: petition filed Feb. 22, 2022 was 108 days late for the Aug. 9, 2021 notice (fn. 4). Court rounds to nearest dollar. Derived: 0.85 x 19,866 = 16,886.1."
+}

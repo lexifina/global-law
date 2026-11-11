@@ -1,0 +1,127 @@
+{
+  "id": "tcsumm-2021-9",
+  "citation": "T.C. Summary Opinion 2021-9",
+  "case_name": "Jennevieve Marie Fletcher v. Commissioner",
+  "docket_numbers": [
+    "17307-19S"
+  ],
+  "judge": "Guy",
+  "date": "2021-05-10",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "766e5e9b-688e-4614-b4cd-75871a8e82d5",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/17307-19",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/17307-19/766e5e9b-688e-4614-b4cd-75871a8e82d5/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "suitability_reason": "Section 86 inclusion of Social Security benefits received in 2016 despite a later (2020) repayment obligation; §86(d)(2)(A) reduces only by repayments made during the taxable year. Mechanical.",
+  "tax_years": [
+    2016
+  ],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "Maine",
+    "notes": "Received Social Security disability benefits; eligibility ended in 2016 when she began a home business; repaying overpayment at $100/month since June 2020."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2016,
+        "deficiency": 3992,
+        "penalties": [],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "included Social Security benefits of $13,024 in taxable income",
+      "nonemployee compensation of $1,983 (conceded by respondent)"
+    ],
+    "contested_by_taxpayer": "Benefits she must repay to SSA are like a loan and should be excluded from 2016 income.",
+    "conceded": [
+      "Respondent conceded petitioner need not include nonemployee compensation of $1,983 in 2016 gross income"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Petitioner received Social Security benefits totaling $15,322 in 2016",
+      "values": {
+        "ss_benefits_received_2016": 15322
+      },
+      "snippet": "Petitioner received Social Security benefits totaling $15,322 in 2016.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "SSA concluded most or all 2016 benefits were not owed; repayment began June 2020 at $100/month (no repayment during 2016)",
+      "values": {
+        "repayment_start": "2020-06",
+        "monthly_repayment": 100,
+        "repayment_in_2016": 0
+      },
+      "snippet": "in June 2020 petitioner began repaying the excess benefits through monthly payments of $100 to the SSA.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "2016 return reported Schedule C net profit of $82,395 and excluded the Social Security benefits",
+      "values": {
+        "schedule_c_net_profit": 82395,
+        "ss_reported": 0
+      },
+      "snippet": "reporting net profits of $82,395 on Schedule C, Profit or Loss From Business, but she did not include the Social Security benefits",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Respondent determined $13,024 of Social Security benefits includible",
+      "values": {
+        "taxable_ss_determined": 13024
+      },
+      "snippet": "determined that she was obliged to include Social Security benefits of $13,024 in taxable income for 2016.",
+      "locator": "p. 3"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "social_security_86"
+      ],
+      "question": "Are Social Security benefits received in 2016, which petitioner must repay to the SSA (repayment begun 2020), includible in her 2016 gross income?",
+      "provisions": [
+        "26 U.S.C. §61(a)",
+        "§86",
+        "§86(d)(2)(A)",
+        "§1341"
+      ],
+      "holding": "Yes, to the extent provided by section 86; repayment in 2020 does not affect 2016 liability; respondent's section 86 computation sustained.",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "taxable Social Security benefits",
+        "amount": 13024
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Benefits received less repayments made in the same year (zero) run through §86 formula."
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "Social Security inclusion sustained; Rule 155 reflects respondent's concession of $1,983 nonemployee compensation."
+  },
+  "notes": "Some facts stipulated. Dollar amounts rounded. Filing status not stated in opinion. Derived: 85% x $15,322 = $13,023.70 ~ $13,024 (consistent with 85% cap). Court did not consider effect of 86(d)(2)/1341 on later years."
+}

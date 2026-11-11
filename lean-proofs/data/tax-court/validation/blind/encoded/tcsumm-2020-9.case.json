@@ -1,0 +1,184 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2020-9 (2014)",
+  "taxYear": 2014,
+  "note": "2014: filed single; issue is the education credit. Court found no evidence tuition paid in 2014 (paid in 2013). Student = petitioner with 0 qualified expenses in 2014. Income not stated.",
+  "facts": {
+   "filing": "single",
+   "dependents": [
+    {
+     "name": "child 1",
+     "relationship": "child",
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "child 2",
+     "relationship": "child",
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    }
+   ],
+   "students": [
+    {
+     "name": "petitioner",
+     "qualifiedExpenses": 0
+    }
+   ]
+  },
+  "expected": [],
+  "inferred": [
+   "Children's ages not stated; left at default (minors) on the strength of respondent's concession that two of the three are qualifying children",
+   "Only the two conceded children encoded (named 'child 1', 'child 2'); the third (one child is disabled, which one not stated) omitted",
+   "'paid most of the household expenses' read as paid over half the cost of keeping up the home"
+  ],
+  "unencodable": [
+   "Petitioner's income (wages as medical assistant) not stated; income left at 0, so no deficiency figures are meaningful",
+   "Amount of education credit claimed for 2014 redacted; asFiled/taxShown not encoded"
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-9 (2015)",
+  "taxYear": 2015,
+  "note": "2015: claimed HoH. Unmarried; lived with her three children and their father (not married to him); she paid most household expenses; father did not claim the children or file HoH; she had greater AGI. Income not stated.",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "child 1",
+     "relationship": "child",
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "child 2",
+     "relationship": "child",
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "child 1",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "claims": false
+     }
+    ]
+   },
+   {
+    "child": "child 2",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "claims": false
+     }
+    ]
+   }
+  ],
+  "expected": [],
+  "inferred": [
+   "Children's ages not stated; left at default (minors) on the strength of respondent's concession that two of the three are qualifying children",
+   "Only the two conceded children encoded (named 'child 1', 'child 2'); the third (one child is disabled, which one not stated) omitted",
+   "'paid most of the household expenses' read as paid over half the cost of keeping up the home",
+   "tie-breaker AGIs left at 0: opinion says petitioner's AGI was greater but gives no amounts; father did not claim (claims=false)"
+  ],
+  "unencodable": [
+   "Petitioner's income (wages as medical assistant) not stated; income left at 0, so no deficiency figures are meaningful"
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-9 (2016)",
+  "taxYear": 2016,
+  "note": "2016: claimed HoH. Unmarried; lived with her three children and their father (not married to him); she paid most household expenses; father did not claim the children or file HoH; she had greater AGI. Income not stated.",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "child 1",
+     "relationship": "child",
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "child 2",
+     "relationship": "child",
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "child 1",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "claims": false
+     }
+    ]
+   },
+   {
+    "child": "child 2",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "claims": false
+     }
+    ]
+   }
+  ],
+  "expected": [],
+  "inferred": [
+   "Children's ages not stated; left at default (minors) on the strength of respondent's concession that two of the three are qualifying children",
+   "Only the two conceded children encoded (named 'child 1', 'child 2'); the third (one child is disabled, which one not stated) omitted",
+   "'paid most of the household expenses' read as paid over half the cost of keeping up the home",
+   "tie-breaker AGIs left at 0: opinion says petitioner's AGI was greater but gives no amounts; father did not claim (claims=false)"
+  ],
+  "unencodable": [
+   "Petitioner's income (wages as medical assistant) not stated; income left at 0, so no deficiency figures are meaningful"
+  ]
+ }
+]

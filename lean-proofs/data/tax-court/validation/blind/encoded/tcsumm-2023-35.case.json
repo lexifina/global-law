@@ -1,0 +1,47 @@
+{
+  "citation": "T.C. Summary Opinion 2023-35",
+  "taxYear": 2017,
+  "note": "Polete, 2017. Non-filer (extension to 2018-10-15, not filed; section 6020(b) SFR). HoH and three personal exemptions conceded (taxpayer + two unnamed dependents). Income per concessions: wages 59,510; taxable retirement distributions 52,433; interest 14; capital gain 3,417; alimony 3,000 treated as paid (adjustment). Schedule C (seProfit): Surplus & Adventure 10,404 - COGS 7,595 - substantiated 1,092.37 + 1,077.77 + 80.19 + 229.94 = 328.73; Fibre Arts 3,238 - COGS 7,595 (as printed) - 202.90 - 145.15 = -4,705.05; total -4,376. Car/truck, depreciation and meals unsubstantiated (none allowed); STEAM Works not for profit, no income (nothing encoded). Rentals (otherIncome): Maryland 18,948.50 net - half of RE tax 1,443.67 - half of mortgage interest 4,458.64 - hazard insurance 845.48 = 12,200.71; Beavercreek 7,437.35 - 1,199.36 - 5/12 of petitioner's half of taxes (982.36) and interest (1,143.94) = 4,111.69; total 16,312. Itemized: Oakwood RE tax 13,560.03 + mortgage interest 9,264.48 + Goodwill 90 + 7/12 of petitioner's half of Beavercreek taxes 1,375.30 = 24,290. Withholding 5,050, no estimated payments. Section 6651(a)(2) and 6654 conceded; 6651(a)(1): no reasonable cause.",
+  "facts": {
+    "filing": "hoh",
+    "wages": 59510,
+    "pensions": 52433,
+    "taxableInterest": 14,
+    "capitalGain": 3417,
+    "seProfit": -4376,
+    "otherIncome": 16312,
+    "adjustments": 3000,
+    "itemizedDeductions": 24290,
+    "withholding": 5050,
+    "estimatedPayments": 0,
+    "dependents": [
+      {"name": "dependent 1", "livedWithMoreThanHalfYear": true},
+      {"name": "dependent 2", "livedWithMoreThanHalfYear": true}
+    ],
+    "earlyDistributions": [
+      {"amountIncludible": 52433, "plan": "ira"}
+    ]
+  },
+  "taxShown": 0,
+  "lateness": {
+    "extension": true,
+    "asOf": "2023-12-18",
+    "reasonableCauseFiling": false,
+    "assertsFailureToPay": false
+  },
+  "expected": [],
+  "inferred": [
+    "two placeholder dependents (default child facts, lived with petitioner more than half the year) to give the conceded three personal exemptions; identities/ages not in the text",
+    "alimony $3,000 treated as alimony paid (deduction); the table does not say paid or received",
+    "section 72(t) 10% tax on the 52,433 retirement distributions: the notice proposed it and the opinion calls it purely computational; petitioner's age and plan type not stated (ira assumed)",
+    "capital gain treated as not long-term (longTermGain 0); holding period not stated",
+    "Beavercreek: petitioner's half of RE taxes and mortgage interest allocated 5/12 to the rental (5 months rented), the 7/12 share of taxes to Schedule A; 7/12 share of mortgage interest not deducted",
+    "hazard insurance $845.48 on the Maryland property treated as paid wholly by petitioner",
+    "Fibre Arts COGS taken as $7,595 as printed (opinion flags it)",
+    "state/local income tax for Schedule A not stated (0)"
+  ],
+  "unencodable": [
+    "rental (Schedule E) and Schedule C detail entered as net amounts in otherIncome / seProfit",
+    "section 280A / passive-loss treatment of Beavercreek personal-use months not modelled"
+  ]
+}

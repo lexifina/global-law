@@ -1,0 +1,33 @@
+{
+ "citation": "Rojas v. Commissioner, T.C. Memo. 2022-77",
+ "taxYear": 2016,
+ "note": "Sole issue: Sec. 215 deduction of $69,880 'family support' disallowed because payments end when both minor children emancipate (Sec. 71(c)(2)(A)). Encoded as facts.alimonyPaid: instrument (stipulated judgment) executed 2012-07-25, paid $69,888 (12 x $5,824; fn. 2-3), childSupport = the whole $69,888 (an all-or-nothing child contingency: the entire payment ends on emancipation). As filed: adjustments $69,880. Opinion gives no other income items, so the $24,458 deficiency cannot be computed and is not an expected item. Sec. 6662(a) penalty ($4,892) conceded by respondent.",
+ "facts": {
+  "filing": "mfj",
+  "adjustments": 0,
+  "alimonyPaid": [
+   {
+    "executed": "2012-07-25",
+    "paid": 69888,
+    "childSupport": 69888
+   }
+  ]
+ },
+ "asFiled": {
+  "filing": "mfj",
+  "adjustments": 69880
+ },
+ "accuracy": {},
+ "expected": [
+  {
+   "item": "alimonyDeduction",
+   "value": 0,
+   "note": "Sec. 71(c)(2)(A): payments ending on the children's emancipation are child support; no Sec. 215 deduction"
+  },
+  {
+   "item": "accuracyPenalty",
+   "value": 0,
+   "note": "respondent conceded the Sec. 6662(a) penalty; not a computed holding"
+  }
+ ]
+}

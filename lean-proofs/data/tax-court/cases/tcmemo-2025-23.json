@@ -1,0 +1,234 @@
+{
+  "id": "tcmemo-2025-23",
+  "citation": "T.C. Memo. 2025-23",
+  "case_name": "Charlie Campana v. Commissioner",
+  "docket_numbers": [
+    "15766-23"
+  ],
+  "judge": "Pugh",
+  "date": "2025-03-19",
+  "opinion_type": "memorandum",
+  "source": {
+    "dawson_docket_entry_id": "c155c1b6-de77-470d-b6ef-3959230ca1bc",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/15766-23",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/15766-23/c155c1b6-de77-470d-b6ef-3959230ca1bc/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "suitability_reason": "Income inclusion of conceded interest and retirement distribution, 72(t) 10% tax (under 59 1/2, no exception), and 6662 substantial-understatement threshold are mechanical; only reasonable cause is judgmental.",
+  "tax_years": [
+    2021
+  ],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "Florida",
+    "notes": "Took COVID-related hardship withdrawal from Fidelity retirement account while under 59 1/2."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2021,
+        "deficiency": 18064,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 3238
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "unreported interest income $99",
+      "unreported retirement distribution $56,673",
+      "10% additional tax under section 72(t) of $5,667"
+    ],
+    "contested_by_taxpayer": "Concedes receipt but argues a denied 2017 refund claim should offset 2021 liability; disputes penalty.",
+    "conceded": [
+      "Petitioner conceded receipt of the $99 interest income and the $56,673 retirement distribution"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I2",
+        "I3"
+      ],
+      "fact": "Hardship withdrawal of $56,673 from Fidelity retirement account in 2021; under age 59 1/2 at the time",
+      "values": {
+        "distribution": 56673,
+        "under_59_5": true
+      },
+      "snippet": "He subsequently took a hardship withdrawal of $56,673 from his Fidelity Investments (Fidelity) retirement account.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Received $99 of interest income from the IRS in 2021",
+      "values": {
+        "interest_income": 99
+      },
+      "snippet": "He also received $99 of interest income from the IRS in 2021.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1",
+        "I2",
+        "I4"
+      ],
+      "fact": "Return reported $37,964 taxable income; did not report the interest, the distribution, the 10% additional tax, or $1,874 Fidelity withholding",
+      "values": {
+        "reported_taxable_income": 37964,
+        "fidelity_withholding": 1874
+      },
+      "snippet": "He reported $37,964 of taxable income . He did not report the $99 of interest income or the $56,673 retirement distribution.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I3"
+      ],
+      "fact": "No section 72(t) exception applies and petitioner does not argue one",
+      "values": {
+        "exception_applies": false
+      },
+      "snippet": "None of the several exceptions to this rule apply here, nor does petitioner argue they should.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I4"
+      ],
+      "fact": "Understatement of $18,064 exceeds 10% of tax required to be shown and $5,000",
+      "values": {
+        "understatement": 18064,
+        "threshold_fixed": 5000
+      },
+      "snippet": "Respondent determined an understatement of tax of $18,064, exceeding 10% of the tax required to be shown on the return and $5,000.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F6",
+      "issue_refs": [
+        "I4"
+      ],
+      "fact": "Penalty was automatically calculated through electronic means (6751(b)(2)(B) exception)",
+      "values": {
+        "automatically_calculated": true
+      },
+      "snippet": "penalties “automatically calculated through electronic means,” such as the penalty at issue here, are excepted from the procedural requirements.",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F7",
+      "issue_refs": [
+        "I4"
+      ],
+      "fact": "Petitioner believed Fidelity would withhold the 10% tax; did not rely on a professional or consult Form 1099-R",
+      "values": {
+        "relied_on_professional": false
+      },
+      "snippet": "he incorrectly believed that Fidelity would withhold and remit the requisite amount .",
+      "locator": "p. 4"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "other_income_inclusion_61"
+      ],
+      "question": "Did petitioner receive and fail to report $99 of interest income for 2021?",
+      "provisions": [
+        "26 U.S.C. §61(a)"
+      ],
+      "holding": "Yes; receipt conceded; includible. Court lacks jurisdiction to offset a 2017 refund claim.",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "unreported interest income",
+        "amount": 99
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Conceded receipt; interest is gross income per §61(a)."
+    },
+    {
+      "issue_id": "I2",
+      "tags": [
+        "ira_distribution_income_408d",
+        "other_income_inclusion_61"
+      ],
+      "question": "Did petitioner receive and fail to report a $56,673 retirement distribution for 2021?",
+      "provisions": [
+        "§61(a)(10)",
+        "§408(d)",
+        "§72"
+      ],
+      "holding": "Yes; receipt conceded; includible in 2021 gross income.",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "unreported retirement distribution",
+        "amount": 56673
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Conceded receipt; distribution includible."
+    },
+    {
+      "issue_id": "I3",
+      "tags": [
+        "early_distribution_72t"
+      ],
+      "question": "Is petitioner liable for the 10% additional tax of $5,667 under section 72(t)?",
+      "provisions": [
+        "§72(t)(1)",
+        "§4974(c)"
+      ],
+      "holding": "Yes; under 59 1/2 and no exception applies.",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "10% additional tax",
+        "amount": 5667
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "10% x $56,673 with age < 59 1/2 and no exception."
+    },
+    {
+      "issue_id": "I4",
+      "tags": [
+        "penalty_6662a"
+      ],
+      "question": "Is petitioner liable for the $3,238 section 6662(a) accuracy-related penalty?",
+      "provisions": [
+        "§6662(a), (b)(2), (d)(1)(A)",
+        "§6751(b)(2)(B)",
+        "§7491(c)",
+        "§6664(c)",
+        "Treas. Reg. §1.6664-4(b)(1)"
+      ],
+      "holding": "Yes; substantial understatement ($18,064 exceeds 10% and $5,000); 6751(b) exception for automatically calculated penalties; no reasonable cause.",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "accuracy-related penalty",
+        "amount": 3238
+      },
+      "rule_155": false,
+      "computable": false,
+      "computable_reason": "Threshold is arithmetic, but outcome also turned on 6751(b) and a reasonable-cause judgment."
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered for respondent.",
+    "summary": "$18,064 deficiency and $3,238 6662(a) penalty sustained."
+  },
+  "notes": "Facts stipulated at trial. Tax required to be shown on return not stated; opinion only states understatement exceeds 10% of it. Derived: 10% x $56,673 = $5,667.30; 20% x $18,064 = $3,612.80 vs $3,238 penalty determined (penalty base presumably reduced, e.g. by $1,874 withholding; derived: 20% x ($18,064 - $1,874) = $3,238). Prior ruling: no jurisdiction over 2017."
+}

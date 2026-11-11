@@ -1,0 +1,78 @@
+{
+ "citation": "T.C. Summary Opinion 2021-26",
+ "taxYear": 2015,
+ "note": "Griffin. Niece and nephews (born 2000, 2007, 2010) lived with petitioner more than half of 2015 (credibility finding); relationship, age, support conceded. Filing status and wages not found (single encoded). The father (a parent) is not shown to have claimed them; sec. 152(c)(4)(C) not addressed by the court.",
+ "facts": {
+  "filing": "single",
+  "dependents": [
+   {
+    "name": "TG",
+    "relationship": "siblingsChild",
+    "age": 15,
+    "livedWithMoreThanHalfYear": true
+   },
+   {
+    "name": "SG",
+    "relationship": "siblingsChild",
+    "age": 8,
+    "livedWithMoreThanHalfYear": true
+   },
+   {
+    "name": "OG",
+    "relationship": "siblingsChild",
+    "age": 5,
+    "livedWithMoreThanHalfYear": true
+   }
+  ]
+ },
+ "expected": [
+  {
+   "item": "qualifyingChild:TG",
+   "flag": true
+  },
+  {
+   "item": "qualifyingChild:SG",
+   "flag": true
+  },
+  {
+   "item": "qualifyingChild:OG",
+   "flag": true
+  },
+  {
+   "item": "dependent:TG",
+   "flag": true
+  },
+  {
+   "item": "dependent:SG",
+   "flag": true
+  },
+  {
+   "item": "dependent:OG",
+   "flag": true
+  },
+  {
+   "item": "ctcChild:TG",
+   "flag": true
+  },
+  {
+   "item": "ctcChild:SG",
+   "flag": true
+  },
+  {
+   "item": "ctcChild:OG",
+   "flag": true
+  },
+  {
+   "item": "eicChild:TG",
+   "flag": true
+  },
+  {
+   "item": "eicChild:SG",
+   "flag": true
+  },
+  {
+   "item": "eicChild:OG",
+   "flag": true
+  }
+ ]
+}

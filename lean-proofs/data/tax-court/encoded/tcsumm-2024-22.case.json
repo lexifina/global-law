@@ -1,0 +1,48 @@
+{
+ "citation": "T.C. Summary Opinion 2024-22",
+ "taxYear": 2018,
+ "note": "Lucas (MFJ 2018). Court findings only. Wages stipulated 206,609 (reported 76,445 DFAS; state refund 4,962 reported). Reservist travel allowed 2,433 (moving 13,800 abandoned); itemized = conceded SALT 10,000 + mortgage interest 22,563 (medical 35,310 and noncash charity 85,000 disallowed). Withholding stipulated 12,271 vs 19,960 claimed (outside deficiency, s.6211(b)(1)). NOT ENCODED because the opinion gives no amount: Principal Life Form 1099-R distribution (conceded includible, s.72(t) 10% conceded), dependents/children and amounts of the CTC/ACTC and child and dependent care credit (conceded by respondent), the AOTC claimed on the return (conceded disallowed), the as-filed deduction and tax shown, the excess-social-security credit (1,110; a s.31-type credit, outside deficiency). No court-determined deficiency (Rule 155); the notice deficiency 29,600 is not a finding. asFiled assumes the standard deduction (Schedule A first appears on the 1040X).",
+ "facts": {
+  "filing": "mfj",
+  "wages": 206609,
+  "otherIncome": 4962,
+  "adjustments": 2433,
+  "itemizedDeductions": 32563,
+  "itemize": true,
+  "withholding": 12271
+ },
+ "asFiled": {
+  "filing": "mfj",
+  "wages": 76445,
+  "otherIncome": 4962,
+  "withholding": 19960
+ },
+ "accuracy": {
+  "assertsSubstantialUnderstatement": true,
+  "negligence": false,
+  "reasonableCause": false,
+  "supervisoryApproval": true
+ },
+ "expected": [
+  {
+   "item": "filingStatus",
+   "text": "mfj",
+   "note": "joint return not disputed; s.6015(b) relief denied (not modelled)"
+  },
+  {
+   "item": "deduction",
+   "value": 32563,
+   "note": "Schedule A allowed: conceded SALT 10,000 + mortgage interest 22,563; medical 35,310 and noncash charity 85,000 disallowed (substantiation)"
+  },
+  {
+   "item": "adjustments",
+   "value": 2433,
+   "note": "s.62(a)(2)(E)/162(p) reservist travel allowed 2,433 of 29,445 (stipulated); moving 13,800 abandoned"
+  },
+  {
+   "item": "accuracyPenaltyApplies",
+   "flag": true,
+   "note": "court: liable 'to the extent the understatement ... is substantial', left to Rule 155; approval yes, no reasonable cause. Lean value is on partial facts (Principal Life, credits, as-filed deduction omitted)."
+  }
+ ]
+}

@@ -1,0 +1,66 @@
+{
+ "id": "tcmemo-2020-101",
+ "citation": "T.C. Memo. 2020-101 (Seril v. Commissioner)",
+ "issues": [
+  {
+   "issue": "IRA distributions 54,500 fully taxable (no 60-day rollover waiver for 15,000)",
+   "provision": "§408(d)(1), (d)(3)(A), (d)(3)(I)",
+   "court": "taxable on full 54,500",
+   "lean": "rolloverIncludible 15,000 (days 1,372, no waiver) -> 39,500 + 15,000 = 54,500 taxable",
+   "verdict": "match",
+   "diagnosis": "Rerun 2c5b6354943: 15,000 redeposited 2020-04-27, 1,372 days after the 2016-07-25 distribution; waiverGranted false (the court's refusal to waive under sec. 408(d)(3)(I) is an equity weighing, encoded as a finding) -> rolloverIncludible 15,000, so the full 54,500 is taxable. Computation matches; the decisive waiver step remains a judgment.",
+   "snippet": "declining to waive the 60-day requirement is not against equity or good conscience, and petitioner is therefore taxable on the full $54,500"
+  },
+  {
+   "issue": "Higher-education exception: 3,993 of IRA proceeds used for qualified expenses",
+   "provision": "§72(t)(2)(E), (7)",
+   "court": "3,993 qualified (substantiation finding)",
+   "lean": "higherEducationExpenses 3,993",
+   "verdict": "judgment",
+   "diagnosis": "Amount is a substantiation finding (9,809 - 5,816 = 3,993); encoded as fact.",
+   "snippet": "This leaves $3,993 (viz., $9,809 - $5,816) as the amount that petitioner paid Morehouse using proceeds of her IRA withdrawals."
+  },
+  {
+   "issue": "§72(t) additional tax",
+   "provision": "§72(t)(1)",
+   "court": "5,051",
+   "lean": "5,051",
+   "verdict": "match",
+   "diagnosis": "10% x (54,500 - 3,993 = 50,507) = 5,050.7 -> 5,051. As-filed Form 5329 tax also reproduced: 10% x 24,664 = 2,466.",
+   "snippet": "She is thus liable for additional tax of $5,051 (10% × $50,507) under section 72(t)."
+  },
+  {
+   "issue": "Accuracy-related penalty: reasonable cause",
+   "provision": "§6662(a), (b)(2); §6664(c)(1)",
+   "court": "not liable",
+   "lean": "penalty 0; applies false (understatement 5,487, substantial true)",
+   "verdict": "judgment",
+   "diagnosis": "Computation gives 0 only because the court's reasonable-cause finding is an input; the decisive step is the court's weighing of credibility and circumstances.",
+   "snippet": "we find that petitioner has demonstrated reasonable cause for her underpayment."
+  },
+  {
+   "issue": "§6751(b) supervisory approval for AUR penalty",
+   "provision": "§6751(b)(2)(B)",
+   "court": "not decided",
+   "lean": "n/a",
+   "verdict": "not-encodable",
+   "diagnosis": "Court expressly did not reach it.",
+   "snippet": "we need not decide whether respondent has met his burden of production."
+  },
+  {
+   "issue": "$747 529 plan payment",
+   "provision": "§529(c)",
+   "court": "conceded by respondent",
+   "lean": "omitted",
+   "verdict": "not-encodable",
+   "diagnosis": "Concession; nothing to compute.",
+   "snippet": "Respondent has conceded that issue"
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": 5487
+ },
+ "notes": "Rerun 2c5b6354943: exit 0; 4/4 expected items match (rolloverIncludible 15,000 added). Deficiency left to Rule 155 (notice 9,191 included the conceded $747 item); Lean 5,487 assumes single status (not stated in opinion), so not comparable. Form 5329 amount: 24,664 in findings vs 24,660 in opinion; encoded 24,664 (reproduces the reported 2,466).",
+ "frameworkGaps": []
+}

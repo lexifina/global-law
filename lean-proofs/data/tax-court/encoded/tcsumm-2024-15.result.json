@@ -1,0 +1,29 @@
+{
+ "id": "tcsumm-2024-15",
+ "citation": "T.C. Summary Opinion 2024-15",
+ "issues": [
+  {
+   "issue": "$14,000 IRA deduction for 401(k) deferrals",
+   "provision": "sec. 219",
+   "court": "disallowed",
+   "lean": "iraDeduction 0 (ira/iraSpouse contribution 0)",
+   "verdict": "match",
+   "diagnosis": "rerun 2c5b6354943: sec. 219 now modelled. Encoded the found facts: no IRA and no IRA contributions in 2020 (Mr. Pope's 4,911.72 went to a 401(k), an active-participant plan); iraDeduction 0 matches the disallowance of the 14,000 claimed. The step '401(k) deferral is not a sec. 219 contribution' is the court's characterization, taken as input. No income or deficiency figures, so no deficiency computed.",
+   "snippet": "the Popes are not entitled to an IRA deduction because they did not contribute to a plan governed by section 219."
+  },
+  {
+   "issue": "Interest relief",
+   "provision": "sec. 6404(h)",
+   "court": "no jurisdiction",
+   "lean": null,
+   "verdict": "not-encodable",
+   "diagnosis": "Jurisdictional.",
+   "snippet": "this Court lacks jurisdiction over interest"
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": null
+ },
+ "notes": "Decision for respondent. rerun 2c5b6354943: IRA deduction issue now encoded (iraDeduction 0 match)."
+}

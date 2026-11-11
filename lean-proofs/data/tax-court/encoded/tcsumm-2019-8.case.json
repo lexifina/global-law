@@ -1,0 +1,109 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2019-8",
+  "taxYear": 2015,
+  "note": "Arseo. Wages 25,687 (W-2 box 1; 2,890 pretax Arizona State Retirement System contribution excluded). Corrected: interest 25 and W-2G gambling winnings 2,994 included (gamblingWinnings); gambling losses unsubstantiated (no records) and, even if allowed, as an itemized deduction (2,994) they would not exceed the 9,250 standard deduction; 6,500 IRA deduction denied (pretax contribution not deductible, §219). Filing status not stated: the 9,250 standard deduction shown is the 2015 head-of-household amount (single 6,300, MFJ 12,600), so hoh is encoded with no qualifying person/dependents, because the opinion finds none. Exemptions, dependents, EIC/CTC on the return are not in the opinion, so the 1,907 deficiency cannot be reproduced (see result notes). Gambling losses encoded as 0 (unsubstantiated, no records). The 2,890 ASRS contribution is a pretax employer-plan deferral, not an IRA contribution: ira.contribution 0, activeParticipant true (ASRS member). As filed keeps the 6,500 adjustment as claimed. The 1,907 deficiency is not an expectation here: with the facts the opinion gives (hoh, one exemption, no EIC/CTC) the arithmetic gives about 1,067, so the return must have held facts (exemptions, credits) the opinion omits.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 25687,
+   "taxableInterest": 25,
+   "itemizedDeductions": 0,
+   "claimEIC": false,
+   "claimCTC": false,
+   "gamblingWinnings": 2994,
+   "gamblingLosses": 0,
+   "ira": {
+    "contribution": 0,
+    "activeParticipant": true
+   }
+  },
+  "asFiled": {
+   "filing": "hoh",
+   "wages": 25687,
+   "adjustments": 6500,
+   "itemize": false,
+   "claimEIC": false,
+   "claimCTC": false
+  },
+  "expected": [
+   {
+    "item": "standardDeduction",
+    "value": 9250,
+    "note": "2015 head-of-household standard deduction claimed on the return"
+   },
+   {
+    "item": "deduction",
+    "value": 9250,
+    "note": "no itemized deductions substantiated; even 2,994 of gambling losses (if proven) would be below the 9,250 standard deduction"
+   },
+   {
+    "item": "iraDeduction",
+    "value": 0,
+    "note": "6,500 IRA deduction disallowed: pretax ASRS deferral, no IRA contribution"
+   },
+   {
+    "item": "gamblingLossDeduction",
+    "value": 0,
+    "note": "losses unsubstantiated"
+   },
+   {
+    "item": "itemizedDeductions",
+    "value": 0
+   },
+   {
+    "item": "agi",
+    "value": 28706,
+    "note": "derived: 25,687 + 25 + 2,994 with the 6,500 IRA deduction disallowed (not stated by the court)"
+   },
+   {
+    "item": "deficiency",
+    "value": 1907,
+    "note": "notice deficiency sustained (decision for respondent); not reproducible from the opinion's facts: the return's exemptions/dependents/credits are not stated"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2019-8 (alternative: 2,994 losses assumed)",
+  "taxYear": 2015,
+  "note": "Alternative holding: assuming arguendo 2,994 of gambling losses were substantiated, they are an itemized deduction (sec. 165(d), capped at winnings) below the 9,250 standard deduction, so no lower tax. Same facts with gamblingLosses 2,994.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 25687,
+   "taxableInterest": 25,
+   "itemizedDeductions": 0,
+   "claimEIC": false,
+   "claimCTC": false,
+   "gamblingWinnings": 2994,
+   "gamblingLosses": 2994,
+   "ira": {
+    "contribution": 0,
+    "activeParticipant": true
+   }
+  },
+  "asFiled": {
+   "filing": "hoh",
+   "wages": 25687,
+   "adjustments": 6500,
+   "itemize": false,
+   "claimEIC": false,
+   "claimCTC": false
+  },
+  "expected": [
+   {
+    "item": "deduction",
+    "value": 9250,
+    "note": "standard deduction still larger than 2,994 itemized"
+   },
+   {
+    "item": "gamblingLossDeduction",
+    "value": 0,
+    "note": "not used: standard deduction taken"
+   },
+   {
+    "item": "netTax",
+    "value": 1664,
+    "note": "same corrected tax as the main case (no lower tax liability); derived, not stated"
+   }
+  ]
+ }
+]

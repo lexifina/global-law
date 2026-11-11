@@ -1,0 +1,158 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2019-23",
+  "taxYear": 2015,
+  "note": "J.V./L.V. eligible foster children (court placement 2010), under 17 (16 used). Ms. Madrigal (their grandmother, no income) is the competing non-parent claimant. Maria 19, not a student. Rule 155: no deficiency stated. asFiled = return as claimed (Maria treated as a student qualifying child; HoH; wages only) replaces an earlier taxShown 0 placeholder.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 12893,
+   "dependents": [
+    {
+     "name": "JV",
+     "relationship": "fosterChild",
+     "age": 16,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "LV",
+     "relationship": "fosterChild",
+     "age": 16,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "Maria",
+     "relationship": "child",
+     "age": 19,
+     "student": false,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "JV",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "daysResided": 365,
+      "agi": 12893
+     },
+     {
+      "name": "Madrigal",
+      "daysResided": 365,
+      "agi": 0
+     }
+    ]
+   },
+   {
+    "child": "LV",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "daysResided": 365,
+      "agi": 12893
+     },
+     {
+      "name": "Madrigal",
+      "daysResided": 365,
+      "agi": 0
+     }
+    ]
+   }
+  ],
+  "accuracy": {
+   "reasonableCause": true
+  },
+  "expected": [
+   {
+    "item": "tieBreaker:JV",
+    "text": "petitioner"
+   },
+   {
+    "item": "tieBreaker:LV",
+    "text": "petitioner"
+   },
+   {
+    "item": "qualifyingChild:Maria",
+    "flag": false
+   },
+   {
+    "item": "eicChild:Maria",
+    "flag": false
+   },
+   {
+    "item": "eicChild:JV",
+    "flag": true
+   },
+   {
+    "item": "eicChild:LV",
+    "flag": true
+   },
+   {
+    "item": "ctcChild:JV",
+    "flag": true
+   },
+   {
+    "item": "ctcChild:LV",
+    "flag": true
+   },
+   {
+    "item": "filingStatus",
+    "text": "hoh"
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 0
+   },
+   {
+    "item": "dependent:JV",
+    "flag": true
+   },
+   {
+    "item": "dependent:LV",
+    "flag": true
+   },
+   {
+    "item": "headOfHousehold",
+    "flag": true
+   }
+  ],
+  "asFiled": {
+   "filing": "hoh",
+   "wages": 12893,
+   "dependents": [
+    {
+     "name": "JV",
+     "relationship": "fosterChild",
+     "age": 16,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "LV",
+     "relationship": "fosterChild",
+     "age": 16,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "Maria",
+     "relationship": "child",
+     "age": 19,
+     "student": true,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    }
+   ]
+  }
+ }
+]

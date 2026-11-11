@@ -1,0 +1,122 @@
+[
+ {
+  "citation": "T.C. Memo. 2019-41",
+  "taxYear": 2015,
+  "note": "Monroe (MFJ, family size 2). Sole contested issue: sec. 36B premium tax credit. Court (following Johnson, 152 T.C.) holds MAGI under sec. 36B(d)(2)(B) includes all Social Security received in 2015 despite the sec. 86(e) election; stipulated MAGI 70,065.80 > 400% FPL, so no PTC and the 8,472 APTC is excess (sec. 36B(f)). Return facts: wages 34,176 reported + 5,207 conceded unreported; unemployment 237 reported + 237 conceded unreported (literal reading of stipulation n.2(4)); SS benefits received 35,651.80 (p.2; fn. 6 says 35,652.80; encoded 35,652). sec. 86(e) (rerun 2c5b6354943): lump sums attributed to 2014 348, 2013 10,247, 2012 10,943, 2011 2,607 (found); the 2015 remainder is 5,297 benefits + 6,000 attorney's fees + 209.80 Medicare B = 11,506.80. Prior-year modified incomes are not in the opinion: priorModifiedIncome 0 / priorBenefits 0 is an inference from the stipulated 4,084, which equals the current-year part alone (0.5 x (34,413 + 5,753.40 - 32,000) = 4,083.20), i.e. the election added nothing for 2011-2014. asFiled uses the election (taxable SS 4,084 stipulated, AGI 38,497); corrected keeps it (IRS updated report gave it effect, fn. 5). Penalty conceded on unreported items only; additional SALT deduction 87 and withholding 269 conceded (not encoded: itemized total unknown). sec. 36B now encoded as facts.ptc (family 2, California, APTC 8,472); asFiled has no ptc (no Form 8962 filed). Premiums not stated (irrelevant: no credit over 400%).",
+  "facts": {
+   "filing": "mfj",
+   "wages": 39383,
+   "unemployment": 474,
+   "socialSecurity": 35652,
+   "ssLumpSums": [
+    {
+     "year": 2014,
+     "amount": 348,
+     "priorModifiedIncome": 0,
+     "priorBenefits": 0,
+     "priorTaxable": 0,
+     "priorFiling": "mfj"
+    },
+    {
+     "year": 2013,
+     "amount": 10247,
+     "priorModifiedIncome": 0,
+     "priorBenefits": 0,
+     "priorTaxable": 0,
+     "priorFiling": "mfj"
+    },
+    {
+     "year": 2012,
+     "amount": 10943,
+     "priorModifiedIncome": 0,
+     "priorBenefits": 0,
+     "priorTaxable": 0,
+     "priorFiling": "mfj"
+    },
+    {
+     "year": 2011,
+     "amount": 2607,
+     "priorModifiedIncome": 0,
+     "priorBenefits": 0,
+     "priorTaxable": 0,
+     "priorFiling": "mfj"
+    }
+   ],
+   "ptc": {
+    "familySize": 2,
+    "state": "contiguous",
+    "advancePayments": 8472
+   }
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "wages": 34176,
+   "unemployment": 237,
+   "socialSecurity": 35652,
+   "ssLumpSums": [
+    {
+     "year": 2014,
+     "amount": 348,
+     "priorModifiedIncome": 0,
+     "priorBenefits": 0,
+     "priorTaxable": 0,
+     "priorFiling": "mfj"
+    },
+    {
+     "year": 2013,
+     "amount": 10247,
+     "priorModifiedIncome": 0,
+     "priorBenefits": 0,
+     "priorTaxable": 0,
+     "priorFiling": "mfj"
+    },
+    {
+     "year": 2012,
+     "amount": 10943,
+     "priorModifiedIncome": 0,
+     "priorBenefits": 0,
+     "priorTaxable": 0,
+     "priorFiling": "mfj"
+    },
+    {
+     "year": 2011,
+     "amount": 2607,
+     "priorModifiedIncome": 0,
+     "priorBenefits": 0,
+     "priorTaxable": 0,
+     "priorFiling": "mfj"
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "asFiled.agi",
+    "value": 38497,
+    "note": "stipulated AGI with the sec. 86(e) election"
+   },
+   {
+    "item": "lumpSumElection",
+    "flag": true,
+    "note": "election made on the return; respondent's updated report reduced taxable SS on that basis (fn. 5)"
+   },
+   {
+    "item": "householdIncome",
+    "value": 70066,
+    "note": "stipulated MAGI 70,065.80 (fn. 6: as-filed wages and unemployment + all SS)"
+   },
+   {
+    "item": "povertyLine",
+    "value": 15730,
+    "note": "2014 HHS guidelines, family of 2 (not stated in opinion; Form 8962 Table 1-1)"
+   },
+   {
+    "item": "premiumTaxCredit",
+    "value": 0
+   },
+   {
+    "item": "excessAdvancePtc",
+    "value": 8472
+   }
+  ]
+ }
+]

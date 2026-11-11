@@ -1,0 +1,49 @@
+{
+  "citation": "T.C. Memo. 2023-2",
+  "taxYear": 2016,
+  "note": "HoH, one exemption for son; pensions $68,750, social security $26,499 total, itemized $28,751, withholding $13,750. Marketplace coverage Jan-Nov 2016, premium $708/month ($7,788); APTC $655/month for 11 months. Household of 2, Florida (contiguous). No Form 8962 filed. Coverage not cancelled (no record). Benchmark premium not stated (left 0).",
+  "facts": {
+    "filing": "hoh",
+    "dependents": [
+      { "name": "son", "relationship": "child", "livedWithMoreThanHalfYear": true, "livedWithWholeYear": true, "grossIncome": 0, "taxpayerProvidedOverHalfSupport": true }
+    ],
+    "pensions": 68750,
+    "socialSecurity": 26499,
+    "itemizedDeductions": 28751,
+    "itemize": true,
+    "withholding": 13750,
+    "claimCTC": false,
+    "claimEIC": false,
+    "ptc": {
+      "familySize": 2,
+      "state": "contiguous",
+      "enrolledPremium": 7788,
+      "benchmarkPremium": 0,
+      "advancePayments": 7205,
+      "eligible": true
+    }
+  },
+  "asFiled": {
+    "filing": "hoh",
+    "dependents": [
+      { "name": "son", "relationship": "child", "livedWithMoreThanHalfYear": true, "livedWithWholeYear": true, "grossIncome": 0, "taxpayerProvidedOverHalfSupport": true }
+    ],
+    "pensions": 68750,
+    "socialSecurity": 26499,
+    "itemizedDeductions": 28751,
+    "itemize": true,
+    "withholding": 13750,
+    "claimCTC": false,
+    "claimEIC": false
+  },
+  "expected": [],
+  "inferred": [
+    "advance payments total = $655 x 11 = $7,205 (arithmetic on the stated monthly figure; total redacted)",
+    "son's age not stated (left default); support and whole-year residence assumed so the claimed exemption stands (dependency not in issue)",
+    "claimCTC/claimEIC false: return as described claims no CTC or EIC"
+  ],
+  "unencodable": [
+    "benchmark (SLCSP) premium not stated; left 0",
+    "petitioner's age not stated (left default 40); any §72(t) tax on the early withdrawals is not described and not encoded"
+  ]
+}

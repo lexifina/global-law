@@ -1,0 +1,202 @@
+{
+  "id": "tcsumm-2024-19",
+  "citation": "T.C. Summary Opinion 2024-19",
+  "case_name": "Yelena Tolstov v. Commissioner",
+  "docket_numbers": [
+    "9946-23S"
+  ],
+  "judge": "Panuthos",
+  "date": "2024-09-23",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "90dd35b7-4898-453f-ab1a-877825cfa8fc",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/9946-23",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/9946-23/90dd35b7-4898-453f-ab1a-877825cfa8fc/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2020,
+    2021
+  ],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "California",
+    "notes": "Compulsive slot-machine gambler; wage income $20,901 in 2020; return prepared by professional preparer."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2020,
+        "deficiency": 7927,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 1585
+          }
+        ],
+        "additions": []
+      },
+      {
+        "year": 2021,
+        "deficiency": 13253,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 2650
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "2020: disallowed $55,276 of claimed $61,929 gambling loss deduction"
+    ],
+    "contested_by_taxpayer": "Gambling loss deduction and 6662(a) penalty for 2020",
+    "conceded": [
+      "Petitioner: not entitled to mortgage interest $7,200, car and truck expenses $9,315, noncash charitable contributions $3,050",
+      "Parties resolved all other issues for 2020 and 2021 (Stipulation of Settled Issues)",
+      "Respondent not challenging gambling winnings amount"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "2020 wage income $20,901",
+      "values": {
+        "wages": 20901
+      },
+      "snippet": "reported wage or salary income of $20,901.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Reported $61,929 gambling winnings per W-2G and $61,929 gambling losses",
+      "values": {
+        "gambling_winnings": 61929,
+        "gambling_losses_claimed": 61929
+      },
+      "snippet": "petitioner also reported $61,929 of gambling winnings per the Form W–2G",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Notice disallowed $55,276 of the gambling loss deduction",
+      "values": {
+        "loss_disallowed": 55276
+      },
+      "snippet": "disallowing $55,276 of petitioner’s claimed gambling loss deduction.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Player statement shows coin-in $105,063; ATM receipts at casino $1,320; no log",
+      "values": {
+        "coin_in": 105063,
+        "atm_receipts": 1320,
+        "log_kept": false
+      },
+      "snippet": "of $105,063 while using her player’s card.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Court satisfied petitioner incurred losses at least equal to winnings",
+      "values": {
+        "losses_at_least_winnings": true
+      },
+      "snippet": "The Court is satisfied on this record that petitioner undoubtedly incurred a loss at least equal to her winnings.",
+      "locator": "p. 5"
+    },
+    {
+      "fact_id": "F6",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "Supervisor signed Civil Penalty Approval Form August 16, 2022, before assessment",
+      "values": {
+        "approval_date": "2022-08-16",
+        "supervisory_approval_6751b": true
+      },
+      "snippet": "a Civil Penalty Approval Form was signed by the examining officer’s immediate supervisor.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F7",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "No clear testimony about information given to preparer; concessions suggest lack of good faith",
+      "values": {
+        "reasonable_cause": false
+      },
+      "snippet": "petitioner failed to act with reasonable cau se and in good faith.",
+      "locator": "p. 7"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "gambling_165d"
+      ],
+      "question": "Is petitioner entitled to a 2020 gambling loss deduction beyond the amount respondent allowed?",
+      "provisions": [
+        "26 U.S.C. §165(d)",
+        "§6001",
+        "Cohan v. Commissioner, 39 F.2d 540"
+      ],
+      "holding": "Yes: court estimated losses at least equal to winnings; deduction of $61,929 allowed (capped at gambling gains)",
+      "prevailing_party": "petitioner",
+      "amount_determined": {
+        "description": "gambling losses deductible for 2020",
+        "amount": 61929
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Given the finding that losses >= winnings, §165(d) caps the deduction at winnings ($61,929); the loss finding itself is a Cohan estimate."
+    },
+    {
+      "issue_id": "I2",
+      "tags": [
+        "penalty_6662a"
+      ],
+      "question": "Is petitioner liable for the section 6662(a) accuracy-related penalty for 2020?",
+      "provisions": [
+        "26 U.S.C. §6662(a), (b)(1), (b)(2), (c), (d)(1)(A)",
+        "§6664(c)(1)",
+        "§6751(b)(1)",
+        "§7491(c)"
+      ],
+      "holding": "Liable: supervisory approval timely obtained; petitioner failed to show reasonable cause and good faith",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": null,
+        "amount": null
+      },
+      "rule_155": true,
+      "computable": false,
+      "computable_reason": "Decided on 6751(b) compliance and reasonable cause; the amount of the remaining underpayment is left to Rule 155."
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "2020 gambling losses allowed in full ($61,929); 6662(a) penalty sustained for 2020; other 2020/2021 issues settled."
+  },
+  "notes": "Opinion does not say whether the penalty rests on substantial understatement or negligence. 2021 issues resolved by stipulation; not decided in the opinion. Petitioner bore burden; 7491(a) not raised."
+}

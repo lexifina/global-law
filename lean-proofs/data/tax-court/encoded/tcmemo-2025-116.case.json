@@ -1,0 +1,30 @@
+[
+ {
+  "citation": "T.C. Memo. 2025-116",
+  "taxYear": 2022,
+  "note": "No income figures; the $3,686 deficiency cannot be recomputed. Ms. Davis is the wife's sister (relationship agreed by the parties; encoded as sibling on the joint return). Residency and disability not proved.",
+  "facts": {
+   "filing": "mfj",
+   "dependents": [
+    {
+     "name": "AngelaDavis",
+     "relationship": "sibling",
+     "age": 64,
+     "youngerThanTaxpayer": false,
+     "disabled": false,
+     "livedWithMoreThanHalfYear": false
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "qualifyingChild:AngelaDavis",
+    "flag": false
+   },
+   {
+    "item": "eicChild:AngelaDavis",
+    "flag": false
+   }
+  ]
+ }
+]

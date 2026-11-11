@@ -1,0 +1,55 @@
+{
+  "citation": "T.C. Summary Opinion 2022-19",
+  "taxYear": 2017,
+  "note": "Joint 2017 return. Capital loss limited by the model's §1211(b) cap; $4,000 tuition and fees deduction (allowed in exam) as an adjustment; child dependency exemption claimed (age not stated; CTC not stated as claimed). PTC: family of 3, contiguous states, premiums $1,524/month, APTC $1,471/month; benchmark (SLCSP) premium not stated, left 0. asFiled = return as filed (no tuition deduction, no Form 8962); the model applies the $3,000 cap to asFiled as well, so asFiled equals the math-error-corrected return. Taxable SS computed by the model. No penalties at issue.",
+  "facts": {
+    "filing": "mfj",
+    "wages": 61234,
+    "taxableInterest": 953,
+    "ordinaryDividends": 245,
+    "iraDistributions": 38392,
+    "unemployment": 10112,
+    "socialSecurity": 13982,
+    "capitalGain": -123822,
+    "longTermGain": -123822,
+    "adjustments": 4000,
+    "withholding": 10873,
+    "claimCTC": false,
+    "dependents": [
+      { "name": "child", "relationship": "child", "daysWithTaxpayer": 365, "livedWithWholeYear": true, "taxpayerProvidedOverHalfSupport": true }
+    ],
+    "ptc": {
+      "familySize": 3,
+      "state": "contiguous",
+      "enrolledPremium": 18288,
+      "benchmarkPremium": 0,
+      "advancePayments": 17652
+    }
+  },
+  "asFiled": {
+    "filing": "mfj",
+    "wages": 61234,
+    "taxableInterest": 953,
+    "ordinaryDividends": 245,
+    "iraDistributions": 38392,
+    "unemployment": 10112,
+    "socialSecurity": 13982,
+    "capitalGain": -123822,
+    "longTermGain": -123822,
+    "withholding": 10873,
+    "claimCTC": false,
+    "dependents": [
+      { "name": "child", "relationship": "child", "daysWithTaxpayer": 365, "livedWithWholeYear": true, "taxpayerProvidedOverHalfSupport": true }
+    ]
+  },
+  "expected": [],
+  "inferred": [
+    "child: age, residence and support not stated; encoded as a qualifying child living with petitioners all year so the claimed (unchallenged) dependency exemption is allowed",
+    "claimCTC false: no child tax credit is mentioned among the reported items",
+    "benchmarkPremium 0: SLCSP premium not stated (household income appears above 400% FPL, so it should not matter)"
+  ],
+  "unencodable": [
+    "asFiled cannot carry the uncapped $123,822 loss: the model applies §1211(b) to every return, so the deficiency is measured from the math-error-corrected return rather than the return as filed",
+    "PTC previously credited to petitioners' account (amount redacted) cannot be represented"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+ "id": "tcmemo-2022-77",
+ "citation": "Rojas v. Commissioner, T.C. Memo. 2022-77",
+ "issues": [
+  {
+   "issue": "Whether $69,880 of 'family support' paid to a former spouse is deductible alimony under Sec. 215",
+   "provision": "IRC 215(a)-(b); 71(b)(1), 71(c)(1), 71(c)(2)(A); Temp. Treas. Reg. 1.71-1T(c) Q&A-17",
+   "court": "Not deductible: payments end 'until both minor children emancipate', a child-related contingency, so Sec. 71(c)(2)(A) treats them as child support; a co-existing remarriage contingency does not help; state-court label and equity irrelevant.",
+   "lean": "facts.alimonyPaid [{executed 2012-07-25, paid 69,888, childSupport 69,888}] -> alimonyDeduction 0 (expected 0); asFiled adjustments 69,880.",
+   "verdict": "match",
+   "diagnosis": "Sec. 71(c)(2)(A) applied: the whole payment ends on the children's emancipation, so all of it is child support (childSupport = paid) and the Sec. 215 deduction is 0. The decisive step (a mixed child/remarriage contingency still triggers (c)(2)(A); state-court label irrelevant) is legal characterisation, encoded as the childSupport fact, not computed. Unexplained: $5,824/month paid vs $4,500 ordered (fn. 2), $69,888 paid vs $69,880 deducted (fn. 3).",
+   "snippet": "The existence of this child-related contingency triggers the application of section 71(c)(1) and (2)(A) and makes the payments in question nonincludible"
+  },
+  {
+   "issue": "Sec. 6662(a) accuracy-related penalty ($4,892)",
+   "provision": "IRC 6662(a)",
+   "court": "Conceded by respondent; no penalty",
+   "lean": "accuracyPenalty 0 (accuracy facts empty)",
+   "verdict": "match",
+   "diagnosis": "Concession, not a computed holding; encoded as expected 0 for completeness. (4,892 = 20% x 24,458 rounded: 4,891.6.)",
+   "snippet": "Respondent having conceded the penalty, the issue for decision is whether petitioners may deduct as alimony under section 215"
+  },
+  {
+   "issue": "Deficiency for 2016",
+   "provision": "IRC 6211; 1(a)",
+   "court": "$24,458 sustained (disallowance sustained; amount not recomputed by the court)",
+   "lean": "0 on the findings (no income facts); deficiency not an expected item",
+   "verdict": "not-encodable",
+   "diagnosis": "Still not encodable: the opinion (fully stipulated, Rule 122) states no wages, other income, deductions or dependents, so AGI and the 2016 tax cannot be computed even with the alimony field. See notes.",
+   "snippet": "Respondent determined a $24,458 deficiency in petitioners' 2016 federal income tax and a section 6662(a) accuracy-related penalty of $4,892."
+  }
+ ],
+ "deficiency": {
+  "court": 24458,
+  "lean": null
+ },
+ "notes": "Rerun with the alimony fields (402a5fdbb47/f918d6f6fc9): exit 0; alimonyDeduction 0 and accuracyPenalty 0 match. 24,458/69,880 = 0.35000 exactly, but the prior hypothesis that the whole deduction sits in the 2016 MFJ 35% bracket is arithmetically impossible: that bracket is $413,350-$466,950, only $53,600 wide, less than $69,880 (and with the Sec. 68 3% interaction the TI change is still >= $67,784). So the 35% is a blend of rates. SENSITIVITY (scratch only, assumed facts, not findings): MFJ, no dependents, wages W, deficiency = tax with $69,880 adjustment removed. (a) Standard deduction, W 250,000-620,000 step 250 then 368,000-382,000 step 5: deficiency ranges 19,567-27,673; nearest 24,450 (W ~374,000) and 24,503-24,504 (W 381k-404k, exemption phase-out steps); no exact 24,458 found. (b) Itemized $30,000 held fixed (input is post-Sec. 68, held constant as a simplification), W = 500,260-500,270: deficiency exactly 24,458. There AGI 430,380 -> 500,260, TI 400,056 -> 470,260 (Delta 70,204 = 69,880 + 324 exemptions lost to phase-out), crossing 33% (13,294), all of 35% (53,600) and 39.6% (3,310): 4,387.0 + 18,760 + 1,310.8 = 24,457.8 -> 24,458. So the figure is consistent with TI straddling the 35% bracket on both sides with the exemptions phasing out, but the actual income is unknown; this scenario is one of many. Sensitivity files: C:/Users/alany/AppData/Local/Temp/claude/ac2e06910e878915/d3a415f9-df9d-4894-ba8f-d56429e7699a/scratchpad/rojas/sens*.json and .log.",
+ "frameworkGaps": [
+  {
+   "provision": "IRC 71(c)(2)",
+   "missing": "Child-contingency reduction is an input (childSupport amount), not derived from the instrument's contingencies; Sec. 71(f) front-loading recapture not modelled. Neither affects this case.",
+   "suggestedFix": "Optional: a terminatesOnChildContingency flag that sets childSupport to the contingent reduction."
+  }
+ ]
+}

@@ -1,0 +1,190 @@
+{
+  "id": "tcsumm-2023-9",
+  "citation": "T.C. Summary Opinion 2023-9",
+  "case_name": "Thomas LaRonn Mitchell v. Commissioner",
+  "docket_numbers": [
+    "10233-21S"
+  ],
+  "judge": "Landy",
+  "date": "2023-03-14",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "599d7a30-13c1-4ed7-878c-5d686a292826",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/10233-21",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/10233-21/599d7a30-13c1-4ed7-878c-5d686a292826/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": false,
+  "suitability_reason": "Every decided issue (Schedule C car/truck, travel, other expenses) turns on substantiation and credibility under §§162, 274(d), 6001.",
+  "tax_years": [
+    2018
+  ],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "Texas",
+    "notes": "Employed as school counselor (DISD) and insurance salesman (Liberty); Schedule C \"business consultant\" activity with no reported income. Pro se; failed to file brief."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2018,
+        "deficiency": 7474,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 1494.8
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "disallowed Schedule C car and truck expenses $22,499",
+      "disallowed travel expenses $11,376",
+      "disallowed other expenses $8,984"
+    ],
+    "contested_by_taxpayer": "Schedule C expense deductions",
+    "conceded": [
+      "Respondent: entitled to student loan interest deduction of $42",
+      "Respondent: not liable for 6662(a) penalty",
+      "Parties agree remaining adjustments are computational"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1",
+        "I2",
+        "I3"
+      ],
+      "fact": "2018 wages from DISD and Liberty $78,180; Schedule C loss $49,202; refund claimed $5,991",
+      "values": {
+        "wages": 78180,
+        "schedule_c_loss": 49202,
+        "refund_claimed": 5991
+      },
+      "snippet": "On Schedule C Mr. Mitchell deducted $22,499 in car and truck expenses, $11,376 in travel expenses, and $8,984 in other expenses.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Mileage log 81,186 business miles; inspection reports show 21,816 miles driven Oct 20, 2017-Nov 15, 2018",
+      "values": {
+        "log_miles": 81186,
+        "inspection_miles": 21816
+      },
+      "snippet": "21,816 miles were driven on the vehicle, far less than the driven miles shown on the mileage log.",
+      "locator": "p. 5"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Court finds no mileage incurred for business purpose",
+      "values": {
+        "business_miles_found": 0
+      },
+      "snippet": "the Court finds that no mileage was incurred for a business purpose.",
+      "locator": "p. 5"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "20 hotel receipts totaling $2,635.19, found altered and not credible",
+      "values": {
+        "hotel_receipts_total": 2635.19
+      },
+      "snippet": "The Court determines that the receipts have been altered and are simply not credible or reliable.",
+      "locator": "p. 6"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I3"
+      ],
+      "fact": "14 advertisement receipts totaling $8,200 not admitted (authenticity)",
+      "values": {
+        "ad_receipts_total": 8200
+      },
+      "snippet": "The Court sustained respondent’s objection and did not admit the receipts into evidence.",
+      "locator": "p. 6"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "other"
+      ],
+      "question": "Schedule C (§162/§274(d)): may petitioner deduct $22,499 of car and truck expenses?",
+      "provisions": [
+        "26 U.S.C. §162(a)",
+        "§274(d)",
+        "§280F(d)(4)(A)(i)",
+        "§6001",
+        "Temp. Treas. Reg. §1.274-5T"
+      ],
+      "holding": "No; mileage log unreliable, testimony not credible",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "car and truck expenses disallowed",
+        "amount": 22499
+      },
+      "rule_155": true,
+      "computable": false,
+      "computable_reason": "Substantiation/credibility"
+    },
+    {
+      "issue_id": "I2",
+      "tags": [
+        "other"
+      ],
+      "question": "Schedule C: may petitioner deduct $11,376 of travel expenses?",
+      "provisions": [
+        "26 U.S.C. §162(a)",
+        "§274(d)"
+      ],
+      "holding": "No; receipts altered, strict substantiation not met",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "travel expenses disallowed",
+        "amount": 11376
+      },
+      "rule_155": true,
+      "computable": false,
+      "computable_reason": "Substantiation/credibility"
+    },
+    {
+      "issue_id": "I3",
+      "tags": [
+        "other"
+      ],
+      "question": "Schedule C: may petitioner deduct $8,984 of other (advertising) expenses?",
+      "provisions": [
+        "26 U.S.C. §162(a)",
+        "§6001"
+      ],
+      "holding": "No; receipts not authenticated or admitted; no other substantiation",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "other expenses disallowed",
+        "amount": 8984
+      },
+      "rule_155": true,
+      "computable": false,
+      "computable_reason": "Substantiation"
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "All disputed Schedule C deductions disallowed; respondent conceded penalty and $42 student loan interest"
+  },
+  "notes": "Unsuitable: pure substantiation case. NOD issued December 28, 2020; trial January 24, 2022."
+}

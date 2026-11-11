@@ -1,0 +1,33 @@
+{
+  "citation": "T.C. Summary Opinion 2023-25",
+  "taxYear": 2017,
+  "note": "Doggart, 2017. Non-filer; IRS prepared a section 6020(b) SFR. Encoded: two lapsed Prudential life policies with loans extinguished by cash value; the taxable amounts ($13,214 and $5,366 = loan repaid less premiums paid) are undisputed, but loan and premium figures are not stated separately, so each lapse is entered as loanExtinguished = taxable amount, premiumsPaid = 0. Rental loss: no documentation substantiating any Schedule E expense and the property was rented to his daughter below FMV, so no rental deduction is encoded; the rental receipts ($500/month from Sept 15) are not stated to be in the notice and are left out. No other income stated; filing status (single) and age are defaults. No 2017 or 2016 return, no estimated payments or withholding. Failure to file and to pay: no reasonable cause. Section 6654: no 2016 return, so only the 90% current-year prong.",
+  "facts": {
+    "filing": "single",
+    "policyLapses": [
+      {"loanExtinguished": 13214, "premiumsPaid": 0},
+      {"loanExtinguished": 5366, "premiumsPaid": 0}
+    ]
+  },
+  "taxShown": 0,
+  "sfrTax": 818,
+  "lateness": {
+    "asOf": "2023-07-27",
+    "reasonableCauseFiling": false,
+    "reasonableCausePayment": false
+  },
+  "estimated": {
+    "waived": false
+  },
+  "expected": [],
+  "inferred": [
+    "each lapse entered as net taxable amount (loanExtinguished = 1099-R taxable amount, premiumsPaid 0); actual loan and premium figures not stated",
+    "filing status single (not stated; petitioner filed no return)",
+    "sfrTax: the SFR tax is not stated; set equal to the corrected net tax computed by the model (court found he failed to pay the amount shown on the SFR)",
+    "lateness asOf = opinion date 2023-07-27 (additions reach their 25% caps well before then)"
+  ],
+  "unencodable": [
+    "Schedule E rental activity (below-FMV rental to daughter, section 280A / unsubstantiated expenses) has no schema field; no rental income or loss encoded",
+    "SFR tax amount not given in the redacted text"
+  ]
+}

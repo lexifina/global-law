@@ -1,0 +1,90 @@
+{
+ "id": "tcmemo-2024-67",
+ "citation": "T.C. Memo. 2024-67",
+ "issues": [
+  {
+   "issue": "Gross income 254,512 from third-party reports",
+   "provision": "sec. 61; Rule 34(b)(1)(G)",
+   "court": "sustained (deemed conceded)",
+   "lean": "encoded as facts",
+   "verdict": "not-encodable",
+   "diagnosis": "Sustained on concession; amounts encoded.",
+   "snippet": "We accordingly sustain the Commissioner's determination that petitioner in 2018 received gross income of $254,512."
+  },
+  {
+   "issue": "Taxable income / regular tax (single)",
+   "provision": "sec. 1(j), 63",
+   "court": "242,512 / 60,569",
+   "lean": "242512 / 60569",
+   "verdict": "match",
+   "diagnosis": "Capital gain taxed at ordinary rates, as the IRS did (longTermGain 0; character not stated).",
+   "snippet": "taxable income of $242,512, generating tax of $60,569"
+  },
+  {
+   "issue": "MFS rate used in the notice was harmless",
+   "provision": "sec. 1(j); Rev. Proc. 2018-18 sec. 3.01",
+   "court": "same tax as single",
+   "lean": "60569 (MFS)",
+   "verdict": "match",
+   "diagnosis": "Variant run with filing mfs gives 60,569 and total 60,811.",
+   "snippet": "the use of the \"married filing separately\" tax rate was harmless error."
+  },
+  {
+   "issue": "Sec. 72(t) additional tax",
+   "provision": "sec. 72(t)(1)",
+   "court": 242,
+   "lean": "242",
+   "verdict": "match",
+   "diagnosis": "10% x 2,417 = 241.70.",
+   "snippet": "We accordingly sustain the IRS's determination of a $242 additional tax for 2018."
+  },
+  {
+   "issue": "Deficiency",
+   "provision": "sec. 6211",
+   "court": 60811,
+   "lean": 60811,
+   "verdict": "match",
+   "diagnosis": "Non-filer: taxShown 0.",
+   "snippet": "producing a total tax liability of $60,811."
+  },
+  {
+   "issue": "Sec. 6651(a)(1) failure to file",
+   "provision": "sec. 6651(a)(1), (c)(1)",
+   "court": 4016,
+   "lean": 4016,
+   "verdict": "match",
+   "diagnosis": "sfrTax 60,811 (sec. 6651(g)(2)) now in the main case: net amount due 60,811 - 42,961 = 17,850; 5 months late filing x 4.5% = 22.5% x 17,850 = 4,016.25, (c)(1) reduced by the 0.5% FTP for the overlapping months. Deemed conceded. Rerun 57b55431cca.",
+   "snippet": "an addition to tax of $4,016 under section 6651(a)(1) for failure to timely file"
+  },
+  {
+   "issue": "Sec. 6651(a)(2) failure to pay",
+   "provision": "sec. 6651(a)(2), (g)(2)",
+   "court": 3659,
+   "lean": 3659,
+   "verdict": "match",
+   "diagnosis": "sfrTax 60,811: 41 months (15 Apr 2019 - 12 Sep 2022) x 0.5% x 17,850 = 3,659.25. Deemed conceded. Rerun 57b55431cca.",
+   "snippet": "The IRS determined a failure- to-timely-pay addition to tax of $3,659, calculated with reference to petitioner's net underpayment of $17,850."
+  },
+  {
+   "issue": "Sec. 6654 addition",
+   "provision": "sec. 6654",
+   "court": 424,
+   "lean": 424,
+   "verdict": "match",
+   "diagnosis": "estimated: no 2017 return in the record (priorTax none -> required annual = 90% x 60,811 = 54,730; estimatedRequiredAnnual 54,730 matches), no payments, withholding 42,961 spread evenly: shortfall 13,682.50 - 10,740.25 = 2,942.25 per installment, to 15 Apr 2019 at 5%/6%. With the printed Form 1040-ES due dates (17 Apr, 15 Jun, 17 Sep 2018, 15 Jan 2019) Lean gives 422; with the statutory sec. 6654(c)(2) dates (15th; no sec. 7503 weekend/holiday shift) 424 = 423.76, so dueDates is set to the 15th. Assumed: no prior-year return (opinion silent). Deemed conceded (Rule 34(b)(1)(G)).",
+   "snippet": "an addition to tax of $424 under section 6654"
+  }
+ ],
+ "deficiency": {
+  "court": 60811,
+  "lean": 60811
+ },
+ "notes": "Rerun 57b55431cca with sfrTax 60,811 on the main case: all 7 items match (FTF 4,016, FTP 3,659). The SFR-as-shown variant is now redundant but kept. MSA 6,236 encoded as other income (no sec. 220(f)(4) tax determined). Sec. 6654 now encoded via 'estimated' (402a5fdbb47/f918d6f6fc9): exit 0, all 9 items match incl. estimatedTaxAddition 424 and estimatedRequiredAnnual 54,730. Finding: IRS computes the sec. 6654 addition from the statutory 15th-of-month due dates; the framework's default (printed, sec. 7503-shifted dates) gives 422.",
+ "frameworkGaps": [
+  {
+   "provision": "IRC 6654(c)(2); 7503",
+   "missing": "Default installment due dates are the sec. 7503-shifted dates printed on Form 1040-ES; the IRS's sec. 6654 computation here runs from the statutory 15th, so the default undercomputes by ~$2 when a due date falls on a weekend/holiday.",
+   "suggestedFix": "Charge the addition from the statutory dates (Apr 15, Jun 15, Sep 15, Jan 15) and use the shifted dates only for whether a payment is timely; or default dueDates to the statutory dates."
+  }
+ ]
+}

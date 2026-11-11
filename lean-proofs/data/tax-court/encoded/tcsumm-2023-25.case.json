@@ -1,0 +1,68 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2023-25",
+  "taxYear": 2017,
+  "note": "Doggart. No 2017 return filed; IRS prepared a sec. 6020(b) SFR on or around 2020-03-09; notice 2020-11-30. Lapsed Prudential policies: the court found (via the unchallenged Forms 1099-R) only the excess of loan extinguished over premiums paid per policy, 13,214 and 5,366; the separate loan and premium figures are not stated, so each policy is encoded as loanExtinguished = the found excess, premiumsPaid 0 (lapseIncome is the same for any split with loan - premiums = the found excess). Schedule E rental loss on the Signal Mountain Property disallowed under sec. 280A: not modelled, so no Schedule E item is encoded. Filing status, age, withholding and the other income the notice included ('inter alia') are not stated, so the 9,910 deficiency and the 1,434 / 1,147 / 143 additions are not in expected here (see the notice-reconstruction entry). sec. 6651(a)(1),(a)(2) sustained: incarceration / ignorance not reasonable cause (judgment). Decision under Rule 155. asOf set to the notice date for illustration only. sfrTax 9,910 is inferred (the notice deficiency; the opinion finds a valid sec. 6020(b) SFR and non-payment but never states the tax shown on it); it is used only to express the (a)(2) holding.",
+  "facts": {
+   "policyLapses": [
+    {
+     "loanExtinguished": 13214,
+     "premiumsPaid": 0
+    },
+    {
+     "loanExtinguished": 5366,
+     "premiumsPaid": 0
+    }
+   ]
+  },
+  "lateness": {
+   "asOf": "2020-11-30",
+   "reasonableCauseFiling": false,
+   "reasonableCausePayment": false,
+   "assertsFailureToPay": true
+  },
+  "expected": [
+   {
+    "item": "lapseIncome",
+    "value": 18580
+   },
+   {
+    "item": "agi",
+    "value": 18580
+   },
+   {
+    "item": "failureToFileApplies",
+    "flag": true
+   },
+   {
+    "item": "failureToPayApplies",
+    "flag": true
+   }
+  ],
+  "sfrTax": 9910
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-25 (notice reconstruction: sec. 6654)",
+  "taxYear": 2017,
+  "note": "Consistency check of the notice's sec. 6654 addition of 143, not a court holding. No 2017 or 2016 return (so no prior-year safe harbor, no (e)(2) exception) and no estimated payments (found). Current tax = the notice deficiency 9,910 (non-filer: sec. 6211(b)(1) ignores withholding). Withholding 3,537 is inferred, not found: it is the one value making the notice's sec. 6651 base 9,910 - 3,537 = 6,373 give FTF 22.5% x 6,373 = 1,434.",
+  "estimated": {
+   "currentTax": 9910,
+   "withholding": 3537,
+   "payments": []
+  },
+  "expected": [
+   {
+    "item": "estimatedTaxAddition",
+    "value": 143
+   },
+   {
+    "item": "estimatedRequiredAnnual",
+    "value": 8919
+   },
+   {
+    "item": "estimatedTaxApplies",
+    "flag": true
+   }
+  ]
+ }
+]

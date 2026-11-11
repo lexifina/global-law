@@ -1,0 +1,214 @@
+{
+  "id": "tcsumm-2019-8",
+  "citation": "T.C. Summary Opinion 2019-8",
+  "case_name": "Joel H. Arseo v. Commissioner",
+  "docket_numbers": [
+    "7862-18S"
+  ],
+  "judge": "Gerber",
+  "date": "2019-05-02",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "2dcd1345-7fc5-497c-8838-fff77c40b2e5",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/7862-18",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/7862-18/2dcd1345-7fc5-497c-8838-fff77c40b2e5/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2015
+  ],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "Arizona",
+    "notes": "Filed Form 1040A; standard deduction $9,250 claimed (filing status not stated). Pro se. All amounts rounded to nearest dollar per opinion."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2015,
+        "deficiency": 1907,
+        "penalties": [],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "included $25 unreported interest income",
+      "included $2,994 Forms W-2G gambling winnings",
+      "disallowed $6,500 IRA contribution deduction"
+    ],
+    "contested_by_taxpayer": "Claims gambling losses exceeding winnings; claims $6,500 IRA deduction",
+    "conceded": [
+      "Petitioner admits $25 interest income",
+      "Petitioner admits $2,994 gambling winnings (but claims offsetting losses)"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I3"
+      ],
+      "fact": "2015 salary from State of Arizona $28,577; W-2 wages $25,687",
+      "values": {
+        "salary": 28577,
+        "w2_wages": 25687
+      },
+      "snippet": "paid a salary of $28,577, of which $25,687 was reported as wages on petitioner's 2015 Form W-2",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I3"
+      ],
+      "fact": "$2,890 contributed to Arizona State Retirement System excluded from W-2 wages (pretax)",
+      "values": {
+        "state_retirement_contribution": 2890,
+        "pretax": true
+      },
+      "snippet": "Petitioner's Form W-2 did not include $2,890 that he contributed to the Arizona State Retirement System for 2015.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I3"
+      ],
+      "fact": "Return claimed $6,500 IRA deduction",
+      "values": {
+        "ira_deduction_claimed": 6500
+      },
+      "snippet": "reported income of $25,687 from wages and claimed a deduction of $6,500 for an IRA contribution",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "Two Forms W-2G totaling $2,994 gambling winnings; no records kept",
+      "values": {
+        "gambling_winnings": 2994,
+        "records_kept": false
+      },
+      "snippet": "in the total amount of $2,994. Petitioner did not maintain records of his gambling activity",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "$25 interest income received in 2015, unreported",
+      "values": {
+        "interest_income": 25
+      },
+      "snippet": "petitioner received $25 of interest income during 2015",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F6",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "Standard deduction $9,250 claimed; no itemized deductions",
+      "values": {
+        "standard_deduction": 9250,
+        "itemized": false
+      },
+      "snippet": "chose to use the standard deduction of $9,250",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F7",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "Would need more than $6,256 of additional itemized deductions beyond $2,994 losses to exceed the standard deduction",
+      "values": {
+        "additional_itemized_needed": 6256
+      },
+      "snippet": "Petitioner would have to come up with more than $6,256 of additional itemized deductions",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F8",
+      "issue_refs": [
+        "I3"
+      ],
+      "fact": "Petitioner computed $6,500 roughly by doubling his $2,890 contribution",
+      "values": {},
+      "snippet": "by doubling his $2,890 contribution to the Arizona State Retirement System",
+      "locator": "p. 4"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "other_income_inclusion_61"
+      ],
+      "question": "Must petitioner include $25 of unreported interest income for 2015?",
+      "provisions": [
+        "26 U.S.C. §61(a)"
+      ],
+      "holding": "Yes; petitioner admitted the interest income",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "interest income",
+        "amount": 25
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Admitted receipt; inclusion follows mechanically from §61"
+    },
+    {
+      "issue_id": "I2",
+      "tags": [
+        "gambling_165d",
+        "other_income_inclusion_61"
+      ],
+      "question": "Must petitioner include $2,994 of W-2G gambling winnings, and can unsubstantiated gambling losses offset them?",
+      "provisions": [
+        "26 U.S.C. §61(a)",
+        "§165(d)",
+        "§63"
+      ],
+      "holding": "Winnings includible; no records of losses, and even if $2,994 losses substantiated, as itemized deductions they would not exceed the $9,250 standard deduction",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "gambling winnings included",
+        "amount": 2994
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Alternative ground is pure arithmetic: losses capped at winnings ($2,994) as itemized deduction < $9,250 standard deduction (substantiation failure also noted)"
+    },
+    {
+      "issue_id": "I3",
+      "tags": [
+        "ira_deduction_219"
+      ],
+      "question": "Is petitioner entitled to a $6,500 IRA deduction based on pretax contributions to the Arizona State Retirement System?",
+      "provisions": [
+        "26 U.S.C. §219(a)",
+        "§219(e)"
+      ],
+      "holding": "No; the $2,890 contribution was a pretax reduction of wages and pretax contributions are not deductible",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "IRA deduction disallowed",
+        "amount": 6500
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Contribution already excluded from wages; no deductible IRA contribution exists on found facts"
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered for respondent.",
+    "summary": "$1,907 deficiency sustained: interest and gambling winnings included; IRA deduction disallowed"
+  },
+  "notes": "No penalties determined. Filing status not stated. Gambling-loss holding rests on both lack of records and standard-deduction arithmetic (derived: 9,250 - 2,994 = 6,256)."
+}

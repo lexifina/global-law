@@ -1,0 +1,29 @@
+{
+ "citation": "T.C. Summary Opinion 2024-4",
+ "taxYear": 2018,
+ "note": "2018 retirement plan distribution $10,342 (conceded taxable, omitted from return); petitioner in early 50s, not 59 1/2; used to pay past-due rent to avoid eviction; only argument is \u00a772(t)(2)(I) emergency expense (enacted 2023). Late-filing addition conceded. Other income not stated.",
+ "facts": {
+  "pensions": 10342,
+  "taxpayerAge": 52,
+  "earlyDistributions": [
+   {
+    "amountIncludible": 10342,
+    "plan": "qualifiedPlan",
+    "emergencyExpense": 10342
+   }
+  ]
+ },
+ "asFiled": {
+  "taxpayerAge": 52
+ },
+ "expected": [],
+ "inferred": [
+  "Age 52 for 'early 50s' (only matters for the 65 tests)",
+  "Plan kind: 'retirement plan' encoded as qualifiedPlan (IRA vs employer plan not stated)",
+  "Filing status single (not stated)",
+  "Other income on the 2018 return not stated; encoded as zero in facts and asFiled"
+ ],
+ "unencodable": [
+  "Return's other income unknown; deficiency computed on the distribution alone"
+ ]
+}

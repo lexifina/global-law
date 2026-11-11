@@ -1,0 +1,84 @@
+{
+ "part": 1,
+ "cases": 15,
+ "runs": 18,
+ "counts": {
+  "not-encodable": 11,
+  "match": 12,
+  "mismatch": 3,
+  "pending-year": 12,
+  "judgment": 1
+ },
+ "gaps": [
+  {
+   "gap": "Tax years before 2016",
+   "cases": [
+    "tcmemo-2019-83 (2014)",
+    "tcmemo-2023-56",
+    "tcsumm-2019-29 (2012)",
+    "tcsumm-2020-14",
+    "tcsumm-2020-5",
+    "tcsumm-2021-26",
+    "tcsumm-2022-23"
+   ],
+   "fix": "params? for 2012-2015 (coordinator says in progress); then rerun part1.json. Rules used here (sec. 72(t), sec. 86 base amounts, sec. 152) are year-invariant."
+  },
+  {
+   "gap": "Sec. 6651(g) substitute for return: decideCase passes one 'shown' value to both deficiencyOf and lateAdditions",
+   "cases": [
+    "tcmemo-2024-67"
+   ],
+   "fix": "Add Case.sfrTax : Option Int (or LateFacts.taxShownOnReturn); use it as `shown` in lateAdditions (and for the (c)(1) offset) while taxShown stays 0 for sec. 6211. Verified: with shown = SFR tax, FTF 4,016 and FTP 3,659 match."
+  },
+  {
+   "gap": "Sec. 6654 estimated-tax addition not modelled",
+   "cases": [
+    "tcmemo-2024-67"
+   ],
+   "fix": "Add sec. 6654 (required annual payment, quarterly underpayment rate) or at least accept it as a stated amount."
+  },
+  {
+   "gap": "IRA rollovers (sec. 408(d)(3): 60-day rule, Wood bookkeeping error, (I) hardship waiver) not modelled",
+   "cases": [
+    "tcmemo-2019-83"
+   ],
+   "fix": "Optional distribution facts: rolledOverAmount, daysToRollover, waiver; includible = distribution - timely rollover."
+  },
+  {
+   "gap": "Sec. 86(e) lump-sum election and sec. 86(d)(2) same-year repayments have no fields (encoder must net)",
+   "cases": [
+    "tcsumm-2020-5",
+    "tcsumm-2021-9"
+   ],
+   "fix": "socialSecurityRepaid field; lumpSumPriorYears election computation."
+  },
+  {
+   "gap": "Adjustments (alimony sec. 215/71(b), IRA sec. 219) are an opaque amount and not a checkable Outcome item",
+   "cases": [
+    "tcsumm-2023-3",
+    "tcsumm-2024-15"
+   ],
+   "fix": "Expose 'adjustments' (and 'asFiled.*' figures) in Outcome.intValues; optionally model sec. 71(b)(1) tests and sec. 219 eligibility/limits."
+  },
+  {
+   "gap": "As-filed figures cannot be checked via expected (only corrected/deficiency items)",
+   "cases": [
+    "tcmemo-2023-141"
+   ],
+   "fix": "Add 'asFiled.taxableIncome', 'asFiled.totalTax' etc. to intValues (checked by hand here: TI 56,807 and tax 4,662 reproduce)."
+  },
+  {
+   "gap": "Archer MSA / HSA distributions (sec. 220(f), 223(f)) have no field and no additional tax",
+   "cases": [
+    "tcmemo-2024-67",
+    "tcmemo-2019-83"
+   ],
+   "fix": "msaDistributions / hsaDistributions with the 20% additional tax and exceptions."
+  }
+ ],
+ "observations": [
+  "tcmemo-2023-141: deficiency off by $2 (IRS income-tax increase 3,274 vs 3,276 recomputed); as-filed return reproduces exactly.",
+  "tcsumm-2019-29: the court counts SSI as gross income for sec. 152(d)(1)(B); SSI is generally excluded, so that ground is doubtful.",
+  "tcsumm-2021-9: notice deficiency 3,992 reproduced exactly when the conceded 1,983 NEC is treated as Schedule C income."
+ ]
+}

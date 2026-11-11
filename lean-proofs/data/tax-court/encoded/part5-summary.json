@@ -1,0 +1,121 @@
+{
+ "part": 5,
+ "cases": 5,
+ "runs": 7,
+ "counts": {
+  "not-encodable": 8,
+  "match": 8,
+  "judgment": 6,
+  "mismatch": 2
+ },
+ "perCase": {
+  "tcsumm-2021-6": {
+   "not-encodable": 2,
+   "match": 1,
+   "judgment": 1
+  },
+  "tcsumm-2022-10": {
+   "not-encodable": 1,
+   "mismatch": 2,
+   "match": 2
+  },
+  "tcsumm-2023-13": {
+   "not-encodable": 1,
+   "match": 2
+  },
+  "tcsumm-2023-25": {
+   "not-encodable": 3,
+   "judgment": 2
+  },
+  "tcsumm-2023-35": {
+   "judgment": 3,
+   "not-encodable": 1,
+   "match": 3
+  }
+ },
+ "gaps": [
+  {
+   "gap": "Sec. 911 foreign earned income exclusion missing",
+   "cases": [
+    "tcsumm-2022-10"
+   ],
+   "fix": "Add foreignEarnedIncomeExclusion (capped by sec. 911(b)(2)(D) annual limit, prorated by qualifying days) with sec. 911(f) stacking: tax = tax(TI + excluded) - tax(excluded); split wages by US/foreign workdays."
+  },
+  {
+   "gap": "Sec. 6651(g)(2) sfrTax not in this build",
+   "cases": [
+    "tcsumm-2022-10",
+    "tcsumm-2023-25",
+    "tcsumm-2023-35"
+   ],
+   "fix": "Add Case.sfrTax used as 'amount shown' for sec. 6651(a)(2) (and the redetermined tax when the court says so), plus an as-of date for failure-to-pay months. Without it, FTP on an SFR is always 0."
+  },
+  {
+   "gap": "Sec. 6654 estimated-tax addition not modelled",
+   "cases": [
+    "tcsumm-2023-25"
+   ],
+   "fix": "Required annual payment = lesser of 90% current / 100% prior-year tax (prior only if return filed), 4 installments, underpayment-rate tables; at least an applies flag."
+  },
+  {
+   "gap": "No liability-only flags for additions",
+   "cases": [
+    "tcsumm-2023-25",
+    "tcsumm-2023-35",
+    "tcsumm-2022-10"
+   ],
+   "fix": "Expected items failureToFileApplies / failureToPayApplies / estimatedTaxApplies so yes/no holdings without amounts (Rule 155) can be checked."
+  },
+  {
+   "gap": "Schedule C / Schedule E activities (secs. 162, 212, 280A)",
+   "cases": [
+    "tcsumm-2023-35",
+    "tcsumm-2023-25"
+   ],
+   "fix": "Per-activity records (gross receipts, COGS, expenses; rent with rented-months/ownership fraction routing remainder to itemized sec. 163(h)/164 or sec. 262); sec. 280A residence test (personal use > max(14 days, 10% fair-rental days), below-market family rental = personal use) barring deductions."
+  },
+  {
+   "gap": "Sec. 183 hobby activity",
+   "cases": [
+    "tcsumm-2023-35"
+   ],
+   "fix": "Activity with gross income/expenses, deductions capped at gross income, court-set forProfit flag."
+  },
+  {
+   "gap": "Sec. 72(p)/402(c) plan-loan offsets and rollovers",
+   "cases": [
+    "tcsumm-2023-13"
+   ],
+   "fix": "Distribution kind (withdrawal|loanOffset|deemedLoan) and rolledOverWithinDays to decide includibility instead of taking amount as given."
+  },
+  {
+   "gap": "Sec. 72(e) lapse of life policy with loan",
+   "cases": [
+    "tcsumm-2023-25"
+   ],
+   "fix": "Insurance-contract item: income = cash value applied to loan minus investment in contract."
+  },
+  {
+   "gap": "Sec. 6662/6664 underpayment base with unclaimed withholding",
+   "cases": [
+    "tcsumm-2023-13"
+   ],
+   "fix": "asFiled.withholding separate from corrected payments; underpayment = deficiency - withholding not claimed on return (verified 20% x (38,213 - 14,229) = 4,797)."
+  },
+  {
+   "gap": "Sec. 72(t)(2)(B) medical exception detail",
+   "cases": [
+    "tcsumm-2023-13"
+   ],
+   "fix": "Limit to unreimbursed medical expenses paid in the distribution year above 7.5% AGI floor."
+  },
+  {
+   "gap": "Sec. 71 alimony fields (pre-2019 instruments)",
+   "cases": [
+    "tcsumm-2023-35"
+   ],
+   "fix": "alimonyReceived / alimonyPaid instead of otherIncome/adjustments."
+  }
+ ],
+ "notes": "Court states no final deficiency in any case except tcsumm-2021-6 (39,649 sustained; not computable: status/other income unstated). Notice deficiencies reproduced exactly for tcsumm-2022-10 (28,932) and tcsumm-2023-13 (38,213). tcsumm-2022-10 'mismatch' items are framework gaps (sec. 911(f) stacking, sfrTax), not encoding errors."
+}

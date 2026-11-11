@@ -1,0 +1,83 @@
+{
+ "id": "tcsumm-2023-35",
+ "citation": "T.C. Summary Opinion 2023-35",
+ "issues": [
+  {
+   "issue": "Surplus & Adventure (Sch. C) deductions: car/truck, depreciation, other expenses",
+   "provision": "secs. 162(a), 274(d), 280F(d)(4), 167(a)",
+   "court": "allowed 1,092.37 + 1,077.77 + 80.19 + 229.94 = 2,480.27; car/truck and depreciation denied",
+   "lean": "allowed amounts entered as facts; S&A net 328.73 (10,404 - 7,595 - 2,480.27)",
+   "verdict": "judgment",
+   "diagnosis": "Substantiation (strict sec. 274(d) for vehicles; basis/useful life for depreciation) is a finding on evidence; the framework takes the allowed net profit as input and has no Schedule C expense model.",
+   "snippet": "Petitioner testified and the record includes documentary evidence that supports he is entitled to deduct the following asserted expenses"
+  },
+  {
+   "issue": "Fibre Arts (Sch. C) deductions",
+   "provision": "secs. 162(a), 274(d), 167(a)",
+   "court": "allowed Etsy fees 202.90 + Ohio filing fees 145.15; car/truck and depreciation denied",
+   "lean": "Fibre Arts net -4,705.05 (3,238 - 7,595 stipulated COGS - 348.05); combined Sch. C -4,376, SE tax 0",
+   "verdict": "judgment",
+   "diagnosis": "Substantiation finding. Stipulated Fibre Arts COGS (7,595) is identical to S&A COGS, possibly a table error; encoded as stated.",
+   "snippet": "he did not prove the properties' depreciable bases, their useful lives, and the previously allowable depreciation deductions for any assets."
+  },
+  {
+   "issue": "STEAM Works: activity not engaged in for profit; any deductions?",
+   "provision": "sec. 183(a)-(c)",
+   "court": 0,
+   "lean": "not modelled (0 entered)",
+   "verdict": "not-encodable",
+   "diagnosis": "Profit objective is a nine-factor facts-and-circumstances judgment; once hobby found, sec. 183(b) caps deductions at gross income (0), which is arithmetic but the framework has no sec. 183 activity model.",
+   "snippet": "because petitioner did not have any gross income from STEAM Works in 2017, he is not entitled to deduct any of the asserted expenses"
+  },
+  {
+   "issue": "Beavercreek property: allocation of half-share taxes/interest and expenses (5/12 rental, 7/12 itemized/personal)",
+   "provision": "secs. 162(a), 212(2), 163(h), 164(a), 262",
+   "court": "5/12 of half of taxes+interest and 5/12 of 1,199.36 against rent; 7/12 of half taxes+interest itemized",
+   "lean": "net rent 4,811.32 (7,437.35 - 499.73 - 2,126.30); itemized share 2,976.81 (in itemizedDeductions 25,891)",
+   "verdict": "match",
+   "diagnosis": "Allocation is arithmetic on found facts, done in the encoding (framework has no Schedule E / mixed-use allocation); car/truck, meals, depreciation denied for substantiation (judgment).",
+   "snippet": "petitioner may deduct five-twelfths of his half of the mortgage interest and real estate taxes he paid under sections 162(a) and 212(2)"
+  },
+  {
+   "issue": "Maryland property deductions",
+   "provision": "secs. 162(a), 212(2)",
+   "court": "2,896.98 (2,051.50 + 845.48) plus one half of taxes 2,887.33 and interest 8,917.28",
+   "lean": "net rent 12,200.72 (21,000 - 2,896.98 - 5,902.31)",
+   "verdict": "match",
+   "diagnosis": "2,051.50 + 845.48 = 2,896.98 checks; half of taxes+interest = 5,902.31. Rental netting done in the encoding (no Schedule E in framework). Car/truck, meals, depreciation denied (judgment).",
+   "snippet": "petitioner may deduct those expenses totaling $2,896.98 under sections 162(a) and 212(2)"
+  },
+  {
+   "issue": "Alimony $3,000 (stipulated)",
+   "provision": "secs. 71(a)-(b), 61(a)(8)",
+   "court": "3,000 stipulated (direction and instrument not stated; no ruling)",
+   "lean": "alimonyIncluded 3000",
+   "verdict": "match",
+   "diagnosis": "Encoded as alimonyReceived (read as income: listed among stipulated income items). Opinion gives no instrument date or (b)(1) facts; defaults (all requirements met) and executed 2017-05-01 (separation month) assumed. If paid rather than received, it would be a 3,000 sec. 215 deduction instead (AGI -6,000 vs. this encoding). Deficiency unchanged at 17,819.",
+   "snippet": "Alimony $3,000"
+  },
+  {
+   "issue": "Filing status / exemptions (conceded)",
+   "provision": "secs. 2(b), 151",
+   "court": "HOH; three personal exemptions",
+   "lean": "hoh; dependentsCounted 2; exemptions 12,150",
+   "verdict": "match",
+   "diagnosis": "Concessions; dependents not described in opinion, encoded as two qualifying persons.",
+   "snippet": "Petitioner is entitled to three personal exemptions"
+  },
+  {
+   "issue": "Sec. 6651(a)(1) addition to tax for failure to file",
+   "provision": "secs. 6651(a)(1), 6651(g)(1), 7491(c)",
+   "court": "applies (liable; amount left to Rule 155, not stated; notice 6,575.17)",
+   "lean": "failureToFileApplies true; amount 3,192",
+   "verdict": "match",
+   "diagnosis": "Applies flag matches: production met (no return by extended 10/15/2018 due date; SFR is not a return, sec. 6651(g)(1)), reasonableCauseFiling false, positive tax due. Petitioner never claimed reasonable cause, so no weighed judgment decides it. Amount unchecked: court gives none (Lean 25% x (17,819 - 5,050) = 3,192).",
+   "snippet": "Petitioner has not claimed nor proven that he qualifies for an exception to the addition to tax for failure to timely file a return."
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": 17819
+ },
+ "notes": "Rule 155; no court deficiency or addition amounts. Lean corrected return: AGI 131,010, itemized 25,891, exemptions 12,150, TI 92,969, regular tax 17,159 + 660 sec. 72(t) tax (kept: court calls it 'purely computational') = 17,819 (no return filed, taxShown 0). Assumptions that move the figure: alimony $3,000 now in alimonyReceived (direction not stated; if paid, AGI would be 6,000 lower); capital gain character not stated (if short-term about +342); 660 if dropped -660. Notice (34,273; exemption 3,888 implies MFS-style 1,250 phase-out steps on AGI 158,209) not reproduced: its income composition is not given. Framework gaps: no Schedule C/E expense or mixed-use rental allocation, no sec. 183 hobby limit (sfrTax not needed: the sec. 6651(a)(2) addition was conceded, so there is no (c)(1) offset; checked at 2c5b6354943)."
+}

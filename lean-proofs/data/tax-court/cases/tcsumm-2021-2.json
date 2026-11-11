@@ -1,0 +1,74 @@
+{
+  "id": "tcsumm-2021-2",
+  "citation": "T.C. Summary Opinion 2021-2",
+  "case_name": "Dianne S. Hairston and Steve R. Hairston v. Commissioner",
+  "docket_numbers": ["8129-17S"],
+  "judge": "Colvin",
+  "date": "2021-01-25",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "ca4c251b-fb88-4f7d-99b2-22851dd5546e",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/8129-17",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/8129-17/ca4c251b-fb88-4f7d-99b2-22851dd5546e/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "tax_years": [2014],
+  "taxpayer": {
+    "filing_status_claimed": "married filing jointly",
+    "state": "Virginia",
+    "notes": "Cash basis taxpayers. Husband received workers' compensation and Social Security disability benefits; no Social Security benefits reported on 2014 Form 1040."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {"year": 2014, "deficiency": 9717, "penalties": [{"section": "6662(a)", "amount": null}], "additions": []}
+    ],
+    "adjustments": ["unreported Social Security benefits of $35,999 per Form SSA-1099 (taxable portion under section 86)"],
+    "contested_by_taxpayer": "Inclusion of $7,723 workers' compensation offset and of benefits later repaid ($49,170 repayment starting 2017)",
+    "conceded": ["Respondent conceded petitioners are not liable for the section 6662(a) accuracy-related penalty"]
+  },
+  "findings_of_fact": [
+    {"fact_id": "F1", "issue_refs": ["I1"], "fact": "Husband received weekly workers' compensation of $297 from February 10 through October 3, 2013",
+     "values": {"weekly_wc": 297, "wc_start": "2013-02-10", "wc_end": "2013-10-03"},
+     "snippet": "Petitioner husband received weekly workers’ compensation payments of $297 from February 10 through October 3, 2013.", "locator": "p. 3"},
+    {"fact_id": "F2", "issue_refs": ["I1"], "fact": "January 14, 2014 SSA payment of $10,975 for February-December 2013; monthly $999 February-June 2014; June 17, 2014 retroactive increase $3,606; $1,450 monthly July-December 2014",
+     "values": {"payment_2014_01_14": 10975, "monthly_feb_jun_2014": 999, "retro_increase_2014_06_17": 3606, "monthly_jul_dec_2014": 1450},
+     "snippet": "On January 14, 2014, petitioner husband received a payment of $10,975 from the SSA for February through December 2013.", "locator": "p. 3"},
+    {"fact_id": "F3", "issue_refs": ["I1"], "fact": "SSA paid $28,276 to husband in 2014",
+     "values": {"ss_paid_2014": 28276},
+     "snippet": "The SSA paid $28,276 to petitioner husband in 2014.", "locator": "p. 4"},
+    {"fact_id": "F4", "issue_refs": ["I1"], "fact": "Form SSA-1099 for 2014: benefits $35,999 = $28,276 disability + $7,723 workers' compensation offset; $18,599 attributable to 2013",
+     "values": {"ssa1099_total": 35999, "ss_disability": 28276, "wc_offset": 7723, "amount_for_prior_year_2013": 18599},
+     "snippet": "benefits for 2014 totaled $35,999, comprising $28,276 in social security disability and $7,723 in worker’s compensation offset.", "locator": "p. 4"},
+    {"fact_id": "F5", "issue_refs": ["I1"], "fact": "No Social Security benefits reported on 2014 return",
+     "values": {"ss_reported": 0},
+     "snippet": "Petitioners did not report receiving any Social Security benefits on their Form 1040, U.S. Individual Income Tax Return, for 2014.", "locator": "p. 4"},
+    {"fact_id": "F6", "issue_refs": ["I2"], "fact": "Workers' compensation reinstated February 17, 2016 retroactive to October 4, 2013; SSA letter March 22, 2017 requiring repayment of $49,170",
+     "values": {"wc_reinstated_date": "2016-02-17", "wc_retroactive_to": "2013-10-04", "repayment_letter_date": "2017-03-22", "repayment_amount": 49170},
+     "snippet": "because his workers’ compensation benefits had been retroactively reinstated as of October 4, 2013, he must repay $49,170 to the SSA.", "locator": "p. 4"},
+    {"fact_id": "F7", "issue_refs": ["I2"], "fact": "Petitioners are cash basis taxpayers",
+     "values": {"accounting_method": "cash"},
+     "snippet": "Cash basis taxpayers, such as petitioners, must include items of income in gross income for the year in which actually or constructively received.", "locator": "p. 7"}
+  ],
+  "issues": [
+    {"issue_id": "I1", "tags": ["social_security_86"],
+     "question": "Is petitioner husband treated as receiving $35,999 of Social Security disability benefits in 2014 ($28,276 paid plus $7,723 workers' compensation offset attributable to 2013 workers' compensation)?",
+     "provisions": ["26 U.S.C. §86(d)(3)", "20 C.F.R. §404.408(c)"],
+     "holding": "Yes; under §86(d)(3) the workers' compensation offset is included as a social security benefit, so he is treated as receiving $35,999 for 2014",
+     "prevailing_party": "respondent",
+     "amount_determined": {"description": "social security benefits for 2014 under §86", "amount": 35999},
+     "rule_155": false,
+     "computable": true,
+     "computable_reason": "Mechanical application of §86(d)(3) to stipulated SSA-1099 amounts"},
+    {"issue_id": "I2", "tags": ["social_security_86", "other"],
+     "question": "Other (claim-of-right / year of inclusion §451): Is 2014 gross income reduced because husband had to repay $49,170 of benefits beginning in 2017?",
+     "provisions": ["26 U.S.C. §451(a)", "Treas. Reg. §1.451-1(a)", "§1341", "§86(d)(2)"],
+     "holding": "No; cash basis taxpayers include benefits in the year received; later repayments do not affect 2014 liability (relief, if any, in year of repayment)",
+     "prevailing_party": "respondent",
+     "amount_determined": {"description": "repayment not reducing 2014 income", "amount": 49170},
+     "rule_155": false,
+     "computable": true,
+     "computable_reason": "Annual accounting rule: repayment year (2017) differs from receipt year (2014)"}
+  ],
+  "decision": {"text": "Decision will be entered for respondent as to the deficiency and for petitioners as to the accuracy-related penalty under section 6662(a).", "summary": "Deficiency of $9,717 sustained; penalty conceded by respondent"},
+  "notes": "Amounts rounded to nearest dollar by the court. Taxable portion under §86(a)/(b) thresholds not computed in opinion; deficiency $9,717 sustained in full. §86(e) lump-sum election not discussed. Court declined to consider questions about SSA/attorney conduct (outside §6214(a) jurisdiction)."
+}

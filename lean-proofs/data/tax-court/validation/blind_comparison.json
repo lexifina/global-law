@@ -1,0 +1,1015 @@
+{
+ "set": "blind",
+ "cases": [
+  {
+   "id": "tcmemo-2020-101",
+   "deficiency_blind": 5487,
+   "errors": [],
+   "inferred": [
+    "filing status single (not stated; she had filed for divorce; no dependents stated as claimed)",
+    "days from receipt to redeposit computed from Jul 25, 2016 to Apr 27, 2020 (1372); the $15,000 is treated as part of the later distribution"
+   ],
+   "unencodable": [
+    "other income, deductions and dependents on the 2016 return are not stated, so the regular tax is computed on IRA income alone",
+    "as-filed Form 5329 additional tax figure is redacted; asFiled uses 10% of the $24,664 reported as subject to the tax"
+   ],
+   "items": [
+    {
+     "item": "rolloverIncludible",
+     "court": "15000",
+     "blind": "15000",
+     "blind_ok": true,
+     "original": "15000",
+     "original_ok": true
+    },
+    {
+     "item": "earlyDistributionTax",
+     "court": "5051",
+     "blind": "5051",
+     "blind_ok": true,
+     "original": "5051",
+     "original_ok": true
+    },
+    {
+     "item": "accuracyPenalty",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "accuracyPenaltyApplies",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    }
+   ]
+  },
+  {
+   "id": "tcmemo-2022-77",
+   "deficiency_blind": 0,
+   "errors": [],
+   "inferred": [
+    "childSupport = $4,500 x 12 = $54,000: the whole family-support amount ends on a child contingency (emancipation of both children), read as fixed child support under §71(c)(2)",
+    "the $15,888 paid above the $4,500/month required by the instrument encoded as not shown to be paid under the instrument (record does not reveal why)"
+   ],
+   "unencodable": [
+    "petitioners' income, deductions and other return items for 2016 are not stated, so the computed tax and deficiency reflect only the alimony item on zero other income"
+   ],
+   "items": [
+    {
+     "item": "alimonyDeduction",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "accuracyPenalty",
+     "court": "0",
+     "blind": "(not computed)",
+     "blind_ok": false,
+     "original": "0",
+     "original_ok": true,
+     "divergence": "concession-echo",
+     "divergence_note": "Original \"match\" was a conceded penalty entered as 0; blind encoder (correctly) did not encode a conceded issue."
+    }
+   ]
+  },
+  {
+   "id": "tcmemo-2023-2",
+   "deficiency_blind": 7205,
+   "errors": [],
+   "inferred": [
+    "advance payments total = $655 x 11 = $7,205 (arithmetic on the stated monthly figure; total redacted)",
+    "son's age not stated (left default); support and whole-year residence assumed so the claimed exemption stands (dependency not in issue)",
+    "claimCTC/claimEIC false: return as described claims no CTC or EIC"
+   ],
+   "unencodable": [
+    "benchmark (SLCSP) premium not stated; left 0",
+    "petitioner's age not stated (left default 40); any §72(t) tax on the early withdrawals is not described and not encoded"
+   ],
+   "items": [
+    {
+     "item": "taxableSocialSecurity",
+     "court": "22524",
+     "blind": "22524",
+     "blind_ok": true,
+     "original": "22524",
+     "original_ok": true
+    },
+    {
+     "item": "agi",
+     "court": "91274",
+     "blind": "91274",
+     "blind_ok": true,
+     "original": "91274",
+     "original_ok": true
+    },
+    {
+     "item": "deficiency",
+     "court": "7205",
+     "blind": "7205",
+     "blind_ok": true,
+     "original": "7205",
+     "original_ok": true
+    },
+    {
+     "item": "householdIncome",
+     "court": "95249",
+     "blind": "95249",
+     "blind_ok": true,
+     "original": "95249",
+     "original_ok": true
+    },
+    {
+     "item": "povertyLine",
+     "court": "15930",
+     "blind": "15930",
+     "blind_ok": true,
+     "original": "15930",
+     "original_ok": true
+    },
+    {
+     "item": "fplPercent",
+     "court": "598",
+     "blind": "401",
+     "blind_ok": false,
+     "original": "401",
+     "original_ok": false,
+     "divergence": "both-miss",
+     "divergence_note": "Same model output in both (401 vs court 598); a model/encoding difference in the poverty-line percentage, not an encoding effect."
+    },
+    {
+     "item": "premiumTaxCredit",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "excessAdvancePtc",
+     "court": "7205",
+     "blind": "7205",
+     "blind_ok": true,
+     "original": "7205",
+     "original_ok": true
+    }
+   ]
+  },
+  {
+   "id": "tcmemo-2025-116",
+   "deficiency_blind": 0,
+   "errors": [],
+   "inferred": [
+    "youngerThanTaxpayer false: petitioners' ages not stated (irrelevant once disability and residence fail)",
+    "asFiled assumes the return treated Ms. Davis as a disabled qualifying child living with petitioners (the claim made)"
+   ],
+   "unencodable": [
+    "petitioners' earned income, AGI and the EITC amount claimed are not stated, so no EITC amount or deficiency can be computed",
+    "Rayquan Graham (conceded) not encoded; no facts about him"
+   ],
+   "items": [
+    {
+     "item": "qualifyingChild:Angela Davis",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "eicChild:Angela Davis",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2019-8",
+   "deficiency_blind": 1071,
+   "errors": [],
+   "inferred": [
+    "filing status head of household inferred from the $9,250 standard deduction claimed (2015 HoH amount); opinion does not name the status",
+    "no dependents encoded (none stated); exemptions therefore count the taxpayer only",
+    "taxpayer age left at default 40 (not stated)"
+   ],
+   "unencodable": [
+    "any qualifying person / dependents supporting HoH status are not described, so personal exemptions beyond the taxpayer's own and any EIC/CTC cannot be encoded"
+   ],
+   "items": [
+    {
+     "item": "standardDeduction",
+     "court": "9250",
+     "blind": "9250",
+     "blind_ok": true,
+     "original": "9250",
+     "original_ok": true
+    },
+    {
+     "item": "deduction",
+     "court": "9250",
+     "blind": "9250",
+     "blind_ok": true,
+     "original": "9250",
+     "original_ok": true
+    },
+    {
+     "item": "iraDeduction",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "gamblingLossDeduction",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "itemizedDeductions",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "agi",
+     "court": "28706",
+     "blind": "28706",
+     "blind_ok": true,
+     "original": "28706",
+     "original_ok": true
+    },
+    {
+     "item": "deficiency",
+     "court": "1907",
+     "blind": "1071",
+     "blind_ok": false,
+     "original": "1071",
+     "original_ok": false,
+     "divergence": "both-miss",
+     "divergence_note": "Same value in both (1,071 vs 1,907); facts not stated (original diagnosis)."
+    },
+    {
+     "item": "deduction",
+     "court": "9250",
+     "blind": "9250",
+     "blind_ok": true,
+     "original": "9250",
+     "original_ok": true
+    },
+    {
+     "item": "gamblingLossDeduction",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "netTax",
+     "court": "1664",
+     "blind": "1664",
+     "blind_ok": true,
+     "original": "1664",
+     "original_ok": true
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2020-14",
+   "deficiency_blind": 2517,
+   "errors": [],
+   "inferred": [
+    "ageInSeparationYear 31: computed from 'was 46 years old in 2002' and separation from Rockwell in 1987 (any value under 55 gives the same rule outcome)",
+    "spouse age and the return's other income items not stated (defaults / omitted)"
+   ],
+   "unencodable": [],
+   "items": [
+    {
+     "item": "earlyDistributionTax",
+     "court": "2517",
+     "blind": "2517",
+     "blind_ok": true,
+     "original": "2517",
+     "original_ok": true
+    },
+    {
+     "item": "deficiency",
+     "court": "2517",
+     "blind": "2517",
+     "blind_ok": true,
+     "original": "2517",
+     "original_ok": true
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2020-25",
+   "deficiency_blind": 8215,
+   "errors": [],
+   "inferred": [
+    "earned income $16,788 treated as wages (no SE income stated)",
+    "as-filed return encoded as claiming both children as qualifying children (stepchildren living with him over half the year) with HoH, CTC/ACTC and EIC, matching the claims described; the refund figure itself is redacted",
+    "taxpayer age left at default 40 (not stated); withholding not stated"
+   ],
+   "unencodable": [
+    "paidOverHalfHouseholdCost not found either way; left default false (immaterial once no qualifying person)"
+   ],
+   "items": [
+    {
+     "item": "qualifyingChild:A.D.B.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "qualifyingChild:J.N.B.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "qualifyingRelative:A.D.B.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "qualifyingRelative:J.N.B.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "dependent:A.D.B.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "dependent:J.N.B.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "headOfHousehold",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "filingStatus",
+     "court": "single",
+     "blind": "single",
+     "blind_ok": true,
+     "original": "single",
+     "original_ok": true
+    },
+    {
+     "item": "ctcNonrefundable",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "refundableCtc",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "eic",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "earnedIncome",
+     "court": "16788",
+     "blind": "16788",
+     "blind_ok": true,
+     "original": "16788",
+     "original_ok": true
+    },
+    {
+     "item": "deficiency",
+     "court": "7816",
+     "blind": "8215",
+     "blind_ok": false,
+     "original": "8215",
+     "original_ok": false,
+     "divergence": "both-miss",
+     "divergence_note": "Same value in both (8,215 vs 7,816); original diagnosis facts-not-stated / court arithmetic."
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2020-9#2014",
+   "deficiency_blind": null,
+   "errors": [],
+   "inferred": [
+    "Children's ages not stated; left at default (minors) on the strength of respondent's concession that two of the three are qualifying children",
+    "Only the two conceded children encoded (named 'child 1', 'child 2'); the third (one child is disabled, which one not stated) omitted",
+    "'paid most of the household expenses' read as paid over half the cost of keeping up the home"
+   ],
+   "unencodable": [
+    "Petitioner's income (wages as medical assistant) not stated; income left at 0, so no deficiency figures are meaningful",
+    "Amount of education credit claimed for 2014 redacted; asFiled/taxShown not encoded"
+   ],
+   "items": [
+    {
+     "item": "educationCredits",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2020-9#2015",
+   "deficiency_blind": null,
+   "errors": [],
+   "inferred": [
+    "Children's ages not stated; left at default (minors) on the strength of respondent's concession that two of the three are qualifying children",
+    "Only the two conceded children encoded (named 'child 1', 'child 2'); the third (one child is disabled, which one not stated) omitted",
+    "'paid most of the household expenses' read as paid over half the cost of keeping up the home",
+    "tie-breaker AGIs left at 0: opinion says petitioner's AGI was greater but gives no amounts; father did not claim (claims=false)"
+   ],
+   "unencodable": [
+    "Petitioner's income (wages as medical assistant) not stated; income left at 0, so no deficiency figures are meaningful"
+   ],
+   "items": [
+    {
+     "item": "filingStatus",
+     "court": "hoh",
+     "blind": "hoh",
+     "blind_ok": true,
+     "original": "hoh",
+     "original_ok": true
+    },
+    {
+     "item": "headOfHousehold",
+     "court": "true",
+     "blind": "true",
+     "blind_ok": true,
+     "original": "true",
+     "original_ok": true
+    },
+    {
+     "item": "qualifyingChild:child 1",
+     "court": "true",
+     "blind": "true",
+     "blind_ok": true,
+     "original": "true",
+     "original_ok": true
+    },
+    {
+     "item": "qualifyingChild:child 2",
+     "court": "true",
+     "blind": "true",
+     "blind_ok": true,
+     "original": "true",
+     "original_ok": true
+    },
+    {
+     "item": "hohQualifyingPerson:child 1",
+     "court": "true",
+     "blind": "true",
+     "blind_ok": true,
+     "original": "true",
+     "original_ok": true
+    },
+    {
+     "item": "tieBreaker:child 1",
+     "court": "petitioner",
+     "blind": "petitioner",
+     "blind_ok": true,
+     "original": "petitioner",
+     "original_ok": true
+    },
+    {
+     "item": "tieBreaker:child 2",
+     "court": "petitioner",
+     "blind": "petitioner",
+     "blind_ok": true,
+     "original": "petitioner",
+     "original_ok": true
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2020-9#2016",
+   "deficiency_blind": null,
+   "errors": [],
+   "inferred": [
+    "Children's ages not stated; left at default (minors) on the strength of respondent's concession that two of the three are qualifying children",
+    "Only the two conceded children encoded (named 'child 1', 'child 2'); the third (one child is disabled, which one not stated) omitted",
+    "'paid most of the household expenses' read as paid over half the cost of keeping up the home",
+    "tie-breaker AGIs left at 0: opinion says petitioner's AGI was greater but gives no amounts; father did not claim (claims=false)"
+   ],
+   "unencodable": [
+    "Petitioner's income (wages as medical assistant) not stated; income left at 0, so no deficiency figures are meaningful"
+   ],
+   "items": [
+    {
+     "item": "filingStatus",
+     "court": "hoh",
+     "blind": "hoh",
+     "blind_ok": true,
+     "original": "hoh",
+     "original_ok": true
+    },
+    {
+     "item": "headOfHousehold",
+     "court": "true",
+     "blind": "true",
+     "blind_ok": true,
+     "original": "true",
+     "original_ok": true
+    },
+    {
+     "item": "qualifyingChild:child 1",
+     "court": "true",
+     "blind": "true",
+     "blind_ok": true,
+     "original": "true",
+     "original_ok": true
+    },
+    {
+     "item": "qualifyingChild:child 2",
+     "court": "true",
+     "blind": "true",
+     "blind_ok": true,
+     "original": "true",
+     "original_ok": true
+    },
+    {
+     "item": "hohQualifyingPerson:child 1",
+     "court": "true",
+     "blind": "true",
+     "blind_ok": true,
+     "original": "true",
+     "original_ok": true
+    },
+    {
+     "item": "tieBreaker:child 1",
+     "court": "petitioner",
+     "blind": "petitioner",
+     "blind_ok": true,
+     "original": "petitioner",
+     "original_ok": true
+    },
+    {
+     "item": "tieBreaker:child 2",
+     "court": "petitioner",
+     "blind": "petitioner",
+     "blind_ok": true,
+     "original": "petitioner",
+     "original_ok": true
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2021-41",
+   "deficiency_blind": null,
+   "errors": [],
+   "inferred": [
+    "Petitioner paying all rent and utilities read as paying over half the household cost",
+    "Petitioner paying rent/utilities/clothes/phone read as providing over half the grandchildren's support (opinion does not state this as a finding; mother received SNAP/WIC)",
+    "I.M.E.'s age not stated (minor); left at default",
+    "Days resided for the tie-breaker not stated; left 0 for both (only parent status decides)"
+   ],
+   "unencodable": [
+    "Petitioner's wages/other income and AGI redacted; only the additional $5,100 SE income from the Form 1040X is encoded, so EIC/ACTC/deficiency figures are not meaningful",
+    "asFiled / taxShown not encodable (return figures redacted)"
+   ],
+   "items": [
+    {
+     "item": "tieBreaker:I.M.E.",
+     "court": "Kapoor",
+     "blind": "Ms. Kapoor and Mr. Escamilla (joint)",
+     "blind_ok": false,
+     "original": "Kapoor",
+     "original_ok": true,
+     "divergence": "name-format",
+     "divergence_note": "Same winner (the parents, filing jointly); blind wrote both names, key names the mother."
+    },
+    {
+     "item": "tieBreaker:P.A.E.",
+     "court": "Kapoor",
+     "blind": "Ms. Kapoor and Mr. Escamilla (joint)",
+     "blind_ok": false,
+     "original": "Kapoor",
+     "original_ok": true,
+     "divergence": "name-format",
+     "divergence_note": "Same winner, as above."
+    },
+    {
+     "item": "dependent:I.M.E.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "dependent:P.A.E.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "qualifyingRelative:I.M.E.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "qualifyingRelative:P.A.E.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "hohQualifyingPerson:I.M.E.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "hohQualifyingPerson:P.A.E.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "filingStatus",
+     "court": "single",
+     "blind": "single",
+     "blind_ok": true,
+     "original": "single",
+     "original_ok": true
+    },
+    {
+     "item": "ctcChild:I.M.E.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "ctcChild:P.A.E.",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    },
+    {
+     "item": "refundableCtc",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "eic",
+     "court": "0",
+     "blind": "361",
+     "blind_ok": false,
+     "original": "0",
+     "original_ok": true,
+     "divergence": "redaction-removed-fact",
+     "divergence_note": "AGI was redacted (an output); blind had only $5,100 SE income, so a childless EIC of 361 appears. Original used the stated AGI."
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2021-6",
+   "deficiency_blind": 31739,
+   "errors": [],
+   "inferred": [
+    "Filing status single (divorced; 'ex-wife'); status on return not stated",
+    "Other income reported on the 2016 return not stated; encoded as zero in both facts and asFiled, so only the distribution drives the deficiency"
+   ],
+   "unencodable": [
+    "Return's other income/deductions unknown; deficiency computed on the distribution alone"
+   ],
+   "items": [
+    {
+     "item": "earlyDistributionTax",
+     "court": "10947",
+     "blind": "10947",
+     "blind_ok": true,
+     "original": "10947",
+     "original_ok": true
+    },
+    {
+     "item": "failureToFile",
+     "court": "0",
+     "blind": "0",
+     "blind_ok": true,
+     "original": "0",
+     "original_ok": true
+    },
+    {
+     "item": "failureToFileApplies",
+     "court": "false",
+     "blind": "false",
+     "blind_ok": true,
+     "original": "false",
+     "original_ok": true
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2023-13",
+   "deficiency_blind": null,
+   "errors": [],
+   "inferred": [
+    "filing status mfj: joint petitioners and one notice of deficiency for both; status not stated explicitly",
+    "withholding $14,229 entered as a payment (does not affect the deficiency)"
+   ],
+   "unencodable": [
+    "other items on the 2018 joint return (wages, other income, deductions, tax shown) are not given, so the deficiency from adding $115,325 cannot be computed",
+    "ages of the spouses not given (default 40 kept; only 'not 59 1/2' is found)"
+   ],
+   "items": [
+    {
+     "item": "rolloverIncludible",
+     "court": "71147",
+     "blind": "0",
+     "blind_ok": false,
+     "original": "71147",
+     "original_ok": true,
+     "divergence": "representation-choice",
+     "divergence_note": "Blind taxed both distributions directly; original modelled 2020 restoring contributions as a failed rollover with an assumed amount and day count (upper/lower bounds)."
+    },
+    {
+     "item": "earlyDistributionTax",
+     "court": "11533",
+     "blind": "11533",
+     "blind_ok": true,
+     "original": "11533",
+     "original_ok": true
+    },
+    {
+     "item": "deficiency",
+     "court": "38213",
+     "blind": "(not computed)",
+     "blind_ok": false,
+     "original": "38213",
+     "original_ok": true,
+     "divergence": "original-circular",
+     "divergence_note": "Original deficiency match used a base income of 139,100 back-solved from the notice deficiency; blind could not compute a deficiency without it."
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2023-25",
+   "deficiency_blind": 818,
+   "errors": [],
+   "inferred": [
+    "each lapse entered as net taxable amount (loanExtinguished = 1099-R taxable amount, premiumsPaid 0); actual loan and premium figures not stated",
+    "filing status single (not stated; petitioner filed no return)",
+    "sfrTax: the SFR tax is not stated; set equal to the corrected net tax computed by the model (court found he failed to pay the amount shown on the SFR)",
+    "lateness asOf = opinion date 2023-07-27 (additions reach their 25% caps well before then)"
+   ],
+   "unencodable": [
+    "Schedule E rental activity (below-FMV rental to daughter, section 280A / unsubstantiated expenses) has no schema field; no rental income or loss encoded",
+    "SFR tax amount not given in the redacted text"
+   ],
+   "items": [
+    {
+     "item": "lapseIncome",
+     "court": "18580",
+     "blind": "18580",
+     "blind_ok": true,
+     "original": "18580",
+     "original_ok": true
+    },
+    {
+     "item": "agi",
+     "court": "18580",
+     "blind": "18580",
+     "blind_ok": true,
+     "original": "18580",
+     "original_ok": true
+    },
+    {
+     "item": "failureToFileApplies",
+     "court": "true",
+     "blind": "true",
+     "blind_ok": true,
+     "original": "true",
+     "original_ok": true
+    },
+    {
+     "item": "failureToPayApplies",
+     "court": "true",
+     "blind": "true",
+     "blind_ok": true,
+     "original": "true",
+     "original_ok": true
+    },
+    {
+     "item": "estimatedTaxAddition",
+     "court": "143",
+     "blind": "0",
+     "blind_ok": false,
+     "original": "145",
+     "original_ok": false,
+     "divergence": "both-miss",
+     "divergence_note": "Court 143: original 145 (with back-solved inputs), blind 0."
+    },
+    {
+     "item": "estimatedRequiredAnnual",
+     "court": "8919",
+     "blind": "736",
+     "blind_ok": false,
+     "original": "8919",
+     "original_ok": true,
+     "divergence": "original-circular",
+     "divergence_note": "Original used currentTax 9,910 = notice deficiency and back-solved withholding 3,537."
+    },
+    {
+     "item": "estimatedTaxApplies",
+     "court": "true",
+     "blind": "false",
+     "blind_ok": false,
+     "original": "true",
+     "original_ok": true,
+     "divergence": "original-circular",
+     "divergence_note": "As above."
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2023-35",
+   "deficiency_blind": 21464,
+   "errors": [],
+   "inferred": [
+    "two placeholder dependents (default child facts, lived with petitioner more than half the year) to give the conceded three personal exemptions; identities/ages not in the text",
+    "alimony $3,000 treated as alimony paid (deduction); the table does not say paid or received",
+    "section 72(t) 10% tax on the 52,433 retirement distributions: the notice proposed it and the opinion calls it purely computational; petitioner's age and plan type not stated (ira assumed)",
+    "capital gain treated as not long-term (longTermGain 0); holding period not stated",
+    "Beavercreek: petitioner's half of RE taxes and mortgage interest allocated 5/12 to the rental (5 months rented), the 7/12 share of taxes to Schedule A; 7/12 share of mortgage interest not deducted",
+    "hazard insurance $845.48 on the Maryland property treated as paid wholly by petitioner",
+    "Fibre Arts COGS taken as $7,595 as printed (opinion flags it)",
+    "state/local income tax for Schedule A not stated (0)"
+   ],
+   "unencodable": [
+    "rental (Schedule E) and Schedule C detail entered as net amounts in otherIncome / seProfit",
+    "section 280A / passive-loss treatment of Beavercreek personal-use months not modelled"
+   ],
+   "items": [
+    {
+     "item": "filingStatus",
+     "court": "hoh",
+     "blind": "hoh",
+     "blind_ok": true,
+     "original": "hoh",
+     "original_ok": true
+    },
+    {
+     "item": "dependentsCounted",
+     "court": "2",
+     "blind": "2",
+     "blind_ok": true,
+     "original": "2",
+     "original_ok": true
+    },
+    {
+     "item": "exemptions",
+     "court": "12150",
+     "blind": "12150",
+     "blind_ok": true,
+     "original": "12150",
+     "original_ok": true
+    },
+    {
+     "item": "alimonyIncluded",
+     "court": "3000",
+     "blind": "0",
+     "blind_ok": false,
+     "original": "3000",
+     "original_ok": true,
+     "divergence": "ambiguous-fact",
+     "divergence_note": "Opinion does not say whether the $3,000 alimony was paid or received; original assumed received, blind assumed paid."
+    },
+    {
+     "item": "failureToFileApplies",
+     "court": "true",
+     "blind": "true",
+     "blind_ok": true,
+     "original": "true",
+     "original_ok": true
+    }
+   ]
+  },
+  {
+   "id": "tcsumm-2024-4",
+   "deficiency_blind": 1034,
+   "errors": [],
+   "inferred": [
+    "Age 52 for 'early 50s' (only matters for the 65 tests)",
+    "Plan kind: 'retirement plan' encoded as qualifiedPlan (IRA vs employer plan not stated)",
+    "Filing status single (not stated)",
+    "Other income on the 2018 return not stated; encoded as zero in facts and asFiled"
+   ],
+   "unencodable": [
+    "Return's other income unknown; deficiency computed on the distribution alone"
+   ],
+   "items": [
+    {
+     "item": "earlyDistributionTax",
+     "court": "1034",
+     "blind": "1034",
+     "blind_ok": true,
+     "original": "1034",
+     "original_ok": true
+    }
+   ]
+  }
+ ],
+ "summary": {
+  "cases": 14,
+  "items": 88,
+  "blind_match": 75,
+  "blind_not_computed": 2,
+  "original_match": 84,
+  "both_match": 75,
+  "original_only": 9,
+  "blind_only": 0,
+  "blind_equals_original_value": 78,
+  "divergence_classes": {
+   "concession-echo": 1,
+   "both-miss": 4,
+   "name-format": 2,
+   "redaction-removed-fact": 1,
+   "representation-choice": 1,
+   "original-circular": 3,
+   "ambiguous-fact": 1
+  },
+  "blind_match_counting_name_format": 77,
+  "original_matches_reproduced_blind": "75/84 raw; 77/84 counting the 2 tie-breaker name-format cases",
+  "original_matches_not_reproduced_by_cause": {
+   "concession-echo": 1,
+   "name-format": 2,
+   "redaction-removed-fact": 1,
+   "representation-choice": 1,
+   "original-circular": 3,
+   "ambiguous-fact": 1
+  }
+ }
+}

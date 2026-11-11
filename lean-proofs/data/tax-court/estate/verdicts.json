@@ -1,0 +1,67 @@
+{
+ "module": "lean-proofs/LegalProofs/USTax/Estate (global-law-lean)",
+ "checked_by": "lake build LegalProofs.USTax.Estate (Lean 4.35, core only, no sorry/native_decide)",
+ "cases": [
+  {
+   "slug": "mikel",
+   "citation": "T.C. Memo. 2015-64",
+   "theorems": [
+    "mikel_notice",
+    "mikel_claimed",
+    "mikel_threshold"
+   ],
+   "verdict": "match",
+   "detail": "deficiency $268,950 and addition $67,238 exact (2007 table, $345,800 credit); with 60 x $12,000 exclusions tax nil; 53 donees suffice, 52 leave $2,870"
+  },
+  {
+   "slug": "spizzirri",
+   "citation": "T.C. Memo. 2023-25",
+   "theorems": [
+    "spizzirri_return",
+    "spizzirri_gifts",
+    "spizzirri_addition"
+   ],
+   "verdict": "partial",
+   "detail": "return tax $10,150,307 and agreed addition $120,299 exact; found payments give ATG $342,049 vs $193,441 sustained (court would not look behind the notice; $59,443 of tax); $2,251,189 deficiency not reproducible from the opinion"
+  },
+  {
+   "slug": "rowland",
+   "citation": "T.C. Memo. 2025-76",
+   "theorems": [
+    "rowland_dsue",
+    "rowland_effect"
+   ],
+   "verdict": "match",
+   "detail": "DSUE $3,712,562 and exclusion $14,892,562 exact; DSUE nil per holding costs $1,485,025 on the base implied by the return ($26,086,450, derived)"
+  },
+  {
+   "slug": "macelhenny",
+   "citation": "T.C. Memo. 2023-33",
+   "theorems": [
+    "macelhenny_gift"
+   ],
+   "verdict": "match",
+   "detail": "§2512(b) gift $1,935,609, $967,805 per child (court rounded $967,804.50 up); deficiencies not explained in opinion"
+  },
+  {
+   "slug": "steinberg",
+   "citation": "145 T.C. 184 (2015)",
+   "theorems": [
+    "steinberg_net_gift",
+    "steinberg_deficiency"
+   ],
+   "verdict": "match",
+   "detail": "net gift $71,598,056; notice's $1,804,908 = 45% (2007 table) of $4,010,907; discount allowed, no deficiency; the $5,838,540 discount is the expert's valuation, taken as fact"
+  },
+  {
+   "slug": "sower",
+   "citation": "149 T.C. 279 (2017)",
+   "theorems": [
+    "sower_gifts",
+    "sower_deficiency"
+   ],
+   "verdict": "match within $1",
+   "detail": "40% of $1,970,414 = $788,165.60 vs $788,165 stated; the reduced DSUE $282,690 cannot be derived from stated facts"
+  }
+ ]
+}

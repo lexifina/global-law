@@ -1,0 +1,56 @@
+{
+ "id": "tcsumm-2019-33",
+ "citation": "T.C. Summary Opinion 2019-33",
+ "issues": [
+  {
+   "issue": "Unreported A-1 wages ($58,712) includible in 2015 gross income",
+   "provision": "sec. 61(a)",
+   "court": "includible (stipulated; tax-defier arguments rejected)",
+   "lean": "encoded as fact (wages 24,366 + 58,712 = 83,078)",
+   "verdict": "not-encodable",
+   "diagnosis": "Inclusion is a sec. 61 question decided on stipulated facts and the rejection of frivolous arguments; the framework takes the corrected wages as a fact.",
+   "snippet": "In 2015 Mr. Kleinman worked for A-1 Restaurant Services, LLC (A-1), which paid him $58,712 in wages."
+  },
+  {
+   "issue": "HSA distributions ($634) includible and subject to 20% additional tax",
+   "provision": "sec. 223(f)(2), (f)(4)(A)",
+   "court": "includible; 20% additional tax sustained",
+   "lean": "hsaIncludible 634, hsaAdditionalTax 127 (computed from hsaDistributions 634, no qualified expenses, no exception)",
+   "verdict": "match",
+   "diagnosis": "Rerun 2c5b6354943 with the sec. 223(f) fields: includible 634 - 0 = 634; 20% x 634 = 126.80 -> 127; both match and the deficiency still reproduces 10,518. Whether the distributions paid qualified medical expenses is a failure-of-proof finding (encoded as hsaQualifiedExpenses 0); age not stated, taken as under 65.",
+   "snippet": "determined a 20% additional tax pursuant to section 223(f)(4)(A) relating to his HSA distributions"
+  },
+  {
+   "issue": "Deficiency for 2015",
+   "provision": "sec. 6211",
+   "court": 10518,
+   "lean": 10518,
+   "verdict": "match",
+   "diagnosis": "Rerun 2c5b6354943: Lean 10,518 exact (HOH, one CTC child inferred: TI 66,462, tax 10,941 + HSA 127 (now computed under sec. 223(f)(4)) - CTC 550). Filing status and child are inferred from the arithmetic, not stated in the opinion.",
+   "snippet": "The Internal Revenue Service (IRS) determined a deficiency in petitioner Reed Kleinman's 2015 Federal income tax of $10,518"
+  },
+  {
+   "issue": "Sec. 6662(a) accuracy-related penalty ($2,104)",
+   "provision": "sec. 6662(a), (b)(2), (d)",
+   "court": "conceded by respondent",
+   "lean": "not encoded",
+   "verdict": "not-encodable",
+   "diagnosis": "Conceded; no holding to compute (20% x 10,518 = 2,103.60 -> 2,104 matches the notice arithmetic).",
+   "snippet": "We will sustain the IRS' deficiency determination subject to respondent's concession of the accuracy-related penalty."
+  },
+  {
+   "issue": "Sec. 6673 penalty",
+   "provision": "sec. 6673(a)(1)",
+   "court": "not imposed (discretion)",
+   "lean": "not modelled",
+   "verdict": "judgment",
+   "diagnosis": "Discretionary penalty; court declined because of no prior history of frivolous arguments.",
+   "snippet": "We choose not to impose this penalty here because Mr. Kleinman has no previous history of making frivolous arguments."
+  }
+ ],
+ "deficiency": {
+  "court": 10518,
+  "lean": 10518
+ },
+ "notes": "Rerun 2c5b6354943: all 3 expected items match (deficiency 10,518, hsaIncludible 634, hsaAdditionalTax 127). HSA now encoded with hsaDistributions instead of hand-entered otherIncome/otherTaxes. HOH + one under-17 child inferred from the arithmetic (opinion states neither)."
+}

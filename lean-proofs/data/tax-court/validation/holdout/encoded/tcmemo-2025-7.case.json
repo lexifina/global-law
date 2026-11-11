@@ -1,0 +1,45 @@
+{
+ "citation": "T.C. Memo. 2025-7 (Mosley)",
+ "taxYear": 2018,
+ "note": "Non-filer; IRS prepared a 6020(b) SFR (single, standard deduction). Income agreed: wages $40,656, interest $180, three distributions from qualified (NC 401(k)) plans: Prudential $119,820 and $9,003 designated Roth (taxable $1,200), LGERS $95,851; taxable total $216,871. Under 59-1/2, no exception shown (still employed by City of Charlotte in 2018, so no separation-from-service exception). No NOL established (record does not establish existence or amount of any 2009 NOL); no capital loss carryover encoded: respondent's schedule shows a $135,113 LTCL on the SC land and petitioner had already deducted $137,257 for it in 2009-2017. Withholding $45,301 (wages + distributions). No return filed as of the opinion (asOf = filing date of opinion); no reasonable cause for failure to file or pay. 6654: 2017 return showed tax but the amount is not stated; no payments other than withholding; no exception.",
+ "facts": {
+  "filing": "single",
+  "wages": 40656,
+  "taxableInterest": 180,
+  "pensions": 216871,
+  "withholding": 45301,
+  "earlyDistributions": [
+   {
+    "amountIncludible": 119820,
+    "plan": "qualifiedPlan"
+   },
+   {
+    "amountIncludible": 1200,
+    "plan": "qualifiedPlan"
+   },
+   {
+    "amountIncludible": 95851,
+    "plan": "qualifiedPlan"
+   }
+  ]
+ },
+ "taxShown": 0,
+ "lateness": {
+  "asOf": "2025-01-22",
+  "reasonableCauseFiling": false,
+  "reasonableCausePayment": false,
+  "assertsFailureToPay": true
+ },
+ "estimated": {
+  "waived": false
+ },
+ "expected": [],
+ "inferred": [
+  "sfrTax = 83,374: the model's tax on the SFR's stated contents (same wages, interest and distributions, single standard deduction, 72(t) tax included per the SFR notice); the SFR tax figure itself is redacted"
+ ],
+ "unencodable": [
+  "2017 tax shown (for the 6654(d)(1)(B) prior-year safe harbor) is not stated; priorTax left unset",
+  "SFR tax amount is redacted"
+ ],
+ "sfrTax": 83374
+}

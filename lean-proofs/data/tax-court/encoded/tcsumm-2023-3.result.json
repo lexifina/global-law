@@ -1,0 +1,20 @@
+{
+ "id": "tcsumm-2023-3",
+ "citation": "T.C. Summary Opinion 2023-3",
+ "issues": [
+  {
+   "issue": "Is the $15,000 attorney-fee payment alimony?",
+   "provision": "sec. 71(b)(1)(D), 215(a)",
+   "court": "no: deduction 0 for the 15,000 (liability survives payee's death); total allowed 116,418.70",
+   "lean": "alimonyDeduction 0 for the 15,000 item (isolated run); 116,419 with the allowed/conceded item",
+   "verdict": "match",
+   "diagnosis": "Encoded as alimonyPaid items under the 2017-01-30 order: allowed/conceded 116,419 (108,898.70 + 7,520, rounded) and the 15,000 attorney-fee item with noPostDeathLiability false; parties agreed (A)-(C) met. Whether liability survives death (state law / reading of 'until paid in full') is the court's judgment, entered as a fact; the zero follows mechanically. No income found, so no deficiency.",
+   "snippet": "petitioner's payment of attorney's fees to his ex-spouse's attorney was not a payment of alimony within the meaning of section 71(b)(1)."
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": null
+ },
+ "notes": "Rule 155; penalty conceded. 4,097 + 7,520 + 15,000 = 26,617 checks (notice disallowed 26,617.30). case.json holds two cases: full year (alimonyDeduction 116,419) and the isolated 15,000 item (0)."
+}

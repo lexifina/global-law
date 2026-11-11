@@ -1,0 +1,65 @@
+{
+ "id": "tcsumm-2021-41",
+ "citation": "T.C. Summary Opinion 2021-41",
+ "issues": [
+  {
+   "issue": "Tie-breaker: grandchildren I.M.E. and P.A.E. claimed by both petitioner (grandfather) and their mother",
+   "provision": "sec. 152(c)(4)(A)(i)",
+   "court": "Kapoor (parent) for both",
+   "lean": "Kapoor for both",
+   "verdict": "match",
+   "diagnosis": "Rerun at 57b55431cca: matches on the 2015 year. earlier 2016 proxy run: tieBreak gives Kapoor for both (parent claiming beats non-parent). Rule identical in 2015.",
+   "snippet": "the tie-breaker rule in section 152(c)(4)(A)(i) determines that the children shall be treated as the qualifying children of the taxpayer who is their parent."
+  },
+  {
+   "issue": "Dependency exemptions for I.M.E. and P.A.E.",
+   "provision": "sec. 151(c), 152(a), (d)(1)(D)",
+   "court": "not dependents; not qualifying relatives",
+   "lean": "dependent false, qualifyingRelative false for both (sec. 152(d)(1)(D))",
+   "verdict": "match",
+   "diagnosis": "Rerun at 57b55431cca: matches on the 2015 year. earlier 2016 proxy: dependent false and qualifyingRelative false for both (qualifying child of another taxpayer, §152(d)(1)(D)).",
+   "snippet": "petitioner is not entitled to claim dependency exemption deductions for the taxable year 2015."
+  },
+  {
+   "issue": "Head of household status",
+   "provision": "sec. 2(b)(1)(A)",
+   "court": "single",
+   "lean": "single (hohQualifyingPerson false for both)",
+   "verdict": "match",
+   "diagnosis": "Rerun at 57b55431cca: matches on the 2015 year. earlier 2016 proxy: hohQualifyingPerson false for both, filingStatus single.",
+   "snippet": "petitioner is not entitled to claim head of household filing status for the taxable year 2015."
+  },
+  {
+   "issue": "Additional child tax credit",
+   "provision": "sec. 24(a), (d)",
+   "court": "0",
+   "lean": "0 (ctcChild false for both)",
+   "verdict": "match",
+   "diagnosis": "Rerun at 57b55431cca: matches on the 2015 year. earlier 2016 proxy: ctcChild false for both, refundableCtc 0.",
+   "snippet": "petitioner is not entitled to claim the additional child tax credit for the year in issue."
+  },
+  {
+   "issue": "EIC (with or without qualifying children)",
+   "provision": "sec. 32(c)(1)(A)(ii), (c)(3)",
+   "court": "0",
+   "lean": "0 (AGI/earned income 15,545 > 14,820)",
+   "verdict": "match",
+   "diagnosis": "Rerun at 57b55431cca: matches on the 2015 year. earlier 2016 proxy: eic 0 (no qualifying child; AGI 15,545 exceeds the no-child completed phase-out, $14,820 in 2015 / $14,880 in 2016).",
+   "snippet": "petitioner's adjusted gross income and earned income both exceeded the phaseout amount of $14,820 for 2015."
+  },
+  {
+   "issue": "Accuracy-related penalty $1,291",
+   "provision": "sec. 6662(a)",
+   "court": "conceded by respondent",
+   "lean": null,
+   "verdict": "not-encodable",
+   "diagnosis": "Conceded.",
+   "snippet": "Respondent concedes that petitioner is not liable for an accuracy-related penalty under sec. 6662(a) for the year in issue."
+  }
+ ],
+ "deficiency": {
+  "court": 6453,
+  "lean": null
+ },
+ "notes": "Deficiency $6,453 sustained, but not reconstructible: the original return's composition (AGI 11,679 as filed; whether SE income/tax, which credits in what amounts) is not stated, and the 1040X raised AGI to 15,545 'along with other adjustments'. Rough check: original as single with AGI 11,679 gives tax ~138 plus disallowed EIC (~4,672) and ACTC (~1,302) = ~6,112, close to but not 6,453, so the as-filed figures differ in ways the opinion doesn't give. Rerun at 57b55431cca: all 13 expected items match on 2015 (exit 0)."
+}

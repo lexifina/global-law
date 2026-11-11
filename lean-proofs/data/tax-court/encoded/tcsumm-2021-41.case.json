@@ -1,0 +1,119 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2021-41",
+  "taxYear": 2015,
+  "note": "Gopi, 2015. AGI $15,545 per the 1040X (original 11,679 + 5,100 SE income + other adjustments; composition not stated, encoded as wages; court: AGI and earned income both exceed $14,820). Daughter Ms. Kapoor (parent; joint return with spouse) claimed both children. Days approximate: I.M.E. from March (~290); P.A.E. born fall 2015 (~75, born-during-year counts as all year). I.M.E. age not stated (5 used). Deficiency $6,453 not encoded: original return composition (SE income, credits claimed) not stated.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 15545,
+   "dependents": [
+    {
+     "name": "IME",
+     "relationship": "descendantOfChild",
+     "age": 5,
+     "livedWithMoreThanHalfYear": true,
+     "qualifyingChildOfAnother": true
+    },
+    {
+     "name": "PAE",
+     "relationship": "descendantOfChild",
+     "age": 0,
+     "livedWithMoreThanHalfYear": true,
+     "qualifyingChildOfAnother": true
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "IME",
+    "taxpayer": "Gopi",
+    "claimants": [
+     {
+      "name": "Gopi",
+      "daysResided": 290,
+      "agi": 15545
+     },
+     {
+      "name": "Kapoor",
+      "isParent": true,
+      "daysResided": 290
+     }
+    ]
+   },
+   {
+    "child": "PAE",
+    "taxpayer": "Gopi",
+    "claimants": [
+     {
+      "name": "Gopi",
+      "daysResided": 75,
+      "agi": 15545
+     },
+     {
+      "name": "Kapoor",
+      "isParent": true,
+      "daysResided": 75
+     }
+    ]
+   }
+  ],
+  "expected": [
+   {
+    "item": "tieBreaker:IME",
+    "text": "Kapoor"
+   },
+   {
+    "item": "tieBreaker:PAE",
+    "text": "Kapoor"
+   },
+   {
+    "item": "dependent:IME",
+    "flag": false
+   },
+   {
+    "item": "dependent:PAE",
+    "flag": false
+   },
+   {
+    "item": "qualifyingRelative:IME",
+    "flag": false
+   },
+   {
+    "item": "qualifyingRelative:PAE",
+    "flag": false
+   },
+   {
+    "item": "hohQualifyingPerson:IME",
+    "flag": false
+   },
+   {
+    "item": "hohQualifyingPerson:PAE",
+    "flag": false
+   },
+   {
+    "item": "filingStatus",
+    "text": "single"
+   },
+   {
+    "item": "ctcChild:IME",
+    "flag": false
+   },
+   {
+    "item": "ctcChild:PAE",
+    "flag": false
+   },
+   {
+    "item": "refundableCtc",
+    "value": 0
+   },
+   {
+    "item": "eic",
+    "value": 0
+   }
+  ]
+ }
+]

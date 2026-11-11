@@ -1,0 +1,184 @@
+{
+  "id": "tcmemo-2019-83",
+  "citation": "T.C. Memo. 2019-83",
+  "case_name": "Nancy Burack v. Commissioner",
+  "docket_numbers": [
+    "11819-17"
+  ],
+  "judge": "Robert P. Ruwe",
+  "date": "2019-07-08",
+  "opinion_type": "memorandum",
+  "source": {
+    "dawson_docket_entry_id": "32c563a4-fe14-4250-9f12-d7b506afd52d",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/11819-17",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/11819-17/32c563a4-fe14-4250-9f12-d7b506afd52d/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2014
+  ],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "Pennsylvania",
+    "notes": "IRA held with Capital Guardian, LLC / Pershing, LLC (custodian), account ending 0946."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2014,
+        "deficiency": 214333,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 42867
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "IRA distribution of $524,980 included in gross income (rollover not within 60 days)",
+      "underreported taxable HSA distribution by $337",
+      "additional tax under §223(f)(4)(A)"
+    ],
+    "contested_by_taxpayer": "Whether the IRA distribution was timely rolled over",
+    "conceded": [
+      "Petitioner (deemed, Rule 34(b)(4)): $337 HSA distribution and §223(f)(4)(A) additional tax",
+      "Respondent: not liable for §6662(a) penalty"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Received $524,981.89 IRA distribution on June 25, 2014",
+      "values": {
+        "distribution": 524981.89,
+        "distribution_date": "2014-06-25"
+      },
+      "snippet": "petitioner received a $524,981.89 distribution from the IRA with an account number ending in 0946.",
+      "locator": "pp. 2-3"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Intended to roll over within 60 days; used funds to buy home pending sale of former home",
+      "values": {
+        "intent_to_rollover": true
+      },
+      "snippet": "She intended to roll over the distribution back into her IRA within 60 days of receipt.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "On Aug 21, 2014 received $524,981 cashier's check payable to Pershing FBO petitioner and overnighted it to Capital Guardian",
+      "values": {
+        "check_amount": 524981,
+        "check_date": "2014-08-21"
+      },
+      "snippet": "On Thursday, August 21, 2014, petitioner overnighted the check to Capital Guardian.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Check arrived at Capital Guardian Friday, August 22, 2014, 58 days after distribution",
+      "values": {
+        "received_by_institution": "2014-08-22",
+        "days_after_distribution": 58
+      },
+      "snippet": "on Friday, August 22, which was 58 days after petitioner received the IRA distribution.",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Deposited into IRA on August 26, 2014, 62 days after distribution",
+      "values": {
+        "deposit_date": "2014-08-26",
+        "days_after_distribution": 62
+      },
+      "snippet": "On August 26, 2014, 62 days after petitioner received the IRA distribution, the check was deposited at Pershing",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F6",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Capital Guardian assured petitioner she could roll over by overnighting check to it; Capital Guardian was an appropriate institution; late recording was a bookkeeping error",
+      "values": {
+        "bookkeeping_error": true,
+        "appropriate_institution": true
+      },
+      "snippet": "we find that the late recording is due to a bookkeeping error.",
+      "locator": "p. 8"
+    },
+    {
+      "fact_id": "F7",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Notice dated February 27, 2017 included $524,980 in income",
+      "values": {
+        "notice_date": "2017-02-27",
+        "amount_included": 524980
+      },
+      "snippet": "the Commissioner determined that petitioner was required to include $524,980 of the IRA distribution in her 2014 gross income.",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F8",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Funds deposited into IRA within one year",
+      "values": {
+        "deposited_within_one_year": true
+      },
+      "snippet": "In this case the funds were deposited into petitioner's IRA within one year.",
+      "locator": "p. 9"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "rollover_408d3",
+        "ira_distribution_income_408d"
+      ],
+      "question": "Did petitioner roll over the June 25, 2014 IRA distribution within 60 days so that it is excluded from 2014 gross income?",
+      "provisions": [
+        "26 U.S.C. §408(d)(1), (d)(3)(A), (d)(3)(I)",
+        "Rev. Proc. 2003-16, sec. 3.03",
+        "Wood v. Commissioner, 93 T.C. 114"
+      ],
+      "holding": "Yes: check received by Capital Guardian on day 58 and late book entry (day 62) was a bookkeeping error, so rollover timely; alternatively, petitioner qualifies for automatic hardship waiver (deposited within 1 year; would have been valid rollover had institution deposited as instructed)",
+      "prevailing_party": "petitioner",
+      "amount_determined": {
+        "description": "IRA distribution not includible",
+        "amount": 524980
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Given the finding that delivery to Capital Guardian counts as deposit (bookkeeping error), 58 <= 60 days is mechanical; alternative automatic waiver conditions are also mechanical."
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "IRA distribution qualifies as rollover (not taxable); HSA items conceded by petitioner; no 6662(a) penalty (conceded)."
+  },
+  "notes": "Key judgment: Capital Guardian (not custodian Pershing) was an appropriate institution to receive the check — factual finding relying partly on credited testimony. Notice included $524,980, not the full $524,981.89 (unexplained)."
+}

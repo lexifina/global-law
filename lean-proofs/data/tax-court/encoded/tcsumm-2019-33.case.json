@@ -1,0 +1,41 @@
+{
+ "citation": "T.C. Summary Opinion 2019-33",
+ "taxYear": 2015,
+ "note": "Kleinman. Filing status and dependent are not stated; two $4,000 exemptions (8,000) and itemized 9,250 (= 2015 HOH standard deduction) were claimed. HOH with one under-17 child (CTC) reproduces the notice's $10,518 exactly: corrected TI 83,712-9,250-8,000=66,462, 2015 HOH Tax Table 10,941 + sec. 223(f)(4) 20% tax 127 - CTC 550 (AGI phase-out 9x50) = 10,518; as filed TI 7,116 table tax 713 offset by nonrefundable CTC -> 0. Corrected wages = 24,366 reported + 58,712 A-1 (return omitted A-1 wages). HSA distributions 634 via hsaDistributions (no qualified medical expenses shown, no (f)(4)(B)-(C) exception; age not stated, taken as under 65). Rerun 2c5b6354943. taxShown 0 (derived, not stated: no ACTC/EIC assumed claimed). Accuracy penalty conceded (not encoded); sec. 6673 penalty not imposed.",
+ "facts": {
+  "filing": "hoh",
+  "wages": 83078,
+  "itemizedDeductions": 9250,
+  "dependents": [
+   {
+    "name": "child",
+    "relationship": "child",
+    "age": 10,
+    "daysWithTaxpayer": 365,
+    "livedWithMoreThanHalfYear": true,
+    "taxpayerProvidedOverHalfSupport": true
+   }
+  ],
+  "hsaDistributions": 634,
+  "hsaQualifiedExpenses": 0,
+  "hsaException": false
+ },
+ "taxShown": 0,
+ "expected": [
+  {
+   "item": "deficiency",
+   "value": 10518,
+   "note": "notice deficiency, sustained in full"
+  },
+  {
+   "item": "hsaIncludible",
+   "value": 634,
+   "note": "sec. 223(f)(2)"
+  },
+  {
+   "item": "hsaAdditionalTax",
+   "value": 127,
+   "note": "sec. 223(f)(4)(A): 20% x 634 = 126.80"
+  }
+ ]
+}

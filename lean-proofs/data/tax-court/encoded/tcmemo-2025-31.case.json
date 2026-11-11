@@ -1,0 +1,33 @@
+{
+ "citation": "T.C. Memo. 2025-31",
+ "taxYear": 2021,
+ "note": "Correll. HoH and the other child (A.R.) conceded by respondent; EIC conceded by petitioner (claimEIC false). J.M.A. (16) lived all year with his father; no sec. 152(e) release. A.R.'s age and income figures not found, so A.R. and income are omitted.",
+ "facts": {
+  "filing": "hoh",
+  "claimEIC": false,
+  "dependents": [
+   {
+    "name": "JMA",
+    "relationship": "child",
+    "age": 16,
+    "daysWithTaxpayer": 0,
+    "qualifyingChildOfAnother": true,
+    "releasedUnder152e": false
+   }
+  ]
+ },
+ "expected": [
+  {
+   "item": "qualifyingChild:JMA",
+   "flag": false
+  },
+  {
+   "item": "dependent:JMA",
+   "flag": false
+  },
+  {
+   "item": "ctcChild:JMA",
+   "flag": false
+  }
+ ]
+}

@@ -1,0 +1,150 @@
+{
+  "id": "tcsumm-2020-14",
+  "citation": "T.C. Summary Opinion 2020-14",
+  "case_name": "Dale W. Laue and Alicia Laue v. Commissioner",
+  "docket_numbers": [
+    "3842-18S"
+  ],
+  "judge": "Peter J. Panuthos",
+  "date": "2020-04-20",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "19073b24-2d7d-4bc7-b3aa-3f5ab9b4293b",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/3842-18",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/3842-18/19073b24-2d7d-4bc7-b3aa-3f5ab9b4293b/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2015
+  ],
+  "taxpayer": {
+    "filing_status_claimed": "joint (married)",
+    "state": "California",
+    "notes": "Dale Laue separated from Rockwell in 1987 (B-1B program); generally unemployed since 2002 at age 46."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2015,
+        "deficiency": 2517,
+        "penalties": [],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "10% additional tax under section 72(t) of $2,517 on Boeing pension lump-sum distribution"
+    ],
+    "contested_by_taxpayer": "Applicability of age-55 separation-from-service exception, §72(t)(2)(A)(v)",
+    "conceded": [
+      "Petitioners: no general hardship exception to §72(t); no other exception argued"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Worked for Rockwell on B-1B program until 1987 (separation from service)",
+      "values": {
+        "separation_year": 1987,
+        "employer": "Rockwell International"
+      },
+      "snippet": "He worked for Rockwell International (Rockwell) on the B-1B bomber program until 1987.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Generally unemployed since 2002 when he was 46",
+      "values": {
+        "age_in_2002": 46
+      },
+      "snippet": "Petitioner has been generally unemployed since 2002, when he was 46 years old.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Lump-sum gross distribution of $25,170 from Boeing pension deposited November 14, 2015",
+      "values": {
+        "distribution": 25170,
+        "date": "2015-11-14"
+      },
+      "snippet": "deposited the lump-sum gross distribution of $25,170 on November 14, 2015",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Age 59 at distribution, not yet 59-1/2",
+      "values": {
+        "age_at_distribution": 59,
+        "attained_59_5": false
+      },
+      "snippet": "At the time of distribution and deposit petitioner was 59 years old but had not yet attained the age of 59-1/2.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Distribution reported as income ($32,250 total pensions incl. $7,080 Northrop Grumman SEPP not in issue) but no 10% additional tax reported",
+      "values": {
+        "pensions_reported": 32250,
+        "northrop_distribution": 7080,
+        "additional_tax_reported": false
+      },
+      "snippet": "they did not include the 10% additional tax pursuant to section 72(t)(1).",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F6",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Notice of deficiency issued November 27, 2017 for $2,517 additional tax",
+      "values": {
+        "notice_date": "2017-11-27",
+        "additional_tax": 2517
+      },
+      "snippet": "the 10% additional tax of $2,517 because they received the Boeing distribution before petitioner attained age 59-1/2",
+      "locator": "p. 4"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "early_distribution_72t"
+      ],
+      "question": "Are petitioners liable for the 10% additional tax under §72(t) on the $25,170 Boeing pension distribution, or does the §72(t)(2)(A)(v) separation-after-age-55 exception apply?",
+      "provisions": [
+        "26 U.S.C. §72(t)(1), (t)(2)(A)(i), (t)(2)(A)(v)",
+        "H.R. Conf. Rept. No. 99-841 (Vol. II), at II-456 to II-457"
+      ],
+      "holding": "Liable: exception requires attaining age 55 on or before separation from service; petitioner separated from Rockwell in 1987 well before age 55 and was under 59-1/2 at distribution",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "10% additional tax",
+        "amount": 2517
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Mechanical: age at separation (<55) and age at distribution (<59.5) vs statutory exceptions; 10% x $25,170."
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered for respondent.",
+    "summary": "$2,517 section 72(t) additional tax sustained."
+  },
+  "notes": "Birth date not stated; age at 1987 separation derived (from age 46 in 2002) as about 31 (derived). Statutory interpretation: separation must occur in or after the year employee attains 55 (court relied on conference report). 10% of $25,170 = $2,517 (rounded)."
+}

@@ -1,0 +1,56 @@
+{
+  "id": "tcsumm-2024-4",
+  "citation": "T.C. Summary Opinion 2024-4",
+  "case_name": "Caren Kohl, a.k.a. Caren Rein v. Commissioner",
+  "docket_numbers": ["26962-21S"],
+  "judge": "Siegel",
+  "date": "2024-04-25",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "18c4eb27-27af-4f5d-a9c3-4824de014e31",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/26962-21",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/26962-21/18c4eb27-27af-4f5d-a9c3-4824de014e31/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "tax_years": [2018],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "New York",
+    "notes": "In her early 50s in 2018; withdrew retirement funds to pay past-due rent and avoid eviction."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {"year": 2018, "deficiency": null, "penalties": [], "additions": [{"section": "6651(a)", "amount": null}]}
+    ],
+    "adjustments": ["unreported retirement plan distribution of $10,342", "10% additional tax under section 72(t)", "addition to tax for late filing under section 6651(a)"],
+    "contested_by_taxpayer": "Section 72(t) additional tax (economic hardship argument)",
+    "conceded": [
+      "Petitioner conceded the distribution was taxable and includible in income",
+      "Respondent conceded the section 6651(a) late-filing addition"
+    ]
+  },
+  "findings_of_fact": [
+    {"fact_id": "F1", "issue_refs": ["I1"], "fact": "In 2018 petitioner, in her early 50s, received a taxable retirement plan distribution of $10,342",
+     "values": {"distribution_amount": 10342, "year": 2018, "age_description": "early 50s", "under_59_5": true},
+     "snippet": "In 2018, when she was in her early 50s , petitioner received a taxable retirement plan distribution of $10,342.", "locator": "p. 2"},
+    {"fact_id": "F2", "issue_refs": ["I1"], "fact": "Funds withdrawn to pay past-due rent and avoid eviction",
+     "values": {"purpose": "past-due rent / avoid eviction"},
+     "snippet": "She withdrew the money to pay past-due rent and to avoid being evicted by her landlord.", "locator": "p. 2"},
+    {"fact_id": "F3", "issue_refs": ["I1"], "fact": "Section 72(t)(2)(I) emergency expense exception applies only to distributions after December 31, 2023",
+     "values": {"exception_effective_after": "2023-12-31", "distribution_year": 2018},
+     "snippet": "However, section 72(t)(2)(I) applies only “ to distributions made after December 31, 2023. ”", "locator": "p. 3"}
+  ],
+  "issues": [
+    {"issue_id": "I1", "tags": ["early_distribution_72t"],
+     "question": "Is petitioner liable for the 10% additional tax under section 72(t) on her 2018 $10,342 retirement plan distribution taken for economic hardship?",
+     "provisions": ["26 U.S.C. §72(t)(1)", "§72(t)(2)(I)", "Consolidated Appropriations Act, 2023 §115(c)"],
+     "holding": "Yes; she was under 59 1/2 and no exception applies; the emergency-expense exception of §72(t)(2)(I) applies only to distributions after December 31, 2023",
+     "prevailing_party": "respondent",
+     "amount_determined": {"description": "distribution subject to 10% additional tax", "amount": 10342},
+     "rule_155": true,
+     "computable": true,
+     "computable_reason": "Age under 59 1/2 plus effective-date rule for §72(t)(2)(I) mechanically yields 10% of $10,342"}
+  ],
+  "decision": {"text": "Decision will be entered under Rule 155.", "summary": "Section 72(t) 10% additional tax sustained on $10,342 distribution; late-filing addition conceded by respondent"},
+  "notes": "Deficiency amount not stated in opinion. Court notes §§7491(c) and 6751(b) do not apply to §72(t). Derived: 10% x $10,342 = $1,034.20 (not stated by court). Snippets F1/F3 preserve PDF spacing artifacts."
+}

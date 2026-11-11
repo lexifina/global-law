@@ -1,0 +1,34 @@
+{
+ "citation": "T.C. Summary Opinion 2021-6",
+ "taxYear": 2016,
+ "note": "Full distribution of $109,471 from a \u00a7401(a) qualified ESOP/401(k) plan in 2016, paid to petitioner and endorsed to PCG for restitution; age 43, no \u00a772(t) exception. Federal withholding $21,894. Return filed 2017-09-04 (late, no extension); court found reasonable cause for late filing. Other 2016 income on the return not stated.",
+ "facts": {
+  "filing": "single",
+  "taxpayerAge": 43,
+  "pensions": 109471,
+  "withholding": 21894,
+  "earlyDistributions": [
+   {
+    "amountIncludible": 109471,
+    "plan": "qualifiedPlan"
+   }
+  ]
+ },
+ "asFiled": {
+  "filing": "single",
+  "taxpayerAge": 43
+ },
+ "lateness": {
+  "filed": "2017-09-04",
+  "reasonableCauseFiling": true,
+  "assertsFailureToPay": false
+ },
+ "expected": [],
+ "inferred": [
+  "Filing status single (divorced; 'ex-wife'); status on return not stated",
+  "Other income reported on the 2016 return not stated; encoded as zero in both facts and asFiled, so only the distribution drives the deficiency"
+ ],
+ "unencodable": [
+  "Return's other income/deductions unknown; deficiency computed on the distribution alone"
+ ]
+}

@@ -1,0 +1,37 @@
+{
+  "citation": "T.C. Memo. 2020-101",
+  "taxYear": 2016,
+  "note": "IRA distributions $54,500 (Jan 8 $16,500; Jul 25 $38,000), under 59-1/2, no basis. $15,000 treated as nontaxable on the return; redeposited Apr 27, 2020 (no waiver, no qualifying error). $3,993 of IRA withdrawals paid qualified higher-education expenses in 2016. Withholding $3,800. Filing status, ages and all other income not stated: left at defaults (single, no other income). $747 529 item conceded by respondent: omitted. Reasonable cause found; penalty computed by AUR (automatic).",
+  "facts": {
+    "filing": "single",
+    "iraDistributions": 39500,
+    "rollovers": [
+      { "distribution": 15000, "rolledOver": 15000, "days": 1372, "waiverGranted": false, "fromIra": true }
+    ],
+    "earlyDistributions": [
+      { "amountIncludible": 54500, "plan": "ira", "higherEducationExpenses": 3993 }
+    ],
+    "withholding": 3800
+  },
+  "asFiled": {
+    "filing": "single",
+    "iraDistributions": 39500,
+    "earlyDistributions": [
+      { "amountIncludible": 24664, "plan": "ira" }
+    ],
+    "withholding": 3800
+  },
+  "accuracy": {
+    "reasonableCause": true,
+    "automaticallyCalculated": true
+  },
+  "expected": [],
+  "inferred": [
+    "filing status single (not stated; she had filed for divorce; no dependents stated as claimed)",
+    "days from receipt to redeposit computed from Jul 25, 2016 to Apr 27, 2020 (1372); the $15,000 is treated as part of the later distribution"
+  ],
+  "unencodable": [
+    "other income, deductions and dependents on the 2016 return are not stated, so the regular tax is computed on IRA income alone",
+    "as-filed Form 5329 additional tax figure is redacted; asFiled uses 10% of the $24,664 reported as subject to the tax"
+  ]
+}

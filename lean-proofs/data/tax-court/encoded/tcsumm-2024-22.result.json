@@ -1,0 +1,74 @@
+{
+ "id": "tcsumm-2024-22",
+ "citation": "T.C. Summary Opinion 2024-22",
+ "issues": [
+  {
+   "issue": "Unreported wages",
+   "provision": "sec. 61(a)(1); 6201(d)",
+   "court": "sustained: wages 206,609 includible (unreported $174,995)",
+   "lean": "wages 206,609 encoded as fact",
+   "verdict": "match",
+   "diagnosis": "Holding encoded as facts.wages 206,609 (stipulated). Court figure inconsistency (c): 206,609 stipulated - 76,445 reported = 130,164, not the 174,995 stated as unreported; 44,831 gap unexplained in the opinion (possibly notice used different W-2 totals or folded in the Principal Life 1099-R). Lean uses the stipulated total.",
+   "snippet": "Petitioners stipulated that they received wages of $206,609."
+  },
+  {
+   "issue": "Overstated withholding 7,689",
+   "provision": "sec. 31; 6211(b)(1)",
+   "court": "no jurisdiction; not part of deficiency",
+   "lean": "withholding excluded from netTax/deficiency",
+   "verdict": "match",
+   "diagnosis": "Framework excludes withholding from tax shown and from the deficiency (sec. 6211(b)(1)), consistent with the court; the jurisdictional holding itself is not an output.",
+   "snippet": "we lack jurisdiction to redetermine an adjustment to withholding credits."
+  },
+  {
+   "issue": "Medical expense deduction 35,310",
+   "provision": "sec. 213(a); Treas. Reg. 1.213-1(h)",
+   "court": "disallowed in full",
+   "lean": "deduction 32,563 (medical 0)",
+   "verdict": "judgment",
+   "diagnosis": "Substantiation finding is the decisive step (no documents); encoded as 0. Resulting Schedule A deduction checked: expected deduction 32,563 matches.",
+   "snippet": "Petitioners failed to provide any documents."
+  },
+  {
+   "issue": "Noncash charitable contributions 85,000",
+   "provision": "sec. 170(a); Treas. Reg. 1.170A-13(b)(1)",
+   "court": "disallowed in full",
+   "lean": "deduction 32,563 (charity 0)",
+   "verdict": "judgment",
+   "diagnosis": "Receipt adequacy and credibility are judgments; encoded as 0. Allowed Schedule A = conceded SALT 10,000 + mortgage 22,563 = 32,563 -> MATCH.",
+   "snippet": "not entitled to deduct $85,000 for noncash charitable contributions."
+  },
+  {
+   "issue": "Reservist travel expenses 29,445",
+   "provision": "sec. 62(a)(2)(E), 162(p)",
+   "court": "2,433 allowed, 27,012 disallowed",
+   "lean": "adjustments 2,433",
+   "verdict": "match",
+   "diagnosis": "Stipulated amount encoded as facts.adjustments; expected 'adjustments' 2,433 matches. Moving expense 13,800 deemed abandoned (omitted).",
+   "snippet": "We sustain the parties' agreement that Mr. Lucas incurred $2,433 in travel expenses."
+  },
+  {
+   "issue": "Innocent spouse relief for Ms. Lucas",
+   "provision": "sec. 6015(b)(1)(C)",
+   "court": "denied (actual knowledge)",
+   "lean": null,
+   "verdict": "not-encodable",
+   "diagnosis": "Framework has no sec. 6015 model; knowledge of the understatement is a factual judgment. Joint return kept: filingStatus mfj MATCH.",
+   "snippet": "we find that Ms. Lucas had actual knowledge that the 2018 Form 1040 did not include all income"
+  },
+  {
+   "issue": "Accuracy-related penalty",
+   "provision": "sec. 6662(a), (b)(2), (d)(1)(A); 6751(b); 6664(c)",
+   "court": "liable to the extent understatement is substantial (Rule 155)",
+   "lean": "applies; understatement 24,447 (> 5,000 and > 10% of 30,957); penalty 4,889 on partial facts",
+   "verdict": "match",
+   "diagnosis": "Approval and no reasonable cause encoded as found. Lean substantiality is robust: omitted items (Principal Life income + 10% tax, AOTC disallowed) only raise the understatement; conceded CTC/ACTC/dependent care credits are unquantified but would have to exceed ~19,400 to defeat substantiality.",
+   "snippet": "to the extent the understatement of income tax is substantial."
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": 24447
+ },
+ "notes": "Decision under Rule 155; notice deficiency 29,600 / penalty 2,828 are not findings. Lean 24,447 = corrected 30,957 (AGI 209,138; itemized 32,563; TI 176,575) - as-filed 6,510 (81,407 less assumed standard deduction 24,000). Not encoded (no amounts in opinion): Principal Life 1099-R distribution and its sec. 72(t) 10% tax (conceded), CTC/ACTC/child care credits (conceded by respondent, children not described), AOTC claimed on the return (conceded disallowed), excess social security credit 1,110 (sec. 31(b), outside deficiency). asFiled deduction assumed standard. Checks: filingStatus, deduction, adjustments, accuracyPenaltyApplies all MATCH (exit 0)."
+}

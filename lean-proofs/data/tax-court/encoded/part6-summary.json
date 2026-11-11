@@ -1,0 +1,72 @@
+{
+ "part": 6,
+ "cases": 5,
+ "runs": 6,
+ "caseIds": [
+  "tcsumm-2024-11",
+  "tcsumm-2024-12",
+  "tcsumm-2024-19",
+  "tcsumm-2024-22",
+  "tcsumm-2025-3"
+ ],
+ "counts": {
+  "match": 5,
+  "mismatch": 5,
+  "judgment": 5,
+  "not-encodable": 7,
+  "pending-year": 0
+ },
+ "byCase": {
+  "tcsumm-2024-11": "3 not-encodable (sec. 86 vs 104 characterization; no taxable-SS amount or deficiency stated; penalty conceded)",
+  "tcsumm-2024-12": "2 judgment, 5 mismatch (all amount-level; liability yes/no all match), 1 not-encodable (sec. 6673). Deficiency court 7,632/4,244 vs Lean 8,534/4,466 (filing status, withholding not stated; court's 2018 penalty/addition bases are internally inconsistent)",
+  "tcsumm-2024-19": "1 match (sec. 165(d) gambling losses 61,929), 1 judgment (sec. 6662 penalty; negligence inferred), 1 not-encodable (concessions/Schedule C)",
+  "tcsumm-2024-22": "4 match (wages, withholding outside deficiency, sec. 62(a)(2)(E) travel 2,433, sec. 6662 substantial understatement), 2 judgment (sec. 213, sec. 170 substantiation), 1 not-encodable (sec. 6015(b))",
+  "tcsumm-2025-3": "1 not-encodable (sec. 6015(c) relief; intervenor procedure)"
+ },
+ "gaps": [
+  {
+   "gap": "Sec. 6015 innocent-spouse relief not modelled",
+   "cases": [
+    "tcsumm-2025-3 (6015(c))",
+    "tcsumm-2024-22 (6015(b))"
+   ],
+   "fix": "Add a spouse-relief block: election date, divorce/separation date, item attribution per spouse; output per-spouse deficiency/penalty share under 6015(d)(3)(A) and 6015(c)(3) eligibility. Knowledge elements (6015(b)(1)(C), (c)(3)(C)) stay judgment inputs."
+  },
+  {
+   "gap": "Sec. 111 tax-benefit rule for state refunds",
+   "cases": [
+    "tcsumm-2024-12"
+   ],
+   "fix": "Input 'stateRefund' with prior-year itemized/SALT benefit; include only the benefited portion (currently entered as otherIncome)."
+  },
+  {
+   "gap": "No yes/no expected item for sec. 6651(a)(1) liability",
+   "cases": [
+    "tcsumm-2024-12"
+   ],
+   "fix": "Add expected 'failureToFileApplies' (bool) alongside accuracyPenaltyApplies so liability can match when the amount base (prepayments/withholding) is not in the opinion."
+  },
+  {
+   "gap": "No check of as-filed taxable social security",
+   "cases": [
+    "tcsumm-2024-11"
+   ],
+   "fix": "Allow expected 'asFiled.taxableSocialSecurity' to verify the return's sec. 86 figure (here 2,732 = 85% of 3,214)."
+  },
+  {
+   "gap": "As-filed return given only as total income (no deduction stated)",
+   "cases": [
+    "tcsumm-2024-22"
+   ],
+   "fix": "Add asFiled total-income field (or a sec. 6211(b) tax-shown fallback) so the as-filed tax is not built on an assumed standard deduction."
+  },
+  {
+   "gap": "Sec. 6673 frivolous-position penalty",
+   "cases": [
+    "tcsumm-2024-12"
+   ],
+   "fix": "Discretionary; record only as a stated amount/flag if ever needed. Not a computation gap."
+  }
+ ],
+ "notes": "No framework bugs found. Mismatches in tcsumm-2024-12 come from unstated facts (filing status, withholding) and the court's own inconsistent 2018 bases (penalty 1,382 = 20% of 6,910, not of 7,632; addition 933 = 25% of 3,732). tcsumm-2024-22: court's 'unreported 174,995' vs stipulated 206,609 - reported 76,445 = 130,164 (unexplained). part6.json holds 6 case records (tcsumm-2024-12 has two years)."
+}

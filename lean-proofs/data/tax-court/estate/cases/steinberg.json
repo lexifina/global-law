@@ -1,0 +1,108 @@
+{
+  "id": "tc-145-7",
+  "slug": "steinberg",
+  "caption": "Jean Steinberg, Donor v. Commissioner",
+  "citation": "145 T.C. 184 (2015) (145 T.C. No. 7)",
+  "date": "2015-09-16",
+  "docket_numbers": [
+    "23865-11"
+  ],
+  "judge": "Kerrigan",
+  "tax_type": "gift (net gift with assumed sec. 2035(b) estate tax)",
+  "gift_year": 2007,
+  "gift_date": "2007-04-17",
+  "source": {
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/23865-11",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/23865-11/fcd22322-5ae4-4b41-bfac-93180319785d/public-document-download-url",
+    "dawson_docket_entry_id": "fcd22322-5ae4-4b41-bfac-93180319785d",
+    "document_title": "T.C. OPINION, JUDGE KERRIGAN 145 T.C. NO. 7 (DECISION WILL BE ENTERED FOR PETITIONER)",
+    "raw_text": "raw/steinberg.txt",
+    "raw_pdf": "raw/steinberg.pdf",
+    "retrieved": "2026-11-11"
+  },
+  "related": "Steinberg v. Commissioner, 141 T.C. No. 8 (2013) (summary judgment, 'Steinberg I'; separate DAWSON docket entry 7fd46e10-ee5d-4a27-ad43-cb253ea917ed)",
+  "found_facts": [
+    {
+      "fact": "Deficiency",
+      "values": {
+        "gift_tax_increase": 1804908
+      },
+      "snippet": "increasing petitioner's gift tax liability by $1,804,908 for tax year 2007.",
+      "locator": "p. 2"
+    },
+    {
+      "fact": "Gross value transferred",
+      "values": {
+        "gross_fmv": 109449307
+      },
+      "snippet": "The fair market value of the properties transferred ... before consideration of the gift tax liability and section 2035(b) estate tax liability assumed by the daughters was $109,449,307.",
+      "locator": "p. 7"
+    },
+    {
+      "fact": "Escrow",
+      "values": {
+        "escrow_total": 40000000,
+        "gift_tax_paid_from_escrow_before_credits": 32437261
+      },
+      "snippet": "the daughters each transferred $10 million to an escrow fund ... Of the $40 million, $32,437,261 was used to pay the Federal gift tax",
+      "locator": "p. 7 & fn. 1"
+    },
+    {
+      "fact": "Return",
+      "values": {
+        "net_gift_reported": 71598056,
+        "gift_tax_reported": 32034311
+      },
+      "snippet": "petitioner reported taxable gifts of $71,598,056 and total gift tax of $32,034,311.",
+      "locator": "p. 8"
+    },
+    {
+      "fact": "Notice",
+      "values": {
+        "net_gift_per_notice": 75608963,
+        "increase": 4010907,
+        "discount_claimed": 5838540
+      },
+      "snippet": "increased the aggregate value of petitioner's net gifts to her daughters from $71,598,056 to $75,608,963, for a total gift tax increase of $1,804,908 ... increased the value of petitioner's total gifts for tax year 2007 by $4,010,907 ... petitioner's entire $5,838,540 discount",
+      "locator": "pp. 8-9 & fn. 2"
+    },
+    {
+      "fact": "Expert's computed gift tax assumed",
+      "values": {
+        "gift_tax_assumed": 32012711
+      },
+      "snippet": "The report calculated the gift tax liability to be $32,012,711.",
+      "locator": "p. 28"
+    }
+  ],
+  "issue": "Whether the donees' assumption of potential sec. 2035(b) estate tax reduces the value of the net gift, and by how much.",
+  "holding": "Yes; reduction of $5,838,540 (petitioner's unrebutted expert: IRS mortality tables + sec. 7520 rate). Decision for petitioner.",
+  "stated_tax_figures": {
+    "deficiency_determined": 1804908,
+    "decision": "for petitioner (no deficiency)"
+  },
+  "recomputation": {
+    "steps": [
+      "Net gift = 109,449,307 - 32,012,711 - 5,838,540 = 71,598,056 == reported/allowed",
+      "Deficiency = 45% (2007 top rate) x 4,010,907 = 1,804,908.15 -> $1,804,908 == notice",
+      "Holding: discount allowed -> net gift 71,598,056 -> deficiency 0"
+    ],
+    "reconciles": "net gift and deficiency exact",
+    "non_reconciling": [
+      "Notice increased the gift by 4,010,907, not the full 5,838,540 discount (fn. 2; parties nonetheless treat it as disallowing the entire discount).",
+      "Reported gift tax 32,034,311 vs expert 32,012,711 vs escrow-paid 32,437,261 (before credits) differ; prior gifts/credits are not stated, so the circular net-gift solve (Rev. Rul. 75-72) cannot be reproduced exactly."
+    ]
+  },
+  "judgment_vs_computation": {
+    "judgment": [
+      "value of sec. 2035(b) assumption ($5,838,540, actuarial expert)",
+      "gross FMV $109,449,307 (appraisals)"
+    ],
+    "computation": [
+      "net-gift subtraction; marginal-rate deficiency"
+    ]
+  },
+  "caveats": [
+    "The main amount at issue is a valuation; the arithmetic around it is exact."
+  ]
+}

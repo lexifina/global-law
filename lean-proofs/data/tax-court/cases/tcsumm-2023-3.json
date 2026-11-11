@@ -1,0 +1,149 @@
+{
+  "id": "tcsumm-2023-3",
+  "citation": "T.C. Summary Opinion 2023-3",
+  "case_name": "Terrence Edward Aragoni v. Commissioner",
+  "docket_numbers": [
+    "20914-21S"
+  ],
+  "judge": "Panuthos",
+  "date": "2023-01-25",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "c6a4d23f-2772-485f-b4de-8b8e82e6c55c",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/20914-21",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/20914-21/c6a4d23f-2772-485f-b4de-8b8e82e6c55c/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "suitability_reason": "Alimony deductibility of $15,000 attorney-fee payments turns on §71(b)(1)(D) (liability surviving payee's death), read from the instrument's 'paid in full' language; a rule-based test on instrument terms.",
+  "tax_years": [
+    2017
+  ],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "California",
+    "notes": "Divorcing in California; January 30, 2017 Superior Court order for temporary spousal support and $15,000 toward ex-spouse's attorney fees."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2017,
+        "deficiency": 9317,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 1863.4
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "claimed alimony deduction $135,516; allowed $108,898.70; disallowed $26,617.30"
+    ],
+    "contested_by_taxpayer": "Argues the $15,000 attorney-fee payments are temporary spousal support terminating on death, hence deductible alimony.",
+    "conceded": [
+      "Petitioner conceded $4,097 of the claimed alimony deduction is not deductible",
+      "Respondent conceded petitioner is entitled to a partial deduction of $7,520",
+      "Respondent conceded the section 6662(a) accuracy-related penalty"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "January 30, 2017 California Superior Court order: $9,146 monthly alimony; temporary spousal support continues until death of either party",
+      "values": {
+        "order_date": "2017-01-30",
+        "monthly_alimony": 9146
+      },
+      "snippet": "Under section 2 of t he order, “temporary spousal support pursuant to this order shall continue until the death of either party.”",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Section 7 of the order: petitioner to pay $15,000 toward ex-spouse's attorney's fees, $2,500 monthly from March 1, 2017 until paid in full, to ex-spouse's attorney",
+      "values": {
+        "attorney_fee_obligation": 15000,
+        "installment": 2500,
+        "start": "2017-03-01",
+        "terminates_on_payee_death": false
+      },
+      "snippet": "in monthly installments of $2,500, commencing March 1, 2017, and every month after until paid in full.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Return prepared with CPA claimed $135,516 alimony deduction; respondent allowed $108,898.70, disallowing $26,617.30",
+      "values": {
+        "claimed": 135516,
+        "allowed": 108898.7,
+        "disallowed": 26617.3
+      },
+      "snippet": "respondent allowed $108,8 98.70 of petitioner’s claim ed alimony deduction, resulting in a disallowance of $26,617.30.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Parties agree §71(b)(1)(A), (B), (C) are satisfied; dispute only (D)",
+      "values": {
+        "71b1A": true,
+        "71b1B": true,
+        "71b1C": true
+      },
+      "snippet": "satisfy the requirements of section 71(b) (1)(A), (B), and (C).",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Court concludes liability for $15,000 attorney fees would survive ex-spouse's death",
+      "values": {
+        "liability_survives_death": true
+      },
+      "snippet": "We conclude that petitioner ’s liability to pay his ex -spouse’s attorney’s fees of $ 15,000 would survive he r death.",
+      "locator": "p. 5"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "alimony_71_215"
+      ],
+      "question": "Is the $15,000 payment to the ex-spouse's attorney deductible alimony under sections 71(b) and 215 for 2017?",
+      "provisions": [
+        "26 U.S.C. §71(b)(1)(A)-(D)",
+        "§215(a)",
+        "Cal. Fam. Code §4337"
+      ],
+      "holding": "No; obligation to pay until 'paid in full' survives the payee's death, failing §71(b)(1)(D); $15,000 deduction denied.",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "disputed alimony deduction denied",
+        "amount": 15000
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Given instrument terms (no termination on payee death), §71(b)(1)(D) fails mechanically."
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "$15,000 attorney-fee alimony deduction denied; $7,520 allowed per respondent concession; no 6662(a) penalty (conceded)."
+  },
+  "notes": "Some facts stipulated. Disallowed $26,617 = $4,097 (petitioner concession) + $7,520 (respondent concession) + $15,000 (disputed) per fn 2. Pre-TCJA instrument; §§71/215 repeal not applicable. Court relied on Johanson (9th Cir.) and prior Tax Court cases (Logue, Stedman)."
+}

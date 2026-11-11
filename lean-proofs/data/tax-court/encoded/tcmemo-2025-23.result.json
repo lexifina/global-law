@@ -1,0 +1,99 @@
+{
+ "id": "tcmemo-2025-23",
+ "citation": "T.C. Memo. 2025-23 (Campana v. Commissioner)",
+ "issues": [
+  {
+   "issue": "Unreported $99 interest income includible",
+   "provision": "§61(a)(4)",
+   "court": "includible (conceded)",
+   "lean": "taxableInterest 99 included in AGI 107,286",
+   "verdict": "match",
+   "diagnosis": "Conceded receipt; encoded as fact and included by the framework.",
+   "snippet": "He also received $99 of interest income from the IRS in 2021."
+  },
+  {
+   "issue": "Unreported $56,673 retirement distribution includible",
+   "provision": "§§61(a)(10), 72, 402/408(d)",
+   "court": "includible (conceded)",
+   "lean": "pensions 56,673 included",
+   "verdict": "match",
+   "diagnosis": "Conceded receipt; encoded as pensions (Fidelity hardship withdrawal; plan type not specified - treated as qualifiedPlan).",
+   "snippet": "He subsequently took a hardship withdrawal of $56,673 from his Fidelity Investments (Fidelity) retirement account."
+  },
+  {
+   "issue": "§72(t) 10% additional tax",
+   "provision": "§72(t)(1)",
+   "court": "5,667",
+   "lean": "5,667",
+   "verdict": "match",
+   "diagnosis": "Under 59 1/2, no exception found; 10% x 56,673 = 5,667.",
+   "snippet": "None of the several exceptions to this rule apply here, nor does petitioner argue they should."
+  },
+  {
+   "issue": "Deficiency",
+   "provision": "§§1, 72(t), 6211",
+   "court": "18,064",
+   "lean": "18,064",
+   "verdict": "match",
+   "diagnosis": "Matches only under an INFERRED single filing status (opinion does not state status; inferred, not found). Reported TI 37,964 backed out to income 50,514 (+12,550 2021 single std deduction, itemize false). Corrected TI 94,736, tax 16,755 + 5,667 = 22,422 - 4,358 = 18,064. HoH would give ~16,701, MFJ ~13,842.",
+   "snippet": "He reported $37,964 of taxable income . He did not report the $99 of interest income or the $56,673 retirement distribution."
+  },
+  {
+   "issue": "Substantial understatement",
+   "provision": "§6662(d)(1)(A)",
+   "court": "18,064 > max(10% x 22,422, 5,000)",
+   "lean": "understatement 18,064, substantial true",
+   "verdict": "match",
+   "diagnosis": "Mechanical threshold test.",
+   "snippet": "Respondent determined an understatement of tax of $18,064, exceeding 10% of the tax required to be shown on the return and $5,000."
+  },
+  {
+   "issue": "§6751(b) supervisory approval",
+   "provision": "§6751(b)(2)(B)",
+   "court": "exception applies (automatically calculated)",
+   "lean": "automaticallyCalculated true -> approved",
+   "verdict": "match",
+   "diagnosis": "Court's finding encoded as fact.",
+   "snippet": "penalties “automatically calculated through electronic means,” such as the penalty at issue here, are excepted"
+  },
+  {
+   "issue": "Reasonable cause",
+   "provision": "§6664(c); Treas. Reg. §1.6664-4(b)(1)",
+   "court": "no reasonable cause",
+   "lean": "reasonableCause false (input)",
+   "verdict": "judgment",
+   "diagnosis": "Court weighed facts (no professional reliance, ignored 1099-R); encoded as finding, decisive step is judgment.",
+   "snippet": "neither is a ground for concluding that there was reasonable cause for his failure. We therefore sustain the penalty."
+  },
+  {
+   "issue": "Accuracy-related penalty amount",
+   "provision": "§6662(a); §6664(a); Treas. Reg. §1.6664-2(c)(1)",
+   "court": "3,238",
+   "lean": "3,613 (3,238 with labelled penaltyBase workaround 16,190)",
+   "verdict": "mismatch",
+   "diagnosis": "Framework gap: 3,238 = 20% x (18,064 - 1,874). Underpayment under §6664(a) is reduced by withholding not claimed on the return (Treas. Reg. §1.6664-2(c)(1)/(d)); framework uses underpayment = understatement = 18,064 -> 3,613. Sensitivity run with accuracy.penaltyBase 16,190 reproduces 3,238 (exit 0).",
+   "snippet": "an accuracy-related penalty of $3,238 under section 6662(a)"
+  },
+  {
+   "issue": "Offset of denied 2017 refund claim against 2021 liability",
+   "provision": "§§6213(a), 6512(b)",
+   "court": "no jurisdiction over 2017",
+   "lean": "n/a",
+   "verdict": "not-encodable",
+   "diagnosis": "Jurisdictional ruling, outside the computation framework.",
+   "snippet": "We previously ruled that we do not have jurisdiction over petitioner’s 2017 tax year."
+  }
+ ],
+ "deficiency": {
+  "court": 18064,
+  "lean": 18064
+ },
+ "notes": "Filing status single is inferred (not found in opinion) from the deficiency arithmetic; income composition unknown, encoded as otherIncome 50,514 (backed out from reported TI 37,964 + 12,550 single standard deduction). Withholding of 1,874 is in corrected facts only (not claimed on the return); it does not affect deficiency. Main run: 5 of 6 expected items match; accuracyPenalty 3,613 vs 3,238. Labelled workaround run (scratch, accuracy.penaltyBase = 16,190) matches all 6.",
+ "frameworkGaps": [
+  {
+   "provision": "§6664(a)(1)(B), Treas. Reg. §1.6664-2(c)(1) and (d)",
+   "missing": "Underpayment for penalty purposes is not reduced by withholding (§31 credits) the taxpayer did not claim on the return; penalty base uses tax required - tax shown only.",
+   "suggestedFix": "In accuracyPenalty, compute underpayment = required - (shown + amounts previously assessed - rebates) where 'shown' for this purpose is net of withholding claimed, i.e. underpayment = pos((required - corrected.withholding) - (shown - asFiled.withholding)); equivalently subtract (corrected withholding - asFiled withholding) from the underpayment. Here 18,064 - 1,874 = 16,190 -> 3,238."
+  }
+ ]
+}

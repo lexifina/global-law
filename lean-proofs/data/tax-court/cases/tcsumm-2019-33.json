@@ -1,0 +1,181 @@
+{
+  "id": "tcsumm-2019-33",
+  "citation": "T.C. Summary Opinion 2019-33",
+  "case_name": "Reed L. Kleinman v. Commissioner",
+  "docket_numbers": [
+    "12809-18S"
+  ],
+  "judge": "Urda",
+  "date": "2019-10-31",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "02a9440a-23ad-4ca0-b01c-a3b2a1e7f033",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/12809-18",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/12809-18/02a9440a-23ad-4ca0-b01c-a3b2a1e7f033/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2015
+  ],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "Arizona",
+    "notes": "Employee of A-1 Restaurant Services, LLC; received HSA distributions from Optum Bank; filed Form 4852 denying wages; tax-defier arguments. Case submitted under Rule 122. Filing status not stated."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2015,
+        "deficiency": 10518,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 2104
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "added unreported A-1 wages ($58,712) to gross income",
+      "added HSA distributions ($634) to gross income",
+      "20% additional tax under sec. 223(f)(4)(A) on HSA distributions",
+      "computational adjustments",
+      "sec. 6662(a) substantial understatement penalty"
+    ],
+    "contested_by_taxpayer": "Deficiency, via tax-defier arguments (wages not income); did not challenge reported amounts",
+    "conceded": [
+      "Respondent conceded the sec. 6662(a) accuracy-related penalty"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "A-1 paid 2015 wages of $58,712",
+      "values": {
+        "year": 2015,
+        "wages": 58712,
+        "payer": "A-1 Restaurant Services, LLC"
+      },
+      "snippet": "In 2015 Mr. Kleinman worked for A-1 Restaurant Services, LLC (A-1), which paid him $58,712 in wages.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Received $634 in HSA distributions from Optum Bank (Form 1099-SA)",
+      "values": {
+        "hsa_distributions": 634
+      },
+      "snippet": "He also received $634 in health savings account (HSA) distributions from Optum Bank.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Return filed Feb. 1, 2016 reported wages $24,366, itemized deductions $9,250, exemptions $8,000, refund claimed $739; omitted A-1 wages and HSA distributions",
+      "values": {
+        "filed_date": "2016-02-01",
+        "reported_wages": 24366,
+        "itemized_deductions": 9250,
+        "exemptions": 8000,
+        "refund_claimed": 739
+      },
+      "snippet": "Mr. Kleinman reported wages of $24,366, itemized deductions of $9,250, and exemptions of $8,000.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Petitioner did not contend HSA distributions were used for qualified medical expenses or fit any exception",
+      "values": {
+        "hsa_used_for_qualified_medical": false,
+        "hsa_exception_claimed": false
+      },
+      "snippet": "does not contend in this Court that these distributions were so used or that his circumstances in 2015 fit any of the statutory exceptions.",
+      "locator": "p. 6"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Parties stipulated receipt of the wages and HSA distributions",
+      "values": {
+        "stipulated": true
+      },
+      "snippet": "The parties have stipulated that in 2015 Mr. Kleinman received $58,712 in wages from A-1 and $634 in HSA distributions from Optum Bank",
+      "locator": "p. 5"
+    },
+    {
+      "fact_id": "F6",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "No previous history of frivolous arguments",
+      "values": {
+        "prior_frivolous_history": false
+      },
+      "snippet": "We choose not to impose this penalty here because Mr. Kleinman has no previous history of making frivolous arguments.",
+      "locator": "p. 7"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "other_income_inclusion_61",
+        "hsa_223"
+      ],
+      "question": "Must petitioner include $58,712 of A-1 wages and $634 of HSA distributions in 2015 gross income, with the 20% sec. 223(f)(4)(A) additional tax on the HSA distributions?",
+      "provisions": [
+        "26 U.S.C. §61(a)",
+        "§223(f)(2)",
+        "§223(f)(4)(A)"
+      ],
+      "holding": "Yes; deficiency sustained; tax-defier arguments rejected",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "deficiency",
+        "amount": 10518
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Stipulated amounts; wages and non-medical HSA distributions are includible and HSA additional tax is 20% by statute"
+    },
+    {
+      "issue_id": "I2",
+      "tags": [
+        "other"
+      ],
+      "question": "(Sec. 6673 frivolous-position penalty) Should the Court impose a sec. 6673(a)(1) penalty?",
+      "provisions": [
+        "26 U.S.C. §6673(a)(1)"
+      ],
+      "holding": "No penalty imposed (no prior history of frivolous arguments); warned",
+      "prevailing_party": "petitioner",
+      "amount_determined": {
+        "description": "none",
+        "amount": null
+      },
+      "rule_155": false,
+      "computable": false,
+      "computable_reason": "Discretionary"
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered for respondent as to the deficiency and for petitioner as to the penalty.",
+    "summary": "Deficiency $10,518 sustained; 6662(a) penalty conceded by respondent; no 6673 penalty"
+  },
+  "notes": "Submitted fully stipulated under Rule 122. Amounts rounded to nearest dollar. Ninth Circuit Weimerskirch foundation requirement satisfied by stipulation. 'Decision ... for petitioner as to the penalty' refers to the conceded 6662(a) penalty."
+}

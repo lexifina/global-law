@@ -1,0 +1,68 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2022-10",
+  "taxYear": 2016,
+  "note": "Morgan. No 2016 return (stipulated); SFR under sec. 6020(b) showing 28,932. Court: physical presence (330 full days in 1 Jan - 31 Dec 2016, so the whole year qualifies: 366 days) and abode in Saudi Arabia, so the sec. 911 exclusion is allowed up to the sec. 911(b)(2) limit. Encoded with facts.foreign {qualifyingDays 366, foreignEarnedIncome 109,024 = the W-2 wages, all treated as foreign earned income as the court did}. Employer housing (compound bargained for in the contract) has no stated value, so no housing exclusion is encoded. Pension 20,069 not foreign earned income (sec. 911(b)(1)(B)(i)); the notice's sec. 72(t) tax on it (implied by the 28,932 reconstruction) was not conceded, so it is kept (age not stated; under 59 1/2 assumed). Respondent conceded the 2,286 COD income and sec. 6654. Divorced 2006, unmarried: single. No reasonable cause shown for (a)(1)/(a)(2). Amounts left to Rule 155. sfrTax 28,932.",
+  "facts": {
+   "filing": "single",
+   "wages": 109024,
+   "pensions": 20069,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 20069,
+     "plan": "qualifiedPlan"
+    }
+   ],
+   "foreign": {
+    "qualifyingDays": 366,
+    "foreignEarnedIncome": 109024
+   }
+  },
+  "taxShown": 0,
+  "lateness": {
+   "asOf": "2022-06-23",
+   "reasonableCauseFiling": false,
+   "reasonableCausePayment": false,
+   "assertsFailureToPay": true
+  },
+  "expected": [
+   {
+    "item": "foreignEarnedIncomeExclusion",
+    "value": 101300
+   },
+   {
+    "item": "failureToFileApplies",
+    "flag": true
+   },
+   {
+    "item": "failureToPayApplies",
+    "flag": true
+   }
+  ],
+  "sfrTax": 28932
+ },
+ {
+  "citation": "T.C. Summary Opinion 2022-10 (notice reconstruction: no sec. 911 exclusion, incl. later-conceded 2,286 COD income)",
+  "taxYear": 2016,
+  "note": "Consistency check of the notice/SFR deficiency of 28,932, not a court holding. Wages 109,024 + pension 20,069 + COD 2,286, single, standard deduction and one exemption, plus 10% sec. 72(t) on the pension.",
+  "facts": {
+   "filing": "single",
+   "wages": 109024,
+   "pensions": 20069,
+   "otherIncome": 2286,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 20069,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "taxShown": 0,
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 28932
+   }
+  ]
+ }
+]

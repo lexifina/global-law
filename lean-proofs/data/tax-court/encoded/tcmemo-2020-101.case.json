@@ -1,0 +1,61 @@
+[
+ {
+  "citation": "T.C. Memo. 2020-101",
+  "taxYear": 2016,
+  "note": "Filing status and other income not stated; only the IRA items are encoded (default single). $747 529 item conceded by respondent, omitted. Distributions 16,500 (2016-01-08) + 38,000 (2016-07-25) = 54,500; 15,000 redeposited 2020-04-27 (1,372 days after the last distribution); court declines the sec. 408(d)(3)(I) waiver (judgment, encoded waiverGranted false). Encoded as 39,500 taxable IRA distributions plus a 15,000 rollover claim. Deficiency left to Rule 155, not stated.",
+  "facts": {
+   "iraDistributions": 39500,
+   "withholding": 3800,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 54500,
+     "plan": "ira",
+     "higherEducationExpenses": 3993
+    }
+   ],
+   "rollovers": [
+    {
+     "distribution": 15000,
+     "rolledOver": 15000,
+     "days": 1372,
+     "waiverGranted": false,
+     "fromIra": true
+    }
+   ]
+  },
+  "asFiled": {
+   "iraDistributions": 39500,
+   "withholding": 3800,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 24664,
+     "plan": "ira"
+    }
+   ]
+  },
+  "accuracy": {
+   "reasonableCause": true
+  },
+  "expected": [
+   {
+    "item": "rolloverIncludible",
+    "value": 15000,
+    "note": "taxable on the full $54,500; no waiver for the $15,000"
+   },
+   {
+    "item": "earlyDistributionTax",
+    "value": 5051,
+    "note": "10% x $50,507"
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 0,
+    "note": "reasonable cause (court's finding)"
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": false
+   }
+  ]
+ }
+]

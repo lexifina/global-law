@@ -1,0 +1,263 @@
+{
+  "id": "tcsumm-2021-6",
+  "citation": "T.C. Summary Opinion 2021-6",
+  "case_name": "Alan Dexter Wenk v. Commissioner",
+  "docket_numbers": [
+    "3154-19S"
+  ],
+  "judge": "Vasquez",
+  "date": "2021-02-10",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "933f5648-e728-4758-abcd-d0e14b1fd5a4",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/3154-19",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/3154-19/933f5648-e728-4758-abcd-d0e14b1fd5a4/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2016
+  ],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "Kansas",
+    "notes": "Former C.P.A.; pleaded guilty to bank fraud; took full ESOP/401(k) distribution in Feb. 2016 at age 43 to pay restitution; incarcerated July 2016 - July 2017. Filing status not stated."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2016,
+        "deficiency": 39649,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 3551
+          }
+        ],
+        "additions": [
+          {
+            "section": "6651(a)(1)",
+            "amount": 2772
+          }
+        ]
+      }
+    ],
+    "adjustments": [
+      "unreported retirement income $109,471",
+      "sec. 72(t) additional tax $10,947",
+      "additional withholding credit $21,894 allowed",
+      "sec. 6651(a)(1) addition $2,772",
+      "computational adjustments"
+    ],
+    "contested_by_taxpayer": "Inclusion of distribution (never received/benefited), 72(t) tax (relied on withholding), late-filing addition",
+    "conceded": [
+      "Respondent conceded the sec. 6662(a) accuracy-related penalty"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1",
+        "I2"
+      ],
+      "fact": "Elected full distribution from Principal retirement account in Feb. 2016; estimated value $108,802.88",
+      "values": {
+        "distribution_month": "2016-02",
+        "estimated_account_value": 108802.88,
+        "plan_type": "ESOP/401(k)"
+      },
+      "snippet": "The estimated value of the account at the time of the election was $108,802.88.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Check for $82,924.72 issued after withholding federal tax $21,894 and state tax ~$4,652; endorsed to PCG and credited to restitution",
+      "values": {
+        "net_check": 82924.72,
+        "federal_withholding": 21894,
+        "state_withholding_approx": 4652
+      },
+      "snippet": "Principal issued petitioner a check for $82,924.72 after withholding Federal income tax of $21,894 and State income tax of approximately $4,652.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "Petitioner was 43 at the time of the distribution",
+      "values": {
+        "age_at_distribution": 43,
+        "attained_59_5_in_year": false
+      },
+      "snippet": "Petitioner was 43 years old at the time of the distribution.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1",
+        "I2"
+      ],
+      "fact": "Principal reported taxable retirement income of $109,471",
+      "values": {
+        "reported_distribution": 109471
+      },
+      "snippet": "Principal reported that it had paid petitioner taxable retirement income of $109,471 during the year at issue.",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "Respondent determined sec. 72(t) additional tax of $10,947",
+      "values": {
+        "additional_tax_72t": 10947
+      },
+      "snippet": "Respondent also determined an additional tax of $10,947 under section 72(t)",
+      "locator": "p. 5"
+    },
+    {
+      "fact_id": "F6",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "No exception (e.g., rollover) argued or established; qualified trust undisputed",
+      "values": {
+        "rollover": false,
+        "qualified_401a_trust": true
+      },
+      "snippet": "He has neither argued nor established that an exception applies.",
+      "locator": "p. 8"
+    },
+    {
+      "fact_id": "F7",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "Distribution not used for any expense qualifying for a 72(t) exception",
+      "values": {
+        "exception_applies": false
+      },
+      "snippet": "Petitioner did not use the distribution for the payment of any expense that would allow him to avoid the 10% additional tax.",
+      "locator": "p. 9"
+    },
+    {
+      "fact_id": "F8",
+      "issue_refs": [
+        "I3"
+      ],
+      "fact": "Incarcerated July 2016 - July 2017; tried but unable to file return or extension by due date",
+      "values": {
+        "incarcerated_from": "2016-07",
+        "released": "2017-07",
+        "diligent_efforts": true
+      },
+      "snippet": "he was unable to access the resources he needed to file his return or a request for extension by the due date.",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F9",
+      "issue_refs": [
+        "I3"
+      ],
+      "fact": "Return filed Sept. 4, 2017 (late; parties agree)",
+      "values": {
+        "filed_date": "2017-09-04",
+        "timely": false
+      },
+      "snippet": "He filed the return on September 4, 2017.",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F10",
+      "issue_refs": [
+        "I3"
+      ],
+      "fact": "Court found petitioner's testimony credible",
+      "values": {
+        "testimony_credible": true,
+        "reasonable_cause": true
+      },
+      "snippet": "We found his testimony credible, especially in the light of his postrelease conduct.",
+      "locator": "p. 11"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "other_income_inclusion_61"
+      ],
+      "question": "Is the $109,471 distribution from petitioner's ESOP/401(k) retirement account includible in his 2016 gross income?",
+      "provisions": [
+        "26 U.S.C. §61(a)",
+        "§402(a)",
+        "§72",
+        "§402(c)(1)"
+      ],
+      "holding": "Yes; distribution was paid to him and applied to his restitution; no exception",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "distribution includible",
+        "amount": 109471
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Distribution from qualified 401(a) trust actually distributed and not rolled over is includible under sec. 402(a)"
+    },
+    {
+      "issue_id": "I2",
+      "tags": [
+        "early_distribution_72t"
+      ],
+      "question": "Is petitioner liable for the 10% additional tax under sec. 72(t) on the distribution?",
+      "provisions": [
+        "26 U.S.C. §72(t)(1)",
+        "§72(t)(2)(A)(i)",
+        "§72(t)(2)(B)",
+        "§4974(c)"
+      ],
+      "holding": "Liable; petitioner was 43 (under 59-1/2) and no exception applies; entire distribution subject to 10% tax",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "additional tax as determined",
+        "amount": 10947
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Age 43 < 59-1/2, no exception; 10% of $109,471"
+    },
+    {
+      "issue_id": "I3",
+      "tags": [
+        "addition_6651a1"
+      ],
+      "question": "Is petitioner liable for the sec. 6651(a)(1) addition to tax for 2016?",
+      "provisions": [
+        "26 U.S.C. §6651(a)(1)",
+        "§7491(c)",
+        "Treas. Reg. §301.6651-1(c)(1)"
+      ],
+      "holding": "Not liable; reasonable cause shown (incarceration plus credible diligent attempts to file)",
+      "prevailing_party": "petitioner",
+      "amount_determined": {
+        "description": "addition determined but not sustained",
+        "amount": 2772
+      },
+      "rule_155": false,
+      "computable": false,
+      "computable_reason": "Reasonable cause finding based on credibility of testimony"
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered for respondent as to the deficiency and for petitioner as to the accuracy-related penalty under section 6662(a) and the addition to tax under section 6651(a)(1).",
+    "summary": "Deficiency sustained ($109,471 includible; 10% 72(t) tax); no 6662(a) penalty (conceded); no 6651(a)(1) addition (reasonable cause)"
+  },
+  "notes": "Some facts stipulated. Tenth Circuit (Erickson) foundation rule applied. Derived: 10% x $109,471 = $10,947.10, matching respondent's $10,947. Reliance on payer withholding no defense to 72(t) (fn. 9). Also: July 11, 2016 court ordered $135,560.12 transferred from joint account; $52,679.61 applied to restitution, $82,880.51 returned to ex-wife."
+}

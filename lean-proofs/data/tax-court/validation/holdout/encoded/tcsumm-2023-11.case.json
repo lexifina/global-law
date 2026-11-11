@@ -1,0 +1,29 @@
+{
+  "citation": "T.C. Summ. Op. 2023-11",
+  "taxYear": 2018,
+  "note": "Sneed. Issue: repayment of APTC for 2018. Income per return/findings: wages 60,546, interest 20, taxable retirement (IRA) distributions 47,853, additional income 5,302. Family size 3 (herself + two dependents). Marketplace coverage July-Dec 2018 at $1,145.75/month, APTC equal to premium each month (6 x 1,145.75 = 6,874.50, rounded to 6,875). Benchmark (SLCSP) premium not stated: left 0. Filing status not stated (left single); dependents' ages/details not stated, so dependents omitted from both returns (they affect corrected and as-filed identically). Section 72(t) additional tax and accuracy penalty conceded by respondent: not encoded. Taxpayer age not stated (default). asFiled = same return without the PTC reconciliation (no Form 8962 attached).",
+  "facts": {
+    "filing": "single",
+    "wages": 60546,
+    "taxableInterest": 20,
+    "iraDistributions": 47853,
+    "otherIncome": 5302,
+    "ptc": {
+      "familySize": 3,
+      "state": "contiguous",
+      "enrolledPremium": 6875,
+      "benchmarkPremium": 0,
+      "advancePayments": 6875
+    }
+  },
+  "asFiled": {
+    "filing": "single",
+    "wages": 60546,
+    "taxableInterest": 20,
+    "iraDistributions": 47853,
+    "otherIncome": 5302
+  },
+  "expected": [],
+  "inferred": ["APTC and enrolled premium total = 6 months x 1,145.75 = 6,874.50, rounded to 6,875", "filing status single (not stated; irrelevant to the PTC cap above 400% FPL but affects nothing in the deficiency since both returns use it)", "retirement distributions treated as taxable IRA distributions (footnote mentions IRA distributions)"],
+  "unencodable": ["filing status and dependents' details not stated (two dependents claimed)", "benchmark SLCSP premium not stated"]
+}

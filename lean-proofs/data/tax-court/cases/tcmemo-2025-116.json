@@ -1,0 +1,56 @@
+{
+  "id": "tcmemo-2025-116",
+  "citation": "T.C. Memo. 2025-116",
+  "case_name": "John R. Graham and Nicole Graham v. Commissioner",
+  "docket_numbers": ["4044-24"],
+  "judge": "Kerrigan",
+  "date": "2025-11-13",
+  "opinion_type": "memorandum",
+  "source": {
+    "dawson_docket_entry_id": "dc6de5c4-8a20-49a7-beaa-e1d168d776dc",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/4044-24",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/4044-24/dc6de5c4-8a20-49a7-beaa-e1d168d776dc/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "tax_years": [2022],
+  "taxpayer": {
+    "filing_status_claimed": "married filing jointly",
+    "state": "Alabama",
+    "notes": "Claimed EITC for Angela Davis, petitioner wife's sister, age 64 in 2022."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {"year": 2022, "deficiency": 3686, "penalties": [], "additions": []}
+    ],
+    "adjustments": ["disallowed EITC"],
+    "contested_by_taxpayer": "EITC with Angela Davis as qualifying child",
+    "conceded": ["Petitioners conceded at trial that they were not eligible for the EITC for Rayquan Graham"]
+  },
+  "findings_of_fact": [
+    {"fact_id": "F1", "issue_refs": ["I1"], "fact": "Angela Davis is petitioner wife's sister (relationship test met per parties' agreement)",
+     "values": {"relationship": "sister", "relationship_test_met": true},
+     "snippet": "On their tax return they claimed an EITC for Angela Davis, petitioner wife’s sister.", "locator": "p. 2"},
+    {"fact_id": "F2", "issue_refs": ["I1"], "fact": "Ms. Davis was 64 years old in 2022 and did not file a joint return",
+     "values": {"age_2022": 64, "filed_joint_return": false},
+     "snippet": "In 2022 Ms. Davis was 6 4 years old, and she did not file a joint tax return.", "locator": "p. 2"},
+    {"fact_id": "F3", "issue_refs": ["I1"], "fact": "Testimony that Ms. Davis lived with petitioners more than six months, but no documentation; residency not established",
+     "values": {"residency_established": false},
+     "snippet": "The record did not include any documentation to support the assertion that Ms. Davis lived with petitioners for more than six months in 2022", "locator": "p. 3"},
+    {"fact_id": "F4", "issue_refs": ["I1"], "fact": "Permanent and total disability (stroke, wheelchair) asserted by testimony only; not established",
+     "values": {"permanently_totally_disabled_established": false},
+     "snippet": "or that she was permanently and totally disabled.", "locator": "p. 3"}
+  ],
+  "issues": [
+    {"issue_id": "I1", "tags": ["eitc_32", "qualifying_child_152c"],
+     "question": "Are petitioners entitled to the EITC for 2022 with Angela Davis (wife's sister, age 64) as a qualifying child?",
+     "provisions": ["26 U.S.C. §32(c)(3)(A)", "§152(c)(1)", "§152(c)(3)(A)", "§152(c)(3)(B)", "§22(e)(3)"],
+     "holding": "No; petitioners did not prove residency for more than half the year or permanent and total disability (needed to satisfy the age test for a 64-year-old)",
+     "prevailing_party": "respondent",
+     "amount_determined": {"description": "deficiency", "amount": 3686},
+     "rule_155": false,
+     "computable": false,
+     "computable_reason": "Turns on lack of documentation for residency and disability (substantiation/burden of proof), although the age test fails mechanically absent disability"}
+  ],
+  "decision": {"text": "Decision will be entered for respondent.", "summary": "Deficiency of $3,686 sustained; EITC disallowed"},
+  "notes": "Parties agreed relationship and joint-return tests met. Testimony found credible but insufficient without documentation. Age 64 fails §152(c)(3)(A) (under 19 / student under 24) so qualifying-child status depended on §152(c)(3)(B) disability exception. Snippet F2 preserves a PDF spacing artifact ('6 4')."
+}

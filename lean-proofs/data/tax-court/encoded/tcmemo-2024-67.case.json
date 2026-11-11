@@ -1,0 +1,143 @@
+[
+ {
+  "citation": "T.C. Memo. 2024-67",
+  "taxYear": 2018,
+  "note": "Moran. Non-filer; SFR 2022-09-12. Gross income 254,512 = wages 213,630 + capital gain 32,227 + MSA 6,236 + retirement 2,417 + dividends 2. IRS taxed the capital gain at ordinary rates (60,569 = ordinary tax on 242,512), so longTermGain 0. Court accepted the divorce: single. taxShown 0 (no return) for the deficiency. Sec. 6654: no 2017 return or prior-year tax in the record (priorTax none, so the 90%-of-current-year option), no estimated payments, withholding 42,961 treated as paid evenly on the due dates; due dates set to the statutory 15th (sec. 6654(c)(2)) rather than the sec. 7503-shifted printed dates (17 Apr, 17 Sep 2018), which reproduces the IRS figure.",
+  "facts": {
+   "filing": "single",
+   "wages": 213630,
+   "capitalGain": 32227,
+   "longTermGain": 0,
+   "otherIncome": 6236,
+   "pensions": 2417,
+   "ordinaryDividends": 2,
+   "withholding": 42961,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 2417,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "taxShown": 0,
+  "sfrTax": 60811,
+  "lateness": {
+   "asOf": "2022-09-12"
+  },
+  "expected": [
+   {
+    "item": "taxableIncome",
+    "value": 242512
+   },
+   {
+    "item": "regularTax",
+    "value": 60569
+   },
+   {
+    "item": "earlyDistributionTax",
+    "value": 242
+   },
+   {
+    "item": "totalTax",
+    "value": 60811
+   },
+   {
+    "item": "deficiency",
+    "value": 60811
+   },
+   {
+    "item": "failureToFile",
+    "value": 4016
+   },
+   {
+    "item": "failureToPay",
+    "value": 3659
+   },
+   {
+    "item": "estimatedTaxAddition",
+    "value": 424,
+    "note": "deemed conceded; no prior-year return found (priorTax none), no estimated payments; withholding 42,961 spread over the four due dates"
+   },
+   {
+    "item": "estimatedRequiredAnnual",
+    "value": 54730,
+    "note": "derived, not stated: 90% x 60,811 = 54,729.9 (no 2017 return in the record)"
+   }
+  ],
+  "estimated": {
+   "payments": [],
+   "dueDates": [
+    "2018-04-15",
+    "2018-06-15",
+    "2018-09-15",
+    "2019-01-15"
+   ]
+  }
+ },
+ {
+  "citation": "T.C. Memo. 2024-67 (variant: married filing separately, the notice's status)",
+  "taxYear": 2018,
+  "note": "Checks the court's 'harmless error' holding: MFS and single rates give the same tax here.",
+  "facts": {
+   "filing": "mfs",
+   "wages": 213630,
+   "capitalGain": 32227,
+   "longTermGain": 0,
+   "otherIncome": 6236,
+   "pensions": 2417,
+   "ordinaryDividends": 2,
+   "withholding": 42961,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 2417,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "taxShown": 0,
+  "expected": [
+   {
+    "item": "regularTax",
+    "value": 60569
+   },
+   {
+    "item": "totalTax",
+    "value": 60811
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2024-67 (variant: sec. 6651(g) SFR as the return shown)",
+  "taxYear": 2018,
+  "note": "taxShown omitted, so the tax shown = the SFR tax (sec. 6651(g)(2)); only the additions are meaningful here.",
+  "facts": {
+   "filing": "single",
+   "wages": 213630,
+   "capitalGain": 32227,
+   "longTermGain": 0,
+   "otherIncome": 6236,
+   "pensions": 2417,
+   "ordinaryDividends": 2,
+   "withholding": 42961,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 2417,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "lateness": {
+   "asOf": "2022-09-12"
+  },
+  "expected": [
+   {
+    "item": "failureToFile",
+    "value": 4016
+   },
+   {
+    "item": "failureToPay",
+    "value": 3659
+   }
+  ]
+ }
+]

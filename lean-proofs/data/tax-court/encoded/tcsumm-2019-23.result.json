@@ -1,0 +1,84 @@
+{
+ "id": "tcsumm-2019-23",
+ "citation": "T.C. Summary Opinion 2019-23 (Gutierrez v. Commissioner)",
+ "issues": [
+  {
+   "issue": "J.V./L.V. eligible foster children (court custody order 2010)",
+   "provision": "§152(f)(1)(A), (C)",
+   "court": "eligible foster children",
+   "lean": "fosterChild; qualifyingChild JV/LV true",
+   "verdict": "match",
+   "diagnosis": "Eligible foster children under §152(f)(1)(C). Rerun 57b55431cca.",
+   "snippet": "J.V. and L.V. were therefore petitioner's \"eligible foster child[ren]\" under section 152(f)(1)(C)."
+  },
+  {
+   "issue": "Tie-breaker vs Ms. Madrigal (grandmother, no income)",
+   "provision": "§152(c)(4)(A)(ii)",
+   "court": "petitioner (higher AGI)",
+   "lean": "petitioner (tieBreaker:JV/LV match)",
+   "verdict": "match",
+   "diagnosis": "Neither is a parent; higher AGI wins (12,893 > 0). Rerun 57b55431cca.",
+   "snippet": "J.V. and L.V. are treated as the qualifying children of the taxpayer with the higher adjusted gross income"
+  },
+  {
+   "issue": "Dependency exemptions for J.V. and L.V.",
+   "provision": "§151(c); §152(a)",
+   "court": "allowed",
+   "lean": "dependent:JV/LV true",
+   "verdict": "match",
+   "diagnosis": "Expected dependent:JV/LV true. Rerun 57b55431cca.",
+   "snippet": "petitioner is entitled to the dependency exemption deductions claimed with respect to J.V. and L.V."
+  },
+  {
+   "issue": "Maria Terrones (19) qualifying child: student status",
+   "provision": "§152(c)(3)(A), (f)(2)",
+   "court": "not a student; not a qualifying child",
+   "lean": "qualifyingChild:Maria false, eicChild:Maria false (match)",
+   "verdict": "judgment",
+   "diagnosis": "Court preferred school records over testimony (credibility); encoded student false. Qualifying-relative question expressly not decided.",
+   "snippet": "We are more persuaded by her school records than we are by petitioner's testimony on the point."
+  },
+  {
+   "issue": "Head of household",
+   "provision": "§2(b); Reg. §1.2-2(d)",
+   "court": "HoH",
+   "lean": "hoh; headOfHousehold true",
+   "verdict": "match",
+   "diagnosis": "Unmarried; paid all household expenses; QCs J.V./L.V. Rerun 57b55431cca.",
+   "snippet": "Consequently, petitioner qualifies as a head of household for 2015."
+  },
+  {
+   "issue": "EIC with two qualifying children",
+   "provision": "§32(c)(1)(A)(i), (3)",
+   "court": "allowed (2 children)",
+   "lean": "eicChild JV/LV true, Maria false; EIC 5,150 (2 children)",
+   "verdict": "match",
+   "diagnosis": "Expected eicChild JV/LV true, Maria false. Rerun 57b55431cca.",
+   "snippet": "Petitioner is therefore an eligible individual with two qualifying children"
+  },
+  {
+   "issue": "Child tax credit for J.V. and L.V.",
+   "provision": "§24(c)(1)",
+   "court": "allowed",
+   "lean": "ctcChild JV/LV true",
+   "verdict": "match",
+   "diagnosis": "Both under 17. Rerun 57b55431cca.",
+   "snippet": "petitioner is entitled to the child tax credit in dispute."
+  },
+  {
+   "issue": "Accuracy-related penalty",
+   "provision": "§6662(a); §6664(c)(1)",
+   "court": "not liable (reasonable cause: reliance on preparer)",
+   "lean": "accuracyPenalty 0 (match)",
+   "verdict": "judgment",
+   "diagnosis": "Reasonable cause is the court's weighing; encoded reasonableCause true.",
+   "snippet": "he is not liable for a section 6662(a) accuracy-related penalty."
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": 644
+ },
+ "notes": "Rerun 57b55431cca: all 13 expected items match. Court left the deficiency to Rule 155 (notice 5,102); Lean's 644 is the only remaining change (EIC with 2 rather than 3 children: refundable credits 7,278 as filed vs 6,634), not compared with any court figure.",
+ "frameworkGaps": []
+}

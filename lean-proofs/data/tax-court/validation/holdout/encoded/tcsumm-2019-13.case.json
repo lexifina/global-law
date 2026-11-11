@@ -1,0 +1,20 @@
+{
+ "citation": "T.C. Summary Opinion 2019-13",
+ "taxYear": 2015,
+ "note": "2015, single assumed by default (filing status not stated). Schedule C as filed: $12,000 gross receipts less $36,470 expenses = -$24,470. Findings: car/truck ($15,813) unsubstantiated, education ($3,221) unexplained, home office not described -> corrected Schedule C = 12,000 - (36,470 - 15,813 - 3,221) = -$5,436 (amended return's extra depreciation/insurance not encoded; home office not encoded). Salaries from City and County of San Francisco and Kaiser are NOT stated in amount, so wages left at 0 and computed figures are not meaningful. Roth IRA $2,413 distribution: includible part and 72(t) first-home stipulation are redacted, not encoded. Accuracy: penalty computed by CEAS software with no human examiner (automaticallyCalculated), negligence found (insufficient effort to assess liability), no reasonable cause.",
+ "facts": {
+  "seProfit": -5436
+ },
+ "asFiled": {
+  "seProfit": -24470
+ },
+ "accuracy": {
+  "negligence": true,
+  "reasonableCause": false,
+  "supervisoryApproval": false,
+  "automaticallyCalculated": true
+ },
+ "expected": [],
+ "inferred": ["filing status single (default; not stated)"],
+ "unencodable": ["wage amounts (two employers) not stated", "Roth IRA distribution includible amount and §72(t)(2)(F) first-home stipulation redacted", "Schedule A items (incl. the duplicate $3,107 education deduction) not stated in full", "home office deduction / amended-return depreciation and insurance not quantified as found"]
+}

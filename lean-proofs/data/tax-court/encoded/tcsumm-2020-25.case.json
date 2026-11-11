@@ -1,0 +1,37 @@
+{
+ "citation": "T.C. Summary Opinion 2020-25",
+ "taxYear": 2016,
+ "note": "Brzyski. Claimed HoH with A.D.B. (7) and J.N.B. (11), Daniela's children. No Kansas common-law marriage proved (credibility finding) -> not stepchildren -> relationship 'unrelated'. Children did not live with him all 2016 (152(d)(2)(H) fails); support not shown. Earned income 16,788 (encoded as wages; source type not stated). Court: earned income > AGI, but AGI not stated, so no adjustment is encoded. Days the children lived with him not found (only that they came to Missouri June-Oct 2016); left at default since the relationship test is decisive. Grandfather also claimed them (fn. 9) - not a finding that they were his qualifying children. Penalty conceded. Return claimed refund 9,288; IRS froze 7,572 (withholding not stated; not encoded).",
+ "facts": {
+  "filing": "hoh",
+  "wages": 16788,
+  "dependents": [
+   {"name": "ADB", "relationship": "unrelated", "age": 7, "livedWithWholeYear": false, "taxpayerProvidedOverHalfSupport": false},
+   {"name": "JNB", "relationship": "unrelated", "age": 11, "livedWithWholeYear": false, "taxpayerProvidedOverHalfSupport": false}
+  ]
+ },
+ "status": {"marriedAtYearEnd": false},
+ "asFiled": {
+  "filing": "hoh",
+  "wages": 16788,
+  "dependents": [
+   {"name": "ADB", "relationship": "child", "age": 7, "livedWithWholeYear": true, "daysWithTaxpayer": 366, "taxpayerProvidedOverHalfSupport": true},
+   {"name": "JNB", "relationship": "child", "age": 11, "livedWithWholeYear": true, "daysWithTaxpayer": 366, "taxpayerProvidedOverHalfSupport": true}
+  ]
+ },
+ "expected": [
+  {"item": "qualifyingChild:ADB", "flag": false},
+  {"item": "qualifyingChild:JNB", "flag": false},
+  {"item": "qualifyingRelative:ADB", "flag": false},
+  {"item": "qualifyingRelative:JNB", "flag": false},
+  {"item": "dependent:ADB", "flag": false},
+  {"item": "dependent:JNB", "flag": false},
+  {"item": "headOfHousehold", "flag": false},
+  {"item": "filingStatus", "text": "single"},
+  {"item": "ctcNonrefundable", "value": 0},
+  {"item": "refundableCtc", "value": 0},
+  {"item": "eic", "value": 0},
+  {"item": "earnedIncome", "value": 16788},
+  {"item": "deficiency", "value": 7816, "note": "NOD figure; decision for respondent as to the deficiency"}
+ ]
+}

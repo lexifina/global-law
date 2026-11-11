@@ -1,0 +1,24 @@
+{
+ "part": 4,
+ "cases": ["tcsumm-2019-24","tcsumm-2019-33","tcsumm-2019-8","tcsumm-2020-18","tcsumm-2020-9","tcsumm-2021-41"],
+ "counts": {"match": 1, "mismatch": 1, "judgment": 2, "not-encodable": 6, "pending-year": 17, "total": 27},
+ "perCase": {
+  "tcsumm-2019-24": {"not-encodable": 1, "pending-year": 1},
+  "tcsumm-2019-33": {"not-encodable": 2, "pending-year": 2, "judgment": 1},
+  "tcsumm-2019-8": {"pending-year": 4},
+  "tcsumm-2020-18": {"pending-year": 4, "judgment": 1, "mismatch": 1},
+  "tcsumm-2020-9": {"match": 1, "pending-year": 1, "not-encodable": 2},
+  "tcsumm-2021-41": {"pending-year": 5, "not-encodable": 1}
+ },
+ "notes": "Most items are pending-year (2014/2015 rejected by params?). tcsumm-2021-41 and tcsumm-2020-9 (2015) were also run with the year set to 2016 as a logic check: all items matched. tcsumm-2019-33 hand computation (HOH, one child, 2015 tables) reproduces the 10,518 deficiency exactly. The one mismatch (tcsumm-2020-18, 2016 penalty) is the court's own figure: 1,860.60 = 20% of 9,303, not of the 10,331 deficiency (2,066.20).",
+ "frameworkGaps": [
+  {"provision": "Params.lean params? (tax years 2014-2015)", "missing": "Only 2016-2024 supported; blocks 17 items across 5 cases", "fix": "Add 2014 (Rev. Proc. 2013-35) and 2015 (Rev. Proc. 2014-61) parameters incl. tax tables, standard deduction (2015 HOH 9,250), EIC tables (2015 no-child phase-out end 14,820). In progress per ADDENDUM."},
+  {"provision": "sec. 25A (AOTC / Lifetime Learning)", "missing": "No education credits; tcsumm-2019-24 (4-prior-year bar, sec. 25A(i)(2)) and tcsumm-2020-9 (2014 credit) not encodable", "fix": "Per-student record (prior AOTC years, half-time, first 4 years, qualified expenses); 100% of first 2,000 + 25% of next 2,000, 40% refundable; MAGI phase-out; expose educationCreditNonrefundable, aotcRefundable, aotcEligible:<student>."},
+  {"provision": "sec. 223(f)(2),(f)(4) HSA distributions", "missing": "No input; non-qualified distribution and 20% additional tax entered as otherIncome/otherTaxes", "fix": "Add hsaDistributions, hsaQualifiedExpenses, exception flag (death/disability/65); include excess in income and add 20% as a checkable tax item."},
+  {"provision": "sec. 165(d) gambling losses", "missing": "No winnings/losses fields or cap of losses at winnings", "fix": "Add gamblingWinnings, gamblingLosses; deduction = min(losses, winnings) as itemized."},
+  {"provision": "sec. 219 IRA deduction", "missing": "Only generic adjustments; no contribution limit, active-participant phase-out, or bar on pretax sec. 414(h) contributions", "fix": "Add iraContribution with sec. 219(b) limit and per-year phase-out."},
+  {"provision": "sec. 152(c)(4) tie-breaker (Claimant)", "missing": "tieBreak assumes each rival claimant satisfies sec. 152(c)(1) and filed a valid return", "fix": "Optional qualifies: Bool (default true) on Claimant; filter before tie-break."},
+  {"provision": "AGI given only as a total", "missing": "Opinion AGI without composition must be encoded as wages, distorting SE tax / earned income", "fix": "Optional agiOverride / earnedIncomeOverride input for issue-level checks."},
+  {"provision": "sec. 6673 penalty", "missing": "Not modelled", "fix": "None: discretionary, record as judgment."}
+ ]
+}

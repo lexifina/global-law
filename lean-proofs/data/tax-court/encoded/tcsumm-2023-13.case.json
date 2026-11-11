@@ -1,0 +1,72 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2023-13",
+  "taxYear": 2018,
+  "note": "Other income not stated; only the distributions are encoded. Mr. Ghaly under 59 1/2; age at separation from service not found. Rerun 2c5b6354943: the 71,147 withdrawal is encoded as a rollover claim (the 2020 'restoring' contributions; amount not stated, full amount assumed as an upper bound; days 366 is a lower bound, 2018 distribution to 2020 deposit; no waiver sought); the 44,178 sec. 72(p) deemed distribution stays as pensions.",
+  "facts": {
+   "filing": "mfj",
+   "pensions": 44178,
+   "withholding": 14229,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 115325,
+     "plan": "qualifiedPlan"
+    }
+   ],
+   "rollovers": [
+    {
+     "distribution": 71147,
+     "rolledOver": 71147,
+     "days": 366,
+     "waiverGranted": false,
+     "fromIra": false
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "rolloverIncludible",
+    "value": 71147
+   },
+   {
+    "item": "earlyDistributionTax",
+    "value": 11533
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-13 [consistency proxy, NOT a finding]",
+  "taxYear": 2018,
+  "note": "Base taxable income $115,100 (AGI $139,100 less $24,000 standard deduction) is NOT found: it is the value at which the 2018 MFJ schedule reproduces the notice's income-tax increase ($38,213 - $11,533 = $26,680). Rollover encoding as in case 1.",
+  "facts": {
+   "filing": "mfj",
+   "otherIncome": 139100,
+   "pensions": 44178,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 115325,
+     "plan": "qualifiedPlan"
+    }
+   ],
+   "rollovers": [
+    {
+     "distribution": 71147,
+     "rolledOver": 71147,
+     "days": 366,
+     "waiverGranted": false,
+     "fromIra": false
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "otherIncome": 139100
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 38213
+   }
+  ]
+ }
+]

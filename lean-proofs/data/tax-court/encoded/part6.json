@@ -1,0 +1,198 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2024-11",
+  "taxYear": 2019,
+  "note": "Wife's 2019 SSD benefits $32,862 (SSA-1099) held to be §86 social security benefits, not §104(a) damages. Return reported $3,214 of benefits, $2,732 taxable (= 85%, so the 85% ceiling bound on the return). Other income, taxable SS amount and deficiency are not stated in the opinion; only the benefits are encoded. §6662(a) penalty conceded by respondent (not encoded).",
+  "facts": {
+   "filing": "mfj",
+   "socialSecurity": 32862
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "socialSecurity": 3214
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-12",
+  "taxYear": 2018,
+  "note": "Morino v. Commissioner, 2018. Filing status not stated (no spouse/dependents mentioned): single assumed. As filed: Am Law wages 7,917; unemployment 17,706; Schedule C net loss 19,129 (first Sch. C 22,249 - 22,249 management fee = 0; TLT 41,499 - 60,628); student loan interest 2,500. Court: unreported Ward wages 9,994 (W-2; issue statement says 9,993) and NJ state refund 354 (sec. 111 tax benefit rule, otherIncome); Schedule C deductions disallowed: commissions 6,000 + car/truck 26,978 + other 8,920 = 41,898, so TLT net profit 41,499 - (60,628 - 41,898) = 22,769. Return filed 2020-04-17; extension to 2019-10-15. Withholding/timely payments not found (left 0). Penalty ground negligence; 6751(b) approval found; no reasonable cause.",
+  "facts": {
+   "filing": "single",
+   "wages": 17911,
+   "unemployment": 17706,
+   "seProfit": 22769,
+   "otherIncome": 354,
+   "adjustments": 2500
+  },
+  "asFiled": {
+   "filing": "single",
+   "wages": 7917,
+   "unemployment": 17706,
+   "seProfit": -19129,
+   "adjustments": 2500
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": false,
+   "negligence": true,
+   "supervisoryApproval": true,
+   "reasonableCause": false
+  },
+  "lateness": {
+   "filed": "2020-04-17",
+   "extension": true,
+   "reasonableCauseFiling": false,
+   "assertsFailureToPay": false,
+   "asOf": "2021-10-07"
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 7632,
+    "note": "NOD deficiency sustained (computational adjustments)"
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 1382
+   },
+   {
+    "item": "failureToFile",
+    "value": 933
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-12",
+  "taxYear": 2019,
+  "note": "Morino v. Commissioner, 2019. Filing status not stated: single assumed. The opinion finds only the Schedule C items for 2019 (no wages or other income stated): TLT 48,543 - 67,840 = loss 19,297 as filed (first Sch. C 26,163 - 26,163 = 0). Disallowed: commissions 5,500 + car/truck 32,190 + other 5,820 = 43,510, so net profit 24,213. Return timely filed. Penalty ground negligence; 6751(b) approval; no reasonable cause.",
+  "facts": {
+   "filing": "single",
+   "seProfit": 24213
+  },
+  "asFiled": {
+   "filing": "single",
+   "seProfit": -19297
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": false,
+   "negligence": true,
+   "supervisoryApproval": true,
+   "reasonableCause": false
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 4244,
+    "note": "NOD deficiency sustained"
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 849
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-19",
+  "taxYear": 2020,
+  "note": "Partial encoding. Found: wages $20,901, W-2G gambling winnings $61,929 (otherIncome), gambling losses allowed $61,929 (court, §165(d) capped at winnings). Conceded: mortgage interest $7,200 and noncash charity $3,050 (itemized), car/truck $9,315 (Schedule C; Schedule C profit not stated, so omitted). All other 2020 items settled by stipulation, not stated; filing status and age not stated (single/default assumed). asFiled: gambling losses 61,929 + other itemized = mortgage 7,200 + charity 3,050 (other itemized items unknown). The understatement computed is therefore only the part from the two conceded itemized items. Redetermined deficiency left to Rule 155. Accuracy: §6751(b) approval found (signed 2022-08-16, before assessment); no reasonable cause found; negligence asserted by respondent and the penalty upheld on the whole year without naming the ground, encoded as negligence=true (court's implied finding).",
+  "facts": {
+   "filing": "single",
+   "wages": 20901,
+   "itemizedDeductions": 0,
+   "itemize": true,
+   "gamblingWinnings": 61929,
+   "gamblingLosses": 61929
+  },
+  "asFiled": {
+   "filing": "single",
+   "wages": 20901,
+   "itemizedDeductions": 10250,
+   "itemize": true,
+   "gamblingWinnings": 61929,
+   "gamblingLosses": 61929
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": true,
+   "negligence": true,
+   "reasonableCause": false,
+   "supervisoryApproval": true
+  },
+  "expected": [
+   {
+    "item": "gamblingLossDeduction",
+    "value": 61929,
+    "note": "Petitioner is entitled to deduct $61,929 of gambling losses for the year in issue."
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true,
+    "note": "petitioner is liable for an accuracy-related penalty under section 6662(a) for the year in issue"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-22",
+  "taxYear": 2018,
+  "note": "Lucas (MFJ 2018). Court findings only. Wages stipulated 206,609 (reported 76,445 DFAS; state refund 4,962 reported). Reservist travel allowed 2,433 (moving 13,800 abandoned); itemized = conceded SALT 10,000 + mortgage interest 22,563 (medical 35,310 and noncash charity 85,000 disallowed). Withholding stipulated 12,271 vs 19,960 claimed (outside deficiency, s.6211(b)(1)). NOT ENCODED because the opinion gives no amount: Principal Life Form 1099-R distribution (conceded includible, s.72(t) 10% conceded), dependents/children and amounts of the CTC/ACTC and child and dependent care credit (conceded by respondent), the AOTC claimed on the return (conceded disallowed), the as-filed deduction and tax shown, the excess-social-security credit (1,110; a s.31-type credit, outside deficiency). No court-determined deficiency (Rule 155); the notice deficiency 29,600 is not a finding. asFiled assumes the standard deduction (Schedule A first appears on the 1040X).",
+  "facts": {
+   "filing": "mfj",
+   "wages": 206609,
+   "otherIncome": 4962,
+   "adjustments": 2433,
+   "itemizedDeductions": 32563,
+   "itemize": true,
+   "withholding": 12271
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "wages": 76445,
+   "otherIncome": 4962,
+   "withholding": 19960
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": true,
+   "negligence": false,
+   "reasonableCause": false,
+   "supervisoryApproval": true
+  },
+  "expected": [
+   {
+    "item": "filingStatus",
+    "text": "mfj",
+    "note": "joint return not disputed; s.6015(b) relief denied (not modelled)"
+   },
+   {
+    "item": "deduction",
+    "value": 32563,
+    "note": "Schedule A allowed: conceded SALT 10,000 + mortgage interest 22,563; medical 35,310 and noncash charity 85,000 disallowed (substantiation)"
+   },
+   {
+    "item": "adjustments",
+    "value": 2433,
+    "note": "s.62(a)(2)(E)/162(p) reservist travel allowed 2,433 of 29,445 (stipulated); moving 13,800 abandoned"
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true,
+    "note": "court: liable 'to the extent the understatement ... is substantial', left to Rule 155; approval yes, no reasonable cause. Lean value is on partial facts (Principal Life, credits, as-filed deduction omitted)."
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2025-3",
+  "taxYear": 2019,
+  "note": "Sole issue: section 6015(c) relief (conceded by the IRS; intervenor's objections rejected). No return figures in the opinion.",
+  "facts": {
+   "filing": "mfj"
+  },
+  "expected": []
+ }
+]

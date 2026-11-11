@@ -1,0 +1,46 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2021-9",
+  "taxYear": 2016,
+  "note": "Fletcher. 2016 Schedule C 82,395; SS benefits 15,322 received, repaid only from 2020 (no 2016 repayment, sec. 86(d)(2)(A)). Filing status not stated; single assumed (85% cap reached under any status). Respondent conceded the 1,983 nonemployee compensation.",
+  "facts": {
+   "filing": "single",
+   "seProfit": 82395,
+   "socialSecurity": 15322
+  },
+  "asFiled": {
+   "filing": "single",
+   "seProfit": 82395
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 13024
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2021-9 (notice reconstruction, incl. later-conceded 1,983 NEC as SE income)",
+  "taxYear": 2016,
+  "note": "Consistency check of the notice deficiency of 3,992, not a court holding.",
+  "facts": {
+   "filing": "single",
+   "seProfit": 84378,
+   "socialSecurity": 15322
+  },
+  "asFiled": {
+   "filing": "single",
+   "seProfit": 82395
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 13024
+   },
+   {
+    "item": "deficiency",
+    "value": 3992
+   }
+  ]
+ }
+]

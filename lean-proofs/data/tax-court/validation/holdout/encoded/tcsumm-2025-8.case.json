@@ -1,0 +1,26 @@
+{
+ "citation": "T.C. Summary Opinion 2025-8",
+ "taxYear": 2020,
+ "note": "Joint 2020 return (spouse not a party). Findings: sales tax deduction limited to $1,466 allowed by IRS (no receipts beyond that), so SALT = 1,466 + 6,198 real estate + 680 personal property = $8,344 (under the $10,000 cap); gambling winnings stay at $30,100 reported (testimony of $12,221 not credible); gambling losses not shown above the amount the IRS allowed, which is REDACTED, so gamblingLosses left at 0 (default). Schedule C deductions conceded (other $701, travel $2,360, car/truck $7,274 = $10,335) encoded as a $10,335 increase in seProfit over an unknown base (asFiled seProfit 0). Wages, pensions, social security (an RRB computational adjustment is mentioned), other itemized deductions and Schedule C base are NOT stated, so computed figures are not meaningful. Accuracy: written immediate-supervisor approval found; negligence (failed to keep adequate records, guessed amounts); no reasonable cause.",
+ "facts": {
+  "filing": "mfj",
+  "seProfit": 10335,
+  "itemizedDeductions": 8344,
+  "gamblingWinnings": 30100,
+  "gamblingLosses": 0
+ },
+ "asFiled": {
+  "filing": "mfj",
+  "itemizedDeductions": 10000,
+  "gamblingWinnings": 30100,
+  "gamblingLosses": 30100
+ },
+ "accuracy": {
+  "negligence": true,
+  "reasonableCause": false,
+  "supervisoryApproval": true
+ },
+ "expected": [],
+ "inferred": ["conceded Schedule C deductions ($10,335) modelled as seProfit over a zero base; actual Schedule C profit/loss not stated"],
+ "unencodable": ["gambling losses allowed in the notice of deficiency (redacted amount) - left at 0", "wages, social security/RRB benefits, Schedule C gross, other Schedule A items not stated", "taxpayer and spouse ages not stated"]
+}

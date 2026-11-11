@@ -1,0 +1,50 @@
+{
+ "part": 3,
+ "cases": 6,
+ "counts": {
+  "not-encodable": 7,
+  "pending-year": 8,
+  "judgment": 7,
+  "match": 6
+ },
+ "runs": {
+  "tcmemo-2019-41": "exit 1 (year 2015)",
+  "tcmemo-2020-101": "exit 0",
+  "tcmemo-2023-2": "exit 0",
+  "tcmemo-2024-20": "exit 0",
+  "tcmemo-2025-116": "exit 0",
+  "tcsumm-2019-23": "exit 1 (year 2015)"
+ },
+ "gaps": [
+  {
+   "gap": "Tax year 2015 not in params? (2016-2024)",
+   "cases": [
+    "tcmemo-2019-41",
+    "tcsumm-2019-23"
+   ],
+   "fix": "Add 2015 params (in progress); rerun part3.json."
+  },
+  {
+   "gap": "§36B premium tax credit / §36B(f) excess APTC not modelled; §36B MAGI not an output",
+   "cases": [
+    "tcmemo-2019-41",
+    "tcmemo-2023-2"
+   ],
+   "fix": "familySize/state/aptcReceived facts, FPL table, MAGI (§36B(d)(2)(B)) output, excess APTC with §36B(f)(2)(B) caps; tcmemo-2023-2 matches only via the otherTaxes workaround."
+  },
+  {
+   "gap": "§86(e) lump-sum election not modelled",
+   "cases": [
+    "tcmemo-2019-41"
+   ],
+   "fix": "socialSecurityLumpSum [{year, amount}] with the election computation."
+  },
+  {
+   "gap": "§408(d)(3) rollover and (d)(3)(I) waiver not modelled",
+   "cases": [
+    "tcmemo-2020-101"
+   ],
+   "fix": "rolledOverAmount, daysToRollover, waiverGranted facts."
+  }
+ ]
+}

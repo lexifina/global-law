@@ -1,0 +1,90 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2024-12",
+  "taxYear": 2018,
+  "note": "Morino v. Commissioner, 2018. Filing status not stated (no spouse/dependents mentioned): single assumed. As filed: Am Law wages 7,917; unemployment 17,706; Schedule C net loss 19,129 (first Sch. C 22,249 - 22,249 management fee = 0; TLT 41,499 - 60,628); student loan interest 2,500. Court: unreported Ward wages 9,994 (W-2; issue statement says 9,993) and NJ state refund 354 (sec. 111 tax benefit rule, otherIncome); Schedule C deductions disallowed: commissions 6,000 + car/truck 26,978 + other 8,920 = 41,898, so TLT net profit 41,499 - (60,628 - 41,898) = 22,769. Return filed 2020-04-17; extension to 2019-10-15. Withholding/timely payments not found (left 0). Penalty ground negligence; 6751(b) approval found; no reasonable cause.",
+  "facts": {
+   "filing": "single",
+   "wages": 17911,
+   "unemployment": 17706,
+   "seProfit": 22769,
+   "otherIncome": 354,
+   "adjustments": 2500,
+   "qbiDeduction": 4232
+  },
+  "asFiled": {
+   "filing": "single",
+   "wages": 7917,
+   "unemployment": 17706,
+   "seProfit": -19129,
+   "adjustments": 2500
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": false,
+   "negligence": true,
+   "supervisoryApproval": true,
+   "reasonableCause": false
+  },
+  "lateness": {
+   "filed": "2020-04-17",
+   "extension": true,
+   "reasonableCauseFiling": false,
+   "assertsFailureToPay": false,
+   "asOf": "2021-10-07"
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 7632,
+    "note": "NOD deficiency sustained (computational adjustments)"
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 1382
+   },
+   {
+    "item": "failureToFile",
+    "value": 933
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-12",
+  "taxYear": 2019,
+  "note": "Morino v. Commissioner, 2019. Filing status not stated: single assumed. The opinion finds only the Schedule C items for 2019 (no wages or other income stated): TLT 48,543 - 67,840 = loss 19,297 as filed (first Sch. C 26,163 - 26,163 = 0). Disallowed: commissions 5,500 + car/truck 32,190 + other 5,820 = 43,510, so net profit 24,213. Return timely filed. Penalty ground negligence; 6751(b) approval; no reasonable cause.",
+  "facts": {
+   "filing": "single",
+   "seProfit": 24213,
+   "qbiDeduction": 2060
+  },
+  "asFiled": {
+   "filing": "single",
+   "seProfit": -19297
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": false,
+   "negligence": true,
+   "supervisoryApproval": true,
+   "reasonableCause": false
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 4244,
+    "note": "NOD deficiency sustained"
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 849
+   }
+  ]
+ }
+]

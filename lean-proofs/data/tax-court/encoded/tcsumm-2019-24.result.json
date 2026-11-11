@@ -1,0 +1,29 @@
+{
+ "id": "tcsumm-2019-24",
+ "citation": "T.C. Summary Opinion 2019-24",
+ "issues": [
+  {
+   "issue": "AOTC for daughter ET in 2015 after AOTC elections for ET in 2011-2014",
+   "provision": "sec. 25A(i)(2) (modifying sec. 25A(b)(2)(A))",
+   "court": "not entitled",
+   "lean": "aotcEligible:ET false (aotcPriorYears 4); aotcEligible:EMT true",
+   "verdict": "match",
+   "diagnosis": "rerun 2c5b6354943: students ET (aotcPriorYears 4) and EMT (2,885 conceded expenses). Lean: aotcEligible:ET false via sec. 25A(i)(2)/(b)(2)(A) (credit allowed in 4 earlier years), aotcEligible:EMT true; both flags match. ET falls through to the LLC with 0 expenses encoded (expenses split not stated). EMT AOTC tentative 2,000 + 25% x 885 = 2,221, refundable 40% = 888; the nonrefundable 1,333 is limited by tax, which the opinion does not give.",
+   "snippet": "by 2015 petitioners had claimed and received the American Opportunity Credit for four taxable years (2011 through 2014) in relation to ET"
+  },
+  {
+   "issue": "Deficiency for 2015",
+   "provision": "sec. 6211",
+   "court": null,
+   "lean": null,
+   "verdict": "not-encodable",
+   "diagnosis": "rerun 2c5b6354943: still no deficiency: the opinion gives no income or tax figures and the decision is Rule 155. Notice 5,000 = 3,000 nonrefundable + 2,000 refundable education credits as claimed. Lean computes aotcRefundable 888 for EMT on the conceded 2,885 (nonrefundable part depends on unstated tax).",
+   "snippet": "Respondent determined a deficiency of $5,000 with respect to petitioners' 2015 Federal income tax."
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": null
+ },
+ "notes": "rerun 2c5b6354943: sec. 25A now modelled; AOTC eligibility for both students matches (2/2). Deficiency still not encodable (no income figures, Rule 155). Expense split between ET and EMT not stated; 2,885 encoded on EMT."
+}

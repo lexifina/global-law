@@ -1,0 +1,47 @@
+{
+ "id": "tcsumm-2023-13",
+ "citation": "T.C. Summary Opinion 2023-13",
+ "issues": [
+  {
+   "issue": "Do the 2020 'restoring' contributions make the $71,147 withdrawal a nontaxable rollover?",
+   "provision": "secs. 402(a), 402(c)(1), (c)(3)",
+   "court": "no: includible (71,147)",
+   "lean": "rolloverIncludible 71,147",
+   "verdict": "match",
+   "diagnosis": "Rerun 2c5b6354943: encoded as rollovers {distribution 71,147, rolledOver 71,147 (amount not stated; full amount assumed, an upper bound), days 366 (lower bound: 2018 distribution, 2020 deposit), fromIra false, no waiver}. Over 60 days and no waiver -> fully includible whatever the amount redeposited. The court did not apply a 60-day analysis expressly ('neither argued nor established the applicability of an exception'), but the outcome follows.",
+   "snippet": "he asserts that in 2020 he opened two new retirement accounts and deposited funds in them to replace those he withdrew"
+  },
+  {
+   "issue": "Is the $44,178 deemed distribution on the defaulted plan loan includible in 2018 gross income?",
+   "provision": "secs. 72(p), 402(a)",
+   "court": 44178,
+   "lean": "44178 (taken as input)",
+   "verdict": "not-encodable",
+   "diagnosis": "The framework has no sec. 72(p) model (loan default -> deemed distribution); encoded as the found fact pensions 44,178. Deficiency proxy below combines it with the computed 71,147.",
+   "snippet": "Respondent properly included the distributions in petitioners' gross income."
+  },
+  {
+   "issue": "Is petitioners liable for the 10% sec. 72(t) additional tax on the early distributions?",
+   "provision": "sec. 72(t)(1), (2)(A)(i), (2)(B)",
+   "court": 11533,
+   "lean": "11533",
+   "verdict": "match",
+   "diagnosis": "Mr. Ghaly under 59 1/2, no exception proven: 10% x 115,325 = 11,532.50 -> 11,533. The sec. 72(t)(2)(B) medical-expense exception failed on proof of payment (judgment on evidence); encoded with no exceptions as the court found.",
+   "snippet": "The withdrawal does not fit within any of the statutory exceptions, and the entire distribution is subject to the 10% additional tax."
+  },
+  {
+   "issue": "Notice deficiency (consistency proxy)",
+   "provision": "sec. 6211",
+   "court": 38213,
+   "lean": "38213",
+   "verdict": "match",
+   "diagnosis": "Opinion does not state the reported income. With an assumed as-filed MFJ AGI of 139,100 (taxable 115,100), adding 115,325 raises regular tax by 26,680 (49,900 x 22% + 65,425 x 24%) and the sec. 72(t) tax adds 11,533: total 38,213. The base is fitted, not found (any base within roughly $25 gives the same result), so this only shows the notice is consistent with full inclusion plus the 10% tax.",
+   "snippet": "determined a deficiency in petitioners' federal income tax of $ 38,213 and a section 6662(a) accuracy -related penalty of $4,797"
+  }
+ ],
+ "deficiency": {
+  "court": 38213,
+  "lean": 38213
+ },
+ "notes": "Decision for respondent on the full $38,213 deficiency; the sec. 6662(a) penalty was conceded by respondent (not encoded). The notice penalty fits: 20% x (38,213 - 14,229 withholding) = 4,796.80 -> 4,797, i.e. the underpayment was the deficiency net of the 1099-R withholding not claimed on the return. Filing status MFJ inferred from the joint petition. Case 2 in the case.json is a fitted proxy, not a finding. Rerun 2c5b6354943: the 71,147 withdrawal is now a rollover claim (rolloverIncludible 71,147 matches); 44,178 deemed distribution remains an input. All items match; proxy deficiency 38,213 unchanged."
+}

@@ -1,0 +1,144 @@
+{
+  "id": "tcsumm-2024-10",
+  "citation": "T.C. Summary Opinion 2024-10",
+  "case_name": "Edward George Shlikas v. Commissioner",
+  "docket_numbers": [
+    "12027-22S"
+  ],
+  "judge": "Panuthos",
+  "date": "2024-06-20",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "698bddd8-b0ae-4b03-baf4-b7f6594c9235",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/12027-22",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/12027-22/698bddd8-b0ae-4b03-baf4-b7f6594c9235/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "suitability_reason": "Section 72(t) additional tax: age 50 < 59 1/2; first-time homebuyer exception limited to individual retirement plans and distribution not shown to be from one; no equitable exception. 10% of $137,024 matches the $13,702 deficiency.",
+  "tax_years": [
+    2019
+  ],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "Delaware",
+    "notes": "Took retirement distributions totaling $137,024 to buy out brother's half of inherited Maryland house."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2019,
+        "deficiency": 13702,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 2740
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "10% additional tax on early distributions under section 72(t)"
+    ],
+    "contested_by_taxpayer": "Claims first-time homebuyer exception ($10,000) and that the 59 1/2 age rule and exceptions are arbitrary; CARES Act would have applied had he waited 30 days.",
+    "conceded": [
+      "Respondent conceded the section 6662(a) accuracy-related penalty of $2,740"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Distributions of $45,921 (TIAACREF Brokerage) and $91,103 (TIAA Administrative Services LLC), total $137,024, reported as taxable income",
+      "values": {
+        "distribution_1": 45921,
+        "distribution_2": 91103,
+        "total_distributions": 137024
+      },
+      "snippet": "received $45,921 and $91,103 from TIAACREF Brokerage and TIAA Administrative Services LLC, respectively, for a total of $137,024.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Petitioner was 50 years old in 2019 when distributions were made",
+      "values": {
+        "age_at_distribution": 50,
+        "under_59_5": true
+      },
+      "snippet": "Petitioner was 50 years old in 2019 when the distributions were made.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Property deeded from mother's estate to petitioner and brother as joint tenants on November 9, 2019; transferred to petitioner as sole owner for $130,000 on December 5, 2019",
+      "values": {
+        "joint_tenancy_deed_date": "2019-11-09",
+        "sole_owner_date": "2019-12-05",
+        "purchase_price": 130000
+      },
+      "snippet": "On December 5, 2019, the property was transferred to petitioner as the sole owner for the sum of $130,000.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Forms 1099-R did not indicate the accounts were traditional, SEP or SIMPLE IRAs; no evidence that any part was from an individual retirement plan",
+      "values": {
+        "from_individual_retirement_plan": false
+      },
+      "snippet": "The boxes were not checked on the Forms 1099",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Distributions made in 2019 (CARES Act relief applies to 2020 distributions)",
+      "values": {
+        "distribution_year": 2019
+      },
+      "snippet": "had he made the distribution just 30 days later in 2020 instead of 2019, he would have qualified for the exception",
+      "locator": "p. 4"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "early_distribution_72t"
+      ],
+      "question": "Is petitioner liable for the 10% additional tax under section 72(t) on $137,024 of 2019 retirement distributions?",
+      "provisions": [
+        "26 U.S.C. §72(t)(1), (2)(A)(i), (2)(F), (8)(D)(i)",
+        "§4974(c)",
+        "§7701(a)(37)"
+      ],
+      "holding": "Yes. Under 59 1/2; first-time homebuyer exception applies only to individual retirement plans and petitioner did not show the distributions came from one; no equitable/hardship exception.",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "deficiency sustained (10% additional tax)",
+        "amount": 13702
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Age 50 < 59 1/2; non-IRA source makes 72(t)(2)(F) unavailable; 10% x $137,024."
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered for respondent.",
+    "summary": "$13,702 section 72(t) deficiency sustained; 6662(a) penalty conceded by respondent."
+  },
+  "notes": "Some facts stipulated; record is stipulation plus petitioner's testimony. Petitioner testified to a 403(b) plan and partial Roth IRA source but produced no evidence. Respondent's alternative argument (prior ownership interest via 11/9/2019 deed under 72(t)(8)(D)(i)) not reached. Derived: 10% x $137,024 = $13,702.40, matching deficiency."
+}

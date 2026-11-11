@@ -1,0 +1,91 @@
+{
+  "id": "tcmemo-2025-76",
+  "slug": "rowland",
+  "caption": "Estate of Billy S. Rowland, Deceased, James A. Park, Executor v. Commissioner",
+  "citation": "T.C. Memo. 2025-76",
+  "date": "2025-07-15",
+  "docket_numbers": [
+    "12736-22"
+  ],
+  "judge": "Urda (Chief Judge)",
+  "tax_type": "estate (DSUE/portability)",
+  "date_of_death": "2018-01-24",
+  "predeceased_spouse_date_of_death": "2016-04-08",
+  "source": {
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/12736-22",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/12736-22/ff337957-c59c-47f7-90c0-65e3393d9a83/public-document-download-url",
+    "dawson_docket_entry_id": "ff337957-c59c-47f7-90c0-65e3393d9a83",
+    "document_title": "Memorandum Opinion Chief Judge Urda - T.C. Memo. 2025-76. An appropriate order will be issued.",
+    "raw_text": "raw/rowland.txt",
+    "raw_pdf": "raw/rowland.pdf",
+    "retrieved": "2026-11-11"
+  },
+  "found_facts": [
+    {
+      "fact": "DSUE computed on Fay's (late) return",
+      "values": {
+        "bea_2016": 5450000,
+        "estimated_gross_estate": 3000000,
+        "estimated_total_allowable_deductions": 1500000,
+        "adjusted_taxable_gifts": 237438,
+        "dsue": 3712562
+      },
+      "snippet": "It calculated a DSUE amount of $3,712,562, derived from the following inputs: Basic Exclusion Amount $5,450,000 Estimated Gross Estate (3,000,000) Estimated Total Allowable Deductions 1,500,000 Adjusted Taxable Gifts (237,438) Total DSUE 3,712,562",
+      "locator": "p. 3"
+    },
+    {
+      "fact": "Fay's return filing",
+      "snippet": "moved the due date from January 9 to July 8, 2017 ... mailed the Form 706 ... on December 29, 2017, which the Internal Revenue Service (IRS) received on January 2, 2018.",
+      "locator": "pp. 2-3"
+    },
+    {
+      "fact": "Specific bequests / payments",
+      "values": {
+        "specific_bequests": 950000,
+        "payments_to_13_beneficiaries": 1401000
+      },
+      "snippet": "specific bequests totaling $950,000 ... payments to 13 named beneficiaries, totaling $1,401,000",
+      "locator": "pp. 2-3"
+    },
+    {
+      "fact": "Billy's return",
+      "values": {
+        "bea_2018": 11180000,
+        "applicable_exclusion_claimed": 14892562,
+        "net_estate_tax": 4477555,
+        "refund_claimed": 22445,
+        "prior_payment": 4500000
+      },
+      "snippet": "Billy's Return added this amount to the 2018 basic exclusion amount, $11,180,000, resulting in an applicable exclusion of $14,892,562. Billy's Return reported a net estate tax of $4,477,555 and claimed a refund of $22,445 based on a previous payment of $4,500,000.",
+      "locator": "p. 4"
+    }
+  ],
+  "issue": "Whether Fay's estate made a valid portability election (late return under the Rev. Proc. 2017-34 safe harbor; 'complete and properly prepared' return despite estimated values).",
+  "holding": "No valid election; Billy's estate cannot use any DSUE. Partial summary judgment for the Commissioner; substantial compliance and equitable estoppel rejected.",
+  "stated_tax_figures": {
+    "net_estate_tax_reported": 4477555,
+    "deficiency": "not stated in opinion"
+  },
+  "recomputation": {
+    "steps": [
+      "DSUE as claimed (sec. 2010(c)(4)): 5,450,000 - [(3,000,000 - 1,500,000) + 237,438] = 3,712,562 == stated",
+      "Applicable exclusion as claimed: 11,180,000 + 3,712,562 = 14,892,562 == stated",
+      "Holding: DSUE = 0 -> applicable exclusion = 11,180,000",
+      "Incremental tax from losing DSUE at 40% marginal rate: 0.40 x 3,712,562 = 1,485,025 (derived, not stated)",
+      "Implied tax base if net tax = tt(B) - tt(14,892,562) with no other credits: B = 26,086,450 (derived; the return may include other credits)"
+    ],
+    "reconciles": "DSUE and applicable exclusion exact; deficiency not in opinion"
+  },
+  "judgment_vs_computation": {
+    "judgment": [
+      "validity/completeness of return; substantial compliance; estoppel"
+    ],
+    "computation": [
+      "DSUE formula, applicable exclusion, effect of DSUE = 0"
+    ]
+  },
+  "caveats": [
+    "Fay's gross estate and deductions were estimates on her return; the DSUE inputs are reported figures, not court findings.",
+    "Order on partial summary judgment; final deficiency not determined in this opinion."
+  ]
+}

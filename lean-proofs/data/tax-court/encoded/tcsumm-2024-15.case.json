@@ -1,0 +1,23 @@
+{
+ "citation": "T.C. Summary Opinion 2024-15",
+ "taxYear": 2020,
+ "note": "Pope (MFJ). 14,000 IRA deduction claimed (Schedule 1 line 19) by adding 401(k) amounts from the W-2; Mr. Pope deferred 4,911.72 to his employer's 401(k); no IRA and no IRA contributions in 2020, so the sec. 219 deduction is 0. Mr. Pope an active participant (401(k)). No income figures or deficiency amount in the opinion.",
+ "facts": {
+  "filing": "mfj",
+  "adjustments": 0,
+  "ira": {
+   "contribution": 0,
+   "activeParticipant": true
+  },
+  "iraSpouse": {
+   "contribution": 0
+  }
+ },
+ "expected": [
+  {
+   "item": "iraDeduction",
+   "value": 0,
+   "note": "not entitled to an IRA deduction: no contribution to a sec. 219 plan"
+  }
+ ]
+}

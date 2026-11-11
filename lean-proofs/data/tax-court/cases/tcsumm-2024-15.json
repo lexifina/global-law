@@ -1,0 +1,106 @@
+{
+  "id": "tcsumm-2024-15",
+  "citation": "T.C. Summary Opinion 2024-15",
+  "case_name": "Jeffrey R. Pope and Davin L. Pope v. Commissioner",
+  "docket_numbers": [
+    "26170-22S"
+  ],
+  "judge": "Siegel",
+  "date": "2024-07-17",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "def869fe-0a89-4f0a-b27c-d3b76dff7abc",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/26170-22",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/26170-22/def869fe-0a89-4f0a-b27c-d3b76dff7abc/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2020
+  ],
+  "taxpayer": {
+    "filing_status_claimed": "married filing jointly",
+    "state": "New Hampshire",
+    "notes": "Self-prepared return with tax software. Mr. Pope dismissed for lack of prosecution; decision consistent as to both (sec. 6013(d)(3))."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2020,
+        "deficiency": null,
+        "penalties": [],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "disallowed $14,000 IRA deduction"
+    ],
+    "contested_by_taxpayer": "Disallowance of IRA deduction; requested relief from interest",
+    "conceded": []
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Petitioners claimed a $14,000 IRA deduction on their 2020 joint return",
+      "values": {
+        "ira_deduction_claimed": 14000
+      },
+      "snippet": "claimed a $14,000 deduction for Individual Retirement Account (IRA) contributions, and respondent issued a notice of deficiency disallowing it.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "In 2020 Mr. Pope contributed $4,911.72 to his employer's sec. 401(k) plan",
+      "values": {
+        "elective_deferral_401k": 4911.72
+      },
+      "snippet": "In 2020 Mr. Pope contributed $4,911.72 to a section “401(k) plan” offered by his employer.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Petitioners had no IRA in 2020 and made no IRA contributions",
+      "values": {
+        "had_ira": false,
+        "ira_contributions": 0
+      },
+      "snippet": "Petitioners did not have an IRA in 2020, nor did they make contributions to one.",
+      "locator": "p. 2"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "ira_deduction_219"
+      ],
+      "question": "Are petitioners entitled to a $14,000 IRA deduction for 2020 when they made no IRA contributions (only 401(k) elective deferrals)?",
+      "provisions": [
+        "26 U.S.C. §219"
+      ],
+      "holding": "No; no contributions to a plan governed by sec. 219; 401(k) elective deferrals are not deductible as IRA contributions",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "IRA deduction disallowed",
+        "amount": 14000
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Sec. 219 deduction limited to IRA contributions, which were $0"
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered for respondent.",
+    "summary": "IRA deduction of $14,000 disallowed; deficiency sustained; no jurisdiction over interest on unassessed deficiency"
+  },
+  "notes": "Deficiency amount not stated. Court also held it lacks jurisdiction over interest accruing on a not-yet-assessed deficiency (cf. sec. 6404(h)); not modeled as a tax issue. Mr. Pope dismissed under Rule 123(b)."
+}

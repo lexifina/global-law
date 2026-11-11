@@ -1,0 +1,37 @@
+{
+ "citation": "T.C. Summary Opinion 2020-14",
+ "taxYear": 2015,
+ "note": "Laue. Boeing lump sum 25,170 at 59 (not 59 1/2) from the Rockwell pension plan (Rockwell later acquired by Boeing). Separation from Rockwell service in 1987 (p. 2); age then about 31, derived from 'unemployed since 2002, when he was 46 years old' (born c. 1956; 59 but not 59 1/2 in Nov. 2015 agrees). Corrected 2026-11-11: an earlier encoding used the 1999 Northrop Grumman separation (age ~43), the wrong employer for this plan; outcome unchanged (both before 55, so sec. 72(t)(2)(A)(v) fails). Northrop 7,080 is SEPP-excepted. Deficiency = the 72(t) tax only.",
+ "facts": {
+  "filing": "mfj",
+  "taxpayerAge": 59,
+  "pensions": 32250,
+  "earlyDistributions": [
+   {
+    "amountIncludible": 25170,
+    "plan": "qualifiedPlan",
+    "ageInSeparationYear": 31
+   },
+   {
+    "amountIncludible": 7080,
+    "plan": "qualifiedPlan",
+    "sepp": true
+   }
+  ]
+ },
+ "asFiled": {
+  "filing": "mfj",
+  "taxpayerAge": 59,
+  "pensions": 32250
+ },
+ "expected": [
+  {
+   "item": "earlyDistributionTax",
+   "value": 2517
+  },
+  {
+   "item": "deficiency",
+   "value": 2517
+  }
+ ]
+}

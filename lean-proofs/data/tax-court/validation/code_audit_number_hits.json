@@ -1,0 +1,604 @@
+[
+ {
+  "file": "Basic.lean",
+  "line": 46,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "365 * y + y / 4 - y / 100 + y / 400 + doy"
+ },
+ {
+  "file": "Basic.lean",
+  "line": 69,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "#guard daysBetween ⟨2016, 1, 1⟩ ⟨2017, 1, 1⟩ = 366"
+ },
+ {
+  "file": "CTC.lean",
+  "line": 59,
+  "value": 933,
+  "kind": "expected",
+  "cases": [
+   "tcsumm-2024-12"
+  ],
+  "text": "/-- §24(b)(1): AGI increased by §§911, 931, 933 exclusions. -/"
+ },
+ {
+  "file": "Dependents.lean",
+  "line": 306,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "#guard (tieBreak [{ name := \"mother\", isParent := true, daysResided := 365, agi := 15000 },"
+ },
+ {
+  "file": "Dependents.lean",
+  "line": 307,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "{ name := \"grandmother\", daysResided := 365, agi := 25000 }]).map (·.name) = some \"mother\""
+ },
+ {
+  "file": "Dependents.lean",
+  "line": 309,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "#guard (tieBreak [{ name := \"mother\", isParent := true, daysResided := 365, agi := 15000, claims := false },"
+ },
+ {
+  "file": "Dependents.lean",
+  "line": 310,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "{ name := \"grandmother\", daysResided := 365, agi := 25000 }]).map (·.name) = some \"grandmother\""
+ },
+ {
+  "file": "Dependents.lean",
+  "line": 312,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "#guard (tieBreak [{ name := \"mother\", isParent := true, daysResided := 365, agi := 30000, claims := false },"
+ },
+ {
+  "file": "Dependents.lean",
+  "line": 313,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "{ name := \"grandmother\", daysResided := 365, agi := 25000 }]).map (·.name) = none"
+ },
+ {
+  "file": "Dependents.lean",
+  "line": 327,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "-- 183 of 365 days is more than half; 183 of 366 (2016, 2020, 2024) is not."
+ },
+ {
+  "file": "Dependents.lean",
+  "line": 327,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "-- 183 of 365 days is more than half; 183 of 366 (2016, 2020, 2024) is not."
+ },
+ {
+  "file": "Education.lean",
+  "line": 77,
+  "value": 933,
+  "kind": "expected",
+  "cases": [
+   "tcsumm-2024-12"
+  ],
+  "text": "/-- **The credits for the year.** `magi`: AGI (plus §§911, 931, 933 exclusions). -/"
+ },
+ {
+  "file": "FilingStatus.lean",
+  "line": 136,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "private def kid : PersonFacts := { name := \"child\", age := 8, daysWithTaxpayer := 365, livedWithWholeYear := true }"
+ },
+ {
+  "file": "FilingStatus.lean",
+  "line": 156,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "daysWithTaxpayer := 365, taxpayerProvidedOverHalfSupport := true }] = .single"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 88,
+  "value": 634,
+  "kind": "expectedinput",
+  "cases": [
+   "tcsumm-2019-33"
+  ],
+  "text": "| 2015 => [201, 302, 402, 634, 810, 956]   -- Rev. Proc. 2014-37"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 91,
+  "value": 634,
+  "kind": "expectedinput",
+  "cases": [
+   "tcsumm-2019-33"
+  ],
+  "text": "| 2018 => [201, 302, 403, 634, 810, 956]   -- Rev. Proc. 2017-36"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 199,
+  "value": 15730,
+  "kind": "expected",
+  "cases": [
+   "tcmemo-2019-41"
+  ],
+  "text": "-- Table 1-1: 2015 family of 2, 48 states: $15,730; 2017 family of 7: $36,730; 2024 Alaska family of 1: $18,210."
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 200,
+  "value": 15730,
+  "kind": "expected",
+  "cases": [
+   "tcmemo-2019-41"
+  ],
+  "text": "#guard fpl 2015 0 2 = 15730 ∧ fpl 2017 0 7 = 36730 ∧ fpl 2017 0 9 = 45050 ∧ fpl 2024 1 1 = 18210"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 203,
+  "value": 634,
+  "kind": "expectedinput",
+  "cases": [
+   "tcsumm-2019-33"
+  ],
+  "text": "#guard figure 2014 120 = 200 ∧ figure 2014 133 = 300 ∧ figure 2014 350 = 950 ∧ figure 2015 200 = 634"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 208,
+  "value": 95249,
+  "kind": "expected",
+  "cases": [
+   "tcmemo-2023-2"
+  ],
+  "text": "-- T.C. Memo. 2023-2 (2016, HoH, family of 2): household income $95,249 / $15,930 = 598%: no credit, advance payments"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 208,
+  "value": 15930,
+  "kind": "expected",
+  "cases": [
+   "tcmemo-2023-2"
+  ],
+  "text": "-- T.C. Memo. 2023-2 (2016, HoH, family of 2): household income $95,249 / $15,930 = 598%: no credit, advance payments"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 208,
+  "value": 598,
+  "kind": "expected",
+  "cases": [
+   "tcmemo-2023-2"
+  ],
+  "text": "-- T.C. Memo. 2023-2 (2016, HoH, family of 2): household income $95,249 / $15,930 = 598%: no credit, advance payments"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 209,
+  "value": 7205,
+  "kind": "expectedinput",
+  "cases": [
+   "tcmemo-2023-2"
+  ],
+  "text": "-- of $7,205 repaid in full (no cap at 400% or more)."
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 211,
+  "value": 7205,
+  "kind": "expectedinput",
+  "cases": [
+   "tcmemo-2023-2"
+  ],
+  "text": "{ familySize := 2, advancePayments := 7205, benchmarkPremium := 9000, enrolledPremium := 9000 }"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 212,
+  "value": 95249,
+  "kind": "expected",
+  "cases": [
+   "tcmemo-2023-2"
+  ],
+  "text": "#guard (premiumTaxCredit (py 2016) .hoh 95249 f2023_2).excessAdvanceRepayment = 7205"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 212,
+  "value": 7205,
+  "kind": "expectedinput",
+  "cases": [
+   "tcmemo-2023-2"
+  ],
+  "text": "#guard (premiumTaxCredit (py 2016) .hoh 95249 f2023_2).excessAdvanceRepayment = 7205"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 213,
+  "value": 15730,
+  "kind": "expected",
+  "cases": [
+   "tcmemo-2019-41"
+  ],
+  "text": "-- T.C. Memo. 2019-41 (2015, joint, family of 2): $70,065 / $15,730 = 445%: none; $8,472 repaid."
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 213,
+  "value": 8472,
+  "kind": "expectedinput",
+  "cases": [
+   "tcmemo-2019-41"
+  ],
+  "text": "-- T.C. Memo. 2019-41 (2015, joint, family of 2): $70,065 / $15,730 = 445%: none; $8,472 repaid."
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 215,
+  "value": 8472,
+  "kind": "expectedinput",
+  "cases": [
+   "tcmemo-2019-41"
+  ],
+  "text": "{ familySize := 2, advancePayments := 8472, benchmarkPremium := 9000, enrolledPremium := 9000 }"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 216,
+  "value": 8472,
+  "kind": "expectedinput",
+  "cases": [
+   "tcmemo-2019-41"
+  ],
+  "text": "#guard (premiumTaxCredit (py 2015) .mfj 70065 f2019_41).excessAdvanceRepayment = 8472"
+ },
+ {
+  "file": "PremiumCredit.lean",
+  "line": 221,
+  "value": 634,
+  "kind": "expectedinput",
+  "cases": [
+   "tcsumm-2019-33"
+  ],
+  "text": "{ householdIncome := 24120, povertyLine := 12060, fplPercent := 200, applicableFigure := 634, contribution := 1529,"
+ },
+ {
+  "file": "Estimated.lean",
+  "line": 19,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "* **Rate**, §6654(a): the §6621(a)(2) underpayment rate for each quarter, by day, on a 365- or 366-day year (§6622"
+ },
+ {
+  "file": "Estimated.lean",
+  "line": 19,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "* **Rate**, §6654(a): the §6621(a)(2) underpayment rate for each quarter, by day, on a 365- or 366-day year (§6622"
+ },
+ {
+  "file": "Estimated.lean",
+  "line": 90,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "/-- `365 × 366`: a common denominator for daily rates in common and leap years. -/"
+ },
+ {
+  "file": "Estimated.lean",
+  "line": 90,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "/-- `365 × 366`: a common denominator for daily rates in common and leap years. -/"
+ },
+ {
+  "file": "Estimated.lean",
+  "line": 91,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "def yearL : Int := 365 * 366"
+ },
+ {
+  "file": "Estimated.lean",
+  "line": 91,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "def yearL : Int := 365 * 366"
+ },
+ {
+  "file": "Estimated.lean",
+  "line": 215,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "-- 15 Jan 2020) runs to 15 Apr 2020 at 6% (2019 Q2), 5% (2019 Q3 – 2020 Q2), by day on 365/366-day years: $270.98."
+ },
+ {
+  "file": "Estimated.lean",
+  "line": 215,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "-- 15 Jan 2020) runs to 15 Apr 2020 at 6% (2019 Q2), 5% (2019 Q3 – 2020 Q2), by day on 365/366-day years: $270.98."
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 106,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "-- A full year qualifies for the full cap (2024 has 366 days)."
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 107,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "#guard proratedCap 2024 366 = 126500 ∧ proratedCap 2023 365 = 120000 ∧ proratedCap 2023 400 = 120000"
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 107,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "#guard proratedCap 2024 366 = 126500 ∧ proratedCap 2023 365 = 120000 ∧ proratedCap 2023 400 = 120000"
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 108,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "-- Part-year: 2023, 75 qualifying days: 120,000 × 75 / 365 = 24,657.53 → 24,658."
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 110,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "-- Form 2555 (2024) line 32 (irs.gov/pub/irs-prior/f2555--2024.pdf) prints the base as $55.30 a day (16% × 126,500 / 366); a full year: $20,"
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 111,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "#guard housingBase 2024 366 = 20240 ∧ housingBase 2024 100 = 5530"
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 115,
+  "value": 365,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-23",
+   "tcsumm-2019-33",
+   "tcsumm-2020-9"
+  ],
+  "text": "#guard housingLimit 2018 365 = 31170"
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 117,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "#guard housingLimit 2024 366 = 37950"
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 120,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "#guard housingAmount 2024 366 45000 = 17710"
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 121,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "#guard housingExclusion 2024 366 45000 150000 150000 = 17710"
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 122,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "#guard feie 2024 366 150000 17710 = 126500"
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 123,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "#guard housingDeduction 2024 366 45000 150000 150000 = 0"
+ },
+ {
+  "file": "Foreign.lean",
+  "line": 125,
+  "value": 366,
+  "kind": "input",
+  "cases": [
+   "tcsumm-2019-29",
+   "tcsumm-2020-25",
+   "tcsumm-2022-10",
+   "tcsumm-2023-13"
+  ],
+  "text": "#guard housingDeduction 2024 366 45000 0 130000 = 3500"
+ }
+]

@@ -1,0 +1,174 @@
+{
+  "id": "tcmemo-2025-31",
+  "citation": "T.C. Memo. 2025-31",
+  "case_name": "Melissa Correll v. Commissioner",
+  "docket_numbers": [
+    "13403-23"
+  ],
+  "judge": "Siegel",
+  "date": "2025-04-09",
+  "opinion_type": "memorandum",
+  "source": {
+    "dawson_docket_entry_id": "4067aab5-1392-474a-9bde-c1b9e9b0a357",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/13403-23",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/13403-23/4067aab5-1392-474a-9bde-c1b9e9b0a357/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2021
+  ],
+  "taxpayer": {
+    "filing_status_claimed": "head of household",
+    "state": "Florida",
+    "notes": "Noncustodial parent of Child No. 2 (J.M.A.); HOH status conceded by respondent."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2021,
+        "deficiency": null,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": null
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "disallowed dependency claim for Child No. 2 (did not live with petitioner more than half the year)",
+      "child tax credit for Child No. 2",
+      "earned income credit",
+      "head of household status",
+      "dependency for another child",
+      "6662(a) penalty"
+    ],
+    "contested_by_taxpayer": "Dependency exemption and child tax credit for Child No. 2",
+    "conceded": [
+      "Respondent conceded the 6662(a) penalty",
+      "Respondent conceded head of household filing status",
+      "Respondent conceded petitioner claim of a different child as a dependent",
+      "Petitioner conceded she was not eligible for the section 32(a) earned income credit"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1",
+        "I2"
+      ],
+      "fact": "Child No. 2 (J.M.A.) was 16 during 2021",
+      "values": {
+        "child": "J.M.A.",
+        "age_in_year": 16
+      },
+      "snippet": "J.M.A., who was 16 during the year at issue but is now an adult (Child No. 2)",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1",
+        "I2"
+      ],
+      "fact": "In 2021 only A.R. lived with petitioner; Child No. 1 and Child No. 2 lived full time in Georgia with their father",
+      "values": {
+        "child": "J.M.A.",
+        "months_with_taxpayer": 0,
+        "months_with_other_parent": 12
+      },
+      "snippet": "During 2021, only A.R. lived with petitioner in Florida. The other two children lived full time in Georgia with their father.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "2015 updated settlement agreement: petitioner entitled to claim Child No. 1, father entitled to claim Child No. 2",
+      "values": {
+        "agreement_assigns_child2_to": "father"
+      },
+      "snippet": "and the father was entitled to claim Child No. 2.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Both parents claimed Child No. 2 for 2021",
+      "values": {
+        "both_claimed": true
+      },
+      "snippet": "For the year at issue, however, both parents claimed Child No. 2.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "No §152(e) written declaration signed by custodial parent and attached to return",
+      "values": {
+        "sec152e_declaration": false
+      },
+      "snippet": "Neither of those things happened here",
+      "locator": "p. 3"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "dependency_exemption_151",
+        "qualifying_child_152c"
+      ],
+      "question": "May petitioner claim Child No. 2 as a dependent for 2021?",
+      "provisions": [
+        "26 U.S.C. §151(a), (c)",
+        "§152(a)(1)",
+        "§152(c)(1)(B)",
+        "§152(c)(4)(B)",
+        "§152(e)"
+      ],
+      "holding": "No; child did not share petitioner's abode for more than half the year, and no §152(e) release was signed and attached",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": null,
+        "amount": null
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Residency 0 of 12 months fails §152(c)(1)(B); no §152(e) declaration"
+    },
+    {
+      "issue_id": "I2",
+      "tags": [
+        "ctc_24"
+      ],
+      "question": "Is petitioner entitled to the child tax credit for Child No. 2 for 2021?",
+      "provisions": [
+        "26 U.S.C. §24(a)",
+        "§24(c)(1)"
+      ],
+      "holding": "No; Child No. 2 is not petitioner's qualifying child",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": null,
+        "amount": null
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Follows from failure of qualifying-child test in I1"
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "Dependency and CTC for Child No. 2 disallowed; respondent conceded penalty, HOH and other-child dependency; petitioner conceded EIC"
+  },
+  "notes": "Deficiency and penalty amounts not stated in opinion. Facts undisputed; stipulated in part. Tie-breaker rule not reached since child lived with father all year."
+}

@@ -1,0 +1,78 @@
+[
+ {
+  "citation": "T.C. Memo. 2023-2",
+  "taxYear": 2016,
+  "note": "Sec. 36B encoded as facts.ptc (family 2, Florida, enrolled premiums 7,788 for 11 months, APTC 7,205); benchmark (SLCSP) premium not stated (irrelevant: over 400%). asFiled has no ptc (no Form 8962). Son's age not stated.",
+  "facts": {
+   "filing": "hoh",
+   "pensions": 68750,
+   "socialSecurity": 26499,
+   "itemizedDeductions": 28751,
+   "itemize": true,
+   "withholding": 13750,
+   "dependents": [
+    {
+     "name": "son",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ],
+   "ptc": {
+    "familySize": 2,
+    "state": "contiguous",
+    "enrolledPremium": 7788,
+    "advancePayments": 7205
+   }
+  },
+  "asFiled": {
+   "filing": "hoh",
+   "pensions": 68750,
+   "socialSecurity": 26499,
+   "itemizedDeductions": 28751,
+   "itemize": true,
+   "withholding": 13750,
+   "dependents": [
+    {
+     "name": "son",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 22524,
+    "note": "return figure the court adopted for MAGI"
+   },
+   {
+    "item": "agi",
+    "value": 91274
+   },
+   {
+    "item": "deficiency",
+    "value": 7205
+   },
+   {
+    "item": "householdIncome",
+    "value": 95249
+   },
+   {
+    "item": "povertyLine",
+    "value": 15930
+   },
+   {
+    "item": "fplPercent",
+    "value": 598
+   },
+   {
+    "item": "premiumTaxCredit",
+    "value": 0
+   },
+   {
+    "item": "excessAdvancePtc",
+    "value": 7205
+   }
+  ]
+ }
+]

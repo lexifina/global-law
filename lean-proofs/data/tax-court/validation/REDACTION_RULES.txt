@@ -1,0 +1,37 @@
+REDACTION RULES (for blind encoding tests)
+
+Purpose: a separate encoder will read only the redacted text and encode the facts for a Lean tax model; afterwards the
+model's output is compared with the court's figures. The redacted text must keep every FACT the court finds and remove
+every ANSWER the court reaches (and every figure the comparison will check).
+
+Output: <dir>\redacted\<id>.txt (UTF-8) and <dir>\redacted\<id>.redactions.json:
+  {"id":..., "kept_sections": [...], "removed_sections": [...], "redactions": [{"original": "<=25 words", "replaced_with": "...", "kind": "output-figure|conclusion|holding-section|notice-figure"}],
+   "facts_from_discussion": [<fact sentences you carried over from the Opinion/Discussion part>]}
+
+KEEP
+- Caption, tax year(s), the statement of what the issues are (as questions, e.g. "whether petitioner is entitled to head of
+  household filing status"), but with amounts redacted.
+- The whole Findings of Fact / Background section, except output figures (below).
+- Return line items as filed and as found: wages, distributions, pensions, Social Security received, dividends, gains,
+  deductions claimed, withholding, dates, ages, relationships, residence months, support, SSNs, payments, filing dates,
+  extension, notice dates, whether a supervisor approved a penalty in writing, etc.
+- From the Opinion/Discussion part: carry over, as short neutral sentences in a block headed
+  "FACTS FOUND IN THE DISCUSSION", every factual finding the court makes there, including findings that rest on
+  credibility or weighing of evidence (e.g. "The court found that the child lived with petitioner for more than half of
+  2017"; "The court found petitioner did not show reasonable cause"; "The court found the 60-day period ended on day 58
+  when the custodian received the check"). Keep those inputs; do not state the legal consequence.
+
+REMOVE / REDACT (replace with [REDACTED AMOUNT] or [REDACTED CONCLUSION])
+- The Opinion/Discussion/Conclusion sections themselves (after extracting the factual findings as above), the decision
+  line ("Decision will be entered ...") and footnotes in those sections.
+- Every amount of: deficiency, penalty, addition to tax, interest; credits allowed, disallowed or determined (EIC, CTC/ACTC,
+  education, premium tax credit, excess APTC); taxable Social Security; additional tax under §72(t)/§223; tax, total tax,
+  tax shown, AGI and taxable income (as filed and as determined) — EXCEPT the tax shown on the return when the opinion
+  gives no return line items at all (then keep it and log it as kind "notice-figure-kept").
+- The IRS notice's adjustments that are themselves results (e.g. "disallowed the EIC of $5,828", "determined taxable Social
+  Security of $X", "determined a 10% additional tax of $Y"); keep the underlying item ("disallowed the EIC", "determined
+  that the $14,386 distribution was includible") without the result figure.
+- Legal conclusions: whether someone IS a qualifying child/relative/dependent, IS entitled to a status/credit, IS liable
+  for a penalty/addition, whether a distribution IS taxable, etc.
+- Concessions that state a result figure: keep the fact of the concession ("respondent conceded the penalty") without the amount.
+Be conservative: when unsure whether a number is an input or an output, redact it and log it.

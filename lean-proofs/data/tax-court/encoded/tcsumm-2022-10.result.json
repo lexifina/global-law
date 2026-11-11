@@ -1,0 +1,57 @@
+{
+ "id": "tcsumm-2022-10",
+ "citation": "T.C. Summary Opinion 2022-10",
+ "issues": [
+  {
+   "issue": "Is petitioner a qualified individual (330-day physical presence + foreign tax home, abode not in US) entitled to the sec. 911(a)(1) exclusion of his Saudi wages?",
+   "provision": "sec. 911(a)(1), (d)(1)(B), (d)(3)",
+   "court": "yes; exclusion up to the sec. 911(b)(2) limit (101,300 for 2016)",
+   "lean": "foreignEarnedIncomeExclusion 101300 (366 qualifying days, FEI 109,024)",
+   "verdict": "judgment",
+   "diagnosis": "Encoded with facts.foreign; the exclusion 101,300 (full-year 2016 cap; 109,024 exceeds it) matches. Qualification rests on findings: the 330-day count (credibility: Form 2555 25 days vs testimony 21 days, both < 35) and abode in Saudi Arabia (weighing of ties) - judgment inputs. Not modelled: no housing exclusion (employer compound, value not stated); wages for the ~21-25 US days treated as foreign earned income, as the court did.",
+   "snippet": "we conclude that petitioner's abode was in Saudi Arabia in 2016; therefore, he is entitled to exclude his foreign earned income up to the limitations"
+  },
+  {
+   "issue": "Tax on the remaining income (pension + wages over the limit) after the exclusion",
+   "provision": "sec. 911(b)(2)(D), (f); sec. 1; sec. 72(t)",
+   "court": "pension and wages over the limit taxable (amount under Rule 155)",
+   "lean": "6891 (sec. 911(f) stacked regular tax 4,884 on TI 17,443 + sec. 72(t) 2,007)",
+   "verdict": "match",
+   "diagnosis": "sec. 911(f) stacking now modelled: tax(17,443 + 101,300) - tax(101,300) = 4,884, plus 10% sec. 72(t) on the pension 2,007 = 6,891, equal to the hand computation. Court states the rule, not the amount (Rule 155). Caveat: sec. 72(t) kept as not conceded (age not stated).",
+   "snippet": "petitioner's pension income, along with the amount left over after accounting for limitations on his foreign earned income exclusion, both remain taxable"
+  },
+  {
+   "issue": "Sec. 6651(a)(1) failure-to-file addition",
+   "provision": "sec. 6651(a)(1), (c)(1)",
+   "court": "sustained (on redetermined tax)",
+   "lean": "failureToFileApplies true; 1550 (25% x 6,891 = 1,723 less (c)(1) offset 2.5% x 6,891 = 172)",
+   "verdict": "judgment",
+   "diagnosis": "Holding flag failureToFileApplies matches; liability rests on no reasonable cause shown (judgment input). Amount on the redetermined tax with the sec. 6651(c)(1) offset limited by (c)(2): 1,550, as hand-computed. No court amount (Rule 155).",
+   "snippet": "Petitioner does not argue, nor does the record show, that he had a meaningful defense to the imposition of the additions to tax."
+  },
+  {
+   "issue": "Sec. 6651(a)(2) failure-to-pay addition on the SFR (sec. 6651(g)(2))",
+   "provision": "sec. 6651(a)(2), (g)(2)",
+   "court": "sustained, base = tax as redetermined",
+   "lean": "failureToPayApplies true; 1723 (25% x min(sfrTax 28,932, required 6,891), 50 months)",
+   "verdict": "judgment",
+   "diagnosis": "Holding flag failureToPayApplies matches (SFR under sec. 6020(b), unpaid). sec. 6651(c)(2) applied: base is the redetermined 6,891, as the court ordered: 25% x 6,891 = 1,723. Liability rests on no reasonable cause shown (judgment input). No court amount (Rule 155).",
+   "snippet": "we sustain respondent's imposition of the additions to tax under section 6651(a)(1) and (2), with the \"amount required to be shown as tax on [the] return\" computed"
+  },
+  {
+   "issue": "Notice deficiency (consistency check)",
+   "provision": "sec. 6211; sec. 72(t)",
+   "court": 28932,
+   "lean": "28932",
+   "verdict": "match",
+   "diagnosis": "Wages 109,024 + pension 20,069 + COD 2,286 (later conceded), single, std ded 6,300 + exemption 4,050: TI 121,029, regular tax 26,925, plus 10% sec. 72(t) on the pension 2,007 = 28,932 exactly. Shows the notice included a 72(t) tax the opinion never mentions.",
+   "snippet": "respondent prepared a substitute for return pursuant to section 6020(b) for 2016 showing tax due of $28,932, plus additions to tax."
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": 6891
+ },
+ "notes": "Rerun 7175885f197 with facts.foreign (366 days, FEI 109,024) and sfrTax 28,932. Rule 155; no court amounts. Lean deficiency 6,891 (4,884 stacked regular + 2,007 sec. 72(t)); exclusion 101,300; FTF 1,550, FTP 1,723; holding flags match. Notice 28,932 reproduced exactly. Runner exit 0.",
+ "frameworkGaps": []
+}

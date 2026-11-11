@@ -1,0 +1,39 @@
+{
+ "id": "tcmemo-2024-20",
+ "citation": "T.C. Memo. 2024-20 (Turner v. Commissioner)",
+ "issues": [
+  {
+   "issue": "A.V. qualifying child (abode about 60 days)",
+   "provision": "§152(c)(1)(B); §32(c)(3)(A)",
+   "court": "not a qualifying child",
+   "lean": "qualifyingChild:AV false; eicChild:AV false",
+   "verdict": "match",
+   "diagnosis": "Relationship (grandchild) and age (minor) satisfied; 2 x 60 = 120 <= 366 fails the more-than-half-year abode test.",
+   "snippet": "A.V. and petitioner did not share the same principal place of abode for more than one-half of the year."
+  },
+  {
+   "issue": "Head of household",
+   "provision": "§2(b)(1)(A)",
+   "court": "not HoH; single",
+   "lean": "hohQualifyingPerson:AV false; filingStatus single",
+   "verdict": "match",
+   "diagnosis": "paidOverHalfHouseholdCost not found by the court; set true so that the abode finding alone decides, as in the opinion.",
+   "snippet": "Respondent properly changed her filing status from head of household to single"
+  },
+  {
+   "issue": "EIC without a qualifying child",
+   "provision": "§32(c)(1)(A)(ii)",
+   "court": "no finding (left to Rule 155)",
+   "lean": "n/a",
+   "verdict": "not-encodable",
+   "diagnosis": "Court expressly made no finding; no income figures in the opinion.",
+   "snippet": "we make no finding on the point."
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": null
+ },
+ "notes": "Exit 0; 4/4 match. No income figures, so no deficiency. A.V.'s age not stated beyond 'a minor' (17 used; any age under 19 gives the same result).",
+ "frameworkGaps": []
+}

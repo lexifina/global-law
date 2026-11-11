@@ -1,0 +1,73 @@
+[
+ {
+  "citation": "T.C. Memo. 2019-83",
+  "taxYear": 2014,
+  "note": "Burack. Only issue: whether the $524,981.89 IRA distribution (received 2014-06-25) was rolled over within 60 days (sec. 408(d)(3)). Court: Capital Guardian received the rollover check on 2014-08-22 (day 58), recorded on 2014-08-26 (day 62) by bookkeeping error (Wood), so the rollover counts at day 58; alternatively the Rev. Proc. 2003-16 automatic waiver applies. Encoded with days 58 (primary holding). Distribution rounded to 524,982; the court treats the full amount as rolled over. Other 2014 income not found.",
+  "facts": {
+   "filing": "single",
+   "rollovers": [
+    {
+     "distribution": 524982,
+     "rolledOver": 524982,
+     "days": 58,
+     "waiverGranted": false,
+     "fromIra": true
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "rolloverIncludible",
+    "value": 0,
+    "note": "court: distribution qualifies for rollover treatment"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2019-83 (alternative ground: automatic hardship waiver)",
+  "taxYear": 2014,
+  "note": "Recorded deposit on day 62; Rev. Proc. 2003-16 sec. 3.03 automatic waiver found (deposited within 1 year; institution error) -> waiverGranted true.",
+  "facts": {
+   "filing": "single",
+   "rollovers": [
+    {
+     "distribution": 524982,
+     "rolledOver": 524982,
+     "days": 62,
+     "waiverGranted": true,
+     "fromIra": true
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "rolloverIncludible",
+    "value": 0
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2019-83 (notice position: day 62, no waiver; not a holding)",
+  "taxYear": 2014,
+  "note": "Consistency check of the notice: with the deposit counted at day 62 and no waiver the full distribution is includible (notice: 524,980).",
+  "facts": {
+   "filing": "single",
+   "rollovers": [
+    {
+     "distribution": 524982,
+     "rolledOver": 524982,
+     "days": 62,
+     "waiverGranted": false,
+     "fromIra": true
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "rolloverIncludible",
+    "value": 524980,
+    "note": "notice figure; fn. 5: record unclear why 524,980 rather than 524,981.89"
+   }
+  ]
+ }
+]

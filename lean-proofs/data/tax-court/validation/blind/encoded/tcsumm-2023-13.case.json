@@ -1,0 +1,23 @@
+{
+  "citation": "T.C. Summary Opinion 2023-13",
+  "taxYear": 2018,
+  "note": "Ghaly and Ryad, 2018. Joint petitioners (filing status mfj assumed). Encoded: two Great-West 1099-R distributions from a 401(a) qualified plan ($71,147 withdrawal + $44,178 deemed distribution on loan default = $115,325 unreported retirement income), withholding $14,229 on the first, both before age 59 1/2, no rollover or other exception; court found no qualifying expenses paid from the funds (the $34,077 medical bill was unpaid at year end; small copays and $195 left at 0). The rest of the joint return (wages, other income, deductions, tax shown) is not stated in the redacted text, so facts hold only the retirement items and asFiled/taxShown are left out: no deficiency is computed, only the 10% section 72(t) tax. Section 6662 penalty conceded by respondent (not encoded).",
+  "facts": {
+    "filing": "mfj",
+    "pensions": 115325,
+    "withholding": 14229,
+    "earlyDistributions": [
+      {"amountIncludible": 71147, "plan": "qualifiedPlan", "attained59Half": false},
+      {"amountIncludible": 44178, "plan": "qualifiedPlan", "attained59Half": false}
+    ]
+  },
+  "expected": [],
+  "inferred": [
+    "filing status mfj: joint petitioners and one notice of deficiency for both; status not stated explicitly",
+    "withholding $14,229 entered as a payment (does not affect the deficiency)"
+  ],
+  "unencodable": [
+    "other items on the 2018 joint return (wages, other income, deductions, tax shown) are not given, so the deficiency from adding $115,325 cannot be computed",
+    "ages of the spouses not given (default 40 kept; only 'not 59 1/2' is found)"
+  ]
+}

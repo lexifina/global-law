@@ -1,0 +1,47 @@
+{
+ "id": "tcsumm-2020-9",
+ "citation": "T.C. Summary Opinion 2020-9",
+ "issues": [
+  {
+   "issue": "HOH filing status 2016",
+   "provision": "sec. 2(b)(1)(A)(i), 152(c)",
+   "court": "hoh",
+   "lean": "hoh",
+   "verdict": "match",
+   "diagnosis": "Unmarried, paid over half household cost, two conceded qualifying children living with her all year; the children's father (also a parent) did not claim them, so tieBreak gives petitioner. All 7 expected items match (filingStatus, headOfHousehold, qualifyingChild x2, hohQualifyingPerson, tieBreaker x2).",
+   "snippet": "We find that she properly filed as head of household for 2015 and 2016."
+  },
+  {
+   "issue": "HOH filing status 2015",
+   "provision": "sec. 2(b)(1)(A)(i), 152(c)",
+   "court": "hoh",
+   "lean": "hoh",
+   "verdict": "match",
+   "diagnosis": "Rerun at 57b55431cca: 2015 run matches all 7 items (filingStatus, headOfHousehold, qualifyingChild x2, hohQualifyingPerson, tieBreaker x2).",
+   "snippet": "We find that she properly filed as head of household for 2015 and 2016."
+  },
+  {
+   "issue": "Education credit $1,000 for 2014",
+   "provision": "sec. 25A(a)",
+   "court": "not entitled (0)",
+   "lean": "educationCredits 0 (2014 entry: student with 0 qualified expenses paid in 2014)",
+   "verdict": "judgment",
+   "diagnosis": "rerun 2c5b6354943: 2014 entry added with students [petitioner, qualifiedExpenses 0]; educationCredits 0 matches. The decisive step is substantiation (no evidence tuition was paid in 2014, only in 2013), a finding encoded as 0 expenses; the credit then follows mechanically under sec. 25A(a).",
+   "snippet": "petitioner must establish the payment of tuition in 2014 to qualify for the credit. Unfortunately, the records she submitted do not establish that payment."
+  },
+  {
+   "issue": "Accuracy-related penalties 2014-2016",
+   "provision": "sec. 6662(a)",
+   "court": "conceded by respondent",
+   "lean": null,
+   "verdict": "not-encodable",
+   "diagnosis": "Conceded; nothing for the court to decide.",
+   "snippet": "Respondent has conceded the accuracy-related penalties."
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": null
+ },
+ "notes": "Notice deficiencies $8,725 (2014), $7,085 (2015), $5,890 (2016); decision under Rule 155, no recomputed amounts stated. Opinion gives no income figures, so no deficiency can be computed; only status/qualifying-child holdings encoded. Respondent conceded 2 of 3 children as qualifying children for exemptions, CTC and EIC all years. Rerun at 57b55431cca: 2015 and 2016 both match (14/14 items). rerun 2c5b6354943: 2014 education-credit entry added (educationCredits 0 matches; verdict judgment, substantiation). All 15 expected items match across 2014-2016."
+}

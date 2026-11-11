@@ -1,0 +1,338 @@
+[
+ {
+  "citation": "T.C. Memo. 2019-41",
+  "taxYear": 2015,
+  "note": "Monroe (MFJ, family size 2). Sole issue: Â§36B premium tax credit. Court (following Johnson, 152 T.C.) holds MAGI under Â§36B(d)(2)(B) includes all Social Security received in 2015 despite the Â§86(e) lump-sum election; stipulated MAGI 70,065.80 > 400% FPL, so no PTC and the 8,472 APTC is excess (Â§36B(f)). Â§36B and Â§86(e) are not modelled. Return facts: wages 34,176 reported + 5,207 conceded unreported; unemployment 237 reported + 237 conceded unreported (literal reading of stipulation n.2(4); if the conceded 237 is the same item shown in the stipulated AGI, corrected unemployment is 237); SS benefits received 35,651.80 (p.2; fn. 6 says 35,652.80; encoded 35,652). asFiled: taxable SS 4,084 under the Â§86(e) election is entered as otherIncome (workaround: Â§86(e) not modelled) so asFiled AGI = 38,497. Corrected facts use socialSecurity 35,652 with ordinary Â§86 computation (no Â§86(e) election), so the corrected taxable SS and deficiency are not the court's (Rule 155). Penalty conceded on unreported items only; additional SALT deduction 87 and withholding 269 conceded (not encoded: itemized total unknown).",
+  "facts": {
+   "filing": "mfj",
+   "wages": 39383,
+   "unemployment": 474,
+   "socialSecurity": 35652
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "wages": 34176,
+   "unemployment": 237,
+   "otherIncome": 4084
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Memo. 2020-101",
+  "taxYear": 2016,
+  "note": "Filing status and other income not stated; only the IRA items are encoded (default single). $747 529 item conceded by respondent, omitted. Deficiency left to Rule 155, not stated.",
+  "facts": {
+   "iraDistributions": 54500,
+   "withholding": 3800,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 54500,
+     "plan": "ira",
+     "higherEducationExpenses": 3993
+    }
+   ]
+  },
+  "asFiled": {
+   "iraDistributions": 39500,
+   "withholding": 3800,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 24664,
+     "plan": "ira"
+    }
+   ]
+  },
+  "accuracy": {
+   "reasonableCause": true
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 5051,
+    "note": "10% x $50,507"
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 0,
+    "note": "reasonable cause (court's finding)"
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": false
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2023-2",
+  "taxYear": 2016,
+  "note": "Section 36B not modelled: the excess APTC the court held repayable in full ($7,205; household income 598% of FPL) is given as otherTaxes. Son's age not stated.",
+  "facts": {
+   "filing": "hoh",
+   "pensions": 68750,
+   "socialSecurity": 26499,
+   "itemizedDeductions": 28751,
+   "itemize": true,
+   "withholding": 13750,
+   "otherTaxes": 7205,
+   "dependents": [
+    {
+     "name": "son",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "hoh",
+   "pensions": 68750,
+   "socialSecurity": 26499,
+   "itemizedDeductions": 28751,
+   "itemize": true,
+   "withholding": 13750,
+   "dependents": [
+    {
+     "name": "son",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 22524,
+    "note": "return figure the court adopted for MAGI"
+   },
+   {
+    "item": "agi",
+    "value": 91274
+   },
+   {
+    "item": "deficiency",
+    "value": 7205
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2024-20",
+  "taxYear": 2020,
+  "note": "No income figures in the opinion. A.V. a minor (age not stated; 17 used). paidOverHalfHouseholdCost not found; set true so that the abode finding alone decides, as in the opinion.",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "AV",
+     "relationship": "descendantOfChild",
+     "age": 17,
+     "daysWithTaxpayer": 60
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "expected": [
+   {
+    "item": "qualifyingChild:AV",
+    "flag": false
+   },
+   {
+    "item": "eicChild:AV",
+    "flag": false
+   },
+   {
+    "item": "hohQualifyingPerson:AV",
+    "flag": false
+   },
+   {
+    "item": "filingStatus",
+    "text": "single"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2025-116",
+  "taxYear": 2022,
+  "note": "No income figures; the $3,686 deficiency cannot be recomputed. Ms. Davis is the wife's sister (relationship agreed by the parties; encoded as sibling on the joint return). Residency and disability not proved.",
+  "facts": {
+   "filing": "mfj",
+   "dependents": [
+    {
+     "name": "AngelaDavis",
+     "relationship": "sibling",
+     "age": 64,
+     "youngerThanTaxpayer": false,
+     "disabled": false,
+     "livedWithMoreThanHalfYear": false
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "qualifyingChild:AngelaDavis",
+    "flag": false
+   },
+   {
+    "item": "eicChild:AngelaDavis",
+    "flag": false
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2019-23",
+  "taxYear": 2015,
+  "note": "J.V./L.V. eligible foster children (court placement 2010), under 17 (16 used). Ms. Madrigal (their grandmother, no income) is the competing non-parent claimant. Maria 19, not a student. Rule 155: no deficiency stated. asFiled = return as claimed (Maria treated as a student qualifying child; HoH; wages only) replaces an earlier taxShown 0 placeholder.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 12893,
+   "dependents": [
+    {
+     "name": "JV",
+     "relationship": "fosterChild",
+     "age": 16,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "LV",
+     "relationship": "fosterChild",
+     "age": 16,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "Maria",
+     "relationship": "child",
+     "age": 19,
+     "student": false,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "JV",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "daysResided": 365,
+      "agi": 12893
+     },
+     {
+      "name": "Madrigal",
+      "daysResided": 365,
+      "agi": 0
+     }
+    ]
+   },
+   {
+    "child": "LV",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "daysResided": 365,
+      "agi": 12893
+     },
+     {
+      "name": "Madrigal",
+      "daysResided": 365,
+      "agi": 0
+     }
+    ]
+   }
+  ],
+  "accuracy": {
+   "reasonableCause": true
+  },
+  "expected": [
+   {
+    "item": "tieBreaker:JV",
+    "text": "petitioner"
+   },
+   {
+    "item": "tieBreaker:LV",
+    "text": "petitioner"
+   },
+   {
+    "item": "qualifyingChild:Maria",
+    "flag": false
+   },
+   {
+    "item": "eicChild:Maria",
+    "flag": false
+   },
+   {
+    "item": "eicChild:JV",
+    "flag": true
+   },
+   {
+    "item": "eicChild:LV",
+    "flag": true
+   },
+   {
+    "item": "ctcChild:JV",
+    "flag": true
+   },
+   {
+    "item": "ctcChild:LV",
+    "flag": true
+   },
+   {
+    "item": "filingStatus",
+    "text": "hoh"
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 0
+   },
+   {
+    "item": "dependent:JV",
+    "flag": true
+   },
+   {
+    "item": "dependent:LV",
+    "flag": true
+   },
+   {
+    "item": "headOfHousehold",
+    "flag": true
+   }
+  ],
+  "asFiled": {
+   "filing": "hoh",
+   "wages": 12893,
+   "dependents": [
+    {
+     "name": "JV",
+     "relationship": "fosterChild",
+     "age": 16,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "LV",
+     "relationship": "fosterChild",
+     "age": 16,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    },
+    {
+     "name": "Maria",
+     "relationship": "child",
+     "age": 19,
+     "student": true,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 365
+    }
+   ]
+  }
+ }
+]

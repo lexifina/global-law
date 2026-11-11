@@ -1,0 +1,58 @@
+{
+  "id": "tcmemo-2023-2",
+  "kept_sections": [
+    "Caption",
+    "Introduction / issue statement (deficiency and resolution redacted)",
+    "Findings of Fact",
+    "Footnotes 1-3"
+  ],
+  "removed_sections": [
+    "Opinion",
+    "Footnotes 4-6",
+    "Decision line"
+  ],
+  "redactions": [
+    {
+      "original": "determining that (1) since she received the benefit of APTC payments totaling $7,205, she was required to include Form 8962 with the 2016 return and",
+      "replaced_with": "determining (1) [REDACTED CONCLUSION] with respect to Form 8962 and (2) on the basis of her modified AGI (MAGI), [REDACTED CONCLUSION] with respect to the PTC and the APTC payments.",
+      "kind": "conclusion"
+    },
+    {
+      "original": "We resolve this issue in favor of respondent.",
+      "replaced_with": "[REDACTED CONCLUSION]",
+      "kind": "conclusion"
+    },
+    {
+      "original": "$7,205",
+      "replaced_with": "[REDACTED AMOUNT]",
+      "kind": "output-figure"
+    },
+    {
+      "original": "$91,274",
+      "replaced_with": "[REDACTED AMOUNT]",
+      "kind": "output-figure"
+    },
+    {
+      "original": "$22,524",
+      "replaced_with": "[REDACTED AMOUNT]",
+      "kind": "output-figure"
+    },
+    {
+      "original": "for a claimed refund of $5,846.",
+      "replaced_with": "for a claimed refund of [REDACTED AMOUNT].",
+      "kind": "output-figure"
+    },
+    {
+      "original": "Since the Marketplace had made APTC payments on her behalf during 2016, petitioner was required to complete Form 8962 and attach it to the 2016",
+      "replaced_with": "Petitioner did not complete Form 8962 or attach it to the 2016 return.",
+      "kind": "conclusion"
+    }
+  ],
+  "facts_from_discussion": [
+    "Petitioner's 2016 household consisted of herself and her son (two persons), residing in Florida; she claimed the son as a dependent and reported no income for him.",
+    "Petitioner does not dispute that the Marketplace made the monthly APTC payments to Florida Blue on her behalf for January through November 2016.",
+    "Petitioner contends she canceled her health coverage in February 2016; she offered no documentation to corroborate this. The court found the Marketplace documentation showed no record of any request to terminate or cancel coverage during 2016, and that the coverage was terminated on November 30, 2016, for nonpayment of premiums.",
+    "The court found petitioner appeared sincere at trial and was in a fragile mental state during 2016."
+  ],
+  "notes": "APTC: the deficiency equals total APTC ($7,205). Totals were redacted everywhere, but the monthly APTC ($655 x 11 months) is an input fact on Form 1095-A and was kept, so the total is trivially recoverable. AGI ($91,274) and taxable SS ($22,524) as filed were redacted; taxable pensions ($68,750) and total SS benefits ($26,499) kept, so AGI can be recomputed by the model. The FPL figure ($15,930), MAGI ($95,249) and 598% from the Opinion were not carried (law parameter / outputs)."
+}

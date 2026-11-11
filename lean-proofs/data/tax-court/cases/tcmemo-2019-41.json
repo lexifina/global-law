@@ -1,0 +1,184 @@
+{
+  "id": "tcmemo-2019-41",
+  "citation": "T.C. Memo. 2019-41",
+  "case_name": "Charles W. Monroe and Rebecca A. Monroe v. Commissioner",
+  "docket_numbers": [
+    "7107-17"
+  ],
+  "judge": "Ruwe",
+  "date": "2019-04-24",
+  "opinion_type": "memorandum",
+  "source": {
+    "dawson_docket_entry_id": "534034df-9b39-4466-a99a-ffbe481af085",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/7107-17",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/7107-17/534034df-9b39-4466-a99a-ffbe481af085/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2015
+  ],
+  "taxpayer": {
+    "filing_status_claimed": "married filing jointly",
+    "state": "California",
+    "notes": "Family size of two; fully stipulated case under Rule 122."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2015,
+        "deficiency": 9645,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 1875
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "PTC disallowed because household income exceeded 400% of federal poverty line (excess APTC)",
+      "unreported wages and unemployment benefits"
+    ],
+    "contested_by_taxpayer": "Eligibility for premium tax credit (effect of §86(e) election on MAGI)",
+    "conceded": [
+      "Petitioners allowed additional State and local tax deduction of $87",
+      "Petitioners allowed additional withholding credit of $269",
+      "Petitioners failed to report wages of $5,207",
+      "Petitioners failed to report unemployment benefits of $237",
+      "Petitioners liable for 6662(a) penalty attributable to unreported wages and unemployment benefits; not liable for penalty attributable to other items"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Husband received $35,651.80 Social Security benefits in 2015",
+      "values": {
+        "ss_benefits_received": 35651.8
+      },
+      "snippet": "In 2015 petitioner husband received $35,651.80 of Social Security benefits.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Payment components: $5,297 2015 benefits; lump sums $348 (2014), $10,247 (2013), $10,943 (2012), $2,607 (2011); $6,000 attorney fees; $209.80 Medicare Part B premiums",
+      "values": {
+        "current_2015": 5297,
+        "lump_2014": 348,
+        "lump_2013": 10247,
+        "lump_2012": 10943,
+        "lump_2011": 2607,
+        "attorney_fees": 6000,
+        "medicare_part_b": 209.8
+      },
+      "snippet": "$10,247 lump-sum payment related to 2013; (4) a $10,943 lump-sum payment related to 2012; (5) a $2,607 lump-sum payment related to 2011",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Enrolled in California marketplace plan Jan 1-Aug 31, 2015; APTC $1,059/month, total $8,472",
+      "values": {
+        "months_enrolled": 8,
+        "aptc_monthly": 1059,
+        "aptc_total": 8472
+      },
+      "snippet": "Petitioners received $8,472 oftotal APTCs in 2015.",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Joint return with §86(e) election; AGI $38,497 = wages $34,176 + unemployment $237 + taxable SS $4,084",
+      "values": {
+        "agi": 38497,
+        "wages": 34176,
+        "unemployment": 237,
+        "taxable_ss": 4084,
+        "sec86e_election": true
+      },
+      "snippet": "they had adjusted gross income of $38,497, consisting of $34,176 of wages, $237 of unemployment compensation, and $4,084 of taxable Social Security benefits",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Family size two",
+      "values": {
+        "family_size": 2
+      },
+      "snippet": "They have a family size oftwo people for Federal income tax purposes.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F6",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Stipulated: under respondent's view MAGI is $70,065.80, which exceeds 400% FPL; under petitioners' view MAGI is below 400% FPL",
+      "values": {
+        "magi_respondent": 70065.8,
+        "exceeds_400pct_fpl": true
+      },
+      "snippet": "the parties have stipulated that $70,065.80 exceeds 400% of the amount equal to the Federal poverty line",
+      "locator": "p. 5"
+    },
+    {
+      "fact_id": "F7",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Footnote: MAGI consists of $35,652.80 SS benefits, $34,176 wages, $237 unemployment",
+      "values": {
+        "ss_in_magi": 35652.8,
+        "wages": 34176,
+        "unemployment": 237
+      },
+      "snippet": "This consists of $35,652.80 of Social Security benefits, $34,176 of wages, and $237 ofunemployment compensation.",
+      "locator": "p. 5"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "other",
+        "social_security_86"
+      ],
+      "question": "Premium tax credit (§36B): does MAGI include all Social Security benefits received in 2015 notwithstanding a §86(e) lump-sum election, making household income exceed 400% of FPL?",
+      "provisions": [
+        "26 U.S.C. §36B(c)(1)",
+        "§36B(d)(2)(B)",
+        "§86(e)",
+        "Treas. Reg. §1.36B-2(b)(1)"
+      ],
+      "holding": "Following Johnson v. Commissioner, 152 T.C. (2019), MAGI includes all SS benefits received regardless of §86(e) election; MAGI exceeds 400% FPL; petitioners ineligible for PTC",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "MAGI",
+        "amount": 70065.8
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Pure statutory construction on stipulated numbers; MAGI vs 400% FPL threshold comparison"
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "Petitioners ineligible for 2015 PTC; concessions reflected in Rule 155 computation; 6662 penalty only as to unreported wages/unemployment (conceded)"
+  },
+  "notes": "Discrepancy in opinion: SS benefits stated as $35,651.80 (p. 2) and $35,652.80 (fn. 6); $70,065.80 = 35,652.80 + 34,176 + 237 (derived). FPL dollar amount not stated (exceedance stipulated). After NOD respondent issued updated report reducing taxable SS per §86(e) election. Fully stipulated (Rule 122)."
+}

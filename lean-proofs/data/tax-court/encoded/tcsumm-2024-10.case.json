@@ -1,0 +1,32 @@
+{
+ "citation": "T.C. Summary Opinion 2024-10",
+ "taxYear": 2019,
+ "note": "Shlikas. 137,024 from TIAA accounts at 50; not shown to be an IRA (403(b) testified), so the (2)(F) first-time homebuyer exception is unavailable. Filing status not stated (single); deficiency is the 72(t) tax alone, independent of other income.",
+ "facts": {
+  "filing": "single",
+  "taxpayerAge": 50,
+  "pensions": 137024,
+  "earlyDistributions": [
+   {
+    "amountIncludible": 137024,
+    "plan": "qualifiedPlan",
+    "firstHomeCosts": 130000
+   }
+  ]
+ },
+ "asFiled": {
+  "filing": "single",
+  "taxpayerAge": 50,
+  "pensions": 137024
+ },
+ "expected": [
+  {
+   "item": "earlyDistributionTax",
+   "value": 13702
+  },
+  {
+   "item": "deficiency",
+   "value": 13702
+  }
+ ]
+}

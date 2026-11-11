@@ -1,0 +1,35 @@
+{
+  "citation": "T.C. Summary Opinion 2021-13",
+  "taxYear": 2017,
+  "note": "Single, family size 1, Oklahoma (contiguous). Income: taxable IRA distributions $8,500; social security $29,038 (SSR $9,926 + lump-sum SSDI $12,532 for 2015-2017 + SSDI $6,580). Marketplace plan Jan through partial September: 8 x $1,199.06 + partial September $519.59 (= $464.97 APTC + $54.62) = $10,111 enrolled premiums; APTC $9,048.97 = $9,049. Benchmark $1,190.71/month: 8 full months = $9,526 plus September prorated in the same proportion as the partial premium (519.59/1199.06) = $516, total $10,042 (inferred). Model computes annually (no monthly computation, no Medicare-month exclusion). No penalties determined. asFiled omits the PTC: the reported MAGI/HHI and net PTC claimed are redacted, so the refundable net PTC shown on the return is not in taxShown.",
+  "facts": {
+    "filing": "single",
+    "taxpayerAge": 62,
+    "iraDistributions": 8500,
+    "socialSecurity": 29038,
+    "ptc": {
+      "familySize": 1,
+      "state": "contiguous",
+      "enrolledPremium": 10111,
+      "benchmarkPremium": 10042,
+      "advancePayments": 9049
+    }
+  },
+  "asFiled": {
+    "filing": "single",
+    "taxpayerAge": 62,
+    "iraDistributions": 8500,
+    "socialSecurity": 29038
+  },
+  "expected": [],
+  "inferred": [
+    "benchmarkPremium for the partial September month prorated at the partial-premium ratio (only the monthly $1,190.71 is stated)",
+    "taxpayerAge 62: receiving SSR benefits in January 2017 implies at least 62; exact age not stated (no effect: taxable income is 0)"
+  ],
+  "unencodable": [
+    "net PTC claimed on the return (redacted) cannot be entered as a negative tax shown, so the deficiency here is measured against a shown tax of 0 rather than against the claimed net PTC",
+    "§86(e) lump-sum election not encoded: prior-year modified income and benefits for 2015-2016 not stated (taxable social security is 0 without it anyway)",
+    "monthly PTC computation and retroactive Medicare eligibility (Reg. §1.36B-2(c)(3)(iv)) not modelled; annual computation used",
+    "petitioner's argument for monthly household income is a legal issue, not a fact"
+  ]
+}

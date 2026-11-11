@@ -1,0 +1,594 @@
+[
+ {
+  "citation": "T.C. Memo. 2019-83",
+  "taxYear": 2014,
+  "note": "Burack. Only issue: whether a $524,981.89 IRA distribution was rolled over within 60 days (sec. 408(d)(3)); court: yes (bookkeeping error, Wood; alt. Rev. Proc. 2003-16 automatic hardship waiver). Rollover rules are not in the framework; with the court's holding the distribution is not includible, so it is encoded as zero. Other 2014 income not found.",
+  "facts": {
+   "filing": "single",
+   "iraDistributions": 0
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Memo. 2023-141",
+  "taxYear": 2019,
+  "note": "Scott. Return: wages 75,157, std deduction 18,350 (HoH 2019), TI 56,807, credits 2,278, tax 4,662. Unreported: ordinary dividends 90, capital gain distributions 644, 401(k)-type distribution 14,386 (Form 1099-R code 1). Credits of 2,278 encoded as other nonrefundable credits (their nature is not stated). Qualified-dividend share of the 90 not stated (encoded 0).",
+  "facts": {
+   "filing": "hoh",
+   "wages": 75157,
+   "ordinaryDividends": 90,
+   "capitalGain": 644,
+   "longTermGain": 644,
+   "pensions": 14386,
+   "otherNonrefundableCredits": 2278,
+   "withholding": 13339,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 14386,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "hoh",
+   "wages": 75157,
+   "otherNonrefundableCredits": 2278,
+   "withholding": 11462
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 1439
+   },
+   {
+    "item": "deficiency",
+    "value": 4713
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2023-56",
+  "taxYear": 2015,
+  "note": "Rodgers. Issue: whether $7,824 received through the State of Alabama is interest on a child-support arrearage (sec. 61(a)(4)) or child support (sec. 71(c)); court: interest. Characterization not encodable; other 2015 income not found, so the $3,473 deficiency cannot be recomputed.",
+  "facts": {
+   "filing": "single",
+   "taxableInterest": 7824
+  },
+  "asFiled": {
+   "filing": "single"
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 3473,
+    "note": "not reproducible without the rest of the return"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2024-67",
+  "taxYear": 2018,
+  "note": "Moran. Non-filer; SFR 2022-09-12. Gross income 254,512 = wages 213,630 + capital gain 32,227 + MSA 6,236 + retirement 2,417 + dividends 2. IRS taxed the capital gain at ordinary rates (60,569 = ordinary tax on 242,512), so longTermGain 0. Court accepted the divorce: single. taxShown 0 (no return) for the deficiency.",
+  "facts": {
+   "filing": "single",
+   "wages": 213630,
+   "capitalGain": 32227,
+   "longTermGain": 0,
+   "otherIncome": 6236,
+   "pensions": 2417,
+   "ordinaryDividends": 2,
+   "withholding": 42961,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 2417,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "taxShown": 0,
+  "lateness": {
+   "asOf": "2022-09-12"
+  },
+  "expected": [
+   {
+    "item": "taxableIncome",
+    "value": 242512
+   },
+   {
+    "item": "regularTax",
+    "value": 60569
+   },
+   {
+    "item": "earlyDistributionTax",
+    "value": 242
+   },
+   {
+    "item": "totalTax",
+    "value": 60811
+   },
+   {
+    "item": "deficiency",
+    "value": 60811
+   },
+   {
+    "item": "failureToFile",
+    "value": 4016
+   },
+   {
+    "item": "failureToPay",
+    "value": 3659
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2024-67 (variant: married filing separately, the notice's status)",
+  "taxYear": 2018,
+  "note": "Checks the court's 'harmless error' holding: MFS and single rates give the same tax here.",
+  "facts": {
+   "filing": "mfs",
+   "wages": 213630,
+   "capitalGain": 32227,
+   "longTermGain": 0,
+   "otherIncome": 6236,
+   "pensions": 2417,
+   "ordinaryDividends": 2,
+   "withholding": 42961,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 2417,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "taxShown": 0,
+  "expected": [
+   {
+    "item": "regularTax",
+    "value": 60569
+   },
+   {
+    "item": "totalTax",
+    "value": 60811
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2024-67 (variant: sec. 6651(g) SFR as the return shown)",
+  "taxYear": 2018,
+  "note": "taxShown omitted, so the tax shown = the SFR tax (sec. 6651(g)(2)); only the additions are meaningful here.",
+  "facts": {
+   "filing": "single",
+   "wages": 213630,
+   "capitalGain": 32227,
+   "longTermGain": 0,
+   "otherIncome": 6236,
+   "pensions": 2417,
+   "ordinaryDividends": 2,
+   "withholding": 42961,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 2417,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "lateness": {
+   "asOf": "2022-09-12"
+  },
+  "expected": [
+   {
+    "item": "failureToFile",
+    "value": 4016
+   },
+   {
+    "item": "failureToPay",
+    "value": 3659
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2025-31",
+  "taxYear": 2021,
+  "note": "Correll. HoH and the other child (A.R.) conceded by respondent; EIC conceded by petitioner (claimEIC false). J.M.A. (16) lived all year with his father; no sec. 152(e) release. A.R.'s age and income figures not found, so A.R. and income are omitted.",
+  "facts": {
+   "filing": "hoh",
+   "claimEIC": false,
+   "dependents": [
+    {
+     "name": "JMA",
+     "relationship": "child",
+     "age": 16,
+     "daysWithTaxpayer": 0,
+     "qualifyingChildOfAnother": true,
+     "releasedUnder152e": false
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "qualifyingChild:JMA",
+    "flag": false
+   },
+   {
+    "item": "dependent:JMA",
+    "flag": false
+   },
+   {
+    "item": "ctcChild:JMA",
+    "flag": false
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2019-29",
+  "taxYear": 2012,
+  "note": "Saunders. Three unrelated children (all under 10; exact ages not found, encoded 9) lived with petitioners all 2012; not shown not to be the mother's qualifying children (burden), so qualifyingChildOfAnother true. Mr. Steed (wife's father): SSI 8,796 counted by the court as gross income > 3,800 exemption; support test unclear (encoded false). Penalty: reasonable cause found, not encoded (income not found, no tax shown).",
+  "facts": {
+   "filing": "mfj",
+   "dependents": [
+    {
+     "name": "child1",
+     "relationship": "unrelated",
+     "age": 9,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 366,
+     "grossIncome": 0,
+     "taxpayerProvidedOverHalfSupport": true,
+     "qualifyingChildOfAnother": true
+    },
+    {
+     "name": "child2",
+     "relationship": "unrelated",
+     "age": 9,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 366,
+     "grossIncome": 0,
+     "taxpayerProvidedOverHalfSupport": true,
+     "qualifyingChildOfAnother": true
+    },
+    {
+     "name": "child3",
+     "relationship": "unrelated",
+     "age": 9,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 366,
+     "grossIncome": 0,
+     "taxpayerProvidedOverHalfSupport": true,
+     "qualifyingChildOfAnother": true
+    },
+    {
+     "name": "Steed",
+     "relationship": "parent",
+     "age": 70,
+     "youngerThanTaxpayer": false,
+     "livedWithWholeYear": true,
+     "daysWithTaxpayer": 366,
+     "grossIncome": 8796,
+     "taxpayerProvidedOverHalfSupport": false
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "qualifyingChild:child1",
+    "flag": false
+   },
+   {
+    "item": "qualifyingChild:child2",
+    "flag": false
+   },
+   {
+    "item": "qualifyingChild:child3",
+    "flag": false
+   },
+   {
+    "item": "dependent:child1",
+    "flag": false
+   },
+   {
+    "item": "dependent:child2",
+    "flag": false
+   },
+   {
+    "item": "dependent:child3",
+    "flag": false
+   },
+   {
+    "item": "ctcChild:child1",
+    "flag": false
+   },
+   {
+    "item": "ctcChild:child2",
+    "flag": false
+   },
+   {
+    "item": "ctcChild:child3",
+    "flag": false
+   },
+   {
+    "item": "dependent:Steed",
+    "flag": false
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-14",
+  "taxYear": 2015,
+  "note": "Laue. Boeing lump sum 25,170 at 59 (not 59 1/2) from the Rockwell pension plan (Rockwell later acquired by Boeing). Separation from Rockwell service in 1987 (p. 2); age then about 31, derived from 'unemployed since 2002, when he was 46 years old' (born c. 1956; 59 but not 59 1/2 in Nov. 2015 agrees). Corrected 2026-11-11: an earlier encoding used the 1999 Northrop Grumman separation (age ~43), the wrong employer for this plan; outcome unchanged (both before 55, so sec. 72(t)(2)(A)(v) fails). Northrop 7,080 is SEPP-excepted. Deficiency = the 72(t) tax only.",
+  "facts": {
+   "filing": "mfj",
+   "taxpayerAge": 59,
+   "pensions": 32250,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 25170,
+     "plan": "qualifiedPlan",
+     "ageInSeparationYear": 31
+    },
+    {
+     "amountIncludible": 7080,
+     "plan": "qualifiedPlan",
+     "sepp": true
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "taxpayerAge": 59,
+   "pensions": 32250
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 2517
+   },
+   {
+    "item": "deficiency",
+    "value": 2517
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-5",
+  "taxYear": 2015,
+  "note": "Merrell. Joint. Wages 50,248, IRA distribution 17,410 (Mr., under 59 1/2, not disabled; wife's disability irrelevant), SS 26,812 (wife), interest 43 conceded, 5,000 IRA deduction disallowed. Bankruptcy legal fees disallowed (amount not stated; omitted). No sec. 86(e) election shown.",
+  "facts": {
+   "filing": "mfj",
+   "wages": 50248,
+   "iraDistributions": 17410,
+   "socialSecurity": 26812,
+   "taxableInterest": 43,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 17410,
+     "plan": "ira",
+     "disabled": false
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 22790
+   },
+   {
+    "item": "earlyDistributionTax",
+    "value": 1741
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2021-26",
+  "taxYear": 2015,
+  "note": "Griffin. Niece and nephews (born 2000, 2007, 2010) lived with petitioner more than half of 2015 (credibility finding); relationship, age, support conceded. Filing status and wages not found (single encoded). The father (a parent) is not shown to have claimed them; sec. 152(c)(4)(C) not addressed by the court.",
+  "facts": {
+   "filing": "single",
+   "dependents": [
+    {
+     "name": "TG",
+     "relationship": "siblingsChild",
+     "age": 15,
+     "livedWithMoreThanHalfYear": true
+    },
+    {
+     "name": "SG",
+     "relationship": "siblingsChild",
+     "age": 8,
+     "livedWithMoreThanHalfYear": true
+    },
+    {
+     "name": "OG",
+     "relationship": "siblingsChild",
+     "age": 5,
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "qualifyingChild:TG",
+    "flag": true
+   },
+   {
+    "item": "qualifyingChild:SG",
+    "flag": true
+   },
+   {
+    "item": "qualifyingChild:OG",
+    "flag": true
+   },
+   {
+    "item": "dependent:TG",
+    "flag": true
+   },
+   {
+    "item": "dependent:SG",
+    "flag": true
+   },
+   {
+    "item": "dependent:OG",
+    "flag": true
+   },
+   {
+    "item": "ctcChild:TG",
+    "flag": true
+   },
+   {
+    "item": "ctcChild:SG",
+    "flag": true
+   },
+   {
+    "item": "ctcChild:OG",
+    "flag": true
+   },
+   {
+    "item": "eicChild:TG",
+    "flag": true
+   },
+   {
+    "item": "eicChild:SG",
+    "flag": true
+   },
+   {
+    "item": "eicChild:OG",
+    "flag": true
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2021-9",
+  "taxYear": 2016,
+  "note": "Fletcher. 2016 Schedule C 82,395; SS benefits 15,322 received, repaid only from 2020 (no 2016 repayment, sec. 86(d)(2)(A)). Filing status not stated; single assumed (85% cap reached under any status). Respondent conceded the 1,983 nonemployee compensation.",
+  "facts": {
+   "filing": "single",
+   "seProfit": 82395,
+   "socialSecurity": 15322
+  },
+  "asFiled": {
+   "filing": "single",
+   "seProfit": 82395
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 13024
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2021-9 (notice reconstruction, incl. later-conceded 1,983 NEC as SE income)",
+  "taxYear": 2016,
+  "note": "Consistency check of the notice deficiency of 3,992, not a court holding.",
+  "facts": {
+   "filing": "single",
+   "seProfit": 84378,
+   "socialSecurity": 15322
+  },
+  "asFiled": {
+   "filing": "single",
+   "seProfit": 82395
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 13024
+   },
+   {
+    "item": "deficiency",
+    "value": 3992
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2022-23",
+  "taxYear": 2015,
+  "note": "Servance. Tier 1 RRB 28,628 is a social security benefit (sec. 86(d)(1)(B)), not sec. 104(a)(1) workers' comp (not encodable); Hartford 4,406 not shown received (not included). Dividends +61 conceded. Other 2015 income not in the opinion: the 85% inclusion (24,334) requires provisional income >= 65,569 (other MAGI >= 51,255) on a joint return.",
+  "facts": {
+   "filing": "mfj",
+   "socialSecurity": 28628,
+   "ordinaryDividends": 61
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 24334,
+    "note": "depends on unstated other income"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-3",
+  "taxYear": 2017,
+  "note": "Aragoni. Alimony: claimed 135,516; allowed 108,898.70 + conceded 7,520 = 116,418.70; 4,097 conceded; 15,000 attorney-fee payment not alimony (sec. 71(b)(1)(D): liability survives payee's death). Sec. 71(b) is not modelled (adjustments are an opaque amount) and income is not found, so no deficiency is computed.",
+  "facts": {
+   "filing": "single",
+   "adjustments": 116419
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-10",
+  "taxYear": 2019,
+  "note": "Shlikas. 137,024 from TIAA accounts at 50; not shown to be an IRA (403(b) testified), so the (2)(F) first-time homebuyer exception is unavailable. Filing status not stated (single); deficiency is the 72(t) tax alone, independent of other income.",
+  "facts": {
+   "filing": "single",
+   "taxpayerAge": 50,
+   "pensions": 137024,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 137024,
+     "plan": "qualifiedPlan",
+     "firstHomeCosts": 130000
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "single",
+   "taxpayerAge": 50,
+   "pensions": 137024
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 13702
+   },
+   {
+    "item": "deficiency",
+    "value": 13702
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-15",
+  "taxYear": 2020,
+  "note": "Pope. 14,000 IRA deduction claimed; no IRA contributions (401(k) deferrals only), so deduction 0. No income figures or deficiency amount in the opinion.",
+  "facts": {
+   "filing": "mfj",
+   "adjustments": 0
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-4",
+  "taxYear": 2018,
+  "note": "Kohl. 10,342 retirement plan distribution in her early 50s used for past-due rent; sec. 72(t)(2)(I) emergency expense applies only after 2023. Other income not found.",
+  "facts": {
+   "filing": "single",
+   "taxpayerAge": 52,
+   "pensions": 10342,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 10342,
+     "plan": "qualifiedPlan",
+     "emergencyExpense": 10342
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 1034
+   }
+  ]
+ }
+]

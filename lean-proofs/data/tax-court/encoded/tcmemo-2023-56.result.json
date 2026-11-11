@@ -1,0 +1,29 @@
+{
+ "id": "tcmemo-2023-56",
+ "citation": "T.C. Memo. 2023-56",
+ "issues": [
+  {
+   "issue": "Is $7,824 interest on a child-support arrearage (taxable) or child support?",
+   "provision": "sec. 61(a)(4), 71(c)",
+   "court": "interest; includible",
+   "lean": null,
+   "verdict": "not-encodable",
+   "diagnosis": "Characterization of a payment on disputed facts is not expressible; encoded as taxableInterest 7,824.",
+   "snippet": "petitioner received interest on past due child support during 2015"
+  },
+  {
+   "issue": "Deficiency",
+   "provision": "sec. 6211",
+   "court": 3473,
+   "lean": 0,
+   "verdict": "mismatch",
+   "diagnosis": "Rerun at 57b55431cca: runner computes deficiency 0 (court 3,473). Encoding is incomplete, not a framework bug: the opinion gives only the unreported $7,824 interest, not the rest of the 2015 return (wages, credits). Alone, 7,824 < 6,300 std ded + 4,000 exemption = 10,300, so tax 0. 3,473/7,824 = 44.4% exceeds the 39.6% top rate; a plausible cause is loss of EIC under sec. 32(i) (disqualified income 7,824 > 3,400), but the opinion does not state the return, so it cannot be encoded.",
+   "snippet": "determined a deficiency in petitioner's federal income tax for the taxable year 2015 of $ 3,473"
+  }
+ ],
+ "deficiency": {
+  "court": 3473,
+  "lean": 0
+ },
+ "notes": "Decision for respondent. Rerun at 57b55431cca: deficiency mismatch (0 vs 3,473) from missing return facts; no sfrTax needed (she filed)."
+}

@@ -1,0 +1,72 @@
+[
+ {
+  "citation": "T.C. Memo. 2020-85 (Bidzimou) - 2015",
+  "taxYear": 2015,
+  "note": "Petitioner's income and AGI are redacted (only AGI > $14,820 found), so income is left at 0 and no asFiled/taxShown is given: the deficiency cannot be computed from the findings. Encodes the dependent/HoH/CTC/EIC/education findings. BB: son, born 2004, lived with his mother (custodial parent) more than half the year; no Form 8332 (state court order only); mother claimed BB. Petitioner divorced 2013 (unmarried). 2015 education: fall 2015 tuition fully paid by Pell grant; spring 2016 charges paid with loan proceeds credited in 2016, so no qualified expenses paid in 2015 beyond tax-free assistance. Accuracy penalty conceded by respondent (not encoded).",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "BB",
+     "relationship": "child",
+     "age": 11,
+     "livedWithMoreThanHalfYear": false,
+     "providedOverHalfOwnSupport": false,
+     "qualifyingChildOfAnother": true,
+     "releasedUnder152e": false
+    }
+   ],
+   "students": [
+    {
+     "name": "petitioner",
+     "qualifiedExpenses": 0,
+     "halfTime": true
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false
+  },
+  "expected": [],
+  "inferred": [
+   "BB age 11 at end of 2015 from birth year 2004 (exact birth date not stated)",
+   "BB treated as qualifying child of his mother (she had him more than half the nights and claimed him)"
+  ],
+  "unencodable": [
+   "Income/AGI redacted (only 'AGI exceeded $14,820'); EIC phase-out finding cannot be expressed without an amount",
+   "As-filed return (AGI, AOTC and nonrefundable education credit amounts) redacted; no asFiled/taxShown",
+   "Whether petitioner paid over half of the household cost is not stated (default false)"
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2020-85 (Bidzimou) - 2016",
+  "taxYear": 2016,
+  "note": "Petitioner's income and AGI are redacted (only AGI > $14,880 found); income left at 0, no asFiled/taxShown. BB lived with his mother more than half of 2016; no Form 8332; mother claimed BB. No education credit was claimed for 2016 on the return or determined in the 2016 notice, so no student is encoded (2016 Pell did not fully cover expenses; loans paid the balance, amount not stated).",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "BB",
+     "relationship": "child",
+     "age": 12,
+     "livedWithMoreThanHalfYear": false,
+     "providedOverHalfOwnSupport": false,
+     "qualifyingChildOfAnother": true,
+     "releasedUnder152e": false
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false
+  },
+  "expected": [],
+  "inferred": [
+   "BB age 12 at end of 2016 from birth year 2004",
+   "BB treated as qualifying child of his mother"
+  ],
+  "unencodable": [
+   "Income/AGI redacted; no asFiled/taxShown",
+   "Amount of 2016 qualified tuition paid with loan proceeds over the Pell grant not stated"
+  ]
+ }
+]

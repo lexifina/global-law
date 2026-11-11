@@ -1,0 +1,43 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2021-6",
+  "taxYear": 2016,
+  "note": "Wenk. 2016 full distribution of 109,471 from ESOP/401(k) plan (qualified plan, sec. 4974(c)), age 43, no sec. 72(t)(2) exception shown; Federal withholding 21,894. Inclusion in gross income under secs. 402(a)/61 over the 'never benefited' (restitution) argument is a characterisation finding, encoded as the amount found (pensions). Filing status and other income are not stated in the opinion: filing left at the framework default and no deficiency expected (39,649 not computable from the findings). Return filed 2017-09-04 (due 2017-04-18), no extension; court found reasonable cause for late filing (credibility of testimony: a judgment, encoded as a fact). sec. 6651(a)(2) not in issue. sec. 6662 penalty conceded by respondent.",
+  "facts": {
+   "taxpayerAge": 43,
+   "pensions": 109471,
+   "withholding": 21894,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 109471,
+     "plan": "qualifiedPlan",
+     "attained59Half": false
+    }
+   ]
+  },
+  "lateness": {
+   "filed": "2017-09-04",
+   "dueDate": "2017-04-18",
+   "reasonableCauseFiling": true,
+   "assertsFailureToPay": false,
+   "productionMet": true
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 10947,
+    "note": "10% x 109,471 = 10,947.10"
+   },
+   {
+    "item": "failureToFile",
+    "value": 0,
+    "note": "reasonable cause found (credibility judgment)"
+   },
+   {
+    "item": "failureToFileApplies",
+    "flag": false,
+    "note": "production met (late filing agreed); reasonable cause found (credibility judgment)"
+   }
+  ]
+ }
+]

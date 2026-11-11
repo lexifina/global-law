@@ -1,0 +1,41 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2024-19",
+  "taxYear": 2020,
+  "note": "Partial encoding. Found: wages $20,901, W-2G gambling winnings $61,929 (otherIncome), gambling losses allowed $61,929 (court, §165(d) capped at winnings). Conceded: mortgage interest $7,200 and noncash charity $3,050 (itemized), car/truck $9,315 (Schedule C; Schedule C profit not stated, so omitted). All other 2020 items settled by stipulation, not stated; filing status and age not stated (single/default assumed). asFiled: gambling losses 61,929 + other itemized = mortgage 7,200 + charity 3,050 (other itemized items unknown). The understatement computed is therefore only the part from the two conceded itemized items. Redetermined deficiency left to Rule 155. Accuracy: §6751(b) approval found (signed 2022-08-16, before assessment); no reasonable cause found; negligence asserted by respondent and the penalty upheld on the whole year without naming the ground, encoded as negligence=true (court's implied finding).",
+  "facts": {
+   "filing": "single",
+   "wages": 20901,
+   "itemizedDeductions": 0,
+   "itemize": true,
+   "gamblingWinnings": 61929,
+   "gamblingLosses": 61929
+  },
+  "asFiled": {
+   "filing": "single",
+   "wages": 20901,
+   "itemizedDeductions": 10250,
+   "itemize": true,
+   "gamblingWinnings": 61929,
+   "gamblingLosses": 61929
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": true,
+   "negligence": true,
+   "reasonableCause": false,
+   "supervisoryApproval": true
+  },
+  "expected": [
+   {
+    "item": "gamblingLossDeduction",
+    "value": 61929,
+    "note": "Petitioner is entitled to deduct $61,929 of gambling losses for the year in issue."
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true,
+    "note": "petitioner is liable for an accuracy-related penalty under section 6662(a) for the year in issue"
+   }
+  ]
+ }
+]

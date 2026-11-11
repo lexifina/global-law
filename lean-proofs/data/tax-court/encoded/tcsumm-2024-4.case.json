@@ -1,0 +1,23 @@
+{
+ "citation": "T.C. Summary Opinion 2024-4",
+ "taxYear": 2018,
+ "note": "Kohl. 10,342 retirement plan distribution in her early 50s used for past-due rent; sec. 72(t)(2)(I) emergency expense applies only after 2023. Other income not found.",
+ "facts": {
+  "filing": "single",
+  "taxpayerAge": 52,
+  "pensions": 10342,
+  "earlyDistributions": [
+   {
+    "amountIncludible": 10342,
+    "plan": "qualifiedPlan",
+    "emergencyExpense": 10342
+   }
+  ]
+ },
+ "expected": [
+  {
+   "item": "earlyDistributionTax",
+   "value": 1034
+  }
+ ]
+}

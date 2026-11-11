@@ -1,0 +1,47 @@
+{
+ "id": "tcsumm-2019-8",
+ "citation": "T.C. Summary Opinion 2019-8",
+ "issues": [
+  {
+   "issue": "Unreported $25 interest income",
+   "provision": "sec. 61(a)(4)",
+   "court": "includible (25)",
+   "lean": "taxableInterest 25 in corrected AGI 28,706",
+   "verdict": "match",
+   "diagnosis": "Conceded fact; encoded as taxableInterest 25 and carried into AGI 28,706 (matches derived AGI).",
+   "snippet": "Petitioner admits that he had $25 of interest income for 2015."
+  },
+  {
+   "issue": "Unreported $2,994 W-2G gambling winnings; gambling losses offset",
+   "provision": "secs. 61, 165(d), 63",
+   "court": "winnings includible; losses unsubstantiated and, even if proven, an itemized deduction below the 9,250 standard deduction",
+   "lean": "gamblingWinnings 2,994 in AGI 28,706; gamblingLossDeduction 0; deduction 9,250 (standard); alternative with 2,994 losses: deduction 9,250, gamblingLossDeduction 0, netTax 1,664 unchanged",
+   "verdict": "match",
+   "diagnosis": "rerun 2c5b6354943: winnings now gamblingWinnings (sec. 165(d) model). Main case: losses 0 (unsubstantiated: judgment, no records). Alternative case (losses 2,994 assumed, as the court does arguendo): sec. 165(d) caps them at 2,994 as itemized, below the 9,250 standard deduction, so Lean takes the standard deduction and the tax is unchanged (netTax 1,664) - the court's alternative holding computed. All items match.",
+   "snippet": "Petitioner would have to come up with more than $6,256 of additional itemized deductions to be better off than with the $9,250 standard deduction"
+  },
+  {
+   "issue": "$6,500 IRA deduction for pretax state retirement contributions",
+   "provision": "sec. 219(a), (e)",
+   "court": "not deductible",
+   "lean": "iraDeduction 0 (ira.contribution 0, activeParticipant true); AGI 28,706",
+   "verdict": "match",
+   "diagnosis": "rerun 2c5b6354943: sec. 219 now modelled; encoded the finding that the 2,890 ASRS amount was a pretax employer-plan deferral (excluded from W-2 wages), not an IRA contribution: ira.contribution 0 -> iraDeduction 0 matches; AGI 28,706 matches. The characterization (deferral is not an IRA contribution) is the court's legal finding taken as input.",
+   "snippet": "his $2,890 IRA contribution was a pretax reduction from his annual wages, i.e., it was not subject to Federal income tax."
+  },
+  {
+   "issue": "Deficiency",
+   "provision": "sec. 6211",
+   "court": 1907,
+   "lean": 1071,
+   "verdict": "mismatch",
+   "diagnosis": "(missing return facts, not a framework error) rerun 2c5b6354943: unchanged, 1,071 vs 1,907 (gap 836). As-filed TI 5,937 tax 593; corrected TI 15,456 tax 1,664. The opinion does not state exemptions, dependents, or EIC/CTC on the return (HOH implies a qualifying person it never names).",
+   "snippet": "Respondent determined a $1,907 income tax deficiency for petitioner's 2015 tax year."
+  }
+ ],
+ "deficiency": {
+  "court": 1907,
+  "lean": 1071
+ },
+ "notes": "rerun 2c5b6354943: winnings as gamblingWinnings, IRA via sec. 219 fields; new items iraDeduction 0, gamblingLossDeduction 0, itemizedDeductions 0 match; alternative case (2,994 losses assumed) shows no tax benefit (deduction 9,250, netTax 1,664). Deficiency still 1,071 vs 1,907 (return facts missing). Filing status inferred as HOH from the 9,250 standard deduction."
+}

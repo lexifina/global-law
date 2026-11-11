@@ -1,0 +1,37 @@
+{
+ "citation": "T.C. Memo. 2023-141",
+ "taxYear": 2019,
+ "note": "Scott. Return: wages 75,157, std deduction 18,350 (HoH 2019), TI 56,807, credits 2,278, tax 4,662. Unreported: ordinary dividends 90, capital gain distributions 644, 401(k)-type distribution 14,386 (Form 1099-R code 1). Credits of 2,278 encoded as other nonrefundable credits (their nature is not stated). Qualified-dividend share of the 90 not stated (encoded 0).",
+ "facts": {
+  "filing": "hoh",
+  "wages": 75157,
+  "ordinaryDividends": 90,
+  "capitalGain": 644,
+  "longTermGain": 644,
+  "pensions": 14386,
+  "otherNonrefundableCredits": 2278,
+  "withholding": 13339,
+  "earlyDistributions": [
+   {
+    "amountIncludible": 14386,
+    "plan": "qualifiedPlan"
+   }
+  ]
+ },
+ "asFiled": {
+  "filing": "hoh",
+  "wages": 75157,
+  "otherNonrefundableCredits": 2278,
+  "withholding": 11462
+ },
+ "expected": [
+  {
+   "item": "earlyDistributionTax",
+   "value": 1439
+  },
+  {
+   "item": "deficiency",
+   "value": 4713
+  }
+ ]
+}

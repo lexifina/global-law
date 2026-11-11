@@ -1,0 +1,14 @@
+{
+ "citation": "T.C. Memo. 2024-23",
+ "taxYear": 2019,
+ "note": "Ecret v. Commissioner (MFJ, 2019). Court: wife treated as receiving SS benefits of 19,866 for 2019 (6,120 cash + 1,080 withholding + 12,666 workers' compensation offset, sec. 86(d)(3)); parties agree the 85% ratio applies; taxable SS 16,886, i.e. 11,684 over the 5,202 reported. Conceded: unreported interest 33 and dividends 38; penalty conceded by IRS; 2018 dismissed (late petition). The opinion gives no other income, so the only income encoded is the SS finding and the conceded items; the 85% inclusion cannot be reproduced without non-SS modified AGI >= 46,874 (not found). asFiled not encoded (return income not stated). No deficiency figure (Rule 155).",
+ "facts": {
+  "filing": "mfj",
+  "taxableInterest": 33,
+  "ordinaryDividends": 38,
+  "socialSecurity": 19866
+ },
+ "expected": [
+  {"item": "taxableSocialSecurity", "value": 16886, "note": "court applies the 85% ratio as agreed by the parties; needs non-SS MAGI >= 46,874, which the opinion does not find"}
+ ]
+}

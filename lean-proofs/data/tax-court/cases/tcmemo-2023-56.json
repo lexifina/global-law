@@ -1,0 +1,59 @@
+{
+  "id": "tcmemo-2023-56",
+  "citation": "T.C. Memo. 2023-56",
+  "case_name": "Susan D. Rodgers v. Commissioner",
+  "docket_numbers": ["18079-17"],
+  "judge": "Gale",
+  "date": "2023-05-09",
+  "opinion_type": "memorandum",
+  "source": {
+    "dawson_docket_entry_id": "fef2df18-7cb6-46fa-b04e-8eb67d653f02",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/18079-17",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/18079-17/fef2df18-7cb6-46fa-b04e-8eb67d653f02/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "tax_years": [2015],
+  "taxpayer": {
+    "filing_status_claimed": null,
+    "state": "Alabama",
+    "notes": "Divorced; received payments through Alabama Child Support Enforcement Division on former spouse's child support arrearage judgment."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {"year": 2015, "deficiency": 3473, "penalties": [], "additions": []}
+    ],
+    "adjustments": ["unreported interest income of $7,824 reported by the State of Alabama on Form 1099-INT"],
+    "contested_by_taxpayer": "Characterization of the $7,824 as nontaxable child support rather than taxable interest",
+    "conceded": ["Petitioner conceded at trial that she received the $7,824 shown on the Form 1099-INT"]
+  },
+  "findings_of_fact": [
+    {"fact_id": "F1", "issue_refs": ["I1"], "fact": "September 27, 2011 state court order terminated former spouse's current child support obligation and found arrears of $18,000",
+     "values": {"order_date": "2011-09-27", "arrears_initial": 18000.00},
+     "snippet": "THAT the Plaintiff is in arrears in the sum of $18,000.00.", "locator": "p. 2"},
+    {"fact_id": "F2", "issue_refs": ["I1"], "fact": "April 13, 2012 amended order: arrears principal $5,361.89 as of October 30, 2011; judgment $16,044.37 = $5,361.89 principal + $10,682.48 interest",
+     "values": {"amended_order_date": "2012-04-13", "arrears_principal": 5361.89, "judgment_interest": 10682.48, "judgment_total": 16044.37, "as_of": "2011-10-30"},
+     "snippet": "“2. THAT the Plaintiff is in arrears in the sum of $5,361.89 excluding interest as of October 30, 2011.”", "locator": "p. 3"},
+    {"fact_id": "F3", "issue_refs": ["I1"], "fact": "Payments coded 'CS NA AR' from April 23, 2012 to May 14, 2014 total $5,361.89, matching principal",
+     "values": {"principal_payments_start": "2012-04-23", "principal_payments_end": "2014-05-14", "principal_paid_total": 5361.89},
+     "snippet": "Those payments total $5,361.89, matching the amount of the arrearage principal determined in the state court’s order, as amended.", "locator": "p. 3"},
+    {"fact_id": "F4", "issue_refs": ["I1"], "fact": "Payments coded 'CP INT' posted during 2015 total $7,859.27, slightly more than the $7,824 determined and less than total judgment interest",
+     "values": {"interest_coded_payments_2015": 7859.27, "amount_determined": 7824},
+     "snippet": "The payments marked “CP INT” and posted during 2015 total $7,859.27", "locator": "p. 3"},
+    {"fact_id": "F5", "issue_refs": ["I1"], "fact": "Court finds petitioner received interest on past due child support during 2015",
+     "values": {"character": "interest"},
+     "snippet": "We are therefore persuaded by a preponderance of the evidence that petitioner received interest on past due child support during 2015", "locator": "p. 6"}
+  ],
+  "issues": [
+    {"issue_id": "I1", "tags": ["other_income_inclusion_61", "alimony_71_215"],
+     "question": "Is $7,824 received in 2015 from the State of Alabama taxable interest on a child support arrearage (§61(a)(4)) or nontaxable child support (§71(c))?",
+     "provisions": ["26 U.S.C. §61(a)(4)", "§71(c)", "§71(a)", "§215(a)", "Temp. Treas. Reg. §1.71-1T(c), Q&A-15"],
+     "holding": "Taxable interest; arrearage principal was fully paid by May 14, 2014 and 2015 payments were interest on the arrearage judgment, includible under §61(a)(4)",
+     "prevailing_party": "respondent",
+     "amount_determined": {"description": "interest income includible", "amount": 7824},
+     "rule_155": false,
+     "computable": true,
+     "computable_reason": "Given found allocation (principal $5,361.89 fully paid before 2015; later payments interest), inclusion of interest on child support arrearage is a mechanical legal rule"}
+  ],
+  "decision": {"text": "Decision will be entered for respondent.", "summary": "Deficiency of $3,473 sustained; $7,824 is taxable interest"},
+  "notes": "Characterization found by preponderance of evidence (payment summary codes, state court order); computability depends on accepting the principal-first allocation as found. Burden shift under §7491(a) and §6201(d) not decided (unnecessary). Facts partly stipulated."
+}

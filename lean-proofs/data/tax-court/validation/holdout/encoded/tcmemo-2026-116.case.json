@@ -1,0 +1,19 @@
+{
+  "citation": "T.C. Memo. 2026-116",
+  "taxYear": 2022,
+  "note": "Butler. Issues: HOH status, CTC and EIC for two sons A.B. and A.B. (born 2010 and 2012: ages 12 and 10 at end of 2022). Respondent conceded relationship, age, support and joint-return tests. Court found it was not shown that the children lived with petitioner for more than one-half of 2022 (nor longer than with their mother); no §152(e) release in the record. Mother (not married to petitioner per the findings that she filed separately and they did not file jointly; marital status not otherwise stated) also claimed both children; her AGI 52,038, higher than petitioner's. Petitioner's AGI and income are redacted/not stated, so no income, asFiled or taxShown is encoded and no deficiency is computed. Accuracy penalty conceded: not encoded. Tie-breaker not encoded separately: petitioner fails the residency test outright (would lose any tie-breaker too, lower AGI).",
+  "facts": {
+    "filing": "hoh",
+    "dependents": [
+      {"name": "A.B.", "relationship": "child", "age": 12, "livedWithMoreThanHalfYear": false, "releasedUnder152e": false},
+      {"name": "A.B.", "relationship": "child", "age": 10, "livedWithMoreThanHalfYear": false, "releasedUnder152e": false}
+    ]
+  },
+  "status": {
+    "marriedAtYearEnd": false,
+    "paidOverHalfHouseholdCost": false
+  },
+  "expected": [],
+  "inferred": ["petitioner unmarried at end of 2022 (not stated; he and the mother filed separately)", "paidOverHalfHouseholdCost false: not found (moot)"],
+  "unencodable": ["petitioner's income/AGI not stated in the redacted text: deficiency (EIC, CTC, standard deduction change) not computable", "both children share the name 'A.B.' in the opinion; outcomes keyed by name collide (identical facts)"]
+}

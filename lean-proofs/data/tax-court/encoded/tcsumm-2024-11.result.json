@@ -1,0 +1,35 @@
+{
+ "id": "tcsumm-2024-11",
+ "citation": "T.C. Summary Opinion 2024-11",
+ "issues": [
+  {
+   "issue": "Are 2019 SSD benefits ($32,862) social security benefits includible under sec. 86, or excluded under sec. 104(a)(1)-(3) / no constructive receipt?",
+   "provision": "sec. 61(a), 86(a), (b), (d)(1)(A); 104(a)(1), (2), (3)",
+   "court": "includible (benefits are sec. 86 benefits, not sec. 104(a)(2) damages)",
+   "lean": null,
+   "verdict": "not-encodable",
+   "diagnosis": "Characterization question (title II benefit vs. 'damages' received by suit/settlement) has no input in the framework (no sec. 104 exclusion model). Holding encoded as facts.socialSecurity = 32,862 (asFiled 3,214).",
+   "snippet": "Accordingly, those benefits do not constitute \"damages\" within the meaning of section 104(a)(2)."
+  },
+  {
+   "issue": "Taxable amount of SS benefits and deficiency",
+   "provision": "sec. 86(a), (b); 6211",
+   "court": null,
+   "lean": "0 (no other income encoded)",
+   "verdict": "not-encodable",
+   "diagnosis": "Opinion states neither the taxable amount nor the deficiency, nor petitioners' other income/MAGI. As filed, $2,732 = 85% x $3,214 (2,731.9), so the 85% ceiling bound; with the same other income the corrected taxable amount would be 85% x 32,862 = 27,933, but other income is not in the record, so the runner (benefits only) computes taxable SS 0 and deficiency 0, which is not meaningful.",
+   "snippet": "reporting that petitioner had received SSD benefits of $ 3,214 for that year and took the position that only $ 2,732"
+  },
+  {
+   "issue": "Sec. 6662(a) accuracy-related penalty",
+   "provision": "sec. 6662(a)",
+   "court": "conceded by respondent",
+   "lean": null,
+   "verdict": "not-encodable",
+   "diagnosis": "Concession, not a decided issue; not encoded.",
+   "snippet": "Respondent concedes the section 6662(a) accuracy-related penalty."
+  }
+ ],
+ "deficiency": {"court": null, "lean": "0 (not meaningful: other income not in record)"},
+ "notes": "Runner exit 0 with no expected items. Framework gap: none for sec. 86 itself; the case lacks numbers. Optional gap: an asFiled.taxableSocialSecurity / reported-taxable input check would let the as-filed 2,732 be verified (85% ceiling)."
+}

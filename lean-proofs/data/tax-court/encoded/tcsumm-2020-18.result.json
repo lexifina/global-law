@@ -1,0 +1,73 @@
+{
+ "id": "tcsumm-2020-18",
+ "citation": "T.C. Summary Opinion 2020-18",
+ "issues": [
+  {
+   "issue": "2014 deficiency (disallowed Schedule C deductions, unreported income, SE tax)",
+   "provision": "secs. 162, 6001, 7491(a)",
+   "court": 8244,
+   "lean": 8244,
+   "verdict": "judgment",
+   "diagnosis": "Matches only as a consistency check: taxShown = notice total tax - deficiency. The decisive step is a burden-of-proof/substantiation holding (no credible evidence); the opinion gives no gross receipts or return totals, so the tax cannot be recomputed from facts. Rerun 57b55431cca.",
+   "snippet": "respondent's determinations in the notice of deficiency are sustained."
+  },
+  {
+   "issue": "2014 sec. 6662(a) penalty (substantial understatement)",
+   "provision": "secs. 6662(a), (b)(2), (d)(1)(A); 6751(b)(1); 6664(c)",
+   "court": "1,648.80",
+   "lean": 1649,
+   "verdict": "match",
+   "diagnosis": "20% x 8,244 = 1,648.80; Lean 1649 (rounded). Substantial understatement match; 6751(b) approval found; no reasonable cause (judgment). Rerun 57b55431cca.",
+   "snippet": "We sustain the accuracy-related penalties for 2014, 2015, and 2016."
+  },
+  {
+   "issue": "2015 deficiency (disallowed Schedule C deductions, unreported income, SE tax)",
+   "provision": "secs. 162, 6001, 7491(a)",
+   "court": 18011,
+   "lean": 18011,
+   "verdict": "judgment",
+   "diagnosis": "Matches only as a consistency check: taxShown = notice total tax - deficiency. The decisive step is a burden-of-proof/substantiation holding (no credible evidence); the opinion gives no gross receipts or return totals, so the tax cannot be recomputed from facts. Rerun 57b55431cca.",
+   "snippet": "respondent's determinations in the notice of deficiency are sustained."
+  },
+  {
+   "issue": "2015 sec. 6662(a) penalty (substantial understatement)",
+   "provision": "secs. 6662(a), (b)(2), (d)(1)(A); 6751(b)(1); 6664(c)",
+   "court": "3,602.20",
+   "lean": 3602,
+   "verdict": "match",
+   "diagnosis": "20% x 18,011 = 3,602.20; Lean 3602 (rounded). Substantial understatement match; 6751(b) approval found; no reasonable cause (judgment). Rerun 57b55431cca.",
+   "snippet": "We sustain the accuracy-related penalties for 2014, 2015, and 2016."
+  },
+  {
+   "issue": "2016 deficiency (disallowed Schedule C deductions, unreported income, SE tax)",
+   "provision": "secs. 162, 6001, 7491(a)",
+   "court": 10331,
+   "lean": 10331,
+   "verdict": "judgment",
+   "diagnosis": "Matches only as a consistency check: taxShown = notice tax 15,939 - deficiency. The decisive step is a burden-of-proof/substantiation holding (no credible evidence); the opinion gives no gross receipts or return totals, so the tax cannot be recomputed from facts.",
+   "snippet": "respondent's determinations in the notice of deficiency are sustained."
+  },
+  {
+   "issue": "2016 sec. 6662(a) penalty (substantial understatement)",
+   "provision": "secs. 6662(a), (b)(2), (d)(1)(A); 6751(b)(1); 6664(c)",
+   "court": "1,860.60",
+   "lean": 2066,
+   "verdict": "mismatch",
+   "diagnosis": "(c) court figure inconsistent: 20% x 10,331 = 2,066.20; the stated 1,860.60 is 20% of 9,303. The opinion states no reduced base. Substantial (10,331 > 5,000 > 1,593.90) MATCH; 6751(b) approval found and encoded; no reasonable cause (judgment).",
+   "snippet": "We sustain the accuracy-related penalties for 2014, 2015, and 2016."
+  }
+ ],
+ "deficiency": {
+  "court": {
+   "2014": 8244,
+   "2015": 18011,
+   "2016": 10331
+  },
+  "lean": {
+   "2014": 8244,
+   "2015": 18011,
+   "2016": 10331
+  }
+ },
+ "notes": "Rerun 57b55431cca: 2014 and 2015 deficiency/understatement/substantial/penalty all match (deficiencies tautological - taxShown derived from the notice totals). 2016 penalty mismatch is the court's own figure (1,860.60 != 20% of 10,331 = 2,066.20). Court's 10%-of-required-tax figures for 2015 (1,801.10) and 2016 (1,033.10) are 10% of the deficiencies, not of the total tax; harmless since 5,000 is the greater either way."
+}

@@ -1,0 +1,569 @@
+[
+ {
+  "citation": "T.C. Memo. 2023-141",
+  "taxYear": 2019,
+  "note": "Scott. Return: wages 75,157, std deduction 18,350 (HoH 2019), TI 56,807, credits 2,278, tax 4,662. Unreported: ordinary dividends 90, capital gain distributions 644, 401(k)-type distribution 14,386 (Form 1099-R code 1). Credits of 2,278 encoded as other nonrefundable credits (their nature is not stated). Qualified-dividend share of the 90 not stated (encoded 0).",
+  "facts": {
+   "filing": "hoh",
+   "wages": 75157,
+   "ordinaryDividends": 90,
+   "capitalGain": 644,
+   "longTermGain": 644,
+   "pensions": 14386,
+   "otherNonrefundableCredits": 2278,
+   "withholding": 13339,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 14386,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "hoh",
+   "wages": 75157,
+   "otherNonrefundableCredits": 2278,
+   "withholding": 11462
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 1439
+   },
+   {
+    "item": "deficiency",
+    "value": 4713
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2023-37",
+  "taxYear": 2019,
+  "note": "Lin v. Commissioner (MFJ, 2019). Court: modified AGI 53,456 = reported AGI 53,174 + 282 omitted dividends; railroad retirement benefits 32,808 treated as SS (sec. 86(d)(1)(B)); taxable 27,887 (85% cap). Encoding: dividends 4,010 + 282 = 4,292; taxable pensions 50,629 (IRS conceded the retirement adjustment); otherIncome -1,465 = Schedule E loss -8,189 (allowed as originally claimed) + 6,724 unidentified residual of the reported AGI (53,174 - 4,010 - 50,629 + 8,189), so that non-SS MAGI equals the court's 53,456. Residual character (interest/gains) not stated; ages not stated (defaults). No deficiency figure (Rule 155).",
+  "facts": {
+   "filing": "mfj",
+   "ordinaryDividends": 4292,
+   "pensions": 50629,
+   "socialSecurity": 32808,
+   "otherIncome": -1465,
+   "itemize": false
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "ordinaryDividends": 4010,
+   "pensions": 50629,
+   "otherIncome": -1465,
+   "itemize": false
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 27887,
+    "note": "court: 85% x 32,808 cap binds (27,981 uncapped)"
+   },
+   {
+    "item": "agi",
+    "value": 81343,
+    "note": "derived, not stated: court's MAGI 53,456 + taxable SS 27,887"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2024-23",
+  "taxYear": 2019,
+  "note": "Ecret v. Commissioner (MFJ, 2019). Court: wife treated as receiving SS benefits of 19,866 for 2019 (6,120 cash + 1,080 withholding + 12,666 workers' compensation offset, sec. 86(d)(3)); parties agree the 85% ratio applies; taxable SS 16,886, i.e. 11,684 over the 5,202 reported. Conceded: unreported interest 33 and dividends 38; penalty conceded by IRS; 2018 dismissed (late petition). The opinion gives no other income, so the only income encoded is the SS finding and the conceded items; the 85% inclusion cannot be reproduced without non-SS modified AGI >= 46,874 (not found). asFiled not encoded (return income not stated). No deficiency figure (Rule 155).",
+  "facts": {
+   "filing": "mfj",
+   "taxableInterest": 33,
+   "ordinaryDividends": 38,
+   "socialSecurity": 19866
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 16886,
+    "note": "court applies the 85% ratio as agreed by the parties; needs non-SS MAGI >= 46,874, which the opinion does not find"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2024-67",
+  "taxYear": 2018,
+  "note": "Moran. Non-filer; SFR 2022-09-12. Gross income 254,512 = wages 213,630 + capital gain 32,227 + MSA 6,236 + retirement 2,417 + dividends 2. IRS taxed the capital gain at ordinary rates (60,569 = ordinary tax on 242,512), so longTermGain 0. Court accepted the divorce: single. taxShown 0 (no return) for the deficiency. Sec. 6654: no 2017 return or prior-year tax in the record (priorTax none, so the 90%-of-current-year option), no estimated payments, withholding 42,961 treated as paid evenly on the due dates; due dates set to the statutory 15th (sec. 6654(c)(2)) rather than the sec. 7503-shifted printed dates (17 Apr, 17 Sep 2018), which reproduces the IRS figure.",
+  "facts": {
+   "filing": "single",
+   "wages": 213630,
+   "capitalGain": 32227,
+   "longTermGain": 0,
+   "otherIncome": 6236,
+   "pensions": 2417,
+   "ordinaryDividends": 2,
+   "withholding": 42961,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 2417,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "taxShown": 0,
+  "sfrTax": 60811,
+  "lateness": {
+   "asOf": "2022-09-12"
+  },
+  "expected": [
+   {
+    "item": "taxableIncome",
+    "value": 242512
+   },
+   {
+    "item": "regularTax",
+    "value": 60569
+   },
+   {
+    "item": "earlyDistributionTax",
+    "value": 242
+   },
+   {
+    "item": "totalTax",
+    "value": 60811
+   },
+   {
+    "item": "deficiency",
+    "value": 60811
+   },
+   {
+    "item": "failureToFile",
+    "value": 4016
+   },
+   {
+    "item": "failureToPay",
+    "value": 3659
+   },
+   {
+    "item": "estimatedTaxAddition",
+    "value": 424,
+    "note": "deemed conceded; no prior-year return found (priorTax none), no estimated payments; withholding 42,961 spread over the four due dates"
+   },
+   {
+    "item": "estimatedRequiredAnnual",
+    "value": 54730,
+    "note": "derived, not stated: 90% x 60,811 = 54,729.9 (no 2017 return in the record)"
+   }
+  ],
+  "estimated": {
+   "payments": [],
+   "dueDates": [
+    "2018-04-15",
+    "2018-06-15",
+    "2018-09-15",
+    "2019-01-15"
+   ]
+  }
+ },
+ {
+  "citation": "T.C. Memo. 2024-67 (variant: married filing separately, the notice's status)",
+  "taxYear": 2018,
+  "note": "Checks the court's 'harmless error' holding: MFS and single rates give the same tax here.",
+  "facts": {
+   "filing": "mfs",
+   "wages": 213630,
+   "capitalGain": 32227,
+   "longTermGain": 0,
+   "otherIncome": 6236,
+   "pensions": 2417,
+   "ordinaryDividends": 2,
+   "withholding": 42961,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 2417,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "taxShown": 0,
+  "expected": [
+   {
+    "item": "regularTax",
+    "value": 60569
+   },
+   {
+    "item": "totalTax",
+    "value": 60811
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2025-23 (Campana v. Commissioner)",
+  "taxYear": 2021,
+  "note": "Reported TI $37,964 (found). Filing status and income composition not stated in the opinion: single INFERRED (not found) because only single reproduces the $18,064 deficiency (HoH ~16,701, MFJ ~13,842); reported income backed out as otherIncome 50,514 = 37,964 + 12,550 (2021 single standard deduction), itemize false. Unreported: $99 IRS interest, $56,673 Fidelity hardship withdrawal (under 59 1/2, no exception; plan kind treated as qualifiedPlan - either kind gives 10%). Fidelity withheld $1,874, not claimed on the return (withholding left out of asFiled). Penalty $3,238 = 20% x (18,064 - 1,874): \u00a76664(a)/Treas. Reg. \u00a71.6664-2(c)(1) unclaimed withholding reduces the underpayment - not modelled (framework gap). 2017 refund-offset argument not encodable (no jurisdiction, \u00a7\u00a76213(a), 6512(b)).",
+  "facts": {
+   "filing": "single",
+   "taxpayerAge": 40,
+   "otherIncome": 50514,
+   "itemize": false,
+   "taxableInterest": 99,
+   "pensions": 56673,
+   "withholding": 1874,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 56673,
+     "plan": "qualifiedPlan",
+     "attained59Half": false
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "single",
+   "taxpayerAge": 40,
+   "otherIncome": 50514,
+   "itemize": false
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": true,
+   "automaticallyCalculated": true,
+   "reasonableCause": false
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 5667,
+    "note": "\u00a772(t)(1) 10% of 56,673"
+   },
+   {
+    "item": "deficiency",
+    "value": 18064
+   },
+   {
+    "item": "understatement",
+    "value": 18064,
+    "note": "court: understatement of $18,064"
+   },
+   {
+    "item": "substantialUnderstatement",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 3238,
+    "note": "= 20% x (18,064 - 1,874 unclaimed withholding), \u00a76664(a)"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-13",
+  "taxYear": 2018,
+  "note": "Other income not stated; only the distributions are encoded. Mr. Ghaly under 59 1/2; age at separation from service not found. Rerun 2c5b6354943: the 71,147 withdrawal is encoded as a rollover claim (the 2020 'restoring' contributions; amount not stated, full amount assumed as an upper bound; days 366 is a lower bound, 2018 distribution to 2020 deposit; no waiver sought); the 44,178 sec. 72(p) deemed distribution stays as pensions.",
+  "facts": {
+   "filing": "mfj",
+   "pensions": 44178,
+   "withholding": 14229,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 115325,
+     "plan": "qualifiedPlan"
+    }
+   ],
+   "rollovers": [
+    {
+     "distribution": 71147,
+     "rolledOver": 71147,
+     "days": 366,
+     "waiverGranted": false,
+     "fromIra": false
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "rolloverIncludible",
+    "value": 71147
+   },
+   {
+    "item": "earlyDistributionTax",
+    "value": 11533
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-13 [consistency proxy, NOT a finding]",
+  "taxYear": 2018,
+  "note": "Base taxable income $115,100 (AGI $139,100 less $24,000 standard deduction) is NOT found: it is the value at which the 2018 MFJ schedule reproduces the notice's income-tax increase ($38,213 - $11,533 = $26,680). Rollover encoding as in case 1.",
+  "facts": {
+   "filing": "mfj",
+   "otherIncome": 139100,
+   "pensions": 44178,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 115325,
+     "plan": "qualifiedPlan"
+    }
+   ],
+   "rollovers": [
+    {
+     "distribution": 71147,
+     "rolledOver": 71147,
+     "days": 366,
+     "waiverGranted": false,
+     "fromIra": false
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "otherIncome": 139100
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 38213
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-10",
+  "taxYear": 2019,
+  "note": "Shlikas. 137,024 from TIAA accounts at 50; not shown to be an IRA (403(b) testified), so the (2)(F) first-time homebuyer exception is unavailable. Filing status not stated (single); deficiency is the 72(t) tax alone, independent of other income.",
+  "facts": {
+   "filing": "single",
+   "taxpayerAge": 50,
+   "pensions": 137024,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 137024,
+     "plan": "qualifiedPlan",
+     "firstHomeCosts": 130000
+    }
+   ]
+  },
+  "asFiled": {
+   "filing": "single",
+   "taxpayerAge": 50,
+   "pensions": 137024
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 13702
+   },
+   {
+    "item": "deficiency",
+    "value": 13702
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-11",
+  "taxYear": 2019,
+  "note": "Wife's 2019 SSD benefits $32,862 (SSA-1099) held to be \u00a786 social security benefits, not \u00a7104(a) damages. Return reported $3,214 of benefits, $2,732 taxable (= 85%, so the 85% ceiling bound on the return). Other income, taxable SS amount and deficiency are not stated in the opinion; only the benefits are encoded. \u00a76662(a) penalty conceded by respondent (not encoded).",
+  "facts": {
+   "filing": "mfj",
+   "socialSecurity": 32862
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "socialSecurity": 3214
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-12",
+  "taxYear": 2018,
+  "note": "Morino v. Commissioner, 2018. Filing status not stated (no spouse/dependents mentioned): single assumed. As filed: Am Law wages 7,917; unemployment 17,706; Schedule C net loss 19,129 (first Sch. C 22,249 - 22,249 management fee = 0; TLT 41,499 - 60,628); student loan interest 2,500. Court: unreported Ward wages 9,994 (W-2; issue statement says 9,993) and NJ state refund 354 (sec. 111 tax benefit rule, otherIncome); Schedule C deductions disallowed: commissions 6,000 + car/truck 26,978 + other 8,920 = 41,898, so TLT net profit 41,499 - (60,628 - 41,898) = 22,769. Return filed 2020-04-17; extension to 2019-10-15. Withholding/timely payments not found (left 0). Penalty ground negligence; 6751(b) approval found; no reasonable cause.",
+  "facts": {
+   "filing": "single",
+   "wages": 17911,
+   "unemployment": 17706,
+   "seProfit": 22769,
+   "otherIncome": 354,
+   "adjustments": 2500
+  },
+  "asFiled": {
+   "filing": "single",
+   "wages": 7917,
+   "unemployment": 17706,
+   "seProfit": -19129,
+   "adjustments": 2500
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": false,
+   "negligence": true,
+   "supervisoryApproval": true,
+   "reasonableCause": false
+  },
+  "lateness": {
+   "filed": "2020-04-17",
+   "extension": true,
+   "reasonableCauseFiling": false,
+   "assertsFailureToPay": false,
+   "asOf": "2021-10-07"
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 7632,
+    "note": "NOD deficiency sustained (computational adjustments)"
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 1382
+   },
+   {
+    "item": "failureToFile",
+    "value": 933
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-12",
+  "taxYear": 2019,
+  "note": "Morino v. Commissioner, 2019. Filing status not stated: single assumed. The opinion finds only the Schedule C items for 2019 (no wages or other income stated): TLT 48,543 - 67,840 = loss 19,297 as filed (first Sch. C 26,163 - 26,163 = 0). Disallowed: commissions 5,500 + car/truck 32,190 + other 5,820 = 43,510, so net profit 24,213. Return timely filed. Penalty ground negligence; 6751(b) approval; no reasonable cause.",
+  "facts": {
+   "filing": "single",
+   "seProfit": 24213
+  },
+  "asFiled": {
+   "filing": "single",
+   "seProfit": -19297
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": false,
+   "negligence": true,
+   "supervisoryApproval": true,
+   "reasonableCause": false
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 4244,
+    "note": "NOD deficiency sustained"
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 849
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-19",
+  "taxYear": 2020,
+  "note": "Partial encoding. Found: wages $20,901, W-2G gambling winnings $61,929 (otherIncome), gambling losses allowed $61,929 (court, \u00a7165(d) capped at winnings). Conceded: mortgage interest $7,200 and noncash charity $3,050 (itemized), car/truck $9,315 (Schedule C; Schedule C profit not stated, so omitted). All other 2020 items settled by stipulation, not stated; filing status and age not stated (single/default assumed). asFiled: gambling losses 61,929 + other itemized = mortgage 7,200 + charity 3,050 (other itemized items unknown). The understatement computed is therefore only the part from the two conceded itemized items. Redetermined deficiency left to Rule 155. Accuracy: \u00a76751(b) approval found (signed 2022-08-16, before assessment); no reasonable cause found; negligence asserted by respondent and the penalty upheld on the whole year without naming the ground, encoded as negligence=true (court's implied finding).",
+  "facts": {
+   "filing": "single",
+   "wages": 20901,
+   "itemizedDeductions": 0,
+   "itemize": true,
+   "gamblingWinnings": 61929,
+   "gamblingLosses": 61929
+  },
+  "asFiled": {
+   "filing": "single",
+   "wages": 20901,
+   "itemizedDeductions": 10250,
+   "itemize": true,
+   "gamblingWinnings": 61929,
+   "gamblingLosses": 61929
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": true,
+   "negligence": true,
+   "reasonableCause": false,
+   "supervisoryApproval": true
+  },
+  "expected": [
+   {
+    "item": "gamblingLossDeduction",
+    "value": 61929,
+    "note": "Petitioner is entitled to deduct $61,929 of gambling losses for the year in issue."
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true,
+    "note": "petitioner is liable for an accuracy-related penalty under section 6662(a) for the year in issue"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-22",
+  "taxYear": 2018,
+  "note": "Lucas (MFJ 2018). Court findings only. Wages stipulated 206,609 (reported 76,445 DFAS; state refund 4,962 reported). Reservist travel allowed 2,433 (moving 13,800 abandoned); itemized = conceded SALT 10,000 + mortgage interest 22,563 (medical 35,310 and noncash charity 85,000 disallowed). Withholding stipulated 12,271 vs 19,960 claimed (outside deficiency, s.6211(b)(1)). NOT ENCODED because the opinion gives no amount: Principal Life Form 1099-R distribution (conceded includible, s.72(t) 10% conceded), dependents/children and amounts of the CTC/ACTC and child and dependent care credit (conceded by respondent), the AOTC claimed on the return (conceded disallowed), the as-filed deduction and tax shown, the excess-social-security credit (1,110; a s.31-type credit, outside deficiency). No court-determined deficiency (Rule 155); the notice deficiency 29,600 is not a finding. asFiled assumes the standard deduction (Schedule A first appears on the 1040X).",
+  "facts": {
+   "filing": "mfj",
+   "wages": 206609,
+   "otherIncome": 4962,
+   "adjustments": 2433,
+   "itemizedDeductions": 32563,
+   "itemize": true,
+   "withholding": 12271
+  },
+  "asFiled": {
+   "filing": "mfj",
+   "wages": 76445,
+   "otherIncome": 4962,
+   "withholding": 19960
+  },
+  "accuracy": {
+   "assertsSubstantialUnderstatement": true,
+   "negligence": false,
+   "reasonableCause": false,
+   "supervisoryApproval": true
+  },
+  "expected": [
+   {
+    "item": "filingStatus",
+    "text": "mfj",
+    "note": "joint return not disputed; s.6015(b) relief denied (not modelled)"
+   },
+   {
+    "item": "deduction",
+    "value": 32563,
+    "note": "Schedule A allowed: conceded SALT 10,000 + mortgage interest 22,563; medical 35,310 and noncash charity 85,000 disallowed (substantiation)"
+   },
+   {
+    "item": "adjustments",
+    "value": 2433,
+    "note": "s.62(a)(2)(E)/162(p) reservist travel allowed 2,433 of 29,445 (stipulated); moving 13,800 abandoned"
+   },
+   {
+    "item": "accuracyPenaltyApplies",
+    "flag": true,
+    "note": "court: liable 'to the extent the understatement ... is substantial', left to Rule 155; approval yes, no reasonable cause. Lean value is on partial facts (Principal Life, credits, as-filed deduction omitted)."
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2024-4",
+  "taxYear": 2018,
+  "note": "Kohl. 10,342 retirement plan distribution in her early 50s used for past-due rent; sec. 72(t)(2)(I) emergency expense applies only after 2023. Other income not found.",
+  "facts": {
+   "filing": "single",
+   "taxpayerAge": 52,
+   "pensions": 10342,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 10342,
+     "plan": "qualifiedPlan",
+     "emergencyExpense": 10342
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 1034
+   }
+  ]
+ }
+]

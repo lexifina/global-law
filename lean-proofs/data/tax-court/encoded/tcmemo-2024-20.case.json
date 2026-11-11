@@ -1,0 +1,40 @@
+[
+ {
+  "citation": "T.C. Memo. 2024-20",
+  "taxYear": 2020,
+  "note": "No income figures in the opinion. A.V. a minor (age not stated; 17 used). paidOverHalfHouseholdCost not found; set true so that the abode finding alone decides, as in the opinion.",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "AV",
+     "relationship": "descendantOfChild",
+     "age": 17,
+     "daysWithTaxpayer": 60
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "expected": [
+   {
+    "item": "qualifyingChild:AV",
+    "flag": false
+   },
+   {
+    "item": "eicChild:AV",
+    "flag": false
+   },
+   {
+    "item": "hohQualifyingPerson:AV",
+    "flag": false
+   },
+   {
+    "item": "filingStatus",
+    "text": "single"
+   }
+  ]
+ }
+]

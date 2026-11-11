@@ -1,0 +1,57 @@
+{
+ "id": "tcmemo-2019-41",
+ "citation": "T.C. Memo. 2019-41 (Monroe v. Commissioner)",
+ "issues": [
+  {
+   "issue": "Premium tax credit eligibility: MAGI includes all Social Security received despite §86(e) election; excess APTC",
+   "provision": "§36B(c)(1)(A), (d)(2)(B), (d)(3); §36B(f)(2); §86(e)",
+   "court": "not eligible; MAGI 70,065.80 > 400% FPL; APTC 8,472 excess (repayable in full)",
+   "lean": "householdIncome 75,509; povertyLine 15,730; fplPercent 401 (over 400%); premiumTaxCredit 0; excessAdvancePtc 8,472",
+   "verdict": "match",
+   "diagnosis": "Eligibility, credit 0 and excess APTC 8,472 match (facts.ptc: family 2, California, APTC 8,472; no cap at >=400%). householdIncome item mismatches (70,066 vs 75,509): (c)/stipulation basis, not a framework error. The stipulated MAGI (fn. 6) uses the as-filed wages 34,176 and unemployment 237; Lean uses corrected AGI with the conceded 5,207 wages and 237 unemployment: 70,065.80 + 5,207 + 237 = 75,509.80 -> 75,509 (SS encoded as 35,652). Both exceed 4 x 15,730 = 62,920, so the outcome is the same. Lean's MAGI adds all nontaxable SS (35,652 - 7,122), ignoring the §86(e) election, as Johnson holds.",
+   "snippet": "MAGI as defined under section 36B includes all Social Security benefits received during the taxable year, irrespective of a section 86(e) election."
+  },
+  {
+   "issue": "§86(e) lump-sum election: taxable Social Security 4,084 on the return (AGI 38,497, stipulated)",
+   "provision": "§86(e)",
+   "court": "38497 (stipulated AGI with election; taxable SS 4,084)",
+   "lean": "38496 (taxable SS 4,083); lumpSumElection true",
+   "verdict": "mismatch",
+   "diagnosis": "(c) rounding. Rerun 2c5b6354943 with ssLumpSums (2014 348, 2013 10,247, 2012 10,943, 2011 2,607). 2015 part 35,651.80 - 24,145 = 11,506.80; 0.5 x (34,413 + 5,753.40 - 32,000) = 4,083.20 -> Lean 4,083. The stipulated 4,084 follows from whole-dollar worksheet lines: 11,507/2 = 5,753.50 -> 5,754; (34,413 + 5,754 - 32,000)/2 = 4,083.50 -> 4,084. Prior-year modified incomes are not in the opinion; zero prior-year increases is an inference from the 4,084 itself. Election flag matches (true).",
+   "snippet": "Petitioners timely filed a joint Federal income tax return for 2015 on which they made a section 86(e) election."
+  },
+  {
+   "issue": "Unreported wages 5,207 and unemployment 237 (conceded)",
+   "provision": "§61(a)",
+   "court": "includible (stipulated)",
+   "lean": "wages 39,383, unemployment 474 accepted; corrected AGI 46,979 (taxable SS 7,122 under the §86(e) election)",
+   "verdict": "match",
+   "diagnosis": "Concessions encoded as facts and carried into corrected income; no court amount to compare, so this is a fact-level check only.",
+   "snippet": "failed to report wages of $5,207; (4) failed to report unemployment benefits of $237"
+  },
+  {
+   "issue": "Accuracy-related penalty on the unreported items only (conceded)",
+   "provision": "§6662(a)",
+   "court": "liable on unreported wages/unemployment only; amount to Rule 155",
+   "lean": "n/a",
+   "verdict": "not-encodable",
+   "diagnosis": "Partial concession with no stated amount; penaltyBase unknown until Rule 155.",
+   "snippet": "are liable for the section 6662(a) penalty that is attributable to the unreported wages and unemployment benefits"
+  },
+  {
+   "issue": "Deficiency",
+   "provision": "§6211; §36B(f)(2)(A)",
+   "court": "Rule 155 (notice: 9,645)",
+   "lean": 9718,
+   "verdict": "not-encodable",
+   "diagnosis": "Lean 9,718 = income-tax deficiency 1,246 (corrected tax 3,034 with the §86(e) election vs as-filed 1,788) + excess APTC 8,472. Court enters decision under Rule 155, so no figure to compare. Notice 9,645 = 8,472 + 1,173; the 73 difference reflects concessions not encoded (additional SALT 87: itemized total unknown, standard deduction used) and the notice predating the updated report giving effect to the election (fn. 5).",
+   "snippet": "Decision will be entered under Rule 155."
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": 9718
+ },
+ "notes": "Rerun with facts.ptc (commits 402a5fdbb47/f918d6f6fc9): §36B issue now encoded; credit 0 and excess APTC 8,472 match; householdIncome differs only because the stipulated MAGI uses as-filed income (diff = conceded 5,207 + 237). asFiled has no ptc (no Form 8962 filed). §86(e) asFiled.agi still off by 1 (worksheet rounding, unchanged). Lean deficiency 9,718 includes the excess APTC; court figure is Rule 155.",
+ "frameworkGaps": []
+}

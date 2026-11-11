@@ -1,0 +1,172 @@
+{
+  "id": "tcsumm-2023-13",
+  "citation": "T.C. Summary Opinion 2023-13",
+  "case_name": "Magdy A. Ghaly and Laila Ryad v. Commissioner",
+  "docket_numbers": [
+    "27901-21S"
+  ],
+  "judge": "Choi",
+  "date": "2023-04-03",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "205079a4-f422-4985-a370-ec562d99c515",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/27901-21",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/27901-21/205079a4-f422-4985-a370-ec562d99c515/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2018
+  ],
+  "taxpayer": {
+    "filing_status_claimed": "married filing jointly",
+    "state": "New York",
+    "notes": "Facts fully stipulated. Mr. Ghaly under 59 1/2 in 2018; laid off in 2018."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2018,
+        "deficiency": 38213,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 4797
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "unreported retirement income of $115,325 ($71,147 distribution + $44,178 deemed loan distribution)",
+      "10% additional tax on early distributions of $11,533"
+    ],
+    "contested_by_taxpayer": "Inclusion of retirement distributions and the 10% additional tax (asserted re-contribution in 2020 and use for medical/education/property-tax expenses)",
+    "conceded": [
+      "Respondent conceded the sec. 6662(a) substantial understatement penalty"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1",
+        "I2"
+      ],
+      "fact": "Great-West processed withdrawal May 11, 2018; Form 1099-R reported $71,147 distribution with $14,229 withheld",
+      "values": {
+        "distribution": 71147,
+        "withholding": 14229,
+        "date": "2018-05-11"
+      },
+      "snippet": "indicating a distribution of $71,147 and withholding of $14,229.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1",
+        "I2"
+      ],
+      "fact": "Mr. Ghaly defaulted in 2018 on a 2015 plan loan; second 1099-R reported deemed distribution of $44,178 (loan balance)",
+      "values": {
+        "deemed_distribution": 44178,
+        "loan_year": 2015,
+        "default_year": 2018
+      },
+      "snippet": "distribution of $44,178, the balance remaining on the loan.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "Mr. Ghaly had not attained age 59 1/2 at the time of the distributions",
+      "values": {
+        "age_59_5_or_older": false
+      },
+      "snippet": "Mr. Ghaly had not attained the age of 59½ at the time of these distributions.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Plan trust was a qualified trust under sec. 401(a); no exception to taxability established; 2020 contributions to new accounts do not offset 2018 inclusion",
+      "values": {
+        "qualified_401a_trust": true,
+        "rollover_within_60_days": false,
+        "recontribution_year": 2020
+      },
+      "snippet": "Mr. Ghaly does not dispute that his retirement plan trust was a qualified trust under section 401(a).",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "Medical bill of $34,077 (dated Dec. 19, 2018) produced but no proof of payment; property taxes $6,238 paid irrelevant; distributions not used for any exception-qualifying expense",
+      "values": {
+        "medical_bill": 34077,
+        "medical_paid_proven": false,
+        "property_taxes": 6238
+      },
+      "snippet": "The withdrawal does not fit within any of the statutory exceptions, and the entire distribution is subject to the 10% additional tax.",
+      "locator": "p. 5"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "other_income_inclusion_61"
+      ],
+      "question": "Does petitioners' 2018 gross income include $115,325 of retirement plan distributions (a $71,147 distribution and a $44,178 deemed distribution from a defaulted plan loan)?",
+      "provisions": [
+        "26 U.S.C. §61(a)",
+        "§402(a)",
+        "§72(p)",
+        "§402(c)(1)"
+      ],
+      "holding": "Yes; both the actual and the deemed distribution are includible; later 2020 contributions to new accounts do not change 2018 inclusion",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "retirement income includible",
+        "amount": 115325
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Distributions from a 401(a) trust taxable under sec. 72 absent rollover; loan default deemed distribution under 72(p); amounts stipulated"
+    },
+    {
+      "issue_id": "I2",
+      "tags": [
+        "early_distribution_72t"
+      ],
+      "question": "Are petitioners liable for the 10% additional tax under sec. 72(t) on the 2018 early distributions?",
+      "provisions": [
+        "26 U.S.C. §72(t)(1)",
+        "§72(t)(2)(A)(i)",
+        "§72(t)(2)(B)",
+        "§4974(c)"
+      ],
+      "holding": "Yes; Mr. Ghaly under 59 1/2 and no statutory exception established; entire distribution subject to 10% additional tax",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "10% additional tax per notice",
+        "amount": 11533
+      },
+      "rule_155": false,
+      "computable": true,
+      "computable_reason": "Age under 59 1/2 and no qualifying exception found; tax is 10% of $115,325"
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered for respondent as to the deficiency and for petitioners as to the accuracy-related penalty under section 6662(a).",
+    "summary": "Deficiency of $38,213 sustained including $115,325 distributions and $11,533 sec. 72(t) tax; 6662(a) penalty conceded by respondent"
+  },
+  "notes": "Facts fully stipulated (Rule 122-like). Medical-expense exception (72(t)(2)(B)) failed for lack of proof of payment, a substantiation point, but as found the facts show no exception. Court assumed arguendo sec. 6201(d) burden of production met. Derived: 10% x $115,325 = $11,532.50, rounded $11,533."
+}

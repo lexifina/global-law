@@ -1,0 +1,92 @@
+{
+ "citation": "T.C. Summary Opinion 2019-29",
+ "taxYear": 2012,
+ "note": "Saunders. Three unrelated children (all under 10; exact ages not found, encoded 9) lived with petitioners all 2012; not shown not to be the mother's qualifying children (burden), so qualifyingChildOfAnother true. Mr. Steed (wife's father): SSI 8,796 counted by the court as gross income > 3,800 exemption; support test unclear (encoded false). Penalty: reasonable cause found, not encoded (income not found, no tax shown).",
+ "facts": {
+  "filing": "mfj",
+  "dependents": [
+   {
+    "name": "child1",
+    "relationship": "unrelated",
+    "age": 9,
+    "livedWithWholeYear": true,
+    "daysWithTaxpayer": 366,
+    "grossIncome": 0,
+    "taxpayerProvidedOverHalfSupport": true,
+    "qualifyingChildOfAnother": true
+   },
+   {
+    "name": "child2",
+    "relationship": "unrelated",
+    "age": 9,
+    "livedWithWholeYear": true,
+    "daysWithTaxpayer": 366,
+    "grossIncome": 0,
+    "taxpayerProvidedOverHalfSupport": true,
+    "qualifyingChildOfAnother": true
+   },
+   {
+    "name": "child3",
+    "relationship": "unrelated",
+    "age": 9,
+    "livedWithWholeYear": true,
+    "daysWithTaxpayer": 366,
+    "grossIncome": 0,
+    "taxpayerProvidedOverHalfSupport": true,
+    "qualifyingChildOfAnother": true
+   },
+   {
+    "name": "Steed",
+    "relationship": "parent",
+    "age": 70,
+    "youngerThanTaxpayer": false,
+    "livedWithWholeYear": true,
+    "daysWithTaxpayer": 366,
+    "grossIncome": 8796,
+    "taxpayerProvidedOverHalfSupport": false
+   }
+  ]
+ },
+ "expected": [
+  {
+   "item": "qualifyingChild:child1",
+   "flag": false
+  },
+  {
+   "item": "qualifyingChild:child2",
+   "flag": false
+  },
+  {
+   "item": "qualifyingChild:child3",
+   "flag": false
+  },
+  {
+   "item": "dependent:child1",
+   "flag": false
+  },
+  {
+   "item": "dependent:child2",
+   "flag": false
+  },
+  {
+   "item": "dependent:child3",
+   "flag": false
+  },
+  {
+   "item": "ctcChild:child1",
+   "flag": false
+  },
+  {
+   "item": "ctcChild:child2",
+   "flag": false
+  },
+  {
+   "item": "ctcChild:child3",
+   "flag": false
+  },
+  {
+   "item": "dependent:Steed",
+   "flag": false
+  }
+ ]
+}

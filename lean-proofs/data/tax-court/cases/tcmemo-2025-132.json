@@ -1,0 +1,161 @@
+{
+  "id": "tcmemo-2025-132",
+  "citation": "T.C. Memo. 2025-132",
+  "case_name": "Ignacio Montes G and Alberto Yanez A v. Commissioner",
+  "docket_numbers": [
+    "4951-23"
+  ],
+  "judge": "Jenkins",
+  "date": "2025-12-23",
+  "opinion_type": "memorandum",
+  "source": {
+    "dawson_docket_entry_id": "a17ac832-d2ee-451f-a4b5-124143f55f5c",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/4951-23",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/4951-23/a17ac832-d2ee-451f-a4b5-124143f55f5c/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": false,
+  "suitability_reason": "Only decided issue (C.M.'s residence with petitioners for more than half of 2020) turned entirely on the credibility of petitioners' testimony and lack of documentation; all other 152(c) elements conceded.",
+  "tax_years": [
+    2020
+  ],
+  "taxpayer": {
+    "filing_status_claimed": "head of household (each petitioner's separate return); later-prepared joint return dated May 5, 2022",
+    "state": "California",
+    "notes": "Notice of deficiency adjusted Montes G's amended return, adding Yanez A's income; notice states examined filing status is joint."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2020,
+        "deficiency": 10697,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 2139
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "added Yanez A's income to Montes G's amended return",
+      "disallowed credit for other dependents",
+      "disallowed earned income credit",
+      "disallowed refundable child tax credit",
+      "disallowed recovery rebate credit (qualifying children and dependents disallowed)"
+    ],
+    "contested_by_taxpayer": "Whether C.M. was petitioners' qualifying child for 2020 (residency test)",
+    "conceded": [
+      "Respondent: section 6662(a) penalty does not apply (stipulated)",
+      "Y.R. was a qualifying relative but not a qualifying child (stipulated)",
+      "E.P. not a qualifying child or qualifying relative (stipulated)",
+      "Petitioners: A.A.R. not a qualifying child or qualifying relative",
+      "Respondent: C.M. satisfies all qualifying child requirements other than same principal place of abode for more than one-half of 2020"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Montes G's original 2020 return claimed head of household and listed C.C. (C.M.) as nephew for child tax credit",
+      "values": {
+        "filing_status": "head of household",
+        "relationship": "nephew"
+      },
+      "snippet": "it lists C.C. (subsequently referred to as C.M.) as a nephew qualifying for a child tax credit",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Notice of deficiency issued November 18, 2022",
+      "values": {
+        "notice_date": "2022-11-18"
+      },
+      "snippet": "On November 18, 2022, respondent issued a Notice of Deficiency to petitioners",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Respondent conceded every qualifying-child requirement for C.M. except the more-than-half-year shared abode test",
+      "values": {
+        "conceded_tests": [
+          "relationship",
+          "age",
+          "support",
+          "joint_return"
+        ],
+        "disputed_test": "residency_152c1B"
+      },
+      "snippet": "C.M. satisfied all the requirements to be a qualifying child other than the requirement that he have the same principal place of abode",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Montes G testified C.M. lived with petitioners from February 2020 through December 24, 2020; testimony found not credible",
+      "values": {
+        "claimed_residence_start": "2020-02",
+        "claimed_residence_end": "2020-12-24",
+        "testimony_credited": false
+      },
+      "snippet": "He further testified that C.M. lived with petitioners from February 2020 through December 24",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Court found testimony about C.M.'s residence not credible; no documentation",
+      "values": {
+        "testimony_credited": false,
+        "documentation": false
+      },
+      "snippet": "this Court finds petitioners’ testimony regarding C.M.’s residence with them not credible",
+      "locator": "p. 5"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "qualifying_child_152c",
+        "ctc_24",
+        "eitc_32",
+        "other"
+      ],
+      "question": "Was C.M. petitioners' qualifying child under section 152(c) for 2020 (residency test), so as to support child tax credit, EIC and section 6428 recovery rebate credit (other: recovery rebate credit §6428)?",
+      "provisions": [
+        "26 U.S.C. §152(c)(1)(B)",
+        "§24(a), (c)(1)",
+        "§32(c)(1)(A)(i), (c)(3)(A)",
+        "§6428(a)"
+      ],
+      "holding": "Not a qualifying child: petitioners did not prove C.M. shared their abode for more than half of 2020; no CTC, EIC or recovery rebate credit with respect to C.M.; credits computed only with Y.R. as qualifying relative",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "credits limited to those determined taking into account Y.R.'s status as qualifying relative",
+        "amount": null
+      },
+      "rule_155": true,
+      "computable": false,
+      "computable_reason": "Residency finding rests on credibility of testimony and absence of documentation."
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "C.M. not a qualifying child; credits allowed only as computed with Y.R. as qualifying relative; no 6662(a) penalty (conceded)."
+  },
+  "notes": "Facts from First Stipulation of Facts, Stipulation of Settled Issues and trial testimony. Petitioners bore burden; 7491(a) not satisfied. Recovery rebate credit: $1,200 ($2,400 joint) plus $500 per qualifying child under §24(c). Footnote 3: notice inconsistent on filing status (EIC disallowed citing MFS while exam status joint)."
+}

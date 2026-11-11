@@ -1,0 +1,24 @@
+{
+  "citation": "T.C. Memo. 2022-77",
+  "taxYear": 2016,
+  "note": "Joint return (Alejandro and Elena). Family support of $4,500/month under a 2012-07-25 stipulated judgment, terminating when both minor children emancipate (or reduced to $2,500 on payee's remarriage until each child emancipates): the full required amount is subject to a child-related contingency (§71(c)(2)). Paid 12 x $5,824 = $69,888; the record does not show why payments exceeded $4,500/month. Deducted $69,880 as filed. Penalty conceded by respondent. Income and other return items not stated.",
+  "facts": {
+    "filing": "mfj",
+    "alimonyPaid": [
+      { "executed": "2012-07-25", "paid": 54000, "childSupport": 54000 },
+      { "executed": "2012-07-25", "paid": 15888, "underInstrument": false, "childSupport": 0 }
+    ]
+  },
+  "asFiled": {
+    "filing": "mfj",
+    "adjustments": 69880
+  },
+  "expected": [],
+  "inferred": [
+    "childSupport = $4,500 x 12 = $54,000: the whole family-support amount ends on a child contingency (emancipation of both children), read as fixed child support under §71(c)(2)",
+    "the $15,888 paid above the $4,500/month required by the instrument encoded as not shown to be paid under the instrument (record does not reveal why)"
+  ],
+  "unencodable": [
+    "petitioners' income, deductions and other return items for 2016 are not stated, so the computed tax and deficiency reflect only the alimony item on zero other income"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "id": "tc-149-11",
+  "slug": "sower",
+  "caption": "Estate of Minnie Lynn Sower, Deceased, Frank W. Sower, Jr. and John R. Sower, Co-Executors v. Commissioner",
+  "citation": "149 T.C. 279 (2017) (149 T.C. No. 11)",
+  "date": "2017-09-11",
+  "docket_numbers": [
+    "32361-15"
+  ],
+  "judge": "Buch",
+  "tax_type": "estate (DSUE examination)",
+  "date_of_death": "2013-08-07",
+  "predeceased_spouse_date_of_death": "2012-02-23",
+  "source": {
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/32361-15",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/32361-15/d13da97f-29ca-4cc6-8273-e1e468a68cf6/public-document-download-url",
+    "dawson_docket_entry_id": "d13da97f-29ca-4cc6-8273-e1e468a68cf6",
+    "document_title": "T.C. OPINION, JUDGE BUCH 149 T.C. NO. 11 (DECISION WILL BE ENTERED FOR RESPONDENT)",
+    "raw_text": "raw/sower.txt",
+    "raw_pdf": "raw/sower.pdf",
+    "retrieved": "2026-11-11"
+  },
+  "secondary": true,
+  "found_facts": [
+    {
+      "fact": "Lifetime taxable gifts (2003-2005)",
+      "values": {
+        "frank": 997920,
+        "minnie": 997921
+      },
+      "snippet": "During their lifetimes, Frank and Minnie gave $997,920 and $997,921 in taxable gifts, respectively. All of the gifts were given between 2003 and 2005.",
+      "locator": "p. 4"
+    },
+    {
+      "fact": "Frank's return",
+      "values": {
+        "taxable_gifts_reported": 0,
+        "worksheet_taxable_gifts": 945420,
+        "dsue_reported": 1256033
+      },
+      "snippet": "reported zero in taxable gifts but included $945,420 in taxable gifts on the worksheet ... Frank's estate reported a DSUE of $1,256,033 and elected portability",
+      "locator": "pp. 4-5"
+    },
+    {
+      "fact": "Minnie's return and payments",
+      "values": {
+        "tax_reported_paid": 369036,
+        "additional_tax_and_interest": 386424
+      },
+      "snippet": "reported and paid an overall estate tax liability of $369,036. Three months later the estate paid an additional $386,424 in tax and interest",
+      "locator": "p. 5"
+    },
+    {
+      "fact": "Adjustments",
+      "values": {
+        "dsue_as_adjusted": 282690,
+        "funeral_cost_reduction": 850,
+        "deficiency": 788165
+      },
+      "snippet": "the Commissioner reduced the DSUE available to Minnie's estate from $1,256,033 to $282,690. The Commissioner also adjusted Minnie's taxable estate by the amount of her lifetime taxable gifts. Finally, the Commissioner reduced Minnie's taxable estate by $850 to account for funeral costs. Together these adjustments increased the estate tax liability for Minnie's estate by $788,165.",
+      "locator": "p. 6"
+    },
+    {
+      "fact": "2013 BEA",
+      "values": {
+        "bea_2013": 5250000
+      },
+      "snippet": "At the time of Minnie's death the basic exclusion was $5,250,000.",
+      "locator": "p. 9"
+    }
+  ],
+  "issue": "Whether the IRS may examine the predeceased spouse's return (after a closing letter and after its limitations period) to recompute the DSUE available to the surviving spouse's estate.",
+  "holding": "Yes (sec. 2010(c)(5)(B)); closing letter not a sec. 7121 agreement, no estoppel, not a second examination, pre-2010 gifts count. Decision for respondent ($788,165).",
+  "stated_tax_figures": {
+    "deficiency": 788165
+  },
+  "recomputation": {
+    "steps": [
+      "Marginal check: 40% x [(1,256,033 - 282,690) + 997,921 - 850] = 40% x 1,970,414 = 788,165.60 -> $788,165 == deficiency (whole change in the 40% bracket)",
+      "DSUE reduction = 973,343"
+    ],
+    "reconciles": "deficiency exact as 40% of (DSUE reduction + Minnie's ATG - funeral costs)",
+    "non_reconciling": [
+      "DSUE reduction 973,343 != Frank's taxable gifts 997,920 or worksheet figure 945,420; Frank's taxable estate and the IRS's DSUE computation are not in the opinion, so DSUE = 282,690 cannot be derived from stated facts (2012 BEA 5,120,000 is not stated in the opinion)."
+    ]
+  },
+  "judgment_vs_computation": {
+    "judgment": [
+      "procedural/legal issues only"
+    ],
+    "computation": [
+      "deficiency = 40% x total base change"
+    ]
+  },
+  "caveats": [
+    "Mainly a procedural holding; listed as secondary."
+  ]
+}

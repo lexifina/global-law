@@ -1,0 +1,22 @@
+{
+ "citation": "T.C. Summary Opinion 2021-7",
+ "taxYear": 2016,
+ "note": "MFJ 2016. Issues: (1) $23,169 Form 2106 unreimbursed employee expenses (Schedule A, before 2% floor) - findings: records insufficient to substantiate, no showing employer would not have reimbursed, $7,200 vehicle reimbursement received; encoded as not deductible. (2) AOTC on $2,250 UCSD Extension tuition - finding: less than half-time student, so halfTime=false (the model then falls back to the LLC automatically; whether the court reached the LLC, and whether petitioners themselves paid the tuition via the business AmEx card, is not stated). Wages / AGI / income amounts are NOT stated in the redacted text, so wages left at 0 and computed figures are not meaningful for the deficiency. Accuracy penalty conceded by respondent (not encoded). Charitable $1,200 conceded.",
+ "facts": {
+  "filing": "mfj",
+  "itemizedDeductions": 10779,
+  "students": [
+   {"name": "Abrahan Pichardo", "qualifiedExpenses": 2250, "halfTime": false}
+  ]
+ },
+ "asFiled": {
+  "filing": "mfj",
+  "itemizedDeductions": 33948,
+  "students": [
+   {"name": "Abrahan Pichardo", "qualifiedExpenses": 2250, "halfTime": true}
+  ]
+ },
+ "expected": [],
+ "inferred": ["corrected itemized deductions taken as $33,948 claimed less $23,169 Form 2106 expenses = $10,779 (below the $12,600 standard deduction, which respondent allowed); unclear whether the $33,948 is before or after the 2% floor", "asFiled student treated as half-time (as claimed on Form 8863)"],
+ "unencodable": ["wages/AGI of both spouses not stated in the redacted findings", "§67 2% floor on unreimbursed employee expenses not modelled directly (itemized deductions given as an amount)", "whether tuition was paid by petitioners (business card, possible reimbursement) - substantiation of payment not expressible; LLC fallback computed automatically"]
+}

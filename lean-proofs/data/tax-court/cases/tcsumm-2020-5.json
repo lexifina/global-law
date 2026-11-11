@@ -1,0 +1,204 @@
+{
+  "id": "tcsumm-2020-5",
+  "citation": "T.C. Summary Opinion 2020-5",
+  "case_name": "Tracey Rene Merrell and Christopher L. Merrell v. Commissioner",
+  "docket_numbers": [
+    "14862-18S"
+  ],
+  "judge": "Guy",
+  "date": "2020-01-16",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "f1fbe486-f5fc-44aa-ab6f-579a80c88b5f",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/14862-18",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/14862-18/f1fbe486-f5fc-44aa-ab6f-579a80c88b5f/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2015
+  ],
+  "taxpayer": {
+    "filing_status_claimed": "married filing jointly",
+    "state": "California",
+    "notes": "Husband and wife, pro se. Notice of deficiency dated May 7, 2018."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2015,
+        "deficiency": 7396,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 1479
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "included Social Security benefits of $22,790 (85% of $26,812)",
+      "10% additional tax under 72(t) on $17,410 IRA distribution",
+      "unreported interest $43",
+      "disallowed $5,000 IRA deduction",
+      "disallowed bankruptcy legal fees",
+      "unreported wages $1,109"
+    ],
+    "contested_by_taxpayer": "Inclusion of Social Security benefits (seeking 86(e) lump-sum treatment) and 72(t) additional tax (wife disabled; hardship)",
+    "conceded": [
+      "Petitioners: failed to report interest income of $43",
+      "Petitioners: not entitled to deduct $5,000 IRA contribution",
+      "Petitioners: not entitled to deduct legal fees related to a bankruptcy proceeding",
+      "Respondent: no unreported wage income of $1,109",
+      "Respondent: no 6662(a) accuracy-related penalty"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Mrs. Merrell received $26,812 Social Security benefits in 2015, including $9,772 otherwise payable in 2014",
+      "values": {
+        "ss_benefits_received": 26812,
+        "attributable_to_2014": 9772
+      },
+      "snippet": "Mrs. Merrell received Social Security benefits totaling $26,812, including benefits of $9,772 that were otherwise payable to her in 2014",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "Mr. Merrell received $17,410 IRA distribution; under 59 1/2 and not disabled",
+      "values": {
+        "ira_distribution": 17410,
+        "recipient_age_59_5_attained": false,
+        "recipient_disabled": false
+      },
+      "snippet": "Mr. Merrell received a distribution of $17,410 from an IRA. Mr. Merrell had not attained the age of 59½, nor was he disabled",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1",
+        "I2"
+      ],
+      "fact": "Joint 2015 return reported total income $67,658 = wages $50,248 + IRA distribution $17,410; no SS benefits reported; no 86(e) election",
+      "values": {
+        "total_income_reported": 67658,
+        "wages": 50248,
+        "ira_distribution": 17410,
+        "ss_reported": 0,
+        "sec86e_election_on_return": false
+      },
+      "snippet": "reporting total income of $67,658, comprising wages of $50,248 and the aforementioned IRA distribution of $17,410",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Respondent included $22,790 taxable SS (85% of $26,812)",
+      "values": {
+        "taxable_ss_determined": 22790,
+        "pct": 0.85
+      },
+      "snippet": "Social Security benefits of $22,790 (representing 85% of the Social Security benefits of $26,812 paid to Mrs. Merrell)",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Post-NOD handwritten \"1040X 2015\" proposed $14,484 taxable SS; not processed",
+      "values": {
+        "proposed_taxable_ss_2015": 14484
+      },
+      "snippet": "including the addition of \"$14,484 for taxable social security income.\" The IRS did not process",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F6",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "Amended 2014 return reported taxable SS $8,306 (85% of $9,772) and tax $1,284; not processed",
+      "values": {
+        "taxable_ss_2014_amended": 8306,
+        "tax_2014_amended": 1284
+      },
+      "snippet": "reporting taxable Social Security benefits of $8,306 (representing 85% of the Social Security benefits of $9,772",
+      "locator": "p. 4"
+    },
+    {
+      "fact_id": "F7",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "Parties agree Mr. Merrell (IRA owner) not disabled; petitioners argue Mrs. Merrell was disabled",
+      "values": {
+        "ira_owner": "Mr. Merrell",
+        "owner_disabled": false
+      },
+      "snippet": "the parties agree that he was not disabled during the year in issue",
+      "locator": "p. 7"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "social_security_86"
+      ],
+      "question": "Must petitioners include $22,790 of Social Security benefits in 2015 income, and would a §86(e) lump-sum election reduce their liability?",
+      "provisions": [
+        "26 U.S.C. §61(a)",
+        "§86(a)-(d)",
+        "§86(e)"
+      ],
+      "holding": "Respondent sustained; no 86(e) election on original return and petitioners offered no 2014 return or worksheets showing an election would alter liability",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "taxable Social Security benefits",
+        "amount": 22790
+      },
+      "rule_155": true,
+      "computable": false,
+      "computable_reason": "Decided on failure of proof (no 2014 return/worksheets) regarding 86(e) effect; 85% inclusion itself is mechanical but needed inputs (2014 income) not in record"
+    },
+    {
+      "issue_id": "I2",
+      "tags": [
+        "early_distribution_72t"
+      ],
+      "question": "Are petitioners liable for the 10% §72(t) additional tax on Mr. Merrell's $17,410 IRA distribution where Mrs. Merrell (not the IRA owner) was disabled?",
+      "provisions": [
+        "26 U.S.C. §72(t)(1)",
+        "§72(t)(2)(A)(iii)",
+        "§72(t)(5)",
+        "§72(m)(7)"
+      ],
+      "holding": "Liable; disability exception requires the IRA owner (employee) to be disabled; no hardship exception",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "distribution subject to 10% additional tax",
+        "amount": 17410
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Owner under 59 1/2 and not disabled; spouse disability irrelevant under 72(t)(5); 10% of $17,410"
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "SS inclusion and 72(t) additional tax sustained; respondent conceded penalty and $1,109 wages; petitioners conceded interest, IRA deduction, legal fees"
+  },
+  "notes": "Some facts stipulated. Footnote 4: petitioners acknowledge $26,812 received. Note the opinion says the $9,772 was paid in 2015 (p. 4) though otherwise payable in 2014. Derived: 85% x 26,812 = 22,790.2; 10% x 17,410 = 1,741 (not stated by court)."
+}

@@ -1,0 +1,169 @@
+{
+  "id": "tcsumm-2022-23",
+  "citation": "T.C. Summary Opinion 2022-23",
+  "case_name": "Elijah Servance and Corliss Servance v. Commissioner",
+  "docket_numbers": [
+    "1587-18S"
+  ],
+  "judge": "Copeland",
+  "date": "2022-11-21",
+  "opinion_type": "summary",
+  "source": {
+    "dawson_docket_entry_id": "64b1a913-3015-47cf-bcdc-c70fdd2f8213",
+    "dawson_case_url": "https://dawson.ustaxcourt.gov/case-detail/1587-18",
+    "dawson_document_api": "https://public-api-green.dawson.ustaxcourt.gov/public-api/1587-18/64b1a913-3015-47cf-bcdc-c70fdd2f8213/public-document-download-url",
+    "retrieved": "2026-11-11"
+  },
+  "suitable": true,
+  "tax_years": [
+    2015
+  ],
+  "taxpayer": {
+    "filing_status_claimed": "married filing jointly",
+    "state": "Connecticut",
+    "notes": "Mr. Servance worked 33 years for Metro-North Railroad, retired 2012 after colon cancer diagnosis. Notice of deficiency dated January 2, 2018. Pro se."
+  },
+  "notice_of_deficiency": {
+    "per_year": [
+      {
+        "year": 2015,
+        "deficiency": 7344,
+        "penalties": [
+          {
+            "section": "6662(a)",
+            "amount": 1469
+          }
+        ],
+        "additions": []
+      }
+    ],
+    "adjustments": [
+      "$24,334 taxable tier 1 railroad retirement benefits (85% of $28,628)",
+      "$4,406 additional taxable wages from Hartford (Form W-2)",
+      "$61 unreported taxable dividends",
+      "$1,469 6662(a)/(b)(2) penalty"
+    ],
+    "contested_by_taxpayer": "Inclusion of tier 1 RRB benefits (claimed excludable under §104(a)(1)) and Hartford disability payments",
+    "conceded": [
+      "Petitioners conceded liability for tax on the $61 dividends",
+      "Respondent conceded the accuracy-related penalty"
+    ]
+  },
+  "findings_of_fact": [
+    {
+      "fact_id": "F1",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "RRB paid Mr. Servance $28,628 tier 1 railroad retirement benefits in 2015 (stipulated), reported on SSA-1099; not reported on return",
+      "values": {
+        "tier1_rrb": 28628,
+        "reported": false
+      },
+      "snippet": "During 2015 the RRB paid Mr. Servance $28,628 in tier 1 railroad retirement benefits",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F2",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "RRB disability application based on cancer granted December 19, 2012",
+      "values": {
+        "rrb_grant_date": "2012-12-19"
+      },
+      "snippet": "His application was granted on December 19, 2012.",
+      "locator": "p. 2"
+    },
+    {
+      "fact_id": "F3",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "NOD included $24,334 = 85% x $28,628",
+      "values": {
+        "taxable_portion": 24334,
+        "pct": 0.85
+      },
+      "snippet": "($28,628 × 85% = $24,334)",
+      "locator": "p. 3"
+    },
+    {
+      "fact_id": "F4",
+      "issue_refs": [
+        "I1"
+      ],
+      "fact": "No evidence cancer was caused by work for Metro-North",
+      "values": {
+        "occupational_injury": false
+      },
+      "snippet": "the record contains no evidence that Mr. Servance’s cancer was caused by his work for Metro-North",
+      "locator": "p. 5"
+    },
+    {
+      "fact_id": "F5",
+      "issue_refs": [
+        "I2"
+      ],
+      "fact": "No evidence of receipt of Hartford payments produced by respondent; Mr. Servance repaid Hartford Life Debt at $1,000/month beginning February 3, 2015",
+      "values": {
+        "hartford_amount_nod": 4406,
+        "repayment_monthly": 1000,
+        "repayment_start": "2015-02-03"
+      },
+      "snippet": "repaying the “Hartford Life Debt” at $1,000 per month beginning on February 3, 2015.",
+      "locator": "p. 6"
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "I1",
+      "tags": [
+        "social_security_86",
+        "other"
+      ],
+      "question": "Must petitioners include tier 1 railroad retirement benefits of $28,628 (to the extent of §86) in 2015 gross income, or are they excludable under §104(a)(1) as workmen's compensation?",
+      "provisions": [
+        "26 U.S.C. §86(a)",
+        "§86(d)(1)(B)",
+        "§104(a)(1)",
+        "Treas. Reg. §1.104-1(b)",
+        "45 U.S.C. §231a"
+      ],
+      "holding": "Includible to the extent provided by §86 (85%); 45 U.S.C. §231a is not in the nature of a workmen's compensation act and no evidence of occupational illness",
+      "prevailing_party": "respondent",
+      "amount_determined": {
+        "description": "taxable tier 1 benefits per NOD (85%)",
+        "amount": 24334
+      },
+      "rule_155": true,
+      "computable": true,
+      "computable_reason": "Legal classification: tier 1 RRB are SS benefits under §86(d)(1)(B); §104(a)(1) inapplicable because statute not limited to on-the-job injury; 85% computation is §86 formula (inputs for base amount not stated)"
+    },
+    {
+      "issue_id": "I2",
+      "tags": [
+        "other_income_inclusion_61"
+      ],
+      "question": "Must petitioners include $4,406 of Hartford long-term disability payments in 2015 gross income?",
+      "provisions": [
+        "26 U.S.C. §61(a)",
+        "§6201(d)"
+      ],
+      "holding": "No; respondent failed threshold evidentiary burden for unreported income and petitioners credibly showed repayment (rescission doctrine)",
+      "prevailing_party": "petitioner",
+      "amount_determined": {
+        "description": "Hartford payments excluded",
+        "amount": 4406
+      },
+      "rule_155": true,
+      "computable": false,
+      "computable_reason": "Turns on burden of proof, evidence, and credibility of repayment testimony"
+    }
+  ],
+  "decision": {
+    "text": "Decision will be entered under Rule 155.",
+    "summary": "Tier 1 RRB included (85%); Hartford $4,406 not included; dividends conceded by petitioners; penalty conceded by respondent"
+  },
+  "notes": "Some facts stipulated; receipt of $28,628 stipulated. Court did not verify §86 base-amount computation; it sustained inclusion \"to the extent provided by section 86 (i.e., 85% of that amount)\"."
+}

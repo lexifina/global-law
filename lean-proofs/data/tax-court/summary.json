@@ -1,0 +1,2714 @@
+{
+ "cases": 45,
+ "issues": 182,
+ "totals": {
+  "match": 95,
+  "mismatch": 15,
+  "not-encodable": 41,
+  "judgment": 31
+ },
+ "computable_agreement": "95/110",
+ "mismatch_causes": {
+  "court-or-irs-arithmetic": 4,
+  "facts-not-stated": 10,
+  "model-gap": 1
+ },
+ "by_tag": {
+  "Taxable Social Security (§86)": {
+   "match": 7,
+   "mismatch": 3,
+   "not-encodable": 5
+  },
+  "Gross income (§61)": {
+   "match": 9,
+   "not-encodable": 6,
+   "judgment": 1
+  },
+  "Accuracy penalty (§6662)": {
+   "not-encodable": 8,
+   "judgment": 5,
+   "match": 6,
+   "mismatch": 4
+  },
+  "Deficiency (§6211)": {
+   "not-encodable": 6,
+   "mismatch": 4,
+   "match": 8,
+   "judgment": 3
+  },
+  "IRA rollover (§408(d)(3))": {
+   "match": 4
+  },
+  "Early-distribution tax (§72(t))": {
+   "judgment": 1,
+   "match": 13
+  },
+  "Other provisions": {
+   "not-encodable": 12,
+   "judgment": 10,
+   "match": 6
+  },
+  "Alimony (§§71, 215)": {
+   "match": 3,
+   "not-encodable": 1
+  },
+  "Earned income credit (§32)": {
+   "match": 6,
+   "not-encodable": 1,
+   "judgment": 1
+  },
+  "Head of household (§2(b))": {
+   "match": 7,
+   "not-encodable": 1
+  },
+  "Late filing (§6651(a)(1))": {
+   "match": 2,
+   "judgment": 3,
+   "mismatch": 1
+  },
+  "Late payment (§6651(a)(2))": {
+   "match": 1,
+   "judgment": 2
+  },
+  "Estimated-tax addition (§6654)": {
+   "match": 1,
+   "mismatch": 1
+  },
+  "IRA distributions (§408(d))": {
+   "match": 1,
+   "not-encodable": 1
+  },
+  "Qualifying child / dependency (§§151, 152)": {
+   "match": 8,
+   "judgment": 3
+  },
+  "Child tax credit (§24)": {
+   "match": 6
+  },
+  "Education credits (§25A)": {
+   "match": 1,
+   "judgment": 1
+  },
+  "Qualifying relative (§152(d))": {
+   "judgment": 1,
+   "match": 2
+  },
+  "Gambling losses (§165(d))": {
+   "match": 2
+  },
+  "IRA deduction (§219)": {
+   "match": 2
+  },
+  "Self-employment tax (§1401)": {
+   "mismatch": 2
+  }
+ },
+ "detail": [
+  {
+   "id": "tcmemo-2019-41",
+   "citation": "T.C. Memo. 2019-41 (Monroe v. Commissioner)",
+   "name": "Charles W. Monroe and Rebecca A. Monroe v. Commissioner",
+   "date": "2019-04-24",
+   "type": "memorandum",
+   "years": [
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "Premium tax credit eligibility: MAGI includes all Social Security received despite §86(e) election; excess APTC",
+     "provision": "§36B(c)(1)(A), (d)(2)(B), (d)(3); §36B(f)(2); §86(e)",
+     "court": "not eligible; MAGI 70,065.80 > 400% FPL; APTC 8,472 excess (repayable in full)",
+     "lean": "householdIncome 75,509; povertyLine 15,730; fplPercent 401 (over 400%); premiumTaxCredit 0; excessAdvancePtc 8,472",
+     "verdict": "match",
+     "diagnosis": "Eligibility, credit 0 and excess APTC 8,472 match (facts.ptc: family 2, California, APTC 8,472; no cap at >=400%). householdIncome item mismatches (70,066 vs 75,509): (c)/stipulation basis, not a framework error. The stipulated MAGI (fn. 6) uses the as-filed wages 34,176 and unemployment 237; Lean uses corrected AGI with the conceded 5,207 wages and 237 unemployment: 70,065.80 + 5,207 + 237 = 75,509.80 -> 75,509 (SS encoded as 35,652). Both exceed 4 x 15,730 = 62,920, so the outcome is the same. Lean's MAGI adds all nontaxable SS (35,652 - 7,122), ignoring the §86(e) election, as Johnson holds.",
+     "snippet": "MAGI as defined under section 36B includes all Social Security benefits received during the taxable year, irrespective of a section 86(e) election.",
+     "cause": null
+    },
+    {
+     "issue": "§86(e) lump-sum election: taxable Social Security 4,084 on the return (AGI 38,497, stipulated)",
+     "provision": "§86(e)",
+     "court": "38497 (stipulated AGI with election; taxable SS 4,084)",
+     "lean": "38496 (taxable SS 4,083); lumpSumElection true",
+     "verdict": "mismatch",
+     "diagnosis": "(c) rounding. Rerun 2c5b6354943 with ssLumpSums (2014 348, 2013 10,247, 2012 10,943, 2011 2,607). 2015 part 35,651.80 - 24,145 = 11,506.80; 0.5 x (34,413 + 5,753.40 - 32,000) = 4,083.20 -> Lean 4,083. The stipulated 4,084 follows from whole-dollar worksheet lines: 11,507/2 = 5,753.50 -> 5,754; (34,413 + 5,754 - 32,000)/2 = 4,083.50 -> 4,084. Prior-year modified incomes are not in the opinion; zero prior-year increases is an inference from the 4,084 itself. Election flag matches (true).",
+     "snippet": "Petitioners timely filed a joint Federal income tax return for 2015 on which they made a section 86(e) election.",
+     "cause": "court-or-irs-arithmetic"
+    },
+    {
+     "issue": "Unreported wages 5,207 and unemployment 237 (conceded)",
+     "provision": "§61(a)",
+     "court": "includible (stipulated)",
+     "lean": "wages 39,383, unemployment 474 accepted; corrected AGI 46,979 (taxable SS 7,122 under the §86(e) election)",
+     "verdict": "match",
+     "diagnosis": "Concessions encoded as facts and carried into corrected income; no court amount to compare, so this is a fact-level check only.",
+     "snippet": "failed to report wages of $5,207; (4) failed to report unemployment benefits of $237",
+     "cause": null
+    },
+    {
+     "issue": "Accuracy-related penalty on the unreported items only (conceded)",
+     "provision": "§6662(a)",
+     "court": "liable on unreported wages/unemployment only; amount to Rule 155",
+     "lean": "n/a",
+     "verdict": "not-encodable",
+     "diagnosis": "Partial concession with no stated amount; penaltyBase unknown until Rule 155.",
+     "snippet": "are liable for the section 6662(a) penalty that is attributable to the unreported wages and unemployment benefits",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency",
+     "provision": "§6211; §36B(f)(2)(A)",
+     "court": "Rule 155 (notice: 9,645)",
+     "lean": 9718,
+     "verdict": "not-encodable",
+     "diagnosis": "Lean 9,718 = income-tax deficiency 1,246 (corrected tax 3,034 with the §86(e) election vs as-filed 1,788) + excess APTC 8,472. Court enters decision under Rule 155, so no figure to compare. Notice 9,645 = 8,472 + 1,173; the 73 difference reflects concessions not encoded (additional SALT 87: itemized total unknown, standard deduction used) and the notice predating the updated report giving effect to the election (fn. 5).",
+     "snippet": "Decision will be entered under Rule 155.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": 9718
+   },
+   "notes": "Rerun with facts.ptc (commits 402a5fdbb47/f918d6f6fc9): §36B issue now encoded; credit 0 and excess APTC 8,472 match; householdIncome differs only because the stipulated MAGI uses as-filed income (diff = conceded 5,207 + 237). asFiled has no ptc (no Form 8962 filed). §86(e) asFiled.agi still off by 1 (worksheet rounding, unchanged). Lean deficiency 9,718 includes the excess APTC; court figure is Rule 155."
+  },
+  {
+   "id": "tcmemo-2019-83",
+   "citation": "T.C. Memo. 2019-83",
+   "name": "Nancy Burack v. Commissioner",
+   "date": "2019-07-08",
+   "type": "memorandum",
+   "years": [
+    2014
+   ],
+   "issues": [
+    {
+     "issue": "Was the $524,981.89 IRA distribution rolled over within 60 days?",
+     "provision": "sec. 408(d)(3)(A), (I); Rev. Proc. 2003-16",
+     "court": "yes (bookkeeping error; alt. automatic hardship waiver)",
+     "lean": "rolloverIncludible 0 (days 58); alt. ground 0 (days 62 + waiverGranted)",
+     "verdict": "match",
+     "diagnosis": "Rerun 2c5b6354943 with rollovers: distribution 524,982 rolled over in full. Primary holding encoded as days 58 (Wood bookkeeping error: check received by Capital Guardian on day 58) -> includible 0; alternative ground days 62 + waiverGranted true (Rev. Proc. 2003-16 automatic waiver) -> 0. Whether the late booking is a bookkeeping error and whether the automatic waiver applies are findings (judgment inputs); the exclusion itself is now computed. Notice check (day 62, no waiver): Lean 524,982 vs notice 524,980, the 2-dollar gap the court itself flags (fn. 5).",
+     "snippet": "we find that the late recording is due to a bookkeeping error.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Rerun 2c5b6354943: 3 variants; holding and alternative ground match (rolloverIncludible 0); notice-position variant differs by 2 (524,982 vs 524,980, fn. 5: record unclear). Rule 155; HSA items conceded; penalty conceded. No other 2014 income in the opinion, so no deficiency is computed."
+  },
+  {
+   "id": "tcmemo-2020-101",
+   "citation": "T.C. Memo. 2020-101 (Seril v. Commissioner)",
+   "name": "Tamecca Seril, a.k.a. Tamecca Tillard v. Commissioner",
+   "date": "2020-07-08",
+   "type": "memorandum",
+   "years": [
+    2016
+   ],
+   "issues": [
+    {
+     "issue": "IRA distributions 54,500 fully taxable (no 60-day rollover waiver for 15,000)",
+     "provision": "§408(d)(1), (d)(3)(A), (d)(3)(I)",
+     "court": "taxable on full 54,500",
+     "lean": "rolloverIncludible 15,000 (days 1,372, no waiver) -> 39,500 + 15,000 = 54,500 taxable",
+     "verdict": "match",
+     "diagnosis": "Rerun 2c5b6354943: 15,000 redeposited 2020-04-27, 1,372 days after the 2016-07-25 distribution; waiverGranted false (the court's refusal to waive under sec. 408(d)(3)(I) is an equity weighing, encoded as a finding) -> rolloverIncludible 15,000, so the full 54,500 is taxable. Computation matches; the decisive waiver step remains a judgment.",
+     "snippet": "declining to waive the 60-day requirement is not against equity or good conscience, and petitioner is therefore taxable on the full $54,500",
+     "cause": null
+    },
+    {
+     "issue": "Higher-education exception: 3,993 of IRA proceeds used for qualified expenses",
+     "provision": "§72(t)(2)(E), (7)",
+     "court": "3,993 qualified (substantiation finding)",
+     "lean": "higherEducationExpenses 3,993",
+     "verdict": "judgment",
+     "diagnosis": "Amount is a substantiation finding (9,809 - 5,816 = 3,993); encoded as fact.",
+     "snippet": "This leaves $3,993 (viz., $9,809 - $5,816) as the amount that petitioner paid Morehouse using proceeds of her IRA withdrawals.",
+     "cause": null
+    },
+    {
+     "issue": "§72(t) additional tax",
+     "provision": "§72(t)(1)",
+     "court": "5,051",
+     "lean": "5,051",
+     "verdict": "match",
+     "diagnosis": "10% x (54,500 - 3,993 = 50,507) = 5,050.7 -> 5,051. As-filed Form 5329 tax also reproduced: 10% x 24,664 = 2,466.",
+     "snippet": "She is thus liable for additional tax of $5,051 (10% × $50,507) under section 72(t).",
+     "cause": null
+    },
+    {
+     "issue": "Accuracy-related penalty: reasonable cause",
+     "provision": "§6662(a), (b)(2); §6664(c)(1)",
+     "court": "not liable",
+     "lean": "penalty 0; applies false (understatement 5,487, substantial true)",
+     "verdict": "judgment",
+     "diagnosis": "Computation gives 0 only because the court's reasonable-cause finding is an input; the decisive step is the court's weighing of credibility and circumstances.",
+     "snippet": "we find that petitioner has demonstrated reasonable cause for her underpayment.",
+     "cause": null
+    },
+    {
+     "issue": "§6751(b) supervisory approval for AUR penalty",
+     "provision": "§6751(b)(2)(B)",
+     "court": "not decided",
+     "lean": "n/a",
+     "verdict": "not-encodable",
+     "diagnosis": "Court expressly did not reach it.",
+     "snippet": "we need not decide whether respondent has met his burden of production.",
+     "cause": null
+    },
+    {
+     "issue": "$747 529 plan payment",
+     "provision": "§529(c)",
+     "court": "conceded by respondent",
+     "lean": "omitted",
+     "verdict": "not-encodable",
+     "diagnosis": "Concession; nothing to compute.",
+     "snippet": "Respondent has conceded that issue",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": 5487
+   },
+   "notes": "Rerun 2c5b6354943: exit 0; 4/4 expected items match (rolloverIncludible 15,000 added). Deficiency left to Rule 155 (notice 9,191 included the conceded $747 item); Lean 5,487 assumes single status (not stated in opinion), so not comparable. Form 5329 amount: 24,664 in findings vs 24,660 in opinion; encoded 24,664 (reproduces the reported 2,466)."
+  },
+  {
+   "id": "tcmemo-2022-77",
+   "citation": "Rojas v. Commissioner, T.C. Memo. 2022-77",
+   "name": "Alejandro J. Rojas and Elena G. Rojas v. Commissioner",
+   "date": "2022-07-18",
+   "type": "memorandum",
+   "years": [
+    2016
+   ],
+   "issues": [
+    {
+     "issue": "Whether $69,880 of 'family support' paid to a former spouse is deductible alimony under Sec. 215",
+     "provision": "IRC 215(a)-(b); 71(b)(1), 71(c)(1), 71(c)(2)(A); Temp. Treas. Reg. 1.71-1T(c) Q&A-17",
+     "court": "Not deductible: payments end 'until both minor children emancipate', a child-related contingency, so Sec. 71(c)(2)(A) treats them as child support; a co-existing remarriage contingency does not help; state-court label and equity irrelevant.",
+     "lean": "facts.alimonyPaid [{executed 2012-07-25, paid 69,888, childSupport 69,888}] -> alimonyDeduction 0 (expected 0); asFiled adjustments 69,880.",
+     "verdict": "match",
+     "diagnosis": "Sec. 71(c)(2)(A) applied: the whole payment ends on the children's emancipation, so all of it is child support (childSupport = paid) and the Sec. 215 deduction is 0. The decisive step (a mixed child/remarriage contingency still triggers (c)(2)(A); state-court label irrelevant) is legal characterisation, encoded as the childSupport fact, not computed. Unexplained: $5,824/month paid vs $4,500 ordered (fn. 2), $69,888 paid vs $69,880 deducted (fn. 3).",
+     "snippet": "The existence of this child-related contingency triggers the application of section 71(c)(1) and (2)(A) and makes the payments in question nonincludible",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6662(a) accuracy-related penalty ($4,892)",
+     "provision": "IRC 6662(a)",
+     "court": "Conceded by respondent; no penalty",
+     "lean": "accuracyPenalty 0 (accuracy facts empty)",
+     "verdict": "match",
+     "diagnosis": "Concession, not a computed holding; encoded as expected 0 for completeness. (4,892 = 20% x 24,458 rounded: 4,891.6.)",
+     "snippet": "Respondent having conceded the penalty, the issue for decision is whether petitioners may deduct as alimony under section 215",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency for 2016",
+     "provision": "IRC 6211; 1(a)",
+     "court": "$24,458 sustained (disallowance sustained; amount not recomputed by the court)",
+     "lean": "0 on the findings (no income facts); deficiency not an expected item",
+     "verdict": "not-encodable",
+     "diagnosis": "Still not encodable: the opinion (fully stipulated, Rule 122) states no wages, other income, deductions or dependents, so AGI and the 2016 tax cannot be computed even with the alimony field. See notes.",
+     "snippet": "Respondent determined a $24,458 deficiency in petitioners' 2016 federal income tax and a section 6662(a) accuracy-related penalty of $4,892.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 24458,
+    "lean": null
+   },
+   "notes": "Rerun with the alimony fields (402a5fdbb47/f918d6f6fc9): exit 0; alimonyDeduction 0 and accuracyPenalty 0 match. 24,458/69,880 = 0.35000 exactly, but the prior hypothesis that the whole deduction sits in the 2016 MFJ 35% bracket is arithmetically impossible: that bracket is $413,350-$466,950, only $53,600 wide, less than $69,880 (and with the Sec. 68 3% interaction the TI change is still >= $67,784). So the 35% is a blend of rates. SENSITIVITY (scratch only, assumed facts, not findings): MFJ, no dependents, wages W, deficiency = tax with $69,880 adjustment removed. (a) Standard deduction, W 250,000-620,000 step 250 then 368,000-382,000 step 5: deficiency ranges 19,567-27,673; nearest 24,450 (W ~374,000) and 24,503-24,504 (W 381k-404k, exemption phase-out steps); no exact 24,458 found. (b) Itemized $30,000 held fixed (input is post-Sec. 68, held constant as a simplification), W = 500,260-500,270: deficiency exactly 24,458. There AGI 430,380 -> 500,260, TI 400,056 -> 470,260 (Delta 70,204 = 69,880 + 324 exemptions lost to phase-out), crossing 33% (13,294), all of 35% (53,600) and 39.6% (3,310): 4,387.0 + 18,760 + 1,310.8 = 24,457.8 -> 24,458. So the figure is consistent with TI straddling the 35% bracket on both sides with the exemptions phasing out, but the actual income is unknown; this scenario is one of many. Sensitivity files: C:/Users/alany/AppData/Local/Temp/claude/ac2e06910e878915/d3a415f9-df9d-4894-ba8f-d56429e7699a/scratchpad/rojas/sens*.json and .log."
+  },
+  {
+   "id": "tcmemo-2023-141",
+   "citation": "T.C. Memo. 2023-141",
+   "name": "Danielle Monique Scott v. Commissioner",
+   "date": "2023-11-28",
+   "type": "memorandum",
+   "years": [
+    2019
+   ],
+   "issues": [
+    {
+     "issue": "Unreported dividends 90, capital gain distributions 644, retirement distribution 14,386",
+     "provision": "sec. 61; Rule 90(c)",
+     "court": "includible (deemed admitted)",
+     "lean": "encoded as facts",
+     "verdict": "not-encodable",
+     "diagnosis": "Inclusion rests on deemed admissions / summary judgment, not a computation; amounts encoded as found.",
+     "snippet": "she is deemed to have admitted receiving taxable income in the relevant amounts.",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 72(t) additional tax",
+     "provision": "sec. 72(t)(1)",
+     "court": 1439,
+     "lean": "1439",
+     "verdict": "match",
+     "diagnosis": "10% x 14,386 = 1,438.60 -> 1,439.",
+     "snippet": "we will sustain respondent's determination of a $1,439 additional tax for 2019.",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency",
+     "provision": "sec. 6211",
+     "court": 4713,
+     "lean": "4715",
+     "verdict": "mismatch",
+     "diagnosis": "(c) As-filed return reproduced exactly (TI 56,807, tax 6,940 - credits 2,278 = 4,662). Corrected tax on TI 71,927 with 644 at 15%: 10,216 (Tax Table on ordinary 71,283 = 10,119 + 96.60) -> increase 3,276 + 1,439 = 4,715. The notice's income-tax increase is 3,274 (2 less); with the 90 dividends qualified it would be 3,267. The $2 gap is in the IRS computation, not explained in the opinion.",
+     "snippet": "the IRS determined a tentative tax of $3,274. To that sum the IRS added tax of $1,439",
+     "cause": "court-or-irs-arithmetic"
+    }
+   ],
+   "deficiency": {
+    "court": 4713,
+    "lean": "4715"
+   },
+   "notes": "HoH inferred from the 18,350 standard deduction; 2,278 credits encoded as other nonrefundable credits."
+  },
+  {
+   "id": "tcmemo-2023-2",
+   "citation": "T.C. Memo. 2023-2 (Henry v. Commissioner)",
+   "name": "Marie L. Henry v. Commissioner",
+   "date": "2023-01-05",
+   "type": "memorandum",
+   "years": [
+    2016
+   ],
+   "issues": [
+    {
+     "issue": "Taxable Social Security / AGI",
+     "provision": "§86; §36B(d)(2)(B)(iii)",
+     "court": "taxable SS 22,524; AGI 91,274; MAGI 95,249",
+     "lean": "taxable SS 22,524; AGI 91,274; householdIncome 95,249",
+     "verdict": "match",
+     "diagnosis": "Framework §86 computation reproduces the return figure (85% x 26,499 = 22,524). §36B household income = 91,274 + 3,975 = 95,249 now computed and matches.",
+     "snippet": "her MAGI for 2016 was $95,249",
+     "cause": null
+    },
+    {
+     "issue": "PTC eligibility: household income 598% of FPL; repay all APTC",
+     "provision": "§36B(c)(1)(A), (d)(2), (d)(3); §36B(f)(2)",
+     "court": "household income 95,249; FPL 15,930; 598%; not eligible; repay all 7,205 APTC",
+     "lean": "householdIncome 95,249; povertyLine 15,930; fplPercent 401; premiumTaxCredit 0; excessAdvancePtc 7,205",
+     "verdict": "match",
+     "diagnosis": "facts.ptc: family 2, Florida, enrolled premiums 7,788 (11 x 708), APTC 7,205 (11 x 655); benchmark premium not stated (irrelevant over 400%). All amounts match. fplPercent item differs (598 vs 401) by convention only: 95,249 / 15,930 = 5.979 -> 598%, while Form 8962 line 5 (which Lean reproduces) enters 401 for anything over 400%. Same eligibility result; no cap applies at >=400%.",
+     "snippet": "Petitioner's household income of $95,249 was 598% of the FPL during 2016",
+     "cause": null
+    },
+    {
+     "issue": "Whether coverage was canceled in February 2016",
+     "provision": "§36B; burden of proof",
+     "court": "not proved; APTC paid through November",
+     "lean": "n/a",
+     "verdict": "judgment",
+     "diagnosis": "Factual/credibility finding; the court credited Marketplace records over testimony.",
+     "snippet": "petitioner was unable to offer any documentation to corroborate her contention",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency",
+     "provision": "§6211; §36B(f)(2)(A)",
+     "court": "7,205",
+     "lean": "7,205",
+     "verdict": "match",
+     "diagnosis": "Now computed: corrected total tax 14,959 = 7,754 as filed + 7,205 excess APTC from facts.ptc (otherTaxes workaround removed).",
+     "snippet": "results in a deficiency in her income tax of that same amount for 2016",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 7205,
+    "lean": 7205
+   },
+   "notes": "Rerun with facts.ptc (commits 402a5fdbb47/f918d6f6fc9); otherTaxes 7,205 removed. 7/8 checks match; fplPercent 598 vs 401 is the Form 8962 line-5 convention (over 400% entered as 401). Deficiency 7,205 still matches, now computed. Son's age not stated; filing status not in issue."
+  },
+  {
+   "id": "tcmemo-2023-37",
+   "citation": "T.C. Memo. 2023-37",
+   "name": "Charles Lin and Amy Lin v. Commissioner",
+   "date": "2023-03-21",
+   "type": "memorandum",
+   "years": [
+    2019
+   ],
+   "issues": [
+    {
+     "issue": "Taxable portion of 32,808 railroad retirement benefits (treated as SS) on a 2019 joint return",
+     "provision": "26 U.S.C. 86(a)(1), (a)(2), (b), (c)(1)(B), (c)(2)(B), (d)(1)(B)",
+     "court": "27,887 (85% cap; uncapped two-tier figure 27,981)",
+     "lean": "27,887",
+     "verdict": "match",
+     "diagnosis": "MAGI 53,456 + 16,404 = 69,860; 0.85 x 25,860 = 21,981 + 6,000 = 27,981; capped at 0.85 x 32,808 = 27,887. Characterising railroad retirement benefits as SS (86(d)(1)(B)) is done outside the framework by encoding socialSecurity = 32,808. The opinion cites the 85% cap as sec. 86(b)(2)(B) and calls 27,981 the '(b)(1)(A)' amount; the cap is in 86(a)(2) (closing clause). Citation slips only; arithmetic correct.",
+     "snippet": "the taxable amount of Social Security benefits cannot exceed 85% of the benefits received. For petitioners that amount is $27,887",
+     "cause": null
+    },
+    {
+     "issue": "Modified AGI / AGI",
+     "provision": "26 U.S.C. 86(b)(2), 62",
+     "court": "MAGI 53,456 (reported AGI 53,174 + 282 omitted dividends); corrected AGI not stated",
+     "lean": "AGI 81,343 = 53,456 + 27,887",
+     "verdict": "match",
+     "diagnosis": "Expected AGI is derived (court's MAGI + taxable SS), not stated. Encoding uses otherIncome -1,465 = Schedule E loss -8,189 + unidentified residual 6,724 of reported AGI (53,174 - 4,010 dividends - 50,629 pensions + 8,189); the residual's character is not in the opinion.",
+     "snippet": "petitioners had modified AGI of $53,456—adjusted gross income of $53,174 as reported on their original return, plus $282",
+     "cause": null
+    },
+    {
+     "issue": "Omitted dividends 282",
+     "provision": "26 U.S.C. 61(a)(7)",
+     "court": "conceded by petitioners",
+     "lean": "encoded as fact (dividends 4,292)",
+     "verdict": "match",
+     "diagnosis": "Concession encoded as a fact.",
+     "snippet": "petitioners admitted receipt of $282 of additional dividend income",
+     "cause": null
+    },
+    {
+     "issue": "Unreported retirement income adjustment 11,344",
+     "provision": "26 U.S.C. 72, 402, 408(d)(3)",
+     "court": "conceded by IRS",
+     "lean": "taxable pensions kept at reported 50,629",
+     "verdict": "match",
+     "diagnosis": "IRS concession encoded by leaving taxable pensions as reported.",
+     "snippet": "respondent stated that he is no longer pursuing the $11,344 adjustment relating to unreported retirement income",
+     "cause": null
+    },
+    {
+     "issue": "Additional Schedule E rental loss (30,763 on amended return vs 8,189 original)",
+     "provision": "26 U.S.C. 162, 212, 167, 6001; 469(i) assumed arguendo; Cohan",
+     "court": "no additional loss allowed; original 8,189 loss left undisturbed",
+     "lean": "not modelled (court's allowed 8,189 loss entered as a fact inside otherIncome)",
+     "verdict": "not-encodable",
+     "diagnosis": "Turns on failure to prove allocation to the rented room (no square footage), HOA fee unrelated to the home, repairs after the tenant left; allocation/substantiation and sec. 469 are not modelled. Judgment on proof.",
+     "snippet": "no portion of the additional Schedule E loss reported on petitioners' amended return is allowable as a deduction",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": 3378
+   },
+   "notes": "Decision under Rule 155; no deficiency figure stated (notice: 4,679, which included the later-conceded 11,344 retirement adjustment), so no deficiency expectation is encoded. Lean's 3,378 is informational only: it assumes both spouses under 65 (ages not found; if 65+ the standard deduction is higher), treats the 6,724 residual as ordinary income and all dividends as non-qualified (qualified part of the original 4,010 not stated; 68 of the 282 qualified), and the as-filed return omits socialSecurity (taxable SS reported as zero). Run: all expectations ok for this case."
+  },
+  {
+   "id": "tcmemo-2023-56",
+   "citation": "T.C. Memo. 2023-56",
+   "name": "Susan D. Rodgers v. Commissioner",
+   "date": "2023-05-09",
+   "type": "memorandum",
+   "years": [
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "Is $7,824 interest on a child-support arrearage (taxable) or child support?",
+     "provision": "sec. 61(a)(4), 71(c)",
+     "court": "interest; includible",
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Characterization of a payment on disputed facts is not expressible; encoded as taxableInterest 7,824.",
+     "snippet": "petitioner received interest on past due child support during 2015",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency",
+     "provision": "sec. 6211",
+     "court": 3473,
+     "lean": 0,
+     "verdict": "mismatch",
+     "diagnosis": "Rerun at 57b55431cca: runner computes deficiency 0 (court 3,473). Encoding is incomplete, not a framework bug: the opinion gives only the unreported $7,824 interest, not the rest of the 2015 return (wages, credits). Alone, 7,824 < 6,300 std ded + 4,000 exemption = 10,300, so tax 0. 3,473/7,824 = 44.4% exceeds the 39.6% top rate; a plausible cause is loss of EIC under sec. 32(i) (disqualified income 7,824 > 3,400), but the opinion does not state the return, so it cannot be encoded.",
+     "snippet": "determined a deficiency in petitioner's federal income tax for the taxable year 2015 of $ 3,473",
+     "cause": "facts-not-stated"
+    }
+   ],
+   "deficiency": {
+    "court": 3473,
+    "lean": 0
+   },
+   "notes": "Decision for respondent. Rerun at 57b55431cca: deficiency mismatch (0 vs 3,473) from missing return facts; no sfrTax needed (she filed)."
+  },
+  {
+   "id": "tcmemo-2024-20",
+   "citation": "T.C. Memo. 2024-20 (Turner v. Commissioner)",
+   "name": "Susan D. Turner v. Commissioner",
+   "date": "2024-02-08",
+   "type": "memorandum",
+   "years": [
+    2020
+   ],
+   "issues": [
+    {
+     "issue": "A.V. qualifying child (abode about 60 days)",
+     "provision": "§152(c)(1)(B); §32(c)(3)(A)",
+     "court": "not a qualifying child",
+     "lean": "qualifyingChild:AV false; eicChild:AV false",
+     "verdict": "match",
+     "diagnosis": "Relationship (grandchild) and age (minor) satisfied; 2 x 60 = 120 <= 366 fails the more-than-half-year abode test.",
+     "snippet": "A.V. and petitioner did not share the same principal place of abode for more than one-half of the year.",
+     "cause": null
+    },
+    {
+     "issue": "Head of household",
+     "provision": "§2(b)(1)(A)",
+     "court": "not HoH; single",
+     "lean": "hohQualifyingPerson:AV false; filingStatus single",
+     "verdict": "match",
+     "diagnosis": "paidOverHalfHouseholdCost not found by the court; set true so that the abode finding alone decides, as in the opinion.",
+     "snippet": "Respondent properly changed her filing status from head of household to single",
+     "cause": null
+    },
+    {
+     "issue": "EIC without a qualifying child",
+     "provision": "§32(c)(1)(A)(ii)",
+     "court": "no finding (left to Rule 155)",
+     "lean": "n/a",
+     "verdict": "not-encodable",
+     "diagnosis": "Court expressly made no finding; no income figures in the opinion.",
+     "snippet": "we make no finding on the point.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Exit 0; 4/4 match. No income figures, so no deficiency. A.V.'s age not stated beyond 'a minor' (17 used; any age under 19 gives the same result)."
+  },
+  {
+   "id": "tcmemo-2024-23",
+   "citation": "T.C. Memo. 2024-23",
+   "name": "Donald Ecret and Kristen Ecret v. Commissioner",
+   "date": "2024-02-14",
+   "type": "memorandum",
+   "years": [
+    2019
+   ],
+   "issues": [
+    {
+     "issue": "Whether 12,666 of workers' compensation that offset 2019 SS benefits is a 'social security benefit' (benefits treated as received = 19,866)",
+     "provision": "26 U.S.C. 86(d)(3); 42 U.S.C. 424a",
+     "court": "yes; 19,866 = 6,120 cash + 1,080 withholding + 12,666 offset",
+     "lean": "not modelled; court's 19,866 encoded as socialSecurity",
+     "verdict": "not-encodable",
+     "diagnosis": "Legal characterisation under 86(d)(3), and the IRS concession excluding 35,382 of retroactive 2016-2018 benefits, are done outside the framework; only the resulting amount is an input.",
+     "snippet": "under section 86(d) petitioners are nonetheless required to treat this sum as Social Security benefits for Federal income tax purposes",
+     "cause": null
+    },
+    {
+     "issue": "Taxable SS benefits for 2019",
+     "provision": "26 U.S.C. 86(a)(2), (b), (c)(2)(B)",
+     "court": "16,886 (85% x 19,866; parties agree the 85% ratio applies); 11,684 over the 5,202 reported",
+     "lean": "0 with only the found income (interest 33, dividends 38); 16,886 in labelled sensitivity runs at non-SS MAGI 46,874 and 46,875",
+     "verdict": "mismatch",
+     "diagnosis": "Missing facts, not a framework error: the opinion states no other income. The 85% cap binds iff 0.85 x (MAGI + 9,933 - 44,000) + 6,000 >= 16,885.5, i.e. MAGI >= 46,874 (MFJ, nearest-dollar). As filed, 5,202 = 85% of 6,120 requires MAGI >= 43,460 (0.85 x (M + 3,060 - 44,000) + 3,060 >= 5,202). The court adopts the ratio by agreement, not computation.",
+     "snippet": "Respondent contends that the 85% inclusion ratio applies here, and petitioners do not appear to disagree.",
+     "cause": "facts-not-stated"
+    },
+    {
+     "issue": "Unreported interest 33 and dividends 38",
+     "provision": "26 U.S.C. 61(a)(4), (a)(7)",
+     "court": "conceded by petitioners",
+     "lean": "encoded as facts",
+     "verdict": "match",
+     "diagnosis": "Concession encoded; reported interest/dividend totals unknown, so only the omitted amounts are encoded.",
+     "snippet": "petitioners conceded that they received during 2019 unreported taxable interest and dividend income of $33 and $38",
+     "cause": null
+    },
+    {
+     "issue": "Accuracy-related penalty",
+     "provision": "26 U.S.C. 6662(a)",
+     "court": "conceded by IRS",
+     "lean": "no accuracy block encoded",
+     "verdict": "match",
+     "diagnosis": "Concession; nothing to compute.",
+     "snippet": "Respondent has also conceded the accuracy-related penalty.",
+     "cause": null
+    },
+    {
+     "issue": "2018 deficiency (petition 108 days late)",
+     "provision": "26 U.S.C. 6213(a)",
+     "court": "dismissed for lack of jurisdiction",
+     "lean": "not modelled",
+     "verdict": "not-encodable",
+     "diagnosis": "Jurisdiction / timeliness of the petition is outside the return computation.",
+     "snippet": "We accordingly dismissed this case for lack of jurisdiction insofar as it concerned petitioners' tax liability for 2018.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Decision under Rule 155; no deficiency stated (notice: 6,859 on a 55,248 base, later reduced by concession). asFiled not encoded because the return's other income is not stated. Main run: exit 1 (taxableSocialSecurity expected 16,886, computed 0), caused by missing MAGI facts. Sensitivity (scratch only, invented otherIncome 46,803 / 46,804): C:/Users/alany/AppData/Local/Temp/claude/ac2e06910e878915/d3a415f9-df9d-4894-ba8f-d56429e7699a/scratchpad/p0tc/sens.json and sens.out.json, both give 16,886."
+  },
+  {
+   "id": "tcmemo-2024-67",
+   "citation": "T.C. Memo. 2024-67",
+   "name": "Fabricio Moran v. Commissioner",
+   "date": "2024-06-17",
+   "type": "memorandum",
+   "years": [
+    2018
+   ],
+   "issues": [
+    {
+     "issue": "Gross income 254,512 from third-party reports",
+     "provision": "sec. 61; Rule 34(b)(1)(G)",
+     "court": "sustained (deemed conceded)",
+     "lean": "encoded as facts",
+     "verdict": "not-encodable",
+     "diagnosis": "Sustained on concession; amounts encoded.",
+     "snippet": "We accordingly sustain the Commissioner's determination that petitioner in 2018 received gross income of $254,512.",
+     "cause": null
+    },
+    {
+     "issue": "Taxable income / regular tax (single)",
+     "provision": "sec. 1(j), 63",
+     "court": "242,512 / 60,569",
+     "lean": "242512 / 60569",
+     "verdict": "match",
+     "diagnosis": "Capital gain taxed at ordinary rates, as the IRS did (longTermGain 0; character not stated).",
+     "snippet": "taxable income of $242,512, generating tax of $60,569",
+     "cause": null
+    },
+    {
+     "issue": "MFS rate used in the notice was harmless",
+     "provision": "sec. 1(j); Rev. Proc. 2018-18 sec. 3.01",
+     "court": "same tax as single",
+     "lean": "60569 (MFS)",
+     "verdict": "match",
+     "diagnosis": "Variant run with filing mfs gives 60,569 and total 60,811.",
+     "snippet": "the use of the \"married filing separately\" tax rate was harmless error.",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 72(t) additional tax",
+     "provision": "sec. 72(t)(1)",
+     "court": 242,
+     "lean": "242",
+     "verdict": "match",
+     "diagnosis": "10% x 2,417 = 241.70.",
+     "snippet": "We accordingly sustain the IRS's determination of a $242 additional tax for 2018.",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency",
+     "provision": "sec. 6211",
+     "court": 60811,
+     "lean": 60811,
+     "verdict": "match",
+     "diagnosis": "Non-filer: taxShown 0.",
+     "snippet": "producing a total tax liability of $60,811.",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6651(a)(1) failure to file",
+     "provision": "sec. 6651(a)(1), (c)(1)",
+     "court": 4016,
+     "lean": 4016,
+     "verdict": "match",
+     "diagnosis": "sfrTax 60,811 (sec. 6651(g)(2)) now in the main case: net amount due 60,811 - 42,961 = 17,850; 5 months late filing x 4.5% = 22.5% x 17,850 = 4,016.25, (c)(1) reduced by the 0.5% FTP for the overlapping months. Deemed conceded. Rerun 57b55431cca.",
+     "snippet": "an addition to tax of $4,016 under section 6651(a)(1) for failure to timely file",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6651(a)(2) failure to pay",
+     "provision": "sec. 6651(a)(2), (g)(2)",
+     "court": 3659,
+     "lean": 3659,
+     "verdict": "match",
+     "diagnosis": "sfrTax 60,811: 41 months (15 Apr 2019 - 12 Sep 2022) x 0.5% x 17,850 = 3,659.25. Deemed conceded. Rerun 57b55431cca.",
+     "snippet": "The IRS determined a failure- to-timely-pay addition to tax of $3,659, calculated with reference to petitioner's net underpayment of $17,850.",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6654 addition",
+     "provision": "sec. 6654",
+     "court": 424,
+     "lean": 424,
+     "verdict": "match",
+     "diagnosis": "estimated: no 2017 return in the record (priorTax none -> required annual = 90% x 60,811 = 54,730; estimatedRequiredAnnual 54,730 matches), no payments, withholding 42,961 spread evenly: shortfall 13,682.50 - 10,740.25 = 2,942.25 per installment, to 15 Apr 2019 at 5%/6%. With the printed Form 1040-ES due dates (17 Apr, 15 Jun, 17 Sep 2018, 15 Jan 2019) Lean gives 422; with the statutory sec. 6654(c)(2) dates (15th; no sec. 7503 weekend/holiday shift) 424 = 423.76, so dueDates is set to the 15th. Assumed: no prior-year return (opinion silent). Deemed conceded (Rule 34(b)(1)(G)).",
+     "snippet": "an addition to tax of $424 under section 6654",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 60811,
+    "lean": 60811
+   },
+   "notes": "Rerun 57b55431cca with sfrTax 60,811 on the main case: all 7 items match (FTF 4,016, FTP 3,659). The SFR-as-shown variant is now redundant but kept. MSA 6,236 encoded as other income (no sec. 220(f)(4) tax determined). Sec. 6654 now encoded via 'estimated' (402a5fdbb47/f918d6f6fc9): exit 0, all 9 items match incl. estimatedTaxAddition 424 and estimatedRequiredAnnual 54,730. Finding: IRS computes the sec. 6654 addition from the statutory 15th-of-month due dates; the framework's default (printed, sec. 7503-shifted dates) gives 422."
+  },
+  {
+   "id": "tcmemo-2025-116",
+   "citation": "T.C. Memo. 2025-116 (Graham v. Commissioner)",
+   "name": "John R. Graham and Nicole Graham v. Commissioner",
+   "date": "2025-11-13",
+   "type": "memorandum",
+   "years": [
+    2022
+   ],
+   "issues": [
+    {
+     "issue": "Angela Davis (wife's sister, 64) as EIC qualifying child",
+     "provision": "§32(c)(3)(A); §152(c)(1), (3)(A), (3)(B); §22(e)(3)",
+     "court": "not a qualifying child (abode and disability not proved)",
+     "lean": "qualifyingChild false; eicChild false",
+     "verdict": "match",
+     "diagnosis": "Fails age (64, not a student; disability not proved) and abode (not proved). Both are burden-of-proof findings on undocumented testimony, encoded as facts (disabled false, livedWithMoreThanHalfYear false).",
+     "snippet": "Petitioner husband's testimony without supporting documentation is not enough to show that petitioners met the statutory requirements.",
+     "cause": null
+    },
+    {
+     "issue": "Weight of uncorroborated (credible) testimony",
+     "provision": "Rule 142(a)",
+     "court": "insufficient",
+     "lean": "input",
+     "verdict": "judgment",
+     "diagnosis": "Decisive step is the court's evidentiary judgment, not a computation.",
+     "snippet": "testified credibly that Ms. Davis lived with petitioners for more than six months in 2022",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency 3,686",
+     "provision": "§6211",
+     "court": "3,686 (decision for respondent)",
+     "lean": "not computed",
+     "verdict": "not-encodable",
+     "diagnosis": "Opinion gives no income figures; deficiency cannot be recomputed. EITC for Rayquan Graham conceded.",
+     "snippet": "Respondent determined a deficiency of $3,686 for 2022.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 3686,
+    "lean": null
+   },
+   "notes": "Exit 0; 2/2 match. Relationship (sister of a joint filer) agreed by the parties; encoded sibling. youngerThanTaxpayer false (petitioners' ages not stated); age test fails regardless."
+  },
+  {
+   "id": "tcmemo-2025-23",
+   "citation": "T.C. Memo. 2025-23 (Campana v. Commissioner)",
+   "name": "Charlie Campana v. Commissioner",
+   "date": "2025-03-19",
+   "type": "memorandum",
+   "years": [
+    2021
+   ],
+   "issues": [
+    {
+     "issue": "Unreported $99 interest income includible",
+     "provision": "§61(a)(4)",
+     "court": "includible (conceded)",
+     "lean": "taxableInterest 99 included in AGI 107,286",
+     "verdict": "match",
+     "diagnosis": "Conceded receipt; encoded as fact and included by the framework.",
+     "snippet": "He also received $99 of interest income from the IRS in 2021.",
+     "cause": null
+    },
+    {
+     "issue": "Unreported $56,673 retirement distribution includible",
+     "provision": "§§61(a)(10), 72, 402/408(d)",
+     "court": "includible (conceded)",
+     "lean": "pensions 56,673 included",
+     "verdict": "match",
+     "diagnosis": "Conceded receipt; encoded as pensions (Fidelity hardship withdrawal; plan type not specified - treated as qualifiedPlan).",
+     "snippet": "He subsequently took a hardship withdrawal of $56,673 from his Fidelity Investments (Fidelity) retirement account.",
+     "cause": null
+    },
+    {
+     "issue": "§72(t) 10% additional tax",
+     "provision": "§72(t)(1)",
+     "court": "5,667",
+     "lean": "5,667",
+     "verdict": "match",
+     "diagnosis": "Under 59 1/2, no exception found; 10% x 56,673 = 5,667.",
+     "snippet": "None of the several exceptions to this rule apply here, nor does petitioner argue they should.",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency",
+     "provision": "§§1, 72(t), 6211",
+     "court": "18,064",
+     "lean": "18,064",
+     "verdict": "match",
+     "diagnosis": "Matches only under an INFERRED single filing status (opinion does not state status; inferred, not found). Reported TI 37,964 backed out to income 50,514 (+12,550 2021 single std deduction, itemize false). Corrected TI 94,736, tax 16,755 + 5,667 = 22,422 - 4,358 = 18,064. HoH would give ~16,701, MFJ ~13,842.",
+     "snippet": "He reported $37,964 of taxable income . He did not report the $99 of interest income or the $56,673 retirement distribution.",
+     "cause": null
+    },
+    {
+     "issue": "Substantial understatement",
+     "provision": "§6662(d)(1)(A)",
+     "court": "18,064 > max(10% x 22,422, 5,000)",
+     "lean": "understatement 18,064, substantial true",
+     "verdict": "match",
+     "diagnosis": "Mechanical threshold test.",
+     "snippet": "Respondent determined an understatement of tax of $18,064, exceeding 10% of the tax required to be shown on the return and $5,000.",
+     "cause": null
+    },
+    {
+     "issue": "§6751(b) supervisory approval",
+     "provision": "§6751(b)(2)(B)",
+     "court": "exception applies (automatically calculated)",
+     "lean": "automaticallyCalculated true -> approved",
+     "verdict": "match",
+     "diagnosis": "Court's finding encoded as fact.",
+     "snippet": "penalties “automatically calculated through electronic means,” such as the penalty at issue here, are excepted",
+     "cause": null
+    },
+    {
+     "issue": "Reasonable cause",
+     "provision": "§6664(c); Treas. Reg. §1.6664-4(b)(1)",
+     "court": "no reasonable cause",
+     "lean": "reasonableCause false (input)",
+     "verdict": "judgment",
+     "diagnosis": "Court weighed facts (no professional reliance, ignored 1099-R); encoded as finding, decisive step is judgment.",
+     "snippet": "neither is a ground for concluding that there was reasonable cause for his failure. We therefore sustain the penalty.",
+     "cause": null
+    },
+    {
+     "issue": "Accuracy-related penalty amount",
+     "provision": "§6662(a); §6664(a); Treas. Reg. §1.6664-2(c)(1)",
+     "court": "3,238",
+     "lean": "3,613 (3,238 with labelled penaltyBase workaround 16,190)",
+     "verdict": "mismatch",
+     "diagnosis": "Framework gap: 3,238 = 20% x (18,064 - 1,874). Underpayment under §6664(a) is reduced by withholding not claimed on the return (Treas. Reg. §1.6664-2(c)(1)/(d)); framework uses underpayment = understatement = 18,064 -> 3,613. Sensitivity run with accuracy.penaltyBase 16,190 reproduces 3,238 (exit 0).",
+     "snippet": "an accuracy-related penalty of $3,238 under section 6662(a)",
+     "cause": "model-gap"
+    },
+    {
+     "issue": "Offset of denied 2017 refund claim against 2021 liability",
+     "provision": "§§6213(a), 6512(b)",
+     "court": "no jurisdiction over 2017",
+     "lean": "n/a",
+     "verdict": "not-encodable",
+     "diagnosis": "Jurisdictional ruling, outside the computation framework.",
+     "snippet": "We previously ruled that we do not have jurisdiction over petitioner’s 2017 tax year.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 18064,
+    "lean": 18064
+   },
+   "notes": "Filing status single is inferred (not found in opinion) from the deficiency arithmetic; income composition unknown, encoded as otherIncome 50,514 (backed out from reported TI 37,964 + 12,550 single standard deduction). Withholding of 1,874 is in corrected facts only (not claimed on the return); it does not affect deficiency. Main run: 5 of 6 expected items match; accuracyPenalty 3,613 vs 3,238. Labelled workaround run (scratch, accuracy.penaltyBase = 16,190) matches all 6."
+  },
+  {
+   "id": "tcmemo-2025-31",
+   "citation": "T.C. Memo. 2025-31",
+   "name": "Melissa Correll v. Commissioner",
+   "date": "2025-04-09",
+   "type": "memorandum",
+   "years": [
+    2021
+   ],
+   "issues": [
+    {
+     "issue": "Is J.M.A. petitioner's qualifying child / dependent?",
+     "provision": "sec. 152(c)(1)(B), 152(e)",
+     "court": "no",
+     "lean": "qualifyingChild false, dependent false",
+     "verdict": "match",
+     "diagnosis": "0 days with petitioner; no sec. 152(e) declaration; he is the father's qualifying child, so not a qualifying relative either.",
+     "snippet": "Child No. 2 did not live with petitioner for more than one- half of the yea r, so he was not her \"qualifying child.\"",
+     "cause": null
+    },
+    {
+     "issue": "Child tax credit for J.M.A.",
+     "provision": "sec. 24(a), (c)(1)",
+     "court": "no",
+     "lean": "false",
+     "verdict": "match",
+     "diagnosis": "Age 16 meets the 2021 under-18 rule but residency fails.",
+     "snippet": "it follows that petitioner is not entitled to the child tax credit for him.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Rule 155; no income figures in the opinion; HoH and the other child conceded; EIC conceded."
+  },
+  {
+   "id": "tcsumm-2019-23",
+   "citation": "T.C. Summary Opinion 2019-23 (Gutierrez v. Commissioner)",
+   "name": "Santiago Gutierrez v. Commissioner",
+   "date": "2019-08-22",
+   "type": "summary",
+   "years": [
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "J.V./L.V. eligible foster children (court custody order 2010)",
+     "provision": "§152(f)(1)(A), (C)",
+     "court": "eligible foster children",
+     "lean": "fosterChild; qualifyingChild JV/LV true",
+     "verdict": "match",
+     "diagnosis": "Eligible foster children under §152(f)(1)(C). Rerun 57b55431cca.",
+     "snippet": "J.V. and L.V. were therefore petitioner's \"eligible foster child[ren]\" under section 152(f)(1)(C).",
+     "cause": null
+    },
+    {
+     "issue": "Tie-breaker vs Ms. Madrigal (grandmother, no income)",
+     "provision": "§152(c)(4)(A)(ii)",
+     "court": "petitioner (higher AGI)",
+     "lean": "petitioner (tieBreaker:JV/LV match)",
+     "verdict": "match",
+     "diagnosis": "Neither is a parent; higher AGI wins (12,893 > 0). Rerun 57b55431cca.",
+     "snippet": "J.V. and L.V. are treated as the qualifying children of the taxpayer with the higher adjusted gross income",
+     "cause": null
+    },
+    {
+     "issue": "Dependency exemptions for J.V. and L.V.",
+     "provision": "§151(c); §152(a)",
+     "court": "allowed",
+     "lean": "dependent:JV/LV true",
+     "verdict": "match",
+     "diagnosis": "Expected dependent:JV/LV true. Rerun 57b55431cca.",
+     "snippet": "petitioner is entitled to the dependency exemption deductions claimed with respect to J.V. and L.V.",
+     "cause": null
+    },
+    {
+     "issue": "Maria Terrones (19) qualifying child: student status",
+     "provision": "§152(c)(3)(A), (f)(2)",
+     "court": "not a student; not a qualifying child",
+     "lean": "qualifyingChild:Maria false, eicChild:Maria false (match)",
+     "verdict": "judgment",
+     "diagnosis": "Court preferred school records over testimony (credibility); encoded student false. Qualifying-relative question expressly not decided.",
+     "snippet": "We are more persuaded by her school records than we are by petitioner's testimony on the point.",
+     "cause": null
+    },
+    {
+     "issue": "Head of household",
+     "provision": "§2(b); Reg. §1.2-2(d)",
+     "court": "HoH",
+     "lean": "hoh; headOfHousehold true",
+     "verdict": "match",
+     "diagnosis": "Unmarried; paid all household expenses; QCs J.V./L.V. Rerun 57b55431cca.",
+     "snippet": "Consequently, petitioner qualifies as a head of household for 2015.",
+     "cause": null
+    },
+    {
+     "issue": "EIC with two qualifying children",
+     "provision": "§32(c)(1)(A)(i), (3)",
+     "court": "allowed (2 children)",
+     "lean": "eicChild JV/LV true, Maria false; EIC 5,150 (2 children)",
+     "verdict": "match",
+     "diagnosis": "Expected eicChild JV/LV true, Maria false. Rerun 57b55431cca.",
+     "snippet": "Petitioner is therefore an eligible individual with two qualifying children",
+     "cause": null
+    },
+    {
+     "issue": "Child tax credit for J.V. and L.V.",
+     "provision": "§24(c)(1)",
+     "court": "allowed",
+     "lean": "ctcChild JV/LV true",
+     "verdict": "match",
+     "diagnosis": "Both under 17. Rerun 57b55431cca.",
+     "snippet": "petitioner is entitled to the child tax credit in dispute.",
+     "cause": null
+    },
+    {
+     "issue": "Accuracy-related penalty",
+     "provision": "§6662(a); §6664(c)(1)",
+     "court": "not liable (reasonable cause: reliance on preparer)",
+     "lean": "accuracyPenalty 0 (match)",
+     "verdict": "judgment",
+     "diagnosis": "Reasonable cause is the court's weighing; encoded reasonableCause true.",
+     "snippet": "he is not liable for a section 6662(a) accuracy-related penalty.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": 644
+   },
+   "notes": "Rerun 57b55431cca: all 13 expected items match. Court left the deficiency to Rule 155 (notice 5,102); Lean's 644 is the only remaining change (EIC with 2 rather than 3 children: refundable credits 7,278 as filed vs 6,634), not compared with any court figure."
+  },
+  {
+   "id": "tcsumm-2019-24",
+   "citation": "T.C. Summary Opinion 2019-24",
+   "name": "Milton H. Thomas II and Priscilla Snelling Thomas v. Commissioner",
+   "date": "2019-08-26",
+   "type": "summary",
+   "years": [
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "AOTC for daughter ET in 2015 after AOTC elections for ET in 2011-2014",
+     "provision": "sec. 25A(i)(2) (modifying sec. 25A(b)(2)(A))",
+     "court": "not entitled",
+     "lean": "aotcEligible:ET false (aotcPriorYears 4); aotcEligible:EMT true",
+     "verdict": "match",
+     "diagnosis": "rerun 2c5b6354943: students ET (aotcPriorYears 4) and EMT (2,885 conceded expenses). Lean: aotcEligible:ET false via sec. 25A(i)(2)/(b)(2)(A) (credit allowed in 4 earlier years), aotcEligible:EMT true; both flags match. ET falls through to the LLC with 0 expenses encoded (expenses split not stated). EMT AOTC tentative 2,000 + 25% x 885 = 2,221, refundable 40% = 888; the nonrefundable 1,333 is limited by tax, which the opinion does not give.",
+     "snippet": "by 2015 petitioners had claimed and received the American Opportunity Credit for four taxable years (2011 through 2014) in relation to ET",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency for 2015",
+     "provision": "sec. 6211",
+     "court": null,
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "rerun 2c5b6354943: still no deficiency: the opinion gives no income or tax figures and the decision is Rule 155. Notice 5,000 = 3,000 nonrefundable + 2,000 refundable education credits as claimed. Lean computes aotcRefundable 888 for EMT on the conceded 2,885 (nonrefundable part depends on unstated tax).",
+     "snippet": "Respondent determined a deficiency of $5,000 with respect to petitioners' 2015 Federal income tax.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "rerun 2c5b6354943: sec. 25A now modelled; AOTC eligibility for both students matches (2/2). Deficiency still not encodable (no income figures, Rule 155). Expense split between ET and EMT not stated; 2,885 encoded on EMT."
+  },
+  {
+   "id": "tcsumm-2019-29",
+   "citation": "T.C. Summary Opinion 2019-29",
+   "name": "Richard Alan Saunders and Shelia Candy Saunders v. Commissioner",
+   "date": "2019-09-30",
+   "type": "summary",
+   "years": [
+    2012
+   ],
+   "issues": [
+    {
+     "issue": "Are the three children qualifying children (CTC)?",
+     "provision": "sec. 152(c)(2), 24(a)",
+     "court": "no (no qualifying relationship)",
+     "lean": "no (qualifyingChild/dependent/ctcChild false x3; failure sec. 152(c)(1)(A) relationship)",
+     "verdict": "match",
+     "diagnosis": "Rerun at 57b55431cca: 9 child items match (qualifyingChild, dependent, ctcChild for 3 children).",
+     "snippet": "The children do not bear a qualifying relationship to petitioners as defined in section 152(c).",
+     "cause": null
+    },
+    {
+     "issue": "Are the children qualifying relatives (household members)?",
+     "provision": "sec. 152(d)(1)(D), (d)(2)(H)",
+     "court": "no (not shown not to be the mother's qualifying children)",
+     "lean": "no (qualifyingRelative false; failure sec. 152(d)(1)(D) qualifying child of another)",
+     "verdict": "judgment",
+     "diagnosis": "Rerun at 57b55431cca: lean matches given qualifyingChildOfAnother=true, but that fact rests on petitioners' failure to carry the burden of proof (judgment), not computation.",
+     "snippet": "They have not met that burden",
+     "cause": null
+    },
+    {
+     "issue": "Is Mr. Steed a qualifying relative?",
+     "provision": "sec. 152(d)(1)(B), 151(d)",
+     "court": "no: SSI 8,796 > 3,800",
+     "lean": "no (dependent false; failures sec. 152(d)(1)(B) gross income >= 3,800 and (d)(1)(C) support)",
+     "verdict": "match",
+     "diagnosis": "Rerun at 57b55431cca: dependent:Steed false matches. Caveat stands: the court counted SSI as gross income; SSI is generally excluded, so the (d)(1)(B) ground is doubtful; support (encoded false) also fails.",
+     "snippet": "Mr. Steed received during 2012 SSI of $733 per month, or $8,796 for the year",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6662(a) penalty",
+     "provision": "sec. 6664(c)(1)",
+     "court": "not liable (reasonable cause, reliance on preparer)",
+     "lean": null,
+     "verdict": "judgment",
+     "diagnosis": "Reasonable cause weighed by the court; not encoded because income and tax shown are not in the opinion.",
+     "snippet": "we hold that petitioners are not liable for the accuracy-related penalty under section 6662(a).",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 4018,
+    "lean": null
+   },
+   "notes": "Deficiency sustained as determined (4,018); not recomputable without income. Rerun at 57b55431cca: all 10 expected items match (exit 0)."
+  },
+  {
+   "id": "tcsumm-2019-33",
+   "citation": "T.C. Summary Opinion 2019-33",
+   "name": "Reed L. Kleinman v. Commissioner",
+   "date": "2019-10-31",
+   "type": "summary",
+   "years": [
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "Unreported A-1 wages ($58,712) includible in 2015 gross income",
+     "provision": "sec. 61(a)",
+     "court": "includible (stipulated; tax-defier arguments rejected)",
+     "lean": "encoded as fact (wages 24,366 + 58,712 = 83,078)",
+     "verdict": "not-encodable",
+     "diagnosis": "Inclusion is a sec. 61 question decided on stipulated facts and the rejection of frivolous arguments; the framework takes the corrected wages as a fact.",
+     "snippet": "In 2015 Mr. Kleinman worked for A-1 Restaurant Services, LLC (A-1), which paid him $58,712 in wages.",
+     "cause": null
+    },
+    {
+     "issue": "HSA distributions ($634) includible and subject to 20% additional tax",
+     "provision": "sec. 223(f)(2), (f)(4)(A)",
+     "court": "includible; 20% additional tax sustained",
+     "lean": "hsaIncludible 634, hsaAdditionalTax 127 (computed from hsaDistributions 634, no qualified expenses, no exception)",
+     "verdict": "match",
+     "diagnosis": "Rerun 2c5b6354943 with the sec. 223(f) fields: includible 634 - 0 = 634; 20% x 634 = 126.80 -> 127; both match and the deficiency still reproduces 10,518. Whether the distributions paid qualified medical expenses is a failure-of-proof finding (encoded as hsaQualifiedExpenses 0); age not stated, taken as under 65.",
+     "snippet": "determined a 20% additional tax pursuant to section 223(f)(4)(A) relating to his HSA distributions",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency for 2015",
+     "provision": "sec. 6211",
+     "court": 10518,
+     "lean": 10518,
+     "verdict": "match",
+     "diagnosis": "Rerun 2c5b6354943: Lean 10,518 exact (HOH, one CTC child inferred: TI 66,462, tax 10,941 + HSA 127 (now computed under sec. 223(f)(4)) - CTC 550). Filing status and child are inferred from the arithmetic, not stated in the opinion.",
+     "snippet": "The Internal Revenue Service (IRS) determined a deficiency in petitioner Reed Kleinman's 2015 Federal income tax of $10,518",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6662(a) accuracy-related penalty ($2,104)",
+     "provision": "sec. 6662(a), (b)(2), (d)",
+     "court": "conceded by respondent",
+     "lean": "not encoded",
+     "verdict": "not-encodable",
+     "diagnosis": "Conceded; no holding to compute (20% x 10,518 = 2,103.60 -> 2,104 matches the notice arithmetic).",
+     "snippet": "We will sustain the IRS' deficiency determination subject to respondent's concession of the accuracy-related penalty.",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6673 penalty",
+     "provision": "sec. 6673(a)(1)",
+     "court": "not imposed (discretion)",
+     "lean": "not modelled",
+     "verdict": "judgment",
+     "diagnosis": "Discretionary penalty; court declined because of no prior history of frivolous arguments.",
+     "snippet": "We choose not to impose this penalty here because Mr. Kleinman has no previous history of making frivolous arguments.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 10518,
+    "lean": 10518
+   },
+   "notes": "Rerun 2c5b6354943: all 3 expected items match (deficiency 10,518, hsaIncludible 634, hsaAdditionalTax 127). HSA now encoded with hsaDistributions instead of hand-entered otherIncome/otherTaxes. HOH + one under-17 child inferred from the arithmetic (opinion states neither)."
+  },
+  {
+   "id": "tcsumm-2019-8",
+   "citation": "T.C. Summary Opinion 2019-8",
+   "name": "Joel H. Arseo v. Commissioner",
+   "date": "2019-05-02",
+   "type": "summary",
+   "years": [
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "Unreported $25 interest income",
+     "provision": "sec. 61(a)(4)",
+     "court": "includible (25)",
+     "lean": "taxableInterest 25 in corrected AGI 28,706",
+     "verdict": "match",
+     "diagnosis": "Conceded fact; encoded as taxableInterest 25 and carried into AGI 28,706 (matches derived AGI).",
+     "snippet": "Petitioner admits that he had $25 of interest income for 2015.",
+     "cause": null
+    },
+    {
+     "issue": "Unreported $2,994 W-2G gambling winnings; gambling losses offset",
+     "provision": "secs. 61, 165(d), 63",
+     "court": "winnings includible; losses unsubstantiated and, even if proven, an itemized deduction below the 9,250 standard deduction",
+     "lean": "gamblingWinnings 2,994 in AGI 28,706; gamblingLossDeduction 0; deduction 9,250 (standard); alternative with 2,994 losses: deduction 9,250, gamblingLossDeduction 0, netTax 1,664 unchanged",
+     "verdict": "match",
+     "diagnosis": "rerun 2c5b6354943: winnings now gamblingWinnings (sec. 165(d) model). Main case: losses 0 (unsubstantiated: judgment, no records). Alternative case (losses 2,994 assumed, as the court does arguendo): sec. 165(d) caps them at 2,994 as itemized, below the 9,250 standard deduction, so Lean takes the standard deduction and the tax is unchanged (netTax 1,664) - the court's alternative holding computed. All items match.",
+     "snippet": "Petitioner would have to come up with more than $6,256 of additional itemized deductions to be better off than with the $9,250 standard deduction",
+     "cause": null
+    },
+    {
+     "issue": "$6,500 IRA deduction for pretax state retirement contributions",
+     "provision": "sec. 219(a), (e)",
+     "court": "not deductible",
+     "lean": "iraDeduction 0 (ira.contribution 0, activeParticipant true); AGI 28,706",
+     "verdict": "match",
+     "diagnosis": "rerun 2c5b6354943: sec. 219 now modelled; encoded the finding that the 2,890 ASRS amount was a pretax employer-plan deferral (excluded from W-2 wages), not an IRA contribution: ira.contribution 0 -> iraDeduction 0 matches; AGI 28,706 matches. The characterization (deferral is not an IRA contribution) is the court's legal finding taken as input.",
+     "snippet": "his $2,890 IRA contribution was a pretax reduction from his annual wages, i.e., it was not subject to Federal income tax.",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency",
+     "provision": "sec. 6211",
+     "court": 1907,
+     "lean": 1071,
+     "verdict": "mismatch",
+     "diagnosis": "(missing return facts, not a framework error) rerun 2c5b6354943: unchanged, 1,071 vs 1,907 (gap 836). As-filed TI 5,937 tax 593; corrected TI 15,456 tax 1,664. The opinion does not state exemptions, dependents, or EIC/CTC on the return (HOH implies a qualifying person it never names).",
+     "snippet": "Respondent determined a $1,907 income tax deficiency for petitioner's 2015 tax year.",
+     "cause": "facts-not-stated"
+    }
+   ],
+   "deficiency": {
+    "court": 1907,
+    "lean": 1071
+   },
+   "notes": "rerun 2c5b6354943: winnings as gamblingWinnings, IRA via sec. 219 fields; new items iraDeduction 0, gamblingLossDeduction 0, itemizedDeductions 0 match; alternative case (2,994 losses assumed) shows no tax benefit (deduction 9,250, netTax 1,664). Deficiency still 1,071 vs 1,907 (return facts missing). Filing status inferred as HOH from the 9,250 standard deduction."
+  },
+  {
+   "id": "tcsumm-2020-14",
+   "citation": "T.C. Summary Opinion 2020-14",
+   "name": "Dale W. Laue and Alicia Laue v. Commissioner",
+   "date": "2020-04-20",
+   "type": "summary",
+   "years": [
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "Sec. 72(t) on 25,170 Boeing lump sum; age-55 separation exception",
+     "provision": "sec. 72(t)(1), (2)(A)(v)",
+     "court": 2517,
+     "lean": 2517,
+     "verdict": "match",
+     "diagnosis": "Rerun 2026-11-11 after correcting the separation age: 10% x 25,170 = 2,517; no exception (separation from Rockwell service in 1987 at about 31, derived from 'unemployed since 2002, when he was 46'; < 55); Northrop 7,080 exempt under sec. 72(t)(2)(A)(iv) SEPP.",
+     "snippet": "the participant must have attained the age of 55 before separation from service.",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency",
+     "provision": "sec. 6211",
+     "court": 2517,
+     "lean": 2517,
+     "verdict": "match",
+     "diagnosis": "Rerun at 57b55431cca: corrected total tax 3,685 - as filed 1,168 = 2,517.",
+     "snippet": "respondent determined a deficiency of $2,517 in petitioners' 2015 Federal income tax.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 2517,
+    "lean": 2517
+   },
+   "notes": "Decision for respondent. Both items match; return was filed, no sfrTax. Encoding corrected 2026-11-11: ageInSeparationYear was 43 (the 1999 Northrop Grumman separation, wrong employer for the Boeing/Rockwell plan); now 31 (1987 Rockwell separation, derived from age 46 in 2002). Verdicts unchanged; Rulings.lean (generated by tools/taxcourt/rulings_lean.py) still holds the old JSON string and should be regenerated."
+  },
+  {
+   "id": "tcsumm-2020-18",
+   "citation": "T.C. Summary Opinion 2020-18",
+   "name": "Darline Francois v. Commissioner",
+   "date": "2020-06-30",
+   "type": "summary",
+   "years": [
+    2014,
+    2015,
+    2016
+   ],
+   "issues": [
+    {
+     "issue": "2014 deficiency (disallowed Schedule C deductions, unreported income, SE tax)",
+     "provision": "secs. 162, 6001, 7491(a)",
+     "court": 8244,
+     "lean": 8244,
+     "verdict": "judgment",
+     "diagnosis": "Matches only as a consistency check: taxShown = notice total tax - deficiency. The decisive step is a burden-of-proof/substantiation holding (no credible evidence); the opinion gives no gross receipts or return totals, so the tax cannot be recomputed from facts. Rerun 57b55431cca.",
+     "snippet": "respondent's determinations in the notice of deficiency are sustained.",
+     "cause": null
+    },
+    {
+     "issue": "2014 sec. 6662(a) penalty (substantial understatement)",
+     "provision": "secs. 6662(a), (b)(2), (d)(1)(A); 6751(b)(1); 6664(c)",
+     "court": "1,648.80",
+     "lean": 1649,
+     "verdict": "match",
+     "diagnosis": "20% x 8,244 = 1,648.80; Lean 1649 (rounded). Substantial understatement match; 6751(b) approval found; no reasonable cause (judgment). Rerun 57b55431cca.",
+     "snippet": "We sustain the accuracy-related penalties for 2014, 2015, and 2016.",
+     "cause": null
+    },
+    {
+     "issue": "2015 deficiency (disallowed Schedule C deductions, unreported income, SE tax)",
+     "provision": "secs. 162, 6001, 7491(a)",
+     "court": 18011,
+     "lean": 18011,
+     "verdict": "judgment",
+     "diagnosis": "Matches only as a consistency check: taxShown = notice total tax - deficiency. The decisive step is a burden-of-proof/substantiation holding (no credible evidence); the opinion gives no gross receipts or return totals, so the tax cannot be recomputed from facts. Rerun 57b55431cca.",
+     "snippet": "respondent's determinations in the notice of deficiency are sustained.",
+     "cause": null
+    },
+    {
+     "issue": "2015 sec. 6662(a) penalty (substantial understatement)",
+     "provision": "secs. 6662(a), (b)(2), (d)(1)(A); 6751(b)(1); 6664(c)",
+     "court": "3,602.20",
+     "lean": 3602,
+     "verdict": "match",
+     "diagnosis": "20% x 18,011 = 3,602.20; Lean 3602 (rounded). Substantial understatement match; 6751(b) approval found; no reasonable cause (judgment). Rerun 57b55431cca.",
+     "snippet": "We sustain the accuracy-related penalties for 2014, 2015, and 2016.",
+     "cause": null
+    },
+    {
+     "issue": "2016 deficiency (disallowed Schedule C deductions, unreported income, SE tax)",
+     "provision": "secs. 162, 6001, 7491(a)",
+     "court": 10331,
+     "lean": 10331,
+     "verdict": "judgment",
+     "diagnosis": "Matches only as a consistency check: taxShown = notice tax 15,939 - deficiency. The decisive step is a burden-of-proof/substantiation holding (no credible evidence); the opinion gives no gross receipts or return totals, so the tax cannot be recomputed from facts.",
+     "snippet": "respondent's determinations in the notice of deficiency are sustained.",
+     "cause": null
+    },
+    {
+     "issue": "2016 sec. 6662(a) penalty (substantial understatement)",
+     "provision": "secs. 6662(a), (b)(2), (d)(1)(A); 6751(b)(1); 6664(c)",
+     "court": "1,860.60",
+     "lean": 2066,
+     "verdict": "mismatch",
+     "diagnosis": "(c) court figure inconsistent: 20% x 10,331 = 2,066.20; the stated 1,860.60 is 20% of 9,303. The opinion states no reduced base. Substantial (10,331 > 5,000 > 1,593.90) MATCH; 6751(b) approval found and encoded; no reasonable cause (judgment).",
+     "snippet": "We sustain the accuracy-related penalties for 2014, 2015, and 2016.",
+     "cause": "court-or-irs-arithmetic"
+    }
+   ],
+   "deficiency": {
+    "court": {
+     "2014": 8244,
+     "2015": 18011,
+     "2016": 10331
+    },
+    "lean": {
+     "2014": 8244,
+     "2015": 18011,
+     "2016": 10331
+    }
+   },
+   "notes": "Rerun 57b55431cca: 2014 and 2015 deficiency/understatement/substantial/penalty all match (deficiencies tautological - taxShown derived from the notice totals). 2016 penalty mismatch is the court's own figure (1,860.60 != 20% of 10,331 = 2,066.20). Court's 10%-of-required-tax figures for 2015 (1,801.10) and 2016 (1,033.10) are 10% of the deficiencies, not of the total tax; harmless since 5,000 is the greater either way."
+  },
+  {
+   "id": "tcsumm-2020-25",
+   "citation": "T.C. Summary Opinion 2020-25",
+   "name": "David Casimer Brzyski v. Commissioner",
+   "date": "2020-08-27",
+   "type": "summary",
+   "years": [
+    2016
+   ],
+   "issues": [
+    {
+     "issue": "Common-law marriage to Daniela (stepchild relationship)",
+     "provision": "152(f)(1)(A)(i); Kansas common-law marriage",
+     "court": "not married; children not stepchildren",
+     "lean": "encoded as finding: relationship 'unrelated', marriedAtYearEnd false",
+     "verdict": "judgment",
+     "diagnosis": "Decisive step is a credibility/burden finding under Kansas law (inconsistent affidavits, 'fiance' post, single filings); encoded as a fact, not computed.",
+     "snippet": "we find that Mr. Brzyski failed to meet his burden of proof to establish that a common law marriage took place in Kansas.",
+     "cause": null
+    },
+    {
+     "issue": "Qualifying child A.D.B. / J.N.B.",
+     "provision": "152(c)(2)",
+     "court": "no (relationship fails)",
+     "lean": "false/false",
+     "verdict": "match",
+     "diagnosis": "Lean fails 152(c)(1)(A) relationship. It also lists residence >1/2 year as a failure only because days-with-taxpayer was not found and left at default 0; the court did not reach that test.",
+     "snippet": "he did not satisfy the relationship requirement and neither A.D.B nor J.N.B. was his qualifying child",
+     "cause": null
+    },
+    {
+     "issue": "Qualifying relative A.D.B. / J.N.B.",
+     "provision": "152(d)(2)(H), 152(d)(1)(C); Reg. 1.152-1(b)",
+     "court": "no (not household member all year; support not shown)",
+     "lean": "false/false (fails 152(d)(2) member of household and 152(d)(1)(C) support)",
+     "verdict": "match",
+     "diagnosis": "Both grounds reproduced from findings livedWithWholeYear false and taxpayerProvidedOverHalfSupport false (the latter a substantiation finding).",
+     "snippet": "we find that A.D.B. and J.N.B. are not qualifying relatives of Mr. Brzyski.",
+     "cause": null
+    },
+    {
+     "issue": "Dependency exemptions",
+     "provision": "151(c), 152(a)",
+     "court": "not allowed",
+     "lean": "dependent false for both; exemptions 4,050 (self only)",
+     "verdict": "match",
+     "diagnosis": "Follows from QC and QR both failing.",
+     "snippet": "Mr. Brzyski is not entitled to his claimed dependency exemption",
+     "cause": null
+    },
+    {
+     "issue": "Head of household",
+     "provision": "2(b)(1)",
+     "court": "not entitled",
+     "lean": "headOfHousehold false; filingStatus single (only allowed status)",
+     "verdict": "match",
+     "diagnosis": "Unmarried (no marriage found) with no qualifying person -> single.",
+     "snippet": "Mr. Brzyski is not entitled to the filing status \"head of household\" for the 2016 taxable year.",
+     "cause": null
+    },
+    {
+     "issue": "Child tax credit and additional CTC",
+     "provision": "24(a), (c), (d)",
+     "court": "not entitled",
+     "lean": "ctcNonrefundable 0, refundableCtc 0",
+     "verdict": "match",
+     "diagnosis": "No 152(c) qualifying child.",
+     "snippet": "Mr. Brzyski is not entitled to either the child tax credit or the additional child tax credit.",
+     "cause": null
+    },
+    {
+     "issue": "Earned income credit (no qualifying child)",
+     "provision": "32(a), (c)(1)(A); Rev. Proc. 2015-53 sec. 3.06",
+     "court": "0 (earned income 16,788 > 14,880 completed phaseout)",
+     "lean": "eic 0; earnedIncome 16,788",
+     "verdict": "match",
+     "diagnosis": "Lean phases out at the 2016 no-child single completed amount.",
+     "snippet": "Mr. Brzyski earned $16,788 in the 2016 taxable year. This amount is above the cap, and therefore, he is not entitled to the credit.",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency",
+     "provision": "6211",
+     "court": "7,816",
+     "lean": "8,215",
+     "verdict": "mismatch",
+     "diagnosis": "Missing fact, not a framework error. As filed (HoH, 2 QCs, earned income 16,788): tax 0, EIC 5,572 + ACTC 2,000 = net -7,572, exactly the refund the IRS froze. Corrected single on AGI 16,788: TI 6,438, tax 643 -> deficiency 8,215. Court's 7,816 implies corrected tax 244 -> TI ~2,425-2,449 -> AGI ~12,775-12,799, i.e. ~4,000 of above-the-line adjustments, consistent with fn. 17 ('earned income was greater than his adjusted gross income') but not stated. Sensitivity run (scratch only) with adjustments 4,000 on both returns gives deficiency exactly 7,816 (3,950 -> 7,821; 4,050 -> 7,811).",
+     "snippet": "Mr. Brzyski's earned income was greater than his adjusted gross income.",
+     "cause": "facts-not-stated"
+    },
+    {
+     "issue": "Accuracy-related penalty",
+     "provision": "6662(a)",
+     "court": "conceded by respondent",
+     "lean": "not encoded",
+     "verdict": "not-encodable",
+     "diagnosis": "Concession, no findings to compute.",
+     "snippet": "Respondent concedes the accuracy-related penalty.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 7816,
+    "lean": 8215
+   },
+   "notes": "Main case encodes findings only (no adjustments; AGI not stated). Labelled sensitivity variant (scratch, not in case file): facts.adjustments = asFiled.adjustments = 4,000 -> corrected AGI 12,788, TI 2,438, tax 244, deficiency 7,816 (exact match). As-filed netTax -7,572 equals the frozen refund, confirming the as-filed encoding; claimed refund 9,288 implies withholding ~1,716 (not encoded; does not affect deficiency). Earned income encoded as wages (opinion does not say wages vs SE). Grandfather also claimed the children (fn. 9); no finding they were his QCs, so qualifyingChildOfAnother not set. Children's days with taxpayer unknown (came to Missouri June-Oct 2016); left at default."
+  },
+  {
+   "id": "tcsumm-2020-5",
+   "citation": "T.C. Summary Opinion 2020-5",
+   "name": "Tracey Rene Merrell and Christopher L. Merrell v. Commissioner",
+   "date": "2020-01-16",
+   "type": "summary",
+   "years": [
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "Taxable social security benefits",
+     "provision": "sec. 86(a)-(d)",
+     "court": 22790,
+     "lean": 22790,
+     "verdict": "match",
+     "diagnosis": "Runner: 22,790 (85% cap; MAGI 67,701 + 13,406 = 81,107 > 44,000; 0.85 x 26,812 = 22,790.20).",
+     "snippet": "Social Security benefits of $22,790 (representing 85% of the Social Security benefits of $26,812",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 86(e) lump-sum election",
+     "provision": "sec. 86(e)",
+     "court": "election would not alter liability (failure of proof)",
+     "lean": "lumpSumElection false; taxable SS 22,790 either way (election: 14,484 for 2015 + 8,306 for 2014)",
+     "verdict": "match",
+     "diagnosis": "Rerun 2c5b6354943 with ssLumpSums (9,772 attributable to 2014, found). Without the lump sum, 2015: provisional 67,701 + 8,520 = 76,221, taxable = 85% x 17,040 = 14,484 (their own 1040X figure). 2014 increase: 85% x 9,772 = 8,306 at any 2014 MFJ modified income >= 43,138 (implied by their unprocessed amended 2014 return's 8,306). 14,484 + 8,306 = 22,790 = no-election amount, so no benefit. 2014 income is a bound, not a finding; the court decided on burden of proof (no 2014 return in evidence), so a lower 2014 income would change the computation but not the holding.",
+     "snippet": "it does not appear that an election under section 86(e) would alter their tax liability.",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 72(t) on 17,410 IRA distribution (spouse's disability)",
+     "provision": "sec. 72(t)(2)(A)(iii), (5)",
+     "court": 1741,
+     "lean": 1741,
+     "verdict": "match",
+     "diagnosis": "Runner: 10% x 17,410 = 1,741; IRA owner not disabled, so sec. 72(t)(2)(A)(iii) unavailable (disability of spouse irrelevant) - encoded as disabled false per the court's finding.",
+     "snippet": "the section 72(t)(2)(A)(iii) exception is not available to petitioners.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Rule 155; notice deficiency 7,396 included items later conceded either way. Legal-fee deduction amount not stated (omitted). Rerun 2c5b6354943: exit 0, 3/3 expected items match (taxable SS 22,790, sec. 72(t) 1,741, lumpSumElection false). No deficiency computed (no asFiled; Rule 155)."
+  },
+  {
+   "id": "tcsumm-2020-9",
+   "citation": "T.C. Summary Opinion 2020-9",
+   "name": "Claudia Yanira Magana v. Commissioner",
+   "date": "2020-02-10",
+   "type": "summary",
+   "years": [
+    2014,
+    2015,
+    2016
+   ],
+   "issues": [
+    {
+     "issue": "HOH filing status 2016",
+     "provision": "sec. 2(b)(1)(A)(i), 152(c)",
+     "court": "hoh",
+     "lean": "hoh",
+     "verdict": "match",
+     "diagnosis": "Unmarried, paid over half household cost, two conceded qualifying children living with her all year; the children's father (also a parent) did not claim them, so tieBreak gives petitioner. All 7 expected items match (filingStatus, headOfHousehold, qualifyingChild x2, hohQualifyingPerson, tieBreaker x2).",
+     "snippet": "We find that she properly filed as head of household for 2015 and 2016.",
+     "cause": null
+    },
+    {
+     "issue": "HOH filing status 2015",
+     "provision": "sec. 2(b)(1)(A)(i), 152(c)",
+     "court": "hoh",
+     "lean": "hoh",
+     "verdict": "match",
+     "diagnosis": "Rerun at 57b55431cca: 2015 run matches all 7 items (filingStatus, headOfHousehold, qualifyingChild x2, hohQualifyingPerson, tieBreaker x2).",
+     "snippet": "We find that she properly filed as head of household for 2015 and 2016.",
+     "cause": null
+    },
+    {
+     "issue": "Education credit $1,000 for 2014",
+     "provision": "sec. 25A(a)",
+     "court": "not entitled (0)",
+     "lean": "educationCredits 0 (2014 entry: student with 0 qualified expenses paid in 2014)",
+     "verdict": "judgment",
+     "diagnosis": "rerun 2c5b6354943: 2014 entry added with students [petitioner, qualifiedExpenses 0]; educationCredits 0 matches. The decisive step is substantiation (no evidence tuition was paid in 2014, only in 2013), a finding encoded as 0 expenses; the credit then follows mechanically under sec. 25A(a).",
+     "snippet": "petitioner must establish the payment of tuition in 2014 to qualify for the credit. Unfortunately, the records she submitted do not establish that payment.",
+     "cause": null
+    },
+    {
+     "issue": "Accuracy-related penalties 2014-2016",
+     "provision": "sec. 6662(a)",
+     "court": "conceded by respondent",
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Conceded; nothing for the court to decide.",
+     "snippet": "Respondent has conceded the accuracy-related penalties.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Notice deficiencies $8,725 (2014), $7,085 (2015), $5,890 (2016); decision under Rule 155, no recomputed amounts stated. Opinion gives no income figures, so no deficiency can be computed; only status/qualifying-child holdings encoded. Respondent conceded 2 of 3 children as qualifying children for exemptions, CTC and EIC all years. Rerun at 57b55431cca: 2015 and 2016 both match (14/14 items). rerun 2c5b6354943: 2014 education-credit entry added (educationCredits 0 matches; verdict judgment, substantiation). All 15 expected items match across 2014-2016."
+  },
+  {
+   "id": "tcsumm-2021-2",
+   "citation": "T.C. Summary Opinion 2021-2",
+   "name": "Dianne S. Hairston and Steve R. Hairston v. Commissioner",
+   "date": "2021-01-25",
+   "type": "summary",
+   "years": [
+    2014
+   ],
+   "issues": [
+    {
+     "issue": "Husband treated as receiving $35,999 of social security benefits for 2014 (incl. $7,723 workers' compensation offset)",
+     "provision": "§86(d)(3)",
+     "court": "yes: $35,999 treated as benefits for 2014",
+     "lean": "socialSecurity input; the §86(d)(3) characterisation is made outside the framework (input-level)",
+     "verdict": "not-encodable",
+     "diagnosis": "Framework takes benefits as a number; it has no §86(d)(3) workers'-compensation-offset rule, so the holding is an input, not a computation. Taxable amount not stated by the court.",
+     "snippet": "Under section 86 petitioner husband is taxed as if he received $35,999 in Social Security disability benefits for 2014.",
+     "cause": null
+    },
+    {
+     "issue": "2017+ repayment of $49,170 does not reduce 2014 income",
+     "provision": "§451(a); §1341; §86(d)(2)",
+     "court": "no reduction for 2014",
+     "lean": "not modelled (year of inclusion / claim of right)",
+     "verdict": "not-encodable",
+     "diagnosis": "Timing-of-inclusion rule for a cash-method taxpayer; framework has no multi-year or §1341 model.",
+     "snippet": "Petitioners' repayments in 2017 of benefits received in 2014 do not affect their 2014 tax liability.",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency $9,717",
+     "provision": "§6211",
+     "court": "9717",
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Rerun 57b55431cca: 2014 now runs, but the opinion states no other income, deductions or the return as filed, so the 9,717 deficiency cannot be recomputed (with benefits alone provisional income 18,000 < 32,000 gives 0 taxable). Arithmetic: 85% x 35,999 = 30,599; 9,717/30,599 = 31.8% average rate implies other taxable income near the 2014 MFJ 28%/33% boundary (226,850), roughly 219,000. Inference only.",
+     "snippet": "Respondent determined that petitioners had an income tax deficiency of $9,717 for taxable year 2014.",
+     "cause": null
+    },
+    {
+     "issue": "§6662(a) penalty",
+     "provision": "§6662(a)",
+     "court": "conceded by respondent",
+     "lean": "not encoded",
+     "verdict": "not-encodable",
+     "diagnosis": "Conceded; no holding to compute.",
+     "snippet": "Respondent concedes that petitioners are not liable for the accuracy-related penalty under sec. 6662(a).",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 9717,
+    "lean": null
+   },
+   "notes": "Rerun 2c5b6354943: runs (exit 0, no expected items). Deficiency not encodable: other income absent from the opinion. The framework now has a sec. 86(e) field (ssLumpSums), but it is not used here: the court did not discuss the election, and neither 2013 modified income nor 2014 other income is in the opinion (SSA-1099 shows $18,599 attributable to 2013), so nothing about it can be computed or compared."
+  },
+  {
+   "id": "tcsumm-2021-26",
+   "citation": "T.C. Summary Opinion 2021-26",
+   "name": "Carol Denise Griffin v. Commissioner",
+   "date": "2021-08-16",
+   "type": "summary",
+   "years": [
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "Niece/nephews qualifying children (dependency exemptions)",
+     "provision": "sec. 152(c)(1)(B)",
+     "court": "yes",
+     "lean": "yes (all three)",
+     "verdict": "judgment",
+     "diagnosis": "Runner: qualifyingChild and dependent true for TG, SG, OG (6/6 match). The decisive step, residency more than half of 2015, is a credibility finding encoded as a fact; the rest is computation.",
+     "snippet": "we find that T.G., S.G., and O.G. satisfied the residency test and were qualifying children",
+     "cause": null
+    },
+    {
+     "issue": "CTC and ACTC",
+     "provision": "sec. 24(a), (c), (d)",
+     "court": "allowed as claimed",
+     "lean": "ctcChild true x3",
+     "verdict": "match",
+     "diagnosis": "Runner: ctcChild true for all three (ages 15, 8, 5 < 17). Credit amounts not computed (wages not stated).",
+     "snippet": "petitioner is entitled to the child tax credits and additional child tax credits as claimed",
+     "cause": null
+    },
+    {
+     "issue": "EIC",
+     "provision": "sec. 32(c)(3)",
+     "court": "allowed as claimed",
+     "lean": "eicChild true x3",
+     "verdict": "match",
+     "diagnosis": "Runner: eicChild true for all three. EIC amount not computed (wages not stated); sec. 152(c)(4)(C) tie-breaker not addressed by the court.",
+     "snippet": "petitioner is entitled to the earned income tax credit as claimed on her return.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 0,
+    "lean": null
+   },
+   "notes": "Decision for petitioner. Sec. 152(c)(4)(C) (non-parent claimant where a parent may claim) not addressed by the court. Rerun 2026-11-11 on 57b55431cca (2015 supported). Exit 0, 12/12 expected flags match. No deficiency computed (no income or asFiled facts)."
+  },
+  {
+   "id": "tcsumm-2021-41",
+   "citation": "T.C. Summary Opinion 2021-41",
+   "name": "Nowran Gopi v. Commissioner",
+   "date": "2021-12-02",
+   "type": "summary",
+   "years": [
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "Tie-breaker: grandchildren I.M.E. and P.A.E. claimed by both petitioner (grandfather) and their mother",
+     "provision": "sec. 152(c)(4)(A)(i)",
+     "court": "Kapoor (parent) for both",
+     "lean": "Kapoor for both",
+     "verdict": "match",
+     "diagnosis": "Rerun at 57b55431cca: matches on the 2015 year. earlier 2016 proxy run: tieBreak gives Kapoor for both (parent claiming beats non-parent). Rule identical in 2015.",
+     "snippet": "the tie-breaker rule in section 152(c)(4)(A)(i) determines that the children shall be treated as the qualifying children of the taxpayer who is their parent.",
+     "cause": null
+    },
+    {
+     "issue": "Dependency exemptions for I.M.E. and P.A.E.",
+     "provision": "sec. 151(c), 152(a), (d)(1)(D)",
+     "court": "not dependents; not qualifying relatives",
+     "lean": "dependent false, qualifyingRelative false for both (sec. 152(d)(1)(D))",
+     "verdict": "match",
+     "diagnosis": "Rerun at 57b55431cca: matches on the 2015 year. earlier 2016 proxy: dependent false and qualifyingRelative false for both (qualifying child of another taxpayer, §152(d)(1)(D)).",
+     "snippet": "petitioner is not entitled to claim dependency exemption deductions for the taxable year 2015.",
+     "cause": null
+    },
+    {
+     "issue": "Head of household status",
+     "provision": "sec. 2(b)(1)(A)",
+     "court": "single",
+     "lean": "single (hohQualifyingPerson false for both)",
+     "verdict": "match",
+     "diagnosis": "Rerun at 57b55431cca: matches on the 2015 year. earlier 2016 proxy: hohQualifyingPerson false for both, filingStatus single.",
+     "snippet": "petitioner is not entitled to claim head of household filing status for the taxable year 2015.",
+     "cause": null
+    },
+    {
+     "issue": "Additional child tax credit",
+     "provision": "sec. 24(a), (d)",
+     "court": "0",
+     "lean": "0 (ctcChild false for both)",
+     "verdict": "match",
+     "diagnosis": "Rerun at 57b55431cca: matches on the 2015 year. earlier 2016 proxy: ctcChild false for both, refundableCtc 0.",
+     "snippet": "petitioner is not entitled to claim the additional child tax credit for the year in issue.",
+     "cause": null
+    },
+    {
+     "issue": "EIC (with or without qualifying children)",
+     "provision": "sec. 32(c)(1)(A)(ii), (c)(3)",
+     "court": "0",
+     "lean": "0 (AGI/earned income 15,545 > 14,820)",
+     "verdict": "match",
+     "diagnosis": "Rerun at 57b55431cca: matches on the 2015 year. earlier 2016 proxy: eic 0 (no qualifying child; AGI 15,545 exceeds the no-child completed phase-out, $14,820 in 2015 / $14,880 in 2016).",
+     "snippet": "petitioner's adjusted gross income and earned income both exceeded the phaseout amount of $14,820 for 2015.",
+     "cause": null
+    },
+    {
+     "issue": "Accuracy-related penalty $1,291",
+     "provision": "sec. 6662(a)",
+     "court": "conceded by respondent",
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Conceded.",
+     "snippet": "Respondent concedes that petitioner is not liable for an accuracy-related penalty under sec. 6662(a) for the year in issue.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 6453,
+    "lean": null
+   },
+   "notes": "Deficiency $6,453 sustained, but not reconstructible: the original return's composition (AGI 11,679 as filed; whether SE income/tax, which credits in what amounts) is not stated, and the 1040X raised AGI to 15,545 'along with other adjustments'. Rough check: original as single with AGI 11,679 gives tax ~138 plus disallowed EIC (~4,672) and ACTC (~1,302) = ~6,112, close to but not 6,453, so the as-filed figures differ in ways the opinion doesn't give. Rerun at 57b55431cca: all 13 expected items match on 2015 (exit 0)."
+  },
+  {
+   "id": "tcsumm-2021-6",
+   "citation": "T.C. Summary Opinion 2021-6",
+   "name": "Alan Dexter Wenk v. Commissioner",
+   "date": "2021-02-10",
+   "type": "summary",
+   "years": [
+    2016
+   ],
+   "issues": [
+    {
+     "issue": "Is the $109,471 retirement distribution, paid over to the former employer as restitution, includible in 2016 gross income?",
+     "provision": "secs. 61(a), 402(a), 72",
+     "court": "includible (109,471)",
+     "lean": "109471 included as pensions (input)",
+     "verdict": "not-encodable",
+     "diagnosis": "Whether a distribution applied to restitution was 'received' is a characterisation on disputed facts (constructive receipt / assignment); the framework takes income items as inputs, so the court's finding is encoded as the fact (pensions 109,471).",
+     "snippet": "the record establishes that the proceeds from the distribution were paid to him and then, through Mr. Eisenhauer, transferred to his former employer",
+     "cause": null
+    },
+    {
+     "issue": "Is petitioner liable for the 10% sec. 72(t) additional tax on the distribution?",
+     "provision": "sec. 72(t)(1), (2)(A)(i); sec. 4974(c)",
+     "court": 10947,
+     "lean": "10947",
+     "verdict": "match",
+     "diagnosis": "Age 43, ESOP/401(k) qualified plan, no exception shown: 10% x 109,471 = 10,947.10 -> 10,947, matching the notice amount the court sustained.",
+     "snippet": "the withdrawal does not fit within any of the statutory exceptions, and the entire distribution is subject to the 10% additional tax.",
+     "cause": null
+    },
+    {
+     "issue": "Is petitioner liable for the sec. 6651(a)(1) addition to tax (return due 2017-04-18, filed 2017-09-04)?",
+     "provision": "sec. 6651(a)(1)",
+     "court": "does not apply (0)",
+     "lean": "failureToFileApplies false; failureToFile 0",
+     "verdict": "judgment",
+     "diagnosis": "Production met (parties agree return was late: due 2017-04-18, filed 2017-09-04); reasonable cause encoded as found, so the flag is false and the amount 0. The decisive step is the court's credibility finding about his efforts to file while incarcerated, not a computation. The notice's 2,772 cannot be checked without its underpayment base.",
+     "snippet": "petitioner has shown he had reasonable cause for failing to timely file his 2016 return and that his failure was not due to willful neglect.",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6662(a) accuracy-related penalty ($3,551)",
+     "provision": "sec. 6662(a)",
+     "court": 0,
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Conceded by respondent; not decided, so not encoded.",
+     "snippet": "Respondent concedes that petitioner is not liable for the sec. 6662(a) accuracy-related penalty.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 39649,
+    "lean": null
+   },
+   "notes": "Decision for respondent on the 39,649 deficiency, but the opinion does not give filing status, the other income on the return, or the tax shown, so the deficiency cannot be recomputed (Lean on the distribution alone: regular tax 20,792 + 72(t) 10,947 = 31,739 as single, which is not comparable). The 21,894 withholding credit allowed in the notice affects the balance due, not the deficiency. All expected items matched (exit 0). No framework gap found."
+  },
+  {
+   "id": "tcsumm-2021-9",
+   "citation": "T.C. Summary Opinion 2021-9",
+   "name": "Jennevieve Marie Fletcher v. Commissioner",
+   "date": "2021-05-10",
+   "type": "summary",
+   "years": [
+    2016
+   ],
+   "issues": [
+    {
+     "issue": "Are 2016 SS benefits repaid from 2020 includible in 2016?",
+     "provision": "sec. 86(a), (d)(2)(A)",
+     "court": 13024,
+     "lean": "13024",
+     "verdict": "match",
+     "diagnosis": "No repayment in 2016, so benefits are 15,322; 85% cap: 13,023.70 -> 13,024.",
+     "snippet": "Petitioner's repayment in 2020 of Social Security benefits received in 2016 does not affect her 2016 tax liability.",
+     "cause": null
+    },
+    {
+     "issue": "Notice deficiency (consistency check)",
+     "provision": "sec. 6211",
+     "court": 3992,
+     "lean": "3992",
+     "verdict": "match",
+     "diagnosis": "Recomputing the notice (SS + the 1,983 NEC as Schedule C income, later conceded) reproduces 3,992 exactly, confirming respondent's sec. 86 computation.",
+     "snippet": "Respondent determined that petitioner is liable for a Federal income tax deficiency of $3,992 for the taxable year 2016.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": 3250
+   },
+   "notes": "Rule 155 deficiency not stated; Lean's post-concession figure is 3250 (single assumed; status not stated)."
+  },
+  {
+   "id": "tcsumm-2022-10",
+   "citation": "T.C. Summary Opinion 2022-10",
+   "name": "Alfred Christopher Morgan v. Commissioner",
+   "date": "2022-06-23",
+   "type": "summary",
+   "years": [
+    2016
+   ],
+   "issues": [
+    {
+     "issue": "Is petitioner a qualified individual (330-day physical presence + foreign tax home, abode not in US) entitled to the sec. 911(a)(1) exclusion of his Saudi wages?",
+     "provision": "sec. 911(a)(1), (d)(1)(B), (d)(3)",
+     "court": "yes; exclusion up to the sec. 911(b)(2) limit (101,300 for 2016)",
+     "lean": "foreignEarnedIncomeExclusion 101300 (366 qualifying days, FEI 109,024)",
+     "verdict": "judgment",
+     "diagnosis": "Encoded with facts.foreign; the exclusion 101,300 (full-year 2016 cap; 109,024 exceeds it) matches. Qualification rests on findings: the 330-day count (credibility: Form 2555 25 days vs testimony 21 days, both < 35) and abode in Saudi Arabia (weighing of ties) - judgment inputs. Not modelled: no housing exclusion (employer compound, value not stated); wages for the ~21-25 US days treated as foreign earned income, as the court did.",
+     "snippet": "we conclude that petitioner's abode was in Saudi Arabia in 2016; therefore, he is entitled to exclude his foreign earned income up to the limitations",
+     "cause": null
+    },
+    {
+     "issue": "Tax on the remaining income (pension + wages over the limit) after the exclusion",
+     "provision": "sec. 911(b)(2)(D), (f); sec. 1; sec. 72(t)",
+     "court": "pension and wages over the limit taxable (amount under Rule 155)",
+     "lean": "6891 (sec. 911(f) stacked regular tax 4,884 on TI 17,443 + sec. 72(t) 2,007)",
+     "verdict": "match",
+     "diagnosis": "sec. 911(f) stacking now modelled: tax(17,443 + 101,300) - tax(101,300) = 4,884, plus 10% sec. 72(t) on the pension 2,007 = 6,891, equal to the hand computation. Court states the rule, not the amount (Rule 155). Caveat: sec. 72(t) kept as not conceded (age not stated).",
+     "snippet": "petitioner's pension income, along with the amount left over after accounting for limitations on his foreign earned income exclusion, both remain taxable",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6651(a)(1) failure-to-file addition",
+     "provision": "sec. 6651(a)(1), (c)(1)",
+     "court": "sustained (on redetermined tax)",
+     "lean": "failureToFileApplies true; 1550 (25% x 6,891 = 1,723 less (c)(1) offset 2.5% x 6,891 = 172)",
+     "verdict": "judgment",
+     "diagnosis": "Holding flag failureToFileApplies matches; liability rests on no reasonable cause shown (judgment input). Amount on the redetermined tax with the sec. 6651(c)(1) offset limited by (c)(2): 1,550, as hand-computed. No court amount (Rule 155).",
+     "snippet": "Petitioner does not argue, nor does the record show, that he had a meaningful defense to the imposition of the additions to tax.",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6651(a)(2) failure-to-pay addition on the SFR (sec. 6651(g)(2))",
+     "provision": "sec. 6651(a)(2), (g)(2)",
+     "court": "sustained, base = tax as redetermined",
+     "lean": "failureToPayApplies true; 1723 (25% x min(sfrTax 28,932, required 6,891), 50 months)",
+     "verdict": "judgment",
+     "diagnosis": "Holding flag failureToPayApplies matches (SFR under sec. 6020(b), unpaid). sec. 6651(c)(2) applied: base is the redetermined 6,891, as the court ordered: 25% x 6,891 = 1,723. Liability rests on no reasonable cause shown (judgment input). No court amount (Rule 155).",
+     "snippet": "we sustain respondent's imposition of the additions to tax under section 6651(a)(1) and (2), with the \"amount required to be shown as tax on [the] return\" computed",
+     "cause": null
+    },
+    {
+     "issue": "Notice deficiency (consistency check)",
+     "provision": "sec. 6211; sec. 72(t)",
+     "court": 28932,
+     "lean": "28932",
+     "verdict": "match",
+     "diagnosis": "Wages 109,024 + pension 20,069 + COD 2,286 (later conceded), single, std ded 6,300 + exemption 4,050: TI 121,029, regular tax 26,925, plus 10% sec. 72(t) on the pension 2,007 = 28,932 exactly. Shows the notice included a 72(t) tax the opinion never mentions.",
+     "snippet": "respondent prepared a substitute for return pursuant to section 6020(b) for 2016 showing tax due of $28,932, plus additions to tax.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": 6891
+   },
+   "notes": "Rerun 7175885f197 with facts.foreign (366 days, FEI 109,024) and sfrTax 28,932. Rule 155; no court amounts. Lean deficiency 6,891 (4,884 stacked regular + 2,007 sec. 72(t)); exclusion 101,300; FTF 1,550, FTP 1,723; holding flags match. Notice 28,932 reproduced exactly. Runner exit 0."
+  },
+  {
+   "id": "tcsumm-2022-17",
+   "citation": "T.C. Summary Opinion 2022-17",
+   "name": "Ruben H. Domdom, Jr. v. Commissioner",
+   "date": "2022-08-30",
+   "type": "summary",
+   "years": [
+    2014,
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "§911 foreign earned income exclusion for Iraq wages, 2014 and 2015",
+     "provision": "§911(a), (d)(1), (d)(3)",
+     "court": "denied: abode not shown to be outside the U.S.",
+     "lean": "not modelled",
+     "verdict": "not-encodable",
+     "diagnosis": "§911 not in the framework; the decisive step (abode within the U.S.) is a factual judgment on ties to San Diego/Nevada. No wage or exclusion amounts are stated in the opinion.",
+     "snippet": "Because petitioner has not established that his abode was not within the United States for either year in issue",
+     "cause": null
+    },
+    {
+     "issue": "§6662(a) penalties 2014 and 2015",
+     "provision": "§6662(a), (b)(2); §6664(c); §6751(b)",
+     "court": "not liable: reasonable cause (reliance on paid preparer), although understatements substantial and approval obtained",
+     "lean": "accuracy facts encoded (reasonableCause true, supervisoryApproval true); no amounts, so no check",
+     "verdict": "judgment",
+     "diagnosis": "The outcome turns on the court's reasonable-cause finding (reliance on preparer). Framework would return no penalty given reasonableCause=true, but no understatement amount is in the opinion and the year is also pending.",
+     "snippet": "We further find that petitioner had reasonable cause and acted in good faith with respect to the underpayment",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "No deficiency, wage or penalty figures stated. Years 2014/2015 rejected by runner (pending-year), but nothing numeric to check once they land."
+  },
+  {
+   "id": "tcsumm-2022-23",
+   "citation": "T.C. Summary Opinion 2022-23",
+   "name": "Elijah Servance and Corliss Servance v. Commissioner",
+   "date": "2022-11-21",
+   "type": "summary",
+   "years": [
+    2015
+   ],
+   "issues": [
+    {
+     "issue": "Tier 1 RRB excludable as workers' compensation?",
+     "provision": "sec. 104(a)(1); Reg. 1.104-1(b)",
+     "court": "no",
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Sec. 104(a)(1) classification of a statute is not expressible; RRB encoded as socialSecurity (sec. 86(d)(1)(B)).",
+     "snippet": "the Servances are not entitled to exclude Mr. Serv ance's tier 1 railroad retirement benefits",
+     "cause": null
+    },
+    {
+     "issue": "Taxable tier 1 benefits",
+     "provision": "sec. 86",
+     "court": 24334,
+     "lean": 0,
+     "verdict": "mismatch",
+     "diagnosis": "Rerun 57b55431cca: Lean 0 vs court 24,334. Insufficient facts, not a framework bug: the opinion gives only the RRB (28,628) and dividends (61); with those, provisional income 14,375 < 32,000 (MFJ) gives 0. 85% inclusion needs other MAGI >= 51,255, which the court took from the notice without stating it.",
+     "snippet": "to the extent provided by section 86 (i.e., 85% of that amount).",
+     "cause": "facts-not-stated"
+    },
+    {
+     "issue": "Hartford 4,406 disability payments",
+     "provision": "sec. 61; claim of right / rescission",
+     "court": "not includible",
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Burden of production and rescission on disputed facts.",
+     "snippet": "We therefore do not sustai n respondent's determination that benefits from Hartford of $4,406",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Rule 155 (notice deficiency 7,344; penalty 1,469 conceded; dividends 61 conceded). Rerun 57b55431cca: taxableSocialSecurity mismatch from missing other-income facts."
+  },
+  {
+   "id": "tcsumm-2023-13",
+   "citation": "T.C. Summary Opinion 2023-13",
+   "name": "Magdy A. Ghaly and Laila Ryad v. Commissioner",
+   "date": "2023-04-03",
+   "type": "summary",
+   "years": [
+    2018
+   ],
+   "issues": [
+    {
+     "issue": "Do the 2020 'restoring' contributions make the $71,147 withdrawal a nontaxable rollover?",
+     "provision": "secs. 402(a), 402(c)(1), (c)(3)",
+     "court": "no: includible (71,147)",
+     "lean": "rolloverIncludible 71,147",
+     "verdict": "match",
+     "diagnosis": "Rerun 2c5b6354943: encoded as rollovers {distribution 71,147, rolledOver 71,147 (amount not stated; full amount assumed, an upper bound), days 366 (lower bound: 2018 distribution, 2020 deposit), fromIra false, no waiver}. Over 60 days and no waiver -> fully includible whatever the amount redeposited. The court did not apply a 60-day analysis expressly ('neither argued nor established the applicability of an exception'), but the outcome follows.",
+     "snippet": "he asserts that in 2020 he opened two new retirement accounts and deposited funds in them to replace those he withdrew",
+     "cause": null
+    },
+    {
+     "issue": "Is the $44,178 deemed distribution on the defaulted plan loan includible in 2018 gross income?",
+     "provision": "secs. 72(p), 402(a)",
+     "court": 44178,
+     "lean": "44178 (taken as input)",
+     "verdict": "not-encodable",
+     "diagnosis": "The framework has no sec. 72(p) model (loan default -> deemed distribution); encoded as the found fact pensions 44,178. Deficiency proxy below combines it with the computed 71,147.",
+     "snippet": "Respondent properly included the distributions in petitioners' gross income.",
+     "cause": null
+    },
+    {
+     "issue": "Is petitioners liable for the 10% sec. 72(t) additional tax on the early distributions?",
+     "provision": "sec. 72(t)(1), (2)(A)(i), (2)(B)",
+     "court": 11533,
+     "lean": "11533",
+     "verdict": "match",
+     "diagnosis": "Mr. Ghaly under 59 1/2, no exception proven: 10% x 115,325 = 11,532.50 -> 11,533. The sec. 72(t)(2)(B) medical-expense exception failed on proof of payment (judgment on evidence); encoded with no exceptions as the court found.",
+     "snippet": "The withdrawal does not fit within any of the statutory exceptions, and the entire distribution is subject to the 10% additional tax.",
+     "cause": null
+    },
+    {
+     "issue": "Notice deficiency (consistency proxy)",
+     "provision": "sec. 6211",
+     "court": 38213,
+     "lean": "38213",
+     "verdict": "match",
+     "diagnosis": "Opinion does not state the reported income. With an assumed as-filed MFJ AGI of 139,100 (taxable 115,100), adding 115,325 raises regular tax by 26,680 (49,900 x 22% + 65,425 x 24%) and the sec. 72(t) tax adds 11,533: total 38,213. The base is fitted, not found (any base within roughly $25 gives the same result), so this only shows the notice is consistent with full inclusion plus the 10% tax.",
+     "snippet": "determined a deficiency in petitioners' federal income tax of $ 38,213 and a section 6662(a) accuracy -related penalty of $4,797",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 38213,
+    "lean": 38213
+   },
+   "notes": "Decision for respondent on the full $38,213 deficiency; the sec. 6662(a) penalty was conceded by respondent (not encoded). The notice penalty fits: 20% x (38,213 - 14,229 withholding) = 4,796.80 -> 4,797, i.e. the underpayment was the deficiency net of the 1099-R withholding not claimed on the return. Filing status MFJ inferred from the joint petition. Case 2 in the case.json is a fitted proxy, not a finding. Rerun 2c5b6354943: the 71,147 withdrawal is now a rollover claim (rolloverIncludible 71,147 matches); 44,178 deemed distribution remains an input. All items match; proxy deficiency 38,213 unchanged."
+  },
+  {
+   "id": "tcsumm-2023-25",
+   "citation": "T.C. Summary Opinion 2023-25",
+   "name": "Robert R. Doggart v. Commissioner",
+   "date": "2023-07-27",
+   "type": "summary",
+   "years": [
+    2017
+   ],
+   "issues": [
+    {
+     "issue": "Are the lapsed Prudential policy amounts (13,214 + 5,366) gross income for 2017?",
+     "provision": "sec. 61(a)(9), sec. 72(e)",
+     "court": "includible: 18,580",
+     "lean": "lapseIncome 18580 (policyLapses: 13,214 + 5,366); agi 18580",
+     "verdict": "match",
+     "diagnosis": "Encoded with facts.policyLapses (sec. 72(e)(2),(5),(6): loan extinguished + cash - investment in the contract). The court found only the excess per policy (loan repaid less premiums paid, as Prudential computed and petitioner did not dispute), so each policy is encoded as loanExtinguished = that excess, premiumsPaid 0; lapseIncome is identical for any split. Lean's rule (constructive receipt of the cash value applied to the loan; no-cash irrelevant) matches the court's reasoning. Checks lapseIncome 18,580 and agi 18,580 pass.",
+     "snippet": "The amounts constructively received in excess of his investments in the contracts are therefore includible in gross income.",
+     "cause": null
+    },
+    {
+     "issue": "Schedule E rental loss on the Signal Mountain Property (claimed 77,675, conceded to 25,000)",
+     "provision": "sec. 280A(a), (d)(1), (d)(2)(A),(C), (d)(3)(A); sec. 262",
+     "court": "no deduction allowed (0)",
+     "lean": "not modelled; no Schedule E item encoded",
+     "verdict": "not-encodable",
+     "diagnosis": "Framework has no Schedule E / sec. 280A dwelling-unit test. Facts are mechanical: 47 personal-use days (1 Jan-16 Feb) > max(14, 10% of fair-rental days = 0), plus below-FMV rental to daughter counts as personal use, so the unit is a residence and sec. 212 deductions are barred. Encoding the disallowed loss as absent gives the same result.",
+     "snippet": "Petitioner resided at the property from January 1 until February 16, 2017, exceeding the 14- day maximum for this reason alone.",
+     "cause": null
+    },
+    {
+     "issue": "sec. 6651(a)(1) failure-to-file addition",
+     "provision": "sec. 6651(a)(1)",
+     "court": "liable (notice: 1,434)",
+     "lean": "failureToFileApplies true (no return, reasonableCauseFiling false); amount 210 on the partial income only, not comparable",
+     "verdict": "judgment",
+     "diagnosis": "Holding flag failureToFileApplies matches. Decisive step is the court's finding that incarceration/ignorance is not reasonable cause (input), so verdict stays judgment. Amount not computable: notice base includes unstated 'inter alia' income, withholding and status; notice figures consistent with net tax 6,373: FTF 22.5% x 6,373 = 1,434.",
+     "snippet": "Incarceration  is not a reasonable cause for failure to file.",
+     "cause": null
+    },
+    {
+     "issue": "sec. 6651(a)(2) failure-to-pay addition (SFR under sec. 6020(b))",
+     "provision": "sec. 6651(a)(2), (g)(2)",
+     "court": "liable (notice: 1,147)",
+     "lean": "failureToPayApplies true (SFR via sfrTax, unpaid, reasonableCausePayment false); 131 on partial income",
+     "verdict": "judgment",
+     "diagnosis": "Holding flag failureToPayApplies matches. Needs an SFR for sec. 6651(g)(2): the court found a valid sec. 6020(b) SFR but not its tax, so sfrTax is set to 9,910 (the notice deficiency, inferred) only to mark the SFR. Decisive step is no reasonable cause (judgment). Amount: 1,147 = 18% x 6,373 implies 36 months (to about April 2021), not computable from findings.",
+     "snippet": "As with the failure to file a return, incarceration is not a reasonable cause for the failure to pay tax.",
+     "cause": null
+    },
+    {
+     "issue": "sec. 6654 estimated-tax addition",
+     "provision": "sec. 6654(a), (d)(1)(B)",
+     "court": "liable (notice: 143)",
+     "lean": "145 on the notice reconstruction (required annual 8,919 = 90% x 9,910; no prior return, no payments; withholding 3,537 inferred); estimatedTaxApplies true",
+     "verdict": "mismatch",
+     "diagnosis": "Liability: court finding (2017 tax liability, no 2016/2017 return, no estimated payments; no reasonable-cause exception) - required annual 8,919 matches. Amount is a notice figure (Rule 155), checked via a reconstruction entry: tax 9,910 (the deficiency), withholding 3,537 inferred from FTF 22.5% x 6,373 = 1,434. Shortfall 1,345.50 per installment; at 4% flat to 15 Apr 2018 (967 installment-days): 1,345.5 x 4% x 967/365 = 142.59 -> 143. Lean applies the 5% 2018 Q2 rate for 1-15 Apr 2018 (+4 x 1,345.5 x 1% x 14/365 = 2.06) -> 145. Difference is the Form 2210 worksheet convention (one rate through 15 April) vs the quarterly sec. 6621 rate; not an encoding error. Holding flag estimatedTaxApplies (no waiver, production met) matches on the reconstruction; in the main entry Lean's tax on the found income alone (818) would fall under the sec. 6654(e)(1) 1,000 floor, so the flag is checked only on the reconstruction.",
+     "snippet": "petitioner had a tax liability for the 2017 tax year, that petitioner did not file a return for the 2017 or 2016 tax year",
+     "cause": "court-or-irs-arithmetic"
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Decision under Rule 155; notice deficiency 9,910 and additions 1,434 / 1,147 / 143 cannot be recomputed from the court's findings because the notice included other income ('inter alia') and status, age and withholding are not stated. Rerun f918d6f6fc9: lapsed policies now encoded with facts.policyLapses (match, 18,580). Second case entry is a notice reconstruction for sec. 6654 (estimated {currentTax 9,910, withholding 3,537 inferred}): required annual 8,919 matches, addition 145 vs notice 143 (2.06 from the 5% rate for 1-15 Apr 2018 vs 4% flat). Runner exit 1 (that one item). The single inferred withholding 3,537 makes the notice's FTF 1,434 and sec. 6654 143 (at 4% flat) mutually consistent; FTP 1,147 = 18% x 6,373 implies 36 months, i.e. computed to about April 2021. Schedule E (sec. 280A) still not modelled. Rerun 7175885f197: holding flags failureToFileApplies / failureToPayApplies (main) and estimatedTaxApplies (reconstruction) all match; sfrTax 9,910 inferred to mark the SFR."
+  },
+  {
+   "id": "tcsumm-2023-3",
+   "citation": "T.C. Summary Opinion 2023-3",
+   "name": "Terrence Edward Aragoni v. Commissioner",
+   "date": "2023-01-25",
+   "type": "summary",
+   "years": [
+    2017
+   ],
+   "issues": [
+    {
+     "issue": "Is the $15,000 attorney-fee payment alimony?",
+     "provision": "sec. 71(b)(1)(D), 215(a)",
+     "court": "no: deduction 0 for the 15,000 (liability survives payee's death); total allowed 116,418.70",
+     "lean": "alimonyDeduction 0 for the 15,000 item (isolated run); 116,419 with the allowed/conceded item",
+     "verdict": "match",
+     "diagnosis": "Encoded as alimonyPaid items under the 2017-01-30 order: allowed/conceded 116,419 (108,898.70 + 7,520, rounded) and the 15,000 attorney-fee item with noPostDeathLiability false; parties agreed (A)-(C) met. Whether liability survives death (state law / reading of 'until paid in full') is the court's judgment, entered as a fact; the zero follows mechanically. No income found, so no deficiency.",
+     "snippet": "petitioner's payment of attorney's fees to his ex-spouse's attorney was not a payment of alimony within the meaning of section 71(b)(1).",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Rule 155; penalty conceded. 4,097 + 7,520 + 15,000 = 26,617 checks (notice disallowed 26,617.30). case.json holds two cases: full year (alimonyDeduction 116,419) and the isolated 15,000 item (0)."
+  },
+  {
+   "id": "tcsumm-2023-35",
+   "citation": "T.C. Summary Opinion 2023-35",
+   "name": "Sean Paul Polete v. Commissioner",
+   "date": "2023-12-18",
+   "type": "summary",
+   "years": [
+    2017
+   ],
+   "issues": [
+    {
+     "issue": "Surplus & Adventure (Sch. C) deductions: car/truck, depreciation, other expenses",
+     "provision": "secs. 162(a), 274(d), 280F(d)(4), 167(a)",
+     "court": "allowed 1,092.37 + 1,077.77 + 80.19 + 229.94 = 2,480.27; car/truck and depreciation denied",
+     "lean": "allowed amounts entered as facts; S&A net 328.73 (10,404 - 7,595 - 2,480.27)",
+     "verdict": "judgment",
+     "diagnosis": "Substantiation (strict sec. 274(d) for vehicles; basis/useful life for depreciation) is a finding on evidence; the framework takes the allowed net profit as input and has no Schedule C expense model.",
+     "snippet": "Petitioner testified and the record includes documentary evidence that supports he is entitled to deduct the following asserted expenses",
+     "cause": null
+    },
+    {
+     "issue": "Fibre Arts (Sch. C) deductions",
+     "provision": "secs. 162(a), 274(d), 167(a)",
+     "court": "allowed Etsy fees 202.90 + Ohio filing fees 145.15; car/truck and depreciation denied",
+     "lean": "Fibre Arts net -4,705.05 (3,238 - 7,595 stipulated COGS - 348.05); combined Sch. C -4,376, SE tax 0",
+     "verdict": "judgment",
+     "diagnosis": "Substantiation finding. Stipulated Fibre Arts COGS (7,595) is identical to S&A COGS, possibly a table error; encoded as stated.",
+     "snippet": "he did not prove the properties' depreciable bases, their useful lives, and the previously allowable depreciation deductions for any assets.",
+     "cause": null
+    },
+    {
+     "issue": "STEAM Works: activity not engaged in for profit; any deductions?",
+     "provision": "sec. 183(a)-(c)",
+     "court": 0,
+     "lean": "not modelled (0 entered)",
+     "verdict": "not-encodable",
+     "diagnosis": "Profit objective is a nine-factor facts-and-circumstances judgment; once hobby found, sec. 183(b) caps deductions at gross income (0), which is arithmetic but the framework has no sec. 183 activity model.",
+     "snippet": "because petitioner did not have any gross income from STEAM Works in 2017, he is not entitled to deduct any of the asserted expenses",
+     "cause": null
+    },
+    {
+     "issue": "Beavercreek property: allocation of half-share taxes/interest and expenses (5/12 rental, 7/12 itemized/personal)",
+     "provision": "secs. 162(a), 212(2), 163(h), 164(a), 262",
+     "court": "5/12 of half of taxes+interest and 5/12 of 1,199.36 against rent; 7/12 of half taxes+interest itemized",
+     "lean": "net rent 4,811.32 (7,437.35 - 499.73 - 2,126.30); itemized share 2,976.81 (in itemizedDeductions 25,891)",
+     "verdict": "match",
+     "diagnosis": "Allocation is arithmetic on found facts, done in the encoding (framework has no Schedule E / mixed-use allocation); car/truck, meals, depreciation denied for substantiation (judgment).",
+     "snippet": "petitioner may deduct five-twelfths of his half of the mortgage interest and real estate taxes he paid under sections 162(a) and 212(2)",
+     "cause": null
+    },
+    {
+     "issue": "Maryland property deductions",
+     "provision": "secs. 162(a), 212(2)",
+     "court": "2,896.98 (2,051.50 + 845.48) plus one half of taxes 2,887.33 and interest 8,917.28",
+     "lean": "net rent 12,200.72 (21,000 - 2,896.98 - 5,902.31)",
+     "verdict": "match",
+     "diagnosis": "2,051.50 + 845.48 = 2,896.98 checks; half of taxes+interest = 5,902.31. Rental netting done in the encoding (no Schedule E in framework). Car/truck, meals, depreciation denied (judgment).",
+     "snippet": "petitioner may deduct those expenses totaling $2,896.98 under sections 162(a) and 212(2)",
+     "cause": null
+    },
+    {
+     "issue": "Alimony $3,000 (stipulated)",
+     "provision": "secs. 71(a)-(b), 61(a)(8)",
+     "court": "3,000 stipulated (direction and instrument not stated; no ruling)",
+     "lean": "alimonyIncluded 3000",
+     "verdict": "match",
+     "diagnosis": "Encoded as alimonyReceived (read as income: listed among stipulated income items). Opinion gives no instrument date or (b)(1) facts; defaults (all requirements met) and executed 2017-05-01 (separation month) assumed. If paid rather than received, it would be a 3,000 sec. 215 deduction instead (AGI -6,000 vs. this encoding). Deficiency unchanged at 17,819.",
+     "snippet": "Alimony $3,000",
+     "cause": null
+    },
+    {
+     "issue": "Filing status / exemptions (conceded)",
+     "provision": "secs. 2(b), 151",
+     "court": "HOH; three personal exemptions",
+     "lean": "hoh; dependentsCounted 2; exemptions 12,150",
+     "verdict": "match",
+     "diagnosis": "Concessions; dependents not described in opinion, encoded as two qualifying persons.",
+     "snippet": "Petitioner is entitled to three personal exemptions",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6651(a)(1) addition to tax for failure to file",
+     "provision": "secs. 6651(a)(1), 6651(g)(1), 7491(c)",
+     "court": "applies (liable; amount left to Rule 155, not stated; notice 6,575.17)",
+     "lean": "failureToFileApplies true; amount 3,192",
+     "verdict": "match",
+     "diagnosis": "Applies flag matches: production met (no return by extended 10/15/2018 due date; SFR is not a return, sec. 6651(g)(1)), reasonableCauseFiling false, positive tax due. Petitioner never claimed reasonable cause, so no weighed judgment decides it. Amount unchecked: court gives none (Lean 25% x (17,819 - 5,050) = 3,192).",
+     "snippet": "Petitioner has not claimed nor proven that he qualifies for an exception to the addition to tax for failure to timely file a return.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": 17819
+   },
+   "notes": "Rule 155; no court deficiency or addition amounts. Lean corrected return: AGI 131,010, itemized 25,891, exemptions 12,150, TI 92,969, regular tax 17,159 + 660 sec. 72(t) tax (kept: court calls it 'purely computational') = 17,819 (no return filed, taxShown 0). Assumptions that move the figure: alimony $3,000 now in alimonyReceived (direction not stated; if paid, AGI would be 6,000 lower); capital gain character not stated (if short-term about +342); 660 if dropped -660. Notice (34,273; exemption 3,888 implies MFS-style 1,250 phase-out steps on AGI 158,209) not reproduced: its income composition is not given. Framework gaps: no Schedule C/E expense or mixed-use rental allocation, no sec. 183 hobby limit (sfrTax not needed: the sec. 6651(a)(2) addition was conceded, so there is no (c)(1) offset; checked at 2c5b6354943)."
+  },
+  {
+   "id": "tcsumm-2023-6",
+   "citation": "T.C. Summary Opinion 2023-6",
+   "name": "Ahmed Maregn Mohamed v. Commissioner",
+   "date": "2023-03-07",
+   "type": "summary",
+   "years": [
+    2017
+   ],
+   "issues": [
+    {
+     "issue": "Relief under §6015(b) and (c)",
+     "provision": "§6015(b)(1)(C), (c)(3)(C)",
+     "court": "denied: actual knowledge of the items",
+     "lean": "not modelled",
+     "verdict": "not-encodable",
+     "diagnosis": "Innocent-spouse relief is not in the framework; the decisive step (knowledge) is a factual judgment.",
+     "snippet": "Petitioner is not entitled to relief under section 6015(b) or (c) because he had actual knowledge of the items giving rise to the liability.",
+     "cause": null
+    },
+    {
+     "issue": "Equitable relief under §6015(f)",
+     "provision": "§6015(f); Rev. Proc. 2013-34",
+     "court": "denied after weighing factors",
+     "lean": "not modelled",
+     "verdict": "judgment",
+     "diagnosis": "Multi-factor equitable weighing (Rev. Proc. 2013-34 §4.03); not a computation. Only the threshold allocation (3% / 97% of $20,174) is arithmetic.",
+     "snippet": "the Court is unable to conclude that it would be inequitable to hold petitioner liable for the tax liability.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "No deficiency proceeding. Omitted items 15,625 + 3,870 = 19,495 (97%) and 679 (3%) of 20,174. The $5,602 assessment's basis is not in the record (fn. 2), so it cannot be checked; the rest of the 2017 return is not in the opinion."
+  },
+  {
+   "id": "tcsumm-2024-10",
+   "citation": "T.C. Summary Opinion 2024-10",
+   "name": "Edward George Shlikas v. Commissioner",
+   "date": "2024-06-20",
+   "type": "summary",
+   "years": [
+    2019
+   ],
+   "issues": [
+    {
+     "issue": "Sec. 72(t) on 137,024; first-time homebuyer exception",
+     "provision": "sec. 72(t)(1), (2)(F), 7701(a)(37)",
+     "court": 13702,
+     "lean": "13702",
+     "verdict": "match",
+     "diagnosis": "Plan not shown to be an IRA (burden; judgment on the record) -> encoded qualifiedPlan; framework denies (2)(F) for non-IRAs. 10% x 137,024 = 13,702.40.",
+     "snippet": "petitioner is not eligible for the qualified first -time homebuyer exception from additional tax.",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency",
+     "provision": "sec. 6211",
+     "court": 13702,
+     "lean": "13702",
+     "verdict": "match",
+     "diagnosis": "Deficiency is the 72(t) tax alone.",
+     "snippet": "determined a deficiency in federal income tax of $13, 702",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": 13702,
+    "lean": "13702"
+   },
+   "notes": "Penalty 2,740 conceded by respondent."
+  },
+  {
+   "id": "tcsumm-2024-11",
+   "citation": "T.C. Summary Opinion 2024-11",
+   "name": "Jon K. Palsgaard and Kimberly A. Kelly v. Commissioner",
+   "date": "2024-07-01",
+   "type": "summary",
+   "years": [
+    2019
+   ],
+   "issues": [
+    {
+     "issue": "Are 2019 SSD benefits ($32,862) social security benefits includible under sec. 86, or excluded under sec. 104(a)(1)-(3) / no constructive receipt?",
+     "provision": "sec. 61(a), 86(a), (b), (d)(1)(A); 104(a)(1), (2), (3)",
+     "court": "includible (benefits are sec. 86 benefits, not sec. 104(a)(2) damages)",
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Characterization question (title II benefit vs. 'damages' received by suit/settlement) has no input in the framework (no sec. 104 exclusion model). Holding encoded as facts.socialSecurity = 32,862 (asFiled 3,214).",
+     "snippet": "Accordingly, those benefits do not constitute \"damages\" within the meaning of section 104(a)(2).",
+     "cause": null
+    },
+    {
+     "issue": "Taxable amount of SS benefits and deficiency",
+     "provision": "sec. 86(a), (b); 6211",
+     "court": null,
+     "lean": "0 (no other income encoded)",
+     "verdict": "not-encodable",
+     "diagnosis": "Opinion states neither the taxable amount nor the deficiency, nor petitioners' other income/MAGI. As filed, $2,732 = 85% x $3,214 (2,731.9), so the 85% ceiling bound; with the same other income the corrected taxable amount would be 85% x 32,862 = 27,933, but other income is not in the record, so the runner (benefits only) computes taxable SS 0 and deficiency 0, which is not meaningful.",
+     "snippet": "reporting that petitioner had received SSD benefits of $ 3,214 for that year and took the position that only $ 2,732",
+     "cause": null
+    },
+    {
+     "issue": "Sec. 6662(a) accuracy-related penalty",
+     "provision": "sec. 6662(a)",
+     "court": "conceded by respondent",
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Concession, not a decided issue; not encoded.",
+     "snippet": "Respondent concedes the section 6662(a) accuracy-related penalty.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": "0 (not meaningful: other income not in record)"
+   },
+   "notes": "Runner exit 0 with no expected items. Framework gap: none for sec. 86 itself; the case lacks numbers. Optional gap: an asFiled.taxableSocialSecurity / reported-taxable input check would let the as-filed 2,732 be verified (85% ceiling)."
+  },
+  {
+   "id": "tcsumm-2024-12",
+   "citation": "T.C. Summary Opinion 2024-12",
+   "name": "Gregory Alexander Morino v. Commissioner",
+   "date": "2024-07-02",
+   "type": "summary",
+   "years": [
+    2018,
+    2019
+   ],
+   "issues": [
+    {
+     "issue": "2018 unreported Ward wages 9,994 and NJ state tax refund 354",
+     "provision": "26 U.S.C. 61(a), 111, 6201(d)",
+     "court": "includible (respondent)",
+     "lean": "encoded as facts: wages 7,917 + 9,994 = 17,911; otherIncome 354",
+     "verdict": "judgment",
+     "diagnosis": "Receipt is a finding on an undisputed third-party transcript; sec. 111 tax-benefit inclusion of the refund is not modelled and is encoded directly as otherIncome (court: taxpayer neither alleged nor proved no prior tax benefit). Issue statement says 9,993, findings say W-2 9,994; 9,994 used.",
+     "snippet": "Mr. Morino did not dispute the accuracy of the transcript or his receipt of this income.",
+     "cause": null
+    },
+    {
+     "issue": "Schedule C commissions/fees (6,000; 5,500), car and truck (26,978; 32,190), other expenses (8,920; 5,820), 2018 and 2019",
+     "provision": "26 U.S.C. 162(a), 274(d), 280F(d)(4), 6001",
+     "court": "disallowed in full",
+     "lean": "encoded as facts: SE profit 2018 22,769 (as filed -19,129); 2019 24,213 (as filed -19,297)",
+     "verdict": "judgment",
+     "diagnosis": "Substantiation failure (no evidence offered) is a finding, not a computation; disallowed totals 41,898 (2018) and 43,510 (2019) added back to reported Schedule C losses. Note the itemized 'other expenses' on the returns total 15,050 and 11,100; only 8,920 and 5,820 were in dispute.",
+     "snippet": "At trial Mr. Morino failed to provide any testimony or other evidence to substantiate the claimed deductions.",
+     "cause": null
+    },
+    {
+     "issue": "Deficiency 2018",
+     "provision": "26 U.S.C. 6211; 1, 1401, 63, 164(f)",
+     "court": "7,632 (NOD sustained; remaining adjustments computational)",
+     "lean": "8,534 (single assumed: AGI 54,631, taxable 42,631, regular tax 5,317 + SE tax 3,217; as filed tax 0)",
+     "verdict": "mismatch",
+     "diagnosis": "Opinion does not state filing status, withholding or the IRS computation; with only the found items Lean is 902 higher. No plausible single/HOH variant of the found facts reproduces 7,632 (HOH gives 7,340). The IRS's own figures are not mutually consistent with one base: 6662 penalty 1,382 implies an underpayment of 6,910 (not 7,632), and the 6651(a)(1) addition 933 = 25% x 3,732 implies 3,900 of timely credits/withholding. Missing findings (status, other return items, withholding), not a framework error.",
+     "snippet": "determined deficiencies in Mr. Morino's federal income tax of $7,632 and $4,244 for 2018 and 2019",
+     "cause": "facts-not-stated"
+    },
+    {
+     "issue": "Deficiency 2019",
+     "provision": "26 U.S.C. 6211; 1, 1401, 63, 164(f)",
+     "court": "4,244 (NOD sustained)",
+     "lean": "4,466 (single assumed: AGI 22,502, taxable 10,302, regular tax 1,045 + SE tax 3,421; as filed 0)",
+     "verdict": "mismatch",
+     "diagnosis": "Opinion finds only the 2019 Schedule C items; any other 2019 income/adjustments are not stated. 222 gap: e.g. a 2,500 student loan interest deduction (claimed in 2018) would give about 4,204; exact 4,244 needs unstated facts. Not a framework error.",
+     "snippet": "On that return he reported a business loss of $19,297 from TLT",
+     "cause": "facts-not-stated"
+    },
+    {
+     "issue": "Sec. 6651(a)(1) addition 2018 (filed 2020-04-17, extended due date 2019-10-15)",
+     "provision": "26 U.S.C. 6651(a)(1), (b)(1), 6081(a)",
+     "court": "liable, 933 as determined",
+     "lean": "liable (5 months, 25%, no reasonable cause); 2,134 = 25% x 8,534",
+     "verdict": "mismatch",
+     "diagnosis": "Liability matches; amount differs because timely payments (withholding) were not found and the Lean required tax is 8,534. 933 = 25% x 3,732, implying net amount required after timely credits of 3,732 (e.g. 7,632 - 3,900 withholding). Missing finding; lateness and absence of reasonable cause are encoded as found.",
+     "snippet": "There is no evidence in the record, and Mr. Morino failed to argue, that reasonable cause existed",
+     "cause": "facts-not-stated"
+    },
+    {
+     "issue": "Sec. 6662(a) negligence penalty 2018",
+     "provision": "26 U.S.C. 6662(a), (b)(1), (c), 6664(c)(1), 6751(b)(1), 7491(c)",
+     "court": "liable, 1,382",
+     "lean": "applies = true (match); penalty 1,707 = 20% x 8,534",
+     "verdict": "mismatch",
+     "diagnosis": "Liability matches (negligence, written supervisory approval and no reasonable cause encoded as the court found them). Amount follows the deficiency mismatch; also the IRS 1,382 = 20% x 6,910, below its own 7,632 deficiency, so the penalty base was a portion not explained in the opinion (penaltyBase could encode 6,910 if found).",
+     "snippet": "we hold Mr. Morino liable for the accuracy-related penalties for the years in issue under section 6662(a) and (b)(1)",
+     "cause": "facts-not-stated"
+    },
+    {
+     "issue": "Sec. 6662(a) negligence penalty 2019",
+     "provision": "26 U.S.C. 6662(a), (b)(1), (c), 6664(c)(1), 6751(b)(1)",
+     "court": "liable, 849",
+     "lean": "applies = true (match); penalty 893 = 20% x 4,466",
+     "verdict": "mismatch",
+     "diagnosis": "Liability matches; 849 = 20% x 4,244 (848.8), so the amount gap is entirely the deficiency gap above.",
+     "snippet": "Mr. Morino did not offer a reasonable cause defense to the imposition of the accuracy-related penalties.",
+     "cause": "facts-not-stated"
+    },
+    {
+     "issue": "Sec. 6673(a)(1) frivolous-position penalty",
+     "provision": "26 U.S.C. 6673(a)(1)",
+     "court": "not imposed (first proceeding); warned",
+     "lean": "not modelled",
+     "verdict": "not-encodable",
+     "diagnosis": "Discretionary court-imposed sanction; no computation.",
+     "snippet": "Since this is Mr. Morino's first time proceeding before this Court, we will not impose a penalty now.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": {
+     "2018": 7632,
+     "2019": 4244
+    },
+    "lean": {
+     "2018": 8534,
+     "2019": 4466
+    }
+   },
+   "notes": "Encoded as two cases (2018, 2019) in tcsumm-2024-12.case.json; Lean exit 1. Issue-level holdings (income included, deductions disallowed, 6651 and 6662 liability) all agree; every dollar mismatch traces to facts the opinion does not state (filing status, withholding, 2019 non-Schedule C items, the IRS computation), and the IRS figures themselves imply different bases (6662 base 6,910 vs deficiency 7,632 for 2018; 6651 base 3,732). sfrTax / asFiled.taxableIncome / asFiled.tax not used (return was filed; not in this build's Case.lean when run). No framework gaps found beyond: sec. 111 tax-benefit rule not modelled (encoded as otherIncome), and no expected flag for 6651(a)(1) liability (only the amount 'failureToFile'), so a sustained-addition holding can only be checked by amount."
+  },
+  {
+   "id": "tcsumm-2024-15",
+   "citation": "T.C. Summary Opinion 2024-15",
+   "name": "Jeffrey R. Pope and Davin L. Pope v. Commissioner",
+   "date": "2024-07-17",
+   "type": "summary",
+   "years": [
+    2020
+   ],
+   "issues": [
+    {
+     "issue": "$14,000 IRA deduction for 401(k) deferrals",
+     "provision": "sec. 219",
+     "court": "disallowed",
+     "lean": "iraDeduction 0 (ira/iraSpouse contribution 0)",
+     "verdict": "match",
+     "diagnosis": "rerun 2c5b6354943: sec. 219 now modelled. Encoded the found facts: no IRA and no IRA contributions in 2020 (Mr. Pope's 4,911.72 went to a 401(k), an active-participant plan); iraDeduction 0 matches the disallowance of the 14,000 claimed. The step '401(k) deferral is not a sec. 219 contribution' is the court's characterization, taken as input. No income or deficiency figures, so no deficiency computed.",
+     "snippet": "the Popes are not entitled to an IRA deduction because they did not contribute to a plan governed by section 219.",
+     "cause": null
+    },
+    {
+     "issue": "Interest relief",
+     "provision": "sec. 6404(h)",
+     "court": "no jurisdiction",
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Jurisdictional.",
+     "snippet": "this Court lacks jurisdiction over interest",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Decision for respondent. rerun 2c5b6354943: IRA deduction issue now encoded (iraDeduction 0 match)."
+  },
+  {
+   "id": "tcsumm-2024-19",
+   "citation": "T.C. Summary Opinion 2024-19",
+   "name": "Yelena Tolstov v. Commissioner",
+   "date": "2024-09-23",
+   "type": "summary",
+   "years": [
+    2020,
+    2021
+   ],
+   "issues": [
+    {
+     "issue": "2020 gambling loss deduction beyond the $6,653 respondent allowed",
+     "provision": "§165(d); §6001; Cohan v. Commissioner",
+     "court": "61929 allowed (losses at least equal to winnings)",
+     "lean": "61929 (gamblingLossDeduction)",
+     "verdict": "match",
+     "diagnosis": "The decisive step is the Cohan estimate that losses were at least equal to winnings (judgment on coin-in $105,063, casino visits, few assets); given that finding, the §165(d) cap at gambling gains ($61,929) is computed and matches.",
+     "snippet": "Petitioner is entitled to deduct $61,929 of gambling losses for the year in issue.",
+     "cause": null
+    },
+    {
+     "issue": "§6662(a) accuracy-related penalty, 2020",
+     "provision": "§6662(a),(b)(1)-(2),(c),(d)(1)(A); §6664(c)(1); §6751(b)(1); §7491(c)",
+     "court": "liable",
+     "lean": "applies (via negligence; substantial understatement false on known items)",
+     "verdict": "judgment",
+     "diagnosis": "§6751(b) approval (2022-08-16, before assessment) and no reasonable cause are encoded as the court found them. The court did not name the ground. On the items the opinion states (conceded mortgage interest $7,200 and charity $3,050), Lean's partial understatement is $1,230 (TI 20,901 vs 10,651), not substantial (< $5,000); the rest of the underpayment (car/truck $9,315 on Schedule C with unstated profit, settled 'omitted items of income') is not in the opinion. Penalty applies in Lean only because negligence is encoded from the court's implied finding (concessions unexplained, no records); the ground and reasonable cause are judgments. Penalty amount left to Rule 155.",
+     "snippet": "petitioner failed to act with reasonable cause and in good faith. Therefore, petitioner is liable for an accuracy-related penalty",
+     "cause": null
+    },
+    {
+     "issue": "Concessions: mortgage interest $7,200, car and truck $9,315, noncash charity $3,050; all other 2020/2021 issues settled",
+     "provision": "stipulation of settled issues",
+     "court": "conceded",
+     "lean": "itemized concessions encoded; car/truck not encodable (Schedule C gross/profit not stated)",
+     "verdict": "not-encodable",
+     "diagnosis": "Settled items are not stated in the opinion, so the corrected return is partial; 2021 is wholly settled.",
+     "snippet": "petitioner conceded that she is not entitled to claimed deductions for mortgage interest of $7,200, car and truck expenses of $9,315",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": 1230
+   },
+   "notes": "Notice: 2020 deficiency $7,927, penalty $1,585 (2021: $13,253 / $2,650, settled). Decision under Rule 155, no redetermined figure. Lean's $1,230 is only the part of the deficiency from the two conceded itemized deductions on known facts (single filer and age assumed; other itemized items, Schedule C and omitted income not stated), so it is not comparable with the notice. Penalty ($246 on the partial base) not compared. No framework gap: gamblingWinnings/gamblingLosses used; sfrTax not relevant (return timely filed)."
+  },
+  {
+   "id": "tcsumm-2024-22",
+   "citation": "T.C. Summary Opinion 2024-22",
+   "name": "Carl David Lucas and Jasmine Lucas v. Commissioner",
+   "date": "2024-10-09",
+   "type": "summary",
+   "years": [
+    2018
+   ],
+   "issues": [
+    {
+     "issue": "Unreported wages",
+     "provision": "sec. 61(a)(1); 6201(d)",
+     "court": "sustained: wages 206,609 includible (unreported $174,995)",
+     "lean": "wages 206,609 encoded as fact",
+     "verdict": "match",
+     "diagnosis": "Holding encoded as facts.wages 206,609 (stipulated). Court figure inconsistency (c): 206,609 stipulated - 76,445 reported = 130,164, not the 174,995 stated as unreported; 44,831 gap unexplained in the opinion (possibly notice used different W-2 totals or folded in the Principal Life 1099-R). Lean uses the stipulated total.",
+     "snippet": "Petitioners stipulated that they received wages of $206,609.",
+     "cause": null
+    },
+    {
+     "issue": "Overstated withholding 7,689",
+     "provision": "sec. 31; 6211(b)(1)",
+     "court": "no jurisdiction; not part of deficiency",
+     "lean": "withholding excluded from netTax/deficiency",
+     "verdict": "match",
+     "diagnosis": "Framework excludes withholding from tax shown and from the deficiency (sec. 6211(b)(1)), consistent with the court; the jurisdictional holding itself is not an output.",
+     "snippet": "we lack jurisdiction to redetermine an adjustment to withholding credits.",
+     "cause": null
+    },
+    {
+     "issue": "Medical expense deduction 35,310",
+     "provision": "sec. 213(a); Treas. Reg. 1.213-1(h)",
+     "court": "disallowed in full",
+     "lean": "deduction 32,563 (medical 0)",
+     "verdict": "judgment",
+     "diagnosis": "Substantiation finding is the decisive step (no documents); encoded as 0. Resulting Schedule A deduction checked: expected deduction 32,563 matches.",
+     "snippet": "Petitioners failed to provide any documents.",
+     "cause": null
+    },
+    {
+     "issue": "Noncash charitable contributions 85,000",
+     "provision": "sec. 170(a); Treas. Reg. 1.170A-13(b)(1)",
+     "court": "disallowed in full",
+     "lean": "deduction 32,563 (charity 0)",
+     "verdict": "judgment",
+     "diagnosis": "Receipt adequacy and credibility are judgments; encoded as 0. Allowed Schedule A = conceded SALT 10,000 + mortgage 22,563 = 32,563 -> MATCH.",
+     "snippet": "not entitled to deduct $85,000 for noncash charitable contributions.",
+     "cause": null
+    },
+    {
+     "issue": "Reservist travel expenses 29,445",
+     "provision": "sec. 62(a)(2)(E), 162(p)",
+     "court": "2,433 allowed, 27,012 disallowed",
+     "lean": "adjustments 2,433",
+     "verdict": "match",
+     "diagnosis": "Stipulated amount encoded as facts.adjustments; expected 'adjustments' 2,433 matches. Moving expense 13,800 deemed abandoned (omitted).",
+     "snippet": "We sustain the parties' agreement that Mr. Lucas incurred $2,433 in travel expenses.",
+     "cause": null
+    },
+    {
+     "issue": "Innocent spouse relief for Ms. Lucas",
+     "provision": "sec. 6015(b)(1)(C)",
+     "court": "denied (actual knowledge)",
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Framework has no sec. 6015 model; knowledge of the understatement is a factual judgment. Joint return kept: filingStatus mfj MATCH.",
+     "snippet": "we find that Ms. Lucas had actual knowledge that the 2018 Form 1040 did not include all income",
+     "cause": null
+    },
+    {
+     "issue": "Accuracy-related penalty",
+     "provision": "sec. 6662(a), (b)(2), (d)(1)(A); 6751(b); 6664(c)",
+     "court": "liable to the extent understatement is substantial (Rule 155)",
+     "lean": "applies; understatement 24,447 (> 5,000 and > 10% of 30,957); penalty 4,889 on partial facts",
+     "verdict": "match",
+     "diagnosis": "Approval and no reasonable cause encoded as found. Lean substantiality is robust: omitted items (Principal Life income + 10% tax, AOTC disallowed) only raise the understatement; conceded CTC/ACTC/dependent care credits are unquantified but would have to exceed ~19,400 to defeat substantiality.",
+     "snippet": "to the extent the understatement of income tax is substantial.",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": 24447
+   },
+   "notes": "Decision under Rule 155; notice deficiency 29,600 / penalty 2,828 are not findings. Lean 24,447 = corrected 30,957 (AGI 209,138; itemized 32,563; TI 176,575) - as-filed 6,510 (81,407 less assumed standard deduction 24,000). Not encoded (no amounts in opinion): Principal Life 1099-R distribution and its sec. 72(t) 10% tax (conceded), CTC/ACTC/child care credits (conceded by respondent, children not described), AOTC claimed on the return (conceded disallowed), excess social security credit 1,110 (sec. 31(b), outside deficiency). asFiled deduction assumed standard. Checks: filingStatus, deduction, adjustments, accuracyPenaltyApplies all MATCH (exit 0)."
+  },
+  {
+   "id": "tcsumm-2024-4",
+   "citation": "T.C. Summary Opinion 2024-4",
+   "name": "Caren Kohl, a.k.a. Caren Rein v. Commissioner",
+   "date": "2024-04-25",
+   "type": "summary",
+   "years": [
+    2018
+   ],
+   "issues": [
+    {
+     "issue": "Sec. 72(t) on 10,342; emergency-expense exception",
+     "provision": "sec. 72(t)(1), (2)(I); CAA 2023 sec. 115(c)",
+     "court": "liable (amount not stated; 10% = 1,034)",
+     "lean": "1034",
+     "verdict": "match",
+     "diagnosis": "Encoded emergencyExpense 10,342; framework applies (2)(I) only from 2024, so 2018 gets no exception. Court gives no figure; 10% x 10,342 = 1,034.20.",
+     "snippet": "section 72(t)(2)(I) applies only \" to distributions made after December 31, 2023. \"",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Rule 155; sec. 6651(a) conceded; inclusion conceded; other income not stated."
+  },
+  {
+   "id": "tcsumm-2025-3",
+   "citation": "T.C. Summary Opinion 2025-3",
+   "name": "Amanda Renee Stewart v. Commissioner (Ahmed Zied, Intervenor)",
+   "date": "2025-03-11",
+   "type": "summary",
+   "years": [
+    2019
+   ],
+   "issues": [
+    {
+     "issue": "Do intervenor's objections (unfairness; wish to amend the return and claim offsetting deductions) defeat petitioner's sec. 6015(c) relief for 2019?",
+     "provision": "sec. 6015(c), (d)(3)(A); sec. 6013(d)(3); Rules 13(a), 20(a)",
+     "court": "no; petitioner relieved under sec. 6015(c) of the deficiency and penalty attributable to intervenor's business income (IRS conceded)",
+     "lean": null,
+     "verdict": "not-encodable",
+     "diagnosis": "Framework has no sec. 6015 (election eligibility under (c)(3), allocation of items under (d)(3)(A) as if separate returns). The case also turns on jurisdiction/procedure (intervenor cannot enlarge issues or redetermine the deficiency without a timely petition) and on the IRS concession; no return figures are stated, so no allocation could be computed even with sec. 6015 support.",
+     "snippet": "the Court agrees, despite intervenor's objection, that petitioner is entitled to relief from joint and several liability under section 6015(c).",
+     "cause": null
+    }
+   ],
+   "deficiency": {
+    "court": null,
+    "lean": null
+   },
+   "notes": "Notice: 2019 deficiency $33,028 and sec. 6662(b)(2) penalty $6,474 from unreported wages and nonemployee compensation; not contested and not redetermined by the court, so not encoded as expected. Case.json verified against the opinion (only filing mfj; expected empty); runner exit 0, no checks. None of the newer fields (sfrTax, ptc, alimony, etc.) apply."
+  }
+ ]
+}

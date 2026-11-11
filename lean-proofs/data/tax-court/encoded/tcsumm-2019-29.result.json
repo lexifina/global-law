@@ -1,0 +1,47 @@
+{
+ "id": "tcsumm-2019-29",
+ "citation": "T.C. Summary Opinion 2019-29",
+ "issues": [
+  {
+   "issue": "Are the three children qualifying children (CTC)?",
+   "provision": "sec. 152(c)(2), 24(a)",
+   "court": "no (no qualifying relationship)",
+   "lean": "no (qualifyingChild/dependent/ctcChild false x3; failure sec. 152(c)(1)(A) relationship)",
+   "verdict": "match",
+   "diagnosis": "Rerun at 57b55431cca: 9 child items match (qualifyingChild, dependent, ctcChild for 3 children).",
+   "snippet": "The children do not bear a qualifying relationship to petitioners as defined in section 152(c)."
+  },
+  {
+   "issue": "Are the children qualifying relatives (household members)?",
+   "provision": "sec. 152(d)(1)(D), (d)(2)(H)",
+   "court": "no (not shown not to be the mother's qualifying children)",
+   "lean": "no (qualifyingRelative false; failure sec. 152(d)(1)(D) qualifying child of another)",
+   "verdict": "judgment",
+   "diagnosis": "Rerun at 57b55431cca: lean matches given qualifyingChildOfAnother=true, but that fact rests on petitioners' failure to carry the burden of proof (judgment), not computation.",
+   "snippet": "They have not met that burden"
+  },
+  {
+   "issue": "Is Mr. Steed a qualifying relative?",
+   "provision": "sec. 152(d)(1)(B), 151(d)",
+   "court": "no: SSI 8,796 > 3,800",
+   "lean": "no (dependent false; failures sec. 152(d)(1)(B) gross income >= 3,800 and (d)(1)(C) support)",
+   "verdict": "match",
+   "diagnosis": "Rerun at 57b55431cca: dependent:Steed false matches. Caveat stands: the court counted SSI as gross income; SSI is generally excluded, so the (d)(1)(B) ground is doubtful; support (encoded false) also fails.",
+   "snippet": "Mr. Steed received during 2012 SSI of $733 per month, or $8,796 for the year"
+  },
+  {
+   "issue": "Sec. 6662(a) penalty",
+   "provision": "sec. 6664(c)(1)",
+   "court": "not liable (reasonable cause, reliance on preparer)",
+   "lean": null,
+   "verdict": "judgment",
+   "diagnosis": "Reasonable cause weighed by the court; not encoded because income and tax shown are not in the opinion.",
+   "snippet": "we hold that petitioners are not liable for the accuracy-related penalty under section 6662(a)."
+  }
+ ],
+ "deficiency": {
+  "court": 4018,
+  "lean": null
+ },
+ "notes": "Deficiency sustained as determined (4,018); not recomputable without income. Rerun at 57b55431cca: all 10 expected items match (exit 0)."
+}

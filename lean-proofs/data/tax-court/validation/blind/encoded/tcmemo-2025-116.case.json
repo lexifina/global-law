@@ -1,0 +1,26 @@
+{
+  "citation": "T.C. Memo. 2025-116",
+  "taxYear": 2022,
+  "note": "Married filing jointly; EITC claimed for Angela Davis, wife's sister, age 64, no joint return. Court found residence for more than half of 2022 and permanent and total disability not established. Rayquan Graham EITC conceded (no facts given; omitted). Income/earned income not stated.",
+  "facts": {
+    "filing": "mfj",
+    "dependents": [
+      { "name": "Angela Davis", "relationship": "sibling", "age": 64, "youngerThanTaxpayer": false, "livedWithMoreThanHalfYear": false, "disabled": false, "filedJointReturn": false }
+    ]
+  },
+  "asFiled": {
+    "filing": "mfj",
+    "dependents": [
+      { "name": "Angela Davis", "relationship": "sibling", "age": 64, "youngerThanTaxpayer": false, "livedWithMoreThanHalfYear": true, "disabled": true, "filedJointReturn": false }
+    ]
+  },
+  "expected": [],
+  "inferred": [
+    "youngerThanTaxpayer false: petitioners' ages not stated (irrelevant once disability and residence fail)",
+    "asFiled assumes the return treated Ms. Davis as a disabled qualifying child living with petitioners (the claim made)"
+  ],
+  "unencodable": [
+    "petitioners' earned income, AGI and the EITC amount claimed are not stated, so no EITC amount or deficiency can be computed",
+    "Rayquan Graham (conceded) not encoded; no facts about him"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+ "citation": "T.C. Memo. 2025-23 (Campana v. Commissioner)",
+ "taxYear": 2021,
+ "note": "Reported TI $37,964 (found). Filing status and income composition not stated in the opinion: single INFERRED (not found) because only single reproduces the $18,064 deficiency (HoH ~16,701, MFJ ~13,842); reported income backed out as otherIncome 50,514 = 37,964 + 12,550 (2021 single standard deduction), itemize false. Unreported: $99 IRS interest, $56,673 Fidelity hardship withdrawal (under 59 1/2, no exception; plan kind treated as qualifiedPlan - either kind gives 10%). Fidelity withheld $1,874, not claimed on the return (withholding left out of asFiled). Penalty $3,238 = 20% x (18,064 - 1,874): \u00a76664(a)/Treas. Reg. \u00a71.6664-2(c)(1) unclaimed withholding reduces the underpayment - not modelled (framework gap). 2017 refund-offset argument not encodable (no jurisdiction, \u00a7\u00a76213(a), 6512(b)).",
+ "facts": {
+  "filing": "single",
+  "taxpayerAge": 40,
+  "otherIncome": 50514,
+  "itemize": false,
+  "taxableInterest": 99,
+  "pensions": 56673,
+  "withholding": 1874,
+  "earlyDistributions": [
+   {
+    "amountIncludible": 56673,
+    "plan": "qualifiedPlan",
+    "attained59Half": false
+   }
+  ]
+ },
+ "asFiled": {
+  "filing": "single",
+  "taxpayerAge": 40,
+  "otherIncome": 50514,
+  "itemize": false
+ },
+ "accuracy": {
+  "assertsSubstantialUnderstatement": true,
+  "automaticallyCalculated": true,
+  "reasonableCause": false
+ },
+ "expected": [
+  {
+   "item": "earlyDistributionTax",
+   "value": 5667,
+   "note": "\u00a772(t)(1) 10% of 56,673"
+  },
+  {
+   "item": "deficiency",
+   "value": 18064
+  },
+  {
+   "item": "understatement",
+   "value": 18064,
+   "note": "court: understatement of $18,064"
+  },
+  {
+   "item": "substantialUnderstatement",
+   "flag": true
+  },
+  {
+   "item": "accuracyPenaltyApplies",
+   "flag": true
+  },
+  {
+   "item": "accuracyPenalty",
+   "value": 3238,
+   "note": "= 20% x (18,064 - 1,874 unclaimed withholding), \u00a76664(a)"
+  }
+ ]
+}

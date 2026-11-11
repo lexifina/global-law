@@ -1,0 +1,75 @@
+{
+ "citation": "T.C. Summary Opinion 2021-41",
+ "taxYear": 2015,
+ "note": "Grandfather (widower) claimed HoH, exemptions, ACTC, EIC for grandchildren I.M.E. and P.A.E. Both lived with him and their mother (his daughter) for more than half of 2015 (P.A.E. born fall 2015). Mother and her husband (children's father) filed a joint 2015 return claiming both children. Petitioner paid all rent and utilities. Petitioner's income amounts redacted/not stated (AGI and earned income > $14,820 per amended return, incl. $5,100 SE income).",
+ "facts": {
+  "filing": "hoh",
+  "dependents": [
+   {
+    "name": "I.M.E.",
+    "relationship": "descendantOfChild",
+    "livedWithMoreThanHalfYear": true,
+    "qualifyingChildOfAnother": true,
+    "providedOverHalfOwnSupport": false,
+    "taxpayerProvidedOverHalfSupport": true
+   },
+   {
+    "name": "P.A.E.",
+    "relationship": "descendantOfChild",
+    "age": 0,
+    "livedWithMoreThanHalfYear": true,
+    "qualifyingChildOfAnother": true,
+    "providedOverHalfOwnSupport": false,
+    "taxpayerProvidedOverHalfSupport": true
+   }
+  ],
+  "seProfit": 5100
+ },
+ "status": {
+  "marriedAtYearEnd": false,
+  "paidOverHalfHouseholdCost": true
+ },
+ "tieBreakers": [
+  {
+   "child": "I.M.E.",
+   "taxpayer": "petitioner",
+   "claimants": [
+    {
+     "name": "petitioner",
+     "isParent": false
+    },
+    {
+     "name": "Ms. Kapoor and Mr. Escamilla (joint)",
+     "isParent": true,
+     "claims": true
+    }
+   ]
+  },
+  {
+   "child": "P.A.E.",
+   "taxpayer": "petitioner",
+   "claimants": [
+    {
+     "name": "petitioner",
+     "isParent": false
+    },
+    {
+     "name": "Ms. Kapoor and Mr. Escamilla (joint)",
+     "isParent": true,
+     "claims": true
+    }
+   ]
+  }
+ ],
+ "expected": [],
+ "inferred": [
+  "Petitioner paying all rent and utilities read as paying over half the household cost",
+  "Petitioner paying rent/utilities/clothes/phone read as providing over half the grandchildren's support (opinion does not state this as a finding; mother received SNAP/WIC)",
+  "I.M.E.'s age not stated (minor); left at default",
+  "Days resided for the tie-breaker not stated; left 0 for both (only parent status decides)"
+ ],
+ "unencodable": [
+  "Petitioner's wages/other income and AGI redacted; only the additional $5,100 SE income from the Form 1040X is encoded, so EIC/ACTC/deficiency figures are not meaningful",
+  "asFiled / taxShown not encodable (return figures redacted)"
+ ]
+}

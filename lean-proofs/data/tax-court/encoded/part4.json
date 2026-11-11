@@ -1,0 +1,493 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2019-24",
+  "taxYear": 2015,
+  "note": "Thomas (MFJ). Sole issue: American Opportunity Credit (sec. 25A(i)) for daughter ET in 2015. AOTC elected for ET in 2011, 2012, 2013 and 2014 (four prior taxable years), so sec. 25A(b)(2)(A) as modified by sec. 25A(i)(2) bars a 5th year: no AOTC for ET. Respondent conceded the AOTC for EMT and 2,885 of education expenses. As filed: nonrefundable education credit 3,000 and refundable AOTC 2,000. No income, deduction or tax figures in the opinion; sec. 25A not modelled; deficiency (5,000 per notice, before concessions) left to Rule 155. Only filing status encoded.",
+  "facts": {
+   "filing": "mfj"
+  },
+  "expected": []
+ },
+ {
+  "citation": "T.C. Summary Opinion 2019-33",
+  "taxYear": 2015,
+  "note": "Kleinman. Filing status and dependent are not stated; two $4,000 exemptions (8,000) and itemized 9,250 (= 2015 HOH standard deduction) were claimed. HOH with one under-17 child (CTC) reproduces the notice's $10,518 exactly: corrected TI 83,712-9,250-8,000=66,462, 2015 HOH Tax Table 10,941 + sec. 223(f)(4) 20% tax 127 - CTC 550 (AGI phase-out 9x50) = 10,518; as filed TI 7,116 table tax 713 offset by nonrefundable CTC -> 0. Corrected wages = 24,366 reported + 58,712 A-1 (return omitted A-1 wages). HSA distribution 634 as otherIncome; sec. 223(f)(4)(A) tax 127 as otherTaxes. taxShown 0 (derived, not stated: no ACTC/EIC assumed claimed). Accuracy penalty conceded (not encoded); sec. 6673 penalty not imposed.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 83078,
+   "otherIncome": 634,
+   "otherTaxes": 127,
+   "itemizedDeductions": 9250,
+   "dependents": [
+    {
+     "name": "child",
+     "relationship": "child",
+     "age": 10,
+     "daysWithTaxpayer": 365,
+     "livedWithMoreThanHalfYear": true,
+     "taxpayerProvidedOverHalfSupport": true
+    }
+   ]
+  },
+  "taxShown": 0,
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 10518,
+    "note": "notice deficiency, sustained in full"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2019-8",
+  "taxYear": 2015,
+  "note": "Arseo. Wages 25,687 (W-2 box 1; 2,890 pretax Arizona State Retirement System contribution excluded). Corrected: interest 25 and W-2G gambling winnings 2,994 included (otherIncome); gambling losses unsubstantiated (no records) and, even if allowed, as an itemized deduction (2,994) they would not exceed the 9,250 standard deduction; 6,500 IRA deduction denied (pretax contribution not deductible, \u00a7219). Filing status not stated: the 9,250 standard deduction shown is the 2015 head-of-household amount (single 6,300, MFJ 12,600), so hoh is encoded with no qualifying person/dependents, because the opinion finds none. Exemptions, dependents, EIC/CTC on the return are not in the opinion, so the 1,907 deficiency cannot be reproduced (see result notes). Gambling losses encoded as 0 (unsubstantiated). The 1,907 deficiency is not an expectation here: with the facts the opinion gives (hoh, one exemption, no EIC/CTC) the arithmetic gives about 1,067, so the return must have held facts (exemptions, credits) the opinion omits.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 25687,
+   "taxableInterest": 25,
+   "otherIncome": 2994,
+   "itemizedDeductions": 0,
+   "claimEIC": false,
+   "claimCTC": false
+  },
+  "asFiled": {
+   "filing": "hoh",
+   "wages": 25687,
+   "adjustments": 6500,
+   "itemize": false,
+   "claimEIC": false,
+   "claimCTC": false
+  },
+  "expected": [
+   {
+    "item": "standardDeduction",
+    "value": 9250,
+    "note": "2015 head-of-household standard deduction claimed on the return"
+   },
+   {
+    "item": "deduction",
+    "value": 9250,
+    "note": "no itemized deductions substantiated; even 2,994 of gambling losses (if proven) would be below the 9,250 standard deduction"
+   },
+   {
+    "item": "agi",
+    "value": 28706,
+    "note": "derived: 25,687 + 25 + 2,994 with the 6,500 IRA deduction disallowed (not stated by the court)"
+   },
+   {
+    "item": "deficiency",
+    "value": 1907,
+    "note": "notice deficiency sustained (decision for respondent); not reproducible from the opinion's facts: the return's exemptions/dependents/credits are not stated"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-18 (2014)",
+  "taxYear": 2014,
+  "note": "Income detail not in the opinion: the total tax required per the notice ($8967, quoted by the court) is given as otherTaxes; tax shown = required - deficiency (derived). The deficiency/understatement checks are therefore consistency checks only (taxShown is derived from the deficiency).",
+  "facts": {
+   "otherTaxes": 8967
+  },
+  "taxShown": 723,
+  "accuracy": {
+   "supervisoryApproval": true
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 8244
+   },
+   {
+    "item": "understatement",
+    "value": 8244
+   },
+   {
+    "item": "substantialUnderstatement",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 1649,
+    "note": "court states $1,648.80"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-18 (2015)",
+  "taxYear": 2015,
+  "note": "Income detail not in the opinion: the total tax required per the notice ($22394, quoted by the court) is given as otherTaxes; tax shown = required - deficiency (derived). The deficiency/understatement checks are therefore consistency checks only (taxShown is derived from the deficiency).",
+  "facts": {
+   "otherTaxes": 22394
+  },
+  "taxShown": 4383,
+  "accuracy": {
+   "supervisoryApproval": true
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 18011
+   },
+   {
+    "item": "understatement",
+    "value": 18011
+   },
+   {
+    "item": "substantialUnderstatement",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 3602,
+    "note": "court states $3,602.20"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-18 (2016)",
+  "taxYear": 2016,
+  "note": "Income detail not in the opinion: the total tax required per the notice ($15939, quoted by the court) is given as otherTaxes; tax shown = required - deficiency (derived). The deficiency/understatement checks are therefore consistency checks only (taxShown is derived from the deficiency).",
+  "facts": {
+   "otherTaxes": 15939
+  },
+  "taxShown": 5608,
+  "accuracy": {
+   "supervisoryApproval": true
+  },
+  "expected": [
+   {
+    "item": "deficiency",
+    "value": 10331
+   },
+   {
+    "item": "understatement",
+    "value": 10331
+   },
+   {
+    "item": "substantialUnderstatement",
+    "flag": true
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 1861,
+    "note": "court states $1,860.60, which is 20% of 9,303, not of the 10,331 understatement (20% = 2,066.20); the opinion gives no reduced penalty base"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-9 (2015)",
+  "taxYear": 2015,
+  "note": "Magana. No income figures in the opinion. Respondent conceded two of three children are qualifying children (ages not stated; default age 0 used, they lived with petitioner all year). Unmarried to the children's father, who lived in the household, did not claim the children and did not file HOH; petitioner paid most household expenses and had the greater AGI (AGIs not stated; 2 vs 1 used ordinally).",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "child1",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true,
+     "livedWithWholeYear": true
+    },
+    {
+     "name": "child2",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true,
+     "livedWithWholeYear": true
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "child1",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 2
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 1,
+      "claims": false
+     }
+    ]
+   },
+   {
+    "child": "child2",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 2
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 1,
+      "claims": false
+     }
+    ]
+   }
+  ],
+  "expected": [
+   {
+    "item": "filingStatus",
+    "text": "hoh",
+    "note": "she properly filed as head of household for 2015 and 2016"
+   },
+   {
+    "item": "headOfHousehold",
+    "flag": true
+   },
+   {
+    "item": "qualifyingChild:child1",
+    "flag": true,
+    "note": "conceded"
+   },
+   {
+    "item": "qualifyingChild:child2",
+    "flag": true,
+    "note": "conceded"
+   },
+   {
+    "item": "hohQualifyingPerson:child1",
+    "flag": true
+   },
+   {
+    "item": "tieBreaker:child1",
+    "text": "petitioner"
+   },
+   {
+    "item": "tieBreaker:child2",
+    "text": "petitioner"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2020-9 (2016)",
+  "taxYear": 2016,
+  "note": "Magana. No income figures in the opinion. Respondent conceded two of three children are qualifying children (ages not stated; default age 0 used, they lived with petitioner all year). Unmarried to the children's father, who lived in the household, did not claim the children and did not file HOH; petitioner paid most household expenses and had the greater AGI (AGIs not stated; 2 vs 1 used ordinally).",
+  "facts": {
+   "filing": "hoh",
+   "dependents": [
+    {
+     "name": "child1",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true,
+     "livedWithWholeYear": true
+    },
+    {
+     "name": "child2",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true,
+     "livedWithWholeYear": true
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "child1",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 2
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 1,
+      "claims": false
+     }
+    ]
+   },
+   {
+    "child": "child2",
+    "taxpayer": "petitioner",
+    "claimants": [
+     {
+      "name": "petitioner",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 2
+     },
+     {
+      "name": "father",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 1,
+      "claims": false
+     }
+    ]
+   }
+  ],
+  "expected": [
+   {
+    "item": "filingStatus",
+    "text": "hoh",
+    "note": "she properly filed as head of household for 2015 and 2016"
+   },
+   {
+    "item": "headOfHousehold",
+    "flag": true
+   },
+   {
+    "item": "qualifyingChild:child1",
+    "flag": true,
+    "note": "conceded"
+   },
+   {
+    "item": "qualifyingChild:child2",
+    "flag": true,
+    "note": "conceded"
+   },
+   {
+    "item": "hohQualifyingPerson:child1",
+    "flag": true
+   },
+   {
+    "item": "tieBreaker:child1",
+    "text": "petitioner"
+   },
+   {
+    "item": "tieBreaker:child2",
+    "text": "petitioner"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2021-41",
+  "taxYear": 2015,
+  "note": "Gopi, 2015. AGI $15,545 per the 1040X (original 11,679 + 5,100 SE income + other adjustments; composition not stated, encoded as wages; court: AGI and earned income both exceed $14,820). Daughter Ms. Kapoor (parent; joint return with spouse) claimed both children. Days approximate: I.M.E. from March (~290); P.A.E. born fall 2015 (~75, born-during-year counts as all year). I.M.E. age not stated (5 used). Deficiency $6,453 not encoded: original return composition (SE income, credits claimed) not stated.",
+  "facts": {
+   "filing": "hoh",
+   "wages": 15545,
+   "dependents": [
+    {
+     "name": "IME",
+     "relationship": "descendantOfChild",
+     "age": 5,
+     "livedWithMoreThanHalfYear": true,
+     "qualifyingChildOfAnother": true
+    },
+    {
+     "name": "PAE",
+     "relationship": "descendantOfChild",
+     "age": 0,
+     "livedWithMoreThanHalfYear": true,
+     "qualifyingChildOfAnother": true
+    }
+   ]
+  },
+  "status": {
+   "marriedAtYearEnd": false,
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "IME",
+    "taxpayer": "Gopi",
+    "claimants": [
+     {
+      "name": "Gopi",
+      "daysResided": 290,
+      "agi": 15545
+     },
+     {
+      "name": "Kapoor",
+      "isParent": true,
+      "daysResided": 290
+     }
+    ]
+   },
+   {
+    "child": "PAE",
+    "taxpayer": "Gopi",
+    "claimants": [
+     {
+      "name": "Gopi",
+      "daysResided": 75,
+      "agi": 15545
+     },
+     {
+      "name": "Kapoor",
+      "isParent": true,
+      "daysResided": 75
+     }
+    ]
+   }
+  ],
+  "expected": [
+   {
+    "item": "tieBreaker:IME",
+    "text": "Kapoor"
+   },
+   {
+    "item": "tieBreaker:PAE",
+    "text": "Kapoor"
+   },
+   {
+    "item": "dependent:IME",
+    "flag": false
+   },
+   {
+    "item": "dependent:PAE",
+    "flag": false
+   },
+   {
+    "item": "qualifyingRelative:IME",
+    "flag": false
+   },
+   {
+    "item": "qualifyingRelative:PAE",
+    "flag": false
+   },
+   {
+    "item": "hohQualifyingPerson:IME",
+    "flag": false
+   },
+   {
+    "item": "hohQualifyingPerson:PAE",
+    "flag": false
+   },
+   {
+    "item": "filingStatus",
+    "text": "single"
+   },
+   {
+    "item": "ctcChild:IME",
+    "flag": false
+   },
+   {
+    "item": "ctcChild:PAE",
+    "flag": false
+   },
+   {
+    "item": "refundableCtc",
+    "value": 0
+   },
+   {
+    "item": "eic",
+    "value": 0
+   }
+  ]
+ }
+]

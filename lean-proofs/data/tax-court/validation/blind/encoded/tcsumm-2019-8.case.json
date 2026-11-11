@@ -1,0 +1,29 @@
+{
+ "citation": "T.C. Summary Opinion 2019-8",
+ "taxYear": 2015,
+ "note": "Unreported $25 interest and $2,994 W-2G gambling winnings (no losses substantiated, no other itemized deductions); $6,500 IRA deduction claimed but the only retirement contribution was a $2,890 pretax ASRS salary reduction already excluded from W-2 wages, so no IRA contribution. Filing status not in issue; the $9,250 standard deduction claimed is the 2015 head-of-household amount, so hoh is encoded as claimed. Dependents, ages and withholding are not stated (defaults). No penalty in issue.",
+ "facts": {
+  "filing": "hoh",
+  "wages": 25687,
+  "taxableInterest": 25,
+  "gamblingWinnings": 2994,
+  "gamblingLosses": 0,
+  "itemize": false,
+  "ira": { "contribution": 0, "activeParticipant": true }
+ },
+ "asFiled": {
+  "filing": "hoh",
+  "wages": 25687,
+  "adjustments": 6500,
+  "itemize": false
+ },
+ "expected": [],
+ "inferred": [
+  "filing status head of household inferred from the $9,250 standard deduction claimed (2015 HoH amount); opinion does not name the status",
+  "no dependents encoded (none stated); exemptions therefore count the taxpayer only",
+  "taxpayer age left at default 40 (not stated)"
+ ],
+ "unencodable": [
+  "any qualifying person / dependents supporting HoH status are not described, so personal exemptions beyond the taxpayer's own and any EIC/CTC cannot be encoded"
+ ]
+}

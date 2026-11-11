@@ -1,0 +1,38 @@
+{
+ "id": "tcsumm-2020-5",
+ "citation": "T.C. Summary Opinion 2020-5",
+ "issues": [
+  {
+   "issue": "Taxable social security benefits",
+   "provision": "sec. 86(a)-(d)",
+   "court": 22790,
+   "lean": 22790,
+   "verdict": "match",
+   "diagnosis": "Runner: 22,790 (85% cap; MAGI 67,701 + 13,406 = 81,107 > 44,000; 0.85 x 26,812 = 22,790.20).",
+   "snippet": "Social Security benefits of $22,790 (representing 85% of the Social Security benefits of $26,812"
+  },
+  {
+   "issue": "Sec. 86(e) lump-sum election",
+   "provision": "sec. 86(e)",
+   "court": "election would not alter liability (failure of proof)",
+   "lean": "lumpSumElection false; taxable SS 22,790 either way (election: 14,484 for 2015 + 8,306 for 2014)",
+   "verdict": "match",
+   "diagnosis": "Rerun 2c5b6354943 with ssLumpSums (9,772 attributable to 2014, found). Without the lump sum, 2015: provisional 67,701 + 8,520 = 76,221, taxable = 85% x 17,040 = 14,484 (their own 1040X figure). 2014 increase: 85% x 9,772 = 8,306 at any 2014 MFJ modified income >= 43,138 (implied by their unprocessed amended 2014 return's 8,306). 14,484 + 8,306 = 22,790 = no-election amount, so no benefit. 2014 income is a bound, not a finding; the court decided on burden of proof (no 2014 return in evidence), so a lower 2014 income would change the computation but not the holding.",
+   "snippet": "it does not appear that an election under section 86(e) would alter their tax liability."
+  },
+  {
+   "issue": "Sec. 72(t) on 17,410 IRA distribution (spouse's disability)",
+   "provision": "sec. 72(t)(2)(A)(iii), (5)",
+   "court": 1741,
+   "lean": 1741,
+   "verdict": "match",
+   "diagnosis": "Runner: 10% x 17,410 = 1,741; IRA owner not disabled, so sec. 72(t)(2)(A)(iii) unavailable (disability of spouse irrelevant) - encoded as disabled false per the court's finding.",
+   "snippet": "the section 72(t)(2)(A)(iii) exception is not available to petitioners."
+  }
+ ],
+ "deficiency": {
+  "court": null,
+  "lean": null
+ },
+ "notes": "Rule 155; notice deficiency 7,396 included items later conceded either way. Legal-fee deduction amount not stated (omitted). Rerun 2c5b6354943: exit 0, 3/3 expected items match (taxable SS 22,790, sec. 72(t) 1,741, lumpSumElection false). No deficiency computed (no asFiled; Rule 155)."
+}

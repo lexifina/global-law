@@ -1,0 +1,50 @@
+[
+ {
+  "citation": "T.C. Summary Opinion 2023-3",
+  "taxYear": 2017,
+  "note": "Aragoni. Order dated 2017-01-30 (Cal. Superior Court): monthly spousal support continuing 'until the death of either party' and $15,000 of ex-spouse's attorney fees payable 'until paid in full'. Alimony deduction claimed 135,516; respondent allowed 108,898.70 and conceded 7,520 (total 116,418.70 -> 116,419); petitioner conceded 4,097; the disputed 15,000 attorney-fee payment is encoded as a second alimonyPaid item with noPostDeathLiability false (sec. 71(b)(1)(D)); parties agreed (A)-(C) are met. Income is not found in the opinion, so no deficiency is computed.",
+  "facts": {
+   "filing": "single",
+   "alimonyPaid": [
+    {
+     "executed": "2017-01-30",
+     "paid": 116419
+    },
+    {
+     "executed": "2017-01-30",
+     "paid": 15000,
+     "noPostDeathLiability": false
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "alimonyDeduction",
+    "value": 116419,
+    "note": "108,898.70 allowed + 7,520 conceded; disputed 15,000 denied"
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2023-3",
+  "taxYear": 2017,
+  "note": "Isolated disputed issue: the 15,000 attorney-fee payment alone.",
+  "facts": {
+   "filing": "single",
+   "alimonyPaid": [
+    {
+     "executed": "2017-01-30",
+     "paid": 15000,
+     "noPostDeathLiability": false
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "alimonyDeduction",
+    "value": 0,
+    "note": "liability to pay survives payee's death: not alimony"
+   }
+  ]
+ }
+]
