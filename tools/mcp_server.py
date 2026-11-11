@@ -3923,6 +3923,25 @@ def loose_pattern(text: str) -> str:
     return ''.join(one(ch) for ch in text)
 
 
+TREE_KEPT_S = 2.0  # how long tree_on answers from what it last read (as _look does for the corpora served)
+_trees_kept: dict = {}
+
+
+def tree_on(date: str, corpus: str):
+    """law.corpus_tree(date, corpus), kept for TREE_KEPT_S while the tree's HEAD stays the same. A search of every
+    jurisdiction asks it of 720 corpora, and each answer, though worked out long before, cost a look at the corpus's
+    folder and index (a third of a millisecond: 250 ms a search, on one thread at a time). Refusals are not kept."""
+    now, head = time.monotonic(), law._head()
+    got = _trees_kept.get((corpus, date))
+    if got is not None and got[1] == head and now - got[2] < TREE_KEPT_S:
+        return got[0]
+    tree = law.corpus_tree(date, corpus)
+    if len(_trees_kept) > 20000:  # dates are the caller's: never more than a few thousand entries
+        _trees_kept.clear()
+    _trees_kept[(corpus, date)] = (tree, head, now)
+    return tree
+
+
 def every_corpus_first(paths, limit: int) -> list[str]:
     """Up to `limit` paths, taken from each corpus in turn, so a cut list still shows every jurisdiction that matched
     (cut alphabetically, united-states/ would never appear beside 53 other corpora)."""
@@ -3958,7 +3977,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     for c in corpora:
         if not scope or scoped(c['path'], scope) is not None:
             try:
-                pins.append((c['path'], law.corpus_tree(date, c['path'])))
+                pins.append((c['path'], tree_on(date, c['path'])))
             except SystemExit as e:  # a checkout broken since it was served (issue #7): named, and the rest searched
                 left_out.append(str(e.code))
     pins = [(c, sha) for c, sha in pins if sha]
@@ -4040,12 +4059,17 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     # word) only to drop "a file in the tree but in no corpus". It is asked only where it can say otherwise: a corpus
     # folder the tree has moved (data/moved-paths.tsv), or a corpus with another corpus inside its folder.
     served = sorted(c['path'] for c in law.manifest()['corpora'])
-    moved_from = list(law.moved_paths())
+    # The moved folders as two sets, looked up by the corpus and its parent folders: asked of every moved path for every
+    # corpus, a search of 720 corpora made 127,000 comparisons (90 ms) before it read anything.
+    moved_from = set(law.moved_paths())
+    moved_parents = {old[:i] for old in moved_from for i, ch in enumerate(old) if ch == '/'}
 
     def placed_elsewhere(corpus):
         i = bisect.bisect_right(served, corpus + '/')
-        return (i < len(served) and served[i].startswith(corpus + '/')) or any(
-            old == corpus or corpus.startswith(old + '/') or old.startswith(corpus + '/') for old in moved_from)
+        return ((i < len(served) and served[i].startswith(corpus + '/'))
+                or corpus in moved_from       # the corpus folder itself was moved
+                or corpus in moved_parents    # a folder inside it was
+                or any(corpus[:i] in moved_from for i, ch in enumerate(corpus) if ch == '/'))  # a folder above it was
 
     def searched(pin):
         # One corpus's matches as the answer uses them, worked out in the worker: the files that match, and the first
