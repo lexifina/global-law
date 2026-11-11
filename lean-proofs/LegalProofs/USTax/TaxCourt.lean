@@ -37,6 +37,9 @@ no `native_decide`; axioms only `propext`, `Classical.choice`, `Quot.sound` (`Ta
 * `Income` — SE tax by year (incl. the 2012 payroll-tax holiday), §86 (the 2025 model's core), the 2020 §85(c) unemployment exclusion.
 * `EarlyDistribution` — §72(t) with its exceptions by plan type and year.
 * `Penalties` — §6662(a), (b)(1)–(2), (d), §6664(c), §6751(b); §6651(a)(1)–(2), (c)(1), (f).
+* `Education` — §25A AOTC and LLC by year. `Retirement` — §219, §408(d)(3), §223(f), §165(d), §86(e).
+* `PremiumCredit` — §36B and §36B(f), 2014–2024 (Form 8962 Tables 1-1, 2 and 5; every Table 2 entry reproduced).
+* `Extra` — §911 (with §911(f) stacking), §6654, §§71/215, §72(e) lapses, whether each addition applies.
 * `Return` — a simple Form 1040 for any year; `deficiencyOf` (§6211, refundable credits as negative tax).
 * `Case` — `Case`, `decideCase`, `Outcome`, JSON reading with defaults; `sfrTax` (§6651(g)). `Run` — the batch runner (not imported here).
 * `Tests`, `Theorems`, `Axioms`.
