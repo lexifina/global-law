@@ -4,6 +4,7 @@ import LegalProofs.USTax.TaxCourt.EarlyDistribution
 import LegalProofs.USTax.TaxCourt.Penalties
 import LegalProofs.USTax.TaxCourt.Education
 import LegalProofs.USTax.TaxCourt.Retirement
+import LegalProofs.USTax.TaxCourt.Extra
 
 /-!
 # A simple individual return, 2012–2024, and the deficiency
@@ -28,6 +29,31 @@ details beyond §63(c)(5).
 
 namespace Legal.USTax.TaxCourt
 open TaxCode.Individual
+
+/-- One instrument's alimony payments for the year (`Extra.AlimonyFacts` with defaults for JSON). -/
+structure AlimonyItem where
+  executed : Date := ⟨2000, 1, 1⟩
+  modifiedOptIn : Bool := false
+  paid : Int := 0
+  underInstrument : Bool := true
+  noNonAlimonyDesignation : Bool := true
+  notSameHousehold : Bool := true
+  noPostDeathLiability : Bool := true
+  childSupport : Int := 0
+  deriving Repr, Inhabited
+
+def AlimonyItem.facts (a : AlimonyItem) (joint : Bool) : Extra.AlimonyFacts :=
+  { executed := a.executed, modifiedOptIn := a.modifiedOptIn, paid := a.paid, underInstrument := a.underInstrument,
+    noNonAlimonyDesignation := a.noNonAlimonyDesignation, notSameHousehold := a.notSameHousehold,
+    noPostDeathLiability := a.noPostDeathLiability, jointReturn := joint, childSupport := a.childSupport }
+
+/-- A life insurance policy that lapsed with a loan outstanding (§72(e), `Extra.lapseIncome`). -/
+structure LapseItem where
+  loanExtinguished : Int := 0
+  cashReceived : Int := 0
+  premiumsPaid : Int := 0
+  nontaxableReceived : Int := 0
+  deriving Repr, Inhabited
 
 /-- The facts of one year's return, as the court finds them (or as filed). -/
 structure ReturnFacts where
@@ -129,6 +155,11 @@ structure ReturnFacts where
   /-- When the opinion gives only totals: AGI as found (replaces the computed AGI) and earned income as found. -/
   agiOverride : Option Int := none
   earnedIncomeOverride : Option Int := none
+  /-- §71 / §215 (instruments executed before 2019): alimony received (gross income) and paid (§62(a)(10)). -/
+  alimonyReceived : List AlimonyItem := []
+  alimonyPaid : List AlimonyItem := []
+  /-- §72(e): lapsed policies (ordinary income; not §72(t)). -/
+  policyLapses : List LapseItem := []
   deriving Repr, Inhabited
 
 /-- Form 1040, line by line. -/
@@ -171,6 +202,9 @@ structure ReturnResult where
   educationNonrefundable : Int := 0
   aotcRefundable : Int := 0
   lumpSumElection : Bool := false
+  alimonyIncluded : Int := 0
+  alimonyDeduction : Int := 0
+  lapseIncome : Int := 0
   deriving Repr, Inhabited
 
 /-- §63(c)–(f): the standard deduction. -/
@@ -210,8 +244,15 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
   -- §213(f) (2013–2016): "the taxpayer or the taxpayer's spouse", whatever the filing status
   let someone65 := r.taxpayerAge ≥ 65 || ((f == .mfj || f == .mfs) && r.spouseAge ≥ 65)
   let hsa := hsaDistribution p.year r.hsaDistributions r.hsaQualifiedExpenses (r.hsaException || r.taxpayerAge ≥ 65)
+  let joint := f == .mfj
+  let aliIn := r.alimonyReceived.foldl (fun t a => t + Extra.alimonyIncluded (a.facts joint)) 0
+  let aliOut := r.alimonyPaid.foldl (fun t a => t + Extra.alimonyDeduction (a.facts joint)) 0
+  let lapse := r.policyLapses.foldl (fun t l => t + Extra.lapseIncome
+    { loanExtinguished := l.loanExtinguished, cashReceived := l.cashReceived, premiumsPaid := l.premiumsPaid,
+      nontaxableReceived := l.nontaxableReceived }) 0
   let income0 := r.wages + r.wagesSpouse + r.seProfit + r.seProfitSpouse + r.taxableInterest + r.ordinaryDividends +
-    capInc + r.iraDistributions + r.pensions + uc + r.otherIncome + rollInc + hsa.1 + pos r.gamblingWinnings
+    capInc + r.iraDistributions + r.pensions + uc + r.otherIncome + rollInc + hsa.1 + pos r.gamblingWinnings + aliIn +
+    lapse
   -- earned income (§32(c)(2)), also §63(c)(5)
   let earnedT := r.wages + (r.seProfit - halfSeTaxP p r.seProfit r.wages)
   let earnedS := r.wagesSpouse + (r.seProfitSpouse - halfSeTaxP p r.seProfitSpouse r.wagesSpouse)
@@ -228,7 +269,7 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
   let ded := if usesStd then std else itemized
   let charity2020 := if p.year == 2020 && usesStd then charity else 0
   let charity2021 := if p.year == 2021 && usesStd then charity else 0
-  let adj0 := halfSe + r.adjustments + charity2020
+  let adj0 := halfSe + r.adjustments + charity2020 + aliOut
   -- §86: MAGI = AGI without §86 (and, here, with the given adjustments) plus tax-exempt interest; §86(b)(2)(A)
   -- disregards §85(c), so 2020 unemployment counts in full here (the exclusion is applied afterwards)
   let tssOf (adj : Int) : Int × Bool :=
@@ -301,7 +342,8 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
     payments := r.withholding + r.estimatedPayments, dependentsCounted := deps.length,
     iraDeduction := iraD.1 + iraD.2, rolloverIncludible := rollInc, hsaIncludible := hsa.1, hsaAdditionalTax := hsa.2,
     gamblingLossDeduction := if usesStd then 0 else gambling, educationNonrefundable := eduNonref,
-    aotcRefundable := edu.aotcRefundable, lumpSumElection := tssR.2 }
+    aotcRefundable := edu.aotcRefundable, lumpSumElection := tssR.2, alimonyIncluded := aliIn,
+    alimonyDeduction := aliOut, lapseIncome := lapse }
 
 /-- §6211(a), (b)(4): the deficiency — tax as recomputed less tax shown, refundable credits as negative tax. Negative
 means the return overstated the tax. -/

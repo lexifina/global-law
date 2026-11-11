@@ -43,6 +43,24 @@ structure Expectation where
   note : String := ""
   deriving Repr, Inhabited
 
+/-- §6654 findings (`Extra.estimatedTaxAddition`); the current-year tax and withholding default to the corrected
+return's net tax and withholding. -/
+structure EstimatedPayment where
+  date : Date := ⟨2000, 1, 1⟩
+  amount : Int := 0
+  deriving Repr, Inhabited
+
+structure EstimatedIssue where
+  currentTax : Option Int := none
+  withholding : Option Int := none
+  priorTax : Option Int := none
+  priorAGI : Int := 0
+  priorNoLiability : Bool := false
+  payments : List EstimatedPayment := []
+  dueDates : Option (List Date) := none
+  requiredInstallments : Option (List Int) := none
+  deriving Repr, Inhabited
+
 structure Case where
   citation : String := ""
   taxYear : Nat := 0
@@ -56,6 +74,8 @@ structure Case where
   tieBreakers : List TieBreakIssue := []
   accuracy : Option AccuracyFacts := none
   lateness : Option LateFacts := none
+  /-- §6654 addition for failure to pay estimated tax. -/
+  estimated : Option EstimatedIssue := none
   expected : List Expectation := []
   deriving Repr, Inhabited
 
@@ -96,6 +116,7 @@ structure Outcome where
   earlyDistributions : List EarlyDistResult := []
   accuracy : Option AccuracyOutcome := none
   lateness : Option LateOutcome := none
+  estimated : Option Extra.EstOutcome := none
   checks : List Check := []
   /-- §25A: each student's AOTC eligibility. -/
   students : List (String × Bool) := []
@@ -129,7 +150,14 @@ def Outcome.intValues (o : Outcome) : List (String × Int) :=
   (match o.taxShown with | some t => [("taxShown", t)] | none => []) ++
   (match o.deficiency with | some d => [("deficiency", d)] | none => []) ++
   (match o.accuracy with | some a => [("accuracyPenalty", a.penalty), ("understatement", a.understatement)] | none => []) ++
-  (match o.lateness with | some l => [("failureToFile", l.failureToFile), ("failureToPay", l.failureToPay)] | none => [])
+  (match o.lateness with | some l => [("failureToFile", l.failureToFile), ("failureToPay", l.failureToPay)] | none => []) ++
+  (match o.estimated with
+   | some e => [("estimatedTaxAddition", e.addition), ("estimatedRequiredAnnual", e.requiredAnnual)]
+   | none => []) ++
+  (match o.corrected with
+   | some r => [("alimonyIncluded", r.alimonyIncluded), ("alimonyDeduction", r.alimonyDeduction),
+       ("lapseIncome", r.lapseIncome)]
+   | none => [])
 
 def Outcome.flagValues (o : Outcome) : List (String × Bool) :=
   (match o.corrected with | some r => [("lumpSumElection", r.lumpSumElection)] | none => []) ++
@@ -215,6 +243,12 @@ def decideCase (c : Case) : Outcome :=
         deficiency := shownNet.map (deficiencyOf corrected),
         earlyDistributions := facts.earlyDistributions.map (earlyDistTax p corrected.agi someone65),
         accuracy := acc, lateness := late,
+        estimated := c.estimated.map fun e => Extra.estimatedTaxAddition
+          { year := c.taxYear, currentTax := e.currentTax.getD corrected.netTax,
+            withholding := e.withholding.getD facts.withholding, priorTax := e.priorTax, priorAGI := e.priorAGI,
+            mfs := status == .mfs, priorNoLiability := e.priorNoLiability,
+            payments := e.payments.map fun x => (x.date, x.amount), dueDates := e.dueDates,
+            requiredOverride := e.requiredInstallments },
         students := facts.students.map fun s => (s.name, aotcEligible s) }
     let checks := c.expected.map (runCheck o)
     { o with checks := checks, agrees := checks.all (·.ok) && o.errors.isEmpty }
@@ -278,6 +312,26 @@ deriving instance FromJson for LumpSumFacts
 instance (priority := high) : FromJson LumpSumFacts :=
   ⟨fromJsonWithDefaults (FromJson.fromJson? (α := LumpSumFacts))⟩
 
+deriving instance ToJson for AlimonyItem
+deriving instance FromJson for AlimonyItem
+instance (priority := high) : FromJson AlimonyItem :=
+  ⟨fromJsonWithDefaults (FromJson.fromJson? (α := AlimonyItem))⟩
+
+deriving instance ToJson for LapseItem
+deriving instance FromJson for LapseItem
+instance (priority := high) : FromJson LapseItem :=
+  ⟨fromJsonWithDefaults (FromJson.fromJson? (α := LapseItem))⟩
+
+deriving instance ToJson for EstimatedPayment
+deriving instance FromJson for EstimatedPayment
+instance (priority := high) : FromJson EstimatedPayment :=
+  ⟨fromJsonWithDefaults (FromJson.fromJson? (α := EstimatedPayment))⟩
+
+deriving instance ToJson for EstimatedIssue
+deriving instance FromJson for EstimatedIssue
+instance (priority := high) : FromJson EstimatedIssue :=
+  ⟨fromJsonWithDefaults (FromJson.fromJson? (α := EstimatedIssue))⟩
+
 deriving instance ToJson for ReturnFacts
 deriving instance FromJson for ReturnFacts
 instance (priority := high) : FromJson ReturnFacts :=
@@ -318,6 +372,7 @@ deriving instance ToJson for DependentOutcome
 deriving instance ToJson for EarlyDistResult
 deriving instance ToJson for AccuracyOutcome
 deriving instance ToJson for LateOutcome
+deriving instance ToJson for Extra.EstOutcome
 deriving instance ToJson for Check
 deriving instance ToJson for Outcome
 
