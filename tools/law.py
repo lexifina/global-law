@@ -1477,17 +1477,20 @@ def _earlier_names(corpus: str, rel: str) -> set[str]:
 
 def _folder_moves(corpus: str) -> dict[str, str]:
     """old folder -> new folder, from the file moves of a layout commit (japan-law's 129AC0000000089/art-005.md ->
-    act/1896/089/art-005.md gives 129AC0000000089 -> act/1896/089): the part of each path before the tail both share."""
+    act/1896/089/art-005.md gives 129AC0000000089 -> act/1896/089), every folder a moved file sat in: the folders of
+    the old and new path, and theirs, as far up as the two paths keep the same names below them. Never by stripping
+    only the shared tail: armenia's law/52/x.md -> law/1961/52/x.md would read as a move of law -> law/1961."""
     mv = moves(corpus)
     key = ('folder-moves', f"{corpus}@{_at(_index(corpus))}")
     if key not in _CACHE:
         out: dict[str, str] = {}
         for old, new in mv.items():
-            a, b = old.split('/'), new.split('/')
-            while len(a) > 1 and len(b) > 1 and a[-1] == b[-1]:
-                a, b = a[:-1], b[:-1]
-            if a != b:
+            a, b = old.split('/')[:-1], new.split('/')[:-1]  # the folders the file sat in
+            while a and b and a != b:
                 out.setdefault('/'.join(a), '/'.join(b))
+                if a[-1] != b[-1] or len(a) == 1 or len(b) == 1:
+                    break  # the folder itself was renamed (slug -> number): nothing above it moved with it
+                a, b = a[:-1], b[:-1]
         _CACHE[key] = out
     return _CACHE[key]  # type: ignore[return-value]
 
@@ -2551,6 +2554,14 @@ def _git_blame_if_same(path: str, seq: list[tuple[str, str]]) -> list[tuple[str,
     if any(h.get('repeal_notice') for h in history(path) if h['commit'] in shas):
         return None  # a repeal notice ends the text there; git blame would carry lines across it
     corpus, rel = corpus_of(path)
+    blame_path = rel
+    names = _earlier_names(corpus, rel)
+    if len(names) > 1:
+        # Moved by a layout commit. git blame's own rename pairing may follow another act's identical file, so blame
+        # never crosses the move: only a file whose last version is from before it, by the name it had then.
+        blame_path = next((n for n in sorted(names - {rel}) if read_object(corpus, f'{seq[-1][0]}:{n}') is not None), None)
+        if blame_path is None:
+            return None
     ix = _index(corpus)
     rows = ix['rows']
     order_of = {rows[o][0]: o for o, _, _ in ix['files'].get(rel, [])}
@@ -2563,7 +2574,7 @@ def _git_blame_if_same(path: str, seq: list[tuple[str, str]]) -> list[tuple[str,
     label = dict(seq)
     out, commit = [], ''
     try:
-        porcelain = git('blame', '--line-porcelain', seq[-1][0], '--', rel, cwd=corpus_dir(corpus))
+        porcelain = git('blame', '--line-porcelain', seq[-1][0], '--', blame_path, cwd=corpus_dir(corpus))
     except RuntimeError:
         return None
     for line in porcelain.splitlines():
@@ -4038,7 +4049,7 @@ def credit(author: str, kind: str) -> str:
     return CREDIT.get(kind, '{}').format(author)
 
 
-INDEX_VERSION = 10  # raise when what the index keeps changes: old indexes are then rebuilt
+INDEX_VERSION = 11  # raise when what the index keeps changes: old indexes are then rebuilt
 
 
 def _index_version() -> str:
@@ -4147,6 +4158,74 @@ def _redate(data: dict, rows: list, block: str) -> None:
             data.setdefault('retroactive', set()).add(r[0])
 
 
+def _rename_repair(changes: str) -> dict[str, str]:
+    """old -> new for the exact renames of a documentation commit that moves folders, re-paired by folder. git pairs
+    files of identical text arbitrarily (two acts' identical closing article: argentina-general-villegas-city-law's
+    ordenanza-00-2025/art-036.md was paired with ordenanza-6507-2024's new path), which would give one act the
+    other's history. Each old folder moves to one new folder, learnt from its files whose text is unique in the commit;
+    within a group of identical files each old path then takes the same file name under its folder's new place, and a
+    file left over takes the new path left over. {} when every pair already agrees."""
+    pairs = []
+    for line in changes.splitlines():
+        if line.startswith(':') and '\t' in line:
+            meta, *ps = line.split('\t')
+            m = meta.split()
+            if m[4].startswith('R') and len(ps) == 2:
+                pairs.append((_unquote(ps[0]), _unquote(ps[1]), m[3]))
+    if len(pairs) < 2:
+        return {}
+    from collections import Counter, defaultdict
+
+    def split(old: str, new: str) -> tuple[str, str, str]:
+        a, b = old.split('/'), new.split('/')
+        tail = []
+        while len(a) > 1 and len(b) > 1 and a[-1] == b[-1]:
+            tail.insert(0, a.pop())
+            b.pop()
+        return '/'.join(a), '/'.join(b), '/'.join(tail)
+    by_blob = defaultdict(list)
+    for p in pairs:
+        by_blob[p[2]].append(p)
+    votes: dict[str, Counter] = defaultdict(Counter)
+    for old, new, blob in pairs:
+        if len(by_blob[blob]) == 1:  # text found once: git had only one way to pair it
+            of, nf, _ = split(old, new)
+            votes[of][nf] += 1
+    target = {of: c.most_common(1)[0][0] for of, c in votes.items()}
+    out: dict[str, str] = {}
+    for blob, group in by_blob.items():
+        if len(group) < 2:
+            continue
+        news = {new for _, new, _ in group}
+        left, given = [], {}
+        for old, new, _ in group:
+            of, _, tail = split(old, new)
+            parts = old.split('/')
+            # the old folder: the longest prefix of the old path that has a known target
+            want = None
+            for i in range(len(parts) - 1, 0, -1):
+                f = '/'.join(parts[:i])
+                if f in target:
+                    want = f'{target[f]}/' + '/'.join(parts[i:])
+                    break
+            if want in news and want not in given.values():
+                given[old] = want
+            else:
+                left.append((old, new))
+        rest = [n for n in sorted(news) if n not in given.values()]
+        if len(left) == 1 and len(rest) == 1:
+            given[left[0][0]] = rest[0]
+        else:
+            for old, new in left:  # no better knowledge: git's pairing, if still free
+                if new in rest:
+                    given[old] = new
+                    rest.remove(new)
+        for old, new, _ in group:
+            if old in given and given[old] != new:
+                out[old] = given[old]
+    return out
+
+
 def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = frozenset(),
             paths: tuple = (), keep: bool = False) -> None:
     """Add the commits in `revs` to a corpus index, oldest first: one `git log --raw` for every commit and file.
@@ -4213,6 +4292,7 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = fro
                 row = row[:4] + (row[4] if kind == 'law' else kind, day_) + row[6:]
         order = len(rows)
         rows.append(row)
+        repair = _rename_repair(changes) if row[4] == 'documentation' else {}
         for line in changes.splitlines():
             if not line.startswith(':') or '\t' not in line:
                 continue
@@ -4220,6 +4300,7 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = fro
             f = meta.split()
             if f[4].startswith('R') and len(paths) == 2:
                 old, new = _unquote(paths[0]), _unquote(paths[1])
+                new = repair.get(old, new)
                 if row[4] == 'documentation':
                     # A file moved unchanged by a documentation commit (a corpus renaming its folders) keeps its
                     # history: the new path takes the old one's versions, which are read by blob, not by path.

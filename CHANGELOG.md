@@ -37,6 +37,14 @@ Status words:
     the folder its files moved to (`path_arg`).
   - **Checked:** 17/17 answers the same as before the move, by new and by old paths; with git alone, `git blame`
     and `git log --follow` credit the same laws across the move.
+  - **Files of identical text, moved together.** git pairs the renames of identical files arbitrarily, so after a
+    layout move two acts' identical articles could swap histories (argentina-general-villegas-city-law:
+    `ordenanza-00-2025/art-036.md` read as Ordenanza 6507/2024's; poland-law's line credits). A documentation
+    commit's renames are re-paired by folder, each old folder going where its uniquely worded files went
+    (`_rename_repair`); a moved file is credited by replaying its versions, not by `git blame` (whose own rename
+    pairing has the same fault); INDEX_VERSION is raised so indexes that kept git's pairing are rebuilt.
+  - **Citation rules written for the old folder names** (corpus.json `citation.file`) match a moved file by the name it
+    had, and search its act's folder now (what_else_changes found nothing in a moved corpus).
 - **Fixed (the tools), a server of every country: `find_provision` by words, and a search of every jurisdiction.**
   - **The heading index is on disk for every corpus.** On a server of the whole world `find_provision` with words grepped the headings of every blob of the commit: Romania's 1.84 million files took more than 120 s, so it never answered. The index of headings was kept on disk for case law only. It is now kept for every corpus (`headings-v2-<corpus>-<commit>.json` in the cache folder, written under a temporary name and moved into place, the three newest per corpus). An index for a new commit starts from an earlier commit's file and reads only the files `git diff-tree` names (checked: the same bytes as a build from scratch, on the Irish acts from 200 and 1,500 commits back, Palau and the Finnish labour court; 2.0 s from scratch, 0.2 s from 200 commits back).
   - **A server that builds no index reads a stored one.** `heading_index_if_built` gives the index from memory or from its file and never builds; `store_heading_index` makes the file without keeping the index in memory, for a host to call in the background (calls for one corpus at once build once). `find_provision` uses the stored index where there is one and greps where there is not. A clone of a few countries answers as before.

@@ -1111,9 +1111,12 @@ def path_arg(value) -> str:
     # its new place: a file by the move recorded for it, a folder (an act) by the folder its files moved to.
     if '/caselaw/' not in path:
         now = run_law(law.moves, corpus).get(rel)
-        if now is None:
-            folders = run_law(law._folder_moves, corpus)
-            whole = rel.rstrip('/')
+        folders = run_law(law._folder_moves, corpus) if now is None else {}
+        whole = rel.rstrip('/')
+        current = set(folders.values())
+        if now is None and any(whole == f or whole.startswith(f + '/') for f in current):
+            pass  # already a path in the new layout (huuli/2016/11712 begins with the old folder huuli/2016)
+        elif now is None:
             if whole in folders:
                 now = folders[whole]
             else:  # the longest moved folder the path is inside
@@ -4881,6 +4884,15 @@ def _declared_rule(corpus: str, rel: str) -> tuple[str, str, re.Pattern | None] 
         m = re.fullmatch(rule['file'], rel)
     except re.error as e:
         raise UnusableCitationRule(f'its file pattern is not a valid regular expression ({e})') from None
+    moved_from = None
+    if not m:
+        # A corpus whose folders a layout move renamed (act/1896/089/art-005.md was minpo/art-005.md): its rule was
+        # written for the old names, so the file is matched by the name it had, and its act's folder now is searched.
+        for old in sorted(law._earlier_names(corpus, rel) - {rel}):
+            m = re.fullmatch(rule['file'], old)
+            if m:
+                moved_from = old
+                break
     if not m or len(m.groups()) < 2:
         return None
     number = m.group('n' if 'n' in m.re.groupindex else 2) or ''
@@ -4912,6 +4924,9 @@ def _declared_rule(corpus: str, rel: str) -> tuple[str, str, re.Pattern | None] 
             raise UnusableCitationRule(f'its not_preceded_by or not_followed_by is not a valid regular expression ({e})') from None
     # The folder searched is the path to the end of group 1, from the corpus root: a rule whose group 1 is only
     # the last folder ("sb/([0-9]{4})/...", "acts/([a-z0-9-]+)/...") then searches that folder, not none.
+    if moved_from:
+        tail = moved_from[m.end(1):]
+        return (rel[:-len(tail)] if tail and rel.endswith(tail) else rel.rpartition('/')[0]), pattern, check
     return rel[:m.end(1)], pattern, check
 
 
