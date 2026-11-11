@@ -4544,7 +4544,7 @@ def _no_merges(corpus: str, pin: str) -> bool:
     return not law.git('rev-list', '--merges', '-n', '1', pin, cwd=law.corpus_dir(corpus)).strip()
 
 
-def folder_commits(corpus: str, inner: str) -> list[str]:
+def _folder_commits(corpus: str, inner: str) -> list[str]:
     """The commits that touched files under a folder, up to the pin. For case law, read from the corpus index (every
     file's versions) instead of `git log -- <folder>`, which walks every commit's tree: a year of US Supreme Court
     decisions took 20 s that way, over 328,000 commits (US case-law audit, 2026-11-07). For law too where the index
@@ -4581,20 +4581,21 @@ def folder_commits(corpus: str, inner: str) -> list[str]:
                 orders.update(o for o, *_ in ix['files'][files[i]])
                 i += 1
             return [rows[o][0] for o in sorted(orders, reverse=True) if o < main]  # each commit once, newest first
-    return _folder_log(corpus, law.reachable_tip(corpus), inner)
+    return law.git('log', '--format=%H', law.reachable_tip(corpus), '--', inner, cwd=law.corpus_dir(corpus)).split()
 
 
-FOLDER_LOG_KEPT_S = 0.25  # a folder's git log that took this long is kept in the tree's cache
+FOLDER_KEPT_S = 0.25  # a folder's commits that took this long to work out are kept in the tree's cache
 
 
-def _folder_log(corpus: str, tip: str, inner: str) -> list[str]:
-    """`git log --format=%H <tip> -- <inner>`: the commits that touched a folder. Git walks the corpus's whole history
-    for it (18-24 s for a top folder of Romania's, France's or Switzerland's acts, on every list of that corpus's
-    root: past a hosted call's time, every time). One that took a while is kept in the tree's cache, named by the tip
-    commit and the folder, and read from there until the corpus's pin moves."""
-    kept = None
+def folder_commits(corpus: str, inner: str) -> list[str]:
+    """The commits that touched files under a folder, up to the pin (_folder_commits), kept in the tree's cache when
+    working them out took a while: named by the corpus's tip commit and the folder, so read from there until the pin
+    moves. For a top folder of a large corpus that is 18-24 s of git log (Romania, France, Switzerland), or as long
+    going through the index's versions of every file under it (Sweden's year folders: 40 s for a list of 100), on
+    every list of that corpus's root: past a hosted call's time, every time."""
+    tip, kept = law.reachable_tip(corpus), None
     if re.fullmatch(r'[0-9a-f]{40}', tip or ''):
-        kept = law._store() / f"folder-commits-{tip}-{hashlib.sha1(inner.encode('utf-8', 'surrogateescape')).hexdigest()[:16]}.json"
+        kept = law._store() / f"folder-commits-v2-{tip}-{hashlib.sha1(inner.encode('utf-8', 'surrogateescape')).hexdigest()[:16]}.json"
         try:
             got = json.loads(kept.read_text(encoding='utf-8'))
             if got['folder'] == inner and isinstance(got['commits'], list):
@@ -4602,8 +4603,8 @@ def _folder_log(corpus: str, tip: str, inner: str) -> list[str]:
         except (OSError, ValueError, KeyError, TypeError):
             pass
     began = time.monotonic()
-    commits = law.git('log', '--format=%H', tip, '--', inner, cwd=law.corpus_dir(corpus)).split()
-    if kept is not None and time.monotonic() - began >= FOLDER_LOG_KEPT_S:
+    commits = _folder_commits(corpus, inner)
+    if kept is not None and time.monotonic() - began >= FOLDER_KEPT_S:
         try:
             kept.parent.mkdir(parents=True, exist_ok=True)
             tmp = kept.with_name(f'{kept.name}.{os.getpid()}.{threading.get_ident()}.part')
