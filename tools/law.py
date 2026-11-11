@@ -5165,13 +5165,30 @@ class _Files:
             _OPEN_INDEXES.remove(self._f)
         self._f.close()
 
+    def _read(self, at: int, n: int) -> bytes:
+        """`n` bytes of the file from `at` (fewer at its end). Where the system has pread the file's own position is
+        left alone: it belongs to the open file, which a process forked from this one shares, so a seek() here and a
+        read() there would take each other's place as two threads once did."""
+        import os
+        pread = getattr(os, 'pread', None)
+        if pread is None:  # Windows
+            self._f.seek(at)
+            return self._f.read(n)
+        fd, parts, got = self._f.fileno(), [], 0
+        while got < n:
+            part = pread(fd, n - got, at + got)
+            if not part:
+                break
+            parts.append(part)
+            got += len(part)
+        return parts[0] if len(parts) == 1 else b''.join(parts)
+
     def _piece(self, i: int) -> dict:
         if i not in self._shards:
             with self._reading:
                 if i not in self._shards:
                     at, n = self._offsets[i]
-                    self._f.seek(at)
-                    raw = self._f.read(n)
+                    raw = self._read(at, n)
                     if len(raw) != n:
                         raise OSError(f'{self._path}: index cut short')
                     self._shards[i] = _unpickle(raw)
@@ -5189,8 +5206,7 @@ class _Files:
         if len(self._shards) < len(self._offsets):
             for i, (at, n) in enumerate(self._offsets):
                 if i not in self._shards:
-                    self._f.seek(at)
-                    self._shards[i] = _unpickle(self._f.read(n))
+                    self._shards[i] = _unpickle(self._read(at, n))
         placed: list = [None] * sum(len(self._shards[i][1]) for i in self._shards)
         for files, places in self._shards.values():
             for kv, at in zip(files.items(), places):
