@@ -605,9 +605,16 @@ def widen() -> str:
 
 def unserved_answer(where: str) -> str | None:
     """For a path or scope that reaches only corpora this server leaves out, what to tell the user; else None."""
+    served = set(_look()[1])
+    # A path inside a corpus this server serves reaches that corpus, so the answer is None: found from the path's own
+    # folders. Every read asked this of all 980 corpora in the tree (law.matches each: 170 ms a read on a server of
+    # every country, half of what a read took, and on one thread at a time).
+    if isinstance(where, str) and '/' in where:
+        parts = where.strip('/').split('/')
+        if any('/'.join(parts[:k]) in served for k in range(2, len(parts) + 1)):
+            return None
     full = _full_manifest(head())['corpora']
     reach = [c for c in full if law.matches(c, where)]
-    served = set(_look()[1])
     if not reach or any(c['path'] in served for c in reach):
         return None
     shut = [(c['path'], serving(c)) for c in reach]
