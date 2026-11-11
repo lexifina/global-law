@@ -8,6 +8,9 @@ Status words:
 - **Open:** found and reported, not yet fixed.
 - **Checked:** a test that passed.
 
+## 11 November 2026
+- **Fixed (the tools), a corpus with many corrections is slow to read in every fresh process.** `file_index` works out, for each correction, the files it names but does not change. Japan's acts have 41,177 corrections naming 5.8 million paths, and that took 17 minutes each time a process first built a tree of the corpus, which is how long a server's new copy took to start. A file index that took over two seconds to work out is now kept beside the corpus index (`file-index-v1-<corpus>-<pin>-<source>-<made from>.pickle`), keyed by the index's reading, the moved paths, the repeal notices and `law.py` itself, so a change to the rules never reads an old one. Checked: the 104 regression answers are the same computed and read back; a damaged file is ignored and worked out again.
+
 ## 10 November 2026
 - **Fixed (the tools): with a full-text index, `search_law` reads only the corpora a page reaches.** On a server of 800 corpora a search of every jurisdiction with the index took 4 to 12 s ("force majeure" 11.5 s, "tax" 6.6 s, for a page of 5 lines): every corpus with a match was grepped until it alone had given a page of lines, hundreds of git processes, though the lines come corpus by corpus and only the first corpora can be on the page. A search that matched nothing took 30 s, in the change notes of every corpus.
   - **Corpora in order.** The corpora the index holds are taken one after another, in the answer's order, and each is asked for the lines the page still lacks, and one more. Once the corpora before one have given more than the page can use, it is not read: the index has counted its files. The corpora the index leaves out are grepped side by side as before. A first page of "on" over the three test corpora starts one `git grep`, of 25 files (0.13 s; without the index 1.7 s).

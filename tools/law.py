@@ -1690,6 +1690,14 @@ def file_index(corpus: str) -> tuple[dict, list]:
     key = ('file-index', f"{corpus}@{_at(ix)}")
     if key in _CACHE:
         return _CACHE[key]  # type: ignore[return-value]
+    import time
+    began = time.monotonic()
+    kept = None if ix.get('focused') else _file_index_kept(corpus, ix)
+    if kept is not None:
+        got = _file_index_read(kept)
+        if got is not None:
+            _CACHE[key] = got
+            return got
     rows = ix['rows']
     index: dict[str, list] = {}
     touched: dict[int, dict] = {}
@@ -1728,7 +1736,58 @@ def file_index(corpus: str) -> tuple[dict, list]:
             files = {p: v for p, v in files.items() if p in names}
         overlays.append((_moved_fix(corpus, fix), order, files))
     _CACHE[key] = (index, overlays)
+    if kept is not None and time.monotonic() - began >= FILE_INDEX_KEEP_S:
+        _file_index_write(kept, (index, overlays))
     return index, overlays
+
+
+# A corpus whose file index took this long to work out keeps it on disk, beside its index: Japan's acts (41,177
+# corrections naming 5.8 million paths) took 17 minutes in every fresh process, which is how long a server's new copy
+# then took to start. Keyed by what it is worked out from: the index's reading, the moved paths, and this file itself
+# (a change to the rules here makes a new key, so no kept answer outlives the code that made it).
+FILE_INDEX_KEEP_S = 2.0
+FILE_INDEX_KEPT = 2  # kept files per corpus (two server copies may read different pins)
+_SOURCE_ID: list = []
+
+
+def _file_index_kept(corpus: str, ix: dict) -> Path | None:
+    import hashlib
+    try:
+        if not _SOURCE_ID:
+            _SOURCE_ID.append(hashlib.sha1(Path(__file__).read_bytes()).hexdigest()[:10])
+        made_from = hashlib.sha1(repr((sorted(moves(corpus).items()), sorted(str(b) for b in notice_blobs(corpus)),
+                                       bool(act_ends(corpus)))).encode('utf-8', 'replace')).hexdigest()[:10]
+        return _store() / f"file-index-v1-{corpus.replace('/', '~')}-{_at(ix)[:12]}-{_SOURCE_ID[0]}-{made_from}.pickle"
+    except (OSError, ValueError, SystemExit):
+        return None
+
+
+def _file_index_read(path: Path):
+    import pickle
+    try:
+        with open(path, 'rb') as f:
+            got = pickle.load(f)
+    except (OSError, ValueError, EOFError, pickle.UnpicklingError, AttributeError, ImportError, IndexError):
+        return None
+    return got if isinstance(got, tuple) and len(got) == 2 and isinstance(got[0], dict) and isinstance(got[1], list) else None
+
+
+def _file_index_write(path: Path, value) -> None:
+    import os
+    import pickle
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_name(f'{path.name}.{os.getpid()}.{threading.get_ident()}.tmp')
+        with open(tmp, 'wb') as f:
+            pickle.dump(value, f, protocol=pickle.HIGHEST_PROTOCOL)
+        os.replace(tmp, path)
+        stem = path.name.split('-')  # file-index-v1-<corpus>-<at>-<source>-<made from>.pickle
+        same = sorted(path.parent.glob('-'.join(stem[:-3]) + '-*.pickle'), key=lambda p: p.stat().st_mtime, reverse=True)
+        for old in same[FILE_INDEX_KEPT:]:
+            if old != path:
+                old.unlink(missing_ok=True)
+    except OSError:
+        pass
 
 
 NAMED_TREE_MIN = 200  # a correction naming this many unchanged paths is read with one recursive ls-tree (_named_at)
