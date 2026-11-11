@@ -1,7 +1,7 @@
 import LegalProofs.USTax.TaxCourt.FilingStatus
 
 /-!
-# §32 earned income credit, tax years 2016–2024
+# §32 earned income credit, tax years 2012–2024
 
 Amounts: the year's §32(b) figures (`Params.eic`), applied through the IRS EIC Table (§32(f)(1)) with the same
 reconstruction as the 2025 model (`TaxCode.Individual.D.eicTab`: each $50 line is the credit at its midpoint, a line
@@ -10,7 +10,7 @@ threshold, also AGI, and take the smaller). `eicStatuteAmount` gives the exact s
 
 Eligibility by year (§32(c)(1), (c)(3), (d), (i), (m), and for 2021 §32(n) as added by ARPA §§9621–9624):
 
-| rule | 2016–2020 | 2021 | 2022–2024 |
+| rule | 2012–2020 | 2021 | 2022–2024 |
 |---|---|---|---|
 | childless age (at year end) | 25–64 | 19+ (24+ for a specified student, 18+ former foster or homeless youth), no upper limit | 25–64 |
 | childless phase-in/out | 7.65% | 15.3% (§32(n)) | 7.65% |

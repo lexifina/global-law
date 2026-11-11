@@ -4,11 +4,11 @@ import LegalProofs.USTax.TaxCourt.EarlyDistribution
 import LegalProofs.USTax.TaxCourt.Penalties
 
 /-!
-# A simple individual return, 2016–2024, and the deficiency
+# A simple individual return, 2012–2024, and the deficiency
 
 `computeReturn p r` runs Form 1040 for one year from the facts in `ReturnFacts`: income (wages, self-employment,
 interest, dividends, capital gain, retirement distributions, social security, unemployment, other) → adjustments →
-AGI → standard deduction or itemized deductions → personal exemptions (2016–2017) → taxable income → the regular tax
+AGI → standard deduction or itemized deductions → personal exemptions (2012–2017) → taxable income → the regular tax
 (Tax Table / schedule / capital-gain worksheet) → nonrefundable credits (other, then CTC/ODC) → SE tax, §72(t),
 other taxes → refundable credits (EIC, ACTC / 2021 refundable CTC, other).
 
@@ -16,7 +16,7 @@ other taxes → refundable credits (EIC, ACTC / 2021 refundable CTC, other).
 (§6211(b)(4)). Withholding and estimated payments are not "tax shown" (§6211(b)(1)) and do not enter it.
 
 Items given as amounts the court found (not computed here): the adjustments to income other than one-half of SE
-tax, itemized deductions (after §68 in 2016–2017), the §199A deduction, other credits and other taxes (NIIT,
+tax, itemized deductions (after §68 in 2013–2017), the §199A deduction, other credits and other taxes (NIIT,
 additional Medicare tax, §5000A payment, household employment taxes, recapture).
 
 Not modelled: AMT (give it in `otherTaxes`), kiddie tax, foreign income, Schedule D worksheet (28% / §1250 gain),
@@ -112,6 +112,9 @@ structure ReturnResult where
   taxableSocialSecurity : Int
   unemploymentExcluded : Int
   halfSeTax : Int
+  /-- Total adjustments to income (Form 1040 "adjustments"): one-half of SE tax, the given adjustments, the 2020
+  §62(a)(22) charity deduction. -/
+  adjustments : Int
   agi : Int
   standardDeduction : Int
   deduction : Int
@@ -147,10 +150,12 @@ def standardDeduction (p : Params) (r : ReturnFacts) (f : Filing) (earned : Int)
     (if spouseCounts then (if r.spouseAge ≥ 65 then 1 else 0) + (if r.spouseBlind then 1 else 0) else 0)
   basic + per * boxes
 
-/-- §151 (2016–2017): exemptions for the taxpayer, spouse and dependents, reduced by the §151(d)(3) phase-out:
+/-- §151 (2012–2017): exemptions for the taxpayer, spouse and dependents, reduced by the §151(d)(3) phase-out (2013–2017;
+none in 2012):
 2 percentage points for each $2,500 ($1,250 separate) or fraction of AGI over the threshold. Zero from 2018. -/
 def exemptions (p : Params) (f : Filing) (agi : Int) (count : Nat) : Int :=
   if p.exemption = 0 then 0 else
+  if p.pepThreshold f = 0 then p.exemption * count else
   let total := p.exemption * count
   let step := if f == .mfs then 1250 else 2500
   let pct := min 100 (2 * ceilDiv (pos (agi - p.pepThreshold f)) step)
@@ -159,18 +164,18 @@ def exemptions (p : Params) (f : Filing) (agi : Int) (count : Nat) : Int :=
 /-- **The return.** -/
 def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
   let f := r.filing
-  let base := p.ssWageBase
   -- self-employment tax, per individual
-  let seT := seTaxY base r.seProfit r.wages
-  let seS := seTaxY base r.seProfitSpouse r.wagesSpouse
-  let halfSe := halfSeTaxY base r.seProfit r.wages + halfSeTaxY base r.seProfitSpouse r.wagesSpouse
+  let seT := seTaxP p r.seProfit r.wages
+  let seS := seTaxP p r.seProfitSpouse r.wagesSpouse
+  let halfSe := halfSeTaxP p r.seProfit r.wages + halfSeTaxP p r.seProfitSpouse r.wagesSpouse
   -- capital loss limit §1211(b)
   let capInc := if r.capitalGain < 0 then max r.capitalGain (if f == .mfs then -1500 else -3000) else r.capitalGain
   let uc := r.unemployment + r.unemploymentSpouse
   let income0 := r.wages + r.wagesSpouse + r.seProfit + r.seProfitSpouse + r.taxableInterest + r.ordinaryDividends +
     capInc + r.iraDistributions + r.pensions + uc + r.otherIncome
   -- earned income (§32(c)(2)), also §63(c)(5)
-  let earned := r.wages + r.wagesSpouse + seEarned base r.seProfit r.wages + seEarned base r.seProfitSpouse r.wagesSpouse
+  let earned := r.wages + r.wagesSpouse + (r.seProfit - halfSeTaxP p r.seProfit r.wages) +
+    (r.seProfitSpouse - halfSeTaxP p r.seProfitSpouse r.wagesSpouse)
   let std := standardDeduction p r f earned
   -- 2020 §62(a)(22) and 2021 §170(p): only for a taxpayer who does not itemize; the choice compares totals
   let charity := if p.year == 2020 then min (pos r.charityNonItemizer) 300
@@ -221,7 +226,7 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
   let earnedCtc := match r.priorYearEarnedIncome with
     | some e => if p.year == 2020 && e > earned then e else earned
     | none => earned
-  let ssTaxes := employeeFica base r.wages + employeeFica base r.wagesSpouse + halfSe
+  let ssTaxes := employeeFicaP p r.wages + employeeFicaP p r.wagesSpouse + halfSe
   let ctcR : CtcResult := if r.claimCTC then
       ctcFor p counts
         { filing := f, magi := agi, taxLeft := tax - otherNonref, earnedIncome := earnedCtc,
@@ -232,7 +237,7 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
   let totalTax := pos (tax - nonref) + seT + seS + edTax + r.otherTaxes + ctcR.excessAdvance
   let refundable := eicR.1 + ctcR.refundable + r.otherRefundableCredits
   { filing := f, totalIncome := income0 + tss - ucx, taxableSocialSecurity := tss, unemploymentExcluded := ucx,
-    halfSeTax := halfSe, agi := agi, standardDeduction := std, deduction := ded, exemptions := ex,
+    halfSeTax := halfSe, adjustments := adj, agi := agi, standardDeduction := std, deduction := ded, exemptions := ex,
     taxableIncome := ti, regularTax := tax, ctcNonrefundable := ctcR.nonrefundable, nonrefundableCredits := nonref,
     seTax := seT + seS, earlyDistributionTax := edTax, excessAdvanceCtc := ctcR.excessAdvance,
     totalTax := totalTax, earnedIncome := earned, eic := eicR.1, eicReasons := eicR.2,

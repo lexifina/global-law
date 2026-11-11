@@ -1,17 +1,17 @@
 import LegalProofs.USTax.TaxCourt.Params
 
 /-!
-# The regular tax: §1 schedules, the §3 Tax Table, and §1(h) for qualified dividends and capital gain (2016–2024)
+# The regular tax: §1 schedules, the §3 Tax Table, and §1(h) for qualified dividends and capital gain (2012–2024)
 
 * `scheduleTax p f ti` — the rate schedule, exact in mills, rounded once to the dollar.
-* `tableTax p f ti` — the Tax Table (2016–2024 Form 1040 instructions): lines "at least X but less than Y" of $5/$10/
+* `tableTax p f ti` — the Tax Table (2012–2024 Form 1040 instructions): lines "at least X but less than Y" of $5/$10/
   $10 up to $25, $25 up to $3,000 and $50 up to $100,000; the entry is the schedule tax on the line's midpoint, rounded
   half up. The same construction as the 2025 model (`TaxCode.Individual.C.Table`); checked against every printed row
   of the nine years' tables by `tools/taxcourt/check_tables.lean` (see the findings in `LegalProofs/USTax/TaxCourt.lean`).
 * `taxOn p f ti` — Form 1040 line 16, ordinary case: the Table below $100,000, the schedule from $100,000.
-* `regularTax p f ti pref` — the Qualified Dividends and Capital Gain Tax Worksheet (2016–2024 editions; same line
+* `regularTax p f ti pref` — the Qualified Dividends and Capital Gain Tax Worksheet (2012–2024 editions; same line
   structure each year), `pref` being qualified dividends plus net capital gain (§1(h)(11), §1(h)(3)). Before 2018 the
-  0% and 15% ceilings are the tops of the 15% and 35% brackets; from 2018 they are the §1(j)(5)(B) amounts.
+  0% and 15% ceilings are the tops of the 15% and 35% brackets (2012: no 20% rate, so no 15% ceiling); from 2018 they are the §1(j)(5)(B) amounts.
 -/
 
 namespace Legal.USTax.TaxCourt
@@ -54,7 +54,8 @@ def regularTax (p : Params) (f : Filing) (ti pref : Int) : Int :=
   let l9 := l7 - l8                     -- taxed at 0%
   let l10 := min l1 l4
   let l12 := l10 - l9
-  let l14 := min l1 (p.cg15 f)
+  -- 2012: no 20% rate (§1(h)(1)(C) as then in force): everything above the 0% band is taxed at 15%
+  let l14 := if p.year ≤ 2012 then l1 else min l1 (p.cg15 f)
   let l15 := l5 + l9
   let l16 := pos (l14 - l15)
   let l17 := min l12 l16                -- taxed at 15%
@@ -66,7 +67,7 @@ def regularTax (p : Params) (f : Filing) (ti pref : Int) : Int :=
 
 /-! ## Tests: printed base amounts (Tables 1–4 of each revenue procedure) -/
 
-/-- The parameters of a covered year (tests only; outside 2016–2024 it is all zeros). -/
+/-- The parameters of a covered year (tests only; outside 2012–2024 it is all zeros). -/
 def P (y : Nat) : Params := (params? y).getD default
 
 -- Rev. Proc. 2015-53 Table 3 (2016 single): over $413,350 → $119,934.75; over $415,050 → $120,529.75

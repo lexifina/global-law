@@ -1,19 +1,23 @@
-"""Extract the printed EIC Tables (Pub. 596) and Tax Tables (Form 1040 instructions), 2016-2024, to JSON.
+"""Extract the printed EIC Tables (Pub. 596) and Tax Tables (Form 1040 instructions), 2012-2024, to JSON.
 
     # fetch (irs.gov/pub/irs-prior/p596--YYYY.pdf, i1040gi--YYYY.pdf) into DIR, then
     pdftotext -layout DIR/p596-YYYY.pdf DIR/p596-YYYY.txt      (and i1040gi-YYYY)
-    python -I extract_tables.py DIR OUTDIR
+    python -I extract_tables.py DIR OUTDIR [FIRST LAST]
+
+(2012-2015: the Tax Table is the separate i1040tt--YYYY.pdf; its text as DIR/i1040tt-YYYY.txt is used when
+DIR/i1040gi-YYYY.txt is absent.)
 
 writes OUTDIR/eic_tables.json  {year: [[atLeast, [8 columns]], ...]}
        OUTDIR/tax_tables.json  {year: [[atLeast, butLessThan, [single, mfj, mfs, hoh]], ...]}
 The page layout puts two or three table blocks side by side, so a handful of rows per year are mis-assembled by this
 parser (values shifted between columns); CheckTables.lean reports every mismatch so they can be inspected.
 """
-import json, re, sys
+import json, os, re, sys
 
 src, out = sys.argv[1], sys.argv[2]
 eic, tax = {}, {}
-for y in range(2016, 2025):
+first, last = (int(sys.argv[3]), int(sys.argv[4])) if len(sys.argv) > 4 else (2016, 2024)
+for y in range(first, last + 1):
     t = open(f'{src}/p596-{y}.txt', encoding='latin-1').read()
     rows = {}
     for line in t.splitlines():
@@ -26,7 +30,8 @@ for y in range(2016, 2025):
             else:
                 i += 1
     eic[y] = sorted(rows.items())
-    t = open(f'{src}/i1040gi-{y}.txt', encoding='latin-1').read()
+    gi = f'{src}/i1040gi-{y}.txt'
+    t = open(gi if os.path.exists(gi) else f'{src}/i1040tt-{y}.txt', encoding='latin-1').read()
     i = t.find('Sample Table'); j = t.find('Tax Computation Worksheet', i + 1000)
     rows = {}
     for line in t[i:j].splitlines():

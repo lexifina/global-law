@@ -1,64 +1,235 @@
 [
-  {
-    "citation": "Worked example 1 (hypothetical, after Pub. 596 (2019))",
-    "taxYear": 2019,
-    "note": "HoH upheld (son); niece fails residence and is another taxpayer's qualifying child; EIC and CTC for one child",
-    "facts": {
-      "filing": "hoh", "taxpayerAge": 32, "wages": 21000,
-      "dependents": [
-        {"name": "son", "age": 8, "daysWithTaxpayer": 365, "livedWithWholeYear": true},
-        {"name": "niece", "relationship": "siblingsChild", "age": 14, "daysWithTaxpayer": 150, "qualifyingChildOfAnother": true}
-      ]
+ {
+  "citation": "Worked example 1 (hypothetical, after Pub. 596 (2019))",
+  "taxYear": 2019,
+  "note": "HoH upheld (son); niece fails residence and is another taxpayer's qualifying child; EIC and CTC for one child",
+  "facts": {
+   "filing": "hoh",
+   "taxpayerAge": 32,
+   "wages": 21000,
+   "dependents": [
+    {
+     "name": "son",
+     "age": 8,
+     "daysWithTaxpayer": 365,
+     "livedWithWholeYear": true
     },
-    "status": {"paidOverHalfHouseholdCost": true},
-    "asFiled": {
-      "filing": "hoh", "taxpayerAge": 32, "wages": 21000,
-      "dependents": [
-        {"name": "son", "age": 8, "daysWithTaxpayer": 365, "livedWithWholeYear": true},
-        {"name": "niece", "relationship": "siblingsChild", "age": 14, "daysWithTaxpayer": 365}
-      ]
+    {
+     "name": "niece",
+     "relationship": "siblingsChild",
+     "age": 14,
+     "daysWithTaxpayer": 150,
+     "qualifyingChildOfAnother": true
+    }
+   ]
+  },
+  "status": {
+   "paidOverHalfHouseholdCost": true
+  },
+  "asFiled": {
+   "filing": "hoh",
+   "taxpayerAge": 32,
+   "wages": 21000,
+   "dependents": [
+    {
+     "name": "son",
+     "age": 8,
+     "daysWithTaxpayer": 365,
+     "livedWithWholeYear": true
     },
-    "accuracy": {},
-    "expected": [
-      {"item": "filingStatus", "text": "hoh"},
-      {"item": "qualifyingChild:niece", "flag": false},
-      {"item": "eic", "value": 3207},
-      {"item": "refundableCtc", "value": 1400},
-      {"item": "deficiency", "value": 3576},
-      {"item": "accuracyPenalty", "value": 0}
-    ]
+    {
+     "name": "niece",
+     "relationship": "siblingsChild",
+     "age": 14,
+     "daysWithTaxpayer": 365
+    }
+   ]
   },
-  {
-    "citation": "Worked example 2 (hypothetical, after Pub. 590-B (2022))",
-    "taxYear": 2022,
-    "facts": {"taxpayerAge": 45, "wages": 60000, "pensions": 30000, "withholding": 5000,
-              "earlyDistributions": [{"amountIncludible": 30000, "plan": "qualifiedPlan"}]},
-    "asFiled": {"taxpayerAge": 45, "wages": 60000, "withholding": 5000},
-    "accuracy": {},
-    "lateness": {"filed": "2023-08-01", "paid": "2023-08-01"},
-    "expected": [
-      {"item": "earlyDistributionTax", "value": 3000},
-      {"item": "deficiency", "value": 9600},
-      {"item": "accuracyPenalty", "value": 1920},
-      {"item": "failureToFile", "value": 2095},
-      {"item": "failureToPay", "value": 19}
-    ]
+  "accuracy": {},
+  "expected": [
+   {
+    "item": "filingStatus",
+    "text": "hoh"
+   },
+   {
+    "item": "qualifyingChild:niece",
+    "flag": false
+   },
+   {
+    "item": "eic",
+    "value": 3207
+   },
+   {
+    "item": "refundableCtc",
+    "value": 1400
+   },
+   {
+    "item": "deficiency",
+    "value": 3576
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 0
+   }
+  ]
+ },
+ {
+  "citation": "Worked example 2 (hypothetical, after Pub. 590-B (2022))",
+  "taxYear": 2022,
+  "facts": {
+   "taxpayerAge": 45,
+   "wages": 60000,
+   "pensions": 30000,
+   "withholding": 5000,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 30000,
+     "plan": "qualifiedPlan"
+    }
+   ]
   },
-  {
-    "citation": "Tie-breaker illustration (hypothetical, after Pub. 501)",
-    "taxYear": 2018,
-    "note": "grandmother and mother both claim; the mother (parent) wins, so the grandmother loses HoH, EIC and CTC",
-    "facts": {"filing": "hoh", "taxpayerAge": 58, "wages": 25000,
-              "dependents": [{"name": "grandson", "relationship": "descendantOfChild", "age": 6, "daysWithTaxpayer": 365, "livedWithWholeYear": true}]},
-    "status": {"paidOverHalfHouseholdCost": true},
-    "tieBreakers": [{"child": "grandson", "taxpayer": "grandmother",
-                     "claimants": [{"name": "grandmother", "daysResided": 365, "agi": 25000},
-                                   {"name": "mother", "isParent": true, "daysResided": 365, "agi": 9000}]}],
-    "taxShown": -5000,
-    "expected": [
-      {"item": "tieBreaker:grandson", "text": "mother"},
-      {"item": "filingStatus", "text": "single"},
-      {"item": "eic", "value": 0}
+  "asFiled": {
+   "taxpayerAge": 45,
+   "wages": 60000,
+   "withholding": 5000
+  },
+  "accuracy": {},
+  "lateness": {
+   "filed": "2023-08-01",
+   "paid": "2023-08-01"
+  },
+  "expected": [
+   {
+    "item": "earlyDistributionTax",
+    "value": 3000
+   },
+   {
+    "item": "deficiency",
+    "value": 9600
+   },
+   {
+    "item": "accuracyPenalty",
+    "value": 1920
+   },
+   {
+    "item": "failureToFile",
+    "value": 2095
+   },
+   {
+    "item": "failureToPay",
+    "value": 19
+   }
+  ]
+ },
+ {
+  "citation": "Tie-breaker illustration (hypothetical, after Pub. 501)",
+  "taxYear": 2018,
+  "note": "grandmother and mother both claim; the mother (parent) wins, so the grandmother loses HoH, EIC and CTC",
+  "facts": {
+   "filing": "hoh",
+   "taxpayerAge": 58,
+   "wages": 25000,
+   "dependents": [
+    {
+     "name": "grandson",
+     "relationship": "descendantOfChild",
+     "age": 6,
+     "daysWithTaxpayer": 365,
+     "livedWithWholeYear": true
+    }
+   ]
+  },
+  "status": {
+   "paidOverHalfHouseholdCost": true
+  },
+  "tieBreakers": [
+   {
+    "child": "grandson",
+    "taxpayer": "grandmother",
+    "claimants": [
+     {
+      "name": "grandmother",
+      "daysResided": 365,
+      "agi": 25000
+     },
+     {
+      "name": "mother",
+      "isParent": true,
+      "daysResided": 365,
+      "agi": 9000
+     }
     ]
-  }
+   }
+  ],
+  "taxShown": -5000,
+  "expected": [
+   {
+    "item": "tieBreaker:grandson",
+    "text": "mother"
+   },
+   {
+    "item": "filingStatus",
+    "text": "single"
+   },
+   {
+    "item": "eic",
+    "value": 0
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2024-67 (Moran; non-filer, sec. 6651(g) substitute for return)",
+  "taxYear": 2018,
+  "note": "SFR 2022-09-12 showing 60,811; withholding 42,961. Deficiency against 0 shown; additions against the SFR tax.",
+  "facts": {
+   "filing": "single",
+   "wages": 213630,
+   "capitalGain": 32227,
+   "otherIncome": 6236,
+   "pensions": 2417,
+   "ordinaryDividends": 2,
+   "withholding": 42961,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 2417,
+     "plan": "qualifiedPlan"
+    }
+   ]
+  },
+  "taxShown": 0,
+  "sfrTax": 60811,
+  "lateness": {
+   "asOf": "2022-09-12"
+  },
+  "expected": [
+   {
+    "item": "taxableIncome",
+    "value": 242512
+   },
+   {
+    "item": "regularTax",
+    "value": 60569
+   },
+   {
+    "item": "earlyDistributionTax",
+    "value": 242
+   },
+   {
+    "item": "totalTax",
+    "value": 60811
+   },
+   {
+    "item": "deficiency",
+    "value": 60811
+   },
+   {
+    "item": "failureToFile",
+    "value": 4016
+   },
+   {
+    "item": "failureToPay",
+    "value": 3659
+   }
+  ]
+ }
 ]

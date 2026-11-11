@@ -1,7 +1,7 @@
 import LegalProofs.USTax.TaxCourt.Params
 
 /-!
-# §152 dependents: qualifying child, qualifying relative, the tie-breaker (tax years 2016–2024)
+# §152 dependents: qualifying child, qualifying relative, the tie-breaker (tax years 2012–2024)
 
 §152 was not amended in substance between 2016 and 2024. The 2018–2025 suspension of the exemption amount
 (§151(d)(5)(A)) does not touch the definition of a dependent: §151(d)(5)(B) keeps "allowed a deduction under §151"
@@ -295,7 +295,7 @@ theorem tieBreak_no_parent (cs : List Claimant) (hnp : ∀ c ∈ cs, c.isParent 
   unfold tieBreak; simp only; rw [if_neg (by simpa using h1), if_neg (by simpa using h2)]
   exact pickBest_isSome _ _ h3
 
-/-! ## Tests: the Pub. 501 / Pub. 596 tie-breaker examples (the rules have been the same in every edition 2016–2024)
+/-! ## Tests: the Pub. 501 / Pub. 596 tie-breaker examples (the rules have been the same in every edition 2012–2024)
 -/
 
 -- Pub. 501, "Tiebreaker rules", Example 1 (child lived with mother and grandmother; mother's AGI $15,000,

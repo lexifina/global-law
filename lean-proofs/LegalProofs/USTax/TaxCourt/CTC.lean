@@ -1,11 +1,11 @@
 import LegalProofs.USTax.TaxCourt.EIC
 
 /-!
-# §24 child tax credit, additional child tax credit, credit for other dependents (2016–2024)
+# §24 child tax credit, additional child tax credit, credit for other dependents (2012–2024)
 
 Three regimes:
 
-| | 2016–2017 (pre-TCJA §24) | 2018–2020, 2022–2024 (§24(h), TCJA) | 2021 (§24(i)–(j), ARPA §9611) |
+| | 2012–2017 (pre-TCJA §24) | 2018–2020, 2022–2024 (§24(h), TCJA) | 2021 (§24(i)–(j), ARPA §9611) |
 |---|---|---|---|
 | per qualifying child | $1,000 | $2,000 (SSN required, §24(h)(7)) | $3,000; $3,600 under 6 |
 | child's age (year end) | under 17 | under 17 | under 18 |

@@ -10,6 +10,9 @@ A `Case` is a citation, a tax year and the court's findings:
   uses the status `determineStatus` allows, starting from the one in `facts.filing` (the one claimed);
 * `asFiled` (the return as filed, recomputed) or `taxShown` (the tax shown, net of refundable credits) — for the
   deficiency and the penalties;
+* `sfrTax` — the tax on a substitute for return (§6020(b)), net of refundable credits: §6651(g) treats it as the
+  return filed by the taxpayer for §6651(a)(2) (and so for the §6651(c)(1) offset), so when present the additions use it
+  as the tax shown, while the deficiency still uses `taxShown` / `asFiled` (0 for a non-filer);
 * `tieBreakers` — competing claimants for a child (§152(c)(4)); a child lost to someone else is dropped from
   `facts.dependents` automatically (matched by name);
 * `accuracy` — §6662 findings; `lateness` — §6651 findings;
@@ -48,6 +51,8 @@ structure Case where
   status : Option StatusFacts := none
   asFiled : Option ReturnFacts := none
   taxShown : Option Int := none
+  /-- §6651(g): the tax on the substitute for return, used as the tax shown for §6651(a)(1)–(2), (c)(1). -/
+  sfrTax : Option Int := none
   tieBreakers : List TieBreakIssue := []
   accuracy : Option AccuracyFacts := none
   lateness : Option LateFacts := none
@@ -105,8 +110,16 @@ def Outcome.intValues (o : Outcome) : List (String × Int) :=
        ("earlyDistributionTax", r.earlyDistributionTax), ("eic", r.eic), ("ctcNonrefundable", r.ctcNonrefundable),
        ("refundableCtc", r.refundableCtc), ("totalTax", r.totalTax), ("netTax", r.netTax),
        ("earnedIncome", r.earnedIncome), ("dependentsCounted", r.dependentsCounted),
-       ("excessAdvanceCtc", r.excessAdvanceCtc)]
+       ("excessAdvanceCtc", r.excessAdvanceCtc), ("adjustments", r.adjustments), ("halfSeTax", r.halfSeTax),
+       ("totalIncome", r.totalIncome), ("refundableCredits", r.refundableCredits),
+       ("nonrefundableCredits", r.nonrefundableCredits)]
    | none => []) ++
+  (match o.asFiled with
+   | some r => [("asFiled.agi", r.agi), ("asFiled.taxableIncome", r.taxableIncome), ("asFiled.tax", r.regularTax),
+       ("asFiled.regularTax", r.regularTax), ("asFiled.totalTax", r.totalTax), ("asFiled.netTax", r.netTax),
+       ("asFiled.adjustments", r.adjustments), ("asFiled.eic", r.eic)]
+   | none => []) ++
+  (match o.taxShown with | some t => [("taxShown", t)] | none => []) ++
   (match o.deficiency with | some d => [("deficiency", d)] | none => []) ++
   (match o.accuracy with | some a => [("accuracyPenalty", a.penalty), ("understatement", a.understatement)] | none => []) ++
   (match o.lateness with | some l => [("failureToFile", l.failureToFile), ("failureToPay", l.failureToPay)] | none => [])
@@ -148,7 +161,7 @@ def runCheck (o : Outcome) (e : Expectation) : Check :=
 /-- **Decide the encoded issues.** -/
 def decideCase (c : Case) : Outcome :=
   match params? c.taxYear with
-  | none => { citation := c.citation, taxYear := c.taxYear, errors := [s!"tax year {c.taxYear} is outside 2016–2024"],
+  | none => { citation := c.citation, taxYear := c.taxYear, errors := [s!"tax year {c.taxYear} is outside 2012–2024"],
               agrees := false }
   | some p =>
     let winners := c.tieBreakers.map fun t => (t.child, t.taxpayer, (tieBreak t.claimants).map (·.name))
@@ -179,8 +192,9 @@ def decideCase (c : Case) : Outcome :=
         eicChild := eicQualifyingChild p x && x.hasSSN,
         hohQualifyingPerson := hohQualifyingPerson p st x : DependentOutcome }
     let acc := c.accuracy.map fun a => accuracyPenalty p corrected.netTax (shownNet.getD 0) a
+    -- §6651(g): a substitute for return is the return for (a)(2); its tax is the tax shown for the additions
     let late := c.lateness.map fun l =>
-      lateAdditions p corrected.netTax (shownNet.getD corrected.netTax)
+      lateAdditions p corrected.netTax (c.sfrTax.getD (shownNet.getD corrected.netTax))
         { l with timelyPayments := l.timelyPayments + corrected.payments }
     let o : Outcome :=
       { citation := c.citation, taxYear := c.taxYear,

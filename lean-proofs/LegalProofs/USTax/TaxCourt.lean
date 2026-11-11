@@ -15,7 +15,7 @@ import LegalProofs.USTax.TaxCourt.Theorems
 import LegalProofs.USTax.TaxCourt.Axioms
 
 /-!
-# Tax Court library: individual income tax, tax years 2016–2024
+# Tax Court library: individual income tax, tax years 2012–2024
 
 The rules U.S. Tax Court cases most often turn on, written from the statute as it stood for each year, so that a case
 agent can encode a court's findings of fact and recompute its holdings. Namespace `Legal.USTax.TaxCourt`. No `sorry`,
@@ -34,11 +34,11 @@ no `native_decide`; axioms only `propext`, `Classical.choice`, `Quot.sound` (`Ta
 * `FilingStatus` — §7703(a)–(b), §2(a) surviving spouse, §2(b) head of household.
 * `EIC` — §32 by year, incl. 2021 §32(n); the EIC Table rule.
 * `CTC` — §24 for 2016–17, the TCJA years, and 2021 (§24(i), §24(j) advance-payment reconciliation).
-* `Income` — SE tax by year, §86 (the 2025 model's core), the 2020 §85(c) unemployment exclusion.
+* `Income` — SE tax by year (incl. the 2012 payroll-tax holiday), §86 (the 2025 model's core), the 2020 §85(c) unemployment exclusion.
 * `EarlyDistribution` — §72(t) with its exceptions by plan type and year.
 * `Penalties` — §6662(a), (b)(1)–(2), (d), §6664(c), §6751(b); §6651(a)(1)–(2), (c)(1), (f).
 * `Return` — a simple Form 1040 for any year; `deficiencyOf` (§6211, refundable credits as negative tax).
-* `Case` — `Case`, `decideCase`, `Outcome`, JSON reading with defaults. `Run` — the batch runner (not imported here).
+* `Case` — `Case`, `decideCase`, `Outcome`, JSON reading with defaults; `sfrTax` (§6651(g)). `Run` — the batch runner (not imported here).
 * `Tests`, `Theorems`, `Axioms`.
 
 ## Findings
@@ -72,6 +72,18 @@ no `native_decide`; axioms only `propext`, `Classical.choice`, `Quot.sound` (`Ta
    * Ties §152(c)(4) leaves open (equal days and equal AGI) go to the first claimant listed.
    * §152(e) releases count for §§151, 24 and §152(d) but not §2(b) or §32.
 
+7. **2012–2015** (Rev. Procs. 2011-52, 2013-15, 2013-35, 2014-61). 2012 has six rates (top 35%, `rates2012`), no
+   20% capital-gain rate, no §151(d)(3) phase-out, a 7.5% medical floor, and the payroll-tax holiday: SE OASDI 10.4%
+   (employee 4.2%) with the §164(f) deduction replaced by 59.6% of the 10.4% tax plus one-half of the 2.9% tax
+   (TRUIRJCA §601(b)(2); Schedule SE (2012) line 13 — the short form's "57.51%, or 50% plus $1,100" approximates it).
+   2013–2015: ATRA's 39.6% bracket, 20% capital-gain rate and §151(d)(3) thresholds; 10% medical floor, 7.5% if
+   either spouse is 65 (§213(f), through 2016). §6651(a) minimum by tax year: $135, $135, $135, $205 (the 2015 return
+   was due after 2015, so Pub. L. 114-125's $205 applies). §68 (2013–2017) stays an input (itemized deductions as
+   allowed); AOTC/LLC are inputs (`otherNonrefundableCredits`, `otherRefundableCredits`).
+8. **§6651(g) substitute for return** (`Case.sfrTax`): the additions use the SFR's tax as the tax shown, the deficiency
+   the tax on the return actually filed (0 for a non-filer). T.C. Memo. 2024-67 then agrees exactly ($4,016 and
+   $3,659); without it (a)(1) loses the (c)(1) offset ($4,463) and (a)(2) is 0.
+
 ## Table checks (`tools/taxcourt/CheckTables.lean`, Nov 2026)
 
 Every printed row of the nine EIC Tables and nine Tax Tables, extracted with `pdftotext -layout` from the IRS PDFs by
@@ -80,7 +92,10 @@ Every printed row of the nine EIC Tables and nine Tax Tables, extracted with `pd
 2023 1,246/1,253; 2024 1,316/1,323. Tax Table: 2,040–2,042 of 2,057 each year (2020: 1,988 of 2,051). Every other
 row was inspected: some of its cells come from a neighbouring line or block of the multi-column page (e.g. 2022 EIC
 "$42,900" shows $99 for one child, the model's value for $42,850), or it sits next to the sample-table text. None is
-a model error.
+a model error. 2012–2015 (EIC Tables extracted with `pdftotext -raw`, Tax Tables from i1040tt): EIC 2012 999/999,
+2013 1,024/1,024, 2014 1,041/1,041, 2015 1,060/1,060; Tax Table 2,012 of 2,036 / 2,038, 2,043 and 2,042 of 2,057, the
+rest layout artefacts (an HoH cell from the next block). The 2012–2015 EIC Tables also phase out from the unrounded
+maximum.
 
 ## Not modelled
 

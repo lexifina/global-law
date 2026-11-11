@@ -1,7 +1,7 @@
 import LegalProofs.USTax.TaxCourt.Params
 
 /-!
-# §72(t): the 10% additional tax on early distributions from qualified retirement plans (2016–2024)
+# §72(t): the 10% additional tax on early distributions from qualified retirement plans (2012–2024)
 
 §72(t)(1): "the taxpayer's tax ... shall be increased by an amount equal to 10 percent of the portion of such amount
 which is includible in gross income"; 25% for a SIMPLE IRA distribution within two years of first participation
@@ -16,7 +16,7 @@ which is includible in gross income"; 25% for a SIMPLE IRA distribution within t
 | substantially equal periodic payments | (2)(A)(iv) | all | all | whole |
 | separation from service in or after the year of reaching 55 (50 for public safety employees, (10)) | (2)(A)(v) | not IRAs | all | whole |
 | IRS levy under §6331 | (2)(A)(vii) | all | all | whole |
-| medical expenses over the §213 floor | (2)(B) | all | all | ≤ expenses − 10% of AGI (2016; 7.5% if either spouse 65+), 7.5% (2017–) |
+| medical expenses over the §213 floor | (2)(B) | all | all | ≤ expenses − 7.5% of AGI (2012), 10% (2013–2016; 7.5% if either spouse 65+), 7.5% (2017–) |
 | QDRO | (2)(C) | not IRAs | all | whole |
 | health insurance while unemployed | (2)(D) | IRAs | all | ≤ premiums |
 | higher education | (2)(E) | IRAs | all | ≤ qualified expenses |
@@ -97,10 +97,10 @@ def PlanKind.isIra : PlanKind → Bool
   | .ira | .simpleIra => true
   | .qualifiedPlan => false
 
-/-- §213(a) floor read by §72(t)(2)(B): the year's percentage of AGI; for 2016, 7.5% if the taxpayer or spouse was
+/-- §213(a) floor read by §72(t)(2)(B): the year's percentage of AGI (7.5% in 2012); for 2013–2016, 7.5% if the taxpayer or spouse was
 65 or older by year end (§213(f) as then in force). -/
 def medicalFloor (p : Params) (agi : Int) (someone65 : Bool) : Int :=
-  let bp := if p.year == 2016 && someone65 then 750 else p.medicalFloorBp
+  let bp := if 2013 ≤ p.year && p.year ≤ 2016 && someone65 then 750 else p.medicalFloorBp
   roundDollar (pos agi * bp) 10000
 
 /-- `x` capped at `c`, and zero unless positive. -/

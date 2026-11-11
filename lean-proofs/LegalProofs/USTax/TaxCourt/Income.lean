@@ -56,12 +56,48 @@ def seEarned (base se wages : Int) : Int := se - halfSeTaxY base se wages
 -- The $400 floor: $433 of profit owes nothing in any year.
 #guard seTaxY 127200 433 0 = 0 ∧ seTaxY 127200 434 0 = 61
 
+/-! ## 2012: the payroll tax holiday
+
+For 2012 the OASDI rates were cut by 2 points (TRUIRJCA §601 as extended by Pub. L. 112-78 §101 and Pub. L. 112-96
+§1001): employee 4.2% (§3101(a)), self-employment 10.4% (§1401(a)). §601(b)(2) replaces the §164(f) deduction for
+those years with 59.6% of the §1401(a) tax plus one-half of the §1401(b) tax — Schedule SE (2012) line 13. (The
+short Schedule SE line 6, "multiply line 5 by 57.51% ... or 50% and add $1,100", approximates the same amount.) -/
+
+/-- §1401(a) at 10.4% (to the base) plus 2.9%, rounded once (2012). -/
+def seTax2012 (base se wages : Int) : Int := roundDollar (104 * oasdiBaseY base se wages + 29 * A.seIncome10k se) 10000000
+
+/-- TRUIRJCA §601(b)(2): 59.6% of the 10.4% tax plus one-half of the 2.9% tax, rounded once (2012). -/
+def halfSeTax2012 (base se wages : Int) : Int :=
+  roundDollar (61984 * oasdiBaseY base se wages + 14500 * A.seIncome10k se) 10000000000
+
+/-- SE tax for the year's parameters. -/
+def seTaxP (p : Params) (se wages : Int) : Int :=
+  if p.year == 2012 then seTax2012 p.ssWageBase se wages else seTaxY p.ssWageBase se wages
+
+/-- The §164(f) deduction for the year's parameters. -/
+def halfSeTaxP (p : Params) (se wages : Int) : Int :=
+  if p.year == 2012 then halfSeTax2012 p.ssWageBase se wages else halfSeTaxY p.ssWageBase se wages
+
+-- 2012, $50,000 of profit: 92.35% = $46,175 × 13.3% = $6,141.28 → $6,141; deduction 59.6% × $4,802.20 + ½ × $1,339.08
+-- = $2,862.11 + $669.54 = $3,531.65 → $3,532 (Schedule SE (2012) long form lines 10–13).
+#guard seTax2012 110100 50000 0 = 6141 ∧ halfSeTax2012 110100 50000 0 = 3532
+-- Above the base: $150,000 profit: NESE $138,525; 10.4% × $110,100 = $11,450.40 (Schedule SE (2012) short line 5:
+-- "add $11,450.40") + 2.9% × $138,525 = $4,017.23: $15,467.63 → $15,468.
+#guard seTax2012 110100 150000 0 = 15468
+
 /-! ## Employee share of FICA (for §24(d)(2)) -/
 
 /-- §3101(a)–(b)(1): 6.2% of wages up to the base plus 1.45% of all wages, rounded (assumes correct withholding). -/
 def employeeFica (base wages : Int) : Int := roundDollar (62 * min (pos wages) base + 145 * pos wages / 10) 1000
 
 #guard employeeFica 168600 50000 = 3825
+
+/-- The year's employee share: 4.2% OASDI in 2012 (TRUIRJCA §601(a)(1) as extended). -/
+def employeeFicaP (p : Params) (wages : Int) : Int :=
+  if p.year == 2012 then roundDollar (42 * min (pos wages) p.ssWageBase + 145 * pos wages / 10) 1000
+  else employeeFica p.ssWageBase wages
+
+#guard employeeFicaP ((params? 2012).getD default) 50000 = 2825
 
 /-! ## §86 taxable social security -/
 

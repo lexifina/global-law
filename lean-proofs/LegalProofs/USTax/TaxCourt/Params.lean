@@ -2,13 +2,17 @@ import LegalProofs.USTax.TaxCourt.Basic
 import TaxCode.Individual.D.EarnedIncome
 
 /-!
-# Year parameters, tax years 2016–2024
+# Year parameters, tax years 2012–2024
 
 Every inflation-adjusted figure is copied from the revenue procedure for its year; statutory figures cite the Code
 section as it read for that year. Sources (all read from the IRS PDFs, Nov 2026):
 
 | year | revenue procedure | notes |
 |---|---|---|
+| 2012 | Rev. Proc. 2011-52 (2011-45 I.R.B. 701) | six rates (no 39.6% bracket); no §151(d)(3) phase-out, no §68, no 20% capital-gain rate |
+| 2013 | Rev. Proc. 2013-15 (2013-5 I.R.B. 444) | post-ATRA (Pub. L. 112-240): 39.6% bracket, §151(d)(3) and §68 thresholds; other items in Rev. Proc. 2012-41 |
+| 2014 | Rev. Proc. 2013-35 (2013-47 I.R.B. 537) | |
+| 2015 | Rev. Proc. 2014-61 (2014-47 I.R.B. 860) | |
 | 2016 | Rev. Proc. 2015-53 | |
 | 2017 | Rev. Proc. 2016-55 | |
 | 2018 | Rev. Proc. 2018-18 (2018-10 I.R.B. 392) | replaces Rev. Proc. 2017-58 after Pub. L. 115-97 (TCJA); the EIC figures fell with chained CPI |
@@ -75,6 +79,12 @@ instance (s : RateSched) : Decidable s.Ok := by unfold RateSched.Ok; infer_insta
 def oldRates (e1 e2 e3 e4 e5 e6 b1 b2 b3 b4 b5 b6 : Int) : RateSched :=
   ⟨e1, e2, e3, e4, e5, e6, 100, 150, 250, 280, 330, 350, 396, b1, b2, b3, b4, b5, b6⟩
 
+/-- 2012 rates, §1(a)–(d) with §1(i)(2) as then in force (EGTRRA §101, extended by TRUIRJCA §101): 10, 15, 25, 28, 33
+and 35 percent — six brackets. The seventh slot repeats 35%: its top `e6` is one dollar above `e5` and its base `b6` is
+`b5` plus 35 cents, so the tax is exactly the six-rate schedule (the extra row is not printed in Rev. Proc. 2011-52). -/
+def rates2012 (e1 e2 e3 e4 e5 b1 b2 b3 b4 b5 : Int) : RateSched :=
+  ⟨e1, e2, e3, e4, e5, e5 + 1, 100, 150, 250, 280, 330, 350, 350, b1, b2, b3, b4, b5, b5 + 35⟩
+
 /-- §1(j)(2) rates (2018–2025): 10, 12, 22, 24, 32, 35, 37 percent. -/
 def tcjaRates (e1 e2 e3 e4 e5 e6 b1 b2 b3 b4 b5 b6 : Int) : RateSched :=
   ⟨e1, e2, e3, e4, e5, e6, 100, 120, 220, 240, 320, 350, 370, b1, b2, b3, b4, b5, b6⟩
@@ -82,6 +92,29 @@ def tcjaRates (e1 e2 e3 e4 e5 e6 b1 b2 b3 b4 b5 b6 : Int) : RateSched :=
 /-- Schedules by year and filing status, as printed (Tables 1–4 of each revenue procedure; Table 1 is "married
 individuals filing joint returns and surviving spouses"). Bases in cents. -/
 def rateSched : Nat → Filing → RateSched
+  -- Rev. Proc. 2011-52 §3.01 (2012)
+  | 2012, .single => rates2012 8700 35350 85650 178650 388350 87000 486750 1744250 4348250 11268350
+  | 2012, .mfj | 2012, .qss => rates2012 17400 70700 142700 217450 388350 174000 973500 2773500 4866500 10506200
+  | 2012, .mfs => rates2012 8700 35350 71350 108725 194175 87000 486750 1386750 2433250 5253100
+  | 2012, .hoh => rates2012 12400 47350 122300 198050 388350 124000 648250 2522000 4643000 10922900
+  -- Rev. Proc. 2013-15 §2.01 (2013, post-ATRA)
+  | 2013, .single => oldRates 8925 36250 87850 183250 398350 400000 89250 499125 1789125 4460325 11558625 11616375
+  | 2013, .mfj | 2013, .qss =>
+      oldRates 17850 72500 146400 223050 398350 450000 178500 998250 2845750 4991950 10776850 12584600
+  | 2013, .mfs => oldRates 8925 36250 73200 111525 199175 225000 89250 499125 1422875 2495975 5388425 6292300
+  | 2013, .hoh => oldRates 12750 48600 125450 203150 398350 425000 127500 665250 2586500 4762100 11203700 12136450
+  -- Rev. Proc. 2013-35 §3.01 (2014)
+  | 2014, .single => oldRates 9075 36900 89350 186350 405100 406750 90750 508125 1819375 4535375 11754125 11811875
+  | 2014, .mfj | 2014, .qss =>
+      oldRates 18150 73800 148850 226850 405100 457600 181500 1016250 2892500 5076500 10958750 12796250
+  | 2014, .mfs => oldRates 9075 36900 74425 113425 202550 228800 90750 508125 1446250 2538250 5479375 6398125
+  | 2014, .hoh => oldRates 12950 49400 127550 206600 405100 432200 129500 676250 2630000 4843400 11393900 12342400
+  -- Rev. Proc. 2014-61 §3.01 (2015; Table 1 prints "not over $230,450230,450", read $230,450)
+  | 2015, .single => oldRates 9225 37450 90750 189300 411500 413200 92250 515625 1848125 4607525 11940125 11999625
+  | 2015, .mfj | 2015, .qss =>
+      oldRates 18450 74900 151200 230450 411500 464850 184500 1031250 2938750 5157750 11132400 12999650
+  | 2015, .mfs => oldRates 9225 37450 75600 115225 205750 232425 92250 515625 1469375 2578875 5566200 6499825
+  | 2015, .hoh => oldRates 13150 50200 129600 209850 411500 439000 131500 687250 2672250 4919250 11573700 12536200
   -- Rev. Proc. 2015-53 §3.01
   | 2016, .single => oldRates 9275 37650 91150 190150 413350 415050 92750 518375 1855875 4627875 11993475 12052975
   | 2016, .mfj | 2016, .qss =>
@@ -136,14 +169,14 @@ def rateSched : Nat → Filing → RateSched
       tcjaRates 23200 94300 201050 383900 487450 731200 232000 1085200 3433700 7822100 11135700 19666950
   | 2024, .mfs => tcjaRates 11600 47150 100525 191950 243725 365600 116000 542600 1716850 3911050 5567850 9833475
   | 2024, .hoh => tcjaRates 16550 63100 100500 191950 243700 609350 165500 724100 1546900 3741700 5397700 18195450
-  | _, _ => tcjaRates 1 2 3 4 5 6 10 34 254 494 814 1164  -- outside 2016–2024: never used (see `Params.valid`)
+  | _, _ => tcjaRates 1 2 3 4 5 6 10 34 254 494 814 1164  -- outside 2012–2024: never used (see `Params.valid`)
 
 /-- The years this library covers. -/
-def years : List Nat := [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+def years : List Nat := [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
 def filings : List Filing := [.single, .mfj, .mfs, .hoh, .qss]
 
-/-- **Every printed base amount in the nine revenue procedures' Tables 1–4 is the exact tax at the top of the row
-before.** A typo in any of the 216 printed bases or 216 bracket tops would make this fail. -/
+/-- **Every printed base amount in the thirteen revenue procedures' Tables 1–4 is the exact tax at the top of the row
+before.** A typo in any of the 312 printed bases or bracket tops would make this fail. -/
 theorem rateSched_ok : ∀ y ∈ years, ∀ f ∈ filings, (rateSched y f).Ok := by decide
 
 /-! ## Everything else that changes by year -/
@@ -182,12 +215,13 @@ structure Params where
   exemption : Int
   /-- The exemption amount used in the §152(d)(1)(B) gross-income test (Notice 2018-70; indexed). -/
   exemption152d : Int
-  /-- §151(d)(3) phase-out threshold amounts (2016–2017 only; 0 = no phase-out): joint, HoH, unmarried, separate. -/
+  /-- §151(d)(3) phase-out threshold amounts (2013–2017 only; 0 = no phase-out): joint, HoH, unmarried, separate. -/
   pepJoint : Int
   pepHoh : Int
   pepSingle : Int
   pepMfs : Int
-  /-- §1(h)(1)(B)/(C) (2016–2017) or §1(j)(5)(B) (2018+): the maximum zero-rate and 15%-rate amounts. -/
+  /-- §1(h)(1)(B)/(C) (2012–2017) or §1(j)(5)(B) (2018+): the maximum zero-rate and 15%-rate amounts. 2012 has no
+  20% rate (§1(h)(1)(C) as then in force taxed the rest at 15%): its `cg15*` are unused (see `regularTax`). -/
   cg0Joint : Int
   cg0Hoh : Int
   cg0Single : Int
@@ -209,7 +243,8 @@ structure Params where
   /-- §6651(a) flush language: the minimum addition for a return more than 60 days late (by the year the return is
   required to be filed, i.e. `year + 1`). -/
   ftfMinimum : Int
-  /-- §213(a) floor (basis points of AGI) for the year, read by §72(t)(2)(B). -/
+  /-- §213(a) floor (basis points of AGI) for the year, read by §72(t)(2)(B) (7.5% for 2013–2016 if the taxpayer or
+  spouse was 65, §213(f): see `medicalFloor`). -/
   medicalFloorBp : Int
   /-- Return due date (§6072(a), moved by §7503 or postponed under §7508A), and the extended due date (§6081). -/
   dueDate : Date
@@ -217,8 +252,109 @@ structure Params where
   deriving Repr, Inhabited
 
 open TaxCode.Individual.D in
-/-- The parameters for tax year `y`, or `none` outside 2016–2024. -/
+/-- The parameters for tax year `y`, or `none` outside 2012–2024. -/
 def params? : Nat → Option Params
+  | 2012 => some {
+      year := 2012
+      -- Rev. Proc. 2011-52 §3.11(1)-(3)
+      stdJoint := 11900, stdHoh := 8700, stdSingle := 5950, addlMarried := 1150, addlUnmarried := 1450
+      depMin := 950, depAddon := 300
+      -- §3.19: $3,800; no §151(d)(3) phase-out for 2012 (§151(d)(3)(E)-(F), EGTRRA §102 as extended by TRUIRJCA §101)
+      exemption := 3800, exemption152d := 3800
+      pepJoint := 0, pepHoh := 0, pepSingle := 0, pepMfs := 0
+      -- §1(h)(1)(B): the 0% rate reaches the top of the 15% bracket; the rest is taxed at 15% (no 20% rate in 2012)
+      cg0Joint := 70700, cg0Hoh := 47350, cg0Single := 35350, cg0Mfs := 35350
+      cg15Joint := 0, cg15Hoh := 0, cg15Single := 0, cg15Mfs := 0
+      -- §3.06(1)-(2)
+      eic0 := ⟨765, 765, 6210, 7770, 12980, 475, 13980, 19190⟩
+      eic1 := ⟨3400, 1598, 9320, 17090, 22300, 3169, 36920, 42130⟩
+      eic2 := ⟨4000, 2106, 13090, 17090, 22300, 5236, 41952, 47162⟩
+      eic3 := ⟨4500, 2106, 13090, 17090, 22300, 5891, 45060, 50270⟩
+      eicInvLimit := 3200
+      -- §24 $1,000 per child (TRUIRJCA §101); §3.04: the §24(d)(1)(B)(i) amount is $3,000
+      ctc := oldCtc
+      -- SSA: 2012 contribution and benefit base
+      ssWageBase := 110100
+      -- §6651(a) "$135" (Pub. L. 110-245 §303: returns required to be filed after 31 Dec 2008)
+      ftfMinimum := 135
+      -- §213(a) 7.5% before 2013 (Pub. L. 111-148 §9013 raised it to 10% for years after 2012)
+      medicalFloorBp := 750
+      -- due Mon 15 Apr 2013; extended Tue 15 Oct 2013
+      dueDate := ⟨2013, 4, 15⟩, extendedDueDate := ⟨2013, 10, 15⟩ }
+  | 2013 => some {
+      year := 2013
+      -- Rev. Proc. 2013-15 §2.07(1)-(3)
+      stdJoint := 12200, stdHoh := 8950, stdSingle := 6100, addlMarried := 1200, addlUnmarried := 1500
+      depMin := 1000, depAddon := 350
+      -- §2.11: $3,900; phase-out begins $300,000 / $275,000 / $250,000 / $150,000 (ATRA §101(b)(2))
+      exemption := 3900, exemption152d := 3900
+      pepJoint := 300000, pepHoh := 275000, pepSingle := 250000, pepMfs := 150000
+      -- §1(h)(1)(B)-(D) as amended by ATRA §102: 0% to the top of the 15% bracket, 15% to the start of the 39.6% bracket
+      cg0Joint := 72500, cg0Hoh := 48600, cg0Single := 36250, cg0Mfs := 36250
+      cg15Joint := 450000, cg15Hoh := 425000, cg15Single := 400000, cg15Mfs := 225000
+      -- §2.05(1)-(2)
+      eic0 := ⟨765, 765, 6370, 7970, 13310, 487, 14340, 19680⟩
+      eic1 := ⟨3400, 1598, 9560, 17530, 22870, 3250, 37870, 43210⟩
+      eic2 := ⟨4000, 2106, 13430, 17530, 22870, 5372, 43038, 48378⟩
+      eic3 := ⟨4500, 2106, 13430, 17530, 22870, 6044, 46227, 51567⟩
+      eicInvLimit := 3300
+      -- §2.03: $3,000
+      ctc := oldCtc
+      ssWageBase := 113700
+      -- §6651(a) $135 (Pub. L. 110-245 §303)
+      ftfMinimum := 135
+      -- §213(a) 10% (Pub. L. 111-148 §9013); §213(f): 7.5% if either spouse 65 (see `medicalFloor`)
+      medicalFloorBp := 1000
+      -- due Tue 15 Apr 2014; extended Wed 15 Oct 2014
+      dueDate := ⟨2014, 4, 15⟩, extendedDueDate := ⟨2014, 10, 15⟩ }
+  | 2014 => some {
+      year := 2014
+      -- Rev. Proc. 2013-35 §3.13(1)-(3)
+      stdJoint := 12400, stdHoh := 9100, stdSingle := 6200, addlMarried := 1200, addlUnmarried := 1550
+      depMin := 1000, depAddon := 350
+      -- §3.23: $3,950; phase-out begins $305,050 / $279,650 / $254,200 / $152,525
+      exemption := 3950, exemption152d := 3950
+      pepJoint := 305050, pepHoh := 279650, pepSingle := 254200, pepMfs := 152525
+      cg0Joint := 73800, cg0Hoh := 49400, cg0Single := 36900, cg0Mfs := 36900
+      cg15Joint := 457600, cg15Hoh := 432200, cg15Single := 406750, cg15Mfs := 228800
+      -- §3.06(1)-(2)
+      eic0 := ⟨765, 765, 6480, 8110, 13540, 496, 14590, 20020⟩
+      eic1 := ⟨3400, 1598, 9720, 17830, 23260, 3305, 38511, 43941⟩
+      eic2 := ⟨4000, 2106, 13650, 17830, 23260, 5460, 43756, 49186⟩
+      eic3 := ⟨4500, 2106, 13650, 17830, 23260, 6143, 46997, 52427⟩
+      eicInvLimit := 3350
+      ctc := oldCtc
+      ssWageBase := 117000
+      -- §6651(a) $135; §6651(j) (Pub. L. 113-295 div. A §208) indexes it for returns required to be filed after 2014,
+      -- and the adjusted amount stays $135 (Rev. Proc. 2015-53 §3.43 still gives $135)
+      ftfMinimum := 135
+      medicalFloorBp := 1000
+      -- due Wed 15 Apr 2015; extended Thu 15 Oct 2015
+      dueDate := ⟨2015, 4, 15⟩, extendedDueDate := ⟨2015, 10, 15⟩ }
+  | 2015 => some {
+      year := 2015
+      -- Rev. Proc. 2014-61 §3.14(1)-(3)
+      stdJoint := 12600, stdHoh := 9250, stdSingle := 6300, addlMarried := 1250, addlUnmarried := 1550
+      depMin := 1050, depAddon := 350
+      -- §3.24: $4,000; phase-out begins $309,900 / $284,050 / $258,250 / $154,950
+      exemption := 4000, exemption152d := 4000
+      pepJoint := 309900, pepHoh := 284050, pepSingle := 258250, pepMfs := 154950
+      cg0Joint := 74900, cg0Hoh := 50200, cg0Single := 37450, cg0Mfs := 37450
+      cg15Joint := 464850, cg15Hoh := 439000, cg15Single := 413200, cg15Mfs := 232425
+      -- §3.06(1)-(2)
+      eic0 := ⟨765, 765, 6580, 8240, 13750, 503, 14820, 20330⟩
+      eic1 := ⟨3400, 1598, 9880, 18110, 23630, 3359, 39131, 44651⟩
+      eic2 := ⟨4000, 2106, 13870, 18110, 23630, 5548, 44454, 49974⟩
+      eic3 := ⟨4500, 2106, 13870, 18110, 23630, 6242, 47747, 53267⟩
+      eicInvLimit := 3400
+      ctc := oldCtc
+      ssWageBase := 118500
+      -- Pub. L. 114-125 §921: $205 for returns required to be filed (with extensions) after 31 Dec 2015 -- the 2015
+      -- return, due 18 Apr 2016 (Rev. Proc. 2016-55 §2)
+      ftfMinimum := 205
+      medicalFloorBp := 1000
+      -- Emancipation Day observed Fri 15 Apr 2016: due Mon 18 Apr 2016; extended Mon 17 Oct 2016
+      dueDate := ⟨2016, 4, 18⟩, extendedDueDate := ⟨2016, 10, 17⟩ }
   | 2016 => some {
       year := 2016
       -- Rev. Proc. 2015-53 §3.14(1)-(3)
@@ -471,7 +607,7 @@ def Params.pepThreshold (p : Params) : Filing → Int
   | .mfs => p.pepMfs
   | .single => p.pepSingle
 
-/-- All nine years are present, each labelled with its own year. -/
+/-- All thirteen years are present, each labelled with its own year. -/
 theorem params_years : ∀ y ∈ years, (params? y).map (·.year) = some y := by decide
 
 /-! ## Consistency checks on the printed EIC figures (every year, every column) -/

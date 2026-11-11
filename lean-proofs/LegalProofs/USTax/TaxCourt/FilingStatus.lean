@@ -1,7 +1,7 @@
 import LegalProofs.USTax.TaxCourt.Dependents
 
 /-!
-# Filing status: §1, §2(a) surviving spouse, §2(b) head of household, §7703 marital status (2016–2024)
+# Filing status: §1, §2(a) surviving spouse, §2(b) head of household, §7703 marital status (2012–2024)
 
 None of §§2 and 7703 changed between 2016 and 2024 (the TCJA left them alone; §151(d)(5)(B) keeps the "entitled to a
 deduction under section 151" tests working while the exemption amount is zero).
@@ -129,7 +129,7 @@ theorem married_separate_only (p : Params) (st : StatusFacts) (deps : List Perso
   unfold determineStatus allowedStatuses
   simp [hm, hj, hc]
 
-/-! ## Tests (Pub. 501 examples; the rules are the same in every edition 2016–2024) -/
+/-! ## Tests (Pub. 501 examples; the rules are the same in every edition 2012–2024) -/
 
 section
 private def p19 : Params := (params? 2019).getD default

@@ -1,7 +1,7 @@
 import LegalProofs.USTax.TaxCourt.Params
 
 /-!
-# Penalties and additions to tax: §6662(a), (b)(1)–(2), (d) and §6651(a)(1)–(2), (c)(1), (f) (2016–2024)
+# Penalties and additions to tax: §6662(a), (b)(1)–(2), (d) and §6651(a)(1)–(2), (c)(1), (f) (2012–2024)
 
 **§6662.** A 20% penalty on the portion of an underpayment attributable to negligence or to a substantial
 understatement. An understatement is substantial if it exceeds the greater of 10% of the tax required to be shown or
@@ -9,7 +9,7 @@ $5,000 (§6662(d)(1)(A)); 5% instead of 10% for a taxpayer who claims a §199A d
 2017). The understatement is reduced by items with substantial authority, or adequately disclosed with a reasonable
 basis (§6662(d)(2)(B)). No penalty for a portion with reasonable cause and good faith (§6664(c)(1)), and none unless
 the initial determination was personally approved in writing by the immediate supervisor (§6751(b)(1)), except a
-penalty "automatically calculated through electronic means" (§6751(b)(2)(B)). These rules did not change 2016–2024.
+penalty "automatically calculated through electronic means" (§6751(b)(2)(B)). These rules did not change 2012–2024.
 
 Amounts compared are "tax" in the deficiency sense: refundable credits count as negative tax (§6211(b)(4)), so an
 over-claimed EIC can create an understatement — the measure the Tax Court uses when it sustains §6662 penalties on

@@ -4,7 +4,7 @@ import TaxCode.Individual.Household
 # Tax Court library: shared helpers
 
 The rules in this folder are the individual-income-tax rules that U.S. Tax Court cases most often turn on, written
-from the statute **as it stood for each tax year 2016–2024**, so that a court's findings of fact can be encoded and its
+from the statute **as it stood for each tax year 2012–2024**, so that a court's findings of fact can be encoded and its
 holdings recomputed.
 
 Conventions (as in `TaxCode/Individual`):

@@ -156,4 +156,99 @@ def case2Json : String := "{\"citation\": \"Worked example 2\", \"taxYear\": 202
   | .ok c => (decideCase c).agrees && (decideCase c).deficiency == some 9600
   | .error _ => false
 
+/-! ## 2012–2015 (Rev. Procs. 2011-52, 2013-15, 2013-35, 2014-61)
+
+EIC rows from Pub. 596 (2012–2015) and Tax Table rows from the 2012–2015 Form 1040 Tax Tables (i1040tt). All 4,083
+extracted rows of the four EIC Tables (`pdftotext -raw`) and every Tax Table row agree (`tools/taxcourt/CheckTables.lean`,
+Nov 2026); the 2012–2015 tables phase out from the unrounded maximum, like 2016–2023. -/
+
+#guard eicRow 2012 12000 = [150, 3169, 4810, 5411, 475, 3169, 4810, 5411]
+#guard eicRow 2012 20000 = [0, 2700, 4618, 5272, 0, 3169, 5236, 5891]
+#guard eicRow 2012 27350 = [0, 1525, 3070, 3724, 0, 2358, 4167, 4822]
+#guard eicRow 2013 12000 = [177, 3250, 4810, 5411, 487, 3250, 4810, 5411]
+#guard eicRow 2013 30000 = [0, 1254, 2741, 3412, 0, 2107, 3865, 4537]
+#guard eicRow 2014 12000 = [196, 3305, 4810, 5411, 496, 3305, 4810, 5411]
+#guard eicRow 2014 27350 = [0, 1780, 3450, 4132, 0, 2647, 4593, 5276]
+#guard eicRow 2015 20000 = [0, 3053, 5145, 5838, 23, 3359, 5548, 6242]
+#guard eicRow 2015 30000 = [0, 1455, 3039, 3732, 0, 2337, 4201, 4895]
+
+-- Tax Tables (single, MFJ, MFS, HoH)
+#guard tableRow 2012 48500 = [8161, 6409, 8161, 6776]
+#guard tableRow 2012 77000 = [15286, 11316, 15457, 13901]
+#guard tableRow 2013 48500 = [8060, 6386, 8060, 6641]
+#guard tableRow 2014 77000 = [15113, 10969, 15191, 13669]
+#guard tableRow 2015 99950 = [21064, 16581, 21519, 19316]
+
+-- Printed base amounts: Rev. Proc. 2011-52 Table 3 (2012 single, over $388,350: $112,683.50; 35% is the top rate);
+-- Rev. Proc. 2013-15 Table 1 (2013 joint, over $450,000: $125,846 plus 39.6%); Rev. Proc. 2013-35 Table 2 (2014 HoH,
+-- over $432,200: $123,424); Rev. Proc. 2014-61 Table 4 (2015 separate, over $232,425: $64,998.25).
+#guard (rateSched 2012 .single).mills 388350 = 112683500 ∧
+  (rateSched 2012 .single).mills 1388350 = 112683500 + 350 * 1000000
+#guard (rateSched 2013 .mfj).mills 450000 = 125846000
+#guard (rateSched 2014 .hoh).mills 432200 = 123424000
+#guard (rateSched 2015 .mfs).mills 232425 = 64998250
+
+-- Capital gain: 2012 has no 20% rate. Single, $1,000,000 of long-term gain: 0% to $35,350, 15% on the rest
+-- ($144,697.50 → $144,698). 2013: 0% to $36,250, 15% to $400,000 ($54,562.50 → $54,563), 20% on $600,000.
+#guard regularTax (py 2012) .single 1000000 1000000 = 144698
+#guard regularTax (py 2013) .single 1000000 1000000 = 54563 + 120000
+
+-- Standard deduction, exemptions: 2012 single $5,950 + $3,800: wages $40,000 → taxable $30,250.
+#guard (computeReturn (py 2012) { wages := 40000 }).taxableIncome = 30250
+-- 2015 joint, both 66: $12,600 + 2 × $1,250 = $15,100.
+#guard (computeReturn (py 2015) { filing := .mfj, taxpayerAge := 66, spouseAge := 66 }).standardDeduction = 15100
+-- §151(d)(3): none in 2012 (four exemptions at AGI $1,000,000 = $15,200); 2013 joint AGI $350,000 is $50,000 over
+-- $300,000: 20 steps of $2,500 = 40% of $15,600 lost.
+#guard exemptions (py 2012) .mfj 1000000 4 = 15200
+#guard exemptions (py 2013) .mfj 350000 4 = 15600 - 6240
+-- Qualifying relative gross income: $3,899 passes in 2013 ($3,900), $3,900 does not.
+#guard qualifyingRelative (py 2013)
+  { relationship := .parent, grossIncome := 3899, taxpayerProvidedOverHalfSupport := true, youngerThanTaxpayer := false,
+    age := 70 } = true
+#guard qualifyingRelative (py 2013)
+  { relationship := .parent, grossIncome := 3900, taxpayerProvidedOverHalfSupport := true, youngerThanTaxpayer := false,
+    age := 70 } = false
+-- 2012 payroll tax holiday: profit $50,000: SE tax $6,141, §164(f) deduction $3,532 (59.6% × 10.4% part + ½ × 2.9%).
+#guard (computeReturn (py 2012) { seProfit := 50000 }).seTax = 6141
+#guard (computeReturn (py 2012) { seProfit := 50000 }).halfSeTax = 3532
+#guard (computeReturn (py 2013) { seProfit := 50000 }).seTax = 7065
+-- §72(t)(2)(B) medical floor: 2012 7.5%; 2014 10%, 7.5% if 65 or over (§213(f)).
+#guard (earlyDistTax (py 2012) 50000 false { amountIncludible := 10000, medicalExpenses := 8000 }).exempt = 4250
+#guard (earlyDistTax (py 2014) 50000 false { amountIncludible := 10000, medicalExpenses := 8000 }).exempt = 3000
+#guard (earlyDistTax (py 2014) 50000 true { amountIncludible := 10000, medicalExpenses := 8000 }).exempt = 4250
+-- CTC: $1,000 per child; ACTC 15% over $3,000 (2014: one child, no tax, earned $8,000 → $750).
+#guard (ctcFor (py 2014) ⟨1, 0, 0⟩ { filing := .single, magi := 8000, taxLeft := 0, earnedIncome := 8000 }).refundable = 750
+-- §6651(a) minimum: $135 (2012–2014 returns), $205 (2015 return, due 18 Apr 2016).
+#guard [2012, 2013, 2014, 2015].map (fun y => (py y).ftfMinimum) = [135, 135, 135, 205]
+#guard (lateAdditions (py 2014) 500 500 { filed := some ⟨2015, 7, 1⟩, paid := some ⟨2015, 4, 15⟩ }).failureToFile = 135
+
+/-! ## §6651(g): the substitute for return (T.C. Memo. 2024-67)
+
+A non-filer for 2018; the IRS prepared a substitute for return on 12 Sep 2022 showing $60,811, with withholding of
+$42,961 (net $17,850). The deficiency is measured against a tax shown of 0; the §6651(a)(2) addition and the (c)(1)
+offset against the SFR's tax. (a)(2): 41 months (15 Apr 2019 – 12 Sep 2022) × 0.5% × $17,850 = $3,659.25 → $3,659.
+(a)(1): 5 months × 5% less 5 × 0.5% = 22.5% × $17,850 = $4,016.25 → $4,016 — both as the court sustained. -/
+def moranJson : String := "{\"citation\": \"T.C. Memo. 2024-67\", \"taxYear\": 2018,
+  \"facts\": {\"filing\": \"single\", \"wages\": 213630, \"capitalGain\": 32227, \"otherIncome\": 6236,
+            \"pensions\": 2417, \"ordinaryDividends\": 2, \"withholding\": 42961,
+            \"earlyDistributions\": [{\"amountIncludible\": 2417, \"plan\": \"qualifiedPlan\"}]},
+  \"taxShown\": 0, \"sfrTax\": 60811, \"lateness\": {\"asOf\": \"2022-09-12\"},
+  \"expected\": [{\"item\": \"taxableIncome\", \"value\": 242512}, {\"item\": \"regularTax\", \"value\": 60569},
+               {\"item\": \"totalTax\", \"value\": 60811}, {\"item\": \"deficiency\", \"value\": 60811},
+               {\"item\": \"failureToFile\", \"value\": 4016}, {\"item\": \"failureToPay\", \"value\": 3659},
+               {\"item\": \"adjustments\", \"value\": 0}, {\"item\": \"taxShown\", \"value\": 0}]}"
+
+#guard match parseCase moranJson with
+  | .ok c => (decideCase c).agrees
+  | .error _ => false
+-- Without `sfrTax` the additions would use the tax shown of 0: no (a)(2), and (a)(1) without the offset (25%).
+#guard match parseCase moranJson with
+  | .ok c => (decideCase { c with sfrTax := none }).lateness.map (fun l => (l.failureToFile, l.failureToPay)) =
+      some (4463, 0)
+  | .error _ => false
+
+-- The as-filed items: case 2's return as filed has taxable income $47,050 and tax $5,974.
+#guard (decideCase { case2 with expected := [{ item := "asFiled.taxableIncome", value := some 47050 },
+  { item := "asFiled.tax", value := some 5974 }, { item := "adjustments", value := some 0 }] }).agrees
+
 end Legal.USTax.TaxCourt.Tests

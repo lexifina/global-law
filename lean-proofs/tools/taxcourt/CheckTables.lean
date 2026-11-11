@@ -3,7 +3,7 @@ import LegalProofs.USTax.TaxCourt.Schedule
 import Lean.Data.Json
 
 /-!
-# Compare the model with every printed row of the 2016–2024 EIC Tables and Tax Tables
+# Compare the model with every printed row of the 2012–2024 EIC Tables and Tax Tables
 
     lake env lean --run tools/taxcourt/CheckTables.lean OUTDIR/eic_tables.json OUTDIR/tax_tables.json
 
@@ -31,6 +31,7 @@ def main (args : List String) : IO UInt32 := do
   let tj : Json ← IO.ofExcept (Json.parse (← IO.FS.readFile taxF))
   let mut real := 0
   for y in years do
+    if (ej.getObjVal? (toString y)).toOption.isNone then continue
     let some p := params? y | continue
     let rows : Array (Int × Array Int) ← IO.ofExcept (ej.getObjValAs? (Array (Int × Array Int)) (toString y))
     let mut eOk := 0

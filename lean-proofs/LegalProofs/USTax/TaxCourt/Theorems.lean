@@ -1,7 +1,7 @@
 import LegalProofs.USTax.TaxCourt.Case
 
 /-!
-# Theorems over all inputs, every year 2016–2024
+# Theorems over all inputs, every year 2012–2024
 
 Proved elsewhere and collected here by name:
 * `rateSched_ok` — every printed bracket base in the nine revenue procedures is the exact tax at the row's start;
@@ -26,38 +26,51 @@ def oldRatesP (s : RateSched) : Prop :=
   s.r1 = 100 ∧ s.r2 = 150 ∧ s.r3 = 250 ∧ s.r4 = 280 ∧ s.r5 = 330 ∧ s.r6 = 350 ∧ s.r7 = 396
 def tcjaRatesP (s : RateSched) : Prop :=
   s.r1 = 100 ∧ s.r2 = 120 ∧ s.r3 = 220 ∧ s.r4 = 240 ∧ s.r5 = 320 ∧ s.r6 = 350 ∧ s.r7 = 370
+/-- 2012: six rates, the top one repeated in the seventh slot (`rates2012`). -/
+def rates2012P (s : RateSched) : Prop :=
+  s.r1 = 100 ∧ s.r2 = 150 ∧ s.r3 = 250 ∧ s.r4 = 280 ∧ s.r5 = 330 ∧ s.r6 = 350 ∧ s.r7 = 350
+instance (s : RateSched) : Decidable (rates2012P s) := by unfold rates2012P; infer_instance
 instance (s : RateSched) : Decidable (oldRatesP s) := by unfold oldRatesP; infer_instance
 instance (s : RateSched) : Decidable (tcjaRatesP s) := by unfold tcjaRatesP; infer_instance
 
-theorem rates_old : ∀ y ∈ [2016, 2017], ∀ f ∈ filings, oldRatesP (rateSched y f) := by decide
+theorem rates_2012 : ∀ f ∈ filings, rates2012P (rateSched 2012 f) := by decide
+theorem rates_old : ∀ y ∈ [2013, 2014, 2015, 2016, 2017], ∀ f ∈ filings, oldRatesP (rateSched y f) := by decide
 theorem rates_tcja : ∀ y ∈ [2018, 2019, 2020, 2021, 2022, 2023, 2024], ∀ f ∈ filings, tcjaRatesP (rateSched y f) := by
   decide
 
 set_option maxHeartbeats 4000000 in
 /-- A well-formed schedule with either set of rates: one more dollar costs between 10 cents and the top rate. -/
-theorem sched_step (s : RateSched) (hok : s.Ok) (hr : oldRatesP s ∨ tcjaRatesP s) (x : Int) (hx : 0 ≤ x) :
+theorem sched_step (s : RateSched) (hok : s.Ok) (hr : oldRatesP s ∨ tcjaRatesP s ∨ rates2012P s) (x : Int) (hx : 0 ≤ x) :
     s.r1 ≤ s.mills (x + 1) - s.mills x ∧ s.mills (x + 1) - s.mills x ≤ s.r7 := by
   unfold RateSched.Ok at hok
   unfold RateSched.mills
-  rcases hr with ⟨h1, h2, h3, h4, h5, h6, h7⟩ | ⟨h1, h2, h3, h4, h5, h6, h7⟩ <;>
+  rcases hr with ⟨h1, h2, h3, h4, h5, h6, h7⟩ | ⟨h1, h2, h3, h4, h5, h6, h7⟩ | ⟨h1, h2, h3, h4, h5, h6, h7⟩ <;>
     simp only [h1, h2, h3, h4, h5, h6, h7] at hok ⊢ <;> (repeat' split) <;> omega
 
-/-- **One more dollar of taxable income costs at least 10 cents and at most the top rate** (39.6 cents before 2018,
-37 cents from 2018), in exact mills, in every year and filing status. -/
+/-- **One more dollar of taxable income costs at least 10 cents and at most the top rate** (35 cents in 2012, 39.6
+cents 2013–2017, 37 cents from 2018), in exact mills, in every year and filing status. -/
 theorem schedule_marginal (y : Nat) (hy : y ∈ years) (f : Filing) (x : Int) (hx : 0 ≤ x) :
     100 ≤ (rateSched y f).mills (x + 1) - (rateSched y f).mills x ∧
-    (rateSched y f).mills (x + 1) - (rateSched y f).mills x ≤ (if y ≤ 2017 then 396 else 370) := by
+    (rateSched y f).mills (x + 1) - (rateSched y f).mills x ≤
+      (if y ≤ 2012 then 350 else if y ≤ 2017 then 396 else 370) := by
   have hf : f ∈ filings := by cases f <;> decide
   have hok := rateSched_ok y hy f hf
+  by_cases h12 : y ≤ 2012
+  · have hy12 : y = 2012 := by simp [years] at hy; omega
+    subst hy12
+    have ho := rates_2012 f hf
+    have := sched_step _ hok (Or.inr (Or.inr ho)) x hx
+    simp only [rates2012P] at ho
+    simp only [h12, ↓reduceIte]; omega
   by_cases h17 : y ≤ 2017
   · have ho := rates_old y (by simp [years] at hy; simp; omega) f hf
     have := sched_step _ hok (Or.inl ho) x hx
     simp only [oldRatesP] at ho
-    simp only [h17, ↓reduceIte]; omega
+    simp only [h12, h17, ↓reduceIte]; omega
   · have ht := rates_tcja y (by simp [years] at hy; simp; omega) f hf
-    have := sched_step _ hok (Or.inr ht) x hx
+    have := sched_step _ hok (Or.inr (Or.inl ht)) x hx
     simp only [tcjaRatesP] at ht
-    simp only [h17, ↓reduceIte]; omega
+    simp only [h12, h17, ↓reduceIte]; omega
 
 /-- **The regular-tax schedule never falls as taxable income rises**, in any year, for any filing status. -/
 theorem schedule_mono (y : Nat) (hy : y ∈ years) (f : Filing) (x : Int) (n : Nat) :
