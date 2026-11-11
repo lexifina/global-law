@@ -3774,6 +3774,46 @@ class SearchByIndex(unittest.TestCase):
                 self.assertIn(f"\nThe structured answer lists {len(data['provisions'])} of {data['provision_count']} matching provisions;", text)
 
     @needs(IE_C)
+    def test_an_index_that_gives_the_lines_is_not_grepped(self):
+        """lines(query, corpus, revision, names): the page's lines come from the index, and git greps nothing; an
+        index whose lines do not answer, or answer anything else, is grepped as an index without them."""
+        m = self.m
+        sha = m.law.corpus_tree(m.law.day('today'), IE_C)
+
+        class Lines(FilesIndex):
+            answer = staticmethod(lambda got: got)
+
+            def lines(self, query, corpus, rev, names):
+                self.calls.append(('lines', query, corpus, rev, list(names)))
+                word, out = query.lower(), {}
+                for name in names:
+                    text = subprocess.run(['git', 'show', f'{rev}:{name}'], cwd=ROOT / corpus, capture_output=True, check=True).stdout.decode('utf-8', 'replace')
+                    out[name] = [(i, line) for i, line in enumerate(text.split('\n'), 1) if re.search(rf'\b{re.escape(word)}\b', line.lower())]
+                return self.answer(out)
+
+        ask = {'query': 'bankruptcy', 'jurisdiction': 'ireland', 'max_results': 40}
+        plain = self.by(FilesIndex(m), **ask)
+        self.assertTrue(self.greps)
+        index = Lines(m)
+        text, data = self.by(index, **ask)
+        self.assertEqual(self.greps, [])
+        asked = [c for c in index.calls if c[0] == 'lines']
+        self.assertTrue(asked and all(c[1:4] == ('bankruptcy', IE_C, sha) for c in asked))
+        self.assertEqual([n for c in asked for n in c[4]], index.matching('bankruptcy', IE_C)[:sum(len(c[4]) for c in asked)])
+        self.assertEqual((data['results'], data['provision_count'], data['provisions'], data['page']),
+                         (plain[1]['results'], plain[1]['provision_count'], plain[1]['provisions'], plain[1]['page']))
+        self.assertEqual(text, plain[0])
+        for name, answer in (('none', lambda got: None), ('fails', lambda got: 1 / 0), ('a list', lambda got: list(got.items())),
+                             ('a file left out', lambda got: dict(list(got.items())[1:])),
+                             ('backwards', lambda got: {n: rows[::-1] if len(rows) > 1 else [(0, 'x')] for n, rows in got.items()}),
+                             ('not lines', lambda got: {n: ['x'] for n in got})):
+            with self.subTest(lines=name):
+                index = Lines(m)
+                index.answer = staticmethod(answer)
+                self.assertEqual(self.by(index, **ask), plain)
+                self.assertTrue(self.greps)
+
+    @needs(IE_C)
     def test_git_reads_only_the_files_a_part_needs(self):
         m, index = self.m, FilesIndex(self.m)
         text, data = self.by(index, query='the', jurisdiction='ireland')

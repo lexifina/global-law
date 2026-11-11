@@ -140,6 +140,12 @@ def rewritten_grep(cmd: list, cwd) -> tuple[list, object]:
 #       paths(query, corpus, None, size) gives, for many corpora in one call (search_law's list of provisions names
 #       files of up to SEARCH_INDEX_TOP_UPS corpora it did not read). A corpus left out, or whose paths are not as
 #       asked, adds nothing to the list; None, or an exception, and paths is asked for each corpus.
+# and a fourth:
+#   lines(query, corpus, revision, names) -> {name: [(line number, line), ...]} | None
+#       For each of the files `names` (as paths gave them) of the corpus at `revision` (the tree search_law reads
+#       today), the lines on which the query's words begin, as the index matches them, in ascending order: what the
+#       page shows, with no git grep of those files. A file may have none. None, an exception, a file left out or
+#       lines out of order, and git greps those files as ever.
 # It is asked only for a plain search (no regex, no case_sensitive) of the text in force today.
 search_index = None
 SEARCH_INDEX_FILES = 200  # files of one corpus named in one git grep (and asked of search_index.paths at once)
@@ -213,6 +219,33 @@ def index_paths_many(query: str, wanted: list) -> dict | None:
     sizes = dict(wanted)
     checked = {c: _index_paths_checked(names, None, sizes[c]) for c, names in got.items() if isinstance(c, str) and c in sizes}
     return {c: names for c, names in checked.items() if names is not None}
+
+
+def index_lines(query: str, corpus: str, rev: str, names: list) -> dict | None:
+    """search_index.lines, checked: {name: [(line number, line), ...]} with every name asked and each file's lines in
+    ascending order. None when the index has no such method, does not answer, or answers anything else."""
+    fn = getattr(search_index, 'lines', None)
+    if not callable(fn) or not names:
+        return None
+    try:
+        got = fn(query, corpus, rev, list(names))
+    except Exception:  # noqa: BLE001
+        return None
+    if not isinstance(got, dict):
+        return None
+    out = {}
+    for name in names:
+        rows = got.get(name)
+        if not isinstance(rows, (list, tuple)):
+            return None
+        last = 0
+        for row in rows:
+            if not (isinstance(row, (list, tuple)) and len(row) == 2 and isinstance(row[0], int) and not isinstance(row[0], bool)
+                    and row[0] > last and isinstance(row[1], str)):
+                return None
+            last = row[0]
+        out[name] = [(row[0], row[1]) for row in rows]
+    return out
 
 
 def within_seconds(seconds: float, fn):
@@ -4144,31 +4177,36 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                 parts[-1].append(n)
                 room -= len(n) + 1
             for part in parts if good else []:
-                if corpus not in judged:
-                    done = git_run(['git', 'grep', '--threads=1', '-n', '-I', *flags, '-e', pattern, sha, '--', *part],
-                                   cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT)
-                else:
-                    checkpoint()
-                    while not _GREP_SEM.acquire(timeout=0.5):
-                        checkpoint()
-                    try:
-                        done = case_grep(corpus, sha, [], part, False)
-                    finally:
-                        _GREP_SEM.release()
-                if done.returncode not in (0, 1):
-                    return corpus, done, [], [], 0, None
-                found: dict[str, list[str]] = {}
-                for line in done.stdout.splitlines():
-                    rel, _, rest = line.removeprefix(sha + ':').partition(':')
-                    found.setdefault(rel, []).append(rest)
+                # An index that gives the lines too (lines) is asked first: the files it names are then not grepped
+                # at all. A query whose words the index finds in most files but whose characters git finds in none
+                # ("(a+)+$": the word "a") was grepped through every file of the corpus, 200 at a time, for 32 s.
+                checkpoint()
+                found = index_lines(query, corpus, sha, part)
+                if found is None:
+                    if corpus not in judged:
+                        done = git_run(['git', 'grep', '--threads=1', '-n', '-I', *flags, '-e', pattern, sha, '--', *part],
+                                       cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT)
+                    else:
+                        while not _GREP_SEM.acquire(timeout=0.5):
+                            checkpoint()
+                        try:
+                            done = case_grep(corpus, sha, [], part, False)
+                        finally:
+                            _GREP_SEM.release()
+                    if done.returncode not in (0, 1):
+                        return corpus, done, [], [], 0, None
+                    found = {}
+                    for line in done.stdout.splitlines():
+                        rel, _, rest = line.removeprefix(sha + ':').partition(':')
+                        number, _, text = rest.partition(':')
+                        found.setdefault(rel, []).append((int(number) if number.isdigit() else None, text))
                 for rel in part:  # in the index's order, whatever order the lines came in; a file with no line
-                    path = f'{corpus}/{rel}'  # (the phrase runs over a line break) is counted and gives no row
+                    path = f'{corpus}/{rel}'  # (git: the phrase runs over a line break) is counted and gives no row
                     paths.append(path)
-                    for rest in found.get(rel, ()):
+                    for number, text in found.get(rel, ()):
                         count += 1
                         if len(rows) < offset + limit:
-                            number, _, text = rest.partition(':')
-                            rows.append((corpus, {'path': path, 'line': int(number) if number.isdigit() else None, 'text': text.strip()[:400]}))
+                            rows.append((corpus, {'path': path, 'line': number, 'text': text.strip()[:400]}))
                 if corpus in unread or corpus in cut:  # stopped for the call's time: the answer says so
                     ended = True
                     break
