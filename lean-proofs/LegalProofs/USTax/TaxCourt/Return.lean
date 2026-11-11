@@ -56,6 +56,19 @@ structure LapseItem where
   nontaxableReceived : Int := 0
   deriving Repr, Inhabited
 
+/-- §911 findings (`Extra.Foreign`). `foreignEarnedIncome` is already in `wages` / `seProfit`. -/
+structure ForeignItem where
+  qualifyingDays : Int := 0
+  foreignEarnedIncome : Int := 0
+  housingExpenses : Int := 0
+  /-- Employer-provided amounts (§911(c)(4)(A)). -/
+  employerHousing : Int := 0
+  /-- Higher full-year housing limit for the location (the year's IRS notice). -/
+  housingLimitOverride : Option Int := none
+  /-- Deductions allocable to excluded income (§911(d)(6)), subtracted from the stacked amount. -/
+  disallowedDeductions : Int := 0
+  deriving Repr, Inhabited
+
 /-- The facts of one year's return, as the court finds them (or as filed). -/
 structure ReturnFacts where
   filing : Filing := .single
@@ -163,6 +176,8 @@ structure ReturnFacts where
   policyLapses : List LapseItem := []
   /-- §36B: Marketplace coverage, benchmark premium and advance payments (2014+). -/
   ptc : Option PtcFacts := none
+  /-- §911 foreign earned income and housing exclusions (the §911(f) stacking rule applies to the tax). -/
+  foreign : Option ForeignItem := none
   deriving Repr, Inhabited
 
 /-- Form 1040, line by line. -/
@@ -209,6 +224,9 @@ structure ReturnResult where
   alimonyDeduction : Int := 0
   lapseIncome : Int := 0
   ptc : Option PtcResult := none
+  foreignEarnedIncomeExclusion : Int := 0
+  housingExclusion : Int := 0
+  housingDeduction : Int := 0
   deriving Repr, Inhabited
 
 /-- §63(c)–(f): the standard deduction. -/
@@ -254,9 +272,23 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
   let lapse := r.policyLapses.foldl (fun t l => t + Extra.lapseIncome
     { loanExtinguished := l.loanExtinguished, cashReceived := l.cashReceived, premiumsPaid := l.premiumsPaid,
       nontaxableReceived := l.nontaxableReceived }) 0
+  -- §911: the exclusions come off gross income (Schedule 1 line 8d); the housing deduction is an adjustment
+  let y : Int := p.year
+  let fr : Int × Int × Int := match r.foreign with
+    | some x =>
+      let hx := Extra.housingExclusion y x.qualifyingDays x.housingExpenses x.employerHousing x.foreignEarnedIncome
+        x.housingLimitOverride
+      (hx, Extra.feie y x.qualifyingDays x.foreignEarnedIncome hx,
+        Extra.housingDeduction y x.qualifyingDays x.housingExpenses x.employerHousing x.foreignEarnedIncome
+          x.housingLimitOverride)
+    | none => (0, 0, 0)
+  let hx := fr.1
+  let fx := fr.2.1
+  let hd := fr.2.2
+  let excluded911 := hx + fx
   let income0 := r.wages + r.wagesSpouse + r.seProfit + r.seProfitSpouse + r.taxableInterest + r.ordinaryDividends +
     capInc + r.iraDistributions + r.pensions + uc + r.otherIncome + rollInc + hsa.1 + pos r.gamblingWinnings + aliIn +
-    lapse
+    lapse - excluded911
   -- earned income (§32(c)(2)), also §63(c)(5)
   let earnedT := r.wages + (r.seProfit - halfSeTaxP p r.seProfit r.wages)
   let earnedS := r.wagesSpouse + (r.seProfitSpouse - halfSeTaxP p r.seProfitSpouse r.wagesSpouse)
@@ -273,7 +305,7 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
   let ded := if usesStd then std else itemized
   let charity2020 := if p.year == 2020 && usesStd then charity else 0
   let charity2021 := if p.year == 2021 && usesStd then charity else 0
-  let adj0 := halfSe + r.adjustments + charity2020 + aliOut
+  let adj0 := halfSe + r.adjustments + charity2020 + aliOut + hd
   -- §86: MAGI = AGI without §86 (and, here, with the given adjustments) plus tax-exempt interest; §86(b)(2)(A)
   -- disregards §85(c), so 2020 unemployment counts in full here (the exclusion is applied afterwards)
   let tssOf (adj : Int) : Int × Bool :=
@@ -301,7 +333,11 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
   let ti := pos (agi - ded - ex - r.qbiDeduction - charity2021)
   -- the regular tax
   let cgPref := if r.capitalGain > 0 && r.longTermGain > 0 then min r.capitalGain r.longTermGain else 0
-  let tax := regularTax p f ti (pos r.qualifiedDividends + cgPref)
+  let pref := pos r.qualifiedDividends + cgPref
+  -- §911(f): tax on (taxable income + excluded amount) less tax on the excluded amount
+  let stack := excluded911 - (r.foreign.map (·.disallowedDeductions)).getD 0
+  let tax := if excluded911 > 0 then Extra.stackedTax (fun _ f t => regularTax p f t pref) y f ti stack
+    else regularTax p f ti pref
   -- credits: the other nonrefundable credits, then §25A, then §24 (Form 1040 order)
   let edu := educationCredits p f agi r.students r.educationKiddieRule
   let otherNonref0 := min (pos r.otherNonrefundableCredits) tax
@@ -314,7 +350,7 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
     | none => earned
   let disq := r.taxableInterest + r.taxExemptInterest + r.ordinaryDividends + pos r.capitalGain +
     r.otherDisqualifiedIncome
-  let eicR := if r.claimEIC then
+  let eicR := if excluded911 > 0 then (0, ["§32(c)(1)(C): §911 exclusion claimed"]) else if r.claimEIC then
       eicAmount p
         { filing := f, earnedIncome := earnedEic, agi := agi, disqualifiedIncome := disq,
           taxpayerAge := r.taxpayerAge, spouseAge := if f == .mfj then some r.spouseAge else none,
@@ -340,18 +376,21 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
   let ptcRepay := (ptcR.map (·.excessAdvanceRepayment)).getD 0
   let ptcNet := (ptcR.map (·.netCredit)).getD 0
   let totalTax := pos (tax - nonref) + seT + seS + edTax + r.otherTaxes + ctcR.excessAdvance + hsa.2 + ptcRepay
-  let refundable := eicR.1 + ctcR.refundable + r.otherRefundableCredits + edu.aotcRefundable + ptcNet
+  -- §24(d)(5): no refundable child credit for a taxpayer excluding income under §911
+  let ctcRef := if excluded911 > 0 then 0 else ctcR.refundable
+  let refundable := eicR.1 + ctcRef + r.otherRefundableCredits + edu.aotcRefundable + ptcNet
   { filing := f, totalIncome := income0 + tss - ucx, taxableSocialSecurity := tss, unemploymentExcluded := ucx,
     halfSeTax := halfSe, adjustments := adj, agi := agi, standardDeduction := std, deduction := ded, exemptions := ex,
     taxableIncome := ti, regularTax := tax, ctcNonrefundable := ctcR.nonrefundable, nonrefundableCredits := nonref,
     seTax := seT + seS, earlyDistributionTax := edTax, excessAdvanceCtc := ctcR.excessAdvance,
     totalTax := totalTax, earnedIncome := earned, eic := eicR.1, eicReasons := eicR.2,
-    refundableCtc := ctcR.refundable, refundableCredits := refundable, netTax := totalTax - refundable,
+    refundableCtc := ctcRef, refundableCredits := refundable, netTax := totalTax - refundable,
     payments := r.withholding + r.estimatedPayments, dependentsCounted := deps.length,
     iraDeduction := iraD.1 + iraD.2, rolloverIncludible := rollInc, hsaIncludible := hsa.1, hsaAdditionalTax := hsa.2,
     gamblingLossDeduction := if usesStd then 0 else gambling, educationNonrefundable := eduNonref,
     aotcRefundable := edu.aotcRefundable, lumpSumElection := tssR.2, alimonyIncluded := aliIn,
-    alimonyDeduction := aliOut, lapseIncome := lapse, ptc := ptcR }
+    alimonyDeduction := aliOut, lapseIncome := lapse, ptc := ptcR, foreignEarnedIncomeExclusion := fx,
+    housingExclusion := hx, housingDeduction := hd }
 
 /-- §6211(a), (b)(4): the deficiency — tax as recomputed less tax shown, refundable credits as negative tax. Negative
 means the return overstated the tax. -/

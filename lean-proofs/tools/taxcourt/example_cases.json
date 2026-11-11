@@ -327,5 +327,48 @@
     "value": 0
    }
   ]
+ },
+ {
+  "citation": "T.C. Summary Opinion 2022-10 (sec. 911)",
+  "taxYear": 2016,
+  "facts": {
+   "filing": "single",
+   "wages": 109024,
+   "pensions": 20069,
+   "earlyDistributions": [
+    {
+     "amountIncludible": 20069,
+     "plan": "qualifiedPlan"
+    }
+   ],
+   "foreign": {
+    "qualifyingDays": 366,
+    "foreignEarnedIncome": 109024
+   }
+  },
+  "taxShown": 0,
+  "sfrTax": 28932,
+  "lateness": {
+   "asOf": "2022-06-23"
+  },
+  "expected": [
+   {
+    "item": "foreignEarnedIncomeExclusion",
+    "value": 101300
+   },
+   {
+    "item": "failureToFileApplies",
+    "flag": true
+   },
+   {
+    "item": "failureToPayApplies",
+    "flag": true
+   },
+   {
+    "item": "regularTax",
+    "value": 4884,
+    "note": "2016 schedule: tax on 118,743 less tax on 101,300 (sec. 911(f))"
+   }
+  ]
  }
 ]

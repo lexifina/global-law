@@ -138,6 +138,13 @@ structure LateFacts where
   fraudulent : Bool := false
   /-- Whether (a)(2) is in issue (on a substitute for return, §6651(g)). -/
   assertsFailureToPay : Bool := true
+  /-- §6651(a)(3) (whether it applies only; `Extra.failureToPayNoticeApplies`): notice and demand, amount, payment. -/
+  noticeDate : Option Date := none
+  noticeAmount : Int := 0
+  noticePaid : Option Date := none
+  reasonableCauseNotice : Bool := false
+  /-- §7491(c): the Commissioner met the burden of production. -/
+  productionMet : Bool := true
   deriving Repr, Inhabited
 
 structure LateOutcome where

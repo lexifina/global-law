@@ -51,6 +51,9 @@ structure EstimatedPayment where
   deriving Repr, Inhabited
 
 structure EstimatedIssue where
+  /-- §6654(e)(3) waiver granted; §7491(c) production. -/
+  waived : Bool := false
+  productionMet : Bool := true
   currentTax : Option Int := none
   withholding : Option Int := none
   priorTax : Option Int := none
@@ -118,6 +121,9 @@ structure Outcome where
   lateness : Option LateOutcome := none
   estimated : Option Extra.EstOutcome := none
   checks : List Check := []
+  /-- Whether each addition applies (`Extra.Additions`): failureToFileApplies, failureToPayApplies,
+  failureToPayNoticeApplies, c1OffsetApplies, estimatedTaxApplies. -/
+  holdings : List (String × Bool) := []
   /-- §25A: each student's AOTC eligibility. -/
   students : List (String × Bool) := []
   /-- All checks passed. -/
@@ -156,7 +162,8 @@ def Outcome.intValues (o : Outcome) : List (String × Int) :=
    | none => []) ++
   (match o.corrected with
    | some r => [("alimonyIncluded", r.alimonyIncluded), ("alimonyDeduction", r.alimonyDeduction),
-       ("lapseIncome", r.lapseIncome)] ++
+       ("lapseIncome", r.lapseIncome), ("foreignEarnedIncomeExclusion", r.foreignEarnedIncomeExclusion),
+       ("housingExclusion", r.housingExclusion), ("housingDeduction", r.housingDeduction)] ++
        (match r.ptc with
         | some x => [("householdIncome", x.householdIncome), ("povertyLine", x.povertyLine),
             ("fplPercent", x.fplPercent), ("premiumTaxCredit", x.credit),
@@ -166,6 +173,7 @@ def Outcome.intValues (o : Outcome) : List (String × Int) :=
    | none => [])
 
 def Outcome.flagValues (o : Outcome) : List (String × Bool) :=
+  o.holdings ++
   (match o.corrected with | some r => [("lumpSumElection", r.lumpSumElection)] | none => []) ++
   o.students.map (fun (n, b) => ("aotcEligible:" ++ n, b)) ++
   (match o.accuracy with
@@ -237,6 +245,29 @@ def decideCase (c : Case) : Outcome :=
         hohQualifyingPerson := hohQualifyingPerson p st x : DependentOutcome }
     let acc := c.accuracy.map fun a => accuracyPenalty p corrected.netTax (shownNet.getD 0) a
     -- §6651(g): a substitute for return is the return for (a)(2); its tax is the tax shown for the additions
+    let est : Option (Extra.EstFacts × EstimatedIssue) := c.estimated.map fun e =>
+      ({ year := c.taxYear, currentTax := e.currentTax.getD corrected.netTax,
+         withholding := e.withholding.getD facts.withholding, priorTax := e.priorTax, priorAGI := e.priorAGI,
+         mfs := status == .mfs, priorNoLiability := e.priorNoLiability,
+         payments := e.payments.map fun x => (x.date, x.amount), dueDates := e.dueDates,
+         requiredOverride := e.requiredInstallments }, e)
+    let lateHold : List (String × Bool) := match c.lateness with
+      | none => []
+      | some l =>
+        let a : Extra.AdditionFacts :=
+          { fileDue := l.dueDate.getD (if l.extension then p.extendedDueDate else p.dueDate),
+            payDue := l.dueDate.getD p.dueDate, filed := l.filed, substituteReturn := c.sfrTax.isSome, paid := l.paid,
+            asOf := l.asOf, requiredTax := corrected.netTax,
+            shownTax := c.sfrTax.getD (shownNet.getD corrected.netTax),
+            timelyPayments := l.timelyPayments + corrected.payments,
+            reasonableCauseFiling := l.reasonableCauseFiling, reasonableCausePayment := l.reasonableCausePayment,
+            noticeDate := l.noticeDate, noticeAmount := l.noticeAmount, noticePaid := l.noticePaid,
+            reasonableCauseNotice := l.reasonableCauseNotice, productionMet := l.productionMet }
+        [("failureToFileApplies", Extra.failureToFileApplies a), ("failureToPayApplies", Extra.failureToPayApplies a),
+         ("failureToPayNoticeApplies", Extra.failureToPayNoticeApplies a), ("c1OffsetApplies", Extra.c1OffsetApplies a)]
+    let estHold : List (String × Bool) := match est with
+      | some (x, e) => [("estimatedTaxApplies", Extra.estimatedTaxApplies x e.waived e.productionMet)]
+      | none => []
     let late := c.lateness.map fun l =>
       lateAdditions p corrected.netTax (c.sfrTax.getD (shownNet.getD corrected.netTax))
         { l with timelyPayments := l.timelyPayments + corrected.payments }
@@ -249,12 +280,8 @@ def decideCase (c : Case) : Outcome :=
         deficiency := shownNet.map (deficiencyOf corrected),
         earlyDistributions := facts.earlyDistributions.map (earlyDistTax p corrected.agi someone65),
         accuracy := acc, lateness := late,
-        estimated := c.estimated.map fun e => Extra.estimatedTaxAddition
-          { year := c.taxYear, currentTax := e.currentTax.getD corrected.netTax,
-            withholding := e.withholding.getD facts.withholding, priorTax := e.priorTax, priorAGI := e.priorAGI,
-            mfs := status == .mfs, priorNoLiability := e.priorNoLiability,
-            payments := e.payments.map fun x => (x.date, x.amount), dueDates := e.dueDates,
-            requiredOverride := e.requiredInstallments },
+        estimated := est.map fun xe => Extra.estimatedTaxAddition xe.1,
+        holdings := lateHold ++ estHold,
         students := facts.students.map fun s => (s.name, aotcEligible s) }
     let checks := c.expected.map (runCheck o)
     { o with checks := checks, agrees := checks.all (·.ok) && o.errors.isEmpty }
@@ -342,6 +369,11 @@ deriving instance ToJson for PtcFacts
 deriving instance FromJson for PtcFacts
 instance (priority := high) : FromJson PtcFacts :=
   ⟨fromJsonWithDefaults (FromJson.fromJson? (α := PtcFacts))⟩
+
+deriving instance ToJson for ForeignItem
+deriving instance FromJson for ForeignItem
+instance (priority := high) : FromJson ForeignItem :=
+  ⟨fromJsonWithDefaults (FromJson.fromJson? (α := ForeignItem))⟩
 
 deriving instance ToJson for ReturnFacts
 deriving instance FromJson for ReturnFacts
