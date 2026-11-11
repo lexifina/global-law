@@ -27,6 +27,7 @@ TAGNAME = {"eitc_32": "Earned income credit (§32)", "qualifying_child_152c": "Q
            "other": "Other provisions"}
 
 decided = T["match"] + T["mismatch"]
+MC = S.get("mismatch_causes", {})
 RUL = Path(__file__).resolve().parents[2] / "LegalProofs" / "USTax" / "TaxCourt" / "Rulings.lean"
 rul_text = RUL.read_text(encoding="utf-8") if RUL.exists() else ""
 GUARDS = sum(1 for l in rul_text.splitlines() if l.startswith("#guard"))
@@ -54,13 +55,13 @@ legend = "".join(f'<li><i style="background:{col}"></i>{E(l)} <b>{T[k]}</b></li>
 
 # by issue type
 rows = []
-for tag, c in sorted(S["by_tag"].items(), key=lambda kv: -sum(kv[1].values())):
+for tag, c in sorted(S["by_tag"].items(), key=lambda kv: (kv[0] == "Other provisions", -sum(kv[1].values()))):
     n = sum(c.values())
     if not n:
         continue
     m, mm = c.get("match", 0), c.get("mismatch", 0)
     rows.append(f"<tr><td>{E(tag)}</td><td class=r>{m}</td><td class=r>{mm}</td><td class=r>{c.get('judgment', 0)}</td>"
-                f"<td class=r>{c.get('not-encodable', 0)}</td><td class=r>{c.get('pending-year', 0)}</td></tr>")
+                f"<td class=r>{c.get('not-encodable', 0)}</td></tr>")
 
 # mismatches and judgments, with diagnoses
 def listing(kind, limit=40):
@@ -155,12 +156,15 @@ file is built; a change to the rules that breaks any reproduced holding fails th
 <h2>Results</h2>
 <div class=bar>{bar}</div><ul class=lg>{legend}</ul>
 <p>Where the outcome is a computation from the found facts, Lean reaches the court’s result on <b>{T['match']} of
-{decided}</b> issues. The rest of the issues are of two other kinds. Some turn on a judgment that only the court can make,
+{decided}</b> issues. Of the {T['mismatch']} differences, {MC.get('facts-not-stated', 0)} are figures that depend on parts of the
+return the opinion never states, {MC.get('court-or-irs-arithmetic', 0)} are slips in the court’s or the IRS’s own
+arithmetic, and {MC.get('model-gap', 0)} is a rule the model does not yet have. In none of them does the model read the
+statute differently from the court. The rest of the issues are of two other kinds. Some turn on a judgment that only the court can make,
 such as whether a witness was credible or whether the taxpayer had reasonable cause; the model takes the court’s
 finding as a fact, and then follows it. Others are questions the model cannot express, such as whether a payment was
 income at all on disputed facts.</p>
 <h3>By issue type</h3>
-<div class=tw><table><tr><th>Issue</th><th class=r>Match</th><th class=r>Differs</th><th class=r>Judgment</th><th class=r>Outside model</th><th class=r>Year pending</th></tr>{''.join(rows)}</table></div>
+<div class=tw><table><tr><th>Issue</th><th class=r>Match</th><th class=r>Differs</th><th class=r>Judgment</th><th class=r>Outside model</th></tr>{''.join(rows)}</table></div>
 
 <h2>Where Lean and the court differ</h2>
 <p>Every difference was traced to its cause. None is a rule the model applies differently from the court:</p>
@@ -178,8 +182,12 @@ income at all on disputed facts.</p>
 Tax Court cases, most of which turn on substantiation and credibility.</li>
 <li><b>Who did the work.</b> The findings were extracted and encoded by AI agents, each quotation checked against the
 opinion text. No lawyer has reviewed the encodings.</li>
-<li><b>Coverage.</b> The model covers ordinary individual returns. It does not cover business deductions, the
-alternative minimum tax or the kiddie tax, so issues that depend on them are outside the model.</li>
+<li><b>Coverage.</b> The model covers ordinary individual returns for tax years 2012–2024. It does not cover business
+deductions, the alternative minimum tax, the kiddie tax or innocent-spouse relief, so issues that depend on them are
+outside the model.</li>
+<li><b>Inferred facts.</b> Where an opinion leaves out a fact the computation needs (filing status, withholding, prior-year
+income), the encoders inferred it from the notice’s figures and say so in each case’s notes. Matches that rest on an
+inferred fact are weaker than the rest.</li>
 <li><b>Agreement is about outcomes.</b> A match means the model reaches the court’s result from the court’s facts; it
 does not show the court’s reasoning is the model’s.</li>
 </ul>

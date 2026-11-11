@@ -47,7 +47,7 @@ CAUSES = [("court-or-irs-arithmetic", r"court'?s own|court's figure|IRS figure|n
 
 
 # hand-checked causes where the keyword heuristic misfiles a diagnosis (case id, first 40 characters of the diagnosis)
-OVERRIDE = {('tcsumm-2022-10', 'Framework gap: no sec. 911(f) stacking, '): 'model-gap', ('tcsumm-2022-23', 'Rerun 57b55431cca: Lean 0 vs court 24,33'): 'facts-not-stated'}
+OVERRIDE = {('tcsumm-2022-10', 'Framework gap: no sec. 911(f) stacking, '): 'model-gap', ('tcsumm-2022-23', 'Rerun 57b55431cca: Lean 0 vs court 24,33'): 'facts-not-stated', ('tcsumm-2023-25', 'Liability: court finding (2017 tax liabi'): 'court-or-irs-arithmetic', ('tcsumm-2024-12', 'Liability matches; amount differs becaus'): 'facts-not-stated', ('tcsumm-2024-12', 'Liability matches (negligence, written s'): 'facts-not-stated', ('tcsumm-2024-12', 'Liability matches; 849 = 20% x 4,244 (84'): 'facts-not-stated'}
 
 
 def mismatch_cause(d):
