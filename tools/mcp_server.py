@@ -4475,8 +4475,10 @@ def folder_commits(corpus: str, inner: str) -> list[str]:
     else:
         try:
             ix = law._index(corpus)
-            plain = (bool(ix.get('files')) and not ix.get('focused') and not ix.get('moves') and not ix.get('withdrawn')
-                     and not ix.get('withdrawn_versions') and inner == inner.strip('/') and inner
+            # The cheap tests first: whether the index has files at all counts them, which for a corpus read in parts
+            # loads every part (0.4 s for Japan's 443,000 files, for each folder of a list, on one thread).
+            plain = (not ix.get('focused') and not ix.get('moves') and not ix.get('withdrawn')
+                     and not ix.get('withdrawn_versions') and inner == inner.strip('/') and inner and bool(ix.get('files'))
                      and not re.search(r'[*?\[\\]|^:', inner) and _no_merges(corpus, ix['pin']))
         except (SystemExit, Exception):  # noqa: BLE001  no index to read (a checkout behind its pin): git answers
             plain = False
