@@ -310,10 +310,12 @@ canton's, or `caselaw` for all).
     jurisdiction reads the first corpus's first files). The total of lines is exact on the part that reads the last
     matching file.
   - `provisions` lists the files read and then the next the index names, up to 200, the corpora not read sharing the
-    room (at most 30 of them are asked); when it holds fewer than match, the text says "The structured answer lists K
-    of N matching provisions".
+    room (at most 30 of them are asked, in one call where the index has `paths_many(query, wanted)`); when it holds
+    fewer than match, the text says "The structured answer lists K of N matching provisions".
   - A search of every jurisdiction (no `jurisdiction`) that matches nothing does not go on to the change notes, which
-    takes reading every corpus's history; `related_changes` is then empty. A search with a `jurisdiction` still does.
+    takes reading every corpus's history; `related_changes` is then empty. A search with a `jurisdiction` still does,
+    for at most 1.5 s (`GLOBAL_LAW_CHANGES_HINT_S`): past that the answer says "The change notes were not read for
+    this; search_changes looks there." (in `hints` as well), and case law's change notes are not read in that time.
 - The heading index `find_provision` matches words against is kept on disk for every corpus
   (`headings-v2-<corpus>-<commit>.json` in the tree's cache folder, the three newest per corpus), and an index for a
   new commit reads only the files that differ from an earlier one's. A clone of a few countries builds it at start, as

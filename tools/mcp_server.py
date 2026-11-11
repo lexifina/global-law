@@ -134,11 +134,21 @@ def rewritten_grep(cmd: list, cwd) -> tuple[list, object]:
 #       prints them), in ascending order of their UTF-8 bytes (the order git lists a tree in), after the path `after`
 #       (None: from the first). Fewer than `size`, or none, means there are no more. None, an exception, or paths out
 #       of order, and the corpus is grepped as ever.
+# and may have a third:
+#   paths_many(query, wanted) -> {corpus: [path, ...]} | None
+#       For each (corpus, size) in `wanted`, the first `size` of those files of the corpus, in the same order: what
+#       paths(query, corpus, None, size) gives, for many corpora in one call (search_law's list of provisions names
+#       files of up to SEARCH_INDEX_TOP_UPS corpora it did not read). A corpus left out, or whose paths are not as
+#       asked, adds nothing to the list; None, or an exception, and paths is asked for each corpus.
 # It is asked only for a plain search (no regex, no case_sensitive) of the text in force today.
 search_index = None
 SEARCH_INDEX_FILES = 200  # files of one corpus named in one git grep (and asked of search_index.paths at once)
 SEARCH_INDEX_ARGV = 20000  # characters of file names in one git grep: Windows takes 32,767 in a command line
 SEARCH_INDEX_TOP_UPS = 30  # corpora asked for further paths, unread, to fill search_law's list of provisions
+# With an index, a search of one jurisdiction that matches nothing answers at once, and then looked through the
+# change notes for the words (a git log --grep of the corpus's history: 1 to 8 s for a mistyped word). It gets this
+# long, and the answer says when the change notes were not read.
+SEARCH_CHANGES_HINT_S = float(os.environ.get('GLOBAL_LAW_CHANGES_HINT_S', '1.5'))
 
 
 def indexed_file(corpus: str, rel: str) -> bool:
@@ -173,6 +183,10 @@ def index_paths(query: str, corpus: str, after: str | None, size: int) -> list |
         got = hook.paths(query, corpus, after, size)
     except Exception:  # noqa: BLE001
         return None
+    return _index_paths_checked(got, after, size)
+
+
+def _index_paths_checked(got, after: str | None, size: int) -> list | None:
     if not isinstance(got, (list, tuple)) or len(got) > size or not all(isinstance(p, str) and p for p in got):
         return None
     last = after
@@ -181,6 +195,40 @@ def index_paths(query: str, corpus: str, after: str | None, size: int) -> list |
             return None
         last = p
     return list(got)
+
+
+def index_paths_many(query: str, wanted: list) -> dict | None:
+    """search_index.paths_many for (corpus, size) pairs, checked as index_paths checks: {corpus: its first paths} for
+    the corpora asked whose paths are as asked. None when the index has no such method or it does not answer."""
+    many = getattr(search_index, 'paths_many', None)
+    if not callable(many) or not wanted:
+        return None
+    try:
+        got = many(query, [(corpus, size) for corpus, size in wanted])
+    except Exception:  # noqa: BLE001
+        return None
+    if not isinstance(got, dict):
+        return None
+    sizes = dict(wanted)
+    checked = {c: _index_paths_checked(names, None, sizes[c]) for c, names in got.items() if isinstance(c, str) and c in sizes}
+    return {c: names for c, names in checked.items() if names is not None}
+
+
+def within_seconds(seconds: float, fn):
+    """(True, fn()) when fn ends within `seconds` (and within the call's own time), else (False, None). fn runs under
+    a nearer deadline, so the git commands it starts, on this thread and in the pools it fills, are killed when that
+    passes; the call's own deadline is put back whatever happens. When the call's own time is up, that is raised."""
+    own = getattr(_call, 'deadline', 0.0)
+    near = time.monotonic() + seconds
+    _call.deadline = min(own, near) if own else near
+    try:
+        return True, fn()
+    except subprocess.TimeoutExpired:
+        pass
+    finally:
+        _call.deadline = own
+    checkpoint()
+    return False, None
 
 
 def law_search_time_up() -> bool:
@@ -4096,7 +4144,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
             law_read[0] += 1
         whole = seen >= total or ended
         return corpus, done, paths, rows, count, {'files': len(paths) if ended and seen < total else max(files_in, len(paths)),
-                                                  'whole': whole, 'after': after}
+                                                  'whole': whole, 'after': after, 'seen': seen}
 
     results, files, owners, n_lines = [], set(), {}, 0
     offset = offset_arg(args)
@@ -4161,11 +4209,20 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     # the list then shows several jurisdictions, and may stay short of SEARCH_PATHS where hundreds of corpora matched.
     more_files = [(c, ix) for c, ix in by_index.items() if not ix['whole'] and ix['files'] > len(ix['paths'])][:SEARCH_INDEX_TOP_UPS]
     share = -(-max(0, SEARCH_PATHS - len(listed)) // max(1, len(more_files)))
+    # One call for all of them where the index takes one (paths_many): it names a corpus's first files, so a corpus
+    # read in part is asked for those it read as well, which are passed over (or is asked by itself, far into it).
+    most = {c: ix.get('seen', 0) + min(share, ix['files'] - len(ix['paths']), SEARCH_INDEX_FILES) for c, ix in more_files}
+    first = index_paths_many(query, [(c, n) for c, n in most.items() if n <= 2 * SEARCH_INDEX_FILES]) if share else None
     for corpus, ix in more_files:
         room = min(share, SEARCH_PATHS - len(listed), ix['files'] - len(ix['paths']), SEARCH_INDEX_FILES)
         if room <= 0:
             break
-        listed.update(f'{corpus}/{n}' for n in index_paths(query, corpus, ix['after'], room) or [] if indexed_file(corpus, n))
+        if first is None or most[corpus] > 2 * SEARCH_INDEX_FILES:
+            names = index_paths(query, corpus, ix['after'], room) or []
+        else:
+            after = ix['after'].encode('utf-8', 'surrogateescape') if ix['after'] is not None else None
+            names = [n for n in first.get(corpus, []) if after is None or n.encode('utf-8', 'surrogateescape') > after][:room]
+        listed.update(f'{corpus}/{n}' for n in names if indexed_file(corpus, n))
     if not late:  # with bodies of law not read, an offset past the lines read is not past the end
         past_end(offset, n_lines)
     # The matching lines in parts: they come in one order (corpus by corpus, file by file), so offset goes on from
@@ -4215,9 +4272,18 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     # notes of every corpus took 30 s to read)
     if not results and not offset and not args.get('regex') and not late and not (by_index and not scope):
         # The words may name a reform rather than appear in its text ("Schuldenbremse"); try the change notes.
-        _, found = t_search_changes({'query': query, 'jurisdiction': scope, 'end': date, 'max_results': 10})
+        ask = {'query': query, 'jurisdiction': scope, 'end': date, 'max_results': 10}
+        if by_index:  # an answer that took no time does not wait long for this
+            read, got = within_seconds(SEARCH_CHANGES_HINT_S, lambda: t_search_changes(ask))
+            found = got[1] if read else {'changes': []}
+            read = read and not (found.get('case_law_unread_for_time') and not found['changes'])
+        else:
+            read, (_, found) = True, t_search_changes(ask)
         related = found['changes']
-        if related:
+        if not read:
+            hints.append('The change notes were not read for this; search_changes looks there.')
+            lines.append(hints[-1])
+        elif related:
             hints.append(f'The text does not contain it, but {len(related)} change note(s) do; the provisions those changes touched may be what you want '
                          '(law_details lists them):')
             lines += [hints[-1]] + [f"  {c['in_force']}  {c['corpus']}  {c['law']}: {c['line']}" for c in related]

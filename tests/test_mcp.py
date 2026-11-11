@@ -3635,6 +3635,144 @@ class SearchByIndex(unittest.TestCase):
             self.by(None, query='zzqqxx nothing here')  # without an index, as ever
             self.assertEqual(len(asked), 2)
 
+    @needs(PW_C)
+    def test_the_change_notes_are_given_a_short_time_when_the_index_answered(self):
+        m, index = self.m, FilesIndex(self.m)
+        ask = {'query': 'zzqqxx nothing here', 'jurisdiction': 'palau'}
+        hint = 'The change notes were not read for this; search_changes looks there.'
+        seen, started, popen = [], [], subprocess.Popen
+
+        def kept(cmd, *a, **kw):
+            started.append(popen(cmd, *a, **kw))
+            return started[-1]
+
+        def in_worker(_):
+            seen.append(('worker', m._call.deadline - time.monotonic()))
+            while True:  # (as a long loop of the server's own work does)
+                m.checkpoint()
+                time.sleep(0.02)
+
+        def slow_git(args):  # a git command that does not end, as git_run runs it: killed when the time is up
+            seen.append(('thread', m._call.deadline - time.monotonic()))
+            m.git_run([sys.executable, '-c', 'import time; time.sleep(60)'], capture_output=True)
+
+        def slow_pool(args):
+            seen.append(('thread', m._call.deadline - time.monotonic()))
+            with m.ThreadPoolExecutor(2) as pool:
+                list(m.pool_map(pool, in_worker, [1, 2]))
+
+        def deadline_in_a_worker():
+            with m.ThreadPoolExecutor(1) as pool:
+                return list(m.pool_map(pool, lambda _: m._call.deadline, [1]))[0]
+        self.by(index, **ask)  # (the stand-in index reads the corpus once)
+        for own in (0.0, time.monotonic() + 600):
+            for slow in (slow_git, slow_pool):
+                with self.subTest(own=bool(own), slow=slow.__name__), self.mock.patch.object(m, 'SEARCH_CHANGES_HINT_S', 0.4), \
+                        self.mock.patch.object(m, 't_search_changes', slow), self.mock.patch.object(m.subprocess, 'Popen', kept):
+                    del seen[:], started[:]
+                    m._call.deadline = own
+                    try:
+                        began = time.monotonic()
+                        text, data = self.by(index, **ask)
+                        took = time.monotonic() - began
+                        self.assertLess(took, 3)
+                        self.assertGreaterEqual(took, 0.4)
+                        self.assertEqual((data['related_changes'], data['provision_count'], data['matched_by']), ([], 0, 'index'))
+                        self.assertEqual(data['hints'], ['The words were matched as whole words. To match part of a word, pass regex true.', hint])
+                        self.assertTrue(text.endswith('\n' + hint))
+                        self.assertNotIn('Nor does any change note', text)
+                        # the nearer deadline was the one the work ran under, on the thread and in its workers
+                        self.assertTrue(seen and all(0.2 < left <= 0.4 for _, left in seen), seen)
+                        self.assertEqual({who for who, _ in seen}, {'thread', 'worker'} if slow is slow_pool else {'thread'})
+                        # and is gone: the thread, and a worker started from it, have the call's own again
+                        self.assertEqual((m._call.deadline, deadline_in_a_worker()), (own, own))
+                        if slow is slow_git:
+                            self.assertEqual([p.poll() is not None for p in started], [True])  # the process was killed
+                    finally:
+                        m._call.deadline = 0.0
+        with self.mock.patch.object(m, 'SEARCH_CHANGES_HINT_S', 30):
+            # the call's own time ending first is the call's end, as ever
+            own = m._call.deadline = time.monotonic() + 0.4
+            try:
+                with self.mock.patch.object(m, 't_search_changes', slow_pool), self.assertRaises(subprocess.TimeoutExpired):
+                    self.by(index, **ask)
+                self.assertEqual(m._call.deadline, own)
+                # an error in it is the error it was, and the deadline is put back
+                own = m._call.deadline = time.monotonic() + 600
+                with self.mock.patch.object(m, 't_search_changes', lambda args: 1 / 0), self.assertRaises(ZeroDivisionError):
+                    self.by(index, **ask)
+                self.assertEqual(m._call.deadline, own)
+                # change notes read in time are given as before, and without an index nothing is bounded
+                del seen[:]
+                real = m.t_search_changes
+
+                def noting(args):
+                    seen.append(m._call.deadline)
+                    return real(args)
+                with self.mock.patch.object(m, 't_search_changes', noting):
+                    text, data = self.by(index, **ask)
+                    self.assertIn('Nor does any change note.', text)
+                    self.assertNotIn(hint, text)
+                    plain = self.by(None, **ask)
+                self.assertEqual((text, {**data, 'matched_by': None, 'hints': data['hints'][1:]}), (plain[0].replace('\nNor does', '\n' + data['hints'][0] + '\nNor does'), {**plain[1], 'matched_by': None}))
+                self.assertEqual(seen[1], own)
+                self.assertLess(seen[0], own)
+            finally:
+                m._call.deadline = 0.0
+
+    @needs(IE_C, PW_C, FI_TT)
+    def test_the_list_of_provisions_is_asked_for_in_one_call(self):
+        m = self.m
+
+        class Many(FilesIndex):
+            answer = staticmethod(lambda got: got)
+
+            def paths_many(self, query, wanted):
+                self.calls.append(('paths_many', query, list(wanted)))
+                return self.answer({c: self.matching(query, c)[:size] for c, size in wanted})
+        for ask, files in (({'query': 'on', 'kind': 'all', 'max_results': 5}, 200), ({'query': 'on', 'kind': 'all', 'max_results': 5, 'offset': 150}, 10),
+                           ({'query': 'extradition', 'kind': 'all', 'max_results': 3}, 200), ({'query': 'on', 'jurisdiction': 'palau', 'max_results': 2}, 200)):
+            with self.subTest(ask=ask, files=files), self.mock.patch.object(m, 'SEARCH_INDEX_FILES', files):
+                one, many = FilesIndex(m), Many(m)
+                each = self.by(one, **ask)
+                self.assertEqual(self.by(many, **ask), each)
+                self.assertGreater(each[1]['provision_count'], len(each[1]['results']))
+                topped = [c for c in one.calls if c[0] == 'paths'][-1]
+                asked = [c for c in many.calls if c[0] == 'paths_many']
+                self.assertEqual(len(asked), 1)
+                self.assertLess(len([c for c in many.calls if c[0] == 'paths']), len([c for c in one.calls if c[0] == 'paths']))
+                self.assertTrue(topped[2] in [c for c, _ in asked[0][2]] or files != 200)
+                if files == 200:  # no corpus is asked by itself for the list: only for the files git read
+                    self.assertEqual([c for c in many.calls if c[0] == 'paths'], [c for c in one.calls if c[0] == 'paths'][:1])
+        ask = {'query': 'on', 'kind': 'all', 'max_results': 5}
+        one = FilesIndex(m)
+        each = self.by(one, **ask)
+        singly = [c for c in one.calls if c[0] == 'paths']
+        self.assertEqual(len(singly), 4)  # the files read, and the three corpora for the list
+        many = Many(m)
+        self.by(many, **ask)  # the corpus read in part is asked for the files read as well; the others for their share
+        self.assertEqual(many.calls[-1], ('paths_many', 'on', [(FI_TT, 25 + 59), (IE_C, 59), (PW_C, 59)]))
+        # an index whose paths_many does not answer: each corpus is asked, as without it
+        for name, answer in (('none', lambda got: None), ('fails', lambda got: 1 / 0), ('a list', lambda got: list(got.items()))):
+            with self.subTest(paths_many=name):
+                many = Many(m)
+                many.answer = answer
+                self.assertEqual(self.by(many, **ask), each)
+                self.assertEqual([c for c in many.calls if c[0] == 'paths'], singly)
+        # a corpus's paths that are not as asked, or a corpus not asked for, add nothing; the rest stand
+        whole = set(each[1]['provisions'])
+        for name, answer in (('backwards', lambda got: {**got, IE_C: got[IE_C][::-1]}), ('too many', lambda got: {**got, IE_C: got[IE_C] + ['zz/zz.md']}),
+                             ('text', lambda got: {**got, IE_C: 'a.md'}), ('left out', lambda got: {c: n for c, n in got.items() if c != IE_C}),
+                             ('another', lambda got: {**{c: n for c, n in got.items() if c != IE_C}, 'germany/bund/acts': ['a/b.md'], 7: []})):
+            with self.subTest(paths_many=name):
+                many = Many(m)
+                many.answer = answer
+                text, data = self.by(many, **ask)
+                self.assertTrue(set(data['provisions']) >= {p for p in whole if not p.startswith(IE_C)})
+                self.assertFalse([p for p in data['provisions'] if p.startswith(IE_C)])
+                self.assertEqual((data['provision_count'], data['results']), (each[1]['provision_count'], each[1]['results']))
+                self.assertIn(f"\nThe structured answer lists {len(data['provisions'])} of {data['provision_count']} matching provisions;", text)
+
     @needs(IE_C)
     def test_git_reads_only_the_files_a_part_needs(self):
         m, index = self.m, FilesIndex(self.m)
