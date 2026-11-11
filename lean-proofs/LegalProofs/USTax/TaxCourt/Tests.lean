@@ -251,4 +251,36 @@ def moranJson : String := "{\"citation\": \"T.C. Memo. 2024-67\", \"taxYear\": 2
 #guard (decideCase { case2 with expected := [{ item := "asFiled.taxableIncome", value := some 47050 },
   { item := "asFiled.tax", value := some 5974 }, { item := "adjustments", value := some 0 }] }).agrees
 
+/-! ## Education, IRA, rollover, HSA, gambling, lump-sum, overrides and the rival's `qualifies` flag through `decideCase` -/
+
+-- 2015 single, wages $40,000, one student with $4,000 of tuition (AOTC $2,500: $1,000 refundable), a $5,500 IRA
+-- contribution (not an active participant), $3,000 of HSA distributions with $1,000 of medical expenses ($2,000
+-- includible, $400 additional tax), gambling winnings $2,000 and losses $5,000 (standard deduction is larger).
+-- AGI = 40,000 + 2,000 + 2,000 − 5,500 = 38,500; taxable 38,500 − 6,300 − 4,000 = 28,200.
+def moreJson : String := "{\"citation\": \"items test\", \"taxYear\": 2015,
+  \"facts\": {\"wages\": 40000, \"students\": [{\"name\": \"kid\", \"qualifiedExpenses\": 4000}],
+            \"ira\": {\"contribution\": 5500}, \"hsaDistributions\": 3000, \"hsaQualifiedExpenses\": 1000,
+            \"gamblingWinnings\": 2000, \"gamblingLosses\": 5000},
+  \"expected\": [{\"item\": \"agi\", \"value\": 38500}, {\"item\": \"taxableIncome\", \"value\": 28200},
+               {\"item\": \"iraDeduction\", \"value\": 5500}, {\"item\": \"hsaAdditionalTax\", \"value\": 400},
+               {\"item\": \"aotcRefundable\", \"value\": 1000}, {\"item\": \"aotcEligible:kid\", \"flag\": true},
+               {\"item\": \"adjustments\", \"value\": 5500}, {\"item\": \"gamblingLossDeduction\", \"value\": 0}]}"
+
+#guard match parseCase moreJson with
+  | .ok c => (decideCase c).agrees
+  | .error _ => false
+
+-- An AGI override replaces the computed AGI (here $60,000 on wages $40,000).
+#guard (computeReturn (py 2019) { wages := 40000, agiOverride := some 60000 }).agi = 60000
+-- A rollover after 75 days without a waiver: the whole $10,000 is income.
+#guard (computeReturn (py 2019) { rollovers := [{ distribution := 10000, rolledOver := 10000, days := 75 }] }).agi = 10000
+
+-- Tie-breaker: a rival with higher AGI does not compete if the child is not the rival's qualifying child.
+private def rivals (q : Bool) : TieBreakIssue :=
+  { child := "c", taxpayer := "me",
+    claimants := [{ name := "me", daysResided := 200, agi := 20000 },
+                  { name := "aunt", daysResided := 200, agi := 50000, qualifies := q }] }
+#guard (decideCase { taxYear := 2019, tieBreakers := [rivals true] }).tieBreakers = [("c", some "aunt")]
+#guard (decideCase { taxYear := 2019, tieBreakers := [rivals false] }).tieBreakers = [("c", some "me")]
+
 end Legal.USTax.TaxCourt.Tests

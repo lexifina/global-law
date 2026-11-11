@@ -97,6 +97,8 @@ structure Outcome where
   accuracy : Option AccuracyOutcome := none
   lateness : Option LateOutcome := none
   checks : List Check := []
+  /-- §25A: each student's AOTC eligibility. -/
+  students : List (String × Bool) := []
   /-- All checks passed. -/
   agrees : Bool := true
   deriving Repr, Inhabited
@@ -112,7 +114,12 @@ def Outcome.intValues (o : Outcome) : List (String × Int) :=
        ("earnedIncome", r.earnedIncome), ("dependentsCounted", r.dependentsCounted),
        ("excessAdvanceCtc", r.excessAdvanceCtc), ("adjustments", r.adjustments), ("halfSeTax", r.halfSeTax),
        ("totalIncome", r.totalIncome), ("refundableCredits", r.refundableCredits),
-       ("nonrefundableCredits", r.nonrefundableCredits)]
+       ("nonrefundableCredits", r.nonrefundableCredits), ("iraDeduction", r.iraDeduction),
+       ("rolloverIncludible", r.rolloverIncludible), ("hsaIncludible", r.hsaIncludible),
+       ("hsaAdditionalTax", r.hsaAdditionalTax), ("gamblingLossDeduction", r.gamblingLossDeduction),
+       ("educationNonrefundable", r.educationNonrefundable), ("aotcRefundable", r.aotcRefundable),
+       ("educationCredits", r.educationNonrefundable + r.aotcRefundable), ("itemizedDeductions",
+         if r.deduction == r.standardDeduction then 0 else r.deduction)]
    | none => []) ++
   (match o.asFiled with
    | some r => [("asFiled.agi", r.agi), ("asFiled.taxableIncome", r.taxableIncome), ("asFiled.tax", r.regularTax),
@@ -125,6 +132,8 @@ def Outcome.intValues (o : Outcome) : List (String × Int) :=
   (match o.lateness with | some l => [("failureToFile", l.failureToFile), ("failureToPay", l.failureToPay)] | none => [])
 
 def Outcome.flagValues (o : Outcome) : List (String × Bool) :=
+  (match o.corrected with | some r => [("lumpSumElection", r.lumpSumElection)] | none => []) ++
+  o.students.map (fun (n, b) => ("aotcEligible:" ++ n, b)) ++
   (match o.accuracy with
    | some a => [("substantialUnderstatement", a.substantial), ("accuracyPenaltyApplies", a.applies)]
    | none => []) ++
@@ -164,7 +173,8 @@ def decideCase (c : Case) : Outcome :=
   | none => { citation := c.citation, taxYear := c.taxYear, errors := [s!"tax year {c.taxYear} is outside 2012–2024"],
               agrees := false }
   | some p =>
-    let winners := c.tieBreakers.map fun t => (t.child, t.taxpayer, (tieBreak t.claimants).map (·.name))
+    let winners := c.tieBreakers.map fun t =>
+      (t.child, t.taxpayer, (tieBreak (t.claimants.filter (·.qualifies))).map (·.name))
     let lost := (winners.filter fun (_, me, w) => w != some me).map (·.1)
     let deps := c.facts.dependents.map fun x => if lost.contains x.name then { x with lostTieBreaker := true } else x
     let claimed := c.facts.filing
@@ -204,7 +214,8 @@ def decideCase (c : Case) : Outcome :=
         dependents := depOut, corrected := some corrected, asFiled := shown, taxShown := shownNet,
         deficiency := shownNet.map (deficiencyOf corrected),
         earlyDistributions := facts.earlyDistributions.map (earlyDistTax p corrected.agi someone65),
-        accuracy := acc, lateness := late }
+        accuracy := acc, lateness := late,
+        students := facts.students.map fun s => (s.name, aotcEligible s) }
     let checks := c.expected.map (runCheck o)
     { o with checks := checks, agrees := checks.all (·.ok) && o.errors.isEmpty }
 
@@ -246,6 +257,26 @@ deriving instance ToJson for EarlyDistFacts
 deriving instance FromJson for EarlyDistFacts
 instance (priority := high) : FromJson EarlyDistFacts :=
   ⟨fromJsonWithDefaults (FromJson.fromJson? (α := EarlyDistFacts))⟩
+
+deriving instance ToJson for StudentFacts
+deriving instance FromJson for StudentFacts
+instance (priority := high) : FromJson StudentFacts :=
+  ⟨fromJsonWithDefaults (FromJson.fromJson? (α := StudentFacts))⟩
+
+deriving instance ToJson for IraFacts
+deriving instance FromJson for IraFacts
+instance (priority := high) : FromJson IraFacts :=
+  ⟨fromJsonWithDefaults (FromJson.fromJson? (α := IraFacts))⟩
+
+deriving instance ToJson for RolloverFacts
+deriving instance FromJson for RolloverFacts
+instance (priority := high) : FromJson RolloverFacts :=
+  ⟨fromJsonWithDefaults (FromJson.fromJson? (α := RolloverFacts))⟩
+
+deriving instance ToJson for LumpSumFacts
+deriving instance FromJson for LumpSumFacts
+instance (priority := high) : FromJson LumpSumFacts :=
+  ⟨fromJsonWithDefaults (FromJson.fromJson? (α := LumpSumFacts))⟩
 
 deriving instance ToJson for ReturnFacts
 deriving instance FromJson for ReturnFacts

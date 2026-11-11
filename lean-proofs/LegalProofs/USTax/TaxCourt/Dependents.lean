@@ -199,6 +199,9 @@ structure Claimant where
   agi : Int := 0
   /-- Whether this claimant actually claims the child (§152(c)(4)(B), (C) look at who claims). -/
   claims : Bool := true
+  /-- Whether the child is this claimant's qualifying child under §152(c)(1) (the tie-breaker is only among those
+  "who can claim" the child, §152(c)(4)(A)); `Case` drops claimants with `qualifies := false` before `tieBreak`. -/
+  qualifies : Bool := true
   deriving Repr, Inhabited, DecidableEq
 
 /-- The first element that no later element strictly beats (`better a b`: `a` strictly better than `b`). -/

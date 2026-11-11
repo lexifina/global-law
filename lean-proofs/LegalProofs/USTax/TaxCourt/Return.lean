@@ -2,6 +2,8 @@ import LegalProofs.USTax.TaxCourt.CTC
 import LegalProofs.USTax.TaxCourt.Income
 import LegalProofs.USTax.TaxCourt.EarlyDistribution
 import LegalProofs.USTax.TaxCourt.Penalties
+import LegalProofs.USTax.TaxCourt.Education
+import LegalProofs.USTax.TaxCourt.Retirement
 
 /-!
 # A simple individual return, 2012–2024, and the deficiency
@@ -103,6 +105,30 @@ structure ReturnFacts where
   -- payments
   withholding : Int := 0
   estimatedPayments : Int := 0
+  -- items added Nov 2026 (all optional)
+  /-- §25A: each student for whom an education credit is claimed. -/
+  students : List StudentFacts := []
+  /-- §25A(i)(5): the taxpayer is a child to whom §1(g) applies (no refundable AOTC). -/
+  educationKiddieRule : Bool := false
+  /-- §219: traditional IRA contributions and active-participant status, taxpayer and spouse. -/
+  ira : IraFacts := {}
+  iraSpouse : IraFacts := {}
+  /-- §408(d)(3): distributions claimed to have been rolled over (only the includible part enters income). -/
+  rollovers : List RolloverFacts := []
+  /-- §223(f): HSA distributions, the qualified medical expenses they paid, and whether a (f)(4)(B)–(C) exception
+  (death, disability, 65) applies (the taxpayer's age 65 counts automatically). -/
+  hsaDistributions : Int := 0
+  hsaQualifiedExpenses : Int := 0
+  hsaException : Bool := false
+  /-- §165(d): wagering gains (in gross income) and losses (itemized, up to the gains); expenses count 2018–2025. -/
+  gamblingWinnings : Int := 0
+  gamblingLosses : Int := 0
+  gamblingExpenses : Int := 0
+  /-- §86(e): parts of `socialSecurity` attributable to earlier years (the election is made if it lowers the tax). -/
+  ssLumpSums : List LumpSumFacts := []
+  /-- When the opinion gives only totals: AGI as found (replaces the computed AGI) and earned income as found. -/
+  agiOverride : Option Int := none
+  earnedIncomeOverride : Option Int := none
   deriving Repr, Inhabited
 
 /-- Form 1040, line by line. -/
@@ -136,6 +162,15 @@ structure ReturnResult where
   netTax : Int
   payments : Int
   dependentsCounted : Nat
+  iraDeduction : Int := 0
+  rolloverIncludible : Int := 0
+  hsaIncludible : Int := 0
+  hsaAdditionalTax : Int := 0
+  gamblingLossDeduction : Int := 0
+  /-- §25A: AOTC + LLC allowed against tax, and the refundable AOTC. -/
+  educationNonrefundable : Int := 0
+  aotcRefundable : Int := 0
+  lumpSumElection : Bool := false
   deriving Repr, Inhabited
 
 /-- §63(c)–(f): the standard deduction. -/
@@ -171,28 +206,48 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
   -- capital loss limit §1211(b)
   let capInc := if r.capitalGain < 0 then max r.capitalGain (if f == .mfs then -1500 else -3000) else r.capitalGain
   let uc := r.unemployment + r.unemploymentSpouse
+  let rollInc := r.rollovers.foldl (fun t x => t + rolloverIncludible x) 0
+  -- §213(f) (2013–2016): "the taxpayer or the taxpayer's spouse", whatever the filing status
+  let someone65 := r.taxpayerAge ≥ 65 || ((f == .mfj || f == .mfs) && r.spouseAge ≥ 65)
+  let hsa := hsaDistribution p.year r.hsaDistributions r.hsaQualifiedExpenses (r.hsaException || r.taxpayerAge ≥ 65)
   let income0 := r.wages + r.wagesSpouse + r.seProfit + r.seProfitSpouse + r.taxableInterest + r.ordinaryDividends +
-    capInc + r.iraDistributions + r.pensions + uc + r.otherIncome
+    capInc + r.iraDistributions + r.pensions + uc + r.otherIncome + rollInc + hsa.1 + pos r.gamblingWinnings
   -- earned income (§32(c)(2)), also §63(c)(5)
-  let earned := r.wages + r.wagesSpouse + (r.seProfit - halfSeTaxP p r.seProfit r.wages) +
-    (r.seProfitSpouse - halfSeTaxP p r.seProfitSpouse r.wagesSpouse)
+  let earnedT := r.wages + (r.seProfit - halfSeTaxP p r.seProfit r.wages)
+  let earnedS := r.wagesSpouse + (r.seProfitSpouse - halfSeTaxP p r.seProfitSpouse r.wagesSpouse)
+  let earned := r.earnedIncomeOverride.getD (earnedT + earnedS)
   let std := standardDeduction p r f earned
   -- 2020 §62(a)(22) and 2021 §170(p): only for a taxpayer who does not itemize; the choice compares totals
   let charity := if p.year == 2020 then min (pos r.charityNonItemizer) 300
     else if p.year == 2021 then min (pos r.charityNonItemizer) (if f == .mfj then 600 else 300) else 0
+  let gambling := gamblingLossDeduction p.year r.gamblingWinnings r.gamblingLosses r.gamblingExpenses
+  let itemized := r.itemizedDeductions + gambling
   let usesStd := match r.itemize with
     | some b => !b
-    | none => std + charity ≥ r.itemizedDeductions
-  let ded := if usesStd then std else r.itemizedDeductions
+    | none => std + charity ≥ itemized
+  let ded := if usesStd then std else itemized
   let charity2020 := if p.year == 2020 && usesStd then charity else 0
   let charity2021 := if p.year == 2021 && usesStd then charity else 0
-  let adj := halfSe + r.adjustments + charity2020
+  let adj0 := halfSe + r.adjustments + charity2020
   -- §86: MAGI = AGI without §86 (and, here, with the given adjustments) plus tax-exempt interest; §86(b)(2)(A)
   -- disregards §85(c), so 2020 unemployment counts in full here (the exclusion is applied afterwards)
-  let tss := taxableSocialSecurity f r.livedApartAllYear r.socialSecurity (income0 - adj + r.taxExemptInterest)
+  let tssOf (adj : Int) : Int × Bool :=
+    let m := income0 - adj + r.taxExemptInterest
+    let plain := taxableSocialSecurity f r.livedApartAllYear r.socialSecurity m
+    if r.ssLumpSums.isEmpty then (plain, false) else
+    let el := lumpSumElectionTaxable f r.livedApartAllYear r.socialSecurity m r.ssLumpSums
+    if el < plain then (el, true) else (plain, false)
+  -- §219(g)(3)(A): MAGI is AGI without the IRA deduction (taxable social security refigured without it)
+  let agiNoIra0 := income0 + (tssOf adj0).1 - adj0
+  let agiNoIra := agiNoIra0 - unemploymentExclusion p.year r.unemployment r.unemploymentSpouse agiNoIra0
+  let iraD := iraDeduction p f r.livedApartAllYear r.taxpayerAge r.spouseAge earnedT earnedS agiNoIra r.ira
+    r.iraSpouse
+  let adj := adj0 + iraD.1 + iraD.2
+  let tssR := tssOf adj
+  let tss := tssR.1
   let agi0 := income0 + tss - adj
   let ucx := unemploymentExclusion p.year r.unemployment r.unemploymentSpouse agi0
-  let agi := agi0 - ucx
+  let agi := r.agiOverride.getD (agi0 - ucx)
   -- exemptions (2016–2017)
   let deps := r.dependents.filter (isDependent p r.canBeClaimedAsDependent)
   let selfCount : Nat := (if r.canBeClaimedAsDependent then 0 else 1) +
@@ -202,10 +257,11 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
   -- the regular tax
   let cgPref := if r.capitalGain > 0 && r.longTermGain > 0 then min r.capitalGain r.longTermGain else 0
   let tax := regularTax p f ti (pos r.qualifiedDividends + cgPref)
-  -- credits
-  let otherNonref := min (pos r.otherNonrefundableCredits) tax
-  -- §213(f) (2016): "the taxpayer or the taxpayer's spouse", whatever the filing status
-  let someone65 := r.taxpayerAge ≥ 65 || ((f == .mfj || f == .mfs) && r.spouseAge ≥ 65)
+  -- credits: the other nonrefundable credits, then §25A, then §24 (Form 1040 order)
+  let edu := educationCredits p f agi r.students r.educationKiddieRule
+  let otherNonref0 := min (pos r.otherNonrefundableCredits) tax
+  let eduNonref := min edu.nonrefundable (tax - otherNonref0)
+  let otherNonref := otherNonref0 + eduNonref
   let edTax := r.earlyDistributions.foldl (fun s d => s + earlyDistAmount p agi someone65 d) 0
   let kids := eicChildCounts p r.dependents
   let earnedEic := match r.priorYearEarnedIncome with
@@ -234,15 +290,18 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
           advanceChildren := r.advanceCtcChildren }
     else {}
   let nonref := otherNonref + ctcR.nonrefundable
-  let totalTax := pos (tax - nonref) + seT + seS + edTax + r.otherTaxes + ctcR.excessAdvance
-  let refundable := eicR.1 + ctcR.refundable + r.otherRefundableCredits
+  let totalTax := pos (tax - nonref) + seT + seS + edTax + r.otherTaxes + ctcR.excessAdvance + hsa.2
+  let refundable := eicR.1 + ctcR.refundable + r.otherRefundableCredits + edu.aotcRefundable
   { filing := f, totalIncome := income0 + tss - ucx, taxableSocialSecurity := tss, unemploymentExcluded := ucx,
     halfSeTax := halfSe, adjustments := adj, agi := agi, standardDeduction := std, deduction := ded, exemptions := ex,
     taxableIncome := ti, regularTax := tax, ctcNonrefundable := ctcR.nonrefundable, nonrefundableCredits := nonref,
     seTax := seT + seS, earlyDistributionTax := edTax, excessAdvanceCtc := ctcR.excessAdvance,
     totalTax := totalTax, earnedIncome := earned, eic := eicR.1, eicReasons := eicR.2,
     refundableCtc := ctcR.refundable, refundableCredits := refundable, netTax := totalTax - refundable,
-    payments := r.withholding + r.estimatedPayments, dependentsCounted := deps.length }
+    payments := r.withholding + r.estimatedPayments, dependentsCounted := deps.length,
+    iraDeduction := iraD.1 + iraD.2, rolloverIncludible := rollInc, hsaIncludible := hsa.1, hsaAdditionalTax := hsa.2,
+    gamblingLossDeduction := if usesStd then 0 else gambling, educationNonrefundable := eduNonref,
+    aotcRefundable := edu.aotcRefundable, lumpSumElection := tssR.2 }
 
 /-- §6211(a), (b)(4): the deficiency — tax as recomputed less tax shown, refundable credits as negative tax. Negative
 means the return overstated the tax. -/

@@ -41,6 +41,22 @@ RULES = [(r"6662", "Accuracy penalty (§6662)"), (r"6651\(a\)\(2\)|failure to pa
          (r"6211|deficien", "Deficiency (§6211)"), (r"\b61\b|gross income|income", "Gross income (§61)")]
 
 
+CAUSES = [("court-or-irs-arithmetic", r"court'?s own|court's figure|IRS figure|notice'?s|rounding|arithmetic|misprint|20% of|is 20%"),
+          ("facts-not-stated", r"not stated|doesn't state|does not state|no income|not in the opinion|never states|leaves out|omit|missing (return )?facts|opinion gives no|not reconstruct|isn't in the opinion|depends on other income"),
+          ("model-gap", r"gap|not modell?ed|missing|no field|framework|lacks|isn't in this build|not in this build")]
+
+
+# hand-checked causes where the keyword heuristic misfiles a diagnosis (case id, first 40 characters of the diagnosis)
+OVERRIDE = {('tcsumm-2022-10', 'Framework gap: no sec. 911(f) stacking, '): 'model-gap', ('tcsumm-2022-23', 'Rerun 57b55431cca: Lean 0 vs court 24,33'): 'facts-not-stated'}
+
+
+def mismatch_cause(d):
+    for name, pat in CAUSES:
+        if re.search(pat, d, re.I):
+            return name
+    return "unexplained"
+
+
 def classify(text):
     for pat, name in RULES:
         if re.search(pat, text, re.I):
@@ -51,7 +67,7 @@ def classify(text):
 idx = load(D / "index.json")
 idx = idx if isinstance(idx, list) else idx["cases"]
 meta = {c["id"]: c for c in idx}
-cases, totals, by_tag = [], collections.Counter(), collections.defaultdict(collections.Counter)
+cases, totals, by_tag, causes = [], collections.Counter(), collections.defaultdict(collections.Counter), collections.Counter()
 for p in sorted(glob.glob(str(D / "encoded" / "*.result.json"))):
     r = load(p)
     cid = r.get("id") or Path(p).name.split(".")[0]
@@ -60,7 +76,11 @@ for p in sorted(glob.glob(str(D / "encoded" / "*.result.json"))):
     for it in r.get("issues", []):
         v = CANON.get(str(it.get("verdict", "")).strip().lower(), str(it.get("verdict")))
         totals[v] += 1
-        issues.append({**it, "verdict": v})
+        cause = (it.get("cause") or OVERRIDE.get((cid, str(it.get("diagnosis", ""))[:40]))
+                 or mismatch_cause(str(it.get("diagnosis", "")))) if v == "mismatch" else None
+        if cause:
+            causes[cause] += 1
+        issues.append({**it, "verdict": v, "cause": cause})
     for it in issues:
         by_tag[classify(str(it.get("provision", "")) + " " + str(it.get("issue", "")))][it["verdict"]] += 1
     cases.append({"id": cid, "citation": r.get("citation") or m.get("citation"), "name": m.get("case_name"),
@@ -69,6 +89,6 @@ for p in sorted(glob.glob(str(D / "encoded" / "*.result.json"))):
 decided = totals["match"] + totals["mismatch"]
 out = {"cases": len(cases), "issues": sum(totals.values()), "totals": dict(totals),
        "computable_agreement": f"{totals['match']}/{decided}" if decided else "-",
-       "by_tag": {k: dict(v) for k, v in by_tag.items()}, "detail": cases}
+       "mismatch_causes": dict(causes), "by_tag": {k: dict(v) for k, v in by_tag.items()}, "detail": cases}
 (D / "summary.json").write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")
-print(len(cases), "cases;", dict(totals), "; match on computable:", out["computable_agreement"])
+print(len(cases), "cases;", dict(totals), "; match on computable:", out["computable_agreement"], "; mismatch causes:", dict(causes))

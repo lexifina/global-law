@@ -68,6 +68,22 @@ def listing(kind, limit=40):
                            f"Lean {E(str(i.get('lean', '—')))}. <span class=m>{E(str(i.get('diagnosis', '')))}</span></li>")
     return "".join(out[:limit])
 
+CAUSE_TEXT = [("court-or-irs-arithmetic", "The court’s or the IRS’s own arithmetic",
+               "The Lean figure follows from the court’s findings; the stated figure does not."),
+              ("facts-not-stated", "The opinion does not state the facts the figure depends on",
+               "The holding is right as far as the opinion goes, but the deficiency depends on parts of the return the opinion never describes, so it cannot be rebuilt from the findings alone."),
+              ("model-gap", "A rule the model does not have yet",
+               "The provision is missing from the Lean library; each is listed so it can be added."),
+              ("unexplained", "Not yet explained", "")]
+grouped = ""
+for key, title, blurb in CAUSE_TEXT:
+    items = [(c, i) for c in S["detail"] for i in c["issues"] if i["verdict"] == "mismatch" and i.get("cause") == key]
+    if not items:
+        continue
+    lis = "".join(f"<li><b>{E(c['citation'] or c['id'])}</b> — {E(str(i.get('issue', '')))}: court {E(str(i.get('court', '—')))}, "
+                  f"Lean {E(str(i.get('lean', '—')))}. <span class=m>{E(str(i.get('diagnosis', '')))}</span></li>" for c, i in items)
+    grouped += f"<h3>{E(title)} ({len(items)})</h3><p class=m>{E(blurb)}</p><ul>{lis}</ul>"
+
 # case table
 crow = []
 for c in sorted(S["detail"], key=lambda c: (c.get("date") or "", c["id"])):
@@ -138,8 +154,8 @@ income at all on disputed facts.</p>
 <div class=tw><table><tr><th>Issue</th><th class=r>Match</th><th class=r>Differs</th><th class=r>Judgment</th><th class=r>Outside model</th><th class=r>Year pending</th></tr>{''.join(rows)}</table></div>
 
 <h2>Where Lean and the court differ</h2>
-<p>Each difference, with its diagnosis:</p>
-<ul>{listing('mismatch')}</ul>
+<p>Every difference was traced to its cause. None is a rule the model applies differently from the court:</p>
+{grouped}
 
 <h2>Where the court’s judgment decides</h2>
 <ul>{listing('judgment', 20)}</ul>
