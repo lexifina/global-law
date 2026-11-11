@@ -1549,7 +1549,12 @@ def correction_end(corpus: str, fix: dict, rel: str) -> str:
     """The last day a correction applies: its own end, or for an open range the day before the act's next ordinary
     commit (the act is Act-path:, else the folders of its Files:, else the folder of the file read). Never past the
     end data/acts.json gives the file's act (correction_cap)."""
-    cap = correction_cap(corpus, rel, fix['from']) or '9999-12-31'  # never past the file's act's end
+    return _correction_end(corpus, fix, rel, correction_cap(corpus, rel, fix['from']))
+
+
+def _correction_end(corpus: str, fix: dict, rel: str, cap: str | None) -> str:
+    """correction_end, given the cap the file's act's end sets (correction_cap), or None for none."""
+    cap = cap or '9999-12-31'  # never past the file's act's end
     if fix.get('to'):
         return min(fix['to'], cap)
     folder = lambda f: f.rsplit('/', 1)[0] if '/' in f else f  # noqa: E731
@@ -1559,6 +1564,37 @@ def correction_end(corpus: str, fix: dict, rel: str) -> str:
         return cap
     import datetime as dt
     return min((dt.date.fromisoformat(nxt) - dt.timedelta(days=1)).isoformat(), cap)
+
+
+def overlay_ends(corpus: str) -> list[tuple]:
+    """For each correction of file_index's overlays, in their order: (end, own). `own` is {file: correction_end} for
+    the files whose last day is their own, and `end` the last day of every other file the correction covers (None
+    when each file has its own). A correction's end is one day for all its files, except under an act that
+    data/acts.json ends on a day (correction_cap) or where the correction names no range, act or files and so ends
+    with each file's own folder. Asked once a file, for each correction and each tree, it was most of building the
+    tree of a past date: 16 million calls and 115 of the 127 s for Japan's 443,000 files (profiled 2026-11-11). Once
+    per reading of the index."""
+    ix = _index(corpus)
+    key = ('overlay-ends', f'{corpus}@{_at(ix)}')
+    got = _CACHE.get(key)
+    if got is None:
+        ended = {f for f, e in act_ends(corpus).items() if e['day']}
+        got = []
+        for fix, _, files in file_index(corpus)[1]:
+            shared = bool(fix.get('to') or fix.get('act_path') or fix['files'])
+            end, own = None, {}
+            for path in files:
+                capped, i = not shared, path.find('/')
+                while not capped and i > 0:  # under an act with a dated end: its cap is the file's own
+                    capped = path[:i] in ended
+                    i = path.find('/', i + 1)
+                if capped:
+                    own[path] = correction_end(corpus, fix, path)
+                elif end is None:
+                    end = _correction_end(corpus, fix, path, None)
+            got.append((end, own))
+        _CACHE[key] = got
+    return got  # type: ignore[return-value]
 
 
 def trailer_values(block: str) -> dict[str, list[str]]:
@@ -2010,9 +2046,11 @@ def _tree_days(corpus: str, ix: dict) -> tuple | None:
         days = {v[0] for versions in index.values() for v in versions}
         try:
             ends = set()
-            for fix, _, files in overlays:
+            for (fix, _, files), (end, own) in zip(overlays, overlay_ends(corpus)):
                 days.add(fix['from'])
-                ends.update(correction_end(corpus, fix, path) for path in files)
+                ends.update(own.values())
+                if len(own) < len(files):
+                    ends.add(end)
             for end in ends:
                 if end < '9999-12-31':  # no date asked is after it
                     days.add((dt.date.fromisoformat(end) + dt.timedelta(days=1)).isoformat())
@@ -2038,11 +2076,11 @@ def _built_tree(date: str, corpus: str, key: tuple) -> str | None:
         if best and best[2]:
             chosen[path] = (best[2], best[3])
     best_fix: dict[str, tuple] = {}
-    for fix, order, files in overlays:
-        if fix['from'] > date:
+    for (fix, order, files), (end, own) in zip(overlays, overlay_ends(corpus)):
+        if fix['from'] > date or (not own and (end is None or date > end)):  # (no file: nothing to lay over)
             continue
         for path, (blob, mode) in files.items():
-            if date > correction_end(corpus, fix, path):
+            if date > own.get(path, end):
                 continue
             prev = best_fix.get(path)
             if prev is None or (fix['from'], order) >= prev[0]:

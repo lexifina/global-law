@@ -20,6 +20,7 @@ import mmap
 import os
 import queue
 import re
+import shutil
 import subprocess
 import sys
 import threading
@@ -28,6 +29,7 @@ import traceback
 import types
 import unicodedata
 import warnings
+from array import array
 from collections import ChainMap, OrderedDict
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
@@ -4584,6 +4586,150 @@ def _folder_commits(corpus: str, inner: str) -> list[str]:
     return law.git('log', '--format=%H', law.reachable_tip(corpus), '--', inner, cwd=law.corpus_dir(corpus)).split()
 
 
+def _folder_map_file(corpus: str) -> Path:
+    return law._store() / f"folder-map-{hashlib.sha1(corpus.encode('utf-8', 'surrogateescape')).hexdigest()[:16]}.sqlite"
+
+
+_FOLDER_MAP_SHAS: dict[str, tuple] = {}  # corpus -> (the map file's identity, tip, its commits' ids end to end)
+
+
+def folder_map_commits(corpus: str, inner: str, tip: str) -> list[str] | None:
+    """A folder's commits from the corpus's folder map (folder_map_build), newest first as `git log -- <folder>`
+    prints them; None when there is no map of this tip, or the map has no such folder (git is then asked)."""
+    import sqlite3
+    path = _folder_map_file(corpus)
+    try:
+        st = path.stat()
+    except OSError:
+        return None
+    try:
+        db = sqlite3.connect(f'file:{path.as_posix()}?mode=ro&immutable=1', uri=True, timeout=1)
+        try:
+            row = db.execute("select value from meta where key = 'tip'").fetchone()
+            if not row or row[0] != tip:
+                return None
+            got = db.execute('select commits from folders where folder = ?', (inner,)).fetchone()
+            if got is None:
+                return None
+            ident = (st.st_ino, st.st_mtime_ns, st.st_size)
+            kept = _FOLDER_MAP_SHAS.get(corpus)
+            if kept is None or kept[0] != ident or kept[1] != tip:
+                shas = db.execute("select value from meta where key = 'shas'").fetchone()[0]
+                if len(_FOLDER_MAP_SHAS) >= 6:
+                    _FOLDER_MAP_SHAS.clear()
+                kept = _FOLDER_MAP_SHAS[corpus] = (ident, tip, shas)
+            shas = kept[2]
+            orders = array('I')
+            orders.frombytes(got[0])
+            return [shas[o * 20:o * 20 + 20].hex() for o in reversed(orders)]
+        finally:
+            db.close()
+    except (sqlite3.Error, OSError, ValueError, TypeError, IndexError):
+        return None
+
+
+def folder_map_build(corpus: str) -> str:
+    """Builds the corpus's folder map, or brings it up to its tip: every folder -> the commits that touched a file
+    under it, read in one `git log --name-only` of the whole history (of the new commits only, when the map is of
+    an ancestor of the tip). A list of folders asks for each folder's commits: a path-limited git log each, 100 of
+    them for a page, which took 35 s for a second-level folder of Romania's 1.2 million files and ran out of a
+    hosted call's time (and a day on which the corpus changed, every one was asked again). With the map each is a
+    row read. Only for a history without merges, where the commits git log lists for a path are exactly those that
+    change it. Not built in a call: a host builds it before it serves (it takes about as long as one log of the
+    whole history). Returns what was done: 'current', 'built', 'extended', or 'not built: <why>'."""
+    import sqlite3
+    tip = law.reachable_tip(corpus)
+    if not re.fullmatch(r'[0-9a-f]{40}', tip or ''):
+        return 'not built: no tip'
+    if not _no_merges(corpus, tip):
+        return 'not built: the history has merges'
+    cwd, path = law.corpus_dir(corpus), _folder_map_file(corpus)
+    old_tip, shas, known = None, bytearray(), 0
+    try:
+        db = sqlite3.connect(f'file:{path.as_posix()}?mode=ro&immutable=1', uri=True, timeout=1)
+        try:
+            old_tip = db.execute("select value from meta where key = 'tip'").fetchone()[0]
+            if old_tip == tip:
+                return 'current'
+            shas = bytearray(db.execute("select value from meta where key = 'shas'").fetchone()[0])
+        finally:
+            db.close()
+    except (sqlite3.Error, OSError, TypeError):
+        old_tip, shas = None, bytearray()
+    if old_tip and (not re.fullmatch(r'[0-9a-f]{40}', old_tip) or subprocess.run(
+            ['git', 'merge-base', '--is-ancestor', old_tip, tip], cwd=cwd, capture_output=True).returncode != 0):
+        old_tip, shas = None, bytearray()
+    known = len(shas) // 20
+    found: dict[str, array] = {}
+    proc = subprocess.Popen(['git', 'log', '--reverse', '--no-renames', '--name-only', '-z', '--format=%x01%H',
+                             f'{old_tip}..{tip}' if old_tip else tip], cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    order, seen, rest = known - 1, set(), b''
+    try:
+        while True:
+            block = proc.stdout.read(1 << 20)
+            parts = (rest + block).split(b'\0')
+            rest = parts.pop() if block else b''
+            for token in parts:
+                token = token.lstrip(b'\n')
+                if token[:1] == b'\x01':
+                    order += 1
+                    shas += bytes.fromhex(token[1:41].decode('ascii'))
+                    seen = set()
+                    continue
+                name = token.decode('utf-8', 'surrogateescape')
+                i = name.find('/')
+                while i > 0:
+                    folder = name[:i]
+                    if folder not in seen:
+                        seen.add(folder)
+                        got = found.get(folder)
+                        if got is None:
+                            got = found[folder] = array('I')
+                        got.append(order)
+                    i = name.find('/', i + 1)
+            if not block:
+                break
+    finally:
+        proc.stdout.close()
+        failed = proc.wait()
+    if failed:
+        return 'not built: git log failed'
+    if len(shas) != (order + 1) * 20:
+        return 'not built: the log was not read whole'
+    tmp = path.with_name(f'{path.name}.{os.getpid()}.part')
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if old_tip:
+            shutil.copyfile(path, tmp)
+        elif tmp.exists():
+            tmp.unlink()
+        db = sqlite3.connect(str(tmp), timeout=5)
+        try:
+            db.execute('pragma journal_mode = off')
+            db.execute('pragma synchronous = off')
+            db.execute('create table if not exists meta (key text primary key, value)')
+            db.execute('create table if not exists folders (folder text primary key, commits blob) without rowid')
+            if old_tip:
+                for folder, orders in found.items():
+                    got = db.execute('select commits from folders where folder = ?', (folder,)).fetchone()
+                    db.execute('insert or replace into folders values (?, ?)', (folder, (got[0] if got else b'') + orders.tobytes()))
+            else:
+                db.executemany('insert into folders values (?, ?)', ((f, o.tobytes()) for f, o in found.items()))
+            db.execute("insert or replace into meta values ('shas', ?)", (bytes(shas),))
+            db.execute("insert or replace into meta values ('tip', ?)", (tip,))
+            db.commit()
+        finally:
+            db.close()
+        os.replace(tmp, path)
+    except (sqlite3.Error, OSError) as e:
+        try:
+            tmp.unlink()
+        except OSError:
+            pass
+        return f'not built: {type(e).__name__}: {e}'
+    return 'extended' if old_tip else 'built'
+
+
 FOLDER_KEPT_S = 0.25  # a folder's commits that took this long to work out are kept in the tree's cache
 
 
@@ -4595,6 +4741,13 @@ def folder_commits(corpus: str, inner: str) -> list[str]:
     every list of that corpus's root: past a hosted call's time, every time."""
     tip, kept = law.reachable_tip(corpus), None
     if re.fullmatch(r'[0-9a-f]{40}', tip or ''):
+        # The corpus's folder map, where a host has built one of this tip (folder_map_build), for a plain folder of
+        # a body of law: the folder's row. Case law's folders are read from its index (_folder_commits).
+        if (inner and inner == inner.strip('/') and not re.search(r'[*?\[\\]|^:', inner)
+                and not law.is_caselaw({'path': corpus, **(law.corpus_info(corpus) or {})})):
+            mapped = folder_map_commits(corpus, inner, tip)
+            if mapped is not None:
+                return mapped
         kept = law._store() / f"folder-commits-v2-{tip}-{hashlib.sha1(inner.encode('utf-8', 'surrogateescape')).hexdigest()[:16]}.json"
         try:
             got = json.loads(kept.read_text(encoding='utf-8'))
@@ -4831,7 +4984,8 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
     _call.skipped = []  # case law left unread for the time (CASELAW_SECONDS): said in the answer
     if cases:  # each case-law corpus by its own way (caselaw_phrase), side by side: git grep is most of the time
         with ThreadPoolExecutor(min(8, len(cases))) as pool:
-            for rows, over in pool_map(pool, lambda cc: caselaw_phrase(cc[0], cc[1], pattern, scoped(cc[0]['path'], scope), by_commit), cases):
+            words = None if args.get('regex') else query  # a plain query: a host's index may name the decisions
+            for rows, over in pool_map(pool, lambda cc: caselaw_phrase(cc[0], cc[1], pattern, scoped(cc[0]['path'], scope), by_commit, words), cases):
                 found += rows
                 cut = cut or over
     for c, cwd in pairs_of:
@@ -4979,7 +5133,39 @@ def caselaw_grep_counts(cwd: Path, head: str, pattern: str, specs: list[str]) ->
     return lines
 
 
-def caselaw_phrase(c: dict, cwd: Path, pattern: str, sub: str | None, by_commit: dict) -> tuple[list[dict], bool]:
+def caselaw_index_counts(corpus: str, cwd: Path, head: str, pattern: str, words: str, sub: str | None) -> dict[str, int] | None:
+    """caselaw_grep_counts by way of a host's index (search_index): the decisions that hold the words, as the index
+    matches them (whole words, as search_law's), named by the index and their matching lines counted by git in those
+    files alone, PHRASE_FILES + 1 of them at most (one more says there are more). The grep of every decision of a
+    court took 5 to 13 s for the Dutch courts (survey, 2026-11-11). None, and the corpus is grepped as ever: no
+    index, a corpus it does not hold at `head` (the text in force today), or an answer that is not as asked."""
+    if search_index is None or not words:
+        return None
+    try:
+        rev = tree_on(law.day('today'), corpus)
+        if rev != head:  # a tree built for today (corrections laid over): the same decisions as the pin's, or grep
+            both = law.git('rev-parse', f'{rev}:decisions', f'{head}:decisions', cwd=cwd, check=False).split()
+            if len(both) != 2 or both[0] != both[1]:
+                return None
+    except (SystemExit, Exception):  # noqa: BLE001
+        return None
+    prefix = (sub.strip('/') if sub else 'decisions') + '/'
+    names, after = [], prefix
+    while len(names) <= PHRASE_FILES:
+        got = index_paths(words, corpus, after, 1000)
+        if got is None:
+            return None
+        inside = [n for n in got if n.startswith(prefix)]
+        names += inside
+        if len(got) < 1000 or len(inside) < len(got):
+            break
+        after = got[-1]
+    names = [n for n in names[:PHRASE_FILES + 1] if n.endswith('.md')]
+    counts = grep_counts(cwd, pattern, [(head, None, n) for n in names])
+    return {name: n for (_, name), n in counts.items() if n}
+
+
+def caselaw_phrase(c: dict, cwd: Path, pattern: str, sub: str | None, by_commit: dict, words: str | None = None) -> tuple[list[dict], bool]:
     """phrase_history in one case-law corpus. Each decision is one file written once, so the decisions that brought the
     words in are the files that hold them at the pin (one git grep), each dated by its own first version; only the
     corrections can have changed them since, and only those commits are diffed (git log --no-walk). The pickaxe search
@@ -4987,7 +5173,9 @@ def caselaw_phrase(c: dict, cwd: Path, pattern: str, sub: str | None, by_commit:
     courts together never finished."""
     specs = [f'{sub}/*.md'] if sub else ['decisions/*.md']
     head = corpus_head(c['path'])
-    lines = caselaw_grep_counts(cwd, head, pattern, specs)
+    lines = caselaw_index_counts(c['path'], cwd, head, pattern, words, sub) if words else None
+    if lines is None:
+        lines = caselaw_grep_counts(cwd, head, pattern, specs)
     names = sorted(lines)
     cut = len(names) > PHRASE_FILES
     names = names[:PHRASE_FILES]
@@ -5056,12 +5244,19 @@ def former_folders(corpus: str, sub: str) -> list[str]:
 def grep_counts(cwd: Path, pattern: str, pairs: list) -> dict[tuple[str, str], int]:
     """{(commit, file): lines matching the pattern} for each change and its parent, in a few git greps."""
     counts: dict[tuple[str, str], int] = {}
-    for i in range(0, len(pairs), 40):
-        chunk = pairs[i:i + 40]
+
+    def one(chunk):
         revs = sorted({p[0] for p in chunk} | {p[1] for p in chunk if p[1]})
         names = sorted({p[2] for p in chunk} | {p[4] for p in chunk if len(p) > 4})  # and old names of renamed files
-        out = git_run(['git', 'grep', '--threads=1', '-c', '-I', '-i', '-E', '-e', pattern, *revs, '--', *names], cwd=cwd, capture_output=True,
-                      encoding='utf-8', errors='replace', env={**os.environ, 'GIT_LITERAL_PATHSPECS': '1'}).stdout
+        return git_run(['git', 'grep', '--threads=1', '-c', '-I', '-i', '-E', '-e', pattern, *revs, '--', *names], cwd=cwd, capture_output=True,
+                       encoding='utf-8', errors='replace', env={**os.environ, 'GIT_LITERAL_PATHSPECS': '1'}).stdout
+    chunks = [pairs[i:i + 40] for i in range(0, len(pairs), 40)]
+    if len(chunks) > 1:  # side by side: 900 changed files, one grep of 40 after another, were 5 of a call's 14 s
+        with ThreadPoolExecutor(min(8, len(chunks))) as pool:
+            outs = list(pool_map(pool, one, chunks))
+    else:
+        outs = [one(chunk) for chunk in chunks]
+    for out in outs:
         for line in out.splitlines():
             rev, _, rest = line.partition(':')
             name, _, n = rest.rpartition(':')

@@ -264,6 +264,80 @@ class UnitedStatesCaseLaw(unittest.TestCase):
         self.assertNotIn(f'{CASES}/', plain['text'])
         self.assertIn(f'{CASES}/{D2}', ref['text'])
 
+    def test_phrase_history_asks_a_search_index_for_the_decisions(self):
+        """With a host's index (search_index), phrase_history in case law reads the decisions the index names and git
+        counts their lines: no grep of every decision. The answer is the one git alone gives; an index that does not
+        answer, or names files out of order, leaves the grep as it was."""
+        probe = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server\n'
+                 'mode, names = sys.argv[1], json.loads(sys.argv[2])\n'
+                 'asked, greps = [], []\n'
+                 'class Index:\n'
+                 '    def paths(self, query, corpus, after, size):\n'
+                 '        asked.append([query, corpus, after, size])\n'
+                 '        if mode == "none":\n'
+                 '            return None\n'
+                 '        got = [n for n in names if after is None or n > after][:size]\n'
+                 '        return got[::-1] if mode == "disorder" else got\n'
+                 'mcp_server.search_index = Index()\n'
+                 'real = mcp_server.git_run\n'
+                 'def spy(cmd, **k):\n'
+                 '    greps.append([str(x) for x in cmd])\n'
+                 '    return real(cmd, **k)\n'
+                 'mcp_server.git_run = spy\n'
+                 'r = mcp_server.handle({"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "phrase_history", '
+                 '"arguments": {"query": "small business debtor", "jurisdiction": "united-states/caselaw"}}})["result"]\n'
+                 'print(json.dumps({"error": r["isError"], "data": r.get("structuredContent", {}), "asked": asked, '
+                 '"whole": [g for g in greps if "grep" in g and any(a.startswith(":(literal)decisions/") or a == "decisions/*.md" for a in g)]}))\n')
+
+        def run(mode, names):
+            done = subprocess.run([sys.executable, '-X', 'utf8', '-c', probe, mode, json.dumps(names)], cwd=self.t.root,
+                                  capture_output=True, encoding='utf-8', timeout=300)
+            self.assertEqual(done.returncode, 0, done.stderr)
+            return json.loads(done.stdout)
+        want = [(f'{CASES}/{D2}', '2016-06-01', 'added')]
+        named = run('index', [D1, D2])  # D1 does not hold the words: git counts no line of it
+        self.assertFalse(named['error'])
+        self.assertEqual([(c['path'], c['in_force'], c['effect']) for c in named['data']['changes']], want)
+        self.assertEqual(named['asked'], [['small business debtor', CASES, 'decisions/', 1000]])
+        self.assertEqual(named['whole'], [])  # no grep of the whole court
+        for mode in ('none', 'disorder'):
+            got = run(mode, [D1, D2])
+            self.assertEqual([(c['path'], c['in_force'], c['effect']) for c in got['data']['changes']], want, mode)
+            self.assertTrue(got['whole'], mode)
+
+    def test_find_provision_reads_a_courts_stored_headings(self):
+        """Where a court's heading index is on disk (a host stores it: store_heading_index), find_provision in its
+        decisions matches the words against it and greps no decision: the same rows as the grep of every decision's
+        heading lines gives (18 s for the Dutch courts of appeal's 166,000 decisions; survey, 2026-11-11)."""
+        probe = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server\n'
+                 'greps = []\n'
+                 'real = mcp_server.git_run\n'
+                 'def spy(cmd, **k):\n'
+                 '    if "grep" in [str(x) for x in cmd]:\n'
+                 '        greps.append([str(x) for x in cmd])\n'
+                 '    return real(cmd, **k)\n'
+                 'mcp_server.git_run = spy\n'
+                 'def ask():\n'
+                 '    r = mcp_server.handle({"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "find_provision", '
+                 '"arguments": {"query": "Doe Roe", "jurisdiction": "united-states/caselaw"}}})["result"]\n'
+                 '    return {"error": r["isError"], "paths": [x["path"] for x in r.get("structuredContent", {}).get("results", [])]}\n'
+                 'before, n = ask(), len(greps)\n'
+                 'corpus = sys.argv[1]\n'
+                 'stored = mcp_server.store_heading_index(corpus, mcp_server.corpus_head(corpus))\n'
+                 'del greps[:]\n'
+                 'after = ask()\n'
+                 'print(json.dumps({"before": before, "after": after, "stored": stored, "greps_before": n, "greps_after": len(greps)}))\n')
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', probe, CASES], cwd=self.t.root, capture_output=True,
+                              encoding='utf-8', timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        got = json.loads(done.stdout)
+        self.assertTrue(got['stored'])
+        self.assertFalse(got['before']['error'] or got['after']['error'])
+        self.assertEqual(got['before']['paths'][:1], [f'{CASES}/{D2}'])
+        self.assertEqual(got['after']['paths'], got['before']['paths'])
+        self.assertTrue(got['greps_before'])
+        self.assertEqual(got['greps_after'], 0)
+
     def test_phrase_history_and_folders_read_case_law_from_its_index(self):
         """phrase_history in case law is one git grep of the pinned tree, each decision dated by the commit that added
         it, and list_provisions dates a folder of decisions from the corpus index: `git log -G` and `git log -- <folder>`
