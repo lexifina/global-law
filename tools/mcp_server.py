@@ -146,6 +146,11 @@ def rewritten_grep(cmd: list, cwd) -> tuple[list, object]:
 #       today), the lines on which the query's words begin, as the index matches them, in ascending order: what the
 #       page shows, with no git grep of those files. A file may have none. None, an exception, a file left out or
 #       lines out of order, and git greps those files as ever.
+# and a fifth, for find_provision:
+#   top_files(words, corpus, size) -> [path, ...] | None
+#       Up to `size` files of the corpus that hold any of `words` (whole words, whatever the case), those that hold
+#       them most first. find_provision, when no heading matches, then counts the matching lines of those files only,
+#       in place of a grep of the whole corpus. None, an exception or anything else, and the corpus is grepped.
 # It is asked only for a plain search (no regex, no case_sensitive) of the text in force today.
 search_index = None
 SEARCH_INDEX_FILES = 200  # files of one corpus named in one git grep (and asked of search_index.paths at once)
@@ -236,6 +241,23 @@ def _text_rev(corpus: str) -> str | None:
     except Exception:  # noqa: BLE001 (a host's hook must not fail a call git can answer)
         return None
     return rev if isinstance(rev, str) and re.fullmatch(r'[0-9a-f]{40}', rev) else None
+
+
+def index_top(words: list, corpus: str, size: int) -> list | None:
+    """search_index.top_files, checked: at most `size` different files search_law counts. None when the index has no
+    such method, does not answer, or answers anything else."""
+    fn = getattr(search_index, 'top_files', None)
+    if not callable(fn) or not words or size <= 0:
+        return None
+    try:
+        got = fn(list(words), corpus, size)
+    except Exception:  # noqa: BLE001
+        return None
+    if not isinstance(got, (list, tuple)) or len(got) > size or len(set(got)) != len(got):
+        return None
+    if not all(isinstance(n, str) and n and not n.startswith(('-', ':', '/')) and indexed_file(corpus, n) for n in got):
+        return None
+    return list(got)
 
 
 def index_lines(query: str, corpus: str, rev: str, names: list) -> dict | None:
@@ -2638,7 +2660,8 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             # A host that keeps the text in force today as plain files names that revision (text_search_rev): the
             # same words, grepped from files rather than from the packs of the pin (23 s for Montenegro's acts,
             # whose tree for today is built and so is not the pin).
-            sha = _text_rev(c['path']) or sha
+            text_rev = _text_rev(c['path'])  # (the index holds this revision: it is asked only where this is read)
+            sha = text_rev or sha
             # Within one act or folder the grep is quick and a 2-digit article number ("31") is worth looking for;
             # across a corpus it is not. A number alone is matched as a whole word (31, not 310 or 2031).
             inner = [a[len(c['path']) + 1:] for a in acts if a.startswith(c['path'] + '/')] if acts else \
@@ -2647,8 +2670,15 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             if not terms:
                 continue
             whole = ['-w'] if all(w.isdigit() for w in terms) else []
+            # A host's index names the files that hold the words most, and only their lines are counted: a grep of
+            # every file of a country for a word no heading has took 24 s in France and ran out of time in Romania.
+            most = (offset + limit) * 3
+            named = None if inner or whole or text_rev is None else index_top(terms, c['path'], most + 1)
+            if named is not None and not named:
+                continue
+            capped = capped or (named is not None and len(named) > most)
             grep = ['git', 'grep', '-c', '-i', '-I', '-F', *whole, *[a for w in terms for a in ('-e', w)], sha, '--',
-                    *(inner or ['*.md'])]
+                    *(named if named is not None else inner or ['*.md'])]
             out = git_run(grep, cwd=ROOT / c['path'], capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT).stdout
             law_files = set(names_of(c['path'], sha))
             counted = []
