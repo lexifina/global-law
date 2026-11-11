@@ -28,7 +28,7 @@ import traceback
 import types
 import unicodedata
 import warnings
-from collections import OrderedDict
+from collections import ChainMap, OrderedDict
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 from pathlib import Path
@@ -4588,6 +4588,15 @@ def list_folders(corpus: str, sha: str, base: str, items: list, folders: list[st
     return text, {'date': date, 'corpus': corpus, 'count': len(items), 'folders': rows, 'folder_count': len(folders)}
 
 
+def events_by_commit() -> dict:
+    """(corpus, commit) -> its event, for every event of the timeline in hand, worked out once per timeline (kept
+    with it, as law.by_corpus is). search_changes and phrase_history made this table on every call: every event of
+    every corpus served, most of a second and some hundred megabytes on a server of every country, whatever the
+    jurisdiction asked; with an index, that was the second a search that found nothing in one country spent."""
+    events = law.timeline()
+    return law._kept(events, 'by-commit', lambda: {(e.corpus, e.corpus_commit): e for e in events})
+
+
 def t_search_changes(args: dict) -> tuple[str, dict]:
     """Search what each change says about itself: commit messages, which name the law, its dates and its effect."""
     query = text_arg(args, 'query')
@@ -4596,7 +4605,7 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
     scope = scope_arg(args)
     start, end = date_arg(args.get('start') or '0001-01-01'), date_arg(args.get('end') or '9999-12-31')
     limit = num(args, 'max_results', 30, 200)
-    by_commit = {(e.corpus, e.corpus_commit): e for e in law.timeline()}
+    by_commit = events_by_commit()
     hits, missing = [], []
     corpora, caselaw = by_kind(law.manifest()['corpora'], scope, args)
     corpora = [c for c in corpora if scoped(c['path'], scope) is not None]
@@ -4673,7 +4682,8 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
     scope = scope_arg(args)
     limit = num(args, 'max_results', 40, 300)
     pattern = safe_regex(query) if args.get('regex') else loose_pattern(query)
-    by_commit = {(e.corpus, e.corpus_commit): e for e in law.timeline()}
+    # (its own layer on top: the decisions' events are added below, and the kept table is every call's)
+    by_commit = ChainMap({}, events_by_commit())
     found, missing, cut = [], [], False
     corpora, caselaw = by_kind(law.manifest()['corpora'], scope, args)
     corpora = [c for c in corpora if scoped(c['path'], scope) is not None]
