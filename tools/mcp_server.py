@@ -4493,62 +4493,17 @@ def folder_commits(corpus: str, inner: str) -> list[str]:
     return law.git('log', '--format=%H', law.reachable_tip(corpus), '--', inner, cwd=law.corpus_dir(corpus)).split()
 
 
-def folder_commits_by_log(corpus: str, folders: list[str]) -> dict[str, list[str]]:
-    """folder -> the commits that touched files under it, newest first, for several folders of a corpus whose history
-    has no merges, from one `git log --name-only` over all of them: what `git log -- <folder>` prints for each. A
-    folder git would read as a pattern is left out (the caller asks for it alone)."""
-    plain = [f for f in dict.fromkeys(folders) if f and f == f.strip('/') and not re.search(r'[*?\[\\]|^:', f)]
-    out: dict[str, list[str]] = {f: [] for f in plain}
-    if not plain:
-        return out
-    tip, cwd = law.reachable_tip(corpus), law.corpus_dir(corpus)
-    chunks, cur, size = [], [], 0
-    for f in plain:  # a command line holds 32,767 characters on Windows
-        if cur and size + len(f) + 3 > 20000:
-            chunks.append(cur)
-            cur, size = [], 0
-        cur.append(f)
-        size += len(f) + 3
-    chunks.append(cur)
-    for chunk in chunks:
-        asked = set(chunk)
-        text = law.git('log', '--format=%x01%H', '--name-only', '--no-renames', tip, '--', *chunk, cwd=cwd)
-        for block in text.split('\x01')[1:]:
-            sha, _, names = block.partition('\n')
-            sha, hit = sha.strip(), set()
-            for name in names.splitlines():
-                name = law._unquote(name.strip())
-                if not name:
-                    continue
-                parts = name.split('/')
-                for k in range(1, len(parts)):
-                    folder = '/'.join(parts[:k])
-                    if folder in asked:
-                        hit.add(folder)
-            for folder in hit:
-                out[folder].append(sha)
-    return out
-
-
 def folder_commits_many(corpus: str, folders: list[str]) -> dict[str, list[str]]:
-    """folder -> folder_commits(corpus, folder), for the rows of a list of folders. Where each folder would need a
-    `git log` of its own (a corpus with moved or withdrawn files, whose index does not hold what git prints), one log
-    answers for all of them: 81 year folders of Japan's cabinet orders were 81 logs, 20 s and more, past the time a
-    list may take, so the list never answered."""
-    out: dict[str, list[str]] = {}
-    try:
-        info = {'path': corpus, **(law.corpus_info(corpus) or {})}
-        ix = law._index(corpus)
-        by_index = bool(ix.get('files')) and not ix.get('focused') and (law.is_caselaw(info) or not (
-            ix.get('moves') or ix.get('withdrawn') or ix.get('withdrawn_versions')))
-        if len(folders) > 1 and not by_index and not law.is_caselaw(info) and _no_merges(corpus, ix['pin']):
-            out = folder_commits_by_log(corpus, folders)
-    except (SystemExit, Exception):  # noqa: BLE001  each folder is then asked for alone, as before
-        out = {}
-    for f in folders:
-        if f not in out:
-            out[f] = folder_commits(corpus, f)
-    return out
+    """folder -> folder_commits(corpus, folder), for the rows of a list of folders, eight at a time. Where the index
+    cannot answer (a corpus with moved or withdrawn files: Japan's acts, France's codes) each folder is a path-limited
+    `git log` of its own, 0.2 to 0.5 s with the changed-path filters of a commit-graph: 81 year folders one after
+    another were past the time a list may take, so the list never answered. (One log for all the folders is no
+    answer: git uses the filters for a single path only, and that log took 229 s.)"""
+    folders = list(dict.fromkeys(folders))
+    if len(folders) < 3:
+        return {f: folder_commits(corpus, f) for f in folders}
+    with ThreadPoolExecutor(min(8, len(folders))) as pool:
+        return dict(zip(folders, pool_map(pool, lambda f: folder_commits(corpus, f), folders)))
 
 
 FOLDER_ROWS = 100  # folders list_provisions summarises with a title and a last change
