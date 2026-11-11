@@ -1,0 +1,240 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=block">
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#04070d}
+canvas{position:absolute;inset:0}
+#ov{position:absolute;inset:0;pointer-events:none;color:#eef1f5;font-family:'IBM Plex Sans',sans-serif}
+.k{position:absolute;left:120px;top:96px;font:600 22px 'IBM Plex Sans';letter-spacing:.22em;text-transform:uppercase}
+.t{position:absolute;left:120px;top:132px;font:600 58px/1.1 'Source Serif 4',serif;max-width:1350px;text-shadow:0 2px 30px rgba(0,0,0,.7)}
+.s{position:absolute;left:122px;top:212px;font:400 26px/1.4 'IBM Plex Sans';color:#a6b5cc;max-width:1180px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud{position:absolute;right:120px;top:100px;text-align:right;font:500 22px 'JetBrains Mono',monospace;color:#a6b5cc;line-height:1.7;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud b{font:700 56px 'Source Serif 4',serif;color:#eef1f5;display:block;line-height:1.1}
+.lab{position:absolute;transform:translate(-50%,-150%);white-space:nowrap;font:600 21px 'JetBrains Mono',monospace;padding:5px 11px;border-radius:9px;background:rgba(6,12,22,.66);border:1px solid rgba(140,170,210,.28);backdrop-filter:blur(6px)}
+.lab.sm{font-size:17px;padding:3px 8px}
+.lab.dn{transform:translate(-50%,60%)}
+.lab.r{transform:translate(-100%,-50%)}
+.lab.l{transform:translate(0,-50%)}
+.lab.plain{background:none;border:none;backdrop-filter:none;padding:0;text-shadow:0 2px 14px #000}
+.lab small{display:block;font:500 15px 'JetBrains Mono';color:#8fa2bd;margin-top:2px}
+.lab.cap{transform:translate(-50%,0);width:380px;white-space:normal;text-align:center;font:600 24px/1.3 'IBM Plex Sans'}
+.lab.cap .num{display:block;font:700 54px/1.05 'Source Serif 4',serif;margin-bottom:4px}
+.lab.cap small{font:400 19px/1.4 'IBM Plex Sans';color:#a6b5cc;margin-top:6px}
+.lab.tx{font:500 24px 'IBM Plex Sans'}
+.lab.tx .n{font:600 26px 'JetBrains Mono',monospace;margin-right:14px}
+#code{position:absolute;padding:20px 26px;border-radius:16px;background:rgba(8,14,26,.8);border:1px solid rgba(120,160,220,.25);backdrop-filter:blur(10px);font:400 22px/1.6 'JetBrains Mono',monospace;color:#d8e2f2;white-space:pre}
+#code .kw{color:#c792ea}#code .n{color:#f78c6c}#code .c{color:#5c6b80}#code .ok{color:#5fd3a0;font-weight:600}#code .s{position:static;font:inherit;color:#c3e88d;text-shadow:none}
+.panel{position:absolute;padding:20px 28px;border-radius:16px;background:rgba(8,14,26,.82);border:1px solid rgba(120,160,220,.25);backdrop-filter:blur(10px)}
+.panel .ph{font:600 18px 'IBM Plex Sans';letter-spacing:.2em;text-transform:uppercase;color:#8fa2bd;margin-bottom:10px}
+.fl{display:flex;gap:16px;margin:6px 0;font:400 23px/1.4 'IBM Plex Sans';color:#d8e2f2;white-space:normal}
+.fl .g{font:600 20px/1.6 'JetBrains Mono',monospace;color:#7cc7ff;flex:none;width:24px}
+.fl em{font-style:normal;color:#ffcc55}
+.cl{display:grid;grid-template-columns:180px 1fr;column-gap:20px;font:400 22px/1.5 'JetBrains Mono',monospace;color:#d8e2f2}
+.cl .a{color:#8fa2bd}.cl .v{color:#5fd3a0;font-weight:600}
+.qq{font:italic 400 29px/1.35 'Source Serif 4',serif;color:#e6ebf2}
+.res{margin-top:12px;font:500 22px 'IBM Plex Sans';color:#a6b5cc}.res b{color:#5fd3a0;font-weight:600}
+#big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#big .bt{font:700 96px/1.05 'Source Serif 4',serif;margin:0 0 40px;text-shadow:0 0 70px rgba(80,220,160,.25)}
+#big .bs{font:400 34px 'IBM Plex Sans';color:#a8b8d0}
+#fade{position:absolute;inset:0;background:#000}
+#scrim{position:absolute;left:0;top:0;width:1920px;height:420px;background:linear-gradient(rgba(4,7,13,.9),rgba(4,7,13,.75) 55%,rgba(4,7,13,0))}
+#card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#card .c1{font:600 24px 'IBM Plex Sans';letter-spacing:.24em;text-transform:uppercase;color:#ff8a75}
+#card .c2{font:600 50px/1.25 'Source Serif 4',serif;max-width:1500px;margin-top:20px}
+#card .c3{margin-top:40px;display:grid;grid-template-columns:auto auto;column-gap:34px;row-gap:14px;text-align:left;font:400 32px/1.35 'IBM Plex Sans';color:#d8e2f2}
+#card .c3 .h{font:600 22px 'IBM Plex Sans';letter-spacing:.18em;text-transform:uppercase;color:#8fa2bd;padding-top:8px}
+#card .c3 .m{font-family:'JetBrains Mono',monospace;font-size:30px}
+#card .c4{margin-top:34px;font:400 26px 'IBM Plex Sans';color:#a8b8d0}
+</style></head><body>
+<div id="ov">
+  <div id="big"><div class="bt">Recreating Tax Court rulings in Lean</div><div class="bs">45 opinions, recomputed from the facts the court found</div></div>
+  <div id="scrim"></div>
+  <div class="k" id="k"></div><div class="t" id="tt"></div><div class="s" id="ss"></div>
+  <div id="hud"></div><div id="labels"></div><div id="code"></div>
+  <div class="panel" id="p1"></div><div class="panel" id="p2"></div><div class="panel" id="p3"></div>
+  <div id="card"></div><div id="fade"></div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const D = window.TC;
+const W = 1920, H = 1080;
+const T = { s1: 4.6, s2: 14, s3: 22.5, facts: 23.6, lean: 27.2, court: 30.8, ok: 33.4, s4: 37, s5: 47, s5x: 53.6, s6: 60, end: 70 };
+const DUR = 71;
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const fadeIO = (t, a, b, d = .6) => seg(t, a, a + d) * (1 - seg(t, b - d, b));
+function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rng(2019);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1); renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#04070d');
+const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 12000);
+const composer = new EffectComposer(renderer); composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), .6, .5, .3); composer.addPass(bloom); composer.addPass(new OutputPass());
+const spriteTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.3, 'rgba(255,255,255,.75)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+const ptsMat = (size, op = 1) => new THREE.PointsMaterial({ size, map: spriteTex, vertexColors: true, transparent: true, opacity: op, depthWrite: false, blending: THREE.AdditiveBlending });
+function points(n, mat) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3)); g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3), 3)); return new THREE.Points(g, mat); }
+// background stars, as in the other films
+{ const n = 5000, p = points(n, ptsMat(4, .7)); const pa = p.geometry.attributes.position.array, ca = p.geometry.attributes.color.array;
+  for (let i = 0; i < n; i++) { const th = R() * 6.283, ph = Math.acos(2 * R() - 1), r = 1800 + R() * 2400; pa.set([r * Math.sin(ph) * Math.cos(th), r * Math.cos(ph), r * Math.sin(ph) * Math.sin(th)], i * 3);
+    const b = .2 + R() * .4; ca.set([b * .8, b * .9, b], i * 3); }
+  scene.add(p); }
+
+// ================= the 182 issues decided in 45 opinions =================
+// each issue: case index, verdict (0 match, 1 differs, 2 court's judgment, 3 outside the model), cause of a difference, tax year
+const NC = D.cases.length, IS = [];
+D.cases.forEach(([id, date, iss], c) => iss.forEach(([v, cause, y], j) => IS.push({ c, j, v, cause, y, id })));
+const N = IS.length, EX_ID = 'tcsumm-2019-23';
+const jit = () => (R() - .5) * 6;
+// layout A: opinions in order of decision date, one column each
+const AX0 = -230, AXW = 460;
+IS.forEach(o => { o.A = V(AX0 + o.c * AXW / (NC - 1), -100 + o.j * 9, jit()); });
+// layout B: by tax year, 2012..2024 (the model's years), a block of 4 columns per year
+const YEARS = Array.from({ length: 13 }, (_, k) => 2012 + k), slotX = k => -230 + k * 460 / 12;
+{ const cnt = {}; IS.forEach(o => { const k = cnt[o.y] = (cnt[o.y] || 0) + 1; const s = o.y - 2012;
+  o.B = V(slotX(s) + ((k - 1) % 4 - 1.5) * 7.5, -100 + Math.floor((k - 1) / 4) * 7.5, jit()); }); }
+// layout C: by verdict, a block of 10 columns each
+const VX = [-180, -60, 60, 180], VY0 = -62;
+{ const cnt = [0, 0, 0, 0]; IS.forEach(o => { const k = cnt[o.v]++; o.C = V(VX[o.v] + (k % 10 - 4.5) * 7.5, VY0 + Math.floor(k / 10) * 7.5, jit()); }); }
+// layout D: the 15 differences, one row per cause
+const DY = [0, 12, -30, -72];
+{ const cnt = [0, 0, 0, 0]; IS.forEach(o => { if (o.v !== 1) { o.Dp = o.C; return; } const k = cnt[o.cause]++; o.Dp = V(-236 + k * 13, DY[o.cause], 0); }); }
+const VCOL = ['#5fd3a0', '#ff6a55', '#ffcc55', '#6f84a6'].map(c => new THREE.Color(c));
+const CCOL = [null, '#7cc7ff', '#ff6a55', '#b79bff'].map(c => c && new THREE.Color(c));
+const NEU = new THREE.Color('#a9c4ec');
+const dots = points(N, ptsMat(8)), hi = points(N, ptsMat(16)); scene.add(dots); scene.add(hi);
+// the checks in Rulings.lean: 192 answers, grouped by opinion
+const NG = D.guards.reduce((a, b) => a + b, 0), GW = 24;
+const grid = points(NG, ptsMat(6.5)); scene.add(grid);
+{ const pa = grid.geometry.attributes.position.array; for (let k = 0; k < NG; k++) pa.set([-250 + (k % GW) * 9, -38 - Math.floor(k / GW) * 9, 0], k * 3); }
+
+// ================= overlay helpers =================
+const $ = id => document.getElementById(id);
+const pool = [];
+function label(i, text, v3, a, color = '', cls = 'lab') { while (pool.length <= i) { const d = document.createElement('div'); $('labels').appendChild(d); pool.push(d); }
+  const d = pool[i]; d.className = cls; const p = v3.clone().project(camera); if (a <= .01 || p.z > 1) { d.style.opacity = 0; return; }
+  d.innerHTML = text; d.style.color = color; d.style.left = ((p.x + 1) / 2 * W) + 'px'; d.style.top = ((1 - p.y) / 2 * H) + 'px'; d.style.opacity = a; }
+function caption(k, c, t, s, a) { $('k').textContent = k; $('k').style.color = c; $('tt').textContent = t; $('ss').innerHTML = s; for (const id of ['k', 'tt', 'ss']) $(id).style.opacity = a; }
+const hud = (h, a) => { $('hud').innerHTML = h; $('hud').style.opacity = a; };
+const code = (h, a, css = '') => { const e = $('code'); e.innerHTML = h; e.style.cssText = css; e.style.opacity = a; };
+const panel = (id, html, a, css) => { const e = $(id); e.innerHTML = html; e.style.cssText = css; e.style.opacity = a; };
+function card(c1, c2, c3, c4, a) { $('card').innerHTML = `<div class="c1">${c1}</div><div class="c2">${c2}</div><div class="c3">${c3}</div><div class="c4">${c4}</div>`; $('card').style.opacity = a; $('card').style.background = `rgba(4,7,13,${.8 * a})`; }
+const cm = s => `<span class="c">${s}</span>`;
+const fmt = n => Math.round(n).toLocaleString('en-US');
+
+const EXS = slotX(2015 - 2012);
+function camAt(t) {
+  const k = ease(seg(t, T.s3, T.s3 + 2)) * (1 - ease(seg(t, T.s4 - .4, T.s4 + 1.6)));
+  const look = V(0, -40, 0).lerp(V(EXS + 145, -45, 0), k), dist = 430 - 110 * k;
+  return [V(look.x + 16 * Math.sin(t * .13), look.y + 10 + 6 * Math.sin(t * .09), dist), look];
+}
+
+window.render = function (t) {
+  $('fade').style.opacity = Math.max(1 - seg(t, 0, .9), seg(t, DUR - 1, DUR));
+  $('big').style.opacity = fadeIO(t, .2, T.s1 - .1, .7); $('big').style.transform = `translateY(${(1 - easeOut(seg(t, .2, 2.2))) * 24}px)`;
+
+  // ---- dots ----
+  const mAB = ease(seg(t, T.s2 + .6, T.s2 + 3.2)), mBC = ease(seg(t, T.s4 + .4, T.s4 + 3)), mCD = ease(seg(t, T.s5 + .3, T.s5 + 2.5));
+  const pa = dots.geometry.attributes.position.array, ca = dots.geometry.attributes.color.array, ha = hi.geometry.attributes.position.array, hc = hi.geometry.attributes.color.array;
+  const ex = fadeIO(t, T.s3 + .2, T.s4 + .3, 1), off = 1 - seg(t, T.s6, T.s6 + 1.2);
+  IS.forEach((o, i) => {
+    const p = o.A.clone().lerp(o.B, mAB).lerp(o.C, mBC).lerp(o.Dp, mCD); pa.set([p.x, p.y, p.z], i * 3); ha.set([p.x, p.y, p.z + 1], i * 3);
+    const born = seg(t, T.s1 + .3 + 2.6 * o.c / NC, T.s1 + .8 + 2.6 * o.c / NC);
+    const isEx = o.id === EX_ID;
+    let vc = mBC; if (isEx) vc = Math.max(vc, seg(t, T.ok, T.ok + .6));
+    const c = NEU.clone().multiplyScalar(.55).lerp(VCOL[o.v], vc);
+    if (o.v === 1) c.lerp(CCOL[o.cause], seg(t, T.s5 + 1.5, T.s5 + 2.5));
+    let b = born * off * (isEx ? 1 : 1 - .82 * ex);
+    if (t > T.s5) b *= o.v === 1 ? 1 : 1 - .96 * seg(t, T.s5, T.s5 + 1.2);
+    ca.set([c.r * b, c.g * b, c.b * b], i * 3);
+    const h = (isEx ? ex * .55 : 0) + (o.v === 1 ? .45 * fadeIO(t, T.s5 + .5, T.s6, .8) : 0);
+    hc.set([c.r * h, c.g * h, c.b * h], i * 3);
+  });
+  for (const a of [dots, hi]) { a.geometry.attributes.position.needsUpdate = true; a.geometry.attributes.color.needsUpdate = true; }
+  { const gc = grid.geometry.attributes.color.array, gA = fadeIO(t, T.s6 + .8, DUR + 1, .6);
+    for (let k = 0; k < NG; k++) { const on = seg(t, T.s6 + 1.4 + 3.6 * k / NG, T.s6 + 1.7 + 3.6 * k / NG); const c = NEU.clone().multiplyScalar(.35).lerp(VCOL[0], on); const b = gA * (.5 + .5 * on);
+      gc.set([c.r * b, c.g * b, c.b * b], k * 3); }
+    grid.geometry.attributes.color.needsUpdate = true; }
+
+  const [cp, cl] = camAt(t); camera.position.copy(cp); camera.lookAt(cl);
+  composer.render();
+
+  // ---- overlay ----
+  let li = 0; code('', 0); hud('', 0); card('', '', '', '', 0); for (const id of ['p1', 'p2', 'p3']) $(id).style.opacity = 0; $('scrim').style.opacity = 0;
+  if (t > T.s1 && t < T.s2) {
+    const a = fadeIO(t, T.s1 + .2, T.s2 - .1); $('scrim').style.opacity = a * .6;
+    caption('The US Tax Court', '#5fe0ff', 'It decides ordinary family tax disputes', 'Who may claim a child, whether an early retirement withdrawal owes the extra 10% tax, how large a penalty should be. We took 45 recent opinions, 2019 to 2025, from the court’s own public case database.', a);
+    hud(`opinions<b>45</b>issues decided ${fmt(182 * seg(t, T.s1 + .3, T.s1 + 3.4))}`, fadeIO(t, T.s1 + .6, T.s2 - .1));
+    let last = 0; D.cases.forEach(([, date], c) => { const y = Math.floor(date); if (y !== last) { last = y;
+      label(li++, String(y), V(AX0 + c * AXW / (NC - 1), -112, 0), a * seg(t, T.s1 + .5 + 2.6 * c / NC, T.s1 + 1 + 2.6 * c / NC), '#8fa2bd', 'lab sm plain dn'); } });
+    label(li++, 'Each column is one opinion, in date order; each dot is one issue the court decided', V(0, -128, 0), fadeIO(t, T.s1 + 2.5, T.s2 - .1), '#a6b5cc', 'lab sm plain dn');
+  } else if (t > T.s2 && t < T.s3) {
+    const a = fadeIO(t, T.s2 + .2, T.s3 - .1); $('scrim').style.opacity = a * .6;
+    caption('Facts in', '#5fe0ff', 'Only the facts the court found go in', 'From each opinion, the court’s findings of fact (ages, income, who lived where) are written down as data. A Lean model of the tax rules for that year recomputes each holding. The court’s conclusions are kept out, to compare with afterwards.', a);
+    const la = a * seg(t, T.s2 + 2.4, T.s2 + 3.2);
+    YEARS.forEach((y, k) => label(li++, String(y), V(slotX(k), -110, 0), la * (y > 2022 ? .5 : 1), '#8fa2bd', 'lab sm plain dn'));
+    label(li++, 'Tax year in dispute (opinions cover 2012 to 2022; the model has the rules for 2012 to 2024)', V(0, -128, 0), la, '#a6b5cc', 'lab sm plain dn');
+  } else if (t > T.s3 && t < T.s4) {
+    const a = fadeIO(t, T.s3 + .2, T.s4 - .1); $('scrim').style.opacity = a;
+    caption('One case', '#5fe0ff', 'Who may claim two children', 'T.C. Summary Opinion 2019-23, tax year 2015. Two adults could each claim them.', a);
+    label(li++, 'Its 8 issues', V(EXS, -62, 0), fadeIO(t, T.s3 + 1.6, T.s4 - .1), '#eef1f5', 'lab sm');
+    const L = 600, Wd = 'width:1120px;';
+    const F = ['He lived all of 2015 with his partner, her grandchildren J.V. and L.V. (both under 17), and their daughter Maria (19)',
+      'A 2010 court order gave the two of them custody of J.V. and L.V.',
+      'His wages were $12,893 and he paid all household costs. His partner had no income.',
+      'Maria was not a student in 2015 <em>(the court’s judgment: school records over his testimony)</em>'];
+    panel('p1', '<div class="ph">Facts the court found</div>' + F.map((s, k) => `<div class="fl" style="opacity:${seg(t, T.facts + .2 + k * .55, T.facts + .7 + k * .55)}"><span class="g">${k + 1}</span><span>${s}</span></div>`).join(''),
+      fadeIO(t, T.facts, T.s4 - .1), `left:${L}px;top:262px;${Wd}`);
+    const C = [['J.V., L.V.', 'foster children placed by a court → qualifying children'], ['tie-breaker', 'neither claimant is a parent → higher AGI wins:'], ['', '$12,893 > $0 → <span class="v">he claims both</span>'],
+      ['Maria', '19 and not a student → not a qualifying child'], ['status', 'head of household · earned income credit with 2 children']];
+    panel('p2', '<div class="ph">Lean, with the tax rules for 2015</div><div class="cl">' + C.map(([x, y], k) => { const o = seg(t, T.lean + .2 + k * .45, T.lean + .6 + k * .45); return `<span class="a" style="opacity:${o}">${x}</span><span style="opacity:${o}">${y}</span>`; }).join('') + '</div>',
+      fadeIO(t, T.lean, T.s4 - .1), `left:${L}px;top:548px;${Wd}`);
+    panel('p3', '<div class="ph">The court’s holding</div><div class="qq">“J.V. and L.V. are treated as the qualifying children of the taxpayer with the higher adjusted gross income.”</div>' +
+      `<div class="res" style="opacity:${seg(t, T.ok, T.ok + .5)}"><b>✓ Same answer.</b> 6 of the case’s 8 issues match; the other 2 rest on the court’s judgment.</div>`,
+      fadeIO(t, T.court, T.s4 - .1), `left:${L}px;top:800px;${Wd}`);
+  } else if (t > T.s4 && t < T.s5) {
+    const a = fadeIO(t, T.s4 + .2, T.s5 - .1); $('scrim').style.opacity = a * .7;
+    caption('Results', '#5fd3a0', '95 of 110 computable issues match', '182 issues in 45 opinions. 110 are computable: the opinion states the facts and the answer follows from the tax rules. For each, Lean’s answer is compared with the court’s figure or answer.', a);
+    const LB = [[95, 'Match', 'Lean’s answer equals the court’s'], [15, 'Differ', 'each traced to a cause (next)'],
+      [31, 'Court’s judgment', 'such as who is believed, or reasonable cause; Lean takes it as given'], [41, 'Outside the model', 'conceded items, procedure, and rules not modelled, such as innocent-spouse relief']];
+    const VC = ['#5fd3a0', '#ff8a75', '#ffcc55', '#9fb0cc'];
+    LB.forEach(([n, s, x], k) => label(li++, `<span class="num">${n}</span>${s}<small>${x}</small>`, V(VX[k], VY0 - 9, 0), fadeIO(t, T.s4 + 2.2 + k * .35, T.s5 - .1), VC[k], 'lab cap plain'));
+  } else if (t > T.s5 && t < T.s6) {
+    if (t < T.s5x) {
+      const a = fadeIO(t, T.s5 + .2, T.s5x - .1); $('scrim').style.opacity = a * .7;
+      caption('Results', '#ff8a75', 'The 15 differences', 'Each was traced to its cause by comparing the opinion, the IRS notice figures it quotes, and Lean’s calculation.', a);
+      const DL = [, [10, 'The opinion does not state facts the calculation needs, such as the rest of the return'], [4, 'Slips in the court’s or the IRS’s own arithmetic'],
+        [1, 'A rule the model lacked: withholding not claimed on the return reduces the penalty base']];
+      [1, 2, 3].forEach(c => { const [n, s] = DL[c]; label(li++, `<span class="n">${n}</span>${s}`, V(-236 + n * 13 + 2, DY[c], 0), fadeIO(t, T.s5 + 1.8 + (c - 1) * .5, T.s5x - .1), CCOL[c].getStyle(), 'lab tx plain l'); });
+    } else {
+      caption('', '', '', '', 0);
+      card('One of the 4 slips · T.C. Summary Opinion 2020-18, tax year 2016', 'The accuracy penalty is 20% of the underpayment: here, the $10,331 deficiency the court upheld',
+        `<span class="h">Lean</span><span class="m">20% × $10,331 = <span style="color:#5fd3a0">$2,066.20</span></span><span class="h">Opinion</span><span class="m"><span style="color:#ff8a75">$1,860.60</span> = 20% × $9,303</span>`,
+        'The opinion states no smaller base. The same penalty for 2014 and 2015 matches.', fadeIO(t, T.s5x + .1, T.s6 - .05, .5));
+    }
+  } else if (t > T.s6 && t < T.end + 1) {
+    const a = fadeIO(t, T.s6 + .2, DUR + 2); $('scrim').style.opacity = a * .7;
+    caption('Rulings.lean', '#5fd3a0', '192 answers re-checked on every build', 'The facts of 37 opinions and the court’s answers are stored as Lean tests: each build recomputes them, and one that stops matching fails the build. An issue can give several answers, such as one per child.', a);
+    hud(`checks passing<b>${Math.round(NG * seg(t, T.s6 + 1.4, T.s6 + 5))}</b>from 37 opinions`, fadeIO(t, T.s6 + .8, DUR + 2));
+    label(li++, 'Each dot is one checked answer', V(-250 + (GW - 1) * 4.5, -38 - 8 * 9 - 2, 0), fadeIO(t, T.s6 + 2, DUR + 2), '#a6b5cc', 'lab sm plain dn');
+    code(`${cm('-- T.C. Summary Opinion 2019-23 (tax year 2015)')}\n<span class="kw">#guard</span> holds tcsumm_2019_23 <span class="s">"tieBreaker:JV"</span>\n<span class="kw">#guard</span> holds tcsumm_2019_23 <span class="s">"qualifyingChild:Maria"</span>\n<span class="kw">#guard</span> holds tcsumm_2019_23 <span class="s">"headOfHousehold"</span>\n\n${cm('-- known differences are kept as comments, not checks:')}\n${cm('-- differs: deficiency: opinion 4713, Lean 4715')}`,
+      fadeIO(t, T.s6 + 2.4, DUR + 2), 'left:980px;top:440px;');
+  } else caption('', '', '', '', 0);
+  for (let i = li; i < pool.length; i++) pool[i].style.opacity = 0;
+};
+window.DUR = DUR;
+document.fonts.ready.then(() => { window.render(0); window.READY = true; });
+</script></body></html>

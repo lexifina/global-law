@@ -1,0 +1,348 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=block">
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#04070d}
+canvas{position:absolute;inset:0}
+#ov{position:absolute;inset:0;pointer-events:none;color:#eef1f5;font-family:'IBM Plex Sans',sans-serif}
+.k{position:absolute;left:120px;top:96px;font:600 22px 'IBM Plex Sans';letter-spacing:.22em;text-transform:uppercase}
+.t{position:absolute;left:120px;top:132px;font:600 58px/1.1 'Source Serif 4',serif;max-width:1350px;text-shadow:0 2px 30px rgba(0,0,0,.7)}
+.s{position:absolute;left:122px;top:212px;font:400 26px/1.4 'IBM Plex Sans';color:#a6b5cc;max-width:1080px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud{position:absolute;right:120px;top:100px;text-align:right;font:500 22px 'JetBrains Mono',monospace;color:#a6b5cc;line-height:1.7;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud b{font:700 56px 'Source Serif 4',serif;color:#eef1f5;display:block;line-height:1.1}
+.lab{position:absolute;transform:translate(-50%,-150%);white-space:nowrap;font:600 21px 'JetBrains Mono',monospace;padding:5px 11px;border-radius:9px;background:rgba(6,12,22,.66);border:1px solid rgba(140,170,210,.28);backdrop-filter:blur(6px)}
+.lab.sm{font-size:17px;padding:3px 8px}
+.lab.dn{transform:translate(-50%,60%)}
+.lab.r{transform:translate(-100%,-50%)}
+.lab.l{transform:translate(0,-50%)}
+.lab.plain{background:none;border:none;backdrop-filter:none;padding:0;text-shadow:0 2px 14px #000}
+.lab small{display:block;font:500 15px 'JetBrains Mono';color:#8fa2bd;margin-top:2px}
+#code{position:absolute;left:120px;bottom:110px;padding:20px 26px;border-radius:16px;background:rgba(8,14,26,.74);border:1px solid rgba(120,160,220,.25);backdrop-filter:blur(10px);font:400 22px/1.6 'JetBrains Mono',monospace;color:#d8e2f2;white-space:pre}
+#code .kw{color:#c792ea}#code .n{color:#f78c6c}#code .c{color:#5c6b80}#code .ok{color:#5fd3a0;font-weight:600}
+.panel{position:absolute;padding:22px 28px;border-radius:16px;background:rgba(8,14,26,.78);border:1px solid rgba(120,160,220,.25);backdrop-filter:blur(10px)}
+.panel .ph{font:600 18px 'IBM Plex Sans';letter-spacing:.2em;text-transform:uppercase;color:#8fa2bd;margin-bottom:12px}
+.row2{display:flex;align-items:center;height:36px;font:400 21px 'IBM Plex Sans';color:#d8e2f2;white-space:nowrap}
+.row2 .n{width:64px;text-align:right;margin-right:18px;font:600 22px 'JetBrains Mono',monospace}
+.row2 .bar{height:14px;border-radius:4px;margin-right:16px}
+.fl{display:flex;gap:18px;margin:10px 0;font:400 25px/1.45 'IBM Plex Sans';color:#d8e2f2;white-space:normal}
+.fl .g{font:600 22px/1.65 'JetBrains Mono',monospace;color:#b79bff;flex:none;width:28px}
+#big,#quote{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#quote .q{font:italic 400 46px/1.45 'Source Serif 4',serif;max-width:1380px;color:#e6ebf2}
+#big .bk{font:600 26px 'IBM Plex Sans';letter-spacing:.3em;color:#f2b24a;text-transform:uppercase}
+#big .bt,#quote .bt{font:700 96px/1.05 'Source Serif 4',serif;margin:0 0 56px;text-shadow:0 0 70px rgba(80,220,160,.25)}
+#big .bs{font:400 32px 'IBM Plex Sans';color:#a8b8d0}
+#end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#end .head{font:700 64px/1.15 'Source Serif 4',serif;margin-bottom:38px}
+#end .row{font:600 34px/1.6 'Source Serif 4',serif}
+#end .row span{color:#5fd3a0;font-family:'JetBrains Mono',monospace;font-size:30px;margin-right:16px}
+#end .foot{margin-top:34px;font:500 26px 'JetBrains Mono',monospace;color:#8fa2bd}
+#fade{position:absolute;inset:0;background:#000}
+#scrim{position:absolute;left:0;top:0;width:1920px;height:420px;background:linear-gradient(rgba(4,7,13,.9),rgba(4,7,13,.75) 55%,rgba(4,7,13,0))}
+.node{position:absolute;transform:translate(-50%,-50%);text-align:center;font:600 22px 'IBM Plex Sans';white-space:nowrap;text-shadow:0 2px 14px #000}
+.node small{display:block;font:500 15px 'JetBrains Mono';color:#8fa2bd}
+#card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#card .c1{font:600 24px 'IBM Plex Sans';letter-spacing:.24em;text-transform:uppercase;color:#f2b24a}
+#card .c2{font:600 54px/1.25 'Source Serif 4',serif;max-width:1560px;margin-top:20px}
+#card .c3{font:400 30px/1.45 'IBM Plex Sans';color:#a8b8d0;margin-top:22px;max-width:1300px}
+</style></head><body>
+<div id="ov">
+  <div id="quote"><div class="bt" id="qtitle">Formalizing the US tax code</div><div class="q">“The long-term problem is how this kind of bug-hunting can be done routinely, e.g. as part of a test suite. Some approaches aren’t really automatable, because they require a lot of both human and AI agent work.”</div></div>
+  <div id="big"></div>
+  <div id="scrim"></div><div id="nodes"></div>
+  <div class="k" id="k"></div><div class="t" id="tt"></div><div class="s" id="ss"></div>
+  <div id="hud"></div><div id="code"></div><div id="labels"></div>
+  <div class="panel" id="p1"></div><div class="panel" id="p2"></div>
+  <div id="card"></div><div id="end"></div><div id="fade"></div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const D = window.FZ, NP = D.N;
+const W = 1920, H = 1080;
+const T = { quote: .6, title: 7, l1: 11, faults: 17.5, ex: 23, blame: 27, l2: 31, l2f: 36.5, l3: 42.5, l3n: 47, l3fix: 52, s: 55.5, known: 60.5,
+  n1: 65, n2: 69.3, n3: 73.6, scale: 77.9, end: 81 };
+const DUR = 88;
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const fadeIO = (t, a, b, d = .6) => seg(t, a, a + d) * (1 - seg(t, b - d, b));
+const fmt = n => Math.round(n).toLocaleString('en-US');
+function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rng(2026);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1); renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#04070d');
+const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 12000);
+const composer = new EffectComposer(renderer); composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), .85, .5, .3); composer.addPass(bloom); composer.addPass(new OutputPass());
+scene.add(new THREE.HemisphereLight('#9fc3ff', '#120a06', .7));
+const spriteTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.3, 'rgba(255,255,255,.7)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+const ptsMat = (size, op = 1, add = true) => new THREE.PointsMaterial({ size, map: spriteTex, vertexColors: true, transparent: true, opacity: op, depthWrite: false, blending: add ? THREE.AdditiveBlending : THREE.NormalBlending });
+const glow = (r, c) => new THREE.Mesh(new THREE.IcosahedronGeometry(r, 4), new THREE.MeshBasicMaterial({ color: c, transparent: true }));
+function points(pos, col, mat) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.BufferAttribute(col, 3)); return new THREE.Points(g, mat); }
+// background stars, as in the other films
+{ const n = 6000, p = new Float32Array(n * 3), c = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { const th = R() * 6.283, ph = Math.acos(2 * R() - 1), r = 3000 + R() * 3000; p.set([4500 + r * Math.sin(ph) * Math.cos(th), r * Math.cos(ph), r * Math.sin(ph) * Math.sin(th)], i * 3);
+    const b = .2 + R() * .4; c.set([b * .8, b * .9, b], i * 3); }
+  scene.add(points(p, c, ptsMat(5, .7))); }
+
+// ================= layer 1: Title 26 as a disc =================
+// angle = order in the Title, radius = depth (section, subsection, paragraph, ...)
+const DISC = new THREE.Group(); scene.add(DISC);
+const LR = [14, 40, 62, 84, 104, 122, 138, 150, 160];
+const inactive = new Set(D.inactive);
+const dpos = new Float32Array(NP * 3), dcol = new Float32Array(NP * 3);
+const ang = i => -Math.PI / 2 + 2 * Math.PI * i / NP;
+const discPos = i => { const a = ang(i), r = LR[+D.levels[i]]; return V(r * Math.cos(a), 0, r * Math.sin(a)); };
+for (let i = 0; i < NP; i++) { const lv = +D.levels[i], a = ang(i), r = LR[lv] + (R() - .5) * (lv ? 6 : 10);
+  dpos.set([r * Math.cos(a), (R() - .5) * 2, r * Math.sin(a)], i * 3);
+  const c = inactive.has(i) ? new THREE.Color('#6a5040') : lv <= 1 ? new THREE.Color('#cfe2ff') : new THREE.Color('#5d8fd6').multiplyScalar(1 - .07 * lv);
+  dcol.set([c.r, c.g, c.b], i * 3); }
+const discPts = points(dpos, dcol, ptsMat(1.5, .9, false)); DISC.add(discPts);
+const P3 = i => V(dpos[i * 3], dpos[i * 3 + 1], dpos[i * 3 + 2]);
+// cross-references as arches over the disc (a sample of 7,000 of the 36,763)
+const NR = D.refs.length / 2, SEGS = 12;
+const apos = new Float32Array(NR * SEGS * 6), acol = new Float32Array(NR * SEGS * 6);
+for (let k = 0; k < NR; k++) { const a = P3(D.refs[2 * k]), b = P3(D.refs[2 * k + 1]); const h = 4 + .32 * a.distanceTo(b);
+  for (let s = 0; s < SEGS; s++) { for (const [u, o] of [[s / SEGS, 0], [(s + 1) / SEGS, 3]]) { const p = a.clone().lerp(b, u); p.y += h * 4 * u * (1 - u);
+    apos.set([p.x, p.y, p.z], (k * SEGS + s) * 6 + o); acol.set([.16, .5, .62], (k * SEGS + s) * 6 + o); } } }
+const ageo = new THREE.BufferGeometry(); ageo.setAttribute('position', new THREE.BufferAttribute(apos, 3)); ageo.setAttribute('color', new THREE.BufferAttribute(acol, 3));
+const arches = new THREE.LineSegments(ageo, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: .14, depthWrite: false, blending: THREE.AdditiveBlending })); DISC.add(arches);
+// the 138 confirmed faults
+const FCOL = ['#ff6a55', '#ff9a5c', '#8fa2bd', '#ffcc55', '#f2b24a', '#b79bff', '#7cc7ff', '#ff7ab6'];
+const FL = [[70, 'Reference to a provision that does not exist'], [16, 'Reference to a repealed or reserved one'], [1, 'The same, in historical wording'],
+  [3, 'Hyperlink that does not resolve'], [1, 'Hyperlink to an inactive provision'], [8, 'Wrong level word'], [9, 'Two provisions, same number'], [30, 'Unbalanced parentheses']];
+const fo = D.faults.map(f => [f, R()]).sort((a, b) => a[1] - b[1]).map(x => x[0]);
+const fpos = new Float32Array(fo.length * 3), fcol = new Float32Array(fo.length * 3);
+fo.forEach(([i, c], k) => { const p = P3(i); fpos.set([p.x, p.y + 1, p.z], k * 3); const cc = new THREE.Color(FCOL[c]); fcol.set([cc.r, cc.g, cc.b], k * 3); });
+const faultPts = points(fpos, fcol, ptsMat(9)); DISC.add(faultPts);
+// the §1401(b)(2)(B) example
+const EX = { citing: P3(D.ex.citing), cited: P3(D.ex.cited), meant: P3(D.ex.meant) };
+function arc(a, b, h, color) { const m = a.clone().lerp(b, .5); m.y += h; const c = new THREE.QuadraticBezierCurve3(a, m, b);
+  const t = new THREE.Mesh(new THREE.TubeGeometry(c, 64, .35, 8, false), new THREE.MeshBasicMaterial({ color, transparent: true })); DISC.add(t); return { t, c }; }
+const arcBad = arc(EX.citing, EX.cited, 16, '#ff5a46'), arcGood = arc(EX.citing, EX.meant, 8, '#5fd3a0');
+const exDots = [[EX.citing, '#ffffff'], [EX.cited, '#ff5a46'], [EX.meant, '#5fd3a0']].map(([p, c]) => { const g = glow(1.1, c); g.position.copy(p); DISC.add(g); return g; });
+
+// ================= layer 2: four groups of theorems =================
+const L2 = new THREE.Group(); L2.position.set(3000, 0, 0); scene.add(L2);
+const GR = [['A', 'income and AGI', 104, '#7cc7ff', V(-125, 10, 0)], ['B', 'deductions', 133, '#b79bff', V(125, 10, 0)], ['C', 'tax and AMT', 59, '#ffcc55', V(-125, -75, 0)], ['D', 'credits', 74, '#5fd3a0', V(125, -75, 0)]];
+const thmPos = new Float32Array(370 * 3), thmCol = new Float32Array(370 * 3), thmBase = [], thmAt = [];
+{ let k = 0; GR.forEach(([, , n, c, ctr], g) => { const rad = 1.7 * Math.sqrt(n); const cc = new THREE.Color(c);
+  for (let j = 0; j < n; j++, k++) { const y = 1 - 2 * (j + .5) / n, r = Math.sqrt(1 - y * y), th = j * 2.39996; const p = V(r * Math.cos(th), y, r * Math.sin(th)).multiplyScalar(rad).add(ctr);
+    thmPos.set([p.x, p.y, p.z], k * 3); thmBase.push(cc); thmAt.push(32.2 + 3.6 * (k / 370) + R() * .3); } }); }
+const thmPts = points(thmPos, thmCol, ptsMat(5.5)); L2.add(thmPts);
+const RING_C = V(0, -32, 0), RING_R = 30;
+const ring = new THREE.Mesh(new THREE.TorusGeometry(RING_R, .35, 8, 128), new THREE.MeshBasicMaterial({ color: '#8fa2bd', transparent: true })); ring.position.copy(RING_C); L2.add(ring);
+const ringDot = glow(2.2, '#ffd27a'); L2.add(ringDot);
+const STATIONS = [['1 · Copy', 'from the statute'], ['2 · Test', 'against IRS figures'], ['3 · Prove', 'for all inputs'], ['4 · Review', 'by a separate agent']];
+const stAng = k => Math.PI / 2 - k * Math.PI / 2;
+const stDots = STATIONS.map((_, k) => { const g = glow(1.6, '#eef1f5'); g.position.copy(RING_C).add(V(RING_R * Math.cos(stAng(k)), RING_R * Math.sin(stAng(k)), 0)); L2.add(g); return g; });
+
+// ================= layer 3: 5,000 households, three calculators =================
+const L3 = new THREE.Group(); L3.position.set(6000, 0, 0); scene.add(L3);
+const ROWS = [20, -33, -86], X0 = -110, XW = 260;
+const rowObjs = [0, 1, 2].map(t => { const n = D.hh.length, p = new Float32Array(n * 3), c = new Float32Array(n * 3), bad = [];
+  D.hh.forEach((h, i) => { const pp = V(X0 + h[0] * XW + (R() - .5) * 1.2, ROWS[t] + (R() - .5) * 18, (R() - .5) * 10); p.set([pp.x, pp.y, pp.z], i * 3);
+    const st = h[t + 1]; const cc = st === 1 ? new THREE.Color('#3fdc9a').multiplyScalar(.55) : st === 2 ? new THREE.Color('#ff5a46') : new THREE.Color('#1e2838');
+    c.set([cc.r, cc.g, cc.b], i * 3); if (st === 2) bad.push(pp); });
+  const base = points(p, c, ptsMat(2.2, 1, false)); L3.add(base);
+  const bp = new Float32Array(bad.length * 3), bc = new Float32Array(bad.length * 3); bad.forEach((q, k) => { bp.set([q.x, q.y, q.z + 2], k * 3); bc.set([1, .35, .27], k * 3); });
+  const hot = points(bp, bc, ptsMat(t === 0 ? 9 : 6)); L3.add(hot); return { base, hot }; });
+
+// ================= the loophole search: about 196,000 returns =================
+const SR = new THREE.Group(); SR.position.set(9000, 0, 0); scene.add(SR);
+const NH = 5000, NV = 196000;
+const spos = new Float32Array(NV * 3), scol = new Float32Array(NV * 3);
+{ let k = 0; for (let h = 0; h < NH; h++) { const r = 150 * Math.sqrt((h + .5) / NH), th = h * 2.39996; const hx = r * Math.cos(th), hz = r * Math.sin(th); const m = 39 + (h < 1000 ? 1 : 0);
+  for (let j = 0; j < m; j++, k++) { let y = (R() - .5) * 2.4; if (R() < .05) y = (R() < .55 ? 1 : -1) * (3.5 + Math.pow(R(), 2.5) * 30);
+    spos.set([hx + (R() - .5) * 2.2, y, hz + (R() - .5) * 2.2], k * 3);
+    const c = y > 3 ? new THREE.Color('#3fdc9a').multiplyScalar(.7) : y < -3 ? new THREE.Color('#ff7a4a').multiplyScalar(.5) : new THREE.Color('#4a6a9a').multiplyScalar(.75);
+    scol.set([c.r, c.g, c.b], k * 3); } } }
+const sPts = points(spos, scol, ptsMat(1.6, .9, false)); SR.add(sPts);
+const KNOWN = [], NEW = [];
+for (let q = 0; q < 8; q++) { const h = 600 + Math.floor(R() * 4300); const r = 150 * Math.sqrt((h + .5) / NH), th = h * 2.39996; const p = V(r * Math.cos(th), 18 + R() * 14, r * Math.sin(th));
+  const g = glow(q < 5 ? 1.6 : 2, q < 5 ? '#ffd27a' : '#5fd3a0'); g.position.copy(p); SR.add(g);
+  const stem = new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(p.x, 0, p.z), p]), new THREE.LineBasicMaterial({ color: q < 5 ? '#ffd27a' : '#5fd3a0', transparent: true }));
+  SR.add(stem); (q < 5 ? KNOWN : NEW).push({ g, stem }); }
+
+// ================= overlay helpers =================
+const $ = id => document.getElementById(id);
+const pool = [];
+function label(i, text, v3, a, color = '', cls = 'lab') { while (pool.length <= i) { const d = document.createElement('div'); $('labels').appendChild(d); pool.push(d); }
+  const d = pool[i]; d.className = cls; const p = v3.clone().project(camera); if (a <= .01 || p.z > 1) { d.style.opacity = 0; return; }
+  d.innerHTML = text; d.style.color = color; d.style.left = ((p.x + 1) / 2 * W) + 'px'; d.style.top = ((1 - p.y) / 2 * H) + 'px'; d.style.opacity = a; }
+function caption(k, c, t, s, a) { $('k').textContent = k; $('k').style.color = c; $('tt').textContent = t; $('ss').textContent = s; for (const id of ['k', 'tt', 'ss']) $(id).style.opacity = a; }
+const hud = (h, a) => { $('hud').innerHTML = h; $('hud').style.opacity = a; };
+const code = (h, a) => { $('code').innerHTML = h; $('code').style.opacity = a; };
+const panel = (id, html, a, css) => { const e = $(id); e.innerHTML = html; e.style.cssText = css; e.style.opacity = a; };
+function card(c1, c2, c3, a) { $('card').innerHTML = `<div class="c1">${c1}</div><div class="c2">${c2}</div><div class="c3">${c3}</div>`; $('card').style.opacity = a; $('card').style.background = `rgba(4,7,13,${.72 * a})`; }
+
+function orbit(t, t0, r0, r1, h0, h1, look, rate = .05) { const k = ease(seg(t, t0, t0 + 6)), a = t * rate; const r = r0 + (r1 - r0) * k, h = h0 + (h1 - h0) * k;
+  return [V(r * Math.sin(a), h, r * Math.cos(a)).add(look), look.clone().add(V(0, -10, 0))]; }
+const exMid = EX.citing.clone().lerp(EX.cited, .5); const exOut = V(exMid.x, 0, exMid.z).normalize();
+const exCam = exMid.clone().add(exOut.clone().multiplyScalar(62)).add(V(0, 46, 0)), exLook = exMid.clone().add(V(0, 4, 0));
+function camAt(t) {
+  if (t < T.l2) { const [p, l] = orbit(t, T.l1, 365, 318, 205, 168, V(0, 0, 0));
+    const k = 0;  // the §1401 close-up is cut
+    return [p.lerp(exCam, k), l.lerp(exLook, k)]; }
+  if (t < T.l3) return [V(3000 + 14 * Math.sin(t * .15), -15 + 4 * Math.sin(t * .1), 310), V(3000, -15, 0)];
+  if (t < T.s) return [V(6000 + 8 * Math.sin(t * .2), -15, 300), V(6000, -15, 0)];
+  return orbit(t, T.s, 340, 250, 190, 120, V(9000, 0, 0), .04);
+}
+
+// Scenes left out of the cut: the §1401 example, the layer-2 findings list, and the corrected-our-model card.
+const SKIP = [[4.2, 9.6], [T.ex, T.blame], [T.l2f, T.l3], [T.l3fix, T.s]];  // first: the intro holds about 5 s
+const skipT = u => { let t = u; for (const [a, b] of SKIP) if (t >= a) t += b - a; return t; };
+window.render = function (u) {
+  const t = skipT(u);
+  const cuts = [T.l1, T.l2, T.l3, T.s, T.ex, T.blame, T.l2f, T.l3fix];
+  let f = Math.max(1 - seg(t, 0, 1.2), seg(t, DUR - 1, DUR));
+  for (const c of cuts) f = Math.max(f, seg(t, c - .5, c) * (1 - seg(t, c + .1, c + .8)));
+  $('fade').style.opacity = f;
+  $('quote').style.opacity = fadeIO(t, T.quote, T.l1 - .4, 1); $('quote').style.transform = `translateY(${(1 - easeOut(seg(t, T.quote, 2.6))) * 24}px)`;
+  $('qtitle').style.opacity = 1;
+  $('big').style.opacity = 0;
+
+  // ---- layer 1 ----
+  DISC.visible = t > T.l1 - .2 && t < T.l2 + .2;
+  const grow = ease(seg(t, T.l1 + .2, T.l1 + 4.5));
+  discPts.geometry.setDrawRange(0, Math.floor(NP * grow));
+  arches.geometry.setDrawRange(0, Math.floor(NR * ease(seg(t, 13, 16.5))) * SEGS * 2);
+  const dimF = seg(t, T.faults, T.faults + 1.2), dimB = seg(t, T.blame, T.blame + 1);
+  arches.material.opacity = .14 * (1 - .7 * dimF) * (1 - .6 * seg(t, T.ex, T.ex + 1));
+  discPts.material.opacity = .9 * (1 - .45 * dimF) * (1 - .5 * dimB);
+  faultPts.geometry.setDrawRange(0, Math.floor(fo.length * ease(seg(t, T.faults + .3, T.faults + 3))));
+  faultPts.material.opacity = 1 - .5 * dimB;
+  const exA = fadeIO(t, T.ex + .8, T.blame, .5);
+  arcBad.t.material.opacity = exA * seg(t, T.ex + .8, T.ex + 1.6); arcGood.t.material.opacity = exA * seg(t, T.ex + 1.8, T.ex + 2.6);
+  exDots.forEach((g, i) => { g.material.opacity = exA * seg(t, T.ex + .8 + i * .5, T.ex + 1.3 + i * .5); g.visible = exA > 0; });
+  arcBad.t.visible = arcGood.t.visible = exA > 0;
+
+  // ---- layer 2 ----
+  L2.visible = t > T.l2 - .2 && t < T.l3 + .2;
+  if (L2.visible) { for (let k = 0; k < 370; k++) { const on = seg(t, thmAt[k], thmAt[k] + .4), c = thmBase[k], m = .14 + .86 * on; thmCol.set([c.r * m, c.g * m, c.b * m], k * 3); }
+    thmPts.geometry.attributes.color.needsUpdate = true; L2.rotation.set(0, 0, 0); }
+  const ringA = fadeIO(t, T.l2 + .6, T.l2f, .6);
+  ring.material.opacity = .45 * ringA; ringDot.material.opacity = ringA; stDots.forEach(g => g.material.opacity = ringA);
+  { const a = Math.PI / 2 - (t - T.l2) * 1.4; ringDot.position.copy(RING_C).add(V(RING_R * Math.cos(a), RING_R * Math.sin(a), 1)); }
+
+  // ---- layer 3 ----
+  L3.visible = t > T.l3 - .2 && t < T.s + .2;
+  rowObjs.forEach((o, k) => { const a = seg(t, T.l3 + .5 + k * .8, T.l3 + 1.5 + k * .8); o.base.material.opacity = a;
+    o.hot.material.opacity = seg(t, T.l3n + k * 1.5, T.l3n + .6 + k * 1.5) * (k === 0 ? .6 + .4 * Math.sin(t * 5) ** 2 : 1); });
+
+  // ---- search ----
+  SR.visible = t > T.s - .2;
+  sPts.geometry.setDrawRange(0, Math.floor(NV * ease(seg(t, T.s + .3, T.s + 4.2))));
+  sPts.material.opacity = .9 * (1 - .4 * seg(t, T.known, T.known + 1));
+  KNOWN.forEach((o, i) => { const a = seg(t, T.known + .4 + i * .35, T.known + 1 + i * .35); o.g.material.opacity = a; o.stem.material.opacity = a * .7; });
+  NEW.forEach((o, i) => { const a = seg(t, T.n1 - .6 + i * .3, T.n1 + i * .3); o.g.material.opacity = a; o.stem.material.opacity = a * .7; o.g.scale.setScalar(1 + .25 * Math.sin(t * 4 + i)); });
+
+  const dense = (t > T.l1 && t < T.l2) || t > T.l3 - .3; bloom.strength = dense ? .5 : .8; bloom.threshold = dense ? .62 : .32;
+  const [cp, cl] = camAt(t); camera.position.copy(cp); camera.lookAt(cl);
+  composer.render();
+
+  // ---- overlay ----
+  let li = 0; code('', 0); hud('', 0); card('', '', '', 0); $('p1').style.opacity = 0; $('p2').style.opacity = 0; $('nodes').style.opacity = 0; $('scrim').style.opacity = 0;
+  if (t > T.l1 && t < T.l2) {
+    const cA = fadeIO(t, T.l1 + .3, T.l2 - .1);
+    $('scrim').style.opacity = cA * (t > T.ex && t < T.blame ? 1 : .55);
+    if (t < T.faults) {
+      caption('Layer 1 · Title 26 as data', '#5fe0ff', '59,058 provisions, 36,763 cross-references', 'Every provision down to the clause, and every reference between them, checked by a Lean test suite in about 40 seconds.', fadeIO(t, T.l1 + .3, T.faults - .1));
+      hud(`provisions<b>${fmt(NP * grow)}</b>cross-references ${fmt(36763 * ease(seg(t, 13, 16.5)))}`, fadeIO(t, T.l1 + .6, T.faults - .1));
+      for (const [s, [i, hd]] of Object.entries(D.secs)) { const a = ang(i), p = V(176 * Math.cos(a), 0, 176 * Math.sin(a));
+        label(li++, `§${s}<small>${hd.length > 26 ? hd.slice(0, 24) + '…' : hd}</small>`, p, fadeIO(t, 12.5, T.faults - .1) * seg(t, T.l1 + .2 + 4.3 * i / NP, T.l1 + .8 + 4.3 * i / NP), '#cfe2ff', 'lab sm plain l'); }
+      code(`$ lake env lean --run TaxCode/Main.lean t26.json ids.tsv findings.json baseline.json\n${cm('-- exits non-zero when a new release adds a finding the baseline does not have')}`, fadeIO(t, 14.2, T.faults - .1));
+    } else if (t < T.ex) {
+      caption('Layer 1 · Title 26 as data', '#5fe0ff', '138 confirmed drafting faults', '389 machine findings, each checked against the official text. Each confirmed fault has a certificate checked by Lean.', fadeIO(t, T.faults + .1, T.ex - .1));
+      const cnt = Math.floor(fo.length * ease(seg(t, T.faults + .3, T.faults + 3)));
+      panel('p1', `<div class="ph">confirmed faults by class · ${cnt}</div>` + FL.map(([n, s], c) => `<div class="row2" style="opacity:${seg(t, T.faults + .5 + c * .25, T.faults + .9 + c * .25)}"><span class="n" style="color:${FCOL[c]}">${n}</span>${s}</div>`).join(''),
+        fadeIO(t, T.faults + .3, T.ex - .1), 'right:120px;top:300px;left:auto;bottom:auto;');
+    } else if (t < T.blame) {
+      caption('Layer 1 · one of them', '#ff8a75', '§1401(b)(2)(B) cites §3121(b)(2)', '§3121(b)(2) excludes domestic service by students in college clubs. The section meant is §3101(b)(2), as Form 8959 applies it.', fadeIO(t, T.ex + .1, T.blame - .1));
+      const a = fadeIO(t, T.ex + 1.2, T.blame - .1);
+      label(li++, '§1401(b)(2)(B)', EX.citing.clone().add(V(0, 2, 0)), a, '#eef1f5', 'lab sm');
+      label(li++, '§3121(b)(2) · cited', EX.cited.clone().add(V(0, 2, 0)), a * seg(t, T.ex + 1.2, T.ex + 1.8), '#ff8a75', 'lab sm');
+      label(li++, '§3101(b)(2) · meant', EX.meant.clone().add(V(0, -2, 0)), a * seg(t, T.ex + 2.2, T.ex + 2.8), '#5fd3a0', 'lab sm dn');
+      code(`Additional Medicare tax: the self-employment threshold is reduced by wages\n“taken into account under section ${'<span class="n">3121(b)(2)</span>'}”. Unchanged since the Affordable Care Act.`, fadeIO(t, T.ex + 2.4, T.blame - .1));
+    } else {
+      caption('Layer 1 · blame', '#5fe0ff', 'Which law wrote each fault', 'Title 26’s history is in git back to the 1994 edition, one commit per public law. Each fault is traced to the first commit with its words.', fadeIO(t, T.blame + .1, T.l2 - .1));
+      const BL = [[60, 'Already in the 1994 edition (start of record)', '#8fa2bd'], [11, 'Inflation Reduction Act, 2022', '#ffcc55'], [6, 'Consolidated Appropriations Act, 2021', '#ffcc55'],
+        [5, 'Tax Cuts and Jobs Act, 2017', '#ffcc55'], [5, 'American Jobs Creation Act, 2004', '#ffcc55'], [4, 'One Big Beautiful Bill Act, 2025', '#ffcc55'], [4, 'Gulf Opportunity Zone Act, 2005', '#ffcc55'],
+        [8, 'Consolidated Appropriations Acts, 2001 and 2023', '#ffcc55'], [19, '13 other Acts, 1996–2021', '#ffcc55'], [16, 'Not traced', '#5c6b80']];
+      panel('p1', '<div class="ph">138 confirmed faults, by the law that wrote the words</div>' + BL.map(([n, s, c], k) => { const g = ease(seg(t, T.blame + .6 + k * .15, T.blame + 1.6 + k * .15));
+        return `<div class="row2"><span class="n" style="color:${c === '#5c6b80' ? '#8fa2bd' : c}">${n}</span><span class="bar" style="width:${Math.max(3, 340 * n / 60 * g)}px;background:${c}"></span>${s}</div>`; }).join(''),
+        fadeIO(t, T.blame + .4, T.l2 - .1), 'right:120px;top:330px;left:auto;bottom:auto;');
+    }
+  } else if (t > T.l2 && t < T.l3) {
+    const proved = D ? Array.from({ length: 370 }, (_, k) => t > thmAt[k] + .2).filter(Boolean).length : 0;
+    if (t < T.l2f) {
+      caption('Layer 2 · the 2025 income tax in Lean', '#b79bff', '370 theorems about the 2025 income tax', 'Four groups: income, deductions, the tax and AMT, and credits. Each rule is copied from the statute, tested against IRS examples, and proved for every input (for example, that no marginal rate exceeds 37%), then checked by a separate reviewer.', fadeIO(t, T.l2 + .3, T.l2f - .1));
+      const nodes = STATIONS.map(([a, b], k) => { const o = V(Math.cos(stAng(k)), Math.sin(stAng(k)), 0); const p = RING_C.clone().add(o.clone().multiplyScalar(RING_R + (k % 2 ? 22 : 9))).add(L2.position).project(camera);
+        return `<div class="node" style="left:${(p.x + 1) / 2 * W}px;top:${(1 - p.y) / 2 * H}px;color:#eef1f5">${a}<small>${b}</small></div>`; });
+      $('nodes').innerHTML = nodes.join(''); $('nodes').style.opacity = ringA;
+    } else {
+      caption('Layer 2 · the 2025 income tax in Lean', '#b79bff', 'What the model found', 'Three of the findings.', fadeIO(t, T.l2f + .1, T.l3 - .1));
+      const FI = [['', 'The official text already shows 2026 law in several places. Read as it stands, it gives the wrong 2025 tax.'],
+        ['B', 'The SALT cap phase-down: separate filers lose 15% of each dollar over $250,000, until the cap is $5,000 at $350,000.'],
+        ['B', 'The tips and overtime deductions shrink $100 for each $1,000, rounded down: one more dollar of income can cost $100 of deduction.']];
+      panel('p2', FI.map(([g, s], k) => `<div class="fl" style="opacity:${seg(t, T.l2f + .4 + k * 1.3, T.l2f + 1 + k * 1.3)}"><span class="g">${k + 1}</span><span>${s}</span></div>`).join(''),
+        fadeIO(t, T.l2f + .3, T.l3 - .1), 'left:500px;width:864px;top:390px;right:auto;bottom:auto;');
+    }
+    GR.forEach(([g, name, n, c, ctr], k) => { const below = true; const rad = 1.7 * Math.sqrt(n);
+      label(li++, `${g} · ${name}<small>${n} theorems</small>`, ctr.clone().add(L2.position).add(V(0, below ? -rad - 4 : rad + 4, 0)), fadeIO(t, T.l2 + .8 + k * .3, T.l3 - .1), c, below ? 'lab sm plain dn' : 'lab sm plain'); });
+    hud(`theorems proved<b>${proved}</b>Lean kernel · no sorry`, fadeIO(t, T.l2 + .6, T.l3 - .1));
+  } else if (t > T.l3 && t < T.s) {
+    if (t < T.l3fix) {
+      caption('Layer 3 · checking the Lean model', '#5fd3a0', 'Our model vs open-source tax software', '5,000 households through our Lean model and three open-source calculators. Each dot is a household; red where a calculator differs from our model by more than $10.', fadeIO(t, T.l3 + .3, T.l3fix - .1));
+      const NM = [['PolicyEngine-US', 'all 5,000'], ['Tax-Calculator', 'both samples'], ['UsTaxes', 'common sample, 2,000']];
+      const AN = [['#5fd3a0', '7 households differ, all on the IRS EIC table, by up to $11. Nothing else differs.'],
+        ['#ff8a75', 'Allows the EITC and dependent care credit on separate returns without the lived-apart rule.'],
+        ['#ff8a75', '14 bugs: drops self-employment income, never applies the dependent care credit, EITC age test always true.']];
+      NM.forEach(([n, s], k) => label(li++, `${n}<small>${s}</small>`, L3.position.clone().add(V(X0 - 8, ROWS[k], 0)), fadeIO(t, T.l3 + .5 + k * .8, T.l3fix - .1), '#eef1f5', 'lab sm plain r'));
+      AN.forEach(([c, s], k) => label(li++, s, L3.position.clone().add(V(X0, ROWS[k] - 16, 0)), fadeIO(t, T.l3n + .3 + k * 1.5, T.l3fix - .1), c, 'lab sm plain l'));
+    } else {
+      caption('', '', '', '', 0);
+      card('The comparison also corrected our model, twice', 'Schedule C profit is qualified business income.<br>§63(e) lets a filer elect to itemize.', 'One household in the AMT owes $2,070 less by itemizing a smaller amount. Both fixes are in.', fadeIO(t, T.l3fix + .2, T.s - .1));
+    }
+  } else if (t > T.s && t < T.end) {
+    if (t < T.n1) {
+      const known = t > T.known;
+      caption('The loophole search', '#ffd27a', known ? 'It found the known strategies' : 'The same Lean model, used as an oracle', known ? 'No strategy is written into the search: only the choices, and what the model says each costs or saves.' : 'A blind search over choices families control: separate returns and who holds what, IRA contributions, earning less, realizing gains.',
+        known ? fadeIO(t, T.known + .1, T.n1 - .1) : fadeIO(t, T.s + .3, T.known - .1));
+      hud(`returns computed, about<b>${fmt(NV * ease(seg(t, T.s + .3, T.s + 4.2)))}</b>for 5,000 households`, fadeIO(t, T.s + .5, T.n1 - .1));
+      if (known) { const KS = ['Separate returns to get under the §199A threshold', 'Children claimed by the lower earner, for the child credit', 'Deferring gains to keep the EITC under the $11,950 investment-income limit',
+        'The saver’s credit tiers', 'Itemizing a smaller amount to cut AMT'];
+        code(KS.map((s, i) => `<span style="opacity:${seg(t, T.known + .4 + i * .35, T.known + 1 + i * .35)}"><span class="ok">✓</span> ${s}</span>`).join('\n'), fadeIO(t, T.known + .3, T.n1 - .1)); }
+    } else {
+      caption('', '', '', '', 0);
+      const C = [[T.n1, T.n2, 'Novel loophole · 1 of 2', 'A retired spouse with large Social Security and a spouse with a moderate wage can owe less filing separately, even living together.', '$48,000 of benefits and a $60,000 wage: $1,482 less. The usual advice is the opposite.'],
+        [T.n2, T.n3, 'Novel loophole · 2 of 2', 'Wages on one return, investments on the other.', 'About $200,000 of each: $1,621 less, because the net investment income tax and the 0% gain band are measured per return.'],
+        [T.n3, T.scale, 'Form versus statute · not a loophole', 'Schedule 8812 refunds up to $500 more per other dependent than §24(h)(5) allows.', 'Single, one child and one other dependent, MAGI $240,000, no tax left: the statute gives $200, the form $700.'],
+        [T.scale, T.end, 'For scale', 'None of the three is on the scale of the backdoor Roth.', 'In the examples: $1,482, $1,621, and up to $500 per other dependent.']];
+      for (const [a, b, c1, c2, c3] of C) if (t > a && t < b) card(c1, c2, c3, fadeIO(t, a + .1, b - .05, .45));
+    }
+  } else caption('', '', '', '', 0);
+  for (let i = li; i < pool.length; i++) pool[i].style.opacity = 0;
+
+  const ea = seg(t, T.end + .2, T.end + 1.2) * (1 - seg(t, DUR - 1, DUR));
+  $('end').innerHTML = ''+['Title 26 as data: 59,058 provisions checked in about 40 seconds', '138 confirmed drafting faults, each with a Lean certificate, traced back to 1994',
+    'The 2025 individual income tax in Lean: 370 theorems', '5,000 households against three open-source calculators, every difference traced', 'A blind search: the known strategies, two novel loopholes, and one form discrepancy']
+    .map((r, i) => `<div class="row" style="opacity:${seg(t, T.end + .6 + i * .25, T.end + 1.2 + i * .25)}"><span>✓</span>${r}</div>`).join('') + `<div class="foot">global-law · lean-proofs/TaxCode</div>`;
+  $('end').style.opacity = ea; $('end').style.background = `rgba(4,7,13,${.75 * ea})`;
+};
+const cm = s => `<span class="c">${s}</span>`;
+window.DUR = DUR - SKIP.reduce((x, [a, b]) => x + b - a, 0);
+document.fonts.ready.then(() => { window.render(0); window.READY = true; });
+</script></body></html>

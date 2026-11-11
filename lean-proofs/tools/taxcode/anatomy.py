@@ -62,7 +62,7 @@ def main(inp, out):
     steps = [6.0, 9.0, 9.0]          # the certificates' evidence data packs denser
     per_line = [max(1, int(cw[k] // steps[k])) for k in range(3)]
     band_h = [max(22, max(math.ceil(counts[k].get(d, 0) / per_line[k]) * steps[k] for k in range(3)) + 10) for d in range(maxd + 1)]
-    Y0 = 300
+    Y0 = 254
     band_y = [Y0 + sum(band_h[:d]) for d in range(maxd + 1)]
     H_plot = sum(band_h)
     pos = {}
@@ -77,18 +77,17 @@ def main(inp, out):
                 x = cx[k] + (cw[k] - in_row * step) / 2 + c * step + step / 2
                 y = band_y[d] + (band_h[d] - rows * step) / 2 + r * step + step / 2
                 pos[n] = (x, y)
-    H = Y0 + H_plot + 150
+    H = Y0 + H_plot + 100
     o = [f'<svg viewBox="0 0 {W} {H:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" class="anat" '
          f'aria-label="Dependency map of the Lean tax code: {len(names)} declarations by depth">',
          f'<rect width="{W}" height="{H:.0f}" rx="14" fill="#0f1720"/>',
-         '<text x="44" y="74" font-family="IBM Plex Sans,system-ui,sans-serif" font-weight="600" font-size="44" fill="#eef1f5">Anatomy of a proof</text>',
-         '<text x="44" y="110" font-family="IBM Plex Sans,system-ui,sans-serif" font-size="20" fill="#9aa6b5">Formalizing the US tax code · a Lean declaration map</text>']
+         '<text x="44" y="64" font-family="IBM Plex Sans,system-ui,sans-serif" font-size="20" fill="#9aa6b5">Formalizing the US tax code · a Lean declaration map</text>']
     stats = [(f"{len(names):,}", "DECLARATIONS"), (f"{sum(1 for n in names if kind[n] == 'thm'):,}", "THEOREMS"),
              (f"{sum(len(v) for v in deps.values()):,}", "DEPENDENCIES"), (f"{lines:,}", "SOURCE LINES"), (str(maxd), "MAX DEPTH")]
     for i, (v, lab) in enumerate(stats):
         x = 44 + i * 190
-        o.append(f'<text x="{x}" y="170" font-family="IBM Plex Sans,system-ui,sans-serif" font-weight="600" font-size="34" fill="#eef1f5">{v}</text>')
-        o.append(f'<text x="{x}" y="196" font-family="JetBrains Mono,monospace" font-size="13" letter-spacing="1" fill="#8b97a6">{lab}</text>')
+        o.append(f'<text x="{x}" y="124" font-family="IBM Plex Sans,system-ui,sans-serif" font-weight="600" font-size="34" fill="#eef1f5">{v}</text>')
+        o.append(f'<text x="{x}" y="150" font-family="JetBrains Mono,monospace" font-size="13" letter-spacing="1" fill="#8b97a6">{lab}</text>')
     for k, (_, lab, c, _) in enumerate(COLS):
         o.append(f'<text x="{cx[k] + cw[k] / 2:.0f}" y="{Y0 - 14}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" letter-spacing="1" fill="{c}">{lab}</text>')
     o.append(f'<text x="44" y="{Y0 - 52}" font-family="JetBrains Mono,monospace" font-size="13" letter-spacing="1" fill="#8b97a6">DEPENDENCY DEPTH ↓ · FOUNDATIONS TO RESULTS</text>')
@@ -116,7 +115,6 @@ def main(inp, out):
     for i, t in enumerate(["One dot = one Lean definition or theorem. Lines join each one to the declarations that use it.",
                            "Larger dots have more direct users. Depth is the longest chain of definitions beneath it."]):
         o.append(f'<text x="44" y="{yb + i * 26}" font-family="IBM Plex Sans,system-ui,sans-serif" font-size="17" fill="#d6dbe2">{t}</text>')
-    o.append(f'<text x="44" y="{yb + 70}" font-family="IBM Plex Sans,system-ui,sans-serif" font-size="14" fill="#7d8896">Lean 4 core only, no Mathlib · compiler-generated declarations left out · source: global-law / lean-proofs · tools/TaxAnatomy.lean</text>')
     o.append('</svg>')
     Path(out).write_text("\n".join(o), encoding="utf-8")
     print(len(names), "declarations;", sum(len(v) for v in deps.values()), "edges; depth", maxd, "; lines", lines,
