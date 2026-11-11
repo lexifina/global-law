@@ -149,6 +149,7 @@ SEARCH_INDEX_TOP_UPS = 30  # corpora asked for further paths, unread, to fill se
 # change notes for the words (a git log --grep of the corpus's history: 1 to 8 s for a mistyped word). It gets this
 # long, and the answer says when the change notes were not read.
 SEARCH_CHANGES_HINT_S = float(os.environ.get('GLOBAL_LAW_CHANGES_HINT_S', '1.5'))
+SEARCH_CHANGES_HINT_COMMITS = int(os.environ.get('GLOBAL_LAW_CHANGES_HINT_COMMITS', '40000'))  # past this the hint is not tried
 
 
 def indexed_file(corpus: str, rel: str) -> bool:
@@ -4298,7 +4299,17 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         # The words may name a reform rather than appear in its text ("Schuldenbremse"); try the change notes.
         ask = {'query': query, 'jurisdiction': scope, 'end': date, 'max_results': 10}
         if by_index:  # an answer that took no time does not wait long for this
-            read, got = within_seconds(SEARCH_CHANGES_HINT_S, lambda: t_search_changes(ask))
+            # Reading the notes is a `git log --grep` of each corpus's history, about 65,000 commits a second: over
+            # more commits than can be read in the time (Romania 522,000, France, Germany), starting it only spent
+            # the whole 1.5 s to be stopped. Those are not started; the answer says where the notes can be searched.
+            try:
+                commits = sum(len(law.corpus_events(c)) for c, _ in pins)
+            except SystemExit:
+                commits = SEARCH_CHANGES_HINT_COMMITS + 1
+            if commits > SEARCH_CHANGES_HINT_COMMITS:
+                read, got = False, None
+            else:
+                read, got = within_seconds(SEARCH_CHANGES_HINT_S, lambda: t_search_changes(ask))
             found = got[1] if read else {'changes': []}
             read = read and not (found.get('case_law_unread_for_time') and not found['changes'])
         else:
