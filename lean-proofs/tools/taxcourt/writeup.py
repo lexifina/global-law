@@ -27,6 +27,10 @@ TAGNAME = {"eitc_32": "Earned income credit (§32)", "qualifying_child_152c": "Q
            "other": "Other provisions"}
 
 decided = T["match"] + T["mismatch"]
+RUL = Path(__file__).resolve().parents[2] / "LegalProofs" / "USTax" / "TaxCourt" / "Rulings.lean"
+rul_text = RUL.read_text(encoding="utf-8") if RUL.exists() else ""
+GUARDS = sum(1 for l in rul_text.splitlines() if l.startswith("#guard"))
+EXAMPLE = next((l for l in rul_text.splitlines() if l.startswith("#guard")), "")
 pct = round(100 * T["match"] / decided) if decided else 0
 years = sorted({y for c in S["detail"] for y in (c.get("years") or [])})
 
@@ -124,7 +128,7 @@ a formal model of the statute, given only the facts the court found, reaches the
 <div class=k><b>{S['cases']}</b><span>Tax Court opinions recreated (summary and memorandum opinions, decided 2019–2025)</span></div>
 <div class=k><b>{S['issues']}</b><span>issues the court decided, each checked against the Lean model</span></div>
 <div class=k><b>{T['match']} / {decided}</b><span>computable issues where Lean reaches the court’s result ({pct}%)</span></div>
-<div class=k><b>{years[0] if years else ''}–{years[-1] if years else ''}</b><span>tax years at issue, each with its own rates, thresholds and rules</span></div>
+<div class=k><b>{GUARDS}</b><span>holdings Lean recomputes from the court’s findings every time the rulings file is built</span></div>
 </div>
 
 <h2>How it works</h2>
@@ -142,6 +146,11 @@ IRS’s EIC and Tax Tables, about 28,000 rows, and reviewed by a second agent th
 <p><b>The test.</b> Each case is encoded from the court’s findings only, never from its conclusions. Lean then
 computes every holding, and we compare. Every difference was traced: an encoding slip (fixed), a gap in the model, an
 error in the court’s or the IRS’s own arithmetic, or a step that is the court’s judgment rather than a computation.</p>
+
+<p><b>The record.</b> Every encoded case is written into one Lean file, <code>Rulings.lean</code>, as the court’s
+findings followed by one check per holding the model reproduces. Lean re-evaluates all {GUARDS} checks each time the
+file is built; a change to the rules that breaks any reproduced holding fails the build.</p>
+<pre>{E(EXAMPLE)}</pre>
 
 <h2>Results</h2>
 <div class=bar>{bar}</div><ul class=lg>{legend}</ul>

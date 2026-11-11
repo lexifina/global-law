@@ -18,7 +18,8 @@ disallowed refundable credits. Callers can pass other measures.
 **§6651.** (a)(1) failure to file: 5% of the net amount required to be shown (§6651(b)(1): less timely payments and
 credits) for each month or fraction of lateness, up to 25%; if more than 60 days late, not less than the lesser of the
 year's minimum (`Params.ftfMinimum`) or 100% of that amount. (a)(2) failure to pay the tax shown: 0.5% per month or
-fraction, up to 25%. (c)(1): for a month both apply, (a)(1) is reduced by (a)(2). (f): fraudulent failure to file:
+fraction, up to 25%. (c)(1): for a month both apply, (a)(1) is reduced by (a)(2). (c)(2): when the tax shown exceeds the tax required to be
+shown, (a)(2) (and so the (c)(1) offset) uses the smaller amount. (f): fraudulent failure to file:
 15% per month, up to 75%. Each is excused by reasonable cause and not willful neglect.
 
 Not modelled: §6651(a)(3), the 1% (levy notice) and 0.25% (installment agreement) rates of §6651(d), (h); the
@@ -156,7 +157,8 @@ def lateAdditions (p : Params) (required shown : Int) (l : LateFacts) : LateOutc
   let mFile := max 0 (min (monthsOrFraction fileDue filedOn) 5)
   let mPay := if l.assertsFailureToPay then max 0 (min (monthsOrFraction payDue (l.paid.getD l.asOf)) 50) else 0
   let net := pos (required - l.timelyPayments)
-  let netShown := pos (shown - l.timelyPayments)
+  -- §6651(c)(2): if the tax required to be shown is less than the tax shown, (a)(2) uses the lower amount
+  let netShown := pos (min shown required - l.timelyPayments)
   let ratePerMonth : Int := if l.fraudulent then 1500 else 500
   -- §6651(c)(1): for each month both apply, (a)(1) is reduced by (a)(2); computed exactly, rounded once
   let overlap := min mFile mPay
@@ -179,9 +181,9 @@ theorem lateFiling_le (p : Params) (r s : Int) (l : LateFacts) :
   have h0 : 0 ≤ m ∧ m ≤ 5 := by omega
   generalize hp : (if l.assertsFailureToPay = true then _ else (0 : Int)) = mp
   have hmp : 0 ≤ mp := by rw [← hp]; split <;> omega
-  have hred : 0 ≤ pos (s - l.timelyPayments) * (50 * min m mp) :=
+  have hred : 0 ≤ pos (min s r - l.timelyPayments) * (50 * min m mp) :=
     Int.mul_nonneg (pos_nonneg _) (by omega)
-  generalize pos (s - l.timelyPayments) * (50 * min m mp) = red at hred
+  generalize pos (min s r - l.timelyPayments) * (50 * min m mp) = red at hred
   generalize daysBetween _ _ = dd
   have hn := pos_nonneg (r - l.timelyPayments)
   generalize pos (r - l.timelyPayments) = n at hn
@@ -224,6 +226,9 @@ private def py (y : Nat) : Params := (params? y).getD default
 -- With an extension to 15 Oct 2019, a return filed 1 Oct 2019 is timely, but payment was due 15 Apr: 6 months of (a)(2).
 #guard lateAdditions (py 2018) 4000 4000 { filed := some ⟨2019, 10, 1⟩, extension := true, paid := some ⟨2019, 10, 1⟩ } =
   ⟨0, 6, 0, 120, false⟩
+-- §6651(c)(2): an SFR showing $5,000 when only $1,000 is required: (a)(2) on $1,000 (10 months × 0.5% = $50), and the
+-- (c)(1) offset on $1,000 too: (a)(1) 25% × $1,000 − 5 × 0.5% × $1,000 = $225.
+#guard lateAdditions (py 2018) 1000 5000 { asOf := ⟨2020, 2, 1⟩ } = ⟨5, 10, 225, 50, false⟩
 -- Withholding covers the tax: no addition.
 #guard (lateAdditions (py 2022) 3000 3000 { filed := some ⟨2024, 1, 1⟩, timelyPayments := 3500 }).failureToFile = 0
 end

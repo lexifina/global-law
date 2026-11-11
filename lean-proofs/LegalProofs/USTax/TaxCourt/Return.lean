@@ -5,6 +5,7 @@ import LegalProofs.USTax.TaxCourt.Penalties
 import LegalProofs.USTax.TaxCourt.Education
 import LegalProofs.USTax.TaxCourt.Retirement
 import LegalProofs.USTax.TaxCourt.Extra
+import LegalProofs.USTax.TaxCourt.PremiumCredit
 
 /-!
 # A simple individual return, 2012–2024, and the deficiency
@@ -160,6 +161,8 @@ structure ReturnFacts where
   alimonyPaid : List AlimonyItem := []
   /-- §72(e): lapsed policies (ordinary income; not §72(t)). -/
   policyLapses : List LapseItem := []
+  /-- §36B: Marketplace coverage, benchmark premium and advance payments (2014+). -/
+  ptc : Option PtcFacts := none
   deriving Repr, Inhabited
 
 /-- Form 1040, line by line. -/
@@ -205,6 +208,7 @@ structure ReturnResult where
   alimonyIncluded : Int := 0
   alimonyDeduction : Int := 0
   lapseIncome : Int := 0
+  ptc : Option PtcResult := none
   deriving Repr, Inhabited
 
 /-- §63(c)–(f): the standard deduction. -/
@@ -331,8 +335,12 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
           advanceChildren := r.advanceCtcChildren }
     else {}
   let nonref := otherNonref + ctcR.nonrefundable
-  let totalTax := pos (tax - nonref) + seT + seS + edTax + r.otherTaxes + ctcR.excessAdvance + hsa.2
-  let refundable := eicR.1 + ctcR.refundable + r.otherRefundableCredits + edu.aotcRefundable
+  -- §36B(d)(2)(B): household income adds tax-exempt interest and all excluded social security
+  let ptcR := r.ptc.map (premiumTaxCredit p f (agi + r.taxExemptInterest + pos (r.socialSecurity - tss)))
+  let ptcRepay := (ptcR.map (·.excessAdvanceRepayment)).getD 0
+  let ptcNet := (ptcR.map (·.netCredit)).getD 0
+  let totalTax := pos (tax - nonref) + seT + seS + edTax + r.otherTaxes + ctcR.excessAdvance + hsa.2 + ptcRepay
+  let refundable := eicR.1 + ctcR.refundable + r.otherRefundableCredits + edu.aotcRefundable + ptcNet
   { filing := f, totalIncome := income0 + tss - ucx, taxableSocialSecurity := tss, unemploymentExcluded := ucx,
     halfSeTax := halfSe, adjustments := adj, agi := agi, standardDeduction := std, deduction := ded, exemptions := ex,
     taxableIncome := ti, regularTax := tax, ctcNonrefundable := ctcR.nonrefundable, nonrefundableCredits := nonref,
@@ -343,7 +351,7 @@ def computeReturn (p : Params) (r : ReturnFacts) : ReturnResult :=
     iraDeduction := iraD.1 + iraD.2, rolloverIncludible := rollInc, hsaIncludible := hsa.1, hsaAdditionalTax := hsa.2,
     gamblingLossDeduction := if usesStd then 0 else gambling, educationNonrefundable := eduNonref,
     aotcRefundable := edu.aotcRefundable, lumpSumElection := tssR.2, alimonyIncluded := aliIn,
-    alimonyDeduction := aliOut, lapseIncome := lapse }
+    alimonyDeduction := aliOut, lapseIncome := lapse, ptc := ptcR }
 
 /-- §6211(a), (b)(4): the deficiency — tax as recomputed less tax shown, refundable credits as negative tax. Negative
 means the return overstated the tax. -/

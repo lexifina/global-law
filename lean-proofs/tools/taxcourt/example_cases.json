@@ -231,5 +231,101 @@
     "value": 3659
    }
   ]
+ },
+ {
+  "citation": "T.C. Memo. 2023-2 (sec. 36B)",
+  "taxYear": 2016,
+  "facts": {
+   "filing": "hoh",
+   "pensions": 68750,
+   "socialSecurity": 26499,
+   "itemizedDeductions": 28751,
+   "itemize": true,
+   "withholding": 13750,
+   "dependents": [
+    {
+     "name": "son",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ],
+   "ptc": {
+    "familySize": 2,
+    "advancePayments": 7205
+   }
+  },
+  "asFiled": {
+   "filing": "hoh",
+   "pensions": 68750,
+   "socialSecurity": 26499,
+   "itemizedDeductions": 28751,
+   "itemize": true,
+   "withholding": 13750,
+   "dependents": [
+    {
+     "name": "son",
+     "relationship": "child",
+     "livedWithMoreThanHalfYear": true
+    }
+   ]
+  },
+  "expected": [
+   {
+    "item": "taxableSocialSecurity",
+    "value": 22524
+   },
+   {
+    "item": "agi",
+    "value": 91274
+   },
+   {
+    "item": "householdIncome",
+    "value": 95249
+   },
+   {
+    "item": "fplPercent",
+    "value": 401
+   },
+   {
+    "item": "excessAdvancePtc",
+    "value": 7205
+   },
+   {
+    "item": "deficiency",
+    "value": 7205
+   }
+  ]
+ },
+ {
+  "citation": "T.C. Memo. 2019-41 (sec. 36B, as reported)",
+  "taxYear": 2015,
+  "facts": {
+   "filing": "mfj",
+   "wages": 34176,
+   "unemployment": 237,
+   "socialSecurity": 35652,
+   "ptc": {
+    "familySize": 2,
+    "advancePayments": 8472
+   }
+  },
+  "expected": [
+   {
+    "item": "householdIncome",
+    "value": 70065
+   },
+   {
+    "item": "povertyLine",
+    "value": 15730
+   },
+   {
+    "item": "excessAdvancePtc",
+    "value": 8472
+   },
+   {
+    "item": "premiumTaxCredit",
+    "value": 0
+   }
+  ]
  }
 ]

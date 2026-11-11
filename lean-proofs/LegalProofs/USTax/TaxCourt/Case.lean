@@ -156,7 +156,13 @@ def Outcome.intValues (o : Outcome) : List (String × Int) :=
    | none => []) ++
   (match o.corrected with
    | some r => [("alimonyIncluded", r.alimonyIncluded), ("alimonyDeduction", r.alimonyDeduction),
-       ("lapseIncome", r.lapseIncome)]
+       ("lapseIncome", r.lapseIncome)] ++
+       (match r.ptc with
+        | some x => [("householdIncome", x.householdIncome), ("povertyLine", x.povertyLine),
+            ("fplPercent", x.fplPercent), ("premiumTaxCredit", x.credit),
+            ("excessAdvancePtc", x.excessAdvanceRepayment), ("netPremiumTaxCredit", x.netCredit),
+            ("ptcContribution", x.contribution)]
+        | none => [])
    | none => [])
 
 def Outcome.flagValues (o : Outcome) : List (String × Bool) :=
@@ -332,6 +338,11 @@ deriving instance FromJson for EstimatedIssue
 instance (priority := high) : FromJson EstimatedIssue :=
   ⟨fromJsonWithDefaults (FromJson.fromJson? (α := EstimatedIssue))⟩
 
+deriving instance ToJson for PtcFacts
+deriving instance FromJson for PtcFacts
+instance (priority := high) : FromJson PtcFacts :=
+  ⟨fromJsonWithDefaults (FromJson.fromJson? (α := PtcFacts))⟩
+
 deriving instance ToJson for ReturnFacts
 deriving instance FromJson for ReturnFacts
 instance (priority := high) : FromJson ReturnFacts :=
@@ -367,6 +378,7 @@ deriving instance FromJson for Case
 instance (priority := high) : FromJson Case :=
   ⟨fromJsonWithDefaults (FromJson.fromJson? (α := Case))⟩
 
+deriving instance ToJson for PtcResult
 deriving instance ToJson for ReturnResult
 deriving instance ToJson for DependentOutcome
 deriving instance ToJson for EarlyDistResult
