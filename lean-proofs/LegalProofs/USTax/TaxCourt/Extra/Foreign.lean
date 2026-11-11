@@ -23,22 +23,22 @@ open Legal.USTax.TaxCourt
 
 /-- §911(b)(2)(D) exclusion amount, by year. 2012 Rev. Proc. 2011-52; 2013 Rev. Proc. 2013-15 (after ATRA); 2014
 Rev. Proc. 2013-35; 2015 Rev. Proc. 2014-61; 2016 Rev. Proc. 2015-53; 2017 Rev. Proc. 2016-55; 2018 Rev. Proc.
-2018-18; 2019 Rev. Proc. 2018-57; 2020 Rev. Proc. 2019-44; 2021 Rev. Proc. 2020-45; 2022 Rev. Proc. 2021-45; 2023
+2018-18 (chained CPI after TCJA: $103,900, not the $104,100 of Rev. Proc. 2017-58 §3.34); 2019 Rev. Proc. 2018-57; 2020 Rev. Proc. 2019-44; 2021 Rev. Proc. 2020-45; 2022 Rev. Proc. 2021-45; 2023
 Rev. Proc. 2022-38; 2024 Rev. Proc. 2023-34. Zero outside 2012–2024. -/
 def feieCap : Int → Int
-  | 2012 => 95100
-  | 2013 => 97600
-  | 2014 => 99200
-  | 2015 => 100800
-  | 2016 => 101300
-  | 2017 => 102100
-  | 2018 => 104100
-  | 2019 => 105900
-  | 2020 => 107600
-  | 2021 => 108700
-  | 2022 => 112000
-  | 2023 => 120000
-  | 2024 => 126500
+  | 2012 => 95100  -- Form 2555 instructions (2012), irs.gov/pub/irs-prior/i2555--2012.pdf: "$95,100"
+  | 2013 => 97600  -- Form 2555 instructions (2013), irs.gov/pub/irs-prior/i2555--2013.pdf: "$97,600"
+  | 2014 => 99200  -- Form 2555 instructions (2014), irs.gov/pub/irs-prior/i2555--2014.pdf: "$99,200"
+  | 2015 => 100800 -- Form 2555 instructions (2015), irs.gov/pub/irs-prior/i2555--2015.pdf: "$100,800"
+  | 2016 => 101300 -- Form 2555 instructions (2016), irs.gov/pub/irs-prior/i2555--2016.pdf: "$101,300"
+  | 2017 => 102100 -- Form 2555 instructions (2017), irs.gov/pub/irs-prior/i2555--2017.pdf: "$102,100"
+  | 2018 => 103900 -- Form 2555 instructions (2018), irs.gov/pub/irs-prior/i2555--2018.pdf: "$103,900"
+  | 2019 => 105900 -- Form 2555 instructions (2019), irs.gov/pub/irs-prior/i2555--2019.pdf: "$105,900"
+  | 2020 => 107600 -- Form 2555 instructions (2020), irs.gov/pub/irs-prior/i2555--2020.pdf: "$107,600"
+  | 2021 => 108700 -- Form 2555 instructions (2021), irs.gov/pub/irs-prior/i2555--2021.pdf: "$108,700"
+  | 2022 => 112000 -- Form 2555 instructions (2022), irs.gov/pub/irs-prior/i2555--2022.pdf: "$112,000"
+  | 2023 => 120000 -- Form 2555 instructions (2023), irs.gov/pub/irs-prior/i2555--2023.pdf: "$120,000"
+  | 2024 => 126500 -- Form 2555 instructions (2024), irs.gov/pub/irs-prior/i2555--2024.pdf: "$126,500"
   | _ => 0
 
 /-- Qualifying days clamped to `[0, days in year]`. -/
@@ -102,15 +102,17 @@ theorem feie_le_cap (y days fei hx : Int) : feie y days fei hx ≤ proratedCap y
 
 -- Caps, per the revenue procedures.
 #guard [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024].map feieCap =
-  [95100, 97600, 99200, 100800, 101300, 102100, 104100, 105900, 107600, 108700, 112000, 120000, 126500]
+  [95100, 97600, 99200, 100800, 101300, 102100, 103900, 105900, 107600, 108700, 112000, 120000, 126500]
 -- A full year qualifies for the full cap (2024 has 366 days).
 #guard proratedCap 2024 366 = 126500 ∧ proratedCap 2023 365 = 120000 ∧ proratedCap 2023 400 = 120000
 -- Part-year: 2023, 75 qualifying days: 120,000 × 75 / 365 = 24,657.53 → 24,658.
 #guard proratedCap 2023 75 = 24658
--- Form 2555 (2024) line 32 prints the base as $55.30 a day (16% × 126,500 / 366); a full year: $20,240.
+-- Form 2555 (2024) line 32 (irs.gov/pub/irs-prior/f2555--2024.pdf) prints the base as $55.30 a day (16% × 126,500 / 366); a full year: $20,240.
 #guard housingBase 2024 366 = 20240 ∧ housingBase 2024 100 = 5530
--- Form 2555 (2023): $52.60 a day; (2022): $49.10 a day (100 days).
-#guard housingBase 2023 100 = 5260 ∧ housingBase 2022 100 = 4910
+-- Form 2555 (2023) line 32: $52.60 a day; (2022): $49.10; (2018): $45.55 (irs.gov/pub/irs-prior/f2555--{2018,2022,2023}.pdf).
+#guard housingBase 2023 100 = 5260 ∧ housingBase 2022 100 = 4910 ∧ housingBase 2018 100 = 4555
+-- 2018 default limit: "$31,170 (30% of $103,900)" (Form 2555 instructions, 2018).
+#guard housingLimit 2018 365 = 31170
 -- Default limit 30%: 2024 full year $37,950.
 #guard housingLimit 2024 366 = 37950
 -- Employee, 2024 full year, $150,000 wages, $45,000 housing (above the limit), employer-paid: housing amount
