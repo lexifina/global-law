@@ -3030,12 +3030,36 @@ def act_floor_note(date: str, path: str) -> str:
     return ''
 
 
+CLOSE_PATHS_ALL = 5_000  # a corpus of up to this many files is searched whole for names like a mistyped one
+
+
+def _close_paths(rel: str, files) -> list[str]:
+    """Up to three names like a path that is not in the record. A small corpus is compared whole, as before. A large
+    one is compared where a mistyped path would be: the files of its own folder, or, when the folder itself is not
+    there, the files of the folders beside it whose names are like it. Comparing every name took 17 to 25 s for one
+    wrong path in France's 812,000 files or Romania's 1.2 million (1.7 s in Ireland's 38,000), on the one thread a
+    server answers on."""
+    if len(files) <= CLOSE_PATHS_ALL:
+        return difflib.get_close_matches(rel, list(files), n=3, cutoff=0.6)
+    folder, _, name = rel.rpartition('/')
+    pool = [f for f in files if f.startswith(folder + '/')] if folder else [f for f in files if '/' not in f]
+    if not pool and folder:
+        above, _, last = folder.rpartition('/')
+        prefix = above + '/' if above else ''
+        beside = {f[len(prefix):].split('/', 1)[0] for f in files if f.startswith(prefix) and '/' in f[len(prefix):]}
+        for like in difflib.get_close_matches(last, sorted(beside), n=3, cutoff=0.6):
+            pool += [f for f in files if f.startswith(f'{prefix}{like}/')]
+    if len(pool) > CLOSE_PATHS_ALL:  # a folder of very many files: those whose names are closest in length first
+        pool = sorted(pool, key=lambda f: (abs(len(f) - len(rel)), f))[:CLOSE_PATHS_ALL]
+    return difflib.get_close_matches(rel, pool, n=3, cutoff=0.6)
+
+
 def explain_missing(date: str, path: str) -> str:
     """Why there is no text: a mistyped path, before the record, not yet in force, or repealed."""
     corpus, rel = corpus_of(path)
     files = _index(corpus)['files']
     if rel not in files:
-        close = difflib.get_close_matches(rel, list(files), n=3, cutoff=0.6)
+        close = _close_paths(rel, files)
         hint = f" Did you mean {', '.join(f'{corpus}/{c}' for c in close)}?" if close else ''
         return f'{path} is not in this record at any date.{hint}'
     h = history(path)
