@@ -221,6 +221,23 @@ def index_paths_many(query: str, wanted: list) -> dict | None:
     return {c: names for c, names in checked.items() if names is not None}
 
 
+# A server that holds each corpus's text in force today as plain files may name that revision here, for a corpus:
+# text_search_rev(corpus) -> a revision git reads like a commit, or None. find_provision's search of the words of the
+# law (when no heading matches) then greps that revision in place of the corpus's pin commit.
+text_search_rev = None
+
+
+def _text_rev(corpus: str) -> str | None:
+    hook = text_search_rev
+    if hook is None:
+        return None
+    try:
+        rev = hook(corpus)
+    except Exception:  # noqa: BLE001 (a host's hook must not fail a call git can answer)
+        return None
+    return rev if isinstance(rev, str) and re.fullmatch(r'[0-9a-f]{40}', rev) else None
+
+
 def index_lines(query: str, corpus: str, rev: str, names: list) -> dict | None:
     """search_index.lines, checked: {name: [(line number, line), ...]} with every name asked and each file's lines in
     ascending order. None when the index has no such method, does not answer, or answers anything else."""
@@ -2618,6 +2635,10 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             sha = corpus_head(c['path'])
             if not sha or not (ROOT / c['path'] / '.git').exists():
                 continue
+            # A host that keeps the text in force today as plain files names that revision (text_search_rev): the
+            # same words, grepped from files rather than from the packs of the pin (23 s for Montenegro's acts,
+            # whose tree for today is built and so is not the pin).
+            sha = _text_rev(c['path']) or sha
             # Within one act or folder the grep is quick and a 2-digit article number ("31") is worth looking for;
             # across a corpus it is not. A number alone is matched as a whole word (31, not 310 or 2031).
             inner = [a[len(c['path']) + 1:] for a in acts if a.startswith(c['path'] + '/')] if acts else \
@@ -4530,7 +4551,37 @@ def folder_commits(corpus: str, inner: str) -> list[str]:
                 orders.update(o for o, *_ in ix['files'][files[i]])
                 i += 1
             return [rows[o][0] for o in sorted(orders, reverse=True) if o < main]  # each commit once, newest first
-    return law.git('log', '--format=%H', law.reachable_tip(corpus), '--', inner, cwd=law.corpus_dir(corpus)).split()
+    return _folder_log(corpus, law.reachable_tip(corpus), inner)
+
+
+FOLDER_LOG_KEPT_S = 0.25  # a folder's git log that took this long is kept in the tree's cache
+
+
+def _folder_log(corpus: str, tip: str, inner: str) -> list[str]:
+    """`git log --format=%H <tip> -- <inner>`: the commits that touched a folder. Git walks the corpus's whole history
+    for it (18-24 s for a top folder of Romania's, France's or Switzerland's acts, on every list of that corpus's
+    root: past a hosted call's time, every time). One that took a while is kept in the tree's cache, named by the tip
+    commit and the folder, and read from there until the corpus's pin moves."""
+    kept = None
+    if re.fullmatch(r'[0-9a-f]{40}', tip or ''):
+        kept = law._store() / f"folder-commits-{tip}-{hashlib.sha1(inner.encode('utf-8', 'surrogateescape')).hexdigest()[:16]}.json"
+        try:
+            got = json.loads(kept.read_text(encoding='utf-8'))
+            if got['folder'] == inner and isinstance(got['commits'], list):
+                return got['commits']
+        except (OSError, ValueError, KeyError, TypeError):
+            pass
+    began = time.monotonic()
+    commits = law.git('log', '--format=%H', tip, '--', inner, cwd=law.corpus_dir(corpus)).split()
+    if kept is not None and time.monotonic() - began >= FOLDER_LOG_KEPT_S:
+        try:
+            kept.parent.mkdir(parents=True, exist_ok=True)
+            tmp = kept.with_name(f'{kept.name}.{os.getpid()}.{threading.get_ident()}.part')
+            tmp.write_text(json.dumps({'folder': inner, 'commits': commits}), encoding='utf-8')
+            os.replace(tmp, kept)
+        except OSError:
+            pass
+    return commits
 
 
 def folder_commits_many(corpus: str, folders: list[str]) -> dict[str, list[str]]:
