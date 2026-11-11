@@ -4406,17 +4406,33 @@ def _publisher_changes(info: dict, rows: list) -> None:
             rows[i] = r[:4] + ('uncredited',) + r[5:]
 
 
+INDEX_SEEN_S = 2.0  # how long _main_index answers without looking at the corpus again (as a server's _look does)
+_INDEX_SEEN: dict = {}
+
+
 def _main_index(corpus: str) -> dict:
     """The corpus read once at the commit the tree pins: every commit (rows, in history order) and every version of
     every file (files: path -> [(row, blob or None for a deletion, mode)]). Kept on disk in the tree's git folder
     (global-law-cache), keyed by the pin: a pin that moved forward adds only the new commits, so after the first read
     a corpus costs one file load, not a walk of its history."""
+    # Asked again within INDEX_SEEN_S of an answer, at the same HEAD, the index in hand is given without looking at
+    # the corpus's folder and pin again. Those looks are 36 microseconds, and a tree of a corpus with many corrections
+    # asks 12 million times (act_ends for every file under every correction): Japan's acts took 500 s to build a
+    # day's tree in a fresh process, 450 s of them here.
+    import time
+    now, head = time.monotonic(), _head()
+    seen = _INDEX_SEEN.get(corpus)
+    if seen is not None and now - seen[0] < INDEX_SEEN_S and seen[1] == head:
+        got = _CACHE.get(seen[2])
+        if got is not None:
+            return got  # type: ignore[return-value]
     cwd = corpus_dir(corpus)
     sha = tip(corpus)
     if not sha:
         raise SystemExit(f'{corpus} is not pinned in this tree')
     key = ('index', f'{corpus}@{sha}')
     if key in _CACHE:
+        _INDEX_SEEN[corpus] = (now, head, key)
         return _CACHE[key]  # type: ignore[return-value]
     focused = _focused_index(corpus, cwd, sha)
     if focused is not None:
