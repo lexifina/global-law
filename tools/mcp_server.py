@@ -173,7 +173,8 @@ search_index = None
 # search of a whole history took 34 s (Japan) to over 80 s (Romania, France), whatever the words.
 history_index = None
 HISTORY_GAP = 2000  # commits after the index's tip that git is asked about; more, and git reads the whole history
-HISTORY_ROUNDS = 8  # times the index is asked again, leaving out the commits that are no change of the law
+HISTORY_ROUNDS = 24  # times the index is asked for a corpus's next changed files, the commits already seen left out
+HISTORY_SKIP = 50000  # commits left out of one question (a host's index may take 65,536)
 SEARCH_INDEX_FILES = 200  # files of one corpus named in one git grep (and asked of search_index.paths at once)
 SEARCH_INDEX_ARGV = 20000  # characters of file names in one git grep: Windows takes 32,767 in a command line
 SEARCH_INDEX_TOP_UPS = 30  # corpora asked for further paths, unread, to fill search_law's list of provisions
@@ -5100,10 +5101,12 @@ def history_rows(corpus: str, cwd: Path, words: str | None, folders: list[str] |
                  holding, counted) -> tuple[list[tuple], bool] | None:
     """What status_pairs gives for the pickaxe search of a corpus's whole history, by way of a host's index
     (history_index): the commits after the index's tip are read by git (log_args, specs), the rest named by the index.
-    With whether the index had more than it gave. `counted(commit)`: whether a commit is a change phrase_history
-    reports; a corpus published again in another layout is one commit of 600,000 files that is not, and would fill
-    the index's answer, so where an answer is full and holds too few changes that count, the index is asked again
-    without the commits that do not. None: no index, words it is not asked, a corpus it does not hold,
+    With whether the index had more than was read. `counted(commit)`: whether a commit is a change phrase_history
+    reports. Many are not: a corpus published again in another layout is one commit of 600,000 files, and the
+    newest commits that hold a common word in Romania are nine in ten no event of the timeline. So the index's
+    answer is read commit by commit: where it is full, the commits it gave whole are left out of the next question
+    (the last, which may be cut, is asked again), until it has no more, PHRASE_FILES changed files that count are in
+    hand, or it has been asked HISTORY_ROUNDS times (the list is then cut, as a long one is). None: no index, words it is not asked, a corpus it does not hold,
     a tip that is not in this history or too far behind it; then git reads the whole history, as ever."""
     hook = history_index
     if hook is None or not words:
@@ -5124,18 +5127,21 @@ def history_rows(corpus: str, cwd: Path, words: str | None, folders: list[str] |
         if isinstance(holding, (set, frozenset)) and corpus not in holding:
             return newer, False  # no change of this corpus touched the words
         skip: set = set()
+        kept: list = []
+        full = False
         for _ in range(HISTORY_ROUNDS):
             got = hook.pairs(words, corpus, folders, most, sorted(skip))
             if not isinstance(got, (list, tuple)) or len(got) > most or not all(isinstance(r, (list, tuple)) and len(r) == 4 for r in got):
                 return None
-            others = {r[0] for r in got if not counted(r[0])}
-            if len(got) < most or not others or len(got) - sum(1 for r in got if r[0] in others) > PHRASE_FILES:
+            full = len(got) >= most
+            if full and got[0][0] != got[-1][0]:  # the last commit's files may not all be here: it is asked again
+                got = [r for r in got if r[0] != got[-1][0]]
+            kept += [r for r in got if counted(r[0])]
+            skip |= {r[0] for r in got}
+            if not full or len(kept) > PHRASE_FILES or len(skip) > HISTORY_SKIP:
                 break
-            skip |= others
-        else:
-            return None
         rows = []
-        for row in got:
+        for row in kept:
             sha, parent, name, old = row
             if not (isinstance(sha, str) and isinstance(name, str) and isinstance(old, str) and (parent is None or isinstance(parent, str))):
                 return None
@@ -5149,7 +5155,7 @@ def history_rows(corpus: str, cwd: Path, words: str | None, folders: list[str] |
             elif not inside[1]:
                 old = name
             rows.append((sha, parent, name, old))
-        return newer + rows, len(got) >= most
+        return newer + rows, full
     except (SystemExit, Exception):  # noqa: BLE001
         return None
 
@@ -5363,7 +5369,7 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
     notes = [n for n in note.strip().split('\n') if n and not n.startswith('Not read, as they hold court decisions')]
     if not found:
         return f'No change in the record added or removed text containing {query!r}.' + note, {
-            'changes': [], 'total': 0, 'not_searched': missing, **caselaw_fields(caselaw),
+            'changes': [], 'total': 0, 'not_searched': missing, **({'cut': True} if cut else {}), **caselaw_fields(caselaw),
             **({'case_law_partial': unread} if unread else {}), **({'notes': notes} if notes else {})}
     start = [f for f in found if f['effect'] == 'present_at_start']
     at_start = (f"'present at start': the words were already in the record's first text ({start[0]['law']}, "

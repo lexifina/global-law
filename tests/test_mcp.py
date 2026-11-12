@@ -4103,6 +4103,23 @@ class PhraseHistoryByIndex(unittest.TestCase):
         self.assertEqual(asked, [[], ['f' * 40]])
         self.assertEqual(self.whole, [])
 
+        class Scattered(ChangesIndex):  # as many commits that do not count as an answer holds, one file each, newest
+            def pairs(self, words, corpus, folders, most, skip=None):
+                got = super().pairs(words, corpus, folders, most, skip)
+                junk = [('%040x' % i, None, f'x/{i}.md', f'x/{i}.md') for i in range(1, most + 1) if '%040x' % i not in (skip or ())]
+                return (junk + got)[:most]
+        index = Scattered(m, self.corpora(ask))
+        self.assertEqual(self.by(index, ask), git)
+        asked = [len(c[5]) for c in index.calls if c[0] == 'pairs' and c[2] == US_C]
+        self.assertEqual(len(asked), 2)  # the first answer's commits but its last are left out of the second question
+        self.assertEqual(asked[0], 0)
+        self.assertEqual(self.whole, [])
+        with self.mock.patch.object(m, 'HISTORY_ROUNDS', 1):  # asked once only: what is in hand, said to be cut
+            text, data = self.by(Scattered(m, self.corpora(ask)), ask)
+            self.assertEqual(self.whole, [])
+            self.assertEqual((data['changes'], data.get('cut')), ([], True))
+            self.assertIn('only the newest were', text)
+
     @needs(US_C)
     def test_an_index_that_does_not_answer_is_not_missed(self):
         m, ask = self.m, self.ASKS[0]
