@@ -1266,7 +1266,7 @@ def path_arg(value) -> str:
 
 # --- the index of provisions, for find_provision --------------------------------------------------------------------
 
-@lru_cache(maxsize=1024)  # every corpus, so list_jurisdictions does not list them all again
+@lru_cache(maxsize=2048)  # every corpus (811 on a server of the world, some at a second revision), so list_jurisdictions does not list them all again
 def names_of(corpus: str, sha: str) -> tuple[str, ...]:
     """Every law file in a corpus at one commit (names only: cheap even for a large corpus)."""
     out = law.git('ls-tree', '-r', '--name-only', sha, cwd=ROOT / corpus).splitlines()
@@ -3022,7 +3022,7 @@ def provision_link(corpus: str, rel: str, date: str, links: list[dict]) -> tuple
     return None
 
 
-@lru_cache(maxsize=64)
+@lru_cache(maxsize=2048)  # (every corpus served, as modifies_in)
 def act_titles(corpus: str, sha: str) -> dict[str, str]:
     """folder -> act title, from the one index file a corpus ships: data/acts.json (romania-law: path, title),
     data/acts.csv (the UK: path, title) or verzeichnis.json (Germany: slug, title, jurabk). Never every README."""
@@ -3076,7 +3076,7 @@ def act_title(corpus: str, rel: str) -> str:
     return named.group(1) if named and re.search(r'\b(Act|Order|Regulations|Rules|Measure)\b', named.group(1)) else ''
 
 
-@lru_cache(maxsize=64)
+@lru_cache(maxsize=2048)  # (every corpus served, as modifies_in)
 def act_portals(corpus: str, sha: str) -> dict[str, str]:
     """folder -> the act's own page on the publisher's portal, its current consolidated text (data/acts.json
     `portal`, romania-law)."""
@@ -3510,7 +3510,10 @@ def t_applies_to_case(args: dict) -> tuple[str, dict]:
                                               'reaches_back_to_commencement': [{'law': r['law'], 'in_force': r['in_force']} for r in back]}
 
 
-@lru_cache(maxsize=16)
+# Kept for every corpus served: every read_law asks for its corpus's, and with room for 16 a server of every country
+# (720 bodies of law) read the history again whenever the corpus was not one of the last 16 read: 6.3 s for Romania's
+# 631,000 commits, on the first read of it in each process and after any 16 others (2026-11-12).
+@lru_cache(maxsize=2048)
 def modifies_in(corpus: str, sha: str) -> list[dict]:
     """Every `Modifies:` effect in a corpus's history: a change to how a provision applies that leaves its words alone
     (proposed shape: Modifies: <provision> | <kind> | <from>..<until> | <effect> | set-by <source>)."""
@@ -6835,7 +6838,7 @@ def ch_article_paths(m) -> list[str]:
 _decision_key = law.decision_key  # a docket or BGE reference as a key (law.py, which builds the case-law index)
 
 
-@lru_cache(maxsize=64)
+@lru_cache(maxsize=256)  # (every case-law corpus served: 91)
 def _decisions(corpus: str, sha: str) -> dict[str, tuple[str, ...]]:
     """Docket and BGE reference -> decision files, by file name: a decision's file is named from its docket (or its
     BGE reference), decisions/<court>/<year>/<docket>.md, with --<hash> after it where two share a name. One ls-tree
@@ -7900,7 +7903,7 @@ _META_SEEN: dict[tuple[str, str], dict] = {}
 _META_LOCK = threading.Lock()
 
 
-@lru_cache(maxsize=512)
+@lru_cache(maxsize=2048)  # (every corpus served)
 def _relations(corpus: str, sha: str) -> dict[str, tuple[str, str]]:
     """A case-law corpus's decision-relations.tsv (path, relation, target, note): 'same-decision-as' (a duplicate file
     and the file kept, in the same corpus) and 'moved-to' (a file moved to another corpus, '<corpus>/<path>')."""
