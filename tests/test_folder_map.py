@@ -120,6 +120,28 @@ class FolderMap(unittest.TestCase):
         self.assertTrue(all(not error and changes for error, changes in got['whole']), got['whole'])
         self.assertTrue(len(got['runs']) >= 8 and max(got['runs']) == 1, got['runs'])  # each history in runs of one commit
 
+    def test_5_find_provision_within_a_folder_or_a_file(self):
+        """A scope inside a corpus: the files in it are read off the corpus's sorted names by folder (a folder, a
+        folder two levels down, one file, a folder that is only the start of another's name), as when every name of
+        the corpus was tested against the scope."""
+        probe = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server as m\n'
+                 'out = {}\n'
+                 'for scope in json.loads(sys.stdin.read()):\n'
+                 '    r = m.handle({"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "find_provision", '
+                 '"arguments": {"query": "2", "jurisdiction": scope}}})["result"]\n'
+                 '    out[scope] = [r["isError"], [x["path"] for x in r.get("structuredContent", {}).get("results", [])]]\n'
+                 'print(json.dumps(out))\n')
+        scopes = [LAW, f'{LAW}/act-a', f'{LAW}/act-a/part-1', f'{LAW}/act-a/part-1/2.md', f'{LAW}/act-b', f'{LAW}/act', f'{LAW}/act-a/']
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', probe], cwd=self.t.root, input=json.dumps(scopes),
+                              capture_output=True, encoding='utf-8', timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        got = json.loads(done.stdout)
+        two = f'{LAW}/act-a/part-1/2.md'
+        for scope in scopes[:4] + scopes[6:]:
+            self.assertEqual(got[scope], [False, [two]], scope)
+        for scope in (f'{LAW}/act-b', f'{LAW}/act'):  # no file numbered 2 there; "act" is not the folder act-a
+            self.assertNotIn(two, got[scope][1], scope)
+
     def test_3_built_again_for_a_history_that_is_not_its_continuation(self):
         """A map whose tip the corpus no longer holds as an ancestor (a rebuilt corpus) is built again, whole."""
         import sqlite3

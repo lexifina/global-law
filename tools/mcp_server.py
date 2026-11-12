@@ -2631,7 +2631,27 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         # A corpus wholly inside the scope asked (a country's every corpus) has every file in scope: not asked of
         # each name (in_scope, 2.1 million times for the United States).
         every = not acts and (not scope or (c['path'] + '/').startswith(scope if scope.endswith('/') else scope + '/'))
-        names = names_of(c['path'], sha) if every else [n for n in names_of(c['path'], sha) if in_scope(f"{c['path']}/{n}")]
+        if every:
+            names = names_of(c['path'], sha)
+        else:
+            # The acts the query names, or the folder (or file) the scope names, inside this corpus: its files are
+            # read off the corpus's sorted names (names_under), then checked as every name was. A citation of an
+            # act with no jurisdiction tested all 12.6 million names of 720 corpora against the act's folder (8 s).
+            inside = ([a[len(c['path']) + 1:] for a in acts if a.startswith(c['path'] + '/')] if acts else
+                      [scope[len(c['path']) + 1:].rstrip('/')] if scope and scope.startswith(c['path'] + '/') else None)
+            if acts and not inside:
+                continue  # none of the acts is in this corpus
+            names = None
+            if inside and all(inside) and _names_sorted(c['path'], sha):
+                in_corpus, picked = names_of(c['path'], sha), set()
+                for folder in inside:
+                    picked.update(names_under(c['path'], sha, folder))
+                    j = bisect.bisect_left(in_corpus, folder)
+                    if j < len(in_corpus) and in_corpus[j] == folder:  # (the scope may name one file)
+                        picked.add(folder)
+                names = [n for n in sorted(picked) if in_scope(f"{c['path']}/{n}")]
+            if names is None:
+                names = [n for n in names_of(c['path'], sha) if in_scope(f"{c['path']}/{n}")]
         if not names:
             continue
         scores: dict[str, int] = {}
