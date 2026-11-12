@@ -4184,7 +4184,8 @@ def loose_pattern(text: str) -> str:
         if forms:
             return '(' + '|'.join(dict.fromkeys(ch + forms)) + ')'
         return VARIANTS.get(ch, re.sub(r'([.^$*+?()\[\]{}|\\])', r'\\\1', ch))
-    return ''.join(one(ch) for ch in text)
+    # (a run of spaces is one space: each became "one or more spaces", and two typed by mistake matched no text)
+    return ''.join(one(ch) for ch in re.sub(r'\s+', ' ', text))
 
 
 TREE_KEPT_S = 2.0  # how long tree_on answers from what it last read (as _look does for the corpora served)
@@ -5265,6 +5266,12 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
     query = text_arg(args, 'query')
     if not query:
         raise UserError('Give words to trace, for example "COVID-19" or "7,500,000".')
+    if not args.get('regex'):
+        # A phrase given in quotes is the phrase: with the quotes it matched only where the law itself quotes it
+        # ("data protection" in quotes: 1 change in Ireland, 451 without).
+        query = re.sub(r'\s+', ' ', query)
+        if len(query) > 2 and (query[0], query[-1]) in QUOTE_PAIRS and not any(q in query[1:-1] for q in (query[0], query[-1])):
+            query = query[1:-1].strip() or query
     scope = scope_arg(args)
     limit = num(args, 'max_results', 40, 300)
     pattern = safe_regex(query) if args.get('regex') else loose_pattern(query)
@@ -5291,9 +5298,10 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
             for rows, over in pool_map(pool, lambda cc: caselaw_phrase(cc[0], cc[1], pattern, scoped(cc[0]['path'], scope), by_commit, words), cases):
                 found += rows
                 cut = cut or over
-    for c, cwd in pairs_of:
-        if law.is_caselaw(c):
-            continue
+    def one_law(pair):
+        """(the changes of one law corpus, whether its list of changed files was cut)."""
+        c, cwd = pair
+        out, over = [], False
         sub = scoped(c['path'], scope)
         # --name-status with renames: a provision file renamed by a change (Malta's "Annex II" becoming the "Third
         # Schedule") is counted under its old name before and its new name after, so a move is not read as an addition.
@@ -5311,14 +5319,14 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
                 continue
             pairs.append((sha, parent, name, e, old))
         if len(pairs) > PHRASE_FILES or more:
-            pairs, cut = pairs[:PHRASE_FILES], True
+            pairs, over = pairs[:PHRASE_FILES], True
         # Which way did the words go? Count the file's matching lines before and after the change; git runs the
         # pattern, never Python's backtracking engine. Equal counts: the words sit on a line changed for another reason.
         counts = grep_counts(cwd, pattern, pairs)
         for sha, parent, name, e, old in pairs:
             after, before = counts.get((sha, name), 0), counts.get((parent, old), 0) if parent else 0
             if old != name and before:  # renamed: matching lines that came along moved; any beyond that were removed
-                found.append({'in_force': e.in_force, 'corpus': c['path'], 'law': e.law, 'path': f"{c['path']}/{old}",
+                out.append({'in_force': e.in_force, 'corpus': c['path'], 'law': e.law, 'path': f"{c['path']}/{old}",
                               'effect': 'moved' if after >= before else 'removed', 'to': f"{c['path']}/{name}",
                               'lines_added': 0, 'lines_removed': max(before - after, 0), 'lines_moved': min(before, after)})
                 if after <= before:
@@ -5330,9 +5338,21 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
             effect = 'added' if after > before else 'removed'
             if effect == 'added' and e.kind == 'baseline':  # a first commit that enacts (the Grundgesetz, 1949) stays "added"
                 effect = 'present_at_start'
-            found.append({'in_force': e.in_force, 'corpus': c['path'], 'law': e.law, 'path': f"{c['path']}/{moved.get(name, name)}",
+            out.append({'in_force': e.in_force, 'corpus': c['path'], 'law': e.law, 'path': f"{c['path']}/{moved.get(name, name)}",
                           'effect': effect,
                           'lines_added': max(after - before, 0), 'lines_removed': max(before - after, 0)})
+        return out, over
+    # The law corpora side by side: with an index naming the changed files, a call over every jurisdiction is the
+    # counting of lines in some hundreds of corpora, one after another ("COVID-19": 70 s).
+    laws = [(c, cwd) for c, cwd in pairs_of if not law.is_caselaw(c)]
+    if len(laws) > 1:
+        with ThreadPoolExecutor(min(PHRASE_CORPORA, len(laws))) as pool:
+            done = list(pool_map(pool, one_law, laws))
+    else:
+        done = [one_law(pair) for pair in laws]
+    for rows, over in done:
+        found += rows
+        cut = cut or over
     found.sort(key=lambda f: (f['in_force'], f['path']))
     note = not_searched(missing) + (f'\nOver {PHRASE_FILES} changed files in one corpus matched; only the newest were '
                                     'checked. Narrow it with a jurisdiction or a longer phrase.' if cut else '') + caselaw_note(caselaw)
@@ -5365,6 +5385,7 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
 
 
 PHRASE_FILES = 3000  # changed files phrase_history checks per corpus
+QUOTE_PAIRS = {('"', '"'), ('\u201c', '\u201d'), ('\u201e', '\u201c'), ('\u201e', '\u201d'), ('\u00ab', '\u00bb'), ('\u00bb', '\u00ab')}  # around a whole query
 
 
 CASELAW_GREPS = max(2, min(12, (os.cpu_count() or 4) // 2))  # git grep processes one case-law corpus is read with, side by side
@@ -5551,8 +5572,74 @@ def former_folders(corpus: str, sub: str) -> list[str]:
     return out
 
 
+GREP_BLOBS = 200  # file versions one git grep is given, by blob id
+LOOKUPS = 400  # (commit, file) names one git cat-file --batch-check is asked for
+PHRASE_CORPORA = 4  # law corpora phrase_history reads side by side
+
+
 def grep_counts(cwd: Path, pattern: str, pairs: list) -> dict[tuple[str, str], int]:
-    """{(commit, file): lines matching the pattern} for each change and its parent, in a few git greps."""
+    """{(commit, file): lines matching the pattern} for each change (commit, parent, file[, _, old name]) and its
+    parent's version of the file, each version read once: the blob of every (commit, file) is looked up (one git
+    cat-file --batch-check; a file a commit does not have is simply not there) and git grep is given the blobs
+    themselves, each once however many changes share it. Given commits and names, git grep read every name in every
+    commit of a part: 40 changes of 40 files in 40 commits were 3,200 files read for the 80 wanted, and a list cut
+    at 3,000 changed files took 17 s to count (Romania, "S.R.L."); phrase_history of a common word with no
+    jurisdiction, 40 to 70 s. Anything unexpected from git, and the files are counted the old way."""
+    wanted = list(dict.fromkeys([(p[0], p[2]) for p in pairs] + [(p[1], p[4] if len(p) > 4 else p[2]) for p in pairs if p[1]]))
+    if len(wanted) > 2:
+        try:
+            if any('\n' in name for _, name in wanted):
+                raise ValueError('a name with a line break')
+
+            def looked_up(part):
+                done = git_run(['git', 'cat-file', '--batch-check'], cwd=cwd, input=''.join(f'{rev}:{name}\n' for rev, name in part),
+                               capture_output=True, encoding='utf-8', errors='replace')
+                got = done.stdout.splitlines()
+                if done.returncode or len(got) != len(part):
+                    raise ValueError('git cat-file --batch-check')
+                return got
+            # In parts, side by side: a name is found by walking its commit's trees, and where a folder holds tens
+            # of thousands of entries that is over a millisecond a name (the Netherlands: 6,000 names, 9 s in one).
+            asked = [wanted[i:i + LOOKUPS] for i in range(0, len(wanted), LOOKUPS)]
+            if len(asked) > 1:
+                with ThreadPoolExecutor(min(8, len(asked))) as pool:
+                    lines = [line for got in pool_map(pool, looked_up, asked) for line in got]
+            else:
+                lines = looked_up(asked[0])
+            holders: dict[str, list] = {}
+            for key, line in zip(wanted, lines):
+                fields = line.split()
+                if len(fields) == 3 and fields[1] == 'blob' and re.fullmatch(r'[0-9a-f]{40,64}', fields[0]):
+                    holders.setdefault(fields[0], []).append(key)
+                elif not line.endswith(' missing') and not (len(fields) == 3 and fields[1] in ('tree', 'commit', 'tag')):
+                    raise ValueError(line[:80])
+            blobs = list(holders)
+
+            def some(part):
+                return git_run(['git', 'grep', '--threads=1', '-c', '-I', '-i', '-E', '-e', pattern, *part], cwd=cwd, capture_output=True,
+                               encoding='utf-8', errors='replace').stdout
+            parts = [blobs[i:i + GREP_BLOBS] for i in range(0, len(blobs), GREP_BLOBS)]
+            if len(parts) > 1:
+                with ThreadPoolExecutor(min(8, len(parts))) as pool:
+                    outs = list(pool_map(pool, some, parts))
+            else:
+                outs = [some(part) for part in parts]
+            found: dict[tuple[str, str], int] = {}
+            for out in outs:
+                for line in out.splitlines():
+                    blob, _, n = line.rpartition(':')
+                    if n.isdigit() and blob in holders:
+                        for key in holders[blob]:
+                            found[key] = int(n)
+            return found
+        except (ValueError, OSError, subprocess.SubprocessError):
+            pass
+    return _grep_counts_by_name(cwd, pattern, pairs)
+
+
+def _grep_counts_by_name(cwd: Path, pattern: str, pairs: list) -> dict[tuple[str, str], int]:
+    """grep_counts by commits and file names, in a few git greps: for one or two files, and when the blobs cannot be
+    looked up."""
     counts: dict[tuple[str, str], int] = {}
 
     def one(chunk):

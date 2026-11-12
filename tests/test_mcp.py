@@ -4193,5 +4193,51 @@ class ChangedBetweenDates(unittest.TestCase):
                 break
 
 
+class CountsByBlob(unittest.TestCase):
+    """grep_counts reads each version of a file once, by its blob id (2026-11-12): the counts must be those of the
+    git grep over commits and names it replaced, for every change and its parent."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    @needs(US_C)
+    def test_the_counts_are_those_of_a_grep_by_commit_and_name(self):
+        m, cwd = self.m, ROOT / US_C
+        out = subprocess.run(['git', 'log', '-60', '--format=@%H %P', '--name-status', '-M', '--', '*.md'], cwd=cwd, capture_output=True,
+                             encoding='utf-8', errors='replace', check=True).stdout
+        pairs = [(sha, parent, name, None, old) for sha, parent, name, old in m.status_pairs(out)][:400]
+        self.assertGreater(len(pairs), 5)
+        for pattern in (m.loose_pattern('the'), m.loose_pattern('small business debtor'), 'sec(tion|retary)', m.loose_pattern('qqzzxxjj')):
+            with self.subTest(pattern=pattern):
+                new, old = m.grep_counts(cwd, pattern, pairs), m._grep_counts_by_name(cwd, pattern, pairs)
+                keys = {(p[0], p[2]) for p in pairs} | {(p[1], p[4]) for p in pairs if p[1]}
+                self.assertEqual({k: new.get(k, 0) for k in keys}, {k: old.get(k, 0) for k in keys})
+                self.assertTrue(set(new) <= keys)
+        base = m.grep_counts(cwd, m.loose_pattern('the'), pairs)
+        self.assertTrue(any(base.values()))
+        from unittest import mock
+        with mock.patch.object(m, 'GREP_BLOBS', 7):  # many small greps, side by side: the same counts
+            self.assertEqual(m.grep_counts(cwd, m.loose_pattern('the'), pairs), base)
+        one = pairs[:1]  # one change: counted by name, as ever
+        self.assertEqual({k: v for k, v in m.grep_counts(cwd, m.loose_pattern('the'), one).items() if k in keys},
+                         {k: v for k, v in m._grep_counts_by_name(cwd, m.loose_pattern('the'), one).items() if k in keys})
+
+    @needs(US_C)
+    def test_a_phrase_in_quotes_or_with_two_spaces_is_the_phrase(self):
+        m = self.m
+        plain = m.t_phrase_history({'query': 'small business debtor', 'jurisdiction': US_C, 'max_results': 300})[1]['changes']
+        self.assertTrue(plain)
+        for query in ('"small business debtor"', '“small business debtor”', 'small  business   debtor', ' "small business  debtor" '):
+            with self.subTest(query=query):
+                self.assertEqual(m.t_phrase_history({'query': query, 'jurisdiction': US_C, 'max_results': 300})[1]['changes'], plain)
+        # a quote inside the words is part of them, and a regular expression is taken as written
+        self.assertNotEqual(m.t_phrase_history({'query': '"small" business "debtor"', 'jurisdiction': US_C})[1]['changes'], plain[:40])
+        self.assertEqual(m.loose_pattern('a  b'), m.loose_pattern('a b'))
+
+
 if __name__ == '__main__':
     unittest.main()
