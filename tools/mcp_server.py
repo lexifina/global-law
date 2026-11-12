@@ -7575,7 +7575,7 @@ def fi_decision_paths(m) -> list[str]:
 # Austria --------------------------------------------------------------------------------------------------------------
 AT_ACTS = 'austria/bund/acts'
 # "Art 7 B-VG", "Art. 140 Abs. 1 B-VG", "Artikel 18 Abs 2 B-VG": the Federal Constitutional Act; "§ 1 DSG", "§ 4 Abs 1
-# DSG": the Data Protection Act. austria-law holds these two; other Austrian acts are not read yet. German law has no
+# DSG": the Data Protection Act, with forms of their own; the other acts are read by AT_PARA below. German law has no
 # act abbreviated DSG or B-VG, so these never claim a German citation.
 AT_BVG = re.compile(r'\bArt(?:ikel|\.)?\s*(?P<num>\d{1,3}[a-z]?)(?:\s*Abs\.?\s*\d{1,2}[a-z]?)?(?:\s*(?:Z|lit\.?)\s*[\w.]{1,4})?\s*B-VG(?![\w-])')
 AT_DSG = re.compile(r'§\s*(?P<num>\d{1,3}[a-z]?)(?:\s*Abs\.?\s*\d{1,2}[a-z]?)?(?:\s*(?:Z|lit\.?)\s*[\w.]{1,4})?\s*DSG(?![\w-])')
@@ -7588,8 +7588,10 @@ AT_DOCKET = re.compile(r'(?<![\w/.-])(?:\d{1,2}\s+(?:Ob|Os|ObA|ObS|Bkd|Fsc|Nc|Ns
 
 
 def at_corpus() -> tuple[str, str | None]:
-    path = next((c['path'] for c in _full_manifest(head())['corpora'] if iso_code(c) == 'at' and not law.is_caselaw(c)
-                 and c['path'].endswith('/acts')), AT_ACTS)
+    """Austria's federal law (B-VG, DSG and the other federal acts), not a Land's: austria/burgenland/acts is also 'at'."""
+    paths = [c['path'] for c in _full_manifest(head())['corpora'] if iso_code(c) == 'at' and not law.is_caselaw(c)
+             and c['path'].endswith('/acts')]
+    path = AT_ACTS if AT_ACTS in paths or not paths else paths[0]
     served = any(c['path'] == path for c in law.manifest()['corpora']) and (ROOT / path / '.git').exists()
     return path, (corpus_head(path) or None) if served else None
 
@@ -7608,6 +7610,83 @@ def at_dsg_paths(m) -> list[str]:
         if p.startswith('dsg/') and p.endswith('/' + want):
             return [f'{corpus}/{p}']
     return [f'{corpus}/dsg/{want}']
+
+
+@lru_cache(maxsize=1)
+def at_aliases() -> dict:
+    """data/at-aliases.json: for each Austrian corpus, 'acts' (abbreviation key: no spaces, dots or hyphens, lower case
+    -> act folder) and 'forms' (key -> the abbreviations as courts write them: "ABGB", "EStG 1988", "EStG", "Bgld. BauG",
+    "Bgld BauG"). Built from each corpus's data/fassungen.json (RIS's Abkürzung); B-VG and DSG keep their own forms
+    above. Austrian and German acts share abbreviations (StGB, ZPO, StPO, AktG, GmbHG, EStG ...): citations_in()
+    settles those by the text's words or the corpora served, never by the order of the forms."""
+    try:
+        return json.loads((ROOT / 'data' / 'at-aliases.json').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        try:
+            return json.loads(law.git('show', 'HEAD:data/at-aliases.json', check=False) or '{}')
+        except (ValueError, SystemExit, RuntimeError, OSError):
+            return {}
+
+
+def at_key(abbr: str) -> str:
+    return re.sub(r'[\s.\-]', '', abbr).lower()
+
+
+_AT_QUAL = r'(?:Abs\.?|Z|lit\.?|Satz|S\.|Halbsatz|Fall)'
+
+
+def _at_para_rx():
+    """'§ 1295 ABGB', '§ 879 Abs 1 ABGB', '§§ 1293, 1295 ABGB', '§ 16 Abs 1 Z 3 MRG', '§ 1 Bgld. BauG': one or more
+    §§ with their Abs/Z/lit, then an abbreviation the table holds (written in any case: RIS gives "URHG" where courts
+    write "UrhG"). Only §: "Art. 106 StGB" is Swiss, and B-VG's articles have their own form. An abbreviation a German
+    act also has (StGB, StPO, ZPO, AktG, GmbHG, UrhG, EStG ...) is left to the German form: "§ 242 StPO" names neither
+    country, so the words alone cannot say it is Austrian. Bounded repetition, as the German form."""
+    german = set(de_aliases().get('acts', {}))
+    names = sorted({n for c in at_aliases().get('corpora', {}).values() for forms in c.get('forms', {}).values()
+                    for n in forms if len(n) >= 2 and de_key(n) not in german}, key=lambda n: (-len(n), n))
+    abbr = '|'.join(re.escape(n) for n in names) or r'(?!x)x'
+    return re.compile(r'(?<![\w-])(?P<kind>§§?)\s*(?P<nums>\d{1,4}\s?[a-z]?(?:\s*(?:' + _AT_QUAL
+                      + r'\s*[\w.]{1,4}|(?:,|und|bis|sowie|oder)\s*\d{1,4}\s?[a-z]?|ff\.?)){0,12})'
+                      r',?\s+(?:des\s+|der\s+)?(?P<abbr>(?i:' + abbr + r'))(?![\wÄÖÜäöüß-])')
+
+
+AT_PARA = _LazyRegex(_at_para_rx, '§')
+
+
+def _at_year_forms_rx():
+    """The abbreviations of data/at-aliases.json written with a year ("EStG 1988"), for CITATION_COUNTRY_MARKS."""
+    forms = sorted({n for c in at_aliases().get('corpora', {}).values() for fs in c.get('forms', {}).values() for n in fs
+                    if re.search(r'\s(?:18|19|20)\d{2}$', n)}, key=lambda n: (-len(n), n))
+    return re.compile(r'(?<![\w-])(?:' + ('|'.join(re.escape(n) for n in forms) or r'(?!x)x') + r')(?!\d)')
+
+
+@lru_cache(maxsize=4)
+def _at_names(corpus: str, sha: str) -> frozenset:
+    return frozenset(names_of(corpus, sha))
+
+
+def at_para_paths(m) -> list[str]:
+    """The files an Austrian § citation names: the act by its abbreviation (data/at-aliases.json; the
+    federal corpus first, then a Land's), each number (not the Abs, Z or lit) by its file in that act's folder, at the
+    top of the folder before any nested one; where no served corpus holds the act, [] (unresolved)."""
+    k = at_key(m.group('abbr'))
+    hit = next(((path, c['acts'][k]) for path, c in at_aliases().get('corpora', {}).items() if k in c.get('acts', {})), None)
+    if not hit:
+        return []
+    corpus, folder = hit
+    served = any(c['path'] == corpus for c in law.manifest()['corpora']) and (ROOT / corpus / '.git').exists()
+    sha = (corpus_head(corpus) or None) if served else None
+    names = _at_names(corpus, sha) if sha else frozenset()
+    out = []
+    for q, n, suf in re.findall(r'(' + _AT_QUAL + r')?\s*(\d+)\s?([a-z]?)\b', m.group('nums')):
+        if q:
+            continue
+        want = f'par-{int(n):04d}{suf}.md'
+        direct = f'{folder}/{want}'
+        found = direct if direct in names else next(
+            (p for p in sorted(names) if p.startswith(folder + '/') and p.endswith('/' + want)), direct)
+        out.append(f'{corpus}/{found}')
+    return out
 
 
 # Brazil ---------------------------------------------------------------------------------------------------------------
@@ -8344,6 +8423,10 @@ CITATION_REGISTRY = [
     # Austria: "Art 7 B-VG", "Art. 140 Abs. 1 B-VG", "§ 1 DSG" (the acts austria-law holds), and Geschäftszahlen.
     CitationForm('at', AT_BVG, at_bvg_paths, ('Art 7 B-VG', 'Art. 140 Abs. 1 B-VG', 'Artikel 18 Abs 2 B-VG')),
     CitationForm('at', AT_DSG, at_dsg_paths, ('§ 1 DSG', '§ 4 Abs 1 DSG')),
+    # The other federal acts and Burgenland's, by RIS's abbreviation (data/at-aliases.json), but for those German acts
+    # share.
+    CitationForm('at', AT_PARA, at_para_paths, ('§ 1295 ABGB', '§ 879 Abs 1 ABGB', '§§ 1293, 1295 ABGB',
+                                                 '§ 16 Abs 1 Z 3 MRG', '§ 1 Bgld. BauG', '§ 5 Bgld BauG')),
     CitationForm('at', AT_DOCKET, lambda m: decision_paths(m.group(0)),
                  ('G 123/2024', 'E 1471/2026', '1 Ob 123/20a', '15 Os 12/21m', 'Ra 2020/01/0123')),
     # Every other country's ECLI, read the same way: its decisions resolve once a case-law corpus of that country is
@@ -8415,6 +8498,9 @@ CITATION_COUNTRY_MARKS = {
     'md': re.compile(r'Republicii\s+Moldova|\bMoldovei\b|(?-i:\bRM\b)', re.I),
     'ro': re.compile(r'Rom[aâ]niei\b', re.I),
     'pr': re.compile(r'Puerto\s+Rico|puertorrique|\bL\.\s?P\.\s?R\.\s?A\.', re.I),  # Puerto Rico's own codes (a US territory)
+    # Austria's acts named with their year ("EStG 1988", "GewO 1994", "KFG 1967"): the German acts of those names carry
+    # none, so "§ 2 EStG 1988" is Austrian though "§ 2 EStG" is read as German.
+    'at': _LazyRegex(lambda: _at_year_forms_rx(), r'\d{4}'),
 }
 # How a citation's name may go on past what its form read: capitalised words and the joining words between them
 # ("Política de los Estados Unidos Mexicanos", "para el Distrito Federal", "al Republicii Moldova"); and a

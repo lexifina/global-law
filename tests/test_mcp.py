@@ -2650,6 +2650,21 @@ class TestCrossCountryCitations(unittest.TestCase):
                 self.assertEqual(self.countries(ex), {f.country}, ex)
         self.assertEqual(listed - seen, set(), 'CITATION_OVERLAPS lists overlaps that no longer happen')
 
+    def test_austrian_acts_by_abbreviation(self):
+        """#21: the federal acts beyond B-VG and DSG, and Burgenland's, by RIS's abbreviation; an abbreviation German
+        acts share stays German (the words alone cannot say "§ 242 StPO" is Austrian)."""
+        from unittest import mock
+        def paths(text):
+            with mock.patch.object(self.m, 'citation_served', lambda c: False):
+                return [(h['country'], h['path']) for h in self.m.citations_in(text)]
+        self.assertEqual(paths('§§ 1293, 1295 ABGB'), [('at', 'austria/bund/acts/abgb/par-1293.md'),
+                                                         ('at', 'austria/bund/acts/abgb/par-1295.md')])
+        self.assertEqual(paths('§ 16 Abs 1 Z 3 MRG'), [('at', 'austria/bund/acts/mrg/par-0016.md')])
+        self.assertEqual(paths('§ 2 EStG 1988')[0], ('at', 'austria/bund/acts/estg-1988/par-0002.md'))
+        self.assertEqual(paths('§ 5 Bgld BauG'), [('at', 'austria/burgenland/acts/baug/par-0005.md')])
+        self.assertNotIn('at', {c for c, _ in paths('§ 242 StPO')})
+        self.assertNotIn('at', {c for c, _ in paths('Art. 106 Abs. 1 StGB')})
+
     def test_spain_does_not_take_mexican_or_argentine_citations(self):
         text = ('Conforme al artículo 1 de la Constitución Política de los Estados Unidos Mexicanos y al artículo 14 de la '
                 'Ley Orgánica del Poder Judicial de la Federación, en relación con el artículo 1910 del Código Civil para el '
