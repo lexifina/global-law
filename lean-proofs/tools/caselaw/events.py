@@ -22,14 +22,15 @@ from graph import norm_cite  # noqa: E402
 CITE_RX = re.compile(r"\b(\d{1,4})\s+((?:[A-Z][A-Za-z.']{0,9}\s?){1,5}(?:\d[a-z]{1,2}\.?\s?)?(?:\([^)]{1,12}\)\s?)?)\s*(\d{1,5})\b")
 NOISE_BEFORE = re.compile(r"(objection|motion|exception|demurrer|plea|assignment|point|contention|petition|request|"
                           r"rehearing|ruling|argument|claim|issue|protest|challenge|application|suggestion|"
-                          r"specification|ground|error|complaint)s?\b[^.]{0,60}$", re.I)
+                          r"specification|ground|error|complaint|proposition|finding|recommendation|cross-point)s?\b"
+                          r"(?:[^.]|\.(?!\s+[A-Z][a-z])){0,60}$", re.I)
 REFUSE = re.compile(r"(decline|refuse|need not|will not|do not|did not|cannot|could not|not|asked|urge|urges|invite|"
                     r"request|ask|whether|would|should|asks|asking|urging|nor|unwilling|reluctant|hesitate)\b"
-                    r"[\w\s,]{0,30}$", re.I)
+                    r"[\w\s,’']{0,60}$", re.I)
 ACT_WE = re.compile(r"\b(?:we|this court|the court|it is)\b(?P<mid>(?:\s+[\w’']+){0,5}?)\s+overrul(?:e|es)\b", re.I)
 NEG_MID = re.compile(r"\b(not|decline|declines|refuse|refuses|need|would|could|might|whether|if|unless|asked|ask|asks|"
                      r"urged|urge|invited|invite|requested|request|reluctant|hesitate|cannot|nor|never|have|had|did|was|"
-                     r"were|previously|earlier|once|then|recently|implicitly|in)\b", re.I)
+                     r"were|previously|earlier|once|then|recently|implicitly|in|no|should|to|see|cannot|persuaded)\b", re.I)
 ACT_PASSIVE = re.compile(r"\b(?:is|are|be)\s+(?:(?:hereby|now|expressly|specifically|therefore|accordingly|herewith|"
                          r"formally|explicitly|today|thus|necessarily|disapproved\s+and|modified\s+and|and\s+now\s+is|"
                          r"and\s+hereby\s+is|and\s+are\s+hereby|in\s+all\s+respects|pro\s+tanto|to\s+that\s+extent|"
@@ -44,16 +45,17 @@ ACT_MODAL = re.compile(r"\b(?:should|must|ought\s+to|shall|will)\s+(?:now\s+|the
 NEG_BEFORE_MODAL = re.compile(r"\b(whether|ask|asks|asked|asking|urge|urges|urged|argue|argues|argued|contend|contends|"
                               r"suggest|suggests|suggested|consider|question|invite|invites|petition|request|requests|seek|"
                               r"seeks|if|unless|would|might|could|claim|claims|insist|insists|maintain|maintains|"
-                              r"submit|submits|propose|proposes)\b[^.]{0,120}$", re.I)
+                              r"submit|submits|propose|proposes|assert|asserts|asserted|implies|imply|sought|until|not|plurality|"
+                              r"dissent|dissenting|mock|considered|believes|believed|thinks|thought)\b[^.]{0,120}$", re.I)
 ACT_EXTENT = re.compile(r"(?:to the extent|insofar as|in so far as|so far as)[^.]{0,250}\b(?:is|are|be)\s+(?:\w+\s+)?overruled\b"
                         r"(?!\s+(?:by|in)\b)|\b(?:is|are|be)\s+overruled\s+to the extent", re.I)
 REPORT = re.compile(r"\boverruled,?\s*((?:(?:on other grounds|in part|on another point|on other points|on different grounds|"
                     r"on a different point|sub silentio|by implication|implicitly|in relevant part|on unrelated grounds|"
                     r"in other part|on other issues?|on another issue|on another ground)[\s,]*){0,2}),?\s*(?:by|in)\s", re.I)
-NOISE_AFTER = re.compile(r"overrul\w*\s+(?:(?:[\w.\-]+['’]s?|the|his|her|their|its|this|that|these|those|all|each|both|"
+NOISE_AFTER = re.compile(r"overrul\w*\s+(?:(?:[\w.\-]+(?:['’]s?)?|the|his|her|their|its|this|that|these|those|all|each|both|"
                          r"remaining|said|such|any|every|appellants?|appellees?|defendants?|plaintiffs?|respondents?|"
                          r"petitioners?|movants?|relators?|state['’]s|first|second|third|fourth|fifth|sixth|seventh|"
-                         r"eighth|ninth|tenth|sole|single|only|and|or|of|error|cross)\s+){0,6}"
+                         r"eighth|ninth|tenth|sole|single|only|and|or|of|error|cross)\s+){0,8}"
                          r"(issues?|points?|contentions?|assignments?|objections?|grounds?|complaints?|arguments?|"
                          r"motions?|exceptions?|claims?|challenges?|errors?|specifications?|propositions?|cross-points?|"
                          r"demurrers?|pleas?|requests?|applications?|petitions?|protests?|counts?|parts?|sub-?issues?)\b",
@@ -63,6 +65,42 @@ MAJ = re.compile(r"^(Majority|Per Curiam|Opinion|Head matter|Lead|Plurality|$)",
 DISAPPROVE = re.compile(r"\bdisapprov(?:e|es|ed|ing)\b", re.I)
 SWAP = {"disapprove": "overrule  ", "disapproves": "overrules  ", "disapproved": "overruled  ",
         "disapproving": "overruling  "}
+
+
+ABBR = set("""v vs No Nos Co Inc Corp Ltd al seq Bros Ry App Supp Ct Dist Div Cir Rep Rptr Super Misc Dept Cas Ed
+    Eq Ga Va Md Pa Me Vt Del Ky La Mo Ohio Iowa Wash Mass Conn Penn Mich Minn Wis Ill Ind Kan Neb Okla Ariz Colo Cal Fla
+    Ala Tenn Miss Ark Ore Nev Mont Wyo Utah Tex Civ Crim Pac Atl Fed Wall Pet How Cranch Dall Wheat Black Mr Mrs Dr St
+    Ave Assn Ass Comm Comr Commr Sec Stat Ann Gen Laws Rev Cl Pt Art Ch Sess Reg Id Ibid Jr Sr So Wn Hun Barb Paige Wend
+    Johns Cow Abb Pr Hill Den Daly Bosw Sandf Duer Hilt Bradf Edw Redf Dem Wheel Rob""".split())
+
+
+def sentence_of(s, at):
+    """The sentence around position `at`: from the last sentence end before it (within 350 characters) to the next
+    one after it (within 250). A full stop followed by a capital ends a sentence unless it closes an abbreviation of a
+    court, reporter or name (a word in ABBR, or of one or two letters)."""
+    def is_end(i):
+        if s[i] != ".":
+            return False
+        j = i + 1
+        while j < len(s) and s[j] == " ":
+            j += 1
+        if j == i + 1 or j >= len(s) or not (s[j].isupper() or s[j] in "“\"("):
+            return False
+        w = re.search(r"([A-Za-z’']+)$", s[max(0, i - 15):i])
+        if w and (w.group(1) in ABBR or len(w.group(1)) <= 2):
+            return False
+        return True
+    a0 = max(0, at - 350)
+    for i in range(at - 1, max(0, at - 350) - 1, -1):
+        if is_end(i):
+            a0 = i + 1
+            break
+    a1 = min(len(s), at + 250)
+    for i in range(at, min(len(s), at + 250)):
+        if is_end(i):
+            a1 = i + 1
+            break
+    return a0, a1
 
 
 def cites_in(text, idx):
@@ -180,12 +218,13 @@ def main(ex, gdir, out):
             if not MAJ.match(sec):
                 cnt["act-in-separate-opinion"] += 1
                 continue
-            region = s[max(0, at - 400):at + 250]
+            a0, a1 = sentence_of(s, at)
+            region = s[a0:a1]
             targets = [j for _, _, j in cites_in(region, idx) if j != y]
             how = "cite"
             if not targets:
                 how = "name"
-                near = s[max(0, at - 250):at + 120].replace("-", "")
+                near = region.replace("-", "")
                 for j in cites_of.get(y, []):
                     for t in name_tokens(names.get(j, "")):
                         if re.search(r"\b" + re.escape(t.replace("-", "")) + r"\b", near):
