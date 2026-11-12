@@ -4333,8 +4333,19 @@ class SearchBestFirst(unittest.TestCase):
         self.assertEqual(best.get('order'), 'relevance')
         self.assertNotIn('order', by_name)
         key = lambda r: (r['path'], r['line'], r['text'])  # noqa: E731
-        self.assertEqual(sorted(map(key, best['results'])), sorted(map(key, by_name['results'])))
-        self.assertEqual((best['provision_count'], best['page']['total']), (by_name['provision_count'], by_name['page']['total']))
+        # The same provisions; of each, its first lines (at most RANKED_LINES), which are lines the order of names gives.
+        every = {}
+        for r in by_name['results']:
+            every.setdefault(r['path'], []).append(key(r))
+        shown = {}
+        for r in best['results']:
+            shown.setdefault(r['path'], []).append(key(r))
+        self.assertEqual(set(shown), set(every))
+        for path, rows in shown.items():
+            self.assertEqual(rows, every[path][:m.RANKED_LINES], path)
+        self.assertEqual(best['provision_count'], by_name['provision_count'])
+        if any(len(rows) > m.RANKED_LINES for rows in every.values()):  # lines were left out: the count is a floor
+            self.assertIsNone(best['page']['total'])
         seen = list(dict.fromkeys(r['path'] for r in best['results'] if r['path'].startswith(IE_C + '/')))
         texts = index.corpus(IE_C)
         q = index.words(ask['query']).strip()

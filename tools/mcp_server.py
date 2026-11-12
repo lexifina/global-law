@@ -229,6 +229,9 @@ def index_paths(query: str, corpus: str, after: str | None, size: int) -> list |
     return _index_paths_checked(got, after, size)
 
 
+RANKED_LINES = 3  # lines of one provision search_law shows in the order of relevance
+
+
 def index_ranked(query: str, corpus: str, skip: int, size: int) -> list | None:
     """search_index.ranked, checked: at most `size` different paths; None when the index cannot rank, does not answer,
     or answers anything else."""
@@ -4413,6 +4416,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         # files then come by their place in that order (`seen`), not after a name. An index that cannot rank this
         # corpus lists it by name; one that stops ranking part of the way leaves the corpus to grep.
         best_first = order == 'relevance'
+        capped = False  # a provision had more lines than are shown of one (RANKED_LINES): the lines are not all here
         if corpus in judged:
             _call.deadline = deadline
             if caselaw_time_up():
@@ -4465,7 +4469,12 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                 for rel in part:  # in the index's order, whatever order the lines came in; a file with no line
                     path = f'{corpus}/{rel}'  # (git: the phrase runs over a line break) is counted and gives no row
                     paths.append(path)
-                    for number, text in found.get(rel, ()):
+                    hits = found.get(rel, ())
+                    if best_first and len(hits) > RANKED_LINES:
+                        # The best provision is the one that says the words most often: all its lines would fill
+                        # the page (a schedule with twelve of them was the whole answer), so it shows its first few.
+                        hits, capped = hits[:RANKED_LINES], True
+                    for number, text in hits:
                         count += 1
                         if len(rows) < offset + limit:
                             rows.append((corpus, {'path': path, 'line': number, 'text': text.strip()[:400]}))
@@ -4476,7 +4485,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
             law_read[0] += 1
         whole = seen >= total or ended
         return corpus, done, paths, rows, count, {'files': len(paths) if ended and seen < total else max(files_in, len(paths)),
-                                                  'whole': whole, 'after': after, 'seen': seen, 'ranked': best_first}
+                                                  'whole': whole, 'after': after, 'seen': seen, 'ranked': best_first,
+                                                  'capped': capped}
 
     results, files, owners, n_lines = [], set(), {}, 0
     offset = offset_arg(args)
@@ -4532,7 +4542,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     checkpoint()
     # Lines not all read: a corpus the index answered for gave what the page needs and has more files, or comes after
     # the page and was not read.
-    more_lines = any(not ix['whole'] for ix in by_index.values())
+    more_lines = any(not ix['whole'] or ix.get('capped') for ix in by_index.values())
     n_files = len(files) + sum(ix['files'] for ix in by_index.values())  # provisions that match
     listed = set(files)  # paths for the answer's list: those read and, while the list has room, the next the index names
     for corpus, ix in by_index.items():
@@ -9535,7 +9545,7 @@ TOOLS = [
      {'query': {'type': 'string', 'description': 'Words or a phrase; a regular expression if regex is true.'}, 'date': DATE, 'jurisdiction': SCOPE,
       'kind': KIND, 'regex': REGEX, 'case_sensitive': {'type': 'boolean', 'description': 'Match upper and lower case as written (default false: either case matches).'},
       'max_results': at_most(30, 200, 'Matching lines to return'), 'offset': OFFSET,
-      'order': {'type': 'string', 'enum': ['relevance', 'path'], 'description': 'relevance (default): within each body of law, the provisions in which the words occur most come first, where the server can rank them. path: in the order of the files\' names.'}},
+      'order': {'type': 'string', 'enum': ['relevance', 'path'], 'description': 'relevance (default): within each body of law, the provisions in which the words occur most come first, each with its first three matching lines, where the server can rank them. path: every matching line, in the order of the files\' names.'}},
      ['query'], t_search_law),
     ('changes_between', 'Every provision whose text on date_b differs from its text on date_a, in every jurisdiction or one, with the laws that took effect after date_a, up to and including date_b.',
      {'date_a': DAY, 'date_b': DAY, 'jurisdiction': SCOPE, 'kind': KIND}, ['date_a', 'date_b'], t_changes_between),
