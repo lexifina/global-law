@@ -92,6 +92,34 @@ class FolderMap(unittest.TestCase):
         self.assertEqual(got['folders']['act-a/part-1']['map'][0], new)
         self.assertEqual(len(got['folders']['act-a/part-1']['map']), 3)
 
+    def test_4_a_history_read_in_parts_gives_what_one_log_gives(self):
+        """split_log: phrase_history's pickaxe search and search_changes' search of the notes, the history handed to
+        several git log processes in runs, answer as the one log of the whole history does."""
+        probe = ('import json, sys; sys.path.insert(0, "tools"); sys.dont_write_bytecode = True; import mcp_server as m\n'
+                 'def ask(name, args):\n'
+                 '    r = m.handle({"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": name, "arguments": args}})["result"]\n'
+                 '    return [r["isError"], r.get("structuredContent", {}).get("changes")]\n'
+                 'calls = [("phrase_history", {"query": "amended", "jurisdiction": sys.argv[1]}), ("phrase_history", {"query": "One"}),\n'
+                 '         ("search_changes", {"query": "Act A", "jurisdiction": sys.argv[1]}), ("search_changes", {"query": "repeal"})]\n'
+                 'whole = [ask(*c) for c in calls]\n'
+                 'runs = []\n'
+                 'real = m.git_run\n'
+                 'def spy(cmd, **k):\n'
+                 '    if "--no-walk=unsorted" in cmd:\n'
+                 '        runs.append(len((k.get("input") or "").split()))\n'
+                 '    return real(cmd, **k)\n'
+                 'm.git_run = spy\n'
+                 'm.LOG_SPLIT_COMMITS, m.LOG_PARTS = 2, 2\n'
+                 'parts = [ask(*c) for c in calls]\n'
+                 'print(json.dumps({"whole": whole, "parts": parts, "runs": runs}))\n')
+        done = subprocess.run([sys.executable, '-X', 'utf8', '-c', probe, LAW], cwd=self.t.root, capture_output=True,
+                              encoding='utf-8', timeout=300)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        got = json.loads(done.stdout)
+        self.assertEqual(got['parts'], got['whole'])
+        self.assertTrue(all(not error and changes for error, changes in got['whole']), got['whole'])
+        self.assertTrue(len(got['runs']) >= 8 and max(got['runs']) == 1, got['runs'])  # each history in runs of one commit
+
     def test_3_built_again_for_a_history_that_is_not_its_continuation(self):
         """A map whose tip the corpus no longer holds as an ancestor (a rebuilt corpus) is built again, whole."""
         import sqlite3

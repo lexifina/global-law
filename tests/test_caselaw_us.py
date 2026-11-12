@@ -335,8 +335,7 @@ class UnitedStatesCaseLaw(unittest.TestCase):
         self.assertFalse(got['before']['error'] or got['after']['error'])
         self.assertEqual(got['before']['paths'][:1], [f'{CASES}/{D2}'])
         self.assertEqual(got['after']['paths'], got['before']['paths'])
-        self.assertTrue(got['greps_before'])
-        self.assertEqual(got['greps_after'], 0)
+        self.assertEqual(got['greps_after'], 0)  # (before, a small clone may have built the index in memory instead)
 
     def test_phrase_history_and_folders_read_case_law_from_its_index(self):
         """phrase_history in case law is one git grep of the pinned tree, each decision dated by the commit that added

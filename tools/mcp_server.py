@@ -1281,6 +1281,64 @@ def stems_of(corpus: str, sha: str) -> dict[str, str]:
     return {n: stem_of(n) for n in names_of(corpus, sha)}
 
 
+def _lines_text(lines) -> tuple[str, array]:
+    """(the lines joined by a newline, where each begins in that text)."""
+    starts, at = array('I'), 0
+    for line in lines:
+        starts.append(at)
+        at += len(line) + 1
+    return '\n'.join(lines), starts
+
+
+def lines_holding(text: str, starts: array, needles: list[str], most: int) -> list[int] | None:
+    """The lines of a text (_lines_text) that hold any of the needles, as line numbers in order; None when a needle
+    is empty or more than `most` lines hold one (the caller then goes through every line, as it did before). Each
+    needle is looked for by str.find, from the line after its last hit: the time is that of reading the text once
+    for each needle, whatever the number of lines."""
+    hits: set[int] = set()
+    lines, size = len(starts), len(text)
+    for needle in needles:
+        if not needle:
+            return None
+        pos = text.find(needle)
+        while pos >= 0:
+            i = bisect.bisect_right(starts, pos) - 1
+            hits.add(i)
+            if len(hits) > most:
+                return None
+            pos = text.find(needle, starts[i + 1]) if i + 1 < lines else -1
+    return sorted(hits)
+
+
+@lru_cache(maxsize=2048)  # (about 30 bytes a name: Romania's 1.2 million are 48 MB; 12 million names in all)
+def names_index(corpus: str, sha: str) -> tuple[str, array]:
+    """Every name of names_of, folded, on a line each, with where each line begins: which names hold a word or a
+    number of a query is a search of this text (lines_holding). find_provision scored every name in scope one by
+    one (folded it, counted the words in it): 12 million names for a query with no jurisdiction, 2.1 million for the
+    United States, though their files are named by number and almost no name could hold "protection"."""
+    return _lines_text([fold(n) for n in names_of(corpus, sha)])
+
+
+_index_text: dict[tuple[str, str], tuple] = {}  # (the index, its folded headings as one text, the line starts, the names)
+
+
+def headings_index(corpus: str, sha: str, index: dict[str, str]) -> tuple[str, array, list[str]]:
+    """An index's folded headings (folded_headings) on a line each, where each line begins, and the file each line is
+    the heading of: made on the first search of the index and kept with it (and dropped with it)."""
+    key = (corpus, sha)
+    with _index_lock:
+        kept = _index_text.get(key)
+    if kept is not None and kept[0] is index:
+        return kept[1:]
+    folded = folded_headings(corpus, sha, index)
+    text, starts = _lines_text(list(folded.values()))
+    made = (index, text, starts, list(folded))
+    with _index_lock:
+        if _index_done.get(key) is index:
+            _index_text[key] = made
+    return made[1:]
+
+
 @lru_cache(maxsize=4096)
 def has_file(corpus: str, sha: str, rel: str) -> bool:
     """Whether one law file is in a corpus at one commit: one ls-tree of that path. names_of lists every file and filters
@@ -1417,6 +1475,7 @@ def _index_keep(key: tuple[str, str], out: dict[str, str]) -> None:
         oldest = next(iter(_index_done))
         total -= len(_index_done.pop(oldest))
         _index_folded.pop(oldest, None)
+        _index_text.pop(oldest, None)
 
 
 def _index_files(disk: Path, rest: str = r'[0-9a-f]{12}\.json') -> list[Path]:
@@ -1644,8 +1703,19 @@ def index_served() -> bool:
     country greps instead, rather than read millions of files."""
     # Case law is not searched by heading unless a query's scope names it, so its files do not count: listing a million
     # US decisions here on every find_provision took 6 s (US speed gate, 2026-11-07).
+    # Remembered for a minute while the tree's HEAD stays: every find_provision asks, and the answer is a look at
+    # every corpus's folder and pin (a fifth of a second for 720 corpora).
+    now, head = time.monotonic(), law._head()
+    kept = _index_served
+    if kept and kept[0] == head and now - kept[1] < 60:
+        return kept[2]
     corpora = [c['path'] for c in law.manifest()['corpora'] if (ROOT / c['path'] / '.git').exists() and not law.is_caselaw(c)]
-    return sum(len(names_of(c, s)) for c in corpora if (s := corpus_head(c))) <= INDEX_FILES
+    served = sum(len(names_of(c, s)) for c in corpora if (s := corpus_head(c))) <= INDEX_FILES
+    _index_served[:] = [head, now, served]
+    return served
+
+
+_index_served: list = []
 
 
 def warm_index() -> None:
@@ -1678,7 +1748,7 @@ def folder_titles(corpus: str, sha: str) -> dict[str, dict]:
         return _folder_titles(corpus, sha)
 
 
-@lru_cache(maxsize=64)
+@lru_cache(maxsize=2048)  # every corpus served: a query with no jurisdiction asks all of them (see folded_titles)
 def _folder_titles(corpus: str, sha: str) -> dict[str, dict]:
     done = git_run(['git', 'show', f'{sha}:data/acts.json'], cwd=ROOT / corpus, capture_output=True, timeout=GIT_TIMEOUT)
     try:
@@ -1739,7 +1809,7 @@ ACT_CITE = re.compile(r'(?<![\w.])(?:(?P<kind>' + '|'.join(p for p, _ in ACT_KIN
                       r'\s*(?:/\s*|\s+din\s+(?:\d{1,2}\s+[a-zăâîșşțţ]+\s+)?)(?P<y>(?:1[89]|20)\d{2})(?!\d)', re.I)
 
 
-@lru_cache(maxsize=64)
+@lru_cache(maxsize=2048)  # every corpus served: with room for 64, a citation with no jurisdiction worked all 720 out again (10 s)
 def act_folder_index(corpus: str, sha: str) -> dict[tuple[str, str], list[str]]:
     """The corpus's <kind>/<year>/<number> folders by (year, number), sorted, once per pinned commit: act_folders
     listed every folder of the corpus's files for each citation (Romania's 1.8 million names, about half a second)."""
@@ -1803,11 +1873,20 @@ def missing_act(query: str) -> str:
             'shows the acts of that year it holds.')
 
 
-@lru_cache(maxsize=64)
+@lru_cache(maxsize=2048)
 def folded_titles(corpus: str, sha: str) -> dict[str, list[str]]:
     """folder_titles' names, folded and with single spaces, once per pinned commit: act_by_title folded every title of
-    the corpus for each citation (Romania's, about 93,000 a call)."""
+    the corpus for each citation (Romania's, about 93,000 a call). Kept for every corpus served: room for 64 was less
+    than a query with no jurisdiction asks (720 corpora), so each such call read and folded all 594,000 titles
+    again, half of its time (profiled 2026-11-12)."""
     return {folder: [' '.join(fold(name).split()) for name in info['names']] for folder, info in folder_titles(corpus, sha).items()}
+
+
+@lru_cache(maxsize=2048)
+def titles_text(corpus: str, sha: str) -> str:
+    """Every folded title of a corpus (folded_titles) on a line each: whether any title could hold a word is one
+    search of this text, and act_by_title passes over a corpus where one of the words is in no title."""
+    return '\n'.join(t for names in folded_titles(corpus, sha).values() for t in names)
 
 
 def act_by_title(words: list[str], corpora: list[str], phrase: str) -> list[tuple[int, str, str]]:
@@ -1818,12 +1897,16 @@ def act_by_title(words: list[str], corpora: list[str], phrase: str) -> list[tupl
     if not words:
         return []
     want = [re.compile(rf'(?<!\w){re.escape(fold(w))}') for w in words]
+    folded_words = [fold(w) for w in words]
     folded_phrase = ' '.join(fold(phrase).split())
     as_phrase = re.compile(rf'(?<!\w){re.escape(folded_phrase)}(?!\w)')
     out = []
     for corpus in corpora:
         sha = corpus_head(corpus)
         if not sha:
+            continue
+        text = titles_text(corpus, sha)
+        if not all(w in text for w in folded_words):  # a title must hold every word: no title of this corpus can
             continue
         folded = folded_titles(corpus, sha)
         for folder, info in folder_titles(corpus, sha).items():
@@ -2470,7 +2553,13 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             return listed(rows)
     if hint and (not scope or hint.startswith(scope)):
         scope = hint
-    words = [w for w in re.split(r'[\s,§]+', rest.lower()) if w and w not in noise]
+    spoken = [w for w in re.split(r'[\s,§]+', rest.lower()) if w and w not in noise]
+    # The small words of an English phrase score nothing: each is part of some word in nearly every name and heading
+    # ("to" in "storage", "be" in "member"), so "right to be forgotten" with no jurisdiction scored 1.5 million files
+    # of every country, 23,640 of them matches, and ran out of time (2026-11-12). They stay in an act's title
+    # ("Protection from Harassment Act") and in the phrase a heading may hold whole (`phrase`); a query of nothing
+    # else keeps them.
+    words = [w for w in spoken if w not in SMALL_WORDS] or spoken
     numbers = [w for w in words if re.fullmatch(r'\d+(?:-\d+)?[a-z]?', w)]
     # The article numbers a heading may give, as article_number writes them: "31", or "31 bis" when the query says so.
     suffixed = {f'{a.lstrip("0") or a} {b.lower()}' for a, b in re.findall(rf'(?<![\w.])(\d+)\s*({NUMBER_SUFFIX})\b', rest, re.I)}
@@ -2513,6 +2602,9 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     # Scored without reading every file, so it stays fast on a corpus of hundreds of thousands of documents: numbers
     # against file names, words against heading lines found by git grep; headings are read only for the best hits.
     plain = [w for w in words if w not in numbers]
+    said = [w for w in spoken if w not in numbers]  # with the small words, as written: the phrase a heading may hold
+    phrase = ' '.join(said) if len(said) > len(plain) else ''
+    phrase_folded = fold(phrase)
     article_query = bool(re.search(r'(?<![\w.])(art\.?|artikel|article|articolo|articolul|artigo|art[ií]culo)(?![\w])', query, re.I))
     plain_folded = [fold(w) for w in plain]
     # Compiled once for the call, not once for each file in scope.
@@ -2536,8 +2628,10 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         if law.is_caselaw(c) and not (scope and (law.names_caselaw(scope) or scope.startswith(c['path']))):
             continue
         sha = corpus_head(c['path'])
-        names = [n for n in names_of(c['path'], sha) if in_scope(f"{c['path']}/{n}")]
-        stems = stems_of(c['path'], sha) if number_rx and names else None
+        # A corpus wholly inside the scope asked (a country's every corpus) has every file in scope: not asked of
+        # each name (in_scope, 2.1 million times for the United States).
+        every = not acts and (not scope or (c['path'] + '/').startswith(scope if scope.endswith('/') else scope + '/'))
+        names = names_of(c['path'], sha) if every else [n for n in names_of(c['path'], sha) if in_scope(f"{c['path']}/{n}")]
         if not names:
             continue
         scores: dict[str, int] = {}
@@ -2549,8 +2643,17 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         narrow = bool(acts) or bool(scope) and scope.startswith(c['path'] + '/')
         by_heading = heading_numbers(c['path'], sha, names) if numbers and (narrow or indexed) else {}
         headed_hits = set()
-        for name in names:
-            stem = stems[name] if stems else ''  # only a number is matched against it
+        # A name scores by a heading's article number, by a number of the query in it, or by a word of the query in
+        # it: where no heading gives a number, only the names that hold one of those (names_index: a search of
+        # the corpus's names as one text) can score, and only they are gone through.
+        scored = names
+        if not by_heading and every:
+            text, starts = names_index(c['path'], sha)
+            held = lines_holding(text, starts, [n_bare for _, n_bare, _ in number_rx] + plain_folded, max(2000, len(starts) // 3))
+            if held is not None:  # (in the names' own order, as they were gone through)
+                scored = [names[i] for i in held]
+        for name in scored:
+            stem = None  # worked out (stem_of) only for a name that holds a number of the query
             score = 0
             headed = by_heading.get(name)
             if headed is not None and headed in wanted:
@@ -2558,6 +2661,10 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 headed_hits.add(name)
             low = name.lower() if numbers else ''
             for n, n_bare, n_rx in number_rx:
+                if n_bare not in low:  # neither its stem nor a number in its name can be this one
+                    continue
+                if stem is None:
+                    stem = stem_of(name)
                 if stem == n or stem == n_bare:
                     score += 10 if headed is None else 0 if headed in wanted else 2
                 elif n_rx.search(low):
@@ -2581,7 +2688,18 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             if index is not None:
                 folded_words = [fold(w) for w in plain]
                 folded_heads = folded_headings(c['path'], sha, index)  # folded once per index, not once per call
-                lines = [(n, index[n]) for n in names if (f := folded_heads.get(n)) and any(w in f for w in folded_words)]
+                # The headings as one text, searched for each word: only the files whose heading holds one are gone
+                # through (every name was: 12 million a call with no jurisdiction). In the names' order, as before:
+                # where git lists them sorted, as it does; else, or where most headings hold a word, every name.
+                held = None
+                if every and _names_sorted(c['path'], sha):
+                    text, starts, headed = headings_index(c['path'], sha, index)
+                    held = lines_holding(text, starts, folded_words, max(2000, len(starts) // 3))
+                if held is not None:
+                    at = [headed[i] for i in held]
+                    lines = [(n, index[n]) for n in sorted(at) if (j := bisect.bisect_left(names, n)) < len(names) and names[j] == n]
+                else:
+                    lines = [(n, index[n]) for n in names if (f := folded_heads.get(n)) and any(w in f for w in folded_words)]
             else:
                 pattern = '^(#|heading:|title:).*(' + '|'.join(re.escape(w) for w in plain) + ')'
                 if law.is_caselaw(c):  # in parts, side by side: New York's other courts' 204,000 headings took 19 s in one
@@ -2601,8 +2719,9 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                     low = fold(text) if index is not None else text.lower()
                     # Every word on the line, or the words as a phrase, outranks one word of several ("automatic
                     # stay" is §362's heading, not "Automatic exchange of information").
+                    said_whole = phrase_folded if index is not None else phrase
                     gain = 3 * sum(1 for w in plain_here if w in low) + (4 if all(w in low for w in plain_here) else 0) \
-                        + (6 if len(plain_here) > 1 and ' '.join(plain_here) in low else 0)
+                        + (6 if len(plain_here) > 1 and ' '.join(plain_here) in low or said_whole and said_whole in low else 0)
                     # A file scores by its best heading line, not the sum of its lines: one word on each of two
                     # headings is not the phrase.
                     if gain > head_best.get((c['path'], name), 0):
@@ -2611,7 +2730,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             for (cp, name), gain in head_best.items():
                 if cp == c['path']:
                     scores[name] = scores.get(name, 0) + gain
-        exact = headed_hits | {n for n in scores if n not in by_heading and any((stems[n] if stems else stem_of(n)) in (x, x.lstrip('0')) for x in numbers)}
+        exact = headed_hits | {n for n in scores if n not in by_heading and any(stem_of(n) in (x, x.lstrip('0')) for x in numbers)}
         if exact and not plain:  # "art. 1" is art-001.md, not every art-NNN-1.md beside it
             scores = {n: v for n, v in scores.items() if n in exact}
         if c['path'] in cut_short:
@@ -2647,18 +2766,20 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         # Headings are often only a number ("Artikel 16a"), so fall back to the words of the law: at the commit the
         # tree pins, the latest text. (Building the corpus as in force today first cost Romania a minute before the
         # grep began, and a finder needs only where the words are; read_law gives the text on a date.)
-        for c in law.manifest()['corpora']:
+        def in_text(c):
+            """The files of one corpus whose text holds the words, as rows for `found`, and whether more matched than were kept."""
+            more = False
             if not corpus_in_scope(c['path']):
-                continue
+                return [], more
             # Case law's text is grepped only when the scope names it, as its headings are: a grep of a million
             # decisions for a phrase found in no law heading would run past the time limit.
             if law.is_caselaw(c) and not (scope and (law.names_caselaw(scope) or scope.startswith(c['path']))):
-                continue
+                return [], more
             if c['path'] in cut_short:  # its time is spent: any word of the query in any decision is no hit (N4)
-                continue
+                return [], more
             sha = corpus_head(c['path'])
             if not sha or not (ROOT / c['path'] / '.git').exists():
-                continue
+                return [], more
             # A host that keeps the text in force today as plain files names that revision (text_search_rev): the
             # same words, grepped from files rather than from the packs of the pin (23 s for Montenegro's acts,
             # whose tree for today is built and so is not the pin).
@@ -2670,15 +2791,15 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 [scope[len(c['path']) + 1:]] if scope and scope.startswith(c['path'] + '/') else []
             terms = [w for w in words if len(w) > 2 or inner and w.isdigit()]
             if not terms:
-                continue
+                return [], more
             whole = ['-w'] if all(w.isdigit() for w in terms) else []
             # A host's index names the files that hold the words most, and only their lines are counted: a grep of
             # every file of a country for a word no heading has took 24 s in France and ran out of time in Romania.
             most = (offset + limit) * 3
             named = None if inner or whole or text_rev is None else index_top(terms, c['path'], most + 1)
             if named is not None and not named:
-                continue
-            capped = capped or (named is not None and len(named) > most)
+                return [], more
+            more = more or (named is not None and len(named) > most)
             grep = ['git', 'grep', '-c', '-i', '-I', '-F', *whole, *[a for w in terms for a in ('-e', w)], sha, '--',
                     *(named if named is not None else inner or ['*.md'])]
             out = git_run(grep, cwd=ROOT / c['path'], capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT).stdout
@@ -2688,10 +2809,17 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 name, _, count = line.removeprefix(f'{sha}:').rpartition(':')
                 if name in law_files and count.isdigit() and in_scope(f"{c['path']}/{name}"):
                     counted.append((int(count), name))
-            capped = capped or len(counted) > (offset + limit) * 3
+            more = more or len(counted) > (offset + limit) * 3
             counted = sorted(counted, key=lambda r: (-r[0], natural(r[1])))[:(offset + limit) * 3]  # only these can be shown
             heads = read_headings(c['path'], sha, tuple(n for _, n in counted))
-            found += [(n, f"{c['path']}/{name}", heads.get(name, '') + '  (matched in the text)') for n, name in counted]
+            return [(n, f"{c['path']}/{name}", heads.get(name, '') + '  (matched in the text)') for n, name in counted], more
+        # The corpora in scope side by side, eight at a time, in the manifest's order: with no jurisdiction they are
+        # every body of law served (720), and one after another the index's answer for each, and git's count of the
+        # lines of the files it named, were 40 to 80 s (a call that found no heading ran out of time).
+        with ThreadPoolExecutor(8) as pool:
+            for rows, more in pool_map(pool, in_text, law.manifest()['corpora']):
+                found += rows
+                capped = capped or more
     found.sort(key=lambda r: (-r[0], natural(r[1])))
     seen: set[str] = set()
     found = [r for r in found if not (r[1] in seen or seen.add(r[1]))]
@@ -4877,6 +5005,40 @@ def list_folders(corpus: str, sha: str, base: str, items: list, folders: list[st
     return text, {'date': date, 'corpus': corpus, 'count': len(items), 'folders': rows, 'folder_count': len(folders)}
 
 
+LOG_PARTS = max(2, min(8, (os.cpu_count() or 4) * 2 // 3))  # git log processes one long history is read with, side by side
+LOG_SPLIT_COMMITS = 1000  # a history of fewer commits is read by one process, as ever
+
+
+def split_log(corpus: str, cwd: Path, args: list[str], paths: list[str] | None = None, rev: str | None = None) -> str:
+    """What `git log <args> [-- <paths>]` prints for a corpus's history from its HEAD (or `rev`), the history read in parts side
+    by side where it is long: its commits are listed once (git rev-list) and handed in runs to LOG_PARTS git log
+    processes (--no-walk), whose outputs are joined in the history's order. For searches that look into every commit
+    and cannot use an index of paths: the pickaxe search of phrase_history (-G: every commit's changed files are
+    read and diffed; 99 s for Japan's 50,000 commits, 168 s for the Netherlands', in one process, past a hosted
+    call's time; 24 and 45 s side by side) and search_changes' search of the notes (--grep: 7 s for Romania's
+    631,000). Only for a history without merges, where a walk limited to paths shows the same commits as the list
+    (with merges git simplifies the history it walks); any other is read by the one git log."""
+    tail = ['--', *paths] if paths else []
+    try:
+        head = rev or law.git('rev-parse', 'HEAD', cwd=cwd).strip()
+        commits = law.git('rev-list', head, cwd=cwd).split() if re.fullmatch(r'[0-9a-f]{40}', head) and _no_merges(corpus, head) else []
+    except (SystemExit, OSError, ValueError, subprocess.SubprocessError):
+        commits = []
+    if len(commits) < LOG_SPLIT_COMMITS:
+        return law.git('log', *([rev] if rev else []), *args, *tail, cwd=cwd)
+    size = -(-len(commits) // (LOG_PARTS * 4))  # shorter runs than processes: the busy stretches of a history are shared out
+    runs = [commits[i:i + size] for i in range(0, len(commits), size)]
+
+    def one(run):
+        done = git_run(['git', 'log', '--no-walk=unsorted', '--stdin', *args, *tail], cwd=cwd, input='\n'.join(run) + '\n',
+                       capture_output=True, encoding='utf-8', errors='replace')
+        if done.returncode:
+            raise subprocess.SubprocessError(f'git log: {(done.stderr or "").strip()[:200]}')
+        return done.stdout
+    with ThreadPoolExecutor(LOG_PARTS) as pool:
+        return ''.join(pool_map(pool, one, runs))
+
+
 def events_by_commit() -> dict:
     """(corpus, commit) -> its event, for every event of the timeline in hand, worked out once per timeline (kept
     with it, as law.by_corpus is). search_changes and phrase_history made this table on every call: every event of
@@ -4928,14 +5090,29 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
         with ThreadPoolExecutor(min(8, len(cases))) as pool:
             for got in pool_map(pool, case_hits, cases):
                 hits += got
-    for c, cwd in pairs:
-        if law.is_caselaw(c):
-            continue
+    def law_hits(c_cwd):
+        c, cwd = c_cwd
         sub = scoped(c['path'], scope)
-        for sha in law.git('log', '--format=%H', '-i', '--fixed-strings', f'--grep={query}', *(['--', sub] if sub else []), cwd=cwd).split():
+        # (within a folder git walks the commits that touch it, by its index of changed paths: left to the one log)
+        noted = (law.git('log', '--format=%H', '-i', '--fixed-strings', f'--grep={query}', '--', sub, cwd=cwd) if sub else
+                 split_log(c['path'], cwd, ['--format=%H', '-i', '--fixed-strings', f'--grep={query}']))
+        got = []
+        for sha in noted.split():
             e = by_commit.get((c['path'], sha))
             if e is not None and e.kind != 'documentation' and start <= e.in_force <= end:
-                hits.append((e, c['path'], sha, cwd))
+                got.append((e, c['path'], sha, cwd))
+        return got
+
+    # The bodies of law four at a time, in the manifest's order: with no jurisdiction they are 720, and one git log
+    # after another were 15 to 18 s.
+    laws = [p for p in pairs if not law.is_caselaw(p[0])]
+    if len(laws) > 1:
+        with ThreadPoolExecutor(min(4, len(laws))) as pool:
+            for got in pool_map(pool, law_hits, laws):
+                hits += got
+    else:
+        for p in laws:
+            hits += law_hits(p)
     missing_note = not_searched(missing) + caselaw_note(caselaw)
     if unread:
         missing_note += (f'\nPartial: {len(unread)} case-law corpora were not read within the {int(CASELAW_SECONDS)} s this answer may '
@@ -4943,11 +5120,17 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
     hits.sort(key=lambda h: h[0].in_force)  # a stable sort of hits gathered in one order: the same on every call
     offset = offset_arg(args, len(hits))
     place = page_of(len(hits), len(hits[offset:offset + limit]), offset)
-    found = []
-    for e, corpus, sha, cwd in hits[offset:offset + limit]:  # only the changes shown are read in full
+    def shown(hit):  # only the changes shown are read in full
+        e, corpus, sha, cwd = hit
         body = law.git('show', '-s', '--format=%B', sha, cwd=cwd)
-        hit = next((l.strip() for l in body.splitlines() if query.lower() in l.lower()), '')
-        found.append({'in_force': e.in_force, 'corpus': corpus, 'law': e.law, 'commit': sha, 'line': hit[:300]})
+        line = next((l.strip() for l in body.splitlines() if query.lower() in l.lower()), '')
+        return {'in_force': e.in_force, 'corpus': corpus, 'law': e.law, 'commit': sha, 'line': line[:300]}
+    part = hits[offset:offset + limit]
+    if len(part) > 1:
+        with ThreadPoolExecutor(min(8, len(part))) as pool:
+            found = list(pool_map(pool, shown, part))
+    else:
+        found = [shown(h) for h in part]
     partial = {'case_law_unread_for_time': sorted(unread)} if unread else {}
     if not found:
         return f'No change in the record mentions {query!r}.' + missing_note, {'changes': [], 'total': 0, 'not_searched': missing,
@@ -4997,8 +5180,7 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
         # A folder the corpus has since moved (moves) is searched under its earlier names too.
         specs = [f'{f}/*.md' for f in [sub, *former_folders(c['path'], sub)]] if sub else ['*.md']
         moved = law.moves(c['path'])
-        out = law.git('log', '--format=@%H %P', '--name-status', '-M', '-i', '--extended-regexp', f'-G{pattern}', '--',
-                      *specs, cwd=cwd)
+        out = split_log(c['path'], cwd, ['--format=@%H %P', '--name-status', '-M', '-i', '--extended-regexp', f'-G{pattern}'], specs)
         pairs, sha, parent = [], None, None
         for line in out.splitlines():
             if line.startswith('@'):
@@ -5141,15 +5323,25 @@ def caselaw_index_counts(corpus: str, cwd: Path, head: str, pattern: str, words:
     index, a corpus it does not hold at `head` (the text in force today), or an answer that is not as asked."""
     if search_index is None or not words:
         return None
+    prefix = (sub.strip('/') if sub else 'decisions') + '/'
+    other: list[str] = []
     try:
         rev = tree_on(law.day('today'), corpus)
-        if rev != head:  # a tree built for today (corrections laid over): the same decisions as the pin's, or grep
-            both = law.git('rev-parse', f'{rev}:decisions', f'{head}:decisions', cwd=cwd, check=False).split()
-            if len(both) != 2 or both[0] != both[1]:
+        if not rev:
+            return None
+        if rev != head:
+            # The index holds the text in force today, a tree built with the corrections laid over; the lines are
+            # counted at the pin. The files that differ between the two (a handful) are counted whatever the index
+            # says of them: every other file is the same text in both.
+            done = git_run(['git', 'diff', '--name-only', '--no-renames', '-z', rev, head, '--', prefix.rstrip('/')], cwd=cwd,
+                           capture_output=True, encoding='utf-8', errors='replace')
+            if done.returncode:
+                return None
+            other = [n for n in done.stdout.split('\0') if n.endswith('.md')]
+            if len(other) > PHRASE_FILES:
                 return None
     except (SystemExit, Exception):  # noqa: BLE001
         return None
-    prefix = (sub.strip('/') if sub else 'decisions') + '/'
     names, after = [], prefix
     while len(names) <= PHRASE_FILES:
         got = index_paths(words, corpus, after, 1000)
@@ -5161,6 +5353,9 @@ def caselaw_index_counts(corpus: str, cwd: Path, head: str, pattern: str, words:
             break
         after = got[-1]
     names = [n for n in names[:PHRASE_FILES + 1] if n.endswith('.md')]
+    if other:  # (up to the last file the index named, where it named as many as it may: past it nothing is known)
+        last = names[-1] if len(names) > PHRASE_FILES else None
+        names = sorted(set(names) | {n for n in other if last is None or n <= last})
     counts = grep_counts(cwd, pattern, [(head, None, n) for n in names])
     return {name: n for (_, name), n in counts.items() if n}
 
@@ -8514,7 +8709,8 @@ def t_law_details(args: dict) -> tuple[str, dict]:
                 # The author named whole, not a part of a longer name ("1 Ala. 9" is not "1 Ala. 98"): git's --author
                 # matches any part, so the names it gives are checked again.
                 whole = re.compile(rf'(?<![\w.]){re.escape(law_name.strip())}(?![\w])', re.I)
-                rows = law.git('log', pin, '--format=%H%x1f%an', f'--author={law_name}', '--fixed-strings', '-i', cwd=cwd).splitlines()
+                # (every commit's author is read: 6 s for Romania's 631,000 commits in one process)
+                rows = split_log(c, cwd, ['--format=%H%x1f%an', f'--author={law_name}', '--fixed-strings', '-i'], rev=pin).splitlines()
                 shas = [r.split('\x1f', 1)[0] for r in rows if '\x1f' in r and whole.search(r.split('\x1f', 1)[1])]
                 if not shas and corpus and len(law_name.strip()) >= 8 and not law.is_caselaw(entry):
                     # A law's full title, which its message holds and its short name does not: "Gesetz zur Ergänzung
@@ -8527,13 +8723,20 @@ def t_law_details(args: dict) -> tuple[str, dict]:
                         return law.git('log', pin, '-n', '10', '--format=%H', '-i', *how, cwd=cwd).split()
                     shas = ((grep('--perl-regexp', f'--grep=^\\Q{title}\\E\\s*$') if '\\E' not in title else [])
                             or grep(f'--grep={title}', '--fixed-strings'))
-        for sha in shas[:10]:
+        def read(sha):
             msg = law.git('show', '-s', '--format=%an%x1f%B', sha, cwd=cwd)
             author, _, body = msg.partition('\x1f')
             changed = law.git('show', '--name-status', '--format=', sha, cwd=cwd).split('\n')
             files = [f"{c}/{l.split(chr(9))[-1]}" for l in changed if l.strip() and not NOT_LAW.search(l.split('\t')[-1])]
-            found.append({'corpus': c, 'commit': sha, 'law': author, 'message': body.strip(), 'trailers': law.trailers(body),
-                          'trailers_all': law.trailers_all(body), 'provisions': files})
+            return {'corpus': c, 'commit': sha, 'law': author, 'message': body.strip(), 'trailers': law.trailers(body),
+                    'trailers_all': law.trailers_all(body), 'provisions': files}
+        # The changes side by side: a publisher's ten starting texts each list every file of the corpus (the
+        # Netherlands' 438,000: 18 s one after another).
+        if len(shas) > 1:
+            with ThreadPoolExecutor(min(8, len(shas[:10]))) as inner:
+                found += list(pool_map(inner, read, shas[:10]))
+        else:
+            found += [read(sha) for sha in shas[:10]]
         return found
 
     # Each corpus is its own git processes: read eight at a time, in the manifest's order (the five decisions of a
@@ -8591,6 +8794,32 @@ def t_law_details(args: dict) -> tuple[str, dict]:
 DIFF_PROVISIONS, DIFF_CHARS = 60, 700  # provisions law_details diffs per law, and characters of diff per provision
 
 
+def texts_of(cwd: Path, names: list[str]) -> list[str]:
+    """The text of each object named (`<commit>:<path>`), '' where there is none, read by one `git cat-file --batch`:
+    as `git show` of each gives it (line ends as \n), without a process for each."""
+    if not names:
+        return []
+    done = git_run(['git', 'cat-file', '--batch'], cwd=cwd, capture_output=True, timeout=GIT_TIMEOUT,
+                   input=''.join(f'{n}\n' for n in names).encode('utf-8'))
+    out, data, pos = [], done.stdout or b'', 0
+    for _ in names:
+        end = data.find(b'\n', pos)
+        if end < 0:
+            out.append('')
+            continue
+        header = data[pos:end].split()
+        pos = end + 1
+        if len(header) >= 3 and header[-2] == b'blob':
+            size = int(header[-1])
+            out.append(data[pos:pos + size].decode('utf-8', 'replace').replace('\r\n', '\n').replace('\r', '\n'))
+            pos += size + 1
+        else:  # "<name> missing", or not a file
+            if len(header) >= 3 and header[-1].isdigit():
+                pos += int(header[-1]) + 1
+            out.append('')
+    return out
+
+
 def change_diffs(corpus: str, sha: str, paths: list[str]) -> list[dict]:
     """Each provision a change touched, with what happened to its words: changed (with a word diff), only laid out
     differently, or moved to or from another provision in the same change (a consolidation re-split at new page or
@@ -8598,11 +8827,14 @@ def change_diffs(corpus: str, sha: str, paths: list[str]) -> list[dict]:
     from collections import Counter
     cwd = law.corpus_dir(corpus)
     per = []
-    for p in paths[:DIFF_PROVISIONS]:
+    # Both versions of every provision in one git process: two `git show` each were 4.6 s for a change of 30
+    # provisions, and a law_details of three such changes 14 s (2026-11-12).
+    rels = [p[len(corpus) + 1:] for p in paths[:DIFF_PROVISIONS]]
+    texts = texts_of(cwd, [f'{sha}{at}:{rel}' for rel in rels for at in ('^', '')])
+    for n, p in enumerate(paths[:DIFF_PROVISIONS]):
         checkpoint()
-        rel = p[len(corpus) + 1:]
-        old = law_words(law.git('show', f'{sha}^:{rel}', cwd=cwd, check=False)) or ''
-        new = law_words(law.git('show', f'{sha}:{rel}', cwd=cwd, check=False)) or ''
+        old = law_words(texts[2 * n]) or ''
+        new = law_words(texts[2 * n + 1]) or ''
         a, b = law_tokens(old), law_tokens(new)
         removed, added = Counter(), Counter()
         for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
@@ -8734,6 +8966,9 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
 
 
 CHANGES_SHOWN = 300  # provisions changes_between lists across all corpora when several changed
+
+
+SMALL_WORDS = frozenset(('to', 'be', 'in', 'on', 'for', 'by', 'at', 'an', 'or', 'as', 'is', 'it', 'with', 'from'))  # find_provision
 
 
 DATE = {'type': 'string', 'description': 'An in-force date, YYYY-MM-DD, or "today". Defaults to today.'}
