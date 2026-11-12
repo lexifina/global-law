@@ -155,6 +155,24 @@ def rewritten_grep(cmd: list, cwd) -> tuple[list, object]:
 #       in place of a grep of the whole corpus. None, an exception or anything else, and the corpus is grepped.
 # It is asked only for a plain search (no regex, no case_sensitive) of the text in force today.
 search_index = None
+# A host may also keep an index of the history, for phrase_history: `history_index`, an object with
+#   tips() -> {corpus: commit} | None
+#       For each law corpus it holds, the commit up to which every change of the corpus's history is in it.
+#   holding(words) -> {corpus, ...} | None
+#       The corpora with at least one change whose added or removed lines contain the words (a phrase, whole words,
+#       whatever the case or the diacritics, as search_index matches). None: not known, and each corpus is asked.
+#   pairs(words, corpus, folders, most, skip) -> [(commit, first parent or None, path, path before the change), ...] | None
+#       The newest `most` changed files of the corpus's history whose added or removed lines contain the words,
+#       newest commit first, under one of `folders` (paths within the corpus; None: anywhere), leaving out the
+#       commits in `skip`: every *.md file whose number of lines holding the words a commit changed is among them
+#       (a line only moved within a file need not be). Renames as `git log -M` pairs them. None, an exception or
+#       anything else: git is asked.
+# With it, phrase_history diffs only the commits after `tips()[corpus]` (none, on a host whose indexer has caught up)
+# and counts the matching lines of the files the index names, as it does for those git log -G names: the pickaxe
+# search of a whole history took 34 s (Japan) to over 80 s (Romania, France), whatever the words.
+history_index = None
+HISTORY_GAP = 2000  # commits after the index's tip that git is asked about; more, and git reads the whole history
+HISTORY_ROUNDS = 8  # times the index is asked again, leaving out the commits that are no change of the law
 SEARCH_INDEX_FILES = 200  # files of one corpus named in one git grep (and asked of search_index.paths at once)
 SEARCH_INDEX_ARGV = 20000  # characters of file names in one git grep: Windows takes 32,767 in a command line
 SEARCH_INDEX_TOP_UPS = 30  # corpora asked for further paths, unread, to fill search_law's list of provisions
@@ -5062,6 +5080,78 @@ def split_log(corpus: str, cwd: Path, args: list[str], paths: list[str] | None =
         return ''.join(pool_map(pool, one, runs))
 
 
+def status_pairs(out: str) -> list[tuple]:
+    """(commit, first parent or None, name, name before) for each file of a `git log --format='@%H %P' --name-status`."""
+    rows, sha, parent = [], None, None
+    for line in out.splitlines():
+        if line.startswith('@'):
+            sha, _, parents = line[1:].partition(' ')
+            parent = parents.split()[0] if parents.split() else None
+            continue
+        fields = line.strip().split('\t')
+        if len(fields) >= 2:
+            rows.append((sha, parent, fields[-1], fields[1]))
+    return rows
+
+
+def history_rows(corpus: str, cwd: Path, words: str | None, folders: list[str] | None, log_args: list[str], specs: list[str],
+                 holding, counted) -> tuple[list[tuple], bool] | None:
+    """What status_pairs gives for the pickaxe search of a corpus's whole history, by way of a host's index
+    (history_index): the commits after the index's tip are read by git (log_args, specs), the rest named by the index.
+    With whether the index had more than it gave. `counted(commit)`: whether a commit is a change phrase_history
+    reports; a corpus published again in another layout is one commit of 600,000 files that is not, and would fill
+    the index's answer, so where an answer is full and holds too few changes that count, the index is asked again
+    without the commits that do not. None: no index, words it is not asked, a corpus it does not hold,
+    a tip that is not in this history or too far behind it; then git reads the whole history, as ever."""
+    hook = history_index
+    if hook is None or not words:
+        return None
+    most = PHRASE_FILES * 2 + 1
+    try:
+        tips = hook.tips()
+        tip = tips.get(corpus) if isinstance(tips, dict) else None
+        if not isinstance(tip, str) or not re.fullmatch(r'[0-9a-f]{40}', tip):
+            return None
+        head = corpus_head(corpus) or law.git('rev-parse', 'HEAD', cwd=cwd).strip()
+        newer = []
+        if tip != head:
+            ahead, behind = law.git('rev-list', '--count', '--left-right', f'{tip}...{head}', cwd=cwd).split()
+            if int(ahead) or int(behind) > HISTORY_GAP:
+                return None
+            newer = status_pairs(law.git('log', f'{tip}..{head}', *log_args, '--', *specs, cwd=cwd))
+        if isinstance(holding, (set, frozenset)) and corpus not in holding:
+            return newer, False  # no change of this corpus touched the words
+        skip: set = set()
+        for _ in range(HISTORY_ROUNDS):
+            got = hook.pairs(words, corpus, folders, most, sorted(skip))
+            if not isinstance(got, (list, tuple)) or len(got) > most or not all(isinstance(r, (list, tuple)) and len(r) == 4 for r in got):
+                return None
+            others = {r[0] for r in got if not counted(r[0])}
+            if len(got) < most or not others or len(got) - sum(1 for r in got if r[0] in others) > PHRASE_FILES:
+                break
+            skip |= others
+        else:
+            return None
+        rows = []
+        for row in got:
+            sha, parent, name, old = row
+            if not (isinstance(sha, str) and isinstance(name, str) and isinstance(old, str) and (parent is None or isinstance(parent, str))):
+                return None
+            # As git shows a rename one side of which is outside what was asked for (*.md, the folders): the side
+            # inside alone, added or deleted.
+            inside = [n.endswith('.md') and (not folders or any(n.startswith(f + '/') for f in folders)) for n in (name, old)]
+            if not any(inside):
+                continue
+            if not inside[0]:
+                name = old
+            elif not inside[1]:
+                old = name
+            rows.append((sha, parent, name, old))
+        return newer + rows, len(got) >= most
+    except (SystemExit, Exception):  # noqa: BLE001
+        return None
+
+
 def events_by_commit() -> dict:
     """(corpus, commit) -> its event, for every event of the timeline in hand, worked out once per timeline (kept
     with it, as law.by_corpus is). search_changes and phrase_history made this table on every call: every event of
@@ -5188,9 +5278,15 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
     pairs_of = [(c, cwd) for c, cwd in checked_out(corpora, missing)]
     cases = [(c, cwd) for c, cwd in pairs_of if law.is_caselaw(c)]
     _call.skipped = []  # case law left unread for the time (CASELAW_SECONDS): said in the answer
+    words = None if args.get('regex') else query  # a plain query: a host's index may name the decisions, and the changes
+    holding = None
+    if history_index is not None and words and len(pairs_of) - len(cases) > 2:
+        try:  # which corpora any change touched the words in: one question, in place of one a corpus
+            holding = history_index.holding(words)
+        except Exception:  # noqa: BLE001
+            holding = None
     if cases:  # each case-law corpus by its own way (caselaw_phrase), side by side: git grep is most of the time
         with ThreadPoolExecutor(min(8, len(cases))) as pool:
-            words = None if args.get('regex') else query  # a plain query: a host's index may name the decisions
             for rows, over in pool_map(pool, lambda cc: caselaw_phrase(cc[0], cc[1], pattern, scoped(cc[0]['path'], scope), by_commit, words), cases):
                 found += rows
                 cut = cut or over
@@ -5203,22 +5299,17 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
         # A folder the corpus has since moved (moves) is searched under its earlier names too.
         specs = [f'{f}/*.md' for f in [sub, *former_folders(c['path'], sub)]] if sub else ['*.md']
         moved = law.moves(c['path'])
-        out = split_log(c['path'], cwd, ['--format=@%H %P', '--name-status', '-M', '-i', '--extended-regexp', f'-G{pattern}'], specs)
-        pairs, sha, parent = [], None, None
-        for line in out.splitlines():
-            if line.startswith('@'):
-                sha, _, parents = line[1:].partition(' ')
-                parent = parents.split()[0] if parents.split() else None
-                continue
-            fields = line.strip().split('\t')
-            if len(fields) < 2:
-                continue
-            old, name = fields[1], fields[-1]
+        log_args = ['--format=@%H %P', '--name-status', '-M', '-i', '--extended-regexp', f'-G{pattern}']
+        named = history_rows(c['path'], cwd, words, [sub, *former_folders(c['path'], sub)] if sub else None, log_args, specs, holding,
+                             lambda sha, corpus=c['path']: getattr(by_commit.get((corpus, sha)), 'kind', 'documentation') != 'documentation')
+        rows, more = named if named is not None else (status_pairs(split_log(c['path'], cwd, log_args, specs)), False)
+        pairs = []
+        for sha, parent, name, old in rows:
             e = by_commit.get((c['path'], sha))
             if e is None or e.kind == 'documentation' or NOT_LAW.search(name):
                 continue
             pairs.append((sha, parent, name, e, old))
-        if len(pairs) > PHRASE_FILES:
+        if len(pairs) > PHRASE_FILES or more:
             pairs, cut = pairs[:PHRASE_FILES], True
         # Which way did the words go? Count the file's matching lines before and after the change; git runs the
         # pattern, never Python's backtracking engine. Equal counts: the words sit on a line changed for another reason.
@@ -5242,7 +5333,7 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
                           'effect': effect,
                           'lines_added': max(after - before, 0), 'lines_removed': max(before - after, 0)})
     found.sort(key=lambda f: (f['in_force'], f['path']))
-    note = not_searched(missing) + (f'\nOver {PHRASE_FILES} changed files in one corpus matched; only the oldest were '
+    note = not_searched(missing) + (f'\nOver {PHRASE_FILES} changed files in one corpus matched; only the newest were '
                                     'checked. Narrow it with a jurisdiction or a longer phrase.' if cut else '') + caselaw_note(caselaw)
     unread = len(_call.skipped)
     if unread:
@@ -9014,6 +9105,137 @@ def diff_summary(rows: list[dict] | None) -> str:
     return '\n'.join(out)
 
 
+CHANGED_MOST = 200_000  # files with a version or a correction dated in a window that changed_files looks at; more, and the trees are built
+
+
+def _day_paths(corpus: str):
+    """(days, {day: [files]}, {file: [(from, order, last day, blob, mode)]}) of a corpus that is not in in-force
+    order: the days on which its tree can change (law._tree_days), the files that can change on each (a version of
+    theirs takes force, a correction of theirs begins, or ended the day before), and each file's corrections with
+    their last day. False when a correction's end is not a calendar day. Once per reading of the corpus's index."""
+    ix = law._index(corpus)
+    key = ('day-paths', f'{corpus}@{law._at(ix)}')
+    got = law._CACHE.get(key)
+    if got is None:
+        import datetime as dt
+        index, overlays = law.file_index(corpus)
+        by_day: dict[str, list] = {}
+        for path, versions in index.items():
+            for v in versions:
+                by_day.setdefault(v[0], []).append(path)
+        fixes: dict[str, list] = {}
+        try:
+            for (fix, order, files), (end, own) in zip(overlays, law.overlay_ends(corpus)):
+                if not own and end is None:
+                    continue  # (no file: nothing to lay over)
+                for path, (blob, mode) in files.items():
+                    last = own.get(path, end)
+                    fixes.setdefault(path, []).append((fix['from'], order, last, blob, mode))
+                    by_day.setdefault(fix['from'], []).append(path)
+                    if last < '9999-12-31':
+                        by_day.setdefault((dt.date.fromisoformat(last) + dt.timedelta(days=1)).isoformat(), []).append(path)
+            got = (sorted(by_day), by_day, fixes)
+        except (ValueError, OverflowError, TypeError):
+            got = False
+        law._CACHE[key] = got
+    return got
+
+
+def _in_force(versions, fixes, date: str):
+    """(blob, mode) of a file as in force on `date`, or None: as law._built_tree chooses it."""
+    best = None
+    for day, order, blob, mode in versions or ():
+        if day <= date and (best is None or (day, order) >= (best[0], best[1])):
+            best = (day, order, blob, mode)
+    chosen = (best[2], best[3]) if best and best[2] else None
+    fix = None
+    for start, order, last, blob, mode in fixes or ():
+        if start > date or date > last:
+            continue
+        if fix is None or (start, order) >= fix[0]:
+            fix = ((start, order), blob, mode)
+    if fix is not None:
+        chosen = (fix[1], fix[2]) if fix[1] else None
+    return chosen
+
+
+_small_trees, _small_lock = [0], threading.Lock()
+
+
+def _small_tree(corpus: str, cwd: Path, files: list[tuple]) -> str:
+    """A tree of the files given, [(path, blob, mode)], written to this process's tree store (as law._built_tree)."""
+    if not files:
+        return law.EMPTY_TREE
+    store = law._tree_store()
+    objects = law.git('rev-parse', '--path-format=absolute', '--git-path', 'objects', cwd=cwd).strip()
+    with _small_lock:
+        _small_trees[0] += 1
+        n = _small_trees[0]
+    index = store / f'index-part-{os.getpid()}-{n}'
+    env = {**os.environ, 'GIT_INDEX_FILE': str(index), 'GIT_OBJECT_DIRECTORY': str(store / 'objects'), 'GIT_ALTERNATE_OBJECT_DIRECTORIES': objects}
+    try:
+        listing = b''.join(f'{mode} blob {blob}\t{path}'.encode('utf-8') + b'\0' for path, blob, mode in files)
+        run = subprocess.run(['git', 'update-index', '--add', '-z', '--index-info'], cwd=cwd, env=env, input=listing, capture_output=True)
+        if run.returncode or b'Ignoring path' in run.stderr:
+            raise RuntimeError(f"git update-index: {run.stderr.decode('utf-8', 'replace').strip()[:300]}")
+        tree = subprocess.run(['git', 'write-tree'], cwd=cwd, env=env, capture_output=True, encoding='utf-8')
+        if tree.returncode:
+            raise RuntimeError(f'git write-tree: {tree.stderr.strip()[:300]}')
+        return tree.stdout.strip()
+    finally:
+        try:
+            os.unlink(index)
+        except OSError:
+            pass
+
+
+def changed_files(corpus: str, a: str, b: str, inner: str | None) -> list[str] | None:
+    """The lines `git diff --name-status` prints for the corpus as in force on `a` against the corpus as in force on
+    `b` (under `inner`, where given), without building either: only the files with a version or a correction dated
+    in the window can differ, each is read off the table of versions for both dates, and git compares two trees of
+    the files that do differ (so renames are paired as between the whole trees: only files there on one date alone
+    can be). Building both trees took 13 s for Romania (1.2 million files each), 7 s for France. None: a corpus in
+    in-force order (its two commits are compared, at once), a date before its record, a window that touches more
+    than CHANGED_MOST files, or anything that fails; then the trees are compared, as ever."""
+    try:
+        if law.in_order(corpus):
+            return None
+        table = _day_paths(corpus)
+        if not table:
+            return None
+        days, by_day, fixes = table
+        i, j = bisect.bisect_right(days, a), bisect.bisect_right(days, b)
+        if not i or not j:
+            return None
+        if i == j:
+            return []
+        if sum(len(by_day[d]) for d in days[i:j]) > CHANGED_MOST * 4:
+            return None
+        touched = {path for d in days[i:j] for path in by_day[d]}
+        if inner:
+            inner = inner.rstrip('/')
+            touched = {path for path in touched if path == inner or path.startswith(inner + '/')}
+        if len(touched) > CHANGED_MOST:
+            return None
+        index, _ = law.file_index(corpus)
+        before, after = [], []
+        for path in sorted(touched):
+            versions, own = index.get(path), fixes.get(path)
+            was, now = _in_force(versions, own, a), _in_force(versions, own, b)
+            if was == now:
+                continue
+            if was:
+                before.append((path, *was))
+            if now:
+                after.append((path, *now))
+        if not before and not after:
+            return []
+        cwd = law.corpus_dir(corpus)
+        return law.git('diff', '--name-status', _small_tree(corpus, cwd, before), _small_tree(corpus, cwd, after), cwd=cwd).splitlines()
+    except (SystemExit, Exception):  # noqa: BLE001
+        return None
+
+
 def t_changes_between(args: dict) -> tuple[str, dict]:
     """Every provision whose text differs between two dates, in every corpus, with the laws in between."""
     a, b = date_arg(args.get('date_a')), date_arg(args.get('date_b'))
@@ -9028,11 +9250,15 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
         sub = scoped(c['path'], scope)
         if sub is None:
             continue
-        pa, pb = law.pinned(ra, c['path']), law.pinned(rb, c['path'])
-        if pa == pb:
+        names = changed_files(c['path'], ra.date, rb.date, sub) if isinstance(ra, law.Moment) and isinstance(rb, law.Moment) else None
+        if names is None:
+            pa, pb = law.pinned(ra, c['path']), law.pinned(rb, c['path'])
+            if pa == pb:
+                continue
+            names = law.git('diff', '--name-status', pa or law.EMPTY_TREE, pb, *(['--', sub] if sub else []), cwd=law.corpus_dir(c['path'])).splitlines()
+        elif not names:
             continue
         cwd = law.corpus_dir(c['path'])
-        names = law.git('diff', '--name-status', pa or law.EMPTY_TREE, pb, *(['--', sub] if sub else []), cwd=cwd).splitlines()
         changed = [(l.split('\t')[0], l.split('\t')[-1]) for l in names if l.strip() and not NOT_LAW.search(l.split('\t')[-1])]
         if sub and not changed:
             continue

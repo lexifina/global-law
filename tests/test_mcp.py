@@ -3973,5 +3973,225 @@ class SearchByIndex(unittest.TestCase):
                 m._call.deadline = 0.0
 
 
+class ChangesIndex:
+    """A stand-in for a host's index of changes (mcp_server.history_index): for each corpus it holds, the changed
+    files git's pickaxe finds for the words (parts of words too, where a host's index matches whole words: the answers
+    can then be held against git's own), up to a tip `behind` commits before the corpus's HEAD."""
+
+    def __init__(self, m, corpora, behind=0):
+        self.m, self.corpora, self.behind, self.calls, self._tips, self._rows = m, list(corpora), behind, [], {}, {}
+
+    def tip(self, corpus):
+        if corpus not in self._tips:  # (a history shorter than `behind`: its first commit)
+            commits = subprocess.run(['git', 'rev-list', '-n', str(self.behind + 1), 'HEAD'], cwd=ROOT / corpus, capture_output=True, text=True,
+                                     check=True).stdout.split()
+            self._tips[corpus] = commits[-1]
+        return self._tips[corpus]
+
+    def tips(self):
+        return {c: self.tip(c) for c in self.corpora}
+
+    def rows(self, words, corpus):
+        if (words, corpus) not in self._rows:
+            self._rows[words, corpus] = self._read(words, corpus)
+        return list(self._rows[words, corpus])
+
+    def _read(self, words, corpus):
+        out = subprocess.run(['git', 'log', self.tip(corpus), '--format=@%H %P', '--name-status', '-M', '-i', '-E', f'-G{self.m.loose_pattern(words)}', '--', '*.md'],
+                             cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace', check=True).stdout
+        return self.m.status_pairs(out)
+
+    def holding(self, words):
+        self.calls.append(('holding', words))
+        return {c for c in self.corpora if self.rows(words, c)}
+
+    def pairs(self, words, corpus, folders, most, skip=None):
+        self.calls.append(('pairs', words, corpus, folders, most, list(skip or [])))
+        under = lambda n: not folders or any(n.startswith(f + '/') for f in folders)  # noqa: E731
+        return [r for r in self.rows(words, corpus) if r[0] not in (skip or ()) and (under(r[2]) or under(r[3]))][:most]
+
+
+class PhraseHistoryByIndex(unittest.TestCase):
+    """phrase_history with a host's index of changes (history_index, 2026-11-12): the index names the changed files
+    whose added or removed lines hold the words, git reads only the commits after the index's tip, and the lines are
+    counted as ever."""
+
+    ASKS = ({'query': '7,500,000', 'jurisdiction': US_C, 'max_results': 300}, {'query': 'COVID', 'jurisdiction': GG_FOLDER, 'max_results': 300})
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def setUp(self):
+        from unittest import mock
+        self.mock = mock
+        self.whole = []  # every reading of a whole history (split_log)
+        m, split = self.m, self.m.split_log
+
+        def split_log(*a, **kw):
+            self.whole.append(a[0])
+            return split(*a, **kw)
+        for name, new in (('split_log', split_log), ('history_index', None)):
+            patch = mock.patch.object(m, name, new)
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def by(self, index, ask):
+        del self.whole[:]
+        with self.mock.patch.object(self.m, 'history_index', index):
+            return self.m.t_phrase_history(dict(ask))
+
+    def corpora(self, ask):
+        m = self.m
+        return [c['path'] for c in m.law.manifest()['corpora'] if m.scoped(c['path'], m.scope_arg(dict(ask))) is not None and not m.law.is_caselaw(c)
+                and (ROOT / c['path'] / '.git').exists()]
+
+    @needs(DE_C, US_C)
+    def test_the_index_names_the_changes_and_git_reads_no_whole_history(self):
+        for ask in self.ASKS:
+            with self.subTest(ask=ask):
+                git = self.by(None, ask)
+                self.assertTrue(self.whole and git[1]['changes'])
+                index = ChangesIndex(self.m, self.corpora(ask))
+                self.assertEqual(self.by(index, ask), git)
+                self.assertEqual(self.whole, [])
+                self.assertTrue(any(c[0] == 'pairs' for c in index.calls))
+
+    @needs(DE_C, US_C, UK_C)
+    def test_many_corpora_are_first_asked_which_hold_the_words(self):
+        m, ask = self.m, {'query': '7,500,000', 'max_results': 300}
+        with self.mock.patch.object(m, 'by_kind', lambda corpora, scope, args: ([c for c in corpora if c['path'] in (US_C, DE_C, UK_C)], [])):
+            git = self.by(None, ask)
+            self.assertTrue(git[1]['changes'])
+            index = ChangesIndex(m, [c for c in (US_C, DE_C, UK_C) if (ROOT / c / '.git').exists()])
+            self.assertEqual(self.by(index, ask), git)
+            self.assertEqual(self.whole, [])
+            self.assertEqual([c for c in index.calls if c[0] == 'holding'], [('holding', '7,500,000')])
+            holders = index.holding('7,500,000')
+            self.assertEqual({c[2] for c in index.calls if c[0] == 'pairs'}, holders)  # only those are asked for their changes
+
+    @needs(DE_C, US_C)
+    def test_the_commits_after_the_indexs_tip_are_read_by_git(self):
+        for ask in self.ASKS:
+            for behind in (1, 40):
+                with self.subTest(ask=ask, behind=behind):
+                    git = self.by(None, ask)
+                    self.assertEqual(self.by(ChangesIndex(self.m, self.corpora(ask), behind=behind), ask), git)
+                    self.assertEqual(self.whole, [])
+        with self.mock.patch.object(self.m, 'HISTORY_GAP', 3):  # too far behind: the whole history is read, as ever
+            ask = self.ASKS[0]
+            git = self.by(None, ask)
+            self.assertEqual(self.by(ChangesIndex(self.m, self.corpora(ask), behind=40), ask), git)
+            self.assertTrue(self.whole)
+
+    @needs(US_C)
+    def test_commits_that_are_no_change_of_the_law_are_left_out(self):
+        m, ask = self.m, self.ASKS[0]
+        git = self.by(None, ask)
+
+        class Crowded(ChangesIndex):  # a corpus published again: one commit, no event of the timeline, holds every file
+            def pairs(self, words, corpus, folders, most, skip=None):
+                got = super().pairs(words, corpus, folders, most, skip)
+                junk = [] if 'f' * 40 in (skip or ()) else [('f' * 40, None, f'x/{i}.md', f'x/{i}.md') for i in range(most)]
+                return (junk + got)[:most]
+        index = Crowded(m, self.corpora(ask))
+        self.assertEqual(self.by(index, ask), git)
+        asked = [c[5] for c in index.calls if c[0] == 'pairs' and c[2] == US_C]
+        self.assertEqual(asked, [[], ['f' * 40]])
+        self.assertEqual(self.whole, [])
+
+    @needs(US_C)
+    def test_an_index_that_does_not_answer_is_not_missed(self):
+        m, ask = self.m, self.ASKS[0]
+        git = self.by(None, ask)
+
+        class NoTips(ChangesIndex):
+            def tips(self):
+                raise OSError('down')
+
+        class Elsewhere(ChangesIndex):  # a tip that is not in this history
+            def tip(self, corpus):
+                return 'a' * 40
+
+        class NoPairs(ChangesIndex):
+            def pairs(self, *a, **kw):
+                return None
+
+        class Odd(ChangesIndex):
+            def pairs(self, *a, **kw):
+                return [('x', None, 'a.md')]
+        for kind in (NoTips, Elsewhere, NoPairs, Odd):
+            with self.subTest(kind=kind.__name__):
+                self.assertEqual(self.by(kind(m, self.corpora(ask)), ask), git)
+                self.assertTrue(self.whole)
+        self.assertEqual(self.by(ChangesIndex(m, []), ask), git)  # a corpus the index does not hold
+        self.assertEqual(self.by(ChangesIndex(m, self.corpora(ask)), {**ask, 'query': '7,500,0+', 'regex': True})[1]['changes'],
+                         self.by(None, {**ask, 'query': '7,500,0+', 'regex': True})[1]['changes'])
+        self.assertTrue(self.whole)  # a regular expression is git's
+
+
+class ChangedBetweenDates(unittest.TestCase):
+    """changes_between without the two trees (changed_files, 2026-11-12): for a corpus that is not in in-force order,
+    the files that differ between two dates are read off its table of versions and corrections, and must be the
+    lines git prints for the two trees corpus_tree builds."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    @needs_any_corpus()
+    def test_the_files_that_differ_are_those_of_the_two_trees(self):
+        m = self.m
+        law = m.law
+        tried = compared = 0
+        for c in law.manifest()['corpora']:
+            path = c['path']
+            if tried >= 3:
+                break
+            if law.is_caselaw(c) or not (ROOT / path / '.git').exists() or law.in_order(path):
+                continue
+            index, _ = law.file_index(path)
+            table = m._day_paths(path)
+            if not table or len(table[0]) < 4 or len(index) > 60000:
+                continue
+            tried += 1
+            days = table[0]
+            cwd = law.corpus_dir(path)
+            folder = sorted(index)[len(index) // 2].split('/')[0]
+            third = len(days) // 3
+            for a, b, inner in ((days[0], days[-1], None), (days[third], days[2 * third], None), (days[-2], days[-1], None),
+                                (days[1], days[1], None), (days[0], days[-1], folder), (days[third], days[-1], folder)):
+                with self.subTest(corpus=path, a=a, b=b, inner=inner):
+                    got = m.changed_files(path, a, b, inner)
+                    self.assertIsNotNone(got)
+                    ta, tb = law.corpus_tree(a, path), law.corpus_tree(b, path)
+                    want = [] if ta == tb else law.git('diff', '--name-status', ta or law.EMPTY_TREE, tb, *(['--', inner] if inner else []), cwd=cwd).splitlines()
+                    self.assertEqual(got, want)
+                    compared += bool(want)
+            self.assertIsNone(m.changed_files(path, '0001-01-01', days[-1], None))  # before its record: the trees say
+            with self.mock_most(m, 0):
+                self.assertIsNone(m.changed_files(path, days[0], days[-1], None))  # a window too wide: the trees
+        if tried:
+            self.assertTrue(compared)
+
+    @staticmethod
+    def mock_most(m, n):
+        from unittest import mock
+        return mock.patch.object(m, 'CHANGED_MOST', n)
+
+    def test_a_corpus_in_order_is_left_to_its_commits(self):
+        m = self.m
+        for c in m.law.manifest()['corpora']:
+            if (ROOT / c['path'] / '.git').exists() and not m.law.is_caselaw(c) and m.law.in_order(c['path']):
+                self.assertIsNone(m.changed_files(c['path'], '2000-01-01', '2020-01-01', None))
+                break
+
+
 if __name__ == '__main__':
     unittest.main()
