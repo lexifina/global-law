@@ -159,8 +159,9 @@ search_index = None
 #   tips() -> {corpus: commit} | None
 #       For each law corpus it holds, the commit up to which every change of the corpus's history is in it.
 #   holding(words) -> {corpus, ...} | None
-#       The corpora with at least one change whose added or removed lines contain the words (a phrase, whole words,
-#       whatever the case or the diacritics, as search_index matches). None: not known, and each corpus is asked.
+#       The corpora with at least one change whose added or removed lines contain the words (a phrase of whole
+#       words, the last of which may be the start of a longer one, whatever the case or the diacritics). None: not
+#       known, and each corpus is asked.
 #   pairs(words, corpus, folders, most, skip) -> [(commit, first parent or None, path, path before the change), ...] | None
 #       The newest `most` changed files of the corpus's history whose added or removed lines contain the words,
 #       newest commit first, under one of `folders` (paths within the corpus; None: anywhere), leaving out the
