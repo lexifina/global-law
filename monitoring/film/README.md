@@ -83,13 +83,33 @@ needs case law that cites the provision.
 
 | On screen | Value | Source |
 | --- | ---: | --- |
-| official sources | 610 | different `official_source` names in `data/freshness.tsv`; 947 of the 982 corpora name one |
+| official sources | 4,396 | 610 publishers and 3,786 courts, counted as set out below |
 | corpora | 982 | rows in `data/freshness.tsv` |
 
-The list holds 56 of those names, each beside the corpus read from it. `build_data.py` chooses them: up to two per
+**Publishers: 610.** The different `official_source` names in `data/freshness.tsv`; 947 of the 982 corpora name one.
+
+**Courts: 3,786.** A case-law corpus files each decision under the court that gave it, one folder per court under
+`decisions/`. `courts.py` lists those folders for the 241 case-law corpora at their `newest` commits and writes them
+to [courts.tsv](courts.tsv), 4,177 rows. From those:
+
+- 158 folders named by year (Finland, Brazil) are not courts and are left out;
+- a court that sits in several corpora of one country is counted once.
+
+That leaves 3,786 courts: 2,865 in the United States, 355 in Poland, 353 in France, 119 in Switzerland, 83 in the
+Netherlands, 6 in Germany and 5 in Finland. Things to know about this count:
+
+- A court is the source of its own decisions, but the corpus may read them through a publisher that gathers many
+  courts. Most United States decisions, for example, are read from the Caselaw Access Project, which is one of the
+  610 publishers.
+- Some folders are bodies that decide cases without being courts, such as Swiss federal offices.
+- Folder names are cut at 50 characters, so two courts whose names share their first 50 characters would count as
+  one.
+
+The list holds 56 publisher names, each beside the corpus read from it, and 14 courts of the United States named
+from their folders. `build_data.py` chooses them: up to two per
 country in path order, where the name is 12 to 44 characters, fits the row beside its path and uses only characters
 in the film's fonts. Each name is listed once. Rows whose source is a mirror or a private collection, not the
-publisher itself, are left out of the list; they still count in the 610.
+publisher itself, are left out of the list; they still count in the 610 publishers.
 
 Where a corpus's official source comes from, in this order (`official_source` in `tools/freshness.py`):
 
@@ -129,6 +149,7 @@ national law and 30 days after for a state or city.
 | `film.html` | the film: one canvas, drawn for any frame number |
 | `data.js`, `build_data.py` | the snapshot as the film reads it, built from `data/freshness.tsv` and `figures.json` |
 | `figures.py`, `figures.json` | the commit counts |
+| `courts.py`, `courts.tsv` | the courts in every case-law corpus |
 | `render.mjs` | renders the frames in Chromium and encodes them: `FMT=jpeg node render.mjs video out.mp4 2`; with `LAYOUT=landscape` it renders the 1920x1080 cut |
 
 The film's typefaces are Source Serif 4, IBM Plex Sans and IBM Plex Mono. They are not kept here: put their

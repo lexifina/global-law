@@ -269,7 +269,7 @@ const SCENES = [
     sub: 'Read a law on any date, search it, compare two dates or trace who wrote each word. The same 18 tools work on every corpus.',
     stats: (t) => [[fmt(clamp(Math.floor((t - TOOL0) / TOOL_GAP) + 1, 0, TOOLS.length)), 'tools', null, '18'], ['982', 'corpora']] },
   { a: T.s6, b: T.end - 0.55, title: 'Every commit always pins to a live official source',
-    sub: 'Each corpus is read from its country’s official publisher and checked against it on a schedule.',
+    sub: 'Each corpus is read from its country’s official publisher, and every court decision is filed under the court that gave it.',
     stats: (t) => { const u = eio((t - T.s6 - 0.5) / 1.3); return [[fmt(window.SOURCE_COUNT * u), 'official sources', null, fmt(window.SOURCE_COUNT)], [fmt(982 * u), 'corpora', null, '982']] },
     foot: 'github.com/lexifina/global-law' },
 ]
