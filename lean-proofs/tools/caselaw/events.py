@@ -61,7 +61,7 @@ NOISE_AFTER = re.compile(r"overrul\w*\s+(?:(?:[\w.\-]+(?:['’]s?)?|the|his|her|
                          r"demurrers?|pleas?|requests?|applications?|petitions?|protests?|counts?|parts?|sub-?issues?)\b",
                          re.I)
 REPORT_HAS = re.compile(r"\b(?:was|were|has been|have been|had been|since)\s+(?:\w+\s+)?overruled\b", re.I)
-MAJ = re.compile(r"^(Majority|Per Curiam|Opinion|Head matter|Lead|Plurality|$)", re.I)
+MAJ = re.compile(r"^(Majority|Per Curiam|Opinion|Head matter|Lead|Plurality|Combined|Rehearing|$)", re.I)
 DISAPPROVE = re.compile(r"\bdisapprov(?:e|es|ed|ing)\b", re.I)
 SWAP = {"disapprove": "overrule  ", "disapproves": "overrules  ", "disapproved": "overruled  ",
         "disapproving": "overruling  "}
