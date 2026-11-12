@@ -47,7 +47,7 @@ Each detector has a test, so a source that changes its page shape shows up as a 
 
 ## What's left before it runs
 
-- Run the detectors daily alongside the 15-minute update pass described in [MONITORING.md](MONITORING.md).
+- Run the detectors daily alongside the 15-minute update pass described in [monitoring/](monitoring/).
 - Count each poll as a check in [FRESHNESS.md](FRESHNESS.md).
 - Cover the remaining sources: other networks, and support for search forms.
 

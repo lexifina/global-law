@@ -258,7 +258,10 @@ def status_line(status: dict, summary: dict) -> str:
         f"{f.get('unverified', 0)} unverified ([FRESHNESS.md](FRESHNESS.md)) |"])
 
 
-PAGES = ('README.md', 'FRESHNESS.md', 'MONITORING.md')  # the pages whose marked lines this tool rewrites
+# The pages whose marked lines this tool rewrites. monitoring/README.md is the monitoring page; MONITORING.md is kept
+# as a short pointer to it, with the same status lines.
+PAGES = ('README.md', 'FRESHNESS.md', 'MONITORING.md', 'monitoring/README.md')
+LOCAL_LINK = re.compile(r'\]\((?!https?:|#|/|\.\./)')
 
 
 def _rewrite(root: Path, block: re.Pattern, line: str) -> bool:
@@ -269,7 +272,9 @@ def _rewrite(root: Path, block: re.Pattern, line: str) -> bool:
             text = (root / name).read_bytes().decode('utf-8')
         except OSError:
             continue
-        new = block.sub(lambda m: m.group(1) + line + m.group(2), text, count=1)
+        # a page in a folder reaches the root's files through ../
+        here = LOCAL_LINK.sub('](' + '../' * name.count('/'), line)
+        new = block.sub(lambda m: m.group(1) + here + m.group(2), text, count=1)
         if new != text:
             (root / name).write_bytes(new.encode('utf-8'))
         found = found or bool(block.search(text))

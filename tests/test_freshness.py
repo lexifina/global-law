@@ -168,6 +168,9 @@ class OnDisk(unittest.TestCase):
     def test_readme_lines_rewritten(self):
         (self.root / 'MONITORING.md').write_text('top\n<!-- status-summary -->\nold\n<!-- /status-summary -->\n',
                                                  encoding='utf-8')
+        (self.root / 'monitoring').mkdir()
+        (self.root / 'monitoring' / 'README.md').write_text(
+            'top\n<!-- status-summary -->\nold\n<!-- /status-summary -->\n', encoding='utf-8')
         (self.root / 'FRESHNESS.md').write_text('<!-- freshness-summary -->\nold\n<!-- /freshness-summary -->\n',
                                                 encoding='utf-8')
         freshness.write(self.root, today=D)
@@ -182,7 +185,11 @@ class OnDisk(unittest.TestCase):
         self.assertIn('Official sources not answering | portal (`ro/national/acts`, since 2026-11-06)', mon)
         self.assertIn('corpora current** on 2026-11-06', fre)
         self.assertIn('| Subnational | 1 | 1 |', fre)
-        self.assertNotIn('old', mon + fre)
+        page = (self.root / 'monitoring' / 'README.md').read_text(encoding='utf-8')
+        self.assertIn('**Updates: running**: last published 2026-11-06 14:20 UTC', page)
+        self.assertIn('([FRESHNESS.md](../FRESHNESS.md))', page)
+        self.assertIn('([FRESHNESS.md](FRESHNESS.md))', mon)
+        self.assertNotIn('old', mon + fre + page)
 
     def test_health(self):
         freshness.write(self.root, today=D)

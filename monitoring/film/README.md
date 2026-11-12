@@ -1,6 +1,6 @@
 # Monitoring short: where every figure comes from
 
-The 45 second film explains [MONITORING.md](https://github.com/lexifina/global-law/blob/main/MONITORING.md). Every
+The 45 second film explains the [monitoring page](../README.md). Every
 number in it is taken from one snapshot of the repository, **2026-11-11 20:11:55 UTC**, the `generated` time of
 `data/status.json` at that moment. This page says how each number was obtained and which parts of the picture are
 drawn for illustration.
@@ -56,7 +56,7 @@ Things to know about these counts:
 
 | On screen | Value | Source |
 | --- | ---: | --- |
-| every 15 minutes | | MONITORING.md |
+| every 15 minutes | | the monitoring page |
 | corpora updated | 105 | `published_last_24h.corpora_moved` in `data/status.json` is 106; the film shows one of them, Missouri, as held back |
 | held back | 2 | `held_back` in `data/status.json`: `singapore-law`, `united-states-missouri-law` |
 
@@ -68,7 +68,7 @@ Missouri the `newest` commit (63117d6) differs from the pinned one, which is wha
 
 ## Scene 4: an old timestamp means a stall
 
-| On screen | Source in MONITORING.md |
+| On screen | Source in the monitoring page |
 | --- | --- |
 | 15 min, the next pass | "every 15 minutes, a pass here checks every new commit" |
 | 45 min, updates have stalled | "`updates` is `running` while a pass has succeeded in the last 45 minutes" |

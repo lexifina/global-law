@@ -9,4 +9,4 @@ Click a file to play it.
 - [git-repo.mp4](git-repo.mp4): the law as a git repository
 - [charts.mp4](charts.mp4): the charts in [visualisations/](../visualisations/)
 - [one-country.mp4](one-country.mp4): one country's law
-- [monitoring.mp4](monitoring.mp4): how new law is checked and pinned every 15 minutes ([how its figures were counted](../tools/monitoring-film/))
+- [monitoring.mp4](monitoring.mp4): how new law is checked and pinned every 15 minutes ([how its figures were counted](../monitoring/film/))

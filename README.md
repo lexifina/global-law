@@ -99,7 +99,7 @@ each country's usual form (`Art. 336 OR`, `§ 823 Abs. 1 BGB`, `article 1240 du 
 
 - [FEATURES.md](FEATURES.md): every feature, and what every corpus here must support (`git blame`, `law.py`, the MCP tools)
 - [FAQ.md](FAQ.md): questions and answers · [CONTRIBUTING.md](CONTRIBUTING.md): proposing changes · [MCP.md](MCP.md): the MCP server · [REPRODUCE.md](REPRODUCE.md): how it was built · [CHANGELOG.md](CHANGELOG.md)
-- [FRESHNESS.md](FRESHNESS.md): how current each corpus is · [MONITORING.md](MONITORING.md): whether updates are running · [WATCHING.md](WATCHING.md): how each official source is watched for changes
+- [FRESHNESS.md](FRESHNESS.md): how current each corpus is · [Monitoring](monitoring/): whether updates are running · [WATCHING.md](WATCHING.md): how each official source is watched for changes
 - [performance/](performance/): how fast the tools are, measured
 - [visualisations/](visualisations/): charts and bridges across the world's law
 - [Vulnerabilities](vulnerabilities/): Mistakes in legislation as published
@@ -113,7 +113,7 @@ https://github.com/user-attachments/assets/6020acb1-53f3-4b65-94a4-fe132b867358
 
 https://github.com/user-attachments/assets/3e3076d7-cfb4-4e0a-8552-2926a630fc8e
 
-How updates are checked and pinned every 15 minutes ([MONITORING.md](MONITORING.md)); [how each figure in the film was counted](tools/monitoring-film/):
+How updates are checked and pinned every 15 minutes ([Monitoring](monitoring/)); [how each figure in the film was counted](monitoring/film/):
 
 https://github.com/user-attachments/assets/ebfea880-c7f7-4310-b8fb-b64849811fe3
 
