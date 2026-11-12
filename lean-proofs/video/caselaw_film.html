@@ -175,7 +175,7 @@ window.render = function (t) {
   } else if (t > T.s6) {
     caption('', '', '', '', 0);
     card('What else Lean checks', 'Every citation, against what had been overruled or amended by then',
-      `<span class="h">${fmt(S.corr_citations)}</span><span>citations of a decision already overruled by a court the citing court must follow</span><span class="h">${S.stat_pct}%</span><span>of recent decisions on federal statutes applied a section Congress has since amended</span>`,
+      `<span class="h">${fmt(S.corr_citations)}</span><span>citations of a decision already overruled by a court the citing court must follow</span><span class="h">${S.stat_pct}%</span><span>of decisions since 1995 citing the US Code cite words a law has since rewritten</span>`,
       'Rules in Lean, open data in global-law', fadeIO(t, T.s6 + .2, DUR + 2, .6));
   } else caption('', '', '', '', 0);
   for (let i = li; i < pool.length; i++) pool[i].style.opacity = 0;

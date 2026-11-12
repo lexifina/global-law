@@ -2,6 +2,7 @@ import LegalProofs.USCaseLaw.Courts
 import LegalProofs.USCaseLaw.Precedent
 import LegalProofs.USCaseLaw.Examples
 import LegalProofs.USCaseLaw.Statute
+import LegalProofs.USCaseLaw.StatuteText
 
 /-!
 # US case law: the doctrine of precedent in Lean
@@ -14,6 +15,8 @@ Every decision in the US case law of global-law (6,892,454 decisions), checked a
 * `Precedent` — decisions, overruling events, `Record.valid`, `overruledOn` (good law on a day) with proofs that once
   overruled a decision stays overruled and that citation chains run backwards in time; `findings` per decision.
 * `Statute` — the version of a US Code section a decision applied, and whether it has changed since.
+* `StatuteText` — over the whole US Code: amended since by a law, and whether the words of the section and of the
+  subsection a decision cited still read the same, with proofs that words differ only if something changed.
 * `Examples` — Gideon/Betts, Lawrence/Bowers and invalid overrulings, checked by `#guard`.
 * `Run` (not imported) — the runner over all decisions: `lake env lean --run LegalProofs/USCaseLaw/Run.lean`.
 

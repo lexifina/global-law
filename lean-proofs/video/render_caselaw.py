@@ -50,11 +50,11 @@ def build_data():
         (ok if v == "1" else bad).append([dd[y] // 10000, r, courts[dc[y]][1]] if v == "1" else [dd[y] // 10000, r])
     summ = json.loads((W / "results" / "summary_v3.json").read_text())
     corr = json.loads((W / "results" / "corroborated_v3.json").read_text())
-    st = json.loads((W / "results" / "statutes_summary.json").read_text())
+    st = json.loads((W / "usc" / "results" / "changed_words.json").read_text())
     named = sum(v for k, v in summ["reports"].items() if k.startswith("named:"))
     S = dict(decisions=summ["decisions"], citations=summ["citations"], acts=summ["acts"], acts_valid=summ["acts_valid"],
              notes=named, agree_pct=round(100 * summ["reports"]["named:match"] / named),
-             corr_citations=corr["citations"], stat_pct=round(100 * st["decisions_with_changed_section"] / st["decisions"]))
+             corr_citations=corr["citations"], stat_pct=round(100 * st["decisions_both"] / st["decisions"]))
     out = dict(pts=pts, ok=ok, bad=bad, rows=rows, S=S)
     (HERE / "caselaw_data.json").write_text(json.dumps(out, separators=(",", ":")), encoding="utf-8")
     print("points", len(pts), "ok", len(ok), "bad", len(bad), S)
