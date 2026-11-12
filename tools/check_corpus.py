@@ -275,7 +275,7 @@ def problems(repo: Path, until: str, pin: str | None = None, corpus_json: dict |
     lacking = [k for k in EXPECTED if not cj.get(k)]
     if cj and lacking:
         warn.append(f"corpus.json lacks {', '.join(lacking)} (defaults are used)")
-    if cj.get('corpus') and not re.fullmatch(r'[a-z]{2}(/[a-z0-9-]+){2}', cj['corpus']):
+    if cj.get('corpus') and not re.fullmatch(r'(?:[a-z]{2}|eaeu)(/[a-z0-9-]+){2}', cj['corpus']):
         fatal.append(f"corpus path {cj['corpus']!r} is not <iso>/<level>/<name>")
     # The history a corpus declares, in corpus.json or else data/repo.json (the shared builder's descriptor): readers
     # and tools/describe.py take it over anything derived from the commits, so it must be one of the standard's.
