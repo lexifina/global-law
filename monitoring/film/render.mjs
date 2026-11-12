@@ -16,6 +16,8 @@ const { chromium } = require('playwright')
 const [mode, out, scaleArg, ...rest] = process.argv.slice(2)
 const scale = Number(scaleArg || 1)
 const JPEG = process.env.FMT === 'jpeg'
+const LAND = process.env.LAYOUT === 'landscape' // 1920x1080; the default is the vertical 1080x1920
+const [OW, OH] = LAND ? [1920, 1080] : [1080, 1920]
 try { os.setPriority(process.pid, os.constants.priority.PRIORITY_BELOW_NORMAL) } catch {}
 
 function ffmpegPath() {
@@ -32,9 +34,9 @@ const browser = await chromium.launch({
   args: ['--enable-gpu', '--use-angle=d3d11', '--enable-gpu-rasterization', '--ignore-gpu-blocklist',
     '--force_high_performance_gpu', '--renderer-process-limit=1', '--allow-file-access-from-files', '--force-device-scale-factor=1'],
 })
-const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 })
+const page = await browser.newPage({ viewport: { width: OW, height: OH }, deviceScaleFactor: 1 })
 page.on('pageerror', (e) => { console.error('PAGE ERROR', e.message) })
-await page.goto(pathToFileURL(join(here, 'film.html')).href + `?scale=${scale}`)
+await page.goto(pathToFileURL(join(here, 'film.html')).href + `?scale=${scale}${LAND ? '&layout=landscape' : ''}`)
 await page.evaluate(() => window.ready)
 const { FPS, DURATION } = await page.evaluate(() => window.FILM)
 const frame = (i, type, q) => page.evaluate(([n, ty, qq]) => { window.render(n); return document.getElementById('c').toDataURL(ty, qq).split(',')[1] }, [i, type, q])
@@ -54,7 +56,7 @@ if (mode === 'bench') {
   const first = Number(rest[0] || 0), last = Number(rest[1] || total)
   const ff = spawn(await ffmpegPath(), [
     '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', JPEG ? 'mjpeg' : 'png', '-i', '-',
-    '-vf', `scale=1080:1920:flags=lanczos,format=yuv420p`,
+    '-vf', `scale=${OW}:${OH}:flags=lanczos,format=yuv420p`,
     '-c:v', 'h264_nvenc', '-preset', 'p7', '-tune', 'hq', '-rc', 'vbr', '-cq', '15', '-b:v', '0', '-maxrate', '40M', '-bufsize', '80M',
     '-spatial-aq', '1', '-temporal-aq', '1', '-aq-strength', '10', '-bf', '3', '-g', '120', '-profile:v', 'high',
     '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-movflags', '+faststart', resolve(out),

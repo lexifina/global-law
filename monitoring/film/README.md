@@ -1,9 +1,12 @@
-# Monitoring short: where every figure comes from
+# Monitoring film: where every figure comes from
 
 The 45 second film explains the [monitoring page](../README.md). Every
 number in it is taken from one snapshot of the repository, **2026-11-11 20:11:55 UTC**, the `generated` time of
 `data/status.json` at that moment. This page says how each number was obtained and which parts of the picture are
 drawn for illustration.
+
+There are two cuts of the same film: 1920x1080 for this repository and 1080x1920 for vertical players. They show
+the same figures.
 
 ## The snapshot
 
@@ -78,16 +81,36 @@ Missouri the `newest` commit (63117d6) differs from the pinned one, which is wha
 
 The stall in this scene is a demonstration. Updates were running at the snapshot.
 
-## Scene 5: every corpus says how current it is
+## Scene 5: every corpus knows how current it is
+
+Each corpus moves to a cell above the number of days since its last check: the snapshot day, 2026-11-11, minus the
+corpus's `last_verified` in `data/freshness.tsv`. National law is one row and states and cities the other.
 
 | On screen | Value | Source |
 | --- | ---: | --- |
-| current | 798 | rows with status `current` in `data/freshness.tsv` |
-| stale | 168 | status `stale` |
-| unverified | 14 | status `unverified` |
-| 7 days for national law, 30 days for a state or city | | the thresholds in FRESHNESS.md |
+| days for national law | 7 | the threshold in FRESHNESS.md: a national corpus is `stale` when not checked within 7 days |
+| days for a state or city | 30 | the threshold in FRESHNESS.md for sub-national corpora |
+| the dashed lines | | drawn after day 7 and after day 30, where a check falls due |
+| never | 14 | corpora with no `last_verified` (status `unverified`): 8 national, 6 sub-national |
 
-The two remaining corpora are `pending-change` and are drawn in white.
+What the two rows hold at the snapshot:
+
+| | Corpora | Checked 0 to 7 days ago | 8 to 14 days ago | Never |
+| --- | ---: | ---: | ---: | ---: |
+| National law | 379 | 203 | 168 | 8 |
+| States and cities | 603 | 246 | 351 | 6 |
+
+No corpus was last checked more than 14 days before the snapshot. The colour of a cell is the corpus's `status`:
+green `current`, amber `stale`, grey `unverified`, white `pending-change` (two corpora). The 168 amber cells are the
+national corpora past their 7 days.
+
+The three corpora read out are real rows, with their `last_verified` and `check_due`:
+
+| Corpus | Last checked | Next check due | Status |
+| --- | --- | --- | --- |
+| `albania/national/acts` | 2026-11-11 | 2026-11-18 | current |
+| `austria/bund/acts` | 2026-10-28 | 2026-11-04 | stale |
+| `brazil/bahia/acts` | 2026-10-30 | 2026-11-29 | current |
 
 ## What is drawn for illustration
 
@@ -101,15 +124,17 @@ The two remaining corpora are `pending-change` and are drawn in white.
 - **Singapore.** `singapore-law` is held back and has no row in `data/freshness.tsv`, so it is drawn waiting on the
   outer circle and is not one of the 982.
 - **The commit dots in scene 3.** The number of dots on each row is not the corpus's real number of commits.
+- **The cells in scene 5.** The column a corpus sits in is its real number of days. Its place within the column
+  follows the alphabetical order of the paths and means nothing.
 
 ## Files
 
 | File | What it is |
 | --- | --- |
 | `film.html` | the film: one canvas, drawn for any frame number |
-| `data.js` | the snapshot as the film reads it, built from `data/freshness.tsv` and `figures.json` |
+| `data.js`, `build_data.py` | the snapshot as the film reads it, built from `data/freshness.tsv` and `figures.json` |
 | `figures.py`, `figures.json` | the commit counts |
-| `render.mjs` | renders the frames in Chromium and encodes them: `FMT=jpeg node render.mjs video out.mp4 2` |
+| `render.mjs` | renders the frames in Chromium and encodes them: `FMT=jpeg node render.mjs video out.mp4 2`; with `LAYOUT=landscape` it renders the 1920x1080 cut |
 
 The film's typefaces are Source Serif 4, IBM Plex Sans and IBM Plex Mono. They are not kept here: put their
 `latin` woff2 files in `fonts/` as `ss500`, `ss600`, `ps400`, `ps500`, `pm400` and `pm500` before rendering.
