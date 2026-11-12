@@ -1,0 +1,149 @@
+{
+ "law names it": {
+  "audited": 30,
+  "of": 30,
+  "override": 11,
+  "express": 10,
+  "labels": {
+   "override_express": 10,
+   "unrelated": 6,
+   "related": 7,
+   "override_implicit": 1,
+   "codifies": 6
+  },
+  "ci": [
+   0.219,
+   0.545
+  ],
+  "name_check": {
+   "same_decision": 12,
+   "same_litigation": 14,
+   "different_case": 4
+  }
+ },
+ "report names it": {
+  "audited": 40,
+  "of": 279,
+  "override": 8,
+  "express": 8,
+  "labels": {
+   "unrelated": 12,
+   "codifies": 8,
+   "related": 12,
+   "override_express": 8
+  },
+  "ci": [
+   0.105,
+   0.348
+  ],
+  "name_check": {
+   "none": 2,
+   "same_litigation": 6,
+   "same_decision": 28,
+   "different_case": 4
+  }
+ },
+ "quoted words struck": {
+  "audited": 45,
+  "of": 5760,
+  "override": 5,
+  "express": 0,
+  "labels": {
+   "related": 17,
+   "unrelated": 23,
+   "override_implicit": 5
+  },
+  "ci": [
+   0.048,
+   0.235
+  ],
+  "name_check": {
+   "none": 45
+  }
+ },
+ "top10": {
+  "audited": 10,
+  "override": 7,
+  "express": 6
+ },
+ "top20": {
+  "audited": 20,
+  "override": 11,
+  "express": 10
+ },
+ "top30": {
+  "audited": 30,
+  "override": 15,
+  "express": 14
+ },
+ "baseline_non_candidates": {
+  "audited": 20,
+  "override": 0,
+  "labels": {
+   "related": 1,
+   "unrelated": 19
+  }
+ },
+ "candidates": 6069,
+ "python_window_candidates": 6095,
+ "lean_candidate_citations": 12687,
+ "quoted_SA": {
+  "audited": 25,
+  "override": 4,
+  "of": 2315,
+  "ci": [
+   0.064,
+   0.347
+  ]
+ },
+ "quoted_FT": {
+  "audited": 20,
+  "override": 1,
+  "of": 3445,
+  "ci": [
+   0.009,
+   0.236
+  ]
+ },
+ "estimated_overrides_in_candidates": [
+  215,
+  609,
+  1730
+ ],
+ "auditor_on_gold": {
+  "audited": 20,
+  "override": 15,
+  "labels": {
+   "override_express": 14,
+   "unrelated": 2,
+   "related": 2,
+   "codifies": 1,
+   "override_implicit": 1
+  }
+ },
+ "candidates_by_tier": {
+  "S": 101,
+  "A": 2392,
+  "F": 3201,
+  "T": 375
+ },
+ "candidates_by_kind": {
+  "law names it": 30,
+  "report names it": 279,
+  "quoted words struck": 5760
+ },
+ "recall": {
+  "0 found": 20,
+  "2 cites no US Code section we can read": 3,
+  "4 the law changed none of the sections the decision cites": 4,
+  "5 the law amended a cited section, but was not the first to rewrite the cited words": 5,
+  "7 no evidence signal": 4
+ },
+ "confirmed": 34,
+ "confirmed_on_gold": 15,
+ "confirmed_new": {
+  "not on the lists": 2,
+  "law after 2011": 2,
+  "lower court": 15
+ }
+}

@@ -3,6 +3,11 @@ import LegalProofs.USCaseLaw.Precedent
 import LegalProofs.USCaseLaw.Examples
 import LegalProofs.USCaseLaw.Statute
 import LegalProofs.USCaseLaw.StatuteText
+import LegalProofs.USCaseLaw.AmendmentCheck
+import LegalProofs.USCaseLaw.CrossRefs
+import LegalProofs.USCaseLaw.Recodification
+import LegalProofs.USCaseLaw.Overrides
+import LegalProofs.USCaseLaw.Watch
 
 /-!
 # US case law: the doctrine of precedent in Lean

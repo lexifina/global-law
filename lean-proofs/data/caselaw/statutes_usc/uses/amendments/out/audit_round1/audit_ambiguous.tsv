@@ -1,0 +1,21 @@
+gid	oid	verdict	subtype	olrc_note	reason
+1714	2	ARTIFACT	parser	none	"each other place it appears" (after clause (1)'s "the first place") means all remaining occurrences but was parsed as a single insertion; count of 5 also includes "United States"; record inserted in all real State occurrences.
+6079	7	ARTIFACT	parser	probable_intent note on (a)(7)(A)(i) "participation rate" (different provision)	"in the subparagraph heading" disambiguates: "practices" occurs once in heading "Good farming practices"; record_cand 1 is the heading, as intended.
+2003	1	ARTIFACT	other	none	(a)(14) has only one word "or" (at the end); the other 2 counts are substrings in "for" and "motor"; record_cand 3 is that final "or", as intended.
+9651	1	ARTIFACT	parser	none	"both places it appears" means strike both (one in (f)(1), one in (f)(4)); parsed with all=false; record replaced both, as intended.
+11607	1	ARTIFACT	parser	none	"in the subsection heading" disambiguates: heading "Federal Advisory Committee Act." is the 1st occurrence; record also rewrote the body (via another instruction), so record_cand 0.
+7558	1	ARTIFACT	parser	none	"in the first sentence of paragraph (1)" narrows to one occurrence but target was all of (m) (10 hits); record_cand 1 is (m)(1)'s first sentence, as intended.
+6697	52	ARTIFACT	parser	probable_intent note on (g)(2)(A)(vi) provider wording (different provision)	"in the heading" disambiguates: heading "Preservation of commingled images" of (h)(2); record_cand 1 is the heading, as intended.
+8150	1	ARTIFACT	parser	none	"in subsection (c), paragraph (1)— in the paragraph heading" names heading "(1) Mission need." but target was all of (c); record_cand 1 is that heading, as intended.
+6405	3	ARTIFACT	parser	none	"in the subsection heading" disambiguates: heading "Loans and loan guarantees"; record changed the heading (as "Grants, loans, and", Code casing) so record_cand 0 only through casing.
+3634	5	ARTIFACT	parser	none	"striking 'or' after the semicolon" identifies the final "or"; most of the 9 counts are substrings ("transport", "import", "export", "control"...); record_cand 9 is the final "or", as intended.
+128	9	ARTIFACT	path	none	"Subsections (c)(2) and (d)" each contain the phrase once, so one strike in each is meant; we searched the whole section as one target; record after still shows the old text in both (record_cand 0).
+3443	3	ARTIFACT	parser	none	"in the subsection heading" disambiguates: heading "(a) National High-Performance Computing Program."; record changed the heading (Code casing differs), hence record_cand 0.
+6909	2	ARTIFACT	parser	none	"in the heading of paragraph (2)" disambiguates: heading "Timing; content; meeting."; record_cand 1 is the heading, as intended.
+13633	1	ARTIFACT	parser	none	"both places it appears" means strike both ((b)(2) and (b)(3)); parsed with all=false; record struck both, as intended.
+13070	3	ARTIFACT	parser	none	"both places it appears" means replace both "year" in (a)(2)(G); parsed with all=false; record replaced both, as intended.
+13720	2	ARTIFACT	parser	none	"in the subsection heading" disambiguates: only the heading has "Calendar Year" (other hits are lower-case "calendar year"); record_cand 1 is the heading, as intended.
+1157	1	ARTIFACT	parser	none	"both places it appears" means replace both dates ((c)(1) and (c)(2)); parsed with all=false; record replaced both (subsec. relettered (b)).
+12169	14	REAL	drafting	none	Clauses (i)-(ii) of the same Act first put "replacement" in the heading and defined term, so clause (iii)'s bare "after 'replacement'" has 2+ hits in (g)(1)(B); intended is the body's "a replacement", which is record_cand 2.
+4269	5	ARTIFACT	parser	none	"in the paragraph heading" disambiguates: heading "Administrative expenses."; second hit is lower-case "administrative costs"; record_cand 1 is the heading, as intended.
+8132	2	ARTIFACT	parser	none	"in the first sentence" disambiguates: "(v)" in first sentence vs "clause (v)" in second; record changed the first-sentence item (via inserted new (v)), so record_cand 0 is a detection miss.

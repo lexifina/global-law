@@ -1,0 +1,31 @@
+item	parse_ok	dangling_real	real_error_in_law	fault	so_in_original	note
+A31	yes	yes	yes	real	note	Pub. L. 111-148 replaced 300gg-3(a) with a one-sentence ban, so (c)(3)(A)/(B) "subsection (a)(3)" points at a paragraph that no longer exists; OLRC References in Text note says (a) "no longer contains paragraphs".
+A32	no	yes	no	parser	-	"subsections (a) and (b)" are subsections of 5 U.S.C. 9504 (the section being modified), not of 26 U.S.C. 7812; 9504(b) exists.
+A33	yes	yes	yes	real	note	Pub. L. 115-264 restructured 17 U.S.C. 115(c) to paras (1)-(2); the negotiation authority old (c)(3)(B)-(C) is now roughly (c)(1)(D); 804(b)(4) not conformed (footnote: see References in Text).
+A34	no	no	no	parser	-	Text writes "654A(f)(5)" but the section is 42 U.S.C. 654a, which has (f)(5) (private industry councils); reader treated case as a different section.
+A35	yes	yes	yes	real	note	AEDA s4219 (50 U.S.C. 2538a) was repealed and restated as 10 U.S.C. 6128 by Pub. L. 119-60, which conformed 179(f)(3)(C) (to "section 6218", itself so-in-original for 6128) but left the (B)(ii)(I) cite stale.
+A36	yes	yes	yes	real	note	19 U.S.C. 1306 (Tariff Act s306) repealed by Pub. L. 107-171 s10418(a)(5), the same Act that amended 136a; definition list in (f)(1)(A) never updated (footnote 3 + References in Text).
+A37	yes	yes	yes	real	note	30 U.S.C. 226d and 226e (and 227) were omitted from the Code; 10 U.S.C. 8721(b) carries the list over from old 7421; References in Text note says so.
+A38	yes	yes	yes	real	note	10 U.S.C. 2371 was renumbered 4021 by Pub. L. 116-283 (eff. 2022); 41 U.S.C. 1904(a)(1) not conformed (and 2371(h) cited in (c) was repealed in 2014).
+A39	no	yes	no	parser	-	Reference is to section 300l-2(e) (old Title XV health-planning review, long repealed), not to 300l; reader dropped the "-2" suffix. Real cite is obsolete too but is a different target.
+A40	no	yes	no	parser	-	"paragraphs ... and (9) of section 402(c) and section 402(f)" = 402(c)(9) (exists) plus all of 402(f); reader joined (9) onto 402(f).
+A41	yes	no	no	tree	-	40102(a)(41) exists (top-level path should be (a)(41)); but it now defines "public aircraft" - the "United States" definition is (a)(46), so the cite is stale-by-renumbering though not dangling.
+A42	yes	yes	yes	real	note	26 U.S.C. 902 repealed by Pub. L. 115-97 s14301; 904(d)(2)(E)(i)(II) still uses 902(a)/(b) stock-ownership tests (References in Text note).
+A43	no	yes	no	parser	-	Series "(j)(2)(A)(i), (ii), (iii), and (iv)" - (ii) belongs to (j)(2)(A) / (j)(2)(B), both exist; reader lost the prefix.
+A44	yes	no	no	tree	-	42 U.S.C. 4332 paragraph (2) begins inline in the chapeau, and (2)(C) (the EIS requirement) exists; record tree puts (A)-(G) at top level.
+A45	yes	yes	yes	real	note	40 U.S.C. 174j-1 to 174j-8 were transferred to 2 U.S.C. 2042 et seq.; the Code text itself carries the bracketed correction [2 U.S.C. 2042 et seq.].
+A46	yes	yes	yes	real	note	41 U.S.C. 35 (Walsh-Healey) repealed/restated as 41 U.S.C. 6502 by Pub. L. 111-350; 15 U.S.C. 636(j)(13)(C) not conformed (References in Text note).
+A47	yes	yes	yes	real	note	Pub. L. 111-148 amended 25 U.S.C. 1602 generally; it no longer has a subsec. (d); 1671(6) not conformed (same for 1665g(e), 1680l(f)).
+A48	yes	yes	yes	real	note	45 U.S.C. 762 repealed by Pub. L. 94-210 (eff. 1978), and FTA s17 (49 U.S.C. 1613) recodified; 744(d)(4)(B) not conformed (References in Text note).
+A49	no	yes	no	parser	-	"sections 209 through 230 of this title" means sections of title II of the Reclamation Reform Act of 1982 (bracket gives 43 U.S.C. 390ii-390zz-1 etc.), not 43 U.S.C. 230.
+A50	yes	yes	yes	real	note	42 U.S.C. 13925 editorially reclassified as 34 U.S.C. 12291 (2017); 46 U.S.C. 51318 parenthetical still cites 42 U.S.C. 13925(a) (References in Text note).
+A51	yes	yes	no	other	-	Not an error: the reference is the repealer itself (7301(b)(2)(H) "Sections 205, 206, and 207 (7 U.S.C. 1446f-1446h) are repealed"), so the target is gone by design.
+A52	yes	yes	yes	real	note	42 U.S.C. 5914 (annual reports) was omitted from the Code (dropped in 2000 edition); 5905(a) still says the plan is revised "as provided in section 5914(a)".
+A53	yes	no	no	tree	-	1539(e)(4) exists; record mis-indents the (3)(i)/(ii) definitions at top level, breaking the tree so the reader missed (e)(4).
+A54	yes	yes	yes	real	no	856(d)(8) has only (A)-(B) and never had an (F); the related-person rule is 856(d)(9)(F). Drafting error since Pub. L. 106-170; no footnote or note on the Code page.
+A55	yes	yes	yes	real	note	12 U.S.C. 101, 177 and 178 were all repealed by Pub. L. 103-325 (1994); 51c still defines "capital stock" for them (References in Text note).
+A56	yes	no	no	tree	-	1408(i) (Certification Date) exists but is mis-indented under (h) in the record; note the regulations the text means are now in (j), so the cite is stale but not dangling.
+A57	yes	yes	yes	real	note	Pub. L. 113-79 amended 16 U.S.C. 3833 generally; old par. (2) is now (a)(2); 42 U.S.C. 411(a)(1) not conformed (References in Text note).
+A58	yes	yes	yes	real	note	Pub. L. 114-329 redesignated 5511(a)(3)(B) as (a)(3)(C) (agency list i-xii); 15 U.S.C. 7431(a)(4) and (f) not conformed.
+A59	yes	no	no	tree	-	231a(c)(1)(ii)(C) exists inline in clause (ii) ("or (C), in the case of a wife, has in her care ... a child"); reader missed inline designation.
+A60	yes	yes	yes	real	note	15 U.S.C. 753 (EPAA s4) omitted from the Code after the President's authority expired Sept. 30, 1981; 764(c)(1) still refers to it (References in Text note).

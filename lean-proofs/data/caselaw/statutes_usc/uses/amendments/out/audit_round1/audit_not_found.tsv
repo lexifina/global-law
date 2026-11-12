@@ -1,0 +1,21 @@
+gid	oid	verdict	subtype	olrc_note	reason
+4864	3	REAL	code_text	yes, on a different instruction (subsec. (b)(2) probable intent)	prior (a)(1) reads "described in section 2323(b)(3) of this title"; the Act strikes "section 113(b)(3)", the Perkins Act cite the Code renders as a title 20 section.
+1773	3	ARTIFACT	normalization	none	prior (b)(2) has the struck words verbatim except for the Code's bracketed editorial cites "[7 U.S.C. 2012(l)]" and "[7 U.S.C. 2011 et seq.]"; ignoring bracketed insertions would match.
+12833	1	REAL	record	none	record goes from the 2017 edition straight to 118-145, so prior (d)(4) is the old "Special rule" text; the FAFSA Simplification Act rewrite (116-260, effective 2024) that holds the struck "not later than January 1 ..." words is missing.
+4207	1	REAL	code_text	none	prior (c)(2)(D) reads "core academic subjects (as defined in section 7801 of this title)"; Act cites "section 9101 of the Elementary and Secondary Education Act of 1965".
+2245	44	REAL	code_text	yes, on a different instruction ("applicable review period" executed by probable intent)	prior (f)(1) reads "before a rule promulgated under section 2605 of this title can protect"; Act says "section 6".
+6294	1	REAL	code_text	none	prior (f)(1)(D)(ii) reads "section 1524(a)(3) of this title"; Act strikes "section 524(a)(3)" (Federal Crop Insurance Act numbering).
+13469	3	REAL	code_text	only for earlier laws (111-11 executed in (a)(3)(F) by probable intent)	prior (a)(3)(F) reads "section 6805(a) of this title or a visitor reservation service."; Act strikes "6(a) or a visitor reservation service." against the Act's own wording.
+196	11	REAL	code_text	none	after the redesignation the target (i)(3)(A) reads "appropriated under section 796l of this title"; the anchor "section 753" is the Rehabilitation Act number, which the Code does not print.
+2164	4	REAL	code_text	none	prior (e)(1) reads "Notwithstanding section 1451 of this title"; Act quotes "section 451 of the Tariff Act of 1930 (19 U.S.C. 1451)".
+5824	17	REAL	code_text	none	prior (d)(26)(B)(i), which becomes (d)(23)(B)(i), reads "section 195f of this title"; Act strikes "section 319" (HSA numbering).
+3077	20	REAL	drafting	none	prior (a)(2) reads "a major automated information system program under chapter 144A of this title"; the Act's struck text leaves out "program", and the record's after text still has the phrase.
+8108	3	REAL	code_text	none	prior (j)(1) reads "section 1395o(1) of this title"; Act strikes "1836(1)" (SSA numbering).
+6890	1	REAL	code_text	none	prior (a) heading is "(a) In general.—Not later than December 31"; the Act strikes "In General." (Act heading case); only the heading case differs.
+4668	1	REAL	code_text	none	prior (1) reads "States that as of November 30, 1993, have"; the Code turned the Act's "as of the date of enactment of this Act" into a date.
+1022	2	REAL	code_text	none	prior (2) reads "section 7102(9) of title 22"; Act strikes "section 103(9)" (TVPA numbering).
+1085	7	REAL	code_text	none	after redesignation (c)(1) reads "Not later than 2 years after December 19, 2006"; the Code turned the Act's "date of enactment of the Pandemic and All-Hazards Preparedness Act" into a date.
+8105	6	REAL	code_text	none	prior (a) second sentence reads "section 1395m(0) of this title" (the typo is kept); Act strikes "section 1834(0)" (SSA numbering).
+4399	1	REAL	code_text	none	prior (h)(5)(A)(iii) reads "an elementary or secondary school as defined in section 8801 of title 20"; Act quotes "section 14101 of the Elementary and Secondary Education Act of 1965 (20 U.S.C. 8801)".
+2685	4	REAL	code_text	none	prior (e)(2) reads "set forth in section 3802 of this title"; Act strikes "section 2102 of the Bipartisan Trade Promotion Authority Act of 2002".
+9157	2	ARTIFACT	parser	none	prior (a)(2) begins "(2) Whoever", but op 1 ("striking '(a)(1) No restricted' and all that follows through the end of paragraph (1) and inserting ...") was parsed as replace_to_end with new="", so it deleted to the end of (a), including (2), and dropped the inserted text.

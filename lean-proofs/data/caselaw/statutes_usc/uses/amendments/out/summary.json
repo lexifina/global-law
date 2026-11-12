@@ -1,0 +1,930 @@
+{
+ "operations": 50010,
+ "laws": 762,
+ "instructions": 48762,
+ "by_class": [
+  [
+   "applied_matches",
+   33485
+  ],
+  [
+   "applied_record_differs",
+   4763
+  ],
+  [
+   "unsupported",
+   3544
+  ],
+  [
+   "no_target",
+   2789
+  ],
+  [
+   "chapter_level",
+   1967
+  ],
+  [
+   "not_found",
+   1957
+  ],
+  [
+   "section_not_in_record",
+   589
+  ],
+  [
+   "ambiguous",
+   461
+  ],
+  [
+   "wrong_target",
+   339
+  ],
+  [
+   "applied_unchecked",
+   116
+  ]
+ ],
+ "by_class_and_record_status": [
+  [
+   [
+    "ambiguous",
+    "after_stub"
+   ],
+   13
+  ],
+  [
+   [
+    "ambiguous",
+    "no_law_commit"
+   ],
+   44
+  ],
+  [
+   [
+    "ambiguous",
+    "ok"
+   ],
+   391
+  ],
+  [
+   [
+    "ambiguous",
+    "ok_multi"
+   ],
+   13
+  ],
+  [
+   [
+    "applied_matches",
+    "after_stub"
+   ],
+   25
+  ],
+  [
+   [
+    "applied_matches",
+    "no_law_commit"
+   ],
+   3135
+  ],
+  [
+   [
+    "applied_matches",
+    "ok"
+   ],
+   29859
+  ],
+  [
+   [
+    "applied_matches",
+    "ok_multi"
+   ],
+   466
+  ],
+  [
+   [
+    "applied_record_differs",
+    "after_stub"
+   ],
+   198
+  ],
+  [
+   [
+    "applied_record_differs",
+    "no_law_commit"
+   ],
+   856
+  ],
+  [
+   [
+    "applied_record_differs",
+    "ok"
+   ],
+   3581
+  ],
+  [
+   [
+    "applied_record_differs",
+    "ok_multi"
+   ],
+   128
+  ],
+  [
+   [
+    "applied_unchecked",
+    "no_law_commit"
+   ],
+   11
+  ],
+  [
+   [
+    "applied_unchecked",
+    "ok"
+   ],
+   104
+  ],
+  [
+   [
+    "applied_unchecked",
+    "ok_multi"
+   ],
+   1
+  ],
+  [
+   [
+    "chapter_level",
+    "chapter_level"
+   ],
+   1967
+  ],
+  [
+   [
+    "no_target",
+    "after_stub"
+   ],
+   48
+  ],
+  [
+   [
+    "no_target",
+    "created_by_law"
+   ],
+   242
+  ],
+  [
+   [
+    "no_target",
+    "no_law_commit"
+   ],
+   917
+  ],
+  [
+   [
+    "no_target",
+    "ok"
+   ],
+   1474
+  ],
+  [
+   [
+    "no_target",
+    "ok_multi"
+   ],
+   108
+  ],
+  [
+   [
+    "not_found",
+    "after_stub"
+   ],
+   6
+  ],
+  [
+   [
+    "not_found",
+    "no_law_commit"
+   ],
+   753
+  ],
+  [
+   [
+    "not_found",
+    "ok"
+   ],
+   1184
+  ],
+  [
+   [
+    "not_found",
+    "ok_multi"
+   ],
+   14
+  ],
+  [
+   [
+    "section_not_in_record",
+    "section_not_in_record"
+   ],
+   589
+  ],
+  [
+   [
+    "unsupported",
+    "after_stub"
+   ],
+   226
+  ],
+  [
+   [
+    "unsupported",
+    "created_by_law"
+   ],
+   14
+  ],
+  [
+   [
+    "unsupported",
+    "no_law_commit"
+   ],
+   1221
+  ],
+  [
+   [
+    "unsupported",
+    "ok"
+   ],
+   2037
+  ],
+  [
+   [
+    "unsupported",
+    "ok_multi"
+   ],
+   46
+  ],
+  [
+   [
+    "wrong_target",
+    "after_stub"
+   ],
+   6
+  ],
+  [
+   [
+    "wrong_target",
+    "no_law_commit"
+   ],
+   73
+  ],
+  [
+   [
+    "wrong_target",
+    "ok"
+   ],
+   251
+  ],
+  [
+   [
+    "wrong_target",
+    "ok_multi"
+   ],
+   9
+  ]
+ ],
+ "main_scope_note": "ops whose section has a commit by this law in the record (before and after both exist)",
+ "main_by_class": [
+  [
+   "applied_matches",
+   30325
+  ],
+  [
+   "applied_record_differs",
+   3709
+  ],
+  [
+   "unsupported",
+   2083
+  ],
+  [
+   "no_target",
+   1582
+  ],
+  [
+   "not_found",
+   1198
+  ],
+  [
+   "ambiguous",
+   404
+  ],
+  [
+   "wrong_target",
+   260
+  ],
+  [
+   "applied_unchecked",
+   105
+  ]
+ ],
+ "main_by_kind_class": [
+  [
+   [
+    "A",
+    "applied_matches"
+   ],
+   253
+  ],
+  [
+   [
+    "A",
+    "applied_record_differs"
+   ],
+   60
+  ],
+  [
+   [
+    "A",
+    "no_target"
+   ],
+   16
+  ],
+  [
+   [
+    "B",
+    "applied_matches"
+   ],
+   4456
+  ],
+  [
+   [
+    "B",
+    "applied_record_differs"
+   ],
+   590
+  ],
+  [
+   [
+    "B",
+    "no_target"
+   ],
+   94
+  ],
+  [
+   [
+    "D",
+    "applied_matches"
+   ],
+   1794
+  ],
+  [
+   [
+    "D",
+    "applied_record_differs"
+   ],
+   323
+  ],
+  [
+   [
+    "D",
+    "applied_unchecked"
+   ],
+   67
+  ],
+  [
+   [
+    "D",
+    "no_target"
+   ],
+   115
+  ],
+  [
+   [
+    "E",
+    "applied_matches"
+   ],
+   1924
+  ],
+  [
+   [
+    "E",
+    "applied_record_differs"
+   ],
+   157
+  ],
+  [
+   [
+    "E",
+    "no_target"
+   ],
+   137
+  ],
+  [
+   [
+    "E",
+    "not_found"
+   ],
+   8
+  ],
+  [
+   [
+    "E",
+    "wrong_target"
+   ],
+   64
+  ],
+  [
+   [
+    "IA",
+    "applied_matches"
+   ],
+   1499
+  ],
+  [
+   [
+    "IA",
+    "applied_record_differs"
+   ],
+   124
+  ],
+  [
+   [
+    "IA",
+    "no_target"
+   ],
+   71
+  ],
+  [
+   [
+    "IB",
+    "applied_matches"
+   ],
+   109
+  ],
+  [
+   [
+    "IB",
+    "applied_record_differs"
+   ],
+   9
+  ],
+  [
+   [
+    "IB",
+    "applied_unchecked"
+   ],
+   1
+  ],
+  [
+   [
+    "IB",
+    "no_target"
+   ],
+   10
+  ],
+  [
+   [
+    "M",
+    "applied_matches"
+   ],
+   2054
+  ],
+  [
+   [
+    "M",
+    "applied_record_differs"
+   ],
+   265
+  ],
+  [
+   [
+    "M",
+    "no_target"
+   ],
+   149
+  ],
+  [
+   [
+    "P",
+    "applied_matches"
+   ],
+   2051
+  ],
+  [
+   [
+    "P",
+    "applied_record_differs"
+   ],
+   285
+  ],
+  [
+   [
+    "P",
+    "applied_unchecked"
+   ],
+   22
+  ],
+  [
+   [
+    "P",
+    "no_target"
+   ],
+   50
+  ],
+  [
+   [
+    "R",
+    "ambiguous"
+   ],
+   9
+  ],
+  [
+   [
+    "R",
+    "applied_matches"
+   ],
+   210
+  ],
+  [
+   [
+    "R",
+    "applied_record_differs"
+   ],
+   36
+  ],
+  [
+   [
+    "R",
+    "no_target"
+   ],
+   10
+  ],
+  [
+   [
+    "R",
+    "not_found"
+   ],
+   27
+  ],
+  [
+   [
+    "R",
+    "wrong_target"
+   ],
+   2
+  ],
+  [
+   [
+    "S",
+    "ambiguous"
+   ],
+   380
+  ],
+  [
+   [
+    "S",
+    "applied_matches"
+   ],
+   15638
+  ],
+  [
+   [
+    "S",
+    "applied_record_differs"
+   ],
+   1836
+  ],
+  [
+   [
+    "S",
+    "no_target"
+   ],
+   890
+  ],
+  [
+   [
+    "S",
+    "not_found"
+   ],
+   1144
+  ],
+  [
+   [
+    "S",
+    "wrong_target"
+   ],
+   183
+  ],
+  [
+   [
+    "T",
+    "ambiguous"
+   ],
+   15
+  ],
+  [
+   [
+    "T",
+    "applied_matches"
+   ],
+   337
+  ],
+  [
+   [
+    "T",
+    "applied_record_differs"
+   ],
+   24
+  ],
+  [
+   [
+    "T",
+    "applied_unchecked"
+   ],
+   15
+  ],
+  [
+   [
+    "T",
+    "no_target"
+   ],
+   40
+  ],
+  [
+   [
+    "T",
+    "not_found"
+   ],
+   19
+  ],
+  [
+   [
+    "T",
+    "wrong_target"
+   ],
+   11
+  ],
+  [
+   [
+    "U",
+    "unsupported"
+   ],
+   2083
+  ]
+ ],
+ "ambiguous_record_candidate": [
+  [
+   "1",
+   165
+  ],
+  [
+   "2",
+   97
+  ],
+  [
+   "0",
+   91
+  ],
+  [
+   "3",
+   27
+  ],
+  [
+   "4",
+   13
+  ],
+  [
+   "5",
+   5
+  ],
+  [
+   "6",
+   4
+  ],
+  [
+   "7",
+   1
+  ],
+  [
+   "9",
+   1
+  ]
+ ],
+ "ambiguous_candidates_differ": [
+  [
+   "1",
+   374
+  ],
+  [
+   "0",
+   30
+  ]
+ ],
+ "groups": 14258,
+ "groups_replay_equal_by_status": [
+  [
+   [
+    "after_stub",
+    "0"
+   ],
+   212
+  ],
+  [
+   [
+    "created_by_law",
+    "0"
+   ],
+   59
+  ],
+  [
+   [
+    "no_law_commit",
+    "0"
+   ],
+   1793
+  ],
+  [
+   [
+    "no_law_commit",
+    "1"
+   ],
+   900
+  ],
+  [
+   [
+    "ok",
+    "0"
+   ],
+   5144
+  ],
+  [
+   [
+    "ok",
+    "1"
+   ],
+   6049
+  ],
+  [
+   [
+    "ok_multi",
+    "0"
+   ],
+   75
+  ],
+  [
+   [
+    "ok_multi",
+    "1"
+   ],
+   26
+  ]
+ ],
+ "laws_with_most_failures": [
+  [
+   "Pub. L. 115-334",
+   149,
+   1810
+  ],
+  [
+   "Pub. L. 114-95",
+   138,
+   591
+  ],
+  [
+   "Pub. L. 116-260",
+   123,
+   1089
+  ],
+  [
+   "Pub. L. 117-263",
+   118,
+   1589
+  ],
+  [
+   "Pub. L. 114-328",
+   115,
+   901
+  ],
+  [
+   "Pub. L. 117-328",
+   114,
+   785
+  ],
+  [
+   "Pub. L. 113-79",
+   101,
+   1143
+  ],
+  [
+   "Pub. L. 114-255",
+   95,
+   838
+  ],
+  [
+   "Pub. L. 118-272",
+   93,
+   356
+  ],
+  [
+   "Pub. L. 119-60",
+   78,
+   1384
+  ],
+  [
+   "Pub. L. 116-283",
+   72,
+   1723
+  ],
+  [
+   "Pub. L. 118-31",
+   71,
+   871
+  ],
+  [
+   "Pub. L. 115-71",
+   58,
+   62
+  ],
+  [
+   "Pub. L. 115-232",
+   51,
+   825
+  ],
+  [
+   "Pub. L. 117-58",
+   51,
+   1417
+  ]
+ ],
+ "main_by_congress": {
+  "113": {
+   "applied_matches": 3896,
+   "not_found": 202,
+   "no_target": 227,
+   "applied_record_differs": 499,
+   "ambiguous": 55,
+   "unsupported": 416,
+   "wrong_target": 42,
+   "applied_unchecked": 27
+  },
+  "114": {
+   "applied_matches": 5092,
+   "unsupported": 474,
+   "applied_record_differs": 601,
+   "not_found": 367,
+   "no_target": 276,
+   "ambiguous": 63,
+   "wrong_target": 43,
+   "applied_unchecked": 20
+  },
+  "115": {
+   "applied_matches": 6309,
+   "unsupported": 440,
+   "applied_record_differs": 735,
+   "ambiguous": 98,
+   "no_target": 320,
+   "not_found": 229,
+   "wrong_target": 40,
+   "applied_unchecked": 17
+  },
+  "116": {
+   "applied_matches": 4439,
+   "applied_record_differs": 706,
+   "not_found": 102,
+   "ambiguous": 77,
+   "wrong_target": 54,
+   "no_target": 225,
+   "unsupported": 247,
+   "applied_unchecked": 21
+  },
+  "117": {
+   "applied_matches": 5259,
+   "applied_record_differs": 711,
+   "unsupported": 259,
+   "wrong_target": 29,
+   "no_target": 233,
+   "not_found": 170,
+   "ambiguous": 54,
+   "applied_unchecked": 15
+  },
+  "118": {
+   "applied_matches": 3202,
+   "applied_record_differs": 235,
+   "no_target": 189,
+   "not_found": 74,
+   "unsupported": 163,
+   "wrong_target": 38,
+   "ambiguous": 41,
+   "applied_unchecked": 3
+  },
+  "119": {
+   "applied_matches": 2128,
+   "unsupported": 84,
+   "applied_record_differs": 222,
+   "ambiguous": 16,
+   "no_target": 112,
+   "wrong_target": 14,
+   "applied_unchecked": 2,
+   "not_found": 54
+  }
+ }
+}

@@ -1,0 +1,31 @@
+item	parse_ok	dangling_real	real_error_in_law	fault	so_in_original	note
+A1	yes	yes	yes	real	note	Paragraph 1622 of the old Tariff Act schedule (19 USC 1201) was repealed by Pub. L. 87-456 (1962); the definition was never conformed (References in Text note).
+A2	yes	yes	yes	real	note	42 USC 1973c was editorially reclassified to 52 USC 10304 (2014); the enacted cite is stale and the Code adds a bracket "[now 52 U.S.C. 10304]".
+A3	yes	yes	yes	real	no	26 USC 4761 (Marihuana Tax Act) was repealed in 1970; the only note is a Codification note on the 1954-Code substitution, and nothing flags the repeal.
+A4	yes	no	no	tree	-	1395mm(i)(6)(B) exists; the record indents the subsection heading "(i) Duration, termination..." as a roman-numeral clause, so the reader never sees subsection (i).
+A5	yes	yes	yes	real	yes	Pub. L. 110-411 enacted 4145c and rewrote 4112 in the same Act; the certification of compliance is now 4112(b)(2)(D), and the Code footnote says "So in original... does not contain a par. (4)".
+A6	yes	yes	yes	real	note	Pub. L. 108-159 rewrote 1681g(c), which now has only paragraphs (1) and (2); the summary of rights is at (c)(1). The source was not conformed (References in Text note).
+A7	yes	yes	yes	real	note	25 USC 450 et seq. (ISDEAA) was editorially reclassified to 25 USC 5301 et seq. in 2016; the enacted cite is stale (References in Text note).
+A8	no	yes	no	parser	-	The reader cut "300m–3(c)(2)" down to 300m(c)(2). The intended targets (300m-3 and 300o-2, the old health planning provisions) are also gone, so the law does dangle, just not at the parsed path.
+A9	yes	no	no	tree	-	1395x(iii)(2)(A) (home infusion therapy professional services) exists; the subsection heading "(iii)" is indented as a clause in the record.
+A10	yes	yes	yes	real	note	42 USC 14135a was editorially reclassified to 34 USC 40702 (2017); the enacted parenthetical is stale (References in Text note).
+A11	yes	yes	yes	real	note	16 USC 4107 (IFA section 308) was repealed by Pub. L. 117-328 (2022); 46 USC 12113(g) still cites it for vessels bought under that program (References in Text note).
+A12	yes	yes	yes	real	no	(n)(1)(G) has no clauses; the patent certification with clause (iv) is now (n)(1)(H)(iv) after a later redesignation, and the cross-references were not conformed. No footnote.
+A13	yes	yes	yes	real	note	22 USC 7536 (Afghanistan Freedom Support Act report section) was omitted from the Code in the 2012 edition (References in Text: "omitted from the Code").
+A14	yes	yes	yes	real	note	5 USC 5532 (dual-compensation limitation) was repealed by Pub. L. 106-65 (1999) (References in Text note).
+A15	no	yes	no	parser	-	The source explicitly cites 20 USC 2471 "as such sections are in effect on August 22, 1996" (a historical version), so it is not a dangling reference to today's Code.
+A16	yes	yes	yes	real	note	Old 31 USC ch. 67 (revenue sharing, incl. 6721) was repealed by Pub. L. 99-272 (1986). Today's 6701-6720 are a different, later chapter, so 6721(d) is gone (References in Text note).
+A17	yes	no	no	tree	-	637(d)(3)(C) exists inside the quoted contract clause of 637(d)(3); the record flattens the quoted "(A)"-"(H)" lines, so the reader misses them.
+A18	yes	yes	yes	real	note	33 USC 1171 (pre-1972 FWPCA section 21) was "omitted as superseded" by the 1972 FWPCA rewrite (likely now 33 USC 1341) (References in Text note).
+A19	yes	no	no	tree	-	1715k(h)(8) exists; the clauses (i)-(iv) of (h)(2) are at top-level indent in the record, so the reader closes subsection (h) at "(i)".
+A20	yes	no	no	tree	-	15 USC 297(b)(A) exists after the "(1)/(2) ... shall—" lead-in; the reader nests (A) under (2) instead of directly under (b).
+A21	yes	yes	yes	real	note	42 USC 12339 was repealed by Pub. L. 103-252 (1994); 12335 still lists it three times (References in Text note).
+A22	yes	yes	yes	real	note	29 USC 32 (Vocational Rehabilitation Act of 1920) was repealed in 1973 and its references now run to the Rehabilitation Act (29 USC 701 et seq.) (References in Text note).
+A23	yes	yes	yes	real	note	12 USC 101, 177 and 178 were repealed by Pub. L. 103-325 (1994) (References in Text note); 101 and 177 have no stub in the record.
+A24	no	no	no	parser	-	The garbled text "sections 3675 paragraphs (1), (2), and (6) of section 3675(b), 3680A" attaches (6) to 3675(b), not 3680A; the reader built 3680A(6).
+A25	yes	yes	yes	real	note	The statute itself says 1675c(e) was repealed by the Deficit Reduction Act of 2005; the reference is deliberate (References in Text note).
+A26	yes	yes	yes	real	no	Pub. L. 114-255 restructured 247d-6b(c)(7), so old (C)(iii)-(v) are now (B)(iii)-(v); 300hh-10(b)(4)(J) still cites (C). No footnote.
+A27	yes	no	no	tree	-	1396d(a)(7) exists; the clauses (i)-(xviii) of (a)'s lead-in are at top-level indent, so the reader ends subsection (a) at "(i)".
+A28	yes	yes	yes	real	no	20 USC 1486 (IDEA part D appropriations) was repealed by the 2004 IDEA rewrite (Pub. L. 108-446); 29 USC 772 still cites it, with no footnote or note.
+A29	yes	no	no	tree	-	1182(a)(6)(C)(i) exists; the line "(a) biological agent..." sits at top-level indent, so the reader closes subsection (a) early.
+A30	yes	no	no	tree	-	1182(a)(10)(B) (guardian for a helpless alien) exists; same early close of 1182(a) as A29.
