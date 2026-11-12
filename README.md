@@ -113,6 +113,10 @@ https://github.com/user-attachments/assets/6020acb1-53f3-4b65-94a4-fe132b867358
 
 https://github.com/user-attachments/assets/3e3076d7-cfb4-4e0a-8552-2926a630fc8e
 
+How updates are checked and pinned every 15 minutes ([MONITORING.md](MONITORING.md)); [how each figure in the film was counted](tools/monitoring-film/):
+
+https://github.com/user-attachments/assets/ebfea880-c7f7-4310-b8fb-b64849811fe3
+
 ## License
 
 This repository is [CC0](LICENSE.md). The law text is in each country's repository, under that repository's own terms.
