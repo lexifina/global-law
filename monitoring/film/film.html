@@ -16,13 +16,15 @@ canvas{display:block}
 'use strict'
 const SCALE = Number(new URLSearchParams(location.search).get('scale') || 1)
 const LAND = new URLSearchParams(location.search).get('layout') === 'landscape'
-const W = LAND ? 1920 : 1080, H = LAND ? 1080 : 1920, FPS = 60, DURATION = 45.5
-// where things sit: the disc, the heading column, the panel, the end card, the plot of scene 5 and its sample line
+const W = LAND ? 1920 : 1080, H = LAND ? 1080 : 1920, FPS = 60, DURATION = 38.5
+// where things sit: the disc, the heading column, the panel, the plot of scene 3 and its sample line, the list of scene 4
 const L = LAND
-  ? { cx: 1385, cy: 548, r: 368, hx: 96, hy: 196, hw: 770, px: 84, py: 590, pw: 900, ex: 960, ey: 440,
-      plot: { x0: 900, x1: 1850, natY: 400, subY: 890, natTop: 170, subTop: 530, cell: 6, cols: 4 }, sx: 96, sy: 660 }
-  : { cx: 540, cy: 965, r: 445, hx: 60, hy: 196, hw: 975, px: 48, py: 1218, pw: 984, ex: 540, ey: 800,
-      plot: { x0: 84, x1: 1000, natY: 960, subY: 1560, natTop: 640, subTop: 1056, cell: 7, cols: 3 }, sx: 84, sy: 520 }
+  ? { cx: 1385, cy: 548, r: 368, hx: 96, hy: 196, hw: 770, px: 84, py: 590, pw: 900,
+      plot: { x0: 900, x1: 1850, natY: 400, subY: 890, natTop: 170, subTop: 530, cell: 6, cols: 4 }, sx: 96, sy: 660,
+      list: { x0: 900, x1: 1840, y0: 110, y1: 980 } }
+  : { cx: 540, cy: 985, r: 445, hx: 60, hy: 196, hw: 975, px: 48, py: 1218, pw: 984,
+      plot: { x0: 84, x1: 1000, natY: 960, subY: 1560, natTop: 640, subTop: 1056, cell: 7, cols: 3 }, sx: 84, sy: 520,
+      list: { x0: 60, x1: 1020, y0: 560, y1: 1660 } }
 const cv = document.getElementById('c'); cv.width = W * SCALE; cv.height = H * SCALE
 const ctx = cv.getContext('2d')
 const layer = document.createElement('canvas'); layer.width = cv.width; layer.height = cv.height
@@ -40,10 +42,10 @@ const TAU = Math.PI * 2
 const mod = (a, n) => ((a % n) + n) % n
 
 // ---------- scene clock
-const T = { s1: 0, s2: 8, s3: 16.5, s4: 24, s5: 33, s6: 40, end: DURATION }
+// s2: the pass; s3: the pins panel, still under the same heading; s5: days since each check; s6: the official sources
+const T = { s1: 0, s2: 8, s3: 15.6, s5: 22.5, s6: 30, end: DURATION }
 const ARM0 = T.s2 + 0.9, ARM_DUR = 6.0            // the pass sweeps once round
 const ROT = 0.02                                   // disc drift, rad/s
-const STALL0 = 26.6, STALL1 = 30.6, RECOVER = 31.4 // the stalled stretch in scene 4
 
 // ---------- layout
 const CX = L.cx, CY = L.cy, R = L.r, RS = R * 1.17
@@ -96,8 +98,7 @@ const commits = []
     commits.push({ c, t0, dur: 0.85 + rnd() * 0.5, off: (rnd() - 0.5) * 0.5, u: rnd(), counted: true })
   }
   // a quiet trickle afterwards so the record never looks frozen
-  for (let t = 8; t < 40; t += 0.11 + rnd() * 0.12) {
-    if (t > STALL0 - 0.6 && t < RECOVER) continue
+  for (let t = 8; t < T.s5; t += 0.11 + rnd() * 0.12) {
     const c = active[Math.floor(rnd() * active.length)]
     commits.push({ c, t0: t, dur: 0.9 + rnd() * 0.5, off: (rnd() - 0.5) * 0.5, u: rnd(), counted: false })
   }
@@ -106,7 +107,7 @@ const commits = []
 }
 const arrivals = commits.filter((k) => k.counted).map((k) => k.t0 + k.dur).sort((a, b) => a - b)
 
-// scene 5: each corpus moves to a cell above the number of days since its last check; never checked sits at the far right
+// scene 3: each corpus moves to a cell above the number of days since its last check; never checked sits at the far right
 const PLOT = L.plot, DAYS = 31, CELL = PLOT.cell, COLS = PLOT.cols
 const dayX = (d) => lerp(PLOT.x0 + 16, PLOT.x1 - 96, d / DAYS)
 const NEVER_X = PLOT.x1 - 30
@@ -153,8 +154,6 @@ function baseCol(c) {
 for (const c of C) c.base = baseCol(c)
 const STATUS_COL = [COL.green, COL.amber, COL.grey, COL.white]
 
-function stallDim(t) { return 1 - 0.55 * ss(STALL0 + 1.2, STALL1 - 0.4, t) * (1 - ss(RECOVER, RECOVER + 0.5, t)) }
-
 function corpusLook(c, t) {
   let col = c.base, gain = 1
   // commits landing
@@ -166,7 +165,7 @@ function corpusLook(c, t) {
     col = mix(col, COL.white, 0.45 * wait); gain += 0.5 * wait
     const dt = t - c.tCheck
     if (dt > 0) {
-      const out = 1 - ss(T.s4 - 0.8, T.s4 + 0.4, t)
+      const out = 1 - ss(T.s5 - 0.8, T.s5 + 0.4, t)
       if (c.held) {
         const keep = 1 - ss(T.s5 - 0.6, T.s5 + 0.4, t)
         const amt = keep * (0.85 + 0.15 * Math.sin(t * 5))
@@ -192,8 +191,8 @@ const noise = document.createElement('canvas'); noise.width = W; noise.height = 
 
 function discAlpha(t) {
   const build = 1
-  const end = 1 - 0.93 * ss(T.s6 - 0.5, T.s6 + 0.9, t)
-  const panel = 1 - 0.3 * (win(t, T.s3 + 0.2, T.s4 - 0.1, 0.8, 0.6) + win(t, T.s4 + 0.2, T.s5 - 0.1, 0.8, 0.6))
+  const end = 1 - ss(T.s6 - 0.5, T.s6 + 0.4, t)
+  const panel = 1 - 0.3 * win(t, T.s3 + 0.2, T.s5 - 0.1, 0.8, 0.6)
   return build * end * panel
 }
 const rot = (t) => ROT * t
@@ -203,7 +202,7 @@ function reveal(ang, t) { // sector sweep that builds the record
 }
 
 function drawDisc(g, t) {
-  const ro = rot(t), dA = discAlpha(t) * stallDim(t), ring = 1 - morphAll(t)
+  const ro = rot(t), dA = discAlpha(t), ring = 1 - morphAll(t)
   g.globalCompositeOperation = 'lighter'
   // source circle
   for (const c of C) {
@@ -283,15 +282,6 @@ function drawArm(g, t) {
   g.restore(); g.globalAlpha = 1
 }
 
-function drawPulse(g, t) { // a ring each time a pass completes in scene 4
-  for (const t0 of [T.s4 + 1.45, T.s4 + 2.25, RECOVER]) {
-    const u = (t - t0) / 1.1; if (u <= 0 || u >= 1) continue
-    g.globalAlpha = 0.5 * (1 - u) * (1 - u); g.strokeStyle = '#bfe0ff'; g.lineWidth = 2
-    g.beginPath(); g.arc(CX, CY, lerp(R * 0.15, RS + 20, eout(u)), 0, TAU); g.stroke()
-  }
-  g.globalAlpha = 1
-}
-
 // ---------- text
 const F = {
   title: '500 52px Serif4', sub: '400 29px PlexSans', num: '600 40px Serif4', lab: '400 22px PlexMono',
@@ -314,20 +304,20 @@ const SCENES = [
   { a: T.s1, b: T.s2, title: 'Every change in the law is a commit',
     sub: 'Each country’s pipeline reads its official source and publishes each change as a commit, dated the day it takes effect.',
     stats: (t) => [[fmt(982 * eio((t - 0.5) / 3.0)), 'corpora', null, '982'], [fmt(FIG.total_commits * eio((t - 0.5) / 3.6)), 'commits', null, fmt(FIG.total_commits)], [fmt(FIG.commits_in_window * arrivals.filter((x) => x <= t).length / arrivals.length), 'in 24 hours', null, fmt(FIG.commits_in_window)]] },
-  { a: T.s2, b: T.s3, title: 'A pass checks every new commit',
-    sub: 'It runs every 15 minutes. A commit that fails a check is held back, and the last good commit stays pinned.',
+  { a: T.s2, b: T.s5, title: 'Every commit is pinned to real legislation. Live.',
+    sub: 'Every 15 minutes a pass checks each new commit. One that fails is held back.',
     stats: (t) => {
       const ok = movedList.filter((c) => !c.held && c.tCheck <= t).length
       const held = (C.find((c) => c.held).tCheck <= t ? 1 : 0) + (WAIT.tCheck <= t ? 1 : 0)
       return [[fmt(ok), 'corpora updated', '#6fe0a8'], [fmt(held), 'held back', '#ff7676']]
     } },
-  { a: T.s3, b: T.s4, title: 'Pins only move forward',
-    sub: 'The pass moves each pin to the newest good commit, rewrites the status and verifies the history in the same commit.' },
-  { a: T.s4, b: T.s5, title: 'An old timestamp means a stall',
-    sub: 'When no pin moves, the status is still refreshed within the hour.' },
   { a: T.s5, b: T.s6, title: 'Every corpus knows how current it is',
     sub: 'Each corpus records the day it was last checked against its official source and the day its next check is due.',
     stats: () => [['7', 'days for national law'], ['30', 'days for a state or city']] },
+  { a: T.s6, b: T.end - 0.55, title: 'Every commit always pins to a live official source',
+    sub: 'Each corpus is read from its country’s official publisher and checked against it on a schedule.',
+    stats: (t) => { const u = eio((t - T.s6 - 0.7) / 1.6); return [[fmt(window.SOURCE_COUNT * u), 'official sources', null, fmt(window.SOURCE_COUNT)], [fmt(982 * u), 'corpora', null, '982']] },
+    foot: 'github.com/lexifina/global-law' },
 ]
 function drawHeader(g, t) {
   for (const s of SCENES) {
@@ -350,6 +340,7 @@ function drawHeader(g, t) {
         x += text(g, lab, x, y - 3, F.lab, DIM, al3)
       })
     }
+    if (s.foot) text(g, s.foot, L.hx, y + 84, F.mono, DIM, al * ss(s.a + 2.2, s.a + 3.0, t))
   }
 }
 
@@ -370,14 +361,14 @@ function panel(g, al, y, h) {
   g.beginPath(); g.roundRect(L.px, y, L.pw, h, 18); g.fill(); g.stroke(); g.globalAlpha = 1
 }
 
-// scene 3: three real corpora, their commits and their pins
+// scene 2, second half: three real corpora, their commits and their pins
 const TRACKS = [
   { name: 'albania/national/acts', sha: C.find((c) => c.path === 'albania/national/acts').pinned, add: 2, bad: false },
   { name: 'united-states/federal/usc', sha: C.find((c) => c.path === 'united-states/federal/usc').pinned, add: 1, bad: false },
   { name: HELD_PATH, sha: C.find((c) => c.held).pinned, add: 1, bad: true, badSha: C.find((c) => c.held).newest },
 ]
 function drawPins(g, t) {
-  const al = win(t, T.s3 + 0.5, T.s4 - 0.05, 0.7, 0.5); if (al <= 0) return
+  const al = win(t, T.s3 + 0.5, T.s5 - 0.05, 0.7, 0.5); if (al <= 0) return
   const y0 = L.py + (1 - eout((t - T.s3 - 0.5) / 0.9)) * 18
   panel(g, al, y0, 424)
   TRACKS.forEach((tr, i) => {
@@ -416,70 +407,7 @@ function drawPins(g, t) {
   })
 }
 
-// scene 4: time since the last pass
-function elapsedMin(t) {
-  const a = T.s4 + 0.65
-  if (t < a) return 14 * ss(a - 0.6, a, t) * 0
-  if (t < a + 0.8) return 15 * ((t - a) / 0.8)
-  if (t < a + 1.6) return 15 * ((t - a - 0.8) / 0.8)
-  if (t < STALL0) return 15 * ((t - a - 1.6) / (STALL0 - a - 1.6)) * 0.999
-  if (t < RECOVER) return lerp(15, 128, eio((t - STALL0) / (STALL1 - STALL0)))
-  return 128 * (1 - eout((t - RECOVER) / 0.45))
-}
-function drawGauge(g, t) {
-  const al = win(t, T.s4 + 0.5, T.s5 - 0.05, 0.7, 0.5); if (al <= 0) return
-  const y0 = L.py + (1 - eout((t - T.s4 - 0.5) / 0.9)) * 18
-  const pl = L.px + 40, pr = L.px + L.pw - 40
-  panel(g, al, y0, 392)
-  const m = elapsedMin(t)
-  const stalled = ss(44.5, 45.5, m), failed = ss(119.5, 120.5, m)
-  const sc = mix(mix(COL.green, COL.amber, stalled), COL.red, failed), scs = `rgb(${sc[0] | 0},${sc[1] | 0},${sc[2] | 0})`
-  // status line
-  let x = pl; const ty = y0 + 78
-  x += text(g, 'Updates', x, ty, F.sansM, SUBINK, al) + 16
-  g.globalAlpha = al; g.fillStyle = scs; g.beginPath(); g.arc(x + 8, ty - 10, 7, 0, TAU); g.fill(); g.globalAlpha = 1
-  text(g, m < 45 ? 'running' : 'stalled', x + 28, ty, F.sansM, scs, al)
-  const mm = Math.floor(m), clock = mm < 60 ? `${mm} min` : `${Math.floor(mm / 60)} h ${String(mm % 60).padStart(2, '0')} min`
-  text(g, clock + ' since the last pass', pr, ty, F.mono, '#cfd5e6', al, 'right')
-  // track
-  const x0 = L.px + 48, x1 = L.px + L.pw - 48, ly = y0 + 150, MAX = 135, X = (v) => lerp(x0, x1, v / MAX)
-  g.globalAlpha = al; g.fillStyle = 'rgba(140,155,208,0.16)'
-  g.beginPath(); g.roundRect(x0, ly - 5, x1 - x0, 10, 5); g.fill()
-  g.fillStyle = scs; g.beginPath(); g.roundRect(x0, ly - 5, Math.max(10, X(m) - x0), 10, 5); g.fill()
-  g.beginPath(); g.arc(X(m), ly, 9, 0, TAU); g.fill(); g.globalAlpha = 1
-  const marks = [[15, '15 min', 'the next pass', 'center'], [45, '45 min', 'updates have stalled', 'center'], [120, '2 hours', 'the status is too old', 'center']]
-  for (const [v, a, b, alg] of marks) {
-    const reached = m >= v - 0.5 ? 1 : 0.55, xx = X(v)
-    g.globalAlpha = al * 0.5; g.strokeStyle = '#aab4dc'; g.lineWidth = 1.5
-    g.beginPath(); g.moveTo(xx, ly - 16); g.lineTo(xx, ly + 16); g.stroke(); g.globalAlpha = 1
-    const tx = alg === 'left' ? xx - 14 : alg === 'right' ? xx + 14 : xx
-    text(g, a, tx, ly + 56, F.mono, INK, al * reached, alg)
-    text(g, b, tx, ly + 90, F.sansS, SUBINK, al * reached, alg)
-  }
-  // the command
-  const ca = al * ss(T.s4 + 1.4, T.s4 + 2.1, t)
-  g.globalAlpha = ca * 0.6; g.strokeStyle = 'rgba(150,170,230,0.14)'; g.beginPath(); g.moveTo(pl, y0 + 290); g.lineTo(pr, y0 + 290); g.stroke(); g.globalAlpha = 1
-  text(g, '$ python tools/freshness.py --health', pl, y0 + 344, F.mono, stalled > 0.5 ? '#ff8a8a' : '#cfd5e6', ca)
-  text(g, stalled > 0.5 ? 'fails' : 'passes', pr, y0 + 344, F.mono, stalled > 0.5 ? '#ff8a8a' : '#6fe0a8', ca, 'right')
-}
-
-function drawEnd(g, t) {
-  const al = ss(T.s6 + 0.5, T.s6 + 1.3, t) * (1 - ss(T.end - 1.0, T.end - 0.15, t)); if (al <= 0) return
-  const dy = (1 - eout((t - T.s6 - 0.5) / 1.0)) * 14
-  const EX = L.ex, o = L.ey - 800
-  text(g, 'Check it yourself', EX, 800 + o + dy, '500 64px Serif4', INK, al, 'center')
-  const a2 = al * ss(T.s6 + 0.9, T.s6 + 1.6, t)
-  const cmd = 'python tools/freshness.py --health'
-  g.font = '400 30px PlexMono'; const w = g.measureText(cmd).width + 72
-  g.globalAlpha = a2; g.fillStyle = 'rgba(11,14,28,0.9)'; g.strokeStyle = 'rgba(150,170,230,0.22)'; g.lineWidth = 1
-  g.beginPath(); g.roundRect(EX - w / 2, 868 + o, w, 76, 14); g.fill(); g.stroke(); g.globalAlpha = 1
-  text(g, cmd, EX, 916 + o, '400 30px PlexMono', '#e6ebf7', a2, 'center')
-  const a3 = al * ss(T.s6 + 1.2, T.s6 + 1.9, t); let y = 1016 + o
-  for (const l of wrap(g, 'It fails when updates have stalled or the status is more than 2 hours old.', F.sub, 760)) { text(g, l, EX, y, F.sub, SUBINK, a3, 'center'); y += 41 }
-  text(g, 'github.com/lexifina/global-law', EX, y + 62, F.mono, DIM, a3, 'center')
-}
-
-// scene 5: the two rows, the day each check falls due, and three real corpora read out one after another
+// scene 3: the two rows, the day each check falls due, and three real corpora read out one after another
 const SAMPLES = [
   { path: 'albania/national/acts', checked: '11 November', due: '18 November', word: 'current', col: '#6fe0a8' },
   { path: 'austria/bund/acts', checked: '28 October', due: '4 November', word: 'stale', col: '#ffc454' },
@@ -514,11 +442,50 @@ function drawPlot(g, t) {
   })
 }
 
+// scene 4: official sources by name, each joined to the corpus read from it; the list rolls upward without stopping
+const SRC = window.SOURCES, ROW = 52, ROLL = 88 // px per row, px per second
+function drawSources(g, t) {
+  const al = ss(T.s6 + 0.3, T.s6 + 1.1, t) * (1 - ss(T.end - 1.0, T.end - 0.3, t)); if (al <= 0) return
+  const B = L.list, tt = t - T.s6
+  g.font = F.sansM
+  for (let i = 0; i < SRC.length; i++) {
+    const y = B.y0 + 150 + i * ROW - tt * ROLL
+    if (y < B.y0 - 10 || y > B.y1 + 10) continue
+    const edge = ss(B.y0, B.y0 + 150, y) * (1 - ss(B.y1 - 110, B.y1, y))  // rows fade in at the bottom and out at the top
+    const a = al * edge; if (a <= 0.004) continue
+    const [name, path] = SRC[i]
+    // a row is pinned when it clears the bottom fade; the rows on screen at the start are pinned one after another
+    const tin = Math.min((B.y1 - 150 - y) / ROLL, tt - 0.6 - i * 0.09)
+    const k = eio(tin / 0.7)
+    // the pin
+    const pc = mix([255, 255, 255], COL.green, k)
+    g.globalAlpha = a; g.strokeStyle = `rgb(${pc[0] | 0},${pc[1] | 0},${pc[2] | 0})`; g.fillStyle = g.strokeStyle; g.lineWidth = 2
+    g.beginPath(); g.arc(B.x0 + 10, y - 9, 8, 0, TAU); g.stroke()
+    g.globalAlpha = a * k; g.beginPath(); g.arc(B.x0 + 10, y - 9, 3.6, 0, TAU); g.fill(); g.globalAlpha = 1
+    const wn = text(g, name, B.x0 + 36, y, F.sansM, INK, a)
+    g.font = F.monoS; const wp = g.measureText(path).width
+    text(g, path, B.x1, y - 1, F.monoS, '#8e96ad', a * (0.35 + 0.65 * k), 'right')
+    // the line from the source to its corpus, drawn as the row is pinned, with a light that keeps running along it
+    const xa = B.x0 + 36 + wn + 16, xb = B.x1 - wp - 16
+    if (xb > xa + 20) {
+      g.globalAlpha = a * 0.34; g.strokeStyle = '#8c9bd0'; g.lineWidth = 1.2
+      g.beginPath(); g.moveTo(xa, y - 8); g.lineTo(lerp(xa, xb, k), y - 8); g.stroke()
+      const ph = mod(tin * 0.55 + (i % 7) * 0.143, 1)
+      if (k >= 1) {
+        const px = lerp(xa, xb, eio(ph)), glow = Math.sin(ph * Math.PI)
+        g.globalAlpha = a * glow; g.fillStyle = '#bfe8ff'
+        g.beginPath(); g.roundRect(px - 9, y - 9.5, 18, 3, 1.5); g.fill()
+      }
+      g.globalAlpha = 1
+    }
+  }
+}
+
 function render(frame) {
   const t = frame / FPS
   // light layer
   lx.setTransform(1, 0, 0, 1, 0, 0); lx.clearRect(0, 0, layer.width, layer.height); lx.setTransform(SCALE, 0, 0, SCALE, 0, 0)
-  drawDisc(lx, t); drawArm(lx, t); drawPulse(lx, t)
+  drawDisc(lx, t); drawArm(lx, t)
   // frame
   const g = ctx
   g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.globalCompositeOperation = 'source-over'; g.filter = 'none'
@@ -538,7 +505,7 @@ function render(frame) {
   g.setTransform(SCALE, 0, 0, SCALE, 0, 0)
   label(g, t, C.find((c) => c.held).am, C.find((c) => c.held).r, 'united-states-missouri-law', C.find((c) => c.held).tCheck, true)
   label(g, t, WAIT.am, RS, WAIT.name, WAIT.tCheck, false)
-  drawPins(g, t); drawGauge(g, t); drawPlot(g, t); drawHeader(g, t); drawEnd(g, t)
+  drawPins(g, t); drawPlot(g, t); drawSources(g, t); drawHeader(g, t)
   // open and close on the page colour
   const fade = 1 - ss(0, 0.5, t) + ss(T.end - 0.5, T.end - 0.05, t)
   if (fade > 0) { g.globalAlpha = Math.min(1, fade); g.fillStyle = '#04050c'; g.fillRect(0, 0, W, H); g.globalAlpha = 1 }

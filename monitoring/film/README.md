@@ -1,6 +1,6 @@
 # Monitoring film: where every figure comes from
 
-The 45 second film explains the [monitoring page](../README.md). Every
+The 38 second film explains the [monitoring page](../README.md). Every
 number in it is taken from one snapshot of the repository, **2026-11-11 20:11:55 UTC**, the `generated` time of
 `data/status.json` at that moment. This page says how each number was obtained and which parts of the picture are
 drawn for illustration.
@@ -55,7 +55,7 @@ Things to know about these counts:
 - The history of a repository can be rewritten after the snapshot. Run later, the script still reads the commits
   named in the snapshot for as long as GitHub keeps them.
 
-## Scene 2: a pass checks every new commit
+## Scene 2: every commit is pinned to real legislation, live
 
 | On screen | Value | Source |
 | --- | ---: | --- |
@@ -63,25 +63,11 @@ Things to know about these counts:
 | corpora updated | 105 | `published_last_24h.corpora_moved` in `data/status.json` is 106; the film shows one of them, Missouri, as held back |
 | held back | 2 | `held_back` in `data/status.json`: `singapore-law`, `united-states-missouri-law` |
 
-## Scene 3: pins only move forward
-
-The three rows are real corpora and the commit hashes are their `pinned` values in `data/freshness.tsv`:
+The second half of the scene shows three pins. The three rows are real corpora and the commit hashes are their `pinned` values in `data/freshness.tsv`:
 `albania/national/acts` f07de17, `united-states/federal/usc` a4c5f91, `united-states/missouri/acts` 66f2343. For
 Missouri the `newest` commit (63117d6) differs from the pinned one, which is what held back means.
 
-## Scene 4: an old timestamp means a stall
-
-| On screen | Source in the monitoring page |
-| --- | --- |
-| 15 min, the next pass | "every 15 minutes, a pass here checks every new commit" |
-| 45 min, updates have stalled | "`updates` is `running` while a pass has succeeded in the last 45 minutes" |
-| 2 hours, the status is too old | the health check "fails when the status has not been refreshed for 2 hours" |
-| the status is still refreshed within the hour | "If no pin moved, it still refreshes the status within the hour" |
-| `python tools/freshness.py --health` fails | it fails when updates have stalled or the status is 2 hours old |
-
-The stall in this scene is a demonstration. Updates were running at the snapshot.
-
-## Scene 5: every corpus knows how current it is
+## Scene 3: every corpus knows how current it is
 
 Each corpus moves to a cell above the number of days since its last check: the snapshot day, 2026-11-11, minus the
 corpus's `last_verified` in `data/freshness.tsv`. National law is one row and states and cities the other.
@@ -112,6 +98,20 @@ The three corpora read out are real rows, with their `last_verified` and `check_
 | `austria/bund/acts` | 2026-10-28 | 2026-11-04 | stale |
 | `brazil/bahia/acts` | 2026-10-30 | 2026-11-29 | current |
 
+## Scene 4: every commit always pins to a live official source
+
+| On screen | Value | Source |
+| --- | ---: | --- |
+| official sources | 527 | different `official_source` names in `data/freshness.tsv`; 661 of the 982 corpora name one |
+| corpora | 982 | rows in `data/freshness.tsv` |
+
+The list shows 36 of those names, each beside the corpus read from it. `build_data.py` chooses them: up to two per
+country in path order, where the name is 12 to 44 characters, fits the row beside its path and uses only characters
+in the film's fonts. Each name is listed once. Rows whose source is a mirror or a private collection, not the
+publisher itself, are left out of the list; they still count in the 527.
+
+"Checked against it on a schedule" is the 7 and 30 day rule of scene 3.
+
 ## What is drawn for illustration
 
 - **The disc.** Each of the 982 corpora is an arc of dots. National corpora are on the three inner rings and
@@ -123,9 +123,11 @@ The three corpora read out are real rows, with their `last_verified` and `check_
   uses the 105 corpora with the most commits in the 24 hours, plus Missouri.
 - **Singapore.** `singapore-law` is held back and has no row in `data/freshness.tsv`, so it is drawn waiting on the
   outer circle and is not one of the 982.
-- **The commit dots in scene 3.** The number of dots on each row is not the corpus's real number of commits.
-- **The cells in scene 5.** The column a corpus sits in is its real number of days. Its place within the column
+- **The commit dots beside the pins in scene 2.** The number of dots on each row is not the corpus's real number of commits.
+- **The cells in scene 3.** The column a corpus sits in is its real number of days. Its place within the column
   follows the alphabetical order of the paths and means nothing.
+- **The lines in scene 4.** The line from each source to its corpus, and the light running along it, show that the
+  corpus is read from that source. They are not a measurement of traffic.
 
 ## Files
 
