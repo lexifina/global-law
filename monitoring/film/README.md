@@ -55,44 +55,29 @@ Things to know about these counts:
 - The history of a repository can be rewritten after the snapshot. Run later, the script still reads the commits
   named in the snapshot for as long as GitHub keeps them.
 
-## Scene 2: every commit is pinned to real legislation, live
+## Scene 2: every commit is pinned to real legislation
 
 | On screen | Value | Source |
 | --- | ---: | --- |
 | every 15 minutes | | the monitoring page |
-| corpora updated | 105 | `published_last_24h.corpora_moved` in `data/status.json` is 106; the film shows one of them, Missouri, as held back |
-| held back | 2 | `held_back` in `data/status.json`: `singapore-law`, `united-states-missouri-law` |
+| corpora updated | 106 | `published_last_24h.corpora_moved` in `data/status.json` |
 
-## Scene 3: every corpus knows how current it is
+The snapshot also lists two corpora held back by a check (`singapore-law`, `united-states-missouri-law`). The film
+does not show them.
 
-Each corpus moves to a cell above the number of days since its last check: the snapshot day, 2026-11-11, minus the
-corpus's `last_verified` in `data/freshness.tsv`. National law is one row and states and cities the other.
+## Scene 3: the same toolset across every jurisdiction
 
 | On screen | Value | Source |
 | --- | ---: | --- |
-| days for national law | 7 | the threshold in FRESHNESS.md: a national corpus is `stale` when not checked within 7 days |
-| days for a state or city | 30 | the threshold in FRESHNESS.md for sub-national corpora |
-| the dashed lines | | drawn after day 7 and after day 30, where a check falls due |
-| never | 14 | corpora with no `last_verified` (status `unverified`): 8 national, 6 sub-national |
+| tools | 18 | the tools table in [MCP.md](../../MCP.md) |
+| corpora | 982 | rows in `data/freshness.tsv` |
 
-What the two rows hold at the snapshot:
-
-| | Corpora | Checked 0 to 7 days ago | 8 to 14 days ago | Never |
-| --- | ---: | ---: | ---: | ---: |
-| National law | 379 | 203 | 168 | 8 |
-| States and cities | 603 | 246 | 351 | 6 |
-
-No corpus was last checked more than 14 days before the snapshot. The colour of a cell is the corpus's `status`:
-green `current`, amber `stale`, grey `unverified`, white `pending-change` (two corpora). The 168 amber cells are the
-national corpora past their 7 days.
-
-The three corpora read out are real rows, with their `last_verified` and `check_due`:
-
-| Corpus | Last checked | Next check due | Status |
-| --- | --- | --- | --- |
-| `albania/national/acts` | 2026-11-11 | 2026-11-18 | current |
-| `austria/bund/acts` | 2026-10-28 | 2026-11-04 | stale |
-| `brazil/bahia/acts` | 2026-10-30 | 2026-11-29 | current |
+The 18 names on screen are the tools of `tools/mcp_server.py`, which answer the same questions for any corpus in the
+tree: `read_law`, `search_law`, `find_provision`, `list_provisions`, `list_jurisdictions`, `law_details`,
+`provision_history`, `who_wrote`, `phrase_history`, `compare_dates`, `changes_between`, `laws_between`,
+`search_changes`, `world_on_date`, `applies_to_case`, `check_precedent`, `resolve_citations`, `what_else_changes`.
+What a tool can answer for a corpus depends on what that corpus's record holds: `check_precedent`, for example,
+needs case law that cites the provision.
 
 ## Scene 4: every commit always pins to a live official source
 
@@ -120,7 +105,8 @@ Canadian provinces held as metadata only, with no law text read from the officia
 which hold no law text yet. Before the second and third rules were added the film showed 527 sources named by 661
 corpora.
 
-"Checked against it on a schedule" is the 7 and 30 day rule of scene 3.
+"Checked against it on a schedule" is the rule in FRESHNESS.md: a check falls due 7 days after the last one for
+national law and 30 days after for a state or city.
 
 ## What is drawn for illustration
 
@@ -130,11 +116,9 @@ corpora.
 - **The streaks in scene 1.** 692 streaks are drawn, so each one stands for about 16 commits. They land only on the
   322 corpora that had commits in the 24 hours, more often on those with more commits. The counter is the real figure.
 - **The corpora that turn green in scene 2.** The snapshot does not name the 106 corpora whose pins moved. The film
-  uses the 105 corpora with the most commits in the 24 hours, plus Missouri.
-- **Singapore.** `singapore-law` is held back and has no row in `data/freshness.tsv`, so it is drawn waiting on the
-  outer circle and is not one of the 982.
-- **The cells in scene 3.** The column a corpus sits in is its real number of days. Its place within the column
-  follows the alphabetical order of the paths and means nothing.
+  uses the 106 corpora with the most commits in the 24 hours.
+- **The waves in scene 3.** Each tool name lights in turn and a wave crosses every ring. No tool is being run; the
+  wave shows that the tool reaches every corpus.
 - **The lines in scene 4.** The line from each source to its corpus, and the light running along it, show that the
   corpus is read from that source. They are not a measurement of traffic.
 

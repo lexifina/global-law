@@ -17,13 +17,13 @@ canvas{display:block}
 const SCALE = Number(new URLSearchParams(location.search).get('scale') || 1)
 const LAND = new URLSearchParams(location.search).get('layout') === 'landscape'
 const W = LAND ? 1920 : 1080, H = LAND ? 1080 : 1920, FPS = 60, DURATION = 24.5
-// where things sit: the disc, the heading column, the plot of scene 3 and its sample line, the list of scene 4
+// where things sit: the disc, the heading column, the tool names of scene 3, the list of scene 4
 const L = LAND
   ? { cx: 1385, cy: 548, r: 368, hx: 96, hy: 196, hw: 770,
-      plot: { x0: 900, x1: 1850, natY: 400, subY: 890, natTop: 170, subTop: 530, cell: 6, cols: 4 }, sx: 96, sy: 660,
+      tools: { x0: 100, y0: 650, w: 810, row: 50, font: '400 20px PlexMono' },
       list: { x0: 900, x1: 1840, y0: 110, y1: 980 } }
   : { cx: 540, cy: 985, r: 445, hx: 60, hy: 196, hw: 975,
-      plot: { x0: 84, x1: 1000, natY: 960, subY: 1560, natTop: 640, subTop: 1056, cell: 7, cols: 3 }, sx: 84, sy: 520,
+      tools: { x0: 96, y0: 1316, w: 912, row: 50, panel: [48, 1246, 984, 364] },
       list: { x0: 60, x1: 1020, y0: 560, y1: 1660 } }
 const cv = document.getElementById('c'); cv.width = W * SCALE; cv.height = H * SCALE
 const ctx = cv.getContext('2d')
@@ -42,7 +42,7 @@ const TAU = Math.PI * 2
 const mod = (a, n) => ((a % n) + n) % n
 
 // ---------- scene clock
-// six seconds a scene. s2: the pass; s5: days since each check; s6: the official sources
+// six seconds a scene. s2: the pass; s5: the tools; s6: the official sources
 const T = { s1: 0, s2: 6, s5: 12, s6: 18, end: DURATION }
 const ARM0 = T.s2 + 0.6, ARM_DUR = 4.0            // the pass sweeps once round
 const ROT = 0.02                                   // disc drift, rad/s
@@ -53,14 +53,11 @@ const BANDS = [0.25, 0.37, 0.49, 0.615, 0.74, 0.865, 0.99]
 const rnd = rng(20261112)
 const C = window.CORPORA.map((r, i) => ({ i, path: r[0], sub: r[1], status: r[2], acts: r[3], pinned: r[4], newest: r[5], day: r[6], since: r[7] }))
 const FIG = window.FIGURES
-const HELD_PATH = 'united-states/missouri/acts'
 for (const c of C) {
   c.w = 1 + Math.pow(Math.sqrt(c.acts), 0.8)
   c.n = Math.min(380, Math.round(7 + 2.1 * Math.sqrt(c.acts)))
   c.h = rnd()
   c.band = c.sub ? 3 + Math.floor(rnd() * 4) : Math.floor(rnd() * 3)
-  c.held = c.path === HELD_PATH
-  if (c.held) c.band = 6
 }
 const byBand = BANDS.map(() => [])
 for (const c of C) byBand[c.band].push(c)
@@ -69,22 +66,13 @@ byBand.forEach((list, b) => {
   let a = -Math.PI / 2 + b * 0.37
   for (const c of list) { const span = (c.w / tot) * TAU; c.a0 = a + gap; c.a1 = a + span - gap; if (c.a1 < c.a0) c.a1 = c.a0 + 0.001; a += span }
 })
-// put the held corpus at lower right when the pass reaches it, so its label has room
-{
-  const h = C.find((c) => c.held), want = (52 * Math.PI) / 180 - ROT * 8.6, shift = want - (h.a0 + h.a1) / 2
-  for (const c of byBand[h.band]) { c.a0 += shift; c.a1 += shift }
-}
 for (const c of C) { c.am = (c.a0 + c.a1) / 2; c.r = BANDS[c.band] * R }
-// the corpus that is held before it is ever pinned waits on the source circle, lower left
-const WAIT = { am: (128 * Math.PI) / 180 - ROT * 8.6, name: 'singapore-law' }
-
 // each streak stands for several of the day's commits and lands on a corpus that really had commits in those 24 hours
 const moved = new Set()
 {
   // the corpora with the most commits in the 24 hours stand for the ones whose pins moved
-  const pool = C.filter((c) => !c.held && c.day > 0).sort((a, b) => b.day - a.day)
-  for (const c of pool.slice(0, 105)) moved.add(c.i)
-  moved.add(C.find((c) => c.held).i)
+  const pool = C.filter((c) => c.day > 0).sort((a, b) => b.day - a.day)
+  for (const c of pool.slice(0, 106)) moved.add(c.i)
 }
 const movedList = [...moved].map((i) => C[i])
 for (const c of C) { c.moved = moved.has(c.i); c.hits = [] }
@@ -98,7 +86,7 @@ const commits = []
     commits.push({ c, t0, dur: 0.85 + rnd() * 0.5, off: (rnd() - 0.5) * 0.5, u: rnd(), counted: true })
   }
   // a quiet trickle afterwards so the record never looks frozen
-  for (let t = T.s2; t < T.s5; t += 0.11 + rnd() * 0.12) {
+  for (let t = T.s2; t < T.s6 - 1; t += 0.11 + rnd() * 0.12) {
     const c = active[Math.floor(rnd() * active.length)]
     commits.push({ c, t0: t, dur: 0.9 + rnd() * 0.5, off: (rnd() - 0.5) * 0.5, u: rnd(), counted: false })
   }
@@ -107,30 +95,27 @@ const commits = []
 }
 const arrivals = commits.filter((k) => k.counted).map((k) => k.t0 + k.dur).sort((a, b) => a - b)
 
-// scene 3: each corpus moves to a cell above the number of days since its last check; never checked sits at the far right
-const PLOT = L.plot, DAYS = 31, CELL = PLOT.cell, COLS = PLOT.cols
-const dayX = (d) => lerp(PLOT.x0 + 16, PLOT.x1 - 96, d / DAYS)
-const NEVER_X = PLOT.x1 - 30
-{
-  const groups = new Map()
-  for (const c of [...C].sort((a, b) => (a.path < b.path ? -1 : 1))) {
-    const key = c.sub + ':' + c.since
-    const k = groups.get(key) || 0; groups.set(key, k + 1)
-    c.tx = (c.since < 0 ? NEVER_X : dayX(c.since)) + ((k % COLS) - (COLS - 1) / 2) * CELL
-    c.ty = (c.sub ? PLOT.subY : PLOT.natY) - 10 - Math.floor(k / COLS) * CELL
+// scene 3: the 18 tools, called one after another; each call sends a wave out through every corpus
+const TOOLS = ['read_law', 'search_law', 'find_provision', 'list_provisions', 'list_jurisdictions', 'law_details',
+  'provision_history', 'who_wrote', 'phrase_history', 'compare_dates', 'changes_between', 'laws_between',
+  'search_changes', 'world_on_date', 'applies_to_case', 'check_precedent', 'resolve_citations', 'what_else_changes']
+const TOOL0 = T.s5 + 0.9, TOOL_GAP = 0.24, WAVE = 0.8 // the first call, the gap between calls, seconds a wave takes to cross
+function toolGlow(c, t) {
+  let g = 0
+  for (let i = 0; i < TOOLS.length; i++) {
+    const dt = t - TOOL0 - i * TOOL_GAP; if (dt <= 0) break
+    const d = c.band / 6 - (dt / WAVE) * 1.3 + 0.15
+    if (d > -0.5) g += Math.exp(-d * d * 130)
   }
+  return g
 }
-const MORPH0 = T.s5 + 0.5
-const morph = (c, t) => eio((t - MORPH0 - c.h * 0.6) / 1.2)
-const morphAll = (t) => ss(T.s5 + 0.3, T.s5 + 1.2, t)
 
 // particles
 const P = []
 for (const c of C) {
   for (let k = 0; k < c.n; k++) {
     const g = (rnd() + rnd() + rnd() - 1.5) / 1.5
-    P.push({ c, u: rnd(), dr: g * R * 0.036, s: 1.1 + rnd() * rnd() * 2.1, a: 0.28 + rnd() * 0.62, ph: rnd() * TAU,
-      ox: (rnd() - 0.5) * CELL * 0.62, oy: (rnd() - 0.5) * CELL * 0.62 })
+    P.push({ c, u: rnd(), dr: g * R * 0.036, s: 1.1 + rnd() * rnd() * 2.1, a: 0.28 + rnd() * 0.62, ph: rnd() * TAU })
   }
 }
 // when the pass reaches each corpus
@@ -138,7 +123,6 @@ for (const c of C) {
   const a = mod(c.am + ROT * (ARM0 + ARM_DUR / 2) + Math.PI / 2, TAU)
   c.tCheck = ARM0 + (a / TAU) * ARM_DUR
 }
-WAIT.tCheck = ARM0 + (mod(WAIT.am + ROT * (ARM0 + ARM_DUR / 2) + Math.PI / 2, TAU) / TAU) * ARM_DUR
 
 // ---------- colour
 const COL = {
@@ -152,7 +136,6 @@ function baseCol(c) {
   return mix(k, [k[0] * 0.8, k[1] * 0.9, 255], c.h * 0.5)
 }
 for (const c of C) c.base = baseCol(c)
-const STATUS_COL = [COL.green, COL.amber, COL.grey, COL.white]
 
 function corpusLook(c, t) {
   let col = c.base, gain = 1
@@ -166,21 +149,15 @@ function corpusLook(c, t) {
     const dt = t - c.tCheck
     if (dt > 0) {
       const out = 1 - ss(T.s5 - 0.8, T.s5 + 0.4, t)
-      if (c.held) {
-        const keep = 1 - ss(T.s5 - 0.6, T.s5 + 0.4, t)
-        const amt = keep * (0.85 + 0.15 * Math.sin(t * 5))
-        col = mix(col, COL.red, amt); gain += keep * (1.1 + 1.2 * Math.exp(-dt * 2))
-      } else {
-        const amt = out * (0.55 + 0.45 * Math.exp(-dt * 1.6))
-        col = mix(col, COL.green, amt); gain += out * 1.4 * Math.exp(-dt * 2.2)
-      }
+      const amt = out * (0.55 + 0.45 * Math.exp(-dt * 1.6))
+      col = mix(col, COL.green, amt); gain += out * 1.4 * Math.exp(-dt * 2.2)
     }
   }
-  // freshness in scene 5
-  const m = morph(c, t)
-  if (m > 0) { col = mix(col, STATUS_COL[c.status], m * 0.95); gain = lerp(gain, 1, m) }
+  // a tool call passing through in scene 3
+  const tg = toolGlow(c, t)
+  if (tg > 0) { col = mix(col, [196, 238, 255], Math.min(1, tg) * 0.75); gain += Math.min(1.3, tg) * 1.0 }
   col = mix(col, COL.white, fl * 0.7); gain += fl * 1.3
-  return { col, gain, m }
+  return { col, gain }
 }
 
 // ---------- drawing
@@ -201,13 +178,13 @@ function reveal(ang, t) { // sector sweep that builds the record
 }
 
 function drawDisc(g, t) {
-  const ro = rot(t), dA = discAlpha(t), ring = 1 - morphAll(t)
+  const ro = rot(t), dA = discAlpha(t)
   g.globalCompositeOperation = 'lighter'
   // source circle
   for (const c of C) {
     const rv = reveal(c.am, t); if (rv <= 0) continue
     const a = c.am + ro
-    g.globalAlpha = 0.16 * rv * dA * ring
+    g.globalAlpha = 0.16 * rv * dA
     g.fillStyle = '#9fb6ff'
     g.fillRect(CX + Math.cos(a) * RS - 0.8, CY + Math.sin(a) * RS - 0.8, 1.6, 1.6)
   }
@@ -222,15 +199,10 @@ function drawDisc(g, t) {
     if (rv <= 0) continue
     const a = lerp(c.a0, c.a1, p.u) + ro
     const r = c.r + p.dr + Math.sin(t * 0.7 + p.ph) * 1.6
-    let al = p.a * look.gain * rv * dA * (0.82 + 0.18 * Math.sin(t * 1.3 + p.ph * 3))
-    let x = CX + Math.cos(a) * r, y = CY + Math.sin(a) * r, s = p.s * (al > 1 ? Math.min(1.5, Math.sqrt(al)) : 1)
-    const m = look.m
-    if (m > 0) { // gather into the corpus's cell; many dots share it, so each one is fainter there
-      x = lerp(x, c.tx + p.ox, m); y = lerp(y, c.ty + p.oy, m); s = lerp(s, CELL * 0.4, m)
-      al = lerp(al, Math.min(0.9, 9 / c.n) * dA, m)
-    }
+    const al = p.a * look.gain * rv * dA * (0.82 + 0.18 * Math.sin(t * 1.3 + p.ph * 3))
+    const s = p.s * (al > 1 ? Math.min(1.5, Math.sqrt(al)) : 1)
     g.globalAlpha = Math.min(1, al)
-    g.fillRect(x - s / 2, y - s / 2, s, s)
+    g.fillRect(CX + Math.cos(a) * r - s / 2, CY + Math.sin(a) * r - s / 2, s, s)
   }
   // commits travelling in from their official source
   for (const k of commits) {
@@ -240,25 +212,10 @@ function drawDisc(g, t) {
     for (let j = 0; j < 24; j++) {
       const uu = u - j * 0.011; if (uu < 0) break
       const e = eio(uu), rr = lerp(RS, tr, e), a = c.am + ro + k.off * (1 - e) * (1 - e)
-      g.globalAlpha = (j === 0 ? 1 : 0.6 * (1 - j / 24)) * dA * ring * Math.min(1, uu * 8)
+      g.globalAlpha = (j === 0 ? 1 : 0.6 * (1 - j / 24)) * dA * Math.min(1, uu * 8)
       g.fillStyle = j === 0 ? '#ffffff' : '#8fe6ff'
       const s = j === 0 ? 4 : 2.8 - j * 0.07
       g.fillRect(CX + Math.cos(a) * rr - s / 2, CY + Math.sin(a) * rr - s / 2, s, s)
-    }
-  }
-  // the corpus held before its first pin, waiting on the source circle
-  {
-    const on = ss(T.s2 - 0.5, T.s2 + 0.6, t) * (1 - ss(T.s5 - 0.6, T.s5 + 0.4, t))
-    if (on > 0) {
-      const a = WAIT.am + ro, x = CX + Math.cos(a) * RS, y = CY + Math.sin(a) * RS
-      const isRed = ss(WAIT.tCheck - 0.05, WAIT.tCheck + 0.15, t)
-      const col = mix(COL.white, COL.red, isRed), r2 = rng(99)
-      g.fillStyle = `rgb(${col[0] | 0},${col[1] | 0},${col[2] | 0})`
-      for (let j = 0; j < 46; j++) {
-        const rr = Math.sqrt(r2()) * 11, th = r2() * TAU + t * 0.4
-        g.globalAlpha = on * dA * ring * (0.5 + 0.5 * r2()) * (1 + isRed * 0.3 * Math.sin(t * 5))
-        g.fillRect(x + Math.cos(th) * rr - 1, y + Math.sin(th) * rr - 1, 2, 2)
-      }
     }
   }
   g.globalAlpha = 1
@@ -303,16 +260,14 @@ const SCENES = [
   { a: T.s1, b: T.s2, title: 'Every change in the law is a commit',
     sub: 'Each country’s pipeline reads its official source and publishes each change as a commit, dated the day it takes effect.',
     stats: (t) => [[fmt(982 * eio((t - 0.4) / 2.2)), 'corpora', null, '982'], [fmt(FIG.total_commits * eio((t - 0.4) / 2.8)), 'commits', null, fmt(FIG.total_commits)], [fmt(FIG.commits_in_window * arrivals.filter((x) => x <= t).length / arrivals.length), 'in 24 hours', null, fmt(FIG.commits_in_window)]] },
-  { a: T.s2, b: T.s5, title: 'Every commit is pinned to real legislation. Live.',
-    sub: 'Every 15 minutes a pass checks each new commit. One that fails is held back.',
+  { a: T.s2, b: T.s5, title: 'Every commit is pinned to real legislation',
+    sub: 'Every 15 minutes a pass checks each new commit. Stale content is continually updated.',
     stats: (t) => {
-      const ok = movedList.filter((c) => !c.held && c.tCheck <= t).length
-      const held = (C.find((c) => c.held).tCheck <= t ? 1 : 0) + (WAIT.tCheck <= t ? 1 : 0)
-      return [[fmt(ok), 'corpora updated', '#6fe0a8'], [fmt(held), 'held back', '#ff7676']]
+      return [[fmt(movedList.filter((c) => c.tCheck <= t).length), 'corpora updated', '#6fe0a8', '106']]
     } },
-  { a: T.s5, b: T.s6, title: 'Every corpus knows how current it is',
-    sub: 'Each corpus records the day it was last checked against its official source and the day its next check is due.',
-    stats: () => [['7', 'days for national law'], ['30', 'days for a state or city']] },
+  { a: T.s5, b: T.s6, title: 'The same toolset across every jurisdiction',
+    sub: 'Read a law on any date, search it, compare two dates or trace who wrote each word. The same 18 tools work on every corpus.',
+    stats: (t) => [[fmt(clamp(Math.floor((t - TOOL0) / TOOL_GAP) + 1, 0, TOOLS.length)), 'tools', null, '18'], ['982', 'corpora']] },
   { a: T.s6, b: T.end - 0.55, title: 'Every commit always pins to a live official source',
     sub: 'Each corpus is read from its country’s official publisher and checked against it on a schedule.',
     stats: (t) => { const u = eio((t - T.s6 - 0.5) / 1.3); return [[fmt(window.SOURCE_COUNT * u), 'official sources', null, fmt(window.SOURCE_COUNT)], [fmt(982 * u), 'corpora', null, '982']] },
@@ -343,49 +298,24 @@ function drawHeader(g, t) {
   }
 }
 
-function label(g, t, am, r0, name, tOn, alignRight) {
-  const al = ss(tOn + 0.1, tOn + 0.6, t) * (1 - ss(T.s5 - 0.6, T.s5 - 0.1, t)); if (al <= 0) return
-  const a = am + rot(t), x0 = CX + Math.cos(a) * (r0 + 16), y0 = CY + Math.sin(a) * (r0 + 16)
-  const x1 = CX + Math.cos(a) * (RS + 62), y1 = CY + Math.sin(a) * (RS + 62)
-  const k = eout((t - tOn - 0.1) / 0.6)
-  g.globalAlpha = al * 0.75; g.strokeStyle = '#ff7676'; g.lineWidth = 1.2
-  g.beginPath(); g.moveTo(x0, y0); g.lineTo(lerp(x0, x1, k), lerp(y0, y1, k)); g.stroke(); g.globalAlpha = 1
-  const al2 = al * ss(tOn + 0.45, tOn + 0.9, t)
-  text(g, name, alignRight ? Math.min(W - 56, x1 + 150) : Math.max(56, x1 - 96), y1 + 34, F.mono, '#ff8a8a', al2, alignRight ? 'right' : 'left')
-}
-
-// scene 3: the two rows, the day each check falls due, and three real corpora read out one after another
-const SAMPLES = [
-  { path: 'albania/national/acts', checked: '11 November', due: '18 November', word: 'current', col: '#6fe0a8' },
-  { path: 'austria/bund/acts', checked: '28 October', due: '4 November', word: 'stale', col: '#ffc454' },
-  { path: 'brazil/bahia/acts', checked: '30 October', due: '29 November', word: 'current', col: '#6fe0a8' },
-].map((s) => ({ ...s, c: C.find((c) => c.path === s.path) }))
-function drawPlot(g, t) {
-  const al = win(t, T.s5 + 1.3, T.s6 + 0.05, 0.7, 0.5); if (al <= 0) return
-  const rowsDef = [[PLOT.natY, PLOT.natTop, 'National law', 7], [PLOT.subY, PLOT.subTop, 'States and cities', 30]]
-  for (const [by, top, name, limit] of rowsDef) {
-    text(g, name, PLOT.x0, top, F.sansM, INK, al)
-    g.globalAlpha = al * 0.4; g.strokeStyle = '#8c9bd0'; g.lineWidth = 1.2
-    g.beginPath(); g.moveTo(PLOT.x0, by); g.lineTo(PLOT.x1, by); g.stroke()
-    // the day the next check falls due
-    const lx = dayX(limit + 0.5)
-    g.globalAlpha = al * 0.75; g.strokeStyle = '#ffc454'; g.setLineDash([5, 6])
-    g.beginPath(); g.moveTo(lx, by); g.lineTo(lx, top + 26); g.stroke(); g.setLineDash([]); g.globalAlpha = 1
-    text(g, `due after ${limit} days`, limit > 20 ? lx - 12 : lx + 12, top + 44, F.monoS, '#ffc454', al, limit > 20 ? 'right' : 'left')
-    for (const d of [0, 7, 14, 21, 28]) text(g, String(d), dayX(d), by + 30, F.monoS, DIM, al, 'center')
-    text(g, 'never', NEVER_X, by + 30, F.monoS, DIM, al, 'center')
+// scene 3: the tool names light one after another as each is called
+function drawTools(g, t) {
+  const al = win(t, T.s5 + 0.4, T.s6 + 0.05, 0.6, 0.5); if (al <= 0) return
+  const B = L.tools, colW = B.w / 3
+  if (B.panel) {
+    g.globalAlpha = al; g.fillStyle = 'rgba(8,10,22,0.9)'; g.strokeStyle = 'rgba(150,170,230,0.16)'; g.lineWidth = 1
+    g.beginPath(); g.roundRect(B.panel[0], B.panel[1], B.panel[2], B.panel[3], 18); g.fill(); g.stroke(); g.globalAlpha = 1
   }
-  text(g, 'days since the last check', PLOT.x0, PLOT.subY + 74, F.sansS, SUBINK, al)
-  SAMPLES.forEach((s, i) => {
-    const t0 = T.s5 + 2.3 + i * 1.15, a = al * win(t, t0, t0 + 1.15, 0.3, 0.3); if (a <= 0) return
-    const k = eout((t - t0) / 0.5)
-    g.globalAlpha = a; g.strokeStyle = s.col; g.lineWidth = 2.5
-    g.beginPath(); g.arc(s.c.tx, s.c.ty, lerp(34, 14, k), 0, TAU); g.stroke(); g.globalAlpha = 1
-    text(g, s.path, L.sx, L.sy, F.mono, '#e6ebf7', a)
-    let x = L.sx
-    x += text(g, `last checked ${s.checked}, next check due ${s.due}`, x, L.sy + 42, F.sans, SUBINK, a) + 18
-    g.globalAlpha = a; g.fillStyle = s.col; g.beginPath(); g.arc(x + 6, L.sy + 33, 6, 0, TAU); g.fill(); g.globalAlpha = 1
-    text(g, s.word, x + 22, L.sy + 42, F.sans, s.col, a)
+  TOOLS.forEach((name, i) => {
+    const x = B.x0 + (i % 3) * colW, y = B.y0 + Math.floor(i / 3) * B.row
+    const dt = t - TOOL0 - i * TOOL_GAP, on = ss(0, 0.18, dt), flash = dt > 0 ? Math.exp(-dt * 4) : 0
+    const c = mix(mix([125, 132, 153], COL.green, on), COL.white, flash)
+    const cs = `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`
+    g.globalAlpha = al; g.strokeStyle = cs; g.fillStyle = cs; g.lineWidth = 2
+    g.beginPath(); g.arc(x + 9, y - 8, 7 + flash * 4, 0, TAU); g.stroke()
+    g.globalAlpha = al * on; g.beginPath(); g.arc(x + 9, y - 8, 3.2, 0, TAU); g.fill(); g.globalAlpha = 1
+    const ink = mix([125, 132, 153], [243, 245, 250], Math.max(on, flash))
+    text(g, name, x + 30, y, B.font || F.mono, `rgb(${ink[0] | 0},${ink[1] | 0},${ink[2] | 0})`, al)
   })
 }
 
@@ -450,9 +380,7 @@ function render(frame) {
   g.filter = 'none'; g.globalAlpha = 1; g.drawImage(layer, 0, 0)
   g.globalCompositeOperation = 'source-over'
   g.setTransform(SCALE, 0, 0, SCALE, 0, 0)
-  label(g, t, C.find((c) => c.held).am, C.find((c) => c.held).r, 'united-states-missouri-law', C.find((c) => c.held).tCheck, true)
-  label(g, t, WAIT.am, RS, WAIT.name, WAIT.tCheck, false)
-  drawPlot(g, t); drawSources(g, t); drawHeader(g, t)
+  drawTools(g, t); drawSources(g, t); drawHeader(g, t)
   // open and close on the page colour
   const fade = 1 - ss(0, 0.5, t) + ss(T.end - 0.5, T.end - 0.05, t)
   if (fade > 0) { g.globalAlpha = Math.min(1, fade); g.fillStyle = '#04050c'; g.fillRect(0, 0, W, H); g.globalAlpha = 1 }
