@@ -4256,5 +4256,111 @@ class CountsByBlob(unittest.TestCase):
         self.assertEqual(m.loose_pattern('a  b'), m.loose_pattern('a b'))
 
 
+class LawNamedOtherWays(unittest.TestCase):
+    """law_details finds a change by its law's citation written the other usual ways, and by its commit given as the
+    law (2026-11-12): callers who asked that way were told no such law is in the record."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def test_the_ways_a_citation_is_written(self):
+        f = self.m.law_name_forms
+        for given in ('Public Law 117-151', 'P.L. 117-151', 'PL 117-151', 'pub l 117-151', 'Public Law No. 117-151', 'Pub. L. 117–151'):
+            self.assertIn('Pub. L. 117-151', f(given), given)
+        self.assertEqual(f('Pub. L. 117-151'), ['Pub. L. 117-151'])
+        self.assertEqual(f('Legea 31/1990'), ['Legea 31/1990', 'Legea nr. 31/1990'])
+        self.assertEqual(f('Ordin ancpi 1605 / 2016')[-1], 'Ordin ancpi nr. 1605/2016')
+        self.assertEqual(f('Legea nr. 31/1990'), ['Legea nr. 31/1990'])
+        self.assertEqual(f('loi 2020-290')[-1], 'loi n° 2020-290')
+        self.assertEqual(f('Decret no 2026-989')[-1], 'décret n° 2026-989')
+        for plain in ('36. Änderung', 'S.I. 2020/471', 'Data Protection Act 2018', 'Loi n° 2020-290 du 23 mars 2020', '1 Ala. 9'):
+            self.assertEqual(f(plain)[0], plain)
+            self.assertLessEqual(len(f(plain)), 2)
+
+    @needs(US_C)
+    def test_another_way_of_writing_it_and_a_commit_find_the_same_change(self):
+        m = self.m
+        want = m.t_law_details({'law': 'Pub. L. 117-151', 'jurisdiction': US_C, 'include_diffs': False})[1]['changes']
+        self.assertTrue(want)
+        for given in ('Public Law 117-151', 'P.L. 117-151'):
+            with self.subTest(given=given):
+                self.assertEqual(m.t_law_details({'law': given, 'jurisdiction': US_C, 'include_diffs': False})[1]['changes'], want)
+        sha = want[0]['commit']
+        for given in (sha, sha[:12]):
+            got = m.t_law_details({'law': given, 'jurisdiction': US_C, 'include_diffs': False})[1]['changes']
+            self.assertEqual([c['commit'] for c in got], [sha])
+        with self.assertRaises(m.UserError) as refused:
+            m.t_law_details({'law': 'Public Law 9999-9999', 'jurisdiction': US_C})
+        self.assertIn('last_change.law', str(refused.exception))
+
+
+class SearchBestFirst(unittest.TestCase):
+    """search_law with an index that can rank a corpus's files (search_index.ranked, 2026-11-12): the same provisions
+    and the same lines as in the order of the names, each body of law's best provision first; and in parts."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def by(self, index, **ask):
+        from unittest import mock
+        with mock.patch.object(self.m, 'search_index', index):
+            return self.m.t_search_law(dict(ask))
+
+    @needs(IE_C)
+    def test_the_same_lines_best_provision_first_and_in_parts(self):
+        m = self.m
+
+        class Ranking(FilesIndex):  # the files that hold the words most often first, equal ones by name
+            def ranked(self, query, corpus, skip, size):
+                self.calls.append(('ranked', query, corpus, skip, size))
+                q = self.words(query).strip()
+                texts = self.corpus(corpus)
+                names = sorted(self.matching(query, corpus), key=lambda n: (-texts[n].count(' ' + q + ' '), n.encode()))
+                return names[skip:skip + size]
+        ask = {'query': 'personal data breach', 'jurisdiction': 'ireland', 'max_results': 200}
+        _, by_name = self.by(FilesIndex(m), **ask)
+        index = Ranking(m)
+        _, best = self.by(index, **ask)
+        self.assertTrue(by_name['results'] and any(c[0] == 'ranked' for c in index.calls))
+        self.assertEqual(best.get('order'), 'relevance')
+        self.assertNotIn('order', by_name)
+        key = lambda r: (r['path'], r['line'], r['text'])  # noqa: E731
+        self.assertEqual(sorted(map(key, best['results'])), sorted(map(key, by_name['results'])))
+        self.assertEqual((best['provision_count'], best['page']['total']), (by_name['provision_count'], by_name['page']['total']))
+        seen = list(dict.fromkeys(r['path'] for r in best['results'] if r['path'].startswith(IE_C + '/')))
+        texts = index.corpus(IE_C)
+        q = index.words(ask['query']).strip()
+        often = [texts[p[len(IE_C) + 1:]].count(' ' + q + ' ') for p in seen]
+        self.assertEqual(often, sorted(often, reverse=True))
+        self.assertGreater(len(set(often)), 1, 'the words occur equally often in every file: nothing was ranked')
+        # in parts: the same lines in the same order, whatever the size of a part
+        parts, offset = [], 0
+        while offset is not None:
+            _, data = self.by(Ranking(m), **{**ask, 'max_results': 7, 'offset': offset})
+            parts += data['results']
+            offset = data['page']['next_offset']
+        self.assertEqual(list(map(key, parts)), list(map(key, best['results'])))
+        # asked for the order of the names, or of an index that cannot rank: as ever
+        index = Ranking(m)
+        _, named = self.by(index, **ask, order='path')
+        self.assertEqual(named['results'], by_name['results'])
+        self.assertFalse(any(c[0] == 'ranked' for c in index.calls))
+        with self.assertRaises(m.UserError):
+            self.by(index, **ask, order='best')
+
+        class Broken(Ranking):
+            def ranked(self, *a):
+                return ['not/there.md', 'not/there.md']
+        self.assertEqual(self.by(Broken(m), **ask)[1]['results'], by_name['results'])
+
+
 if __name__ == '__main__':
     unittest.main()

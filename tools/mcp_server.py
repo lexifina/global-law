@@ -148,6 +148,13 @@ def rewritten_grep(cmd: list, cwd) -> tuple[list, object]:
 #       today), the lines on which the query's words begin, as the index matches them, in ascending order: what the
 #       page shows, with no git grep of those files. A file may have none. None, an exception, a file left out or
 #       lines out of order, and git greps those files as ever.
+# and may rank a corpus's files:
+#   ranked(query, corpus, skip, size) -> [path, ...] | None
+#       `size` of the files paths() names for the corpus, after the first `skip`, those that matter most first (in
+#       which the words occur most often), in an order that stays the same from call to call while the index holds
+#       the same text; fewer than `size` means there are no more. search_law then gives each body of law's lines
+#       best provision first (order "relevance", its default), where it gave them in the order of the files' names.
+#       None, an exception or anything else: the files are listed by paths(), by name.
 # and a fifth, for find_provision:
 #   top_files(words, corpus, size) -> [path, ...] | None
 #       Up to `size` files of the corpus that hold any of `words` (whole words, whatever the case), those that hold
@@ -163,6 +170,8 @@ search_index = None
 #       words, the last of which may be the start of a longer one, whatever the case or the diacritics). None: not
 #       known, and each corpus is asked.
 #   pairs(words, corpus, folders, most, skip) -> [(commit, first parent or None, path, path before the change), ...] | None
+#       (a row may go on with the file's blob id after the change and before it, '' where the file is not there on
+#       that side: the matching lines are then counted in those blobs with no look-up of the commit's tree)
 #       The newest `most` changed files of the corpus's history whose added or removed lines contain the words,
 #       newest commit first, under one of `folders` (paths within the corpus; None: anywhere), leaving out the
 #       commits in `skip`: every *.md file whose number of lines holding the words a commit changed is among them
@@ -218,6 +227,22 @@ def index_paths(query: str, corpus: str, after: str | None, size: int) -> list |
     except Exception:  # noqa: BLE001
         return None
     return _index_paths_checked(got, after, size)
+
+
+def index_ranked(query: str, corpus: str, skip: int, size: int) -> list | None:
+    """search_index.ranked, checked: at most `size` different paths; None when the index cannot rank, does not answer,
+    or answers anything else."""
+    rank = getattr(search_index, 'ranked', None)
+    if rank is None:
+        return None
+    try:
+        got = rank(query, corpus, skip, size)
+    except Exception:  # noqa: BLE001
+        return None
+    if (not isinstance(got, (list, tuple)) or len(got) > size or not all(isinstance(p, str) and p for p in got)
+            or len(set(got)) != len(got)):
+        return None
+    return list(got)
 
 
 def _index_paths_checked(got, after: str | None, size: int) -> list | None:
@@ -4235,6 +4260,9 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     date = date_arg(args.get('date'))
     scope = scope_arg(args)
     limit = num(args, 'max_results', 30, 200)
+    order = str(args.get('order') or 'relevance').strip().lower()
+    if order not in ('relevance', 'path'):
+        raise UserError('order is "relevance" (each body of law\'s provisions that hold the words most often first) or "path".')
     # Each corpus is searched as in force on the date (law.corpus_tree): its commit-order prefix when its history is
     # in in-force order, else a tree of each file's version for the date, so older acts appended after the tip and
     # corrections are searched on the dates they apply.
@@ -4381,6 +4409,10 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         corpus, sha = pin
         done = subprocess.CompletedProcess([], 1, '', '')
         paths, rows, count, after, seen, files_in, ended = [], [], 0, None, 0, total, False
+        # Best provision first, where the index can rank and the caller did not ask for the order of the names: the
+        # files then come by their place in that order (`seen`), not after a name. An index that cannot rank this
+        # corpus lists it by name; one that stops ranking part of the way leaves the corpus to grep.
+        best_first = order == 'relevance'
         if corpus in judged:
             _call.deadline = deadline
             if caselaw_time_up():
@@ -4388,7 +4420,12 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                 return corpus, done, [], [], 0, {'files': 0, 'whole': True, 'after': None}
         while seen < total and count < need and not ended:
             size = min(SEARCH_INDEX_FILES, max(25, need - count))
-            names = index_paths(query, corpus, after, size)
+            names = index_ranked(query, corpus, seen, size) if best_first else None
+            if names is None:
+                if best_first and seen:
+                    return None
+                best_first = False
+                names = index_paths(query, corpus, after, size)
             if names is None:
                 return None
             seen, after, ended = seen + len(names), names[-1] if names else after, len(names) < size
@@ -4439,7 +4476,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
             law_read[0] += 1
         whole = seen >= total or ended
         return corpus, done, paths, rows, count, {'files': len(paths) if ended and seen < total else max(files_in, len(paths)),
-                                                  'whole': whole, 'after': after, 'seen': seen}
+                                                  'whole': whole, 'after': after, 'seen': seen, 'ranked': best_first}
 
     results, files, owners, n_lines = [], set(), {}, 0
     offset = offset_arg(args)
@@ -4507,12 +4544,15 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     # One call for all of them where the index takes one (paths_many): it names a corpus's first files, so a corpus
     # read in part is asked for those it read as well, which are passed over (or is asked by itself, far into it).
     most = {c: ix.get('seen', 0) + min(share, ix['files'] - len(ix['paths']), SEARCH_INDEX_FILES) for c, ix in more_files}
-    first = index_paths_many(query, [(c, n) for c, n in most.items() if n <= 2 * SEARCH_INDEX_FILES]) if share else None
+    by_name = [(c, n) for c, n in most.items() if n <= 2 * SEARCH_INDEX_FILES and not by_index[c].get('ranked')]
+    first = index_paths_many(query, by_name) if share and by_name else None
     for corpus, ix in more_files:
         room = min(share, SEARCH_PATHS - len(listed), ix['files'] - len(ix['paths']), SEARCH_INDEX_FILES)
         if room <= 0:
             break
-        if first is None or most[corpus] > 2 * SEARCH_INDEX_FILES:
+        if ix.get('ranked'):  # the next best files, after those read
+            names = index_ranked(query, corpus, ix.get('seen', 0), room) or []
+        elif first is None or most[corpus] > 2 * SEARCH_INDEX_FILES:
             names = index_paths(query, corpus, ix['after'], room) or []
         else:
             after = ix['after'].encode('utf-8', 'surrogateescape') if ix['after'] is not None else None
@@ -4560,7 +4600,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         hints.append('To find what cites or relies on a provision, including the terms it defines and their scope, use '
                      'what_else_changes with its path: a text search misses citation forms and defined terms.')
     if by_index and not results and not offset:  # the index matches whole words; grep matches parts of words as well
-        hints.append('The words were matched as whole words. To match part of a word, pass regex true.')
+        hints.append('The words were matched as whole words (the last, if long, also as the start of a word). To match '
+                     'part of a word, pass regex true.')
     lines += hints
     related = []
     # (not with the call's time nearly up; nor over every jurisdiction when an index answered in no time: the change
@@ -4609,7 +4650,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                               'case_law_unread_for_time': sorted(unread),
                               **({'law_unread_for_time': late[:20], 'law_unread_count': len(late)} if late else {}),
                               **({'hints': hints} if hints else {}),
-                              **({'matched_by': 'index'} if by_index else {})}
+                              **({'matched_by': 'index'} if by_index else {}),
+                              **({'order': 'relevance'} if any(ix.get('ranked') for ix in by_index.values()) else {})}
 
 
 def t_list_provisions(args: dict) -> tuple[str, dict]:
@@ -5131,7 +5173,7 @@ def history_rows(corpus: str, cwd: Path, words: str | None, folders: list[str] |
         full = False
         for _ in range(HISTORY_ROUNDS):
             got = hook.pairs(words, corpus, folders, most, sorted(skip))
-            if not isinstance(got, (list, tuple)) or len(got) > most or not all(isinstance(r, (list, tuple)) and len(r) == 4 for r in got):
+            if not isinstance(got, (list, tuple)) or len(got) > most or not all(isinstance(r, (list, tuple)) and len(r) in (4, 6) for r in got):
                 return None
             full = len(got) >= most
             if full and got[0][0] != got[-1][0]:  # the last commit's files may not all be here: it is asked again
@@ -5142,8 +5184,9 @@ def history_rows(corpus: str, cwd: Path, words: str | None, folders: list[str] |
                 break
         rows = []
         for row in kept:
-            sha, parent, name, old = row
-            if not (isinstance(sha, str) and isinstance(name, str) and isinstance(old, str) and (parent is None or isinstance(parent, str))):
+            sha, parent, name, old, *blobs = row
+            if not (isinstance(sha, str) and isinstance(name, str) and isinstance(old, str) and (parent is None or isinstance(parent, str))
+                    and all(isinstance(b, str) and re.fullmatch(r'[0-9a-f]{40,64}|', b) for b in blobs)):
                 return None
             # As git shows a rename one side of which is outside what was asked for (*.md, the folders): the side
             # inside alone, added or deleted.
@@ -5152,9 +5195,11 @@ def history_rows(corpus: str, cwd: Path, words: str | None, folders: list[str] |
                 continue
             if not inside[0]:
                 name = old
+                blobs = blobs and ['', blobs[1]]  # (the old name is not there after the change)
             elif not inside[1]:
                 old = name
-            rows.append((sha, parent, name, old))
+                blobs = blobs and [blobs[0], '']  # (nor the new name before it)
+            rows.append((sha, parent, name, old, *blobs))
         return newer + rows, full
     except (SystemExit, Exception):  # noqa: BLE001
         return None
@@ -5318,17 +5363,21 @@ def t_phrase_history(args: dict) -> tuple[str, dict]:
         named = history_rows(c['path'], cwd, words, [sub, *former_folders(c['path'], sub)] if sub else None, log_args, specs, holding,
                              lambda sha, corpus=c['path']: getattr(by_commit.get((corpus, sha)), 'kind', 'documentation') != 'documentation')
         rows, more = named if named is not None else (status_pairs(split_log(c['path'], cwd, log_args, specs)), False)
-        pairs = []
-        for sha, parent, name, old in rows:
+        pairs, blobs = [], {}
+        for sha, parent, name, old, *known in rows:
             e = by_commit.get((c['path'], sha))
             if e is None or e.kind == 'documentation' or NOT_LAW.search(name):
                 continue
             pairs.append((sha, parent, name, e, old))
+            if known:  # (the index gave the two versions' blobs)
+                blobs[(sha, name)] = known[0]
+                if parent:
+                    blobs[(parent, old)] = known[1]
         if len(pairs) > PHRASE_FILES or more:
             pairs, over = pairs[:PHRASE_FILES], True
         # Which way did the words go? Count the file's matching lines before and after the change; git runs the
         # pattern, never Python's backtracking engine. Equal counts: the words sit on a line changed for another reason.
-        counts = grep_counts(cwd, pattern, pairs)
+        counts = grep_counts(cwd, pattern, pairs, blobs)
         for sha, parent, name, e, old in pairs:
             after, before = counts.get((sha, name), 0), counts.get((parent, old), 0) if parent else 0
             if old != name and before:  # renamed: matching lines that came along moved; any beyond that were removed
@@ -5583,16 +5632,20 @@ LOOKUPS = 400  # (commit, file) names one git cat-file --batch-check is asked fo
 PHRASE_CORPORA = 4  # law corpora phrase_history reads side by side
 
 
-def grep_counts(cwd: Path, pattern: str, pairs: list) -> dict[tuple[str, str], int]:
+def grep_counts(cwd: Path, pattern: str, pairs: list, blobs: dict | None = None) -> dict[tuple[str, str], int]:
     """{(commit, file): lines matching the pattern} for each change (commit, parent, file[, _, old name]) and its
     parent's version of the file, each version read once: the blob of every (commit, file) is looked up (one git
     cat-file --batch-check; a file a commit does not have is simply not there) and git grep is given the blobs
     themselves, each once however many changes share it. Given commits and names, git grep read every name in every
     commit of a part: 40 changes of 40 files in 40 commits were 3,200 files read for the 80 wanted, and a list cut
     at 3,000 changed files took 17 s to count (Romania, "S.R.L."); phrase_history of a common word with no
-    jurisdiction, 40 to 70 s. Anything unexpected from git, and the files are counted the old way."""
+    jurisdiction, 40 to 70 s. `blobs`: {(commit, file): blob id, or '' where the commit has no such file} for
+    versions already known (a host's index of changes gives them), which are not looked up. Anything unexpected from
+    git, and the files are counted the old way."""
     wanted = list(dict.fromkeys([(p[0], p[2]) for p in pairs] + [(p[1], p[4] if len(p) > 4 else p[2]) for p in pairs if p[1]]))
-    if len(wanted) > 2:
+    known = {key: blobs[key] for key in wanted if key in blobs} if blobs else {}
+    wanted = [key for key in wanted if key not in known]
+    if len(wanted) + len(known) > 2:
         try:
             if any('\n' in name for _, name in wanted):
                 raise ValueError('a name with a line break')
@@ -5611,8 +5664,11 @@ def grep_counts(cwd: Path, pattern: str, pairs: list) -> dict[tuple[str, str], i
                 with ThreadPoolExecutor(min(8, len(asked))) as pool:
                     lines = [line for got in pool_map(pool, looked_up, asked) for line in got]
             else:
-                lines = looked_up(asked[0])
+                lines = looked_up(asked[0]) if asked else []
             holders: dict[str, list] = {}
+            for key, blob in known.items():
+                if blob:
+                    holders.setdefault(blob, []).append(key)
             for key, line in zip(wanted, lines):
                 fields = line.split()
                 if len(fields) == 3 and fields[1] == 'blob' and re.fullmatch(r'[0-9a-f]{40,64}', fields[0]):
@@ -8921,11 +8977,37 @@ def t_resolve_citations(args: dict) -> tuple[str, dict]:
                               **({'not_resolved': extra} if extra else {}), **({'notes': notes} if notes else {})}
 
 
+_ACCENTED = {'decret': 'décret', 'arrete': 'arrêté', 'reglement': 'règlement'}
+
+
+def law_name_forms(name: str) -> list[str]:
+    """A law's citation as given, and as the records write it where that differs in a way people often type:
+    "Public Law 117-151" and "P.L. 117-151" are "Pub. L. 117-151"; "Legea 31/1990" is "Legea nr. 31/1990"; "loi
+    2020-290" is "Loi n° 2020-290". A change is recorded under its law's citation (the commit's author), and a
+    caller who wrote it another way was told no such law is in the record (5 of callers' first 10 calls, 2026-11-12)."""
+    forms = [name]
+    us = re.fullmatch(r'(?i)\s*(?:public\s+law|pub\.?\s*l\.?|p\.?\s*l\.?)\s*(?:no\.?\s*)?(\d+)\s*[-\u2013]\s*(\d+)\s*', name)
+    if us:
+        forms.append(f'Pub. L. {us.group(1)}-{us.group(2)}')
+    numbered = re.fullmatch(r'\s*(.*?[^\d\s./])\s+(\d+)\s*/\s*(\d{4})\s*', name)
+    if numbered and not re.search(r'(?i)\b(?:nr|no|n[\u00b0\u00ba])\.?$', numbered.group(1)):
+        forms.append(f'{numbered.group(1)} nr. {numbered.group(2)}/{numbered.group(3)}')
+    fr = re.fullmatch(r'(?i)\s*(loi(?:\s+organique)?|d[e\u00e9]cret(?:-loi)?|ordonnance|arr[e\u00ea]t[e\u00e9])\s+(?:n[o\u00b0\u00ba]?\.?\s*)?(\d{2,4}-\d+)\s*', name)
+    if fr:
+        kind = ' '.join(_ACCENTED.get(w.lower(), w) for w in fr.group(1).split())
+        forms.append(f'{kind} n\u00b0 {fr.group(2)}')
+    return list(dict.fromkeys(forms))
+
+
 def t_law_details(args: dict) -> tuple[str, dict]:
     """The full record of one law's change: its commit message with every trailer, and the provisions it changed."""
     corpus = scope_arg(args, 'jurisdiction')  # (`corpus`, its name before, is read as jurisdiction: ALIASES)
     law_name = text_arg(args, 'law')
     commit = text_arg(args, 'commit')
+    if law_name and not commit and re.fullmatch(r'[0-9a-fA-F]{7,40}', law_name.strip()):
+        # A commit given as the law: read_law and provision_history name each change's commit beside its law, and
+        # no law's citation is seven hexadecimal digits and nothing else.
+        commit, law_name = law_name.strip(), ''
     if commit and not re.fullmatch(r'[0-9a-fA-F]{4,40}', commit):
         raise UserError('commit must be a hexadecimal commit hash (4 to 40 characters).')
     if commit:  # a commit of this tree (a root commit) stands for the corpus commit it moved to
@@ -9002,9 +9084,13 @@ def t_law_details(args: dict) -> tuple[str, dict]:
             else:
                 # The author named whole, not a part of a longer name ("1 Ala. 9" is not "1 Ala. 98"): git's --author
                 # matches any part, so the names it gives are checked again.
-                whole = re.compile(rf'(?<![\w.]){re.escape(law_name.strip())}(?![\w])', re.I)
-                # (every commit's author is read: 6 s for Romania's 631,000 commits in one process)
-                rows = split_log(c, cwd, ['--format=%H%x1f%an', f'--author={law_name}', '--fixed-strings', '-i'], rev=pin).splitlines()
+                forms = law_name_forms(law_name.strip())
+                whole = re.compile('|'.join(rf'(?<![\w.]){re.escape(form)}(?![\w])' for form in forms), re.I)
+                # (every commit's author is read: 6 s for Romania's 631,000 commits in one process; the other ways
+                # the citation is written are looked for in the same reading, as one pattern)
+                how = ([f'--author={law_name}', '--fixed-strings'] if len(forms) == 1 else
+                       ['--author=' + '|'.join(re.sub(r'([.^$*+?()\[\]{}|\\])', r'\\\1', form) for form in forms), '--extended-regexp'])
+                rows = split_log(c, cwd, ['--format=%H%x1f%an', *how, '-i'], rev=pin).splitlines()
                 shas = [r.split('\x1f', 1)[0] for r in rows if '\x1f' in r and whole.search(r.split('\x1f', 1)[1])]
                 if not shas and corpus and len(law_name.strip()) >= 8 and not law.is_caselaw(entry):
                     # A law's full title, which its message holds and its short name does not: "Gesetz zur Ergänzung
@@ -9043,7 +9129,9 @@ def t_law_details(args: dict) -> tuple[str, dict]:
         if law_name and not corpus and re.search(r'\bCourt\b|\bCir(?:cuit)?\b|\bTribunal\b|Gericht|\bCour\b|\bHof\b', law_name, re.I):
             hint = (' Court decisions are not searched by author across every corpus: give the decision\'s citation or docket, '
                     'or name its case-law corpus (jurisdiction, e.g. "united-states/alabama/caselaw").')
-        raise UserError(f'No change in the record by {law_name or commit!r}. Use laws_between to list laws by date.' + hint + not_searched(missing))
+        raise UserError(f'No change in the record by {law_name or commit!r}. Name the law as read_law or provision_history '
+                        'name it (last_change.law), or give the commit they give; laws_between lists laws by date.'
+                        + hint + not_searched(missing))
     for f in found:
         # A decision's commit that changed no file: the same decision appended again, its file already written by an
         # earlier commit. Say which file holds it, not "documentation only".
@@ -9446,7 +9534,8 @@ TOOLS = [
     ('search_law', 'Search the text of all the law in force on a date, across every jurisdiction or one. Plain text by default.',
      {'query': {'type': 'string', 'description': 'Words or a phrase; a regular expression if regex is true.'}, 'date': DATE, 'jurisdiction': SCOPE,
       'kind': KIND, 'regex': REGEX, 'case_sensitive': {'type': 'boolean', 'description': 'Match upper and lower case as written (default false: either case matches).'},
-      'max_results': at_most(30, 200, 'Matching lines to return'), 'offset': OFFSET},
+      'max_results': at_most(30, 200, 'Matching lines to return'), 'offset': OFFSET,
+      'order': {'type': 'string', 'enum': ['relevance', 'path'], 'description': 'relevance (default): within each body of law, the provisions in which the words occur most come first, where the server can rank them. path: in the order of the files\' names.'}},
      ['query'], t_search_law),
     ('changes_between', 'Every provision whose text on date_b differs from its text on date_a, in every jurisdiction or one, with the laws that took effect after date_a, up to and including date_b.',
      {'date_a': DAY, 'date_b': DAY, 'jurisdiction': SCOPE, 'kind': KIND}, ['date_a', 'date_b'], t_changes_between),
