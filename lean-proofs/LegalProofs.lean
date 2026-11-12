@@ -13,3 +13,4 @@ import LegalProofs.Cases.GMOGap
 import LegalProofs.Generated
 import LegalProofs.GeneratedMore
 import LegalProofs.USTax
+import LegalProofs.USCaseLaw
