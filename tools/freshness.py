@@ -115,7 +115,26 @@ def act_count(acts) -> int | str:
     return acts if isinstance(acts, int) else ''
 
 
-def corpus_row(entry: dict, pinned: str | None, newest: str | None, today: dt.date) -> dict:
+def read_named_sources(root: Path) -> dict[str, str]:
+    """data/official-sources.tsv: path -> official source, for corpora whose own description names no publisher yet
+    (taken from each corpus's record note or README). {} when the file is missing."""
+    try:
+        text = (root / 'data' / 'official-sources.tsv').read_text(encoding='utf-8')
+    except OSError:
+        return {}
+    return {r['path']: r['official_source'] for r in csv.DictReader(io.StringIO(text), delimiter='\t')}
+
+
+def official_source(entry: dict, named: dict[str, str] | None = None) -> str:
+    """The official source a corpus is read from: its own `publisher`, else the publisher of its `source` (case law
+    names it there), else the name data/official-sources.tsv gives it."""
+    src = entry.get('source')
+    return (entry.get('publisher') or (src.get('publisher') if isinstance(src, dict) else '')
+            or (named or {}).get(entry.get('path'), '') or '')
+
+
+def corpus_row(entry: dict, pinned: str | None, newest: str | None, today: dt.date,
+               named: dict[str, str] | None = None) -> dict:
     """One corpus's freshness, from its manifest entry (describe.py carries the corpus's own freshness summary into
     `freshness`), the commit pinned here and, when known, the corpus's newest commit."""
     own = entry.get('freshness') or {}
@@ -145,7 +164,7 @@ def corpus_row(entry: dict, pinned: str | None, newest: str | None, today: dt.da
         'newest': newest or '', 'acts': act_count(own.get('totals', {}).get('acts') or entry.get('acts')),
         'acts_current': totals.get('current', ''), 'acts_pending': totals.get('pending-change', ''),
         'acts_stale': totals.get('stale', ''), 'acts_unverified': totals.get('unverified', ''),
-        'per_act': 'yes' if own else 'no', 'official_source': entry.get('publisher') or '',
+        'per_act': 'yes' if own else 'no', 'official_source': official_source(entry, named),
     }
 
 
@@ -211,9 +230,9 @@ def write(root: Path = ROOT, heads: dict[str, str] | None = None, today: dt.date
     today = today or today_utc()
     manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
     pins = gitlinks(root) if pins is None else pins
-    heads, own = heads or {}, own or {}
+    heads, own, named = heads or {}, own or {}, read_named_sources(root)
     rows = [corpus_row({**c, 'freshness': own[c['path']]} if own.get(c['path']) else c,
-                       pins.get(c['path']), heads.get(c['path']), today)
+                       pins.get(c['path']), heads.get(c['path']), today, named)
             for c in sorted(manifest['corpora'], key=lambda c: c['path'])]
     summary = summarise(rows, manifest, today)
     (root / 'data').mkdir(exist_ok=True)

@@ -1,6 +1,6 @@
 # Monitoring film: where every figure comes from
 
-The 38 second film explains the [monitoring page](../README.md). Every
+The 24 second film explains the [monitoring page](../README.md). Every
 number in it is taken from one snapshot of the repository, **2026-11-11 20:11:55 UTC**, the `generated` time of
 `data/status.json` at that moment. This page says how each number was obtained and which parts of the picture are
 drawn for illustration.
@@ -63,10 +63,6 @@ Things to know about these counts:
 | corpora updated | 105 | `published_last_24h.corpora_moved` in `data/status.json` is 106; the film shows one of them, Missouri, as held back |
 | held back | 2 | `held_back` in `data/status.json`: `singapore-law`, `united-states-missouri-law` |
 
-The second half of the scene shows three pins. The three rows are real corpora and the commit hashes are their `pinned` values in `data/freshness.tsv`:
-`albania/national/acts` f07de17, `united-states/federal/usc` a4c5f91, `united-states/missouri/acts` 66f2343. For
-Missouri the `newest` commit (63117d6) differs from the pinned one, which is what held back means.
-
 ## Scene 3: every corpus knows how current it is
 
 Each corpus moves to a cell above the number of days since its last check: the snapshot day, 2026-11-11, minus the
@@ -102,13 +98,27 @@ The three corpora read out are real rows, with their `last_verified` and `check_
 
 | On screen | Value | Source |
 | --- | ---: | --- |
-| official sources | 527 | different `official_source` names in `data/freshness.tsv`; 661 of the 982 corpora name one |
+| official sources | 610 | different `official_source` names in `data/freshness.tsv`; 947 of the 982 corpora name one |
 | corpora | 982 | rows in `data/freshness.tsv` |
 
-The list shows 36 of those names, each beside the corpus read from it. `build_data.py` chooses them: up to two per
+The list holds 56 of those names, each beside the corpus read from it. `build_data.py` chooses them: up to two per
 country in path order, where the name is 12 to 44 characters, fits the row beside its path and uses only characters
 in the film's fonts. Each name is listed once. Rows whose source is a mirror or a private collection, not the
-publisher itself, are left out of the list; they still count in the 527.
+publisher itself, are left out of the list; they still count in the 610.
+
+Where a corpus's official source comes from, in this order (`official_source` in `tools/freshness.py`):
+
+| Rule | Corpora |
+| --- | ---: |
+| the corpus's own `publisher` in `manifest.json` | 661 |
+| the `publisher` of its `source` in `manifest.json` (case law names it there) | 199 |
+| [data/official-sources.tsv](../../data/official-sources.tsv): the source named in the corpus's record note or README, for corpora whose own description carries no publisher yet | 87 |
+| none named | 35 |
+
+The 35 without a name: 27 Swiss case law corpora, which gather many courts and name no single publisher; six
+Canadian provinces held as metadata only, with no law text read from the official site; and Costa Rica and Tuvalu,
+which hold no law text yet. Before the second and third rules were added the film showed 527 sources named by 661
+corpora.
 
 "Checked against it on a schedule" is the 7 and 30 day rule of scene 3.
 
@@ -123,7 +133,6 @@ publisher itself, are left out of the list; they still count in the 527.
   uses the 105 corpora with the most commits in the 24 hours, plus Missouri.
 - **Singapore.** `singapore-law` is held back and has no row in `data/freshness.tsv`, so it is drawn waiting on the
   outer circle and is not one of the 982.
-- **The commit dots beside the pins in scene 2.** The number of dots on each row is not the corpus's real number of commits.
 - **The cells in scene 3.** The column a corpus sits in is its real number of days. Its place within the column
   follows the alphabetical order of the paths and means nothing.
 - **The lines in scene 4.** The line from each source to its corpus, and the light running along it, show that the

@@ -61,6 +61,15 @@ class CorpusRow(unittest.TestCase):
     def test_acts_list_is_counted(self):
         self.assertEqual(freshness.corpus_row(entry(acts=['A', 'B']), PIN, None, D)['acts'], 2)
 
+    def test_official_source_order(self):
+        own = freshness.corpus_row(entry(publisher='Gazette', source={'publisher': 'Court'}), PIN, None, D, {'ro/national/acts': 'Table'})
+        self.assertEqual(own['official_source'], 'Gazette')
+        court = freshness.corpus_row(entry(publisher='', source={'publisher': 'Court'}), PIN, None, D, {'ro/national/acts': 'Table'})
+        self.assertEqual(court['official_source'], 'Court')
+        e = entry(publisher='')
+        self.assertEqual(freshness.corpus_row(e, PIN, None, D, {e['path']: 'Table'})['official_source'], 'Table')
+        self.assertEqual(freshness.corpus_row(e, PIN, None, D)['official_source'], '')
+
     def test_due_check_turns_stale_when_read_later(self):
         row = {'status': 'current', 'check_due': '2026-11-11'}
         self.assertEqual(freshness.status_on(row, dt.date(2026, 11, 12)), 'stale')
