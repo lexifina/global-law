@@ -1,0 +1,185 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=block">
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#04070d}
+canvas{position:absolute;inset:0}
+#ov{position:absolute;inset:0;pointer-events:none;color:#eef1f5;font-family:'IBM Plex Sans',sans-serif}
+.k{position:absolute;left:120px;top:96px;font:600 22px 'IBM Plex Sans';letter-spacing:.22em;text-transform:uppercase}
+.t{position:absolute;left:120px;top:132px;font:600 58px/1.1 'Source Serif 4',serif;max-width:1350px;text-shadow:0 2px 30px rgba(0,0,0,.7)}
+.s{position:absolute;left:122px;top:212px;font:400 26px/1.4 'IBM Plex Sans';color:#a6b5cc;max-width:1180px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud{position:absolute;right:120px;top:100px;text-align:right;font:500 22px 'JetBrains Mono',monospace;color:#a6b5cc;line-height:1.7;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud b{font:700 56px 'Source Serif 4',serif;color:#eef1f5;display:block;line-height:1.1}
+.lab{position:absolute;transform:translate(-50%,-150%);white-space:nowrap;font:600 21px 'JetBrains Mono',monospace;padding:5px 11px;border-radius:9px;background:rgba(6,12,22,.66);border:1px solid rgba(140,170,210,.28)}
+.lab.sm{font-size:17px;padding:3px 8px}
+.lab.dn{transform:translate(-50%,60%)}
+.lab.r{transform:translate(-100%,-50%)}
+.lab.plain{background:none;border:none;padding:0;text-shadow:0 2px 14px #000}
+.lab.cap{transform:translate(-50%,0);width:400px;white-space:normal;text-align:center;font:600 24px/1.3 'IBM Plex Sans'}
+.lab.cap .num{display:block;font:700 54px/1.05 'Source Serif 4',serif;margin-bottom:4px}
+.lab.cap small{display:block;font:400 19px/1.4 'IBM Plex Sans';color:#a6b5cc;margin-top:6px}
+.panel{position:absolute;padding:20px 28px;border-radius:16px;background:rgba(8,14,26,.82);border:1px solid rgba(120,160,220,.25)}
+.panel .ph{font:600 18px 'IBM Plex Sans';letter-spacing:.2em;text-transform:uppercase;color:#8fa2bd;margin-bottom:10px}
+.cl{display:grid;grid-template-columns:240px 1fr;column-gap:20px;font:400 22px/1.5 'JetBrains Mono',monospace;color:#d8e2f2}
+.cl .a{color:#8fa2bd}.cl .v{color:#5fd3a0;font-weight:600}
+.qq{font:italic 400 29px/1.35 'Source Serif 4',serif;color:#e6ebf2}
+.res{margin-top:12px;font:500 22px 'IBM Plex Sans';color:#a6b5cc}.res b{color:#5fd3a0;font-weight:600}
+#big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#big .bt{font:700 96px/1.05 'Source Serif 4',serif;margin:0 0 40px;text-shadow:0 0 70px rgba(80,220,160,.25)}
+#big .bs{font:400 34px 'IBM Plex Sans';color:#a8b8d0}
+#fade{position:absolute;inset:0;background:#000}
+#scrim{position:absolute;left:0;top:0;width:1920px;height:420px;background:linear-gradient(rgba(4,7,13,.9),rgba(4,7,13,.75) 55%,rgba(4,7,13,0))}
+#card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#card .c1{font:600 24px 'IBM Plex Sans';letter-spacing:.24em;text-transform:uppercase;color:#5fd3a0}
+#card .c2{font:600 50px/1.25 'Source Serif 4',serif;max-width:1500px;margin-top:20px}
+#card .c3{margin-top:40px;display:grid;grid-template-columns:auto auto;column-gap:34px;row-gap:14px;text-align:left;font:400 32px/1.35 'IBM Plex Sans';color:#d8e2f2}
+#card .c3 .h{font:600 30px 'JetBrains Mono',monospace;color:#eef1f5;text-align:right}
+#card .c4{margin-top:34px;font:400 26px 'IBM Plex Sans';color:#a8b8d0}
+</style></head><body>
+<div id="ov">
+  <div id="big"><div class="bt">Formalizing all US case law in Lean</div><div class="bs">6.9 million decisions, checked against the rules of precedent</div></div>
+  <div id="scrim"></div>
+  <div class="k" id="k"></div><div class="t" id="tt"></div><div class="s" id="ss"></div>
+  <div id="hud"></div><div id="labels"></div>
+  <div class="panel" id="p1"></div><div class="panel" id="p2"></div><div class="panel" id="p3"></div>
+  <div id="card"></div><div id="fade"></div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const D = window.CL;  // {pts:[[year,row,tier]], ok:[[year,row,tier]], bad:[[year,row]], rows:[names], S:{...}}
+const S = D.S;
+const W = 1920, H = 1080;
+const T = { s1: 4.6, s2: 13.5, s3: 21.5, a: 22.6, b: 26.2, c: 29.8, ok: 32.4, s4: 36, s5: 45, s6: 54, end: 63 };
+const DUR = 64;
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const fadeIO = (t, a, b, d = .6) => seg(t, a, a + d) * (1 - seg(t, b - d, b));
+function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rng(1963);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1); renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#04070d');
+const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 12000);
+const composer = new EffectComposer(renderer); composer.addPass(new RenderPass(scene, camera));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), .55, .5, .3)); composer.addPass(new OutputPass());
+const spriteTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.3, 'rgba(255,255,255,.75)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+const ptsMat = (size, op = 1) => new THREE.PointsMaterial({ size, map: spriteTex, vertexColors: true, transparent: true, opacity: op, depthWrite: false, blending: THREE.AdditiveBlending });
+function points(n, mat) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3)); g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3), 3)); return new THREE.Points(g, mat); }
+{ const n = 5000, p = points(n, ptsMat(4, .7)); const pa = p.geometry.attributes.position.array, ca = p.geometry.attributes.color.array;
+  for (let i = 0; i < n; i++) { const th = R() * 6.283, ph = Math.acos(2 * R() - 1), r = 1800 + R() * 2400; pa.set([r * Math.sin(ph) * Math.cos(th), r * Math.cos(ph), r * Math.sin(ph) * Math.sin(th)], i * 3);
+    const b = .2 + R() * .4; ca.set([b * .8, b * .9, b], i * 3); }
+  scene.add(p); }
+
+// layout: x = year (1790..2026), y = court system row; layout B adds the tier as depth (last resort in front)
+const NR = D.rows.length, X0 = -300, XW = 600, Y0 = 40, YH = 290;
+const xOf = y => X0 + (Math.max(1790, y) - 1790) / (2026 - 1790) * XW;
+const yOf = r => Y0 - r * YH / (NR - 1);
+const TZ = { L: 40, A: 0, T: -40, S: -40 };
+const TCOL = { L: new THREE.Color('#f2b24a'), A: new THREE.Color('#5fd3b4'), T: new THREE.Color('#837d99'), S: new THREE.Color('#837d99') };
+const NEU = new THREE.Color('#a9c4ec'), OK = new THREE.Color('#5fd3a0'), BAD = new THREE.Color('#ff6a55');
+const P = D.pts.map(([y, r, t]) => ({ A: V(xOf(y) + (R() - .5) * 2.4, yOf(r) + (R() - .5) * 4.6, (R() - .5) * 6), t, y }));
+P.forEach(o => { o.B = o.A.clone(); o.B.z = TZ[o.t] + (R() - .5) * 6; });
+const dots = points(P.length, ptsMat(3.2)); scene.add(dots);
+const OKP = D.ok.map(([y, r, t]) => ({ p: V(xOf(y) + (R() - .5) * 2.4, yOf(r) + (R() - .5) * 4.6, 2), t, y }));
+const BADP = D.bad.map(([y, r]) => ({ p: V(xOf(y) + (R() - .5) * 2.4, yOf(r) + (R() - .5) * 4.6, 3), y }));
+const okd = points(OKP.length, ptsMat(4.6)), badd = points(BADP.length, ptsMat(5)); scene.add(okd); scene.add(badd);
+{ const a = okd.geometry.attributes.position.array; OKP.forEach((o, i) => a.set([o.p.x, o.p.y, o.p.z], i * 3)); }
+{ const a = badd.geometry.attributes.position.array; BADP.forEach((o, i) => a.set([o.p.x, o.p.y, o.p.z], i * 3)); }
+
+const $ = id => document.getElementById(id);
+const pool = [];
+function label(i, text, v3, a, color = '', cls = 'lab') { while (pool.length <= i) { const d = document.createElement('div'); $('labels').appendChild(d); pool.push(d); }
+  const d = pool[i]; d.className = cls; const p = v3.clone().project(camera); if (a <= .01 || p.z > 1) { d.style.opacity = 0; return; }
+  d.innerHTML = text; d.style.color = color; d.style.left = ((p.x + 1) / 2 * W) + 'px'; d.style.top = ((1 - p.y) / 2 * H) + 'px'; d.style.opacity = a; }
+function caption(k, c, t, s, a) { $('k').textContent = k; $('k').style.color = c; $('tt').textContent = t; $('ss').innerHTML = s; for (const id of ['k', 'tt', 'ss']) $(id).style.opacity = a; }
+const hud = (h, a) => { $('hud').innerHTML = h; $('hud').style.opacity = a; };
+const panel = (id, html, a, css) => { const e = $(id); e.innerHTML = html; e.style.cssText = css; e.style.opacity = a; };
+function card(c1, c2, c3, c4, a) { $('card').innerHTML = `<div class="c1">${c1}</div><div class="c2">${c2}</div><div class="c3">${c3}</div><div class="c4">${c4}</div>`; $('card').style.opacity = a; $('card').style.background = `rgba(4,7,13,${.85 * a})`; }
+const fmt = n => Math.round(n).toLocaleString('en-US');
+
+function camAt(t) {
+  const k = ease(seg(t, T.s2 + .4, T.s2 + 3)) * (1 - ease(seg(t, T.s3 - .5, T.s3 + 1.5)));
+  const ang = .55 * k;
+  const look = V(0, -70, 0), dist = 760;
+  return [V(look.x + dist * Math.sin(ang) + 14 * Math.sin(t * .11), look.y + 10 + 5 * Math.sin(t * .08) + 120 * k, dist * Math.cos(ang)), look];
+}
+
+window.render = function (t) {
+  $('fade').style.opacity = Math.max(1 - seg(t, 0, .9), seg(t, DUR - 1, DUR));
+  $('big').style.opacity = fadeIO(t, .2, T.s1 - .1, .7); $('big').style.transform = `translateY(${(1 - easeOut(seg(t, .2, 2.2))) * 24}px)`;
+  // decisions
+  const mAB = ease(seg(t, T.s2 + .4, T.s2 + 3)) * (1 - ease(seg(t, T.s3 - .5, T.s3 + 1.5)));
+  const pa = dots.geometry.attributes.position.array, ca = dots.geometry.attributes.color.array;
+  const dim = (1 - .75 * seg(t, T.s3 - .5, T.s3 + .5) * (1 - seg(t, T.s4, T.s4 + .6) * .35)) * (1 - .6 * seg(t, T.s5, T.s5 + 1));
+  P.forEach((o, i) => {
+    const p = o.A.clone().lerp(o.B, mAB); pa.set([p.x, p.y, p.z], i * 3);
+    const born = seg(t, T.s1 + .2 + 3.2 * (o.y - 1790) / 236, T.s1 + .7 + 3.2 * (o.y - 1790) / 236);
+    const c = NEU.clone().multiplyScalar(.5).lerp(TCOL[o.t], .9 * mAB);
+    const b = born * dim * .85; ca.set([c.r * b, c.g * b, c.b * b], i * 3);
+  });
+  dots.geometry.attributes.position.needsUpdate = true; dots.geometry.attributes.color.needsUpdate = true;
+  { const c = okd.geometry.attributes.color.array, cb = badd.geometry.attributes.color.array, end = (1 - seg(t, T.s6, T.s6 + 1)) * (1 - .65 * seg(t, T.s5, T.s5 + 1)) * .55;
+    OKP.forEach((o, i) => { const on = seg(t, T.s4 + .6 + 3 * (o.y - 1790) / 236, T.s4 + 1 + 3 * (o.y - 1790) / 236) * end; const col = TCOL[o.t].clone().lerp(OK, .35); c.set([col.r * on, col.g * on, col.b * on], i * 3); });
+    BADP.forEach((o, i) => { const on = seg(t, T.s4 + 4.2 + 2 * (o.y - 1790) / 236, T.s4 + 4.6 + 2 * (o.y - 1790) / 236) * end * (1 - seg(t, T.s5 + .5, T.s5 + 1.5)); cb.set([BAD.r * on, BAD.g * on, BAD.b * on], i * 3); });
+    okd.geometry.attributes.color.needsUpdate = true; badd.geometry.attributes.color.needsUpdate = true; }
+  const [cp, cl] = camAt(t); camera.position.copy(cp); camera.lookAt(cl);
+  composer.render();
+
+  let li = 0; hud('', 0); card('', '', '', '', 0); for (const id of ['p1', 'p2', 'p3']) $(id).style.opacity = 0; $('scrim').style.opacity = 0;
+  if (t > T.s1 && t < T.s2) {
+    const a = fadeIO(t, T.s1 + .2, T.s2 - .1); $('scrim').style.opacity = a * .6;
+    caption('All US case law', '#5fe0ff', 'Every federal and state court, 1658 to 2026', 'Each dot stands for a few hundred decisions, by the year decided and the court system: the federal courts on top, then each state.', a);
+    hud(`decisions<b>${fmt(S.decisions * seg(t, T.s1 + .3, T.s1 + 3.6))}</b>citations between them ${fmt(S.citations * seg(t, T.s1 + .3, T.s1 + 3.6))}`, fadeIO(t, T.s1 + .6, T.s2 - .1));
+    for (const y of [1800, 1850, 1900, 1950, 2000]) label(li++, String(y), V(xOf(y), Y0 - YH - 14, 0), a * .9, '#8fa2bd', 'lab sm plain dn');
+    label(li++, 'Federal courts', V(X0 - 8, yOf(0), 0), a, '#8fa2bd', 'lab sm plain r');
+    label(li++, 'the 50 states, DC and territories', V(X0 - 8, yOf(Math.floor(NR / 2)), 0), a, '#8fa2bd', 'lab sm plain r');
+  } else if (t > T.s2 && t < T.s3) {
+    const a = fadeIO(t, T.s2 + .2, T.s3 - .1); $('scrim').style.opacity = a * .6;
+    caption('The rules', '#f2b24a', 'Who binds whom, and who may overrule whom', 'Every court sits in a system and a tier. A court is bound by the courts above it; only a court with power over a decision can overrule it, and only the Supreme Court can overrule the Supreme Court. Lean proves these properties for every pair of courts.', a);
+    const la = a * seg(t, T.s2 + 2.4, T.s2 + 3.2);
+    label(li++, 'courts of last resort', V(X0 + XW + 10, yOf(NR - 1), 40), la, '#f2b24a', 'lab sm');
+    label(li++, 'appellate courts', V(X0 + XW + 10, yOf(NR - 1), 0), la, '#5fd3b4', 'lab sm');
+    label(li++, 'trial and special courts', V(X0 + XW + 10, yOf(NR - 1), -40), la, '#b7a9e0', 'lab sm');
+  } else if (t > T.s3 && t < T.s4) {
+    const a = fadeIO(t, T.s3 + .2, T.s4 - .1); $('scrim').style.opacity = a;
+    caption('One case', '#5fe0ff', 'Lawrence v. Texas, 2003', 'Given only what the overruling decision says, does Lean reach what later courts say?', a);
+    const L = 600, Wd = 'width:1120px;';
+    panel('p1', '<div class="ph">Facts in: the decision’s own words</div><div class="qq">“Bowers v. Hardwick should be and now is overruled.”</div>', fadeIO(t, T.a, T.s4 - .1), `left:${L}px;top:300px;${Wd}`);
+    const C = [['overruling court', 'Supreme Court of the United States, 26 June 2003'], ['overruled', 'Bowers v. Hardwick, Supreme Court, 1986'], ['power', 'the same court → <span class="v">may overrule</span>'], ['from', '26 June 2003, Bowers is overruled']];
+    panel('p2', '<div class="ph">Lean, with the rules of precedent</div><div class="cl">' + C.map(([x, y], k) => { const o = seg(t, T.b + .2 + k * .45, T.b + .6 + k * .45); return `<span class="a" style="opacity:${o}">${x}</span><span style="opacity:${o}">${y}</span>`; }).join('') + '</div>',
+      fadeIO(t, T.b, T.s4 - .1), `left:${L}px;top:470px;${Wd}`);
+    panel('p3', '<div class="ph">What later courts say</div><div class="qq">“Bowers v. Hardwick, 478 U.S. 186 (1986), overruled by Lawrence v. Texas, 539 U.S. 558 (2003)”</div>' +
+      `<div class="res" style="opacity:${seg(t, T.ok, T.ok + .5)}"><b>✓ Same answer.</b> The note was never shown to Lean.</div>`, fadeIO(t, T.c, T.s4 - .1), `left:${L}px;top:740px;${Wd}`);
+  } else if (t > T.s4 && t < T.s5) {
+    const a = fadeIO(t, T.s4 + .2, T.s5 - .1); $('scrim').style.opacity = a * .7;
+    caption('Overrulings', '#5fd3a0', `${fmt(S.acts)} times a court says it overrules a decision`, `Lean accepts ${fmt(S.acts_valid)}, where the court had the power and the decision overruled came first. It rejects ${fmt(S.acts - S.acts_valid)} (red), mostly misreadings: a lower court “overruling” a higher one, or a court reaching into another system.`, a);
+    hud(`accepted<b>${fmt(S.acts_valid * seg(t, T.s4 + .6, T.s4 + 3.8))}</b>rejected ${fmt((S.acts - S.acts_valid) * seg(t, T.s4 + 4.2, T.s4 + 6.4))}`, fadeIO(t, T.s4 + .6, T.s5 - .1));
+  } else if (t > T.s5 && t < T.s6) {
+    const a = fadeIO(t, T.s5 + .2, T.s6 - .1); $('scrim').style.opacity = a * .7;
+    caption('The test', '#5fe0ff', `${fmt(S.notes)} later notes name the overruling`, 'Held back from Lean, and compared with its answer afterwards. A blind reading of 120 shows where they part.', a);
+    const LB = [[S.agree_pct + '%', 'Lean agrees', `the named decision overruled the case in its own words`], ['97%', 'of agreements hold up', 'the decision says so itself (36 of 37, read blind)'], ['1 in 3', 'notes credit an overruling', 'the named decision never states']];
+    LB.forEach(([n, s, x], k) => label(li++, `<span class="num">${n}</span>${s}<small>${x}</small>`, V(-230 + k * 230, -60, 0), fadeIO(t, T.s5 + 1.6 + k * .5, T.s6 - .1), ['#5fd3a0', '#5fd3a0', '#ffcc55'][k], 'lab cap plain'));
+  } else if (t > T.s6) {
+    caption('', '', '', '', 0);
+    card('What else Lean checks', 'Every citation, against what had been overruled or amended by then',
+      `<span class="h">${fmt(S.corr_citations)}</span><span>citations of a decision already overruled by a court the citing court must follow</span><span class="h">${S.stat_pct}%</span><span>of recent decisions on federal statutes applied a section Congress has since amended</span>`,
+      'Rules in Lean, open data in global-law', fadeIO(t, T.s6 + .2, DUR + 2, .6));
+  } else caption('', '', '', '', 0);
+  for (let i = li; i < pool.length; i++) pool[i].style.opacity = 0;
+};
+window.DUR = DUR;
+document.fonts.ready.then(() => { window.render(0); window.READY = true; });
+</script></body></html>
