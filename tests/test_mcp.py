@@ -4683,5 +4683,189 @@ class SearchByAct(unittest.TestCase):
         self.assertIn('most of its words', text)
 
 
+class ProvisionByActAndNumber(unittest.TestCase):
+    """find_provision reads an act's name and a provision's number ("Data Protection Act 2018 section 2") as the
+    file of that number in that act (unit_of_named_act, 2026-11-13): the heading search gave every act's section 2."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def find(self, query, scope='', **more):
+        return self.m.t_find_provision({'query': query, **({'jurisdiction': scope} if scope else {}), **more})[1]
+
+    def test_a_query_is_split_into_the_name_and_the_number(self):
+        m = self.m
+        for query, want in (('Code du travail L3141-3', (['Code', 'du', 'travail'], 'L3141-3', '')),
+                            ('Equality Act 2010 section 4', (['Equality', 'Act', '2010'], '4', 'section')),
+                            ('Ala. Code § 35-9A-421', (['Ala.', 'Code'], '35-9A-421', '')),
+                            ('4 § Arbetsmiljölagen', (['Arbetsmiljölagen'], '4', '')),
+                            ('民法 第九条', (['民法'], '9', '')),
+                            ('StGB Art. 115', (['StGB'], '115', 'art')),
+                            ('Constitution article 4 section 5', (['Constitution', 'article', '4'], '5', 'section'))):
+            self.assertEqual(m.named_unit_parts(query), want, query)
+        for query in ('theft', 'section 5', '1182', 'right to erasure', 'Data Protection Act'):
+            self.assertIsNone(m.named_unit_parts(query), query)
+        self.assertEqual(m.unit_groups('L221-18'), ['l', '221', '18'])
+        self.assertEqual(m.unit_groups('35-9A-421'), ['35', '9', 'a', '421'])
+        self.assertEqual(m.file_groups('sec-0092-103.md'), ['92', '103'])
+        self.assertEqual([m.kanji_number(k) for k in ('九', '二十一', '百三')], [9, 21, 103])
+
+    @needs(IE_C, PW_C)
+    def test_the_number_in_the_act_that_is_named(self):
+        act = IE_C + '/data-protection-act-2018'
+        got = self.find('Data Protection Act 2018 section 2', 'ireland')
+        self.assertEqual(got['read_as'], 'act and number')
+        # the section before the schedule of the same number
+        self.assertEqual([r['path'] for r in got['results'][:2]], [act + '/section-2.md', act + '/schedule-2.md'])
+        self.assertIn('read as 2 of', got['results'][0]['heading'])
+        self.assertEqual(self.find('Data Protection Act 2018 s. 110', 'ireland')['results'][0]['path'], act + '/section-110.md')
+        # with no scope too, and in the corpus itself
+        self.assertEqual(self.find('Data Protection Act 2018 section 110')['results'][0]['path'], act + '/section-110.md')
+        self.assertEqual(self.find('Data Protection Act 2018 section 110', IE_C)['results'][0]['path'], act + '/section-110.md')
+
+    @needs(IE_C, PW_C)
+    def test_a_unit_the_files_divide_and_a_unit_named_on_the_way(self):
+        const = PW_C + '/constitution'
+        got = self.find('Constitution article 5', 'palau')
+        self.assertEqual(got['read_as'], 'act and number')
+        self.assertTrue(got['results'] and all(r['path'].startswith(const + '/art-05-') for r in got['results']), got['results'][:3])
+        for query in ('Constitution article 4 section 5', 'Constitution art. 4 sec. 5'):
+            self.assertEqual([r['path'] for r in self.find(query, 'palau')['results']], [const + '/art-04-sec-05.md'], query)
+
+    @needs(IE_C, PW_C)
+    def test_what_is_left_to_the_other_look_ups(self):
+        # an act's own name (the year is no section), a name that names no act, words, a number the act lacks
+        for query, scope in (('Data Protection Act 2018', 'ireland'), ('Zzzqqq Act section 2', 'ireland'),
+                             ('personal data breach', 'ireland'), ('Data Protection Act 2018 section 99999', 'ireland'),
+                             ('Australian Consumer Law section 2', 'ireland')):
+            self.assertNotIn('read_as', self.find(query, scope), query)
+        self.assertEqual(self.find('Data Protection Act 2018', 'ireland')['results'][0]['path'], IE_C + '/data-protection-act-2018')
+        # a later part of the list is the heading search's
+        self.assertNotIn('read_as', self.find('Data Protection Act 2018 section 2', 'ireland', offset=1))
+
+    @needs(IE_C)
+    def test_an_alias_whose_folder_is_gone_narrows_nothing(self):
+        m = self.m
+        self.assertTrue(m.scope_holds(IE_C))
+        self.assertTrue(m.scope_holds(IE_C + '/data-protection-act-2018'))
+        self.assertTrue(m.scope_holds('ireland'))
+        self.assertFalse(m.scope_holds(IE_C + '/no-such-act-1900'))
+        self.assertFalse(m.scope_holds('no-such-country/national/acts/an-act'))
+        from unittest import mock
+        gone = [{'names': ['DPA'], 'scope': IE_C + '/no-such-act-1900'}]
+        with mock.patch.object(m, 'aliases', lambda: gone):
+            got = self.find('Data Protection Act 2018 section 2', 'ireland')
+            self.assertEqual(got['results'][0]['path'], IE_C + '/data-protection-act-2018/section-2.md')
+            self.assertTrue(self.find('DPA section 2', 'ireland')['results'])  # (the heading search, not an empty folder)
+
+
+class CasesIndex:
+    """A host's index of where decisions name their parties (search_index.cases): the files it is told to give."""
+
+    def __init__(self, rows, broken=None):
+        self.rows, self.broken, self.calls = rows, broken, []
+
+    def cases(self, name, corpora, size):
+        self.calls.append((name, list(corpora), size))
+        if self.broken is not None:
+            return self.broken
+        return [(c, p) for c, p in self.rows if c in corpora][:size]
+
+
+class DecisionsByName(unittest.TestCase):
+    """find_provision reads a case's name ("Miranda v. Arizona") through a host's index (decisions_by_name,
+    2026-11-13): the heading search read the statutes for the words and gave sections numbered 37V."""
+    TOP, STATE, APPEAL = 'united-states/supreme-court/caselaw', 'united-states/arizona/caselaw', 'united-states/arizona-appellate/caselaw'
+    LAW = 'united-states/federal/usc'
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def ask(self, query, scope, rows, meta, index=None, law_too=True):
+        """find_provision's answer with the three courts served, `rows` in the index and `meta` as the files' front matter."""
+        from unittest import mock
+        m = self.m
+        index = index if index is not None else CasesIndex(rows)
+        corpora = [{'path': c, 'caselaw': True} for c in (self.TOP, self.STATE, self.APPEAL)] + ([{'path': self.LAW}] if law_too else [])
+        with mock.patch.object(m, 'search_index', index), \
+                mock.patch.object(m.law, 'manifest', lambda: {'corpora': corpora}), \
+                mock.patch.object(m.law, 'is_caselaw', lambda c: bool(c.get('caselaw'))), \
+                mock.patch.object(m.law, 'corpus_of', lambda p: next((c['path'], p[len(c['path']) + 1:]) for c in corpora if p.startswith(c['path'] + '/'))), \
+                mock.patch.object(m, 'caselaw_pins', lambda: [(c, 'x') for c in (self.TOP, self.STATE, self.APPEAL)]), \
+                mock.patch.object(m, 'decision_meta', lambda paths: {p: meta[p] for p in paths if p in meta}), \
+                mock.patch.object(m, 'indexed_file', lambda corpus, path: True):
+            return m.decisions_by_name(query, scope), index
+
+    def test_what_is_a_case_name(self):
+        m = self.m
+        for query in ('Miranda v. Arizona', 'R v Jogee', 'Brown vs. Board of Education', 'In re Winship', 'Ex parte Milligan', 'Roe versus Wade'):
+            self.assertTrue(m.CASE_NAME.search(query), query)
+        for query in ('theft', 'section 5 v 6', 'automatic stay', 'Data Protection Act 2018 section 2', 'review of decisions'):
+            self.assertFalse(m.CASE_NAME.search(query), query)
+        self.assertEqual(m.case_name_words("Dobbs v. Jackson Women's Health Organization"), {'dobbs', 'jackson', 'womens', 'health', 'organization'})
+        self.assertEqual(m.case_name_words('BROWN et al. v. BOARD OF EDUCATION OF TOPEKA et al.'), {'brown', 'board', 'education', 'topeka'})
+
+    def test_the_decision_before_its_orders_its_reprint_and_the_lower_courts(self):
+        d = 'decisions/x/'
+        main, order, reprint = f'{self.TOP}/{d}1973/410-U-S-113.md', f'{self.TOP}/{d}1971/402-U-S-941.md', f'{self.TOP}/{d}1973/10-Ohio-Misc-9.md'
+        other, lower = f'{self.TOP}/{d}1980/445-U-S-1.md', f'{self.STATE}/{d}1975/1-Ariz-1.md'
+        meta = {main: {'name': 'Roe v. Wade', 'court': 'Supreme Court of the United States', 'decided': '1973-01-22',
+                       'citations': ['410 U.S. 113', '93 S. Ct. 705'], 'cites_cases': ['a'] * 40},
+                order: {'name': 'Roe v. Wade', 'court': 'Supreme Court of the United States', 'decided': '1971-05-03', 'citations': ['402 U.S. 941']},
+                reprint: {'name': 'Roe v. Wade', 'court': 'Supreme Court of the United States', 'decided': '1973-01-22',
+                          'citations': ['10 Ohio Misc. 9'], 'cites_cases': ['a'] * 40},
+                other: {'name': 'Wade v. Roe Construction Co.', 'parties': ['WADE v. ROE CONSTRUCTION CO. et al.'], 'decided': '1980-01-01'},
+                lower: {'name': 'Roe v. Wade', 'court': 'Arizona Supreme Court', 'decided': '1975-01-01'}}
+        rows = [(self.TOP, p[len(self.TOP) + 1:]) for p in (order, reprint, main, other)] + [(self.STATE, lower[len(self.STATE) + 1:])]
+        got, index = self.ask('Roe v. Wade', 'united-states', rows, meta)
+        # (a name that holds every word asked, in another order, comes after the name itself)
+        self.assertEqual([r['path'] for r in got], [main, reprint, order, other])
+        self.assertEqual(got[0]['heading'], 'Roe v. Wade, Supreme Court of the United States, 1973-01-22, 410 U.S. 113  (read as a case name)')
+        # the highest court named it: the other courts are not asked
+        self.assertEqual([c[1] for c in index.calls], [[self.TOP]])
+        # no decision of the highest court carries the name: the other courts are asked
+        got, index = self.ask('Roe v. Wade', 'united-states', rows[-1:], meta)
+        self.assertEqual(([r['path'] for r in got], len(index.calls)), ([lower], 2))
+        # of two decisions that cite as little, the one whose name is the words asked comes first
+        got, _ = self.ask('Roe v. Wade Construction', 'united-states', rows, meta)
+        self.assertEqual([r['path'] for r in got], [main, reprint, other, order])
+
+    def test_words_in_a_scope_that_is_case_law(self):
+        d = 'decisions/x/'
+        dobbs, zant = f'{self.TOP}/{d}2022/597-U-S-215.md', f'{self.TOP}/{d}1993/506-U-S-357.md'
+        meta = {dobbs: {'name': "Dobbs v. Jackson Women's Health Organization", 'decided': '2022-06-24', 'cites_cases': ['a'] * 30},
+                zant: {'name': 'Dobbs v. Zant', 'decided': '1993-01-19'}}
+        rows = [(self.TOP, p[len(self.TOP) + 1:]) for p in (zant, dobbs)]
+        got, _ = self.ask('Dobbs', self.TOP, rows, meta)
+        self.assertEqual([r['path'] for r in got], [dobbs, zant])
+        # the same word where the scope holds law too is no case name; nor are words no decision is named by
+        self.assertIsNone(self.ask('Dobbs', 'united-states', rows, meta)[0])
+        self.assertIsNone(self.ask('automatic stay', self.TOP, rows, meta)[0])
+        # a citation or a docket is not a name
+        self.assertIsNone(self.ask('Dobbs 19-1392', self.TOP, rows, meta)[0])
+
+    def test_no_decision_no_index_and_a_broken_answer(self):
+        m = self.m
+        self.assertEqual(self.ask('Smith v. Jones', 'united-states', [], {})[0], [])
+        self.assertIsNone(self.ask('Smith v. Jones', 'united-states', [], {}, index=object())[0])
+        for broken in ('x', [('elsewhere/caselaw', 'a.md')], [(self.TOP, 5)], [(self.TOP, 'a.txt')], [('a',)]):
+            self.assertIsNone(self.ask('Smith v. Jones', 'united-states', [], {}, index=CasesIndex([], broken=broken))[0], broken)
+        # a case name where no case law is served is answered at once, not handed to the heading search
+        from unittest import mock
+        with mock.patch.object(m, 'search_index', CasesIndex([])), mock.patch.object(m, 'caselaw_pins', lambda: []), \
+                mock.patch.object(m, 'cited_provisions', lambda *a, **k: []), mock.patch.object(m, 'unit_of_named_act', lambda *a, **k: []):
+            text, got = m.t_find_provision({'query': 'Donoghue v Stevenson'})
+        self.assertEqual((got['results'], got['read_as']), ([], 'case name'))
+        self.assertTrue(text.startswith("No decision named 'Donoghue v Stevenson'"), text)
+
+
 if __name__ == '__main__':
     unittest.main()

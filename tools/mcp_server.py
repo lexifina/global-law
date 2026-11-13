@@ -491,6 +491,34 @@ def index_acts(query: str, corpora: list, phrase: bool = False) -> dict | None:
         return None
 
 
+CASE_NAMES_ASKED = 150  # decisions a host's index is asked for by a case's name
+
+
+def index_cases(name: str, corpora: list) -> list | None:
+    """search_index.cases, checked: [(corpus, file)] of the case-law corpora asked whose decisions name the case at
+    their head; None when the index has no such method, does not answer, or answers anything else.
+    A host's index may find the decisions that carry a name where a decision names its own parties (the first words
+    of its file): find_provision then answers "Miranda v. Arizona" with the decision, where the heading search read
+    the statutes for those words."""
+    find = getattr(search_index, 'cases', None)
+    if find is None or not corpora:
+        return None
+    try:
+        got = find(name, list(corpora), CASE_NAMES_ASKED)
+        asked = set(corpora)
+        if not isinstance(got, (list, tuple)) or len(got) > CASE_NAMES_ASKED:
+            return None
+        out = []
+        for row in got:
+            corpus, path = row
+            if corpus not in asked or not isinstance(path, str) or not path.endswith('.md') or not indexed_file(corpus, path):
+                return None
+            out.append((corpus, path))
+        return out
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def _index_paths_checked(got, after: str | None, size: int) -> list | None:
     if not isinstance(got, (list, tuple)) or len(got) > size or not all(isinstance(p, str) and p for p in got):
         return None
@@ -2259,6 +2287,22 @@ def aliases() -> list[dict]:
     return _aliases(head())
 
 
+def scope_holds(path: str) -> bool:
+    """Whether a scope an alias names is in the tree as served: a corpus, a folder of one that holds files, or a
+    folder of corpora. An alias written for a folder that has since moved then narrows nothing (the look-up by the
+    act's name finds where it is now). True when it cannot be told (a corpus not checked out)."""
+    pins = _corpus_pins(head())
+    for corpus, sha in pins.items():
+        if path == corpus:
+            return True
+        if path.startswith(corpus + '/'):
+            try:
+                return bool(names_under(corpus, sha, path[len(corpus) + 1:]))
+            except (SystemExit, OSError, subprocess.SubprocessError):
+                return True
+    return any(c.startswith(path.rstrip('/') + '/') for c in pins)
+
+
 def corpus_head(corpus: str) -> str:
     return _corpus_pins(head()).get(corpus, '')
 
@@ -2683,6 +2727,424 @@ def cited_provisions(query: str, scope: str, limit: int = MAX_ITEMS) -> list[tup
     return []
 
 
+# --- an act's name and a provision's number -------------------------------------------------------------------------
+# "Code du travail L3141-3", "Property Code 92.103", "Equality Act 2010 section 4", "Kodeks pracy art. 154", "45 CFR
+# 164.502": the act is named in words and the provision by its number. The heading search scored the words against
+# every heading of the jurisdiction and the number against every file's name, and the provision asked for came first
+# for 35 of 71 such look-ups (2026-11-13): France's codes were not found at all, the Equality Act's section 4 came
+# after eight schedule paragraphs numbered 4, and Texas's Property Code 92.103 gave the Occupations Code. Read here
+# as what it is: the act's folder is found by the name (its title, an abbreviation in its title, its folder's name,
+# its number), and the file in that folder by the number.
+UNIT_MARKS = frozenset(('§', '§§', 'section', 'sections', 'sec', 'sect', 's', 'ss', 'art', 'article', 'articles', 'artikel', 'articolo',
+                        'articolul', 'artículo', 'articulo', 'artykuł', 'artykul', 'artigo', 'reg', 'regulation', 'rule', 'clause', 'cl',
+                        'par', 'para', 'paragraph', 'paragraf', 'schedule', 'sch', 'annex', 'anexa', 'annexe', 'anlage', 'bijlage'))
+# Words of a file's path that say what kind of unit it is, not which one ("sec-0092-103", "title-45-part-0164").
+UNIT_WORDS = frozenset(('sec', 'section', 's', 'art', 'article', 'artikel', 'cl', 'clause', 'rule', 'r', 'reg', 'regulation', 'par',
+                        'para', 'paragraph', 'unit', 'title', 'part', 'chapter', 'ch', 'sch', 'schedule', 'book', 'div', 'pt'))
+KANJI_DIGITS = {'〇': 0, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9}
+UNIT_KINDS = (('section', 'sections', 'sec', 'sect', 's', 'ss'),
+              ('art', 'article', 'articles', 'artikel', 'articolo', 'articolul', 'artículo', 'articulo', 'artykuł', 'artykul', 'artigo'),
+              ('reg', 'regulation'), ('rule', 'r'), ('clause', 'cl'), ('par', 'para', 'paragraph', 'paragraf'),
+              ('schedule', 'schedules', 'sch'), ('annex', 'anexa', 'annexe', 'anlage', 'bijlage'))
+UNIT_AFTER = frozenset(('sch', 'schedule', 'schedules', 'annex', 'anexa', 'annexe', 'anlage', 'bijlage', 'appendix'))
+NAMED_UNIT_CORPORA = 80  # bodies of law in the scope past which an act is not looked for by its name here
+NAMED_UNIT_SHOWN = 8  # files of one number shown (an act with a section 4 and a schedule paragraph 4)
+
+
+def kanji_number(text: str) -> int | None:
+    """The number written in kanji numerals ("九" 9, "二十一" 21, "百三" 103); None when it is not one."""
+    total = current = 0
+    for ch in text:
+        if ch in KANJI_DIGITS:
+            current = current * 10 + KANJI_DIGITS[ch] if current and current < 10 and False else KANJI_DIGITS[ch]
+        elif ch in '十百千':
+            unit = {'十': 10, '百': 100, '千': 1000}[ch]
+            total += (current or 1) * unit
+            current = 0
+        else:
+            return None
+    return total + current if text else None
+
+
+def unit_groups(text: str) -> list[str]:
+    """A provision's number as its runs of digits and letters, a run of digits without its leading zeros:
+    "L221-18" is l, 221, 18; "35-9A-421" is 35, 9, a, 421; "0092-103" is 92, 103."""
+    return [g.lstrip('0') or '0' if g.isdigit() else g for g in re.findall(r'\d+|[^\W\d_]+', fold(text))]
+
+
+def file_groups(rel: str) -> list[str]:
+    """unit_groups of a file's path within its act, the words that only say what kind of unit it is left out."""
+    return [g for g in unit_groups(rel.removesuffix('.md')) if g not in UNIT_WORDS]
+
+
+def named_unit_parts(query: str) -> tuple[list[str], str, str] | None:
+    """(the words that name the act, the provision's number, the word that says what kind of unit it is or '') of a
+    query that is an act's name and a number; None when it is not of that shape (no number, or no word beside it)."""
+    tokens = re.findall(r'§+|[^\s,;()\[\]"„“”«»]+', query)
+    bare = [t.rstrip('.:') if not re.search(r'\d', t) else t for t in tokens]
+    numbered = lambda t: bool(re.search(r'\d', t))  # noqa: E731
+    at = None
+    for i in range(len(tokens) - 1):
+        if bare[i].lower() in UNIT_MARKS and numbered(tokens[i + 1]):
+            at = (i, i + 1)  # the last marker with a number after it
+    if at is None:
+        for i in range(len(tokens) - 1):
+            if numbered(tokens[i]) and tokens[i + 1].startswith('§'):
+                at = (i + 1, i)  # "4 §"
+    unit, name = None, None
+    if at is not None:
+        unit, name = tokens[at[1]], [t for i, t in enumerate(tokens) if i not in at]
+    else:
+        found = re.fullmatch(r'第([0-9〇一二三四五六七八九十百千]+)条', tokens[-1]) if tokens else None
+        if found:  # 第九条
+            n = int(found.group(1)) if found.group(1).isdigit() else kanji_number(found.group(1))
+            unit, name = (str(n), tokens[:-1]) if n is not None else (None, None)
+        elif len(tokens) >= 2 and numbered(tokens[-1]):
+            unit, name = tokens[-1], tokens[:-1]
+    if not unit or not name:
+        return None
+    unit = unit.strip('.:,')
+    if not unit_groups(unit) or not any(re.search(r'[^\W\d_]', t) for t in name):
+        return None
+    mark = bare[at[0]].lower() if at is not None else ''
+    return name, unit, '' if mark.startswith('§') else mark
+
+
+def _label_words(text: str) -> list[str]:
+    return re.findall(r'\w+', fold(text))
+
+
+ACT_NAMES_HEADED = 300  # folders with no title whose first file's heading is read for the act's name
+
+
+@lru_cache(maxsize=512)
+def act_dirs(corpus: str, sha: str) -> tuple[str, ...]:
+    """The folders of a corpus down to three levels (an act's folder is one of them: property-code,
+    codes/code-du-travail, ley/1970/ley-federal-del-trabajo). One pass over the corpus's names, kept per commit."""
+    out = set()
+    for name in names_of(corpus, sha):
+        parts = name.split('/')[:-1]
+        for k in range(1, min(3, len(parts)) + 1):
+            out.add('/'.join(parts[:k]))
+    return tuple(sorted(out))
+
+
+@lru_cache(maxsize=512)
+def act_name_index(corpus: str, sha: str) -> tuple[list, dict, dict, dict]:
+    """What the acts of a corpus are called, once per commit: (entries, by word, by numbers, by code).
+    entries: (words, folder, label) for an act's title, the abbreviation its title gives in brackets, its code and
+    short name (folder_titles, act_titles), its folder's own name down to three levels, and, for a folder with no
+    title at the top of a corpus of few folders, the name its first file's heading gives ("California Code of
+    Civil Procedure § 1"); by word: the entries a word is in; by numbers: the folders whose path holds exactly
+    those numbers; by code: New York's law-rpa as rpa."""
+    entries: list[tuple[tuple[str, ...], str, str]] = []
+    seen = set()
+
+    def add(folder, label):
+        words = tuple(_label_words(label))
+        if words and (words, folder) not in seen:
+            seen.add((words, folder))
+            entries.append((words, folder, label))
+
+    def labels(folder, label):
+        add(folder, label)
+        for inner in re.findall(r'\(([^()]+)\)', label):  # "Straßenverkehrs-Ordnung (StVO)", "Criminal Code (C-46)"
+            add(folder, inner)
+        if '(' in label:
+            add(folder, re.sub(r'\([^()]*\)', ' ', label))
+
+    titled = set()
+    for folder, info in folder_titles(corpus, sha).items():
+        titled.add(folder)
+        for label in info.get('names') or [info.get('title', '')]:
+            labels(folder, str(label))
+    for folder, title in act_titles(corpus, sha).items():
+        titled.add(folder)
+        labels(folder, str(title))
+    numbers: dict[tuple, list] = {}
+    codes: dict[str, str] = {}
+    names = names_of(corpus, sha)
+    dirs = act_dirs(corpus, sha) if len(names) <= 1_500_000 else ()
+    for folder in dirs:
+        last = folder.rsplit('/', 1)[-1]
+        add(folder, last.replace('-', ' ').replace('_', ' '))
+        path_words = _label_words(folder.replace('-', ' ').replace('_', ' ').replace('/', ' '))
+        key = tuple(sorted(w.lstrip('0') or '0' for w in path_words if w.isdigit()))
+        if key:
+            numbers.setdefault(key, []).append((folder, frozenset(w for w in path_words if not w.isdigit())))
+        if last.startswith('law-') and last[4:].isalpha() and len(last) >= 7:
+            codes[last[4:]] = folder
+    top = [d for d in dirs if '/' not in d and d not in titled]
+    if 0 < len(top) <= ACT_NAMES_HEADED:
+        firsts = {}
+        for folder in top:
+            under = names_under(corpus, sha, folder)
+            if under:
+                firsts[under[0]] = folder
+        for name, head in read_headings(corpus, sha, tuple(firsts)).items():
+            cut = re.match(r'\s*(.{6,}?)\s*(?:§+|\b[Ss]ec(?:tion)?\b\.?|\b[Aa]rt(?:icle)?\b\.?)\s*[\w.\-]+', head or '')
+            if cut and len(cut.group(1).split()) >= 2:
+                add(firsts[name], cut.group(1).strip(' ,;:'))
+    by_word: dict[str, list[int]] = {}
+    for i, (words, _folder, _label) in enumerate(entries):
+        for w in set(words):
+            by_word.setdefault(w, []).append(i)
+    return entries, by_word, numbers, codes
+
+
+def acts_by_name(name: list[str], corpus: str, sha: str) -> list[tuple[float, str, str]]:
+    """[(how well, folder, what it is called)] for the folders of a corpus that the words name, best first:
+    1.0 the words are an act's title, an abbreviation its title gives in brackets, its code, or its folder's name;
+    0.9 the numbers in the words are the folder's ("(1977:480)" is 1977/480; "Cap. 486" is cap-486);
+    0.8 the title ends or begins with the words ("Kodeks pracy" of "Ustawa z dnia 26 czerwca 1974 r. Kodeks
+        pracy"), or the words name the corpus itself ("CFR": the folder is then '', the whole corpus);
+    0.7 a folder that is an abbreviation the word begins with (New York's law-rpa for "RPAPL").
+    A title that only holds the words among others names nothing ("Australian Consumer Law" is no act whose long
+    title has the three words in it)."""
+    words = tuple(w for t in name for w in _label_words(t))
+    if not words:
+        return []
+    wanted, alpha = set(words), [w for w in words if not w.isdigit()]
+    mine = tuple(sorted(w.lstrip('0') or '0' for w in words if w.isdigit()))
+    entries, by_word, numbers, codes = act_name_index(corpus, sha)
+    found: dict[str, tuple[float, str]] = {}
+
+    def offer(folder, score, label):
+        if score > found.get(folder, (0.0, ''))[0]:
+            found[folder] = (score, label)
+
+    lists = [by_word.get(w) for w in wanted]
+    if all(lists):
+        n = len(words)
+        for i in min(lists, key=len):
+            got, folder, label = entries[i]
+            if got == words or (len(got) == n and set(got) == wanted):
+                offer(folder, 1.0, label)
+            elif len(got) > n and (got[-n:] == words or got[:n] == words):
+                offer(folder, 0.8, label)
+    # (one number alone names a folder only with every word beside it: "Cap. 486" is cap-486, but "Data Protection
+    # Act 2018 Schedule" is not every folder that ends in -act-2018)
+    for folder, path_alpha in numbers.get(mine, ()) if mine else ():
+        if len(mine) >= 2 or (alpha and all(w in path_alpha for w in alpha)):
+            offer(folder, 0.9, folder)
+    if len(alpha) == 1 and not mine:
+        for code, folder in codes.items():
+            if alpha[0] != code and alpha[0].startswith(code):
+                offer(folder, 0.7, folder.rsplit('/', 1)[-1])
+    parts = corpus.split('/')
+    if any(w == parts[-1] or w == parts[-2] + parts[-1] for w in alpha):
+        offer('', 0.8, corpus)
+    return sorted(((score, folder, label) for folder, (score, label) in found.items()), key=lambda r: (-r[0], r[1]))
+
+
+def unit_files(corpus: str, sha: str, folder: str, groups: list[str], lead: list[str], mark: str = '') -> tuple[int, list[str]]:
+    """(how, files): the files of an act's folder (or, '' the whole corpus) that a provision's number names, best
+    first. how: 0 the path within the act is the number; 1 the file's own name is; 2 the number is a unit of the kind
+    the query names that the files divide ("article 5" of art-05-sec-01, art-05-sec-02); 3 the path ends with it;
+    4 none.
+    `lead`: numbers that stand before the act's name ("45 CFR 164.502"), tried in front of the number."""
+    names = names_under(corpus, sha, folder) if folder else names_of(corpus, sha)
+    skip = len(folder) + 1 if folder else 0
+    last = groups[-1]
+    for want in ([lead + groups, groups] if lead else [groups]):
+        tiers: list[list[str]] = [[], [], [], []]
+        n = len(want)
+        kinds = set(next((k for k in UNIT_KINDS if mark in k), ()))
+        for full in names:
+            rel = full[skip:]
+            if last not in fold(rel):  # (cheap: most files of a corpus do not hold the last run at all)
+                continue
+            got = file_groups(rel)
+            if got == want:
+                tiers[0].append(full)
+            elif file_groups(rel.rsplit('/', 1)[-1]) == want:
+                tiers[1].append(full)
+            elif len(got) > n and got[:n] == want and kinds and (re.match(r'[^\W\d_]+', fold(rel)) or [''])[0] in kinds:
+                tiers[2].append(full)
+            elif len(got) > n and got[-n:] == want:
+                tiers[3].append(full)
+        how = next((i for i, t in enumerate(tiers) if t), 4)
+        if how < 4:
+            # Of the files of one number, the kind the query names first ("section 2" before schedule 2), and a
+            # schedule or an annex after the rest.
+
+            def rank(full):
+                words = set(re.findall(r'[^\W\d_]+', fold(full[skip:])))
+                return (0 if kinds & words else 2 if words & UNIT_AFTER else 1, natural(full))
+            return how, sorted(tiers[how], key=rank)
+    return 4, []
+
+
+NAMED_UNIT_ACTS = 6  # acts of one name past which the name is taken to name none of them
+
+
+def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
+    """The provision an act's name and a number name, as find_provision's rows; [] when the query is not of that
+    shape, is of a form the look-ups after this one read ("Art. 16a GG" by aliases.json, "11 U.S.C. 1101", "Cap.
+    387" in Malta, "Legea nr. 31/1990 art. 5"), names no act of the scope, or the act has no file of that number
+    (the heading search then runs)."""
+    parts = named_unit_parts(query)
+    if parts is None:
+        return []
+    name, unit, mark = parts
+    groups = unit_groups(unit)
+    # A unit above the one asked for, named on the way ("Constitution article 4 section 5"), is part of the number
+    # (art-04-sec-05), not of the act's name.
+    above, kept, i = [], [], 0
+    while i < len(name):
+        if name[i].rstrip('.:').lower() in UNIT_MARKS and i + 1 < len(name) and re.search(r'\d', name[i + 1]):
+            above += unit_groups(name[i + 1].strip('.,:'))
+            i += 2
+        else:
+            kept.append(name[i])
+            i += 1
+    if above and kept:
+        name = kept
+    else:
+        above = []
+    corpora = [c['path'] for c in law.manifest()['corpora'] if not law.is_caselaw(c)
+               and (not scope or c['path'] == scope or c['path'].startswith(scope.rstrip('/') + '/') or scope.startswith(c['path'] + '/'))]
+    if not corpora or len(corpora) > NAMED_UNIT_CORPORA:
+        return []
+    if re.search(r'\b\d+[a-z]?\s*U\.?\s?S\.?\s?C\b', query, re.I) or (MALTA_ACT.search(query) and (not scope or scope.startswith('malta'))):
+        return []
+    for entry in aliases():
+        if (entry.get('scope') and any(re.search(rf'(?<![\w.]){re.escape(n)}(?![\w])', query, re.I) for n in entry.get('names', []))
+                and scope_holds(entry['scope'])):
+            return []
+    if act_folders(query, corpora)[0]:
+        return []
+    marked = bool(mark) or '§' in query
+    lead = [w.lstrip('0') or '0' for t in name for w in _label_words(t) if w.isdigit()]
+    offers = []
+    for corpus in corpora:
+        sha = corpus_head(corpus)
+        if not sha:
+            continue
+        inner = scope[len(corpus) + 1:] if scope.startswith(corpus + '/') else ''
+        # The whole query may be an act's own name ("Data Protection Act 2018", "Regulation 2016/679"): no number of
+        # a provision is in it, and the search by titles answers it.
+        if not marked and any(score == 1.0 for score, _, _ in acts_by_name(name + [unit], corpus, sha)):
+            return []
+        for score, folder, label in acts_by_name(name, corpus, sha):
+            if inner and not (folder == inner or folder.startswith(inner + '/') or inner.startswith(folder + '/') or not folder):
+                continue
+            offers.append((score, corpus, sha, folder if folder or not inner else inner, label))
+    # No act of that name ("Ala. Code § 35-9A-421"), or every title begins with it ("C.R.S. 13-40-117", each title of
+    # Colorado's statutes being "C.R.S. tit. N"): the name is how the jurisdiction's one code is cited, and the number
+    # is looked for in the body of law the scope names. Only for a name written as a citation (a dot, capitals): a
+    # name in words that names no act here ("Australian Consumer Law") is left to the heading search.
+    cited_code = any('.' in t.rstrip('.') or t.endswith('.') or (t.isupper() and len(t) >= 2) for t in name)
+    whole = [(0.5, corpus, corpus_head(corpus), scope[len(corpus) + 1:] if scope.startswith(corpus + '/') else '', corpus)
+             for corpus in corpora if corpus_head(corpus)] if cited_code and len(corpora) <= 3 else []
+    # The acts the words name exactly (or by their number) before the titles that only begin or end with the words:
+    # "Criminal Code" is Canada's C-46, not the eleven orders whose titles end with "of the Criminal Code".
+    found = []
+    for near in ([o for o in offers if o[0] >= 0.9], [o for o in offers if o[0] < 0.9], whole):
+        if not near or len(near) > NAMED_UNIT_ACTS:
+            continue
+        # Of the acts the words may name, the one in which a file IS the number before one in which a file's path
+        # only ends with it: Belgium's "Code civil art. 215" is the old code's art-215, not the new code's art-4-215.
+        for score, corpus, sha, folder, label in near:
+            how, files = unit_files(corpus, sha, folder, groups, above or (lead if not folder else []), mark)
+            if files:
+                found.append((how, -score, corpus, folder, sha, label, files))
+        # (a bare number many files of a body of law carry names none of them)
+        if near is whole and (any(f[1] != -0.5 for f in found) or sum(len(f[-1]) for f in found) > 3):
+            found = [f for f in found if f[1] != -0.5]
+        # (an act named exactly whose files only END with the number does not close the look-up: the act whose title
+        # begins with the words may hold the number itself)
+        if found and min(f[0] for f in found) <= 1:
+            break
+    if not found:
+        return []
+    best = min(f[0] for f in found)
+    rows = []
+    for how, _minus, corpus, folder, sha, label, files in sorted(f for f in found if f[0] == best):
+        heads = read_headings(corpus, sha, tuple(files[:NAMED_UNIT_SHOWN]))
+        shown = label if folder else corpus
+        rows += [{'path': f'{corpus}/{f}', 'heading': f"{heads.get(f, '')}  (read as {unit} of {shown})".lstrip(), 'score': 100}
+                 for f in files[:NAMED_UNIT_SHOWN]]
+    return rows[:max(limit, NAMED_UNIT_SHOWN)]
+
+
+CASE_NAME = re.compile(r'(?i)(?<=[^\W\d_])\s+(?:v|vs|versus)\.?\s+(?=[^\W\d_])|^\s*(?:in\s+re|ex\s+parte|in\s+the\s+matter\s+of|re)\s+\w')
+CASE_NAME_WORDS = {'v', 'vs', 'versus', 'et', 'al', 'the', 'of', 'in', 're', 'ex', 'parte', 'and', 'matter', 'inc', 'co', 'no'}
+CASE_NAME_NEAR = 0.6  # the share of words two names have in common from which they are taken for one case
+LOWER_COURTS = ('-appellate', '-district', '-other-courts', '/bankruptcy', '-trial', '-special')
+
+
+def case_name_words(text: str) -> set[str]:
+    return {w for w in re.findall(r"[^\W_]+", fold(text.replace("'", ''))) if w not in CASE_NAME_WORDS and not w.isdigit()}
+
+
+def decisions_by_name(query: str, scope: str) -> list[dict] | None:
+    """The decisions a case's name names, as find_provision's rows, by a host's index of where decisions name their
+    parties (index_cases): those whose name is the query's before those whose name only holds its words, a highest
+    court's before a lower court's, the decision that cites most before the orders made on the way to it (Roe v.
+    Wade has three orders of 1971 before 410 U.S. 113), then the earliest. The highest courts are asked first, and
+    the other courts only when none of theirs carries the name. None when the query is no case name, no case law is
+    served in the scope, or there is no such index; [] when it is a case name and no decision carries it."""
+    if getattr(search_index, 'cases', None) is None or len(query) > 200 or re.search(r'\d{3,}', query):
+        return None
+    reach = [c for c in law.manifest()['corpora']
+             if not scope or c['path'] == scope or c['path'].startswith(scope.rstrip('/') + '/') or scope.startswith(c['path'] + '/')]
+    named = bool(CASE_NAME.search(query))
+    if not (named or (scope and reach and all(law.is_caselaw(c) for c in reach))):
+        return None
+    wanted = case_name_words(query)
+    served = {c for c, _ in caselaw_pins()}
+    corpora = [c['path'] for c in reach if c['path'] in served]
+    if not wanted or (not corpora and not named):
+        return None
+    if not corpora:
+        return []  # (a case's name where no case law is served: said so, not handed to the heading search)
+    inner = scope.rstrip('/') + '/' if scope else ''
+    court_of = lambda corpus: 0 if 'supreme-court' in corpus else 2 if any(x in corpus for x in LOWER_COURTS) else 1  # noqa: E731
+    rows, answered, failed = [], False, False
+    for part in ([c for c in corpora if court_of(c) == 0], [c for c in corpora if court_of(c) != 0]):
+        hits = index_cases(query, part) if part else []
+        if hits is None:
+            failed = True
+            continue
+        answered = True
+        paths = [f'{c}/{p}' for c, p in hits if not inner or f'{c}/{p}'.startswith(inner) or inner.startswith(c + '/')]
+        meta = decision_meta(paths)
+        for path in paths:
+            m = meta.get(path)
+            if m is None:
+                continue
+            parties = m.get('parties')
+            names = [str(m.get('name') or '')] + [str(x) for x in (parties if isinstance(parties, list) else [parties] if parties else [])]
+            near, held = 0.0, False
+            for n in names:
+                got = case_name_words(n)
+                if got:
+                    near = max(near, len(wanted & got) / len(wanted | got))
+                    held = held or wanted <= got
+            # (the name itself; then a name that holds every word asked, "Dobbs" of "Dobbs v. Jackson Women's Health
+            # Organization"; a decision that only has the words near its head is no answer to them)
+            kind = 0 if near >= CASE_NAME_NEAR else 1 if held else 2
+            if kind == 2:
+                continue
+            cites, cited = m.get('citations'), m.get('cites_cases')
+            weight = len(cited) if isinstance(cited, list) else str(cited).count('", "') if cited else 0
+            head = ', '.join(x for x in (names[0] or (names[1] if len(names) > 1 else ''), str(m.get('court') or ''),
+                                          str(m.get('decided') or ''), str(cites[0]) if isinstance(cites, list) and cites else '') if x)
+            # (of one decision printed twice, the report with more parallel citations: Miranda is 384 U.S. 436 before
+            # its reprint in 10 Ohio Misc. 9)
+            rows.append(((kind, court_of(law.corpus_of(path)[0]), -min(weight, 20), -near, str(m.get('decided') or '9999'),
+                          -(len(cites) if isinstance(cites, list) else 0), natural(path)),
+                         {'path': path, 'heading': f'{head}  (read as a case name)', 'score': 100}))
+        if any(key[0] == 0 for key, _ in rows):
+            break
+    # (courts that were not asked, or did not answer, may hold it: "no decision of that name" is then not said)
+    if not answered or (not rows and (failed or not named)):
+        return None
+    rows.sort(key=lambda r: r[0])
+    return [row for _key, row in rows]
+
+
 def t_find_provision(args: dict) -> tuple[str, dict]:
     query = text_arg(args, 'query')
     if not query:
@@ -2710,10 +3172,41 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     # is read as resolve_citations reads it, and the provision it names comes first: a heading search finds another
     # norm's article 155 (Spain has thousands of norms).
     cited = cited_provisions(query, scope, offset + limit) if not DOCKET_QUERY.fullmatch(query) else []
+    if not cited and not DOCKET_QUERY.fullmatch(query):
+        # An abbreviation before its article ("StGB Art. 115", "BGB § 823") is the citation written the other way
+        # round ("Art. 115 StGB"), which is the order the citation forms read.
+        turned = named_unit_parts(query)
+        if turned and len(turned[0]) == 1 and (turned[2].startswith('art') or '§' in query):
+            cited = cited_provisions(f"{'Art.' if turned[2].startswith('art') else '§'} {turned[1]} {turned[0][0]}", scope, offset + limit)
     if cited:
         rows = [{'path': p, 'heading': f'{h}  (read as the citation "{c}", as resolve_citations reads it)'.lstrip(), 'score': 100}
                 for p, h, c in cited]
         return listed(rows)
+    # An act's name and a provision's number ("Code du travail L3141-3", "Equality Act 2010 section 4"): the file of
+    # that number in that act's folder, ahead of the heading search (unit_of_named_act).
+    if not DOCKET_QUERY.fullmatch(query) and not offset:
+        try:
+            named_rows = unit_of_named_act(query, scope, limit)
+        except SystemExit:  # (law.py's refusal of a corpus it cannot read: the heading search answers)
+            named_rows = []
+        if named_rows:
+            return listed(named_rows, read_as='act and number')
+    # A case's name ("Miranda v. Arizona", or any words where the scope is case law): the decisions that name it at
+    # their head, by a host's index (decisions_by_name); without one, or with none found, the look-ups below run.
+    if not DOCKET_QUERY.fullmatch(query) and not US_CITE_SHAPE.fullmatch(query.strip()):
+        try:
+            case_rows = decisions_by_name(query, scope)
+        except SystemExit:
+            case_rows = None
+        if case_rows:
+            return listed(case_rows, read_as='case name', decisions=len(case_rows))
+        if case_rows is not None:
+            # (the heading search answered "Donoghue v Stevenson" with every section numbered 37V)
+            served = [c for c, _ in caselaw_pins() if not scope or c == scope or c.startswith(scope.rstrip('/') + '/') or scope.startswith(c + '/')]
+            how = ('A case is found by its name where the record of its court gives the parties; try its citation or docket number, '
+                   'or search_law for the name within the jurisdiction of its court.')
+            return (f"No decision named {query.strip()!r} in the case law this {'server holds' if HOSTED else 'clone serves'}"
+                    + (f' under {scope}' if scope else '') + f' ({len(served)} case-law corpora). ' + how),                 {'results': [], 'case_law_served': served, 'hint': how, 'read_as': 'case name'}
     # A docket number alone ("1170253", "77-440", "No. 1389", "Docket No. 2:19-cv-01234"), or a US reporter citation of
     # a form the reporter list lacks ("8 Bush 587", "2004-NMCA-020"): looked up in the case law served, the decisions a
     # shared docket names ranked by the words of the query, and never handed to the heading search, which read every
@@ -2802,7 +3295,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     for entry in aliases():
         for n in entry.get('names', []) if entry.get('scope') else []:
             mm = re.search(rf'(?<![\w.]){re.escape(n)}(?![\w])', rest, re.I)
-            if mm:
+            if mm and scope_holds(entry['scope']):
                 hint, rest = entry['scope'], rest[:mm.start()] + ' ' + rest[mm.end():]
                 break
     noise = {'s', 's.', 'ss.', 'sec', 'sec.', 'section', 'art', 'art.', 'artikel', 'article', 'articolul', 'articolului', 'artículo', 'articulo',
@@ -10111,8 +10604,8 @@ def at_most(default: int, most: int, what: str = 'At most this many') -> dict:
 TOOLS = [
     ('list_jurisdictions', 'List every jurisdiction and body of law in the tree, with how far each record reaches and an example path. Start here.',
      {'jurisdiction': SCOPE}, [], t_list_jurisdictions),
-    ('find_provision', 'Find the file path of a provision by its number ("1182", "Art. 16a", "reg 13") or words from its heading ("debtor", "Asylrecht"). Also finds an act by its name ("Data Protection Act 2018": its folder) and a court decision by its docket number or citation ("1 BvR 1547/19", "410 U.S. 113").',
-     {'query': {'type': 'string', 'description': 'A section, article or regulation number, heading words, the name of an act, or a decision\'s docket number or citation.'},
+    ('find_provision', 'Find the file path of a provision by its number ("1182", "Art. 16a", "reg 13") or words from its heading ("debtor", "Asylrecht"). Also finds an act by its name ("Data Protection Act 2018": its folder), a provision by its act and number in one query ("Equality Act 2010 section 4", "Code du travail L3141-3", "Codul civil art. 1357"), and a court decision by its docket number, citation or name ("1 BvR 1547/19", "410 U.S. 113", "Miranda v. Arizona").',
+     {'query': {'type': 'string', 'description': 'A section, article or regulation number, heading words, the name of an act (with a provision\'s number after it, for that provision), or a decision\'s docket number, citation or name.'},
       'jurisdiction': SCOPE, 'max_results': at_most(15, 100), 'offset': OFFSET}, ['query'], t_find_provision),
     ('read_law', 'The text of a provision as it was in force on a date, with the law that last changed it, the next change, its history in brief, and any limit of the record that applies. Several provisions in one answer: give paths, or a folder (an act) as path.',
      {'path': {'type': 'string', 'description': PATH['description'] + ' Or a folder (an act): its provisions are read in order.'},
