@@ -4429,6 +4429,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                 return corpus, done, [], [], 0, {'files': 0, 'whole': True, 'after': None}
         while seen < total and count < need and not ended:
             size = min(SEARCH_INDEX_FILES, max(25, need - count))
+            if best_first:  # (each provision gives up to RANKED_LINES lines: fewer files fill the page, and they are the longest)
+                size = min(SEARCH_INDEX_FILES, max(10, -(-(need - count) // RANKED_LINES) + 2))
             names = index_ranked(query, corpus, seen, size) if best_first else None
             if names is None:
                 if best_first and seen:
