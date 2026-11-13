@@ -474,7 +474,9 @@ def index_acts(query: str, corpora: list, phrase: bool = False) -> dict | None:
         return None
     try:
         got = group(query, list(corpora), True) if phrase else group(query, list(corpora))
-        if (not isinstance(got, dict) or got.get('match') not in (('phrase',) if phrase else ('all_words', 'most_words'))
+        # (asked by the phrase, an index may add the acts that hold the words when few files hold the phrase, and
+        # says 'phrase' only when some file does)
+        if (not isinstance(got, dict) or got.get('match') not in (('phrase', 'all_words', 'most_words') if phrase else ('all_words', 'most_words'))
                 or not isinstance(got.get('acts'), list)):
             return None
         asked, acts = set(corpora), []
