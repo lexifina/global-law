@@ -1,0 +1,41 @@
+56004: 2 disagreeing rows 
+56013: 3 disagreeing rows 
+56146: 3 disagreeing rows 
+56189: 5 disagreeing rows 
+56240: 1 disagreeing rows 
+56269: 3 disagreeing rows 
+56277: 5 disagreeing rows 
+56279: 3 disagreeing rows 
+56302: 1 disagreeing rows 
+56379: 1 disagreeing rows 
+56393: 1 disagreeing rows 
+56428: 2 disagreeing rows 
+56438: 1 disagreeing rows 
+56439: 2 disagreeing rows 
+56497: 1 disagreeing rows 
+
+500 universes, 15 with a disagreement
+  status    6 of 74546 keys disagree
+  findings  6 of 35348 keys disagree
+  certs     0 of 88901 keys disagree
+  splits    1 of 10716 keys disagree
+  conflicts 18 of 4843 keys disagree
+  lines     0 of 7282 keys disagree
+  horty     3 of 1401 keys disagree
+  class (file, bucket, rule): rounds   first example
+  status    firm                                 overruled                      3   e.g. 56013 139/-@19970805 A=negative|overruled B=negative|overruled
+  conflicts onlyB                                fed.c                          3   e.g. 56189 fed.c 1202/- A= B=no,yes
+  conflicts onlyB                                fed.d                          2   e.g. 56146 fed.d 1202/- A= B=no,yes
+  findings  firm                                 cites:overruled                2   e.g. 56269 cites 161 158 overruled A=1 B=0
+  conflicts onlyB                                fed.a                          1   e.g. 56004 fed.a 1223/- A= B=no,yes
+  findings  firm                                 atRisk:claim                   1   e.g. 56013 atRisk:claim 149 140 A=1 B=0
+  conflicts onlyB                                fed.b                          1   e.g. 56240 fed.b 1225/- A= B=no,yes
+  status    firm                                 disapproved                    1   e.g. 56277 160/-@19700120 A=negative|overruled B=negative|disapproved
+  horty     onlyA                                fed.c                          1   e.g. 56302 fed.c h170fedc,h176fedc A=consistent B=
+  splits    onlyB                                fed.a                          1   e.g. 56379 fed.a 1202|1203 A= B=split
+  horty     onlyA                                horty:lines3_fedc              1   e.g. 56393 horty:lines3_fedc h166fedc,h167fedc,h174fedc A=inconsistent B=
+  horty     onlyA                                horty:lines3_fedb              1   e.g. 56438 horty:lines3_fedb h163fedb,h169fedb A=consistent B=
+  info  findings uncompared lean:citesNotCitable:force               1286
+  info  findings uncompared lean:hortyConsistentBase                 917
+  info  findings uncompared lean:hortySelfInconsistent               305
+  info  findings uncompared lean:inconsistentBindingBase             484

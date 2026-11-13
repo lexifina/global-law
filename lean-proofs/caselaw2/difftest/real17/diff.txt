@@ -1,0 +1,24 @@
+status    compared 394963 keys   disagreeing 5
+findings  compared 133588 keys   disagreeing 6
+certs     compared 346832 keys   disagreeing 0
+splits    compared    329 keys   disagreeing 0
+conflicts compared    107 keys   disagreeing 0
+
+file      bucket                                   rule                         count
+findings  firm                                     panelDepartsWithoutEnBanc        4
+            e.g. panelDepartsWithoutEnBanc 106047 93370   A=0   B=1
+            e.g. panelDepartsWithoutEnBanc 110729 93356   A=0   B=1
+            e.g. panelDepartsWithoutEnBanc 110790 93334   A=0   B=1
+findings  firm                                     cites:overruled                  2
+            e.g. cites 116259 80815 overruled   A=0   B=1
+            e.g. cites 116438 80815 overruled   A=0   B=1
+status    firm                                     overruled                        5
+            e.g. 80815/-@19850312   A=partial|partialScope   B=partial|overruled:partial
+            e.g. 80815/H80815.0@19850312   A=negative|overruled   B=negative|overruled
+            e.g. 83001/-@19900412   A=partial|partialScope   B=partial|overruled:partial
+
+informational (not disagreements):
+  findings uncompared lean:citesNotCitable:force               5683
+  findings uncompared lean:hortyConsistentBase                 43
+  findings uncompared lean:hortySelfInconsistent               1
+  findings uncompared lean:inconsistentBindingBase             1

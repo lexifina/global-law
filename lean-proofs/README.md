@@ -241,6 +241,21 @@ and finds three answers ([Found.lean](LegalProofs/USTax/WashSale/Found.lean)):
 Whether two index funds are "substantially identical" has never been settled by the IRS, and is modelled as data.
 Bills to extend §1091 to digital assets have been introduced since 2021; none is law as of November 2026.
 
+## US case law: the doctrine of precedent
+
+[LegalProofs/USCaseLaw/](LegalProofs/USCaseLaw) states the rules of precedent (which court binds which, who may
+overrule whom, good law on a day) and runs them over every decision in the US case law of global-law (6,892,454
+decisions); it also checks, over the whole US Code, whether the words a decision applied have changed since. Data and
+pipeline: [data/caselaw/README.md](data/caselaw/README.md); tools: [tools/caselaw/](tools/caselaw).
+
+[LegalProofs/CaseLaw2/](LegalProofs/CaseLaw2) is the second version, at the level of holdings: dated authority between
+courts, treatments admitted only with a certificate that Lean checks against the decision's text, status per holding
+and per line of courts, circuit splits, and 141 theorems with locked statements, tested against an independent
+reference. Results, how to build and run it, the trust inventory and where everything lives:
+[caselaw2/README.md](caselaw2/README.md).
+
+    lake build LegalProofs.USCaseLaw LegalProofs.CaseLaw2
+
 ## What a proof here does and does not show
 
 Lean checks that each conclusion follows from the dated facts and the rule as defined. It does not check the facts or

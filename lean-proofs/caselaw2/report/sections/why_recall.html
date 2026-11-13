@@ -1,0 +1,98 @@
+<!-- Hand-written section; make_report.py embeds it verbatim. Numbers: round2/recall.md (miss diagnosis, 496 misses
+     at the start of round 2), eval/audits/notes-blind (audit B), gold/README.md, eval/score_final.txt. -->
+<h3 id="why-half">Why we find only about half of the overrulings on the published lists</h3>
+<p>The Supreme Court Database flags 278 decisions as altering precedent. After four rounds we find 141 of them. That
+looks low for something as public as the Supreme Court overruling itself. It is low for four reasons, and only one of
+them is our reader being weak.</p>
+
+<p><b>1. Most overrulings do not say “overruled”.</b> A court rarely writes “we overrule <i>X</i>”. It writes that
+<i>X</i> “is no longer good law”, that it “cannot be reconciled with our later cases”, that “we decline to follow it”,
+that its reasoning “has been eroded”, or it simply decides the other way and leaves readers to draw the conclusion.
+<i>Brown v. Board of Education</i> never says it overrules <i>Plessy</i>; it says “any language in <i>Plessy</i>
+contrary to this finding is rejected”. We diagnosed every miss at the start of round 2 by reading the overruling
+decision. Of 196 flagged decisions we then missed, 66 (a third) had <b>no overruling words at all</b>: in most the
+earlier case is discussed and departed from without a word of overruling; in some only the dissent or the syllabus says
+the Court overruled it; in some the earlier case is not even cited. The database’s coders, and the Constitution
+Annotated’s editors, are making a legal judgment that the later case is inconsistent with the earlier one. Our model
+is built not to make that judgment: a decision’s status changes only when a court with the power to change it says so
+in words we can quote. An implicit overruling shows in our output as “at risk”, never as “overruled”. Round 4 added a tier for the case where a later decision of a court with standing says so in words (“<i>X</i>, overruled by <i>Y</i>”): 8 of these 66 decisions now carry such an “at risk” row naming them as the overruling decision (11 of the 101 Constitution Annotated pairs), among them <i>Brown</i> for <i>Plessy</i>, <i>Mapp</i> for <i>Wolf</i> and <i>Crawford</i> for <i>Ohio v. Roberts</i>. None of them changes a status.</p>
+
+<p><b>2. The words vary more than any list of patterns.</b> Another 110 of the 196 misses were filtered out before a
+model ever read them. The largest group (126 across all gold sets) used a wording none of our scan patterns covered. These are real
+ones from the misses: “we are not satisfied that those decisions are founded on a correct view of the law”; “must be
+regarded as having been distinctly overthrown”; “we cannot adopt that decision or apply its principles”; “they can no
+longer be guiding”; “to the extent that what the Court now says is inconsistent with what was said in <i>Miles v.
+Graham</i>, the latter cannot survive”; “we therefore reject as untenable the diversities taken in the <i>St. Louis
+Trust</i> cases”. Each is unmistakable to a lawyer and each is a new sentence to a pattern.
+Others were dropped because the sentence did not look like the court’s own act (it was in
+the passive, or it described the rule rather than the case), or because our map of the opinion put the sentence in a
+concurrence when it was in the opinion of the court. Recent slip opinions were hard-wrapped, which broke sentence
+splitting; that is why <i>Dobbs</i>, <i>Wayfair</i> and <i>Loper Bright</i> were missing until round 3. This is the
+part that further work fixes, and it is where the gain from 29.5% to 50.7% came from.</p>
+
+<p><b>3. Naming the target is its own problem.</b> In 11 of the 196 the court does say it overrules something, but we
+could not tie the words to a decision: “the rule of the <i>Slaughter-House</i> line of cases”, “our decision in that
+case”, a case named only by one party, or a citation to a reporter page that holds several decisions. A certificate
+needs the target to resolve to exactly one decision. When it does not, we admit nothing.</p>
+
+<p><b>4. The lists and we count different things.</b> The database flags a <i>decision</i> that altered precedent; it
+does not say which precedent, so a match needs us to admit an overruling by that decision of some Supreme Court case.
+The lists also include partial overrulings (“overruled insofar as…”), which we record against one holding, and
+overrulings of a line of cases. And they are not complete in the other direction: of 12 Supreme Court overrulings we
+admit that the database does not flag, a blind reading found 11 are real.</p>
+
+<div class="tw"><table>
+<thead><tr><th>Why a flagged decision was missed (start of round 2)</th><th>Supreme Court Database</th><th>Constitution Annotated pairs</th></tr></thead>
+<tbody>
+<tr><td>No overruling words: implicit</td><td class="num">66</td><td class="num">101</td></tr>
+<tr><td>Words we did not scan for, or the sentence was filtered out</td><td class="num">110</td><td class="num">134</td></tr>
+<tr><td>Overruling stated, target not resolved to one decision</td><td class="num">11</td><td class="num">19</td></tr>
+<tr><td>Other (a different decision on the same page, rehearings, labelled “declined to follow”)</td><td class="num">8</td><td class="num">18</td></tr>
+<tr><td>Rejected by the certificate checker</td><td class="num">1</td><td class="num">2</td></tr>
+<tr><td>Overruling decision not in the corpus</td><td class="num">0</td><td class="num">5</td></tr>
+<tr><td><b>Total misses then</b></td><td class="num"><b>196</b></td><td class="num"><b>279</b></td></tr>
+</tbody></table></div>
+<p class="small">Source: round2/recall.md and round2/recall_misses.tsv. Rounds 2 and 3 then recovered 59 of the 196
+database misses, almost all from the second row. The first row is the floor: about a quarter of the 278 flagged
+decisions cannot be found by any reader that requires the overruling court’s own words.</p>
+
+<p>So the honest reading of 50.7% is this. Of the overrulings a court actually announces in words, we now find most.
+Of the overrulings lawyers recognise, about a quarter to a third were never announced, and a formal model that will not
+infer them will not find them. We think that is the right side to err on. Precision is 92.8%: when the model says the
+Supreme Court overruled a case, it almost always did, and it can show the sentence.</p>
+
+<h3 id="why-notes">Why agreement with later courts’ notes is lower still</h3>
+<p>When a later court cites a case it often adds a note: “<i>X</i>, overruled by <i>Y</i>”, “abrogated by <i>Y</i>”,
+“overruled on other grounds by <i>Y</i>”. We hold 193,411 such notes back as a test. Our model agrees with about 28%
+of the “overruled” notes that name the overruling decision. Three things explain most of the gap, and they are not the
+same as above.</p>
+
+<p><b>1. A note is a later court’s opinion about <i>Y</i>, not what <i>Y</i> said.</b> We had readers open the named
+decision <i>Y</i> for 120 notes, blind. In only 44 (37%) does <i>Y</i>’s majority say in words that it overrules,
+abrogates or disapproves <i>X</i>. In 13 it rejects <i>X</i>’s holding without saying so; in 38 it only mentions
+<i>X</i> or reports what another court did; in 25 <i>X</i> is not discussed in the passages at all. For “abrogated by”
+the figure is 4 of 34: abrogation is almost always a later court’s inference that a higher court’s ruling left an
+earlier case untenable. A model that requires <i>Y</i>’s own words can agree with at most about 37% of notes, and
+with very few abrogation notes. That is the main ceiling.</p>
+
+<p><b>2. Most notes say “on other grounds”.</b> Of 15,768 “overruled” notes that name the overruling decision, 10,406
+say the case was overruled <i>on other grounds</i>, and 1,434 say <i>in part</i>. The citing court is telling its
+reader that the point it cites the case for survives. Our model tracks that: it records the overruling against one
+holding and leaves the rest of the decision good. Counting those notes as “the decision is overruled” and asking
+whether we agree mixes two different questions. Where a note names the overruling decision and we have admitted an
+overruling of the same case, we name the same decision about 82% of the time.</p>
+
+<p><b>3. Notes are written by busy courts and read by patterns.</b> A blind check of our own reading of the notes found
+84% had the target, the overruling decision and the kind all right; the rest were our misreadings, such as taking a
+case in a parenthetical for the target. Notes also repeat one another: a wrong “overruled by” in one opinion is copied
+into the next. In v1 we found that a third of the decisions courts credit with overruling a case never say they
+overrule it. The notes are the best independent evidence we have, but they are a noisy witness. Commercial citators have the same problem: the
+study cited in our design research found that each missed or mislabelled about a third of negative treatments.</p>
+
+<p><b>4. The rest is the same as above:</b> wordings we do not scan for, targets we cannot resolve, and, for lower
+courts, overruling decisions that are not in the corpus or are unpublished orders.</p>
+
+<p>Put together: the note test measures two things at once, whether our reader finds what the overruling court wrote,
+and whether later courts describe that court accurately. On the first, where both can be checked, we name the same overruling decision 82% of the time.
+The second is not ours to fix, and is one of the findings of this work: a large share of what courts call an
+overruling was never stated by the court that is said to have done it.</p>

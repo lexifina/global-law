@@ -1,0 +1,112 @@
+52009: 5 disagreeing rows 
+52013: 18 disagreeing rows 
+52016: 6 disagreeing rows 
+52046: 10 disagreeing rows 
+52060: 3 disagreeing rows 
+52084: 4 disagreeing rows 
+52085: 4 disagreeing rows 
+52107: 4 disagreeing rows 
+52126: 5 disagreeing rows 
+52141: 13 disagreeing rows 
+52149: 4 disagreeing rows 
+52150: 4 disagreeing rows 
+52171: 7 disagreeing rows 
+52222: 5 disagreeing rows 
+52227: 2 disagreeing rows 
+52230: 11 disagreeing rows 
+52233: 5 disagreeing rows 
+52253: 5 disagreeing rows 
+52260: 3 disagreeing rows 
+52267: 5 disagreeing rows 
+52262: 3 disagreeing rows 
+52311: 5 disagreeing rows 
+52322: 6 disagreeing rows 
+52348: 4 disagreeing rows 
+52346: 10 disagreeing rows 
+52356: 15 disagreeing rows 
+52360: 5 disagreeing rows 
+52362: 8 disagreeing rows 
+52373: 4 disagreeing rows 
+52375: 8 disagreeing rows 
+52392: 6 disagreeing rows 
+52391: 4 disagreeing rows 
+52404: 3 disagreeing rows 
+52421: 5 disagreeing rows 
+52426: 5 disagreeing rows 
+52442: 6 disagreeing rows 
+52448: 4 disagreeing rows 
+52450: 12 disagreeing rows 
+52463: 5 disagreeing rows 
+52467: 5 disagreeing rows 
+52484: 4 disagreeing rows 
+52507: 5 disagreeing rows 
+52510: 4 disagreeing rows 
+52512: 14 disagreeing rows 
+52520: 4 disagreeing rows 
+52521: 3 disagreeing rows 
+52539: 4 disagreeing rows 
+52547: 10 disagreeing rows 
+52567: 5 disagreeing rows 
+52589: 6 disagreeing rows 
+52593: 4 disagreeing rows 
+52599: 4 disagreeing rows 
+52600: 5 disagreeing rows 
+52597: 5 disagreeing rows 
+52602: 7 disagreeing rows 
+52622: 4 disagreeing rows 
+52632: 6 disagreeing rows 
+52638: 8 disagreeing rows 
+52639: 3 disagreeing rows 
+52656: 4 disagreeing rows 
+52663: 4 disagreeing rows 
+52666: 3 disagreeing rows 
+52689: 3 disagreeing rows 
+52691: 8 disagreeing rows 
+52699: 5 disagreeing rows 
+52709: 5 disagreeing rows 
+52714: 12 disagreeing rows 
+52741: 3 disagreeing rows 
+52744: 3 disagreeing rows 
+52769: 10 disagreeing rows 
+52779: 4 disagreeing rows 
+52781: 7 disagreeing rows 
+52792: 5 disagreeing rows 
+52824: 4 disagreeing rows 
+52832: 5 disagreeing rows 
+52858: 9 disagreeing rows 
+52866: 6 disagreeing rows 
+52888: 5 disagreeing rows 
+52892: 6 disagreeing rows 
+52896: 5 disagreeing rows 
+52900: 6 disagreeing rows 
+52915: 4 disagreeing rows 
+52948: 5 disagreeing rows 
+52956: 5 disagreeing rows 
+52955: 4 disagreeing rows 
+52992: 8 disagreeing rows 
+
+1000 universes, 86 with a disagreement
+  status    103 of 117265 keys disagree
+  findings  234 of 54988 keys disagree
+  certs     0 of 147826 keys disagree
+  splits    56 of 18873 keys disagree
+  conflicts 106 of 7118 keys disagree
+  class (file, bucket, rule): rounds   first example
+  findings  onlyA                                atRisk:claim                  66   e.g. 52009 atRisk:claim 117 116 A=1 B=
+  findings  onlyB                                cites:overruled               52   e.g. 52009 cites 120 116 overruled A= B=1
+  status    status:none/negative                 overruled                     39   e.g. 52009 116/-@19891225 A=none|- B=negative|overruled
+  findings  onlyB                                atRisk:citesLaterNegated      25   e.g. 52009 atRisk:citesLaterNegated 124 116 A= B=1
+  conflicts onlyB                                ca.a                          20   e.g. 52060 ca.a 1104/- A= B=no,yes
+  status    status:none/negative                 abrogated                     15   e.g. 52149 122/-@19870411 A=none|- B=negative|abrogated
+  findings  onlyB                                cites:abrogated               15   e.g. 52149 cites 126 122 abrogated A= B=1
+  status    status:none/negative                 disapproved                   13   e.g. 52107 120/-@19930824 A=none|- B=negative|disapproved
+  splits    onlyA                                fed.a                          9   e.g. 52013 fed.a 101|1101 A=split B=
+  conflicts onlyA                                fed.a                          7   e.g. 52013 fed.a 1103/- A=no,yes B=
+  splits    onlyA                                fed.b                          7   e.g. 52171 fed.b 101|1101 A=split B=
+  findings  onlyA                                atRisk:contraryBinding         7   e.g. 52322 atRisk:contraryBinding 119 126 A=1 B=
+  splits    onlyB                                fed.a                          5   e.g. 52013 fed.a 1103|1104 A= B=split
+  status    status:none/partial                  overruled                      4   e.g. 52233 107/-@19800319 A=none|- B=partial|overruled:partial
+  status    status:none/partial                  abrogated                      2   e.g. 52227 110/-@19980320 A=none|- B=partial|abrogated:partial
+  status    status:none/partial                  disapproved                    1   e.g. 52356 108/-@19770308 A=none|- B=partial|disapproved:partial
+  conflicts onlyA                                fed.b                          1   e.g. 52512 fed.b 1101/- A=no,yes B=
+  info  findings uncompared lean:citesNotCitable:force               3004

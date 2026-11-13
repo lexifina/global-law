@@ -1,0 +1,36 @@
+status    compared 357141 keys   disagreeing 17
+findings  compared  85286 keys   disagreeing 27
+certs     compared 313825 keys   disagreeing 0
+splits    compared    335 keys   disagreeing 0
+
+file      bucket                                   rule                         count
+findings  onlyB                                    panelDepartsWithoutEnBanc       17
+            e.g. panelDepartsWithoutEnBanc 1911812 1910292   A=   B=1
+            e.g. panelDepartsWithoutEnBanc 1911932 1911699   A=   B=1
+            e.g. panelDepartsWithoutEnBanc 1913006 1912179   A=   B=1
+findings  firm                                     panelDepartsWithoutEnBanc        7
+            e.g. panelDepartsWithoutEnBanc 106047 93370   A=0   B=1
+            e.g. panelDepartsWithoutEnBanc 110729 93356   A=0   B=1
+            e.g. panelDepartsWithoutEnBanc 110790 93334   A=0   B=1
+findings  onlyA                                    cites:overruled                  2
+            e.g. cites 1917295 1912465 overruled   A=1   B=
+            e.g. cites 1919531 1912465 overruled   A=1   B=
+findings  onlyB                                    cites:vacated                    1
+            e.g. cites 5165379 5115375 vacated   A=   B=1
+status    status:partial/none                      partialScope                    16
+            e.g. 1910292/-@19780522   A=partial|partialScope   B=none|-
+            e.g. 1911187/-@19871204   A=partial|partialScope   B=none|-
+            e.g. 1911515/-@19831215   A=partial|partialScope   B=none|-
+status    status:negative/none                     overruled                        1
+            e.g. 1912465/-@19960425   A=negative|overruled   B=none|-
+status    status:none/negative                     vacated                          1
+            e.g. 5115375/-@19430113   A=none|-   B=negative|vacated
+
+informational (not disagreements):
+  findings uncompared lean:atRisk:citesLaterNegated            53457
+  findings uncompared lean:citesNotCitable:force               38785
+  findings uncompared lean:ignoresBindingInUnit                2200
+  findings uncompared ref:atRisk:claim                         2455
+  findings uncompared ref:atRisk:contraryBinding               151
+  findings uncompared ref:atRisk:soft                          6838
+  splits uncompared lean:conflict                              139
