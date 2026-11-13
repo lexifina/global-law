@@ -75,6 +75,7 @@ def federation_block(name: str, c: dict) -> list[str]:
             '| ' + ' | '.join(f'{h[1]:g}%' if chart else f'{pct(h[1])} ({h[2]} confidence)' for h in c['headline']) + ' |', '',
             cell(c.get('verdict', '')), '',
            f'{cell(c.get("method", ""))} Every figure is in {link}.', '',
+           ] + plan_block(c.get('plan')) + [
            '<details><summary>Federal law, part by part</summary>', '',
            '| Part | Held | Confidence | Basis |', '| --- | --- | --- | --- |']
     out += [f'| {cell(f["part"])} | {f["share"]:g}% | {f["confidence"]} | {cell(f["basis"])} |' for f in c.get('federal', [])]
@@ -85,6 +86,30 @@ def federation_block(name: str, c: dict) -> list[str]:
             f'{"held" if s.get("constitution") else "not held"} | {(format(min(100.0, s["case_law"]), "g") + "%") if s.get("case_law") is not None else chr(0x2013)} |'
             for s in states]
     return out + ['', '</details>', '']
+
+
+def plan_block(plan: dict | None) -> list[str]:
+    """The plan for every source a lawyer or citizen needs, part by part (as romania-law's PLAN.md)."""
+    if not plan:
+        return []
+    out = [f'### The plan: every source a lawyer or citizen needs', '',
+           f'**{plan["pct"]:g}%** of the plan is in global-law, weighted by how binding each source is and how often it is '
+           f'used; **{plan["collected_pct"]:g}%** counting sources collected but not yet in global-law. '
+           f'{plan["low_confidence_weight"]:g}% of the weight is in parts whose official total is an estimate. Updated {plan["updated"]}.', '',
+           '| Part | Will be in | Weight | Progress | How | Status |', '| --- | --- | ---: | --- | --- | --- |']
+    groups = []
+    for p in plan['parts']:
+        if p['group'] not in groups:
+            groups.append(p['group'])
+    for g in groups:
+        gp = next((x for x in plan.get('groups', []) if x['group'] == g), None)
+        out.append(f'| **{g}** | | **{gp["weight"]:g}%** | **{gp["pct"]:g}%** | | |' if gp else f'| **{g}** | | | | | |')
+        for p in (p for p in plan['parts'] if p['group'] == g):
+            pc = f'{p["pct"]:g}%' + (f' ({p["collected_pct"]:g}% collected)' if p.get('collected_pct') is not None else '')
+            est = '' if p['confidence'] == 'high' else f'; {p["confidence"]}-confidence total'
+            out.append(f'| {cell(p["part"])} | `{cell(p["where"])}` | {p["weight"]:g}% | {cell(p["progress"])} · {pc} | {cell(p["how"])}{est} | {p["status"]} |')
+    return out + ['', "Totals are the publishers' own counts where they exist (eCFR, the Federal Register API, CAP, the Census of "
+                  'Governments, the BIA list), otherwise the best public estimate, marked.', '']
 
 
 def completeness_block(name: str, c: dict) -> list[str]:

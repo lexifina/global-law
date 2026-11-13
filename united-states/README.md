@@ -12,13 +12,62 @@
 <img alt="How complete global-law is for the whole country: federal law, each state and territory code, case law and local law" src="completeness-light.svg" width="880">
 </picture>
 
-| US Code, current text | Code of Federal Regulations (parts in force) | State and territorial codes (by population) | Published case law (of CAP) | County and city law |
-| --- | --- | --- | --- | --- |
-| 100% | 99.1% | 88.4% | 98.4% | 0% |
+| The plan, weighted | US Code, current text | Code of Federal Regulations (parts in force) | State and territorial codes (by population) | Published case law (of CAP) | County and city law |
+| --- | --- | --- | --- | --- | --- |
+| 55.9% | 100% | 99.1% | 88.4% | 98.4% | 0% |
 
-Federal: the US Code is whole as current text (53 titles, release point 119-138; history 99.7% since 1995, 33.4% since 1926), the CFR holds 8,241 of the eCFR's 8,317 parts in force, and the Constitution, the Statutes at Large and the Federal Register are not held. States: 41 of 56 hold 90% or more of their code and 6 hold none; 88.4% weighted by population (79.6% unweighted). Case law: 98.4% of the 6,920,596 published decisions in the Caselaw Access Project are held (6,931,555 decisions in all, 98.6% of them with their opinion text); decisions after CAP's end (2018) are not held. No county or city law is held.
+55.9% of the plan (every source a US lawyer or citizen needs, 31 parts weighted by how binding each is and how often it is used) is in global-law. Strong: the US Code, the CFR, the state codes and the published case law to 2018. Missing: the Constitution's own text, session laws and the Statutes at Large, state administrative codes (two states), decisions since 2018, court rules, all county and city law (New York City collected, not yet in global-law), tribal codes, treaties and legislative history. Federal: the US Code is whole as current text (53 titles, release point 119-138; history 99.7% since 1995, 33.4% since 1926), the CFR holds 8,241 of the eCFR's 8,317 parts in force, and the Constitution, the Statutes at Large and the Federal Register are not held. States: 41 of 56 hold 90% or more of their code and 6 hold none; 88.4% weighted by population (79.6% unweighted). Case law: 98.4% of the 6,920,596 published decisions in the Caselaw Access Project are held (6,931,555 decisions in all, 98.6% of them with their opinion text); decisions after CAP's end (2018) are not held. No county or city law is held.
 
 Each state's code: the units of the official table of contents (chapters, or the code's own unit) read from the publisher on the date shown, against the units with law text in the repository's tree (us/verified in eu-law-charts; one reviewer per state, spot checks against the official text). CFR: parts in force in the eCFR structure of each title against the part folders held. Case law: decisions held per jurisdiction against CAP's own case counts. Population: 2020 census. Every figure is in [data/completeness.json](../data/completeness.json).
+
+### The plan: every source a lawyer or citizen needs
+
+**55.9%** of the plan is in global-law, weighted by how binding each source is and how often it is used; **56%** counting sources collected but not yet in global-law. 9% of the weight is in parts whose official total is an estimate. Updated 2026-11-13.
+
+| Part | Will be in | Weight | Progress | How | Status |
+| --- | --- | ---: | --- | --- | --- |
+| **Federal legislation** | | **20%** | **75%** | | |
+| Constitution of the United States | `none yet` | 3% | 0 of 28 texts (the Constitution and 27 amendments) · 0% | constitution.congress.gov / GovInfo CONAN | not started |
+| US Code, current text | `united-states/federal/usc` | 12% | 53 of 53 titles (release point 119-138) · 100% | the Office of the Law Revision Counsel's XML, every title | done |
+| US Code, every change since 1995 | `united-states/federal/usc` | 3% | title-years with every change dated, 1995-2026 · 99.7% | GovInfo annual editions and release points, each change credited to its law | done |
+| Statutes at Large (public and private laws) | `none yet` | 2% | 0 of about 47,000 public laws and 45,000 private laws (138 volumes) · 0% | GovInfo Statutes at Large and public-law XML; medium-confidence total | not started |
+| **State legislation** | | **21%** | **71.8%** | | |
+| State and territorial constitutions | `united-states/<state>/acts` | 3% | 45 of 56, weighted by population · 90.3% | each state's official text | collecting |
+| State and territorial codes | `united-states/<state>/acts` | 13% | 41 of 56 hold 90% or more; weighted by population · 88.4% | each code's official table of contents against the units held (one reviewer per state) | collecting |
+| State codes, every change dated | `united-states/<state>/acts` | 3% | 9 of 56 codes hold dated earlier versions; weighted by population · 27.3% | annual editions and session laws replayed onto the code | collecting |
+| Session laws, 1995-2026 | `united-states/<state>/acts (session-law folders)` | 2% | 20,170 of about 650,000 laws enacted (10 states hold some) · 3.1% | each legislature's chaptered acts as enacted; low-confidence total | collecting |
+| **Regulations and guidance** | | **21.5%** | **44.3%** | | |
+| Code of Federal Regulations | `united-states/federal/cfr` | 8% | 8,241 of 8,317 parts in force (2026-11-10) · 99.1% | eCFR, every version since 2015 | collecting |
+| Federal Register (rules, proposed rules, notices) | `none yet` | 2% | 0 of 976,037 documents since 1994 · 0% | FederalRegister.gov API | not started |
+| Executive orders and proclamations | `none yet` | 1% | 0 of 14,438 executive orders and 11,080 proclamations · 0% | Federal Register presidential documents; earlier ones from the National Archives | not started |
+| IRS guidance (Internal Revenue Bulletin) | `united-states/federal/irs-guidance` | 1.5% | 10,111 of about 10,460 items, 1996-2026 · 96.7% | every bulletin, item by item; medium-confidence total | collecting |
+| Other federal agency guidance and decisions | `none yet` | 1% | 0 of 473 agencies' guidance documents · 0% | each agency's guidance portal; low-confidence total | not started |
+| State administrative codes | `united-states/ohio, south-carolina, guam` | 7% | Ohio 4,051 of about 21,000 rules; South Carolina 94 of 107 chapters; Guam some; none for 53 others; weighted by population · 2% | each state's official administrative code; medium-confidence total | collecting |
+| State registers | `none yet` | 1% | 0 of 56 registers · 0% | each state's official register | not started |
+| **Case law** | | **22.5%** | **70.2%** | | |
+| Federal courts, to 2018 (CAP) | `united-states/<court>/caselaw` | 7% | 1,970,129 decisions; CAP lists 1,845,102 · 100% | the Caselaw Access Project's published decisions | done |
+| State courts, to 2018 (CAP) | `united-states/<state>/caselaw` | 9% | every state and territory, 121 court corpora, against CAP's counts · 97.8% | the Caselaw Access Project's published decisions | done |
+| Published decisions since 2018 | `none yet` | 5% | 0 of about 280,000 (federal appeals 30,000, Supreme Court 529, district 32,000, state appellate 215,000) · 0% | each court's own opinion pages; low-confidence total | not started |
+| Unpublished appellate decisions | `none yet` | 1% | 0 of about 185,000 federal since 2019 (states more) · 0% | each court's own opinion pages; medium-confidence total | not started |
+| State attorney general opinions | `none yet` | 0.5% | 0 of about 100,000 (45 of 56 publish) · 0% | each attorney general's site; low-confidence total | not started |
+| **Court rules** | | **3%** | **0.1%** | | |
+| Federal rules (civil, criminal, appellate, evidence, bankruptcy) and local rules | `none yet` | 1% | 0 of 5 national rule sets and 94 districts' local rules · 0% | uscourts.gov and each court | not started |
+| State rules of court | `united-states/guam, kentucky` | 2% | Guam 6 rule sets, Kentucky Rules of Evidence; none for 54 others · 0.2% | each state judiciary; medium-confidence total | collecting |
+| **Local law** | | **6%** | **0%** | | |
+| County, city and township codes | `none in global-law (united-states-new-york-city-law collected)` | 6% | 0 of 38,736 counties, municipalities and townships (about 10,500 codes online); New York City collected · 0% (1.6% collected) | each code's official or codifier's publication; medium-confidence total | collecting |
+| **Tribal law** | | **1.5%** | **32.1%** | | |
+| Tribal constitutions and codes | `none yet` | 1% | 0 of 574 tribes (NILL holds 400+ constitutions, 240+ codes) · 0% | each nation's own publication; medium-confidence total | not started |
+| Tribal court decisions | `united-states/tribal/caselaw` | 0.5% | 2,277 of CAP's 2,368 (American Tribal Law, Navajo Reporter) · 96.2% | the Caselaw Access Project | done |
+| **Treaties** | | **1.5%** | **0%** | | |
+| Treaties and international agreements | `none yet` | 1.5% | 0 of about 1,100 treaties and 17,300 executive agreements · 0% | the State Department's treaty texts; Senate treaty documents; medium-confidence total | not started |
+| **Legislative history** | | **1.5%** | **0%** | | |
+| Congressional bills, reports and Record | `none yet` | 1% | 0 of about 390,000 bills (93rd-119th Congress), 172 Record volumes · 0% | congress.gov and GovInfo; medium-confidence total | not started |
+| State bills | `none yet` | 0.5% | 0 of about 128,000 bills a year · 0% | each legislature; medium-confidence total | not started |
+| **Historical law** | | **1.5%** | **1.3%** | | |
+| US Code before 1995 (printed editions 1926-1994) | `united-states/federal/usc` | 1% | 11 of 542 title-editions read · 2% | Library of Congress scans, by OCR | collecting |
+| Earlier state codes and compilations | `none yet` | 0.5% | 0 of 56 · 0% | state archives and law libraries; low-confidence total | not started |
+
+Totals are the publishers' own counts where they exist (eCFR, the Federal Register API, CAP, the Census of Governments, the BIA list), otherwise the best public estimate, marked.
 
 <details><summary>Federal law, part by part</summary>
 

@@ -1007,7 +1007,472 @@
       "verified_on": "2026-11-13",
       "kind": "federation",
       "chart": "completeness",
+      "plan": {
+        "updated": "2026-11-13",
+        "pct": 55.9,
+        "collected_pct": 56.0,
+        "low_confidence_weight": 9.0,
+        "groups": [
+          {
+            "group": "Federal legislation",
+            "weight": 20,
+            "pct": 75.0,
+            "collected_pct": 75.0
+          },
+          {
+            "group": "State legislation",
+            "weight": 21,
+            "pct": 71.8,
+            "collected_pct": 71.8
+          },
+          {
+            "group": "Regulations and guidance",
+            "weight": 21.5,
+            "pct": 44.3,
+            "collected_pct": 44.3
+          },
+          {
+            "group": "Case law",
+            "weight": 22.5,
+            "pct": 70.2,
+            "collected_pct": 70.2
+          },
+          {
+            "group": "Court rules",
+            "weight": 3,
+            "pct": 0.1,
+            "collected_pct": 0.1
+          },
+          {
+            "group": "Local law",
+            "weight": 6,
+            "pct": 0.0,
+            "collected_pct": 1.6
+          },
+          {
+            "group": "Tribal law",
+            "weight": 1.5,
+            "pct": 32.1,
+            "collected_pct": 32.1
+          },
+          {
+            "group": "Treaties",
+            "weight": 1.5,
+            "pct": 0.0,
+            "collected_pct": 0.0
+          },
+          {
+            "group": "Legislative history",
+            "weight": 1.5,
+            "pct": 0.0,
+            "collected_pct": 0.0
+          },
+          {
+            "group": "Historical law",
+            "weight": 1.5,
+            "pct": 1.3,
+            "collected_pct": 1.3
+          }
+        ],
+        "parts": [
+          {
+            "group": "Federal legislation",
+            "part": "Constitution of the United States",
+            "where": "none yet",
+            "weight": 3,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of 28 texts (the Constitution and 27 amendments)",
+            "how": "constitution.congress.gov / GovInfo CONAN",
+            "status": "not started",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Federal legislation",
+            "part": "US Code, current text",
+            "where": "united-states/federal/usc",
+            "weight": 12,
+            "pct": 100,
+            "collected_pct": null,
+            "progress": "53 of 53 titles (release point 119-138)",
+            "how": "the Office of the Law Revision Counsel's XML, every title",
+            "status": "done",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Federal legislation",
+            "part": "US Code, every change since 1995",
+            "where": "united-states/federal/usc",
+            "weight": 3,
+            "pct": 99.7,
+            "collected_pct": null,
+            "progress": "title-years with every change dated, 1995-2026",
+            "how": "GovInfo annual editions and release points, each change credited to its law",
+            "status": "done",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Federal legislation",
+            "part": "Statutes at Large (public and private laws)",
+            "where": "none yet",
+            "weight": 2,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of about 47,000 public laws and 45,000 private laws (138 volumes)",
+            "how": "GovInfo Statutes at Large and public-law XML",
+            "status": "not started",
+            "confidence": "medium",
+            "target_known": true
+          },
+          {
+            "group": "State legislation",
+            "part": "State and territorial constitutions",
+            "where": "united-states/<state>/acts",
+            "weight": 3,
+            "pct": 90.3,
+            "collected_pct": null,
+            "progress": "45 of 56, weighted by population",
+            "how": "each state's official text",
+            "status": "collecting",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "State legislation",
+            "part": "State and territorial codes",
+            "where": "united-states/<state>/acts",
+            "weight": 13,
+            "pct": 88.4,
+            "collected_pct": null,
+            "progress": "41 of 56 hold 90% or more; weighted by population",
+            "how": "each code's official table of contents against the units held (one reviewer per state)",
+            "status": "collecting",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "State legislation",
+            "part": "State codes, every change dated",
+            "where": "united-states/<state>/acts",
+            "weight": 3,
+            "pct": 27.3,
+            "collected_pct": null,
+            "progress": "9 of 56 codes hold dated earlier versions; weighted by population",
+            "how": "annual editions and session laws replayed onto the code",
+            "status": "collecting",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "State legislation",
+            "part": "Session laws, 1995-2026",
+            "where": "united-states/<state>/acts (session-law folders)",
+            "weight": 2,
+            "pct": 3.1,
+            "collected_pct": null,
+            "progress": "20,170 of about 650,000 laws enacted (10 states hold some)",
+            "how": "each legislature's chaptered acts as enacted",
+            "status": "collecting",
+            "confidence": "low",
+            "target_known": true
+          },
+          {
+            "group": "Regulations and guidance",
+            "part": "Code of Federal Regulations",
+            "where": "united-states/federal/cfr",
+            "weight": 8,
+            "pct": 99.1,
+            "collected_pct": null,
+            "progress": "8,241 of 8,317 parts in force (2026-11-10)",
+            "how": "eCFR, every version since 2015",
+            "status": "collecting",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Regulations and guidance",
+            "part": "Federal Register (rules, proposed rules, notices)",
+            "where": "none yet",
+            "weight": 2,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of 976,037 documents since 1994",
+            "how": "FederalRegister.gov API",
+            "status": "not started",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Regulations and guidance",
+            "part": "Executive orders and proclamations",
+            "where": "none yet",
+            "weight": 1,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of 14,438 executive orders and 11,080 proclamations",
+            "how": "Federal Register presidential documents; earlier ones from the National Archives",
+            "status": "not started",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Regulations and guidance",
+            "part": "IRS guidance (Internal Revenue Bulletin)",
+            "where": "united-states/federal/irs-guidance",
+            "weight": 1.5,
+            "pct": 96.7,
+            "collected_pct": null,
+            "progress": "10,111 of about 10,460 items, 1996-2026",
+            "how": "every bulletin, item by item",
+            "status": "collecting",
+            "confidence": "medium",
+            "target_known": true
+          },
+          {
+            "group": "Regulations and guidance",
+            "part": "Other federal agency guidance and decisions",
+            "where": "none yet",
+            "weight": 1,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of 473 agencies' guidance documents",
+            "how": "each agency's guidance portal",
+            "status": "not started",
+            "confidence": "low",
+            "target_known": false
+          },
+          {
+            "group": "Regulations and guidance",
+            "part": "State administrative codes",
+            "where": "united-states/ohio, south-carolina, guam",
+            "weight": 7,
+            "pct": 2.0,
+            "collected_pct": null,
+            "progress": "Ohio 4,051 of about 21,000 rules; South Carolina 94 of 107 chapters; Guam some; none for 53 others; weighted by population",
+            "how": "each state's official administrative code",
+            "status": "collecting",
+            "confidence": "medium",
+            "target_known": true
+          },
+          {
+            "group": "Regulations and guidance",
+            "part": "State registers",
+            "where": "none yet",
+            "weight": 1,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of 56 registers",
+            "how": "each state's official register",
+            "status": "not started",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Case law",
+            "part": "Federal courts, to 2018 (CAP)",
+            "where": "united-states/<court>/caselaw",
+            "weight": 7,
+            "pct": 100.0,
+            "collected_pct": null,
+            "progress": "1,970,129 decisions; CAP lists 1,845,102",
+            "how": "the Caselaw Access Project's published decisions",
+            "status": "done",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Case law",
+            "part": "State courts, to 2018 (CAP)",
+            "where": "united-states/<state>/caselaw",
+            "weight": 9,
+            "pct": 97.8,
+            "collected_pct": null,
+            "progress": "every state and territory, 121 court corpora, against CAP's counts",
+            "how": "the Caselaw Access Project's published decisions",
+            "status": "done",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Case law",
+            "part": "Published decisions since 2018",
+            "where": "none yet",
+            "weight": 5,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of about 280,000 (federal appeals 30,000, Supreme Court 529, district 32,000, state appellate 215,000)",
+            "how": "each court's own opinion pages",
+            "status": "not started",
+            "confidence": "low",
+            "target_known": true
+          },
+          {
+            "group": "Case law",
+            "part": "Unpublished appellate decisions",
+            "where": "none yet",
+            "weight": 1,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of about 185,000 federal since 2019 (states more)",
+            "how": "each court's own opinion pages",
+            "status": "not started",
+            "confidence": "medium",
+            "target_known": true
+          },
+          {
+            "group": "Case law",
+            "part": "State attorney general opinions",
+            "where": "none yet",
+            "weight": 0.5,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of about 100,000 (45 of 56 publish)",
+            "how": "each attorney general's site",
+            "status": "not started",
+            "confidence": "low",
+            "target_known": true
+          },
+          {
+            "group": "Court rules",
+            "part": "Federal rules (civil, criminal, appellate, evidence, bankruptcy) and local rules",
+            "where": "none yet",
+            "weight": 1,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of 5 national rule sets and 94 districts' local rules",
+            "how": "uscourts.gov and each court",
+            "status": "not started",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Court rules",
+            "part": "State rules of court",
+            "where": "united-states/guam, kentucky",
+            "weight": 2,
+            "pct": 0.2,
+            "collected_pct": null,
+            "progress": "Guam 6 rule sets, Kentucky Rules of Evidence; none for 54 others",
+            "how": "each state judiciary",
+            "status": "collecting",
+            "confidence": "medium",
+            "target_known": true
+          },
+          {
+            "group": "Local law",
+            "part": "County, city and township codes",
+            "where": "none in global-law (united-states-new-york-city-law collected)",
+            "weight": 6,
+            "pct": 0,
+            "collected_pct": 1.6,
+            "progress": "0 of 38,736 counties, municipalities and townships (about 10,500 codes online); New York City collected",
+            "how": "each code's official or codifier's publication",
+            "status": "collecting",
+            "confidence": "medium",
+            "target_known": true
+          },
+          {
+            "group": "Tribal law",
+            "part": "Tribal constitutions and codes",
+            "where": "none yet",
+            "weight": 1,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of 574 tribes (NILL holds 400+ constitutions, 240+ codes)",
+            "how": "each nation's own publication",
+            "status": "not started",
+            "confidence": "medium",
+            "target_known": true
+          },
+          {
+            "group": "Tribal law",
+            "part": "Tribal court decisions",
+            "where": "united-states/tribal/caselaw",
+            "weight": 0.5,
+            "pct": 96.2,
+            "collected_pct": null,
+            "progress": "2,277 of CAP's 2,368 (American Tribal Law, Navajo Reporter)",
+            "how": "the Caselaw Access Project",
+            "status": "done",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Treaties",
+            "part": "Treaties and international agreements",
+            "where": "none yet",
+            "weight": 1.5,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of about 1,100 treaties and 17,300 executive agreements",
+            "how": "the State Department's treaty texts; Senate treaty documents",
+            "status": "not started",
+            "confidence": "medium",
+            "target_known": true
+          },
+          {
+            "group": "Legislative history",
+            "part": "Congressional bills, reports and Record",
+            "where": "none yet",
+            "weight": 1,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of about 390,000 bills (93rd-119th Congress), 172 Record volumes",
+            "how": "congress.gov and GovInfo",
+            "status": "not started",
+            "confidence": "medium",
+            "target_known": true
+          },
+          {
+            "group": "Legislative history",
+            "part": "State bills",
+            "where": "none yet",
+            "weight": 0.5,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of about 128,000 bills a year",
+            "how": "each legislature",
+            "status": "not started",
+            "confidence": "medium",
+            "target_known": true
+          },
+          {
+            "group": "Historical law",
+            "part": "US Code before 1995 (printed editions 1926-1994)",
+            "where": "united-states/federal/usc",
+            "weight": 1,
+            "pct": 2.0,
+            "collected_pct": null,
+            "progress": "11 of 542 title-editions read",
+            "how": "Library of Congress scans, by OCR",
+            "status": "collecting",
+            "confidence": "high",
+            "target_known": true
+          },
+          {
+            "group": "Historical law",
+            "part": "Earlier state codes and compilations",
+            "where": "none yet",
+            "weight": 0.5,
+            "pct": 0,
+            "collected_pct": null,
+            "progress": "0 of 56",
+            "how": "state archives and law libraries",
+            "status": "not started",
+            "confidence": "low",
+            "target_known": true
+          }
+        ]
+      },
       "headline": [
+        [
+          "The plan, weighted",
+          55.9,
+          "high"
+        ],
         [
           "US Code, current text",
           100.0,
@@ -1034,7 +1499,7 @@
           "high"
         ]
       ],
-      "verdict": "Federal: the US Code is whole as current text (53 titles, release point 119-138; history 99.7% since 1995, 33.4% since 1926), the CFR holds 8,241 of the eCFR's 8,317 parts in force, and the Constitution, the Statutes at Large and the Federal Register are not held. States: 41 of 56 hold 90% or more of their code and 6 hold none; 88.4% weighted by population (79.6% unweighted). Case law: 98.4% of the 6,920,596 published decisions in the Caselaw Access Project are held (6,931,555 decisions in all, 98.6% of them with their opinion text); decisions after CAP's end (2018) are not held. No county or city law is held.",
+      "verdict": "55.9% of the plan (every source a US lawyer or citizen needs, 31 parts weighted by how binding each is and how often it is used) is in global-law. Strong: the US Code, the CFR, the state codes and the published case law to 2018. Missing: the Constitution's own text, session laws and the Statutes at Large, state administrative codes (two states), decisions since 2018, court rules, all county and city law (New York City collected, not yet in global-law), tribal codes, treaties and legislative history. Federal: the US Code is whole as current text (53 titles, release point 119-138; history 99.7% since 1995, 33.4% since 1926), the CFR holds 8,241 of the eCFR's 8,317 parts in force, and the Constitution, the Statutes at Large and the Federal Register are not held. States: 41 of 56 hold 90% or more of their code and 6 hold none; 88.4% weighted by population (79.6% unweighted). Case law: 98.4% of the 6,920,596 published decisions in the Caselaw Access Project are held (6,931,555 decisions in all, 98.6% of them with their opinion text); decisions after CAP's end (2018) are not held. No county or city law is held.",
       "method": "Each state's code: the units of the official table of contents (chapters, or the code's own unit) read from the publisher on the date shown, against the units with law text in the repository's tree (us/verified in eu-law-charts; one reviewer per state, spot checks against the official text). CFR: parts in force in the eCFR structure of each title against the part folders held. Case law: decisions held per jurisdiction against CAP's own case counts. Population: 2020 census.",
       "federal": [
         {
