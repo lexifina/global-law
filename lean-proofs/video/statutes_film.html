@@ -18,13 +18,6 @@ canvas{position:absolute;inset:0}
 .lab.cap{transform:translate(-50%,0);width:400px;white-space:normal;text-align:center;font:600 24px/1.3 'IBM Plex Sans'}
 .lab.cap .num{display:block;font:700 54px/1.05 'Source Serif 4',serif;margin-bottom:4px}
 .lab.cap small{display:block;font:400 19px/1.4 'IBM Plex Sans';color:#a6b5cc;margin-top:6px}
-.panel{position:absolute;padding:20px 28px;border-radius:16px;background:rgba(8,14,26,.82);border:1px solid rgba(120,160,220,.25)}
-.panel .ph{font:600 18px 'IBM Plex Sans';letter-spacing:.2em;text-transform:uppercase;color:#8fa2bd;margin-bottom:10px}
-.cl{display:grid;grid-template-columns:300px 1fr;column-gap:20px;font:400 22px/1.5 'JetBrains Mono',monospace;color:#d8e2f2}
-.cl .a{color:#8fa2bd}.cl .v{color:#5fd3a0;font-weight:600}
-.qq b{color:#ffb35c;font-weight:600}.qq i{color:#5fd3a0;font-style:normal}
-.qq{font:italic 400 29px/1.35 'Source Serif 4',serif;color:#e6ebf2}
-.res{margin-top:12px;font:500 22px 'IBM Plex Sans';color:#a6b5cc}.res b{color:#5fd3a0;font-weight:600}
 #big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 #big .bt{font:700 96px/1.05 'Source Serif 4',serif;margin:0 0 40px;text-shadow:0 0 70px rgba(80,220,160,.25)}
 #big .bs{font:400 34px 'IBM Plex Sans';color:#a8b8d0}
@@ -32,17 +25,14 @@ canvas{position:absolute;inset:0}
 #scrim{position:absolute;left:0;top:0;width:1920px;height:420px;background:linear-gradient(rgba(4,7,13,.9),rgba(4,7,13,.75) 55%,rgba(4,7,13,0))}
 #card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 #card .c1{font:600 24px 'IBM Plex Sans';letter-spacing:.24em;text-transform:uppercase;color:#ffb35c}
-#card .c2{font:600 50px/1.25 'Source Serif 4',serif;max-width:1500px;margin-top:20px}
 #card .c3{margin-top:40px;display:grid;grid-template-columns:auto auto;column-gap:34px;row-gap:14px;text-align:left;font:400 32px/1.35 'IBM Plex Sans';color:#d8e2f2}
 #card .c3 .h{font:600 30px 'JetBrains Mono',monospace;color:#eef1f5;text-align:right}
-#card .c4{margin-top:34px;font:400 26px 'IBM Plex Sans';color:#a8b8d0}
 </style></head><body>
 <div id="ov">
   <div id="big"><div class="bt">The statutes behind US case law</div><div class="bs">Every decision since 1995, against every version of the US Code</div></div>
   <div id="scrim"></div>
   <div class="k" id="k"></div><div class="t" id="tt"></div><div class="s" id="ss"></div>
   <div id="hud"></div><div id="labels"></div>
-  <div class="panel" id="p1"></div><div class="panel" id="p2"></div><div class="panel" id="p3"></div>
   <div id="card"></div><div id="fade"></div>
 </div>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
@@ -55,17 +45,18 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 // window.SL = {ch:[[year, title]] (every change a law made to a section since 1995),
 //   cit:[[year decided, title, status (0 unchanged, 1 section amended elsewhere, 2 a law changed the cited words), year of the first change]],
-//   S:{...}, laws:[[name, year, decisions]], ex:{...}}
+//   S:{...}, laws:[[name, year, decisions, note]], end: the end card's rows}
 const D = window.SL, S = D.S;
 const W = 1920, H = 1080;
-const T = { s1: 4.6, s2: 13.5, s3: 22, a: 23, b: 26.6, c: 30.4, ok: 33, s4: 37.5, s5: 47, s6: 54.5 };
-const DUR = 60;
+// title 2.5 s, three 6 s scenes and one 7.5 s scene (the red sweep), a 3 s end card
+const T = { s1: 2.5, s2: 8.5, s4: 14.5, s5: 22, s6: 28 };
+const DUR = 31;
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
 const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
 const seg = (t, a, b) => clamp((t - a) / (b - a));
-const fadeIO = (t, a, b, d = .6) => seg(t, a, a + d) * (1 - seg(t, b - d, b));
+const fadeIO = (t, a, b, d = .35) => seg(t, a, a + d) * (1 - seg(t, b - d, b));
 function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
 const R = rng(1995);
 
@@ -97,7 +88,7 @@ const chd = points(CH.length, ptsMat(2.6)), cid = points(CI.length, ptsMat(3.4))
 scene.add(chd); scene.add(cid);
 { const a = chd.geometry.attributes.position.array; CH.forEach((o, i) => a.set([o.p.x, o.p.y, o.p.z], i * 3)); }
 { const a = cid.geometry.attributes.position.array; CI.forEach((o, i) => a.set([o.p.x, o.p.y, o.p.z], i * 3)); }
-// the time cursor of scene 4
+// the time cursor of scene 3
 const cur = new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0, Y0 + 12, 12), V(0, Y0 - YH - 12, 12)]), new THREE.LineBasicMaterial({ color: '#ffb35c', transparent: true, opacity: 0 }));
 scene.add(cur);
 
@@ -108,79 +99,70 @@ function label(i, text, v3, a, color = '', cls = 'lab') { while (pool.length <= 
   d.innerHTML = text; d.style.color = color; d.style.left = ((p.x + 1) / 2 * W) + 'px'; d.style.top = ((1 - p.y) / 2 * H) + 'px'; d.style.opacity = a; }
 function caption(k, c, t, s, a) { $('k').textContent = k; $('k').style.color = c; $('tt').textContent = t; $('ss').innerHTML = s; for (const id of ['k', 'tt', 'ss']) $(id).style.opacity = a; }
 const hud = (h, a) => { $('hud').innerHTML = h; $('hud').style.opacity = a; };
-const panel = (id, html, a, css) => { const e = $(id); e.innerHTML = html; e.style.cssText = css; e.style.opacity = a; };
-function card(c1, c2, c3, c4, a) { $('card').innerHTML = `<div class="c1">${c1}</div><div class="c2">${c2}</div><div class="c3">${c3}</div><div class="c4">${c4}</div>`; $('card').style.opacity = a; $('card').style.background = `rgba(4,7,13,${.85 * a})`; }
+function card(c1, c3, a) { $('card').innerHTML = `<div class="c1">${c1}</div><div class="c3">${c3}</div>`; $('card').style.opacity = a; $('card').style.background = `rgba(4,7,13,${.85 * a})`; }
 const fmt = n => Math.round(n).toLocaleString('en-US');
 
 function camAt(t) {
-  const k = ease(seg(t, T.s1 + 2, T.s2 + 2)) * (1 - ease(seg(t, T.s3 - .5, T.s3 + 1.5)));
+  const k = ease(seg(t, T.s1 + .2, T.s1 + 2.2)) * (1 - ease(seg(t, T.s4 - .3, T.s4 + 1.2)));
   const ang = -.42 * k;
   const look = V(0, -70, 0), dist = 760;
   return [V(look.x + dist * Math.sin(ang) + 14 * Math.sin(t * .11), look.y + 10 + 5 * Math.sin(t * .08) + 90 * k, dist * Math.cos(ang)), look];
 }
-const curY = t => Y1 + (Y2 - Y1) * ease(seg(t, T.s4 + .8, T.s4 + 6.5));
+// scene 3: the cursor crosses 1995..2027 in the first 40% of the scene, then the red holds
+const SW0 = .4, SW1 = 2.7;
+const curY = t => Y1 + (Y2 - Y1) * ease(seg(t, T.s4 + SW0, T.s4 + SW1));
 
 window.render = function (t) {
-  $('fade').style.opacity = Math.max(1 - seg(t, 0, .9), seg(t, DUR - 1, DUR));
-  $('big').style.opacity = fadeIO(t, .2, T.s1 - .1, .7); $('big').style.transform = `translateY(${(1 - easeOut(seg(t, .2, 2.2))) * 24}px)`;
-  const dimAll = (1 - .7 * seg(t, T.s3 - .5, T.s3 + .5) * (1 - seg(t, T.s4, T.s4 + .6))) * (1 - .7 * seg(t, T.s5, T.s5 + .8)) * (1 - seg(t, T.s6, T.s6 + 1));
+  $('fade').style.opacity = Math.max(1 - seg(t, 0, .35), seg(t, DUR - .28, DUR - .03));
+  $('big').style.opacity = seg(t, .05, .4) * (1 - seg(t, T.s1 - .28, T.s1 - .03)); $('big').style.transform = `translateY(${(1 - easeOut(seg(t, .05, .9))) * 18}px)`;
+  const dimAll = (1 - .78 * seg(t, T.s5, T.s5 + .5)) * (1 - seg(t, T.s6, T.s6 + .35));
   { // law changes: sweep in by year in scene 1, recede behind the decisions afterwards
-    const c = chd.geometry.attributes.color.array, back = 1 - .65 * seg(t, T.s2, T.s2 + 1);
-    CH.forEach((o, i) => { const on = seg(t, T.s1 + .3 + 4 * (o.y - Y1) / 32, T.s1 + .7 + 4 * (o.y - Y1) / 32) * back * dimAll * .7;
+    const c = chd.geometry.attributes.color.array, back = 1 - .65 * seg(t, T.s2, T.s2 + .6);
+    CH.forEach((o, i) => { const on = seg(t, T.s1 + .2 + 1.7 * (o.y - Y1) / 32, T.s1 + .5 + 1.7 * (o.y - Y1) / 32) * back * dimAll * .7;
       c.set([AMB.r * on, AMB.g * on, AMB.b * on], i * 3); });
     chd.geometry.attributes.color.needsUpdate = true; }
-  { // citations: appear in scene 2; in scene 4 the cursor turns red those whose cited words a law has since changed
+  { // citations: appear in scene 2; in scene 3 the cursor turns red those whose cited words a law has since changed
     const c = cid.geometry.attributes.color.array, cy = curY(t), s4 = t > T.s4;
-    CI.forEach((o, i) => { let on = seg(t, T.s2 + .4 + 4 * (o.y - Y1) / 32, T.s2 + .8 + 4 * (o.y - Y1) / 32) * dimAll;
+    CI.forEach((o, i) => { let on = seg(t, T.s2 + .2 + 1.7 * (o.y - Y1) / 32, T.s2 + .5 + 1.7 * (o.y - Y1) / 32) * dimAll;
       let col = BLUE;
       if (s4 && o.s === 2 && o.f && o.f <= cy) { col = RED; on *= 1.15; }
-      else if (s4) on *= .55 + .45 * (1 - seg(t, T.s4 + .8, T.s4 + 2));
+      else if (s4) on *= .55 + .45 * (1 - seg(t, T.s4 + SW0, T.s4 + 1.2));
       c.set([col.r * on * .8, col.g * on * .8, col.b * on * .8], i * 3); });
     cid.geometry.attributes.color.needsUpdate = true;
     cur.geometry.setFromPoints([V(xOf(cy), Y0 + 12, 14), V(xOf(cy), Y0 - YH - 12, 14)]);
-    cur.material.opacity = fadeIO(t, T.s4 + .6, T.s4 + 7.2) * .9; }
+    cur.material.opacity = fadeIO(t, T.s4 + SW0 - .2, T.s4 + SW1 + .25, .25) * .9; }
   const [cp, cl] = camAt(t); camera.position.copy(cp); camera.lookAt(cl);
   composer.render();
 
-  let li = 0; hud('', 0); card('', '', '', '', 0); for (const id of ['p1', 'p2', 'p3']) $(id).style.opacity = 0; $('scrim').style.opacity = 0;
+  let li = 0; hud('', 0); card('', '', 0); $('scrim').style.opacity = 0;
   const axes = a => {
     for (const y of [1995, 2000, 2005, 2010, 2015, 2020, 2025]) label(li++, String(y), V(xOf(y), Y0 - YH - 14, 0), a * .9, '#8fa2bd', 'lab sm plain dn');
     for (const [tt, n] of [[1, 'Title 1'], [11, '11 Bankruptcy'], [18, '18 Crimes'], [28, '28 Courts'], [42, '42 Public health and welfare'], [54, 'Title 54']])
       label(li++, n, V(X0 - 8, yOf(tt), 0), a * .9, '#8fa2bd', 'lab sm plain r');
   };
   if (t > T.s1 && t < T.s2) {
-    const a = fadeIO(t, T.s1 + .2, T.s2 - .1); $('scrim').style.opacity = a * .6;
-    caption('The US Code', '#ffb35c', 'Every change a law has made to it since 1995', `Each dot is one Act of Congress changing one section, by the day it took effect and the title it changed: ${fmt(S.law_versions)} changes by ${fmt(S.laws)} laws, across all ${S.titles} titles.`, a);
-    hud(`sections<b>${fmt(S.sections * seg(t, T.s1 + .3, T.s1 + 3.6))}</b>changed by a law ${fmt(S.law_versions * seg(t, T.s1 + .3, T.s1 + 4.3))} times`, fadeIO(t, T.s1 + .6, T.s2 - .1));
+    const a = fadeIO(t, T.s1 + .05, T.s2 - .05); $('scrim').style.opacity = a * .6;
+    caption('The US Code', '#ffb35c', 'Every change a law has made to it since 1995', `Each dot is one law changing one section: ${fmt(S.laws)} laws, across all ${S.titles} titles.`, a);
+    hud(`sections<b>${fmt(S.sections * seg(t, T.s1 + .2, T.s1 + 2.1))}</b>changed by a law ${fmt(S.law_versions * seg(t, T.s1 + .2, T.s1 + 2.1))} times`, a);
     axes(a);
-  } else if (t > T.s2 && t < T.s3) {
-    const a = fadeIO(t, T.s2 + .2, T.s3 - .1); $('scrim').style.opacity = a * .6;
-    caption('The decisions', '#7fb2ff', 'Courts apply the words in force that day', `Each blue dot stands for about fifty citations of a section by a federal or state court, by the day decided and the title cited.`, a);
-    hud(`citations<b>${fmt(S.citations * seg(t, T.s2 + .3, T.s2 + 3.6))}</b>in ${fmt(S.decisions * seg(t, T.s2 + .3, T.s2 + 3.6))} decisions`, fadeIO(t, T.s2 + .6, T.s3 - .1));
+  } else if (t > T.s2 && t < T.s4) {
+    const a = fadeIO(t, T.s2 + .05, T.s4 - .05); $('scrim').style.opacity = a * .6;
+    caption('The decisions', '#7fb2ff', 'Courts apply the words in force that day', 'Each blue dot is about fifty citations of a section by a court.', a);
+    hud(`citations<b>${fmt(S.citations * seg(t, T.s2 + .2, T.s2 + 2.1))}</b>in ${fmt(S.decisions * seg(t, T.s2 + .2, T.s2 + 2.1))} decisions`, a);
     axes(a);
-  } else if (t > T.s3 && t < T.s4) {
-    const a = fadeIO(t, T.s3 + .2, T.s4 - .1); $('scrim').style.opacity = a;
-    caption('One case', '#7fb2ff', D.ex.title, D.ex.sub, a);
-    const L = 560, Wd = 'width:1180px;';
-    panel('p1', `<div class="ph">The words the court applied, in force ${D.ex.day}: <span style="text-transform:none;letter-spacing:.04em">${D.ex.cite}</span></div><div class="qq">${D.ex.then}</div>`, fadeIO(t, T.a, T.s4 - .1), `left:${L}px;top:300px;${Wd}`);
-    const C = D.ex.lean;
-    panel('p2', '<div class="ph">Lean, with every version of the section</div><div class="cl">' + C.map(([x, y], k) => { const o = seg(t, T.b + .2 + k * .45, T.b + .6 + k * .45); return `<span class="a" style="opacity:${o}">${x}</span><span style="opacity:${o}">${y}</span>`; }).join('') + '</div>',
-      fadeIO(t, T.b, T.s4 - .1), `left:${L}px;top:480px;${Wd}`);
-    panel('p3', `<div class="ph">The same words today</div><div class="qq">${D.ex.now}</div>` +
-      `<div class="res" style="opacity:${seg(t, T.ok, T.ok + .5)}">${D.ex.res}</div>`, fadeIO(t, T.c, T.s4 - .1), `left:${L}px;top:${D.ex.p3top || 760}px;${Wd}`);
   } else if (t > T.s4 && t < T.s5) {
-    const a = fadeIO(t, T.s4 + .2, T.s5 - .1); $('scrim').style.opacity = a * .7;
-    caption('Since then', '#ff6a55', `A law has since rewritten ${fmt(S.both)} of them`, `Red marks each citation once a later Act of Congress rewrites the words it cited: ${S.both_pct}% of all citations, in ${fmt(S.decisions_both)} decisions (${S.decisions_both_pct}%). The older the decision, the more likely.`, a);
-    const k = seg(t, T.s4 + .8, T.s4 + 6.5);
-    hud(`<span style="color:#ffb35c">${Math.floor(curY(t))}</span><b style="color:#ff6a55">${fmt(S.both * ease(k))}</b>citations whose words have changed`, fadeIO(t, T.s4 + .6, T.s5 - .1));
+    const a = fadeIO(t, T.s4 + .05, T.s5 - .05); $('scrim').style.opacity = a * .7;
+    caption('Since then', '#ff6a55', `A law has since rewritten ${fmt(S.both)} of them`, `${S.both_pct}% of all citations, in ${fmt(S.decisions_both)} decisions (${S.decisions_both_pct}%).`, a);
+    const k = seg(t, T.s4 + SW0, T.s4 + SW1);
+    hud(`<span style="color:#ffb35c">${Math.floor(curY(t))}</span><b style="color:#ff6a55">${fmt(S.both * ease(k))}</b>citations whose words have changed`, a);
     axes(a);
   } else if (t > T.s5 && t < T.s6) {
-    const a = fadeIO(t, T.s5 + .2, T.s6 - .1); $('scrim').style.opacity = a * .8;
-    caption('The laws', '#ffb35c', 'The Acts that rewrote the most of them', 'Counted in decisions whose cited provision each Act was the first to change afterwards.', a);
-    D.laws.forEach(([n, y, c, w], k) => label(li++, `<span class="num">${fmt(c)}</span>${n}<small>${y}${w ? ' · ' + w : ''}</small>`, V(-250 + k * 250, -40, 0), fadeIO(t, T.s5 + 1.4 + k * .5, T.s6 - .1), ['#ff6a55', '#ffb35c', '#ffcc55'][k % 3], 'lab cap plain'));
+    const a = fadeIO(t, T.s5 + .05, T.s6 - .05); $('scrim').style.opacity = a * .8;
+    caption('The laws', '#ffb35c', 'The Acts that rewrote the most of them', 'Counted in decisions whose cited words each Act was the first to change.', a);
+    D.laws.forEach(([n, y, c, w], k) => label(li++, `<span class="num">${fmt(c)}</span>${n}<small>${y}${w ? ' · ' + w : ''}</small>`, V(-250 + k * 250, -40, 0), fadeIO(t, T.s5 + .5 + k * .4, T.s6 - .05), ['#ff6a55', '#ffb35c', '#ffcc55'][k % 3], 'lab cap plain'));
   } else if (t > T.s6) {
     caption('', '', '', '', 0);
-    card('What Lean checks', 'For each decision: the words it applied, and what the law says now', D.end, 'Rules in Lean, every version of the US Code in global-law', fadeIO(t, T.s6 + .2, DUR + 2, .6));
+    card('What Lean checks', D.end, seg(t, T.s6 + .05, T.s6 + .4));
   }
   for (let i = li; i < pool.length; i++) pool[i].style.opacity = 0;
 };

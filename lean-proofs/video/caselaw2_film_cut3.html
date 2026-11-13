@@ -1,0 +1,396 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=block">
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#04070d}
+canvas{position:absolute;inset:0}
+#ov{position:absolute;inset:0;pointer-events:none;color:#eef1f5;font-family:'IBM Plex Sans',sans-serif}
+.k{position:absolute;left:120px;top:96px;font:600 22px 'IBM Plex Sans';letter-spacing:.22em;text-transform:uppercase}
+.t{position:absolute;left:120px;top:132px;font:600 58px/1.1 'Source Serif 4',serif;max-width:1560px;white-space:nowrap;text-shadow:0 2px 30px rgba(0,0,0,.7)}
+.s{position:absolute;left:122px;top:212px;font:400 26px/1.4 'IBM Plex Sans';color:#a6b5cc;max-width:1230px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud{position:absolute;right:120px;top:100px;text-align:right;font:500 22px 'JetBrains Mono',monospace;color:#a6b5cc;line-height:1.7;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud b{font:700 56px 'Source Serif 4',serif;color:#eef1f5;display:block;line-height:1.1}
+.sc{position:absolute;inset:0;display:none}
+.sc>*, .abs{position:absolute}
+.lab{white-space:nowrap;font:600 15px 'JetBrains Mono',monospace;letter-spacing:.06em;transform:translateX(-50%);text-shadow:0 2px 14px #000}
+.tag{font:600 17px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8fa2bd;white-space:nowrap}
+.panel{padding:20px 28px;border-radius:16px;background:rgba(8,14,26,.82);border:1px solid rgba(120,160,220,.25);box-sizing:border-box}
+.ph{font:600 18px 'IBM Plex Sans';letter-spacing:.2em;text-transform:uppercase;color:#8fa2bd;margin-bottom:10px}
+.ph i{font-style:normal;letter-spacing:.04em;text-transform:none;color:#a6b5cc;font-weight:500}
+.cl{display:grid;grid-template-columns:200px 1fr;column-gap:20px;font:400 21px/1.5 'JetBrains Mono',monospace;color:#d8e2f2}
+.cl .a{color:#8fa2bd}.v{color:#5fd3a0;font-weight:600}.x{color:#ff6a55;font-weight:600}.am{color:#f2b24a;font-weight:600}
+.qq{font:italic 400 27px/1.38 'Source Serif 4',serif;color:#e6ebf2}
+.qq.sm{font-size:22px}.qq.md{font-size:24px}
+.qq mark,.qq .hl{color:inherit;border-radius:5px;padding:1px 3px;margin:0 -3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.res{margin-top:12px;font:500 22px 'IBM Plex Sans';color:#a6b5cc}.res b{color:#5fd3a0;font-weight:600}.res b.x{color:#ff6a55}
+.body{font:400 22px/1.45 'IBM Plex Sans';color:#d8e2f2}
+.body small,.note{font:400 19px/1.45 'IBM Plex Sans';color:#a6b5cc}
+.chip{display:inline-block;font:600 17px 'JetBrains Mono',monospace;padding:4px 11px;border-radius:9px;border:1px solid currentColor;white-space:nowrap;background:rgba(6,12,22,.6)}
+.src{font:600 24px/1.3 'Source Serif 4',serif;color:#eef1f5;margin:14px 0 8px}
+.src:first-of-type{margin-top:2px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:14px;font:400 20px/1.3 'IBM Plex Sans';color:#c9d4e6;padding:7px 0 7px 16px;border-left:2px solid rgba(140,170,210,.3)}
+.bar{display:grid;grid-template-columns:250px 1fr 90px;align-items:center;column-gap:14px;font:400 19px 'JetBrains Mono',monospace;color:#c9d4e6;height:44px}
+.bar .b{height:16px;border-radius:4px;background:#5fd3a0}
+.bar .n{text-align:right;color:#eef1f5;font-weight:600}
+.hrow{display:grid;grid-template-columns:1fr 178px;column-gap:20px;align-items:center;font:400 19px/1.36 'IBM Plex Sans';color:#d8e2f2;padding:8px 0;border-top:1px solid rgba(120,160,220,.16)}
+.hrow:first-of-type{border-top:none}
+.hrow .st{font:600 17px 'JetBrains Mono',monospace;text-align:right}
+.cap{width:520px;text-align:center;font:600 24px/1.3 'IBM Plex Sans'}
+.cap .num{display:block;font:700 76px/1.05 'Source Serif 4',serif;margin-bottom:6px}
+.cap small{display:block;font:400 20px/1.42 'IBM Plex Sans';color:#a6b5cc;margin-top:8px}
+.mut{display:grid;grid-template-columns:repeat(14,26px);gap:7px;justify-content:center;margin-top:18px}
+.mut span{width:26px;height:26px;border-radius:6px;box-sizing:border-box}
+.fr{display:grid;grid-template-columns:22px 190px 1fr;column-gap:14px;align-items:center;height:92px;border-top:1px solid rgba(120,160,220,.16)}
+.fr:first-child{border-top:none}
+.fr .d{width:14px;height:14px;border-radius:50%}
+.fr .n{font:700 44px 'Source Serif 4',serif;text-align:right}
+.fr .l{font:400 21px/1.25 'IBM Plex Sans';color:#d8e2f2}.fr .l small{display:block;font:400 15px 'JetBrains Mono',monospace;color:#8fa2bd;margin-top:3px}
+#big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#big .b0{font:600 24px 'IBM Plex Sans';letter-spacing:.24em;text-transform:uppercase;color:#5fd3a0;margin-bottom:26px}
+#big .bt{font:700 96px/1.05 'Source Serif 4',serif;margin:0 0 36px;text-shadow:0 0 70px rgba(80,220,160,.25)}
+#big .bs{font:400 36px 'IBM Plex Sans';color:#a8b8d0}
+#fade{position:absolute;inset:0;background:#000}
+#scrim{position:absolute;left:0;top:0;width:1920px;height:420px;background:linear-gradient(rgba(4,7,13,.9),rgba(4,7,13,.75) 55%,rgba(4,7,13,0))}
+#card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#card .c1{font:600 24px 'IBM Plex Sans';letter-spacing:.24em;text-transform:uppercase;color:#5fd3a0}
+#card .c2{font:600 50px/1.25 'Source Serif 4',serif;max-width:1500px;margin-top:20px}
+#card .c3{margin-top:40px;display:grid;grid-template-columns:auto auto;column-gap:34px;row-gap:14px;text-align:left;font:400 30px/1.35 'IBM Plex Sans';color:#d8e2f2}
+#card .c3 .h{font:600 30px 'JetBrains Mono',monospace;color:#eef1f5;text-align:right}
+#card .c4{margin-top:34px;font:400 26px 'IBM Plex Sans';color:#a8b8d0}
+#heat{position:absolute;left:0;top:0;width:1920px;height:1080px}
+svg text{font-family:'IBM Plex Sans',sans-serif}
+</style></head><body>
+<div id="ov">
+  <canvas id="heat" width="1920" height="1080"></canvas>
+  <div id="big"><div class="bt">Formalising US Caselaw in Lean</div><div class="bs" id="bs"></div></div>
+  <div id="scrim"></div>
+  <div class="k" id="k"></div><div class="t" id="tt"></div><div class="s" id="ss"></div>
+  <div id="hud"></div>
+  <div id="stage"></div>
+  <div id="card"></div><div id="fade"></div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const D = window.CL2, S = D.S;
+const W = 1920, H = 1080;
+// scene starts; each scene runs to the next start
+const T = { sa: 2.5, s2: 8.5, s5: 14.5, s8: 22, s10: 28, s11: 34, s12: 40, sb: 46, end: 53.2 };
+const DUR = 53.2;
+// K: how much faster than authored each scene's build-in runs, so everything is on screen by about 40% of the scene
+const K = { sa: 1, s2: 2.9, s5: 2.5, s8: 2.6, s10: 2.1, s11: 1.9, s12: 2.2, sb: 2.3 };
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const fadeIO = (t, a, b, d = .35) => seg(t, a, a + d) * (1 - seg(t, b - d, b));
+function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rng(2026);
+const fmt = n => Math.round(n).toLocaleString('en-US');
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const $ = id => document.getElementById(id);
+const CY = '#5fe0ff', AM = '#f2b24a', GR = '#5fd3a0', RD = '#ff6a55', MU = '#8fa2bd';
+
+// ---------- three.js: one camera in which a world unit is a pixel ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1); renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#04070d');
+const camera = new THREE.PerspectiveCamera(40, W / H, 1, 12000);
+camera.position.set(0, 0, 540 / Math.tan(20 * Math.PI / 180)); camera.lookAt(0, 0, 0);
+const composer = new EffectComposer(renderer); composer.addPass(new RenderPass(scene, camera));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), .55, .5, .3)); composer.addPass(new OutputPass());
+const spriteTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.3, 'rgba(255,255,255,.75)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+const cloudMat = () => new THREE.ShaderMaterial({ uniforms: { map: { value: spriteTex } }, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+  vertexShader: 'attribute float size; attribute vec3 col; varying vec3 vC; void main(){ vC = col; gl_PointSize = size; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+  fragmentShader: 'uniform sampler2D map; varying vec3 vC; void main(){ float a = texture2D(map, gl_PointCoord).a; gl_FragColor = vec4(vC, a); }' });
+function cloud(n, size) { const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3)); g.setAttribute('col', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+  g.setAttribute('size', new THREE.BufferAttribute(new Float32Array(n).fill(size), 1));
+  const p = new THREE.Points(g, cloudMat()); p.frustumCulled = false; p.visible = false; scene.add(p);
+  return { p, pos: g.attributes.position, col: g.attributes.col, size: g.attributes.size }; }
+const px = (x, y, z = 0) => [x - 960, 540 - y, z];
+const stars = cloud(3600, 4);
+for (let i = 0; i < 3600; i++) { const th = R() * 6.283, ph = Math.acos(2 * R() - 1), r = 2600 + R() * 3200;
+  stars.pos.array.set([r * Math.sin(ph) * Math.cos(th), r * Math.cos(ph), -Math.abs(r * Math.sin(ph) * Math.sin(th)) - 600], i * 3);
+  const b = (.2 + R() * .4) * .45; stars.col.array.set([b * .8, b * .9, b], i * 3); }
+stars.p.visible = true;
+
+// ---------- scene 2: the declaration map ----------
+const A = D.anat, AX0 = 130, AXW = 1660, AY0 = 446, AYH = 574;
+const ax = x => AX0 + (x - A.x0) / (A.x1 - A.x0) * AXW, ay = y => AY0 + y / A.h * AYH;
+const v2cols = A.cols.map((c, k) => k).filter(k => A.cols[k].panel === 1);
+const CC = A.cols.map(c => new THREE.Color(c.color));
+const AD = A.dots.map(([x, y, c, d, thm, users]) => { const p = A.cols[c].panel;
+  const born = p === 0 ? T.s2 + .5 + .8 * d / 8 : T.s2 + 2.5 + 3.0 * v2cols.indexOf(c) / v2cols.length + .8 * d / A.maxd;
+  return { x: ax(x), y: ay(y), c, p, thm, born, sz: Math.min(4.6, 1.3 + .75 * Math.sqrt(users)) * (p === 0 ? 4.6 : 3.7) + 3 }; });
+const adots = cloud(AD.length, 8);
+AD.forEach((o, i) => { adots.pos.array.set(px(o.x, o.y), i * 3); adots.size.array[i] = o.sz; });
+const NSEG = 8, aedge = (() => { const n = A.edges.length * NSEG * 2, g = new THREE.BufferGeometry(), pa = new Float32Array(n * 3);
+  A.edges.forEach(([i, j], e) => { const a = AD[i], b = AD[j], my = (a.y + b.y) / 2;
+    const P = u => { const v = 1 - u; return [v * v * v * a.x + 3 * v * v * u * a.x + 3 * v * u * u * b.x + u * u * u * b.x, v * v * v * a.y + 3 * v * v * u * my + 3 * v * u * u * my + u * u * u * b.y]; };
+    for (let s = 0; s < NSEG; s++) { pa.set(px(...P(s / NSEG)), (e * NSEG + s) * 6); pa.set(px(...P((s + 1) / NSEG)), (e * NSEG + s) * 6 + 3); } });
+  g.setAttribute('position', new THREE.BufferAttribute(pa, 3)); g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+  const l = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending }));
+  l.frustumCulled = false; l.visible = false; scene.add(l); return l; })();
+
+// ---------- scene 3: rows crossing the trust boundary ----------
+const NB = 110, BLINE = 598, brow = cloud(NB, 9);
+const BR = [...Array(NB)].map((_, i) => ({ x: 170 + R() * 660, ph: R(), bad: i % 9 === 4 }));
+
+// ---------- scene 8: the corpus ----------
+const FX0 = 150, FXW = 1040, FY0 = 430, FYH = 560;
+const fx = y => FX0 + (Math.max(1790, y) - 1790) / (2026 - 1790) * FXW, fy = r => FY0 + r / 56 * FYH;
+const NEU = new THREE.Color('#a9c4ec');
+const FCOL = ['#f2b24a', '#ff6a55', '#c58bd6', '#5fe0ff', '#9aa6b5', '#5fd3a0'], FC = FCOL.map(c => new THREE.Color(c));
+const CP = D.pts.map(([y, r]) => ({ x: fx(y) + (R() - .5) * 4, y: fy(r) + (R() - .5) * 9, yr: Math.max(1790, y) }));
+const cdots = cloud(CP.length, 2.4); CP.forEach((o, i) => cdots.pos.array.set(px(o.x, o.y), i * 3));
+const FP = D.fnd.map(([y, r, k]) => ({ x: fx(y) + (R() - .5) * 4, y: fy(r) + (R() - .5) * 9, yr: Math.max(1790, y), k }));
+const fdots = cloud(FP.length, 3.6); FP.forEach((o, i) => fdots.pos.array.set(px(o.x, o.y, 1), i * 3));
+
+// ---------- opening: every decision (the v1 film's points) ----------
+const OX0 = 430, OXW = 1190, OY0 = 452, OYH = 548, ox = y => OX0 + (Math.max(1790, y) - 1790) / (2026 - 1790) * OXW, oy = r => OY0 + r / (D.v1rows - 1) * OYH;
+const OP = D.v1pts.map(([y, r]) => ({ x: ox(y) + (R() - .5) * 4.6, y: oy(r) + (R() - .5) * 8.6, yr: Math.max(1790, y) }));
+const odots = cloud(OP.length, 3); OP.forEach((o, i) => odots.pos.array.set(px(o.x, o.y), i * 3));
+
+// ---------- DOM scenes ----------
+const st = $('stage');
+const mk = (id, html) => { const d = document.createElement('div'); d.className = 'sc'; d.id = id; d.innerHTML = html; st.appendChild(d); return d; };
+const at = (a, style = '') => `data-a="${a}" style="${style}"`;
+const cnt = (n, a, d = 1.6) => `<span data-n="${n}" data-c="${a}" data-d="${d}">0</span>`;
+const chip = (txt, col) => `<span class="chip" style="color:${col}">${txt}</span>`;
+
+// opening labels
+mk('sa', [1800, 1850, 1900, 1950, 2000].map(y => `<div class="lab" ${at(.5, `left:${ox(y)}px;top:${OY0 + OYH + 22}px;color:${MU}`)}>${y}</div>`).join('') +
+  `<div class="lab" ${at(.5, `left:${OX0 - 18}px;top:${oy(0) - 10}px;color:${MU};transform:translateX(-100%)`)}>Federal courts</div>` +
+  `<div class="lab" ${at(.5, `left:${OX0 - 18}px;top:${oy(D.v1rows / 2) - 10}px;color:${MU};transform:translateX(-100%)`)}>the 50 states, DC and territories</div>`);
+
+// scene 2 labels
+mk('s2', A.cols.map(c => `<div class="lab" ${at(c.panel ? 2.6 : .5, `left:${ax(c.x + c.w / 2)}px;top:408px;color:${c.color}`)}>${c.name}</div>`).join('') +
+  `<div class="tag" ${at(.4, `left:${AX0}px;top:372px`)}>THE FIRST MODEL</div><div class="tag" ${at(2.4, `left:${ax(A.cols[2].x)}px;top:372px`)}>THIS MODEL</div>` +
+  `<div ${at(2.2, `left:${(ax(A.cols[1].x + A.cols[1].w) + ax(A.cols[2].x)) / 2}px;top:372px;height:660px;border-left:1px dashed rgba(140,170,210,.35)`)}></div>`);
+
+// scene 3
+const PT = D.partial;
+mk('s3', `
+ <div class="panel" ${at(.5, 'left:120px;top:322px;width:770px')}><div class="ph" style="color:${RD}">Untrusted · may be wrong</div>
+   <div class="body">Python and LLM readers, and the doctrine tables. They propose rows: “this court overruled that holding”.<br><small>${fmt(S.treat_rows + S.hist_rows)} treatment and same-case history rows read</small></div></div>
+ <div class="panel" ${at(1.3, 'left:1000px;top:322px;width:800px')}><div class="ph">A certificate travels with every row</div>
+   <div class="cl" style="grid-template-columns:170px 1fr"><span class="a">quote</span><span>the court’s own words</span><span class="a">offset</span><span>characters ${fmt(PT.start)}–${fmt(PT.end)} of the opinion</span><span class="a">part</span><span>${esc(PT.part)} opinion, not a dissent</span><span class="a">target</span><span>the decision named in the quote</span></div></div>
+ <div ${at(2.1, `left:120px;top:${BLINE}px;width:1680px;border-top:2px dashed ${AM}`)}></div>
+ <div class="tag" ${at(2.1, `left:1000px;top:${BLINE - 34}px;color:${AM}`)}>TRUST BOUNDARY</div>
+ <div class="note" ${at(2.1, `left:1000px;top:${BLINE + 10}px;width:800px`)}>Nothing from above the line is believed unless the checker admits it.</div>
+ <div class="panel" ${at(2.9, 'left:120px;top:682px;width:770px')}><div class="ph" style="color:${GR}">Certificate checker · compiled Lean</div>
+   <div class="body">Is the quote at that offset, in the majority, naming the target, by a court with the power? Its soundness theorem says what passing means.</div>
+   <div class="res"><b>${cnt(S.admitted, 3.4, 2.4)} admitted</b> · <b class="x">${cnt(S.rejected, 3.4, 2.4)} rejected</b></div></div>
+ <div class="panel" ${at(4.2, 'left:1000px;top:682px;width:345px;height:196px')}><div class="ph">Spec</div><div class="body">Short definitions a lawyer can read: each rule a default with named exceptions.</div></div>
+ <div ${at(4.9, `left:1345px;top:752px;width:110px;text-align:center;font:600 34px 'JetBrains Mono';color:${GR}`)}>⇄<div style="font:600 15px/1.2 'IBM Plex Sans';letter-spacing:.08em;text-transform:uppercase;margin-top:4px">proved<br>equal</div></div>
+ <div class="panel" ${at(4.5, 'left:1455px;top:682px;width:345px;height:196px')}><div class="ph">Exec</div><div class="body">The same functions over hash maps, fast enough for 6.9 million decisions.</div></div>
+ <div class="note" ${at(5.4, 'left:1000px;top:902px;width:800px')}><b style="color:#eef1f5;font-weight:600">${S.locked} theorems, each statement locked.</b> No sorry, no added axiom, no native_decide.</div>`);
+
+// one worked case
+const LW = D.law;
+mk('sb', `
+ <div class="panel" ${at(.5, 'left:300px;top:300px;width:1320px')}><div class="ph">The decision’s own words <i>· ${esc(LW.by)} · ${esc(LW.by_day)}</i></div><div class="qq">“${esc(LW.quote)}”</div></div>
+ <div class="panel" ${at(1.7, 'left:300px;top:448px;width:1320px')}><div class="ph" style="color:${GR}">Lean checks the certificate</div><div class="cl" style="grid-template-columns:230px 1fr">` +
+  [['quote at offset', `characters ${fmt(LW.start)}–${fmt(LW.end)} of the opinion <span class="v">✓</span>`], ['part', `${esc(LW.part)} opinion <span class="v">✓</span>`], ['target', `${esc(LW.target)} <span class="v">✓</span>`],
+   ['power', `${LW.same_court ? 'the same court' : 'a higher court'} → <span class="v">may overrule</span>`], ['result', `<span class="v">admitted</span> · ${esc(LW.kind)}, scope: ${esc(LW.scope)}`]]
+   .map(([x, y], k) => `<span class="a" data-a="${2.1 + k * .4}">${x}</span><span data-a="${2.1 + k * .4}">${y}</span>`).join('') + `</div>
+   <div class="res" data-a="4.3" style="font-size:24px"><b class="x">Bowers is overruled from ${esc(LW.from_day)}</b>, on Lean’s reading of the rules.</div></div>
+ <div class="panel" ${at(5, 'left:300px;top:772px;width:1320px')}><div class="ph">What later courts say <i>· a note of ${esc(LW.note_day)}, held back from the readers and from Lean</i></div>
+   <div class="qq md">“${esc(LW.note)}”</div><div class="res" data-a="5.9"><b>✓ Same answer.</b> ${LW.notes} later notes name Lawrence as the overruling decision.</div></div>`);
+
+// scene 4
+const FORCE = [['none', '#66758c'], ['notCitable', '#7c8aa0'], ['citableNoWeight', '#93a1b8'], ['persuasive', '#5fe0ff'], ['persuasiveStrong', '#7fd8c8'], ['bindingAbsentConflict', '#e8c46a'], ['binding', AM]];
+const fc = n => chip(n, FORCE.find(f => f[0] === n)[1]);
+const yn = b => b ? `<span class="chip" style="color:${GR}">yes</span>` : `<span class="chip" style="color:${RD}">no</span>`;
+const acard = (a, x, head, rows) => `<div class="panel" ${at(a, `left:${x}px;top:404px;width:540px;height:530px`)}><div class="ph" style="color:${AM}">${head}</div>` +
+  rows.map((r, i) => r.length === 1 ? `<div class="src" data-a="${a + .45 + i * .25}">${r[0]}</div>` : `<div class="row" data-a="${a + .45 + i * .25}"><span>${r[0]}</span>${r[1]}</div>`).join('') + '</div>';
+mk('s4', `<div ${at(.6, 'left:122px;top:318px;display:flex;gap:10px;align-items:center')}><span class="tag" style="margin-right:8px">FORCE</span>${FORCE.map(f => chip(f[0], f[1])).join('<span style="color:#56657c">&lt;</span>')}</div>` +
+  acard(1.0, 120, 'Erie · 25 April 1938', [['A Georgia Supreme Court decision of 1930'], ['federal district court in Georgia, 1935', fc('persuasive')], ['the same court, 1950', fc('binding')],
+    ['A Fifth Circuit decision on Georgia law, 1975'], ['Georgia Court of Appeals, 1996', fc('persuasive')], ['A Georgia Supreme Court decision on federal law, 1995'], ['federal district court in Texas, 2005', fc('persuasive')]]) +
+  acard(2.6, 690, 'Bonner · 1 October 1981', [['A Fifth Circuit decision of 1975, before the Eleventh Circuit was split off'], ['Eleventh Circuit, 1990', fc('binding')], ['A Fifth Circuit decision of 1982'], ['Eleventh Circuit, 1990', fc('persuasive')],
+    ['May the Eleventh overrule the 1975 decision?'], ['a panel', yn(0)], ['the court en banc', yn(1)]]) +
+  acard(4.2, 1260, 'Kentucky · 1 January 1976', [['A 1970 decision of the old Court of Appeals, then the court of last resort'], ['new Court of Appeals, 1990', fc('binding')], ['Supreme Court of Kentucky, 1995', fc('persuasiveStrong')],
+    ['Who may overrule it?'], ['the new Court of Appeals', yn(0)], ['the Supreme Court of Kentucky', yn(1)]]));
+
+// scene 5
+const KN = D.kinds.slice(0, 8), KR = D.kinds.slice(8), KMAX = KN[0][1];
+const stname = s => s === 'good' ? `<span class="st" style="color:${GR}">good law</span>` : `<span class="st" style="color:${RD}">${esc(s.replace('neg:', ''))}<br>${esc(PT.by_day)}</span>`;
+mk('s5', `
+ <div class="panel" ${at(.5, 'left:120px;top:322px;width:640px')}><div class="ph">${fmt(S.treat_rows)} treatments read, by kind</div>` +
+  KN.map(([k, n], i) => `<div class="bar" data-a="${.8 + i * .16}"><span>${k}</span><span><div class="b" data-w="${n / KMAX * 100}" data-c="${.9 + i * .16}" style="width:0;background:${i === 0 ? RD : i < 4 ? AM : MU}"></div></span><span class="n">${fmt(n)}</span></div>`).join('') +
+  `</div>
+ <div class="panel" ${at(2.6, 'left:800px;top:322px;width:1000px')}><div class="ph">Certificate <i>· ${esc(PT.by)} · ${esc(PT.by_day)} · ${esc(PT.part)}, characters ${fmt(PT.start)}–${fmt(PT.end)}</i></div>
+   <div class="qq sm">… ${esc(PT.pre)}<span class="hl" data-hl="3.5" data-rgb="242,178,74">${esc(PT.quote)}</span>${esc(PT.post)} …</div></div>
+ <div class="panel" ${at(4.6, 'left:800px;top:596px;width:1000px')}><div class="ph">${esc(PT.target)} <i>· ${PT.holdings.length} holdings</i></div>` +
+  PT.holdings.map(([h, s], i) => `<div class="hrow" data-a="${4.9 + i * .2}"><span ${s === 'good' ? '' : `data-strike="6.3"`}>${esc(h)}</span><span data-a="${s === 'good' ? 6.9 : 6.3}">${stname(s)}</span></div>`).join('') + '</div>');
+
+// scene 6: timeline (x = date)
+const L = D.led, dnum = d => new Date(Date.UTC(Math.floor(d / 10000), Math.floor(d / 100) % 100 - 1, d % 100)).getTime();
+const day = d => `${d % 100} ${['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][Math.floor(d / 100) % 100 - 1]} ${Math.floor(d / 10000)}`;
+const TX0 = 440, TX1 = 1760, d0 = dnum(20061001), d1 = dnum(20091001), tx = d => TX0 + (dnum(d) - d0) / (d1 - d0) * (TX1 - TX0);
+const xe = tx(L.effective), xn = tx(L.enacted);
+const tbar = (a, y, x0, x1, col, label) => `<g data-a="${a}"><rect x="${x0}" y="${y}" width="${x1 - x0}" height="50" rx="8" fill="${col}" fill-opacity=".22" stroke="${col}" stroke-opacity=".8"/><text x="${(x0 + x1) / 2}" y="${y + 32}" text-anchor="middle" font-size="21" font-weight="600" fill="${col}">${label}</text></g>`;
+mk('s6', `<svg class="abs" style="left:0;top:0" width="1920" height="1080">
+  <g data-a=".5">${[2007, 2008, 2009].map(y => `<line x1="${tx(y * 10000 + 101)}" x2="${tx(y * 10000 + 101)}" y1="440" y2="700" stroke="rgba(140,170,210,.18)"/><text x="${tx(y * 10000 + 101)}" y="728" text-anchor="middle" font-size="19" fill="${MU}" font-family="JetBrains Mono">${y}</text>`).join('')}</g>
+  <g data-a="1"><line x1="${xe}" x2="${xe}" y1="378" y2="700" stroke="${CY}" stroke-width="2"/><text x="${xe + 12}" y="372" font-size="22" font-weight="600" fill="${CY}">${day(L.decided)}: ${esc(L.name.split(' Tire')[0])} decided</text>
+    <text x="${xe + 12}" y="402" font-size="19" fill="#a6b5cc">The Act later takes effect “as if enacted” on ${day(L.effective)}, the day before.</text></g>
+  <g data-a="2.2"><line x1="${xn}" x2="${xn}" y1="378" y2="700" stroke="${AM}" stroke-width="2"/><text x="${xn + 12}" y="372" font-size="22" font-weight="600" fill="${AM}">${day(L.enacted)}</text><text x="${xn + 12}" y="402" font-size="19" fill="#a6b5cc">${esc(L.law)} enacted</text></g>
+  <text data-a="3" x="120" y="478" font-size="21" fill="#d8e2f2" font-weight="600">By the day the question is asked</text><text data-a="3" x="120" y="506" font-size="18" fill="${MU}">status of the holding</text>
+  ${tbar(3.2, 456, TX0, xn - 3, GR, 'good law')}${tbar(3.6, 456, xn + 3, TX1, RD, 'superseded')}
+  <text data-a="4.3" x="120" y="598" font-size="21" fill="#d8e2f2" font-weight="600">By the day of the conduct</text><text data-a="4.3" x="120" y="626" font-size="18" fill="${MU}">asked after the Act</text>
+  ${tbar(4.5, 576, TX0, xe - 3, GR, 'still governs')}${tbar(4.9, 576, xe + 3, TX1, RD, 'superseded: the Act governs conduct from ' + day(L.retro))}
+ </svg>
+ <div class="panel" ${at(1.6, 'left:120px;top:770px;width:1680px')}><div class="ph">The holding <i>· ${esc(L.name)}, ${esc(L.cite)} · superseded by ${esc(L.law)}, 42 U.S.C. § 2000e-5(e)</i></div><div class="qq md" style="font-style:normal">${esc(L.holding)}</div></div>`);
+
+// scene 7
+mk('s7', `
+ <div class="cap" ${at(.6, `left:140px;top:400px;color:${GR}`)}><span class="num">${S.mutants} of ${S.mutants}</span>mutants killed<small>${S.props} proved properties, each run against deliberately broken models: Erie both ways, a panel overruling a panel, a checker that accepts dissents. Every one is caught.</small>
+   <div class="mut">${[...Array(S.mutants)].map((_, i) => `<span data-mut="${1.0 + i * .07}"></span>`).join('')}</div></div>
+ <div class="cap" ${at(1.7, `left:700px;top:400px;color:${CY}`)}><span class="num">0 of ${fmt(S.dt_certs)}</span>certificates decided differently<small>Lean against an independent reference written from the doctrine alone, on the current real data. Splits 0 of ${S.dt_splits}; status rows ${S.dt_status[0]} of ${fmt(S.dt_status[1])}; findings ${S.dt_findings[0]} of ${fmt(S.dt_findings[1])}.</small></div>
+ <div class="cap" ${at(2.9, `left:1260px;top:400px;color:${AM}`)}><span class="num">${fmt(S.fuzz_cases)}</span>fuzz cases<small>The file readers are not proved, so they are fuzzed: generated data files, broken in typed ways, ${S.fuzz_rows} rows. ${S.fuzz_bugs} bugs found and fixed; no failures since.</small></div>
+ <div class="panel" ${at(3.9, 'left:330px;top:856px;width:1260px;text-align:center')}><div class="body">On ${fmt(S.dt_universes)} freshly generated legal universes, and ${S.dt_regress} kept counterexamples, Lean and the reference agree on every answer.</div></div>`);
+
+// scene 8
+const FLAB = { atRisk: 'citations to authority at risk', citesOverruled: 'cite an overruled holding', citesVacated: 'cite a vacated or reversed decision', citesNotCitable: 'cite a decision that may not be cited', citesWithdrawn: 'cite a withdrawn decision', panelDepartsWithoutEnBanc: 'panel departs from its own court without en banc' };
+mk('s8', `<div ${at(.8, 'left:1250px;top:360px;width:550px')}>${D.findings.map(([k, n], i) => `<div class="fr" data-a="${1.6 + i * .3}"><span class="d" style="background:${FCOL[i]}"></span><span class="n" style="color:${FCOL[i]}">${cnt(n, 1.8 + i * .3, 2.6)}</span><span class="l">${FLAB[k]}<small>${k}</small></span></div>`).join('')}</div>` +
+  [1800, 1850, 1900, 1950, 2000].map(y => `<div class="lab" ${at(.6, `left:${fx(y)}px;top:${FY0 + FYH + 22}px;color:${MU}`)}>${y}</div>`).join('') +
+  `<div class="note" ${at(2, `left:${FX0}px;top:340px;width:900px`)}>Each lit dot stands for ${S.findings_rate} findings, placed by the citing decision’s year and court system.</div>`);
+
+// scene 9
+const SP = D.split.sides;
+const side = (a, x, w, s, col, extra = '') => `<div class="panel abs" ${at(a, `left:${x}px;width:${w}px;${extra}`)}><div class="ph" style="display:flex;justify-content:space-between;align-items:center"><span>${esc(s.court.replace('United States Court of Appeals for the ', '').replace(' of the United States', ''))} <i>· ${esc(s.day)}</i></span>${chip(s.answer, col)}</div>
+   <div class="src" style="margin:0 0 8px">${esc(s.name)}, ${esc(s.cite)}</div><div class="qq sm">“${esc(s.quote)}”</div></div>`;
+mk('s9', side(.8, 120, 800, SP[0], GR, 'top:316px;height:262px') + `<div id="no9">${side(1.5, 1000, 800, SP[1], RD, 'top:316px;height:262px')}</div>` +
+  `<div class="tag" ${at(2.2, `left:900px;top:424px;width:120px;text-align:center;color:${AM};font-size:19px`)}>SPLIT</div>` +
+  `<div class="note" ${at(2.2, 'left:120px;top:592px;width:1680px;text-align:center')}>Two courts of appeals, opposite answers, both good law, and neither binds the other.</div>` +
+  side(3.6, 300, 1320, SP[2], CY, 'top:640px') +
+  `<div class="note" ${at(4.4, 'left:120px;top:858px;width:1680px;text-align:center')}><b style="color:${CY};font-weight:600">The split ends.</b> A Supreme Court holding ranks first in every court (a proved property of the resolver).</div>` +
+  `<div ${at(5.2, 'left:120px;top:920px;width:1680px;display:flex;justify-content:center;gap:90px')}>
+     <div class="res" style="margin:0"><b style="color:${AM};font:700 38px 'Source Serif 4',serif">${S.splits}</b>&nbsp; splits and <b style="color:${AM};font:700 38px 'Source Serif 4',serif">${S.conflicts}</b> conflicts standing today</div>
+     <div class="res" style="margin:0"><b style="font:700 38px 'Source Serif 4',serif">${S.horty_ok} of ${S.horty}</b>&nbsp; binding case bases consistent under Horty’s factor model</div></div>`);
+
+// scene 10: heatmap canvas + legend
+const HT = D.heat, HC = 5, CS = 6.3, CH = 8.6, HX0 = 96, HPX = 349, HY0 = 384, HPY = 104;
+// the report's CVE-style ramp (report/heatmaps/plot.py), linear to the peak; its near-black top stop is a light lilac here, so the busiest days stand out on a dark page
+const RSTOP = [[0, '#c9eab8'], [.15, '#3d9a4b'], [.27, '#f1d23b'], [.40, '#f39a24'], [.55, '#d9302c'], [.75, '#9a3fc0'], [1, '#f3dcff']].map(([p, c]) => [p, new THREE.Color().setStyle(c, THREE.LinearSRGBColorSpace)]);
+const ramp = v => { let i = 1; while (i < RSTOP.length - 1 && v > RSTOP[i][0]) i++; const [p0, c0] = RSTOP[i - 1], [p1, c1] = RSTOP[i], o = c0.clone().lerp(c1, clamp((v - p0) / (p1 - p0))); return `rgb(${o.r * 255 | 0},${o.g * 255 | 0},${o.b * 255 | 0})`; };
+const hcum = []; { let s = 0; HT.years.forEach(y => { s += y[2].reduce((a, b) => a + b, 0); hcum.push(s); }); }
+mk('s10', HT.years.map(([y], i) => `<div class="lab" ${at(.7 + i * .11, `left:${HX0 + (i % HC) * HPX}px;top:${HY0 + Math.floor(i / HC) * HPY}px;color:${MU};transform:none;font-weight:400`)}>${y}</div>`).join('') +
+  `<div ${at(1, `left:1360px;top:1010px;white-space:nowrap;display:flex;align-items:center;gap:10px;font:400 16px 'JetBrains Mono';color:${MU}`)}>1<span style="display:inline-block;width:220px;height:12px;border-radius:3px;background:linear-gradient(90deg,${[0, .15, .27, .4, .55, .75, 1].map(v => ramp(v) + ' ' + v * 100 + '%').join(',')})"></span>${HT.max} decisions in a day</div>`);
+const hctx = $('heat').getContext('2d');
+function heat(tr, a) { hctx.clearRect(0, 0, W, H); if (a <= 0) return; hctx.globalAlpha = a; const t = T.s10 + (tr - T.s10) * K.s10;
+  HT.years.forEach(([y, wd, v], i) => { const ox = HX0 + (i % HC) * HPX, oy = HY0 + Math.floor(i / HC) * HPY + 24, t0 = T.s10 + .7 + i * .11;
+    for (let d = 0; d < v.length; d++) { const w = Math.floor((d + wd) / 7), r = (d + wd) % 7, on = seg(t, t0 + w / 53 * .6, t0 + w / 53 * .6 + .25);
+      hctx.fillStyle = v[d] && on > 0 ? ramp(v[d] / HT.max) : 'rgba(150,175,215,.08)'; if (v[d] && on < 1) hctx.globalAlpha = a * (.25 + .75 * on);
+      hctx.fillRect(ox + w * CS, oy + r * CH, CS - 1.2, CH - 1.2); hctx.globalAlpha = a; } });
+  hctx.globalAlpha = a * seg(t, T.s10 + .7, T.s10 + 1.2); hctx.fillStyle = MU; hctx.font = "400 10px 'JetBrains Mono'"; hctx.textAlign = 'right'; hctx.textBaseline = 'middle';
+  for (let r = 0; r < Math.ceil(HT.years.length / HC); r++) ['Mon', '', 'Wed', '', 'Fri', '', 'Sun'].forEach((n, k) => n && hctx.fillText(n, HX0 - 8, HY0 + r * HPY + 24 + k * CH + CH / 2 - .6));
+  hctx.globalAlpha = 1; }
+
+// scene 11
+const Z = D.zombie;
+mk('s11', `
+ <div class="panel" ${at(.4, 'left:120px;top:340px;width:1680px')}><div class="ph">${esc(Z.citing.replace('Inc. ', 'Inc., '))} <i>· ${esc(Z.court)} · ${esc(Z.day)}</i></div>
+   <div class="qq">“${esc(Z.pre)}<span class="hl" data-hl="1.8" data-rgb="255,106,85">${esc(Z.hit)}</span>”</div></div>
+ <div class="panel" ${at(2.8, 'left:120px;top:600px;width:1680px')}><div class="ph">${esc(Z.by)} <i>· ${esc(Z.by_day)}</i></div>
+   <div class="qq">“${esc(Z.by_quote)}”</div><div class="res" data-a="3.8"><b class="x">Overruled ${Z.years} years earlier.</b> The Texas court applies the old test, and does not cite the decision that overruled it.</div></div>
+`);
+
+// scene 12
+const pc = (a, b) => Math.round(100 * a / b) + '%';
+mk('s12', `
+ <div class="cap" ${at(.6, `left:140px;top:400px;color:${GR}`)}><span class="num">${pc(S.scdb_flagged, S.scdb_admitted)}</span>agreement<small>When the model says the Supreme Court overruled a case, the published lists agree: ${S.scdb_flagged} of ${S.scdb_admitted}.</small></div>
+ <div class="cap" ${at(1.9, `left:700px;top:400px;color:${AM}`)}><span class="num">${pc(S.scdb_found, S.scdb_all)}</span>of the Supreme Court Database’s list<small>${S.scdb_found} of the ${S.scdb_all} decisions it records as overruling a precedent.</small></div>
+ <div class="cap" ${at(3.2, `left:1260px;top:400px;color:${CY}`)}><span class="num">${pc(S.crs_found, S.crs_pairs)}</span>of Congress’s list<small>${S.crs_found} of the ${S.crs_pairs} overrulings in the Constitution Annotated table.</small></div>
+ <div class="panel" ${at(4.5, 'left:330px;top:760px;width:1260px;text-align:center')}><div class="qq md" style="font-style:normal">Most of the rest were never announced. ${esc(D.brown)} never says it overrules Plessy.</div></div>`);
+
+// generic per-element animation
+const SCN = [['sa', T.sa, T.s2], ['s2', T.s2, T.s5], ['s5', T.s5, T.s8], ['s8', T.s8, T.s10], ['s10', T.s10, T.s11], ['s11', T.s11, T.s12], ['s12', T.s12, T.sb], ['sb', T.sb, T.end]]
+  .map(([id, a, b]) => { const el = $(id); const q = s => [...el.querySelectorAll(s)];
+    return { id, a, b, k: K[id], el, fa: q('[data-a]'), cn: q('[data-n]'), hl: q('[data-hl]'), bw: q('[data-w]'), mu: q('[data-mut]'), sk: q('[data-strike]') }; });
+function dom(t) { for (const s of SCN) { const on = t > s.a && t < s.b; s.el.style.display = on ? 'block' : 'none'; if (!on) continue;
+  s.el.style.opacity = fadeIO(t, s.a + .05, s.b - .05); const lt = (t - s.a) * s.k;
+  for (const e of s.fa) e.style.opacity = seg(lt, +e.dataset.a, +e.dataset.a + .5);
+  for (const e of s.cn) e.textContent = fmt(+e.dataset.n * easeOut(seg(lt, +e.dataset.c, +e.dataset.c + +e.dataset.d)));
+  for (const e of s.hl) e.style.background = `rgba(${e.dataset.rgb},${.34 * seg(lt, +e.dataset.hl, +e.dataset.hl + .7)})`;
+  for (const e of s.bw) e.style.width = (+e.dataset.w * easeOut(seg(lt, +e.dataset.c, +e.dataset.c + .9))) + '%';
+  for (const e of s.mu) { const k = seg(lt, +e.dataset.mut, +e.dataset.mut + .25); e.style.background = k > .5 ? 'rgba(95,211,160,.85)' : 'rgba(255,106,85,.25)'; e.style.border = k > .5 ? 'none' : '1px solid rgba(255,106,85,.7)'; }
+  for (const e of s.sk) { const k = seg(lt, +e.dataset.strike, +e.dataset.strike + .5); e.style.color = k > 0 ? `rgba(255,${106 + 120 * (1 - k)},${85 + 150 * (1 - k)},1)` : ''; e.style.textDecoration = k > .5 ? 'line-through rgba(255,106,85,.7)' : 'none'; } } }
+
+const CAP = [
+  [T.sa, T.s2, 'All US case law', CY, 'Every federal and state court', 'From 1658, when the US was still a colony, to the present. Each dot is a few hundred decisions.', .6],
+  [T.s2, T.s5, 'The model', CY, `From ${S.decl1} declarations to ${S.decl2}`, 'One dot per Lean definition or theorem: the first model, then this one.', .6],
+  [T.s5, T.s8, 'Holdings and treatments', GR, `${fmt(S.holdings)} holdings, each with its own status`, 'An overruling reaches only the holdings the court’s words reach.', .5],
+  [T.s8, T.s10, 'The corpus run', CY, `${fmt(S.decisions)} decisions, ${fmt(S.citations)} citations`, 'Every citation is checked against the status of what it cites, on the day it was cited.', .6],
+  [T.s10, T.s11, 'Vulnerability heatmap', RD, 'Decisions relying on bad law, day by day', `Each square is a day, ${HT.years[0][0]} to ${HT.years[HT.years.length - 1][0]}: decisions citing, as authority, what was already bad law.`, .6],
+  [T.s11, T.s12, 'The hunt', RD, 'Zombie precedent: courts applying overruled law', `${S.hunt_confirmed} mistakes in case law confirmed by blind reading. One of them:`, .5],
+  [T.s12, T.sb, 'Against the courts', GR, 'How does it compare with what courts say?', 'The model is never shown the answer.', .5],
+  [T.sb, T.end, 'One case', CY, 'Lawrence v. Texas, 2003', 'From the court’s sentence to Lean’s answer, then against what later courts say.', .5],
+];
+function caption(k, c, t, s, a) { $('k').textContent = k; $('k').style.color = c; $('tt').textContent = t; $('ss').textContent = s; for (const id of ['k', 'tt', 'ss']) $(id).style.opacity = a; }
+const hud = (h, a) => { $('hud').innerHTML = h; $('hud').style.opacity = a; };
+$('bs').textContent = `${(S.decisions / 1e6).toFixed(1)} million decisions, checked at the level of holdings`;
+$('card').innerHTML = `<div class="c1">caselaw-lean-2</div><div class="c2">US precedent at the level of holdings, with every treatment certified</div>
+  <div class="c3"><span class="h">${fmt(S.decl2)}</span><span>Lean declarations, ${S.locked} theorems with locked statements</span>
+  <span class="h">${fmt(S.decisions)}</span><span>decisions and ${fmt(S.holdings)} holdings</span>
+  <span class="h">${fmt(S.treat_ok)}</span><span>treatments admitted by certificate, in the court’s own words</span>
+  <span class="h">${S.hunt_confirmed}</span><span>mistakes in case law confirmed by blind reading</span></div>
+  <div class="c4">Rules in Lean, open data in global-law</div>`;
+
+window.render = function (t) {
+  $('fade').style.opacity = Math.max(1 - seg(t, 0, .35), seg(t, DUR - .7, DUR - .05));
+  $('big').style.opacity = fadeIO(t, .05, T.sa - .05, .35); $('big').style.transform = `translateY(${(1 - easeOut(seg(t, .05, .9))) * 18}px)`;
+  stars.p.rotation.z = t * .0016;
+  // opening
+  const ina = t > T.sa && t < T.s2; odots.p.visible = ina;
+  if (ina) { const a = fadeIO(t, T.sa + .05, T.s2 - .05), ca = odots.col.array;
+    OP.forEach((o, i) => { const k = a * .33 * seg(t, T.sa + .15 + 1.7 * (o.yr - 1790) / 236, T.sa + .5 + 1.7 * (o.yr - 1790) / 236); ca[i * 3] = NEU.r * k; ca[i * 3 + 1] = NEU.g * k; ca[i * 3 + 2] = NEU.b * k; });
+    odots.col.needsUpdate = true; }
+  // scene 2
+  const in2 = t > T.s2 && t < T.s5; adots.p.visible = aedge.visible = in2;
+  let n1 = 0, n2 = 0;
+  if (in2) { const a = fadeIO(t, T.s2 + .05, T.s5 - .05), ca = adots.col.array, t2 = T.s2 + (t - T.s2) * K.s2, b = AD.map(o => seg(t2, o.born, o.born + .45));
+    AD.forEach((o, i) => { if (b[i] > .5) o.p ? n2++ : n1++; const c = CC[o.c], k = a * b[i] * (o.thm ? 1.15 : .8) * (o.p ? 1 : .8) * (1 + 1.6 * (1 - b[i]) * (b[i] > 0)); ca[i * 3] = c.r * k; ca[i * 3 + 1] = c.g * k; ca[i * 3 + 2] = c.b * k; });
+    adots.col.needsUpdate = true;
+    const ea = aedge.geometry.attributes.color.array; A.edges.forEach(([i, j], e) => { const c = CC[AD[j].c], k = a * Math.min(b[i], b[j]) * .09; const o = e * NSEG * 6;
+      for (let s = 0; s < NSEG * 2; s++) { ea[o + s * 3] = c.r * k; ea[o + s * 3 + 1] = c.g * k; ea[o + s * 3 + 2] = c.b * k; } });
+    aedge.geometry.attributes.color.needsUpdate = true; }
+  // scene 3
+  const in3 = false; brow.p.visible = false;
+  if (in3) { const a = fadeIO(t, T.s3 + 2.6, T.sb - .1), pa = brow.pos.array, ca = brow.col.array;
+    BR.forEach((o, i) => { const u = ((t - T.s3) / 2.6 + o.ph) % 1, yEnd = o.bad ? BLINE : 690, y = 512 + (yEnd - 512) * Math.min(1, u / (o.bad ? .45 : .8));
+      const stopped = o.bad && u > .45, k = a * Math.min(1, u * 8) * (o.bad ? (stopped ? 1 - (u - .45) / .4 : 1) : 1 - seg(u, .8, 1));
+      const c = stopped ? [1, .42, .33] : y > BLINE ? [.37, .83, .63] : [NEU.r, NEU.g, NEU.b]; pa.set(px(o.x, y), i * 3); ca.set([c[0] * k, c[1] * k, c[2] * k].map(v => Math.max(0, v)), i * 3); });
+    brow.pos.needsUpdate = true; brow.col.needsUpdate = true; }
+  // scene 8
+  const in8 = t > T.s8 && t < T.s10; cdots.p.visible = fdots.p.visible = in8;
+  if (in8) { const a = fadeIO(t, T.s8 + .05, T.s10 - .05), ca = cdots.col.array, cb = fdots.col.array, t8 = T.s8 + (t - T.s8) * K.s8, dim = 1 - .55 * seg(t8, T.s8 + 1.8, T.s8 + 3);
+    CP.forEach((o, i) => { const k = a * dim * .13 * seg(t8, T.s8 + .3 + 1.3 * (o.yr - 1790) / 236, T.s8 + .7 + 1.3 * (o.yr - 1790) / 236); ca[i * 3] = NEU.r * k; ca[i * 3 + 1] = NEU.g * k; ca[i * 3 + 2] = NEU.b * k; });
+    FP.forEach((o, i) => { const t0 = T.s8 + 1.8 + o.k * .3 + 2.6 * (o.yr - 1790) / 236, k = a * .27 * seg(t8, t0, t0 + .4), c = FC[o.k]; cb[i * 3] = c.r * k; cb[i * 3 + 1] = c.g * k; cb[i * 3 + 2] = c.b * k; });
+    cdots.col.needsUpdate = true; fdots.col.needsUpdate = true; }
+  composer.render();
+  // scene 10
+  const in10 = t > T.s10 && t < T.s11; heat(t, in10 ? fadeIO(t, T.s10 + .05, T.s11 - .05) : 0);
+
+  dom(t);
+  let cap = null; for (const c of CAP) if (t > c[0] && t < c[1]) cap = c;
+  if (cap) { const a = fadeIO(t, cap[0] + .05, cap[1] - .05); caption(cap[2], cap[3], cap[4], cap[5], a); $('scrim').style.opacity = a * cap[6]; } else { caption('', '', '', '', 0); $('scrim').style.opacity = 0; }
+  hud('', 0);
+  if (ina) hud(`decisions<b>${fmt(S.decisions * seg(t, T.sa + .15, T.sa + 2.1))}</b>citations between them ${fmt(S.citations * seg(t, T.sa + .15, T.sa + 2.1))}`, fadeIO(t, T.sa + .1, T.s2 - .05));
+  if (in2) { const f = n2 / S.decl2; hud(`declarations<b>${fmt(n2 ? Math.max(S.decl1, n2) : n1)}</b>theorems, statements locked ${Math.round(S.thm1 * (n1 / S.decl1) + (S.locked - S.thm1) * f)}`, fadeIO(t, T.s2 + .1, T.s5 - .05)); }
+  if (in10) { const u = Math.max(0, ((t - T.s10) * K.s10 - .7) / .11), i = Math.min(HT.years.length - 1, Math.floor(u)), v = u >= HT.years.length ? HT.total : (i ? hcum[i - 1] : 0) + (hcum[i] - (i ? hcum[i - 1] : 0)) * (u - i);
+    hud(`decisions<b>${fmt(u <= 0 ? 0 : v)}</b>busiest day, ${HT.peak_day}: ${HT.peak}`, fadeIO(t, T.s10 + .1, T.s11 - .05)); }
+  $('card').style.opacity = 0;
+};
+window.DUR = DUR;
+document.fonts.ready.then(() => { window.render(0); window.READY = true; });
+</script></body></html>
