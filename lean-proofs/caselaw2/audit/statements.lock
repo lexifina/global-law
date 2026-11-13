@@ -1,0 +1,1386 @@
+[
+ {
+  "name": "CaseLaw2.Cert.Window.digest_eq",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.Window.digest_eq : ∀ (self : CaseLaw2.Cert.Window), self.digest.get = CaseLaw2.Sha1.hex self.text",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkCert_cite_index",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Citation-index resolution**: when the citation index is supplied, an admitted row whose target evidence is a citation (and whose quote is not the target's own text) cites a citation that the index resolves to the row's target node: `index(cite) = target`.",
+  "statement": "CaseLaw2.Cert.checkCert_cite_index : ∀ (c : CaseLaw2.Cert.Input),\n  (CaseLaw2.Cert.check c).admitted = true →\n    c.selfText = false →\n      c.evidence.startsWith \"cite:\" = true →\n        ∀ (m : Std.HashMap String Nat),\n          c.citeIndex = some m → m.get? (CaseLaw2.Cert.compact (c.evidence.drop 5).toString) = some c.target",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkCert_quote_nonempty",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Non-empty quote** (FB-L2): an admitted row quotes at least one character, at a non-empty span.",
+  "statement": "CaseLaw2.Cert.checkCert_quote_nonempty : ∀ (c : CaseLaw2.Cert.Input),\n  (CaseLaw2.Cert.check c).admitted = true → c.quote ≠ \"\" ∧ c.start < c.stop",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkCert_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Certificate soundness**: an admitted row satisfies every condition, and `ok` also has verified power.",
+  "statement": "CaseLaw2.Cert.checkCert_sound : ∀ (c : CaseLaw2.Cert.Input),\n  (CaseLaw2.Cert.check c).admitted = true →\n    CaseLaw2.Cert.shaOk c = true ∧\n      (∃ w, CaseLaw2.Cert.coveringWindow c = some w ∧ CaseLaw2.Cert.quoteAt c w = true) ∧\n        CaseLaw2.Cert.hasCue c = true ∧\n          CaseLaw2.Cert.disqualified c = false ∧\n            CaseLaw2.Cert.resolves c = true ∧\n              CaseLaw2.Cert.partOk c = true ∧\n                c.ordered = true ∧\n                  (CaseLaw2.Cert.check c = CaseLaw2.Cert.Result.ok → c.authority = some true) ∧\n                    (CaseLaw2.Cert.check c = CaseLaw2.Cert.Result.okUnverifiedBy → c.authority = none)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkCert_window_hash",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Window hash** (TRUST.md): an admitted row's quote sits in a well-formed window whose SHA-1, computed by the checker itself (`Sha1.hex`), equals the digest the audit copy recorded for that window; when the hash file is supplied, a digest must have been recorded.",
+  "statement": "CaseLaw2.Cert.checkCert_window_hash : ∀ (c : CaseLaw2.Cert.Input),\n  (CaseLaw2.Cert.check c).admitted = true →\n    ∃ w,\n      CaseLaw2.Cert.coveringWindow c = some w ∧\n        CaseLaw2.Cert.quoteAt c w = true ∧\n          CaseLaw2.Cert.wellFormed c w = true ∧\n            (∀ (s : String), w.hash = some s → CaseLaw2.Sha1.hex w.text = s) ∧\n              (c.hashRequired = true → w.hash.isSome = true)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkWitness_inferred",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**A witness row is never explicit**: an admitted witness row carries `explicit = false`, so the event built from it has no status effect (with `Spec.inferred_treatment_no_effect`: `Examples.witness_row_no_effect`).",
+  "statement": "CaseLaw2.Cert.checkWitness_inferred : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),\n  (CaseLaw2.Cert.checkWitness c w).admitted = true → w.explicit = false",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkWitness_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Witness soundness**: an admitted witness row is `explicit = 0` with a status-changing kind and a known witness; W's text passes every text check with X as the target; Y is named; the dates are ordered X ≤ Y ≤ W; and W has standing.",
+  "statement": "CaseLaw2.Cert.checkWitness_sound : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),\n  (CaseLaw2.Cert.checkWitness c w).admitted = true →\n    w.known = true ∧\n      w.explicit = false ∧\n        w.changes = true ∧\n          (CaseLaw2.Cert.textCheck c).admitted = true ∧\n            CaseLaw2.Cert.byResolves c w = true ∧ c.ordered = true ∧ w.witnessOrdered = true ∧ w.standing = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.check_fail_reason",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "Each rejection names the first failing condition: a rejected row carries exactly one reason code.",
+  "statement": "CaseLaw2.Cert.check_fail_reason : ∀ (c : CaseLaw2.Cert.Input) (r : CaseLaw2.Cert.Reason),\n  CaseLaw2.Cert.check c = CaseLaw2.Cert.Result.fail r →\n    (r = CaseLaw2.Cert.Reason.shaUnknown ↔ CaseLaw2.Cert.shaOk c = false)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.witnessTail_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.witnessTail_sound : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),\n  (CaseLaw2.Cert.witnessTail c w).admitted = true →\n    CaseLaw2.Cert.byResolves c w = true ∧ c.ordered = true ∧ w.witnessOrdered = true ∧ w.standing = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Examples.witness_row_no_effect",
+  "module": "LegalProofs.CaseLaw2.Examples",
+  "doc": "**A witness row never changes status**: the event built from an admitted witness row (it carries the row's `explicit` flag) has no status effect. The row only yields an `atRisk` finding naming the by-decision.",
+  "statement": "CaseLaw2.Examples.witness_row_no_effect : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),\n  (CaseLaw2.Cert.checkWitness c w).admitted = true →\n    ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),\n      tr.explicit = w.explicit → CaseLaw2.Spec.treatEffect byHist tr = none",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Exec.exec_canChangeStatus_eq_spec",
+  "module": "LegalProofs.CaseLaw2.Exec.Env",
+  "doc": "",
+  "statement": "CaseLaw2.Exec.exec_canChangeStatus_eq_spec : ∀ (e : CaseLaw2.Env) (b x : CaseLaw2.Decision)\n  (dom : Option CaseLaw2.Domain),\n  CaseLaw2.Spec.canChangeStatus (CaseLaw2.Exec.ExecEnv.build e).lookups b x dom =\n    CaseLaw2.Spec.canChangeStatus e.lookups b x dom",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Exec.exec_eventLookups_eq_spec",
+  "module": "LegalProofs.CaseLaw2.Exec.Env",
+  "doc": "",
+  "statement": "CaseLaw2.Exec.exec_eventLookups_eq_spec : ∀ (r : CaseLaw2.Record),\n  (CaseLaw2.Exec.ExecRecord.build r).lookups = CaseLaw2.Spec.recordLookups r",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Exec.exec_forceDiv_eq_spec",
+  "module": "LegalProofs.CaseLaw2.Exec.Env",
+  "doc": "The runner's force on a court as it ordinarily sits (H6) equals the Spec's.",
+  "statement": "CaseLaw2.Exec.exec_forceDiv_eq_spec : ∀ (e : CaseLaw2.Env) (x : CaseLaw2.Decision) (h : CaseLaw2.Holding) (p : Bool)\n  (q : CaseLaw2.Spec.Query),\n  CaseLaw2.Spec.forceDiv (CaseLaw2.Exec.ExecEnv.build e).lookups x h p q = CaseLaw2.Spec.forceDiv e.lookups x h p q",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Exec.exec_force_eq_spec",
+  "module": "LegalProofs.CaseLaw2.Exec.Env",
+  "doc": "The runner's force equals the Spec's.",
+  "statement": "CaseLaw2.Exec.exec_force_eq_spec : ∀ (e : CaseLaw2.Env) (x : CaseLaw2.Decision) (h : CaseLaw2.Holding) (p : Bool)\n  (q : CaseLaw2.Spec.Query),\n  CaseLaw2.Spec.force (CaseLaw2.Exec.ExecEnv.build e).lookups x h p q = CaseLaw2.Spec.force e.lookups x h p q",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Exec.exec_lookups_eq_spec",
+  "module": "LegalProofs.CaseLaw2.Exec.Env",
+  "doc": "",
+  "statement": "CaseLaw2.Exec.exec_lookups_eq_spec : ∀ (e : CaseLaw2.Env), (CaseLaw2.Exec.ExecEnv.build e).lookups = e.lookups",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Exec.exec_status_eq_spec",
+  "module": "LegalProofs.CaseLaw2.Exec.Env",
+  "doc": "The runner's status equals the Spec's (both the court data and the events through hash indexes).",
+  "statement": "CaseLaw2.Exec.exec_status_eq_spec : ∀ (e : CaseLaw2.Env) (r : CaseLaw2.Record) (x k t u : Nat),\n  CaseLaw2.Spec.status\n      (CaseLaw2.Spec.effectsOf (CaseLaw2.Exec.ExecEnv.build e).lookups (CaseLaw2.Exec.ExecRecord.build r).lookups r.dec\n        x)\n      k t u =\n    CaseLaw2.Spec.statusOf e.lookups r x k t u",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Exec.index_getD",
+  "module": "LegalProofs.CaseLaw2.Exec.Index",
+  "doc": "",
+  "statement": "@CaseLaw2.Exec.index_getD : ∀ {α : Type u_1} {K : Type u_2} [inst : BEq K] [inst_1 : Hashable K] [LawfulBEq K]\n  [LawfulHashable K] (key : α → K) (l : List α) (k : K),\n  (CaseLaw2.Exec.index key l).getD k [] = List.filter (fun x => key x == k) l",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Force.le_binding",
+  "module": "LegalProofs.CaseLaw2.Basic",
+  "doc": "",
+  "statement": "CaseLaw2.Force.le_binding : ∀ (a : CaseLaw2.Force), a.rank ≤ CaseLaw2.Force.binding.rank",
+  "axioms": []
+ },
+ {
+  "name": "CaseLaw2.Force.rank_inj",
+  "module": "LegalProofs.CaseLaw2.Basic",
+  "doc": "",
+  "statement": "@CaseLaw2.Force.rank_inj : ∀ {a b : CaseLaw2.Force}, a.rank = b.rank → a = b",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Force.rank_max",
+  "module": "LegalProofs.CaseLaw2.Basic",
+  "doc": "",
+  "statement": "CaseLaw2.Force.rank_max : ∀ (a b : CaseLaw2.Force), (a.max b).rank = max a.rank b.rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Force.rank_min",
+  "module": "LegalProofs.CaseLaw2.Basic",
+  "doc": "",
+  "statement": "CaseLaw2.Force.rank_min : ∀ (a b : CaseLaw2.Force), (a.min b).rank = min a.rank b.rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.acknowledged_never_zombie",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "",
+  "statement": "CaseLaw2.Hunt.acknowledged_never_zombie : ∀ (s : CaseLaw2.Spec.Status) (u : CaseLaw2.Hunt.Use),\n  u.acknowledges = true → CaseLaw2.Hunt.zombie s u = false",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.corrected_implies_first",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "",
+  "statement": "CaseLaw2.Hunt.corrected_implies_first : ∀ (pub : CaseLaw2.Publication) (pr : Bool) (f : CaseLaw2.Force) (b s : Bool),\n  CaseLaw2.Hunt.unpublishedAsBinding' pub pr f b s = true → CaseLaw2.Hunt.unpublishedAsBinding pub f b s = true",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.earlier_conduct_no_error",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "Prospectivity (the reader-side mirror of `Spec.supersession_prospective`): before the date, no error.",
+  "statement": "CaseLaw2.Hunt.earlier_conduct_no_error : ∀ (d u : Nat) (a n : Bool), u < d → CaseLaw2.Hunt.twoDateError d u a n = false",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.enBanc_never",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "",
+  "statement": "CaseLaw2.Hunt.enBanc_never : ∀ (d : CaseLaw2.Hunt.Departure),\n  d.panel = false → CaseLaw2.Hunt.panelOverrulesPanel d = false",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.erase_keeps_consistent",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "Overruling a case never creates an inconsistency (from `Horty.consistent_erase`).",
+  "statement": "CaseLaw2.Hunt.erase_keeps_consistent : ∀ (Γ : List CaseLaw2.Spec.Horty.FCase) (c : CaseLaw2.Spec.Horty.FCase),\n  CaseLaw2.Hunt.inconsistentBase Γ = false → CaseLaw2.Hunt.inconsistentBase (Γ.erase c) = false",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.forumDependent_symm",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "",
+  "statement": "CaseLaw2.Hunt.forumDependent_symm : ∀ (a b : CaseLaw2.Force),\n  CaseLaw2.Hunt.forumDependent a b = CaseLaw2.Hunt.forumDependent b a",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.good_law_never_zombie",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "",
+  "statement": "CaseLaw2.Hunt.good_law_never_zombie : ∀ (u : CaseLaw2.Hunt.Use),\n  CaseLaw2.Hunt.zombie CaseLaw2.Spec.Status.good u = false",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.no_conflict_with_power",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "",
+  "statement": "CaseLaw2.Hunt.no_conflict_with_power : ∀ (c k : CaseLaw2.Force) (a b : CaseLaw2.Answer) (p : Bool),\n  CaseLaw2.Hunt.dualHighCourtConflict c k a b true p = false",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.panelOverrulesPanel_needs",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "",
+  "statement": "CaseLaw2.Hunt.panelOverrulesPanel_needs : ∀ (d : CaseLaw2.Hunt.Departure),\n  CaseLaw2.Hunt.panelOverrulesPanel d = true → d.panel = true ∧ d.strongRule = true ∧ d.exception = none",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.same_notation_same_force",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "",
+  "statement": "CaseLaw2.Hunt.same_notation_same_force : ∀ (n m : CaseLaw2.Hunt.Notation),\n  n = m → CaseLaw2.Hunt.commissionForce n = CaseLaw2.Hunt.commissionForce m",
+  "axioms": []
+ },
+ {
+  "name": "CaseLaw2.Hunt.twoDateError_dates",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "",
+  "statement": "CaseLaw2.Hunt.twoDateError_dates : ∀ (d u : Nat) (a n : Bool), CaseLaw2.Hunt.twoDateError d u a n = true → d ≤ u",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.unpublishedAsBinding_spec",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "The Spec's version with `followed` read from the opinion.",
+  "statement": "CaseLaw2.Hunt.unpublishedAsBinding_spec : ∀ (c : CaseLaw2.Spec.CiteFacts) (f : CaseLaw2.Force)\n  (p : List CaseLaw2.RuleId) (pub : CaseLaw2.Publication),\n  c.pub = some pub →\n    c.force = some (f, p) →\n      c.followed = true →\n        CaseLaw2.Hunt.unpublishedAsBinding pub f true false = true → CaseLaw2.Spec.citesUnpublishedAsBinding c = true",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.winning_side_never",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "",
+  "statement": "CaseLaw2.Hunt.winning_side_never : ∀ (s c : Nat) (a : CaseLaw2.Answer) (r n : Bool),\n  CaseLaw2.Hunt.losingSideAfterResolution s c a a r n = false",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Hunt.zombie_is_spec_finding",
+  "module": "LegalProofs.CaseLaw2.Hunt",
+  "doc": "The Spec's own findings are the candidate set: every zombie is a `citesOverruled`, `citesVacated` or `citesWithdrawn` row. The search reads the opinion to decide the other four limbs.",
+  "statement": "CaseLaw2.Hunt.zombie_is_spec_finding : ∀ (c : CaseLaw2.Spec.CiteFacts) (u : CaseLaw2.Hunt.Use),\n  CaseLaw2.Hunt.zombie c.status u = true →\n    (CaseLaw2.Spec.citesOverruled c || CaseLaw2.Spec.citesVacated c || CaseLaw2.Spec.citesWithdrawn c) = true",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Lookups.succeeds_refl",
+  "module": "LegalProofs.CaseLaw2.Courts",
+  "doc": "",
+  "statement": "CaseLaw2.Lookups.succeeds_refl : ∀ (L : CaseLaw2.Lookups) (f c : Nat), L.succeeds f c c = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.FCase.wf_iff",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Horty.FCase.wf_iff : ∀ (c : CaseLaw2.Spec.Horty.FCase),\n  c.wf = true ↔ ∀ (f : CaseLaw2.Spec.Horty.Factor), f ∈ c.reason → f ∈ c.facts ∧ f.side = c.outcome",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.Side.ne_opp",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Horty.Side.ne_opp : ∀ (s : CaseLaw2.Spec.Horty.Side), s ≠ s.opp",
+  "axioms": []
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.Side.opp_ne",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Horty.Side.opp_ne : ∀ (s : CaseLaw2.Spec.Horty.Side), s.opp ≠ s",
+  "axioms": []
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.answerCase_conflict",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Horty.answerCase_conflict : ∀ (a b : Bool),\n  CaseLaw2.Spec.Horty.conflict (CaseLaw2.Spec.Horty.answerCase a) (CaseLaw2.Spec.Horty.answerCase b) = !a == b",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.answers_consistent_iff",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "Yes/no holdings are the degenerate fact-free case: a split question's binding base is consistent iff all answers agree.",
+  "statement": "CaseLaw2.Spec.Horty.answers_consistent_iff : ∀ (as : List Bool),\n  CaseLaw2.Spec.Horty.consistent (List.map CaseLaw2.Spec.Horty.answerCase as) = true ↔\n    ∀ (a : Bool), a ∈ as → ∀ (b : Bool), b ∈ as → a = b",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.consistent_erase",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "Overruling one case preserves consistency.",
+  "statement": "@CaseLaw2.Spec.Horty.consistent_erase : ∀ {Γ : List CaseLaw2.Spec.Horty.FCase} (c : CaseLaw2.Spec.Horty.FCase),\n  CaseLaw2.Spec.Horty.consistent Γ = true → CaseLaw2.Spec.Horty.consistent (Γ.erase c) = true",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.consistent_filter",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "Overruling every case matching a predicate preserves consistency.",
+  "statement": "@CaseLaw2.Spec.Horty.consistent_filter : ∀ {Γ : List CaseLaw2.Spec.Horty.FCase} (p : CaseLaw2.Spec.Horty.FCase → Bool),\n  CaseLaw2.Spec.Horty.consistent Γ = true → CaseLaw2.Spec.Horty.consistent (List.filter p Γ) = true",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.consistent_iff",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Horty.consistent_iff : ∀ (Γ : List CaseLaw2.Spec.Horty.FCase),\n  CaseLaw2.Spec.Horty.consistent Γ = true ↔\n    ∀ (c1 : CaseLaw2.Spec.Horty.FCase),\n      c1 ∈ Γ → ∀ (c2 : CaseLaw2.Spec.Horty.FCase), c2 ∈ Γ → CaseLaw2.Spec.Horty.conflict c1 c2 = false",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.consistent_of_same_outcome",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "A base whose cases all share one outcome is consistent.",
+  "statement": "@CaseLaw2.Spec.Horty.consistent_of_same_outcome : ∀ {Γ : List CaseLaw2.Spec.Horty.FCase} {s : CaseLaw2.Spec.Horty.Side},\n  (∀ (c : CaseLaw2.Spec.Horty.FCase), c ∈ Γ → c.outcome = s) → CaseLaw2.Spec.Horty.consistent Γ = true",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.consistent_sublist",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "Overruling = removing holdings preserves consistency.",
+  "statement": "@CaseLaw2.Spec.Horty.consistent_sublist : ∀ {Γ Γ' : List CaseLaw2.Spec.Horty.FCase},\n  (∀ (x : CaseLaw2.Spec.Horty.FCase), x ∈ Γ' → x ∈ Γ) →\n    CaseLaw2.Spec.Horty.consistent Γ = true → CaseLaw2.Spec.Horty.consistent Γ' = true",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.forcedBy_iff",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Horty.forcedBy_iff : ∀ (c : CaseLaw2.Spec.Horty.FCase) (X : List CaseLaw2.Spec.Horty.Factor),\n  CaseLaw2.Spec.Horty.forcedBy c X = true ↔\n    (∀ (f : CaseLaw2.Spec.Horty.Factor), f ∈ c.reason → f ∈ X) ∧\n      ∀ (f : CaseLaw2.Spec.Horty.Factor), f ∈ X → f.side = c.outcome.opp → f ∈ c.facts",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.forced_blocks_opposite",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "If a precedent forces its outcome on `X`, every decision for the other side on `X` (with any reason made of present, other-side factors) is inconsistent with the case base.",
+  "statement": "@CaseLaw2.Spec.Horty.forced_blocks_opposite : ∀ {Γ : List CaseLaw2.Spec.Horty.FCase} {c : CaseLaw2.Spec.Horty.FCase}\n  {X : List CaseLaw2.Spec.Horty.Factor},\n  c ∈ Γ →\n    CaseLaw2.Spec.Horty.forcedBy c X = true →\n      ∀ (r : List CaseLaw2.Spec.Horty.Factor),\n        CaseLaw2.Spec.Horty.sub r X = true →\n          (∀ (f : CaseLaw2.Spec.Horty.Factor), f ∈ r → f.side = c.outcome.opp) →\n            CaseLaw2.Spec.Horty.consistent ({ facts := X, reason := r, outcome := c.outcome.opp } :: Γ) = false",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.permitted_of_consistent_same_outcome",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "If every case in a consistent base has outcome `s`, any well-formed case with outcome `s` is permitted. (The consistency and well-formedness hypotheses are not needed for the conclusion.)",
+  "statement": "@CaseLaw2.Spec.Horty.permitted_of_consistent_same_outcome : ∀ {Γ : List CaseLaw2.Spec.Horty.FCase}\n  {s : CaseLaw2.Spec.Horty.Side} {c : CaseLaw2.Spec.Horty.FCase},\n  CaseLaw2.Spec.Horty.consistent Γ = true →\n    (∀ (d : CaseLaw2.Spec.Horty.FCase), d ∈ Γ → d.outcome = s) →\n      c.wf = true → c.outcome = s → CaseLaw2.Spec.Horty.permitted Γ c = true",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.result_not_stricter",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "The result model never forces where the reason model does not.",
+  "statement": "@CaseLaw2.Spec.Horty.result_not_stricter : ∀ {c : CaseLaw2.Spec.Horty.FCase} {X : List CaseLaw2.Spec.Horty.Factor},\n  c.wf = true →\n    CaseLaw2.Spec.Horty.forcedBy (CaseLaw2.Spec.Horty.resultCase c) X = true → CaseLaw2.Spec.Horty.forcedBy c X = true",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Horty.sub_iff",
+  "module": "LegalProofs.CaseLaw2.Spec.Horty",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Horty.sub_iff : ∀ (a b : List CaseLaw2.Spec.Horty.Factor),\n  CaseLaw2.Spec.Horty.sub a b = true ↔ ∀ (x : CaseLaw2.Spec.Horty.Factor), x ∈ a → x ∈ b",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.good_join",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Status.good_join : ∀ (a : CaseLaw2.Spec.Status), CaseLaw2.Spec.Status.good.join a = a",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.isNeg_iff",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Status.isNeg_iff : ∀ (a : CaseLaw2.Spec.Status), 10 ≤ a.rank ↔ ∃ n, a = CaseLaw2.Spec.Status.neg n",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.join_assoc",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Status.join_assoc : ∀ (a b c : CaseLaw2.Spec.Status), (a.join b).join c = a.join (b.join c)",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.join_comm",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Status.join_comm : ∀ (a b : CaseLaw2.Spec.Status), a.join b = b.join a",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.join_good",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Status.join_good : ∀ (a : CaseLaw2.Spec.Status), a.join CaseLaw2.Spec.Status.good = a",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.rank_inj",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "@CaseLaw2.Spec.Status.rank_inj : ∀ {a b : CaseLaw2.Spec.Status}, a.rank = b.rank → a = b",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.rank_join",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Status.rank_join : ∀ (a b : CaseLaw2.Spec.Status), (a.join b).rank = max a.rank b.rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.rank_zero_iff",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Status.rank_zero_iff : ∀ (a : CaseLaw2.Spec.Status), a.rank = 0 ↔ a = CaseLaw2.Spec.Status.good",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.adopted_status_per_heir",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "**Status after an adoption cut-off is per heir** (hunt H4; *Bonner*): an overruling that does not reach an adopter leaves the status unchanged for every court in that adopter's line (and in no reached adopter's line). The Fifth Circuit's 1983 en banc overruling of a pre-split decision does not change it in the Eleventh.",
+  "statement": "CaseLaw2.Spec.adopted_status_per_heir : ∀ (inLine : Nat → Bool) (e : CaseLaw2.Spec.Effect)\n  (l : List CaseLaw2.Spec.Effect) (k t u : Nat) (orig : Bool) (reached unreached : List Nat) (a : Nat),\n  e.reach = CaseLaw2.Spec.Reach.lines orig reached unreached →\n    reached.any inLine = false →\n      a ∈ unreached →\n        inLine a = true → CaseLaw2.Spec.statusFor inLine (e :: l) k t u = CaseLaw2.Spec.statusFor inLine l k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.any_congr_mem",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "",
+  "statement": "@CaseLaw2.Spec.any_congr_mem : ∀ {α : Type} (l : List α) (p q : α → Bool),\n  (∀ (x : α), x ∈ l → p x = q x) → l.any p = l.any q",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.appliesSuperseded_needs_conduct",
+  "module": "LegalProofs.CaseLaw2.Spec.Findings",
+  "doc": "Hunt H2: a superseded-holding finding needs a known conduct date that the supersession reaches, and a holding-level match; the citing date alone never gives it.",
+  "statement": "CaseLaw2.Spec.appliesSuperseded_needs_conduct : ∀ (c : CaseLaw2.Spec.CiteFacts),\n  CaseLaw2.Spec.appliesSupersededHolding c = true →\n    c.statusAtConduct = some (CaseLaw2.Spec.Status.neg CaseLaw2.Spec.Neg.superseded) ∧ c.holdingMatch = true",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.before_start_no_effect",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "Nor does any effect reach a question date before it starts.",
+  "statement": "CaseLaw2.Spec.before_start_no_effect : ∀ (e : CaseLaw2.Spec.Effect) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  t < e.start → CaseLaw2.Spec.status (e :: l) k t u = CaseLaw2.Spec.status l k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.claimRisk_needs_no_power",
+  "module": "LegalProofs.CaseLaw2.Spec.Findings",
+  "doc": "A claim is only reported when the treating court is shown to lack power (T2).",
+  "statement": "CaseLaw2.Spec.claimRisk_needs_no_power : ∀ (r : CaseLaw2.Spec.TreatRisk),\n  CaseLaw2.Spec.claimRisk r = true → r.power = some false ∧ r.kind.changesStatus = true",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.conductUnknown_not_finding",
+  "module": "LegalProofs.CaseLaw2.Spec.Findings",
+  "doc": "With an unknown conduct date the finding is never made; the low-confidence family is disjoint from it.",
+  "statement": "CaseLaw2.Spec.conductUnknown_not_finding : ∀ (c : CaseLaw2.Spec.CiteFacts),\n  c.statusAtConduct = none → CaseLaw2.Spec.appliesSupersededHolding c = false",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.conflict_in_line_ignores_unreaching",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "The resolver's answer at a court (the conflict test) is unchanged by an overruling that does not reach its line (a decision the Fifth Circuit alone overruled still counts for an Eleventh Circuit conflict).",
+  "statement": "CaseLaw2.Spec.conflict_in_line_ignores_unreaching : ∀ (inLine : Nat → Bool) (t : Nat) (f : Bool)\n  (s : Option CaseLaw2.TrialScope) (pre post : List (CaseLaw2.Spec.Held CaseLaw2.Spec.Cand))\n  (h : CaseLaw2.Spec.Held CaseLaw2.Spec.Cand) (e : CaseLaw2.Spec.Effect),\n  CaseLaw2.Spec.Effect.reaches inLine e = false →\n    CaseLaw2.Spec.resolve f s\n        (CaseLaw2.Spec.heldIn inLine t\n          (pre ++ { item := h.item, issue := h.issue, effs := e :: h.effs, binds := h.binds } :: post)) =\n      CaseLaw2.Spec.resolve f s (CaseLaw2.Spec.heldIn inLine t (pre ++ h :: post))",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.contraryBinding_needs_binding",
+  "module": "LegalProofs.CaseLaw2.Spec.Findings",
+  "doc": "A contrary-binding risk needs a later holding that binds the holder's court and is good law.",
+  "statement": "CaseLaw2.Spec.contraryBinding_needs_binding : ∀ (f : CaseLaw2.Spec.ContraryFacts),\n  CaseLaw2.Spec.contraryBinding f = true → f.binds = true ∧ f.later = true ∧ f.contraryGood = true",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.division_cannot_overrule",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "Hunt H6, *M.A.P. v. Ryan*: where a court of last resort has a strong court-level horizontal row, a division (a panel) of it has no power over the court's own decision; only an en banc–equivalent bench has.",
+  "statement": "CaseLaw2.Spec.division_cannot_overrule : ∀ (L : CaseLaw2.Lookups) (X B : CaseLaw2.CourtEpoch) (b x : CaseLaw2.Decision),\n  B.court = X.court →\n    L.rules.horizontalCourt X.court x.date = some CaseLaw2.HRule.strong →\n      b.bench = some CaseLaw2.Bench.panel ∨ b.bench = some CaseLaw2.Bench.division →\n        CaseLaw2.Spec.lastResortBench L X B b x = (false, CaseLaw2.RuleId.strongNeedsEnBanc)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.effectsFor_known",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "A court whose line is known reads a decision through `inLine`.",
+  "statement": "CaseLaw2.Spec.effectsFor_known : ∀ (L : CaseLaw2.Lookups) (c : CaseLaw2.Decision) (effs : List CaseLaw2.Spec.Effect),\n  c.date ≠ 0 →\n    (L.epochAt c.court c.date).isSome = true →\n      CaseLaw2.Spec.effectsFor L c effs = CaseLaw2.Spec.heirEffects (CaseLaw2.Spec.inLine L c) effs",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.erie_one_directional",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "§9 22(c), *Erie* one-directional: absent an adoption row, (i) no state-court decision binds a federal court on federal law, and (ii) no federal decision binds a state court on state law.",
+  "statement": "CaseLaw2.Spec.erie_one_directional : ∀ (L : CaseLaw2.Lookups) (x : CaseLaw2.Decision) (h : CaseLaw2.Holding) (p : Bool)\n  (q : CaseLaw2.Spec.Query) (S : CaseLaw2.CourtEpoch),\n  CaseLaw2.Spec.sourceEpoch L x p = some S →\n    CaseLaw2.Spec.adoptionsOf L x = [] →\n      ∀ (r : CaseLaw2.Force × List CaseLaw2.RuleId),\n        CaseLaw2.Spec.force L x h p q = some r →\n          (S.system ≠ 0 →\n              (∃ d, h.domain = some d ∧ d.federal = true) → q.dst.system = 0 → r.fst ≠ CaseLaw2.Force.binding) ∧\n            (S.system = 0 →\n              (∃ s, h.domain = some (CaseLaw2.Domain.stateLaw s)) → q.dst.system ≠ 0 → r.fst ≠ CaseLaw2.Force.binding)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.filter_congr_mem",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "",
+  "statement": "@CaseLaw2.Spec.filter_congr_mem : ∀ {α : Type} (l : List α) (p q : α → Bool),\n  (∀ (x : α), x ∈ l → p x = q x) → List.filter p l = List.filter q l",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.foldl_join",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.foldl_join : ∀ (l : List CaseLaw2.Spec.Effect) (k t u : Nat) (s : CaseLaw2.Spec.Status),\n  List.foldl (fun s e => s.join (e.contrib k t u)) s l = s.join (CaseLaw2.Spec.status l k t u)",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.foldl_max_ge",
+  "module": "LegalProofs.CaseLaw2.Spec.Splits",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.foldl_max_ge : ∀ (cs : List CaseLaw2.Spec.Cand) (m : Nat) (c : CaseLaw2.Spec.Cand),\n  c ∈ cs → c.prec ≤ List.foldl (fun m c => max m c.prec) m cs",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.foldl_max_ge_init",
+  "module": "LegalProofs.CaseLaw2.Spec.Splits",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.foldl_max_ge_init : ∀ (cs : List CaseLaw2.Spec.Cand) (m : Nat),\n  m ≤ List.foldl (fun m c => max m c.prec) m cs",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.foldl_max_le",
+  "module": "LegalProofs.CaseLaw2.Spec.Splits",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.foldl_max_le : ∀ (cs : List CaseLaw2.Spec.Cand) (n m : Nat),\n  m ≤ n → (∀ (c : CaseLaw2.Spec.Cand), c ∈ cs → c.prec ≤ n) → List.foldl (fun m c => max m c.prec) m cs ≤ n",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.foldl_max_rank_le",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "",
+  "statement": "@CaseLaw2.Spec.foldl_max_rank_le : ∀ {α : Type u_1} (g : α → CaseLaw2.Force) (n : Nat) (l : List α)\n  (init : CaseLaw2.Force),\n  init.rank ≤ n → (∀ (a : α), a ∈ l → (g a).rank ≤ n) → (List.foldl (fun f a => f.max (g a)) init l).rank ≤ n",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.forceDiv_eq_force",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "Hunt H6: the division rule only ever concerns a court of last resort. For every other bound court, the force on the court as it ordinarily sits is the Spec's `force`.",
+  "statement": "CaseLaw2.Spec.forceDiv_eq_force : ∀ (L : CaseLaw2.Lookups) (x : CaseLaw2.Decision) (h : CaseLaw2.Holding) (p : Bool)\n  (q : CaseLaw2.Spec.Query),\n  q.dst.tier ≠ CaseLaw2.Tier.last → CaseLaw2.Spec.forceDiv L x h p q = CaseLaw2.Spec.force L x h p q",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.force_le_relation_noAdopt",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "With no adoption, the force is at most the relation.",
+  "statement": "CaseLaw2.Spec.force_le_relation_noAdopt : ∀ (L : CaseLaw2.Lookups) (x : CaseLaw2.Decision) (h : CaseLaw2.Holding)\n  (p : Bool) (q : CaseLaw2.Spec.Query) (S : CaseLaw2.CourtEpoch),\n  CaseLaw2.Spec.sourceEpoch L x p = some S →\n    CaseLaw2.Spec.adoptionsOf L x = [] →\n      ∀ (r : CaseLaw2.Force × List CaseLaw2.RuleId),\n        CaseLaw2.Spec.force L x h p q = some r →\n          r.fst.rank ≤ (CaseLaw2.Spec.relation L S x (h.domain.getD S.home) q).fst.rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.force_rank_le",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "If the relation is bounded on every court, the force is bounded (adoption and caps cannot lift it).",
+  "statement": "CaseLaw2.Spec.force_rank_le : ∀ (L : CaseLaw2.Lookups) (x : CaseLaw2.Decision) (h : CaseLaw2.Holding) (p : Bool)\n  (q : CaseLaw2.Spec.Query) (n : Nat),\n  (∀ (S : CaseLaw2.CourtEpoch),\n      (CaseLaw2.Spec.relation L S x\n              (h.domain.getD\n                ((Option.map CaseLaw2.CourtEpoch.home (CaseLaw2.Spec.sourceEpoch L x p)).getD\n                  CaseLaw2.Domain.federalGeneral))\n              q).fst.rank ≤\n        n) →\n    ∀ (r : CaseLaw2.Force × List CaseLaw2.RuleId), CaseLaw2.Spec.force L x h p q = some r → r.fst.rank ≤ n",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.goodIn_all",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "With no line-limited effect, good law in a line is good law.",
+  "statement": "CaseLaw2.Spec.goodIn_all : ∀ (inLine : Nat → Bool) (l : List CaseLaw2.Spec.Effect) (k t : Nat),\n  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → e.reach = CaseLaw2.Spec.Reach.all) →\n    CaseLaw2.Spec.goodIn inLine l k t = CaseLaw2.Spec.goodLaw l k t t",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.goodIn_ignores_unreaching",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "An overruling that does not reach a line leaves good law in that line as it was.",
+  "statement": "CaseLaw2.Spec.goodIn_ignores_unreaching : ∀ (inLine : Nat → Bool) (e : CaseLaw2.Spec.Effect)\n  (l : List CaseLaw2.Spec.Effect) (k t : Nat),\n  CaseLaw2.Spec.Effect.reaches inLine e = false →\n    CaseLaw2.Spec.goodIn inLine (e :: l) k t = CaseLaw2.Spec.goodIn inLine l k t",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.goodLaw_antitone",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.goodLaw_antitone : ∀ (l : List CaseLaw2.Spec.Effect) (k u t t' : Nat),\n  t ≤ t' →\n    (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → e.lapse = none) →\n      CaseLaw2.Spec.goodLaw l k t' u = true → CaseLaw2.Spec.goodLaw l k t u = true",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.good_cites_clean",
+  "module": "LegalProofs.CaseLaw2.Spec.Findings",
+  "doc": "A cited holding that is good law is never reported as overruled, vacated or withdrawn.",
+  "statement": "CaseLaw2.Spec.good_cites_clean : ∀ (c : CaseLaw2.Spec.CiteFacts),\n  c.status = CaseLaw2.Spec.Status.good →\n    CaseLaw2.Spec.citesOverruled c = false ∧\n      CaseLaw2.Spec.citesVacated c = false ∧ CaseLaw2.Spec.citesWithdrawn c = false",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.good_in_every_line",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "Good law in the union is good law in every line.",
+  "statement": "CaseLaw2.Spec.good_in_every_line : ∀ (inLine : Nat → Bool) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  CaseLaw2.Spec.status l k t u = CaseLaw2.Spec.Status.good →\n    CaseLaw2.Spec.statusFor inLine l k t u = CaseLaw2.Spec.Status.good",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.heir_overruling_stays_in_line",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "An heir's own overruling stays in its line: it does not reach a court outside the lines it reaches (the Eleventh Circuit's en banc overruling of an old Fifth Circuit decision does not change it in the Fifth).",
+  "statement": "CaseLaw2.Spec.heir_overruling_stays_in_line : ∀ (inLine : Nat → Bool) (e : CaseLaw2.Spec.Effect)\n  (l : List CaseLaw2.Spec.Effect) (k t u : Nat) (reached unreached : List Nat),\n  e.reach = CaseLaw2.Spec.Reach.lines false reached unreached →\n    reached.any inLine = false → CaseLaw2.Spec.statusFor inLine (e :: l) k t u = CaseLaw2.Spec.statusFor inLine l k t u",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.heldIn_all",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "**With no line-limited effect the line test is the old (union) test**: nothing changes for decisions without heirs.",
+  "statement": "@CaseLaw2.Spec.heldIn_all : ∀ {α : Type} (inLine : Nat → Bool) (t : Nat) (hs : List (CaseLaw2.Spec.Held α)),\n  (∀ (h : CaseLaw2.Spec.Held α),\n      h ∈ hs → ∀ (e : CaseLaw2.Spec.Effect), e ∈ h.effs → e.reach = CaseLaw2.Spec.Reach.all) →\n    CaseLaw2.Spec.heldIn inLine t hs = CaseLaw2.Spec.heldUnion t hs",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.heldIn_ignores_unreaching",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "**A split or conflict judged in a line ignores overrulings that do not reach that line**: adding such an overruling to any holding's decision leaves the holdings that count there unchanged.",
+  "statement": "@CaseLaw2.Spec.heldIn_ignores_unreaching : ∀ {α : Type} (inLine : Nat → Bool) (t : Nat)\n  (pre post : List (CaseLaw2.Spec.Held α)) (h : CaseLaw2.Spec.Held α) (e : CaseLaw2.Spec.Effect),\n  CaseLaw2.Spec.Effect.reaches inLine e = false →\n    CaseLaw2.Spec.heldIn inLine t\n        (pre ++ { item := h.item, issue := h.issue, effs := e :: h.effs, binds := h.binds } :: post) =\n      CaseLaw2.Spec.heldIn inLine t (pre ++ h :: post)",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.heldUnion_sub_heldIn",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "What counts in the union counts in every line.",
+  "statement": "@CaseLaw2.Spec.heldUnion_sub_heldIn : ∀ {α : Type} (inLine : Nat → Bool) (t : Nat) (hs : List (CaseLaw2.Spec.Held α))\n  (x : α), x ∈ CaseLaw2.Spec.heldUnion t hs → x ∈ CaseLaw2.Spec.heldIn inLine t hs",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.inferred_treatment_no_effect",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "Inferred treatments never change status (§9 item 26).",
+  "statement": "CaseLaw2.Spec.inferred_treatment_no_effect : ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),\n  tr.explicit = false → CaseLaw2.Spec.treatEffect byHist tr = none",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.lineBase_all",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "With no line-limited effect a line's base is the old (union) base.",
+  "statement": "CaseLaw2.Spec.lineBase_all : ∀ (inLine : Nat → Bool) (t : Nat)\n  (hs : List (CaseLaw2.Spec.Held CaseLaw2.Spec.Horty.FCase)),\n  (∀ (h : CaseLaw2.Spec.Held CaseLaw2.Spec.Horty.FCase),\n      h ∈ hs → ∀ (e : CaseLaw2.Spec.Effect), e ∈ h.effs → e.reach = CaseLaw2.Spec.Reach.all) →\n    CaseLaw2.Spec.lineBase inLine t hs = CaseLaw2.Spec.heldUnion t hs",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.lineBase_consistent_union",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "A consistent base in some line makes the union base consistent: an inconsistency among precedents that are good law everywhere is an inconsistency in every line.",
+  "statement": "CaseLaw2.Spec.lineBase_consistent_union : ∀ (inLine : Nat → Bool) (t : Nat)\n  (hs : List (CaseLaw2.Spec.Held CaseLaw2.Spec.Horty.FCase)),\n  CaseLaw2.Spec.Horty.consistent (CaseLaw2.Spec.lineBase inLine t hs) = true →\n    CaseLaw2.Spec.Horty.consistent (CaseLaw2.Spec.heldUnion t hs) = true",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.lineStatus_all",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "With no line-limited effect every line's row is the union status.",
+  "statement": "CaseLaw2.Spec.lineStatus_all : ∀ (ln : CaseLaw2.Spec.Line) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → e.reach = CaseLaw2.Spec.Reach.all) →\n    CaseLaw2.Spec.lineStatus ln l k t u = CaseLaw2.Spec.status l k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.lineStatus_heir_agrees",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "**Per-heir status rows agree with `statusFor`**: a court that is in adopter `a`'s line and in no other line the effects name reads the status of row `heir a` (the Eleventh Circuit and its district courts read the Eleventh's row).",
+  "statement": "CaseLaw2.Spec.lineStatus_heir_agrees : ∀ (inLine : Nat → Bool) (a : Nat) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → ∀ (b : Nat), b ∈ e.adopters → inLine b = (b == a)) →\n    CaseLaw2.Spec.statusFor inLine l k t u = CaseLaw2.Spec.lineStatus (CaseLaw2.Spec.Line.heir a) l k t u",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.lineStatus_orig_agrees",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "A court in no heir's line reads the original line's row.",
+  "statement": "CaseLaw2.Spec.lineStatus_orig_agrees : ∀ (inLine : Nat → Bool) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → ∀ (b : Nat), b ∈ e.adopters → inLine b = false) →\n    CaseLaw2.Spec.statusFor inLine l k t u = CaseLaw2.Spec.lineStatus CaseLaw2.Spec.Line.orig l k t u",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.linesOf_all",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "With no line-limited effect a decision has no per-line rows (its `status.tsv` rows are all there is).",
+  "statement": "CaseLaw2.Spec.linesOf_all : ∀ (l : List CaseLaw2.Spec.Effect),\n  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → e.reach = CaseLaw2.Spec.Reach.all) → CaseLaw2.Spec.linesOf l = []",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.mem_heldIn_iff",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "",
+  "statement": "@CaseLaw2.Spec.mem_heldIn_iff : ∀ {α : Type} (inLine : Nat → Bool) (t : Nat) (hs : List (CaseLaw2.Spec.Held α)) (x : α),\n  x ∈ CaseLaw2.Spec.heldIn inLine t hs ↔\n    ∃ h,\n      h ∈ hs ∧\n        h.item = x ∧ h.binds = true ∧ CaseLaw2.Spec.statusFor inLine h.effs h.issue t t = CaseLaw2.Spec.Status.good",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.mem_lineBase_iff",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "**A Horty base in a line contains exactly the precedents good in that line** (and binding there).",
+  "statement": "CaseLaw2.Spec.mem_lineBase_iff : ∀ (inLine : Nat → Bool) (t : Nat)\n  (hs : List (CaseLaw2.Spec.Held CaseLaw2.Spec.Horty.FCase)) (c : CaseLaw2.Spec.Horty.FCase),\n  c ∈ CaseLaw2.Spec.lineBase inLine t hs ↔\n    ∃ h,\n      h ∈ hs ∧\n        h.item = c ∧ h.binds = true ∧ CaseLaw2.Spec.statusFor inLine h.effs h.issue t t = CaseLaw2.Spec.Status.good",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.minDate_attained",
+  "module": "LegalProofs.CaseLaw2.Spec.Splits",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.minDate_attained : ∀ (rest : List CaseLaw2.Spec.Cand) (c : CaseLaw2.Spec.Cand),\n  ∃ d, d ∈ c :: rest ∧ d.date = CaseLaw2.Spec.minDate (c :: rest)",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.neg_stays_neg",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "Without lapse, once negative, always negative; and good law on a later date was good law earlier.",
+  "statement": "CaseLaw2.Spec.neg_stays_neg : ∀ (l : List CaseLaw2.Spec.Effect) (k u t t' : Nat),\n  t ≤ t' →\n    (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → e.lapse = none) →\n      ∀ (n : CaseLaw2.Spec.Neg),\n        CaseLaw2.Spec.status l k t u = CaseLaw2.Spec.Status.neg n →\n          ∃ n', CaseLaw2.Spec.status l k t' u = CaseLaw2.Spec.Status.neg n'",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.no_cross_system",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "No cross-system power, absent adoption, except SCOTUS on federal law.",
+  "statement": "CaseLaw2.Spec.no_cross_system : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision) (dom : Option CaseLaw2.Domain)\n  (B X : CaseLaw2.CourtEpoch),\n  L.epochAt b.court b.date = some B →\n    L.epochAt x.court x.date = some X →\n      B.system ≠ X.system →\n        B.scotus = false →\n          B.court ≠ X.court →\n            ((CaseLaw2.Spec.adoptionsOf L x).any fun x => x.adopter == b.court) = false →\n              Option.map (fun x => x.fst) (CaseLaw2.Spec.canChangeStatus L b x dom) = some false",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.no_overrule_of_binding_superior",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "v1 `no_overrule_of_binding_superior`, lifted: absent adoption, a lower court of the same system never has power over a higher court's decision.",
+  "statement": "CaseLaw2.Spec.no_overrule_of_binding_superior : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision)\n  (dom : Option CaseLaw2.Domain) (B X : CaseLaw2.CourtEpoch),\n  L.epochAt b.court b.date = some B →\n    L.epochAt x.court x.date = some X →\n      B.tier.rank < X.tier.rank →\n        B.court ≠ X.court →\n          ((CaseLaw2.Spec.adoptionsOf L x).any fun x => x.adopter == b.court) = false →\n            Option.map (fun x => x.fst) (CaseLaw2.Spec.canChangeStatus L b x dom) = some false",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.no_panel_overrules_panel_in_strong",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "§9 item 23, F7: in a court with a strong horizontal rule, a panel cannot overrule a panel of the same court.",
+  "statement": "CaseLaw2.Spec.no_panel_overrules_panel_in_strong : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision)\n  (dom : Option CaseLaw2.Domain) (B X : CaseLaw2.CourtEpoch),\n  L.epochAt b.court b.date = some B →\n    L.epochAt x.court x.date = some X →\n      B.court = X.court →\n        B.tier = CaseLaw2.Tier.appellate →\n          X.tier = CaseLaw2.Tier.appellate →\n            L.rules.horizontal X.court X.system x.date = some CaseLaw2.HRule.strong →\n              b.bench = some CaseLaw2.Bench.panel →\n                Option.map (fun x => x.fst) (CaseLaw2.Spec.canChangeStatus L b x dom) = some false",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.no_power_over_later",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "A decision never has power over a later one.",
+  "statement": "CaseLaw2.Spec.no_power_over_later : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision) (dom : Option CaseLaw2.Domain)\n  (B X : CaseLaw2.CourtEpoch),\n  L.epochAt b.court b.date = some B →\n    L.epochAt x.court x.date = some X →\n      b.date < x.date → CaseLaw2.Spec.canChangeStatus L b x dom = some (false, CaseLaw2.RuleId.cLater)",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.nothing_binds_last_resort",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "§9 22(b): on its own system's law, no decision of any court binds that system's court of last resort; whatever the parameter tables, adoptions and successions say. (SCOTUS binds only on federal questions; see (a).)",
+  "statement": "CaseLaw2.Spec.nothing_binds_last_resort : ∀ (L : CaseLaw2.Lookups) (x : CaseLaw2.Decision) (h : CaseLaw2.Holding)\n  (p : Bool) (q : CaseLaw2.Spec.Query),\n  q.dst.tier = CaseLaw2.Tier.last →\n    q.dst.system ≠ 0 →\n      h.domain = some (CaseLaw2.Domain.stateLaw q.dst.system) →\n        ∀ (r : CaseLaw2.Force × List CaseLaw2.RuleId),\n          CaseLaw2.Spec.force L x h p q = some r → r.fst ≠ CaseLaw2.Force.binding",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.only_scotus_changes_scotus",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "Only SCOTUS (or the same court) changes the status of a SCOTUS decision, absent adoption.",
+  "statement": "CaseLaw2.Spec.only_scotus_changes_scotus : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision)\n  (dom : Option CaseLaw2.Domain) (B X : CaseLaw2.CourtEpoch),\n  L.epochAt b.court b.date = some B →\n    L.epochAt x.court x.date = some X →\n      X.scotus = true →\n        ((CaseLaw2.Spec.adoptionsOf L x).any fun x => x.adopter == b.court) = false →\n          Option.map (fun x => x.fst) (CaseLaw2.Spec.canChangeStatus L b x dom) = some true →\n            B.scotus = true ∨ B.court = X.court",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.panelDeparts_needs_enBanc",
+  "module": "LegalProofs.CaseLaw2.Spec.Findings",
+  "doc": "A panel departure is only reported when the power check failed for want of an en banc bench.",
+  "statement": "CaseLaw2.Spec.panelDeparts_needs_enBanc : ∀ (f : CaseLaw2.Spec.TreatFacts),\n  CaseLaw2.Spec.panelDepartsWithoutEnBanc f = true →\n    ∃ r,\n      f.power = some (false, r) ∧\n        (r = CaseLaw2.RuleId.strongNeedsEnBanc ∨\n          r = CaseLaw2.RuleId.withinUnitEnBanc ∨ r = CaseLaw2.RuleId.adoptedEnBanc)",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.panelDeparts_needs_panel_and_rule",
+  "module": "LegalProofs.CaseLaw2.Spec.Findings",
+  "doc": "Hunt H3b: a panel departure is reported only for a known panel under a rule the court had when it departed.",
+  "statement": "CaseLaw2.Spec.panelDeparts_needs_panel_and_rule : ∀ (f : CaseLaw2.Spec.TreatFacts),\n  CaseLaw2.Spec.panelDepartsWithoutEnBanc f = true → f.panel = true ∧ f.ruleAtDeparture = true",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.partial_overruling_preserves",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "**Partial overruling preserves the other holdings**: an admitted treatment on issues `ks` leaves the status of every other named issue unchanged.",
+  "statement": "CaseLaw2.Spec.partial_overruling_preserves : ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)\n  (e : CaseLaw2.Spec.Effect),\n  CaseLaw2.Spec.treatEffect byHist tr = some e →\n    ∀ (ks : List Nat),\n      tr.scope = CaseLaw2.Scope.issues ks →\n        ∀ (l : List CaseLaw2.Spec.Effect) (k : Nat),\n          ¬k ∈ ks →\n            k ≠ CaseLaw2.anonIssue → ∀ (t u : Nat), CaseLaw2.Spec.status (e :: l) k t u = CaseLaw2.Spec.status l k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.partial_touches_only",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "**Partial events touch only their holdings**: an event on issues `ks` leaves every other named issue as it was.",
+  "statement": "CaseLaw2.Spec.partial_touches_only : ∀ (e : CaseLaw2.Spec.Effect) (l : List CaseLaw2.Spec.Effect) (k t u : Nat)\n  (ks : List Nat),\n  e.scope = CaseLaw2.Scope.issues ks →\n    ¬k ∈ ks → k ≠ CaseLaw2.anonIssue → CaseLaw2.Spec.status (e :: l) k t u = CaseLaw2.Spec.status l k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.prospective_no_effect",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "**Prospectivity**: an effect for conduct from `e.conductFrom` (a supersession's effective or retroactive date, or a prospective overruling) does not reach earlier conduct.",
+  "statement": "CaseLaw2.Spec.prospective_no_effect : ∀ (e : CaseLaw2.Spec.Effect) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  u < e.conductFrom → CaseLaw2.Spec.status (e :: l) k t u = CaseLaw2.Spec.status l k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.reaches_congr",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "Two views that agree on the adopters an effect names are reached by it alike.",
+  "statement": "CaseLaw2.Spec.reaches_congr : ∀ (p q : Nat → Bool) (e : CaseLaw2.Spec.Effect),\n  (∀ (b : Nat), b ∈ e.adopters → p b = q b) → CaseLaw2.Spec.Effect.reaches p e = CaseLaw2.Spec.Effect.reaches q e",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.relation_fed_on_state",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.relation_fed_on_state : ∀ (L : CaseLaw2.Lookups) (S : CaseLaw2.CourtEpoch) (x : CaseLaw2.Decision)\n  (s : Nat) (q : CaseLaw2.Spec.Query),\n  S.system = 0 →\n    q.dst.system ≠ 0 → (CaseLaw2.Spec.relation L S x (CaseLaw2.Domain.stateLaw s) q).fst = CaseLaw2.Force.persuasive",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.relation_lastResort_own_law",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.relation_lastResort_own_law : ∀ (L : CaseLaw2.Lookups) (S : CaseLaw2.CourtEpoch) (x : CaseLaw2.Decision)\n  (q : CaseLaw2.Spec.Query),\n  q.dst.tier = CaseLaw2.Tier.last →\n    q.dst.system ≠ 0 →\n      (CaseLaw2.Spec.relation L S x (CaseLaw2.Domain.stateLaw q.dst.system) q).fst.rank ≤\n        CaseLaw2.Force.persuasiveStrong.rank",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.relation_scotus_federal",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.relation_scotus_federal : ∀ (L : CaseLaw2.Lookups) (S : CaseLaw2.CourtEpoch) (x : CaseLaw2.Decision)\n  (dom : CaseLaw2.Domain) (q : CaseLaw2.Spec.Query),\n  S.scotus = true →\n    dom.federal = true →\n      q.dst.tier ≠ CaseLaw2.Tier.last →\n        CaseLaw2.Spec.relation L S x dom q = (CaseLaw2.Force.binding, CaseLaw2.RuleId.F1)",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.relation_state_on_federal",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.relation_state_on_federal : ∀ (L : CaseLaw2.Lookups) (S : CaseLaw2.CourtEpoch) (x : CaseLaw2.Decision)\n  (dom : CaseLaw2.Domain) (q : CaseLaw2.Spec.Query),\n  S.system ≠ 0 →\n    dom.federal = true →\n      q.dst.system = 0 →\n        CaseLaw2.Spec.relation L S x dom q = (CaseLaw2.Force.persuasive, CaseLaw2.RuleId.E3stateOnFederal)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.relation_trial",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.relation_trial : ∀ (L : CaseLaw2.Lookups) (S : CaseLaw2.CourtEpoch) (x : CaseLaw2.Decision)\n  (dom : CaseLaw2.Domain) (q : CaseLaw2.Spec.Query),\n  S.tier = CaseLaw2.Tier.trial → (CaseLaw2.Spec.relation L S x dom q).fst.rank ≤ CaseLaw2.Force.persuasive.rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.resolve_agree",
+  "module": "LegalProofs.CaseLaw2.Spec.Splits",
+  "doc": "If the binding sub-base agrees, the resolver returns it unchanged (no choice is needed).",
+  "statement": "CaseLaw2.Spec.resolve_agree : ∀ (f : Bool) (s : Option CaseLaw2.TrialScope) (cs : List CaseLaw2.Spec.Cand),\n  CaseLaw2.Spec.agree (CaseLaw2.Spec.top cs) = true → CaseLaw2.Spec.resolve f s cs = CaseLaw2.Spec.top cs",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.resolve_nonempty",
+  "module": "LegalProofs.CaseLaw2.Spec.Splits",
+  "doc": "With some binding candidate, the resolver is never empty.",
+  "statement": "CaseLaw2.Spec.resolve_nonempty : ∀ (f : Bool) (s : Option CaseLaw2.TrialScope) (cs : List CaseLaw2.Spec.Cand),\n  (∃ c, c ∈ cs ∧ c.counts = true) → CaseLaw2.Spec.resolve f s cs ≠ []",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.resolve_sound",
+  "module": "LegalProofs.CaseLaw2.Spec.Splits",
+  "doc": "The resolver only returns candidates it was given, and only binding-sub-base ones.",
+  "statement": "CaseLaw2.Spec.resolve_sound : ∀ (f : Bool) (s : Option CaseLaw2.TrialScope) (cs : List CaseLaw2.Spec.Cand)\n  (c : CaseLaw2.Spec.Cand), c ∈ CaseLaw2.Spec.resolve f s cs → c ∈ cs ∧ c.counts = true",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.resolve_sub_top",
+  "module": "LegalProofs.CaseLaw2.Spec.Splits",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.resolve_sub_top : ∀ (f : Bool) (s : Option CaseLaw2.TrialScope) (cs : List CaseLaw2.Spec.Cand)\n  (c : CaseLaw2.Spec.Cand), c ∈ CaseLaw2.Spec.resolve f s cs → c ∈ CaseLaw2.Spec.top cs",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.revival_counterexample",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "**Revival refutes unrestricted monotonicity** (T3): an overruling whose overruling decision is later vacated lapses, and the holding is good law again. The monotonicity theorem's no-lapse hypothesis cannot be dropped.",
+  "statement": "CaseLaw2.Spec.revival_counterexample : ∃ l k u t t',\n  t ≤ t' ∧\n    CaseLaw2.Spec.status l k t u = CaseLaw2.Spec.Status.neg CaseLaw2.Spec.Neg.overruled ∧\n      CaseLaw2.Spec.status l k t' u = CaseLaw2.Spec.Status.good",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.same_day_events_commute",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "Two events (e.g. on one day, on distinct holdings) commute.",
+  "statement": "CaseLaw2.Spec.same_day_events_commute : ∀ (l₁ l₂ : List CaseLaw2.Spec.Effect) (e₁ e₂ : CaseLaw2.Spec.Effect)\n  (k t u : Nat), CaseLaw2.Spec.status (l₁ ++ e₁ :: e₂ :: l₂) k t u = CaseLaw2.Spec.status (l₁ ++ e₂ :: e₁ :: l₂) k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.scotus_binds_federal",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "§9 22(a): a published, full-court SCOTUS majority holding on a federal issue binds every court below the Supreme Court, whatever the tables say.",
+  "statement": "CaseLaw2.Spec.scotus_binds_federal : ∀ (L : CaseLaw2.Lookups) (x : CaseLaw2.Decision) (h : CaseLaw2.Holding)\n  (q : CaseLaw2.Spec.Query) (S : CaseLaw2.CourtEpoch),\n  L.epochAt x.court x.date = some S →\n    S.scotus = true →\n      (∀ (d : CaseLaw2.Domain), h.domain = some d → d.federal = true) →\n        x.pub = some CaseLaw2.Publication.published →\n          x.form = some CaseLaw2.Form.full ∨ x.form = some CaseLaw2.Form.perCuriam →\n            h.role ≠ some CaseLaw2.Role.plurality →\n              q.dst.tier ≠ CaseLaw2.Tier.last →\n                Option.map (fun x => x.fst) (CaseLaw2.Spec.force L x h false q) = some CaseLaw2.Force.binding",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.scotus_resolves",
+  "module": "LegalProofs.CaseLaw2.Spec.Splits",
+  "doc": "**A binding SCOTUS holding resolves the issue for every court it binds**: if a court's candidates include a binding SCOTUS holding with answer `a`, no candidate outranks SCOTUS, and every SCOTUS candidate in the binding base answers `a`, then every permissible holding answers `a`.",
+  "statement": "CaseLaw2.Spec.scotus_resolves : ∀ (f : Bool) (s : Option CaseLaw2.TrialScope) (cs : List CaseLaw2.Spec.Cand)\n  (a : CaseLaw2.Answer),\n  (∃ c, c ∈ cs ∧ c.prec = CaseLaw2.Spec.scotusPrec ∧ c.force = CaseLaw2.Force.binding ∧ c.answer = a) →\n    (∀ (c : CaseLaw2.Spec.Cand), c ∈ cs → c.prec ≤ CaseLaw2.Spec.scotusPrec) →\n      (∀ (c : CaseLaw2.Spec.Cand), c ∈ cs → c.prec = CaseLaw2.Spec.scotusPrec → c.counts = true → c.answer = a) →\n        ∀ (c : CaseLaw2.Spec.Cand), c ∈ CaseLaw2.Spec.resolve f s cs → c.answer = a",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.scotus_resolves_split",
+  "module": "LegalProofs.CaseLaw2.Spec.Splits",
+  "doc": "**A later binding SCOTUS holding resolves any split** among the courts it binds.",
+  "statement": "CaseLaw2.Spec.scotus_resolves_split : ∀ (f₁ f₂ : Bool) (s₁ s₂ : Option CaseLaw2.TrialScope)\n  (cs₁ cs₂ : List CaseLaw2.Spec.Cand) (a : CaseLaw2.Answer) (b : Bool),\n  (∃ c, c ∈ cs₁ ∧ c.prec = CaseLaw2.Spec.scotusPrec ∧ c.force = CaseLaw2.Force.binding ∧ c.answer = a) →\n    (∃ c, c ∈ cs₂ ∧ c.prec = CaseLaw2.Spec.scotusPrec ∧ c.force = CaseLaw2.Force.binding ∧ c.answer = a) →\n      (∀ (c : CaseLaw2.Spec.Cand), c ∈ cs₁ → c.prec ≤ CaseLaw2.Spec.scotusPrec) →\n        (∀ (c : CaseLaw2.Spec.Cand), c ∈ cs₂ → c.prec ≤ CaseLaw2.Spec.scotusPrec) →\n          (∀ (c : CaseLaw2.Spec.Cand), c ∈ cs₁ → c.prec = CaseLaw2.Spec.scotusPrec → c.counts = true → c.answer = a) →\n            (∀ (c : CaseLaw2.Spec.Cand), c ∈ cs₂ → c.prec = CaseLaw2.Spec.scotusPrec → c.counts = true → c.answer = a) →\n              CaseLaw2.Spec.split (CaseLaw2.Spec.resolve f₁ s₁ cs₁) (CaseLaw2.Spec.resolve f₂ s₂ cs₂) b = false",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.soft_claim_disjoint",
+  "module": "LegalProofs.CaseLaw2.Spec.Findings",
+  "doc": "Soft and claim risks never coincide: a soft kind never changes status.",
+  "statement": "CaseLaw2.Spec.soft_claim_disjoint : ∀ (r : CaseLaw2.Spec.TreatRisk),\n  (!decide ((CaseLaw2.Spec.softRisk r && CaseLaw2.Spec.claimRisk r) = true)) = true",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.soft_treatment_no_effect",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "Soft treatments never change status (§5.2 T1).",
+  "statement": "CaseLaw2.Spec.soft_treatment_no_effect : ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),\n  tr.kind.changesStatus = false → CaseLaw2.Spec.treatEffect byHist tr = none",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.statusFor_all",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "Where every effect reaches every line (no heir, or only history, statutes and SCOTUS), status does not depend on the court asking.",
+  "statement": "CaseLaw2.Spec.statusFor_all : ∀ (inLine : Nat → Bool) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → e.reach = CaseLaw2.Spec.Reach.all) →\n    CaseLaw2.Spec.statusFor inLine l k t u = CaseLaw2.Spec.status l k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.statusFor_congr",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "Status in a line depends only on which effects reach the court.",
+  "statement": "CaseLaw2.Spec.statusFor_congr : ∀ (p q : Nat → Bool) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → CaseLaw2.Spec.Effect.reaches p e = CaseLaw2.Spec.Effect.reaches q e) →\n    CaseLaw2.Spec.statusFor p l k t u = CaseLaw2.Spec.statusFor q l k t u",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.statusFor_le_status",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "The union status (`status.tsv`) is at least as severe as the status in any line.",
+  "statement": "CaseLaw2.Spec.statusFor_le_status : ∀ (inLine : Nat → Bool) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  (CaseLaw2.Spec.statusFor inLine l k t u).rank ≤ (CaseLaw2.Spec.status l k t u).rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.status_cons",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.status_cons : ∀ (e : CaseLaw2.Spec.Effect) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  CaseLaw2.Spec.status (e :: l) k t u = (e.contrib k t u).join (CaseLaw2.Spec.status l k t u)",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.status_cons_good",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "An effect that contributes nothing leaves the status unchanged.",
+  "statement": "CaseLaw2.Spec.status_cons_good : ∀ (e : CaseLaw2.Spec.Effect) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  e.contrib k t u = CaseLaw2.Spec.Status.good → CaseLaw2.Spec.status (e :: l) k t u = CaseLaw2.Spec.status l k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.status_filter_le",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.status_filter_le : ∀ (p : CaseLaw2.Spec.Effect → Bool) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  (CaseLaw2.Spec.status (List.filter p l) k t u).rank ≤ (CaseLaw2.Spec.status l k t u).rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.status_mono",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "**Monotonicity** (§9 22(e), generalising v1 `overruledOn_mono`): without lapse (no vacatur, withdrawal or reversal of an overruling decision, no reinstatement, no dismissal of review), status only worsens as the question date advances.",
+  "statement": "CaseLaw2.Spec.status_mono : ∀ (l : List CaseLaw2.Spec.Effect) (k u t t' : Nat),\n  t ≤ t' →\n    (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → e.lapse = none) →\n      (CaseLaw2.Spec.status l k t u).rank ≤ (CaseLaw2.Spec.status l k t' u).rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.status_mono_conduct",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "Status only worsens as the conduct date advances (every effect reaches later conduct if it reaches earlier).",
+  "statement": "CaseLaw2.Spec.status_mono_conduct : ∀ (l : List CaseLaw2.Spec.Effect) (k t u u' : Nat),\n  u ≤ u' → (CaseLaw2.Spec.status l k t u).rank ≤ (CaseLaw2.Spec.status l k t u').rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.status_perm",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "Status does not depend on the order of the events.",
+  "statement": "@CaseLaw2.Spec.status_perm : ∀ {l₁ l₂ : List CaseLaw2.Spec.Effect},\n  l₁.Perm l₂ → ∀ (k t u : Nat), CaseLaw2.Spec.status l₁ k t u = CaseLaw2.Spec.status l₂ k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.status_rank_mono_of",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.status_rank_mono_of : ∀ (l : List CaseLaw2.Spec.Effect) (k t u t' u' : Nat),\n  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → (e.contrib k t u).rank ≤ (e.contrib k t' u').rank) →\n    (CaseLaw2.Spec.status l k t u).rank ≤ (CaseLaw2.Spec.status l k t' u').rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.supersession_prospective",
+  "module": "LegalProofs.CaseLaw2.Spec.Status",
+  "doc": "**Supersession is prospective** (§7 AB1): conduct before the effective (or retroactive) date keeps the old rule: the supersession contributes nothing to the status for such conduct.",
+  "statement": "CaseLaw2.Spec.supersession_prospective : ∀ (s : CaseLaw2.SEvent) (e : CaseLaw2.Spec.Effect),\n  CaseLaw2.Spec.superEffect s = some e →\n    ∀ (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n      u < s.retroactiveTo.getD s.effective → CaseLaw2.Spec.status (e :: l) k t u = CaseLaw2.Spec.status l k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.top_sub",
+  "module": "LegalProofs.CaseLaw2.Spec.Splits",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.top_sub : ∀ (cs : List CaseLaw2.Spec.Cand) (c : CaseLaw2.Spec.Cand),\n  c ∈ CaseLaw2.Spec.top cs → c ∈ cs ∧ c.counts = true",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.trial_never_binding",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "§9 22(d), F13/§4.4: a trial court's decision (not promoted, not adopted) is at most persuasive for every court.",
+  "statement": "CaseLaw2.Spec.trial_never_binding : ∀ (L : CaseLaw2.Lookups) (x : CaseLaw2.Decision) (h : CaseLaw2.Holding)\n  (q : CaseLaw2.Spec.Query) (S : CaseLaw2.CourtEpoch),\n  L.epochAt x.court x.date = some S →\n    S.tier = CaseLaw2.Tier.trial →\n      CaseLaw2.Spec.adoptionsOf L x = [] →\n        ∀ (r : CaseLaw2.Force × List CaseLaw2.RuleId),\n          CaseLaw2.Spec.force L x h false q = some r → r.fst.rank ≤ CaseLaw2.Force.persuasive.rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.unionBase_sub_lineBase",
+  "module": "LegalProofs.CaseLaw2.Spec.Lines",
+  "doc": "The union base is inside every line's base.",
+  "statement": "CaseLaw2.Spec.unionBase_sub_lineBase : ∀ (inLine : Nat → Bool) (t : Nat)\n  (hs : List (CaseLaw2.Spec.Held CaseLaw2.Spec.Horty.FCase)) (c : CaseLaw2.Spec.Horty.FCase),\n  c ∈ CaseLaw2.Spec.heldUnion t hs → c ∈ CaseLaw2.Spec.lineBase inLine t hs",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ }
+]
