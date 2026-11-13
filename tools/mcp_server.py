@@ -310,14 +310,19 @@ def index_top(words: list, corpus: str, size: int) -> list | None:
     return list(got)
 
 
-def index_lines(query: str, corpus: str, rev: str, names: list) -> dict | None:
+def index_lines(query: str, corpus: str, rev: str, names: list, most: int | None = None) -> dict | None:
     """search_index.lines, checked: {name: [(line number, line), ...]} with every name asked and each file's lines in
-    ascending order. None when the index has no such method, does not answer, or answers anything else."""
+    ascending order. `most`: only a file's first so many lines are wanted (an index whose lines() takes a fifth
+    argument stops reading there; one that does not is asked as ever). None when the index has no such method, does
+    not answer, or answers anything else."""
     fn = getattr(search_index, 'lines', None)
     if not callable(fn) or not names:
         return None
     try:
-        got = fn(query, corpus, rev, list(names))
+        try:
+            got = fn(query, corpus, rev, list(names), most) if most else fn(query, corpus, rev, list(names))
+        except TypeError:
+            got = fn(query, corpus, rev, list(names))
     except Exception:  # noqa: BLE001
         return None
     if not isinstance(got, dict):
@@ -4447,7 +4452,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                 # at all. A query whose words the index finds in most files but whose characters git finds in none
                 # ("(a+)+$": the word "a") was grepped through every file of the corpus, 200 at a time, for 32 s.
                 checkpoint()
-                found = index_lines(query, corpus, sha, part)
+                # (in the order of relevance a provision shows RANKED_LINES lines: one more says there are more)
+                found = index_lines(query, corpus, sha, part, RANKED_LINES + 1 if best_first else None)
                 if found is None:
                     if corpus not in judged:
                         done = git_run(['git', 'grep', '--threads=1', '-n', '-I', *flags, '-e', pattern, sha, '--', *part],
