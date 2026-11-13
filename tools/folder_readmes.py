@@ -62,7 +62,27 @@ def load_tsv(p: Path) -> dict[str, dict]:
     return {l.split('\t')[0]: dict(zip(hdr, l.split('\t'))) for l in lines[1:] if l.strip()}
 
 
+def federation_block(name: str, c: dict) -> list[str]:
+    """A federation's whole-country estimate: headline shares, then each federal body of law and each state."""
+    link = '[data/completeness.json](' + '../' * name.count('/') + '../data/completeness.json)'
+    out = [f'## Completeness of the whole country, best-effort ({c.get("verified_on", "")})', '',
+           '| ' + ' | '.join(h[0] for h in c['headline']) + ' |', '| ' + ' | '.join('---' for _ in c['headline']) + ' |',
+           '| ' + ' | '.join(f'{pct(h[1])} ({h[2]} confidence)' for h in c['headline']) + ' |', '',
+           cell(c.get('verdict', '')), '',
+           f'{cell(c.get("method", ""))} Every figure is in {link}.', '',
+           '<details><summary>Federal law, part by part</summary>', '',
+           '| Part | Held | Confidence | Basis |', '| --- | --- | --- | --- |']
+    out += [f'| {cell(f["part"])} | {pct(f["share"])} | {f["confidence"]} | {cell(f["basis"])} |' for f in c.get('federal', [])]
+    states = c.get('states', [])
+    out += ['', '</details>', '', f'<details><summary>The {len(states)} states, territories and D.C., one by one</summary>', '',
+            '| Jurisdiction | Statutes held | Confidence | Basis |', '| --- | --- | --- | --- |']
+    out += [f'| {cell(s["name"])} | {pct(s["share"])} | {s["confidence"]} | {cell(s["basis"])} |' for s in states]
+    return out + ['', '</details>', '']
+
+
 def completeness_block(name: str, c: dict) -> list[str]:
+    if c.get('kind') == 'federation':
+        return federation_block(name, c)
     s, est = c.get('scores', {}), c.get('estimates', {})
 
     def shown(metric, value):
