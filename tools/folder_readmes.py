@@ -108,6 +108,32 @@ def plan_block(plan: dict | None) -> list[str]:
             pc = f'{p["pct"]:g}%' + (f' ({p["collected_pct"]:g}% collected)' if p.get('collected_pct') is not None else '')
             est = '' if p['confidence'] == 'high' else f'; {p["confidence"]}-confidence total'
             out.append(f'| {cell(p["part"])} | `{cell(p["where"])}` | {p["weight"]:g}% | {cell(p["progress"])} · {pc} | {cell(p["how"])}{est} | {p["status"]} |')
+    g = plan.get('gaps')
+    if g:
+        ba = g['by_access']
+        out += ['', '### What is missing, and how long it would take', '',
+                f'{g["missing_points"]:g} points of the plan are missing. By what stands in the way: **{ba.get("reachable", 0):g}** '
+                f'reachable from open sources, **{ba.get("permission", 0):g}** need a licence or permission (vendor-hosted official '
+                f'texts, terms that bar copying), **{ba.get("blocked", 0):g}** blocked from here (403s, bot checks; not worked '
+                f'around), **{ba.get("fee", 0):g}** behind fees, **{ba.get("no source", 0):g}** with no online source. From open '
+                f'sources alone the plan can reach **{g["ceiling_open_pct"]:g}%**: about {g["build_days_reachable"]:,} '
+                f'builder-days and {g["fetch_hours_reachable"]:,} hours of fetching, **{g["eta_weeks_reachable"]:g} weeks** with '
+                f'{g["builders"]} builders working in parallel (all parts, open or not: {g["build_days_all"]:,} builder-days).', '',
+                '| Next, by plan points per builder-day | Points | Builder-days |', '| --- | ---: | ---: |']
+        out += [f'| {cell(n["part"])} | +{n["points"]:g} | {n["build_days"]:g} |' for n in g.get('next', [])]
+        out += ['', '<details><summary>Every part: what is missing, its size, access and effort</summary>', '',
+                '| Part | Missing | Size | Access | Effort | Blockers | History obtainable |', '| --- | --- | --- | --- | --- | --- | --- |']
+        for p in plan['parts']:
+            q = p.get('gap') or {}
+            if not q or (q.get('missing_points', 0) < 0.005 and not q.get('rows')):
+                continue
+            size = ', '.join(x for x in (q.get('pages') and f'{q["pages"]:,.0f} pages', q.get('words') and f'{q["words"] / 1e6:,.1f}M words',
+                                          q.get('gb') and f'{q["gb"]:g} GB') if x) or '–'
+            acc = ', '.join(f'{k} {v:.0%}' for k, v in (q.get('access_mix') or {}).items())
+            eff = f'{q.get("build_days", 0):g} builder-days, {q.get("fetch_hours", 0):g} h fetch' + (f' ({"; ".join(q["routes"])})' if q.get('routes') else '')
+            out.append(f'| {cell(p["part"])} | {cell(q.get("missing"))} | {size} | {acc} | {cell(eff)} | {cell("; ".join(q.get("blockers") or [])[:300])} | '
+                       f'{cell(str(q.get("history") or "")[:200])} |')
+        out += ['', '</details>']
     return out + ['', "Totals are the publishers' own counts where they exist (eCFR, the Federal Register API, CAP, the Census of "
                   'Governments, the BIA list), otherwise the best public estimate, marked.', '']
 

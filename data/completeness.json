@@ -1009,8 +1009,8 @@
       "chart": "completeness",
       "plan": {
         "updated": "2026-11-13",
-        "pct": 55.9,
-        "collected_pct": 56.0,
+        "pct": 56.0,
+        "collected_pct": 56.1,
         "low_confidence_weight": 9.0,
         "groups": [
           {
@@ -1022,20 +1022,20 @@
           {
             "group": "State legislation",
             "weight": 21,
-            "pct": 71.8,
-            "collected_pct": 71.8
+            "pct": 71.9,
+            "collected_pct": 71.9
           },
           {
             "group": "Regulations and guidance",
             "weight": 21.5,
-            "pct": 44.3,
-            "collected_pct": 44.3
+            "pct": 44.5,
+            "collected_pct": 44.5
           },
           {
             "group": "Case law",
             "weight": 22.5,
-            "pct": 70.2,
-            "collected_pct": 70.2
+            "pct": 70.3,
+            "collected_pct": 70.3
           },
           {
             "group": "Court rules",
@@ -1086,7 +1086,41 @@
             "how": "constitution.congress.gov / GovInfo CONAN",
             "status": "not started",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 3.0,
+              "rows": 1,
+              "missing": "28 texts (Constitution + 27 amendments)",
+              "words": 7600.0,
+              "pages": 20.0,
+              "gb": 0.0,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 0.5,
+              "fetch_hours": 0.2,
+              "reachable_build_days": 0.5,
+              "blockers": [],
+              "sources": [
+                "National Archives transcription / GovInfo CDOC 'The Constitution of the United States' (House/Senate document)",
+                "Constitution Annotated (CONAN), GovInfo GPO-CONAN and constitution.congress.gov"
+              ],
+              "routes": [
+                "manual (28 texts) + dated commits per ratification"
+              ],
+              "history": "Yes. Every amendment has a certified ratification date, so a 1788-1992 history of 28 commits is exact.",
+              "detail": [
+                {
+                  "part": "Constitution of the United States",
+                  "missing_units": 28,
+                  "unit": "texts (Constitution + 27 amendments)",
+                  "access": "open",
+                  "words": 7600.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                }
+              ]
+            }
           },
           {
             "group": "Federal legislation",
@@ -1099,7 +1133,26 @@
             "how": "the Office of the Law Revision Counsel's XML, every title",
             "status": "done",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.0,
+              "rows": 0,
+              "missing": "",
+              "words": null,
+              "pages": null,
+              "gb": null,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 0,
+              "fetch_hours": 0,
+              "reachable_build_days": 0,
+              "blockers": [],
+              "sources": [],
+              "routes": [],
+              "history": null,
+              "detail": []
+            }
           },
           {
             "group": "Federal legislation",
@@ -1112,7 +1165,26 @@
             "how": "GovInfo annual editions and release points, each change credited to its law",
             "status": "done",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.01,
+              "rows": 0,
+              "missing": "",
+              "words": null,
+              "pages": null,
+              "gb": null,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 0,
+              "fetch_hours": 0,
+              "reachable_build_days": 0,
+              "blockers": [],
+              "sources": [],
+              "routes": [],
+              "history": null,
+              "detail": []
+            }
           },
           {
             "group": "Federal legislation",
@@ -1125,20 +1197,163 @@
             "how": "GovInfo Statutes at Large and public-law XML",
             "status": "not started",
             "confidence": "medium",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 2.0,
+              "rows": 1,
+              "missing": "117.2k granules (laws, resolutions, treaties, proclamations) in 138 volumes",
+              "words": null,
+              "pages": 330000.0,
+              "gb": 4.4,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 8.0,
+              "fetch_hours": 2.0,
+              "reachable_build_days": 8.0,
+              "blockers": [
+                "api.govinfo.gov package/granule metadata needs a real api.data.gov key (DEMO_KEY rate-limited)",
+                "vols 1-64 are vendor-digitized: expect OCR errors in the XML"
+              ],
+              "sources": [
+                "GovInfo Statutes at Large bulk USLM XML, volumes 1-138",
+                "GovInfo PLAW bulk XML (slip laws)",
+                "GovInfo PLAW packages (104th-112th as PDF/text/HTML)",
+                "Library of Congress Statutes at Large scans (vols 1-64)"
+              ],
+              "routes": [
+                "bulk download + parse"
+              ],
+              "history": "Statutes are point-in-time enactments, so each law is dated by its approval date. This is the source for crediting pre-1995 US Code changes to their laws.",
+              "detail": [
+                {
+                  "part": "Statutes at Large (public and private laws)",
+                  "missing_units": 117217,
+                  "unit": "granules (laws, resolutions, treaties, proclamations) in 138 volumes",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 8.0,
+                  "confidence": "high"
+                }
+              ]
+            }
           },
           {
             "group": "State legislation",
             "part": "State and territorial constitutions",
             "where": "united-states/<state>/acts",
             "weight": 3,
-            "pct": 90.3,
+            "pct": 90.6,
             "collected_pct": null,
-            "progress": "45 of 56, weighted by population",
+            "progress": "45 of 53 (D.C., Guam and the Virgin Islands have none: their charters are held), weighted by population",
             "how": "each state's official text",
             "status": "collecting",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.28,
+              "rows": 8,
+              "missing": "8 jurisdictions or sub-parts",
+              "words": 467500.0,
+              "pages": 468.0,
+              "gb": 0.0,
+              "access_mix": {
+                "reachable": 0.722,
+                "permission": 0.278
+              },
+              "build_days": 2.4,
+              "fetch_hours": 0.8,
+              "reachable_build_days": 2.1,
+              "blockers": [
+                "state copyright claim (Arkansas)",
+                "nmonesource 403"
+              ],
+              "sources": [
+                "Arkansas constitution",
+                "Connecticut constitution",
+                "Indiana constitution",
+                "New Jersey constitution",
+                "New Mexico constitution"
+              ],
+              "routes": [
+                "single page/PDF parse"
+              ],
+              "history": "amendment history in notes; earlier texts via state archives",
+              "detail": [
+                {
+                  "part": "State constitutions: Arkansas",
+                  "missing_units": 1,
+                  "unit": "constitution",
+                  "access": "copyright-or-terms",
+                  "words": 130000.0,
+                  "build_days": 0.3,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State constitutions: Connecticut",
+                  "missing_units": 1,
+                  "unit": "constitution",
+                  "access": "open",
+                  "words": 37500.0,
+                  "build_days": 0.3,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State constitutions: Indiana",
+                  "missing_units": 1,
+                  "unit": "constitution",
+                  "access": "open",
+                  "words": 37500.0,
+                  "build_days": 0.3,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State constitutions: New Jersey",
+                  "missing_units": 1,
+                  "unit": "constitution",
+                  "access": "open",
+                  "words": 40000.0,
+                  "build_days": 0.3,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State constitutions: New Mexico",
+                  "missing_units": 1,
+                  "unit": "constitution",
+                  "access": "open-with-limits",
+                  "words": 82500.0,
+                  "build_days": 0.3,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State constitutions: Puerto Rico",
+                  "missing_units": 1,
+                  "unit": "constitution",
+                  "access": "open",
+                  "words": 25000.0,
+                  "build_days": 0.3,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State constitutions: Utah",
+                  "missing_units": 1,
+                  "unit": "constitution",
+                  "access": "open",
+                  "words": 65000.0,
+                  "build_days": 0.3,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State constitutions: N. Mariana Islands",
+                  "missing_units": 1,
+                  "unit": "constitution",
+                  "access": "open",
+                  "words": 50000.0,
+                  "build_days": 0.3,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "State legislation",
@@ -1151,7 +1366,244 @@
             "how": "each code's official table of contents against the units held (one reviewer per state)",
             "status": "collecting",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 1.51,
+              "rows": 22,
+              "missing": "22 jurisdictions or sub-parts",
+              "words": 128887200.0,
+              "pages": 193331.0,
+              "gb": 1.3,
+              "access_mix": {
+                "reachable": 0.443,
+                "permission": 0.366,
+                "blocked": 0.191
+              },
+              "build_days": 55.4,
+              "fetch_hours": 122.9,
+              "reachable_build_days": 21.0,
+              "blockers": [
+                "state claims copyright in the Code",
+                "only official online text is a Lexis app behind click-through terms (non-commercial, no bulk copying)",
+                "content.leg.colorado.gov returns an empty 202 challenge to automated fetches; olls.info zip is directly reachable",
+                "Cloudflare challenge 403 on capitol.hawaii.gov",
+                "live site refused connections on 2026-11-13 (not a block, an outage or IP refusal)",
+                "www.ilga.gov and ftp.ilga.gov did not answer from this machine"
+              ],
+              "sources": [
+                "ALISON Code of Alabama API",
+                "American Samoa Bar Association, Code Annotated",
+                "Arkansas Code free public access (LexisNexis)",
+                "Public.Resource.Org bulk Arkansas Code",
+                "Arkansas General Assembly Acts (as enacted)"
+              ],
+              "routes": [
+                "3 chapter PDFs",
+                "API crawl of the 25 missing chapters",
+                "API crawl with a key (the 50 held laws already came from it)"
+              ],
+              "history": "none online officially; Justia yearly copies 2006+",
+              "detail": [
+                {
+                  "part": "State and territorial codes: Alabama",
+                  "missing_units": 25,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 302000.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State and territorial codes: American Samoa",
+                  "missing_units": 328,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 2000000.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State and territorial codes: Arkansas",
+                  "missing_units": 28,
+                  "unit": "titles",
+                  "access": "copyright-or-terms",
+                  "words": 15200000.0,
+                  "build_days": 4.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State and territorial codes: Colorado",
+                  "missing_units": 77,
+                  "unit": "articles",
+                  "access": "open-with-limits",
+                  "words": 700000.0,
+                  "build_days": 2.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State and territorial codes: Hawaii",
+                  "missing_units": 776,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 8800000.0,
+                  "build_days": 4.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State and territorial codes: Idaho",
+                  "missing_units": 701,
+                  "unit": "chapters",
+                  "access": "open-with-limits",
+                  "words": 5600000.0,
+                  "build_days": 2.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State and territorial codes: Illinois",
+                  "missing_units": 889,
+                  "unit": "acts",
+                  "access": "open-with-limits",
+                  "words": 8000000.0,
+                  "build_days": 3.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State and territorial codes: Iowa",
+                  "missing_units": 17,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 148000.0,
+                  "build_days": 0.3,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State and territorial codes: Massachusetts",
+                  "missing_units": 327,
+                  "unit": "chapters",
+                  "access": "open-with-limits",
+                  "words": 4720000.0,
+                  "build_days": 2.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State and territorial codes: Michigan",
+                  "missing_units": 30,
+                  "unit": "MCL chapters",
+                  "access": "open-with-limits",
+                  "words": 1200000.0,
+                  "build_days": 1.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State and territorial codes: Mississippi",
+                  "missing_units": 43,
+                  "unit": "titles",
+                  "access": "copyright-or-terms",
+                  "words": 9920000.0,
+                  "build_days": 5.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State and territorial codes: Nebraska",
+                  "missing_units": 85,
+                  "unit": "chapters",
+                  "access": "open-with-limits",
+                  "words": 10000000.0,
+                  "build_days": 3.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State and territorial codes: Nevada",
+                  "missing_units": 11,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 256000.0,
+                  "build_days": 0.3,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State and territorial codes: New Hampshire",
+                  "missing_units": 679,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 3600000.0,
+                  "build_days": 2.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State and territorial codes: New Jersey",
+                  "missing_units": 2,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 1200.0,
+                  "build_days": 0.1,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State and territorial codes: New Mexico",
+                  "missing_units": 30000,
+                  "unit": "chapter (sections, no official unit count)",
+                  "access": "blocked",
+                  "words": 12000000.0,
+                  "build_days": 4.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State and territorial codes: New York",
+                  "missing_units": 86,
+                  "unit": "laws",
+                  "access": "open-with-limits",
+                  "words": 12000000.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State and territorial codes: North Carolina",
+                  "missing_units": 1,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 24000.0,
+                  "build_days": 0.1,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State and territorial codes: North Dakota",
+                  "missing_units": 3,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 16000.0,
+                  "build_days": 0.1,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State and territorial codes: Puerto Rico",
+                  "missing_units": 34,
+                  "unit": "titles",
+                  "access": "copyright-or-terms",
+                  "words": 16000000.0,
+                  "build_days": 10.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State and territorial codes: Rhode Island",
+                  "missing_units": 2375,
+                  "unit": "chapters",
+                  "access": "open-with-limits",
+                  "words": 12400000.0,
+                  "build_days": 3.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State and territorial codes: US Virgin Islands",
+                  "missing_units": 15000,
+                  "unit": "section (sections, no official unit count)",
+                  "access": "copyright-or-terms",
+                  "words": 6000000.0,
+                  "build_days": 5.0,
+                  "confidence": "low"
+                }
+              ]
+            }
           },
           {
             "group": "State legislation",
@@ -1164,33 +1616,1151 @@
             "how": "annual editions and session laws replayed onto the code",
             "status": "collecting",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 2.18,
+              "rows": 56,
+              "missing": "56 jurisdictions or sub-parts",
+              "words": null,
+              "pages": 9054525.0,
+              "gb": 55.1,
+              "access_mix": {
+                "reachable": 0.822,
+                "permission": 0.056,
+                "blocked": 0.121,
+                "no source": 0.001
+              },
+              "build_days": 542.0,
+              "fetch_hours": 763.5,
+              "reachable_build_days": 422.0,
+              "blockers": [
+                "site refused or timed out from this machine",
+                "no online source",
+                "official code via LexisNexis under terms",
+                "403/WAF on the official site"
+              ],
+              "sources": [
+                "Alabama prior code editions",
+                "Alaska prior code editions",
+                "American Samoa prior code editions",
+                "Arizona prior code editions",
+                "Arkansas prior code editions"
+              ],
+              "routes": [
+                "OGP PDFs as revised",
+                "Public.Resource releases as dated editions",
+                "bulk zips per year"
+              ],
+              "history": "no official dated editions; only session laws (as enacted) and archive.org captures",
+              "detail": [
+                {
+                  "part": "State codes, every change dated: Alabama",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 15.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Alaska",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 7.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: American Samoa",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "no-online-source",
+                  "words": null,
+                  "build_days": 5.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Arizona",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 10.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Arkansas",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "copyright-or-terms",
+                  "words": null,
+                  "build_days": 15.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: California",
+                  "missing_units": 21,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 14.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Colorado",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 12.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Connecticut",
+                  "missing_units": 24,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 10.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Delaware",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 9.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: District of Columbia",
+                  "missing_units": 26,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 11.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Florida",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 8.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State codes, every change dated: Georgia",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "copyright-or-terms",
+                  "words": null,
+                  "build_days": 15.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Guam",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 6.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Hawaii",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "blocked",
+                  "words": null,
+                  "build_days": 9.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Idaho",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 10.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Illinois",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 14.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Indiana",
+                  "missing_units": 22,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 10.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Iowa",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 3.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State codes, every change dated: Kansas",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 7.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Kentucky",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 8.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Louisiana",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 15.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Maine",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 12.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Maryland",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 19.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Massachusetts",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 11.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Michigan",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 10.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Minnesota",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 3.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State codes, every change dated: Mississippi",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "copyright-or-terms",
+                  "words": null,
+                  "build_days": 14.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Missouri",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 9.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Montana",
+                  "missing_units": 28,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 10.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Nebraska",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 7.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Nevada",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "blocked",
+                  "words": null,
+                  "build_days": 9.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: New Hampshire",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "blocked",
+                  "words": null,
+                  "build_days": 10.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: New Jersey",
+                  "missing_units": 26,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 9.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: New Mexico",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "blocked",
+                  "words": null,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: New York",
+                  "missing_units": 19,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 12.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: North Carolina",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "blocked",
+                  "words": null,
+                  "build_days": 11.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: North Dakota",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 9.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: N. Mariana Islands",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 6.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Ohio",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 9.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Oklahoma",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 11.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Oregon",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Pennsylvania",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 7.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Puerto Rico",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "copyright-or-terms",
+                  "words": null,
+                  "build_days": 9.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Rhode Island",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 12.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: South Carolina",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 9.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: South Dakota",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 9.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Tennessee",
+                  "missing_units": 30,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "copyright-or-terms",
+                  "words": null,
+                  "build_days": 14.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Texas",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 16.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Utah",
+                  "missing_units": 31,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 12.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Vermont",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 7.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: US Virgin Islands",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "copyright-or-terms",
+                  "words": null,
+                  "build_days": 6.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Virginia",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 19.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State codes, every change dated: Washington",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 3.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State codes, every change dated: West Virginia",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 9.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State codes, every change dated: Wisconsin",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 3.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State codes, every change dated: Wyoming",
+                  "missing_units": 32,
+                  "unit": "edition-years 1995-2026 without dated text",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 7.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "State legislation",
             "part": "Session laws, 1995-2026",
             "where": "united-states/<state>/acts (session-law folders)",
             "weight": 2,
-            "pct": 3.1,
+            "pct": 3.3,
             "collected_pct": null,
-            "progress": "20,170 of about 650,000 laws enacted (10 states hold some)",
+            "progress": "20,170 of about 603,000 laws enacted (10 states hold some)",
             "how": "each legislature's chaptered acts as enacted",
             "status": "collecting",
             "confidence": "low",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 1.93,
+              "rows": 56,
+              "missing": "56 jurisdictions or sub-parts",
+              "words": 1456775000.0,
+              "pages": 3496260.0,
+              "gb": 175.1,
+              "access_mix": {
+                "reachable": 0.998,
+                "no source": 0.002
+              },
+              "build_days": 228.5,
+              "fetch_hours": 323.4,
+              "reachable_build_days": 226.3,
+              "blockers": [
+                "Cloudflare 403",
+                "site did not answer from this machine",
+                "ECONNREFUSED",
+                "403",
+                "nmonesource 403",
+                "API key required"
+              ],
+              "sources": [
+                "Alabama session laws",
+                "Alaska session laws",
+                "Arizona session laws",
+                "Arkansas session laws",
+                "California session laws"
+              ],
+              "routes": [
+                "HTML/PDF per act",
+                "PDF text per act"
+              ],
+              "history": "as-enacted texts are inherently dated (approval/effective dates); the gap before the earliest online year needs state library scans or HeinOnline (subscription)",
+              "detail": [
+                {
+                  "part": "Session laws, 1995-2026: Alabama",
+                  "missing_units": 20800,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 52000000.0,
+                  "build_days": 6.2,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Alaska",
+                  "missing_units": 4160,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 10400000.0,
+                  "build_days": 2.8,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Arizona",
+                  "missing_units": 10560,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 26400000.0,
+                  "build_days": 4.1,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Arkansas",
+                  "missing_units": 19200,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 48000000.0,
+                  "build_days": 5.8,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: California",
+                  "missing_units": 15069,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 37672500.0,
+                  "build_days": 5.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Colorado",
+                  "missing_units": 13519,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 33797500.0,
+                  "build_days": 4.7,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Connecticut",
+                  "missing_units": 8960,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 22400000.0,
+                  "build_days": 3.8,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Delaware",
+                  "missing_units": 7808,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 19520000.0,
+                  "build_days": 3.6,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: District of Columbia",
+                  "missing_units": 8000,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 20000000.0,
+                  "build_days": 3.6,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Florida",
+                  "missing_units": 9600,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 24000000.0,
+                  "build_days": 3.9,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Georgia",
+                  "missing_units": 20800,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 52000000.0,
+                  "build_days": 6.2,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Guam",
+                  "missing_units": 2880,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 7200000.0,
+                  "build_days": 2.6,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Hawaii",
+                  "missing_units": 8000,
+                  "unit": "laws/chapters enacted",
+                  "access": "open-with-limits",
+                  "words": 20000000.0,
+                  "build_days": 3.6,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Idaho",
+                  "missing_units": 10560,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 26400000.0,
+                  "build_days": 4.1,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Illinois",
+                  "missing_units": 17600,
+                  "unit": "laws/chapters enacted",
+                  "access": "open-with-limits",
+                  "words": 44000000.0,
+                  "build_days": 5.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Indiana",
+                  "missing_units": 7040,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 17600000.0,
+                  "build_days": 3.4,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Iowa",
+                  "missing_units": 6080,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 15200000.0,
+                  "build_days": 3.2,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Kansas",
+                  "missing_units": 4393,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 10982500.0,
+                  "build_days": 2.9,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Kentucky",
+                  "missing_units": 6400,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 16000000.0,
+                  "build_days": 3.3,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Louisiana",
+                  "missing_units": 19928,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 49820000.0,
+                  "build_days": 6.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Maine",
+                  "missing_units": 13929,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 34822500.0,
+                  "build_days": 4.8,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Maryland",
+                  "missing_units": 27200,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 68000000.0,
+                  "build_days": 7.4,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Massachusetts",
+                  "missing_units": 11200,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 28000000.0,
+                  "build_days": 4.2,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Michigan",
+                  "missing_units": 9600,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 24000000.0,
+                  "build_days": 3.9,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Minnesota",
+                  "missing_units": 3840,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 9600000.0,
+                  "build_days": 2.8,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Mississippi",
+                  "missing_units": 17600,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 44000000.0,
+                  "build_days": 5.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Missouri",
+                  "missing_units": 2583,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 6457500.0,
+                  "build_days": 2.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Montana",
+                  "missing_units": 9600,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 24000000.0,
+                  "build_days": 3.9,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Nebraska",
+                  "missing_units": 3840,
+                  "unit": "laws/chapters enacted",
+                  "access": "open-with-limits",
+                  "words": 9600000.0,
+                  "build_days": 2.8,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Nevada",
+                  "missing_units": 8640,
+                  "unit": "laws/chapters enacted",
+                  "access": "open-with-limits",
+                  "words": 21600000.0,
+                  "build_days": 3.7,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: New Hampshire",
+                  "missing_units": 9600,
+                  "unit": "laws/chapters enacted",
+                  "access": "open-with-limits",
+                  "words": 24000000.0,
+                  "build_days": 3.9,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: New Jersey",
+                  "missing_units": 10560,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 26400000.0,
+                  "build_days": 4.1,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: New Mexico",
+                  "missing_units": 5440,
+                  "unit": "laws/chapters enacted",
+                  "access": "open-with-limits",
+                  "words": 13600000.0,
+                  "build_days": 3.1,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: New York",
+                  "missing_units": 22400,
+                  "unit": "laws/chapters enacted",
+                  "access": "open-with-limits",
+                  "words": 56000000.0,
+                  "build_days": 6.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: North Carolina",
+                  "missing_units": 11200,
+                  "unit": "laws/chapters enacted",
+                  "access": "open-with-limits",
+                  "words": 28000000.0,
+                  "build_days": 4.2,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: North Dakota",
+                  "missing_units": 7744,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 19360000.0,
+                  "build_days": 3.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: N. Mariana Islands",
+                  "missing_units": 1280,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 3200000.0,
+                  "build_days": 2.3,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Ohio",
+                  "missing_units": 2880,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 7200000.0,
+                  "build_days": 2.6,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Oklahoma",
+                  "missing_units": 12160,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 30400000.0,
+                  "build_days": 4.4,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Oregon",
+                  "missing_units": 12800,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 32000000.0,
+                  "build_days": 4.6,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Pennsylvania",
+                  "missing_units": 3259,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 8147500.0,
+                  "build_days": 2.7,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Puerto Rico",
+                  "missing_units": 7040,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 17600000.0,
+                  "build_days": 3.4,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Rhode Island",
+                  "missing_units": 14400,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 36000000.0,
+                  "build_days": 4.9,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: South Carolina",
+                  "missing_units": 8000,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 20000000.0,
+                  "build_days": 3.6,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: South Dakota",
+                  "missing_units": 7360,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 18400000.0,
+                  "build_days": 3.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Tennessee",
+                  "missing_units": 19200,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 48000000.0,
+                  "build_days": 5.8,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Texas",
+                  "missing_units": 22400,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 56000000.0,
+                  "build_days": 6.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Utah",
+                  "missing_units": 14400,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 36000000.0,
+                  "build_days": 4.9,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Vermont",
+                  "missing_units": 4800,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 12000000.0,
+                  "build_days": 3.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Virginia",
+                  "missing_units": 27200,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 68000000.0,
+                  "build_days": 7.4,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Washington",
+                  "missing_units": 11200,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 28000000.0,
+                  "build_days": 4.2,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: West Virginia",
+                  "missing_units": 7040,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 17600000.0,
+                  "build_days": 3.4,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Wisconsin",
+                  "missing_units": 5120,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 12800000.0,
+                  "build_days": 3.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: Wyoming",
+                  "missing_units": 2318,
+                  "unit": "laws/chapters enacted",
+                  "access": "open",
+                  "words": 5795000.0,
+                  "build_days": 2.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: American Samoa",
+                  "missing_units": 960,
+                  "unit": "laws/chapters enacted",
+                  "access": "no-online-source",
+                  "words": 2400000.0,
+                  "build_days": 2.2,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Session laws, 1995-2026: US Virgin Islands",
+                  "missing_units": 2560,
+                  "unit": "laws/chapters enacted",
+                  "access": "open-with-limits",
+                  "words": 6400000.0,
+                  "build_days": 2.5,
+                  "confidence": "low"
+                }
+              ]
+            }
           },
           {
             "group": "Regulations and guidance",
             "part": "Code of Federal Regulations",
             "where": "united-states/federal/cfr",
             "weight": 8,
-            "pct": 99.1,
+            "pct": 99.9,
             "collected_pct": null,
-            "progress": "8,241 of 8,317 parts in force (2026-11-10)",
+            "progress": "8,241 of 8,317 parts listed in force (2026-11-10); of the 76 not held, about 8 carry text, the rest are headings or reserved",
             "how": "eCFR, every version since 2015",
             "status": "collecting",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.01,
+              "rows": 1,
+              "missing": "76 eCFR part nodes (most are empty or group headings)",
+              "words": null,
+              "pages": 300.0,
+              "gb": 0.0,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 15.0,
+              "fetch_hours": 6.0,
+              "reachable_build_days": 15.0,
+              "blockers": [],
+              "sources": [
+                "eCFR API (versioner)",
+                "GovInfo CFR annual editions bulk XML",
+                "List of CFR Sections Affected (GovInfo LSA, 361 packages) + FR API"
+              ],
+              "routes": [
+                "bulk download + parse; diff consecutive annual editions; date changes from FR amendatory instructions"
+              ],
+              "history": "Annual snapshots 1996-2015 (XML for all years; 1996 partial). Exact effective dates between snapshots come from FR rule documents (1994+) and the LSA.",
+              "detail": [
+                {
+                  "part": "Code of Federal Regulations",
+                  "missing_units": 76,
+                  "unit": "eCFR part nodes (most are empty or group headings)",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 15.0,
+                  "confidence": "high"
+                }
+              ]
+            }
           },
           {
             "group": "Regulations and guidance",
@@ -1203,7 +2773,45 @@
             "how": "FederalRegister.gov API",
             "status": "not started",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 2.0,
+              "rows": 1,
+              "missing": "976k documents since 1994 (plus about 14,600 un-indexed scanned issues 1936-1993)",
+              "words": null,
+              "pages": 4000000.0,
+              "gb": 171.0,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 25.0,
+              "fetch_hours": 40.0,
+              "reachable_build_days": 25.0,
+              "blockers": [
+                "1936-1993: issue-level PDFs only, so documents must be split out from OCR text (headings, FR Doc. numbers)",
+                "FR statistics page is captcha-gated, so pre-1994 page counts are secondary-source estimates"
+              ],
+              "sources": [
+                "GovInfo FR bulk XML",
+                "FederalRegister.gov API",
+                "GovInfo FR scanned issues 1936-1993"
+              ],
+              "routes": [
+                "bulk download + parse (2000+); API crawl (1994-1999); PDF text + segmentation (1936-1993)"
+              ],
+              "history": "The FR is itself the dated change record: every rule document gives the CFR sections it amends and its effective date. It is the source for CFR history before 2015.",
+              "detail": [
+                {
+                  "part": "Federal Register (rules, proposed rules, notices)",
+                  "missing_units": 976037,
+                  "unit": "documents since 1994 (plus about 14,600 un-indexed scanned issues 1936-1993)",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 25.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Regulations and guidance",
@@ -1216,20 +2824,97 @@
             "how": "Federal Register presidential documents; earlier ones from the National Archives",
             "status": "not started",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 1.0,
+              "rows": 1,
+              "missing": "25.5k numbered EOs (14,438) + numbered proclamations (11,080)",
+              "words": null,
+              "pages": 60000.0,
+              "gb": 2.0,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 10.0,
+              "fetch_hours": 4.0,
+              "reachable_build_days": 10.0,
+              "blockers": [
+                "pre-1936 EOs: no official full-text bulk source; the main compilations are commercial (CIS microfiche, HeinOnline) or UCSB (terms bar republication)",
+                "1936-1993 texts must be cut from scanned FR PDFs"
+              ],
+              "sources": [
+                "FederalRegister.gov API (presidential_document_type filter)",
+                "National Archives EO disposition tables",
+                "Scanned FR issues + Title 3 CFR compilations (GovInfo)",
+                "Statutes at Large XML (proclamations printed in each volume)",
+                "American Presidency Project (UCSB)"
+              ],
+              "routes": [
+                "API crawl (1994+) + PDF text segmentation (1936-1993) + Statutes XML extraction (old proclamations) + manual/HathiTrust for pre-1936 EOs"
+              ],
+              "history": "Yes for 1937+: the disposition tables give amended/revoked-by links, so each EO's status over time can be dated.",
+              "detail": [
+                {
+                  "part": "Executive orders and proclamations",
+                  "missing_units": 25518,
+                  "unit": "numbered EOs (14,438) + numbered proclamations (11,080)",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 10.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Regulations and guidance",
             "part": "IRS guidance (Internal Revenue Bulletin)",
             "where": "united-states/federal/irs-guidance",
             "weight": 1.5,
-            "pct": 96.7,
+            "pct": 99.1,
             "collected_pct": null,
-            "progress": "10,111 of about 10,460 items, 1996-2026",
+            "progress": "10,111 of about 10,205 items published, 1996-2026 (48 gaps confirmed)",
             "how": "every bulletin, item by item",
             "status": "collecting",
             "confidence": "medium",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.01,
+              "rows": 1,
+              "missing": "291 sequence-number gaps (Rev. Rul./Rev. Proc./Notice/Announcement); plus up to 119 T.D. numbers",
+              "words": null,
+              "pages": 3000.0,
+              "gb": 0.1,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 2.0,
+              "fetch_hours": 1.0,
+              "reachable_build_days": 2.0,
+              "blockers": [
+                "IRS does not host the pre-1996 Cumulative Bulletins; scans only (HathiTrust/Google), so OCR is needed"
+              ],
+              "sources": [
+                "Internal Revenue Bulletin (irs.gov/irb)",
+                "IRS drop PDFs",
+                "Cumulative Bulletins 1919-1995 (HathiTrust / Google Books scans)"
+              ],
+              "routes": [
+                "fetch the 48 confirmed PDFs + check the IRB tables of contents for the rest; Cumulative Bulletin OCR as a separate sub-part"
+              ],
+              "history": "Items are dated by IRB issue. Supersession/modification is stated in each item, so a status history is derivable.",
+              "detail": [
+                {
+                  "part": "IRS guidance (Internal Revenue Bulletin)",
+                  "missing_units": 291,
+                  "unit": "sequence-number gaps (Rev. Rul./Rev. Proc./Notice/Announcement); plus up to 119 T.D. numbers",
+                  "access": "open",
+                  "words": null,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Regulations and guidance",
@@ -1242,20 +2927,574 @@
             "how": "each agency's guidance portal",
             "status": "not started",
             "confidence": "low",
-            "target_known": false
+            "target_known": false,
+            "gap": {
+              "missing_points": 1.0,
+              "rows": 0,
+              "missing": "",
+              "words": null,
+              "pages": null,
+              "gb": null,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 0,
+              "fetch_hours": 0,
+              "reachable_build_days": 0,
+              "blockers": [],
+              "sources": [],
+              "routes": [],
+              "history": null,
+              "detail": []
+            }
           },
           {
             "group": "Regulations and guidance",
             "part": "State administrative codes",
             "where": "united-states/ohio, south-carolina, guam",
             "weight": 7,
-            "pct": 2.0,
+            "pct": 1.3,
             "collected_pct": null,
-            "progress": "Ohio 4,051 of about 21,000 rules; South Carolina 94 of 107 chapters; Guam some; none for 53 others; weighted by population",
+            "progress": "Ohio 4,051 of about 21,000 rules; South Carolina 94 of 108 chapters (41% of its words); Guam some; none for 53 others; by words, weighted by population",
             "how": "each state's official administrative code",
             "status": "collecting",
             "confidence": "medium",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 6.91,
+              "rows": 55,
+              "missing": "55 jurisdictions or sub-parts",
+              "words": 491863292.0,
+              "pages": 983715.0,
+              "gb": 16.8,
+              "access_mix": {
+                "reachable": 0.643,
+                "permission": 0.106,
+                "fee": 0.024,
+                "blocked": 0.228
+              },
+              "build_days": 163.5,
+              "fetch_hours": 240.1,
+              "reachable_build_days": 102.5,
+              "blockers": [
+                "asbar.org and new.asbar.org return 403 to scripted clients (not worked around)",
+                "azsos.gov returned 403 to both curl and WebFetch (WAF; not worked around)",
+                "sos-rules-reg.ark.org returns 405 to GET from scripted clients (not worked around)",
+                "Mercatus has no Arkansas data (not analysed in RegData 2.0 or 2024 snapshots)",
+                "govt.westlaw.com returns 403 to curl and WebFetch refuses the host",
+                "Thomson Reuters terms bar copying/downloading without consent"
+              ],
+              "sources": [
+                "Legislative Services Agency (Administrative Code Division)",
+                "Alaska Legislature, Legislative Affairs Agency (BASIS); Lieutenant Governor files regulations",
+                "American Samoa Bar Association (hosts A.S. Administrative Code, ASAC) for the Territory",
+                "Arizona Secretary of State, Administrative Rules Division",
+                "Arkansas Secretary of State (rules filing) / Bureau of Legislative Research (Code of Arkansas Rules, CAR)"
+              ],
+              "routes": [
+                "API crawl",
+                "API crawl (GraphQL) of chapters/rules",
+                "Appian portal crawl; Register from UNT"
+              ],
+              "history": "Register issues give dated changes; the code site shows history notes per rule but no prior full-text versions were seen",
+              "detail": [
+                {
+                  "part": "State administrative codes: Alabama",
+                  "missing_units": 6947649,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 6947649.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Alaska",
+                  "missing_units": 6442827,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 6442827.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: American Samoa",
+                  "missing_units": 600000,
+                  "unit": "words (current code text)",
+                  "access": "blocked",
+                  "words": 600000.0,
+                  "build_days": 2.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State administrative codes: Arizona",
+                  "missing_units": 4758484,
+                  "unit": "words (current code text)",
+                  "access": "blocked",
+                  "words": 4758484.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Arkansas",
+                  "missing_units": 6500000,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 6500000.0,
+                  "build_days": 4.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State administrative codes: California",
+                  "missing_units": 23110146,
+                  "unit": "words (current code text)",
+                  "access": "copyright-or-terms",
+                  "words": 23110146.0,
+                  "build_days": 8.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Colorado",
+                  "missing_units": 12781197,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 12781197.0,
+                  "build_days": 4.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Connecticut",
+                  "missing_units": 5296093,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 5296093.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Delaware",
+                  "missing_units": 6700783,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 6700783.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: District of Columbia",
+                  "missing_units": 9000000,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 9000000.0,
+                  "build_days": 3.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State administrative codes: Florida",
+                  "missing_units": 11503027,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 11503027.0,
+                  "build_days": 4.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Georgia",
+                  "missing_units": 6301501,
+                  "unit": "words (current code text)",
+                  "access": "copyright-or-terms",
+                  "words": 6301501.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Guam",
+                  "missing_units": 1000000,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 1000000.0,
+                  "build_days": 1.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State administrative codes: Hawaii",
+                  "missing_units": 6438101,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 6438101.0,
+                  "build_days": 4.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Idaho",
+                  "missing_units": 3356157,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 3356157.0,
+                  "build_days": 2.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Illinois",
+                  "missing_units": 19071442,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 19071442.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Indiana",
+                  "missing_units": 8711240,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 8711240.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Iowa",
+                  "missing_units": 9776402,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 9776402.0,
+                  "build_days": 2.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Kansas",
+                  "missing_units": 3097891,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 3097891.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Kentucky",
+                  "missing_units": 6110515,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 6110515.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Louisiana",
+                  "missing_units": 11205206,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 11205206.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Maine",
+                  "missing_units": 9722133,
+                  "unit": "words (current code text)",
+                  "access": "blocked",
+                  "words": 9722133.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Maryland",
+                  "missing_units": 9003489,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 9003489.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Massachusetts",
+                  "missing_units": 11790070,
+                  "unit": "words (current code text)",
+                  "access": "fee",
+                  "words": 11790070.0,
+                  "build_days": 4.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Michigan",
+                  "missing_units": 4296218,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 4296218.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Minnesota",
+                  "missing_units": 5768636,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 5768636.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Mississippi",
+                  "missing_units": 13100051,
+                  "unit": "words (current code text)",
+                  "access": "blocked",
+                  "words": 13100051.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Missouri",
+                  "missing_units": 5827166,
+                  "unit": "words (current code text)",
+                  "access": "blocked",
+                  "words": 5827166.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Montana",
+                  "missing_units": 4709177,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 4709177.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Nebraska",
+                  "missing_units": 1807,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 5272057.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Nevada",
+                  "missing_units": 394,
+                  "unit": "NAC chapters",
+                  "access": "blocked",
+                  "words": 5175966.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: New Hampshire",
+                  "missing_units": 1016,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 8582725.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: New Jersey",
+                  "missing_units": 980,
+                  "unit": "chapters",
+                  "access": "copyright-or-terms",
+                  "words": 17347707.0,
+                  "build_days": 5.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: New Mexico",
+                  "missing_units": 3083,
+                  "unit": "parts",
+                  "access": "open",
+                  "words": 9174866.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: New York",
+                  "missing_units": 4835,
+                  "unit": "parts",
+                  "access": "blocked",
+                  "words": 17899233.0,
+                  "build_days": 5.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: North Carolina",
+                  "missing_units": 287,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 6095264.0,
+                  "build_days": 3.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: North Dakota",
+                  "missing_units": 2155,
+                  "unit": "chapter PDFs",
+                  "access": "open",
+                  "words": 3914007.0,
+                  "build_days": 2.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Northern Mariana Islands",
+                  "missing_units": 292,
+                  "unit": "documents",
+                  "access": "open",
+                  "words": 2000000.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Ohio",
+                  "missing_units": 16950,
+                  "unit": "rules",
+                  "access": "blocked",
+                  "words": 13400000.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Oklahoma",
+                  "missing_units": 902,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 8468211.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Oregon",
+                  "missing_units": 2988,
+                  "unit": "divisions",
+                  "access": "open",
+                  "words": 20137231.0,
+                  "build_days": 3.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Pennsylvania",
+                  "missing_units": 1953,
+                  "unit": "chapters",
+                  "access": "open-with-limits",
+                  "words": 10516274.0,
+                  "build_days": 3.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Puerto Rico",
+                  "missing_units": 9700,
+                  "unit": "registered regulations",
+                  "access": "open-with-limits",
+                  "words": 30000000.0,
+                  "build_days": 8.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State administrative codes: Rhode Island",
+                  "missing_units": 1125,
+                  "unit": "parts",
+                  "access": "open",
+                  "words": 6069134.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: South Carolina",
+                  "missing_units": 14,
+                  "unit": "chapters (of 108 now listed)",
+                  "access": "open",
+                  "words": 2870000.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: South Dakota",
+                  "missing_units": 2040,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 2695491.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Tennessee",
+                  "missing_units": 1525,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 8595067.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Texas",
+                  "missing_units": 1475,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 19795582.0,
+                  "build_days": 5.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Utah",
+                  "missing_units": 2342,
+                  "unit": "rules",
+                  "access": "open",
+                  "words": 5782017.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Vermont",
+                  "missing_units": 1027,
+                  "unit": "rules",
+                  "access": "copyright-or-terms",
+                  "words": 5339150.0,
+                  "build_days": 5.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Virginia",
+                  "missing_units": 1357,
+                  "unit": "chapters",
+                  "access": "open-with-limits",
+                  "words": 8200362.0,
+                  "build_days": 3.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Washington",
+                  "missing_units": 2772,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 18306994.0,
+                  "build_days": 2.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: West Virginia",
+                  "missing_units": 1673,
+                  "unit": "rules (series)",
+                  "access": "open-with-limits",
+                  "words": 8629281.0,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Wisconsin",
+                  "missing_units": 1709,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 10534668.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Wyoming",
+                  "missing_units": 1664,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 4136404.0,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Regulations and guidance",
@@ -1268,7 +3507,547 @@
             "how": "each state's official register",
             "status": "not started",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 1.0,
+              "rows": 56,
+              "missing": "56 jurisdictions or sub-parts",
+              "words": 491863292.0,
+              "pages": 983715.0,
+              "gb": 16.8,
+              "access_mix": {
+                "reachable": 0.643,
+                "permission": 0.106,
+                "fee": 0.024,
+                "blocked": 0.228
+              },
+              "build_days": 28.0,
+              "fetch_hours": 56.0,
+              "reachable_build_days": 18.5,
+              "blockers": [
+                "asbar.org and new.asbar.org return 403 to scripted clients (not worked around)",
+                "azsos.gov returned 403 to both curl and WebFetch (WAF; not worked around)",
+                "sos-rules-reg.ark.org returns 405 to GET from scripted clients (not worked around)",
+                "Mercatus has no Arkansas data (not analysed in RegData 2.0 or 2024 snapshots)",
+                "govt.westlaw.com returns 403 to curl and WebFetch refuses the host",
+                "Thomson Reuters terms bar copying/downloading without consent"
+              ],
+              "sources": [
+                "Legislative Services Agency (Administrative Code Division)",
+                "Alaska Legislature, Legislative Affairs Agency (BASIS); Lieutenant Governor files regulations",
+                "American Samoa Bar Association (hosts A.S. Administrative Code, ASAC) for the Territory",
+                "Arizona Secretary of State, Administrative Rules Division",
+                "Arkansas Secretary of State (rules filing) / Bureau of Legislative Research (Code of Arkansas Rules, CAR)"
+              ],
+              "routes": [],
+              "history": "Register issues give dated changes; the code site shows history notes per rule but no prior full-text versions were seen",
+              "detail": [
+                {
+                  "part": "State administrative codes: Alabama",
+                  "missing_units": 6947649,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 6947649.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Alaska",
+                  "missing_units": 6442827,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 6442827.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: American Samoa",
+                  "missing_units": 600000,
+                  "unit": "words (current code text)",
+                  "access": "blocked",
+                  "words": 600000.0,
+                  "build_days": 0.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State administrative codes: Arizona",
+                  "missing_units": 4758484,
+                  "unit": "words (current code text)",
+                  "access": "blocked",
+                  "words": 4758484.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Arkansas",
+                  "missing_units": 6500000,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 6500000.0,
+                  "build_days": 0.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State administrative codes: California",
+                  "missing_units": 23110146,
+                  "unit": "words (current code text)",
+                  "access": "copyright-or-terms",
+                  "words": 23110146.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Colorado",
+                  "missing_units": 12781197,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 12781197.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Connecticut",
+                  "missing_units": 5296093,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 5296093.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Delaware",
+                  "missing_units": 6700783,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 6700783.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: District of Columbia",
+                  "missing_units": 9000000,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 9000000.0,
+                  "build_days": 0.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State administrative codes: Florida",
+                  "missing_units": 11503027,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 11503027.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Georgia",
+                  "missing_units": 6301501,
+                  "unit": "words (current code text)",
+                  "access": "copyright-or-terms",
+                  "words": 6301501.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Guam",
+                  "missing_units": 1000000,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 1000000.0,
+                  "build_days": 0.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State administrative codes: Hawaii",
+                  "missing_units": 6438101,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 6438101.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Idaho",
+                  "missing_units": 3356157,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 3356157.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Illinois",
+                  "missing_units": 19071442,
+                  "unit": "words (current code text)",
+                  "access": "open-with-limits",
+                  "words": 19071442.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Indiana",
+                  "missing_units": 8711240,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 8711240.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Iowa",
+                  "missing_units": 9776402,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 9776402.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Kansas",
+                  "missing_units": 3097891,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 3097891.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Kentucky",
+                  "missing_units": 6110515,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 6110515.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Louisiana",
+                  "missing_units": 11205206,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 11205206.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Maine",
+                  "missing_units": 9722133,
+                  "unit": "words (current code text)",
+                  "access": "blocked",
+                  "words": 9722133.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Maryland",
+                  "missing_units": 9003489,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 9003489.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Massachusetts",
+                  "missing_units": 11790070,
+                  "unit": "words (current code text)",
+                  "access": "fee",
+                  "words": 11790070.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Michigan",
+                  "missing_units": 4296218,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 4296218.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Minnesota",
+                  "missing_units": 5768636,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 5768636.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Mississippi",
+                  "missing_units": 13100051,
+                  "unit": "words (current code text)",
+                  "access": "blocked",
+                  "words": 13100051.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Missouri",
+                  "missing_units": 5827166,
+                  "unit": "words (current code text)",
+                  "access": "blocked",
+                  "words": 5827166.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Montana",
+                  "missing_units": 4709177,
+                  "unit": "words (current code text)",
+                  "access": "open",
+                  "words": 4709177.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Nebraska",
+                  "missing_units": 1807,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 5272057.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Nevada",
+                  "missing_units": 394,
+                  "unit": "NAC chapters",
+                  "access": "blocked",
+                  "words": 5175966.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: New Hampshire",
+                  "missing_units": 1016,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 8582725.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: New Jersey",
+                  "missing_units": 980,
+                  "unit": "chapters",
+                  "access": "copyright-or-terms",
+                  "words": 17347707.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: New Mexico",
+                  "missing_units": 3083,
+                  "unit": "parts",
+                  "access": "open",
+                  "words": 9174866.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: New York",
+                  "missing_units": 4835,
+                  "unit": "parts",
+                  "access": "blocked",
+                  "words": 17899233.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: North Carolina",
+                  "missing_units": 287,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 6095264.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: North Dakota",
+                  "missing_units": 2155,
+                  "unit": "chapter PDFs",
+                  "access": "open",
+                  "words": 3914007.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Northern Mariana Islands",
+                  "missing_units": 292,
+                  "unit": "documents",
+                  "access": "open",
+                  "words": 2000000.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Ohio",
+                  "missing_units": 16950,
+                  "unit": "rules",
+                  "access": "blocked",
+                  "words": 13400000.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Oklahoma",
+                  "missing_units": 902,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 8468211.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Oregon",
+                  "missing_units": 2988,
+                  "unit": "divisions",
+                  "access": "open",
+                  "words": 20137231.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Pennsylvania",
+                  "missing_units": 1953,
+                  "unit": "chapters",
+                  "access": "open-with-limits",
+                  "words": 10516274.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Puerto Rico",
+                  "missing_units": 9700,
+                  "unit": "registered regulations",
+                  "access": "open-with-limits",
+                  "words": 30000000.0,
+                  "build_days": 0.5,
+                  "confidence": "low"
+                },
+                {
+                  "part": "State administrative codes: Rhode Island",
+                  "missing_units": 1125,
+                  "unit": "parts",
+                  "access": "open",
+                  "words": 6069134.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: South Carolina",
+                  "missing_units": 14,
+                  "unit": "chapters (of 108 now listed)",
+                  "access": "open",
+                  "words": 2870000.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: South Dakota",
+                  "missing_units": 2040,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 2695491.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Tennessee",
+                  "missing_units": 1525,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 8595067.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Texas",
+                  "missing_units": 1475,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 19795582.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: US Virgin Islands",
+                  "missing_units": null,
+                  "unit": "chapters",
+                  "access": "no-online-source",
+                  "words": null,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Utah",
+                  "missing_units": 2342,
+                  "unit": "rules",
+                  "access": "open",
+                  "words": 5782017.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Vermont",
+                  "missing_units": 1027,
+                  "unit": "rules",
+                  "access": "copyright-or-terms",
+                  "words": 5339150.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Virginia",
+                  "missing_units": 1357,
+                  "unit": "chapters",
+                  "access": "open-with-limits",
+                  "words": 8200362.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: Washington",
+                  "missing_units": 2772,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 18306994.0,
+                  "build_days": 0.5,
+                  "confidence": "high"
+                },
+                {
+                  "part": "State administrative codes: West Virginia",
+                  "missing_units": 1673,
+                  "unit": "rules (series)",
+                  "access": "open-with-limits",
+                  "words": 8629281.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Wisconsin",
+                  "missing_units": 1709,
+                  "unit": "chapters",
+                  "access": "blocked",
+                  "words": 10534668.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "State administrative codes: Wyoming",
+                  "missing_units": 1664,
+                  "unit": "chapters",
+                  "access": "open",
+                  "words": 4136404.0,
+                  "build_days": 0.5,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Case law",
@@ -1281,20 +4060,76 @@
             "how": "the Caselaw Access Project's published decisions",
             "status": "done",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.0,
+              "rows": 1,
+              "missing": "99.7k decisions held with CAP head matter only",
+              "words": null,
+              "pages": null,
+              "gb": 0.5,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 2.0,
+              "fetch_hours": 0,
+              "reachable_build_days": 2.0,
+              "blockers": [
+                "Most of these are table or memorandum dispositions (SCOTUS cert denials/summary orders, Pa./N.C. 'table' decisions) where the reporter printed no opinion; for pre-1990s ones no text exists anywhere",
+                "CourtListener's CAP merge reuses CAP's own text, so it adds text only where CL independently scraped the court (mostly post-1995)"
+              ],
+              "sources": [
+                "CourtListener bulk (opinion-clusters with filepath_json_harvard / filepath_pdf_harvard, citation-map)",
+                "Court sites for post-1995 table dispositions (Pa. Superior Court memoranda, N.C. Court of Appeals unpublished opinions)"
+              ],
+              "routes": [
+                "bulk join: match held head-matter cases to CourtListener clusters by citation/harvard id and take CL opinion text where CL has a non-CAP source"
+              ],
+              "history": "n/a",
+              "detail": [
+                {
+                  "part": "CAP decisions held as head matter only (no opinion text)",
+                  "missing_units": 99668,
+                  "unit": "decisions held with CAP head matter only",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 2.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Case law",
             "part": "State courts, to 2018 (CAP)",
             "where": "united-states/<state>/caselaw",
             "weight": 9,
-            "pct": 97.8,
+            "pct": 98.0,
             "collected_pct": null,
-            "progress": "every state and territory, 121 court corpora, against CAP's counts",
+            "progress": "every state and territory, 121 court corpora, against CAP's counts (less 11,109 federal D.C. Circuit cases CAP files under D.C.)",
             "how": "the Caselaw Access Project's published decisions",
             "status": "done",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.18,
+              "rows": 0,
+              "missing": "",
+              "words": null,
+              "pages": null,
+              "gb": null,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 0,
+              "fetch_hours": 0,
+              "reachable_build_days": 0,
+              "blockers": [],
+              "sources": [],
+              "routes": [],
+              "history": null,
+              "detail": []
+            }
           },
           {
             "group": "Case law",
@@ -1307,20 +4142,124 @@
             "how": "each court's own opinion pages",
             "status": "not started",
             "confidence": "low",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 5.0,
+              "rows": 1,
+              "missing": "282k published (precedential) decisions, 2019-2026",
+              "words": 1100000000.0,
+              "pages": 3400000.0,
+              "gb": 8.0,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 6.0,
+              "fetch_hours": 3.0,
+              "reachable_build_days": 6.0,
+              "blockers": [
+                "CourtListener API caps (125 requests/day) make an API crawl impossible; the bulk file is the only practical route",
+                "Per-court counts in CourtListener could not be taken: API needs a token and the coverage pages moved to wiki.free.law without per-court numbers",
+                "GovInfo API needs a personal api.data.gov key (DEMO_KEY rate-limited)"
+              ],
+              "sources": [
+                "CourtListener bulk data (Free Law Project)",
+                "CourtListener REST API v4",
+                "GovInfo USCOURTS (federal court opinions)",
+                "Each court's opinion pages (supremecourt.gov, ca1-ca11/cadc/cafc sites, state judiciary sites)"
+              ],
+              "routes": [
+                "bulk download + parse (CourtListener opinions + clusters + dockets + courts, filter date_filed >= 2019-01-01, precedential_status = Published)"
+              ],
+              "history": "Decisions are dated by date_filed; later corrections and withdrawn/amended opinions appear as separate rows or updated text between quarterly snapshots, so revisions are only visible by diffing snapshots.",
+              "detail": [
+                {
+                  "part": "Published decisions since 2018",
+                  "missing_units": 282000,
+                  "unit": "published (precedential) decisions, 2019-2026",
+                  "access": "open",
+                  "words": 1100000000.0,
+                  "build_days": 6.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Case law",
-            "part": "Unpublished appellate decisions",
+            "part": "Unpublished and district-court decisions",
             "where": "none yet",
             "weight": 1,
             "pct": 0,
             "collected_pct": null,
-            "progress": "0 of about 185,000 federal since 2019 (states more)",
+            "progress": "0 of about 485,000 unpublished appellate (federal 185,000) and 1.45M district-court documents since 2019",
             "how": "each court's own opinion pages",
             "status": "not started",
             "confidence": "medium",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 1.0,
+              "rows": 3,
+              "missing": "3 jurisdictions or sub-parts",
+              "words": 5200000000.0,
+              "pages": 14740000.0,
+              "gb": 228.0,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 14.0,
+              "fetch_hours": 252.0,
+              "reachable_build_days": 14.0,
+              "blockers": [
+                "Summary orders that are only docket text entries (no PDF) are reachable only through PACER dockets ($0.10/page) or RECAP",
+                "Several states take unpublished opinions offline after 60 days to a few years (California nonpublished list is a rolling window), so only CourtListener's captured copies exist for older ones",
+                "Some states issue memorandum dispositions only on dockets",
+                "Not every court sends to GovInfo: S.D.N.Y. and C.D. Cal. are absent; 2nd/9th Circuit sparse",
+                "GovInfo counts include routine orders (E.D. Cal. sends nearly everything), so 'documents' overstates reasoned opinions",
+                "PACER requires an account; written opinions are free but discovery of them needs the per-court written-opinions report"
+              ],
+              "sources": [
+                "CourtListener bulk data",
+                "GovInfo USCOURTS appellate",
+                "Each circuit's opinions page",
+                "State judiciary opinion pages",
+                "GovInfo USCOURTS district"
+              ],
+              "routes": [
+                "API crawl (GovInfo packages/granules) + PDF text; PACER written-opinions report for the ~19 missing districts",
+                "bulk download + parse",
+                "bulk download + parse (same pass as published), GovInfo API to fill gaps"
+              ],
+              "history": "Filed date only.",
+              "detail": [
+                {
+                  "part": "Unpublished appellate decisions: federal courts of appeals",
+                  "missing_units": 185000,
+                  "unit": "unpublished opinions/orders in cases terminated on the merits, 2019-2026",
+                  "access": "open",
+                  "words": 300000000.0,
+                  "build_days": 2.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "Unpublished appellate decisions: state intermediate courts",
+                  "missing_units": 300000,
+                  "unit": "unpublished/non-precedential state appellate decisions, 2019-2026 (estimate)",
+                  "access": "open-with-limits",
+                  "words": 900000000.0,
+                  "build_days": 2.0,
+                  "confidence": "low"
+                },
+                {
+                  "part": "Unpublished decisions: federal district-court opinions and orders",
+                  "missing_units": 1449643,
+                  "unit": "district-court documents on GovInfo USCOURTS, 2019-2026",
+                  "access": "open-with-limits",
+                  "words": 4000000000.0,
+                  "build_days": 10.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Case law",
@@ -1333,7 +4272,45 @@
             "how": "each attorney general's site",
             "status": "not started",
             "confidence": "low",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.5,
+              "rows": 1,
+              "missing": "80k formal (and published informal) AG opinions available online, cumulative",
+              "words": 160000000.0,
+              "pages": 400000.0,
+              "gb": 25.0,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 25.0,
+              "fetch_hours": 40.0,
+              "reachable_build_days": 25.0,
+              "blockers": [
+                "MA, RI, UT (and stale MO, NJ, NC, PA, VT) not online",
+                "some AG sites behind bot walls (not to be bypassed)",
+                "older archives are image scans needing OCR"
+              ],
+              "sources": [
+                "Each attorney general's opinions page (~45 of 56)",
+                "HeinOnline State Attorney General Reports and Opinions"
+              ],
+              "routes": [
+                "HTML scrape + PDF text (OCR for pre-1995)"
+              ],
+              "history": "Opinions are dated; withdrawn/overruled lists exist for TX and GA; no versioning.",
+              "detail": [
+                {
+                  "part": "State attorney general opinions",
+                  "missing_units": 80000,
+                  "unit": "formal (and published informal) AG opinions available online, cumulative",
+                  "access": "open-with-limits",
+                  "words": 160000000.0,
+                  "build_days": 25.0,
+                  "confidence": "low"
+                }
+              ]
+            }
           },
           {
             "group": "Court rules",
@@ -1346,7 +4323,56 @@
             "how": "uscourts.gov and each court",
             "status": "not started",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 1.0,
+              "rows": 2,
+              "missing": "2 jurisdictions or sub-parts",
+              "words": 10900000.0,
+              "pages": 26200.0,
+              "gb": 0.5,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 7.0,
+              "fetch_hours": 2.1,
+              "reachable_build_days": 7.0,
+              "blockers": [
+                "no central index; each court's page differs",
+                "past versions rarely kept"
+              ],
+              "sources": [
+                "OLRC US Code appendices in USLM XML (Titles 28A, 18A, 11A)",
+                "uscourts.gov current rules PDFs and Records and Archives of the Rules Committees",
+                "Supreme Court Rules",
+                "Each court's local rules page (*.uscourts.gov)"
+              ],
+              "routes": [
+                "PDF text (per-court link discovery)",
+                "bulk download + parse (USLM, reuse the US Code parser)"
+              ],
+              "history": "Each rule's USLM notes list every amendment date (e.g. 'As amended ... eff. Dec. 1, 2007'), from 1938 (FRCP) / 1946 (FRCrP) / 1968 (FRAP) / 1975 (FRE) / 1983 (FRBP); full prior texts via OLRC release points (2013+), GovInfo USCODE annual editions (1994+) and committee packages on uscourts.gov.",
+              "detail": [
+                {
+                  "part": "Federal rules: national rule sets (FRAP, FRCP, FRE, FRCrP, FRBP) and Supreme Court Rules",
+                  "missing_units": 592,
+                  "unit": "rules",
+                  "access": "open",
+                  "words": 900000.0,
+                  "build_days": 1.0,
+                  "confidence": "high"
+                },
+                {
+                  "part": "Federal rules: local rules of district, bankruptcy and appellate courts",
+                  "missing_units": 450,
+                  "unit": "local rule documents (estimate)",
+                  "access": "open",
+                  "words": 10000000.0,
+                  "build_days": 6.0,
+                  "confidence": "low"
+                }
+              ]
+            }
           },
           {
             "group": "Court rules",
@@ -1359,7 +4385,45 @@
             "how": "each state judiciary",
             "status": "collecting",
             "confidence": "medium",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 2.0,
+              "rows": 1,
+              "missing": "54 jurisdictions (of 56; Guam and part of Kentucky held)",
+              "words": 25000000.0,
+              "pages": 60000.0,
+              "gb": 0.3,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 45.0,
+              "fetch_hours": 15.0,
+              "reachable_build_days": 45.0,
+              "blockers": [
+                "Westlaw-hosted official rules (AZ, MD, NY 22 NYCRR) under vendor terms barring scraping",
+                "rule sets as amendment-order PDFs in some states, no consolidated text",
+                "PR rules in Spanish"
+              ],
+              "sources": [
+                "Each state judiciary's rules page",
+                "Vendor public-access sites (Westlaw govt)"
+              ],
+              "routes": [
+                "HTML scrape + PDF text"
+              ],
+              "history": "Mostly current only; amendment orders posted by many supreme courts (e.g. Arizona rules forum, Colorado rule-change PDFs, Pa. Bulletin) allow dated changes from ~2000s; full past versions rare.",
+              "detail": [
+                {
+                  "part": "State rules of court",
+                  "missing_units": 54,
+                  "unit": "jurisdictions (of 56; Guam and part of Kentucky held)",
+                  "access": "open-with-limits",
+                  "words": 25000000.0,
+                  "build_days": 45.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Local law",
@@ -1372,7 +4436,62 @@
             "how": "each code's official or codifier's publication",
             "status": "collecting",
             "confidence": "medium",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 6.0,
+              "rows": 2,
+              "missing": "2 jurisdictions or sub-parts",
+              "words": 3500000000.0,
+              "pages": 8030000.0,
+              "gb": 30.5,
+              "access_mix": {
+                "permission": 0.996,
+                "blocked": 0.004
+              },
+              "build_days": 63.0,
+              "fetch_hours": 2.0,
+              "reachable_build_days": 0,
+              "blockers": [
+                "All three big codifiers (Municode, American Legal, eCode360) plus municipal.codes return 403 to automated clients; together they host about 82% of codes",
+                "Municode ToS bars copying/reproducing/republishing the site except as permitted; robots.txt Content-Signal ai-train=no, use=reference and named-bot Disallow",
+                "General Code and American Legal terms URLs now redirect to ICC Code Solutions (both are ICC-owned) and 404, so their operative terms could not be quoted",
+                "Legal position: under Georgia v. Public.Resource.Org (2020, government-edicts doctrine) and Veeck v. SBCCI (5th Cir. 2002 en banc, a Texas town's adopted code), ordinance text enacted by a local legislature is not copyrightable, but codifier-written headings, annotations, editor's notes and arrangement may carry thin copyright and the site ToS are contract terms; this is the publisher-side obstacle, not copyright in the law itself",
+                "codelibrary.amlegal.com 403 (the only current official consolidated text, even though NYC law says it must be free of copyright)",
+                "rules.cityofnewyork.us adopted-rules listing 403 earlier"
+              ],
+              "sources": [
+                "Municode Library (CivicPlus)",
+                "American Legal Publishing Code Library",
+                "General Code eCode360",
+                "Self-published city/county sites",
+                "American Legal NYC library (official; XML bulk download of Admin Code, Charter and Rules)"
+              ],
+              "routes": [
+                "One human browser download of the official XML bulk files (the page offers them; that is a manual, permitted route, not a workaround), then parse; Local Laws via Legistar API with a free token",
+                "Per-city agreements or city-provided exports (many cities can export their own code from the codifier's admin tools), plus self-published PDFs; scraping the codifier sites is not an option under current blocks"
+              ],
+              "history": "Codifiers keep supplement histories and some offer dated archived versions (Municode 'compare versions'/archive, eCode360 'previous versions' for some clients), but only through the blocked sites. Ordinances themselves are on city clerk/Legistar sites (many cities use Granicus Legistar with a public Web API) from about 2000-2010 onward, which can give dated amendments.",
+              "detail": [
+                {
+                  "part": "County, city and township codes",
+                  "missing_units": 10500,
+                  "unit": "local codes of ordinances published online (of 38,736 general-purpose governments)",
+                  "access": "copyright-or-terms",
+                  "words": 3500000000.0,
+                  "build_days": 60.0,
+                  "confidence": "medium"
+                },
+                {
+                  "part": "County, city and township codes: New York City",
+                  "missing_units": 4000,
+                  "unit": "sections (Admin Code current text not held) plus Charter, rules and local laws gaps",
+                  "access": "blocked",
+                  "words": null,
+                  "build_days": 3.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Tribal law",
@@ -1385,7 +4504,48 @@
             "how": "each nation's own publication",
             "status": "not started",
             "confidence": "medium",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 1.0,
+              "rows": 1,
+              "missing": "574 federally recognized tribes (constitution + code each); about 270 have something free online",
+              "words": null,
+              "pages": 120000.0,
+              "gb": 3.0,
+              "access_mix": {
+                "permission": 1.0
+              },
+              "build_days": 15.0,
+              "fetch_hours": 5.0,
+              "reachable_build_days": 0,
+              "blockers": [
+                "NILL requires separate permission from each Tribal Nation to reuse materials in another collection",
+                "tribal sovereignty: reuse terms set by ~574 separate governments",
+                "about 300 tribes have no code online at all",
+                "Municode-hosted tribal codes 403"
+              ],
+              "sources": [
+                "NILL Tribal Law Gateway (Native American Rights Fund)",
+                "Tribes' own sites (e.g. Navajo Nation Code at nnols.org/navajo-nation-code; Cherokee Nation Code at attorneygeneral.cherokee.org/Tribal-Code and cherokeecourts.org CNCA PDF; Cherokee Nation Legistar)",
+                "Historical constitutions (OU Law/Thorpe and Library of Congress; Memory Hole 2 FOIA set of 612 constitution documents)",
+                "Westlaw / Lexis / HeinOnline tribal codes"
+              ],
+              "routes": [
+                "Permission requests per nation (start with the ~240 with online codes), then PDF text/HTML parse; constitutions first (short, many already public federal records)"
+              ],
+              "history": "Constitutions: original IRA-era texts and amendments are dated (BIA approval dates; OU/LoC historical copies). Codes: mostly current-only; Navajo and Cherokee publish resolutions/legislation via Legistar-style systems that could give dated changes.",
+              "detail": [
+                {
+                  "part": "Tribal constitutions and codes",
+                  "missing_units": 574,
+                  "unit": "federally recognized tribes (constitution + code each); about 270 have something free online",
+                  "access": "copyright-or-terms",
+                  "words": null,
+                  "build_days": 15.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Tribal law",
@@ -1398,7 +4558,47 @@
             "how": "the Caselaw Access Project",
             "status": "done",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.02,
+              "rows": 1,
+              "missing": "4k published tribal court opinions not in CAP (rough)",
+              "words": null,
+              "pages": 40000.0,
+              "gb": 0.5,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 5.0,
+              "fetch_hours": 4.0,
+              "reachable_build_days": 5.0,
+              "blockers": [
+                "most post-2017 American Tribal Law content is Westlaw-only (fee)",
+                "123 tribes state opinions are not online",
+                "tribal-institute.org rejects automated clients (mod_security 406)"
+              ],
+              "sources": [
+                "NICS Tribal Court Appellate Opinions (Code Publishing Co.)",
+                "Tribal court websites (Navajo Nation Judicial Branch, cherokeecourts.org, others)",
+                "NILL Tribal Courts Bulletin",
+                "TLPI/VersusLaw, Westlaw American Tribal Law (post-2017), Casemaker, Lexis, Fastcase"
+              ],
+              "routes": [
+                "HTML scrape of NICS reporter + PDF text from ~50 tribal court sites"
+              ],
+              "history": "Opinions are dated; NICS back to the 1990s.",
+              "detail": [
+                {
+                  "part": "Tribal court decisions (beyond CAP)",
+                  "missing_units": 4000,
+                  "unit": "published tribal court opinions not in CAP (rough)",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 5.0,
+                  "confidence": "low"
+                }
+              ]
+            }
           },
           {
             "group": "Treaties",
@@ -1411,7 +4611,49 @@
             "how": "the State Department's treaty texts; Senate treaty documents",
             "status": "not started",
             "confidence": "medium",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 1.5,
+              "rows": 1,
+              "missing": "18.4k treaties and executive agreements (about 1,100 Article II treaties + 17,300+ executive agreements)",
+              "words": null,
+              "pages": 260000.0,
+              "gb": 40.0,
+              "access_mix": {
+                "blocked": 1.0
+              },
+              "build_days": 15.0,
+              "fetch_hours": 20.0,
+              "reachable_build_days": 0,
+              "blockers": [
+                "state.gov 403 (TIAS, TIF, 112b texts)",
+                "loc.gov Cloudflare challenge 403 for Bevans/UST scans",
+                "1985-1995 TIAS texts only in HeinOnline (fee)",
+                "UST/Bevans are scans needing OCR"
+              ],
+              "sources": [
+                "Law Library of Congress: Bevans + UST collection",
+                "State Department TIAS texts",
+                "State Department 1 USC 112b reports/texts of international agreements",
+                "Treaties in Force (annual)",
+                "Senate Treaty Documents (congress.gov /treaty API; GovInfo CDOC)"
+              ],
+              "routes": [
+                "LoC PDF scans + OCR for 1776-1984 (once loc.gov access is resolved, e.g. via the official loc.gov JSON API from an allowed client), state.gov PDFs for 1996+ (after access), congress.gov API for Senate treaty documents"
+              ],
+              "history": "Agreements are dated by signature and entry into force; TIF snapshots back to 1981 give in-force status by year; amendments/protocols are separate agreements.",
+              "detail": [
+                {
+                  "part": "Treaties and international agreements",
+                  "missing_units": 18400,
+                  "unit": "treaties and executive agreements (about 1,100 Article II treaties + 17,300+ executive agreements)",
+                  "access": "blocked",
+                  "words": null,
+                  "build_days": 15.0,
+                  "confidence": "low"
+                }
+              ]
+            }
           },
           {
             "group": "Legislative history",
@@ -1424,7 +4666,45 @@
             "how": "congress.gov and GovInfo",
             "status": "not started",
             "confidence": "medium",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 1.0,
+              "rows": 1,
+              "missing": "390k measures introduced 93rd-119th Congress (texts exist online only for the 103rd+)",
+              "words": null,
+              "pages": 9000000.0,
+              "gb": 200.0,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 12.0,
+              "fetch_hours": 120.0,
+              "reachable_build_days": 12.0,
+              "blockers": [
+                "no free texts for 93rd-102nd Congress bills",
+                "needs a real api.data.gov key (free)"
+              ],
+              "sources": [
+                "GovInfo bulk data (BILLS, BILLSTATUS, BILLSUM)",
+                "GovInfo API (CREC, CRECB, CRPT, older BILLS)",
+                "congress.gov API"
+              ],
+              "routes": [
+                "bulk download (BILLS/BILLSTATUS XML ~8.3 GB) + API crawl (CREC/CRECB/CRPT/older BILLS) + PDF text for bound Record"
+              ],
+              "history": "Yes: every bill version is dated (ih, rh, eh, enr), BILLSTATUS has dated actions from 108th, CR is daily-dated. This is itself history.",
+              "detail": [
+                {
+                  "part": "Congressional bills, reports and Record",
+                  "missing_units": 390000,
+                  "unit": "measures introduced 93rd-119th Congress (texts exist online only for the 103rd+)",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 12.0,
+                  "confidence": "high"
+                }
+              ]
+            }
           },
           {
             "group": "Legislative history",
@@ -1437,7 +4717,46 @@
             "how": "each legislature",
             "status": "not started",
             "confidence": "medium",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.5,
+              "rows": 1,
+              "missing": "130k bills introduced per year across 50 states (about 3.5-4.5 million 1995-2026)",
+              "words": null,
+              "pages": null,
+              "gb": 300.0,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 20.0,
+              "fetch_hours": 600.0,
+              "reachable_build_days": 20.0,
+              "blockers": [
+                "LegiScan full-text corpus is subscription; free tier capped at 30k API queries/month",
+                "Open States bulk needs login; coverage mostly 2017+",
+                "pre-2009 bills only on state sites, uneven"
+              ],
+              "sources": [
+                "LegiScan datasets (per session, API JSON + CSV)",
+                "Open States / Plural bulk data",
+                "Each state legislature's site"
+              ],
+              "routes": [
+                "Open States JSON per session (2017+) + LegiScan datasets (2010+) for metadata, then fetch version texts from state sites by the version URLs"
+              ],
+              "history": "Yes, bill versions are dated; 2010+ well covered, 1995-2009 depends on each state's archive.",
+              "detail": [
+                {
+                  "part": "State bills",
+                  "missing_units": 130000,
+                  "unit": "bills introduced per year across 50 states (about 3.5-4.5 million 1995-2026)",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 20.0,
+                  "confidence": "medium"
+                }
+              ]
+            }
           },
           {
             "group": "Historical law",
@@ -1450,7 +4769,44 @@
             "how": "Library of Congress scans, by OCR",
             "status": "collecting",
             "confidence": "high",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.98,
+              "rows": 1,
+              "missing": "531 title-editions (main editions 1926-1988)",
+              "words": null,
+              "pages": 95000.0,
+              "gb": 40.0,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 20.0,
+              "fetch_hours": 30.0,
+              "reachable_build_days": 20.0,
+              "blockers": [
+                "loc.gov Cloudflare challenge for scripted JSON access (do not bypass; use a browser-paced or LoC-sanctioned route)",
+                "OCR quality of 1920s-1950s scans"
+              ],
+              "sources": [
+                "Library of Congress 'United States Code' collection (1925-1988 editions + supplements)",
+                "GovInfo USCODE (1994 edition onward, already held)"
+              ],
+              "routes": [
+                "PDF text (existing text layer) with OCR fallback"
+              ],
+              "history": "Main editions give a 6-year snapshot cadence; annual cumulative supplements tighten it to yearly. Exact dates per change come from the Statutes at Large XML cited in each section's credits.",
+              "detail": [
+                {
+                  "part": "US Code before 1995 (printed editions 1926-1994)",
+                  "missing_units": 531,
+                  "unit": "title-editions (main editions 1926-1988)",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 20.0,
+                  "confidence": "low"
+                }
+              ]
+            }
           },
           {
             "group": "Historical law",
@@ -1463,14 +4819,146 @@
             "how": "state archives and law libraries",
             "status": "not started",
             "confidence": "low",
-            "target_known": true
+            "target_known": true,
+            "gap": {
+              "missing_points": 0.5,
+              "rows": 1,
+              "missing": "56 jurisdictions",
+              "words": null,
+              "pages": 2900000.0,
+              "gb": 600.0,
+              "access_mix": {
+                "reachable": 1.0
+              },
+              "build_days": 120.0,
+              "fetch_hours": 200.0,
+              "reachable_build_days": 120.0,
+              "blockers": [
+                "the only complete set (HeinOnline) is subscription-only",
+                "post-1929 state compilations on HathiTrust are often search-only",
+                "OCR of 19th-century typefaces and annotations"
+              ],
+              "sources": [
+                "HeinOnline State Statutes: A Historical Archive",
+                "HathiTrust",
+                "Iowa Code Archive",
+                "Minnesota Statutes Archive",
+                "Washington RCW Archive"
+              ],
+              "routes": [
+                "official archives first (IA, MN, WA, WI, OR, FL scans, TX scans: ~7 states, ~150 editions, ~300k pages) then HathiTrust full-view volumes + OCR"
+              ],
+              "history": "this part is itself history; pre-1995 editions",
+              "detail": [
+                {
+                  "part": "Earlier state codes and compilations",
+                  "missing_units": 56,
+                  "unit": "jurisdictions",
+                  "access": "open-with-limits",
+                  "words": null,
+                  "build_days": 120.0,
+                  "confidence": "low"
+                }
+              ]
+            }
           }
-        ]
+        ],
+        "gaps": {
+          "missing_points": 44.0,
+          "by_access": {
+            "reachable": 31.4,
+            "permission": 8.6,
+            "fee": 0.2,
+            "blocked": 3.9,
+            "no source": 0.0
+          },
+          "ceiling_open_pct": 87.4,
+          "build_days_reachable": 1129,
+          "build_days_all": 1449,
+          "fetch_hours_reachable": 2482,
+          "builders": 8,
+          "eta_weeks_reachable": 28.2,
+          "next": [
+            {
+              "part": "Constitution of the United States",
+              "points": 3.0,
+              "build_days": 0.5,
+              "points_per_day": 6.0
+            },
+            {
+              "part": "Published decisions since 2018",
+              "points": 5.0,
+              "build_days": 6.0,
+              "points_per_day": 0.833
+            },
+            {
+              "part": "Statutes at Large (public and private laws)",
+              "points": 2.0,
+              "build_days": 8.0,
+              "points_per_day": 0.25
+            },
+            {
+              "part": "Federal rules (civil, criminal, appellate, evidence, bankruptcy) and local rules",
+              "points": 1.0,
+              "build_days": 7.0,
+              "points_per_day": 0.143
+            },
+            {
+              "part": "Executive orders and proclamations",
+              "points": 1.0,
+              "build_days": 10.0,
+              "points_per_day": 0.1
+            },
+            {
+              "part": "State and territorial constitutions",
+              "points": 0.2,
+              "build_days": 2.1,
+              "points_per_day": 0.097
+            },
+            {
+              "part": "Congressional bills, reports and Record",
+              "points": 1.0,
+              "build_days": 12.0,
+              "points_per_day": 0.083
+            },
+            {
+              "part": "Federal Register (rules, proposed rules, notices)",
+              "points": 2.0,
+              "build_days": 25.0,
+              "points_per_day": 0.08
+            },
+            {
+              "part": "Unpublished and district-court decisions",
+              "points": 1.0,
+              "build_days": 14.0,
+              "points_per_day": 0.071
+            },
+            {
+              "part": "US Code before 1995 (printed editions 1926-1994)",
+              "points": 0.98,
+              "build_days": 20.0,
+              "points_per_day": 0.049
+            },
+            {
+              "part": "State rules of court",
+              "points": 2.0,
+              "build_days": 45.0,
+              "points_per_day": 0.044
+            },
+            {
+              "part": "State administrative codes",
+              "points": 4.44,
+              "build_days": 102.5,
+              "points_per_day": 0.043
+            }
+          ],
+          "unmatched_rows": []
+        }
       },
       "headline": [
         [
           "The plan, weighted",
-          55.9,
+          56.0,
           "high"
         ],
         [
@@ -1499,7 +4987,7 @@
           "high"
         ]
       ],
-      "verdict": "55.9% of the plan (every source a US lawyer or citizen needs, 31 parts weighted by how binding each is and how often it is used) is in global-law. Strong: the US Code, the CFR, the state codes and the published case law to 2018. Missing: the Constitution's own text, session laws and the Statutes at Large, state administrative codes (two states), decisions since 2018, court rules, all county and city law (New York City collected, not yet in global-law), tribal codes, treaties and legislative history. Federal: the US Code is whole as current text (53 titles, release point 119-138; history 99.7% since 1995, 33.4% since 1926), the CFR holds 8,241 of the eCFR's 8,317 parts in force, and the Constitution, the Statutes at Large and the Federal Register are not held. States: 41 of 56 hold 90% or more of their code and 6 hold none; 88.4% weighted by population (79.6% unweighted). Case law: 98.4% of the 6,920,596 published decisions in the Caselaw Access Project are held (6,931,555 decisions in all, 98.6% of them with their opinion text); decisions after CAP's end (2018) are not held. No county or city law is held.",
+      "verdict": "56.0% of the plan (every source a US lawyer or citizen needs, 31 parts weighted by how binding each is and how often it is used) is in global-law. Strong: the US Code, the CFR, the state codes and the published case law to 2018. Missing: the Constitution's own text, session laws and the Statutes at Large, state administrative codes (two states), decisions since 2018, court rules, all county and city law (New York City collected, not yet in global-law), tribal codes, treaties and legislative history. Federal: the US Code is whole as current text (53 titles, release point 119-138; history 99.7% since 1995, 33.4% since 1926), the CFR holds 8,241 of the eCFR's 8,317 parts in force, and the Constitution, the Statutes at Large and the Federal Register are not held. States: 41 of 56 hold 90% or more of their code and 6 hold none; 88.4% weighted by population (79.6% unweighted). Case law: 98.4% of the 6,920,596 published decisions in the Caselaw Access Project are held (6,931,555 decisions in all, 98.6% of them with their opinion text); decisions after CAP's end (2018) are not held. No county or city law is held.",
       "method": "Each state's code: the units of the official table of contents (chapters, or the code's own unit) read from the publisher on the date shown, against the units with law text in the repository's tree (us/verified in eu-law-charts; one reviewer per state, spot checks against the official text). CFR: parts in force in the eCFR structure of each title against the part folders held. Case law: decisions held per jurisdiction against CAP's own case counts. Population: 2020 census.",
       "federal": [
         {
