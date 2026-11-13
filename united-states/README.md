@@ -5,88 +5,95 @@
 
 208 repositories under this folder (1 legislation, whole country, 53 legislation, subdivisions, 2 regulations and guidance, 152 case law). Each row links to the repository's current `main`; the folder of the same path is the submodule global-law pins and reads. "Coverage" is what the corpus says of itself; freshness is global-law's monitor.
 
-## Completeness of the whole country, best-effort (2026-11-13)
+## Completeness of the whole country, checked 2026-11-13
 
-| Federal statutes (US Code) | Federal regulations (CFR) | State and territorial statutes | Published case law | Local law (counties, cities) |
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="completeness-dark.svg">
+<img alt="How complete global-law is for the whole country: federal law, each state and territory code, case law and local law" src="completeness-light.svg" width="880">
+</picture>
+
+| US Code, current text | Code of Federal Regulations (parts in force) | State and territorial codes (by population) | Published case law (of CAP) | County and city law |
 | --- | --- | --- | --- | --- |
-| 100% (high confidence) | 95% (medium confidence) | 69% (low confidence) | 90% (medium confidence) | 0% (high confidence) |
+| 100% | 99.1% | 88.4% | 98.4% | 0% |
 
-Federal statute and regulation are close to whole as current text; the Constitution, the Statutes at Large and most agency guidance are not held. Of the 56 states, territories and D.C., 52 have law text, 28 hold 90% or more of their code and the mean share is about 69% (unweighted): Hawaii, Mississippi, Nebraska and Rhode Island hold almost nothing, Arkansas only a catalogue, and New Mexico, Puerto Rico and the US Virgin Islands have no legislation repository. Most state codes are current text only. Case law: 6.9 million published decisions from 152 court corpora, read from the Caselaw Access Project, which ends around 2018; later decisions are mostly missing. No county or city law is held.
+Federal: the US Code is whole as current text (53 titles, release point 119-138; history 99.7% since 1995, 33.4% since 1926), the CFR holds 8,241 of the eCFR's 8,317 parts in force, and the Constitution, the Statutes at Large and the Federal Register are not held. States: 41 of 56 hold 90% or more of their code and 6 hold none; 88.4% weighted by population (79.6% unweighted). Case law: 98.4% of the 6,920,596 published decisions in the Caselaw Access Project are held (6,931,555 decisions in all, 98.6% of them with their opinion text); decisions after CAP's end (2018) are not held. No county or city law is held.
 
-Shares are of current text, read from each repository's README on 2026-11-13: what it holds (titles, chapters, acts) against the number its publisher lists; where the README gives no total, a judgement to the nearest 5%, marked low confidence. History (past versions) is not counted. Case law: decisions held against about 7.2 million published US decisions (CAP's 6.7 million to 2018, and about 60,000 a year since). Every figure is in [data/completeness.json](../data/completeness.json).
+Each state's code: the units of the official table of contents (chapters, or the code's own unit) read from the publisher on the date shown, against the units with law text in the repository's tree (us/verified in eu-law-charts; one reviewer per state, spot checks against the official text). CFR: parts in force in the eCFR structure of each title against the part folders held. Case law: decisions held per jurisdiction against CAP's own case counts. Population: 2020 census. Every figure is in [data/completeness.json](../data/completeness.json).
 
 <details><summary>Federal law, part by part</summary>
 
 | Part | Held | Confidence | Basis |
 | --- | --- | --- | --- |
 | Constitution of the United States | 0% | high | not held: no corpus holds its text |
-| United States Code | 100% | high | all 53 titles, current through release point 119-138; history 99.7% since 1994, 33.4% since 1926 |
-| Code of Federal Regulations | 95% | medium | eCFR, 9,176 parts with versions from December 2015 |
-| Statutes at Large and Federal Register | 0% | high | not held as text (the US Code credits each change to its law) |
-| Agency guidance | 10% | low | IRS guidance (Internal Revenue Bulletin) only |
+| United States Code, current text | 100% | high | all 53 titles, release point 119-138 |
+| United States Code, history since 1995 | 99.7% | high | title-years with every change dated (repository's completeness.json) |
+| United States Code, history since 1926 | 33.4% | high | printed editions 1926-1994: 11 of 542 title-editions read |
+| Code of Federal Regulations | 99.1% | high | 8,241 of 8,317 eCFR parts in force (2026-11-10) |
+| Statutes at Large and Federal Register | 0% | high | not held as text |
+| Federal court decisions (of CAP) | 100% | high | 1,970,129 held; CAP lists 1,845,102 |
 
 </details>
 
 <details><summary>The 56 states, territories and D.C., one by one</summary>
 
-| Jurisdiction | Statutes held | Confidence | Basis |
-| --- | --- | --- | --- |
-| Alabama | 95% | medium | Constitution and all 46 Code titles |
-| Alaska | 100% | high | every title, 20,829 sections |
-| American Samoa | 5% | low | 2 acts of the Code Annotated |
-| Arizona | 50% | low | Constitution and some A.R.S. titles |
-| Arkansas | 0% | high | catalogue of 2025 Acts only, no text |
-| California | 100% | high | all 29 codes and the Constitution, history since 2016 |
-| Colorado | 90% | medium | Constitution and the C.R.S. by title (2022 edition) |
-| Connecticut | 100% | high | every title with a section in force, history since 2019 |
-| Delaware | 50% | low | 1,320 chapters of some titles |
-| District of Columbia | 100% | high | the D.C. Code, history since 2021 |
-| Florida | 90% | medium | Constitution and Florida Statutes by title (first build) |
-| Georgia | 90% | medium | O.C.G.A. by title, 54 records |
-| Guam | 100% | high | all 22 titles, 824 chapters |
-| Hawaii | 2% | high | the Constitution only |
-| Idaho | 20% | medium | Constitution and 415 chapters of about 2,000 |
-| Illinois | 69% | high | 1,968 of the 2,859 acts in force |
-| Indiana | 100% | high | the Indiana Code, history since 2017 |
-| Iowa | 90% | medium | Code volumes I to VII; volume VIII from earlier records |
-| Kansas | 60% | low | Constitution and 91 K.S.A. chapter records |
-| Kentucky | 90% | medium | Constitution and 459 KRS chapters, 36,624 sections |
-| Louisiana | 60% | low | Constitution, Civil Code parts and R.S. titles, 738 records |
-| Maine | 100% | high | Constitution and all 53 normative titles |
-| Maryland | 100% | high | Constitution and all 36 Code articles |
-| Massachusetts | 60% | low | Constitution and 381 General Laws chapters |
-| Michigan | 50% | medium | 204 MCL chapters, 43,685 sections |
-| Minnesota | 100% | high | all 808 chapters with statutory text |
-| Mississippi | 3% | high | 2 of the Code's titles and one 2026 act |
-| Missouri | 100% | high | all 458 normative RSMo chapters |
-| Montana | 100% | high | Constitution and every MCA title (2023 and 2025 editions) |
-| Nebraska | 6% | medium | Constitution and 5 chapters |
-| Nevada | 85% | medium | 825 NRS chapters (first build) |
-| New Hampshire | 62% | high | 1,099 of the 1,778 chapters |
-| New Jersey | 100% | high | the New Jersey Statutes, history since 2021 |
-| New Mexico | 0% | high | no legislation repository (case law only) |
-| New York | 35% | medium | 48 of the 137 consolidated and other laws |
-| North Carolina | 70% | low | General Statutes chapters (first build) |
-| North Dakota | 85% | medium | Century Code chapters and session laws, 2,160 records |
-| Northern Mariana Islands | 100% | high | all 10 titles, 540 chapters |
-| Ohio | 100% | high | all 973 Revised Code chapters and the Constitution |
-| Oklahoma | 100% | high | all 85 titles and the Constitution |
-| Oregon | 69% | medium | 581 of about 840 ORS chapters |
-| Pennsylvania | 60% | low | 52 Pa.C.S. titles; most unconsolidated statutes missing |
-| Puerto Rico | 0% | high | no repository |
-| Rhode Island | 6% | high | 144 of the 2,519 chapters in force |
-| South Carolina | 55% | low | 1,304 Code chapters of some titles |
-| South Dakota | 40% | low | Title 22 and some chapters (first build) |
-| Tennessee | 45% | low | 1,246 chapters of some titles, history 2020-2021 |
-| Texas | 100% | high | all 31 codes, the Constitution and Vernon's Civil Statutes |
-| US Virgin Islands | 0% | high | no repository |
-| Utah | 100% | high | the Utah Code, history since May 2026 |
-| Vermont | 70% | low | Constitution and some titles in whole |
-| Virginia | 100% | high | every title of the Code and the charters |
-| Washington | 100% | high | the Constitution and every RCW title |
-| West Virginia | 90% | medium | the Code and Constitution, 2,371 articles |
-| Wisconsin | 100% | high | all 470 chapters |
-| Wyoming | 100% | high | Constitution, all 44 titles and session laws 2021-2026 |
+| Jurisdiction | Code held | Basis | Constitution | Case law (of CAP) |
+| --- | --- | --- | --- | --- |
+| Alabama | 98.3% | 1,482 of 1,507 chapters of the Code of Alabama 1975 | held | 98.4% |
+| Alaska | 100% | 697 of 697 chapters of the Alaska Statutes | held | 94.9% |
+| American Samoa | 0% | 0 of 328 chapters of the American Samoa Code Annotated | held | 99.8% |
+| Arizona | 100% | 47 of 47 titles of the Arizona Revised Statutes | held | 100% |
+| Arkansas | 0% | 0 of 28 titles of the Arkansas Code of 1987 Annotated | not held | 99.7% |
+| California | 100% | 29 of 29 codes of the California Codes (29 codes) | held | 100% |
+| Colorado | 94.5% | 1,324 of 1,401 articles of the Colorado Revised Statutes | held | 99.4% |
+| Connecticut | 100% | 72 of 72 titles of the General Statutes of Connecticut | not held | 99.4% |
+| Delaware | 100% | 31 of 31 titles of the Delaware Code | held | 99.1% |
+| District of Columbia | 100% | 1,151 of 1,151 chapters of the Code of the District of Columbia | not held | 65% |
+| Florida | 100% | 49 of 49 titles of the Florida Statutes (2026) | held | 99.9% |
+| Georgia | 100% | 53 of 53 titles of the Official Code of Georgia Annotated (O.C.G.A.) | held | 100% |
+| Guam | 100% | 787 of 787 chapters of the Guam Code Annotated | not held | 100% |
+| Hawaii | 0% | 0 of 776 chapters of the Hawaii Revised Statutes | held | 100% |
+| Idaho | 37.1% | 414 of 1,115 chapters of the Idaho Statutes (Idaho Code) | held | 100% |
+| Illinois | 68.9% | 1,970 of 2,859 acts of the Illinois Compiled Statutes (ILCS) | held | 100% |
+| Indiana | 100% | 7,368 of 7,368 chapters of the Indiana Code | not held | 99% |
+| Iowa | 98.7% | 1,282 of 1,299 chapters of the Iowa Code (2026) | held | 99.8% |
+| Kansas | 100% | 88 of 88 chapters of the Kansas Statutes Annotated (K.S.A.) | held | 100% |
+| Kentucky | 100% | 459 of 459 chapters of the Kentucky Revised Statutes (KRS) | held | 99.8% |
+| Louisiana | 100% | 59 of 59 titles of the Louisiana Revised Statutes and Codes (Civil, Children's, Civil Procedure, Criminal Procedure, Evidence) | held | 95.8% |
+| Maine | 100% | 53 of 53 titles of the Maine Revised Statutes | held | 99.8% |
+| Maryland | 100% | 36 of 36 articles of the Annotated Code of Maryland | held | 100% |
+| Massachusetts | 53.7% | 380 of 707 chapters of the General Laws of Massachusetts | held | 99.9% |
+| Michigan | 86.7% | 196 of 226 chapters of the Michigan Compiled Laws | held | 99.8% |
+| Minnesota | 100% | 808 of 808 chapters of the Minnesota Statutes (2026 edition) | held | 99.8% |
+| Mississippi | 14% | 7 of 50 titles of the Mississippi Code of 1972 | held | 99.8% |
+| Missouri | 100% | 458 of 458 chapters of the Revised Statutes of Missouri (RSMo) | held | 99.9% |
+| Montana | 100% | 53 of 53 titles of the Montana Code Annotated 2025 | held | 99.9% |
+| Nebraska | 5.6% | 5 of 90 chapters of the Nebraska Revised Statutes | held | 100% |
+| Nevada | 98.7% | 824 of 835 chapters of the Nevada Revised Statutes | held | 100% |
+| New Hampshire | 61.8% | 1,099 of 1,778 chapters of the New Hampshire Revised Statutes Annotated (RSA) | held | 99.9% |
+| New Jersey | 99.9% | 1,898 of 1,900 chapters of the New Jersey Statutes (Revised Statutes, N.J.S. and Appendix A, the Legislature's general and permanent statutes file) | not held | 98.9% |
+| New Mexico | 0% | global-law holds no New Mexico statute law and no constitution (only case law); the official NMSA 1978 table of contents on NMOneSource refused automated access (403), so the official unit count is not established. | not held | 100% |
+| New York | 36.8% | 50 of 136 laws of the Laws of New York (Consolidated, Unconsolidated, Court Acts, Rules and Misc. in NYS Open Legislation) | held | 95.7% |
+| North Carolina | 99.7% | 332 of 333 chapters of the General Statutes of North Carolina | held | 98.9% |
+| North Dakota | 99.8% | 1,740 of 1,743 chapters of the North Dakota Century Code | held | 99.9% |
+| N. Mariana Islands | 100% | 10 of 10 titles of the Commonwealth Code of the Northern Mariana Islands (CMC) | not held | 91.6% |
+| Ohio | 100% | 973 of 973 chapters of the Ohio Revised Code | held | 97.2% |
+| Oklahoma | 100% | 84 of 84 titles of the Oklahoma Statutes | held | 99.4% |
+| Oregon | 100% | 60 of 60 titles of the Oregon Revised Statutes (2025 Edition) | held | 100% |
+| Pennsylvania | 100% | 52 of 52 titles of the Pennsylvania Consolidated Statutes (Pa.C.S.) | held | 97.8% |
+| Puerto Rico | 0% | 0 of 34 titles of the Leyes de Puerto Rico Anotadas (L.P.R.A.) | not held | 92.2% |
+| Rhode Island | 5.7% | 144 of 2,519 chapters of the General Laws of Rhode Island | held | 100% |
+| South Carolina | 100% | 63 of 63 titles of the Code of Laws of South Carolina 1976 | held | 99.4% |
+| South Dakota | 100% | 68 of 68 titles of the South Dakota Codified Laws (SDCL) | held | 100% |
+| Tennessee | 100% | 1,168 of 1,168 chapters of the Tennessee Code Annotated | held | 99% |
+| Texas | 100% | 30 of 30 codes of the Texas Statutes (codes and Vernon's Civil Statutes) | held | 92.7% |
+| Utah | 100% | 96 of 96 titles of the Utah Code | not held | 99.7% |
+| Vermont | 100% | 42 of 42 titles of the Vermont Statutes Annotated (V.S.A.) | held | 99.7% |
+| US Virgin Islands | 0% | global-law holds no Virgin Islands Code legislation and no Revised Organic Act (0%); only case law is held. The official size of the code could not be established because the Legislature's site did not answer. | not held | 99.8% |
+| Virginia | 100% | 76 of 76 titles of the Code of Virginia | held | 99.5% |
+| Washington | 100% | 101 of 101 titles of the Revised Code of Washington | held | 100% |
+| West Virginia | 100% | 139 of 139 chapters of the West Virginia Code | held | 100% |
+| Wisconsin | 100% | 470 of 470 chapters of the Wisconsin Statutes | held | 99.7% |
+| Wyoming | 100% | 44 of 44 titles of the Wyoming Statutes | held | 99.7% |
 
 </details>
 

@@ -65,18 +65,25 @@ def load_tsv(p: Path) -> dict[str, dict]:
 def federation_block(name: str, c: dict) -> list[str]:
     """A federation's whole-country estimate: headline shares, then each federal body of law and each state."""
     link = '[data/completeness.json](' + '../' * name.count('/') + '../data/completeness.json)'
-    out = [f'## Completeness of the whole country, best-effort ({c.get("verified_on", "")})', '',
-           '| ' + ' | '.join(h[0] for h in c['headline']) + ' |', '| ' + ' | '.join('---' for _ in c['headline']) + ' |',
-           '| ' + ' | '.join(f'{pct(h[1])} ({h[2]} confidence)' for h in c['headline']) + ' |', '',
-           cell(c.get('verdict', '')), '',
+    chart = c.get('chart')
+    out = [f'## Completeness of the whole country, checked {c.get("verified_on", "")}', '']
+    if chart and (ROOT / name / f'{chart}-light.svg').exists():
+        out += ['<picture>', f'<source media="(prefers-color-scheme: dark)" srcset="{chart}-dark.svg">',
+                f'<img alt="How complete global-law is for the whole country: federal law, each state and territory code, '
+                f'case law and local law" src="{chart}-light.svg" width="880">', '</picture>', '']
+    out += ['| ' + ' | '.join(h[0] for h in c['headline']) + ' |', '| ' + ' | '.join('---' for _ in c['headline']) + ' |',
+            '| ' + ' | '.join(f'{h[1]:g}%' if chart else f'{pct(h[1])} ({h[2]} confidence)' for h in c['headline']) + ' |', '',
+            cell(c.get('verdict', '')), '',
            f'{cell(c.get("method", ""))} Every figure is in {link}.', '',
            '<details><summary>Federal law, part by part</summary>', '',
            '| Part | Held | Confidence | Basis |', '| --- | --- | --- | --- |']
-    out += [f'| {cell(f["part"])} | {pct(f["share"])} | {f["confidence"]} | {cell(f["basis"])} |' for f in c.get('federal', [])]
+    out += [f'| {cell(f["part"])} | {f["share"]:g}% | {f["confidence"]} | {cell(f["basis"])} |' for f in c.get('federal', [])]
     states = c.get('states', [])
     out += ['', '</details>', '', f'<details><summary>The {len(states)} states, territories and D.C., one by one</summary>', '',
-            '| Jurisdiction | Statutes held | Confidence | Basis |', '| --- | --- | --- | --- |']
-    out += [f'| {cell(s["name"])} | {pct(s["share"])} | {s["confidence"]} | {cell(s["basis"])} |' for s in states]
+            '| Jurisdiction | Code held | Basis | Constitution | Case law (of CAP) |', '| --- | --- | --- | --- | --- |']
+    out += [f'| {cell(s["name"])} | {s["share"]:g}% | {cell(s["basis"])} | '
+            f'{"held" if s.get("constitution") else "not held"} | {(format(min(100.0, s["case_law"]), "g") + "%") if s.get("case_law") is not None else chr(0x2013)} |'
+            for s in states]
     return out + ['', '</details>', '']
 
 

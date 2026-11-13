@@ -1006,35 +1006,36 @@
     "united-states": {
       "verified_on": "2026-11-13",
       "kind": "federation",
+      "chart": "completeness",
       "headline": [
         [
-          "Federal statutes (US Code)",
-          100,
+          "US Code, current text",
+          100.0,
           "high"
         ],
         [
-          "Federal regulations (CFR)",
-          95,
-          "medium"
+          "Code of Federal Regulations (parts in force)",
+          99.1,
+          "high"
         ],
         [
-          "State and territorial statutes",
-          69,
-          "low"
+          "State and territorial codes (by population)",
+          88.4,
+          "high"
         ],
         [
-          "Published case law",
-          90,
-          "medium"
+          "Published case law (of CAP)",
+          98.4,
+          "high"
         ],
         [
-          "Local law (counties, cities)",
-          0,
+          "County and city law",
+          0.0,
           "high"
         ]
       ],
-      "verdict": "Federal statute and regulation are close to whole as current text; the Constitution, the Statutes at Large and most agency guidance are not held. Of the 56 states, territories and D.C., 52 have law text, 28 hold 90% or more of their code and the mean share is about 69% (unweighted): Hawaii, Mississippi, Nebraska and Rhode Island hold almost nothing, Arkansas only a catalogue, and New Mexico, Puerto Rico and the US Virgin Islands have no legislation repository. Most state codes are current text only. Case law: 6.9 million published decisions from 152 court corpora, read from the Caselaw Access Project, which ends around 2018; later decisions are mostly missing. No county or city law is held.",
-      "method": "Shares are of current text, read from each repository's README on 2026-11-13: what it holds (titles, chapters, acts) against the number its publisher lists; where the README gives no total, a judgement to the nearest 5%, marked low confidence. History (past versions) is not counted. Case law: decisions held against about 7.2 million published US decisions (CAP's 6.7 million to 2018, and about 60,000 a year since).",
+      "verdict": "Federal: the US Code is whole as current text (53 titles, release point 119-138; history 99.7% since 1995, 33.4% since 1926), the CFR holds 8,241 of the eCFR's 8,317 parts in force, and the Constitution, the Statutes at Large and the Federal Register are not held. States: 41 of 56 hold 90% or more of their code and 6 hold none; 88.4% weighted by population (79.6% unweighted). Case law: 98.4% of the 6,920,596 published decisions in the Caselaw Access Project are held (6,931,555 decisions in all, 98.6% of them with their opinion text); decisions after CAP's end (2018) are not held. No county or city law is held.",
+      "method": "Each state's code: the units of the official table of contents (chapters, or the code's own unit) read from the publisher on the date shown, against the units with law text in the repository's tree (us/verified in eu-law-charts; one reviewer per state, spot checks against the official text). CFR: parts in force in the eCFR structure of each title against the part folders held. Case law: decisions held per jurisdiction against CAP's own case counts. Population: 2020 census.",
       "federal": [
         {
           "part": "Constitution of the United States",
@@ -1043,366 +1044,490 @@
           "basis": "not held: no corpus holds its text"
         },
         {
-          "part": "United States Code",
+          "part": "United States Code, current text",
           "share": 100,
           "confidence": "high",
-          "basis": "all 53 titles, current through release point 119-138; history 99.7% since 1994, 33.4% since 1926"
+          "basis": "all 53 titles, release point 119-138"
+        },
+        {
+          "part": "United States Code, history since 1995",
+          "share": 99.7,
+          "confidence": "high",
+          "basis": "title-years with every change dated (repository's completeness.json)"
+        },
+        {
+          "part": "United States Code, history since 1926",
+          "share": 33.4,
+          "confidence": "high",
+          "basis": "printed editions 1926-1994: 11 of 542 title-editions read"
         },
         {
           "part": "Code of Federal Regulations",
-          "share": 95,
-          "confidence": "medium",
-          "basis": "eCFR, 9,176 parts with versions from December 2015"
+          "share": 99.1,
+          "confidence": "high",
+          "basis": "8,241 of 8,317 eCFR parts in force (2026-11-10)"
         },
         {
           "part": "Statutes at Large and Federal Register",
           "share": 0,
           "confidence": "high",
-          "basis": "not held as text (the US Code credits each change to its law)"
+          "basis": "not held as text"
         },
         {
-          "part": "Agency guidance",
-          "share": 10,
-          "confidence": "low",
-          "basis": "IRS guidance (Internal Revenue Bulletin) only"
+          "part": "Federal court decisions (of CAP)",
+          "share": 100.0,
+          "confidence": "high",
+          "basis": "1,970,129 held; CAP lists 1,845,102"
         }
       ],
       "states": [
         {
           "name": "Alabama",
-          "share": 95,
-          "confidence": "medium",
-          "basis": "Constitution and all 46 Code titles"
+          "share": 98.3,
+          "confidence": "high",
+          "basis": "1,482 of 1,507 chapters of the Code of Alabama 1975",
+          "constitution": true,
+          "case_law": 98.4
         },
         {
           "name": "Alaska",
-          "share": 100,
-          "confidence": "high",
-          "basis": "every title, 20,829 sections"
+          "share": 100.0,
+          "confidence": "low",
+          "basis": "697 of 697 chapters of the Alaska Statutes",
+          "constitution": true,
+          "case_law": 94.9
         },
         {
           "name": "American Samoa",
-          "share": 5,
-          "confidence": "low",
-          "basis": "2 acts of the Code Annotated"
+          "share": 0.0,
+          "confidence": "high",
+          "basis": "0 of 328 chapters of the American Samoa Code Annotated",
+          "constitution": true,
+          "case_law": 99.8
         },
         {
           "name": "Arizona",
-          "share": 50,
-          "confidence": "low",
-          "basis": "Constitution and some A.R.S. titles"
+          "share": 100.0,
+          "confidence": "high",
+          "basis": "47 of 47 titles of the Arizona Revised Statutes",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "Arkansas",
-          "share": 0,
-          "confidence": "high",
-          "basis": "catalogue of 2025 Acts only, no text"
+          "share": 0.0,
+          "confidence": "medium",
+          "basis": "0 of 28 titles of the Arkansas Code of 1987 Annotated",
+          "constitution": false,
+          "case_law": 99.7
         },
         {
           "name": "California",
-          "share": 100,
-          "confidence": "high",
-          "basis": "all 29 codes and the Constitution, history since 2016"
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "29 of 29 codes of the California Codes (29 codes)",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "Colorado",
-          "share": 90,
-          "confidence": "medium",
-          "basis": "Constitution and the C.R.S. by title (2022 edition)"
+          "share": 94.5,
+          "confidence": "high",
+          "basis": "1,324 of 1,401 articles of the Colorado Revised Statutes",
+          "constitution": true,
+          "case_law": 99.4
         },
         {
           "name": "Connecticut",
-          "share": 100,
+          "share": 100.0,
           "confidence": "high",
-          "basis": "every title with a section in force, history since 2019"
+          "basis": "72 of 72 titles of the General Statutes of Connecticut",
+          "constitution": false,
+          "case_law": 99.4
         },
         {
           "name": "Delaware",
-          "share": 50,
-          "confidence": "low",
-          "basis": "1,320 chapters of some titles"
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "31 of 31 titles of the Delaware Code",
+          "constitution": true,
+          "case_law": 99.1
         },
         {
           "name": "District of Columbia",
-          "share": 100,
+          "share": 100.0,
           "confidence": "high",
-          "basis": "the D.C. Code, history since 2021"
+          "basis": "1,151 of 1,151 chapters of the Code of the District of Columbia",
+          "constitution": false,
+          "case_law": 65.0
         },
         {
           "name": "Florida",
-          "share": 90,
+          "share": 100.0,
           "confidence": "medium",
-          "basis": "Constitution and Florida Statutes by title (first build)"
+          "basis": "49 of 49 titles of the Florida Statutes (2026)",
+          "constitution": true,
+          "case_law": 99.9
         },
         {
           "name": "Georgia",
-          "share": 90,
+          "share": 100.0,
           "confidence": "medium",
-          "basis": "O.C.G.A. by title, 54 records"
+          "basis": "53 of 53 titles of the Official Code of Georgia Annotated (O.C.G.A.)",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "Guam",
-          "share": 100,
+          "share": 100.0,
           "confidence": "high",
-          "basis": "all 22 titles, 824 chapters"
+          "basis": "787 of 787 chapters of the Guam Code Annotated",
+          "constitution": false,
+          "case_law": 100.0
         },
         {
           "name": "Hawaii",
-          "share": 2,
+          "share": 0.0,
           "confidence": "high",
-          "basis": "the Constitution only"
+          "basis": "0 of 776 chapters of the Hawaii Revised Statutes",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "Idaho",
-          "share": 20,
-          "confidence": "medium",
-          "basis": "Constitution and 415 chapters of about 2,000"
+          "share": 37.1,
+          "confidence": "low",
+          "basis": "414 of 1,115 chapters of the Idaho Statutes (Idaho Code)",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "Illinois",
-          "share": 69,
-          "confidence": "high",
-          "basis": "1,968 of the 2,859 acts in force"
+          "share": 68.9,
+          "confidence": "low",
+          "basis": "1,970 of 2,859 acts of the Illinois Compiled Statutes (ILCS)",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "Indiana",
-          "share": 100,
-          "confidence": "high",
-          "basis": "the Indiana Code, history since 2017"
+          "share": 100.0,
+          "confidence": "low",
+          "basis": "7,368 of 7,368 chapters of the Indiana Code",
+          "constitution": false,
+          "case_law": 99.0
         },
         {
           "name": "Iowa",
-          "share": 90,
+          "share": 98.7,
           "confidence": "medium",
-          "basis": "Code volumes I to VII; volume VIII from earlier records"
+          "basis": "1,282 of 1,299 chapters of the Iowa Code (2026)",
+          "constitution": true,
+          "case_law": 99.8
         },
         {
           "name": "Kansas",
-          "share": 60,
-          "confidence": "low",
-          "basis": "Constitution and 91 K.S.A. chapter records"
+          "share": 100.0,
+          "confidence": "high",
+          "basis": "88 of 88 chapters of the Kansas Statutes Annotated (K.S.A.)",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "Kentucky",
-          "share": 90,
+          "share": 100.0,
           "confidence": "medium",
-          "basis": "Constitution and 459 KRS chapters, 36,624 sections"
+          "basis": "459 of 459 chapters of the Kentucky Revised Statutes (KRS)",
+          "constitution": true,
+          "case_law": 99.8
         },
         {
           "name": "Louisiana",
-          "share": 60,
-          "confidence": "low",
-          "basis": "Constitution, Civil Code parts and R.S. titles, 738 records"
+          "share": 100.0,
+          "confidence": "high",
+          "basis": "59 of 59 titles of the Louisiana Revised Statutes and Codes (Civil, Children's, Civil Procedure, Criminal Procedure, Evidence)",
+          "constitution": true,
+          "case_law": 95.8
         },
         {
           "name": "Maine",
-          "share": 100,
-          "confidence": "high",
-          "basis": "Constitution and all 53 normative titles"
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "53 of 53 titles of the Maine Revised Statutes",
+          "constitution": true,
+          "case_law": 99.8
         },
         {
           "name": "Maryland",
-          "share": 100,
-          "confidence": "high",
-          "basis": "Constitution and all 36 Code articles"
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "36 of 36 articles of the Annotated Code of Maryland",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "Massachusetts",
-          "share": 60,
+          "share": 53.7,
           "confidence": "low",
-          "basis": "Constitution and 381 General Laws chapters"
+          "basis": "380 of 707 chapters of the General Laws of Massachusetts",
+          "constitution": true,
+          "case_law": 99.9
         },
         {
           "name": "Michigan",
-          "share": 50,
+          "share": 86.7,
           "confidence": "medium",
-          "basis": "204 MCL chapters, 43,685 sections"
+          "basis": "196 of 226 chapters of the Michigan Compiled Laws",
+          "constitution": true,
+          "case_law": 99.8
         },
         {
           "name": "Minnesota",
-          "share": 100,
+          "share": 100.0,
           "confidence": "high",
-          "basis": "all 808 chapters with statutory text"
+          "basis": "808 of 808 chapters of the Minnesota Statutes (2026 edition)",
+          "constitution": true,
+          "case_law": 99.8
         },
         {
           "name": "Mississippi",
-          "share": 3,
-          "confidence": "high",
-          "basis": "2 of the Code's titles and one 2026 act"
+          "share": 14.0,
+          "confidence": "medium",
+          "basis": "7 of 50 titles of the Mississippi Code of 1972",
+          "constitution": true,
+          "case_law": 99.8
         },
         {
           "name": "Missouri",
-          "share": 100,
-          "confidence": "high",
-          "basis": "all 458 normative RSMo chapters"
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "458 of 458 chapters of the Revised Statutes of Missouri (RSMo)",
+          "constitution": true,
+          "case_law": 99.9
         },
         {
           "name": "Montana",
-          "share": 100,
-          "confidence": "high",
-          "basis": "Constitution and every MCA title (2023 and 2025 editions)"
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "53 of 53 titles of the Montana Code Annotated 2025",
+          "constitution": true,
+          "case_law": 99.9
         },
         {
           "name": "Nebraska",
-          "share": 6,
-          "confidence": "medium",
-          "basis": "Constitution and 5 chapters"
+          "share": 5.6,
+          "confidence": "high",
+          "basis": "5 of 90 chapters of the Nebraska Revised Statutes",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "Nevada",
-          "share": 85,
-          "confidence": "medium",
-          "basis": "825 NRS chapters (first build)"
+          "share": 98.7,
+          "confidence": "high",
+          "basis": "824 of 835 chapters of the Nevada Revised Statutes",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "New Hampshire",
-          "share": 62,
-          "confidence": "high",
-          "basis": "1,099 of the 1,778 chapters"
+          "share": 61.8,
+          "confidence": "low",
+          "basis": "1,099 of 1,778 chapters of the New Hampshire Revised Statutes Annotated (RSA)",
+          "constitution": true,
+          "case_law": 99.9
         },
         {
           "name": "New Jersey",
-          "share": 100,
+          "share": 99.9,
           "confidence": "high",
-          "basis": "the New Jersey Statutes, history since 2021"
+          "basis": "1,898 of 1,900 chapters of the New Jersey Statutes (Revised Statutes, N.J.S. and Appendix A, the Legislature's general and permanent statutes file)",
+          "constitution": false,
+          "case_law": 98.9
         },
         {
           "name": "New Mexico",
-          "share": 0,
+          "share": 0.0,
           "confidence": "high",
-          "basis": "no legislation repository (case law only)"
+          "basis": "global-law holds no New Mexico statute law and no constitution (only case law); the official NMSA 1978 table of contents on NMOneSource refused automated access (403), so the official unit count is not established.",
+          "constitution": false,
+          "case_law": 100.0
         },
         {
           "name": "New York",
-          "share": 35,
-          "confidence": "medium",
-          "basis": "48 of the 137 consolidated and other laws"
+          "share": 36.8,
+          "confidence": "low",
+          "basis": "50 of 136 laws of the Laws of New York (Consolidated, Unconsolidated, Court Acts, Rules and Misc. in NYS Open Legislation)",
+          "constitution": true,
+          "case_law": 95.7
         },
         {
           "name": "North Carolina",
-          "share": 70,
-          "confidence": "low",
-          "basis": "General Statutes chapters (first build)"
+          "share": 99.7,
+          "confidence": "medium",
+          "basis": "332 of 333 chapters of the General Statutes of North Carolina",
+          "constitution": true,
+          "case_law": 98.9
         },
         {
           "name": "North Dakota",
-          "share": 85,
-          "confidence": "medium",
-          "basis": "Century Code chapters and session laws, 2,160 records"
+          "share": 99.8,
+          "confidence": "high",
+          "basis": "1,740 of 1,743 chapters of the North Dakota Century Code",
+          "constitution": true,
+          "case_law": 99.9
         },
         {
-          "name": "Northern Mariana Islands",
-          "share": 100,
-          "confidence": "high",
-          "basis": "all 10 titles, 540 chapters"
+          "name": "N. Mariana Islands",
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "10 of 10 titles of the Commonwealth Code of the Northern Mariana Islands (CMC)",
+          "constitution": false,
+          "case_law": 91.6
         },
         {
           "name": "Ohio",
-          "share": 100,
-          "confidence": "high",
-          "basis": "all 973 Revised Code chapters and the Constitution"
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "973 of 973 chapters of the Ohio Revised Code",
+          "constitution": true,
+          "case_law": 97.2
         },
         {
           "name": "Oklahoma",
-          "share": 100,
+          "share": 100.0,
           "confidence": "high",
-          "basis": "all 85 titles and the Constitution"
+          "basis": "84 of 84 titles of the Oklahoma Statutes",
+          "constitution": true,
+          "case_law": 99.4
         },
         {
           "name": "Oregon",
-          "share": 69,
-          "confidence": "medium",
-          "basis": "581 of about 840 ORS chapters"
+          "share": 100.0,
+          "confidence": "low",
+          "basis": "60 of 60 titles of the Oregon Revised Statutes (2025 Edition)",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "Pennsylvania",
-          "share": 60,
+          "share": 100.0,
           "confidence": "low",
-          "basis": "52 Pa.C.S. titles; most unconsolidated statutes missing"
+          "basis": "52 of 52 titles of the Pennsylvania Consolidated Statutes (Pa.C.S.)",
+          "constitution": true,
+          "case_law": 97.8
         },
         {
           "name": "Puerto Rico",
-          "share": 0,
-          "confidence": "high",
-          "basis": "no repository"
+          "share": 0.0,
+          "confidence": "low",
+          "basis": "0 of 34 titles of the Leyes de Puerto Rico Anotadas (L.P.R.A.)",
+          "constitution": false,
+          "case_law": 92.2
         },
         {
           "name": "Rhode Island",
-          "share": 6,
-          "confidence": "high",
-          "basis": "144 of the 2,519 chapters in force"
+          "share": 5.7,
+          "confidence": "low",
+          "basis": "144 of 2,519 chapters of the General Laws of Rhode Island",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "South Carolina",
-          "share": 55,
-          "confidence": "low",
-          "basis": "1,304 Code chapters of some titles"
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "63 of 63 titles of the Code of Laws of South Carolina 1976",
+          "constitution": true,
+          "case_law": 99.4
         },
         {
           "name": "South Dakota",
-          "share": 40,
-          "confidence": "low",
-          "basis": "Title 22 and some chapters (first build)"
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "68 of 68 titles of the South Dakota Codified Laws (SDCL)",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "Tennessee",
-          "share": 45,
+          "share": 100.0,
           "confidence": "low",
-          "basis": "1,246 chapters of some titles, history 2020-2021"
+          "basis": "1,168 of 1,168 chapters of the Tennessee Code Annotated",
+          "constitution": true,
+          "case_law": 99.0
         },
         {
           "name": "Texas",
-          "share": 100,
+          "share": 100.0,
           "confidence": "high",
-          "basis": "all 31 codes, the Constitution and Vernon's Civil Statutes"
-        },
-        {
-          "name": "US Virgin Islands",
-          "share": 0,
-          "confidence": "high",
-          "basis": "no repository"
+          "basis": "30 of 30 codes of the Texas Statutes (codes and Vernon's Civil Statutes)",
+          "constitution": true,
+          "case_law": 92.7
         },
         {
           "name": "Utah",
-          "share": 100,
+          "share": 100.0,
           "confidence": "high",
-          "basis": "the Utah Code, history since May 2026"
+          "basis": "96 of 96 titles of the Utah Code",
+          "constitution": false,
+          "case_law": 99.7
         },
         {
           "name": "Vermont",
-          "share": 70,
-          "confidence": "low",
-          "basis": "Constitution and some titles in whole"
+          "share": 100.0,
+          "confidence": "high",
+          "basis": "42 of 42 titles of the Vermont Statutes Annotated (V.S.A.)",
+          "constitution": true,
+          "case_law": 99.7
+        },
+        {
+          "name": "US Virgin Islands",
+          "share": 0.0,
+          "confidence": "medium",
+          "basis": "global-law holds no Virgin Islands Code legislation and no Revised Organic Act (0%); only case law is held. The official size of the code could not be established because the Legislature's site did not answer.",
+          "constitution": false,
+          "case_law": 99.8
         },
         {
           "name": "Virginia",
-          "share": 100,
-          "confidence": "high",
-          "basis": "every title of the Code and the charters"
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "76 of 76 titles of the Code of Virginia",
+          "constitution": true,
+          "case_law": 99.5
         },
         {
           "name": "Washington",
-          "share": 100,
-          "confidence": "high",
-          "basis": "the Constitution and every RCW title"
+          "share": 100.0,
+          "confidence": "medium",
+          "basis": "101 of 101 titles of the Revised Code of Washington",
+          "constitution": true,
+          "case_law": 100.0
         },
         {
           "name": "West Virginia",
-          "share": 90,
-          "confidence": "medium",
-          "basis": "the Code and Constitution, 2,371 articles"
+          "share": 100.0,
+          "confidence": "high",
+          "basis": "139 of 139 chapters of the West Virginia Code",
+          "constitution": true,
+          "case_law": 100.4
         },
         {
           "name": "Wisconsin",
-          "share": 100,
+          "share": 100.0,
           "confidence": "high",
-          "basis": "all 470 chapters"
+          "basis": "470 of 470 chapters of the Wisconsin Statutes",
+          "constitution": true,
+          "case_law": 99.7
         },
         {
           "name": "Wyoming",
-          "share": 100,
-          "confidence": "high",
-          "basis": "Constitution, all 44 titles and session laws 2021-2026"
+          "share": 100.0,
+          "confidence": "low",
+          "basis": "44 of 44 titles of the Wyoming Statutes",
+          "constitution": true,
+          "case_law": 99.7
         }
       ]
     }
