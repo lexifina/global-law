@@ -42,18 +42,6 @@ Shares are of what exists, not of what each repository says it holds; estimates 
 | `bverfg/caselaw` | [germany-bverfg-caselaw](https://github.com/lexifina/germany-bverfg-caselaw/tree/main) | 9301 published decisions of the Bundesverfassungsgericht, one file and one commit each, dated the day decided; 78498 citations of federal law linked to germany-law (35787 of them pinned to the article's version in force that day; the others are older than germany-law's record). | in-force | 2025-09-22 | current |
 | `bverwg/caselaw` | [germany-bverwg-caselaw](https://github.com/lexifina/germany-bverwg-caselaw/tree/main) | 27200 published decisions of the Bundesverwaltungsgericht, one file and one commit each, dated the day decided; 237740 citations of federal law linked to germany-law (54973 of them pinned to the article's version in force that day; the others are older than germany-law's record). | in-force | 2024-03-13 | current |
 
-## Jurisdictions in this folder
+## More
 
-- [Bag](bag/) (1 repository)
-- [Bavaria](bavaria/) (1 repository)
-- [Bfh](bfh/) (1 repository)
-- [Bgh](bgh/) (1 repository)
-- [Bpatg](bpatg/) (1 repository)
-- [Brandenburg](brandenburg/) (1 repository)
-- [Bremen](bremen/) (1 repository)
-- [Bund (federal law)](bund/) (1 repository)
-- [Bverfg](bverfg/) (1 repository)
-- [Bverwg](bverwg/) (1 repository)
-- [Hamburg](hamburg/) (0 repositories)
-- [North Rhine-Westphalia](north-rhine-westphalia/) (1 repository)
-- [Saxony](saxony/) (1 repository)
+- [JURISDICTIONS.md](JURISDICTIONS.md): the 13 jurisdictions in this folder, each with its own page

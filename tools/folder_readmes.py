@@ -71,9 +71,7 @@ def federation_block(name: str, c: dict) -> list[str]:
         out += ['<picture>', f'<source media="(prefers-color-scheme: dark)" srcset="{chart}-dark.svg">',
                 f'<img alt="How complete global-law is for the whole country: federal law, each state and territory code, '
                 f'case law and local law" src="{chart}-light.svg" width="880">', '</picture>', '']
-    out += ['| ' + ' | '.join(h[0] for h in c['headline']) + ' |', '| ' + ' | '.join('---' for _ in c['headline']) + ' |',
-            '| ' + ' | '.join(f'{h[1]:g}%' if chart else f'{pct(h[1])} ({h[2]} confidence)' for h in c['headline']) + ' |', '',
-            cell(c.get('verdict', '')), '',
+    out += [cell(c.get('verdict', '')), '',
            f'{cell(c.get("method", ""))} Every figure is in {link}.', '',
            ] + plan_block(c.get('plan')) + [
            '<details><summary>Federal law, part by part</summary>', '',
@@ -169,29 +167,11 @@ def completeness_block(name: str, c: dict) -> list[str]:
     ]
 
 
-def page(folder: str, body: dict, corpora: dict[str, dict], fresh: dict, complete: dict, names: dict) -> str:
-    depth = folder.count('/')
-    up = '../' * (depth + 1)
-    crumbs = [f'[global-law]({up})']
-    parts = folder.split('/')
-    for i in range(len(parts) - 1):
-        sub = '/'.join(parts[:i + 1])
-        crumbs.append(f'[{names.get(sub, parts[i])}]({"../" * (len(parts) - 1 - i)})')
-    name = body.get('name') or parts[-1].replace('-', ' ').title()
-    mine = sorted(p for p in corpora if p.startswith(folder + '/'))
-    groups: dict[str, list[str]] = {}
-    for p in mine:
-        groups.setdefault(kind_of(p), []).append(p)
-    counts = ', '.join(f'{len(groups[k])} {k}' for k in ORDER if groups.get(k))
-    out = [MARK, f'# {name}', '', ' / '.join(crumbs + [name]), '']
-    if mine:
-        out += [f'{len(mine)} {"repository" if len(mine) == 1 else "repositories"} under this folder ({counts}). Each row links to the '
-                'repository\'s current `main`; the folder of the same path is the submodule global-law pins and reads. '
-                '"Coverage" is what the corpus says of itself; freshness is global-law\'s monitor.', '']
-    else:
-        out += ['No repository under this folder yet: see SOURCES.md for the official sources and why nothing is built.', '']
-    if depth == 0 and folder in complete:
-        out += completeness_block(folder, complete[folder])
+LINK_OUT = 12  # more repositories (or jurisdictions) than this: the list is its own linked page
+
+
+def repo_tables(folder: str, groups: dict, corpora: dict, fresh: dict) -> list[str]:
+    out = []
     for k in ORDER:
         rows = groups.get(k)
         if not rows:
@@ -207,14 +187,66 @@ def page(folder: str, body: dict, corpora: dict[str, dict], fresh: dict, complet
             out.append(f'| `{cell(rel)}` | {f"[{rname}]({url}/tree/main)" if url else chr(0x2013)} | {cell(c.get("coverage") or c.get("name"))} | '
                        f'{cell(c.get("history"))} | {cell(c.get("record_to"))} | {cell(f.get("status"))} |')
         out.append('')
-    subs = [j for j in body.get('jurisdictions', []) if j.rsplit('/', 1)[0] == folder]
-    if subs:
-        out += ['## Jurisdictions in this folder', '']
-        for j in sorted(subs):
-            n = sum(1 for p in corpora if p.startswith(j + '/'))
-            out.append(f'- [{names.get(j, j.rsplit("/", 1)[-1])}]({j.rsplit("/", 1)[-1]}/) ({n} {"repository" if n == 1 else "repositories"})')
-        out.append('')
-    return '\n'.join(out).rstrip() + '\n'
+    return out
+
+
+def page(folder: str, body: dict, corpora: dict[str, dict], fresh: dict, complete: dict, names: dict) -> dict[str, str]:
+    """The folder's README, plus REPOSITORIES.md and JURISDICTIONS.md when its lists are long."""
+    depth = folder.count('/')
+    up = '../' * (depth + 1)
+    crumbs = [f'[global-law]({up})']
+    parts = folder.split('/')
+    for i in range(len(parts) - 1):
+        sub = '/'.join(parts[:i + 1])
+        crumbs.append(f'[{names.get(sub, parts[i])}]({"../" * (len(parts) - 1 - i)})')
+    name = body.get('name') or parts[-1].replace('-', ' ').title()
+    mine = sorted(p for p in corpora if p.startswith(folder + '/'))
+    groups: dict[str, list[str]] = {}
+    for p in mine:
+        groups.setdefault(kind_of(p), []).append(p)
+    counts = ', '.join(f'{len(groups[k])} {k}' for k in ORDER if groups.get(k))
+    subs = sorted(j for j in body.get('jurisdictions', []) if j.rsplit('/', 1)[0] == folder)
+    repos_out, subs_out = len(mine) > LINK_OUT, len(subs) > LINK_OUT
+    head = [MARK, f'# {name}', '', ' / '.join(crumbs + [name]), '']
+    out = list(head)
+    if mine and not repos_out:
+        out += [f'{len(mine)} {"repository" if len(mine) == 1 else "repositories"} under this folder ({counts}). Each row links to the '
+                "repository's current `main`; the folder of the same path is the submodule global-law pins and reads. "
+                "\"Coverage\" is what the corpus says of itself; freshness is global-law's monitor.", '']
+    elif mine:
+        out += [f'{len(mine)} repositories under this folder ({counts}): see [REPOSITORIES.md](REPOSITORIES.md).', '']
+    else:
+        out += ['No repository under this folder yet: see SOURCES.md for the official sources and why nothing is built.', '']
+    if depth == 0 and folder in complete:
+        out += completeness_block(folder, complete[folder])
+    if not repos_out:
+        out += repo_tables(folder, groups, corpora, fresh)
+    jl = []
+    for j in subs:
+        n = sum(1 for p in corpora if p.startswith(j + '/'))
+        jl.append(f'- [{names.get(j, j.rsplit("/", 1)[-1])}]({j.rsplit("/", 1)[-1]}/) ({n} {"repository" if n == 1 else "repositories"})')
+    if subs and not subs_out:
+        out += ['## Jurisdictions in this folder', ''] + jl + ['']
+    more = []
+    if repos_out:
+        more.append(f'- [REPOSITORIES.md](REPOSITORIES.md): all {len(mine)} repositories by kind ({counts}), with coverage, history, '
+                    'how far each record runs, freshness and a link to its `main`')
+    if subs_out:
+        more.append(f'- [JURISDICTIONS.md](JURISDICTIONS.md): the {len(subs)} jurisdictions in this folder, each with its own page')
+    if more:
+        out += ['## More', ''] + more + ['']
+    nl = chr(10)
+    pages = {f'{folder}/README.md': nl.join(out).rstrip() + nl}
+    back = f'Back to [{name}](README.md).'
+    if repos_out:
+        rp = [MARK, f'# {name}: repositories', '', ' / '.join(crumbs + [f'[{name}](README.md)', 'Repositories']), ''] + [f"{len(mine)} repositories under this folder ({counts}). Each row links to the repository's current `main`; "
+                     'the folder of the same path is the submodule global-law pins and reads. "Coverage" is what the corpus says of '
+                     "itself; freshness is global-law's monitor. " + back, ''] + repo_tables(folder, groups, corpora, fresh)
+        pages[f'{folder}/REPOSITORIES.md'] = nl.join(rp).rstrip() + nl
+    if subs_out:
+        jp = [MARK, f'# {name}: jurisdictions', '', ' / '.join(crumbs + [f'[{name}](README.md)', 'Jurisdictions']), ''] + [f'The {len(subs)} jurisdictions in this folder. ' + back, ''] + jl
+        pages[f'{folder}/JURISDICTIONS.md'] = nl.join(jp).rstrip() + nl
+    return pages
 
 
 PAGE = 'https://github.com/lexifina/global-law/tree/main/'
@@ -249,7 +281,7 @@ def build() -> dict[str, str]:
     for folder, body in bodies.items():
         # only folders that hold a corpus, or a folder that does (a country with nothing yet keeps SOURCES.md)
         if any(p.startswith(folder + '/') for p in corpora) or folder.count('/') == 0:
-            pages[f'{folder}/README.md'] = page(folder, body, corpora, fresh, complete, names)
+            pages.update(page(folder, body, corpora, fresh, complete, names))
         new = json.dumps(link_fields(folder, dict(body), corpora), ensure_ascii=False, indent=2) + '\n'
         pages[f'{folder}/jurisdiction.json'] = new
     return pages
@@ -260,7 +292,7 @@ def write(check: bool = False) -> list[str]:
     for name, text in build().items():
         p = ROOT / name
         current = p.read_text(encoding='utf-8').replace('\r\n', '\n') if p.exists() else None
-        if current is not None and name.endswith('README.md') and MARK not in current:
+        if current is not None and name.endswith('.md') and MARK not in current:
             continue  # a README someone wrote by hand is left alone
         if current != text:
             changed.append(name)

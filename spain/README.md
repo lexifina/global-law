@@ -3,7 +3,7 @@
 
 [global-law](../) / Spain
 
-20 repositories under this folder (1 legislation, whole country, 19 legislation, subdivisions). Each row links to the repository's current `main`; the folder of the same path is the submodule global-law pins and reads. "Coverage" is what the corpus says of itself; freshness is global-law's monitor.
+20 repositories under this folder (1 legislation, whole country, 19 legislation, subdivisions): see [REPOSITORIES.md](REPOSITORIES.md).
 
 ## Completeness, checked against the official sources (2026-11-12)
 
@@ -15,55 +15,7 @@ Spain's national and regional statute law is close to fully covered: spain-law h
 
 Shares are of what exists, not of what each repository says it holds; estimates are marked, with their method in [data/completeness.json](../data/completeness.json).
 
-## Legislation, whole country (1)
+## More
 
-| Corpus | Repository | Coverage | History | Record to | Freshness |
-| --- | --- | --- | --- | --- | --- |
-| `national/acts` | [spain-law](https://github.com/lexifina/spain-law/tree/main) | from 1835-11-27 | in-force | 2026-10-28 | stale |
-
-## Legislation, subdivisions (19)
-
-| Corpus | Repository | Coverage | History | Record to | Freshness |
-| --- | --- | --- | --- | --- | --- |
-| `andalusia/acts` | [spain-andalusia-law](https://github.com/lexifina/spain-andalusia-law/tree/main) | 242 acts, 583 dated versions from 1983-01-24 to 2026-07-07 | in-force | 2026-10-30 | current |
-| `aragon/acts` | [spain-aragon-law](https://github.com/lexifina/spain-aragon-law/tree/main) | 260 acts, 532 dated versions from 1983-10-08 to 2026-08-10 | in-force | 2026-10-30 | current |
-| `asturias/acts` | [spain-asturias-law](https://github.com/lexifina/spain-asturias-law/tree/main) | 141 acts, 299 dated versions from 1982-01-31 to 2026-09-29 | in-force | 2026-10-30 | current |
-| `balearic-islands/acts` | [spain-balearic-islands-law](https://github.com/lexifina/spain-balearic-islands-law/tree/main) | 265 acts, 614 dated versions from 1984-05-10 to 2026-08-12 | in-force | 2026-10-30 | current |
-| `basque-country/acts` | [spain-basque-country-law](https://github.com/lexifina/spain-basque-country-law/tree/main) | 200 acts, 442 dated versions from 1980-01-11 to 2026-07-07 | in-force | 2026-10-30 | current |
-| `canary-islands/acts` | [spain-canary-islands-law](https://github.com/lexifina/spain-canary-islands-law/tree/main) | 198 acts, 486 dated versions from 1983-04-30 to 2026-07-01 | in-force | 2026-10-30 | current |
-| `cantabria/acts` | [spain-cantabria-law](https://github.com/lexifina/spain-cantabria-law/tree/main) | 151 acts, 317 dated versions from 1982-01-31 to 2026-10-17 | in-force | 2026-10-30 | current |
-| `castile-and-leon/acts` | [spain-castile-and-leon-law](https://github.com/lexifina/spain-castile-and-leon-law/tree/main) | 196 acts, 375 dated versions from 1986-04-10 to 2026-03-12 | in-force | 2026-10-30 | current |
-| `castile-la-mancha/acts` | [spain-castile-la-mancha-law](https://github.com/lexifina/spain-castile-la-mancha-law/tree/main) | 161 acts, 347 dated versions from 1982-08-17 to 2026-01-01 | in-force | 2026-10-30 | current |
-| `catalonia/acts` | [spain-catalonia-law](https://github.com/lexifina/spain-catalonia-law/tree/main) | 378 acts, 1039 dated versions from 1980-10-04 to 2026-10-03 | in-force | 2026-10-30 | current |
-| `ceuta/acts` | [spain-ceuta-law](https://github.com/lexifina/spain-ceuta-law/tree/main) | 1 acts, 1 dated versions from 1995-03-15 to 1995-03-15; each act as enacted, later changes not applied | as-enacted | 2026-10-30 | current |
-| `extremadura/acts` | [spain-extremadura-law](https://github.com/lexifina/spain-extremadura-law/tree/main) | 184 acts, 388 dated versions from 1985-02-20 to 2026-09-21 | in-force | 2026-10-30 | current |
-| `galicia/acts` | [spain-galicia-law](https://github.com/lexifina/spain-galicia-law/tree/main) | 217 acts, 439 dated versions from 1981-05-18 to 2026-05-01 | in-force | 2026-10-30 | current |
-| `la-rioja/acts` | [spain-la-rioja-law](https://github.com/lexifina/spain-la-rioja-law/tree/main) | 139 acts, 251 dated versions from 1982-07-09 to 2026-10-29 | in-force | 2026-10-30 | current |
-| `madrid/acts` | [spain-madrid-law](https://github.com/lexifina/spain-madrid-law/tree/main) | 183 acts, 452 dated versions from 1983-03-01 to 2026-09-21 | in-force | 2026-10-30 | current |
-| `melilla/acts` | [spain-melilla-law](https://github.com/lexifina/spain-melilla-law/tree/main) | 1 acts, 1 dated versions from 1995-03-15 to 1995-03-15; each act as enacted, later changes not applied | as-enacted | 2026-10-30 | current |
-| `murcia/acts` | [spain-murcia-law](https://github.com/lexifina/spain-murcia-law/tree/main) | 178 acts, 433 dated versions from 1982-07-09 to 2026-08-12 | in-force | 2026-10-30 | current |
-| `navarre/acts` | [spain-navarre-law](https://github.com/lexifina/spain-navarre-law/tree/main) | 231 acts, 697 dated versions from 1982-08-16 to 2026-09-30 | in-force | 2026-10-30 | current |
-| `valencia/acts` | [spain-valencia-law](https://github.com/lexifina/spain-valencia-law/tree/main) | 263 acts, 599 dated versions from 1982-07-10 to 2026-10-30 | in-force | 2026-10-30 | current |
-
-## Jurisdictions in this folder
-
-- [Andalusia](andalusia/) (1 repository)
-- [Aragon](aragon/) (1 repository)
-- [Asturias](asturias/) (1 repository)
-- [Balearic Islands](balearic-islands/) (1 repository)
-- [Basque Country](basque-country/) (1 repository)
-- [Canary Islands](canary-islands/) (1 repository)
-- [Cantabria](cantabria/) (1 repository)
-- [Castile and León](castile-and-leon/) (1 repository)
-- [Castilla-La Mancha](castile-la-mancha/) (1 repository)
-- [Catalonia](catalonia/) (1 repository)
-- [Ceuta](ceuta/) (1 repository)
-- [Extremadura](extremadura/) (1 repository)
-- [Galicia](galicia/) (1 repository)
-- [La Rioja](la-rioja/) (1 repository)
-- [Madrid](madrid/) (1 repository)
-- [Melilla](melilla/) (1 repository)
-- [Region of Murcia](murcia/) (1 repository)
-- [Spain: national law](national/) (1 repository)
-- [Navarre](navarre/) (1 repository)
-- [Valencian Community](valencia/) (1 repository)
+- [REPOSITORIES.md](REPOSITORIES.md): all 20 repositories by kind (1 legislation, whole country, 19 legislation, subdivisions), with coverage, history, how far each record runs, freshness and a link to its `main`
+- [JURISDICTIONS.md](JURISDICTIONS.md): the 20 jurisdictions in this folder, each with its own page

@@ -3,7 +3,7 @@
 
 [global-law](../) / Poland
 
-15 repositories under this folder (1 legislation, whole country, 14 case law). Each row links to the repository's current `main`; the folder of the same path is the submodule global-law pins and reads. "Coverage" is what the corpus says of itself; freshness is global-law's monitor.
+15 repositories under this folder (1 legislation, whole country, 14 case law): see [REPOSITORIES.md](REPOSITORIES.md).
 
 ## Completeness, checked against the official sources (2026-11-12)
 
@@ -15,45 +15,7 @@ Partial and out of date: poland-law holds the Constitution and 6 of the 7 main c
 
 Shares are of what exists, not of what each repository says it holds; estimates are marked, with their method in [data/completeness.json](../data/completeness.json).
 
-## Legislation, whole country (1)
+## More
 
-| Corpus | Repository | Coverage | History | Record to | Freshness |
-| --- | --- | --- | --- | --- | --- |
-| `national/acts` | [poland-law](https://github.com/lexifina/poland-law/tree/main) | from 1997-10-17 | in-force | 2025-11-24 | stale |
-
-## Case law (14)
-
-| Corpus | Repository | Coverage | History | Record to | Freshness |
-| --- | --- | --- | --- | --- | --- |
-| `krajowa-izba-odwolawcza/caselaw` | [poland-krajowa-izba-odwolawcza-caselaw](https://github.com/lexifina/poland-krajowa-izba-odwolawcza-caselaw/tree/main) | 49127 decisions with text, one file and one commit each, dated the day given: 22168 from SAOS (to 2018-09-06) and 26959 from the UZP portal orzeczenia.uzp.gov.pl (2018-06-01 to 2026-10-12); 19799 citations of law linked to poland-law. | in-force | 2026-11-09 | current |
-| `sad-najwyzszy/caselaw` | [poland-sad-najwyzszy-caselaw](https://github.com/lexifina/poland-sad-najwyzszy-caselaw/tree/main) | 38080 judgments with text from SAOS, one file and one commit each, dated the day given; 280530 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `sady-powszechne-bialystok/caselaw` | [poland-sady-powszechne-bialystok-caselaw](https://github.com/lexifina/poland-sady-powszechne-bialystok-caselaw/tree/main) | 38691 judgments with text from SAOS, one file and one commit each, dated the day given; 333367 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `sady-powszechne-gdansk/caselaw` | [poland-sady-powszechne-gdansk-caselaw](https://github.com/lexifina/poland-sady-powszechne-gdansk-caselaw/tree/main) | 51725 judgments with text from SAOS, one file and one commit each, dated the day given; 458311 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `sady-powszechne-katowice/caselaw` | [poland-sady-powszechne-katowice-caselaw](https://github.com/lexifina/poland-sady-powszechne-katowice-caselaw/tree/main) | 37974 judgments with text from SAOS, one file and one commit each, dated the day given; 334034 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `sady-powszechne-krakow/caselaw` | [poland-sady-powszechne-krakow-caselaw](https://github.com/lexifina/poland-sady-powszechne-krakow-caselaw/tree/main) | 24915 judgments with text from SAOS, one file and one commit each, dated the day given; 261813 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `sady-powszechne-lodz/caselaw` | [poland-sady-powszechne-lodz-caselaw](https://github.com/lexifina/poland-sady-powszechne-lodz-caselaw/tree/main) | 97902 judgments with text from SAOS, one file and one commit each, dated the day given; 684144 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `sady-powszechne-lublin/caselaw` | [poland-sady-powszechne-lublin-caselaw](https://github.com/lexifina/poland-sady-powszechne-lublin-caselaw/tree/main) | 18514 judgments with text from SAOS, one file and one commit each, dated the day given; 161564 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `sady-powszechne-poznan/caselaw` | [poland-sady-powszechne-poznan-caselaw](https://github.com/lexifina/poland-sady-powszechne-poznan-caselaw/tree/main) | 21636 judgments with text from SAOS, one file and one commit each, dated the day given; 255726 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `sady-powszechne-rzeszow/caselaw` | [poland-sady-powszechne-rzeszow-caselaw](https://github.com/lexifina/poland-sady-powszechne-rzeszow-caselaw/tree/main) | 8542 judgments with text from SAOS, one file and one commit each, dated the day given; 69730 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `sady-powszechne-szczecin/caselaw` | [poland-sady-powszechne-szczecin-caselaw](https://github.com/lexifina/poland-sady-powszechne-szczecin-caselaw/tree/main) | 32025 judgments with text from SAOS, one file and one commit each, dated the day given; 319491 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `sady-powszechne-warszawa/caselaw` | [poland-sady-powszechne-warszawa-caselaw](https://github.com/lexifina/poland-sady-powszechne-warszawa-caselaw/tree/main) | 67477 judgments with text from SAOS, one file and one commit each, dated the day given; 588768 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `sady-powszechne-wroclaw/caselaw` | [poland-sady-powszechne-wroclaw-caselaw](https://github.com/lexifina/poland-sady-powszechne-wroclaw-caselaw/tree/main) | 45879 judgments with text from SAOS, one file and one commit each, dated the day given; 367634 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-| `trybunal-konstytucyjny/caselaw` | [poland-trybunal-konstytucyjny-caselaw](https://github.com/lexifina/poland-trybunal-konstytucyjny-caselaw/tree/main) | 9503 judgments with text from SAOS, one file and one commit each, dated the day given; 62422 citations of law linked to poland-law. | in-force | 2026-11-07 | current |
-
-## Jurisdictions in this folder
-
-- [Krajowa Izba Odwolawcza](krajowa-izba-odwolawcza/) (1 repository)
-- [Poland: national law](national/) (1 repository)
-- [Sad Najwyzszy](sad-najwyzszy/) (1 repository)
-- [Sady Powszechne Bialystok](sady-powszechne-bialystok/) (1 repository)
-- [Sady Powszechne Gdansk](sady-powszechne-gdansk/) (1 repository)
-- [Sady Powszechne Katowice](sady-powszechne-katowice/) (1 repository)
-- [Sady Powszechne Krakow](sady-powszechne-krakow/) (1 repository)
-- [Sady Powszechne Lodz](sady-powszechne-lodz/) (1 repository)
-- [Sady Powszechne Lublin](sady-powszechne-lublin/) (1 repository)
-- [Sady Powszechne Poznan](sady-powszechne-poznan/) (1 repository)
-- [Sady Powszechne Rzeszow](sady-powszechne-rzeszow/) (1 repository)
-- [Sady Powszechne Szczecin](sady-powszechne-szczecin/) (1 repository)
-- [Sady Powszechne Warszawa](sady-powszechne-warszawa/) (1 repository)
-- [Sady Powszechne Wroclaw](sady-powszechne-wroclaw/) (1 repository)
-- [Trybunal Konstytucyjny](trybunal-konstytucyjny/) (1 repository)
+- [REPOSITORIES.md](REPOSITORIES.md): all 15 repositories by kind (1 legislation, whole country, 14 case law), with coverage, history, how far each record runs, freshness and a link to its `main`
+- [JURISDICTIONS.md](JURISDICTIONS.md): the 15 jurisdictions in this folder, each with its own page
