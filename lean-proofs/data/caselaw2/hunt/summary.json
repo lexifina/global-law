@@ -1,0 +1,1930 @@
+{
+ "generated": "2026-11-12",
+ "corpus": {
+  "findings": {
+   "panelDepartsWithoutEnBanc": 1960,
+   "ignoresBindingInUnit": 2200,
+   "atRisk": 67616,
+   "citesOverruled": 38778,
+   "citesVacated": 36020,
+   "citesWithdrawn": 5642,
+   "citesNotCitable": 38803,
+   "appliesSupersededHolding": 26
+  }
+ },
+ "readers": {
+  "first_pass": "azure gpt-5.4-mini (kept from before the hand-over; labelled in every *_out.jsonl)",
+  "later": "claude-subagent (pattern 2 remainder, patterns 4 and 5, all second reads, all audits)"
+ },
+ "patterns": {
+  "p1_zombie": {
+   "predicate": "citing decision relies on X for proposition p; statusOf X (for p) at the citing date is negative (overruled, abrogated, disapproved, receded from, reversed, vacated); no acknowledgement; not the same case",
+   "lean": "Hunt.zombie",
+   "corpus": {
+    "findings_citesOverruled": 38778,
+    "findings_citesVacated": 36020,
+    "candidate_rows": 73568,
+    "located_by_stratum": {
+     "not_located": 1649,
+     "O-silent": 16718,
+     "O-ack": 19490,
+     "V-ack": 24601,
+     "V-silent": 11110
+    },
+    "first_read": {
+     "reader": "azure gpt-5.4-mini",
+     "rows": 5389,
+     "by_stratum": {
+      "O-silent": 3777,
+      "V-silent": 1129,
+      "V-ack": 148,
+      "O-ack": 335
+     },
+     "weighted_zombie_rate": {
+      "O-silent": 0.498,
+      "V-silent": 0.567,
+      "V-ack": 0.101,
+      "O-ack": 0.191
+     }
+    },
+    "second_read": {
+     "reader": "claude-subagent",
+     "rows": 466,
+     "counts": {
+      "audited|False": 44,
+      "audited|True": 6,
+      "random_O|False": 220,
+      "random_O|True": 30,
+      "random_V|False": 99,
+      "random_V|True": 21,
+      "scotus|False": 44,
+      "scotus|True": 2
+     },
+     "confirm_rate": {
+      "O-silent": 0.12,
+      "V-silent": 0.175
+     }
+    },
+    "estimated_true_instances": {
+     "two_stage": {
+      "O-silent": 863,
+      "V-silent": 952
+     },
+     "two_stage_total": 1815,
+     "first_read_times_audit": {
+      "O-silent": 1665,
+      "V-silent": 2519
+     },
+     "note": "two_stage counts only rows both readers accept (the second reader rejected 6 of the 11 instances the full-text audit confirmed), so it is a lower estimate; first_read_times_audit is the upper one"
+    }
+   },
+   "known": {
+    "literature_overrulings": 42,
+    "target_resolved": 42,
+    "overruler_in_corpus": 32,
+    "status_negative": 21,
+    "status_partial": 3,
+    "recall_status": {
+     "k": 21,
+     "n": 42,
+     "p": 0.5,
+     "ci95": [
+      0.355,
+      0.645
+     ]
+    },
+    "recall_status_incl_partial": {
+     "k": 24,
+     "n": 42,
+     "p": 0.571,
+     "ci95": [
+      0.422,
+      0.709
+     ]
+    },
+    "later_citers_flagged": "every later citer of the 21 negative targets is a citesOverruled finding",
+    "callout_rows": 146,
+    "callout_known_zombies": 3,
+    "callout_known_zombies_in_findings": 0,
+    "recall_callouts": {
+     "k": 0,
+     "n": 3,
+     "p": 0.0,
+     "ci95": [
+      0.0,
+      0.562
+     ]
+    },
+    "classifier_on_known": {
+     "reader": "azure gpt-5.4-mini",
+     "n": 20,
+     "zombie": 3
+    }
+   },
+   "audit": {
+    "reader": "claude-subagent (full text, blind, decoys mixed in)",
+    "first_read_overruled": {
+     "n": 20,
+     "confirmed": 4,
+     "unclear": 0,
+     "precision": 0.2,
+     "ci95": [
+      0.081,
+      0.416
+     ]
+    },
+    "first_read_vacated": {
+     "n": 10,
+     "confirmed": 4,
+     "unclear": 0,
+     "precision": 0.4,
+     "ci95": [
+      0.168,
+      0.687
+     ]
+    },
+    "two_stage": {
+     "n": 22,
+     "confirmed": 19,
+     "unclear": 0,
+     "precision": 0.864,
+     "ci95": [
+      0.667,
+      0.953
+     ]
+    },
+    "decoys": [
+     {
+      "n": 8,
+      "confirmed": 0,
+      "unclear": 0,
+      "precision": 0.0,
+      "ci95": [
+       0.0,
+       0.324
+      ]
+     },
+     {
+      "n": 6,
+      "confirmed": 0,
+      "unclear": 0,
+      "precision": 0.0,
+      "ci95": [
+       0.0,
+       0.39
+      ]
+     }
+    ],
+    "top_candidates": {
+     "n": 12,
+     "confirmed": 3,
+     "unclear": 0,
+     "precision": 0.25,
+     "ci95": [
+      0.089,
+      0.532
+     ]
+    }
+   },
+   "precision": 0.864,
+   "precision_ci95": [
+    0.667,
+    0.953
+   ],
+   "precision_basis": "two-stage (both readers)",
+   "top": [
+    {
+     "citing": "United States v. Helsey, 463 F. Supp. 1111 (United States District Court for the District of Montana, 1979)",
+     "cited": "Hammer v. Dagenhart, 247 U.S. 251",
+     "why": "District court quotes Hammer as authority that the Tenth Amendment reserves local matters from Congress and strikes down a federal statute; Darby overruled Hammer and rejected that reasoning in 1941; no mention of Darby or the overruling.",
+     "citing_node": 1527626,
+     "cited_node": 5958423
+    },
+    {
+     "citing": "State v. Loudon, 857 S.W.2d 878 (Tennessee Court of Criminal Appeals, 1993)",
+     "cited": "Minersville School District v. Gobitis, 310 U.S. 586",
+     "why": "Loudon quotes Gobitis as the Court's statement that religious scruples do not excuse obedience to general laws; Barnette overruled Gobitis outright in 1943, and the opinion nowhere notes that or cites Barnette.",
+     "citing_node": 6374735,
+     "cited_node": 5975230
+    },
+    {
+     "citing": "In re Odyssey Healthcare, Inc., 310 S.W.3d 419 (Supreme Court of Texas, 2010)",
+     "cited": "National League of Cities v. Usery, 426 U.S. 833",
+     "why": "Texas Supreme Court applies National League of Cities and its Hodel traditional-governmental-functions test as the governing Tenth Amendment limit on commerce power; Garcia overruled exactly that in 1985, and Garcia is never mentioned.",
+     "citing_node": 6401476,
+     "cited_node": 6056736
+    },
+    {
+     "citing": "Dufour v. State, 495 So. 2d 154 (Florida Supreme Court, 1986)",
+     "cited": "State v. Bolton, 383 So. 2d 924",
+     "why": "Dufour cites Bolton as authority that the prosecutor's remark was permissible comment on evidence, not on silence; Kinchen (1985) had disapproved Bolton's test for such comments (from my knowledge; no excerpt). No mention of Kinchen; separate litigation.",
+     "citing_node": 2117065,
+     "cited_node": 2215981
+    },
+    {
+     "citing": "Antonini v. Hanna Industries, 94 Nev. 12 (Supreme Court of Nevada, 1978)",
+     "cited": "Fiscus v. Beartooth Electric, 164 Mont. 319",
+     "why": "Nevada court cites Fiscus (See) to support its rationale that the contractee bears insurance cost and so shares immunity; Piper had overruled Fiscus in its entirety 19 days earlier. No acknowledgment; unrelated litigation.",
+     "citing_node": 3953387,
+     "cited_node": 3891853
+    },
+    {
+     "citing": "Ausmus v. People, 47 Colo. 167 (Colorado Supreme Court, 1910)",
+     "cited": "Commonwealth v. Felch, 132 Mass. 22",
+     "why": "Colorado court quotes Felch as authority for excluding a deceased's declarations of intention as hearsay; Trefethen (1892) overruled Felch on exactly that point. No mention of Trefethen in the passage; unrelated litigation.",
+     "citing_node": 1794333,
+     "cited_node": 3465884
+    },
+    {
+     "citing": "Lee v. State, 103 Neb. 87 (Nebraska Supreme Court, 1919)",
+     "cited": "Holmes v. State, 58 Neb. 297",
+     "why": "Lee cites Fisher and Holmes as support that a larceny verdict must declare value and reverses on it; Griffith (1913) had overruled both outright on that verdict-value rule (own knowledge; no excerpt). No mention of Griffith.",
+     "citing_node": 3922706,
+     "cited_node": 3915638
+    },
+    {
+     "citing": "Kimoktoak v. State, 578 P.2d 594 (Alaska Supreme Court, 1978)",
+     "cited": "United States v. Panczko, 353 F.2d 676",
+     "why": "Alaska court adopts the per se reversal rule for jury separation, citing D'Antonio and 'See' Panczko as authority; Arciniega had overruled both on that rule 18 days earlier. No negative history noted; unrelated litigation.",
+     "citing_node": 133195,
+     "cited_node": 1178951
+    },
+    {
+     "citing": "Messersmith v. Stanga, 71 S.D. 88 (South Dakota Supreme Court, 1946)",
+     "cited": "Harris v. Stearns, 17 S.D. 439",
+     "why": "Messersmith cites the 1903 Harris v. Stearns opinion as authority that a clear tax receipt is conclusive of prior taxes paid; that opinion's affirmance was overruled and reversed on rehearing in 1906 (negated as a whole). No history noted; different litigation.",
+     "citing_node": 5931607,
+     "cited_node": 5925147
+    },
+    {
+     "citing": "State ex rel. Barnett v. Gray, 107 Fla. 73 (Florida Supreme Court, 1932)",
+     "cited": "State ex rel. Montgomery v. Anderson, 18 N.D. 149",
+     "why": "Florida court cites Montgomery v. Anderson, with parenthetical, as authority upholding a 30 percent vote requirement against equal-protection attack; North Dakota had overruled it on that validity point by 1918 (own knowledge; no excerpt). No acknowledgment.",
+     "citing_node": 2081691,
+     "cited_node": 5288643
+    },
+    {
+     "citing": "Miller v. International Diving & Consulting Services, Inc., 669 So. 2d 1246 (Louisiana Court of Appeal, 1996)",
+     "cited": "Holmes v. J. Ray McDermott & Co., 734 F.2d 1110",
+     "why": "Louisiana court cites Holmes for the conduct standard warranting punitive damages for unpaid maintenance and cure and applies it; Guevara (en banc 1995) overruled Holmes on availability of such punitive damages. Guevara not mentioned.",
+     "citing_node": 3339268,
+     "cited_node": 960804
+    },
+    {
+     "citing": "International Ass'n of Machinists v. Sandsberry, 277 S.W.2d 776 (Texas Courts of Civil Appeals, 1954)",
+     "cited": "Grovey v. Townsend, 295 U.S. 45",
+     "why": "Texas court string-cites Grovey to hold no governmental action in the union-shop statute; Smith v. Allwright (1944) overruled Grovey on exactly its state-action holding (own knowledge; no excerpt). No negative history noted; unrelated litigation.",
+     "citing_node": 6579376,
+     "cited_node": 5969928
+    },
+    {
+     "citing": "State v. Lundgren, 124 Minn. 162 (Minnesota Supreme Court, 1913)",
+     "cited": "State v. McGinnis, 38 Mo. App. 15",
+     "why": "Minnesota court cites McGinnis as authority sustaining employer criminal liability for a bartender's unauthorized sale; McCance (1892) overruled McGinnis on that point (own recollection; no excerpt). No acknowledgment; different litigation.",
+     "citing_node": 3638390,
+     "cited_node": 3782424
+    },
+    {
+     "citing": "O'hara v. Board of Education of the Vocational School in the County of, 590 F. Supp. 696 (United States District Court for the District of New Jersey, 1984)",
+     "cited": "Moore v. Bonner, 526 F. Supp. 143",
+     "why": "O'Hara cites the district decision in Moore v. Bonner as authority that the administrative hearing satisfied collateral-estoppel prerequisites; the Fourth Circuit had reversed it outright in 1982 on administrative preclusion. No subsequent history noted; unrelated litigation.",
+     "citing_node": 752395,
+     "cited_node": 898793
+    }
+   ],
+   "recall": 0.5,
+   "recall_ci95": [
+    0.355,
+    0.645
+   ],
+   "recall_basis": "status layer: literature overrulings (CRS table, casebooks) our data mark negative; 0 of 3 later-court call-outs are in the findings",
+   "counts": {
+    "candidates": 73568,
+    "reported_two_stage_in_sample": 59,
+    "estimated_true_low": 1815,
+    "estimated_true_high": 4184,
+    "confirmed_by_audit": 30
+   }
+  },
+  "p2_unpublished": {
+   "predicate": "citing court treats as binding a decision that is unpublished / non-precedential under the issuing court's rule at its date (force below bindingAbsentConflict), not in the same case",
+   "lean": "Hunt.unpublishedAsBinding",
+   "corpus": {
+    "findings_citesNotCitable": 38803,
+    "same_system_later_citations_of_nonpublished": 93362,
+    "same_court_nonbinding_passages": 42633,
+    "binding_cue_passages": 2880,
+    "first_read": {
+     "rows": 2200,
+     "readers": {
+      "azure gpt-5.4-mini": 1598,
+      "claude-subagent": 602
+     },
+     "violations": 375
+    },
+    "federal_appendix_binding_cue": 256,
+    "second_read": {
+     "reader": "claude-subagent",
+     "rows": 256,
+     "violations": 2,
+     "same_case_binding": 3
+    },
+    "confirmed_instances": 1
+   },
+   "known": {
+    "note": "Anastasoff v. United States, 223 F.3d 898 (8th Cir. 2000) (unpublished Christie treated as binding) is the textbook instance; Christie is not in the corpus, so it cannot be recreated. The pattern was validated instead on the 5th Cir. pre-1996 window (49 unpublished decisions the rule makes binding: none is reported, as it should be) and on same-case uses (law of the case: excluded).",
+    "recall": null
+   },
+   "data_error": {
+    "what": "decisions2.pub marks reporter-published opinions as unpublished when their text mentions an unpublished order (an attached opinion, a Rule 23 order under review)",
+    "nonpublished_labels": 481131,
+    "printed_reporter": 77575,
+    "share": 0.161,
+    "audit_cited_not_unpublished": {
+     "k": 32,
+     "n": 32,
+     "p": 1.0,
+     "ci95": [
+      0.893,
+      1.0
+     ]
+    },
+    "affects": "citesNotCitable (38803 findings) and every unpublished-opinion cap"
+   },
+   "audit": {
+    "reader": "claude-subagent",
+    "first_pattern": {
+     "n": 20,
+     "confirmed": 0,
+     "unclear": 0,
+     "precision": 0.0,
+     "ci95": [
+      0.0,
+      0.161
+     ]
+    },
+    "first_top": {
+     "n": 12,
+     "confirmed": 0,
+     "unclear": 0,
+     "precision": 0.0,
+     "ci95": [
+      0.0,
+      0.243
+     ]
+    },
+    "refined": {
+     "n": 2,
+     "confirmed": 1,
+     "unclear": 0,
+     "precision": 0.5,
+     "ci95": [
+      0.095,
+      0.905
+     ]
+    },
+    "decoys": [
+     {
+      "n": 8,
+      "confirmed": 0,
+      "unclear": 0,
+      "precision": 0.0,
+      "ci95": [
+       0.0,
+       0.324
+      ]
+     },
+     {
+      "n": 6,
+      "confirmed": 0,
+      "unclear": 0,
+      "precision": 0.0,
+      "ci95": [
+       0.0,
+       0.39
+      ]
+     }
+    ]
+   },
+   "precision": 0.0,
+   "precision_ci95": [
+    0.0,
+    0.161
+   ],
+   "precision_basis": "first pattern (decisions2.pub); the refined pattern has 2 instances, 1 confirmed",
+   "top": [
+    {
+     "citing": "United States v. Beuns, 614 F. App'x 284 (United States Court of Appeals for the Sixth Circuit, 2015)",
+     "cited": "United States v. Gilmore, 431 F. App'x 428",
+     "why": "Beuns says the facts 'fit squarely within our precedent, which holds' the $500-per-device rule, citing only unpublished Gilmore, and affirms on it; a different defendant and case. Unpublished Sixth Circuit opinions are not binding.",
+     "citing_node": 1123626,
+     "cited_node": 1118148
+    }
+   ],
+   "recall": null,
+   "recall_ci95": null,
+   "recall_basis": "the known instance (Anastasoff) cites a decision outside the corpus",
+   "counts": {
+    "candidates": 2880,
+    "reported_first_pattern": 375,
+    "reported_refined": 2,
+    "confirmed_by_audit": 1,
+    "mislabelled_decisions": 7342
+   }
+  },
+  "p3_panel": {
+   "predicate": "status-changing treatment by b of x, same court (and unit), strong horizontal rule, bench of b is a panel, no recognised exception (intervening higher authority, statute, full-court circulation, earlier conflicting precedent), the court had an en banc procedure",
+   "lean": "Hunt.panelOverrulesPanel",
+   "corpus": {
+    "findings_panelDepartsWithoutEnBanc": 1960,
+    "pairs": 1869,
+    "first_read": {
+     "reader": "azure gpt-5.4-mini",
+     "rows": 1860,
+     "violations": 903,
+     "after_whole_court_filter": 409
+    },
+    "second_read": {
+     "reader": "claude-subagent",
+     "rows": 409,
+     "violations": 58,
+     "by_court": [
+      [
+       "Florida District Court of Appeal",
+       18
+      ],
+      [
+       "Louisiana Court of Appeal",
+       10
+      ],
+      [
+       "Texas Courts of Appeals",
+       7
+      ],
+      [
+       "United States Court of Appeals for the District of Columbia Circuit",
+       5
+      ],
+      [
+       "Court of Appeals of Georgia",
+       3
+      ],
+      [
+       "United States Court of Appeals for the Tenth Circuit",
+       3
+      ],
+      [
+       "United States Court of Appeals for the Second Circuit",
+       3
+      ],
+      [
+       "United States Court of Appeals for the Ninth Circuit",
+       2
+      ],
+      [
+       "Ohio Court of Appeals",
+       2
+      ],
+      [
+       "United States Court of Appeals for the Third Circuit",
+       2
+      ],
+      [
+       "United States Court of Appeals for the District of Columbia",
+       1
+      ],
+      [
+       "Kentucky Court of Appeals",
+       1
+      ]
+     ],
+     "rejected_because": [
+      [
+       "en_banc/other",
+       159
+      ],
+      [
+       "panel/other",
+       50
+      ],
+      [
+       "panel/dicta_or_not_holding",
+       29
+      ],
+      [
+       "panel/circulated_to_full_court",
+       25
+      ],
+      [
+       "en_banc/none",
+       20
+      ],
+      [
+       "panel/intervening_supreme_court",
+       18
+      ],
+      [
+       "panel/earlier_case_conflicts_with_even_earlier",
+       12
+      ],
+      [
+       "unclear/other",
+       9
+      ]
+     ]
+    },
+    "estimated_true_instances": {
+     "low": 37,
+     "high": 154,
+     "note": "low = second-read violations x audit precision; high adds the second-read rejections x the decoy confirmation rate (2 of 6)"
+    }
+   },
+   "known": {
+    "note": "no usable set of later-court call-outs exists for this pattern: the 5 notes in reports_typed.tsv that mention the prior-panel rule next to an overruling (data/p3_known_callouts.tsv) recite the rule and do not accuse a panel. Validation is by mechanism instead: the known lawful routes (D.C. Cir. Irons footnote, 2d Cir. and 1st Cir. circulation, Fed. Cir. en banc footnote, 9th Cir. Miller v. Gammie, 7th Cir. Rule 40(e)) are all rejected by the second read, and the second read is scored against the instances the full-text audit confirmed",
+    "rule_reciting_notes": 5,
+    "in_findings": 0,
+    "second_read_recall_on_audit_confirmed": {
+     "k": 0,
+     "n": 2,
+     "p": 0.0,
+     "ci95": [
+      0.0,
+      0.658
+     ]
+    },
+    "recall": 0.0
+   },
+   "audit": {
+    "reader": "claude-subagent",
+    "first_read": {
+     "n": 20,
+     "confirmed": 2,
+     "unclear": 0,
+     "precision": 0.1,
+     "ci95": [
+      0.028,
+      0.301
+     ]
+    },
+    "first_top": {
+     "n": 12,
+     "confirmed": 0,
+     "unclear": 1,
+     "precision": 0.0,
+     "ci95": [
+      0.0,
+      0.243
+     ]
+    },
+    "two_stage": {
+     "n": 22,
+     "confirmed": 14,
+     "unclear": 2,
+     "precision": 0.636,
+     "ci95": [
+      0.43,
+      0.803
+     ]
+    },
+    "decoys": [
+     {
+      "n": 8,
+      "confirmed": 0,
+      "unclear": 0,
+      "precision": 0.0,
+      "ci95": [
+       0.0,
+       0.324
+      ]
+     },
+     {
+      "n": 6,
+      "confirmed": 2,
+      "unclear": 0,
+      "precision": 0.333,
+      "ci95": [
+       0.097,
+       0.7
+      ]
+     }
+    ]
+   },
+   "precision": 0.636,
+   "precision_ci95": [
+    0.43,
+    0.803
+   ],
+   "precision_basis": "two-stage (both readers)",
+   "top": [
+    {
+     "citing": "Tarrant Appraisal Dist. v. Tarrant Reg'l Water Dist., 547 S.W.3d 917 (Court of Appeals of Texas, Fort Worth, 2018)",
+     "cited": "Grand Prairie Hospital Authority v. Tarrant Appraisal District, 707 S.W.2d 281",
+     "why": "Three-justice Fort Worth panel expressly overrules its own 1986 Grand Prairie holding as misreading Satterlee and the statute's text; en banc reconsideration denied, no intervening authority. Own knowledge: Texas en banc procedure (TRAP 41.2) and prior-panel norm existed.",
+     "citing_node": 6457865,
+     "cited_node": 6476816
+    },
+    {
+     "citing": "Smith v. City of Clearwater, 383 So. 2d 681 (Florida District Court of Appeal, 1980)",
+     "cited": "City of Hollywood v. Pettersen, 178 So. 2d 919",
+     "why": "Three-judge 2d DCA panel adopts a new pending-ordinance rule and 'recedes' from its own Pettersen to the extent of conflict, citing only pre-existing cases and a 'better rule'. Own knowledge: Fla. R. App. P. 9.331 en banc in force from January 1980.",
+     "citing_node": 2215909,
+     "cited_node": 2165970
+    },
+    {
+     "citing": "Nash v. Hunt, 434 So. 2d 51 (Florida District Court of Appeal, 1983)",
+     "cited": "Gonzalez v. Benoit, 424 So. 2d 957",
+     "why": "Three-judge 3d DCA panel 'necessarily must recede' from its six-month-old Gonzalez statement that forcible entry is unavailable for residential tenancies, citing only its own statutory reading; it does not call the statement dicta. Own knowledge: en banc rule 9.331 existed.",
+     "citing_node": 2228567,
+     "cited_node": 2226359
+    },
+    {
+     "citing": "McHale v. Farm Bureau Mutual Insurance, 409 So. 2d 238 (Florida District Court of Appeal, 1982)",
+     "cited": "Travelers Indemnity Co. v. Skyway Marine, Inc., 251 So. 2d 327",
+     "why": "Three-judge 3d DCA panel says its own Travelers Indemnity was 'incorrectly decided' and recedes from it and Alonso on burden of proving post-repair value; no intervening authority or statute. Own knowledge: en banc rule 9.331 existed in 1982.",
+     "citing_node": 2222413,
+     "cited_node": 2183097
+    },
+    {
+     "citing": "In re Hoover, Bax & Slovacek, L.L.P., 6 S.W.3d 646 (Texas Courts of Appeals, 1999)",
+     "cited": "Cass v. Stephens, 823 S.W.2d 731",
+     "why": "El Paso 'Panel No. 1' says its own Cass misspoke in dismissing for want of jurisdiction and overrules it to that extent; only ground is the court's own error, though Cass is then held inapplicable. Own knowledge: Texas en banc procedure existed.",
+     "citing_node": 6498253,
+     "cited_node": 6486516
+    },
+    {
+     "citing": "Washington Annapolis Hotel Co. v. Riddle, 171 F.2d 732 (United States Court of Appeals for the District of Columbia, 1948)",
+     "cited": "Brice v. Curtis, 38 App. D.C. 304",
+     "why": "Three-justice D.C. Circuit division expressly overruled the privilege theory of its own Brice v. Curtis, citing no intervening authority or full-court approval; on my knowledge the court could sit en banc by 1948, though its law-of-the-circuit rule was then less formal.",
+     "citing_node": 1558728,
+     "cited_node": 1907395
+    },
+    {
+     "citing": "In re Estate Beeman, 391 So. 2d 276 (Florida District Court of Appeal, 1980)",
+     "cited": "In re Estate of Weymer, 199 So. 2d 495",
+     "why": "Three-judge Fourth DCA panel acknowledged conflict with its own Weymer holding and receded from it simply 'upon reconsideration', preferring the dissent; no en banc marking although, on my knowledge, Fla. R. App. P. 9.331 en banc procedure existed from 1980.",
+     "citing_node": 2217802,
+     "cited_node": 2170150
+    },
+    {
+     "citing": "Sullivan v. State, 430 So. 2d 519 (Florida District Court of Appeal, 1983)",
+     "cited": "Fulford v. State, 113 So. 2d 572",
+     "why": "Three-judge Second DCA panel receded from its own Fulford identity-proof holding without en banc (available since 1980, my knowledge); Moorman is cited only for a general circumstantial-evidence principle, not as conflicting precedent, though that reading is debatable.",
+     "citing_node": 2227533,
+     "cited_node": 2154411
+    },
+    {
+     "citing": "Revell v. Morrison Supply Co., LLC, 501 S.W.3d 255 (Texas Courts of Appeals, 2016)",
+     "cited": "Johnson v. Kilpatrick, 205 S.W.3d 690",
+     "why": "Three-justice Fort Worth panel held its own Kilpatrick revesting holding erroneous and overruled it, relying only on non-binding sister-court and Second Circuit criticism; Rule 41.2 en banc existed, and Texas panels are bound by prior panels (my knowledge; formalised in Mitschke 2022).",
+     "citing_node": 6522350,
+     "cited_node": 6510087
+    },
+    {
+     "citing": "Tracy v. Gleason, 379 F.2d 469 (United States Court of Appeals for the District of Columbia Circuit, 1967)",
+     "cited": "Hahn v. Gray, 203 F.2d 625",
+     "why": "Three-judge D.C. Circuit division expressly overruled Hahn, Van Horne and Sinlao, preferring the later panel decision Wellman; no higher-court, statutory or full-court ground given. En banc and law-of-the-circuit existed in 1967 (own knowledge).",
+     "citing_node": 1563869,
+     "cited_node": 1559641
+    },
+    {
+     "citing": "Nelson v. Nelson, 433 So. 2d 1015 (Florida District Court of Appeal, 1983)",
+     "cited": "Trujillo v. Trujillo, 378 So. 2d 812",
+     "why": "Three-judge Third DCA panel (one dissenting) receded in a footnote from its own Trujillo holding on emergency custody jurisdiction, citing no intervening authority; Fla. R. App. P. 9.331 en banc procedure existed since 1980 (own knowledge).",
+     "citing_node": 2228181,
+     "cited_node": 2214545
+    },
+    {
+     "citing": "Franklin v. Franklin, 171 F.2d 12 (United States Court of Appeals for the District of Columbia Circuit, 1948)",
+     "cited": "Caffrey v. Caffrey, 4 F.2d 952",
+     "why": "Divided three-judge D.C. Circuit panel declared Caffrey, Biscayne and Lockwood 'should be overruled' as misreading earlier cases and decided contrary to them; no intervening authority. En banc was available by September 1948 (own knowledge; prior-panel rule then less settled).",
+     "citing_node": 1558698,
+     "cited_node": 1555157
+    },
+    {
+     "citing": "Collins v. Cottrill, 388 So. 2d 302 (Florida District Court of Appeal, 1980)",
+     "cited": "Watson v. Watson, 330 So. 2d 848",
+     "why": "Three-judge 3d DCA panel 'specifically recede[s]' from its own post-1973 Watson, citing only sister-district cases; no en banc, though Rule 9.331 existed from Jan 1980 (own knowledge). Statute change covers Layton, not Watson.",
+     "citing_node": 2217104,
+     "cited_node": 2204851
+    },
+    {
+     "citing": "Alexander v. State, 422 So. 2d 25 (Florida District Court of Appeal, 1982)",
+     "cited": "Olcott v. State, 378 So. 2d 303",
+     "why": "Three-judge 2d DCA panel in 1982 'necessarily recede[s]' from Olcott's remand proviso applying Pearce to resentencing; authorities cited predate Olcott, no en banc or dicta claim; en banc rule existed (own knowledge).",
+     "citing_node": 2225578,
+     "cited_node": 2214502
+    },
+    {
+     "citing": "Franklin v. Franklin, 171 F.2d 12 (United States Court of Appeals for the District of Columbia Circuit, 1948)",
+     "cited": "Biscayne Trust Co. v. American Security & Trust Co., 20 F.2d 267",
+     "why": "Three-judge division (2-1) declared Caffrey, Biscayne and Lockwood 'should be overruled' as misunderstanding earlier cases; dissent says they were express holdings; no intervening authority. From knowledge: D.C. Circuit sat en banc by 1948, though its prior-panel rule was then less firm.",
+     "citing_node": 1558698,
+     "cited_node": 1555565
+    },
+    {
+     "citing": "Sawyer v. State, 294 S.W.3d 862 (Texas Courts of Appeals, 2009)",
+     "cited": "Jackson v. State, 990 S.W.2d 879",
+     "why": "Three-justice Beaumont panel expressly overruled its own Jackson to the extent of conflict, citing only that section 5(b) was not argued there; no higher-court, en banc or statutory-change ground relied on. Prior-panel rule and TRAP 41.2 en banc from own knowledge.",
+     "citing_node": 6514137,
+     "cited_node": 6498784
+    }
+   ],
+   "recall": 0.0,
+   "recall_ci95": [
+    0.0,
+    0.658
+   ],
+   "recall_basis": "second read against the instances the full-text audit confirmed in the first-read sample",
+   "counts": {
+    "candidates": 1869,
+    "reported_first_read": 409,
+    "reported_two_stage": 58,
+    "estimated_true_low": 37,
+    "estimated_true_high": 154,
+    "confirmed_by_audit": 18
+   }
+  },
+  "p4_superseded": {
+   "predicate": "citing court applies holding h of X to conduct u, where a statute superseded h for conduct from d and u >= d (status at conduct = superseded), without accounting for the statute",
+   "lean": "Hunt.twoDateError",
+   "corpus": {
+    "findings_appliesSupersededHolding": 26,
+    "override_targets": 36,
+    "citations_after_effective_date": 13605,
+    "located_sampled_pool": 3205,
+    "read": {
+     "reader": "claude-subagent",
+     "rows": 799,
+     "errors": 2,
+     "applies_old_rule": 68,
+     "applies_old_rule_before_effective": 32,
+     "weighted_error_estimate": 2,
+     "weighted_candidate_estimate": 255
+    },
+    "confirmed_instances": 3
+   },
+   "known": {
+    "runner_findings": 26,
+    "runner_findings_audited": {
+     "n": 20,
+     "confirmed": 0,
+     "unclear": 0,
+     "precision": 0.0,
+     "ci95": [
+      0.0,
+      0.161
+     ]
+    },
+    "note": "the runner's own 26 findings (every later citation of the 11th Cir. Ledbetter under the charge-timing issue) are the known set: none of the 20 audited applies the superseded holding. The passage reader was validated on the acknowledged stratum (statute noted)",
+    "ack_stratum": {
+     "k": 4,
+     "n": 60,
+     "p": 0.067,
+     "ci95": [
+      0.026,
+      0.159
+     ]
+    },
+    "recall": null
+   },
+   "audit": {
+    "reader": "claude-subagent",
+    "flagged": {
+     "n": 2,
+     "confirmed": 1,
+     "unclear": 0,
+     "precision": 0.5,
+     "ci95": [
+      0.095,
+      0.905
+     ]
+    },
+    "runner": {
+     "n": 20,
+     "confirmed": 0,
+     "unclear": 0,
+     "precision": 0.0,
+     "ci95": [
+      0.0,
+      0.161
+     ]
+    },
+    "candidates_needing_full_text": {
+     "n": 24,
+     "confirmed": 2,
+     "unclear": 0,
+     "precision": 0.083,
+     "ci95": [
+      0.023,
+      0.258
+     ]
+    },
+    "decoys": {
+     "n": 6,
+     "confirmed": 0,
+     "unclear": 0,
+     "precision": 0.0,
+     "ci95": [
+      0.0,
+      0.39
+     ]
+    }
+   },
+   "precision": 0.0,
+   "precision_ci95": [
+    0.0,
+    0.161
+   ],
+   "precision_basis": "the runner's appliesSupersededHolding findings; the passage reader's 2 flags: 1 confirmed; 24 unsettled candidates: 2 confirmed",
+   "top": [
+    {
+     "citing": "Nadel v. Shinseki, 57 F. Supp. 3d 288 (United States District Court for the Southern District of New York, 2014)",
+     "cited": "Toyota Motor Manufacturing, Kentucky, Inc. v. Williams, 534 U.S. 184",
+     "why": "Rehabilitation Act claim on 2010-2011 employment; court applies Toyota's prevents-or-severely-restricts, permanent-or-long-term standard and pre-amendment cases to hold a temporary knee injury not a disability, never mentioning the ADAAA, which amended the incorporated definition.",
+     "citing_node": 676233,
+     "cited_node": 6206740
+    },
+    {
+     "citing": "United States v. Mayle, 334 F.3d 552 (United States Court of Appeals for the Sixth Circuit, 2003)",
+     "cited": "Koon v. United States, 518 U.S. 81",
+     "why": "Appeal decided 1 July 2003, after the PROTECT Act; court reviews upward departures for abuse of discretion with Koon's substantial deference and affirms on that standard. No mention of the Act's de novo review in the text given (parts omitted).",
+     "citing_node": 1106140,
+     "cited_node": 6164595
+    },
+    {
+     "citing": "El Paso County v. Vasquez, 508 S.W.3d 626 (Texas Courts of Appeals, 2016)",
+     "cited": "Toyota Motor Manufacturing, Kentucky, Inc. v. Williams, 534 U.S. 184",
+     "why": "For a 2013 transfer and discharge, court states Toyota's permanent-or-long-term requirement as governing the actual-disability claim and dismisses it, never mentioning the ADAAA. Caveat: claim is under Texas Chapter 21, and plaintiff's own pleading of recovery was the main ground.",
+     "citing_node": 6522550,
+     "cited_node": 6206740
+    }
+   ],
+   "recall": null,
+   "recall_ci95": null,
+   "recall_basis": "the runner's 26 findings are not instances (0 of 20 audited), so nothing known to recall",
+   "counts": {
+    "candidates": 13605,
+    "read": 799,
+    "reported": 2,
+    "runner_findings": 26,
+    "confirmed_by_audit": 3
+   }
+  },
+  "p5_splits": {
+   "predicate": "(a) Horty: two cases of one binding base with opposite outcomes, each reason present in the other's facts; (b) split: two good-law opposite answers by courts neither of which binds the other; (c) after SCOTUS resolves the split, a court relies on the losing side for the resolved question without noting it",
+   "lean": "Hunt.inconsistentBase, Hunt.persistingSplit, Hunt.losingSideAfterResolution",
+   "corpus": {
+    "splits_persisting": 335,
+    "conflicts_within_one_bound_court": 139,
+    "horty": {
+     "families": 53,
+     "cases": 354,
+     "conflicting_pairs": 4,
+     "by_family": {
+      "preemption_express": {
+       "cases": 23,
+       "conflicting_pairs": 4
+      }
+     }
+    },
+    "scotus_resolutions_gold": 809,
+    "with_conflict_decisions_read": 394,
+    "conflict_decisions_by_side": {
+     "losing": 678,
+     "winning": 691,
+     "unclear": 63,
+     "reader": "azure gpt-5.4-mini"
+    },
+    "losing_side_decisions_cited_later": 304,
+    "later_citations_of_losing_side": 6506,
+    "silent_located_pool": 2087,
+    "read": {
+     "reader": "claude-subagent",
+     "rows": 725,
+     "zombies": 35,
+     "weighted_estimate_in_pool": 130,
+     "weighted_estimate_after_audit": 39
+    }
+   },
+   "known": {
+    "note": "losing-side decisions that later courts themselves marked as overruled / abrogated / reversed by the resolving Supreme Court decision (reports_typed_pairs.tsv)",
+    "losing_side_pairs": 304,
+    "noted_by_later_courts": 164,
+    "recall": {
+     "k": 164,
+     "n": 304,
+     "p": 0.539,
+     "ci95": [
+      0.483,
+      0.595
+     ]
+    }
+   },
+   "audit": {
+    "reader": "claude-subagent",
+    "flagged": {
+     "n": 20,
+     "confirmed": 6,
+     "unclear": 1,
+     "precision": 0.3,
+     "ci95": [
+      0.145,
+      0.519
+     ]
+    },
+    "top": {
+     "n": 12,
+     "confirmed": 6,
+     "unclear": 0,
+     "precision": 0.5,
+     "ci95": [
+      0.254,
+      0.746
+     ]
+    },
+    "decoys": {
+     "n": 8,
+     "confirmed": 0,
+     "unclear": 0,
+     "precision": 0.0,
+     "ci95": [
+      0.0,
+      0.324
+     ]
+    }
+   },
+   "precision": 0.3,
+   "precision_ci95": [
+    0.145,
+    0.519
+   ],
+   "precision_basis": "one read (claude-subagent) + audit",
+   "top": [
+    {
+     "citing": "Waddell & Reed Financial, Inc. v. Torchmark Corp., 243 F. Supp. 2d 1232 (United States District Court for the District of Kansas, 2003)",
+     "cited": "Bath v. Bushkin, Gaims, Gaines & Jonas, 913 F.2d 817",
+     "why": "Waddell fixes RICO accrual using Bath's injury-plus-pattern discovery rule, the rule Rotella rejected, flagging Bath only as overruled on other grounds by Lampf; Rotella is not mentioned in the text given.",
+     "citing_node": 417424,
+     "cited_node": 371151
+    },
+    {
+     "citing": "United States v. Armstrong, 550 F.3d 382 (United States Court of Appeals for the Fifth Circuit, 2008)",
+     "cited": "United States v. Wilson, 249 F.3d 366",
+     "why": "Armstrong states and applies an overt-act element for § 1956(h) conspiracy citing Wilson, the Fifth Circuit rule Whitfield rejected, and the text given never mentions Whitfield.",
+     "citing_node": 993894,
+     "cited_node": 973489
+    },
+    {
+     "citing": "Galvez-Letona v. Kirkpatrick, 54 F. Supp. 2d 1218 (United States District Court for the District of Utah, 1999)",
+     "cited": "J.L. v. Social Security Administration, 971 F.2d 260",
+     "why": "Galvez-Letona states, citing J.L./Share Ourselves, that Congress unequivocally authorized damages against federal agencies under § 504, the answer Lane rejected, without mentioning Lane; caveat: only equitable relief and fees were sought, so the damages statement is dictum.",
+     "citing_node": 421910,
+     "cited_node": 1396470
+    },
+    {
+     "citing": "Oracle USA, Inc. v. Rimini Street, Inc., 6 F. Supp. 3d 1108 (United States District Court for the District of Nevada, 2014)",
+     "cited": "Petrella v. Metro-Goldwyn-Mayer, Inc., 695 F.3d 946",
+     "why": "Oracle uses Ninth Circuit Petrella for the laches test in a copyright action and treats laches as able to bar timely claims in unusual circumstances, never mentioning the Supreme Court's reversal; the defense failed on the facts anyway.",
+     "citing_node": 1530491,
+     "cited_node": 1462448
+    },
+    {
+     "citing": "Durthaler v. Accounts Receivable Management, Inc., 854 F. Supp. 2d 485 (United States District Court for the Southern District of Ohio, 2012)",
+     "cited": "Jerman v. Carlisle, McNellie, Rini, Kramer & Ulrich LPA, 538 F.3d 469",
+     "why": "Durthaler states the bona fide error defense applies to mistakes of law, citing only the Sixth Circuit Jerman decision the Supreme Court reversed, with no mention of the reversal; the error at issue was factual, so the statement is not outcome-determinative.",
+     "citing_node": 1161895,
+     "cited_node": 1115094
+    },
+    {
+     "citing": "Hooker v. Hoover (In re Hoover), 289 B.R. 340 (United States Bankruptcy Court for the Northern District of Ohio, 2003)",
+     "cited": "Perkins v. Scharffe, 817 F.2d 392",
+     "why": "Hoover takes its section 523(a)(6) willfulness standard from Perkins (intentional act necessarily leading to injury), the test Geiger rejected, without citing Geiger; the torts found were intentional, so the result likely survives. Perkins's split role is from my knowledge.",
+     "citing_node": 276668,
+     "cited_node": 1095743
+    },
+    {
+     "citing": "City of O'Fallon v. Centurylink, Inc., 491 S.W.3d 276 (Missouri Court of Appeals, 2016)",
+     "cited": "Guthrie v. Evans, 815 F.2d 626",
+     "why": "Guthrie denied unnamed class members standing to appeal, rejected by Devlin. Citing court, quoting Ring's reliance on Guthrie, says objector who did not intervene lacks standing to appeal; never mentions Devlin. Reliance is an alternative, admittedly unnecessary ground.",
+     "citing_node": 3862747,
+     "cited_node": 430705
+    },
+    {
+     "citing": "Miller ex rel. Bankruptcy Estate of Elrod v. Westfield Steel, Inc. (In, 426 B.R. 106 (United States Bankruptcy Court for the District of Delaware, 2010)",
+     "cited": "Fobian v. Western Farm Credit Bank, 951 F.2d 1149",
+     "why": "Court quotes the Fobian rule barring fees on issues peculiar to bankruptcy law absent bad faith and denies fees on it, without mentioning Travelers. Caveat: the request was under Rule 7054, not a contract, so the fit is imperfect.",
+     "citing_node": 250253,
+     "cited_node": 1395883
+    },
+    {
+     "citing": "Barry v. Santander Bank, N.A. (In re Liberty State Benefits of Delawar, 541 B.R. 219 (United States Bankruptcy Court for the District of Delaware, 2015)",
+     "cited": "United States v. Thomas, 315 F.3d 190",
+     "why": "Thomas required intent to defraud or expose the bank to loss, which Loughrin rejected for 1344(2); the bankruptcy court dismisses the bank-fraud predicate squarely under that Thomas holding and never mentions Loughrin.",
+     "citing_node": 252174,
+     "cited_node": 705523
+    },
+    {
+     "citing": "Wade v. Gaither, 623 F. Supp. 2d 1277 (United States District Court for the District of Utah, 2009)",
+     "cited": "Bivens Gardens Office Building, Inc. v. Barnett Bank of Florida, Inc., 906 F.2d 1546",
+     "why": "Court quotes Bivens Gardens (via Bath) for accrual on discovery of injury and pattern, the rule Rotella rejected, and holds the claim timely because no pattern existed until the second act; Rotella is not mentioned.",
+     "citing_node": 422315,
+     "cited_node": 432700
+    },
+    {
+     "citing": "Hvizdak v. Linn, 190 A.3d 1213 (Superior Court of Pennsylvania, 2018)",
+     "cited": "Sikes v. Teleline, Inc., 281 F.3d 1350",
+     "why": "Hvizdak (2018) cites Sikes for the rule that a civil RICO mail-fraud plaintiff must show his own detrimental reliance, and dismisses because Husband never relied; Bridge rejected that rule and is not mentioned in the text given.",
+     "citing_node": 5769707,
+     "cited_node": 438080
+    },
+    {
+     "citing": "Wade v. Gaither, 623 F. Supp. 2d 1277 (United States District Court for the District of Utah, 2009)",
+     "cited": "Bath v. Bushkin, Gaims, Gaines & Jonas, 913 F.2d 817",
+     "why": "Wade (2009) quotes Bath's injury-plus-pattern discovery accrual rule for civil RICO and holds the claim timely because no pattern existed until the second act; Rotella rejected that rule and is not mentioned.",
+     "citing_node": 422315,
+     "cited_node": 371151
+    }
+   ],
+   "recall": 0.539,
+   "recall_ci95": [
+    0.483,
+    0.595
+   ],
+   "recall_basis": "losing-side labels that later courts' own notes confirm (overruled / abrogated / reversed by the resolving decision)",
+   "counts": {
+    "persisting_splits": 335,
+    "conflicts": 139,
+    "horty_conflicting_pairs": 4,
+    "candidates": 6506,
+    "read": 725,
+    "reported": 35,
+    "estimated_true_in_pool": 39,
+    "confirmed_by_audit": 12
+   }
+  },
+  "p6_rules": {
+   "predicate": "search of the rule tables with the reference engine: a pair (decision, forum) whose force differs from the force of the same decision in a sibling forum, or changes across a cut-off date, or survives a negation the source court made",
+   "lean": "Hunt.forumDependent, Hunt.adoptionCarriesOverruled, Hunt.dualHighCourtConflict, Hunt.cutoffWindow",
+   "adoption_chains": {
+    "treatments": 177,
+    "with_power": 167,
+    "other_heir_citations_after": 98,
+    "of_which_runner_flags_citesOverruled": 25,
+    "by_heir": {
+     "United States Court of Appeals for the Eleventh Circuit overrules; still binding on United States Court of Appeals for the Fifth Circuit": {
+      "treatments": 8,
+      "later_citations": 30,
+      "flagged": 15
+     },
+     "United States Court of Appeals for the Fifth Circuit overrules; still binding on United States Court of Appeals for the Eleventh Circuit": {
+      "treatments": 37,
+      "later_citations": 63,
+      "flagged": 10
+     },
+     "Court of Appeals of the District of Columbia overrules; still binding on Municipal Court of Appeals for the District of Columbia": {
+      "treatments": 3,
+      "later_citations": 5,
+      "flagged": 0
+     },
+     "Mississippi Supreme Court overrules; still binding on High Court of Errors and Appeals of Mississippi": {
+      "treatments": 10,
+      "later_citations": 0,
+      "flagged": 0
+     },
+     "Supreme Court of New Jersey overrules; still binding on New Jersey Court of Errors and Appeals": {
+      "treatments": 14,
+      "later_citations": 0,
+      "flagged": 0
+     },
+     "Supreme Court of Delaware (1897 constitution) overrules; still binding on Delaware Court of Errors and Appeals": {
+      "treatments": 2,
+      "later_citations": 0,
+      "flagged": 0
+     },
+     "Supreme Court of the State of Hawaii overrules; still binding on Supreme Court of the Territory of Hawaii": {
+      "treatments": 14,
+      "later_citations": 0,
+      "flagged": 0
+     },
+     "Alabama Court of Criminal Appeals overrules; still binding on Alabama Court of Appeals": {
+      "treatments": 6,
+      "later_citations": 0,
+      "flagged": 0
+     },
+     "Supreme Court of Kentucky overrules; still binding on Court of Appeals of Kentucky (court of last resort before 1976)": {
+      "treatments": 73,
+      "later_citations": 0,
+      "flagged": 0
+     },
+     "United States Court of Appeals for the Federal Circuit overrules; still binding on United States Court of Customs and Patent Appeals": {
+      "treatments": 7,
+      "later_citations": 0,
+      "flagged": 0
+     },
+     "Supreme Court of South Carolina overrules; still binding on South Carolina Court of Appeals (1824-1868, court of last resort)": {
+      "treatments": 2,
+      "later_citations": 0,
+      "flagged": 0
+     },
+     "Alabama Court of Civil Appeals overrules; still binding on Alabama Court of Appeals": {
+      "treatments": 1,
+      "later_citations": 0,
+      "flagged": 0
+     }
+    }
+   },
+   "successor_gaps": {
+    "successions": 37,
+    "without_binding_on_any_court": 6,
+    "orphaned_decisions": 37668,
+    "later_citations": 68680,
+    "rows": [
+     {
+      "old": "United States Court of Appeals for the Eighth Circuit",
+      "new": "United States Court of Appeals for the Tenth Circuit",
+      "date": "19290228",
+      "decisions": 7364,
+      "force": "persuasive:F7.otherCircuit",
+      "later_citations": 18141
+     },
+     {
+      "old": "United States Court of Claims",
+      "new": "United States Court of Appeals for the Federal Circuit",
+      "date": "19821001",
+      "decisions": 17104,
+      "force": "unknown:adoption.cap",
+      "later_citations": 38559
+     },
+     {
+      "old": "United States Court of Claims",
+      "new": "United States Claims Court",
+      "date": "19821001",
+      "decisions": 17104,
+      "force": "unknown:adoption.cap",
+      "later_citations": 38559
+     },
+     {
+      "old": "New Jersey Court of Chancery",
+      "new": "New Jersey Superior Court, Chancery Division",
+      "date": "19480915",
+      "decisions": 10882,
+      "force": "persuasiveStrong:F12.self",
+      "later_citations": 11219
+     },
+     {
+      "old": "Court of Appeals of Indian Territory",
+      "new": "Oklahoma Supreme Court",
+      "date": "19071116",
+      "decisions": 574,
+      "force": "persuasive:adoption.cap",
+      "later_citations": 71
+     },
+     {
+      "old": "Kansas Court of Appeals (1895-1901)",
+      "new": "Kansas Supreme Court",
+      "date": "19020101",
+      "decisions": 1744,
+      "force": "persuasive:4.1.notVertical",
+      "later_citations": 690
+     }
+    ],
+    "named_probes": [
+     {
+      "case": "Kentucky 1976",
+      "probe": "last before the cut",
+      "probe_node": "3062599",
+      "probe_date": "19751212",
+      "source_court": "Court of Appeals of Kentucky (court of last resort before 1976)",
+      "destination_court": "Kentucky Court of Appeals",
+      "force_one_year_after": "binding:F7/4.1.strong",
+      "force_today": "binding:F7/4.1.strong",
+      "source_published_decisions_before": "67362",
+      "source_published_decisions_after": "0"
+     },
+     {
+      "case": "Kentucky 1976",
+      "probe": "last before the cut",
+      "probe_node": "3062599",
+      "probe_date": "19751212",
+      "source_court": "Court of Appeals of Kentucky (court of last resort before 1976)",
+      "destination_court": "Supreme Court of Kentucky",
+      "force_one_year_after": "persuasiveStrong:H1.selfNotBound",
+      "force_today": "persuasiveStrong:H1.selfNotBound",
+      "source_published_decisions_before": "67362",
+      "source_published_decisions_after": "0"
+     },
+     {
+      "case": "Kentucky 1976",
+      "probe": "last before the cut",
+      "probe_node": "3062599",
+      "probe_date": "19751212",
+      "source_court": "Court of Appeals of Kentucky (court of last resort before 1976)",
+      "destination_court": "Ballard Circuit Court",
+      "force_one_year_after": "binding:4.1.V.statewide",
+      "force_today": "binding:4.1.V.statewide",
+      "source_published_decisions_before": "67362",
+      "source_published_decisions_after": "0"
+     },
+     {
+      "case": "D.C. 1971",
+      "probe": "last before the cut",
+      "probe_node": "1564946",
+      "probe_date": "19710129",
+      "source_court": "Court of Appeals of the District of Columbia",
+      "destination_court": "Municipal Court of Appeals for the District of Columbia",
+      "force_one_year_after": "persuasiveStrong:H1.selfNotBound",
+      "force_today": "persuasiveStrong:H1.selfNotBound",
+      "source_published_decisions_before": "13725",
+      "source_published_decisions_after": "14936"
+     },
+     {
+      "case": "D.C. 1971",
+      "probe": "last before the cut",
+      "probe_node": "1564946",
+      "probe_date": "19710129",
+      "source_court": "Court of Appeals of the District of Columbia",
+      "destination_court": "District of Columbia Criminal Court",
+      "force_one_year_after": "binding:H1",
+      "force_today": "binding:H1",
+      "source_published_decisions_before": "13725",
+      "source_published_decisions_after": "14936"
+     },
+     {
+      "case": "D.C. 1971",
+      "probe": "first after the cut",
+      "probe_node": "1565078",
+      "probe_date": "19710202",
+      "source_court": "Court of Appeals of the District of Columbia",
+      "destination_court": "Municipal Court of Appeals for the District of Columbia",
+      "force_one_year_after": "persuasive:E3.table",
+      "force_today": "persuasive:E3.table",
+      "source_published_decisions_before": "13725",
+      "source_published_decisions_after": "14936"
+     },
+     {
+      "case": "D.C. 1971",
+      "probe": "first after the cut",
+      "probe_node": "1565078",
+      "probe_date": "19710202",
+      "source_court": "Court of Appeals of the District of Columbia",
+      "destination_court": "District of Columbia Criminal Court",
+      "force_one_year_after": "persuasive:E3.table",
+      "force_today": "persuasive:E3.table",
+      "source_published_decisions_before": "13725",
+      "source_published_decisions_after": "14936"
+     },
+     {
+      "case": "New Jersey 1948 (Court of Errors and Appeals)",
+      "probe": "last before the cut",
+      "probe_node": "3992400",
+      "probe_date": "19480909",
+      "source_court": "New Jersey Court of Errors and Appeals",
+      "destination_court": "Supreme Court of New Jersey",
+      "force_one_year_after": "persuasiveStrong:H1.selfNotBound",
+      "force_today": "persuasiveStrong:H1.selfNotBound",
+      "source_published_decisions_before": "10340",
+      "source_published_decisions_after": "0"
+     },
+     {
+      "case": "New Jersey 1948 (Court of Errors and Appeals)",
+      "probe": "last before the cut",
+      "probe_node": "3992400",
+      "probe_date": "19480909",
+      "source_court": "New Jersey Court of Errors and Appeals",
+      "destination_court": "New Jersey Superior Court, Appellate Division",
+      "force_one_year_after": "binding:H1",
+      "force_today": "binding:H1",
+      "source_published_decisions_before": "10340",
+      "source_published_decisions_after": "0"
+     },
+     {
+      "case": "New Jersey 1948 (Court of Errors and Appeals)",
+      "probe": "last before the cut",
+      "probe_node": "3992400",
+      "probe_date": "19480909",
+      "source_court": "New Jersey Court of Errors and Appeals",
+      "destination_court": "Union County Circuit Court",
+      "force_one_year_after": "binding:H1",
+      "force_today": "binding:H1",
+      "source_published_decisions_before": "10340",
+      "source_published_decisions_after": "0"
+     },
+     {
+      "case": "New Jersey 1948 (old Supreme Court)",
+      "probe": "last before the cut",
+      "probe_node": "4016736",
+      "probe_date": "19480914",
+      "source_court": "Supreme Court of New Jersey (before 15 Sept 1948)",
+      "destination_court": "Supreme Court of New Jersey",
+      "force_one_year_after": "persuasive:4.1.notVertical",
+      "force_today": "persuasive:4.1.notVertical",
+      "source_published_decisions_before": "21129",
+      "source_published_decisions_after": "0"
+     },
+     {
+      "case": "New Jersey 1948 (old Supreme Court)",
+      "probe": "last before the cut",
+      "probe_node": "4016736",
+      "probe_date": "19480914",
+      "source_court": "Supreme Court of New Jersey (before 15 Sept 1948)",
+      "destination_court": "New Jersey Superior Court, Appellate Division",
+      "force_one_year_after": "persuasive:4.1.none",
+      "force_today": "persuasive:4.1.none",
+      "source_published_decisions_before": "21129",
+      "source_published_decisions_after": "0"
+     },
+     {
+      "case": "New Jersey 1948 (old Supreme Court)",
+      "probe": "last before the cut",
+      "probe_node": "4016736",
+      "probe_date": "19480914",
+      "source_court": "Supreme Court of New Jersey (before 15 Sept 1948)",
+      "destination_court": "Union County Circuit Court",
+      "force_one_year_after": "bindingAbsentConflict:4.1.V.chooseOnConflict",
+      "force_today": "bindingAbsentConflict:4.1.V.chooseOnConflict",
+      "source_published_decisions_before": "21129",
+      "source_published_decisions_after": "0"
+     },
+     {
+      "case": "Eleventh Circuit 1981 (old Fifth)",
+      "probe": "last before the cut",
+      "probe_node": "958130",
+      "probe_date": "19810930",
+      "source_court": "United States Court of Appeals for the Fifth Circuit",
+      "destination_court": "United States Court of Appeals for the Eleventh Circuit",
+      "force_one_year_after": "binding:F7/4.1.strong",
+      "force_today": "binding:F7/4.1.strong",
+      "source_published_decisions_before": "33514",
+      "source_published_decisions_after": "25427"
+     },
+     {
+      "case": "Eleventh Circuit 1981 (old Fifth)",
+      "probe": "last before the cut",
+      "probe_node": "958130",
+      "probe_date": "19810930",
+      "source_court": "United States Court of Appeals for the Fifth Circuit",
+      "destination_court": "United States Court of Appeals for the Fifth Circuit",
+      "force_one_year_after": "binding:F7/4.1.strong",
+      "force_today": "binding:F7/4.1.strong",
+      "source_published_decisions_before": "33514",
+      "source_published_decisions_after": "25427"
+     },
+     {
+      "case": "Eleventh Circuit 1981 (old Fifth)",
+      "probe": "last before the cut",
+      "probe_node": "958130",
+      "probe_date": "19810930",
+      "source_court": "United States Court of Appeals for the Fifth Circuit",
+      "destination_court": "United States Circuit Court for the District of Alabama",
+      "force_one_year_after": "binding:F7.district",
+      "force_today": "binding:F7.district",
+      "source_published_decisions_before": "33514",
+      "source_published_decisions_after": "25427"
+     },
+     {
+      "case": "Eleventh Circuit 1981 (old Fifth)",
+      "probe": "first after the cut",
+      "probe_node": "958131",
+      "probe_date": "19811001",
+      "source_court": "United States Court of Appeals for the Fifth Circuit",
+      "destination_court": "United States Court of Appeals for the Eleventh Circuit",
+      "force_one_year_after": "persuasive:F7.otherCircuit",
+      "force_today": "persuasive:F7.otherCircuit",
+      "source_published_decisions_before": "33514",
+      "source_published_decisions_after": "25427"
+     },
+     {
+      "case": "Eleventh Circuit 1981 (old Fifth)",
+      "probe": "first after the cut",
+      "probe_node": "958131",
+      "probe_date": "19811001",
+      "source_court": "United States Court of Appeals for the Fifth Circuit",
+      "destination_court": "United States Court of Appeals for the Fifth Circuit",
+      "force_one_year_after": "binding:F7/4.1.strong",
+      "force_today": "binding:F7/4.1.strong",
+      "source_published_decisions_before": "33514",
+      "source_published_decisions_after": "25427"
+     },
+     {
+      "case": "Eleventh Circuit 1981 (old Fifth)",
+      "probe": "first after the cut",
+      "probe_node": "958131",
+      "probe_date": "19811001",
+      "source_court": "United States Court of Appeals for the Fifth Circuit",
+      "destination_court": "United States Circuit Court for the District of Alabama",
+      "force_one_year_after": "persuasive:F7.otherCircuit",
+      "force_today": "persuasive:F7.otherCircuit",
+      "source_published_decisions_before": "33514",
+      "source_published_decisions_after": "25427"
+     },
+     {
+      "case": "Tenth Circuit 1929 (Eighth)",
+      "probe": "last before the cut",
+      "probe_node": "1268525",
+      "probe_date": "19290221",
+      "source_court": "United States Court of Appeals for the Eighth Circuit",
+      "destination_court": "United States Court of Appeals for the Tenth Circuit",
+      "force_one_year_after": "persuasive:F7.otherCircuit",
+      "force_today": "persuasive:F7.otherCircuit",
+      "source_published_decisions_before": "1646",
+      "source_published_decisions_after": "44716"
+     },
+     {
+      "case": "Tenth Circuit 1929 (Eighth)",
+      "probe": "last before the cut",
+      "probe_node": "1268525",
+      "probe_date": "19290221",
+      "source_court": "United States Court of Appeals for the Eighth Circuit",
+      "destination_court": "United States Court of Appeals for the Eighth Circuit",
+      "force_one_year_after": "binding:F7/4.1.strong",
+      "force_today": "binding:F7/4.1.strong",
+      "source_published_decisions_before": "1646",
+      "source_published_decisions_after": "44716"
+     },
+     {
+      "case": "Tenth Circuit 1929 (Eighth)",
+      "probe": "last before the cut",
+      "probe_node": "1268525",
+      "probe_date": "19290221",
+      "source_court": "United States Court of Appeals for the Eighth Circuit",
+      "destination_court": "nited States District Court for the District of New Mexico",
+      "force_one_year_after": "persuasive:F7.otherCircuit",
+      "force_today": "persuasive:F7.otherCircuit",
+      "source_published_decisions_before": "1646",
+      "source_published_decisions_after": "44716"
+     },
+     {
+      "case": "Tenth Circuit 1929 (Eighth)",
+      "probe": "first after the cut",
+      "probe_node": "1268527",
+      "probe_date": "19290301",
+      "source_court": "United States Court of Appeals for the Eighth Circuit",
+      "destination_court": "United States Court of Appeals for the Tenth Circuit",
+      "force_one_year_after": "persuasive:F7.otherCircuit",
+      "force_today": "persuasive:F7.otherCircuit",
+      "source_published_decisions_before": "1646",
+      "source_published_decisions_after": "44716"
+     },
+     {
+      "case": "Tenth Circuit 1929 (Eighth)",
+      "probe": "first after the cut",
+      "probe_node": "1268527",
+      "probe_date": "19290301",
+      "source_court": "United States Court of Appeals for the Eighth Circuit",
+      "destination_court": "United States Court of Appeals for the Eighth Circuit",
+      "force_one_year_after": "binding:F7/4.1.strong",
+      "force_today": "binding:F7/4.1.strong",
+      "source_published_decisions_before": "1646",
+      "source_published_decisions_after": "44716"
+     },
+     {
+      "case": "Tenth Circuit 1929 (Eighth)",
+      "probe": "first after the cut",
+      "probe_node": "1268527",
+      "probe_date": "19290301",
+      "source_court": "United States Court of Appeals for the Eighth Circuit",
+      "destination_court": "nited States District Court for the District of New Mexico",
+      "force_one_year_after": "persuasive:F7.otherCircuit",
+      "force_today": "persuasive:F7.otherCircuit",
+      "source_published_decisions_before": "1646",
+      "source_published_decisions_after": "44716"
+     },
+     {
+      "case": "Federal Circuit 1982 (CCPA)",
+      "probe": "last before the cut",
+      "probe_node": "1986124",
+      "probe_date": "19820930",
+      "source_court": "United States Court of Customs and Patent Appeals",
+      "destination_court": "United States Court of Appeals for the Federal Circuit",
+      "force_one_year_after": "binding:F7/4.1.strong",
+      "force_today": "binding:F7/4.1.strong",
+      "source_published_decisions_before": "15849",
+      "source_published_decisions_after": "0"
+     },
+     {
+      "case": "Federal Circuit 1982 (Court of Claims)",
+      "probe": "last before the cut",
+      "probe_node": "1970080",
+      "probe_date": "19820930",
+      "source_court": "United States Court of Claims",
+      "destination_court": "United States Court of Appeals for the Federal Circuit",
+      "force_one_year_after": "unknown:adoption.cap",
+      "force_today": "unknown:adoption.cap",
+      "source_published_decisions_before": "17103",
+      "source_published_decisions_after": "486"
+     },
+     {
+      "case": "Federal Circuit 1982 (Court of Claims)",
+      "probe": "first after the cut",
+      "probe_node": "1969805",
+      "probe_date": "19821007",
+      "source_court": "United States Court of Claims",
+      "destination_court": "United States Court of Appeals for the Federal Circuit",
+      "force_one_year_after": "persuasive:F13",
+      "force_today": "persuasive:F13",
+      "source_published_decisions_before": "17103",
+      "source_published_decisions_after": "486"
+     },
+     {
+      "case": "Texas Commission of Appeals",
+      "probe": "last before the cut",
+      "probe_node": "6463299",
+      "probe_date": "19430609",
+      "source_court": "Texas Commission of Appeals",
+      "destination_court": "Supreme Court of Texas",
+      "force_one_year_after": "persuasiveStrong:H1.selfNotBound",
+      "force_today": "persuasiveStrong:H1.selfNotBound",
+      "source_published_decisions_before": "4676",
+      "source_published_decisions_after": "2"
+     },
+     {
+      "case": "Texas Commission of Appeals",
+      "probe": "last before the cut",
+      "probe_node": "6463299",
+      "probe_date": "19430609",
+      "source_court": "Texas Commission of Appeals",
+      "destination_court": "Texas Court of Review Tribunal",
+      "force_one_year_after": "binding:H1",
+      "force_today": "binding:H1",
+      "source_published_decisions_before": "4676",
+      "source_published_decisions_after": "2"
+     },
+     {
+      "case": "Texas Commission of Appeals",
+      "probe": "first after the cut",
+      "probe_node": "6463300",
+      "probe_date": "19821109",
+      "source_court": "Texas Commission of Appeals",
+      "destination_court": "Supreme Court of Texas",
+      "force_one_year_after": "persuasive:4.4.trialNotBinding",
+      "force_today": "persuasive:4.4.trialNotBinding",
+      "source_published_decisions_before": "4676",
+      "source_published_decisions_after": "2"
+     },
+     {
+      "case": "Texas Commission of Appeals",
+      "probe": "first after the cut",
+      "probe_node": "6463300",
+      "probe_date": "19821109",
+      "source_court": "Texas Commission of Appeals",
+      "destination_court": "Texas Court of Review Tribunal",
+      "force_one_year_after": "persuasive:4.4.trialNotBinding",
+      "force_today": "persuasive:4.4.trialNotBinding",
+      "source_published_decisions_before": "4676",
+      "source_published_decisions_after": "2"
+     }
+    ],
+    "old_courts_without_binding_successor": 5
+   },
+   "dual_high_courts": {
+    "cross_treatments": 8,
+    "rows": [
+     {
+      "by": "Reed v. State 2 Tex. L. R. 466",
+      "by_court": "Supreme Court of Texas",
+      "target": "Brown v. State 7 Tex. Ct. App. 619",
+      "target_court": "Texas Court of Appeals (1876-1891)",
+      "kind": "overruled",
+      "power": "no:H2.dualLastResort",
+      "both_bind_intermediate": true
+     },
+     {
+      "by": "Jackson v. State 548 S.W.2d 685",
+      "by_court": "Texas Court of Appeals (1876-1891)",
+      "target": "State v. Olsen 360 S.W.2d 398",
+      "target_court": "Supreme Court of Texas",
+      "kind": "overruled",
+      "power": "no:H2.dualLastResort",
+      "both_bind_intermediate": true
+     },
+     {
+      "by": "Lehman v. State 792 S.W.2d 82",
+      "by_court": "Texas Court of Appeals (1876-1891)",
+      "target": "Thompson v. State 43 Tex. 268",
+      "target_court": "Supreme Court of Texas",
+      "kind": "overruled",
+      "power": "no:H2.dualLastResort",
+      "both_bind_intermediate": true
+     },
+     {
+      "by": "W. U. Tel. Co. v. McKinney 2 Wilson 562",
+      "by_court": "Texas Court of Appeals (1876-1891)",
+      "target": "Daniel v. W. U. Tel. Co. 61 Tex. 452",
+      "target_court": "Supreme Court of Texas",
+      "kind": "overruled",
+      "power": "no:H2.dualLastResort",
+      "both_bind_intermediate": true
+     },
+     {
+      "by": "Culpepper v. State 4 Okla. Crim. 103",
+      "by_court": "Criminal Court of Appeals of Oklahoma",
+      "target": "Horn v. Territory of Oklahoma 8 Okla. 52",
+      "target_court": "Oklahoma Supreme Court",
+      "kind": "declinedToFollow",
+      "power": "no:H2.dualLastResort",
+      "both_bind_intermediate": true
+     },
+     {
+      "by": "Hopkins v. State 9 Okla. Crim. 104",
+      "by_court": "Criminal Court of Appeals of Oklahoma",
+      "target": "Hansing v. Territory of Oklahoma 4 Okla. 443",
+      "target_court": "Oklahoma Supreme Court",
+      "kind": "overruled",
+      "power": "no:H2.dualLastResort",
+      "both_bind_intermediate": true
+     },
+     {
+      "by": "Morris v. State 9 Okla. Crim. 241",
+      "by_court": "Criminal Court of Appeals of Oklahoma",
+      "target": "Cecil v. Territory of Oklahoma 16 Okla. 197",
+      "target_court": "Oklahoma Supreme Court",
+      "kind": "overruled",
+      "power": "no:H2.dualLastResort",
+      "both_bind_intermediate": true
+     },
+     {
+      "by": "Johnson v. State 10 Okla. Crim. 597",
+      "by_court": "Criminal Court of Appeals of Oklahoma",
+      "target": "Proctor v. Territory of Oklahoma 18 Okla. 378",
+      "target_court": "Oklahoma Supreme Court",
+      "kind": "overruled",
+      "power": "no:H2.dualLastResort",
+      "both_bind_intermediate": true
+     }
+    ]
+   },
+   "unpublished_windows": {
+    "rows": 40,
+    "top": [
+     [
+      "adopted | United States Court of Appeals for the Fifth Circuit | United States Court of Appeals for the Eleventh Circuit | persuasive | persuasive | after",
+      121334
+     ],
+     [
+      "adopted | United States Court of Appeals for the Ninth Circuit | Supreme Court of Guam | persuasive | persuasive | after",
+      69218
+     ],
+     [
+      "adopted | United States Court of Appeals for the Ninth Circuit | Commonwealth of the Northern Mariana Islands Supreme Court | persuasive | persuasive | after",
+      69218
+     ],
+     [
+      "adopted | United States Court of Appeals for the Third Circuit | Supreme Court of the Virgin Islands | persuasive | persuasive | before",
+      15149
+     ],
+     [
+      "adopted | United States Court of Appeals for the Ninth Circuit | Supreme Court of Guam | notCitable | notCitable | before",
+      13577
+     ],
+     [
+      "adopted | United States Court of Appeals for the Third Circuit | Supreme Court of the Virgin Islands | persuasive | persuasive | after",
+      13275
+     ],
+     [
+      "adopted | United States Court of Appeals for the Ninth Circuit | Commonwealth of the Northern Mariana Islands Supreme Court | notCitable | notCitable | before",
+      11679
+     ],
+     [
+      "adopted | United States Court of Appeals for the Ninth Circuit | Commonwealth of the Northern Mariana Islands Supreme Court | notCitable | notCitable | after",
+      11665
+     ],
+     [
+      "adopted | United States Court of Appeals for the Ninth Circuit | Supreme Court of Guam | notCitable | notCitable | after",
+      9767
+     ],
+     [
+      "adopted | United States Court of Appeals for the Eighth Circuit | United States Court of Appeals for the Tenth Circuit | persuasive | persuasive | after",
+      6472
+     ],
+     [
+      "adopted | United States Court of Appeals for the Eighth Circuit | United States Court of Appeals for the Tenth Circuit | citableNoWeight | citableNoWeight | after",
+      3880
+     ],
+     [
+      "adopted | Court of Appeals of the District of Columbia | Municipal Court of Appeals for the District of Columbia | persuasiveStrong | persuasive | after",
+      1968
+     ]
+    ]
+   },
+   "forum_choice": {
+    "cross_system_departures": 1442,
+    "by_direction": [
+     [
+      "state->state",
+      670
+     ],
+     [
+      "state->federal",
+      527
+     ],
+     [
+      "federal->state",
+      245
+     ]
+    ],
+    "rule_values": [
+     {
+      "rule": "firstInTimeControls",
+      "value": "1",
+      "systems_or_courts": "13"
+     },
+     {
+      "rule": "horizontal",
+      "value": "soft",
+      "systems_or_courts": "31"
+     },
+     {
+      "rule": "horizontal",
+      "value": "strong",
+      "systems_or_courts": "24"
+     },
+     {
+      "rule": "horizontal",
+      "value": "none",
+      "systems_or_courts": "18"
+     },
+     {
+      "rule": "horizontal",
+      "value": "withinUnitOnly",
+      "systems_or_courts": "5"
+     },
+     {
+      "rule": "stateFollowsCircuit",
+      "value": "persuasive",
+      "systems_or_courts": "50"
+     },
+     {
+      "rule": "stateFollowsCircuit",
+      "value": "binding",
+      "systems_or_courts": "4"
+     },
+     {
+      "rule": "stateFollowsCircuit",
+      "value": "persuasiveStrong",
+      "systems_or_courts": "2"
+     },
+     {
+      "rule": "trialScope",
+      "value": "statewide",
+      "systems_or_courts": "36"
+     },
+     {
+      "rule": "trialScope",
+      "value": "statewideChooseOnConflict",
+      "systems_or_courts": "3"
+     },
+     {
+      "rule": "trialScope",
+      "value": "ownUnitThenAny",
+      "systems_or_courts": "3"
+     },
+     {
+      "rule": "trialScope",
+      "value": "ownUnitOnly",
+      "systems_or_courts": "3"
+     }
+    ]
+   },
+   "commission": {
+    "rows": [
+     {
+      "court": "Supreme Court of Missouri",
+      "notation": "other",
+      "decisions": "7004",
+      "probe_destination": "Supreme Court of Missouri",
+      "authority": "persuasiveStrong:H1.selfNotBound",
+      "force": "persuasiveStrong:H1.selfNotBound",
+      "examples": "3753850,3755085,3755086"
+     },
+     {
+      "court": "Texas Court of Appeals (1876-1891)",
+      "notation": "opinionApproved",
+      "decisions": "3242",
+      "probe_destination": "Supreme Court of Texas",
+      "authority": "persuasive:H2.dualLastResort",
+      "force": "persuasive:H2.dualLastResort",
+      "examples": "6408866,6428642,6430920"
+     },
+     {
+      "court": "Missouri Courts of Appeals (St. Louis, Kansas City, Springfield)",
+      "notation": "other",
+      "decisions": "2066",
+      "probe_destination": "Missouri Courts of Appeals (St. Louis, Kansas City, Springfield)",
+      "authority": "persuasiveStrong:4.1.soft",
+      "force": "persuasiveStrong:4.1.soft",
+      "examples": "3074252,3789955,3789956"
+     },
+     {
+      "court": "Supreme Court of Texas",
+      "notation": "opinionAdopted",
+      "decisions": "1541",
+      "probe_destination": "Supreme Court of Texas",
+      "authority": "persuasiveStrong:H1.selfNotBound",
+      "force": "persuasiveStrong:H1.selfNotBound",
+      "examples": "6383303,6383307,6383621"
+     },
+     {
+      "court": "Texas Commission of Appeals",
+      "notation": "opinionAdopted",
+      "decisions": "945",
+      "probe_destination": "Supreme Court of Texas",
+      "authority": "persuasiveStrong:H1.selfNotBound",
+      "force": "persuasiveStrong:H1.selfNotBound",
+      "examples": "6462206,6462248,6462254"
+     },
+     {
+      "court": "Illinois Supreme Court",
+      "notation": "other",
+      "decisions": "313",
+      "probe_destination": "Illinois Supreme Court",
+      "authority": "persuasiveStrong:H1.selfNotBound",
+      "force": "persuasiveStrong:H1.selfNotBound",
+      "examples": "2639188,2639198,2639200"
+     },
+     {
+      "court": "Mississippi Supreme Court",
+      "notation": "opinionAdopted",
+      "decisions": "206",
+      "probe_destination": "Mississippi Supreme Court",
+      "authority": "persuasiveStrong:H1.selfNotBound",
+      "force": "persuasiveStrong:H1.selfNotBound",
+      "examples": "3690448,3690450,3690468"
+     },
+     {
+      "court": "Supreme Court of Texas",
+      "notation": "opinionApproved",
+      "decisions": "69",
+      "probe_destination": "Supreme Court of Texas",
+      "authority": "persuasiveStrong:H1.selfNotBound",
+      "force": "persuasiveStrong:H1.selfNotBound",
+      "examples": "6383594,6383596,6383599"
+     },
+     {
+      "court": "Texas Courts of Civil Appeals",
+      "notation": "opinionAdopted",
+      "decisions": "22",
+      "probe_destination": "Supreme Court of Texas",
+      "authority": "persuasive:4.1.notVertical",
+      "force": "persuasive:4.1.notVertical",
+      "examples": "6562773,6565020,6565086"
+     },
+     {
+      "court": "Idaho Supreme Court",
+      "notation": "other",
+      "decisions": "19",
+      "probe_destination": "Idaho Supreme Court",
+      "authority": "persuasiveStrong:H1.selfNotBound",
+      "force": "persuasiveStrong:H1.selfNotBound",
+      "examples": "2592483,2592493,2592497"
+     },
+     {
+      "court": "Iowa Supreme Court",
+      "notation": "other",
+      "decisions": "10",
+      "probe_destination": "Iowa Supreme Court",
+      "authority": "persuasiveStrong:H1.selfNotBound",
+      "force": "persuasiveStrong:H1.selfNotBound",
+      "examples": "2913047,2913048,2913049"
+     },
+     {
+      "court": "Kansas Court of Appeals (1895-1901)",
+      "notation": "other",
+      "decisions": "10",
+      "probe_destination": "Kansas Court of Appeals (1895-1901)",
+      "authority": "persuasiveStrong:4.1.soft",
+      "force": "persuasiveStrong:4.1.soft",
+      "examples": "2989347,2989351,2989352"
+     }
+    ],
+    "texas_commission_decisions": 4676,
+    "texas_commission_with_notation": 956
+   },
+   "precision": null,
+   "recall": null,
+   "counts": {
+    "adoption_two_heir_treatments": 48,
+    "adoption_other_heir_citations": 98,
+    "adoption_flagged_by_runner": 25,
+    "successor_gaps": 5,
+    "orphaned_decisions": 37668,
+    "dual_high_court_cross_treatments": 8,
+    "unpublished_windows": 40,
+    "cross_system_departures": 1442
+   }
+  }
+ },
+ "lean": {
+  "module": "LegalProofs/CaseLaw2/Hunt.lean",
+  "guards": 44,
+  "theorems": 14,
+  "compiled": "yes: WSL Ubuntu, Lean 4.35.0, lake env lean LegalProofs/CaseLaw2/Hunt.lean, exit 0, no messages (2026-11-12)",
+  "command": "wsl.exe -d Ubuntu -- bash /mnt/c/Users/<you>/Documents/global-law-lean/lean-proofs/tools/caselaw2/hunt/hunt_lean.sh"
+ },
+ "strongest": [
+  "In re Odyssey Healthcare, 310 S.W.3d 419 (Tex. 2010) applies National League of Cities v. Usery, overruled by Garcia in 1985",
+  "United States v. Helsey, 463 F. Supp. 1111 (D. Mont. 1979) strikes down a federal statute on Hammer v. Dagenhart, overruled in 1941",
+  "decisions2.pub mislabelled 7,342 reporter-printed decisions as not published (77,575 such labels, most of them right); every audited 'unpublished treated as binding' report was this error",
+  "United States v. Armstrong, 550 F.3d 382 (5th Cir. 2008) requires an overt act for a 1956(h) conspiracy three years after Whitfield v. United States",
+  "one day decides it: a Fifth Circuit decision of 30 Sep 1981 binds the Eleventh Circuit, even after the Fifth Circuit en banc overrules it (37 such overrulings, 63 later Eleventh Circuit citations, 10 of them reported by our own runner as citing overruled law)"
+ ]
+}

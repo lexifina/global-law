@@ -5,7 +5,7 @@ Code block the decision cited. You get: the decision's opening and the passages 
 the cited words as the court read them and as the law left them, with the changes; the law's own text where it amends
 the section (when found); and, when found, the passage of the law or of a committee report on the law that names a
 case. You may read more of the decision with
-`git -C C:/Users/alany/Documents/us-caselaw-repos/<court_repo> show HEAD:<path>` if needed (paths are not in the packet;
+`git -C ~/Documents/us-caselaw-repos/<court_repo> show HEAD:<path>` if needed (paths are not in the packet;
 you can search the repo with `git -C <repo> grep -l "<case name>" HEAD -- decisions/` only if really needed; usually the
 packet is enough). Do not fetch anything from the web.
 

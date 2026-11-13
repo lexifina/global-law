@@ -1,0 +1,80 @@
+{
+ "recall": {
+  "gold": 36,
+  "found": 23,
+  "explicit": 16,
+  "found_score_ge_0_5": 15,
+  "previous_found": 20
+ },
+ "retro_v1_sample1": {
+  "n": 30,
+  "class": 17,
+  "retro_yes_no": 26,
+  "effective": 21,
+  "retroactive_to": 26
+ },
+ "conf_v1_sample1": {
+  "prospectiveOnly -> noProvision": 9,
+  "asIfIncluded -> asIfIncluded": 1,
+  "appliesToPendingCases -> prospectiveOnly": 1,
+  "noProvision -> noProvision": 10,
+  "asIfIncluded -> noProvision": 1,
+  "retroactiveToDate -> noProvision": 1,
+  "prospectiveOnly -> prospectiveOnly": 4,
+  "retroactiveToDate -> retroactiveToDate": 2,
+  "appliesToPendingCases -> noProvision": 1
+ },
+ "retro_v2_sample2": {
+  "n": 30,
+  "class": 18,
+  "retro_yes_no": 25,
+  "effective": 21,
+  "retroactive_to": 25
+ },
+ "conf_v2_sample2": {
+  "prospectiveOnly -> prospectiveOnly": 5,
+  "retroactiveToDate -> noProvision": 1,
+  "noProvision -> prospectiveOnly": 4,
+  "noProvision -> retroactiveToDate": 1,
+  "noProvision -> noProvision": 13,
+  "asIfIncluded -> prospectiveOnly": 1,
+  "asIfIncluded -> noProvision": 1,
+  "prospectiveOnly -> noProvision": 3,
+  "prospectiveOnly -> retroactiveToDate": 1
+ },
+ "retro_v2_sample1": {
+  "n": 30,
+  "class": 19,
+  "retro_yes_no": 25,
+  "effective": 21,
+  "retroactive_to": 25
+ },
+ "conf_v2_sample1": {
+  "prospectiveOnly -> noProvision": 5,
+  "asIfIncluded -> noProvision": 2,
+  "appliesToPendingCases -> prospectiveOnly": 1,
+  "noProvision -> noProvision": 9,
+  "prospectiveOnly -> prospectiveOnly": 8,
+  "retroactiveToDate -> prospectiveOnly": 1,
+  "retroactiveToDate -> retroactiveToDate": 2,
+  "noProvision -> prospectiveOnly": 1,
+  "appliesToPendingCases -> noProvision": 1
+ },
+ "retro_rx": {
+  "n": 60,
+  "retro_yes_no": 50,
+  "effective": 38
+ },
+ "llm": {
+  "calls": 242,
+  "errors": 0,
+  "classes": {
+   "noProvision": 140,
+   "retroactiveToDate": 21,
+   "prospectiveOnly": 66,
+   "asIfIncluded": 4,
+   "appliesToPendingCases": 11
+  },
+  "tokens": 1170337
+ }
+}

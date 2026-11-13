@@ -3,6 +3,9 @@
 Inputs and outputs of the Lean tax work, so every figure in the two posts can be checked and rerun. The Lean code is in
 `../TaxCode/` and `../LegalProofs/USTax/`; the scripts are in `../tools/`.
 
+The US case-law work has its own pages: [caselaw/README.md](caselaw/README.md) (version 1 and the statute record) and
+[caselaw2/README.md](caselaw2/README.md) (version 2).
+
 ## tax-code/ — "Formalizing the US tax code"
 
 - `drafting/` — the Title 26 drafting checks (OLRC release point 119-138):
