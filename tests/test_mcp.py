@@ -4373,5 +4373,191 @@ class SearchBestFirst(unittest.TestCase):
         self.assertEqual(self.by(Broken(m), **ask)[1]['results'], by_name['results'])
 
 
+class CandidatesIndex(FilesIndex):
+    """A FilesIndex that can also narrow what it cannot answer (search_index.candidates): the files of today's text
+    that hold a query's words, or a word with each run of one alternative of a regular expression; with `ever`, also
+    the files a change touched whose added or removed lines hold them (git's pickaxe, as a host's index of changes)."""
+
+    def __init__(self, m, hold=None, broken=None, changes=None):
+        super().__init__(m, hold)
+        self.broken, self._ever, self.changes = broken, {}, changes  # changes: the ChangesIndex whose tips it stops at
+
+    def today(self, spec, corpus):
+        if 'words' in spec:
+            return set(self.matching(spec['words'], corpus))
+        return {n for n, t in self.corpus(corpus).items() if any(all(self.m.fold(run) in t for run in runs) for runs in spec['fragments'])}
+
+    def changed(self, spec, corpus):
+        if 'words' in spec:
+            wanted = self.m.loose_pattern(spec['words'])
+        else:  # (a file with any run of an alternative in a change: more files than a host's index names, never fewer)
+            wanted = '|'.join(sorted({run for runs in spec['fragments'] for run in runs}))
+        if (wanted, corpus) not in self._ever:
+            out = subprocess.run(['git', '-c', 'core.quotepath=off', 'log', self.changes.tip(corpus) if self.changes else 'HEAD', '--format=', '--name-only', '-i', '-E', f'-G{wanted}', '--', '*.md'],
+                                 cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace', check=True).stdout
+            self._ever[wanted, corpus] = {n for n in out.splitlines() if n}
+        return self._ever[wanted, corpus]
+
+    def names(self, spec, corpus):
+        got = self.today(spec, corpus) | (self.changed(spec, corpus) if spec.get('ever') else set())
+        return sorted(got, key=lambda n: n.encode())
+
+    def candidate_counts(self, spec, corpora, case_law):
+        self.calls.append(('candidate_counts', dict(spec), list(corpora), case_law))
+        return {c: len(self.names(spec, c)) for c in corpora if self.hold is None or c in self.hold}
+
+    def candidates(self, spec, corpus, after, size):
+        self.calls.append(('candidates', dict(spec), corpus, after, size))
+        if self.broken == 'silent':
+            return None
+        names = [n for n in self.names(spec, corpus) if after is None or n.encode() > after.encode()][:size]
+        return names[::-1] if self.broken == 'order' else names
+
+
+class SearchNarrowed(unittest.TestCase):
+    """search_law where the index cannot answer but can narrow (search_index.candidates, 2026-11-13): a regular
+    expression, case as written and a past date give the lines and the counts a read of the whole corpus gives, and
+    git is given only the files the index names."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def setUp(self):
+        from unittest import mock
+        m = self.m
+        self.mock = mock
+        self.greps = []  # every git grep of law started, as its argv
+        run = m.git_run
+
+        def git_run(cmd, **kw):
+            if 'grep' in cmd:
+                self.greps.append(list(cmd))
+            return run(cmd, **kw)
+        for name, new in (('git_run', git_run), ('search_index', None), ('history_index', None)):
+            patch = mock.patch.object(m, name, new)
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def by(self, index, changes=None, **ask):
+        del self.greps[:]
+        with self.mock.patch.object(self.m, 'search_index', index), self.mock.patch.object(self.m, 'history_index', changes):
+            return self.m.t_search_law(dict(ask))
+
+    def same(self, ask, index, changes=None, narrowed=True):
+        _, whole = self.by(None, **ask)
+        text, got = self.by(index, changes, **ask)
+        for key in ('results', 'provision_count', 'provisions', 'page'):
+            self.assertEqual(got.get(key), whole.get(key), (key, ask))
+        asked = [c for c in index.calls if c[0] == 'candidates']
+        self.assertEqual(bool(asked), narrowed, ask)
+        if narrowed:  # no read of a whole corpus: every grep names its files
+            self.assertFalse([cmd for cmd in self.greps if cmd[-1] == '*.md'], ask)
+        self.assertNotIn('At least', text.splitlines()[0])
+        return whole
+
+    def test_the_runs_every_match_holds(self):
+        f = self.m.regex_fragments
+        for pattern, runs in (('data protect(ion|ed)', [['protect', 'data']]), ('colou?r', [['colo']]), ('abc+def', [['abc', 'def']]),
+                              ('x(yyy)?zzzz', [['zzzz']]), ('(foo|bar)baz', [['baz', 'foo'], ['bar', 'baz']]), ('foo|barr', [['foo'], ['barr']]),
+                              ('stare de (alert|urgen)', [['alert', 'stare'], ['stare', 'urgen']]), ('télétravail(leur)?s?', [['télétravail']]),
+                              ('(a|b)(c|d)(e|f)(g|h)word', [['word']]), ('Straße [0-9]+', [['straße']]),
+                              ('ab{0,2}cde', [['cde']]), ('data[[:space:]]+protection', [['protection', 'data']]),
+                              ('Bundes(daten)schutz', [['bundes', 'schutz', 'daten']]), ('^Section [0-9]+\\.', [['section']]),
+                              ('soci[e|]t(y)', [['soci']]), ('art\\. 12', [['art']])):
+            self.assertEqual(f(pattern), runs, pattern)
+        for pattern in ('[0-9]{4}', 'a.*b', 'foo|ba', 'tax|[a-z]+', '個人情報保護', '(abc', 'abc)', 'x|', '.*', 'ab', 'ș.ț', 'a{2}b+c*', '|'.join('word%d' % i for i in range(9))):
+            self.assertIsNone(f(pattern), pattern)
+
+    @needs(IE_C, PW_C)
+    def test_a_regular_expression_reads_the_files_the_index_names(self):
+        m = self.m
+        for ask in ({'query': 'data protect(ion|ed) (commission|officer)', 'regex': True, 'jurisdiction': 'ireland', 'max_results': 200},
+                    {'query': 'Traditional [A-Z]eaders', 'regex': True, 'jurisdiction': 'palau', 'max_results': 200},
+                    {'query': 'olbiil era kelulau|personal data breach', 'regex': True, 'max_results': 50},
+                    {'query': 'olbiil era kelulau|personal data breach', 'regex': True, 'max_results': 7, 'offset': 9},
+                    {'query': 'TRADITIONAL leaders', 'regex': True, 'jurisdiction': 'palau'},
+                    {'query': 'zzzqqqxxx[0-9]', 'regex': True}):
+            with self.subTest(ask=ask):
+                index = CandidatesIndex(m)
+                self.same(ask, index, narrowed=not ask['query'].startswith('zzz'))
+                self.assertFalse([c for c in index.calls if c[0] in ('counts', 'paths', 'ranked')])
+        index = CandidatesIndex(m)  # a pattern with no run of letters every match holds: git reads the corpus, as ever
+        self.same({'query': '[0-9]{4}-[0-9]{2}-[0-9]{2}', 'regex': True, 'jurisdiction': 'palau', 'max_results': 20}, index, narrowed=False)
+        self.assertEqual(index.calls, [])
+        for broken in ('silent', 'order'):  # an index that stops answering, or answers out of order: the corpus is read whole
+            index = CandidatesIndex(m, broken=broken)
+            ask = {'query': 'data protect(ion|ed) (commission|officer)', 'regex': True, 'jurisdiction': 'ireland', 'max_results': 200}
+            _, whole = self.by(None, **ask)
+            _, got = self.by(index, **ask)
+            self.assertEqual((got['results'], got['provision_count']), (whole['results'], whole['provision_count']))
+            self.assertGreater(whole['provision_count'], 1)
+            self.assertTrue([cmd for cmd in self.greps if cmd[-1] == '*.md'])
+        # Past what the page needs, a corpus is read for a time only: the same first lines, and the counts are floors.
+        ask = {'query': 'data protect(ion|ed)', 'regex': True, 'jurisdiction': 'ireland', 'max_results': 3}
+        _, whole = self.by(None, **ask)
+        with self.mock.patch.object(m, 'CANDIDATES_SECONDS', 0), self.mock.patch.object(m, 'CANDIDATES_PAGE', 5):
+            index = CandidatesIndex(m)
+            text, got = self.by(index, **ask)
+        self.assertEqual(got['results'], whole['results'])
+        self.assertTrue(text.startswith('At least ') and 0 < got['provision_count'] < whole['provision_count'], text[:200])
+        self.assertIsNone(got['page']['total'])
+        self.assertEqual(got['page']['next_offset'], whole['page']['next_offset'])
+        self.assertTrue(any('floors' in h for h in got.get('hints', [])))
+        self.assertLess(len([c for c in index.calls if c[0] == 'candidates']), 4)
+        index = CandidatesIndex(m, hold={PW_C})  # a corpus the index does not hold is read whole, the others by their files
+        ask = {'query': 'olbiil era kelulau|personal data breach', 'regex': True, 'max_results': 50}
+        _, whole = self.by(None, **ask)
+        _, got = self.by(index, **ask)
+        self.assertEqual((got['results'], got['provision_count']), (whole['results'], whole['provision_count']))
+        self.assertEqual({c[2] for c in index.calls if c[0] == 'candidates'}, {PW_C})
+
+    @needs(IE_C, PW_C)
+    def test_case_as_written(self):
+        m = self.m
+        for ask in ({'query': 'Traditional Leaders', 'case_sensitive': True, 'jurisdiction': 'palau', 'max_results': 200},
+                    {'query': 'traditional leaders', 'case_sensitive': True, 'jurisdiction': 'palau', 'max_results': 200},
+                    {'query': 'Personal Data Breach', 'case_sensitive': True, 'jurisdiction': 'ireland', 'max_results': 200}):
+            with self.subTest(ask=ask):
+                self.same(ask, CandidatesIndex(m), narrowed=bool(CandidatesIndex(m).matching(ask['query'], IE_C if 'ireland' in ask['jurisdiction'] else PW_C)))
+
+    @needs(IE_C, PW_C)
+    def test_a_past_date(self):
+        m = self.m
+        for corpus, words, pattern in ((IE_C, 'personal data breach', 'data protect(ion|ed) (commission|officer)'),
+                                       (PW_C, 'Traditional Leaders', 'Traditional [A-Z]eaders')):
+            days = sorted({e.in_force for e in m.law.corpus_events(corpus)})
+            for date in (days[len(days) // 2], days[len(days) // 5], days[0]):
+                for ask in ({'query': words}, {'query': pattern, 'regex': True}, {'query': words, 'case_sensitive': True}):
+                    ask = {**ask, 'date': date, 'jurisdiction': corpus, 'max_results': 200}
+                    with self.subTest(ask=ask):
+                        # (an index of changes some commits behind the corpus: the files changed since are read too)
+                        for behind in (0, 3, 40):
+                            changes = ChangesIndex(m, [IE_C, PW_C], behind=behind)
+                            index = CandidatesIndex(m, changes=changes)
+                            self.same(ask, index, changes, narrowed=True)
+                            self.assertTrue(all(c[1].get('ever') for c in index.calls if c[0] == 'candidates'))
+                        # too far behind, or no index of changes: today's files are not all that ever held the words,
+                        # and the corpus is read whole
+                        with self.mock.patch.object(m, 'CANDIDATES_GAP', 2):
+                            self.same(ask, CandidatesIndex(m), ChangesIndex(m, [IE_C, PW_C], behind=3), narrowed=False)
+                        self.same(ask, CandidatesIndex(m), None, narrowed=False)
+
+    @needs(FI_TT)
+    def test_case_law_by_a_regular_expression(self):
+        m = self.m
+        for ask in ({'query': 'lomapalkkasopimuks(en|esta)', 'regex': True, 'jurisdiction': FI_TT, 'max_results': 200},
+                    {'query': 'Lomapalkkasopimuksen', 'case_sensitive': True, 'jurisdiction': FI_TT, 'max_results': 200}):
+            with self.subTest(ask=ask):
+                _, whole = self.by(None, **ask)
+                index = CandidatesIndex(m)
+                _, got = self.by(index, **ask)
+                self.assertEqual((got['results'], got['provision_count']), (whole['results'], whole['provision_count']))
+                self.assertTrue(whole['results'] and [c for c in index.calls if c[0] == 'candidates'])
+
+
 if __name__ == '__main__':
     unittest.main()

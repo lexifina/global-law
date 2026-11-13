@@ -155,6 +155,19 @@ def rewritten_grep(cmd: list, cwd) -> tuple[list, object]:
 #       the same text; fewer than `size` means there are no more. search_law then gives each body of law's lines
 #       best provision first (order "relevance", its default), where it gave them in the order of the files' names.
 #       None, an exception or anything else: the files are listed by paths(), by name.
+# and may narrow what it cannot answer:
+#   candidates(spec, corpus, after, size) -> [path, ...] | None
+#       Files of the corpus that CAN hold what a search asks, in ascending order after `after`, at most `size`; an
+#       empty list means there are no more. Every file that does hold it must be among them; others may be. `spec`:
+#       {'words': query} (a plain query: the files holding its words, as paths() names them), or {'fragments':
+#       [[run, ...], ...]} (a regular expression: for each way a match can be made, lowercase runs of three or more
+#       letters and digits that every match contains, ASCII or Latin with marks ("é": to be folded as the index folds
+#       its words); a file is a candidate when it has, for one way, a word holding each run), with 'ever': True for a search of a past date (also the files that held it on any date).
+#   candidate_counts(spec, corpora, case_law) -> {corpus: n} | None
+#       For the corpora it can narrow: 0 where no file is a candidate, more where some are (any number).
+#       search_law then has git read only those files, where it read every file of the corpus: a past date (31 s for
+#       Romania), a regular expression (past 80 s), case as written (26 s for France). None, an exception or
+#       anything else, or an index without these: the corpus is read whole, for SCAN_SECONDS at most.
 # and a fifth, for find_provision:
 #   top_files(words, corpus, size) -> [path, ...] | None
 #       Up to `size` files of the corpus that hold any of `words` (whole words, whatever the case), those that hold
@@ -230,6 +243,202 @@ def index_paths(query: str, corpus: str, after: str | None, size: int) -> list |
 
 
 RANKED_LINES = 3  # lines of one provision search_law shows in the order of relevance
+CANDIDATES_SECONDS = 5.0  # a corpus an index narrowed is read past what the page needs for this long: then the counts are floors
+SCAN_SECONDS = 30.0  # a body of law that no index narrows is read for this long; then it is named as not read
+CANDIDATES_PAGE = 5000  # candidate files asked of a host's index at a time
+CANDIDATES_GAP = 500  # commits a host's index of changes may be behind the commit served, for a search of a past date
+CANDIDATES_MOST = 100_000  #candidate files of one corpus read for an exact count; past that, until the page is full
+
+
+def _bracket_end(pattern: str, i: int) -> int:
+    """The place after the bracket expression that starts at pattern[i] ('[')."""
+    j = i + 1
+    if pattern[j:j + 1] == '^':
+        j += 1
+    if pattern[j:j + 1] == ']':
+        j += 1
+    while j < len(pattern):
+        if pattern[j] == '[' and pattern[j + 1:j + 2] in (':', '=', '.'):
+            end = pattern.find(pattern[j + 1] + ']', j + 2)
+            j = len(pattern) if end < 0 else end + 2
+        elif pattern[j] == ']':
+            return j + 1
+        else:
+            j += 1
+    return len(pattern)
+
+
+def _group_end(pattern: str, i: int) -> int | None:
+    """The place after the group that starts at pattern[i] ('('); None when it does not close."""
+    depth, j = 0, i
+    while j < len(pattern):
+        ch = pattern[j]
+        if ch == '\\':
+            j += 2
+            continue
+        if ch == '[':
+            j = _bracket_end(pattern, j)
+            continue
+        if ch == '(':
+            depth += 1
+        elif ch == ')':
+            depth -= 1
+            if not depth:
+                return j + 1
+        j += 1
+    return None
+
+
+def _repeat(pattern: str, i: int) -> tuple[str, int]:
+    """('', i) with no repetition at pattern[i]; else ('optional', after it) when what stands before may be absent
+    (?, *, {0,...}) or ('repeated', after it) when it stands at least once (+, {n}, {n,m})."""
+    ch = pattern[i:i + 1]
+    if ch in ('?', '*'):
+        return 'optional', i + 1
+    if ch == '+':
+        return 'repeated', i + 1
+    if ch == '{':
+        end = pattern.find('}', i)
+        if end > 0 and re.fullmatch(r'\d+(,\d*)?', pattern[i + 1:end]):
+            return ('optional' if int(pattern[i + 1:end].split(',')[0]) == 0 else 'repeated'), end + 1
+    return '', i
+
+
+def _alternatives(pattern: str) -> list[str]:
+    """The pattern cut at its top-level | (not inside a group or a bracket expression)."""
+    out, cur, depth, j = [], 0, 0, 0
+    while j < len(pattern):
+        ch = pattern[j]
+        if ch == '\\':
+            j += 2
+            continue
+        if ch == '[':
+            j = _bracket_end(pattern, j)
+            continue
+        if ch == '(':
+            depth += 1
+        elif ch == ')':
+            depth -= 1
+        elif ch == '|' and depth == 0:
+            out.append(pattern[cur:j])
+            cur = j + 1
+        j += 1
+    out.append(pattern[cur:])
+    return out
+
+
+def _run_letter(ch: str) -> bool:
+    """Whether a character of a pattern can be part of a run: an ASCII letter or digit, or a Latin letter with a mark
+    (one a word index folds to ASCII letters: "é", "ț", "ß"). Not a letter of a script whose words an index may cut
+    otherwise."""
+    if ch.isascii():
+        return ch.isalnum()
+    return ch.isalpha() and len(ch.lower()) == 1 and unicodedata.name(ch, '').startswith('LATIN')
+
+
+def _runs(branch: str) -> list[list[str]] | None:
+    """For one alternative of a pattern: the runs of letters and digits that every match contains (lowercase, three
+    or more characters), for each way through the alternatives of its groups (at most RUN_WAYS; a group with more is
+    passed over); None when the alternative cannot be read."""
+    ways, cur, i = [[]], '', 0
+
+    def close():
+        nonlocal cur
+        if len(cur) >= 3:
+            for way in ways:
+                way.append(cur.lower())
+        cur = ''
+    while i < len(branch):
+        ch = branch[i]
+        if ch == '\\':  # an escape: a class or a character that is no letter or digit
+            close()
+            _, i = _repeat(branch, i + 2)
+        elif ch == '[':
+            close()
+            _, i = _repeat(branch, _bracket_end(branch, i))
+        elif ch == '(':
+            end = _group_end(branch, i)
+            if end is None:
+                return None
+            close()
+            how, after = _repeat(branch, end)
+            if how != 'optional':  # a group every match goes through: one of its alternatives' runs are needed too
+                inner = []
+                for part in _alternatives(branch[i + 1:end - 1]):
+                    got = _runs(part)
+                    if got is None:
+                        return None
+                    inner.extend(got)
+                if len(ways) * len(inner) <= RUN_WAYS:
+                    ways = [way + more for way in ways for more in inner]
+            i = after
+        elif ch in ')|*+?{':
+            return None
+        else:
+            how, after = _repeat(branch, i + 1)
+            if _run_letter(ch) and how != 'optional':
+                cur += ch
+                if how:
+                    close()
+            else:
+                close()
+            i = after
+    close()
+    return ways
+
+
+RUN_WAYS = 8  # alternatives a pattern's runs are kept for
+
+
+def regex_fragments(pattern: str) -> list[list[str]] | None:
+    """For a regular expression (POSIX extended, as git grep -E reads it): the ways a match can be made (its
+    alternatives, and those of its groups), and for each up to four runs of three or more letters and digits that
+    such a match must contain, lowercase, longest first. A text that matches holds, for one way, each of its runs
+    inside a word (a run has no space or punctuation in it), so a host's index of words can name the files that can
+    match (search_index.candidates). None when some way has no such run ("[0-9]{4}", ".*", "tax|[a-z]+"), there are
+    more than RUN_WAYS, or the pattern cannot be read: then nothing narrows the search."""
+    try:
+        ways = []
+        for branch in _alternatives(pattern):
+            got = _runs(branch)
+            if got is None or not all(got):
+                return None
+            ways.extend(frozenset(way) for way in got)
+        ways = [w for w in dict.fromkeys(ways) if not any(other < w for other in ways)]  # (a way that asks more than another adds no file)
+        if not 0 < len(ways) <= RUN_WAYS:
+            return None
+        return [sorted(way, key=lambda r: (-len(r), r))[:4] for way in ways]
+    except (IndexError, ValueError):
+        return None
+
+
+def index_candidates(spec: dict, corpus: str, after: str | None, size: int) -> list | None:
+    """search_index.candidates, checked: at most `size` paths in ascending order after `after`; None when the index
+    cannot narrow, does not answer, or answers anything else."""
+    narrow = getattr(search_index, 'candidates', None)
+    if narrow is None:
+        return None
+    try:
+        got = narrow(dict(spec), corpus, after, size)
+    except Exception:  # noqa: BLE001
+        return None
+    return _index_paths_checked(got, after, size)
+
+
+def index_candidate_counts(spec: dict, corpora: list, case_law: bool) -> dict:
+    """search_index.candidate_counts as {corpus: n} for the corpora asked that the index can narrow; {} when it has
+    no such method, does not answer, or answers anything else."""
+    count = getattr(search_index, 'candidate_counts', None)
+    if count is None or not corpora:
+        return {}
+    try:
+        got = count(dict(spec), list(corpora), case_law)
+    except Exception:  # noqa: BLE001
+        return {}
+    if not isinstance(got, dict):
+        return {}
+    asked = set(corpora)
+    return {c: n for c, n in got.items() if c in asked and isinstance(n, int) and not isinstance(n, bool) and n >= 0}
 
 
 def index_ranked(query: str, corpus: str, skip: int, size: int) -> list | None:
@@ -4271,6 +4480,33 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     order = str(args.get('order') or 'relevance').strip().lower()
     if order not in ('relevance', 'path'):
         raise UserError('order is "relevance" (each body of law\'s provisions that hold the words most often first) or "path".')
+    # What a host's index may narrow, where it cannot answer (search_index.candidates): a regular expression by the
+    # runs of letters every match contains, a search that minds case by its words, and either of them or a plain
+    # search on a past date by the files that ever held it. None: nothing to narrow by (a plain search of today's
+    # text is the index's own; a pattern with no fixed run of three letters is no one's).
+    today = date == law.day('today')
+    spec = None
+    if callable(getattr(search_index, 'candidates', None)):
+        if args.get('regex'):
+            runs = regex_fragments(query)
+            spec = {'fragments': runs} if runs else None
+        elif args.get('case_sensitive') or not today:
+            spec = {'words': query}
+        if spec is not None and not today:
+            spec['ever'] = True
+
+    def pin_on(corpus):
+        # A corpus that is not in in-force order is searched on a past date in a tree built for that date (1.2
+        # million files for Romania: 6 s before anything is read). Where the index will name the files, no tree is
+        # built: the pin is "@<date>", and each file's version for the date is read off the table of versions.
+        if spec is not None and not today and (not scope or scoped(corpus, scope) == '') and not law.in_order(corpus):
+            table = _day_paths(corpus)
+            if table:
+                return f'@{date}' if bisect.bisect_right(table[0], date) else None
+        return tree_on(date, corpus)
+
+    def tree_of(corpus, sha):
+        return tree_on(date, corpus) if isinstance(sha, str) and sha.startswith('@') else sha
     # Each corpus is searched as in force on the date (law.corpus_tree): its commit-order prefix when its history is
     # in in-force order, else a tree of each file's version for the date, so older acts appended after the tip and
     # corrections are searched on the dates they apply.
@@ -4279,7 +4515,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     for c in corpora:
         if not scope or scoped(c['path'], scope) is not None:
             try:
-                pins.append((c['path'], tree_on(date, c['path'])))
+                pins.append((c['path'], pin_on(c['path'])))
             except SystemExit as e:  # a checkout broken since it was served (issue #7): named, and the rest searched
                 left_out.append(str(e.code))
     pins = [(c, sha) for c, sha in pins if sha]
@@ -4303,9 +4539,15 @@ def t_search_law(args: dict) -> tuple[str, dict]:
 
     def grep(pin):
         corpus, sha = pin
+        sha = tree_of(corpus, sha)
+        if not sha:
+            return corpus, '', subprocess.CompletedProcess([], 1, '', '')
         if corpus not in judged:
+            # (for SCAN_SECONDS at most: a body of law that nothing narrowed is named as not read, where a search of
+            # Romania by a regular expression held the whole call past its time)
             return corpus, sha, git_run(['git', 'grep', '--threads=1', '-n', '-I', *flags, '-e', pattern, sha, '--', '*.md'],
-                                        cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT)
+                                        cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace',
+                                        timeout=min(GIT_TIMEOUT, SCAN_SECONDS))
         _call.deadline = deadline
         checkpoint()
         lines = []
@@ -4381,7 +4623,12 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         # of one corpus is always made): the answer names it as not read, and its counts are floors.
         if pin[0] not in judged and law_read[0] and law_search_time_up():
             return pin[0], None, [], [], 0, None
-        corpus, sha, done = grep(pin)
+        try:
+            corpus, sha, done = grep(pin)
+        except subprocess.TimeoutExpired:
+            if pin[0] in judged:
+                raise
+            return pin[0], None, [], [], 0, None  # not read in SCAN_SECONDS: named, and the counts are floors
         if corpus not in judged:
             law_read[0] += 1
         if done.returncode not in (0, 1):
@@ -4407,6 +4654,149 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                     number, _, text = rest.partition(':')
                     rows.append((owner, {'path': path, 'line': int(number) if number.isdigit() else None, 'text': text.strip()[:400]}))
         return corpus, done, paths, rows, count, None
+
+    def shortlisted(pin, need, extra=()):
+        # One corpus whose files that can match the index names (spec): git reads those files alone, in the order
+        # of their names, all of them (so the provisions are counted, as a read of the whole corpus counts them)
+        # while that takes little time: see below.
+        # On a past date in a corpus that is not in in-force order, each candidate's version for the date is read
+        # off the table of versions and git greps those blobs: no tree is built. None when the index stops
+        # answering: the corpus is then read whole.
+        corpus, sha = pin
+        done = subprocess.CompletedProcess([], 1, '', '')
+        if corpus in judged:
+            _call.deadline = deadline
+            if caselaw_time_up():
+                unread.add(corpus)
+                return corpus, done, [], [], 0, {'files': 0, 'whole': True, 'after': None, 'shortlist': True}
+        dated = isinstance(sha, str) and sha.startswith('@')
+        versions = fixes = None
+        moved, given = {}, set()
+        if dated:
+            table = _day_paths(corpus)
+            if not table:
+                return None
+            versions, fixes = law.file_index(corpus)[0], table[2]
+            moved = law.moves(corpus)
+        paths, rows, count, after, seen, whole = [], [], 0, None, 0, False
+        began = time.monotonic()
+        extra = list(extra)  # files changed after the index of changes' tip, by name: candidates too, in their places
+        as_git = lambda n: n.encode('utf-8', 'surrogateescape')  # noqa: E731
+        # The next page is asked for while git reads this one (a page of a pattern's candidates takes the index one to
+        # two seconds: eleven of Romania's thirty).
+        asker, ahead, last, drained = ThreadPoolExecutor(1), None, 0, False
+
+        def read_all():  # whether every candidate has been read, where that can be told without waiting
+            if extra:
+                return False
+            if ahead is not None:
+                return ahead.done() and ahead.result() == []
+            return drained or (not spec.get('ever') and last < CANDIDATES_PAGE)
+        while True:
+            checkpoint()
+            names = ahead.result() if ahead is not None else index_candidates(spec, corpus, after, CANDIDATES_PAGE)
+            ahead = None
+            if names is None:
+                asker.shutdown(wait=False)
+                return None
+            last, drained = len(names), not names
+            if names:
+                after = names[-1]
+                if last >= CANDIDATES_PAGE // 5:
+                    ahead = asker.submit(index_candidates, spec, corpus, after, CANDIDATES_PAGE)
+                early = [n for n in extra if as_git(n) <= as_git(after)]
+                if early:
+                    names, extra = sorted(set(names) | set(early), key=as_git), extra[len(early):]
+            elif extra:
+                names, extra = extra, []  # those after the index's last name
+            else:
+                whole = True
+                break
+            if moved:
+                # The index of changes names a file as it was named when it changed; the table of versions, as it is
+                # named now (law.moves: Romania's layout move of November 2026 renamed every file, and a search of
+                # 2010 missed the provisions of Legea 31/1990 that have changed since). Each file once.
+                names = sorted({moved.get(n, n) for n in names} - given, key=as_git)
+                given.update(names)
+            seen += len(names)
+            good = [n for n in names if indexed_file(corpus, n)]
+            found: dict[str, list] = {}
+            if dated:
+                held: dict[str, list] = {}
+                for n in good:
+                    version = _in_force(versions.get(n), fixes.get(n), date)
+                    if version:
+                        held.setdefault(version[0], []).append(n)
+                blobs = list(held)
+                parts = [blobs[i:i + GREP_BLOBS] for i in range(0, len(blobs), GREP_BLOBS)]
+            else:
+                parts, room = [[]], SEARCH_INDEX_ARGV
+                for n in good:
+                    if parts[-1] and (room < len(n) + 1 or len(parts[-1]) >= SEARCH_INDEX_FILES):
+                        parts.append([])
+                        room = SEARCH_INDEX_ARGV
+                    parts[-1].append(n)
+                    room -= len(n) + 1
+                parts = [part for part in parts if part]
+
+            def read(part):
+                if dated:
+                    return git_run(['git', 'grep', '--threads=1', '-n', '-I', *flags, '-e', pattern, *part], cwd=ROOT / corpus,
+                                   capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT)
+                if corpus not in judged:
+                    return git_run(['git', 'grep', '--threads=1', '-n', '-I', *flags, '-e', pattern, sha, '--', *part], cwd=ROOT / corpus,
+                                   capture_output=True, encoding='utf-8', errors='replace', timeout=GIT_TIMEOUT,
+                                   env={**os.environ, 'GIT_LITERAL_PATHSPECS': '1'})
+                while not _GREP_SEM.acquire(timeout=0.5):
+                    checkpoint()
+                try:
+                    return case_grep(corpus, sha, [], part, False)
+                finally:
+                    _GREP_SEM.release()
+            if corpus in judged or len(parts) < 2:
+                outs = [read(part) for part in parts]
+            else:
+                with ThreadPoolExecutor(min(8, len(parts))) as inner:
+                    outs = list(pool_map(inner, read, parts))
+            for out in outs:
+                if out.returncode not in (0, 1):
+                    return corpus, out, [], [], 0, None
+                for line in out.stdout.splitlines():
+                    if dated:
+                        blob, _, rest = line.partition(':')
+                        number, _, text = rest.partition(':')
+                        for n in held.get(blob, ()):
+                            found.setdefault(n, []).append((int(number) if number.isdigit() else None, text))
+                    else:
+                        rel, _, rest = line.removeprefix(sha + ':').partition(':')
+                        number, _, text = rest.partition(':')
+                        found.setdefault(rel, []).append((int(number) if number.isdigit() else None, text))
+            for rel in good:  # in the order of the names; a candidate git finds nothing in is no provision of the answer
+                hits = found.get(rel)
+                if not hits:
+                    continue
+                path = f'{corpus}/{rel}'
+                paths.append(path)
+                for number, text in hits:
+                    count += 1
+                    if len(rows) < offset + limit:
+                        rows.append((corpus, {'path': path, 'line': number, 'text': text.strip()[:400]}))
+            if corpus in unread or corpus in cut:
+                break
+            # All the candidates are read, so the provisions are counted, while that is quick. Once the page has its
+            # lines, for CANDIDATES_SECONDS at most (a run of common letters names a hundred thousand files, a
+            # thousand read in a second: Romania took 20 to 30 s); a corpus that has not filled the page, for
+            # SCAN_SECONDS. What was not read makes the counts floors, and the answer says so.
+            spent, full = time.monotonic() - began, count >= need
+            if ((full and (spent > CANDIDATES_SECONDS or seen >= CANDIDATES_MOST)) or spent > SCAN_SECONDS
+                    or (corpus not in judged and law_search_time_up() and (full or seen >= CANDIDATES_PAGE))):
+                whole = read_all()
+                break
+        asker.shutdown(wait=False)
+        if corpus not in judged:
+            law_read[0] += 1
+        return corpus, done, paths, rows, count, {'files': len(paths), 'whole': whole, 'after': after, 'seen': seen,
+                                                  'floor': not whole, 'shortlist': True}
 
     def indexed(pin, total, need):
         # One corpus that the index holds: its files with the words come from the index, in the order git lists them,
@@ -4508,6 +4898,44 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         able = [c for c, _ in pins if scoped(c, scope) == '' and not placed_elsewhere(c)]
         known = {**index_counts(query, [c for c in able if c not in judged], False),
                  **index_counts(query, [c for c in able if c in judged], True)}
+    # The corpora a host's index can narrow (spec), and those of them with no file that can match at all. On a
+    # past date, a body of law only when the index of changes holds its history up to the pin (the files that ever
+    # held the words are those of today's text and those a change touched).
+    narrowed: dict[str, int] = {}
+    began_search = time.monotonic()
+    behind: dict[str, str] = {}  # law corpora whose index of changes stops at another commit than the one served
+
+    def changed_since(corpus):
+        # The files changed between the index of changes' tip and the commit served (a host's indexer is a few
+        # commits behind after a refresh): candidates as well, whatever they hold. () when the index holds every
+        # commit served; None when it cannot be made up for (another line of history, or too far behind).
+        tip = behind.get(corpus)
+        if tip is None:
+            return ()
+        try:
+            cwd = ROOT / corpus
+            head = corpus_head(corpus) or law.git('rev-parse', 'HEAD', cwd=cwd).strip()
+            only_tip, only_head = map(int, law.git('rev-list', '--count', '--left-right', f'{tip}...{head}', cwd=cwd).split())
+            if not only_head:
+                return ()  # the index holds more than is served: more candidates, none missing
+            if only_tip or only_head > CANDIDATES_GAP:
+                return None
+            out = law.git('-c', 'core.quotepath=off', 'diff', '--name-only', '--no-renames', tip, head, '--', '*.md', cwd=cwd)
+            return sorted({n for n in out.splitlines() if n}, key=lambda n: n.encode('utf-8', 'surrogateescape'))
+        except (SystemExit, ValueError, OSError, subprocess.SubprocessError):
+            return None
+    if spec is not None:
+        able = [c for c, _ in pins if scoped(c, scope) == '' and not placed_elsewhere(c)]
+        if spec.get('ever'):
+            try:
+                tips = history_index.tips() if history_index is not None else None
+            except Exception:  # noqa: BLE001
+                tips = None
+            tips = tips if isinstance(tips, dict) else {}
+            able = [c for c in able if c in judged or re.fullmatch(r'[0-9a-f]{40}', str(tips.get(c) or ''))]
+            behind = {c: tips[c] for c in able if c not in judged and tips[c] != corpus_head(c)}
+        narrowed = {**index_candidate_counts(spec, [c for c in able if c not in judged], False),
+                    **index_candidate_counts(spec, [c for c in able if c in judged], True)}
     by_index: dict[str, dict] = {}  # the corpora the index answered for: files with the words, whether read to the end
     # Law corpora side by side too, four at a time, each git grep within GREP_SLOTS (git_run): one after another, a
     # search of every country waited for each corpus in turn.
@@ -4515,8 +4943,24 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     # corpus, so once the corpora before one have given more lines than the page can use, that corpus cannot reach
     # the page and is not read at all (hundreds of corpora each grepped for a page of five lines took 4 to 12 s).
 
+    def one_corpus(pin):
+        if pin[0] not in narrowed:
+            return searched(pin)
+        extra = changed_since(pin[0])
+        if extra is None:
+            return searched(pin)
+        if not narrowed[pin[0]] and not extra:  # no file of it can match
+            return pin[0], subprocess.CompletedProcess([], 1, '', ''), [], [], 0, {'files': 0, 'whole': True, 'after': None, 'shortlist': True}
+        if pin[0] not in judged and law_read[0] and law_search_time_up():
+            return pin[0], None, [], [], 0, None
+        if n_lines > offset + limit and time.monotonic() - began_search > CANDIDATES_SECONDS:
+            # The page is full and the time for counting is spent: the bodies of law after it are not read (each
+            # costs a question to the index and a read of its files: a pattern over every jurisdiction took minutes).
+            return pin[0], subprocess.CompletedProcess([], 1, '', ''), [], [], 0, {'files': 0, 'whole': False, 'after': None, 'floor': True, 'shortlist': True}
+        return shortlisted(pin, offset + limit + 1, extra) or searched(pin)
+
     def answers(pool):
-        grepped = pool_map(pool, searched, [pin for pin in pins if pin[0] not in known])
+        grepped = pool_map(pool, one_corpus, [pin for pin in pins if pin[0] not in known])
         try:
             for pin in pins:
                 corpus, total = pin[0], known.get(pin[0])
@@ -4585,14 +5029,20 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     notes = short_caveats(sorted({n for corpus in owners for n in law.caveats(date, corpus)}))  # once a corpus, not once a line
     summary = (f'{n_files} provision(s) in force on {date} contain {query!r}' + (f' in {scope}' if scope else '')
                + (f'; showing {len(results)} line(s).' if results else '.'))
-    headline = (f"{'At least ' if cut or unread or late else ''}{n_files} provision(s) in force on {date} contain {query!r}"
+    floor = any(ix.get('floor') for ix in by_index.values())  # a narrowed corpus with more candidates than were read
+    if floor:
+        summary = f'At least {summary[0].lower()}{summary[1:]}'
+    headline = (f"{'At least ' if cut or unread or late or floor else ''}{n_files} provision(s) in force on {date} contain {query!r}"
                 + (f' in {scope}' if scope else '') + f", on {'at least ' if more_lines else ''}{n_lines} line(s).")
     stopped = []  # why the search of case law is not whole, and how to read further: in the text and in `hints`
+    if floor:
+        stopped.append('More files could hold this than were read: the counts are floors. Name one body of law, or add words, to read them all.')
+        summary += f' {stopped[-1]}'
     if cut:  # case law read only in part: the count is a floor
         stopped.append(f'The search of case law stopped after {CASELAW_LINES} matching lines; '
                        f'not read to the end: {", ".join(sorted(cut))}. Name one court\'s corpus as the jurisdiction, or use '
                        'more words, to read further.')
-        summary = f'At least {summary[0].lower()}{summary[1:]} {stopped[-1]}'
+        summary = (summary if floor else f'At least {summary[0].lower()}{summary[1:]}') + f' {stopped[-1]}'
     if unread:
         stopped.append(f'Partial: {len(unread)} case-law corpora were not read within the {int(CASELAW_SECONDS)} s this answer may '
                        f'spend on case law ({", ".join(sorted(unread)[:5])}{" ..." if len(unread) > 5 else ""}); give a jurisdiction to read them.')
@@ -4603,7 +5053,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         not_read.append(f'Partial: {len(late)} of {n_law} bodies of law were not read within the time this answer may take '
                         f'({", ".join(late[:5])}{" ..." if len(late) > 5 else ""}); give a jurisdiction to read them.')
         stopped.append(not_read[0])
-        if not cut:
+        if not cut and not floor:
             summary = f'At least {summary[0].lower()}{summary[1:]}'
     more = more_note(place, 'lines')
     lines = ([summary] + not_read + ([more] if more else []) + [f'Note: {n}' for n in notes] + [f'Left out: {n}' for n in left_out]
@@ -4617,7 +5067,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     if re.fullmatch(r'\s*(?:§+\s*|section\s+|art(?:\.|ikel)?\s*|s\.\s*)?\d+[a-zA-Z]?(?:\(\w+\))*\s*', query, re.I) or any(rx.search(query) for rx, _ in CITATION_FORMS):
         hints.append('To find what cites or relies on a provision, including the terms it defines and their scope, use '
                      'what_else_changes with its path: a text search misses citation forms and defined terms.')
-    if by_index and not results and not offset:  # the index matches whole words; grep matches parts of words as well
+    if by_index and not results and not offset and not args.get('regex'):  # the index matches whole words; grep, parts of words too
         hints.append('The words were matched as whole words (the last, if long, also as the start of a word). To match '
                      'part of a word, pass regex true.')
     lines += hints
