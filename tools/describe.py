@@ -490,7 +490,15 @@ def main(argv: list[str]) -> int:
     if check:
         for name in changed[:20]:
             print('  ', name)
-    return 1 if check and changed else 0
+    # each folder's front page (README.md) and its page/repos fields, from the files just written
+    sys.path.insert(0, str(ROOT / 'tools'))
+    import folder_readmes
+    pages = folder_readmes.write(check)
+    print(f"{len(pages)} folder page(s) {'would change' if check else 'written'}")
+    if check:
+        for name in pages[:20]:
+            print('  ', name)
+    return 1 if check and (changed or pages) else 0
 
 
 if __name__ == '__main__':

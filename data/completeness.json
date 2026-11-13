@@ -1,0 +1,1007 @@
+{
+  "about": "Independent checks of each European jurisdiction's coverage against the official sources (2026-11-12): shares of the essential codes, national law, law-making regions and top courts held, with estimates where no official total exists (method, range and confidence in each entry), and the verdict.",
+  "jurisdictions": {
+    "aland": {
+      "verified_on": "2026-11-12",
+      "verdict": "aland-law holds 1 of the 690 consolidated texts in Ålex: Landskapslag (2015:68) om hemvårdsstöd, with 7 replayed amendments and an end state that matches Ålex word for word. The Autonomy Act is held only in finland-law, in Finnish and as current text only. The Lagtingsordning, the main landskapslagar and Ålands förvaltningsdomstol's case law are not held anywhere.",
+      "scores": {
+        "national_primary_pct": 0.14,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": false,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "albania": {
+      "verified_on": "2026-11-12",
+      "verdict": "Broad and current national coverage: albania-law holds 17,821 national acts (38% of the 46,462 records in QBZ's database, 2,189 of its 3,917 laws), the Constitution with its full history including the 2016 justice reform, and all 7 essential codes, current to 2026-11-10. The codes are current text only and lose paragraph breaks, the Family, Electoral and Customs Codes are held back off main, and there is no case law at all.",
+      "scores": {
+        "national_primary_pct": 38.4,
+        "subnational_pct": 33,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "andorra": {
+      "verified_on": "2026-11-12",
+      "verdict": "andorra-law holds every law the BOPA publishes under its 'Lleis' theme from 1989 to 2026-10-28 (1,038 texts on main, 3 more on future), and the text matches the BOPA exactly, but each law is held only as first enacted: amendments are not applied, so the Codi penal, Codi de procediment penal, Llei qualificada de la Justícia and labour law read as first passed, and the 2008 Codi de relacions laborals, repealed in 2019, carries no repeal marker. There is no case law, nothing from the 7 comuns, and no law from before 1989.",
+      "scores": {
+        "national_primary_pct": 99.0,
+        "subnational_pct": 0,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "armenia": {
+      "verified_on": "2026-11-12",
+      "verdict": "armenia-law (public, pinned 8aaa548 = main) holds the 2015 Constitution with its 2020 amendment and every essential code as consolidated ARLIS texts with dated in-force history to 2026-10-24, and both spot checks of the Constitution match ARLIS. But 38 laws ARLIS marks repealed still have full text on main (among them the 1961 Criminal Code, the 1961 Criminal Procedure Code and the 1964 Civil Procedure Code), the new Bankruptcy Code is shown in force from 2026-09-01 although it takes effect one year after publication (about 2027-07-03), four changes in force 2026-11-01 sit only on 'future', no case law is held, and a 13,162-act sub-law build sits unlinked on wip branches of armenia-sublaws.",
+      "scores": {
+        "national_primary_pct": 99.8,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 99.8,
+          "range": [
+            98.4,
+            100
+          ],
+          "universe": 1002,
+          "held": 1000,
+          "confidence": "medium",
+          "method": "Universe = ARLIS's own status for every non-amending Constitution, code and law its search returns (laws.csv, the builder's listing of the whole ARLIS search, leaving out acts that only amend others): 18 codes + 982 laws 'Գործում է' (in force) + 2 'Գործում է մասնակի' (partly in force) = 1,002 codes and laws in force. Held = those of the 1,002 with a folder on main (mapped through data/paths.json): 18 + 980 + 2 = 1,000; the 2 missing take effect in 2027 and sit on 'future'. Like with like: repealed (321 'Չի գործում' + 23 terminated) and the Constitutions are left out of both sides. Range: low end assumes all 14 laws with a blank ARLIS status are in force (3 of them are not held) and about 1% of in-force laws missed by ARLIS's search; high end excludes the two not-yet-effective laws (1,000/1,000). No official count of laws in force exists to cross-check (no ARLIS total found)"
+        }
+      }
+    },
+    "austria": {
+      "verified_on": "2026-11-12",
+      "verdict": "Strong, accurate federal core: 100 federal acts and ordinances (Constitution and all main codes) with in-force history to 2026-11-02, but only 1 of 9 Länder (Burgenland). Full decision sets for VfGH, VwGH and OGH exist as repositories but are not yet linked into global-law.",
+      "scores": {
+        "national_primary_pct": 1.7,
+        "subnational_pct": 11,
+        "case_law_pct": 100,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 1.7,
+          "range": [
+            1.3,
+            2.5
+          ],
+          "universe": 6000,
+          "held": 100,
+          "confidence": "low",
+          "method": "Derived, no official count (RIS returned 503 on 2026-11-12; no published total found in 2 searches). Pre-2000 stock: the 2. Bundesrechtsbereinigungsgesetz (BGBl. I Nr. 61/2018) reviewed about 5,000 federal laws and ordinances promulgated before 2000, let about 2,450 lapse on 31.12.2018 and kept the rest in its annex (more than 2,500 provisions), so about 2,300-2,500 pre-2000 Rechtsvorschriften remain after later repeals. Post-2000 stock: BGBl. I carries roughly 100-150 laws a year (about 20-30 new principal laws) and BGBl. II roughly 300-450 ordinances a year (about 100-150 new principal ordinances); 27 years x ~150 new principal acts less about a third since repealed or spent gives ~2,000-4,500. Universe ~4,000-7,500 federal laws and ordinances in force, central 6,000. Held: 100 consolidated federal acts (laws and a few ordinances), all current. Score 100/6,000; range 100/7,500 to 100/4,000"
+        }
+      }
+    },
+    "azerbaijan": {
+      "verified_on": "2026-11-12",
+      "verdict": "azerbaijan-law (public, pinned fb5e2fa = main) holds the 1995 Constitution with its 2002, 2009 and 2016 referendum amendments, every essential code, and 6,601 of the 6,612 in-force laws, constitutional laws and codes listed from e-qanun.az, with in-force history to 2026-10-27; a Criminal Procedure Code amendment of 30.06.2026 and Constitution art. 101 match the official texts. But history before 2021 is thin (the Constitution's 1995 version has 111 of 165 article files, 54 articles appear only from the date of their first amendment, and 1,253 commits are labelled 'several' or 'unexplained'), sub-laws, Nakhchivan's own laws and all case law are not held.",
+      "scores": {
+        "national_primary_pct": 99.8,
+        "subnational_pct": 0,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 99.8,
+          "range": [
+            99.0,
+            100
+          ],
+          "universe": 6612,
+          "held": 6601,
+          "confidence": "medium",
+          "method": "Universe = e-qanun's own listing (api.e-qanun.az, via the builder's laws.csv, retrieved 2026-10-28) of every act of the five legislative kinds (constitution, referendum act, constitutional law, code, law) with status 'Qüvvədədir' (in force): 6,612. Held = act folders on main, all in force: 6,601 (the 11 missing: 9 that take effect 2026-12-25 to 2027-08-05, held on 'future', and 2 e-qanun could not serve). Both sides come from one listing, so they count alike (including laws that amend or ratify, as e-qanun lists them). Range: low end allows ~1% of in-force laws absent from the API listing; high end counts only acts already effective (6,601/6,603). No independent official total exists (the Ministry of Justice reports only intake)"
+        }
+      }
+    },
+    "belarus": {
+      "verified_on": "2026-11-12",
+      "verdict": "Nothing of Belarusian law is held: global-law has only belarus/SOURCES.md and belarus/jurisdiction.json with empty corpora, and lexifina/belarus-law is a placeholder whose main branch is a single README (one commit, 2026-10-28, 'Paused, not yet law') saying the build is paused because pravo.by gives current text only and etalonline.by, which has the dated editions, returns HTTP 403. No law text, no case law, nothing linked.",
+      "scores": {
+        "national_primary_pct": 0,
+        "subnational_pct": 0,
+        "case_law_pct": 0,
+        "constitution": false,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "belgium": {
+      "verified_on": "2026-11-12",
+      "verdict": "Small federal core with real in-force history: the Constitution and 17 major codes and laws (29 folders, 18 distinct acts) out of roughly 60,000 consolidated texts. The Code pénal folder still holds the 1867 code although the new Code pénal took effect on 2026-09-01. Only 2 of 7 legislating federated bodies are held (Flanders, partly; the German-speaking Community, 9 acts), and there is no case law.",
+      "scores": {
+        "national_primary_pct": 0.03,
+        "subnational_pct": 29,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 75
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "bosnia-and-herzegovina": {
+      "verified_on": "2026-11-12",
+      "verdict": "Thin coverage of the essentials: the state repository holds 199 of the 681 laws listed in Službeni glasnik BiH (almost nothing from 1997-2009), and every act is held as enacted. The Constitution lacks Amendment I (2009). The state Criminal Code is an unofficial English text to 47/14 that misses at least the 2015 and 2018 amendments. The Criminal Procedure Code, both entity criminal codes, the Law on Obligations and the Federation Constitution are not held, and there is no case law.",
+      "scores": {
+        "national_primary_pct": 29.2,
+        "subnational_pct": 62,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 17
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "bulgaria": {
+      "verified_on": "2026-11-12",
+      "verdict": "The Constitution is held with 4 dated versions and checks out, but every other act (17,367) is a single text as first published in the State Gazette from 2003 on, with no later amendments applied: none of the main codes is held as a current text (Criminal Code, Civil Procedure Code, Criminal Procedure Code, Obligations and Contracts Act all missing), and the one Electoral Code held is the 2011 code that the 2014 code replaced, still marked 'in force'. There is no case law, and Bulgaria has no regions that legislate.",
+      "scores": {
+        "national_primary_pct": 44.3,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 44.3,
+          "range": [
+            31.1,
+            56.7
+          ],
+          "universe": 350,
+          "held": 155,
+          "confidence": "low",
+          "method": "Counts distinct principal laws in force, not acts as published: of the 17,368 acts held, nearly all are first-published State Gazette texts since 2003, not applied to anything. Held: data/acts.json has 2,604 laws and codes; less 1,554 amending acts, 643 ratification/approval laws, 60 annual budget laws, and laws that by title amend, repeal, close, denounce or terminate, 192 principal laws remain = 182 distinct titles (8 titles appear 2-3 times because a new law of the same name replaced the old). Some of the 182 were later replaced by laws of another name, and the repository's labels do not track repeal (only 1 'repealed'), so ~10-25% are taken as no longer in force: held in force ~155 (140-170). Universe: no official count of laws in force found (3 searches, 3 fetches; Capital.bg 403, parliament.bg study gives none). Derived: ~155 post-2003 principal laws in force + ~110 of the ~200 principal laws of 1990-2002 + ~30-60 older laws and codes still in force (Закон за задълженията и договорите 1950, Наказателен кодекс 1968, ЗАНН 1969, Кодекс на труда 1986 ...) ≈ 300-450, central 350; ratification and budget laws excluded. Score 155/350; range 140/450 to 170/300"
+        }
+      }
+    },
+    "croatia": {
+      "verified_on": "2026-11-12",
+      "verdict": "The Constitution is held with its full in-force history (1990-2013) and checks out, but every other act (36,796) is the text as first printed in Narodne novine with no later amendment applied: the Criminal Code, Criminal Procedure Act and Obligations Act are held only in their original wording (the Criminal Code lacks the 2024 femicide article and the changed art. 111), the Civil Procedure Act is missing, and some replaced laws (Zakon o radu 2009, Carinski zakon 1999) are still labelled as live. Croatia has no legislating regions; case law is limited to 1,141 Constitutional Court decisions published in the gazette.",
+      "scores": {
+        "national_primary_pct": 86.2,
+        "subnational_pct": null,
+        "case_law_pct": 0.8,
+        "constitution": true,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 86.2,
+          "range": [
+            78.9,
+            92.9
+          ],
+          "universe": 870,
+          "held": 750,
+          "confidence": "low",
+          "method": "Universe: about 870 laws in force per zakon.hr (private consolidated database, July-September 2026 pages); ratification, budget and amending laws are not in that count. Held, counted alike: zakon acts in registry/data/acts.json plus zakoni/ (data/zakoni.json), leaving out amending acts and titles that amend, ratify (potvrđivanju), budget, repeal (prestanku važenja, stavljanju izvan snage), interpret or implement, and SFRY-era/federal laws; distinct titles with a live label (in force; amended or cited later, not consolidated) = 831 (181 more principal titles are labelled only repealed or replaced). The earlier 1,582 counted live law titles before these exclusions. Live labels still include laws replaced under another name, so 5-15% are taken as no longer in force: held in force ~750 (710-790). Score 750/870; range 710/900 to 790/850"
+        },
+        "case_law_pct": {
+          "value": 0.8,
+          "range": [
+            0.6,
+            1.3
+          ],
+          "universe": 150000,
+          "held": 1141,
+          "confidence": "low",
+          "method": "Universe: Constitutional Court decisions and rulings (odluke i rješenja) since 1990, published in the court's online decision database. Court reports: 2011-2014 resolved 8,174 / 8,705 / 6,967 / 3,387 a year; 1 Oct 2018 - 30 Sep 2022 resolved 19,924 (~5,000 a year). Summing ~1,000-3,000 a year in 1990-2000, ~6,000-8,000 by 2010 and ~5,000 since: ~120,000-180,000 resolved, central 150,000; some procedural rulings may not be online, so the range runs down to ~90,000. Held: 1,141 full-text decisions as printed in Narodne novine; the repository's own NN listing (data/ustavni-sud-metadata.csv) has 4,654 NN-published Constitutional Court documents, so held covers ~24.5% of that NN-published subset. Constitutional Court only; Supreme Court and High Administrative Court decisions (held: 0) would lower a whole-system figure further"
+        }
+      }
+    },
+    "cyprus": {
+      "verified_on": "2026-11-12",
+      "verdict": "A small, carefully dated set of 11 consolidated acts: the Constitution, Criminal Code, Criminal Procedure Law and Civil Procedure Law are held as current text with history from 2013-2017, but the Contract Law (Cap. 149), the Civil Procedure Rules and all other legislation are missing, and there is no case law. Three acts (Cap. 148, Cap. 113, Law 52(I)/2022) are current text only, and the official source blocked the wording checks.",
+      "scores": {
+        "national_primary_pct": 0.6,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 71
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 0.6,
+          "range": [
+            0.4,
+            0.7
+          ],
+          "universe": 2000,
+          "held": 11,
+          "confidence": "low",
+          "method": "No published count (N-Lex/e-Justice: no official consolidated collection; cylaw.org 403, not retried). Derived: laws numbered N(I)/year run to ~150-235 a year since 2000 (highest numbers seen in data/laws.csv, e.g. 268(I)/2004, 235(I)/2025) and ~50-100 a year before 1990, so ~8,500 laws enacted since 1960 plus ~350 pre-independence Caps kept by Constitution art. 188; taking ~25-30% as principal (non-amending) laws and ~25% of those repealed gives ~1,700-2,000 principal laws plus ~150 Caps in force; range 1,500-3,000. Score = 11 held / ~2,000"
+        }
+      }
+    },
+    "czechia": {
+      "verified_on": "2026-11-12",
+      "verdict": "Strong national record: every act e-Sbírka consolidates (18,582 acts since 1918, 8,967 in force on main) with dated in-force history, and the Constitution, Civil Code, Criminal Code and both procedure codes are held as the current consolidated texts (Civil Code 89/2012 with 2025 amendments in force 2026-01-01), all three spot checks matching. No case law is held, and the freshness monitor marks the corpus 'stale' although its record runs to 2026-11-08.",
+      "scores": {
+        "national_primary_pct": 89.7,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 89.7,
+          "range": [
+            81.5,
+            100
+          ],
+          "universe": 10000,
+          "held": 8967,
+          "confidence": "medium",
+          "method": "Official estimate: the Ministry of the Interior (2012 reply on Act 106/1999) put valid national regulations at roughly 10,000 with no exact count; e-Sbírka's 42,946 'předpisy' (MV 2023) counts every item ever, incl. treaties and communications, so it is not an in-force figure. The repo holds every act e-Sbírka publishes with consolidated versions, 8,967 in force (zákony, ústavní zákony, nařízení, vyhlášky, decrees, Senate measures), so the true share is between 8,967/~11,000 and 100% if e-Sbírka's in-force set equals the repo's. Score = 8,967 / 10,000"
+        }
+      }
+    },
+    "denmark": {
+      "verified_on": "2026-11-12",
+      "verdict": "Grundloven, straffeloven, retsplejeloven, aftaleloven and købeloven are held with their full consolidation history. Straffeloven and retsplejeloven match the current consolidations (LBK 1294 and 1298 of 2025) word for word, but no amending act passed after 2025-12-16 is in the repository, so 2026 amendments such as LOV 263/2026 are missing. The 1,432 acts are not 'every statute in force': ægteskabsloven, forældreansvarsloven and tinglysningsloven are absent, and there is no case law.",
+      "scores": {
+        "national_primary_pct": 55,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "estonia": {
+      "verified_on": "2026-11-12",
+      "verdict": "Estonia is a three-act sample, not a national corpus: the Constitution, the Riigikogu Election Act and the Personal Data Protection Act are held with accurate in-force history (current Constitution text matches Riigi Teataja line for line, including the 2026-03-01 change to § 156), but none of the five main codes (karistusseadustik, kriminaalmenetluse seadustik, tsiviilkohtumenetluse seadustik, võlaõigusseadus, tsiviilseadustiku üldosa seadus) is in the repository. That is 3 of about 392 laws in force, with no case law.",
+      "scores": {
+        "national_primary_pct": 0.8,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "faroe-islands": {
+      "verified_on": "2026-11-12",
+      "verdict": "faroe-islands-law holds the current text of all 444 løgtingslógir, 882 kunngerðir and 3 løgtingslógarkunngerðir that logir.fo listed as in force on 2026-10-29, including Stýrisskipanarlógin and Revsilógin, and 5 provisions checked match logir.fo word for word. It is current text only, has missed the acts published since 2026-10-29, and holds no case law. The Danish framework acts (Hjemmestyreloven, Overtagelsesloven) are only in denmark-law, and the retsplejelov for Færøerne is held nowhere except as an empty stub.",
+      "scores": {
+        "national_primary_pct": 100,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 80
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "finland": {
+      "verified_on": "2026-11-12",
+      "verdict": "The Constitution is held with its full amendment history, and the case law is close to everything Finlex publishes for all 7 courts, but 3 of the 7 essential acts are missing: rikoslaki, oikeudenkäymiskaari and esitutkintalaki. ROL, oikeustoimilaki and kauppalaki are current text only. National acts are 2,291 of the 6,239 in force that Finlex consolidates (37%).",
+      "scores": {
+        "national_primary_pct": 37,
+        "subnational_pct": null,
+        "case_law_pct": 99,
+        "constitution": true,
+        "codes_pct": 57
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "france": {
+      "verified_on": "2026-11-12",
+      "verdict": "National law is close to complete. All 76 codes Légifrance lists as in force are there, plus the 1958 Constitution, and about 118,853 LEGI texts with articles in force, each with its in-force history. Two spot-checked 2026 amendments match Légifrance. Case law is strong for the Conseil constitutionnel, the Cour de cassation and the Conseil d'État, but thin below them: the 'tribunaux administratifs' repository is 98% CAA decisions (1,023 real TA decisions), and the cours d'appel stop at 2023-12-22.",
+      "scores": {
+        "national_primary_pct": 100,
+        "subnational_pct": 0,
+        "case_law_pct": 67,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "georgia": {
+      "verified_on": "2026-11-12",
+      "verdict": "georgia-law (public on GitHub, pinned 9c5cdcb = main) holds all 948 documents of Matsne's 'law' group (507 in force), including the 1995 Constitution in its 2017/2018 form and every essential code, as consolidated texts with dated in-force history to 2026-10-26; the Labour Code spot check matches Matsne's newest version (16/09/2026). But 54 laws Matsne marks expired are still in the current tree (among them the 1997 Civil Service Law, the 2004 Parliament Rules and the 2011 Electoral Code), about 150 never-amended laws end with Matsne's site footer, sub-laws are not held (Matsne's consolidations of them are paid: confirmed), and no case law is held.",
+      "scores": {
+        "national_primary_pct": 99.8,
+        "subnational_pct": 46.8,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 99.8,
+          "range": [
+            99.8,
+            100
+          ],
+          "universe": 507,
+          "held": 506,
+          "confidence": "high",
+          "method": "Matsne's own listing (group 1000003 'law': 948 documents, 507 active) as captured in laws.csv on 2026-10-28; 506 of the 507 active laws are in the current tree, the missing one (6884622) takes effect 2027-01-01 and sits on branch 'future' (so 100% of laws already in effect). Excluding the 29 autonomous-republic acts gives the same share (477/478). Expired laws left in the tree are not counted"
+        },
+        "subnational_pct": {
+          "value": 46.8,
+          "range": [
+            32.2,
+            69.0
+          ],
+          "universe": 62,
+          "held": 29,
+          "confidence": "low",
+          "method": "Laws in force per autonomous republic, held in force / estimated in force, pooled. Adjara: no published stock; Transparency International Georgia counts 169 legal acts of the Supreme Council in 2012-2016 of which 34 law amendments and 21 rules amendments, i.e. ~10-15 lasting principal laws per term after annual budgets; x 5 terms since the 2004 reset, less repeals = ~40 (25-60); 12 held in force. Abkhazia (Tbilisi-based government in exile): small legislative output (constitution 1978, budgets, government structure); all its laws on Matsne are held, so ~22 (17-30); 17 held in force. Matsne's law group holds only 57 AR acts, so Matsne itself may not list every Adjara law"
+        }
+      }
+    },
+    "germany": {
+      "verified_on": "2026-11-12",
+      "verdict": "Federal law is well covered for its current text: germany-law holds 6,147 acts as published on Gesetze im Internet up to 2026-10-28 (about 96% of the roughly 6,400 entries in its index), plus the Grundgesetz with every amendment since 1949, and all three spot checks match. But federal acts other than the Grundgesetz have history only from 2019-06-10, only 5 of 16 Länder are linked, the Federal Social Court (BSG) is missing, and four of the six court repositories stop between 2020 and 2025 while the freshness monitor marks them 'current'.",
+      "scores": {
+        "national_primary_pct": 96,
+        "subnational_pct": 31,
+        "case_law_pct": 83,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "gibraltar": {
+      "verified_on": "2026-11-12",
+      "verdict": "gibraltar-law holds only two texts: the Gibraltar Constitution Order 2006 as made, without the 2007 amendment the official site lists, and the Stamp Duties Act 2005 in all 11 dated versions. None of the six main Acts named for this check is held, there is no case law, and the two texts checked match gibraltarlaws.gov.gi word for word.",
+      "scores": {
+        "national_primary_pct": 0,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "greece": {
+      "verified_on": "2026-11-12",
+      "verdict": "Thin national record: the Constitution is held with its 2001, 2008 and 2019 revisions and matches the Gazette word for word, but none of the main codes (Civil, Penal, Civil Procedure, Criminal Procedure) is in the tree, and only 120 of about 5,338 numbered laws since 1975 are held (mostly 2019-2026, as published, 49 with later amendments applied). The rest of the 689 'acts' are 503 presidential decrees (2010-2026, single versions) and 65 Athens municipal decisions; no case law is held.",
+      "scores": {
+        "national_primary_pct": 2.25,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "guernsey": {
+      "verified_on": "2026-11-12",
+      "verdict": "guernsey-law holds no Guernsey, Alderney or Sark Law or Ordinance: it holds 107 UK statutory instruments about Guernsey as made, a catalogue of 182 such instruments, and 12 Wikidata facts, so none of the essentials is present and there is no case law. The one UK Order checked matches legislation.gov.uk word for word in its articles, but its Schedule drops the inserted Schedule 3 (13 boundary points) and loses the number of a substituted section.",
+      "scores": {
+        "national_primary_pct": 0,
+        "subnational_pct": 0,
+        "case_law_pct": 0,
+        "constitution": false,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "hungary": {
+      "verified_on": "2026-11-12",
+      "verdict": "Nothing of Hungarian law is held: global-law has only hungary/SOURCES.md and hungary/jurisdiction.json with empty corpora, and the one Lexifina repository, lexifina/hungary-law, is a 4-file placeholder (one commit, 2026-10-28, 'Hungary: sources, before any law') with no legal text. No other repository in the lexifina organisation mentions Hungary or Magyar.",
+      "scores": {
+        "national_primary_pct": 0,
+        "subnational_pct": 0,
+        "case_law_pct": 0,
+        "constitution": false,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "iceland": {
+      "verified_on": "2026-11-12",
+      "verdict": "iceland-law holds 7 distinct acts, not a statute book: the Icelandic Lagasafn texts of the Constitution, Almenn hegningarlög, the two procedure acts, Samningalög and the trade-union act, with per-article history from 1995, plus 4 old English translations. Stjórnsýslulög 37/1993 is missing, there is no case law, and althingi.is blocked automated access (Cloudflare challenge), so no provision could be checked against the official text.",
+      "scores": {
+        "national_primary_pct": 0.4,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 80
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 0.4,
+          "range": [
+            0.4,
+            0.9
+          ],
+          "universe": 1724,
+          "held": 7,
+          "confidence": "high",
+          "method": "Count from a full machine-readable copy of Lagasafn edition 158a (althingi-net/lagasafn-xml, data/xml/158a/index.xml, dates 2026-09-02 to 2026-10-01): total-count 1,724 laws, of which 793 have text and 931 are 'empty' entries; 1,724 files (1,695 numbered laws + 29 pre-1800 dated laws) in the directory agree. althingi.is itself returned 403 (not worked around). Score = 7 / 1,724; range up to 7 / 793 if only laws with text are counted"
+        }
+      }
+    },
+    "ireland": {
+      "verified_on": "2026-11-12",
+      "verdict": "Faithful copy of the Law Reform Commission's Revised Acts list (604 of the 606 it lists: 579 Acts of the Oireachtas, 8 pre-1922 Acts, 17 statutory instruments), with history from 2013 that starts at each act's first revision, not its enactment. That is about 29% of the 2,000+ Acts in force; the Constitution, case law and almost all statutory instruments are missing, and the record ends at 2026-10-01.",
+      "scores": {
+        "national_primary_pct": 29,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": false,
+        "codes_pct": 67
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "isle-of-man": {
+      "verified_on": "2026-11-12",
+      "verdict": "isle-of-man-law holds the text of only 226 unamended sections of 5 pre-1976 Acts (Criminal Code 1872, Evidence Act 1871, Companies Act 1931, Criminal Justice Act 1963, Isle of Man Constitution Act 1961), each as one undated-by-law version, plus a title-only catalogue of 859 Acts; none of the modern essentials (Constitution Act 1990, Human Rights Act 2001, PPPA 1998, Companies Act 2006, Employment Act 2006, High Court Act 1991) has text, and there is no case law. The 6 sections compared with the archived official PDFs match word for word, but 8 catalogue entries carry a wrong title or citation, including the Companies Act 2006 slot (AT 13 of 2006) titled 'National Health and Care Service Act 2016'.",
+      "scores": {
+        "national_primary_pct": 0.9,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": false,
+        "codes_pct": 7
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 0.9,
+          "range": [
+            0.7,
+            1.0
+          ],
+          "universe": 548,
+          "held": 5,
+          "confidence": "low",
+          "method": "legislation.gov.im (F5-blocked to fetch, not worked around) publishes revised texts of the Acts of Tynwald in force; the repo's builder read Royal Assent dates from 548 official revised-edition PDFs there (README: '548 catalogue entries come from the Acts' own front matter'), the other 311 of the 859 catalogue entries come only from Wikipedia's list and include repealed Acts. Taking ~548 as the in-force universe, range 500-700 for Acts the builder may have missed. Held = 5 Acts, each only in part (226 provisions), so this is an upper bound on text coverage"
+        }
+      }
+    },
+    "italy": {
+      "verified_on": "2026-11-12",
+      "verdict": "Small, accurate and up-to-date core; far from complete. National law is the Constitution, every legge costituzionale and four statutes (55 of ~75,000 acts), current with Normattiva on 2026-11-12; regional law is real in 7 of 22 legislating units (Sicily's repository holds only the Statute), with history only in Emilia-Romagna; no codes, no case law.",
+      "scores": {
+        "national_primary_pct": 0.07,
+        "subnational_pct": 32,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "jersey": {
+      "verified_on": "2026-11-12",
+      "verdict": "jersey-law holds 11 Jersey Laws as official consolidations with in-force history from 2020-2021 onwards: 5 of the 7 essentials checked (not the States of Jersey Law 2005 or the Royal Court (Jersey) Law 1948), no Regulations or Orders as texts, and no case law. Its newest versions match jerseylaw.je's current versions and the wording checked matches, but PPCE Law Art. 28A has lost its paragraph (2) and Companies Law Art. 143D was merged into Art. 143C from 2026-06-24 to 2026-09-29.",
+      "scores": {
+        "national_primary_pct": 2.0,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": false,
+        "codes_pct": 71
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 2.0,
+          "range": [
+            1.5,
+            2.4
+          ],
+          "universe": 550,
+          "held": 11,
+          "confidence": "low",
+          "method": "No published count of Laws in force (2 searches; jerseylaw.je's current list is script-loaded). Derived: the States make about 25-40 Laws a year (LDO report R.95/2026: 25 Laws in 2025; numbering reached L.38/2026 in data/laws.csv; ~30 a year quoted in 2025), most of them amending Laws that the Law Revision (Jersey) Law 2003 left out of the revised edition as spent, and Jersey's statute book also keeps pre-1950 Lois. Principal Laws in force estimated at about 550 (range 450-750: ~1,900 Laws since 1950, ~45% principal, ~20% of those repealed, plus older Lois still in force). Held: 11 principal Laws (Regulations and Orders not counted on either side). Score 11/550; range 11/750 to 11/450"
+        }
+      }
+    },
+    "kosovo": {
+      "verified_on": "2026-11-12",
+      "verdict": "Nearly every law in the Official Gazette's lists is held (1,108 of about 1,133 laws and codes), with all 7 essentials, plus 2,745 Constitutional Court rulings. But everything is held as enacted. The Constitution file is the 2008 text (it still has art. 143, which was deleted in 2012, and lacks the 2020 Istanbul Convention paragraph), and the Criminal and Criminal Procedure Codes lack their 2023 amendments, although the Gazette has published official consolidated texts of all three (2024-2026) that the repository lists but does not use.",
+      "scores": {
+        "national_primary_pct": 97.8,
+        "subnational_pct": 66,
+        "case_law_pct": 46,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "latvia": {
+      "verified_on": "2026-11-12",
+      "verdict": "Latvia holds four acts (Satversme, Krimināllikums, Darba likums, Fizisko personu datu apstrādes likums) with accurate in-force history, but of the six essentials it holds only the Satversme and the Krimināllikums: Civillikums, Civilprocesa likums, Kriminālprocesa likums and Administratīvā procesa likums are missing. The Krimināllikums is one version behind: the version likumi.lv has in force since 2026-11-05 (law of 15.10.2026) is not in the repository. That is 4 of about 1,700 base laws in force, with no case law.",
+      "scores": {
+        "national_primary_pct": 0.24,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 20
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "liechtenstein": {
+      "verified_on": "2026-11-12",
+      "verdict": "Near-complete current national law: 3,689 Lilex texts (1,239 national acts and ordinances plus 2,450 treaties), including the Constitution and all six main codes, with text matching gesetze.li word for word in the checks; but only the Constitution, VRG and StGHG have in-force history, and no court decisions are held at all.",
+      "scores": {
+        "national_primary_pct": 99.4,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "lithuania": {
+      "verified_on": "2026-11-12",
+      "verdict": "Lithuania holds one act, the Konstitucija, with in-force history from 1992-11-02 to 2022-05-22 (12 versions); none of the five main codes and no case law are held. No constitutional amendment after 2022-05-22 was found, so the 2022 end of the record looks current for that one act, but every official site tried (e-tar.lt, e-seimas.lrs.lt, lrs.lt, lrkt.lt) returned 403, so no provision could be checked against the official text.",
+      "scores": {
+        "national_primary_pct": 0.1,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 0.1,
+          "range": [
+            0.07,
+            0.13
+          ],
+          "universe": 1000,
+          "held": 1,
+          "confidence": "low",
+          "method": "No published count of laws (istatymai) in force (3 searches; e-tar.lt 403 earlier; the vda.lrv.lt open-data notice returned 403 and get.data.gov.lt returned 500, so the open TAR dataset was not queried). Derived: about 25-40 new principal laws a year since 1990 (the Seimas passes several hundred laws a term, most of them amending laws), less repeals, gives roughly 800-1,400 principal laws in force, excluding amending and ratification laws; central 1,000. Held: 1 act (the Constitution). Score 1/1,000; range 1/1,400 to 1/800"
+        }
+      }
+    },
+    "luxembourg": {
+      "verified_on": "2026-11-12",
+      "verdict": "Broad but shallow: lexifina/luxembourg-law holds the revised 2023 Constitution with its full history (39 versions, to the Art. 15 revision in force 2026-08-29), plus 6,884 laws Legilux marks in force, one commit each, and 6,406 of those are the text as first published. Code civil, Code pénal, Code de commerce and Code du travail are current consolidated texts. The Nouveau Code de procédure civile, the Code de procédure pénale and all case law are missing, and 45 in-force dates are impossible (including one copied as 0001-01-01 from Legilux's own metadata).",
+      "scores": {
+        "national_primary_pct": 100.0,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 67
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 100.0,
+          "range": [
+            85.9,
+            100.0
+          ],
+          "universe": 6884,
+          "held": 6884,
+          "confidence": "medium",
+          "method": "Universe from the source's own status facet: Legilux SPARQL lists 6,884 acts of type 'loi' as in force/applicable (data/textes-en-vigueur.csv), and the repo's loi/ tree holds a text for every one (478 as Legilux's consolidated text, 6,406 as first published), so held/universe = 100%. Not independently checked against a second count (one search; parliamentary question 3082, Oct 2025, says 969 laws in force are still to be consolidated on Legilux). Lower bound counts only laws held in current wording: 6,884 - 969 amended-but-unconsolidated laws held only as first published = 5,915, 85.9%. The 6,884 include amending, approval, budget and naturalisation laws Legilux still marks in force (about 2,140 titles say 'modifiant'); both sides count the same set"
+        }
+      }
+    },
+    "malta": {
+      "verified_on": "2026-11-12",
+      "verdict": "Near-complete statute book without its Constitution: lexifina/malta-law holds all 562 Chapters and 4,522 pieces of subsidiary legislation on legislation.mt, with the five main codes current to 2026-10-01, but the Constitution of Malta (eli/const) is not in the tree and there is no case law. Only 30% of changes carry an in-force date because the 5,053 undated commits are each law's baseline text (dated by a 'Consolidated:' trailer, by design), not amendments.",
+      "scores": {
+        "national_primary_pct": 99.98,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": false,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "moldova": {
+      "verified_on": "2026-11-12",
+      "verdict": "Almost nothing of Moldova's national law is held: moldova-law contains only the Constitution (3 versions, its text matching the official 2024 Moldpres edition), and none of the codes, ordinary laws or case law. The Gagauzia repository holds 229 of the autonomy's laws, each only as adopted and dated by its adoption day, and some files are split wrongly (an amending law's operative text filed under the wrong article, and in 44 of 229 laws an explanatory note filed as the signature). Transnistria is outside Moldova's control and has no repository.",
+      "scores": {
+        "national_primary_pct": 0,
+        "subnational_pct": 100,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "monaco": {
+      "verified_on": "2026-11-12",
+      "verdict": "Only two texts are held: the 1962 Constitution (with its 2002 revision) and loi n° 1.362 on money laundering (18 versions, 2009 to 2025), both with in-force history and matching Légimonaco in the checks. None of the six main codes, no labour law, no other loi or ordonnance souveraine and no case law are held.",
+      "scores": {
+        "national_primary_pct": 0.1,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "montenegro": {
+      "verified_on": "2026-11-12",
+      "verdict": "The Constitution is held with its full in-force history, including the 2026 Amendments XVII-XXI, and checks out word for word. But of the six main codes only the Labour Act (2019) and the Administrative Procedure Act (2014) are on main, both as first published with later amendments not applied; the Criminal Code, Criminal Procedure Code and Obligations Act are held back, and the Civil Procedure Act's base text is absent. No court decisions beyond about 21 gazette items.",
+      "scores": {
+        "national_primary_pct": 72.9,
+        "subnational_pct": null,
+        "case_law_pct": 2,
+        "constitution": true,
+        "codes_pct": 33
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "netherlands": {
+      "verified_on": "2026-11-12",
+      "verdict": "Strong coverage: netherlands-law holds every regulation in the Basiswettenbestand (35,466, of which about 16,000 still have text and about 19,500 are repealed, README only), including all the essential codes with in-force history from 2002, current to 2026-11-02, and both spot checks pass; all 17 case-law repositories are current to 2026-11-10. Weak points: no provincial or municipal law, no law of Aruba, Curaçao or Sint Maarten, and several of the repository's own metadata claims (version counts, '292 with history', 'not built') are wrong.",
+      "scores": {
+        "national_primary_pct": 96.2,
+        "subnational_pct": 0,
+        "case_law_pct": 100,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 96.2,
+          "range": [
+            91.8,
+            100.0
+          ],
+          "universe": 16640,
+          "held": 16000,
+          "confidence": "medium",
+          "method": "Universe derived from the repo's whole-source listing: tools/acts.json lists 35,826 BWBR regulations (all BWB types except treaties); 35,466 are built, of which 16,000 hold law text (in force) and 19,466 are README-only (repealed). The open WetGit mirror counts 40,566 BWB regelingen incl. 3,678 treaties, i.e. 36,888 non-treaty, so about 1,062 BWBR ids are not in acts.json. Applying the built set's in-force share (45%) to the 360 unbuilt and 1,062 unlisted ids adds ~640: universe ~16,640, score 96.2%. Range: 16,000/17,422 (all missing ids in force) to 100% (none). Cross-check: the Minister of Justice's count (kst-29279-101) gave 9,477 wetten, AMvB's and ministeriele regelingen in force in the BWB on 1 Jan 2010 (1,806/2,292/5,379); the repo's 16,000 also includes ZBO and PBO regulations, beleidsregels, circulaires and BES regulations, so the two are consistent in scale"
+        }
+      }
+    },
+    "north-macedonia": {
+      "verified_on": "2026-11-12",
+      "verdict": "The Constitution is held with its full in-force history through the 2019 Prespa Amendments XXXIII-XXXVI and matches the Constitutional Court's official consolidated text word for word. The codes are weak: the Criminal Code and the Law on Obligations are held back, the Labour, Criminal Procedure and General Administrative Procedure laws are held as enacted without their amendments (37, 4 and 1 amending acts or Court decisions not applied), and the Civil Procedure law shown is the 2026 law that applies only from 2027-01-18, while the 2005 law still applied today is held back. No court decisions.",
+      "scores": {
+        "national_primary_pct": 50.4,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 67
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "norway": {
+      "verified_on": "2026-11-12",
+      "verdict": "norway-law holds 698 of Lovdata's 753 laws and 3,357 central regulations, including all 7 essentials, but only 31 acts (Grunnloven, straffeloven, tvisteloven, arbeidsmiljøloven among them) have real in-force history. The rest, including straffeprosessloven, avtaleloven and forvaltningsloven, are one current Lovdata consolidation each. The two straffeloven/arbeidsmiljøloven spot checks match Lovdata, but Grunnloven misses Stortinget's decision of 3 November 2026 (§§ 25, 26, 41, 75), and there is no case law and no local regulation.",
+      "scores": {
+        "national_primary_pct": 93,
+        "subnational_pct": 0,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "poland": {
+      "verified_on": "2026-11-12",
+      "verdict": "Partial and out of date: poland-law holds the Constitution and 6 of the 7 main codes with amendment history, but the codes stop at their 2023-2024 unified texts (Kodeks karny misses at least 6 amending acts in force 2024-07-01 to 2026-08-23), the KPA is missing, and its 1,608 ustawy are about 26% of the 6,097 in force. The Supreme Court and Constitutional Tribunal repositories stop in 2016 and 2015 although marked current, and the administrative-court repository is empty.",
+      "scores": {
+        "national_primary_pct": 26.4,
+        "subnational_pct": null,
+        "case_law_pct": 67,
+        "constitution": true,
+        "codes_pct": 86
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "portugal": {
+      "verified_on": "2026-11-12",
+      "verdict": "Broad national record: 2,101 acts, which is every Lei and Decreto-Lei the Diário da República (DR) marks in force and has a consolidated text for (2,098), plus the Constitution and the Civil and Labour Codes. Every essential is held, but 1,697 acts are current text only. For 304 acts, including the Civil Procedure Code, the Criminal Procedure Code and the CPA, that current 2026 text is dated to the act's publication day, so a reader asking for an earlier date gets the wrong text. Both autonomous regions are held, but only the regional decrees the DR consolidates (133 and 116 acts). No case law is held.",
+      "scores": {
+        "national_primary_pct": 40.4,
+        "subnational_pct": 100,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 40.4,
+          "range": [
+            32.3,
+            52.5
+          ],
+          "universe": 5200,
+          "held": 2101,
+          "confidence": "low",
+          "method": "No official count of Leis and Decretos-Lei in force exists. Universe built from output and survival: OLP/CEDIS (NOVA) Boletim 8 Tabela I counts 1,610 Leis and 4,841 Decretos-Lei published 2000-2018 (6,451); about 200 a year since (about 1,400 for 2019-2025) and about 500 a year for 1976-1999 (about 12,000); Revoga+ revoked 1,449 DLs of 1975-80 (DL 32/2018) plus 821 more and about 1,200 of 1981-85, so old acts survive at low rates. Assumed in-force standalone (non-amending) share: about 40% of 2000-2025 acts (about 3,100), about 15% of 1976-1999 (about 1,800), plus about 300 pre-1976 acts still in force (Civil Code era DLs) = about 5,200 (range 4,000-6,500). Cross-check: of the 6,451 acts of 2000-2018 the repo holds 1,198 (18.6% of all published, roughly 40-50% of those likely in force and standalone), consistent with the overall share. Held = 2,101 (2,098 DR-consolidated acts in data/atos-em-vigor.csv + Constitution, Civil Code, Labour Code); N-Lex's 1,030 consolidated regimes is a lower bound only"
+        }
+      }
+    },
+    "romania": {
+      "verified_on": "2026-11-12",
+      "verdict": "Broad but uneven: romania-law holds the Constitution, all 8 essential codes with amendment history, about 58,000 laws, OUG, OG and HG, 23,509 CCR decisions and the ÎCCJ's RIL/HP rulings, but only 6% of the primary acts have more than one version, 13,135 amended acts are held only as first published, and every essential code was last checked between June and October 2026 (its own freshness file marks them stale). The README's 97% / 81% / 69% chart is a weighted average of the repository's own targets, with numerators that include amending acts and metadata-only records; by text held, local acts are 0.6%, not 69%.",
+      "scores": {
+        "national_primary_pct": 100,
+        "subnational_pct": null,
+        "case_law_pct": 75,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "russia": {
+      "verified_on": "2026-11-12",
+      "verdict": "Russia has the Constitution with full in-force history to the October 2022 edition and 1,790 federal acts in current text, but these are mostly amending laws signed 2000-2017: no federal law signed 2018-2026 is held, and five of the eight main codes (Civil, Criminal, Arbitrazh Procedure, Tax, Administrative Offences) are missing. Of the 82 regional repositories, 81 are catalogues with no law text and Moscow Oblast holds only 281 never-amended laws as enacted; Moscow city and all case law are absent.",
+      "scores": {
+        "national_primary_pct": 20,
+        "subnational_pct": 1.2,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 38
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "san-marino": {
+      "verified_on": "2026-11-12",
+      "verdict": "The repository holds the Consiglio Grande e Generale's 65 testi coordinati (409 distinct acts, many only in part, 7,535 article files), including the Dichiarazione dei Diritti, the Codice Penale, the 1878 Codice di Procedura Penale and the Legge sulle società, with text matching the official PDFs word for word in the checks; but it is current-only, it is a subject selection rather than the whole statute book, and it holds no case law. In the Dichiarazione the 1974 text is filed under the wrong act (legge-costituzionale-2025-2) and the annexed amending acts are merged into it.",
+      "scores": {
+        "national_primary_pct": 20.5,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 75
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 20.5,
+          "range": [
+            14.6,
+            27.3
+          ],
+          "universe": 2000,
+          "held": 409,
+          "confidence": "low",
+          "method": "No published count. Derived from the yearly numbering series shared by leggi, decreti and regolamenti: the highest act numbers cited in the repo's own data/amendments.csv (lower bounds of each year's series) run about 85-155 a year in 1974-1990, 110-140 in 1994-2002 and 150-220 in 2003-2025 (e.g. 2014 n.219, 2020 n.223, 2024 n.202), about 7,700 numbered acts since 1974. Assumed about 25% (18-35%) are standalone normative acts still in force (the rest amend, ratify, appoint, vary budgets or have lapsed), plus about 100 pre-1974 acts still applied (e.g. the 1878 criminal procedure code) = about 2,000 (range 1,500-2,800). Held = 409 distinct act ids in data/acts.csv across 65 testi coordinati; these include some amending decrees merged into the texts, so the like-with-like share may be lower"
+        }
+      }
+    },
+    "serbia": {
+      "verified_on": "2026-11-12",
+      "verdict": "serbia-law (public, pinned 1329108 = main) holds 9,749 acts scraped from the official PIS register as consolidated texts with in-force history, including the Constitution with the 2022 amendments and all six main codes, current to 2026-11-07. Its README and jurisdiction.json still say it holds only the Constitution; the PIS reuse terms, which a Lexifina memory says forbid automated extraction without Službeni glasnik's consent, are not mentioned anywhere in the repository; there is no Vojvodina law and no case law.",
+      "scores": {
+        "national_primary_pct": 96.3,
+        "subnational_pct": 0,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 96.3,
+          "range": [
+            88.3,
+            100
+          ],
+          "universe": 1650,
+          "held": 1589,
+          "confidence": "medium",
+          "method": "The repo's registry/data/acts.json is a scrape of the PIS register of republic acts in force (9,748 acts, every one 'in force' or 'amending act', none repealed), holding 1,589 zakoni in force (787 ratifications). Cross-check against the National Assembly's laws passed per year (2020 133, 2021 191, 2022 60, 2023 161, 2024 91, 2025 179): held base laws from those years are 77, 107, 33, 102, 57, 120, i.e. 55-67% each year, the remainder matching the usual share of amending laws (izmene i dopune), which have no separate in-force entry. Universe = register count plus an allowance for laws in force the register may omit (older federal SRJ/SCG and SFRJ laws still applied, unconsolidated items): about 1,650 (range 1,589-1,800)"
+        }
+      }
+    },
+    "slovakia": {
+      "verified_on": "2026-11-12",
+      "verdict": "Broad national record: 5,815 acts in force from Slov-Lex as their current consolidated text (aktuálne znenie) plus the Constitution and the election act with dated in-force history, and all eight essential codes held at their 2025-2026 versions (Trestný zákon includes the 2024 changes). Only the Constitution and the election act have history; no case law is held, and the README's English summary still says 664 acts.",
+      "scores": {
+        "national_primary_pct": 100.0,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 100.0,
+          "range": [
+            90.9,
+            100
+          ],
+          "universe": 5817,
+          "held": 5817,
+          "confidence": "medium",
+          "method": "The repo built its list by walking the whole Collection of Laws year by year on Slov-Lex (static.slov-lex.sk/static/SK/ZZ/<year>/) and keeping every act with a version in force on 2026-11-02, leaving out notices, decisions, rulings, resolutions, republications and acts that only amend others (not 'acts in force' in the like-with-like sense). That gives 5,815 acts (2,231 Zb. before 1993, 3,584 Z. z.), all held, plus the Constitution and Act 180/2014 = 5,817. No independent Slov-Lex total was found (1 search; zakony.judikaty.info counts 78,903 Collection documents of all states, not in force). Range allows up to about 10% of in-force acts missed by the walk or classified as excluded (universe up to about 6,400)"
+        }
+      }
+    },
+    "slovenia": {
+      "verified_on": "2026-11-12",
+      "verdict": "Broad national record: 1,971 laws in force from PIS (700 ordinary laws, 1,271 ratification laws) as their current text, plus the Constitution and the Elections Act with full dated history, current to 2026-10-30. But two of the eight essentials, the Obligacijski zakonik and the Zakon o pravdnem postopku, are not in the repository at all (only their amending acts OZ-A and ZPP-E are), no case law is held, and the README still describes a two-act repository with paths that no longer exist.",
+      "scores": {
+        "national_primary_pct": 87,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 71
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    },
+    "spain": {
+      "verified_on": "2026-11-12",
+      "verdict": "Spain's national and regional statute law is close to fully covered: spain-law holds 8,774 of the 8,839 state-level norms in the BOE's consolidated legislation, with in-force history, and the 17 regional repositories hold about 99% of the 3,623 regional norms the BOE consolidates. All essentials are present and current to October 2026, and three spot checks against the BOE match. But the record ends 2026-10-28, regional regulations are not covered, Ceuta and Melilla hold only their statutes, and there is no case law.",
+      "scores": {
+        "national_primary_pct": 99.3,
+        "subnational_pct": 100,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "sweden": {
+      "verified_on": "2026-11-12",
+      "verdict": "Good national coverage: sweden-law holds the consolidated current text (SFST, 'i lydelse t.o.m. SFS ...', not the as-first-published SFS print) of 5,303 statutes in force and 5,813 repealed ones, including all 10 essentials, and both spot checks pass. It has no earlier versions, no case law at all (no Högsta domstolen or Högsta förvaltningsdomstolen repository exists), no regional law, and the chart's 72% 'sourced' figure comes from the 4,425 repeal and amendment commits, which name the act but carry no Source line or URL.",
+      "scores": {
+        "national_primary_pct": 96,
+        "subnational_pct": 0,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "switzerland": {
+      "verified_on": "2026-11-12",
+      "verdict": "Federal law is close to complete and accurate: switzerland-law holds 5,046 of the 5,110 SR texts Fedlex lists as in force, all eight essentials, and the OR and StGB match Fedlex article for article. But main also keeps 520 SR texts Fedlex marks as no longer in force with nothing to show they were repealed, it stopped on 2026-10-28 so 38 versions in force since 1 November (the Flight Passenger Data Act and its amendments) sit only on the future branch, full text history mostly starts in 2021, and Schwyz is the one canton with no law repository.",
+      "scores": {
+        "national_primary_pct": 98.7,
+        "subnational_pct": 96,
+        "case_law_pct": 100,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": false,
+      "estimates": {}
+    },
+    "turkey": {
+      "verified_on": "2026-11-12",
+      "verdict": "turkey-law (public on GitHub, pinned 58fe0ce = main) holds 1,013 law-rank acts from mevzuat.gov.tr (908 kanunlar, 9 Ottoman-era, 63 KHK, 33 CBK), including the Constitution with the 2017 amendments and all nine essential codes, consolidated and current to amendments of August 2026 (retrieved 2026-10-28); 280 laws carry in-force history from the publisher's earlier texts, the other 733 are current text only. No case law is held, and the README, corpus.json and laws.csv still use the pre-2026-11-10 paths and call the public repository private.",
+      "scores": {
+        "national_primary_pct": 100.0,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 100
+      },
+      "regions_not_applicable": true,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 100.0,
+          "range": [
+            95.0,
+            100.0
+          ],
+          "universe": 1013,
+          "held": 1013,
+          "confidence": "medium",
+          "method": "Universe is the publisher's own in-force list: the mevzuat.gov.tr search table (POST /Anasayfa/MevzuatDatatable) for the three law-rank kinds (Kanun incl. 9 Ottoman-era laws, KHK, CBK) listed 908 + 9 + 63 + 33 = 1,013 acts on 2026-10-28, and the build fetched all 1,013 (data/stats.json: 1,013 listed, 1,013 built, 0 unreadable). The list holds base laws only (no purely amending laws; CBKs listed are the base decrees nos. 1-14, 23, 25 ... 177, not the amending ones). Cross-check: the parliament passed about 12,688 laws 1920-2003 and numbering reaches 7596, but most are amending, ratification or budget laws that the publisher folds into the base texts, so they are not in the universe. Range low end allows for in-force law-rank acts the search table might not list (not confirmed by an independent count; one search found no official total)."
+        }
+      }
+    },
+    "ukraine": {
+      "verified_on": "2026-11-12",
+      "verdict": "ukraine-law (public, pinned aa90401 = main) holds 5 acts, each as one current revision taken from zakon.rada.gov.ua: the Constitution with the 2019 EU/NATO course and 2020 immunity changes, and the Civil, Criminal, Criminal Procedure and Labour codes. The Civil Procedure Code and the Code of Administrative Procedure are missing, there is no history, no Crimea law and no case law, and the text could not be checked against the official site (zakon.rada.gov.ua refused the connection).",
+      "scores": {
+        "national_primary_pct": 0.3,
+        "subnational_pct": 0,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 67
+      },
+      "regions_not_applicable": false,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 0.3,
+          "range": [
+            0.2,
+            0.3
+          ],
+          "universe": 2000,
+          "held": 5,
+          "confidence": "low",
+          "method": "No official count (zakon.rada.gov.ua refused connections; 2 searches found only the Rada's '>1 million normative acts' figure for all levels). Derived: Rada act numbers per convocation (XII to IX, IX alone past No. 4986-IX by 2026) total roughly 25,000-30,000 numbered acts since 1990, of which about 55-60% are laws (the series also numbers Rada resolutions), about 15,000-17,000 laws; of these about 65% amend other laws, about 15% ratify treaties and about 3% are budgets or one-off acts, leaving about 2,300-2,700 base laws and codes, minus about a quarter since repealed or replaced, plus a few Soviet-era codes still in force (Labour Code 1971, Housing Code 1983, Code of Administrative Offences 1984): about 2,000 base laws and codes in force (range 1,500-2,800, about 27 of them codes). Held: the Constitution plus 4 codes = 5; 5 / 2,000 = 0.25% (0.18-0.33%)."
+        }
+      }
+    },
+    "united-kingdom": {
+      "verified_on": "2026-11-12",
+      "verdict": "united-kingdom-law holds the current revised text of 4,375 Acts not wholly repealed (3,418 UK Public General Acts plus 957 Acts of the Scottish Parliament, Senedd/National Assembly for Wales and Northern Ireland legislatures), current to 2026-10-31. Only 442 Acts (2010 onwards) have version history and the rest are current text only. It holds no statutory instruments (so no Civil Procedure Rules), no pre-1707 statutes (so no Magna Carta 1297 or Bill of Rights 1689) and no case law. The one spot check matches legislation.gov.uk, but the extent field is blank and the README and manifest still describe the earlier nine-provision EHCP record.",
+      "scores": {
+        "national_primary_pct": 98.3,
+        "subnational_pct": 100,
+        "case_law_pct": 0,
+        "constitution": false,
+        "codes_pct": 88
+      },
+      "regions_not_applicable": false,
+      "estimates": {
+        "national_primary_pct": {
+          "value": 98.3,
+          "range": [
+            91.1,
+            100.0
+          ],
+          "universe": 4450,
+          "held": 4375,
+          "confidence": "medium",
+          "method": "Universe = UK Public General Acts not wholly repealed (about 3,490) plus devolved Acts in force (about 960). UKPGA, derived from the last official counts: 3,410 public general Acts in force at end-1976 and 3,109 on 31 Aug 1981 (these include roughly 300-400 pre-1801 English/Scottish/GB Acts, so about 2,750 UKPGA); plus about 2,200 Acts passed 1982-2026 (about 60 a year in the 1980s falling to 30-55 a year since); minus about 1,500 whole Acts repealed by the Statute Law (Repeals) Acts 1986-2013 (the 2013 Act alone 817) and about 300-400 spent Appropriation, Consolidated Fund and consolidated Acts: about 3,200-3,600. The repository's own set (taken from legislation.gov.uk status, wholly repealed Acts left out) agrees: 3,418 UKPGA, of which about 1,570 are post-1981, and retention by decade matches Acts passed (2010s: 290 held of about 300 passed; 2020s: 251 of about 256; 2025: 36 of 36). Devolved: 957 held (385 asp, 42 anaw, 33 asc, 19 mwa, 202 nia, 274 apni, 2 mnia), taken as the whole in-force set with about 1% margin. 4,375 / 4,450 = 98.3% (low end 4,375 / 4,800 = 91.1% if the in-force universe is at the top of the derived range; high end 100 if the repository's set is the whole universe). Held here is UKPGA 3,418 plus devolved 957, to match the universe; coverage.primary_legislation.held_acts stays 3,418 (UKPGA only)."
+        }
+      }
+    },
+    "vatican-city": {
+      "verified_on": "2026-11-12",
+      "verdict": "Only two texts are held: the Legge fondamentale (4 versions: 2000 law, 2023 law, the 19 November 2025 motu proprio on Art. 8, and the new law of 31 July 2026, which is current and matches vatican.va word for word in the checks) and the Legge sulle fonti del diritto LXXI/2008 as enacted. None of the four received codes (civil, civil procedure, criminal, criminal procedure), no other Vatican law (out of a numbered series that has passed N. DCCXX) and no case law are held.",
+      "scores": {
+        "national_primary_pct": 0.3,
+        "subnational_pct": null,
+        "case_law_pct": 0,
+        "constitution": true,
+        "codes_pct": 0
+      },
+      "regions_not_applicable": true,
+      "estimates": {}
+    }
+  }
+}
