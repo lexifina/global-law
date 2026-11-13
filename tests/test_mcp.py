@@ -4559,5 +4559,125 @@ class SearchNarrowed(unittest.TestCase):
                 self.assertTrue(whole['results'] and [c for c in index.calls if c[0] == 'candidates'])
 
 
+class ActsIndex(FilesIndex):
+    """A FilesIndex that also groups by act (search_index.acts): the files that hold every word of a query (or, when
+    none does, most of them), grouped by their folder, an act counted by how often its files hold the words."""
+
+    def __init__(self, m, hold=None, broken=None):
+        super().__init__(m, hold)
+        self.broken = broken
+
+    def acts(self, query, corpora):
+        self.calls.append(('acts', query, list(corpora)))
+        if self.broken:
+            return self.broken
+        words = self.words(query).split()
+        for need, match in ((len(words), 'all_words'), (max(1, -(-len(words) * 7 // 10)), 'most_words')):
+            found = {}
+            for corpus in corpora:
+                if self.hold is not None and corpus not in self.hold:
+                    continue
+                for name, text in self.corpus(corpus).items():
+                    held = [text.count(' ' + w + ' ') for w in words]
+                    if sum(1 for h in held if h) >= need:
+                        found.setdefault((corpus, name.rsplit('/', 1)[0] if '/' in name else ''), []).append((sum(held), name))
+            if found:
+                rows = []
+                for (corpus, act), files in found.items():
+                    files.sort(key=lambda f: (-f[0], f[1]))
+                    rows.append([corpus, act, len(files), float(sum(n for n, _ in files[:3])), [f for _, f in files[:3]]])
+                rows.sort(key=lambda r: (-r[3], r[0], r[1]))
+                return {'match': match, 'whole': True, 'acts': rows[:40]}
+            if len(words) < 2:
+                break
+        return {'match': 'all_words', 'whole': True, 'acts': []}
+
+
+class SearchByAct(unittest.TestCase):
+    """search_law with an index that groups by act (search_index.acts, 2026-11-13): the acts that match best are
+    named, the bodies of law come in the order of their best act, and words that no provision holds as a phrase
+    find the provisions that hold them all."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def by(self, index, **ask):
+        from unittest import mock
+        with mock.patch.object(self.m, 'search_index', index):
+            return self.m.t_search_law(dict(ask))
+
+    @needs(IE_C, PW_C)
+    def test_the_acts_are_named_and_their_body_of_law_comes_first(self):
+        m = self.m
+        ask = {'query': 'personal data breach', 'max_results': 200}
+        _, plain = self.by(FilesIndex(m), **ask)
+        index = ActsIndex(m)
+        text, got = self.by(index, **ask)
+        self.assertEqual(got['match'], 'phrase')
+        self.assertIn(IE_C + '/data-protection-act-2018', [a['path'] for a in got['acts'][:3]])
+        self.assertTrue(all(a['title'] for a in got['acts'][:3]))
+        self.assertTrue(all(b.startswith(a['path'] + '/') for a in got['acts'] for b in a['best']))
+        self.assertIn('Acts that hold all the words, best first', text)
+        self.assertEqual(got['provision_count'], plain['provision_count'])
+        key = lambda r: (r['path'], r['line'], r['text'])  # noqa: E731
+        self.assertEqual(sorted(map(key, got['results'])), sorted(map(key, plain['results'])))
+        self.assertNotIn('acts', plain)
+        # a word both bodies of law hold: the one with the best act is read first, where the order was that of the names
+        for word in ('President', 'Minister', 'Court'):
+            _, named = self.by(FilesIndex(m), query=word, max_results=5)
+            _, best = self.by(ActsIndex(m), query=word, max_results=5)
+            if best.get('acts') and named['results']:
+                self.assertTrue(best['results'][0]['path'].startswith(best['acts'][0]['path'].split('/acts/')[0]), word)
+        # in parts: the same lines in the same order, and the acts with the first part only
+        parts, offset = [], 0
+        while offset is not None:
+            _, data = self.by(ActsIndex(m), **{**ask, 'max_results': 7, 'offset': offset})
+            self.assertEqual('acts' in data, offset == 0)
+            parts += data['results']
+            offset = data['page']['next_offset']
+        self.assertEqual(list(map(key, parts)), list(map(key, got['results'])))
+        # the order of the names when asked for, and an index whose answer is not one
+        _, path_order = self.by(ActsIndex(m), **ask, order='path')
+        self.assertEqual(path_order['results'], plain['results'])
+        self.assertNotIn('acts', path_order)
+        for broken in ({'match': 'phrase', 'acts': []}, {'match': 'all_words', 'acts': [[IE_C, 'x', 1, 1.0, ['README.md']]]}, [1], 'x'):
+            _, data = self.by(ActsIndex(m, broken=broken), **ask)
+            self.assertEqual(data['results'], plain['results'], broken)
+            self.assertNotIn('acts', data)
+
+    @needs(IE_C)
+    def test_words_no_provision_holds_as_a_phrase(self):
+        m = self.m
+        ask = {'query': 'breach personal data', 'jurisdiction': 'ireland', 'max_results': 10}
+        text, none = self.by(FilesIndex(m), **ask)
+        self.assertEqual((none['provision_count'], none['results']), (0, []))
+        self.assertTrue(none['searched'] and none['searched'][0]['corpus'] == IE_C and 'cannot be found here' in text)
+        index = ActsIndex(m)
+        text, got = self.by(index, **ask)
+        self.assertEqual((got['match'], got['provision_count']), ('all_words', 0))
+        self.assertTrue(text.startswith('No provision in force on') and 'all its words' in text, text[:200])
+        self.assertTrue(0 < len(got['results']) <= 10 and got['acts'])
+        texts = index.corpus(IE_C)
+        for row in got['results']:
+            words = texts[row['path'][len(IE_C) + 1:]]
+            self.assertTrue(all(f' {w} ' in words for w in ('breach', 'personal', 'data')), row['path'])
+            self.assertTrue(row['line'] and any(w in row['text'].lower() for w in ('breach', 'personal', 'data')), row)
+        self.assertEqual(got['results'][0]['path'], got['acts'][0]['best'][0])
+        self.assertEqual(set(r['path'] for r in got['results']), set(got['provisions']))
+        self.assertNotIn('searched', got)
+        # words that are nowhere: nothing, and what was searched
+        text, got = self.by(ActsIndex(m), query='zzzqqq xxxyyy', jurisdiction='ireland')
+        self.assertEqual((got['results'], got.get('acts'), got['match']), ([], None, 'phrase'))
+        self.assertTrue(got['searched'] and 'holds' in got['searched'][0])
+        # most of the words, when no file holds them all
+        text, got = self.by(ActsIndex(m), query='personal data breach zzzqqq', jurisdiction='ireland')
+        self.assertEqual(got['match'], 'most_words')
+        self.assertIn('most of its words', text)
+
+
 if __name__ == '__main__':
     unittest.main()

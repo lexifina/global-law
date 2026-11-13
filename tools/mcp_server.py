@@ -457,6 +457,36 @@ def index_ranked(query: str, corpus: str, skip: int, size: int) -> list | None:
     return list(got)
 
 
+SEARCH_ACTS = 12  # acts search_law names ahead of the lines
+
+
+def index_acts(query: str, corpora: list) -> dict | None:
+    """search_index.acts, checked: {'match': 'all_words' | 'most_words', 'whole': bool, 'acts': [(corpus, act folder,
+    files, [best files]), ...]} for the corpora asked, best act first; None when the index has no such method, does
+    not answer, or answers anything else.
+    A host's index may group the files that hold a query's words by the act they belong to (the folder that holds
+    them) and rank the acts by their best files: search_law then names those acts first, reads the bodies of law in
+    the order of their best act (a country's law was read in the order of the names, and Bavaria filled the page for
+    Germany), and when no provision holds the words as a phrase gives the provisions that hold them all."""
+    group = getattr(search_index, 'acts', None)
+    if group is None or not corpora:
+        return None
+    try:
+        got = group(query, list(corpora))
+        if not isinstance(got, dict) or got.get('match') not in ('all_words', 'most_words') or not isinstance(got.get('acts'), list):
+            return None
+        asked, acts = set(corpora), []
+        for row in got['acts']:
+            corpus, act, n, _score, best = row
+            if (corpus not in asked or not isinstance(act, str) or not isinstance(n, int) or isinstance(n, bool) or n < 1
+                    or not isinstance(best, list) or not best or not all(isinstance(b, str) and b and indexed_file(corpus, b) for b in best)):
+                return None
+            acts.append((corpus, act, n, list(best)))
+        return {'match': got['match'], 'whole': bool(got.get('whole')), 'acts': acts}
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def _index_paths_checked(got, after: str | None, size: int) -> list | None:
     if not isinstance(got, (list, tuple)) or len(got) > size or not all(isinstance(p, str) and p for p in got):
         return None
@@ -4905,10 +4935,20 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     # the text in force today, of the corpora wholly within the scope whose files are all their own. case_sensitive
     # is left to grep: the index folds case, and its count would be of more files than match.
     known: dict[str, int] = {}
+    acts_found = None  # the acts that match best, where a host's index groups by act (index_acts)
     if search_index is not None and not args.get('regex') and not args.get('case_sensitive') and date == law.day('today'):
         able = [c for c, _ in pins if scoped(c, scope) == '' and not placed_elsewhere(c)]
         known = {**index_counts(query, [c for c in able if c not in judged], False),
                  **index_counts(query, [c for c in able if c in judged], True)}
+        if order == 'relevance':
+            acts_found = index_acts(query, [c for c in able if c not in judged])
+            if acts_found and acts_found['acts']:
+                # The bodies of law in the order of their best act (one sort, the same for every part of the answer);
+                # those with no act among the best after them, as they stood.
+                first: dict[str, int] = {}
+                for corpus, *_ in acts_found['acts']:
+                    first.setdefault(corpus, len(first))
+                pins.sort(key=lambda pin: first.get(pin[0], len(first)))
     # The corpora a host's index can narrow (spec), and those of them with no file that can match at all. On a
     # past date, a body of law only when the index of changes holds its history up to the pin (the files that ever
     # held the words are those of today's text and those a change touched).
@@ -5010,6 +5050,44 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     listed = set(files)  # paths for the answer's list: those read and, while the list has room, the next the index names
     for corpus, ix in by_index.items():
         listed.update(ix['paths'])
+    # No provision holds the words as a phrase, and the index knows the acts that hold them all (or most of them):
+    # the best provisions of those acts are the rows, each with its line that holds the most of the words. A search
+    # of several words was an exact phrase or nothing: "punishment for theft" found nothing in India's law, whose
+    # section 303 is "Theft" and says "shall be punished".
+    fallback = None
+    if not n_files and not offset and not late and acts_found and acts_found['acts']:
+        fallback = acts_found['match']
+        words = [w for w in re.findall(r'\w+', query) if len(w) >= 3] or re.findall(r'\w+', query)
+        shas, wanted = dict(pins), {}
+        for corpus, _act, _n, best in acts_found['acts']:
+            for name in best[:2]:
+                if len(results) < limit:
+                    results.append({'path': f'{corpus}/{name}', 'line': None, 'text': ''})
+                    wanted.setdefault(corpus, []).append(name)
+                    owners[corpus] = None
+        for corpus, names in wanted.items():
+            sha = shas.get(corpus)
+            if not sha or not words or isinstance(sha, str) and sha.startswith('@'):
+                continue
+            try:
+                done = git_run(['git', 'grep', '--threads=1', '-n', '-I', '-i', '-F', *[x for w in words[:8] for x in ('-e', w)], sha, '--', *names],
+                               cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace', timeout=10,
+                               env={**os.environ, 'GIT_LITERAL_PATHSPECS': '1'})
+            except subprocess.TimeoutExpired:
+                continue
+            best_line: dict[str, tuple] = {}
+            for line in done.stdout.splitlines():
+                rel, _, rest = line.removeprefix(sha + ':').partition(':')
+                number, _, text = rest.partition(':')
+                held = sum(1 for w in words if w.lower() in text.lower())
+                if rel not in best_line or held > best_line[rel][0]:
+                    best_line[rel] = (held, int(number) if number.isdigit() else None, text.strip()[:400])
+            for row in results:
+                got = best_line.get(row['path'][len(corpus) + 1:]) if row['path'].startswith(corpus + '/') else None
+                if got:
+                    row['line'], row['text'] = got[1], got[2]
+        n_lines = len(results)
+        listed.update(r['path'] for r in results)
     # The first SEARCH_INDEX_TOP_UPS corpora with files not read are asked once each, for an even share of the room:
     # the list then shows several jurisdictions, and may stay short of SEARCH_PATHS where hundreds of corpora matched.
     more_files = [(c, ix) for c, ix in by_index.items() if not ix['whole'] and ix['files'] > len(ix['paths'])][:SEARCH_INDEX_TOP_UPS]
@@ -5040,11 +5118,26 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     notes = short_caveats(sorted({n for corpus in owners for n in law.caveats(date, corpus)}))  # once a corpus, not once a line
     summary = (f'{n_files} provision(s) in force on {date} contain {query!r}' + (f' in {scope}' if scope else '')
                + (f'; showing {len(results)} line(s).' if results else '.'))
+    if fallback:
+        summary = (f'No provision in force on {date} holds {query!r} as a phrase' + (f' in {scope}' if scope else '')
+                   + f"; showing the {len(results)} best provision(s) that hold {'all' if fallback == 'all_words' else 'most of'} its words"
+                   + ' (pass regex true for a pattern, or fewer words for the phrase).')
+    acts_rows = []
+    if acts_found and acts_found['acts'] and not offset:
+        for corpus, act, n, best in acts_found['acts'][:SEARCH_ACTS]:
+            try:
+                title = act_title(corpus, f'{act}/x.md') if act else ''
+            except BaseException:  # noqa: BLE001  (SystemExit is law.py's refusal: the act is named by its folder)
+                title = ''
+            acts_rows.append({'path': f'{corpus}/{act}' if act else corpus, 'title': title, 'matching_provisions': n,
+                              'best': [f'{corpus}/{b}' for b in best]})
     floor = any(ix.get('floor') for ix in by_index.values())  # a narrowed corpus with more candidates than were read
     if floor:
         summary = f'At least {summary[0].lower()}{summary[1:]}'
     headline = (f"{'At least ' if cut or unread or late or floor else ''}{n_files} provision(s) in force on {date} contain {query!r}"
                 + (f' in {scope}' if scope else '') + f", on {'at least ' if more_lines else ''}{n_lines} line(s).")
+    if fallback:
+        headline = summary
     stopped = []  # why the search of case law is not whole, and how to read further: in the text and in `hints`
     if floor:
         stopped.append('More files could hold this than were read: the counts are floors. Name one body of law, or add words, to read them all.')
@@ -5067,7 +5160,14 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         if not cut and not floor:
             summary = f'At least {summary[0].lower()}{summary[1:]}'
     more = more_note(place, 'lines')
-    lines = ([summary] + not_read + ([more] if more else []) + [f'Note: {n}' for n in notes] + [f'Left out: {n}' for n in left_out]
+    act_lines = []
+    if acts_rows:  # the acts first: an answer of lines alone named no act, and "which laws are about this" had no answer
+        whole = '' if acts_found['whole'] else ' (of the best-matching provisions)'
+        act_lines = [f"Acts that hold {'all' if acts_found['match'] == 'all_words' else 'most of'} the words, best first{whole}; "
+                     'list_provisions shows an act, read_law a provision:']
+        act_lines += [f"  {a['path']}" + (f"  {a['title']}" if a['title'] else '') + f"  ({a['matching_provisions']} provision(s); best: {a['best'][0]})"
+                      for a in acts_rows]
+    lines = ([summary] + not_read + ([more] if more else []) + act_lines + [f'Note: {n}' for n in notes] + [f'Left out: {n}' for n in left_out]
              + [f"{r['path']}:{r['line']}: {r['text']}" for r in results] + ([caselaw_note(caselaw).strip()] if caselaw else []))
     hints = []  # guidance that is not a row or a note on the record: in the text, and in the structured answer as `hints`
     named = [e for e in aliases() if e.get('paths') and any(query.lower() == n.lower() for n in e['names'])]
@@ -5082,6 +5182,18 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         hints.append('The words were matched as whole words (the last, if long, also as the start of a word). To match '
                      'part of a word, pass regex true.')
     lines += hints
+    held = []
+    if not results and not offset and not late:
+        # Nothing found is nothing in the record, and the record of a country may be six acts: the answer says what
+        # the bodies of law it searched hold, so that "no such law" is not read into it.
+        described = {c['path']: c.get('coverage') or '' for c in law.manifest()['corpora']}
+        mine = [c for c, _ in pins if c not in judged]
+        held = [{'corpus': c, 'holds': described.get(c, '')} for c in mine[:6]]
+        hints.append(f"Searched {len(mine)} bod{'y' if len(mine) == 1 else 'ies'} of law, which hold only what they describe"
+                     + (': ' + '; '.join(f"{h['corpus']}: {h['holds']}" for h in held if h['holds']) if any(h['holds'] for h in held) else '')
+                     + ('; ...' if len(mine) > len(held) else '') + '. A law that is not held here cannot be found here '
+                     '(list_jurisdictions shows what is held); the law is searched in its own language.')
+        lines.append(hints[-1])
     related = []
     # (not with the call's time nearly up; nor over every jurisdiction when an index answered in no time: the change
     # notes of every corpus took 30 s to read)
@@ -5130,6 +5242,9 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                               **({'law_unread_for_time': late[:20], 'law_unread_count': len(late)} if late else {}),
                               **({'hints': hints} if hints else {}),
                               **({'matched_by': 'index'} if by_index else {}),
+                              **({'acts': acts_rows} if acts_rows else {}),
+                              **({'match': fallback or 'phrase'} if acts_found is not None else {}),
+                              **({'searched': held} if held else {}),
                               **({'order': 'relevance'} if any(ix.get('ranked') for ix in by_index.values()) else {})}
 
 
@@ -10010,7 +10125,7 @@ TOOLS = [
     ('laws_between', 'Every law that took effect between two dates, both days included, across all jurisdictions or one, in the order they took effect.',
      {'start': DAY, 'end': DAY, 'jurisdiction': SCOPE, 'kind': KIND, 'max_results': at_most(200, MAX_ITEMS), 'offset': OFFSET},
      ['start', 'end'], t_laws_between),
-    ('search_law', 'Search the text of all the law in force on a date, across every jurisdiction or one. Plain text by default.',
+    ('search_law', 'Search the text of all the law in force on a date, across every jurisdiction or one, in the law\'s own language. Plain words are a phrase; when no provision holds the phrase, the provisions that hold all the words are given. Names the acts that match best.',
      {'query': {'type': 'string', 'description': 'Words or a phrase; a regular expression if regex is true.'}, 'date': DATE, 'jurisdiction': SCOPE,
       'kind': KIND, 'regex': REGEX, 'case_sensitive': {'type': 'boolean', 'description': 'Match upper and lower case as written (default false: either case matches).'},
       'max_results': at_most(30, 200, 'Matching lines to return'), 'offset': OFFSET,
