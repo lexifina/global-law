@@ -1,0 +1,92 @@
+{
+  "_doc": [
+    "Canonical comparison form for diff.py (DESIGN D4). Applied to BOTH sides; it renames, it never changes a verdict.",
+    "status: each side's status column -> canonical class none | negative | partial | unknown.",
+    "  'partial' is doctrine 8.2's 'partiallyNegative' state of the anonymous issue: the ref writes it as",
+    "  negative + kind ':partial', the Lean as unknown:partialScope on holding '-'.",
+    "kind: event kinds of negative rows -> the Lean Neg vocabulary (the ref keeps the finer event kinds).",
+    "reason: certificate reasons -> one shared vocabulary (only ok vs rejected is scored; reasons are reported).",
+    "finding: finding kinds -> canonical keys; atRisk families are matched by reason family (both sides write atRisk as (source, subject); the Lean's inferredRejection/inferredSupersession are re-oriented).",
+    "uncompared_findings: kinds only one side defines (listed in DIFFTEST.md as coverage, not disagreements)."
+  ],
+  "status": {
+    "good": "none",
+    "none": "none",
+    "negative": "negative",
+    "unknown": "unknown"
+  },
+  "kind": {
+    "overruled": "overruled",
+    "disapproved": "overruled",
+    "recededFrom": "overruled",
+    "abrogated": "abrogated",
+    "supersededByEnactment": "superseded",
+    "superseded": "superseded",
+    "withdrawn": "withdrawn",
+    "substitutedBy": "withdrawn",
+    "vacated": "vacated",
+    "rehearingEnBancGranted": "vacated",
+    "reversed": "reversed",
+    "depublished": "depublished",
+    "reviewGranted": "reviewPending",
+    "reviewPending": "reviewPending",
+    "reviewGrantedDepublished": "depublished"
+  },
+  "reason": {
+    "ok": "ok",
+    "okUnverifiedBy": "ok",
+    "targetLater": "ok",
+    "noAuthority": "ok",
+    "noDecision": "sha",
+    "shaUnknown": "sha",
+    "shaMismatch": "sha",
+    "offsets": "quote",
+    "quoteLength": "quote",
+    "noWindow": "quote",
+    "quoteMismatch": "quote",
+    "noCue": "cue",
+    "noVerb": "cue",
+    "disqualified": "disqualified",
+    "targetUnresolved": "target",
+    "noTarget": "target",
+    "partNotMajority": "part",
+    "part": "part",
+    "badRole": "role",
+    "role": "role",
+    "badRow": "badRow",
+    "windowHash": "hash"
+  },
+  "_reason_note": "Lean's targetLater and noAuthority come after every text check: the text certificate passed and the row failed date order or power, which the ref decides in canChangeStatus (status layer). Both count as a passed certificate here.",
+  "cites_findings": [
+    "citesOverruled",
+    "citesVacated",
+    "citesWithdrawn",
+    "citesNotCitable",
+    "appliesSupersededHolding"
+  ],
+  "pair_findings": [
+    "citesUnpublishedAsBinding",
+    "pluralityTreatedAsBinding",
+    "panelDepartsWithoutEnBanc",
+    "ignoresBindingInUnit"
+  ],
+  "atRisk": {
+    "inferredRejection": "inferred",
+    "inferred": "inferred",
+    "inferredSupersession": "possiblySuperseded",
+    "possiblySuperseded": "possiblySuperseded",
+    "citesLaterNegated": "citesLaterNegated",
+    "supersededConductUnknown": "supersededConductUnknown",
+    "soft": "soft",
+    "claim": "claim",
+    "contraryBinding": "contraryBinding"
+  },
+  "uncompared_findings": {
+    "lean": [
+      "inconsistentBindingBase"
+    ],
+    "ref": []
+  },
+  "_atRisk_note": "Keys are ('atRisk:<family>', source, subject) without the kind/holding detail: two soft treatments of one pair (soft:limited, soft:questioned) are one key. citesLaterNegated and supersededConductUnknown: (citing, cited).",
+  "_conflict_note": "conflict rows: ('conflict', issue, court, unit), unit '-' for none or 0; the Lean's splits.tsv 'conflict' rows (court as 123 or 123/4) vs the ref's conflicts_asof.tsv; firm and answers compared."
+}

@@ -17,7 +17,7 @@ the 103rd Congress or earlier), and to "edition" for words first seen in a later
 import collections, difflib, hashlib, os, re, subprocess, sys
 from multiprocessing import Pool
 
-sys.path.insert(0, r"C:\Users\alany\Documents\global-law-lean\lean-proofs\tools\caselaw")
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 from usc_encode import norm, blocks  # noqa: E402
 
 HOME = os.path.expanduser("~/Documents/us-caselaw-lean-work")
