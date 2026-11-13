@@ -63,7 +63,7 @@ cd lean-proofs
 lake build LegalProofs.CaseLaw2 LegalProofs.USCaseLaw   # model, proofs, 223 #guard checks, mutation matrix, statement lock
 python3 caselaw2/audit/audit.py check                    # 141 theorems; 0 statement changes; 0 problems
 cd caselaw2
-bash run_lean.sh 2 fixtures/data fixtures/edges /tmp/fx  # the runner on the fixtures (compare with fixtures/out)
+bash run_lean.sh 2 fixtures/data fixtures/edges /tmp/fx  # the runner on the fixtures (compare with fixtures/out; summary.tsv also carries timings)
 python3 ../tools/caselaw2/ref/precedent_ref.py run --data fixtures/data --edges fixtures/edges --out /tmp/fxref
 python3 ../tools/caselaw2/ref/diff.py /tmp/fx /tmp/fxref --info   # Lean against the Python reference
 ```
