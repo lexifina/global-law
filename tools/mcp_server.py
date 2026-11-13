@@ -4537,6 +4537,17 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     cut, unread = set(), set()
     deadline = getattr(_call, 'deadline', 0.0)
 
+    def within(corpus):
+        # The files git is to read of a corpus: all of them, or those under the folder (or the file) the scope names
+        # inside it. Every file was read and the lines outside the scope dropped: a search of one act of Romania
+        # read 1.2 million files, and since SCAN_SECONDS was named as not read after 30 s.
+        inner = scoped(corpus, scope) if scope else ''
+        if not inner:
+            return ['*.md']
+        if inner.endswith('.md'):
+            return [f':(literal){inner}']
+        return [re.sub(r'([*?\[\]\\])', r'\\\1', inner) + '*.md']  # (as the lines are kept: paths that begin with the scope)
+
     def grep(pin):
         corpus, sha = pin
         sha = tree_of(corpus, sha)
@@ -4545,7 +4556,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         if corpus not in judged:
             # (for SCAN_SECONDS at most: a body of law that nothing narrowed is named as not read, where a search of
             # Romania by a regular expression held the whole call past its time)
-            return corpus, sha, git_run(['git', 'grep', '--threads=1', '-n', '-I', *flags, '-e', pattern, sha, '--', '*.md'],
+            return corpus, sha, git_run(['git', 'grep', '--threads=1', '-n', '-I', *flags, '-e', pattern, sha, '--', *within(corpus)],
                                         cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace',
                                         timeout=min(GIT_TIMEOUT, SCAN_SECONDS))
         _call.deadline = deadline
@@ -4561,7 +4572,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         while not _GREP_SEM.acquire(timeout=0.5):
             checkpoint()
         try:
-            return corpus, sha, case_grep(corpus, sha, lines)
+            return corpus, sha, case_grep(corpus, sha, lines, within(corpus))
         finally:
             _GREP_SEM.release()
 
