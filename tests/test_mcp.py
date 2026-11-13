@@ -4567,19 +4567,20 @@ class ActsIndex(FilesIndex):
         super().__init__(m, hold)
         self.broken = broken
 
-    def acts(self, query, corpora):
-        self.calls.append(('acts', query, list(corpora)))
+    def acts(self, query, corpora, phrase=False):
+        self.calls.append(('acts', query, list(corpora), phrase))
         if self.broken:
             return self.broken
         words = self.words(query).split()
-        for need, match in ((len(words), 'all_words'), (max(1, -(-len(words) * 7 // 10)), 'most_words')):
+        ways = ((None, 'phrase'),) if phrase else ((len(words), 'all_words'), (max(1, -(-len(words) * 7 // 10)), 'most_words'))
+        for need, match in ways:
             found = {}
             for corpus in corpora:
                 if self.hold is not None and corpus not in self.hold:
                     continue
                 for name, text in self.corpus(corpus).items():
                     held = [text.count(' ' + w + ' ') for w in words]
-                    if sum(1 for h in held if h) >= need:
+                    if (name in self.matching(query, corpus)) if phrase else sum(1 for h in held if h) >= need:
                         found.setdefault((corpus, name.rsplit('/', 1)[0] if '/' in name else ''), []).append((sum(held), name))
             if found:
                 rows = []
@@ -4590,7 +4591,7 @@ class ActsIndex(FilesIndex):
                 return {'match': match, 'whole': True, 'acts': rows[:40]}
             if len(words) < 2:
                 break
-        return {'match': 'all_words', 'whole': True, 'acts': []}
+        return {'match': 'phrase' if phrase else 'all_words', 'whole': True, 'acts': []}
 
 
 class SearchByAct(unittest.TestCase):
@@ -4621,7 +4622,10 @@ class SearchByAct(unittest.TestCase):
         self.assertIn(IE_C + '/data-protection-act-2018', [a['path'] for a in got['acts'][:3]])
         self.assertTrue(all(a['title'] for a in got['acts'][:3]))
         self.assertTrue(all(b.startswith(a['path'] + '/') for a in got['acts'] for b in a['best']))
-        self.assertIn('Acts that hold all the words, best first', text)
+        self.assertIn('Acts that hold the words as a phrase, best first', text)
+        self.assertEqual(got['acts_by'], 'phrase')
+        self.assertEqual(sum(a['matching_provisions'] for a in got['acts']), got['provision_count'])
+        self.assertLessEqual(len(self.by(index, **{**ask, 'max_results': 3})[1]['provisions']), 40)
         self.assertEqual(got['provision_count'], plain['provision_count'])
         key = lambda r: (r['path'], r['line'], r['text'])  # noqa: E731
         self.assertEqual(sorted(map(key, got['results'])), sorted(map(key, plain['results'])))

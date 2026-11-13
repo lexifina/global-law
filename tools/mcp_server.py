@@ -460,10 +460,11 @@ def index_ranked(query: str, corpus: str, skip: int, size: int) -> list | None:
 SEARCH_ACTS = 12  # acts search_law names ahead of the lines
 
 
-def index_acts(query: str, corpora: list) -> dict | None:
-    """search_index.acts, checked: {'match': 'all_words' | 'most_words', 'whole': bool, 'acts': [(corpus, act folder,
-    files, [best files]), ...]} for the corpora asked, best act first; None when the index has no such method, does
-    not answer, or answers anything else.
+def index_acts(query: str, corpora: list, phrase: bool = False) -> dict | None:
+    """search_index.acts, checked: {'match': 'phrase' | 'all_words' | 'most_words', 'whole': bool, 'acts': [(corpus,
+    act folder, files, [best files]), ...]} for the corpora asked, best act first; None when the index has no such
+    method, does not answer, or answers anything else. `phrase`: the acts of the files that hold the words as a
+    phrase (asked when some do: by all the words, "right to erasure" named the Dentists Act among its acts).
     A host's index may group the files that hold a query's words by the act they belong to (the folder that holds
     them) and rank the acts by their best files: search_law then names those acts first, reads the bodies of law in
     the order of their best act (a country's law was read in the order of the names, and Bavaria filled the page for
@@ -472,8 +473,9 @@ def index_acts(query: str, corpora: list) -> dict | None:
     if group is None or not corpora:
         return None
     try:
-        got = group(query, list(corpora))
-        if not isinstance(got, dict) or got.get('match') not in ('all_words', 'most_words') or not isinstance(got.get('acts'), list):
+        got = group(query, list(corpora), True) if phrase else group(query, list(corpora))
+        if (not isinstance(got, dict) or got.get('match') not in (('phrase',) if phrase else ('all_words', 'most_words'))
+                or not isinstance(got.get('acts'), list)):
             return None
         asked, acts = set(corpora), []
         for row in got['acts']:
@@ -4941,7 +4943,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         known = {**index_counts(query, [c for c in able if c not in judged], False),
                  **index_counts(query, [c for c in able if c in judged], True)}
         if order == 'relevance':
-            acts_found = index_acts(query, [c for c in able if c not in judged])
+            acts_found = index_acts(query, [c for c in able if c not in judged], any(n for c, n in known.items() if c not in judged))
             if acts_found and acts_found['acts']:
                 # The bodies of law in the order of their best act (one sort, the same for every part of the answer);
                 # those with no act among the best after them, as they stood.
@@ -5163,7 +5165,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     act_lines = []
     if acts_rows:  # the acts first: an answer of lines alone named no act, and "which laws are about this" had no answer
         whole = '' if acts_found['whole'] else ' (of the best-matching provisions)'
-        act_lines = [f"Acts that hold {'all' if acts_found['match'] == 'all_words' else 'most of'} the words, best first{whole}; "
+        how = {'phrase': 'the words as a phrase', 'all_words': 'all the words'}.get(acts_found['match'], 'most of the words')
+        act_lines = [f"Acts that hold {how}, best first{whole}; "
                      'list_provisions shows an act, read_law a provision:']
         act_lines += [f"  {a['path']}" + (f"  {a['title']}" if a['title'] else '') + f"  ({a['matching_provisions']} provision(s); best: {a['best'][0]})"
                       for a in acts_rows]
@@ -5187,9 +5190,9 @@ def t_search_law(args: dict) -> tuple[str, dict]:
         # Nothing found is nothing in the record, and the record of a country may be six acts: the answer says what
         # the bodies of law it searched hold, so that "no such law" is not read into it.
         described = {c['path']: c.get('coverage') or '' for c in law.manifest()['corpora']}
-        mine = [c for c, _ in pins if c not in judged]
+        mine = [c for c, _ in pins]
         held = [{'corpus': c, 'holds': described.get(c, '')} for c in mine[:6]]
-        hints.append(f"Searched {len(mine)} bod{'y' if len(mine) == 1 else 'ies'} of law, which hold only what they describe"
+        hints.append(f"Searched {len(mine)} bod{'y' if len(mine) == 1 else 'ies'} of law or case law, which hold only what they describe"
                      + (': ' + '; '.join(f"{h['corpus']}: {h['holds']}" for h in held if h['holds']) if any(h['holds'] for h in held) else '')
                      + ('; ...' if len(mine) > len(held) else '') + '. A law that is not held here cannot be found here '
                      '(list_jurisdictions shows what is held); the law is searched in its own language.')
@@ -5228,9 +5231,12 @@ def t_search_law(args: dict) -> tuple[str, dict]:
             hints.append('Nor does any change note. Words that name a reform (a popular name) may not appear in the law; '
                          'try words the text itself would use, or find_provision.')
             lines.append(hints[-1])
-    provisions = every_corpus_first(listed, SEARCH_PATHS)
-    if len(provisions) < n_files:  # (with an index, the list may hold fewer than SEARCH_PATHS: the files it read)
-        lines.insert(1, f"The structured answer lists {f'the first {SEARCH_PATHS}' if len(provisions) == SEARCH_PATHS else len(provisions)}"
+    # The list of paths follows what was asked for (twice the lines, 40 at least, SEARCH_PATHS at most): asked for
+    # three lines, an answer carried 230 paths, and an assistant's context went on them.
+    most_paths = min(SEARCH_PATHS, max(40, 2 * limit))
+    provisions = every_corpus_first(listed, most_paths)
+    if len(provisions) < n_files:  # (with an index, the list may hold fewer: the files it read)
+        lines.insert(1, f"The structured answer lists {f'the first {most_paths}' if len(provisions) == most_paths else len(provisions)}"
                         f' of {n_files} matching provisions; narrow the search with a jurisdiction or longer words.')
     hints = stopped + hints
     return '\n'.join(lines), {'summary': headline, 'date': date, 'provisions': provisions,
@@ -5244,6 +5250,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                               **({'matched_by': 'index'} if by_index else {}),
                               **({'acts': acts_rows} if acts_rows else {}),
                               **({'match': fallback or 'phrase'} if acts_found is not None else {}),
+                              **({'acts_by': acts_found['match']} if acts_rows else {}),
                               **({'searched': held} if held else {}),
                               **({'order': 'relevance'} if any(ix.get('ranked') for ix in by_index.values()) else {})}
 
