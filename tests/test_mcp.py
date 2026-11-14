@@ -4709,6 +4709,16 @@ class ProvisionByActAndNumber(unittest.TestCase):
             self.assertEqual(m.named_unit_parts(query), want, query)
         for query in ('theft', 'section 5', '1182', 'right to erasure', 'Data Protection Act'):
             self.assertIsNone(m.named_unit_parts(query), query)
+        # the word for an article in other languages, and the number before its word
+        for query, want in (('Kodi i Punës neni 92', (['Kodi', 'i', 'Punës'], '92', 'neni')),
+                            ('Zakon o radu članak 77', (['Zakon', 'o', 'radu'], '77', 'članak')),
+                            ('Αστικός Κώδικας άρθρο 914', (['Αστικός', 'Κώδικας'], '914', 'άρθρο')),
+                            ('Zakon o delovnih razmerjih 159. člen', (['Zakon', 'o', 'delovnih', 'razmerjih'], '159', 'člen')),
+                            ('Darbo kodeksas 126 straipsnis', (['Darbo', 'kodeksas'], '126', 'straipsnis')),
+                            ('İş Kanunu madde 53', (['İş', 'Kanunu'], '53', 'madde'))):
+            self.assertEqual(m.named_unit_parts(query), want, query)
+        self.assertEqual(m.named_unit_parts('Equality Act 2010 section 4'), (['Equality', 'Act', '2010'], '4', 'section'))  # (2010 is no "2010 section")
+        self.assertEqual([m.file_groups(f) for f in ('neni-092.md', 'clanak-077.md', 'clen-159.md')], [['92'], ['77'], ['159']])
         self.assertEqual(m.unit_groups('L221-18'), ['l', '221', '18'])
         self.assertEqual(m.unit_groups('35-9A-421'), ['35', '9', 'a', '421'])
         self.assertEqual(m.file_groups('sec-0092-103.md'), ['92', '103'])

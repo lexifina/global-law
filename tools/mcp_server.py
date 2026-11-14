@@ -2743,17 +2743,21 @@ def cited_provisions(query: str, scope: str, limit: int = MAX_ITEMS) -> list[tup
 # its number), and the file in that folder by the number.
 UNIT_MARKS = frozenset(('§', '§§', 'section', 'sections', 'sec', 'sect', 's', 'ss', 'art', 'article', 'articles', 'artikel', 'articolo',
                         'articolul', 'artículo', 'articulo', 'artykuł', 'artykul', 'artigo', 'reg', 'regulation', 'rule', 'clause', 'cl',
-                        'члан', 'члана', 'чл', 'član', 'člana', 'clan', 'čl', 'член', 'чл', 'статья', 'статьи', 'стаття', 'статті',
+                        'члан', 'члана', 'чл', 'član', 'člana', 'clan', 'čl', 'статья', 'статьи', 'стаття', 'статті',
+                        'članak', 'članka', 'clanak', 'člen', 'člena', 'clen', 'neni', 'nenit', 'άρθρο', 'άρθρου', 'αρθρο', 'άρθ', 'αρθ', 'madde', 'maddesi', 'pants', 'panta',
+                        'straipsnis', 'straipsnio', 'artikkel', 'artikla', 'pykälä', 'grein', 'cikk', 'paragrahv', 'ст', 'член', 'члена',
                         'par', 'para', 'paragraph', 'paragraf', 'schedule', 'sch', 'annex', 'anexa', 'annexe', 'anlage', 'bijlage'))
 # Words of a file's path that say what kind of unit it is, not which one ("sec-0092-103", "title-45-part-0164").
 UNIT_WORDS = frozenset(('sec', 'section', 's', 'art', 'article', 'artikel', 'cl', 'clause', 'rule', 'r', 'reg', 'regulation', 'par',
-                        'clan', 'clen', 'chlen', 'statya', 'stattia',
+                        'clan', 'clen', 'chlen', 'statya', 'stattia', 'clanak', 'neni', 'st', 'arthro', 'madde', 'pants', 'straipsnis', 'pykala',
                         'para', 'paragraph', 'unit', 'title', 'part', 'chapter', 'ch', 'sch', 'schedule', 'book', 'div', 'pt'))
 KANJI_DIGITS = {'〇': 0, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9}
 UNIT_KINDS = (('section', 'sections', 'sec', 'sect', 's', 'ss'),
               ('art', 'article', 'articles', 'artikel', 'articolo', 'articolul', 'artículo', 'articulo', 'artykuł', 'artykul', 'artigo',
-               'члан', 'члана', 'чл', 'član', 'člana', 'clan', 'čl', 'член', 'статья', 'статьи', 'стаття', 'статті', 'clen', 'chlen',
-               'statya', 'stattia'),
+               'члан', 'члана', 'чл', 'član', 'člana', 'clan', 'čl', 'член', 'члена', 'статья', 'статьи', 'стаття', 'статті', 'clen', 'chlen',
+               'statya', 'stattia', 'članak', 'članka', 'clanak', 'člen', 'člena', 'neni', 'nenit', 'άρθρο', 'άρθρου', 'αρθρο', 'άρθ', 'αρθ', 'arthro',
+               'madde', 'maddesi', 'pants', 'panta', 'straipsnis', 'straipsnio', 'artikkel', 'artikla', 'pykälä', 'pykala', 'grein', 'cikk', 'paragrahv',
+               'ст', 'st'),
               ('reg', 'regulation'), ('rule', 'r'), ('clause', 'cl'), ('par', 'para', 'paragraph', 'paragraf'),
               ('schedule', 'schedules', 'sch'), ('annex', 'anexa', 'annexe', 'anlage', 'bijlage'))
 UNIT_AFTER = frozenset(('sch', 'schedule', 'schedules', 'annex', 'anexa', 'annexe', 'anlage', 'bijlage', 'appendix'))
@@ -2799,8 +2803,9 @@ def named_unit_parts(query: str) -> tuple[list[str], str, str] | None:
             at = (i, i + 1)  # the last marker with a number after it
     if at is None:
         for i in range(len(tokens) - 1):
-            if numbered(tokens[i]) and tokens[i + 1].startswith('§'):
-                at = (i + 1, i)  # "4 §"
+            if numbered(tokens[i]) and (tokens[i + 1].startswith('§') or (bare[i + 1].lower() in UNIT_MARKS and len(bare[i + 1]) > 2
+                                                                         and re.fullmatch(r'\d+[a-z]?\.?', tokens[i]))):
+                at = (i + 1, i)  # "4 §", "159. člen", "155 straipsnis"
     unit, name = None, None
     if at is not None:
         unit, name = tokens[at[1]], [t for i, t in enumerate(tokens) if i not in at]
@@ -2863,6 +2868,10 @@ def act_name_index(corpus: str, sha: str) -> tuple[list, dict, dict, dict]:
             add(folder, inner)
         if '(' in label:
             add(folder, re.sub(r'\([^()]*\)', ' ', label))
+        # ("LIGJI NR. 03/L-212 I PUNËS" is the Ligji i Punës; "Legea societăților nr. 31/1990" the Legea societăților)
+        bare_label = re.sub(r'(?i)(?<![\w.])(?:nr|no|br|бр|№|č|št|sz)\.?\s*[\w./\-]*\d[\w./\-]*', ' ', label)
+        if bare_label != label and len(_label_words(bare_label)) >= 2:
+            add(folder, bare_label)
 
     titled = set()
     for folder, info in folder_titles(corpus, sha).items():
@@ -2945,6 +2954,15 @@ def acts_by_name(name: list[str], corpus: str, sha: str) -> list[tuple[float, st
     parts = corpus.split('/')
     if any(w == parts[-1] or w == parts[-2] + parts[-1] for w in alpha):
         offer('', 0.8, corpus)
+    if not found and len(words) > 1 and not mine:
+        # A folder at the top that holds its provisions itself and is named by the first word ("ustav/clanak-001.md"
+        # for "Ustav Republike Hrvatske", where the folder has no title): the one act of its kind, a constitution.
+        for i in by_word.get(words[0], ()):
+            got, folder, label = entries[i]
+            if got == words[:1] and '/' not in folder:
+                under = names_under(corpus, sha, folder)
+                if under and '/' not in under[0][len(folder) + 1:]:
+                    offer(folder, 0.7, label)
     return sorted(((score, folder, label) for folder, (score, label) in found.items()), key=lambda r: (-r[0], r[1]))
 
 
@@ -3041,7 +3059,7 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
                 for f in files[:NAMED_UNIT_SHOWN]]
     if act_folders(query, corpora)[0]:
         return []
-    lead = [w.lstrip('0') or '0' for t in name for w in _label_words(t) if w.isdigit()]
+    lead = [t.strip('.,').lstrip('0') or '0' for t in name if t.strip('.,').isdigit()]  # ("45 CFR 164.502"; not the 1 of "ZDR-1")
     offers = []
     for corpus in corpora:
         sha = corpus_head(corpus)
@@ -3248,6 +3266,22 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                    'or search_law for the name within the jurisdiction of its court.')
             return (f"No decision named {query.strip()!r} in the case law this {'server holds' if HOSTED else 'clone serves'}"
                     + (f' under {scope}' if scope else '') + f' ({len(served)} case-law corpora). ' + how),                 {'results': [], 'case_law_served': served, 'hint': how, 'read_as': 'case name'}
+    # An act by its number alone, as a register files it ("Ν. 4624/2019" is nomos-4624-2019; "Zakon 24/2005"): the
+    # act's folder, where the numbers in the query are one folder's numbers (acts_by_name) in the one body of law
+    # the scope reaches.
+    if not DOCKET_QUERY.fullmatch(query) and not offset and scope and len(re.findall(r'\d+', query)) >= 2 and len(query) <= 60:
+        try:
+            reach = [c['path'] for c in law.manifest()['corpora'] if not law.is_caselaw(c)
+                     and (c['path'] == scope or c['path'].startswith(scope.rstrip('/') + '/') or scope.startswith(c['path'] + '/'))]
+            by_number = [(c, f, label) for c in reach[:4] for score, f, label in acts_by_name(re.findall(r'[^\s,;()]+', query), c, corpus_head(c))
+                         if score == 0.9 and f] if len(reach) <= 4 else []
+        except SystemExit:
+            by_number = []
+        if len(by_number) == 1:
+            c, f, label = by_number[0]
+            title = (folder_titles(c, corpus_head(c)).get(f) or {}).get('title') or ''
+            return listed([{'path': f'{c}/{f}', 'kind': 'act', 'title': str(title), 'score': 100,
+                            'heading': f"{title or 'an act'}  (the act of that number: list_provisions lists its provisions)"}], read_as='act number')
     # A docket number alone ("1170253", "77-440", "No. 1389", "Docket No. 2:19-cv-01234"), or a US reporter citation of
     # a form the reporter list lacks ("8 Bush 587", "2004-NMCA-020"): looked up in the case law served, the decisions a
     # shared docket names ranked by the words of the query, and never handed to the heading search, which read every
