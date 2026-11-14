@@ -3191,6 +3191,8 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
     if re.search(r'\b\d+[a-z]?\s*U\.?\s?S\.?\s?C\b', query, re.I) or (MALTA_ACT.search(query) and (not scope or scope.startswith('malta'))):
         return []
     marked = bool(mark) or '§' in query
+    # (a number with a letter in it is a provision's whatever stands before it: "Code du travail L233-4")
+    lettered = bool(re.search(r'[^\W\d_]', unit) and re.search(r'\d', unit))
     # An act a popular name names ("Codul rutier art. 100", aliases.json): that act's folder, when the name is all
     # that stands beside the number; a name inside other words is left to the look-ups after this one ("Art. 16a GG").
     said = fold(' '.join(name)).strip(' .,')
@@ -3201,7 +3203,7 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
             continue
         known = next((n for n in entry['names'] if fold(n) == said), None)
         home = next((c for c in corpora if entry['scope'].startswith(c + '/')), None)
-        if known is None or home is None or not marked:
+        if known is None or home is None or not (marked or lettered):
             return []
         folder = entry['scope'][len(home) + 1:]
         how, files = unit_files(home, corpus_head(home), folder, groups, above, mark, bool(above))
@@ -3470,7 +3472,12 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     # that number in that act's folder, ahead of the heading search (unit_of_named_act).
     if not DOCKET_QUERY.fullmatch(query) and not offset:
         try:
-            named_rows = unit_of_named_act(query, scope, limit)
+            # ("Code du travail L. 233-4", "article L. 3141-3": the letter is part of the number, as in "L233-4", and
+            # is read so first: left apart, "L." made the name a citation and 3141-3 was looked for in every code)
+            joined = re.sub(r'(?<![\w.])([A-Z])\.\s+(?=\d)', r'\1', query)
+            named_rows = unit_of_named_act(joined, scope, limit) if joined != query else []
+            if not named_rows:
+                named_rows = unit_of_named_act(query, scope, limit)
         except SystemExit:  # (law.py's refusal of a corpus it cannot read: the heading search answers)
             named_rows = []
         if named_rows:
