@@ -2111,25 +2111,29 @@ def _folder_titles(corpus: str, sha: str) -> dict[str, dict]:
     return out
 
 
-OPENING_FILES = ('baslangic.md',)  # the file an act opens with, where its first line is the act's title
+# The file an act opens with, where its first line is the act's title: Turkey's baslangic.md, Finland's johdanto.md,
+# Malta's title.md (whose first line is "CHAPTER 452", the title the line after).
+OPENING_FILES = ('baslangic.md', 'johdanto.md', 'title.md')
+OPENING_NUMBER = re.compile(r'(?i)(?:chapter|subsidiary legislation|cap\.?)\s+[\d.]+\s*$')
 
 
 def opening_titles(corpus: str, sha: str) -> dict[str, str]:
     """folder -> the first line of the file its act opens with (OPENING_FILES), without footnote marks: one git grep,
     kept on disk per corpus commit as readme_titles keeps its own."""
-    cache = law._store() / f"openings-{re.sub(r'[^A-Za-z0-9]+', '-', corpus)}-{sha[:12]}.json"
+    # (named by the files looked for: a list made for fewer of them is not read as this one's)
+    cache = law._store() / f"openings-{'-'.join(n[:-3] for n in OPENING_FILES)}-{re.sub(r'[^A-Za-z0-9]+', '-', corpus)}-{sha[:12]}.json"
     try:
         return json.loads(cache.read_text(encoding='utf-8'))
     except (OSError, ValueError):
         pass
-    done = git_run(['git', '-c', 'core.quotePath=false', 'grep', '-m1', '-I', '--no-color', '-e', '[^[:space:]]', sha, '--',
+    done = git_run(['git', '-c', 'core.quotePath=false', 'grep', '-m2', '-I', '--no-color', '-e', '[^[:space:]]', sha, '--',
                     *[f'*/{name}' for name in OPENING_FILES]], cwd=ROOT / corpus, capture_output=True, timeout=GIT_TIMEOUT)
     out: dict[str, str] = {}
     for line in done.stdout.decode('utf-8', 'replace').splitlines():
         _, _, rest = line.partition(':')
         path, _, first = rest.partition(':')
         title = re.sub(r'(?:\s*\[\d+\])+', '', first.lstrip('#')).strip()
-        if '/' in path and 3 <= len(title) <= 200 and not NOT_LAW.search(path):
+        if '/' in path and 3 <= len(title) <= 200 and not NOT_LAW.search(path) and not OPENING_NUMBER.fullmatch(title):
             out.setdefault(path.rsplit('/', 1)[0], title)
     if done.returncode in (0, 1):
         try:
@@ -2332,6 +2336,24 @@ def _aliases(_head: str) -> list[dict]:
 
 def aliases() -> list[dict]:
     return _aliases(head())
+
+
+def alias_applies(entry: dict, scope: str) -> bool:
+    """Whether a scoped popular name is to be read in a call: its folder is in the tree (scope_holds) and in a body
+    of law the call reaches (a host may have narrowed the call to one country; the jurisdiction asked for may be
+    another's). An entry marked "local" names different acts in different countries ("Code du travail",
+    "Strafgesetzbuch", "Ferieloven"): it is read only where everything the call reaches is its own country's."""
+    home = str(entry.get('scope') or '')
+    if not home or not scope_holds(home):
+        return False
+    served = _look()[1]
+    reach = [c for c in served if not scope or c == scope or c.startswith(scope.rstrip('/') + '/') or scope.startswith(c + '/')]
+    if not any(home == c or home.startswith(c + '/') for c in reach):
+        return False
+    if entry.get('local'):
+        country = home.split('/')[0] + '/'
+        return bool(reach) and all(c.startswith(country) for c in reach)
+    return True
 
 
 def scope_holds(path: str) -> bool:
@@ -2791,6 +2813,7 @@ UNIT_MARKS = frozenset(('§', '§§', 'section', 'sections', 'sec', 'sect', 's',
 # Words of a file's path that say what kind of unit it is, not which one ("sec-0092-103", "title-45-part-0164").
 UNIT_WORDS = frozenset(('sec', 'section', 's', 'art', 'article', 'artikel', 'cl', 'clause', 'rule', 'r', 'reg', 'regulation', 'par',
                         'clan', 'clen', 'chlen', 'statya', 'stattia', 'clanak', 'neni', 'st', 'arthro', 'madde', 'pants', 'straipsnis', 'pykala',
+                        'kap', 'luku', 'kafli', 'paragraf', 'gr',
                         'para', 'paragraph', 'unit', 'title', 'part', 'chapter', 'ch', 'sch', 'schedule', 'book', 'div', 'pt'))
 KANJI_DIGITS = {'〇': 0, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9}
 UNIT_KINDS = (('section', 'sections', 'sec', 'sect', 's', 'ss'),
@@ -2802,7 +2825,9 @@ UNIT_KINDS = (('section', 'sections', 'sec', 'sect', 's', 'ss'),
               ('reg', 'regulation'), ('rule', 'r'), ('clause', 'cl'), ('par', 'para', 'paragraph', 'paragraf'),
               ('schedule', 'schedules', 'sch'), ('annex', 'anexa', 'annexe', 'anlage', 'bijlage'))
 UNIT_AFTER = frozenset(('sch', 'schedule', 'schedules', 'annex', 'anexa', 'annexe', 'anlage', 'bijlage', 'appendix'))
-NAMED_UNIT_CORPORA = 80  # bodies of law in the scope past which an act is not looked for by its name here
+CHAPTER_WORDS = frozenset(('kap', 'kapitel', 'kapittel', 'luku', 'luvun', 'kafli'))  # a chapter, written after its number
+NAMED_UNIT_CORPORA = 120  # (Russia's federal law and its 82 regions)
+# bodies of law in the scope past which an act is not looked for by its name here
 NAMED_UNIT_SHOWN = 8  # files of one number shown (an act with a section 4 and a schedule paragraph 4)
 
 
@@ -3080,6 +3105,9 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
         if name[i].rstrip('.:').lower() in UNIT_MARKS and i + 1 < len(name) and re.search(r'\d', name[i + 1]):
             above += unit_groups(name[i + 1].strip('.,:'))
             i += 2
+        elif re.fullmatch(r'\d+[a-z]?\.?', name[i]) and i + 1 < len(name) and name[i + 1].rstrip('.:').lower() in CHAPTER_WORDS:
+            above += unit_groups(name[i].strip('.'))  # ("Brottsbalken 3 kap. 1 §", "Rikoslaki 21 luku 1 §")
+            i += 2
         else:
             kept.append(name[i])
             i += 1
@@ -3100,7 +3128,7 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
     for entry in aliases():
         if not entry.get('scope') or not any(re.search(rf'(?<![\w.]){re.escape(n)}(?![\w])', query, re.I) for n in entry.get('names', [])):
             continue
-        if not scope_holds(entry['scope']):
+        if not alias_applies(entry, scope):
             continue
         known = next((n for n in entry['names'] if fold(n) == said), None)
         home = next((c for c in corpora if entry['scope'].startswith(c + '/')), None)
@@ -3402,7 +3430,11 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     # An act by its number alone, as a register files it ("Ν. 4624/2019" is nomos-4624-2019; "Zakon 24/2005"): the
     # act's folder, where the numbers in the query are one folder's numbers (acts_by_name) in the one body of law
     # the scope reaches.
-    if not offset and len(re.findall(r'\d+', query)) >= 2 and len(query) <= 60:  # (also where the form is a docket's: "Ν. 4624/2019")
+    # (also where the form is a docket's: "Ν. 4624/2019"; not a name with a provision: "Working Time Regulations 1998
+    # regulation 13" is no act numbered 1998/13)
+    if (not offset and len(re.findall(r'\d+', query)) >= 2 and len(query) <= 60
+            and not any(t.rstrip('.:').lower() in UNIT_MARKS for t in query.split())
+            and len([t for t in re.findall(r'[^\W\d_]{3,}', query)]) <= 2):
         try:
             served = set(_look()[1])  # (a host may have narrowed the call to one country: then that is the reach)
             reach = [c['path'] for c in law.manifest()['corpora'] if not law.is_caselaw(c) and c['path'] in served
@@ -3507,7 +3539,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     for entry in aliases():
         for n in entry.get('names', []) if entry.get('scope') else []:
             mm = re.search(rf'(?<![\w.]){re.escape(n)}(?![\w])', rest, re.I)
-            if mm and scope_holds(entry['scope']):
+            if mm and alias_applies(entry, scope):
                 hint, rest, aliased = entry['scope'], rest[:mm.start()] + ' ' + rest[mm.end():], n
                 break
     noise = {'s', 's.', 'ss.', 'sec', 'sec.', 'section', 'art', 'art.', 'artikel', 'article', 'articolul', 'articolului', 'artículo', 'articulo',
