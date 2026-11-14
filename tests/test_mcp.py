@@ -4752,6 +4752,23 @@ class ProvisionByActAndNumber(unittest.TestCase):
         for query, scope in (('Zzzqqq Act section 2', 'ireland'),
                              ('personal data breach', 'ireland'), ('Australian Consumer Law section 2', 'ireland')):
             self.assertNotIn('read_as', self.find(query, scope), query)
+        # a name that names no act, beside a marked number: the rows are another act's, and the answer says so
+        self.assertIn("No act called 'Zzzqqq Act'", self.find('Zzzqqq Act section 2', 'ireland')['caveats'][0])
+        self.assertNotIn('caveats', self.find('personal data breach', 'ireland'))
+
+    def test_article_words_and_ordinals_of_the_caucasus(self):
+        parts = self.m.named_unit_parts
+        self.assertEqual(parts('შრომის კოდექსი მუხლი 31'), (['შრომის', 'კოდექსი'], '31', 'მუხლი'))
+        self.assertEqual(parts('შრომის კოდექსის 31-ე მუხლი'), (['შრომის', 'კოდექსის'], '31', 'მუხლი'))
+        self.assertEqual(parts('Աշխատանքային օրենսգրքի 158-րդ հոդված')[1:], ('158', 'հոդված'))
+        self.assertEqual(parts('Əmək Məcəlləsi maddə 114'), (['Əmək', 'Məcəlləsi'], '114', 'maddə'))
+        self.assertEqual(parts('Əmək Məcəlləsinin 114-cü maddəsi')[1:], ('114', 'maddəsi'))
+        self.assertIsNone(parts('12-a član'))  # (a number with a letter is not an ordinal)
+
+    def test_the_dutch_civil_code_by_book(self):
+        self.assertEqual(self.m.NL_BW.fullmatch('artikel 6:162 BW').groups(), ('6', '162'))
+        self.assertEqual(self.m.NL_BW.fullmatch('art. 7a:1576 BW').groups(), ('7a', '1576'))
+        self.assertIsNone(self.m.NL_BW.fullmatch('artikel 162 BW'))
         # the act is named and has no file of that number: the act itself, not a search of every heading
         got = self.find('Data Protection Act 2018 section 99999', 'ireland')
         self.assertEqual((got['read_as'], [r['path'] for r in got['results']]), ('act', [IE_C + '/data-protection-act-2018']))
