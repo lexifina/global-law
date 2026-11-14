@@ -4826,6 +4826,24 @@ class SerbianInLatinLetters(unittest.TestCase):
         import mcp_server
         cls.m = mcp_server
 
+    def test_greek_typed_without_accents(self):
+        import mcp_server as m
+        self.assertEqual(m.greek_plain_pattern('ετησια αδεια'), '[εέ]τ[ηή]σ[ιίϊΐ][αά] [αά]δ[εέ][ιίϊΐ][αά]')
+        self.assertIsNone(m.greek_plain_pattern('ετήσια άδεια'))
+        self.assertIsNone(m.greek_plain_pattern('annual leave'))
+
+    def test_typed_without_diacritics(self):
+        import mcp_server as m
+        self.assertEqual(m.serbian_plain_pattern('godisnji odmor'), 'годи[сш]њи одмор')
+        self.assertEqual(m.serbian_plain_pattern('djak'), '(ђ|дј)ак')
+        self.assertIsNone(m.serbian_plain_pattern('godišnji odmor'))  # (typed with its diacritics: taken as typed)
+        self.assertIsNone(m.serbian_plain_pattern('annual leave why'))
+        self.assertIsNone(m.serbian_plain_pattern('ugovor o radu'))  # (no letter that stands for two)
+        self.assertEqual(m.serbian_plain_readings('clan 73'), ['члан 73', 'ћлан 73'])
+        known = {'закон', 'заштити', 'података', 'личности', 'члан'}.__contains__
+        self.assertEqual(m.serbian_plain_by_words('Zakon o zastiti podataka o licnosti clan 5', known), 'закон о заштити података о личности члан 5')
+        self.assertIsNone(m.serbian_plain_by_words('Zakon o radu', known))
+
     def test_the_letters(self):
         m = self.m
         for latin, cyrillic in (('godišnji odmor', 'годишњи одмор'), ('Zakon o radu član 73', 'Закон о раду члан 73'),

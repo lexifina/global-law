@@ -20,6 +20,7 @@ import mmap
 import os
 import queue
 import re
+from itertools import combinations, product
 import shutil
 import subprocess
 import sys
@@ -11053,6 +11054,120 @@ def serbian_cyrillic(text: str) -> str | None:
     return ''.join(out)
 
 
+# Typed without š, ž, č, ć, đ ("godisnji odmor", "clan 73"), a letter may stand for two or three: s for с or ш, z for
+# з or ж, c for ц, ч or ћ, and dj for ђ or дј.
+_SR_PLAIN = {'s': 'сш', 'z': 'зж', 'c': 'цчћ'}
+SR_PLAIN_TRIES = 6  # readings of such a query that are asked, the fewest letters changed first
+SR_PLAIN_LOOKUPS = 2  # of them in a tool whose misses are slow (a look-up falls to the heading search)
+
+
+def _sr_plain_parts(text: str) -> list[tuple[str, ...]] | None:
+    """A query in Serbian Latin with no diacritic, as its letters in Cyrillic, each with the letters it may stand
+    for; None when it has a diacritic (then it is taken as typed), is not Serbian Latin, or no letter is open."""
+    if re.search(r'[ĐđŽžĆćČčŠš]', text) or serbian_cyrillic(text) is None:
+        return None
+    parts, i, open_ = [], 0, False
+    while i < len(text):
+        two, ch = text[i:i + 2].lower(), text[i]
+        if two == 'dj':
+            parts.append(('ђ', 'дј'))
+            i, open_ = i + 2, True
+            continue
+        pair = next((c for l, c in _SR_PAIRS if two == l), None)
+        if pair is not None:
+            parts.append((pair,))
+            i += 2
+            continue
+        low = ch.lower()
+        if low in _SR_PLAIN:
+            parts.append(tuple(_SR_PLAIN[low]))
+            open_ = True
+        else:
+            parts.append((_SR_ONE.get(low, ch),))
+        i += 1
+    return parts if open_ else None
+
+
+def serbian_plain_pattern(text: str) -> str | None:
+    """The regular expression that matches every Cyrillic reading of a query typed without diacritics:
+    "godisnji odmor" -> "годи[сш]њи одмор"."""
+    parts = _sr_plain_parts(text)
+    if parts is None:
+        return None
+    out = []
+    for p in parts:
+        if len(p) == 1:
+            out.append(re.sub(r'([.\[\](){}*+?|^$\\])', r'\\\1', p[0]))
+        elif all(len(x) == 1 for x in p):
+            out.append('[' + ''.join(p) + ']')
+        else:
+            out.append('(' + '|'.join(p) + ')')
+    return ''.join(out)
+
+
+def serbian_plain_readings(text: str, most: int = SR_PLAIN_TRIES) -> list[str]:
+    """The Cyrillic readings of a query typed without diacritics other than the letter-for-letter one, the fewest
+    letters changed first: "clan 73" -> "члан 73", "ћлан 73"."""
+    parts = _sr_plain_parts(text)
+    if parts is None:
+        return []
+    spots = [i for i, p in enumerate(parts) if len(p) > 1]
+    out: list[str] = []
+    for changed in range(1, len(spots) + 1):
+        for where in combinations(spots, changed):
+            for picks in product(*[parts[i][1:] for i in where]):
+                chosen = dict(zip(where, picks))
+                out.append(''.join(chosen.get(i, p[0]) for i, p in enumerate(parts)))
+                if len(out) >= most:
+                    return out
+    return out
+
+
+SR_WORD_READINGS = 81  # readings of one word that are compared with the words of the acts' names
+
+
+def serbian_plain_by_words(text: str, known) -> str | None:
+    """The reading of a query typed without diacritics in which each word is, where one of its readings is, a word
+    the acts' names use (`known(word)`: "clan" -> "члан", "zastita" -> "заштита"); None when the query is not of
+    that kind or the reading is the letter-for-letter one."""
+    if _sr_plain_parts(text) is None:
+        return None
+    out = []
+    for piece in re.split(r'([^\W\d_]+)', text):
+        parts = _sr_plain_parts(piece) if piece and piece[0].isalpha() else None
+        if parts is None:
+            out.append((serbian_cyrillic(piece) or piece).lower() if piece and piece[0].isalpha() else piece)
+            continue
+        straight = ''.join(p[0] for p in parts)
+        pick = straight
+        for n, combo in enumerate(product(*parts)):
+            if n >= SR_WORD_READINGS:
+                break
+            word = ''.join(combo)
+            if known(fold(word)):
+                pick = word
+                break
+        out.append(pick)
+    got = ''.join(out)
+    return got if got != (serbian_cyrillic(text) or '').lower() else None
+
+
+def _sr_known(args: dict):
+    """known(word) for serbian_plain_by_words: a word of an act's name in the bodies of law the call reaches, or a
+    word for a provision (члан)."""
+    tables = []
+    try:
+        scope = here(str(args.get('jurisdiction') or '').strip().strip('/'))
+        for c in _look()[1]:
+            if not scope or c == scope or c.startswith(scope + '/') or scope.startswith(c + '/'):
+                sha = corpus_head(c)
+                if sha:
+                    tables.append(act_name_index(c, sha)[1])
+    except (SystemExit, Exception):  # noqa: BLE001
+        pass
+    return lambda w: w in UNIT_MARKS or any(w in t for t in tables)
+
+
 def cyrillic_first(args: dict) -> bool:
     """Whether every body of law this call reaches is one whose record is in Cyrillic and whose language is also
     written in Latin letters (CYRILLIC_FIRST)."""
@@ -11074,13 +11189,41 @@ def in_cyrillic(name: str, handler):
         if isinstance(query, str) and not args.get('regex') and cyrillic_first(args):
             turned = serbian_cyrillic(query)
             if turned and turned != query:
-                try:
-                    text, data = handler({**args, 'query': turned})
-                except UserError:
-                    text, data = '', {}
-                if any(data.get(k) for k in found):
-                    note = f'Searched as {turned!r}: this record is in Cyrillic, and {query!r} was read in that script.'
-                    return f'{note}\n{text}', {**data, 'query_as': turned, 'script_note': note}
+                # The readings, in the order they are asked: typed without diacritics, the one whose words the acts'
+                # names use ("clan" is члан: the letter-for-letter "цлан" sent a look-up to the heading search, 40 s
+                # and another act's rows); then letter for letter; then the other readings, each on its own while
+                # they are few, else all at once as a pattern where the tool takes one (search_law).
+                tries: list[tuple[dict, str, bool]] = []
+                plain = _sr_plain_parts(query) is not None
+                by_words = serbian_plain_by_words(query, _sr_known(args)) if plain else None
+                if by_words:
+                    tries.append(({'query': by_words}, by_words, True))
+                tries.append(({'query': turned}, turned, False))
+                if plain:
+                    others = [r for r in serbian_plain_readings(query, SR_PLAIN_TRIES + 1) if r != by_words]
+                    if len(others) > SR_PLAIN_TRIES and name == 'search_law':
+                        pattern = serbian_plain_pattern(query)
+                        tries.append(({'query': pattern, 'regex': True}, pattern, True))
+                    else:
+                        tries += [({'query': r}, r, True) for r in others[:SR_PLAIN_TRIES if name == 'search_law' else SR_PLAIN_LOOKUPS]]
+                loose = None
+                for more, shown, guessed in tries:
+                    try:
+                        text, data = handler({**args, **more})
+                    except UserError:
+                        continue
+                    if not any(data.get(k) for k in found):
+                        continue
+                    note = f'Searched as {shown!r}: this record is in Cyrillic, and {query!r} was read in that script'
+                    note += ', with s, z, c and dj taken to stand also for š, ž, č, ć and đ.' if guessed else '.'
+                    answer = (f'{note}\n{text}', {**data, 'query_as': shown, 'script_note': note})
+                    # (a text search that found the words apart, not the phrase, is kept for when no reading has it)
+                    if name == 'search_law' and not data.get('provision_count'):
+                        loose = loose or answer
+                        continue
+                    return answer
+                if loose:
+                    return loose
         return handler(args)
     run.__wrapped__ = handler
     return run
@@ -11088,6 +11231,54 @@ def in_cyrillic(name: str, handler):
 
 for _name in ('find_provision', 'search_law', 'search_changes', 'phrase_history'):
     HANDLERS[_name] = in_cyrillic(_name, HANDLERS[_name])
+
+# --- Greek without accents --------------------------------------------------------------------------------------------
+# Greek is often typed without its accents ("ετησια αδεια" for "ετήσια άδεια"), and the text search compares letters
+# as written: such a query found nothing in Greece's or Cyprus's law. When it finds nothing as typed, it is asked
+# again as a pattern in which each vowel also stands for its accented forms.
+GREEK_PLAIN = ('greece/', 'cyprus/')
+_EL_VOWELS = {'α': 'αά', 'ε': 'εέ', 'η': 'ηή', 'ι': 'ιίϊΐ', 'ο': 'οό', 'υ': 'υύϋΰ', 'ω': 'ωώ'}
+
+
+def greek_plain_pattern(text: str) -> str | None:
+    """"ετησια αδεια" -> "[εέ]τ[ηή]σ[ιίϊΐ][αά] [αά]δ[εέ][ιίϊΐ][αά]"; None when the text has an accent already, has no Greek
+    vowel, or has a letter of another script."""
+    low = text.lower()
+    if (re.search(r'[άέήίόύώϊϋΐΰ]', low) or not re.search(r'[αεηιουω]', low) or re.search(r'[a-z\u0400-\u04FF]', low)
+            or not re.search(r'[α-ω]{3}', low)):
+        return None
+    return ''.join('[' + _EL_VOWELS[ch] + ']' if ch in _EL_VOWELS else re.sub(r'([.\[\](){}*+?|^$\\])', r'\\\1', ch) for ch in low)
+
+
+def greek_plain(handler):
+    def run(args: dict) -> tuple[str, dict]:
+        text, data = handler(args)
+        query = args.get('query')
+        if data.get('results') or not isinstance(query, str) or args.get('regex') or args.get('offset'):
+            return text, data
+        pattern = greek_plain_pattern(query)
+        if not pattern:
+            return text, data
+        try:
+            scope = here(str(args.get('jurisdiction') or '').strip().strip('/'))
+            reach = [c for c in _look()[1] if not scope or c == scope or c.startswith(scope + '/') or scope.startswith(c + '/')]
+        except (SystemExit, Exception):  # noqa: BLE001
+            return text, data
+        if not reach or not all(c.startswith(GREEK_PLAIN) for c in reach):
+            return text, data
+        try:
+            text2, data2 = handler({**args, 'query': pattern, 'regex': True})
+        except UserError:
+            return text, data
+        if not data2.get('results'):
+            return text, data
+        note = f'Searched as the pattern {pattern!r}: {query!r} has no accents, and the law is written with them.'
+        return f'{note}\n{text2}', {**data2, 'query_as': pattern, 'script_note': note}
+    run.__wrapped__ = handler
+    return run
+
+
+HANDLERS['search_law'] = greek_plain(HANDLERS['search_law'])
 # Tools that read one file named by `path`: run under law.focus() so a case-law decision needs no corpus-wide index.
 FOCUSED_TOOLS = ('read_law', 'who_wrote', 'compare_dates', 'provision_history', 'applies_to_case')
 PROPERTIES = {name: list(props) for name, _, props, _, _ in TOOLS}
