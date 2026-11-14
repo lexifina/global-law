@@ -9,7 +9,7 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(r"C:\Users\alany\Documents\tax-formalization-data\taxcourt")
+ROOT = Path(r"~\Documents\tax-formalization-data\taxcourt")
 SRC = ROOT / "cases" / "text"
 OUT = ROOT / "validation" / "blind" / "redacted"
 RA = "[REDACTED AMOUNT]"

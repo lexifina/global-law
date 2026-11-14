@@ -1,5 +1,5 @@
 import json, glob, os, re
-H = r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\holdout'
+H = r'~\Documents\tax-formalization-data\taxcourt\validation\holdout'
 ALLOWED = set('deficiency accuracyPenalty accuracyPenaltyApplies substantialUnderstatement failureToFile failureToPay failureToFileApplies failureToPayApplies estimatedTaxAddition estimatedTaxApplies eic ctcNonrefundable refundableCtc educationCredits aotcRefundable educationNonrefundable taxableSocialSecurity earlyDistributionTax rolloverIncludible iraDeduction hsaIncludible hsaAdditionalTax gamblingLossDeduction alimonyDeduction alimonyIncluded foreignEarnedIncomeExclusion premiumTaxCredit excessAdvancePtc householdIncome seTax agi taxableIncome totalTax filingStatus headOfHousehold'.split())
 PREFIX = ('qualifyingChild:', 'qualifyingRelative:', 'dependent:', 'eicChild:', 'ctcChild:', 'hohQualifyingPerson:')
 sel = json.load(open(H + r'\selected.json'))

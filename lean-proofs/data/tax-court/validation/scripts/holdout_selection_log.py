@@ -1,7 +1,7 @@
 import json, re
 from collections import Counter
 
-H = r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\holdout'
+H = r'~\Documents\tax-formalization-data\taxcourt\validation\holdout'
 res = json.load(open(H + r'\search_results.json'))
 draw = json.load(open(H + r'\draw.json'))
 sel = json.load(open(H + r'\selected.json'))

@@ -5,18 +5,18 @@ This is a blind test of whether the model, given only facts, reproduces the cour
 faithfully, not to reach any particular result.
 
 Inputs you MAY read
-- Your redacted opinion(s): C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\blind\redacted\<id>.txt
+- Your redacted opinion(s): ~\Documents\tax-formalization-data\taxcourt\validation\blind\redacted\<id>.txt
   (holdings, conclusions and result figures have been removed and replaced by [REDACTED ...] markers).
-- The schema (sanitized copy of the Lean framework): C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\blind\schema\
+- The schema (sanitized copy of the Lean framework): ~\Documents\tax-formalization-data\taxcourt\validation\blind\schema\
   Start with Case.lean (the Case JSON schema, FromJson readers, defaults), Return.lean (ReturnFacts fields),
   Dependents.lean / FilingStatus.lean (people and status facts), Penalties.lean (accuracy/lateness facts),
   EarlyDistribution.lean, Retirement.lean, Education.lean, PremiumCredit.lean, Income.lean, Extra/*.lean as needed.
   Hypothetical examples: schema\example_cases_hypothetical.json.
 
 Inputs you MUST NOT open (doing so invalidates the test): anything under
-  C:\Users\alany\Documents\tax-formalization-data\taxcourt\encoded\, ...\taxcourt\cases\ (full texts and extracted holdings),
+  ~\Documents\tax-formalization-data\taxcourt\encoded\, ...\taxcourt\cases\ (full texts and extracted holdings),
   ...\taxcourt\summary.json, ...\taxcourt\index.json, ...\taxcourt\validation\ other than blind\redacted\<your ids>, blind\schema\, and your own output files,
-  ...\taxcourt\blog-sections\, C:\Users\alany\Documents\global-law-lean\lean-proofs\tools\taxcourt\,
+  ...\taxcourt\blog-sections\, ~\Documents\global-law-lean\lean-proofs\tools\taxcourt\,
   the original LegalProofs\USTax\TaxCourt\*.lean and LegalProofs\USTax\TaxCourt.lean (use the sanitized schema copy instead),
   and do not search the web or any other copy of the opinion. Do not grep the disk for the case citation or docket.
 
@@ -35,13 +35,13 @@ What to encode
 - Dependents: use "name" as written in the opinion (initials like "A.B." or "son"); keep order of appearance.
 
 Run (sanity check only — to make sure the JSON parses and computes):
-  cd C:\Users\alany\Documents\global-law-lean\lean-proofs
+  cd ~\Documents\global-law-lean\lean-proofs
   PATH=$HOME/.elan/bin:$PATH lake env lean --run LegalProofs/USTax/TaxCourt/Run.lean <your case.json> <out.json>
   (Bash tool; exit 2 = bad JSON/schema -> fix. Never run `lake build`. At most 2 lean processes at a time.)
   Do not tune facts to change the computed output; only fix parse/schema errors or clear transcription errors.
 
 Output per case (UTF-8, LF):
-  C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\<set>\encoded\<id>.case.json  — the Case JSON (expected: []),
+  ~\Documents\tax-formalization-data\taxcourt\validation\<set>\encoded\<id>.case.json  — the Case JSON (expected: []),
     plus two extra top-level keys the runner ignores: "inferred": [list of any facts you assumed rather than read],
     "unencodable": [issues you could not express in the schema, one line each].
   and the runner output next to it as <id>.out.json.

@@ -7,7 +7,7 @@ import json, os, subprocess, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]          # lean-proofs/
-DATA = Path(r"C:\Users\alany\Documents\tax-formalization-data\hunt\family")
+DATA = Path(r"~\Documents\tax-formalization-data\hunt\family")
 LAKE = str(Path.home() / ".elan" / "bin" / "lake.exe")
 
 def parent(age, **kw):

@@ -1,5 +1,5 @@
 import json, re, sys
-base = r"C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\holdout"
+base = r"~\Documents\tax-formalization-data\taxcourt\validation\holdout"
 ids = ["tcmemo-2026-25", "tcsumm-2023-11", "tcsumm-2022-19", "tcsumm-2021-13"]
 extra = {
     "tcmemo-2026-25": ["5,454", "22,782", "85%"],

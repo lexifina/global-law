@@ -1,5 +1,5 @@
 import subprocess,glob,os
-H=r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\holdout\raw'
+H=r'~\Documents\tax-formalization-data\taxcourt\validation\holdout\raw'
 for pdf in glob.glob(os.path.join(H,'*.pdf')):
     out=subprocess.run(['pdftotext','-enc','UTF-8',pdf,'-'],capture_output=True).stdout.decode('utf-8','replace')
     pages=out.split('\f')

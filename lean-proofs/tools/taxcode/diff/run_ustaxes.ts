@@ -1,7 +1,7 @@
 /**
  * Run UsTaxes (github.com/ustaxes/UsTaxes, tax year 2025 forms) on the households from gen_households.py.
  *
- *   node C:/Users/alany/Documents/tax-formalization-data/ustaxes-runner/run.mjs households.json ustaxes.json [flags]
+ *   node ~/Documents/tax-formalization-data/ustaxes-runner/run.mjs households.json ustaxes.json [flags]
  *
  * run.mjs bundles this file with esbuild (alias `ustaxes/*` -> the UsTaxes clone's src/*, npm deps from
  * ustaxes-runner/node_modules; nothing is installed into or changed in the clone) and then runs the bundle.

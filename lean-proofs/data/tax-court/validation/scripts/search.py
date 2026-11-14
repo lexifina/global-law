@@ -1,5 +1,5 @@
 import json,urllib.request,urllib.parse,time,re,os
-BASE=r'C:\Users\alany\Documents\tax-formalization-data\taxcourt'
+BASE=r'~\Documents\tax-formalization-data\taxcourt'
 UA={"User-Agent":"taxcourt-research-corpus/0.1 (academic dataset build)"}
 # exclusion set
 excl_d=set(); excl_e=set()

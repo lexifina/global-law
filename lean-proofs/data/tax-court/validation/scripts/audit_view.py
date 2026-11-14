@@ -1,5 +1,5 @@
 import json,glob,os,sys
-B=r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\encoded'
+B=r'~\Documents\tax-formalization-data\taxcourt\encoded'
 ids=sorted(os.path.basename(f)[:-12] for f in glob.glob(B+r'\*.result.json'))
 lo,hi=int(sys.argv[1]),int(sys.argv[2])
 for n,cid in enumerate(ids[lo:hi],lo):

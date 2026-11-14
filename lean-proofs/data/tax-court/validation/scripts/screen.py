@@ -1,5 +1,5 @@
 import sys,re,os,glob
-H=r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\holdout\raw'
+H=r'~\Documents\tax-formalization-data\taxcourt\validation\holdout\raw'
 for f in sys.argv[1:]:
     t=open(os.path.join(H,f+'.txt'),encoding='utf-8').read()
     t=re.sub(r'\s+',' ',t)

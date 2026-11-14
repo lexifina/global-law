@@ -1,7 +1,7 @@
 """Tax-Calculator on the Tax Court returns (oracle_work/returns.json), one Records batch per tax year, current-law
 policy for that year. Mapping adapted from global-law-lean tools/taxcode/diff/run_taxcalc.py.
 
-    C:/Users/alany/Documents/tax-formalization-data/refs-venv/Scripts/python.exe oracle_tc.py
+    ~/Documents/tax-formalization-data/refs-venv/Scripts/python.exe oracle_tc.py
 """
 import json, os
 import pandas as pd

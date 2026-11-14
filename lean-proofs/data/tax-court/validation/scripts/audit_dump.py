@@ -1,5 +1,5 @@
 import json,glob,os,sys,collections
-B=r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\encoded'
+B=r'~\Documents\tax-formalization-data\taxcourt\encoded'
 keys=collections.Counter(); keycases=collections.defaultdict(set)
 def walk(o,p,cid):
     if isinstance(o,dict):

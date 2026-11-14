@@ -1,5 +1,5 @@
 import json,shutil,os
-H=r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\holdout'
+H=r'~\Documents\tax-formalization-data\taxcourt\validation\holdout'
 c={x['docketNumberWithSuffix']:x for x in json.load(open(H+r'\search_results.json'))}
 M={'10104-18':'tcmemo-2020-85','10198-17':'tcmemo-2020-96','24305-18S':'tcsumm-2020-28','6448-24':'tcmemo-2026-116',
 '1044-25':'tcmemo-2026-25','1468-20S':'tcsumm-2023-11','20268-19S':'tcsumm-2022-19','24551-18S':'tcsumm-2021-13',

@@ -1,5 +1,5 @@
 import json, re, sys
-base = r"C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\holdout"
+base = r"~\Documents\tax-formalization-data\taxcourt\validation\holdout"
 ids = ["tcsumm-2022-7","tcsumm-2019-28","tcsumm-2021-7","tcsumm-2025-8"]
 def norm(s): return re.sub(r"\s+"," ",s.replace("\u2019","'").replace("\u201c",'"').replace("\u201d",'"')).strip()
 phr = ["we hold","is entitled","is not entitled","not entitled","is liable","liable","sustain","conclude","Decision will be entered","Rule 155","we find","qualif"]

@@ -9,7 +9,7 @@ import json, sys, os, subprocess, tempfile, glob, re
 
 SET = sys.argv[1]
 HERE = os.path.dirname(os.path.abspath(__file__)); V = os.path.dirname(HERE)
-ROOT = r'C:\Users\alany\Documents\global-law-lean\lean-proofs'
+ROOT = r'~\Documents\global-law-lean\lean-proofs'
 env = dict(os.environ); env['PATH'] = os.path.expanduser('~/.elan/bin') + os.pathsep + env['PATH']
 
 

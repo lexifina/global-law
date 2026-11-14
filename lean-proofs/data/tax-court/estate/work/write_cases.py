@@ -1,6 +1,6 @@
 import json
-D = 'C:/Users/alany/Documents/tax-formalization-data/taxcourt/estate/cases/'
-M = json.load(open('C:/Users/alany/Documents/tax-formalization-data/taxcourt/estate/work/meta.json'))
+D = '~/Documents/tax-formalization-data/taxcourt/estate/cases/'
+M = json.load(open('~/Documents/tax-formalization-data/taxcourt/estate/work/meta.json'))
 
 
 def src(i):

@@ -1,5 +1,5 @@
 import json,urllib.request,time,os,sys,subprocess
-H=r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\holdout'
+H=r'~\Documents\tax-formalization-data\taxcourt\validation\holdout'
 UA={"User-Agent":"taxcourt-research-corpus/0.1 (academic dataset build)"}
 c={x['docketNumberWithSuffix']:x for x in json.load(open(H+r'\search_results.json'))}
 pool=sys.argv[1].split(',')

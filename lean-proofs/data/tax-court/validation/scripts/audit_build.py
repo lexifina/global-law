@@ -7,8 +7,8 @@ Spot-checked items carry flag "spot-checked" (opinion text grepped with audit_gr
 """
 import json, glob, os, collections
 
-ENC = r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\encoded'
-OUT = r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\audit_matches.json'
+ENC = r'~\Documents\tax-formalization-data\taxcourt\encoded'
+OUT = r'~\Documents\tax-formalization-data\taxcourt\validation\audit_matches.json'
 
 T = 'trivial-arithmetic'; S = 'spot-checked'
 # (id, issue index): (class, items, flags, inferred_facts, evidence)

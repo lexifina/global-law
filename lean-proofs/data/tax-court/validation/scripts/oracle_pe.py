@@ -1,7 +1,7 @@
 """PolicyEngine-US on the Tax Court returns (oracle_work/returns.json), each in its own tax year, placed in Texas
 (no state income tax). Mapping adapted from global-law-lean tools/taxcode/diff/run_policyengine.py.
 
-    C:/Users/alany/pev/Scripts/python.exe oracle_pe.py
+    ~/pev/Scripts/python.exe oracle_pe.py
 """
 import json, os
 import importlib.metadata as md

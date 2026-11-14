@@ -1,15 +1,15 @@
 Encoding brief: recreate US Tax Court rulings in Lean.
 
 Inputs
-- Case JSON: C:\Users\alany\Documents\tax-formalization-data\taxcourt\cases\<id>.json (findings of fact with snippets, issues, holdings, decision); opinion text: cases\text\<id>.txt. Read the opinion text yourself; don't trust the JSON blindly.
-- Lean framework: C:\Users\alany\Documents\global-law-lean\lean-proofs\LegalProofs\USTax\TaxCourt\ (read TaxCourt.lean docstring, Case.lean for the JSON schema, tools\taxcourt\example_cases.json for examples). Build once: `lake build LegalProofs.USTax.TaxCourt` (already built). Run: `lake env lean --run LegalProofs/USTax/TaxCourt/Run.lean in.json out.json` from lean-proofs. elan at $HOME/.elan/bin. Exit 0 = all expected values matched, 1 = some differ, 2 = bad input.
+- Case JSON: ~\Documents\tax-formalization-data\taxcourt\cases\<id>.json (findings of fact with snippets, issues, holdings, decision); opinion text: cases\text\<id>.txt. Read the opinion text yourself; don't trust the JSON blindly.
+- Lean framework: ~\Documents\global-law-lean\lean-proofs\LegalProofs\USTax\TaxCourt\ (read TaxCourt.lean docstring, Case.lean for the JSON schema, tools\taxcourt\example_cases.json for examples). Build once: `lake build LegalProofs.USTax.TaxCourt` (already built). Run: `lake env lean --run LegalProofs/USTax/TaxCourt/Run.lean in.json out.json` from lean-proofs. elan at $HOME/.elan/bin. Exit 0 = all expected values matched, 1 = some differ, 2 = bad input.
 
 Task per case
 1. Encode ONLY the court's findings of fact (not the outcome) as a case JSON in the framework's schema: facts (income items, ages, dependents with relationship/age/days, filing status facts), asFiled (the return as the taxpayer filed it, from the opinion/notice), accuracy/lateness facts (reasonable cause and §6751(b) approval only as the court found them), and expected = the court's holdings/amounts as stated (deficiency, penalty, credit amounts, status, qualifying-child yes/no, §72(t) tax, taxable SS amount etc.). When a holding is an issue-level yes/no without an amount, encode it as the per-issue expected outcome the framework supports.
 2. Run it. For each expected item: MATCH, or MISMATCH with a diagnosis: (a) encoding error -> fix and rerun; (b) framework gap/bug -> note precisely (provision, what's missing) and, if small and clearly correct, you may fix the framework ONLY by messaging the coordinator instead of editing shared files (don't edit LegalProofs/USTax/TaxCourt/*.lean yourself; other agents are using it) - record it as a gap; (c) the court's own figures are inconsistent or rounded differently -> show the arithmetic; (d) the outcome depends on judgment/discretion (credibility, reasonable cause weighed by the court) -> encode the court's finding as a fact and note that the decisive step is a judgment, not a computation.
 3. Issues the opinion decides that the framework cannot express at all (e.g. whether an item is income under §61 on disputed facts): record as "not encodable" with reason.
 
-Outputs (in C:\Users\alany\Documents\tax-formalization-data\taxcourt\encoded\)
+Outputs (in ~\Documents\tax-formalization-data\taxcourt\encoded\)
 - <id>.case.json (the encoded case, schema of Case.lean), and a combined batch file part<N>.json of all your cases.
 - <id>.result.json: {id, citation, issues:[{issue, provision, court, lean, verdict: match|mismatch|not-encodable|judgment, diagnosis, snippet}], deficiency:{court, lean}, notes}.
 - part<N>-summary.json: counts by verdict and a list of framework gaps with suggested fixes.

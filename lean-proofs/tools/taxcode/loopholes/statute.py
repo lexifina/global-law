@@ -6,7 +6,7 @@
 import re, sys
 import xml.etree.ElementTree as ET
 
-XML = r"C:\Users\alany\Documents\tax-formalization-data\xml\usc26.xml"
+XML = r"~\Documents\tax-formalization-data\xml\usc26.xml"
 NS = "{http://xml.house.gov/schemas/uslm/1.0}"
 SKIP = {"notes", "note", "sourceCredit", "toc", "meta"}
 

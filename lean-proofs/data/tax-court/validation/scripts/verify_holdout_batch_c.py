@@ -1,5 +1,5 @@
 import json, re, sys
-base = r"C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\holdout"
+base = r"~\Documents\tax-formalization-data\taxcourt\validation\holdout"
 ids = sys.argv[1:]
 def norm(s):
     s = s.replace("\u2019", "'").replace("\u201c", '"').replace("\u201d", '"')

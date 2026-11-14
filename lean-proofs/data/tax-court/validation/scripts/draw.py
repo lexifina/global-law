@@ -7,5 +7,5 @@ strata={
 }
 rng=random.Random(20261111)
 draw={k:sorted(rng.sample(sorted(v),4)) for k,v in strata.items()}
-json.dump({'seed':20261111,'method':'eligible candidates grouped into 4 issue strata; 4 drawn per stratum with random.Random(seed).sample(sorted(stratum),4)','strata':strata,'drawn':draw},open(r'C:\Users\alany\Documents\tax-formalization-data\taxcourt\validation\holdout\draw.json','w'),indent=1)
+json.dump({'seed':20261111,'method':'eligible candidates grouped into 4 issue strata; 4 drawn per stratum with random.Random(seed).sample(sorted(stratum),4)','strata':strata,'drawn':draw},open(r'~\Documents\tax-formalization-data\taxcourt\validation\holdout\draw.json','w'),indent=1)
 print(json.dumps(draw,indent=1))
