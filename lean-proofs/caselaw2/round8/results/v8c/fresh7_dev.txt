@@ -1,0 +1,74 @@
+fresh gold (round 7, two date views), split=dev, label=v8c, pairs=165, result_sha1=63b2bb7e377a1d7f4220387299a2455b9b0b7369
+
+fresh gold, split=dev, label=v8c, view=model, pairs=165
+dimension     key                          n       a a_date a_kind      b      c      d      e   strict (95% CI)            lenient (95% CI)
+all           all                        165      52     30      0      5     25      0     53   0.315 [0.249,0.390]      0.679 [0.604,0.745]
+burned_crs    inCRS                      146      51     29      0      5     22      0     39   0.349 [0.277,0.430]      0.733 [0.656,0.798]
+burned_crs    notInCRS                    19       1      1      0      0      3      0     14   0.053 [0.009,0.246]      0.263 [0.118,0.488]
+era           1946-1991                   78      18     21      0      3     14      0     22   0.231 [0.151,0.336]      0.718 [0.610,0.806]
+era           1992on                      29      16      2      0      0      3      0      8   0.552 [0.376,0.716]      0.724 [0.543,0.853]
+era           to1945                      58      18      7      0      2      8      0     23   0.310 [0.206,0.438]      0.603 [0.475,0.719]
+express       express                    145      52     28      0      3     24      0     38   0.359 [0.285,0.439]      0.738 [0.661,0.803]
+express       implied                     20       0      2      0      2      1      0     15   0.000 [0.000,0.161]      0.250 [0.112,0.469]
+n_sources     1                           95      27     11      0      2     15      0     40   0.284 [0.203,0.382]      0.579 [0.478,0.673]
+n_sources     2+                          70      25     19      0      3     10      0     13   0.357 [0.255,0.474]      0.814 [0.708,0.888]
+scope         full                       152      52     28      0      3     19      0     50   0.342 [0.271,0.421]      0.671 [0.593,0.741]
+scope         partial                     13       0      2      0      2      6      0      3   0.000 [0.000,0.228]      0.769 [0.497,0.918]
+scope_express full+express               132      52     26      0      1     18      0     35   0.394 [0.315,0.479]      0.735 [0.654,0.803]
+scope_express full+implied                20       0      2      0      2      1      0     15   0.000 [0.000,0.161]      0.250 [0.112,0.469]
+scope_express partial+express             13       0      2      0      2      6      0      3   0.000 [0.000,0.228]      0.769 [0.497,0.918]
+source        blaustein_field_1958        72      21      8      0      3     10      0     30   0.292 [0.199,0.405]      0.583 [0.468,0.690]
+source        gerhardt_1991               84      29     21      0      4     11      0     19   0.345 [0.252,0.452]      0.774 [0.673,0.850]
+source        payne_n1_1991               18       0     12      0      1      4      0      1   0.000 [0.000,0.176]      0.944 [0.742,0.990]
+source        wikipedia                   80      31     18      0      1     13      0     17   0.388 [0.288,0.497]      0.787 [0.686,0.863]
+precision side (model view, this half of the model's Supreme Court overrulings): {"listed": 82, "unlisted": 12, "targetListedOtherOverruler": 1} of 95; all halves: 171
+
+fresh gold, split=dev, label=v8c, view=attributed, pairs=165
+dimension     key                          n       a a_date a_kind      b      c      d      e   strict (95% CI)            lenient (95% CI)
+all           all                        165      82      0      0      5     25      0     53   0.497 [0.422,0.573]      0.679 [0.604,0.745]
+burned_crs    inCRS                      146      80      0      0      5     22      0     39   0.548 [0.467,0.626]      0.733 [0.656,0.798]
+burned_crs    notInCRS                    19       2      0      0      0      3      0     14   0.105 [0.029,0.314]      0.263 [0.118,0.488]
+era           1946-1991                   78      39      0      0      3     14      0     22   0.500 [0.392,0.608]      0.718 [0.610,0.806]
+era           1992on                      29      18      0      0      0      3      0      8   0.621 [0.440,0.773]      0.724 [0.543,0.853]
+era           to1945                      58      25      0      0      2      8      0     23   0.431 [0.312,0.559]      0.603 [0.475,0.719]
+express       express                    145      80      0      0      3     24      0     38   0.552 [0.470,0.630]      0.738 [0.661,0.803]
+express       implied                     20       2      0      0      2      1      0     15   0.100 [0.028,0.301]      0.250 [0.112,0.469]
+n_sources     1                           95      38      0      0      2     15      0     40   0.400 [0.307,0.500]      0.579 [0.478,0.673]
+n_sources     2+                          70      44      0      0      3     10      0     13   0.629 [0.511,0.732]      0.814 [0.708,0.888]
+scope         full                       152      80      0      0      3     19      0     50   0.526 [0.447,0.604]      0.671 [0.593,0.741]
+scope         partial                     13       2      0      0      2      6      0      3   0.154 [0.043,0.422]      0.769 [0.497,0.918]
+scope_express full+express               132      78      0      0      1     18      0     35   0.591 [0.506,0.671]      0.735 [0.654,0.803]
+scope_express full+implied                20       2      0      0      2      1      0     15   0.100 [0.028,0.301]      0.250 [0.112,0.469]
+scope_express partial+express             13       2      0      0      2      6      0      3   0.154 [0.043,0.422]      0.769 [0.497,0.918]
+source        blaustein_field_1958        72      29      0      0      3     10      0     30   0.403 [0.297,0.518]      0.583 [0.468,0.690]
+source        gerhardt_1991               84      50      0      0      4     11      0     19   0.595 [0.488,0.694]      0.774 [0.673,0.850]
+source        payne_n1_1991               18      12      0      0      1      4      0      1   0.667 [0.438,0.837]      0.944 [0.742,0.990]
+source        wikipedia                   80      49      0      0      1     13      0     17   0.613 [0.503,0.712]      0.787 [0.686,0.863]
+precision side (attributed view, this half of the model's Supreme Court overrulings): {"listed": 82, "unlisted": 12, "targetListedOtherOverruler": 1} of 95; all halves: 171
+
+side by side (k/n, rate [Wilson 95%]); model = R5-3 timeline, attributed = recognised overrulings dated from Y
+dimension     key                          n  strict model                strict attributed           lenient model               lenient attributed          
+all           all                        165   52 0.315 [0.249,0.390]      82 0.497 [0.422,0.573]     112 0.679 [0.604,0.745]     112 0.679 [0.604,0.745]     
+burned_crs    inCRS                      146   51 0.349 [0.277,0.430]      80 0.548 [0.467,0.626]     107 0.733 [0.656,0.798]     107 0.733 [0.656,0.798]     
+burned_crs    notInCRS                    19    1 0.053 [0.009,0.246]       2 0.105 [0.029,0.314]       5 0.263 [0.118,0.488]       5 0.263 [0.118,0.488]     
+era           1946-1991                   78   18 0.231 [0.151,0.336]      39 0.500 [0.392,0.608]      56 0.718 [0.610,0.806]      56 0.718 [0.610,0.806]     
+era           1992on                      29   16 0.552 [0.376,0.716]      18 0.621 [0.440,0.773]      21 0.724 [0.543,0.853]      21 0.724 [0.543,0.853]     
+era           to1945                      58   18 0.310 [0.206,0.438]      25 0.431 [0.312,0.559]      35 0.603 [0.475,0.719]      35 0.603 [0.475,0.719]     
+express       express                    145   52 0.359 [0.285,0.439]      80 0.552 [0.470,0.630]     107 0.738 [0.661,0.803]     107 0.738 [0.661,0.803]     
+express       implied                     20    0 0.000 [0.000,0.161]       2 0.100 [0.028,0.301]       5 0.250 [0.112,0.469]       5 0.250 [0.112,0.469]     
+n_sources     1                           95   27 0.284 [0.203,0.382]      38 0.400 [0.307,0.500]      55 0.579 [0.478,0.673]      55 0.579 [0.478,0.673]     
+n_sources     2+                          70   25 0.357 [0.255,0.474]      44 0.629 [0.511,0.732]      57 0.814 [0.708,0.888]      57 0.814 [0.708,0.888]     
+scope         full                       152   52 0.342 [0.271,0.421]      80 0.526 [0.447,0.604]     102 0.671 [0.593,0.741]     102 0.671 [0.593,0.741]     
+scope         partial                     13    0 0.000 [0.000,0.228]       2 0.154 [0.043,0.422]      10 0.769 [0.497,0.918]      10 0.769 [0.497,0.918]     
+scope_express full+express               132   52 0.394 [0.315,0.479]      78 0.591 [0.506,0.671]      97 0.735 [0.654,0.803]      97 0.735 [0.654,0.803]     
+scope_express full+implied                20    0 0.000 [0.000,0.161]       2 0.100 [0.028,0.301]       5 0.250 [0.112,0.469]       5 0.250 [0.112,0.469]     
+scope_express partial+express             13    0 0.000 [0.000,0.228]       2 0.154 [0.043,0.422]      10 0.769 [0.497,0.918]      10 0.769 [0.497,0.918]     
+source        blaustein_field_1958        72   21 0.292 [0.199,0.405]      29 0.403 [0.297,0.518]      42 0.583 [0.468,0.690]      42 0.583 [0.468,0.690]     
+source        gerhardt_1991               84   29 0.345 [0.252,0.452]      50 0.595 [0.488,0.694]      65 0.774 [0.673,0.850]      65 0.774 [0.673,0.850]     
+source        payne_n1_1991               18    0 0.000 [0.000,0.176]      12 0.667 [0.438,0.837]      17 0.944 [0.742,0.990]      17 0.944 [0.742,0.990]     
+source        wikipedia                   80   31 0.388 [0.288,0.497]      49 0.613 [0.503,0.712]      63 0.787 [0.686,0.863]      63 0.787 [0.686,0.863]     
+
+moves model -> attributed: {"a_date->a": 30}
+attributed reading of status.tsv: {"groups": 9649, "groups_recognisedLater_without_neg_unchanged": 50, "groups_with_neg": 1582, "groups_with_neg_issue": 913, "groups_with_neg_whole": 669, "moved_gap_shows_other_actor_neg": 4, "recognisedLater_rows_read_negative": 1796, "recognised_rows": 20009, "rows_changed": 1800, "start_already_dateY_dateY_eq_dateW": 7, "start_already_dateY_via_recognisedLater_rows": 1571, "start_moved_to_dateY_no_recognisedLater_row": 4}
+written: ~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/results/v8c/fresh7\fresh7_dev.json
+exit 0

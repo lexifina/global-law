@@ -1,0 +1,14 @@
+NODES_READY 2026-11-14 05:46 (agent infra11). DESIGN11 section 4 order-node overlay.
+- format: round11/data_orders/FORMAT.md (nodes.tsv 7 columns + header; text/<local id>.txt)
+- check a folder: python -X utf8 round11/nodes11.py --check round11/data_orders
+- certify: python -X utf8 round11/certify11.py --rows R.jsonl --out DIR --nodes round11/data_orders   (rows may use node ids
+  N.. from nodes_map / nodes11.node_of(local_id); N = 6892454, ids in nodes.tsv order)
+- stage:   python -X utf8 round11/stage11.py <name> --nodes round11/data_orders --delta DIR ...  (decisions2.tsv new file,
+  ~873 MB; nodes.count, nodes_map.tsv); run / score / clean as usual (r11_run.sh uses the stage's nodes.count)
+- audits:  make_packs11.py ... --nodes round11/data_orders (or env R11_NODES) shows the order node's caption, court, docket, text
+- tools using r6lib: import round11/nodes11.py; nodes11.activate(DIR); nodes11.patch()  (node_row, fetch_texts, Facts)
+Zones: an order-list text gets NO part_zone line (the builder finds no part heading: all 'other'), so the Lean applies the
+row's own part check (no_zone_no_change; counted zone_missing_rows). Use part majority (as the corpus's S. Ct. memorandum
+orders' dispositions are zoned) or perCuriam; orderHead (headmatter) only from 2013 as before.
+Self-test: 3 synthetic orders + 1 row (order vacated a real 2019 La. App. decision): certified, staged, NOBUILD run -> h11 ok,
+target status neg:vacated by the order node; all other output = v10d except the counters; every scorer exit 0, scores = v10d.

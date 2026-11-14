@@ -1,0 +1,146 @@
+== A2 one year, every move: profit 400000/yr x 1, service field false, S floor true, LP literal false
+   73026 positions, 6956 complete plans, 1100 families. Baseline (sole prop, nothing else): total tax 81297
+ 1. saves 13717  [tax 62190, deferred 24500]  ->S corp acct child health oDef rent salary
+      -> S corp; salary/GP 120000; child wage 12000; health plan; rent home 14d; accountable plan; owner 401(k) deferral; | distribute; SELL
+ 2. saves 13227  [tax 68070, deferred 0]  ->S corp acct child health rent salary
+      -> S corp; salary/GP 120000; child wage 12000; health plan; rent home 14d; accountable plan; | distribute; SELL
+ 3. saves 13072  [tax 62835, deferred 24500]  ->S corp acct health oDef rent salary
+      -> S corp; salary/GP 120000; health plan; rent home 14d; accountable plan; owner 401(k) deferral; | distribute; SELL
+ 4. saves 12877  [tax 56430, deferred 54500]  ->S corp acct child health oDef oPS rent salary
+      -> S corp; salary/GP 120000; child wage 12000; health plan; rent home 14d; accountable plan; owner 401(k) deferral; owner profit-sharing; | distribute; SELL
+ 5. saves 12582  [tax 68715, deferred 0]  ->S corp acct health rent salary
+      -> S corp; salary/GP 120000; health plan; rent home 14d; accountable plan; | distribute; SELL
+ 6. saves 12565  [tax 63342, deferred 24500]  ->S corp child health oDef rent salary
+      -> S corp; salary/GP 120000; child wage 12000; health plan; rent home 14d; owner 401(k) deferral; | distribute; SELL
+ 7. saves 12387  [tax 62310, deferred 30000]  ->S corp acct child health oPS rent salary
+      -> S corp; salary/GP 120000; child wage 12000; health plan; rent home 14d; accountable plan; owner profit-sharing; | distribute; SELL
+ 8. saves 12232  [tax 57075, deferred 54500]  ->S corp acct health oDef oPS rent salary
+      -> S corp; salary/GP 120000; health plan; rent home 14d; accountable plan; owner 401(k) deferral; owner profit-sharing; | distribute; SELL
+   adding 'acct': from -4624 (->C corp acct health oPS rent salary spouse trump) to +2152 (->C corp acct child health oDef oPS rent salary)
+   adding 'child': from -4028 (->C corp child health oPS sPS salary spouse trump) to +2829 (->C corp acct child health oDef salary trump)
+   adding 'health': from 780 (health sPS spouse trump) to +8605 (->C corp acct child health oDef oPS rent salary)
+   adding 'rent': from -2808 (->C corp health oPS rent sPS salary spouse trump) to +4017 (->C corp acct child health oDef oPS rent salary)
+   adding 'spouse': from -7167 (->C corp acct child health oPS rent salary spouse) to +-358 (->C corp acct health salary spouse trump)
+   adding 'oDef': from -855 (child oDef sDef sPS spouse trump) to +1059 (->C corp acct child health oDef rent salary trump)
+   adding 'oPS': from -2690 (child oPS sDef spouse trump) to +8659 (->C corp acct child health oPS rent salary)
+   adding 'sDef': from -996 (child health oPS sDef spouse) to +989 (->C corp acct child health oDef rent sDef salary spouse)
+   adding 'sPS': from -5874 (->C corp health oPS rent sPS salary spouse trump) to +951 (->C corp acct oDef oPS rent sPS salary spouse)
+   adding 'trump': from -6709 (->C corp acct health oPS rent salary spouse trump) to +67 (->C corp health oPS rent sDef salary spouse trump)
+== A3 one year, every move: profit 150000/yr x 1, service field false, S floor true, LP literal false
+   61450 positions, 1168 complete plans, 740 families. Baseline (sole prop, nothing else): total tax 27302
+ 1. saves 8494  [tax 18808, deferred 0]  ->S corp acct health rent salary
+      -> S corp; salary/GP 75000; health plan; rent home 14d; accountable plan; | distribute; SELL
+ 2. saves 7918  [tax 19384, deferred 0]  ->S corp health rent salary
+      -> S corp; salary/GP 75000; health plan; rent home 14d; | distribute; SELL
+ 3. saves 7899  [tax 19403, deferred 0]  ->S corp acct child health rent salary
+      -> S corp; salary/GP 75000; child wage 12000; health plan; rent home 14d; accountable plan; | distribute; SELL
+ 4. saves 7419  [tax 19883, deferred 0]  ->S corp acct health salary
+      -> S corp; salary/GP 75000; health plan; accountable plan; | distribute; SELL
+ 5. saves 7323  [tax 19979, deferred 0]  ->S corp child health rent salary
+      -> S corp; salary/GP 75000; child wage 12000; health plan; rent home 14d; | distribute; SELL
+ 6. saves 6843  [tax 20459, deferred 0]  ->S corp health salary
+      -> S corp; salary/GP 75000; health plan; | distribute; SELL
+   adding 'acct': from 511 (->S corp acct health oDef rent sDef salary spouse) to +1602 (->C corp acct salary spouse)
+   adding 'child': from -688 (->S corp child oDef oPS rent sDef salary spouse) to +3127 (child health oPS sPS spouse trump)
+   adding 'health': from 2212 (->S corp child health oDef oPS rent salary) to +5382 (->C corp health salary spouse)
+   adding 'rent': from 983 (->S corp child oDef oPS rent sDef salary spouse) to +2694 (->C corp rent salary spouse)
+   adding 'spouse': from -4237 (->S corp salary spouse) to +814 (child oDef oPS spouse)
+   adding 'oDef': from -3787 (child oDef oPS sDef sPS spouse trump) to +-2108 (->C corp oDef salary spouse)
+   adding 'oPS': from -3393 (oDef oPS) to +154 (->C corp oPS salary spouse)
+   adding 'sDef': from -3649 (child oDef oPS sDef spouse trump) to +-1838 (->S corp health rent sDef sPS salary spouse)
+   adding 'sPS': from -759 (->S corp health rent sPS salary spouse) to +733 (health oPS sDef sPS spouse trump)
+   adding 'trump': from -734 (->C corp acct child health rent salary trump) to +84 (child oPS trump)
+== A6 one year, every move, service field: profit 1000000/yr x 1, service field true, S floor true, LP literal false
+   88490 positions, 10636 complete plans, 1100 families. Baseline (sole prop, nothing else): total tax 315502
+ 1. saves 47410  [tax 249502, deferred 84500]  ->S corp acct child health oDef oPS rent sDef sPS salary spouse
+      -> S corp; salary/GP 120000; spouse wage 30000; child wage 12000; health plan; rent home 14d; accountable plan; owner 401(k) deferral; owner profit-sharing; spouse 401(k) deferral; spouse profit-sharing; | distribute; SELL
+ 2. saves 46991  [tax 251544, deferred 77125]  ->S corp acct child health oDef oPS rent sDef salary spouse
+      -> S corp; salary/GP 120000; spouse wage 24500; child wage 12000; health plan; rent home 14d; accountable plan; owner 401(k) deferral; owner profit-sharing; spouse 401(k) deferral; | distribute; SELL
+ 3. saves 46651  [tax 256861, deferred 54500]  ->S corp acct child health oDef oPS rent salary
+      -> S corp; salary/GP 120000; child wage 12000; health plan; rent home 14d; accountable plan; owner 401(k) deferral; owner profit-sharing; | distribute; SELL
+ 4. saves 45190  [tax 251722, deferred 84500]  ->S corp child health oDef oPS rent sDef sPS salary spouse
+      -> S corp; salary/GP 120000; spouse wage 30000; child wage 12000; health plan; rent home 14d; owner 401(k) deferral; owner profit-sharing; spouse 401(k) deferral; spouse profit-sharing; | distribute; SELL
+ 5. saves 44771  [tax 253764, deferred 77125]  ->S corp child health oDef oPS rent sDef salary spouse
+      -> S corp; salary/GP 120000; spouse wage 24500; child wage 12000; health plan; rent home 14d; owner 401(k) deferral; owner profit-sharing; spouse 401(k) deferral; | distribute; SELL
+   adding 'acct': from 2220 (->S corp acct child health oDef oPS rent sDef sPS salary spouse) to +2389 (->C corp acct child health oPS rent salary)
+   adding 'child': from 2943 (->S corp acct child health oDef oPS rent sDef sPS salary spouse) to +5253 (child oPS sDef sPS spouse trump)
+   adding 'health': from 722 (child health oDef oPS sDef sPS spouse trump) to +9553 (->C corp acct child health oPS rent sDef sPS salary spouse trump)
+   adding 'rent': from 4144 (->S corp acct child health oDef oPS rent sDef sPS salary spouse) to +4459 (->C corp acct child health oPS rent salary)
+   adding 'spouse': from -3055 (->S corp acct health oDef oPS rent salary spouse) to +-2336 (child oDef oPS spouse trump)
+   adding 'oDef': from 0 (->C corp acct child health oDef oPS rent sDef sPS salary spouse trump) to +3675 (->S corp acct child health oDef oPS rent sDef sPS salary spouse)
+   adding 'oPS': from 4500 (->S corp acct child health oDef oPS rent sDef sPS salary spouse) to +12818 (->C corp acct child health oPS rent sDef sPS salary spouse trump)
+   adding 'sDef': from 2894 (->S corp acct child health oDef oPS rent sDef sPS salary spouse) to +3395 (->C corp acct child health oDef oPS rent sDef salary spouse trump)
+   adding 'sPS': from 419 (->S corp acct child health oDef oPS rent sDef sPS salary spouse) to +1104 (child health oDef oPS sPS spouse trump)
+   adding 'trump': from 138 (->C corp health oPS rent salary trump) to +597 (child oPS sDef sPS spouse trump)
+== B1 statute text only (no salary floor, LP literal): profit 400000/yr x 1, service field false, S floor false, LP literal true
+   4626 positions, 858 complete plans, 146 families. Baseline (sole prop, nothing else): total tax 81297
+ 1. saves 30650  [tax 50647, deferred 0]  ->S corp acct child health rent salary
+      -> S corp; salary/GP 24500; child wage 12000; health plan; rent home 14d; accountable plan; | distribute; SELL
+ 2. saves 30006  [tax 51291, deferred 0]  ->S corp acct health rent salary
+      -> S corp; salary/GP 24500; health plan; rent home 14d; accountable plan; | distribute; SELL
+ 3. saves 29498  [tax 51799, deferred 0]  ->S corp child health rent salary
+      -> S corp; salary/GP 24500; child wage 12000; health plan; rent home 14d; | distribute; SELL
+ 4. saves 29430  [tax 51867, deferred 0]  ->S corp acct child health rent
+      -> S corp; child wage 12000; health plan; rent home 14d; accountable plan; | distribute; SELL
+ 5. saves 29430  [tax 51867, deferred 0]  ->S corp acct child rent
+      -> S corp; child wage 12000; rent home 14d; accountable plan; | distribute; SELL
+ 6. saves 28854  [tax 52443, deferred 0]  ->S corp health rent salary
+      -> S corp; salary/GP 24500; health plan; rent home 14d; | distribute; SELL
+ 7. saves 28786  [tax 52511, deferred 0]  ->S corp acct rent
+      -> S corp; rent home 14d; accountable plan; | distribute; SELL
+ 8. saves 28786  [tax 52511, deferred 0]  ->S corp acct health rent
+      -> S corp; health plan; rent home 14d; accountable plan; | distribute; SELL
+   adding 'acct': from 1152 (->S corp acct child health rent salary) to +2152 (->C corp acct child health rent spouse)
+   adding 'child': from 644 (->S corp acct child health rent salary) to +2796 (->C corp acct child health rent salary)
+   adding 'health': from -783 (->S corp acct child health spouse) to +8605 (->C corp acct child health rent spouse)
+   adding 'rent': from 2150 (->S corp acct child health rent salary) to +4017 (->C corp child health rent salary)
+   adding 'spouse': from -4195 (->S corp acct health rent salary spouse) to +1349 (->C corp acct child health rent spouse)
+   adding 'salary': from -4195 (->S corp acct rent salary spouse) to +1243 (->limited partnership child salary)
+== B2 statute text only, service field: profit 1000000/yr x 1, service field true, S floor false, LP literal true
+   5213 positions, 964 complete plans, 146 families. Baseline (sole prop, nothing else): total tax 315502
+ 1. saves 50385  [tax 265117, deferred 0]  ->S corp acct child health rent salary
+      -> S corp; salary/GP 24500; child wage 12000; health plan; rent home 14d; accountable plan; | distribute; SELL
+ 2. saves 48165  [tax 267337, deferred 0]  ->S corp child health rent salary
+      -> S corp; salary/GP 24500; child wage 12000; health plan; rent home 14d; | distribute; SELL
+ 3. saves 47441  [tax 268061, deferred 0]  ->S corp acct health rent salary
+      -> S corp; salary/GP 24500; health plan; rent home 14d; accountable plan; | distribute; SELL
+ 4. saves 47330  [tax 268172, deferred 0]  ->S corp acct child health rent salary spouse
+      -> S corp; salary/GP 24500; spouse wage 24500; child wage 12000; health plan; rent home 14d; accountable plan; | distribute; SELL
+ 5. saves 46241  [tax 269261, deferred 0]  ->S corp acct child health salary
+      -> S corp; salary/GP 24500; child wage 12000; health plan; accountable plan; | distribute; SELL
+ 6. saves 46241  [tax 269261, deferred 0]  ->limited partnership child health spouse
+      -> limited partnership; spouse wage 24500; child wage 12000; health plan; | distribute; SELL
+   adding 'acct': from 2220 (->S corp acct child health rent salary) to +2389 (->C corp acct child health rent spouse)
+   adding 'child': from 2943 (->S corp acct child health rent salary spouse) to +4802 (child)
+   adding 'health': from 0 (->S corp acct child health rent) to +9553 (->C corp acct child health rent salary spouse)
+   adding 'rent': from 4144 (->S corp acct child health rent salary) to +4459 (->C corp acct child health rent spouse)
+   adding 'spouse': from -3055 (->S corp acct child health rent salary spouse) to +1125 (->C corp acct child health rent spouse)
+   adding 'salary': from -3055 (->S corp acct child rent salary) to +10049 (->C corp salary)
+== C1 five years, entity/salary/retain/sell only: profit 400000/yr x 5, service field false, S floor true, LP literal false
+   45674 positions, 10986 complete plans, 12 families. Baseline (sole prop, nothing else): total tax 588642
+ 1. saves 55780  [tax 532862, deferred 0]  ->C corp retain retain-credit salary
+      -> C corp; salary/GP 250000; | distribute; salary/GP 250000; | distribute; salary/GP 250000; | retain; salary/GP 250000; | retain; salary/GP 250000; | retain to credit; SELL
+ 2. saves 55779  [tax 532863, deferred 0]  ->C corp retain retain-credit salary sweep
+      -> C corp; salary/GP 250000; | retain; salary/GP 250000; | distribute all incl. prior; salary/GP 250000; | retain; salary/GP 250000; | retain; salary/GP 250000; | retain to credit; SELL
+ 3. saves 54942  [tax 533700, deferred 0]  ->C corp retain salary
+      -> C corp; salary/GP 250000; | distribute; salary/GP 250000; | distribute; salary/GP 250000; | retain; salary/GP 250000; | retain; salary/GP 250000; | retain; SELL
+ 4. saves 54941  [tax 533701, deferred 0]  ->C corp retain salary sweep
+      -> C corp; salary/GP 250000; | retain; salary/GP 250000; | distribute all incl. prior; salary/GP 250000; | retain; salary/GP 250000; | retain; salary/GP 250000; | retain; SELL
+ 5. saves 20980  [tax 567662, deferred 0]  ->S corp salary
+      -> S corp; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; SELL
+ 6. saves 8782  [tax 579860, deferred 0]  ->C corp salary
+      -> C corp; salary/GP 250000; | distribute; salary/GP 250000; | distribute; salary/GP 250000; | distribute; salary/GP 250000; | distribute; salary/GP 250000; | distribute; SELL
+ 7. saves 0  [tax 588642, deferred 0]  
+      | distribute; | distribute; | distribute; | distribute; | distribute; SELL
+ 8. saves -18367  [tax 607009, deferred 0]  ->C corp ->S corp salary
+      -> C corp; salary/GP 250000; | distribute; -> S corp; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; SELL
+== C2 five years, service field: profit 400000/yr x 5, service field true, S floor true, LP literal false
+   61977 positions, 13558 complete plans, 16 families. Baseline (sole prop, nothing else): total tax 588642
+ 1. saves 20980  [tax 567662, deferred 0]  ->S corp salary
+      -> S corp; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; SELL
+ 2. saves 0  [tax 588642, deferred 0]  
+      | distribute; | distribute; | distribute; | distribute; | distribute; SELL
+ 3. saves -18367  [tax 607009, deferred 0]  ->C corp ->S corp salary
+      -> C corp; salary/GP 250000; | distribute; -> S corp; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; SELL
+ 4. saves -19647  [tax 608289, deferred 0]  ->C corp ->S corp retain salary
+      -> C corp; salary/GP 250000; | retain; -> S corp; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; salary/GP 120000; | distribute; SELL

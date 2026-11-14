@@ -37,7 +37,7 @@ from concurrent.futures import ProcessPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LP = os.path.abspath(os.path.join(HERE, '..', '..', '..'))                 # lean-proofs
-W = os.path.expanduser('~/Documents/us-caselaw-lean-work/caselaw-lean-2')
+W = os.environ.get('FUZZ_W') or os.path.expanduser('~/Documents/us-caselaw-lean-work/caselaw-lean-2')
 FIX = os.path.join(W, 'fixtures')
 EXE = os.path.join(W, 'runner', '.lake', 'build', 'bin', 'caselaw2.exe' if os.name == 'nt' else 'caselaw2')
 DEFAULT_DIR = os.path.join(os.environ.get('TEMP', '/tmp'), 'caselaw2-fuzz')
@@ -63,6 +63,15 @@ SPEC = {
     'decisions2.tsv': (9, (0, 1, 2, 3), (), (), ()),
 }
 FILES = list(SPEC)
+# round 5 (fuzz5.py): the two optional tables, mutated like the others; not in FILES (a case need not have them)
+SPEC_OPT = {
+    'treatment_witness.tsv': (4, (1,), (), (), ()),
+    'treatment_class.tsv': (5, (), (), (), ()),
+}
+
+
+def spec_of(name):
+    return SPEC[name] if name in SPEC else SPEC_OPT[name]
 BENCH = ["panel", "division", "enBanc", "limitedEnBanc", "circulated", "conflictPanel", "wholeCourt", "unknown"]
 PUB = ["published", "unpublished", "table", "summaryOrder", "memorandum", "unknown"]
 FORM = ["full", "perCuriam", "summaryAffirmance", "equallyDivided", "certifiedAnswer", "plurality", "memorandum",
@@ -315,7 +324,8 @@ def mutate_lines(rng, lines, name):
     elif op == 'empty_field':
         f[j] = ''
     elif op == 'num':
-        nats = SPEC[name][1] + SPEC[name][2] + SPEC[name][3] + SPEC[name][4]
+        sp = spec_of(name)
+        nats = sp[1] + sp[2] + sp[3] + sp[4]
         c = rng.choice(nats) if nats else j
         f[c if c < len(f) else j] = rng.choice(NUMS)
     elif op == 'lone_cr':
@@ -335,7 +345,7 @@ def mutate_lines(rng, lines, name):
     elif op == 'blank':
         lines.insert(i, [rng.choice(['', ' ', '\r', '  \t'])])
     elif op == 'header':
-        lines.insert(0, ['court_id', 'node', 'id', 'x'][:1] + ['h'] * (SPEC[name][0] - 1))
+        lines.insert(0, ['court_id', 'node', 'id', 'x'][:1] + ['h'] * (spec_of(name)[0] - 1))
     return op
 
 
@@ -362,8 +372,8 @@ def read_fixture(name):
         return [l.rstrip('\n').split('\t') for l in f if l.strip('\n')]
 
 
-def gen_case(seed, d):
-    rng = random.Random(seed)
+def base_tabs(rng):
+    """The fixtures' tables plus 1-4 certificate scenarios (the first draws of a case's generator)."""
     tabs = {n: read_fixture(n) for n in FILES}
     vars_ = []
     for k in range(rng.randint(1, 4)):
@@ -377,6 +387,12 @@ def gen_case(seed, d):
         tabs['treatments.tsv'].append(sc['treat'])
         if sc['hist']:
             tabs['history.tsv'].append(sc['hist'])
+    return tabs, vars_
+
+
+def gen_case(seed, d):
+    rng = random.Random(seed)
+    tabs, vars_ = base_tabs(rng)
     ops = []
     fops = defaultdict(set)
     for _ in range(rng.choice([0, 0, 1, 2, 3, 5, 8])):
@@ -416,6 +432,11 @@ def run_ref(d):
             'lawchanges.tsv': len(D.lawchanges), 'supersessions.tsv': len(D.supersessions),
             'issues.tsv': len(D.issues), 'decisions2.tsv': D.n_present},
             'certs': {'%s|%s' % (f.replace('.tsv', ''), i): r for (f, i), r in E.cert_ok.items()}}
+        if getattr(D, 'r5', False):            # round 5 (fuzz5.py): the class table and what the engine made of it
+            res['r5'] = {'class_rows': len(D.klass), 'class_bad': D.class_bad, 'recog': dict(E.recog_all),
+                         'classes': dict(E.row_class), 'oper': sorted(E.op_admitted),
+                         'claims': {k: list(v) for k, v in D.klass.items()},
+                         'witness': {k: [v[0], v[1]] for k, v in D.witness.items()}}
     except Exception:
         res = {'crash': traceback.format_exc()[-2000:]}
     with open(os.path.join(d, 'ref.json'), 'w', encoding='utf-8') as f:
@@ -426,14 +447,15 @@ def run_runner_batch(args):
     """The runner's own main (CaseLaw2.Run.main, the arguments run_lean.sh gives one shard) over a chunk of cases in
     one interpreter process (RunBatch.lean): Windows Application Control blocks a freshly built caselaw2.exe, and
     run_lean.sh's fallback, one `lake env lean --run` per case, costs ~7 s of start-up each."""
-    k, dirs, root = args
-    lst = os.path.join(root, 'runlist-%d.txt' % k)
+    k, dirs, root = args[:3]
+    lp, outname = (args[3], args[4]) if len(args) > 3 else (LP, 'runner')
+    lst = os.path.join(root, 'runlist-%s-%d.txt' % (outname, k))
     with open(lst, 'w', encoding='utf-8', newline='\n') as f:
         f.write('\n'.join(dirs) + '\n')
     env = dict(os.environ, PATH=ELAN + os.pathsep + os.environ.get('PATH', ''), FUZZ_LIST=lst,
-               FUZZ_EDGES=os.path.join(FIX, 'edges'))
-    p = subprocess.run(['lake', 'env', 'lean', os.path.join(HERE, 'RunBatch.lean')], cwd=LP, capture_output=True,
-                       env=env)
+               FUZZ_EDGES=os.path.join(FIX, 'edges'), FUZZ_OUTNAME=outname)
+    p = subprocess.run(['lake', 'env', 'lean', os.path.join(lp, 'tools', 'caselaw2', 'fuzz', 'RunBatch.lean')],
+                       cwd=lp, capture_output=True, env=env)
     err = p.stderr.decode('utf-8', 'replace') + p.stdout.decode('utf-8', 'replace')
     cur, per = None, defaultdict(list)
     for l in err.splitlines():
@@ -442,9 +464,9 @@ def run_runner_batch(args):
         elif cur and ('PANIC' in l or 'error' in l.lower() or 'INTERNAL' in l):
             per[cur].append(l[:300])
     for d in dirs:
-        rcp = os.path.join(d, 'runner', 'rc.txt')
+        rcp = os.path.join(d, outname, 'rc.txt')
         rc = open(rcp, encoding='utf-8').read().strip() if os.path.exists(rcp) else None
-        with open(os.path.join(d, 'runner.json'), 'w', encoding='utf-8') as f:
+        with open(os.path.join(d, outname + '.json'), 'w', encoding='utf-8') as f:
             json.dump({'rc': 0 if rc == '0' else rc, 'stderr': '\n'.join(per.get(d, []))[-2000:],
                        'batch_rc': p.returncode}, f)
     return p.returncode
@@ -604,6 +626,8 @@ def check_case(d):
                 continue
             stats['certs_compared'] += 1
             dtag = '.DEV-int64' if row_nodes[k] & big_nodes else '.FB-L1' if row_nodes[k] & l1_nodes else ''
+            if lr.startswith('okRecognised'):
+                continue                               # round 5: compared with the reference's recognised set in fuzz5.py
             if (lr == 'badRow') != (rr == 'badRow'):
                 fails.append(('P5.badRow' + dtag, '%s lean %s ref %s' % (k, lr, rr)))
                 continue
@@ -722,7 +746,7 @@ def cmd_real():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('cmd', choices=['gen', 'run', 'check', 'real', 'all', 'refonly'])
+    ap.add_argument('cmd', choices=['gen', 'run', 'check', 'real', 'all', 'refonly'])   # round 5: see fuzz5.py
     ap.add_argument('--n', type=int, default=5000)
     ap.add_argument('--seed', type=int, default=1)
     ap.add_argument('--dir', default=DEFAULT_DIR)

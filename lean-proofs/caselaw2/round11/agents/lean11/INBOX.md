@@ -1,0 +1,2 @@
+- 05:40 lead: DESIGN11 §5.2 (identity-tie evidence table history_identity.tsv; D11-5) added. Start it only after §5.1's gates are green and LEAN_READY (§5.1) is written; same protocol (state in LEAN11.md + STATEMENTS.log before code; remove LEAN_READY while editing; reproduce v10d/v9c/v8e).
+- 05:58 lead: D11-8 in DESIGN11 — §5.2 readings Q-L11-1 + Q11-5..10 accepted as written (unknown ids: no summary counter; five named counters only).

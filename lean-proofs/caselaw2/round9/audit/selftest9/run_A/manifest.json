@@ -1,0 +1,76 @@
+{
+ "run": "selftest9/run_A",
+ "class": "selftest-treat",
+ "type": "A",
+ "brief": "A",
+ "table": "treatments",
+ "self_test": true,
+ "created": "2026-11-14 02:18:00",
+ "args": {
+  "cls": "selftest-treat",
+  "cert": [
+   "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round9\\audit\\selftest9\\cert_A"
+  ],
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round9\\audit\\selftest9\\run_A",
+  "n": 12,
+  "exclude": [],
+  "ids": null,
+  "pairs": null,
+  "match": [],
+  "lean_classes": null,
+  "lean_certs": null,
+  "seed": 77,
+  "pack_size": 8,
+  "decoy_share": 0.12,
+  "decoy_wrong_share": 0.6,
+  "decoy_families": "",
+  "pad_min": 500,
+  "pad_max": 1600,
+  "dry_run": false,
+  "force": true,
+  "mark_selftest": true
+ },
+ "inputs": [
+  {
+   "treatments": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round9/audit/selftest9/cert_A/treatments_delta.tsv",
+   "history": null,
+   "witness": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round9/audit/selftest9/cert_A/treatment_witness_delta.tsv",
+   "class": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round9/audit/selftest9/cert_A/treatment_class_delta.tsv",
+   "joined": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round9/audit/selftest9/cert_A/joined_delta.tsv",
+   "anchor": null,
+   "hclaim": null,
+   "sha1": {
+    "treatments": "856c430d6c4e49a9c26af2206ee1535a906e55dc",
+    "witness": "6685f74a214996d1f0b02e3aa78e4a61c909ac76",
+    "class": "1cf2bee7c2b1baf99d09b8348133788a98fcc9d8",
+    "joined": "bd2f5f424621957a7630e1eda37c30badd4abf81"
+   },
+   "bad_rows": 0,
+   "cert": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round9/audit/selftest9/cert_A",
+   "rows": 100,
+   "kept": 100
+  }
+ ],
+ "population": 100,
+ "real": 12,
+ "decoys_wrong": 2,
+ "decoys_right": 2,
+ "packs": {
+  "pack_1.md": {
+   "items": 8,
+   "real": 6,
+   "decoys": 2
+  },
+  "pack_2.md": {
+   "items": 8,
+   "real": 6,
+   "decoys": 2
+  }
+ },
+ "relocated_quotes": 0,
+ "decoy_pool": {
+  "path": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round9/audit/decoy_pool_A.jsonl",
+  "sha1": "95f37cf7d8fd585ea1f6d37e5557c3a0224b96b5"
+ },
+ "warnings": []
+}

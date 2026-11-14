@@ -1,0 +1,33 @@
+round 7 variant v1: dev-side scores (results in round7/results/v1/)
+scored 2026-11-13 23:27:04
+stage args: v1 --delta round7/agents/opwords/cert --delta round7/agents/queue/cert --drop round7/audit/ids_opw_whole.txt
+Lean run: NOBUILD run (binary 0a760c947678)
+Lean summary (shard 0): rows_admitted 205348, rows_rejected 9107, class_rows 7513, class_bad_rows 0, recognised_rows 6478, operative_rows 897, anchor_rows 32593, anchor_unknown_ids 0, anchor_duplicates 0, anchored_admitted 31350, anchored_rejected 1243
+round-7 rows by verdict: t7 noAuthority 9, t7 ok 897
+
+FRESH LISTS, dev (165 pairs): strict 50/165 = 30.3% (23.8-37.7); lenient 109/165 = 66.1% (58.5-72.9)
+  precision side: listed 80/93 = 86.0% (77.5-91.6); classes {"listed": 80, "targetListedOtherOverruler": 1, "unlisted": 12}
+  view attributed strict 80/165 = 48.5% (41.0-56.1); lenient 109/165 = 66.1% (58.5-72.9)
+  view model      strict 50/165 = 30.3% (23.8-37.7); lenient 109/165 = 66.1% (58.5-72.9)
+NO-LEAK: exit 0 (0 = no leak)
+HOLDOUT NOTES: precedent, Y named strict 745/12354 = 6.0% (5.6-6.5); byAnyone 864/12354 = 7.0% (6.6-7.5); negOrPartly 4456/12354 = 36.1% (35.2-36.9); anySignal 5108/12354 = 41.3% (40.5-42.2)
+HOLDOUT NOTES: precedent, explicitly admitted pairs strict 632/3071 = 20.6% (19.2-22.0); byAnyone 647/3071 = 21.1% (19.7-22.5); negOrPartly 3015/3071 = 98.2% (97.6-98.6); anySignal 3028/3071 = 98.6% (98.1-99.0)
+HOLDOUT NOTES: history 4375/5089 = 86.0% (85.0-86.9)
+HOLDOUT NOTES: precedent 766/820 = 93.4% (91.5-94.9)
+OLD LISTS (burned, non-blind): SCDB 144/278 explicit rows, 176/278 with recognised; CRS current 164/292, 196/292 with recognised; rows by class {"selfAnnounced": 22846, "operativeWords": 2649, "recognised": 6155, "doctrine": 0}
+SHEPARDIZED, dev half (raw k/n share [95%]; with documented errors set aside):
+  agreement      overall, scored classes (NEG, PART, MOD, CLEAN)                9821/9985 98.4% [98.1%-98.6%]; set aside 9817/9977 98.4%
+  (a) recall     NEG: model NEG_HIST (strict)                                   105/254 41.3% [35.5%-47.5%]; set aside 105/252 41.7%
+  (a) recall     NEG: model NEG_HIST or UNK_HIST (lenient)                      112/254 44.1% [38.1%-50.2%]; set aside 112/252 44.4%
+  (a) recall     PART: model NEG_HIST or UNK_HIST                               3/11 27.3% [9.7%-56.6%]; set aside 3/11 27.3%
+  (a) recall     NEG and PART together: model as expected                       108/265 40.8% [35.0%-46.8%]; set aside 108/263 41.1%
+  (b) precision  of model NEG_HIST: Shepardized NEG (strict; AMBIG left out)    105/111 94.6% [88.7%-97.5%]; set aside 105/110 95.5%
+  (b) precision  of model NEG_HIST: Shepardized NEG or PART (lenient; AMBIG lef 105/111 94.6% [88.7%-97.5%]; set aside 105/110 95.5%
+  (c) clean      CLEAN: model shows no same-case negative                       9698/9704 99.9% [99.9%-100.0%]; set aside 9694/9698 100.0%
+  (c) clean      MOD: model CLEAN or UNK_HIST                                   15/16 93.8% [71.7%-98.9%]; set aside 15/16 93.8%
+  subclass       NEG/enbanc_different                                           3/27 11.1%
+  subclass       NEG/panel_withdrawn                                            5/27 18.5%
+  subclass       NEG/sc_reversed                                                67/129 51.9%
+  subclass       NEG/sc_vacated                                                 30/71 42.3%
+  subclass       PART/sc_part                                                   3/11 27.3%
+  dev_fp.tsv dev CLEAN/MOD cases shown negative for a same-case reason 7 (CLEAN 6, MOD 1)

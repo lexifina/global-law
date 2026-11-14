@@ -1,0 +1,86 @@
+{
+ "forms": [
+  "Form 8606 (2025) + instructions; 2026 early-release draft form + instructions",
+  "Form 4547 (Rev. 12-2025) + instructions; draft",
+  "Notice 2025-68 (read in full)",
+  "Form 8889 (2025) + instructions; 2026 draft form + instructions",
+  "Form 5329 (2025) + instructions; 2026 draft form + instructions (Parts X, XI new)",
+  "Form 1099-Q (Rev. 4-2025) + instructions",
+  "Form 5498-QA (Rev. 12-2026) + Instructions for Forms 1099-QA and 5498-QA (Rev. 12-2026)",
+  "Pub. 969 (fetched, cross-check only)"
+ ],
+ "grid_points": 5306,
+ "differences": [
+  {
+   "form_line": "Form 8889 line 3 (2025 instructions, rules 2 and 4 and the TIP: \"If you had family coverage on the first day of the last month ... enter $8,550\"); same wording in the 2026 draft",
+   "statute": "s.223(b)(8)(A)(ii): December's plan is attributed only to \"each of the months such individual is treated as an eligible individual solely by reason of clause (i)\". A month in which the person really was eligible keeps its own coverage type under s.223(b)(2).",
+   "direction": "form gives more",
+   "example": "Eligible all 12 months of 2025, self-only Jan-Nov, family from Dec 1: statute 11/12 x 4,300 + 1/12 x 8,550 = 4,654.17; form 8,550. 704 coverage/age/marital grid points differ, all the same way.",
+   "dollars": "up to 3,895.83 more deduction for 2025 (3,987.50 on 2026 limits); tax worth roughly 400-1,400. Anyone who moves from self-only to family cover during the year and is covered on Dec 1.",
+   "explained_by": "Notice 2008-52 (limit is the greater of the monthly sum or the full-year amount for the Dec 1 coverage; its own example gives 5,800 against a monthly sum of 3,142). The form follows the notice, not the \"solely by reason\" words.",
+   "published": "The greater-of rule is widely described; one search found nothing noting that it exceeds the statute's text.",
+   "confidence": "high that form and text differ; the notice is long-standing IRS position"
+  },
+  {
+   "form_line": "Form 4547 Part III line 7 and instructions (\"anticipated to be the qualifying child of the authorized individual for the year in which the election is made\")",
+   "statute": "s.6434(a),(c): election \"with respect to an eligible child of the individual\"; eligible child \"means a qualifying child (as defined in section 152(c))\".",
+   "direction": "form gives more",
+   "example": "Parent elects in March expecting the child to live with them; child fails the s.152(c) residency test for the year. Statute: not an eligible child of that individual. Form/notice: the $1,000 stands.",
+   "dollars": "1,000 per child",
+   "explained_by": "Notice 2025-68 Q&A B-1 (election \"will not be rendered ineffective solely\" because the child later is not a qualifying child). The form face itself still says \"must be a qualifying child\".",
+   "published": "not searched",
+   "confidence": "medium (deliberate administrative reading)"
+  },
+  {
+   "form_line": "Form 5329 Part VII lines 43 and 47 with Form 8889 lines 10-13 (2025 and 2026 draft): a qualified HSA funding distribution only uses up limit; it is never itself an excess contribution",
+   "statute": "s.4973(g)(1): excess contributions are amounts contributed \"neither excludable from gross income under section 106(d) nor allowable as a deduction under section 223\". A funding distribution is excluded by s.408(d)(9), and s.223(b)(4)(C) says it \"shall not be allowed as a deduction\", so read literally all of it is an excess contribution (same words in s.223(f)(3)(B)); s.4973(g)(2)(B) also counts it twice.",
+   "direction": "form gives more",
+   "example": "Family cover, 8,550 funding distribution, nothing else: literal statute 6% x 8,550 = 513 a year until absorbed; form 0. 30 grid points differ, all with a funding distribution.",
+   "dollars": "up to 513 a year (573 with the age-55 amount) per person making the once-in-a-lifetime transfer",
+   "explained_by": "No text fixes it. Notice 2008-51 treats the transfer as counting against the limit only; s.4973(g) was not conformed when s.408(d)(9) was added in 2006.",
+   "published": "one search found no discussion",
+   "confidence": "medium: the words say this; the result is plainly unintended and the form's reading is the sensible one"
+  },
+  {
+   "form_line": "Form 5329 lines 17, 25, 33, 41, 49: 6% of the smaller of the excess or the account value \"on December 31, 2025 (including 2025 contributions made in 2026)\"",
+   "statute": "s.4973(a): tax \"shall not exceed 6 percent of the value of the account ... (determined as of the close of the taxable year)\". s.219(f)(3) deems a later contribution made on the last day of the year only \"For purposes of this section\" (s.219); s.223(d)(4)(B) likewise for s.223.",
+   "direction": "statute gives more",
+   "example": "IRA opened March 2026 with 7,000 designated for 2025 by someone with no compensation; value at 31 Dec 2025 is 0. Statute ceiling 0; form 420. 8 grid points differ.",
+   "dollars": "up to 420 (480 if 50 or older) for an IRA, up to 573 for an HSA, first year only; accounts empty or nearly empty at year-end that receive a prior-year excess contribution the next spring",
+   "explained_by": "none found (no regulation extends the deeming rule to s.4973)",
+   "published": "not searched",
+   "confidence": "medium"
+  },
+  {
+   "form_line": "2026 draft Form 5329 Part X line 61: \"Enter 6% (0.06) of line 60\" with no account-value ceiling (every other excess-contribution part has one)",
+   "statute": "s.4973(a) ceiling of 6% of the value of the account at the close of the taxable year applies to every account in (a)(1)-(6); a Trump account is a s.408(a) account and s.530A(h)(5) changes only the definition of excess contributions.",
+   "direction": "statute gives more",
+   "example": "2,500 excess left in the account, whole balance moved to an ABLE account in the year the child turns 17, value at year-end 0: statute 0, form 150. 24 grid points differ, all with year-end value below the excess.",
+   "dollars": "at most 6% of the undistributed excess; rare",
+   "explained_by": "none; draft form",
+   "published": "no",
+   "confidence": "medium-low (draft; narrow facts)"
+  }
+ ],
+ "no_difference_found": [
+  "Form 8606 2026 draft: \"traditional IRA ... does not include Trump accounts\" keeps them out of lines 2, 6, 7, matching s.530A(h)(4) and Notice 2025-68 G-1 (0 grid points differ). No Trump account can be past its growth period in 2026 (s.530A(b)(2)(A): born 2009 or later), so the form's silence costs nothing for 2026.",
+  "Age cut-offs: Form 4547 (\"under age 18 at the end of the year\", \"born after December 31, 2008\"), draft 5329 Parts III/X (\"has not attained age 18 by the end of 2026\"), the growth period in Notice 2025-68, pilot birth window 2025-2028: all match s.530A(b)(2)(A), (c)(2), (h)(5) and s.6434(c)(1) for calendar-year taxpayers (0 grid points differ).",
+  "Draft 5329 Part X lines 56-60 and Part XI (100% of earnings) match s.530A(h)(5) and (d)(5)(C); exempt contributions are left out of the 5,000 test as in s.530A(c)(2).",
+  "Form 8889 Part III (last-month rule and funding-distribution testing periods, 10%) matches s.223(b)(8)(B) and s.408(d)(9)(D); the 20% tax exceptions match s.223(f)(4).",
+  "Form 5329 Part VIII (ABLE: current-year excess only, no carry-over) matches s.4973(h).",
+  "Forms 1099-Q and 5498-QA are information returns with no limit computation; 5498-QA box 8 matches s.530A(d)(4)(B)."
+ ],
+ "gaps_not_differences": [
+  "No form or instruction yet computes the separate s.408(d)(2) ratio for a Trump account after the growth period, or carries its basis; the 2026 Form 8606 instructions say Trump accounts \"are not discussed\". First needed for 2027 (children born in 2009).",
+  "2025 Form 8889 line 3: the Note (\"If you are married and had family coverage at any time during the year, the additional contribution amount is figured on line 7 and is not included on line 3\") conflicts with the Line 3 chart, which adds 1,000 to self-only months for anyone 55 or older. Following the Note drops up to 1,000 x self-only months / 12; following the chart matches s.223(b)(3).",
+  "Pub. 590-A's section on s.529(c)(3)(E) transfers (read only through a summary) says the account must be open \"more than 15 years\" and that the yearly cap is the Roth contribution limit; the statute's reduction for contributions \"made during the taxable year\" to any IRA was not visible. Not verified word for word.",
+  "Instructions for Form 1099-Q (Rev. 4-2025) predate the 2025 Act's s.529 changes and tell payers to tick box 4a (trustee-to-trustee) for 60-day rollovers to ABLE accounts."
+ ],
+ "not_retrieved": [
+  "Notice 2026-5 (HSA changes): cited by the 8889 draft, not fetched",
+  "Notices 2008-51 and 2008-52: known from search summaries only",
+  "Pub. 590-A and Pub. 590-B full text (590-A QTP section seen only in summary); Pub. 970",
+  "2026 Form 1099-R / 5498 instructions (box 7d earnings on Trump account excess)",
+  "Any 2026 revision of Form 1099-Q or its instructions (latest posted is Rev. April 2025)"
+ ]
+}

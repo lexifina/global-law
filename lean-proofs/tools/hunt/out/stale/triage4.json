@@ -1,0 +1,37 @@
+{
+  "chunk": 4,
+  "counts": {"noise": 70, "intended": 10, "gap": 2},
+  "gaps": [
+    {
+      "entry": "#4.40 (with #4.38)",
+      "new": "§529(c)(3)(E) (2022): tax-free rollover of up to $35,000 per designated beneficiary from a qualified tuition program 'maintained for the 15-year period ending on the date of such distribution' to that beneficiary's Roth IRA",
+      "list": "§529(c)(3)(C)(ii) and §529(e)(1)(B): a change of designated beneficiary to a family member is not a distribution, and the new person simply becomes 'the designated beneficiary'. Neither was touched in 2022; nothing restarts the 15-year period or carries the $35,000 count across a change. The same Act did update §529(d)(2), §408A(c)(3)(E), (c)(5)(B)(ii) and (e)(1)(C).",
+      "effect": "Read literally the 15 years run on the program account, not on the beneficiary. An old account can be re-pointed at a sibling, parent or cousin and rolled into that person's Roth IRA at once; and since the $35,000 cap is 'with respect to the designated beneficiary', each successive family beneficiary gets a fresh $35,000. If a restart on change were read in, the new beneficiary waits 15 years and the money can only leave as a non-qualified withdrawal.",
+      "who_gains": "taxpayer",
+      "example": "Account opened 2008 for child A, $70,000 left after college, 55% earnings. A rolls $35,000 to A's Roth (clearly allowed). Owner changes beneficiary to sibling B, who has wages; B rolls the other $35,000 at the §408A(c)(2) annual limit (about 5 years, reduced by B's other IRA contributions). Alternative if the clock restarted: non-qualified withdrawal of $35,000, earnings $19,250 taxed at 22% plus 10% under §529(c)(6)/§530(d)(4) = $6,160. Best ordinary alternative with no tax is leaving the money locked for some future education use.",
+      "dollars": "about $6,160 tax avoided per extra $35,000 moved (22% bracket, 55% earnings), plus tax-free Roth growth; repeats per family member with compensation",
+      "could_cover": "No anti-abuse rule in §529. §529(g) gives a general regulation power ('Notwithstanding any other provision of this section') 'to carry out the purposes of this section and to prevent abuse of such purposes', wide enough to impose a restart by regulation; none issued in the text. A court could read 'qualified tuition program of a designated beneficiary which has been maintained for the 15-year period' as maintained for that beneficiary. The 5-year contribution look-back in (E)(i)(I) and the annual limit still apply.",
+      "confidence": "medium"
+    },
+    {
+      "entry": "#4.24",
+      "new": "§45E(f) (2022): startup credit 'shall be increased by' up to $1,000 per employee of employer contributions, for the plan's first 5 years (100/100/75/50/25%)",
+      "list": "§45E(b): 'The amount of the credit determined under this section for any taxable year shall not exceed' $5,000 (greater of $500 or lesser of $250 per non-HCE or $5,000) for the first 3 years and 'zero for any other taxable year'. Not amended. The same Act did amend §45E(e)(2) to name subsection (f). (The entry's own list, §38(b)(14), is noise: (f) is an increase of the (a) credit.)",
+      "effect": "If the (f) increase is part of 'the credit determined under this section', (b) caps startup credit plus contribution credit together at $5,000 a year and wipes out years 4 and 5 of the (f) table entirely. If (f) is read as added after (b) (its text increases 'the credit allowed ... under subsection (a) (determined without regard to this subsection)'), the full contribution credit survives. §45E(e)(2)(B) still disallows the deduction by reference to 'the credit increase determined under subsection (f)'.",
+      "who_gains": "government",
+      "example": "20 non-HCE employees, all under the wage limit, employer contributes $1,000 each, startup costs $4,000 a year. Intended: (a) $4,000 x 3 = $12,000; (f) $20,000 + $20,000 + $15,000 + $10,000 + $5,000 = $70,000; total $82,000. Literal (b) cap: $5,000 x 3 and zero in years 4-5 = $15,000.",
+      "dollars": "$67,000 of credit lost over 5 years for a 20-employee employer on the strict reading",
+      "could_cover": "The parenthetical in (f)(1) and the word 'allowed' support applying (b) first and adding (f) afterwards; the 4th- and 5th-year table rows in (f)(3) would be dead letters otherwise, which is a strong argument against the strict reading. §45E has no regulation power of its own; §7805 only.",
+      "confidence": "low"
+    }
+  ],
+  "other": [
+    "§964(e)(4)(A)(ii) (#4.67) still puts its inclusion in the shareholder's taxable year 'with or within which such taxable year of the controlled foreign corporation ends', the timing rule the 2025 Act removed from §951(a)(1) and §951A(e)(1) in favour of §951(a)(3) (year that includes the shareholder's last day of ownership). Same CFC year, two different inclusion years for a shareholder who sells mid-year when the tax years differ (e.g. a November CFC year under the §898(c)(2) one-month deferral, sale in December). Timing only, and a corporate shareholder gets the §245A deduction on it, so classed intended/harmless. It is the only place in subpart F still carrying the old words.",
+      "§953(c)(5)(A)(i)(III) (#4.63) says 'only distributions received by United States shareholders were taken into account under subparagraph (B) of such paragraph (2)'. The 2025 Act replaced §951(a)(2)(B) (the dividend reduction) with the period-of-ownership rule, so this cross-reference now points at nothing; §953(c)(5)(A)(i)(II) also still keys to stock owned 'on the last day of the taxable year' while §951(a)(1)(A) now reaches any-day owners. No dollar effect found; the RPII pro rata share rule needs a conforming rewrite.",
+      "§45AA (military spouse retirement credit, 2022) has no deduction disallowance and no coordination with §45E(f), unlike §45E(e)(2). The same $300 of employer contribution for a military spouse earns $300 under §45AA(a)(2) and $300 under §45E(f), and the §45AA part stays deductible. Small: at most $300 extra credit plus about $63 of deduction per spouse per year for 3 years.",
+      "§45AA(f) aggregates under §414(b), (c), (m), (o); §45E(e)(1) aggregates under §52(a), (b) and §414(m), (o); §45T has no aggregation rule at all for its $500 a year.",
+      "§529(c)(3)(B)(ii) measures the exclusion ratio by 'distributions not described in clause (i)'; a Roth rollover under (E), like a (C)(i) rollover, is not carved out of that denominator in terms, so on a strict reading a rollover in the same year as a tuition withdrawal lowers the excluded share of the tuition withdrawal's earnings. Pre-existing for (C)(i) rollovers; low confidence.",
+      "§48E(h)(4)(C) (#4.34) keeps allocating 1.8 GW a year of low-income bonus capacity through 2032 although the facilities that qualify are mostly wind and solar, which §48E(e)(4) ends for property placed in service after 2027. No taxpayer effect; dead capacity.",
+      "§25(e)(1)(C), §23(c)(1) and §25D(c) each carve out a different set of credits when ordering carryforwards (§25: 23 and 25D; §23: 25D; §25D: none). §25E was not added to any, which is right because §25E has no carryforward (#4.10 intended)."
+    ]
+}

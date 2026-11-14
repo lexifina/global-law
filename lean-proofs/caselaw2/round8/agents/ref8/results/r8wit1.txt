@@ -1,0 +1,24 @@
+g86000: 1 disagreeing rows 
+g86013: 1 disagreeing rows 
+v84006: 3 disagreeing rows 
+
+3 universes, 3 with a disagreement, 0 where the Lean runner wrote no output, 0 where the reference failed
+  status    0 of 621 keys disagree
+  findings  4 of 256 keys disagree
+  certs     1 of 980 keys disagree
+  splits    0 of 39 keys disagree
+  conflicts 0 of 55 keys disagree
+  lines     0 of 46 keys disagree
+  horty     0 of 10 keys disagree
+  classes   0 of 107 keys disagree
+  summary   0 of 47 keys disagree
+  class (file, bucket, rule): universes   first example
+  findings  onlyA                                atRisk:inferred                2   e.g. g86000 atRisk:inferred 195 194 A=1 B=
+  findings  onlyA                                atRisk:citesLaterNegated       1   e.g. g86013 atRisk:citesLaterNegated 234 232 A=1 B=
+  findings  onlyB                                atRisk:inferred                1   e.g. v84006 atRisk:inferred 238 237 A= B=1
+  certs     okMismatch:ok/witnessNoStanding      treatment                      1   e.g. v84006 treatment:tr3 A=noAuthority B=witnessNoStanding
+  info  findings uncompared lean:citesNotCitable:force               1
+  info  findings uncompared lean:hortyConsistentBase                 8
+  info  findings uncompared lean:hortySelfInconsistent               4
+  info  findings uncompared lean:inconsistentBindingBase             2
+rc=1

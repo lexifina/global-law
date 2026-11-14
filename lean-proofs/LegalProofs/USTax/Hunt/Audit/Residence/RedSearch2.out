@@ -1,0 +1,88 @@
+## H plan1 heirs
+positions 42837 terminals 8690 baseline 238000 | minAll 26180 minFull 26180 minFullNoExpat 238000 | covered+resident-after 26180 covered-leaver 26180 non-covered 999999999 | with §2801 heirs: any 26180 full 26180 covered-abroad-at-end 618580 | maxGainTax 238000 maxExits 1 maxExcl 890000 minOrdFull 209994 viol 0
+best in-US-every-day:
+  y0: ABANDON-LPR SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+best overall:
+  y0: ABANDON-LPR SELL RELOCATE RELOCATE out[1-30] out[31-182] out[183-365]
+  y1: out[1-30] out[31-182] out[183-365]
+## H plan2 heirs
+positions 66125 terminals 3418 baseline 238000 | minAll 26180 minFull 26180 minFullNoExpat 238000 | covered+resident-after 26180 covered-leaver 26180 non-covered 200000 | with §2801 heirs: any 26180 full 26180 covered-abroad-at-end 618580 | maxGainTax 238000 maxExits 1 maxExcl 890000 minOrdFull 209994 viol 0
+best in-US-every-day:
+  y0: ABANDON-LPR(no certification) SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+best overall:
+  y0: ABANDON-LPR(no certification) SELL RELOCATE RELOCATE out[1-30] out[31-182] out[183-365]
+  y1: out[1-30] out[31-182] out[183-365]
+## T5 gain below exclusion 500,000
+positions 42837 terminals 8690 baseline 119000 | minAll 0 minFull 0 minFullNoExpat 119000 | covered+resident-after 0 covered-leaver 0 non-covered 999999999 | with §2801 heirs: any 0 full 0 covered-abroad-at-end 392400 | maxGainTax 119000 maxExits 1 maxExcl 500000 minOrdFull 209994 viol 0
+best in-US-every-day:
+  y0: ABANDON-LPR SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+best overall:
+  y0: ABANDON-LPR SELL RELOCATE RELOCATE out[1-30] out[31-182] out[183-365]
+  y1: out[1-30] out[31-182] out[183-365]
+## T5 student gc? citizen student flag
+positions 5756 terminals 693 baseline 300000 | minAll 0 minFull 300000 minFullNoExpat 300000 | covered+resident-after 999999999 covered-leaver 999999999 non-covered 999999999 | with §2801 heirs: any 0 full 300000 covered-abroad-at-end 999999999 | maxGainTax 300000 maxExits 0 maxExcl 0 minOrdFull 209994 viol 0
+best in-US-every-day:
+  y0: SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+best overall:
+  y0: SELL RELOCATE RELOCATE out[1-30] out[31-182] out[183-365]
+  y1: out[1-30] out[31-182] out[183-365]
+## T4 pre2008 plan2b usStock not covered
+positions 76823 terminals 14040 baseline 238000 | minAll 0 minFull 238000 minFullNoExpat 238000 | covered+resident-after 200000 covered-leaver 200000 non-covered 0 | with §2801 heirs: any 0 full 238000 covered-abroad-at-end 792400 | maxGainTax 300000 maxExits 1 maxExcl 0 minOrdFull 209994 viol 0
+best in-US-every-day:
+  y0: ABANDON-LPR(no certification) SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+best overall:
+  y0: ABANDON-LPR SELL RELOCATE RELOCATE out[1-30] out[31-182] out[183-365]
+  y1: out[1-30] out[31-182] out[183-365]
+## T4 pre2008 citizen
+positions 40995 terminals 7108 baseline 238000 | minAll 200000 minFull 238000 minFullNoExpat 238000 | covered+resident-after 200000 covered-leaver 200000 non-covered 999999999 | with §2801 heirs: any 200000 full 238000 covered-abroad-at-end 792400 | maxGainTax 300000 maxExits 1 maxExcl 0 minOrdFull 209994 viol 0
+best in-US-every-day:
+  y0: RENOUNCE SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+best overall:
+  y0: RENOUNCE SELL RELOCATE RELOCATE out[1-30] out[31-182] out[183-365]
+  y1: out[1-30] out[31-182] out[183-365]
+## T5 gifts on, gc9 usStock
+positions 141509 terminals 33862 baseline 238000 | minAll 0 minFull 0 minFullNoExpat 0 | covered+resident-after 0 covered-leaver 0 non-covered 999999999 | with §2801 heirs: any 0 full 0 covered-abroad-at-end 592400 | maxGainTax 618580 maxExits 1 maxExcl 890000 minOrdFull 209994 viol 0
+best in-US-every-day:
+  y0: GIFT-TO-NONRESIDENT RELOCATE RELOCATE US[1-30] ABANDON-LPR US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+best overall:
+  y0: GIFT-TO-NONRESIDENT RELOCATE RELOCATE out[1-30] ABANDON-LPR out[31-182] out[183-365]
+  y1: out[1-30] out[31-182] out[183-365]
+## T5 gifts on, gc9 realty covered
+positions 117193 terminals 9584 baseline 238000 | minAll 26180 minFull 26180 minFullNoExpat 200000 | covered+resident-after 26180 covered-leaver 26180 non-covered 999999999 | with §2801 heirs: any 26180 full 26180 covered-abroad-at-end 618580 | maxGainTax 830400 maxExits 1 maxExcl 890000 minOrdFull 209994 viol 0
+best in-US-every-day:
+  y0: ABANDON-LPR GIFT-TO-NONRESIDENT RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+best overall:
+  y0: ABANDON-LPR GIFT-TO-NONRESIDENT RELOCATE RELOCATE out[1-30] out[31-182] out[183-365]
+  y1: out[1-30] out[31-182] out[183-365]
+## T5 citizen gifts
+positions 123719 terminals 24780 baseline 238000 | minAll 0 minFull 0 minFullNoExpat 0 | covered+resident-after 0 covered-leaver 0 non-covered 999999999 | with §2801 heirs: any 0 full 0 covered-abroad-at-end 592400 | maxGainTax 618580 maxExits 1 maxExcl 890000 minOrdFull 209994 viol 0
+best in-US-every-day:
+  y0: GIFT-TO-NONRESIDENT RELOCATE RELOCATE US[1-30] RENOUNCE US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+best overall:
+  y0: GIFT-TO-NONRESIDENT RELOCATE RELOCATE out[1-30] RENOUNCE out[31-182] out[183-365]
+  y1: out[1-30] out[31-182] out[183-365]
+## T5 gain 0
+positions 42357 terminals 8210 baseline 0 | minAll 0 minFull 0 minFullNoExpat 0 | covered+resident-after 0 covered-leaver 0 non-covered 999999999 | with §2801 heirs: any 0 full 0 covered-abroad-at-end 192400 | maxGainTax 0 maxExits 1 maxExcl 0 minOrdFull 209994 viol 0
+best in-US-every-day:
+  y0: ABANDON-LPR SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+best overall:
+  y0: ABANDON-LPR SELL RELOCATE RELOCATE out[1-30] out[31-182] out[183-365]
+  y1: out[1-30] out[31-182] out[183-365]
+## T5 gain 5,000,000
+positions 42837 terminals 8690 baseline 1190000 | minAll 978180 minFull 978180 minFullNoExpat 1190000 | covered+resident-after 978180 covered-leaver 978180 non-covered 999999999 | with §2801 heirs: any 978180 full 978180 covered-abroad-at-end 3170580 | maxGainTax 1190000 maxExits 1 maxExcl 890000 minOrdFull 209994 viol 0
+best in-US-every-day:
+  y0: ABANDON-LPR SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+best overall:
+  y0: ABANDON-LPR SELL RELOCATE RELOCATE out[1-30] out[31-182] out[183-365]
+  y1: out[1-30] out[31-182] out[183-365]

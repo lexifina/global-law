@@ -1,0 +1,26 @@
+{"name":"NewDeductions",
+ "positions":7,
+ "baseline":134973.50,
+ "best":{"moves":["fileSeparate (§6013(a))","itemizeA (§63(e))","itemizeB (§63(e))"],"value":129986.00,"gain":4987.50,"reading":"textOrder"},
+ "by_reading":{
+  "textOrder":{"salt_cap":{"joint_600000":11900,"separate_300000":13075,"separate_260000":19075,"separate_400000":5000},"best_value":129986.00,"gain":4987.50},
+  "halveFirstHalfFloor":{"salt_cap":{"joint_600000":11900,"separate_300000":5950,"separate_260000":17950,"separate_400000":5000},"best_value":134973.50,"gain":0},
+  "halveFirstFullFloor":{"salt_cap":{"joint_600000":11900,"separate_300000":10000,"separate_260000":17950,"separate_400000":10000},"best_value":132138.50,"gain":2835.00}},
+ "runners_up":[
+  {"moves":["fileJoint","itemizeJoint"],"value":134973.50,"gain":0},
+  {"moves":["fileJoint"],"value":136268.50,"gain":-1295.00},
+  {"moves":["fileSeparate"],"value":136268.50,"gain":-1295.00},
+  {"moves":["fileSeparate","itemizeA"],"value":138762.25,"gain":-3788.75}],
+ "judgment_calls":[
+  "Order of operations in §164(b)(6)(B)/(7): textOrder (reduce and floor the $40,400 amount, then halve for a separate return) is best supported by the words; halve-first readings give gain $0 or $2,835",
+  "Baseline taken as the better joint return (itemized, $134,973.50); against joint-standard the gain is $6,282.50",
+  "Mortgage interest treated as fully deductible by the spouse who paid it (§163 not in list)",
+  "Each spouse deducts only tax that spouse paid; no community property",
+  "2026 brackets and standard deduction taken as supplied, not derived",
+  "§164(b)(6) applied to 2026 despite the '2018 through 2025' heading, because the operative text and (7)(A)(ii) cover 2026"],
+ "silences":[
+  "(7) halves only the threshold for separate returns; silent on halving the $40,400 or the $10,000 floor before the reduction",
+  "No instruction to combine spouses' MAGI on separate returns",
+  "No rule in §164 on which spouse deducts jointly assessed tax",
+  "§68 and AMT outside the list, not encoded",
+  "§63(e)(3) change of election not modelled"]}

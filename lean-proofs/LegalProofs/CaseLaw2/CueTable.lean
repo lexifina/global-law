@@ -47,4 +47,175 @@ def treatDisqualifiers : List String :=
 def histDisqualifiers : List String :=
   ["would revers", "would vacat", "would affirm"]
 
+/-- Round 5: terms of art; an explicit row whose quote has one is class `selfAnnounced`. -/
+def selfAnnouncedCues : List String :=
+  ["overrul", "disapprov", " reced", "abrogat"]
+
+/-- Round 5: cue phrases of a recognised overruling (a later court's statement). -/
+def recognisedCues : List String :=
+  ["overrul", "abrogat", "disapprov", " reced"]
+
+/-- Round 5: phrases that show a later court's sentence is not an accepted statement that X was overruled. -/
+def recognisedDisqualifiers : List String :=
+  ["not overrul", "n't overrul", "never overrul", "not been overrul", "never been overrul", "not abrogat", "n't abrogat", "not been abrogat", "not disapprov", "whether", "without overruling", "rather than overrul", "declin", "refus", "would overrule", "should be overruled", "should overrule", "to overrule", "contend", "dissent", "question", "doubt", "argues", "argued", "arguing", "argument", "urges", "urged", "urging"]
+
+/-- Round 5: operative words other than the terms of art. -/
+def operativeCues : List String :=
+  ["reject", "repudiat", "disavow", "no longer", "not survive", "cannot survive", "overthrown", "abandon", "discard", "overturn", "depart from", "wrongly decided", "cannot stand", "no place", "decline to follow", "declines to follow", "refuse to follow", "not follow", "not be followed", "not to be followed", "not good law", "not the law", "authoritative effect", "not tenable", "sapped", "correct rule of law", "expressing the law", "regarded as controlling"]
+
+/-- Round 5: phrases that dispose of the case as a whole. -/
+def operativeWhole : List String :=
+  ["no longer good law", "no longer the law", "no longer law", "no longer authorit", "no longer be regarded as", "no longer be considered as", "no longer be followed", "no longer to be followed", "not to be followed", "overthrown", "is repudiated", "are repudiated", "is overturned", "are overturned", "wrongly decided", "correct rule of law"]
+
+/-- Round 5: words that limit an act to part of a case; with one of them the quote is not a whole-case disposal. -/
+def operativeLimit : List String :=
+  ["to the extent", "to that extent", "to this extent", "insofar", "in so far", "so far as", "in part", "on this issue", "on this point", "as respects", "in the field of"]
+
+/-- Round 5: objects other than a case (arguments, contentions ...) that the court rejects. -/
+def operativeDisqualifiers : List String :=
+  ["argument", "contention", "contend", " claim ", " claim,", " claim.", " claims", "claim that", "claim of", "suggestion", "invitation", " request", " motion", "petition ", "petition,", "petition.", "petitions", "objection", "evidence", "testimony", "urges", "asks us", "would reject", "not reject", "decline to reject", "need not", " reading of", "reliance on", "assertion", "whether", "we rejected", "court rejected", "rejected in", "rejected by", "repudiated in", "repudiated by", "abandoned in", "abandoned by", "discarded in", "discarded by", "overturned by", "overturned in", "has been rejected", "have been rejected", "was rejected", "were rejected", "has been repudiated", "was repudiated", "has been abandoned", "was abandoned", "did not survive"]
+
+/-- Round 6: cue phrases of an anchor quote (the sentence identifying the decision acted on). -/
+def anchorCues : List String :=
+  ["court of appeals", "court of appeal", "circuit court", "district court", "court below", "appellate division", "appellate court", "appellate term", "superior court", "supreme court", "court of civil appeals", "court of criminal appeals", "trial court", "certiorari", "appeal from", "error to", "reported below", "decision below", "opinion below", "judgment below", "sub nom", "c. a.", "rehearing", "en banc", "in banc", "panel", "former opinion", "prior opinion", "original opinion", "earlier opinion", "previous opinion", "opinion of", "opinion filed", "opinion in this case", "decision of this court", "commonwealth court", "tax court", "board of tax appeals", "court of claims", "bankruptcy"]
+
+/-- Round 6: marks of an earlier proceeding; an anchor quote with one of them is not the decision under review. -/
+def anchorDisqualifiers : List String :=
+  ["former appeal", "prior appeal", "first appeal", "earlier appeal", "previous appeal", "see also"]
+
+/-- Round 7: anaphors; the main quote of an `antecedent` joined row refers back with one of them. -/
+def anaphorCues : List String :=
+  ["those cases", "these cases", "that case", "those decisions", "these decisions", "that decision", "such cases", "such decisions", "those opinions", "these opinions", "that opinion", "those holdings", "these holdings", "that holding", "both cases", "both decisions", "both opinions", "each of them", "each of those", "each of these", "those precedents", "these precedents", "those authorities", "these authorities", "that line of cases", "this line of cases", "they are overruled", "it is overruled", "they are disapproved", "it is disapproved", "they are abrogated", "it is abrogated", "they are no longer", "it is no longer", "we overrule them", "we overrule it", "overrule both", "to the extent they", "insofar as they", "all of them", "both of them", "said case", "said cases", "said decision", "said decisions", "the earlier decisions", "the earlier cases", "the prior decisions", "the former decisions", "the foregoing cases", "the cases cited", "the cases above cited", "the above cases", "the above-cited cases", "overrule them", "overrule it", "disapprove them", "disapprove it", "recede from them", "recede from it", "recede from those", "recede from that", "they are hereby overruled", "it is hereby overruled", "it likewise is overruled", "to the extent that they", "in so far as they", "to the extent it", "to the extent that it", "insofar as it"]
+
+/-- Round 7: phrases that tie a doctrine to the case it comes from (`doctrineTie` joined quote). -/
+def doctrineTieCues : List String :=
+  ["doctrine of", "doctrine announced", "doctrine established", "doctrine first", "doctrine adopted", "doctrine set forth", "doctrine enunciated", "rule of", "rule announced", "rule laid down", "rule established", "rule adopted", "rule set forth", "announced in", "established in", "adopted in", "laid down in", "set forth in", "enunciated in", "articulated in", "formulated in", "the rule in", "first announced", "originated in", "made its appearance", "test of", "adopted by", "established by", "first adopted", "principle of", "presumption of"]
+
+/-- Round 7: cue phrases of a doctrine row's main quote (doctrine mode). -/
+def doctrineRejectCues : List String :=
+  ["has no place", "have no place", "is rejected", "are rejected", "we reject", "we now reject", "repudiate", "abandon", "is overruled", "are overruled", "we overrule", "no longer", "discard", "disapprove", "disavow", "cannot stand", "is abrogated", "are abrogated", "depart from", "departing from", "unsound", "overrule", "abolish", "expressly reject", "therefore reject", "accordingly reject", "hereby reject", "be rejected", "no proper place", "recede from", "decline to follow", "renounce", "jettison", "cannot survive", "not the law"]
+
+/-- Round 7: phrases that show a joined quote is not the court's own statement. -/
+def joinedDisqualifiers : List String :=
+  ["the dissent", "dissenting", "the concurrence", "concurring", "argues", "argued", "contends", "contended", "urges", "urged", "we need not", "we do not decide", "we express no"]
+
+/-- Round 7: "set aside" as a vacatur cue (history rows with a `setAside` claim). -/
+def setAsideCues : List String :=
+  ["set aside", "sets aside", "is set aside", "are set aside", "be set aside"]
+
+/-- Round 7: the order-list / judgment-line forms of a history kind (`orderHead` claim). -/
+def orderLineCues : HKind → List String
+  | .certDenied => ["certiorari denied", "certiorari is denied", "petition for writ of certiorari denied", "petition for a writ of certiorari denied", "petition for writ of certiorari is denied", "petition for a writ of certiorari is denied", "petitions for writs of certiorari denied", "petition for writ of certiorari before judgment denied", "petition for writ of certiorari to the ... denied", "petition for a writ of certiorari to the ... denied", "petitions for writs of certiorari to the ... denied"]
+  | .vacated => ["certiorari granted, judgment vacated", "judgment vacated, and case remanded", "judgment vacated and case remanded", "judgment vacated", "judgments vacated", "judgment is vacated"]
+  | .reversed => ["judgment reversed", "judgments reversed", "judgment is reversed", "certiorari granted and judgment reversed"]
+  | .affirmed => ["judgment affirmed", "judgments affirmed", "judgment is affirmed", "affirmed by an equally divided court"]
+  | .reviewDismissed => ["appeal dismissed", "appeals dismissed", "appeal is dismissed", "certiorari dismissed", "certiorari is dismissed", "writ of certiorari dismissed", "dismissed as improvidently granted", "petition for writ of certiorari dismissed", "dismissed for want of", "petition for writ of certiorari to the ... dismissed", "petition for a writ of certiorari to the ... dismissed", "petitions for writs of certiorari to the ... dismissed"]
+  | _ => []
+
+/-- Round 7: the most characters between an `antecedent` joined quote and the main quote. -/
+def joinedGapMax : Nat := 300
+
+/-- Round 7: the first date of Supreme Court orders printed as head matter only (`orderHead` claim). -/
+def orderHeadFrom : Nat := 20130101
+
+/-- Round 7: the longest quote an `orderHead` claim admits as head matter. -/
+def orderHeadMaxLen : Nat := 400
+
+/-- Round 8: further anchor cues, used only under an `anchorWide` claim (DESIGN8 section 5). -/
+def anchorWideCues : List String :=
+  ["circuit", "(ca1", "(ca2", "(ca3", "(ca4", "(ca5", "(ca6", "(ca7", "(ca8", "(ca9", "(cadc", "(cafc", "c.a.", "judicial court", "court of errors", "case below"]
+
+/-- Round 8: the history cues of a bridge quote, after the target's citation (DESIGN8 section 4, step 5). -/
+def bridgeCues : HKind → List String
+  | .certDenied => ["cert. denied", "certiorari denied", "cert denied"]
+  | .vacated => ["vacated", "judgment vacated", "vacated and remanded"]
+  | .reversed => ["rev'd", "reversed"]
+  | .affirmed => ["aff'd", "affirmed"]
+  | .reviewDismissed => ["cert. dismissed", "certiorari dismissed", "appeal dismissed"]
+  | _ => []
+
+/-- Round 8: the longest bridge quote (DESIGN8 section 4, step 1). -/
+def bridgeMaxLen : Nat := 600
+
+/-- Round 8: (acting circuit, target circuit, acting date before) of the old circuits (`oldCircuit` claim,
+DESIGN8 section 6). -/
+def oldCircuitRules : List (Nat × Nat × Nat) :=
+  [(5, 11, 19811001), (8, 10, 19290301)]
+
+/-- Round 9: cue phrases a soft row may use under an `implicitReject` claim (DESIGN9 section 7). -/
+def implicitRejectCues : List String :=
+  ["cannot agree", "do not agree", "unpersuaded", "not convinced", "wrongly decided", "incorrectly decided", "erroneously decided", "unsound", "erroneous", "incorrect", "mistaken", "undermined", "eroded", "discredited", "called into question", "contrary to", "depart from", "departs from"]
+
+/-- Round 9: judge-form anchor cues, used with `anchor_wide` under an `anchorWide` claim (DESIGN9 section 8). -/
+def anchorWide9Cues : List String :=
+  ["district judge", "magistrate judge", "trial judge"]
+
+/-- Round 9: the most characters between a far `antecedent` joined quote and the main quote under a `joinedFar` claim (DESIGN9 section 5). -/
+def joinedFarMax : Nat := 1200
+
+/-- Round 10: the court phrase B's remand quote must hold (DESIGN10 section 4, check 3). -/
+def remandCourtCues : List String :=
+  ["supreme court"]
+
+/-- Round 10: the remand cues B's quote must hold with the court phrase (DESIGN10 section 4, check 3). -/
+def remandCues : List String :=
+  ["vacat", "remand", "in light of", "further consideration"]
+
+/-- Round 10: the full month names of the printed order date (`<month> <d>, <yyyy>`; D10-6). -/
+def remandMonths : List String :=
+  ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
+
+/-- Round 10: the abbreviations of each month (January first) in the printed order date (`<abbr> <d>, <yyyy>`;
+D10-6). -/
+def remandMonthsAbbr : List (List String) :=
+  [["jan."], ["feb."], ["mar."], ["apr."], [], [], [], ["aug."], ["sept.", "sep."], ["oct."], ["nov."], ["dec."]]
+
+/-- Round 10: the longest remand quote of B (DESIGN10 section 4). -/
+def remandQuoteMax : Nat := 600
+
+/-- Round 10: the longest docket span of B's or the target's text (D10-5). -/
+def remandDocketSpanMax : Nat := 200
+
+/-- Round 10: the most days from the order to the remand decision B. -/
+def remandDaysMax : Nat := 1826
+
+/-- Round 10: the phrase that introduces the reason case in the order's span (D10-7, tie (c2)). -/
+def remandOrderCues : List String :=
+  ["in light of"]
+
+/-- Round 10: the longest span of the order's text (D10-7). -/
+def remandOrderSpanMax : Nat := 300
+
+/-- Round 10: the fewest characters of a compact reason-case tie (D10-7). -/
+def remandTieMin : Nat := 8
+
+/-- Round 10: trial-court names; D's judgment line under a `trialBridge` claim holds one (DESIGN10 section 6). -/
+def trialCourtNames : List String :=
+  ["trial court", "district court", "circuit court", "superior court", "county court", "court of common pleas", "chancery court", "probate court", "court below"]
+
+/-- Round 10: intermediate-court names; D's judgment line under a `trialBridge` claim holds none. -/
+def intermediateCourtNames : List String :=
+  ["court of appeal", "appellate", "court of special appeals", "court of civil appeals", "court of criminal appeals", "commonwealth court", "district court of appeal"]
+
+/-- Round 10: the cue of T's own judgment line (it affirmed; `trialBridgeT`). -/
+def tbridgeCues : List String :=
+  ["affirm"]
+
+/-- Round 10: phrases T's judgment line must not hold (`trialBridgeT`). -/
+def tbridgeNegative : List String :=
+  ["reversed", "reverse", "vacate", "set aside", "remand"]
+
+/-- Round 10: the longest quote of T's text (`trialBridgeT`). -/
+def tbridgeQuoteMax : Nat := 600
+
+/-- Round 10: the most days from T to D (`trialBridgeDate`). -/
+def tbridgeDaysMax : Nat := 1826
+
+/-- Round 11: tribunal-name anchor cues, used with `anchor`, `anchor_wide` and `anchor_wide9` under an `anchorTribunal` claim (DESIGN11 section 5.1). -/
+def anchorTribunalCues : List String :=
+  ["court of international trade", "customs court", "court of federal claims", "claims court", "veterans court", "court of veterans appeals"]
+
+/-- Round 11: the longest span of D's or T's text of an identity line (DESIGN11 section 5.2). -/
+def identitySpanMax : Nat := 200
+
 end CaseLaw2.Cert

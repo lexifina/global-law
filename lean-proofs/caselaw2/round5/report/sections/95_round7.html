@@ -1,0 +1,71 @@
+<h2 id="round7">Round 7 (finished 14 November, 00:10)</h2>
+<p>Started 13 November 2026 at 22:37. The base is the round-6 frozen build, which already contains round 5. Contract:
+<code>round7/DESIGN7.md</code>; log: <code>round7/LOG.md</code>; state: <code>round7/PROGRESS.md</code>.</p>
+
+<h3>What was built</h3>
+<ul>
+<li>One certificate form that joins a second quote from the same opinion to a row's own quote, each checked on its
+own, with a checked relation between them: "names the case just before the act" (at most 300 characters before), or
+"ties the rejected doctrine to the case". The Lean checker gained 37 theorems (183 to 220; 22 stated before proving)
+and 13 mutants (40 to 53), all killed; no <code>sorry</code>, no new axiom. Without the new tables the round-4, 5
+and 6 outputs are reproduced byte for byte. The independent Python reference agrees with the Lean on every new
+row of the real build.</li>
+<li>Rows read by local Claude readers: 4,612 operative-words passages (strongest model, stricter brief), 5,973
+two-sentence passages, 1,147 later-court statements, 255 doctrine passages.</li>
+</ul>
+
+<h3>Blind audits (sample size; Wilson 95%)</h3>
+<table>
+<tr><th>class</th><th>right</th><th>installed</th></tr>
+<tr><td>Other words for overruling, part of a case (906 rows)</td><td>79/80 = 98.8% [93.2, 99.8]</td><td>yes</td></tr>
+<tr><td>Other words for overruling, whole case (30)</td><td>10/30 = 33.3% [19.2, 51.2]</td><td>no</td></tr>
+<tr><td>Later court says X was overruled by Y, newly read (317)</td><td>80/80 [95.4, 100]</td><td>yes</td></tr>
+<tr><td>Overruling across two sentences (489)</td><td>79/80 = 98.8% [93.2, 99.8]</td><td>yes</td></tr>
+<tr><td>Overruling in one sentence, found by the same scan (574)</td><td>78/80 = 97.5% [91.3, 99.3]</td><td>yes</td></tr>
+<tr><td>Same, naming only in the surrounding window (63)</td><td>54/63 = 85.7% [75.0, 92.3]</td><td>no</td></tr>
+<tr><td>Same, weak verbs ("no longer good law") (179)</td><td>36/80 = 45.0% [34.6, 55.9]</td><td>no</td></tr>
+<tr><td>Rejected doctrine tied to one case (19; partly negative only)</td><td>19/19 [83.2, 100]</td><td>yes</td></tr>
+<tr><td>Scope "whole case" from the overruling sentence (56)</td><td>54/56 = 96.4% with extent [87.9, 99.0]</td><td>yes</td></tr>
+<tr><td>Supreme Court orders printed only in head matter (8,166; GVR part 110)</td><td>67/80; GVR 67/80 = 83.8%</td><td>no</td></tr>
+<tr><td>Supreme Court opinion links, sole decision of the litigation (253)</td><td>76/80 = 95.0% [87.8, 98.0]</td><td>yes</td></tr>
+<tr><td>Supreme Court opinion links, weak forms and "must be reversed" (297)</td><td>73/80 = 91.2% [83.0, 95.7]</td><td>yes</td></tr>
+<tr><td>Citations re-pointed on pages that print several decisions (208)</td><td>72/80 = 90.0% [81.5, 94.9]</td><td>yes</td></tr>
+<tr><td>En banc act and grant orders (748)</td><td>79/80 link and effect</td><td>yes</td></tr>
+<tr><td>En banc silent on the panel opinion (55)</td><td>54/55</td><td>yes</td></tr>
+<tr><td>Rehearing linked by docket and date (240)</td><td>79/80 link and effect</td><td>yes</td></tr>
+<tr><td>"Set aside" as a vacatur (97)</td><td>96/97 link and effect</td><td>yes</td></tr>
+</table>
+
+<h3>Dev scores, round-6 frozen build → round-7 candidate (open/dev halves only)</h3>
+<table>
+<tr><th>measure</th><th>before</th><th>after</th></tr>
+<tr><td>Fresh lists, open half, lenient (165)</td><td>108 = 65.5%</td><td>111 = 67.3% [59.8, 74.0]</td></tr>
+<tr><td>Fresh lists, strict, model timeline</td><td>50 = 30.3%</td><td>51 = 30.9% [24.4, 38.3]</td></tr>
+<tr><td>Fresh lists, strict, "as attributed today"</td><td>80 = 48.5%</td><td>81 = 49.1% [41.6, 56.6]</td></tr>
+<tr><td>Held-out notes, pairs also stated by a court with power (2,640)</td><td>940 = 35.6%</td><td>1,038 = 39.3% [37.5, 41.2]</td></tr>
+<tr><td>Held-out notes, holdout speakers only (6,734)</td><td>425 = 6.3%</td><td>574 = 8.5% [7.9, 9.2]</td></tr>
+<tr><td>Shepardized dev, negative history found (254)</td><td>105 = 41.3%</td><td>140 = 55.1% [49.0, 61.1]</td></tr>
+<tr><td>Shepardized dev, precision</td><td>105/111 = 94.6%</td><td>140/149 = 94.0% [88.9, 96.8]</td></tr>
+<tr><td>Shepardized dev, en banc different result (27)</td><td>3</td><td>14</td></tr>
+<tr><td>SCDB / CRS (burned, not blind)</td><td>175/278, 195/292</td><td>178/278, 198/292</td></tr>
+</table>
+
+<h3>Sealed runs (once each, after the freeze of 00:08)</h3>
+<table>
+<tr><th>test</th><th>round-6 build</th><th>round-7 build</th></tr>
+<tr><td>Fresh lists, sealed half (127 pairs; this half's third use): lenient</td><td>77 = 60.6%</td><td>77 = 60.6% [51.9, 68.7]</td></tr>
+<tr><td>… strict, model timeline / as attributed today</td><td>32 = 25.2%</td><td>32 = 25.2% / 57 = 44.9% [36.5, 53.6]</td></tr>
+<tr><td>Shepardized, sealed half (252; second use): negative history found</td><td>104 = 41.3%</td><td>120 = 47.6% [41.5, 53.8]</td></tr>
+<tr><td>… precision</td><td>104/113 = 92.0%</td><td>120/130 = 92.3%</td></tr>
+<tr><td>… en banc different result (33) / panel withdrawn (25)</td><td>0 / 3</td><td>6 / 5</td></tr>
+<tr><td>New time split: Supreme Court judgments of 2021 on (256 pairs, first use): reversals found (83)</td><td>14</td><td>21 = 25.3% [17.2, 35.6]</td></tr>
+<tr><td>… vacaturs found (47)</td><td>9</td><td>13 = 27.7% [16.9, 41.8]</td></tr>
+<tr><td>… rows pointing to the right lower decision</td><td>39/42</td><td>60/65 = 92.3%</td></tr>
+</table>
+<p>Plainly: on the fresh lists the open half moved by three pairs and the sealed half did not move; the new overruling
+classes are precise (audited 97–99%) but mostly add partial overrulings and cases the lists do not test. Same-case
+history improved on every held-out test, by less on the sealed half than on the open half. Nothing was re-tuned after
+the sealed runs. Full table: <code>round7/ROUND7.md</code>.</p>
+<p>The holdout-only rise was checked: every new row that touches a holdout-only pair is the overruling court's own
+words (no later court's statement), and the leak check passes. The sealed halves and a new time-split test are
+scored once after the freeze.</p>

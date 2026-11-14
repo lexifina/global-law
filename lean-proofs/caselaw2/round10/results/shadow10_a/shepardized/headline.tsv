@@ -1,0 +1,29 @@
+# as-of 20101119; model out dir ~\Documents\us-caselaw-lean-work\caselaw-lean-2\round10\out\shadow10_a
+# split dev: 10249 of the 20354 Shepardized cases (round6/history/split/SPLIT.md)
+
+## headline figures: raw, and with documented Shepardized database errors set aside
+(errors: round6/history/shep_errors.tsv, 11 listed; 8 of them among the 10249 cases scored here, 8 linked; a case set aside is left out of numerator and denominator)
+group	value	raw k/n	raw share	raw lo95	raw hi95	set-aside k/n	set-aside share	set-aside lo95	set-aside hi95
+agreement	overall, scored classes (NEG, PART, MOD, CLEAN)	9857/9985	98.7%	98.5%	98.9%	9857/9977	98.8%	98.6%	99.0%
+(a) recall	NEG: model NEG_HIST (strict)	145/254	57.1%	50.9%	63.0%	145/252	57.5%	51.4%	63.5%
+(a) recall	NEG: model NEG_HIST or UNK_HIST (lenient)	155/254	61.0%	54.9%	66.8%	155/252	61.5%	55.4%	67.3%
+(a) recall	PART: model NEG_HIST or UNK_HIST	3/11	27.3%	9.7%	56.6%	3/11	27.3%	9.7%	56.6%
+(a) recall	NEG and PART together: model as expected	148/265	55.8%	49.8%	61.7%	148/263	56.3%	50.2%	62.1%
+(b) precision	of model NEG_HIST: Shepardized NEG (strict; AMBIG left out)	145/155	93.5%	88.5%	96.5%	145/150	96.7%	92.4%	98.6%
+(b) precision	of model NEG_HIST: Shepardized NEG or PART (lenient; AMBIG left out)	145/155	93.5%	88.5%	96.5%	145/150	96.7%	92.4%	98.6%
+(c) clean	CLEAN: model shows no same-case negative	9694/9704	99.9%	99.8%	99.9%	9694/9698	100.0%	99.9%	100.0%
+(c) clean	MOD: model CLEAN or UNK_HIST	15/16	93.8%	71.7%	98.9%	15/16	93.8%	71.7%	98.9%
+recall by subclass	NEG/enbanc_different	16/27	59.3%	40.7%	75.5%	16/26	61.5%	42.5%	77.6%
+recall by subclass	NEG/panel_withdrawn	10/27	37.0%	21.5%	55.8%	10/27	37.0%	21.5%	55.8%
+recall by subclass	NEG/sc_reversed	86/129	66.7%	58.2%	74.2%	86/128	67.2%	58.7%	74.7%
+recall by subclass	NEG/sc_vacated	33/71	46.5%	35.4%	58.0%	33/71	46.5%	35.4%	58.0%
+recall by subclass	PART/sc_part	3/11	27.3%	9.7%	56.6%	3/11	27.3%	9.7%	56.6%
+as expected by subclass	MOD/modified	15/16	93.8%	71.7%	98.9%	15/16	93.8%	71.7%	98.9%
+as expected by subclass	CLEAN/cert_denied	2188/2190	99.9%	99.7%	100.0%	2188/2190	99.9%	99.7%	100.0%
+as expected by subclass	CLEAN/none	6119/6124	99.9%	99.8%	100.0%	6119/6120	100.0%	99.9%	100.0%
+as expected by subclass	CLEAN/other_history	197/197	100.0%	98.1%	100.0%	197/197	100.0%	98.1%	100.0%
+as expected by subclass	CLEAN/rehearing_denied	167/167	100.0%	97.8%	100.0%	167/167	100.0%	97.8%	100.0%
+as expected by subclass	CLEAN/related_only	954/956	99.8%	99.2%	99.9%	954/955	99.9%	99.4%	100.0%
+as expected by subclass	CLEAN/sc_affirmed	69/70	98.6%	92.3%	99.7%	69/69	100.0%	94.7%	100.0%
+model NEG_HIST linked	all	161				156
+model UNK_HIST linked	all	16				15

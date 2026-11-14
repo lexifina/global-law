@@ -1,0 +1,17 @@
+-- FINDINGS check 1 (scenario A lives)
+  QTIP held to death: wealth=218551878 xfer=191188579 itax=0 builtin=7106765 kv=225658643 kb=195798284
+  yr5 release unmarried: wealth=226135352 xfer=164044896 itax=0 builtin=11596458 kv=237731810 kb=189007194
+  yr5 remarry+consent+release: wealth=247542176 xfer=152163406 itax=0 builtin=18203564 kv=265745740 kb=189260174
+  reverse-QTIP: yr5 release unmarried: wealth=219880621 xfer=175242796 itax=0 builtin=6653289 kv=226533910 kb=198578912
+  reverse-QTIP: yr5 remarry+consent+release: wealth=233446693 xfer=177398677 itax=0 builtin=7063780 kv=240510473 kb=210830723
+-- direct plays on the QTIP scenario, trust 100000000 (incFrac=200, split2519=false, spTaxFromTrust=true)
+  hold to death: wealth=218551878 xfer=191188579 itax=0 builtin=7106765 kv=225658643 kb=195798284
+  yr0 release unmarried: wealth=233157839 xfer=142742786 itax=0 builtin=16882731 kv=250040570 kb=179104725
+  yr0 remarry, no consent, release: wealth=233157839 xfer=142742786 itax=0 builtin=16882731 kv=250040570 kb=179104725
+  yr0 remarry+consent+release: wealth=254035113 xfer=132219342 itax=0 builtin=24273345 kv=278308458 kb=176319610
+  yr5 release unmarried: wealth=224348052 xfer=164044896 itax=0 builtin=13383758 kv=237731810 kb=181497531
+  yr5 remarry+consent+release: wealth=244899598 xfer=152163406 itax=0 builtin=20846142 kv=265745740 kb=178156908
+
+real	0m5.058s
+user	0m0.045s
+sys	0m0.031s

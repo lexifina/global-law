@@ -1,0 +1,125 @@
+=== common/benchlib.py
+1c1,2
+< """Shared helpers for the benchmarks/ scorers (standard library only; import with sys.path insert).
+---
+> """(round 8 h0 shadow copy of benchmarks/common/benchlib.py: only ROOT changed.)
+> Shared helpers for the benchmarks/ scorers (standard library only; import with sys.path insert).
+18c19
+< ROOT = os.path.dirname(BENCH)  # caselaw-lean-2
+---
+> ROOT = os.path.dirname(os.path.dirname(BENCH))  # caselaw-lean-2 (round 8 copy: round8/bench_h0/common)
+=== fjc_idb_appeals/score.py
+10a11,12
+> # round 8 h0 shadow (agent infra): copy of benchmarks/fjc_idb_appeals/score.py; changes: paths, results folder (--results), h0-only
+> # output (see round8/bench_h0/README.md). Reads the h0 key written by round8/bench_h0/build_keys.py.
+52c54
+<     ap.add_argument("--results", default=os.path.join(HERE, "results"))
+---
+>     ap.add_argument("--results", required=True)
+68c70
+<     with open(os.path.join(a.results, "%s.cases.tsv" % a.label), "w", encoding="utf-8", newline="\n") as o:
+---
+>     with open(os.path.join(a.results, "%s.h0.cases.tsv" % DS), "w", encoding="utf-8", newline="\n") as o:
+70a73,74
+>             if u["half"] != "h0":
+>                 continue
+83c87
+<     for split in ("h0", "h1", "all"):
+---
+>     for split in ("h0",):
+112c116
+<         benchlib.write_result(os.path.join(a.results, "%s.%s.json" % (a.label, split)), res)
+---
+>         benchlib.write_result(os.path.join(a.results, "%s.%s.json" % (DS, split)), res)
+=== shadow_docket/sdlib.py
+1c1,2
+< """Shared helpers for the shadow_docket benchmark (standard library only)."""
+---
+> """(round 8 h0 shadow copy of benchmarks/shadow_docket/sdlib.py: only ROOT changed.)
+> Shared helpers for the shadow_docket benchmark (standard library only)."""
+8c9
+< ROOT = os.path.dirname(BENCH)  # caselaw-lean-2
+---
+> ROOT = os.path.dirname(os.path.dirname(BENCH))  # caselaw-lean-2 (round 8 copy: round8/bench_h0/shadow_docket)
+=== shadow_docket/score.py
+10a11,12
+> # round 8 h0 shadow (agent infra): copy of benchmarks/shadow_docket/score.py; changes: paths, results folder (--results), h0-only
+> # output (see round8/bench_h0/README.md). Reads the h0 key written by round8/bench_h0/build_keys.py.
+73a76
+>     ap.add_argument("--results", required=True)
+138c141,142
+<     res_dir = os.path.join(HERE, "results")
+---
+>     res_dir = a.results
+>     os.makedirs(res_dir, exist_ok=True)
+156c160
+<     for split in ("h0", "h1", "all"):
+---
+>     for split in ("h0",):
+159c163
+<         summary[split] = emit(os.path.join(res_dir, "%s.%s.json" % (a.label, split)), "shadow_docket", split,
+---
+>         summary[split] = emit(os.path.join(res_dir, "%s.%s.json" % (sdlib.DATASET, split)), "shadow_docket", split,
+162c166
+<     for ck in ("federal", "state"):
+---
+>     for ck in ():  # round 8 h0 shadow: the federal/state files are `all` split
+170c174
+<     with open(os.path.join(res_dir, "%s.cases.tsv" % a.label), "w", encoding="utf-8", newline="\n") as o:
+---
+>     with open(os.path.join(res_dir, "%s.h0.cases.tsv" % sdlib.DATASET), "w", encoding="utf-8", newline="\n") as o:
+174c178
+<         for c in sorted(cases, key=lambda c: (c["class"], c["node"])):
+---
+>         for c in sorted((c for c in cases if c["half"] == "h0"), key=lambda c: (c["class"], c["node"])):
+=== scdb_disposition/score.py
+13a14,15
+> # round 8 h0 shadow (agent infra): copy of benchmarks/scdb_disposition/score.py; changes: paths, results folder (--results), h0-only
+> # output (see round8/bench_h0/README.md). Reads the h0 key written by round8/bench_h0/build_keys.py.
+41a44
+>     ap.add_argument("--results", required=True)
+57c60
+<     resdir = os.path.join(HERE, "results")
+---
+>     resdir = a.results
+85c88
+<     with open(os.path.join(resdir, "%s.cases.tsv" % a.label), "w", encoding="utf-8", newline="\n") as o:
+---
+>     with open(os.path.join(resdir, "%s.h0.cases.tsv" % DATASET), "w", encoding="utf-8", newline="\n") as o:
+87c90
+<         for c in sorted(cases, key=lambda c: c["caseId"]):
+---
+>         for c in sorted((c for c in cases if c["half"] == "h0"), key=lambda c: c["caseId"]):
+100c103
+<         for split in ("h0", "h1", "all"):
+---
+>         for split in ("h0",):
+146c149
+<             benchlib.write_result(os.path.join(resdir, "%s%s.%s.json" % (a.label, suffix, split)), res)
+---
+>             benchlib.write_result(os.path.join(resdir, "%s%s.%s.json" % (DATASET, suffix, split)), res)
+=== state_overruled_tables/score.py
+10a11,12
+> # round 8 h0 shadow (agent infra): copy of benchmarks/state_overruled_tables/score.py; changes: paths, results folder (--results), h0-only
+> # output (see round8/bench_h0/README.md). Reads the h0 key written by round8/bench_h0/build_keys.py.
+56a59
+>     ap.add_argument("--results", required=True)
+150c153
+<     rd = os.path.join(HERE, "results")
+---
+>     rd = a.results
+152c155
+<     with open(os.path.join(rd, a.label + ".cases.tsv"), "w", encoding="utf-8", newline="\n") as o:
+---
+>     with open(os.path.join(rd, DATASET + ".h0.cases.tsv"), "w", encoding="utf-8", newline="\n") as o:
+156a160,161
+>             if r[2] != "h0":
+>                 continue
+159c164
+<     for sp in ("h0", "h1", "all"):
+---
+>     for sp in ("h0",):
+180c185
+<         benchlib.write_result(os.path.join(rd, "%s.%s.json" % (a.label, sp)), res)
+---
+>         benchlib.write_result(os.path.join(rd, "%s.%s.json" % (DATASET, sp)), res)

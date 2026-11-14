@@ -241,6 +241,29 @@ and finds three answers ([Found.lean](LegalProofs/USTax/WashSale/Found.lean)):
 Whether two index funds are "substantially identical" has never been settled by the IRS, and is modelled as data.
 Bills to extend §1091 to digital assets have been introduced since 2021; none is law as of November 2026.
 
+## Businesses, and a loophole hunt by domain
+
+[LegalProofs/USTax/Entity/](LegalProofs/USTax/Entity) writes the rules that move basis, gain and character between
+owners, from the Code's text (OLRC release point 119-138) and, where the Code delegates, the regulations:
+- partnerships under subchapter K (`Partnership.lean`);
+- corporations under subchapters C and S, and the corporate stock rules at the owner boundary (`Corp.lean`).
+
+Tests against the regulations' own examples are in `Tests.lean`, and the theorems are in `Theorems.lean`. Two
+searches use the model:
+- `Contrib.lean`: a parent's built-in gain contributed to a family partnership;
+- `Driver.lean`: an owner family and its business over many years, in three forms that can change at year boundaries.
+
+The scripts are `tools/taxcode/loopholes/entity_*.py`.
+
+[LegalProofs/USTax/Hunt/](LegalProofs/USTax/Hunt) repeats the retirement-account method on twelve other domains:
+accounts, basis, charity, corporate, entity, household, instruments, new deductions, partnership, real estate,
+residence and transfers. For each domain it writes down what the provisions permit and tax, with no planning idea in
+mind, and lets a blind search find the plans that beat the obvious one. Each domain has its file, a
+`<Name>.FINDINGS.md` with how to run it and what it found, and the search output under `tools/hunt/out/<Name>/`.
+`Audit/` holds the briefs for the blind and red-team reviews of the findings. Run a domain with
+`lake env lean LegalProofs/USTax/Hunt/<Name>.lean`. Some figures are marked in their findings as not re-checked
+against the source document.
+
 ## US case law: the doctrine of precedent
 
 [LegalProofs/USCaseLaw/](LegalProofs/USCaseLaw) states the rules of precedent (which court binds which, who may
@@ -250,8 +273,8 @@ pipeline: [data/caselaw/README.md](data/caselaw/README.md); tools: [tools/casela
 
 [LegalProofs/CaseLaw2/](LegalProofs/CaseLaw2) is the second version, at the level of holdings: dated authority between
 courts, treatments admitted only with a certificate that Lean checks against the decision's text, status per holding
-and per line of courts, circuit splits, and 141 theorems with locked statements, tested against an independent
-reference. Results, how to build and run it, the trust inventory and where everything lives:
+and per line of courts, circuit splits, and 305 theorems with locked statements (round 13), tested against an
+independent reference and scored on twelve blind answer keys. Results, how to build and run it, the trust inventory and where everything lives:
 [caselaw2/README.md](caselaw2/README.md).
 
     lake build LegalProofs.USCaseLaw LegalProofs.CaseLaw2

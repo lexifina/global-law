@@ -1,0 +1,7 @@
+round12 infrastructure ready 2026-11-14 07:23 (agent infra12; round12/agents/infra12/NOTES.md)
+- certify12.py / certify12_claims.py (anchorTribunal) / certify_recog12.py / certify_opwords12.py: ids t12:/h12:, base round11/stage/v11d, order-node overlay round12/nodes12.py ON by default with v11d's nodes (round11/data_orders); --nodes DIR / R12_NODES=DIR for another folder (R12_NODES=none: off). Checked: certify12 / certify12_claims on round-11 rows (--base v10d) = round 11's cert folders after h11->h12, byte for byte.
+- stage12.py <name> --delta DIR ... [--remove] [--drop] [--replace] [--table NAME=FILE] [--nodes DIR]: base round11/stage/v11d (hard links; v11d's decisions2 + 1,045 nodes linked without --nodes). No delta -> every file a hard link of v11d, TABLES names/rows/sha1 = v11d's.
+- wsl/r12_run.sh <name> [ref]: NOBUILD = frozen round-11 s51 (a1cc4296) as ~/caselaw2/r12_bin/caselaw2_r11v11d; base mirror base_r12_v11d (hard links of data_r11_v11d); two slots machine-wide incl. r11 slots; refuses under 8 GB. Self-test: NOBUILD v11d_check reproduces round11/out/v11d byte for byte (every table; summary timing lines excepted), twice.
+- score12.sh <name> [beh] [noold] [nobench]: v11d_check summary = round11/results/v11d/summary.txt except header lines (+ round-12 rows line).
+- clean12.sh <name>: refuses round12/KEEP.txt names (v11d, v12_frozen).
+- audit/: HOWTO.md, make_packs12 --exclude by identity whatever the id prefix (self-test xtest/exclusion_selftest.txt: 80/80 excluded in each case), selftest12 PASS, decoy pools + round-11 audits.

@@ -1,0 +1,870 @@
+import Std
+
+/-!
+# Tax-favoured savings accounts beyond the retirement search: rules, then a blind search
+
+Part 1 (Rules) writes down what each provision permits and what it taxes. Part 2 (Search) tries every allowed
+sequence of moves from a starting position and reports the plans that beat the plain use of each account.
+
+    lake env lean LegalProofs/USTax/Hunt/Accounts.lean
+
+Figures: 2025 (Notice 2024-80, Rev. Proc. 2024-25, Rev. Proc. 2024-40), except the Trump-account figures, which are
+the statutory 2026 amounts (contributions may not be accepted before 4 July 2026, §530A(b)(1)(C)(i)(I)).
+
+Simplifications, stated once:
+* one person (a child's family money is one pocket); whole years; no investment growth during the horizon (balances
+  at the start may already hold earnings);
+* age is the age attained by the end of the year; "59½" is read as age 60 and "70½" as age 71 (conservative);
+  Medicare entitlement (§223(b)(7)) is assumed at 65;
+* health coverage for each year is a fact of the scenario, not a move;
+* excess contributions (§4973) are simply not allowed; no SEPP (§72(t)(2)(A)(iv)), no §457(b)(3) last-3-years
+  ceiling, no employer §128 contributions, no Coverdell moves (see FINDINGS);
+* Roth conversions keep one layer: any new conversion restarts the §408A(d)(3)(F) clock for all converted money
+  (conservative).
+-/
+
+namespace Legal.USTax.Hunt.Accounts
+
+/-! ## Part 1. Rules -/
+
+/-- Health coverage pattern for a year. `selfDec` / `famDec`: covered by a high deductible plan only from 1 December.
+`selfToFam`: self-only January–June, family July–December. -/
+inductive Cov where
+  | none | self | family | selfDec | famDec | selfToFam
+  deriving BEq, Hashable, Repr, DecidableEq
+
+/-- §223(b)(2), indexed 2025: $4,300 self-only, $8,550 family. -/
+def hsaSelf : Nat := 4300
+def hsaFamily : Nat := 8550
+
+/-- §223(b)(1)–(3): the sum of the monthly limitations (`cu` = the 55-or-older additional amount). -/
+def Cov.sumLimit (cu : Nat) : Cov → Nat
+  | .none => 0 | .self => hsaSelf + cu | .family => hsaFamily + cu
+  | .selfDec => (hsaSelf + cu) / 12 | .famDec => (hsaFamily + cu) / 12
+  | .selfToFam => (hsaSelf + hsaFamily) / 2 + cu
+
+/-- §223(b)(8)(A): eligible in the last month ⇒ treated as eligible, in that plan, all year. -/
+def Cov.lastMonthLimit (cu : Nat) : Cov → Nat
+  | .none => 0 | .self | .selfDec => hsaSelf + cu | .family | .famDec | .selfToFam => hsaFamily + cu
+
+/-- Eligible individual in every month of the year (§223(c)(1)). -/
+def Cov.full : Cov → Bool | .self | .family | .selfToFam => true | _ => false
+def Cov.decOnly : Cov → Bool | .selfDec | .famDec => true | _ => false
+
+/-- §408(d)(9)(C)(i)(I): the annual §223(b) limitation for the type of coverage at the time of the distribution. -/
+def Cov.qhfdLimit (cu : Nat) (second : Bool) : Cov → Nat
+  | .none => 0 | .self | .selfDec => hsaSelf + cu | .family | .famDec => hsaFamily + cu
+  | .selfToFam => if second then hsaFamily + cu else hsaSelf + cu
+
+/-- The facts of a scenario. -/
+structure Cfg where
+  age0 : Nat                    -- age attained by the end of year 0
+  years : Nat                   -- horizon
+  cov : List Cov := []          -- coverage by year (last entry repeats)
+  comp : Nat := 0               -- compensation each year (§219(b)(1)(B), §415(c)(1)(B))
+  compB : Nat := 0              -- compensation from a second, unrelated employer whose plan the person controls
+  iraDeductible : Bool := false -- §219(g) does not deny the deduction
+  rothOK : Bool := false        -- below the §408A(c)(3) income range
+  wagesOver : Bool := false     -- prior-year §3121(a) wages from the main employer above $145,000, §414(v)(7)(A)
+  has401k : Bool := false
+  has457 : Bool := false        -- governmental §457(b) plan
+  separated : Bool := false     -- severed from the §457(b) employer, §457(d)(1)(A)(ii)
+  disabled : Bool := false      -- eligible individual under §529A(e)(1)
+  hasTA : Bool := false         -- a Trump account was established for the person before 18
+  dependent : Bool := false     -- a §151 deduction for the person is allowable to another taxpayer, §223(b)(6)
+  age529 : Nat := 0             -- years the §529 account has been maintained at year 0
+  rNow : Nat := 35              -- marginal rate (%) on income recognised during the horizon
+  rLater : Nat := 24            -- marginal rate (%) on pre-tax money when eventually drawn
+  beta : Nat := 25              -- premium (%) for a dollar whose future growth is sheltered
+  need : Nat := 0               -- cash that must be in hand at the end
+  deriving Repr
+
+def covAt (c : Cfg) (y : Nat) : Cov := c.cov.getD y (c.cov.getLast?.getD .none)
+
+structure St where
+  yr : Nat := 0
+  cash : Nat := 0
+  ira : Nat := 0        -- traditional IRAs other than a Trump account, one contract: §408(d)(2)
+  iraB : Nat := 0       -- investment in the contract
+  ta : Nat := 0         -- Trump account; §530A(h)(4): §408(d)(2) applied separately
+  taB : Nat := 0
+  rc : Nat := 0         -- Roth IRA: regular contributions, §408A(d)(4)(B)(ii)(I)
+  cvT : Nat := 0        -- Roth IRA: conversions, part that was included in income
+  cvN : Nat := 0        -- Roth IRA: conversions, part that was not
+  cvYr : Nat := 0       -- year of the latest conversion
+  re : Nat := 0         -- Roth IRA earnings
+  rFirst : Nat := 999   -- first year a Roth IRA contribution was made, §408A(d)(2)(B)
+  hsa : Nat := 0
+  hsaYr : Nat := 0      -- contributions to the HSA this year (cash and §408(d)(9))
+  qhfdYr : Nat := 0
+  qhfdN : Nat := 0      -- lifetime count of qualified HSA funding distributions
+  qhfdFirst : Nat := 0  -- this year's first one, if made under self-only coverage
+  qhfdTest : Nat := 0   -- amount inside a §408(d)(9)(D) testing period
+  qhfdFull : Bool := false
+  p529 : Nat := 0
+  p529B : Nat := 0
+  p529Old : Nat := 0    -- contributed (with earnings) more than 5 years ago, §529(c)(3)(E)(i)(I)
+  p529Roth : Nat := 0   -- lifetime §529(c)(3)(E) transfers
+  able : Nat := 0
+  ableYr : Nat := 0
+  planPre : Nat := 0    -- pre-tax plan money (401(k)/403(b), either employer)
+  planRoth : Nat := 0   -- designated Roth accounts
+  planBAT : Nat := 0    -- after-tax employee contributions in the second employer's plan
+  p457 : Nat := 0
+  iraYr : Nat := 0      -- contributions this year to every individual retirement plan
+  tradYr : Nat := 0     -- of which to plans other than Roth IRAs
+  taKidYr : Nat := 0
+  defYr : Nat := 0      -- §402(g) elective deferrals this year
+  catchYr : Nat := 0
+  d457Yr : Nat := 0
+  r457Yr : Nat := 0
+  addA : Nat := 0       -- §415(c) annual additions, main employer
+  addB : Nat := 0       -- §415(c) annual additions, second employer
+  empBYr : Nat := 0
+  ded70 : Nat := 0      -- §219 deductions since 70½ not yet used to reduce a QCD, §408(d)(8)(A)
+  qcdYr : Nat := 0
+  qcdExclYr : Nat := 0  -- excluded under §408(d)(8) so far this year
+  pledge : Nat := 0     -- gifts to charity the person will make in any case
+  taxed : Nat := 0      -- included in gross income by these moves
+  deducted : Nat := 0   -- deducted or excluded by these moves
+  penalty : Nat := 0    -- additional taxes, dollars
+  deriving BEq, Hashable, Repr
+
+inductive Src where | ira | ta deriving BEq, Hashable, Repr, DecidableEq
+
+inductive Move where
+  | nextYear
+  | tradContrib (a : Nat)   -- §219, §408(o)
+  | rothContrib (a : Nat)   -- §408A(c)
+  | convert (a : Nat)       -- §408A(d)(3)
+  | iraWithdraw (a : Nat)   -- §408(d)(1)–(2), §72(t)
+  | rothWithdraw (a : Nat)  -- §408A(d)(1)–(4), §72(t)
+  | taKid (a : Nat)         -- §530A(c)(2)
+  | taAdult (a : Nat)       -- §530A(a) with §219 / §408(o), from the year of the 18th birthday
+  | taConvert (a : Nat)     -- §530A(a), §408A(d)(3)(C), §530A(h)(4)
+  | taWithdraw (a : Nat)    -- §530A(d)(1), §408(d), §72(t)
+  | taToAble                -- §530A(d)(4)
+  | hsaContrib (a : Nat)    -- §223(a)–(b)
+  | qhfd (src : Src) (a : Nat)  -- §408(d)(9)
+  | hsaWithdraw (a : Nat)   -- §223(f)(2), (4)
+  | qcd (src : Src) (a : Nat)   -- §408(d)(8)
+  | giveCash (a : Nat)
+  | c529Contrib (a : Nat)   -- §529(b)(1)(A)(ii)
+  | c529ToRoth (a : Nat)    -- §529(c)(3)(E), §408A(c)(3)(E), (c)(5)(B)(ii)
+  | c529Withdraw (a : Nat)  -- §529(c)(3)(A), (c)(6)
+  | c529ToAble (a : Nat)    -- §529(c)(3)(C)(i)(III)
+  | deferPre (a : Nat)      -- §402(g), §401(k)
+  | deferRoth (a : Nat)     -- §402A(a)(1)
+  | catchPre (a : Nat)      -- §414(v), main employer
+  | catchPreB (a : Nat)     -- §414(v), second employer's plan
+  | catchRoth (a : Nat)     -- §414(v)(7)
+  | d457Pre (a : Nat)       -- §457(b)(2), (c), (e)(18)
+  | d457Roth (a : Nat)      -- §457(e)(18)(A)(ii), §402A(e)(1)(C)
+  | w457 (a : Nat)          -- §457(a)(1)(A), (d)(1)(A)(ii); §72(t)(1) with §4974(c)
+  | afterTaxB (a : Nat)     -- §415(c), second employer
+  | rothRollB (a : Nat)     -- §402A(c)(4)
+  | empPreB (a : Nat)       -- §404(a)(3), §415(c)
+  | empRothB (a : Nat)      -- §402A(a)(3)
+  | taRollIn (a : Nat)      -- §408(d)(3)(A)(ii), (H), from the Trump account to the employer plan
+  deriving BEq, Repr
+
+def age (c : Cfg) (s : St) : Nat := c.age0 + s.yr
+
+/-- §219(b)(5): $7,000, plus $1,000 from the year of the 50th birthday; never more than compensation. -/
+def iraLim (c : Cfg) (s : St) : Nat := min (7000 + (if age c s ≥ 50 then 1000 else 0)) c.comp
+
+/-- §223(b)(3): $1,000 from the year of the 55th birthday. -/
+def hsaCu (c : Cfg) (s : St) : Nat := if age c s ≥ 55 then 1000 else 0
+
+/-- §414(v)(2)(B)(i), (E): $7,500; $11,250 for a participant who attains 60–63 in the year. -/
+def catchLim (c : Cfg) (s : St) : Nat :=
+  if age c s < 50 then 0 else if 60 ≤ age c s ∧ age c s ≤ 63 then 11250 else 7500
+
+def deferralLimit : Nat := 23500    -- §402(g)(1)(B) and §457(e)(15), 2025
+def additionsLimit : Nat := 70000   -- §415(c)(1)(A), 2025
+def limB (c : Cfg) : Nat := min additionsLimit c.compB   -- §415(c)(1): lesser of the dollar amount or compensation
+
+/-- Amounts that become includible, with a 10% addition, if next year's coverage is `c'`:
+§223(b)(8)(B) (contributions that could be made only because of the last-month rule) and §408(d)(9)(D). -/
+def testFail (c : Cfg) (s : St) : Nat :=
+  let c' := covAt c (s.yr + 1)
+  let now := covAt c s.yr
+  let extra := min (s.hsaYr - min s.hsaYr (now.sumLimit (hsaCu c s))) (s.hsaYr - s.qhfdYr)
+  (if !c'.full then extra else 0) +
+  (if s.qhfdTest > 0 && !(if s.qhfdFull then c'.full else c' != .none && !c'.decOnly) then s.qhfdTest else 0)
+
+/-- §408(d)(8)(D), (d)(9)(E): notwithstanding §72 the distribution is treated as includible up to the amount that
+would be includible if every individual retirement plan were distributed; "proper adjustments" keep the investment
+in the contract for later distributions. Takes `a` from `src`; the basis that physically left moves to the other
+account. Only defined when `a` is within the aggregate pre-tax amount. -/
+def stripPre (c : Cfg) (s : St) (src : Src) (a : Nat) : Option St :=
+  let taLive := c.hasTA && age c s ≥ 18   -- §530A(h)(1): §408(d) does not reach a Trump account before that year
+  let preI := s.ira - s.iraB
+  let preT := if taLive then s.ta - s.taB else 0
+  if a = 0 ∨ a > preI + preT then none else
+  match src with
+  | .ira => if a > s.ira then none else
+      let e := a - min a preI
+      some { s with ira := s.ira - a, iraB := s.iraB - e, taB := s.taB + e }
+  | .ta => if !taLive ∨ a > s.ta then none else
+      let e := a - min a preT
+      some { s with ta := s.ta - a, taB := s.taB - e, iraB := s.iraB + e }
+
+/-- RED closed-gap rule.  §530A(h)(4) read as: "For any taxable year beginning before the first day of the calendar
+year in which the account beneficiary attains age 18, section 408(d)(2) shall be applied separately ...".  From that
+year on, §408(d)(2)(A) treats the Trump account and the other IRAs as one contract. -/
+def aggTake (c : Cfg) (s : St) (src : Src) (a : Nat) : Nat × St :=
+  if c.hasTA && age c s ≥ 18 then
+    let B := s.iraB + s.taB
+    let T := s.ira + s.ta
+    let n := a * B / T
+    let ira' := match src with | .ira => s.ira - a | .ta => s.ira
+    let ta' := match src with | .ira => s.ta | .ta => s.ta - a
+    let B' := B - n
+    let taB' := min ta' (match src with | .ta => s.taB - min n s.taB | .ira => s.taB)
+    let iraB' := min ira' (B' - taB')
+    (n, { s with ira := ira', ta := ta', iraB := iraB', taB := B' - iraB' })
+  else match src with
+    | .ira => let n := a * s.iraB / s.ira
+              (n, { s with ira := s.ira - a, iraB := s.iraB - n })
+    | .ta => let n := a * s.taB / s.ta
+             (n, { s with ta := s.ta - a, taB := s.taB - n })
+
+def setFirst (s : St) : St := if s.rFirst = 999 then { s with rFirst := s.yr } else s
+
+/-- One move, if the Code allows it. -/
+def step (c : Cfg) (s : St) : Move → Option St
+  | .nextYear =>
+    if s.yr + 1 < c.years then
+      let inc := testFail c s
+      some { s with yr := s.yr + 1, taxed := s.taxed + inc, penalty := s.penalty + inc / 10,
+                    qhfdTest := 0, qhfdFull := false, qhfdFirst := 0, hsaYr := 0, qhfdYr := 0, iraYr := 0,
+                    tradYr := 0, taKidYr := 0, defYr := 0, catchYr := 0, d457Yr := 0, r457Yr := 0, addA := 0,
+                    addB := 0, empBYr := 0, qcdYr := 0, qcdExclYr := 0, ableYr := 0 }
+    else none
+  | .tradContrib a =>
+    -- §219(b)(1), (b)(5); §408(o): the non-deductible part is investment in the contract
+    if 0 < a ∧ a ≤ s.cash ∧ s.iraYr + a ≤ iraLim c s then
+      let s := { s with cash := s.cash - a, ira := s.ira + a, iraYr := s.iraYr + a, tradYr := s.tradYr + a }
+      if c.iraDeductible then
+        -- §408(d)(8)(A), second sentence: deductions for years ending on or after 70½ cut the exclusion, whichever
+        -- comes first within the year
+        let d := if age c s ≥ 71 then a else 0
+        let red := min d s.qcdExclYr
+        some { s with deducted := s.deducted + a, ded70 := s.ded70 + (d - red), qcdExclYr := s.qcdExclYr - red,
+                      taxed := s.taxed + red }
+      else some { s with iraB := s.iraB + a }
+    else none
+  | .rothContrib a =>
+    -- §408A(c)(2)–(3)
+    if c.rothOK ∧ 0 < a ∧ a ≤ s.cash ∧ s.iraYr + a ≤ iraLim c s then
+      some (setFirst { s with cash := s.cash - a, rc := s.rc + a, iraYr := s.iraYr + a })
+    else none
+  | .convert a =>
+    -- §408A(d)(3)(A)(i), §408(d)(2), §72: pro rata over all traditional IRAs (not the Trump account, §530A(h)(4))
+    if 0 < a ∧ a ≤ s.ira then
+      let (n, s) := aggTake c s .ira a
+      some (setFirst { s with cvT := s.cvT + (a - n), cvN := s.cvN + n, cvYr := s.yr, taxed := s.taxed + (a - n) })
+    else none
+  | .iraWithdraw a =>
+    -- §408(d)(1)–(2); §72(t)(1), (2)(A)(i)
+    if 0 < a ∧ a ≤ s.ira then
+      let (n, s) := aggTake c s .ira a
+      some { s with cash := s.cash + a, taxed := s.taxed + (a - n),
+                    penalty := s.penalty + (if age c s < 60 then (a - n) / 10 else 0) }
+    else none
+  | .rothWithdraw a =>
+    -- §408A(d)(4)(B): regular contributions, then conversions (taxable part first), then earnings.
+    -- §408A(d)(3)(F): 10% on the taxable part of a conversion taken out within 5 years. §408A(d)(2): earnings are
+    -- tax-free only after 59½ and the 5-year period; otherwise included, with §72(t) before 59½.
+    if 0 < a ∧ a ≤ s.rc + s.cvT + s.cvN + s.re then
+      let x1 := min a s.rc
+      let x2 := min (a - x1) s.cvT
+      let x3 := min (a - x1 - x2) s.cvN
+      let x4 := a - x1 - x2 - x3
+      let young := age c s < 60
+      let qualified := !young && s.rFirst + 5 ≤ s.yr
+      some { s with rc := s.rc - x1, cvT := s.cvT - x2, cvN := s.cvN - x3, re := s.re - x4, cash := s.cash + a,
+                    taxed := s.taxed + (if qualified then 0 else x4),
+                    penalty := s.penalty + (if young && s.yr < s.cvYr + 5 then x2 / 10 else 0)
+                                         + (if young then x4 / 10 else 0) }
+    else none
+  | .taKid a =>
+    -- §530A(c)(1)–(2): up to $5,000 a year before the year of the 18th birthday, no deduction (so basis, §72).
+    -- §530A(h)(3): not counted against any other IRA limit. No compensation is required.
+    if c.hasTA ∧ age c s < 18 ∧ 0 < a ∧ a ≤ s.cash ∧ s.taKidYr + a ≤ 5000 then
+      some { s with cash := s.cash - a, ta := s.ta + a, taB := s.taB + a, taKidYr := s.taKidYr + a }
+    else none
+  | .taAdult a =>
+    -- §530A(a): from the year of the 18th birthday the account is treated as a traditional IRA; the contribution
+    -- limits of §530A(b)(1)(C)(i)(II), (c) and the carve-out of (h)(3) stop, so §219 and §408(o) govern.
+    if c.hasTA ∧ age c s ≥ 18 ∧ 0 < a ∧ a ≤ s.cash ∧ s.iraYr + a ≤ iraLim c s then
+      let s := { s with cash := s.cash - a, ta := s.ta + a, iraYr := s.iraYr + a, tradYr := s.tradYr + a }
+      if c.iraDeductible then
+        -- §408(d)(8)(A), second sentence: deductions for years ending on or after 70½ cut the exclusion, whichever
+        -- comes first within the year
+        let d := if age c s ≥ 71 then a else 0
+        let red := min d s.qcdExclYr
+        some { s with deducted := s.deducted + a, ded70 := s.ded70 + (d - red), qcdExclYr := s.qcdExclYr - red,
+                      taxed := s.taxed + red }
+      else some { s with taB := s.taB + a }
+    else none
+  | .taConvert a =>
+    -- §408A(d)(3)(C) conversion of an individual retirement plan; §530A(h)(4): §408(d)(2) applied separately to
+    -- Trump accounts, so the ratio is taken over the Trump account alone
+    if c.hasTA ∧ age c s ≥ 18 ∧ 0 < a ∧ a ≤ s.ta then
+      let (n, s) := aggTake c s .ta a
+      some (setFirst { s with cvT := s.cvT + (a - n), cvN := s.cvN + n, cvYr := s.yr, taxed := s.taxed + (a - n) })
+    else none
+  | .taWithdraw a =>
+    -- §530A(d)(1): none before the year of the 18th birthday; then §408(d), §72(t)
+    if c.hasTA ∧ age c s ≥ 18 ∧ 0 < a ∧ a ≤ s.ta then
+      let (n, s) := aggTake c s .ta a
+      some { s with cash := s.cash + a, taxed := s.taxed + (a - n),
+                    penalty := s.penalty + (if age c s < 60 then (a - n) / 10 else 0) }
+    else none
+  | .taToAble =>
+    -- §530A(d)(4): in the year the beneficiary attains 17, the entire balance, to the beneficiary's ABLE account;
+    -- not included in income; outside the ABLE annual and aggregate limits (§529A(b)(2)(B), (b)(6))
+    if c.hasTA ∧ c.disabled ∧ age c s = 17 ∧ 0 < s.ta then
+      some { s with able := s.able + s.ta, ta := 0, taB := 0 }
+    else none
+  | .hsaContrib a =>
+    -- §223(a), (b)(1)–(3), (b)(6), (b)(7), (b)(8)(A)
+    let cv := covAt c s.yr
+    if !c.dependent ∧ age c s < 65 ∧ 0 < a ∧ a ≤ s.cash ∧ s.hsaYr + a ≤ cv.lastMonthLimit (hsaCu c s) then
+      some { s with cash := s.cash - a, hsa := s.hsa + a, hsaYr := s.hsaYr + a, deducted := s.deducted + a }
+    else none
+  | .qhfd src a =>
+    -- §408(d)(9): once in a lifetime (a second in the same year after moving from self-only to family coverage),
+    -- direct transfer, capped at the §223(b) annual limitation for the coverage at that time, excluded to the
+    -- extent otherwise includible, counted against the HSA limit and not deductible (§223(b)(4)(C)).
+    -- Conservative: closed to a dependent, although §223(b)(6) only denies "deduction" (see FINDINGS).
+    let cv := covAt c s.yr
+    let second := s.qhfdN = 1 ∧ s.qhfdFirst > 0 ∧ cv == .selfToFam
+    if !c.dependent ∧ age c s < 65 ∧ (s.qhfdN = 0 ∨ second) ∧ a + (if second then s.qhfdFirst else 0) ≤ cv.qhfdLimit (hsaCu c s) second
+       ∧ s.hsaYr + a ≤ cv.lastMonthLimit (hsaCu c s) then
+      (stripPre c s src a).map fun s' =>
+        { s' with hsa := s'.hsa + a, hsaYr := s'.hsaYr + a, qhfdYr := s'.qhfdYr + a, qhfdN := s'.qhfdN + 1,
+                  qhfdFirst := if cv == .selfToFam ∧ !second then a else 0,
+                  qhfdTest := s'.qhfdTest + a, qhfdFull := s'.qhfdFull || cv.decOnly || second }
+    else none
+  | .hsaWithdraw a =>
+    -- §223(f)(2), (f)(4)(A), (C): not for medical expenses ⇒ included, plus 20% before 65
+    if 0 < a ∧ a ≤ s.hsa then
+      some { s with hsa := s.hsa - a, cash := s.cash + a, taxed := s.taxed + a,
+                    penalty := s.penalty + (if age c s < 65 then a / 5 else 0) }
+    else none
+  | .qcd src a =>
+    -- §408(d)(8): from 70½, direct to charity, $108,000 (2025), includible money first; the exclusion is cut by
+    -- §219 deductions taken since 70½ (the cut part stays in income)
+    if age c s ≥ 71 ∧ a ≤ s.pledge ∧ s.qcdYr + a ≤ 108000 then
+      (stripPre c s src a).map fun s' =>
+        let red := min a s'.ded70
+        { s' with pledge := s'.pledge - a, qcdYr := s'.qcdYr + a, ded70 := s'.ded70 - red,
+                  qcdExclYr := s'.qcdExclYr + (a - red), taxed := s'.taxed + red }
+    else none
+  | .giveCash a =>
+    -- a gift from cash; no deduction assumed (the person takes the standard deduction)
+    if 0 < a ∧ a ≤ s.cash ∧ a ≤ s.pledge then some { s with cash := s.cash - a, pledge := s.pledge - a } else none
+  | .c529Contrib a =>
+    if 0 < a ∧ a ≤ s.cash then some { s with cash := s.cash - a, p529 := s.p529 + a, p529B := s.p529B + a }
+    else none
+  | .c529ToRoth a =>
+    -- §529(c)(3)(E): program maintained 15 years; only money contributed (with its earnings) more than 5 years
+    -- before; direct transfer to the beneficiary's Roth IRA; $35,000 for life. Annual cap, read literally:
+    -- the §408A(c)(2) amount (deductible amount less contributions to non-Roth IRAs) "reduced by" contributions
+    -- to all individual retirement plans — so contributions to a traditional IRA are subtracted twice.
+    -- §408A(c)(3)(E): the income limit does not reduce it. §72: basis leaves the program pro rata; in the Roth IRA
+    -- the basis part is taken as a contribution and the earnings part as earnings (conservative).
+    if c.age529 + s.yr ≥ 15 ∧ 0 < a ∧ a ≤ s.p529Old ∧ a ≤ s.p529
+       ∧ s.tradYr + s.iraYr + a ≤ iraLim c s ∧ s.p529Roth + a ≤ 35000 then
+      let n := a * s.p529B / s.p529
+      some (setFirst { s with p529 := s.p529 - a, p529B := s.p529B - n, p529Old := s.p529Old - a,
+                              p529Roth := s.p529Roth + a, iraYr := s.iraYr + a, rc := s.rc + n,
+                              re := s.re + (a - n) })
+    else none
+  | .c529Withdraw a =>
+    -- §529(c)(3)(A): earnings part included (§72); §529(c)(6) with §530(d)(4): 10% of it
+    if 0 < a ∧ a ≤ s.p529 then
+      let n := a * s.p529B / s.p529
+      some { s with p529 := s.p529 - a, p529B := s.p529B - n, p529Old := s.p529Old - min a s.p529Old,
+                    cash := s.cash + a, taxed := s.taxed + (a - n), penalty := s.penalty + (a - n) / 10 }
+    else none
+  | .c529ToAble a =>
+    -- §529(c)(3)(C)(i)(III): within the ABLE annual limit, §529A(b)(2)(B)(i) ($19,000 in 2025)
+    if c.disabled ∧ 0 < a ∧ a ≤ s.p529 ∧ s.ableYr + a ≤ 19000 then
+      let n := a * s.p529B / s.p529
+      some { s with p529 := s.p529 - a, p529B := s.p529B - n, p529Old := s.p529Old - min a s.p529Old,
+                    able := s.able + a, ableYr := s.ableYr + a }
+    else none
+  | .deferPre a =>
+    -- §402(g)(1): one limit per individual across employers; §415(c): annual additions per employer
+    if c.has401k ∧ 0 < a ∧ a ≤ s.cash ∧ s.defYr + a ≤ deferralLimit ∧ s.addA + a ≤ additionsLimit then
+      some { s with cash := s.cash - a, planPre := s.planPre + a, defYr := s.defYr + a, addA := s.addA + a,
+                    deducted := s.deducted + a }
+    else none
+  | .deferRoth a =>
+    -- §402A(a)(1): an elective deferral, but not excludable
+    if c.has401k ∧ 0 < a ∧ a ≤ s.cash ∧ s.defYr + a ≤ deferralLimit ∧ s.addA + a ≤ additionsLimit then
+      some { s with cash := s.cash - a, planRoth := s.planRoth + a, defYr := s.defYr + a, addA := s.addA + a }
+    else none
+  | .catchPre a =>
+    -- §414(v)(1)–(3): beyond the §402(g) limit, outside §415(c); §414(v)(7)(A): pre-tax only if prior-year wages
+    -- from the employer sponsoring the plan were not above $145,000
+    if c.has401k ∧ !c.wagesOver ∧ 0 < a ∧ a ≤ s.cash ∧ s.defYr = deferralLimit ∧ s.catchYr + a ≤ catchLim c s then
+      some { s with cash := s.cash - a, planPre := s.planPre + a, catchYr := s.catchYr + a,
+                    deducted := s.deducted + a }
+    else none
+  | .catchPreB a =>
+    -- the same, in the second employer's plan: §414(v)(7)(A) looks at wages "from the employer sponsoring the
+    -- plan" (the scenario gives that employer compensation no higher than $145,000)
+    if c.compB > 0 ∧ c.compB ≤ 145000 ∧ 0 < a ∧ a ≤ s.cash ∧ a ≤ c.compB ∧ s.defYr = deferralLimit
+       ∧ s.catchYr + a ≤ catchLim c s then
+      some { s with cash := s.cash - a, planPre := s.planPre + a, catchYr := s.catchYr + a,
+                    deducted := s.deducted + a }
+    else none
+  | .catchRoth a =>
+    if c.has401k ∧ 0 < a ∧ a ≤ s.cash ∧ s.defYr = deferralLimit ∧ s.catchYr + a ≤ catchLim c s then
+      some { s with cash := s.cash - a, planRoth := s.planRoth + a, catchYr := s.catchYr + a }
+    else none
+  | .d457Pre a =>
+    -- §457(b)(2), (c): its own ceiling, not shared with §402(g). §457(e)(18)(A), as amended in 2022: for a
+    -- 50-or-older participant in a governmental plan the ceiling rises by the lesser of the participant's
+    -- designated Roth contributions to the plan or the §414(v) amount.
+    if c.has457 ∧ 0 < a ∧ a ≤ s.cash ∧ s.d457Yr + a ≤ deferralLimit + min s.r457Yr (catchLim c s) then
+      some { s with cash := s.cash - a, p457 := s.p457 + a, d457Yr := s.d457Yr + a, deducted := s.deducted + a }
+    else none
+  | .d457Roth a =>
+    if c.has457 ∧ 0 < a ∧ a ≤ s.cash ∧ s.d457Yr + a ≤ deferralLimit + min (s.r457Yr + a) (catchLim c s) then
+      some { s with cash := s.cash - a, planRoth := s.planRoth + a, d457Yr := s.d457Yr + a,
+                    r457Yr := s.r457Yr + a }
+    else none
+  | .w457 a =>
+    -- §457(a)(1)(A): included when paid; §457(d)(1)(A)(ii): payable on severance; §72(t)(1) reaches only plans in
+    -- §4974(c), which does not list a §457(b) plan
+    if c.separated ∧ 0 < a ∧ a ≤ s.p457 then
+      some { s with p457 := s.p457 - a, cash := s.cash + a, taxed := s.taxed + a }
+    else none
+  | .afterTaxB a =>
+    -- §415(c)(1): the limit is on annual additions to the plans of one employer (§415(f)(1)(B), (h))
+    if c.compB > 0 ∧ 0 < a ∧ a ≤ s.cash ∧ s.addB + a ≤ limB c then
+      some { s with cash := s.cash - a, planBAT := s.planBAT + a, addB := s.addB + a }
+    else none
+  | .rothRollB a =>
+    -- §402A(c)(4): in-plan rollover to the designated Roth account; after-tax contributions are basis
+    if 0 < a ∧ a ≤ s.planBAT then some { s with planBAT := s.planBAT - a, planRoth := s.planRoth + a } else none
+  | .empPreB a =>
+    -- employer contribution by the second employer: deductible up to 25% of compensation, §404(a)(3)(A)
+    if c.compB > 0 ∧ 0 < a ∧ a ≤ s.cash ∧ s.empBYr + a ≤ c.compB / 4 ∧ s.addB + a ≤ limB c then
+      some { s with cash := s.cash - a, planPre := s.planPre + a, empBYr := s.empBYr + a, addB := s.addB + a,
+                    deducted := s.deducted + a }
+    else none
+  | .empRothB a =>
+    -- §402A(a)(3): employer nonelective contribution designated as Roth: included in the employee's income, still
+    -- deducted by the employer (the two cancel for an owner-employee); not an elective deferral
+    if c.compB > 0 ∧ 0 < a ∧ a ≤ s.cash ∧ s.empBYr + a ≤ c.compB / 4 ∧ s.addB + a ≤ limB c then
+      some { s with cash := s.cash - a, planRoth := s.planRoth + a, empBYr := s.empBYr + a, addB := s.addB + a }
+    else none
+  | .taRollIn a =>
+    -- §408(d)(3)(A)(ii): only the part that would be includible may be rolled to an employer plan; §408(d)(3)(H):
+    -- it is taken from the includible part first. The Trump account is an IRA for this purpose from the year of
+    -- the 18th birthday (§530A(a), (h)(1)).
+    if c.hasTA ∧ c.has401k ∧ age c s ≥ 18 ∧ 0 < a ∧ a ≤ s.ta - s.taB then
+      some { s with ta := s.ta - a, planPre := s.planPre + a }
+    else none
+
+/-! ## Part 2. Search -/
+
+def kind : Move → Nat
+  | .nextYear => 0 | .tradContrib _ => 1 | .rothContrib _ => 2 | .convert _ => 3 | .iraWithdraw _ => 4
+  | .rothWithdraw _ => 5 | .taKid _ => 6 | .taAdult _ => 7 | .taConvert _ => 8 | .taWithdraw _ => 9
+  | .taToAble => 10 | .hsaContrib _ => 11 | .qhfd .ira _ => 12 | .qhfd .ta _ => 13 | .hsaWithdraw _ => 14
+  | .qcd .ira _ => 15 | .qcd .ta _ => 16 | .giveCash _ => 17 | .c529Contrib _ => 18 | .c529ToRoth _ => 19
+  | .c529Withdraw _ => 20 | .c529ToAble _ => 21 | .deferPre _ => 22 | .deferRoth _ => 23 | .catchPre _ => 24
+  | .catchPreB _ => 25 | .catchRoth _ => 26 | .d457Pre _ => 27 | .d457Roth _ => 28 | .w457 _ => 29
+  | .afterTaxB _ => 30 | .rothRollB _ => 31 | .empPreB _ => 32 | .empRothB _ => 33 | .taRollIn _ => 34
+
+def showMove : Move → String
+  | .nextYear => "-- next year --"
+  | .tradContrib a => s!"traditional IRA contribution ${a}"
+  | .rothContrib a => s!"Roth IRA contribution ${a}"
+  | .convert a => s!"convert ${a} of the IRA to Roth"
+  | .iraWithdraw a => s!"withdraw ${a} from the IRA"
+  | .rothWithdraw a => s!"withdraw ${a} from the Roth IRA"
+  | .taKid a => s!"Trump account contribution (minor) ${a}"
+  | .taAdult a => s!"Trump account contribution (18+, IRA rules) ${a}"
+  | .taConvert a => s!"convert ${a} of the Trump account to Roth"
+  | .taWithdraw a => s!"withdraw ${a} from the Trump account"
+  | .taToAble => "roll the whole Trump account into the ABLE account"
+  | .hsaContrib a => s!"HSA contribution ${a}"
+  | .qhfd .ira a => s!"IRA -> HSA funding distribution ${a}"
+  | .qhfd .ta a => s!"Trump account -> HSA funding distribution ${a}"
+  | .hsaWithdraw a => s!"non-medical HSA withdrawal ${a}"
+  | .qcd .ira a => s!"charitable distribution from the IRA ${a}"
+  | .qcd .ta a => s!"charitable distribution from the Trump account ${a}"
+  | .giveCash a => s!"gift to charity from cash ${a}"
+  | .c529Contrib a => s!"529 contribution ${a}"
+  | .c529ToRoth a => s!"529 -> Roth IRA transfer ${a}"
+  | .c529Withdraw a => s!"non-education 529 withdrawal ${a}"
+  | .c529ToAble a => s!"529 -> ABLE rollover ${a}"
+  | .deferPre a => s!"pre-tax elective deferral ${a}"
+  | .deferRoth a => s!"Roth elective deferral ${a}"
+  | .catchPre a => s!"pre-tax catch-up ${a} (main employer)"
+  | .catchPreB a => s!"pre-tax catch-up ${a} (second employer's plan)"
+  | .catchRoth a => s!"Roth catch-up ${a}"
+  | .d457Pre a => s!"457(b) pre-tax deferral ${a}"
+  | .d457Roth a => s!"457(b) Roth deferral ${a}"
+  | .w457 a => s!"457(b) withdrawal ${a}"
+  | .afterTaxB a => s!"after-tax contribution, second employer's plan ${a}"
+  | .rothRollB a => s!"in-plan Roth rollover, second employer's plan ${a}"
+  | .empPreB a => s!"employer contribution, second employer ${a}"
+  | .empRothB a => s!"employer Roth contribution, second employer ${a}"
+  | .taRollIn a => s!"roll ${a} of the Trump account into the employer plan"
+
+/-- The moves tried from a position. Each move is tried with the amounts the position itself offers for that move:
+what is left of its limit (or all the cash, if less), the balance it draws on, that balance's pre-tax part and its
+basis, the open pledge, the cash still needed. No amount is chosen with a plan in mind. -/
+def cands (c : Cfg) (s : St) (allowed : Move → Bool) : List Move :=
+  let cv := covAt c s.yr
+  let cu := hsaCu c s
+  let iraRoom := iraLim c s - s.iraYr
+  let preI := s.ira - s.iraB
+  let preT := s.ta - s.taB
+  let hRoom := cv.lastMonthLimit cu - s.hsaYr
+  let hRoom' := cv.sumLimit cu - s.hsaYr
+  let qAmts := [cv.qhfdLimit cu false, cv.qhfdLimit cu true - s.qhfdFirst, hRoom, hRoom', preI, preT, preI + preT]
+  let qAmts := qAmts ++ qAmts.map (min hRoom) ++ qAmts.map (min (cv.qhfdLimit cu false))
+  let cAmts := [s.pledge, preI, preT, preI + preT, 108000 - s.qcdYr, min s.pledge (preI + preT)]
+  let rollRoom := min (min (iraRoom - s.tradYr) s.p529Old) (min (35000 - s.p529Roth) s.p529)
+  let cRoom := catchLim c s - s.catchYr
+  let bRoom := min (c.compB / 4 - s.empBYr) (limB c - s.addB)
+  let short := c.need - s.cash
+  let ms : List Move :=
+    [.nextYear, .taToAble,
+     .tradContrib (min s.cash iraRoom), .rothContrib (min s.cash iraRoom), .taAdult (min s.cash iraRoom),
+     .convert s.ira, .convert preI, .convert s.iraB, .iraWithdraw s.ira, .iraWithdraw short,
+     .rothWithdraw s.rc, .rothWithdraw (s.rc + s.cvT + s.cvN), .rothWithdraw (s.rc + s.cvT + s.cvN + s.re),
+     .rothWithdraw short,
+     .taKid (min s.cash (5000 - s.taKidYr)), .taConvert s.ta, .taConvert s.taB, .taConvert preT,
+     .taWithdraw s.ta, .taWithdraw short,
+     .hsaContrib (min s.cash hRoom), .hsaContrib (min s.cash hRoom'), .hsaWithdraw s.hsa,
+     .giveCash (min s.cash s.pledge),
+     .c529Contrib s.cash, .c529ToRoth rollRoom, .c529Withdraw s.p529, .c529ToAble (min s.p529 (19000 - s.ableYr)),
+     .deferPre (min s.cash (deferralLimit - s.defYr)), .deferRoth (min s.cash (deferralLimit - s.defYr)),
+     .catchPre (min s.cash cRoom), .catchPreB (min (min s.cash cRoom) c.compB), .catchRoth (min s.cash cRoom),
+     .d457Pre (min s.cash (deferralLimit + min s.r457Yr (catchLim c s) - s.d457Yr)),
+     .d457Roth (min s.cash (deferralLimit + catchLim c s - s.d457Yr)),
+     .d457Roth (min s.cash (catchLim c s - s.r457Yr)),
+     .w457 s.p457, .w457 short,
+     .afterTaxB (min s.cash (limB c - s.addB)), .rothRollB s.planBAT,
+     .empPreB (min s.cash bRoom), .empRothB (min s.cash bRoom), .taRollIn preT]
+    ++ qAmts.flatMap (fun a => [Move.qhfd .ira a, Move.qhfd .ta a])
+    ++ cAmts.flatMap (fun a => [Move.qcd .ira a, Move.qcd .ta a])
+  (ms.filter allowed).eraseDups
+
+/-- The objective: what the position is worth after the tax still embedded in it, with a premium `beta` for money
+whose future growth is sheltered. Cash and basis count at par; tax-free money (Roth, HSA, ABLE of an eligible
+individual) at 1+β; pre-tax money at (1+β)(1−rLater); 529 earnings as if withdrawn for non-education use. Income
+recognised in the horizon costs rNow, deductions save rNow, additional taxes cost their amount. A pledge still open
+will be paid from cash. A testing period still running is settled against next year's coverage. -/
+def worth (c : Cfg) (s : St) : Int :=
+  let I (n : Nat) : Int := n
+  let b : Int := 100 + c.beta
+  let free := s.rc + s.cvT + s.cvN + s.re + s.planRoth + s.hsa + (if c.disabled then s.able else 0)
+  let pre := (s.ira - s.iraB) + (s.ta - s.taB) + s.planPre + s.p457
+  let basis := s.iraB + s.taB + s.planBAT + s.p529B + (if c.disabled then 0 else s.able)
+  let fail := testFail c s
+  (100 * I s.cash + b * I free + b * (100 - I c.rLater) * I pre / 100 + 100 * I basis
+    + (90 - I c.rLater) * I (s.p529 - s.p529B)
+    - I c.rNow * I (s.taxed + fail) + I c.rNow * I s.deducted - 100 * I (s.penalty + fail / 10)
+    - 100 * I s.pledge) / 100
+
+def names : List String :=
+  ["", "trad IRA contrib", "Roth IRA contrib", "IRA->Roth conversion", "IRA withdrawal", "Roth withdrawal",
+   "Trump acct contrib (minor)", "Trump acct contrib (18+)", "Trump acct->Roth conversion", "Trump acct withdrawal",
+   "Trump acct->ABLE", "HSA contrib", "IRA->HSA", "Trump acct->HSA", "HSA non-medical withdrawal", "QCD (IRA)",
+   "QCD (Trump acct)", "cash gift", "529 contrib", "529->Roth", "529 withdrawal", "529->ABLE", "pre-tax deferral",
+   "Roth deferral", "pre-tax catch-up", "pre-tax catch-up (2nd employer)", "Roth catch-up", "457 pre-tax",
+   "457 Roth", "457 withdrawal", "after-tax (2nd employer)", "in-plan Roth rollover (2nd)", "employer contrib (2nd)",
+   "employer Roth contrib (2nd)", "Trump acct->employer plan"]
+
+def maskNames (m : Nat) : String :=
+  ", ".intercalate ((List.range 35).filter (fun k => k > 0 && (m >>> k) % 2 == 1) |>.map (names.getD · "?"))
+
+/-- Breadth-first over every allowed sequence, each position explored once. Returns the best score for each set of
+move kinds used ("family"), with one plan that reaches it, and the number of positions. -/
+def bfs (c : Cfg) (s0 : St) (depth : Nat) (allowed : Move → Bool) :
+    Std.HashMap Nat (Int × List Move) × Nat := Id.run do
+  let mut frontier : Array (St × List Move × Nat) := #[(s0, [], 0)]
+  let mut seen : Std.HashSet St := {}
+  let mut fam : Std.HashMap Nat (Int × List Move) := {}
+  seen := seen.insert s0
+  if s0.cash ≥ c.need then fam := fam.insert 0 (worth c s0, [])
+  for _ in [0:depth] do
+    let mut next : Array (St × List Move × Nat) := #[]
+    for (s, path, mask) in frontier do
+      for m in cands c s allowed do
+        if true then
+          match step c s m with
+          | none => pure ()
+          | some s' =>
+            if !seen.contains s' then
+              seen := seen.insert s'
+              let mask' := if kind m = 0 then mask else mask ||| (1 <<< kind m)
+              let path' := m :: path
+              next := next.push (s', path', mask')
+              if s'.cash ≥ c.need then
+                let w := worth c s'
+                match fam.get? mask' with
+                | some (w0, _) => if w > w0 then fam := fam.insert mask' (w, path')
+                | none => fam := fam.insert mask' (w, path')
+    frontier := next
+  return (fam, seen.size)
+
+def bestOf (fam : Std.HashMap Nat (Int × List Move)) : Option (Nat × Int × List Move) :=
+  fam.fold (fun acc k v => match acc with
+    | none => some (k, v.1, v.2)
+    | some (_, w, _) => if v.1 > w then some (k, v.1, v.2) else acc) none
+
+/-- Run a scenario: the baseline is the best result using only the `plain` moves (each account used as intended);
+then every family of plans that beats it, best first, dropping a family when a family already printed uses a subset
+of its moves and does at least as well. -/
+def report (title : String) (c : Cfg) (s0 : St) (depth : Nat) (allowed plain : Move → Bool) (top : Nat := 8) :
+    IO Unit := do
+  IO.println s!"==== {title} ===="
+  let (bf, _) := bfs c s0 depth (fun m => allowed m && plain m)
+  let base : Int := match bestOf bf with | some (_, w, _) => w | none => -1000000000
+  match bestOf bf with
+  | some (_, w, p) =>
+    IO.println s!"baseline (plain use): worth {w} ({w - worth c s0} over doing nothing)"
+    for m in p.reverse do IO.println s!"    {showMove m}"
+  | none => IO.println "baseline: no plain plan meets the cash need"
+  let (fam, n) := bfs c s0 depth allowed
+  IO.println s!"searched {n} positions to depth {depth}; {fam.size} families"
+  let arr := fam.toArray.qsort (fun a b => a.2.1 > b.2.1 || (a.2.1 == b.2.1 && a.1 < b.1))
+  let mut shown : Array (Nat × Int) := #[]
+  for (mask, w, p) in arr do
+    if w > base && shown.size < top then
+      if !(shown.any fun (m0, w0) => m0 &&& mask == m0 && w0 ≥ w) then
+        shown := shown.push (mask, w)
+        IO.println s!"  +{w - base} vs baseline  [{maskNames mask}]"
+        for m in p.reverse do IO.println s!"      {showMove m}"
+  if shown.isEmpty then IO.println "  nothing beats the baseline"
+
+def isK (ks : List Nat) (m : Move) : Bool := ks.contains (kind m)
+
+end Legal.USTax.Hunt.Accounts
+
+namespace Legal.USTax.Hunt.Accounts
+
+/-! ## RED T6 (closed rule): replay through the kernel, then one statement over all move sequences -/
+
+def run (c : Cfg) : St → List Move → Option St
+  | s, [] => some s
+  | s, m :: ms => match step c s m with
+    | none => none
+    | some s' => run c s' ms
+
+def cS4 : Cfg := { age0 := 30, years := 2, comp := 300000, hasTA := true }
+def sS4 : St := { cash := 30000, ira := 100000 }
+def planS4 : List Move := [.taAdult 7000, .nextYear, .taAdult 7000, .taConvert 14000]
+def view (s : St) : List Nat := [s.cash, s.ira, s.iraB, s.ta, s.taB, s.cvN, s.cvT, s.taxed, s.deducted, s.penalty]
+
+set_option maxRecDepth 100000 in
+/-- Under the closed rule the same four moves are still legal, but $12,281 of the $14,000 is included in income:
+exactly the ordinary backdoor with the pro-rata rule. -/
+theorem red_closed_replay :
+    (run cS4 sS4 planS4).map view = some [16000, 100000, 12281, 0, 0, 1719, 12281, 12281, 0, 0] := by decide
+
+set_option maxRecDepth 100000 in
+theorem red_closed_worth : (run cS4 sS4 planS4).map (worth cS4) = some 124815 := by decide
+
+#print axioms red_closed_replay
+#print axioms red_closed_worth
+
+/-! ### Cut-down model (mine, not the original's): the five move kinds S4 opens, any amounts.
+State: year, cash, ordinary IRA, Trump account, the one pooled basis of §408(d)(2)(A), untaxed and taxed converted
+money, income recognised, this year's IRA contributions. Checked against the full closed `step` below by `#eval`. -/
+
+structure C where
+  yr : Nat
+  cash : Nat
+  ira : Nat
+  ta : Nat
+  B : Nat
+  cvN : Nat
+  cvT : Nat
+  taxed : Nat
+  iraYr : Nat
+  deriving DecidableEq, BEq, Repr
+
+inductive CM where
+  | next | trad (a : Nat) | conv (a : Nat) | taAdult (a : Nat) | taConv (a : Nat)
+  deriving Repr
+
+def cstep (years lim : Nat) (s : C) : CM → Option C
+  | .next => if s.yr + 1 < years then some { s with yr := s.yr + 1, iraYr := 0 } else none
+  | .trad a =>
+    if 0 < a ∧ a ≤ s.cash ∧ s.iraYr + a ≤ lim then
+      some { s with cash := s.cash - a, ira := s.ira + a, B := s.B + a, iraYr := s.iraYr + a }
+    else none
+  | .taAdult a =>
+    if 0 < a ∧ a ≤ s.cash ∧ s.iraYr + a ≤ lim then
+      some { s with cash := s.cash - a, ta := s.ta + a, B := s.B + a, iraYr := s.iraYr + a }
+    else none
+  | .conv a =>
+    if 0 < a ∧ a ≤ s.ira then
+      some { s with ira := s.ira - a, B := s.B - a * s.B / (s.ira + s.ta),
+                    cvT := s.cvT + (a - a * s.B / (s.ira + s.ta)), cvN := s.cvN + a * s.B / (s.ira + s.ta),
+                    taxed := s.taxed + (a - a * s.B / (s.ira + s.ta)) }
+    else none
+  | .taConv a =>
+    if 0 < a ∧ a ≤ s.ta then
+      some { s with ta := s.ta - a, B := s.B - a * s.B / (s.ira + s.ta),
+                    cvT := s.cvT + (a - a * s.B / (s.ira + s.ta)), cvN := s.cvN + a * s.B / (s.ira + s.ta),
+                    taxed := s.taxed + (a - a * s.B / (s.ira + s.ta)) }
+    else none
+
+def crun (years lim : Nat) : C → List CM → Option C
+  | s, [] => some s
+  | s, m :: ms => match cstep years lim s m with
+    | none => none
+    | some s' => crun years lim s' ms
+
+/-- Either some pre-tax money is still in the pool, or income has been recognised; and nothing has been converted
+without income being recognised. -/
+def Inv (s : C) : Prop := (s.B < s.ira + s.ta ∨ 0 < s.taxed) ∧ (0 < s.cvN + s.cvT → 0 < s.taxed)
+
+theorem frac_lt {a B T : Nat} (ha : 0 < a) (h : B < T) : a * B / T < a := by
+  apply Nat.div_lt_of_lt_mul
+  rw [Nat.mul_comm T a]
+  exact Nat.mul_lt_mul_of_pos_left h ha
+
+theorem cstep_inv (years lim : Nat) (s s' : C) (m : CM) (hi : Inv s) (h : cstep years lim s m = some s') :
+    Inv s' := by
+  obtain ⟨h1, h2⟩ := hi
+  cases m with
+  | next =>
+    simp only [cstep] at h
+    split at h
+    · injection h with h; subst h; exact ⟨h1, h2⟩
+    · contradiction
+  | trad a =>
+    simp only [cstep] at h
+    split at h
+    · injection h with h; subst h
+      refine ⟨?_, h2⟩
+      rcases h1 with h1 | h1
+      · left; show s.B + a < s.ira + a + s.ta; omega
+      · right; exact h1
+    · contradiction
+  | taAdult a =>
+    simp only [cstep] at h
+    split at h
+    · injection h with h; subst h
+      refine ⟨?_, h2⟩
+      rcases h1 with h1 | h1
+      · left; show s.B + a < s.ira + (s.ta + a); omega
+      · right; exact h1
+    · contradiction
+  | conv a =>
+    simp only [cstep] at h
+    split at h
+    · rename_i hg
+      injection h with h; subst h
+      have key : 0 < s.taxed + (a - a * s.B / (s.ira + s.ta)) := by
+        rcases h1 with h1 | h1
+        · have := frac_lt hg.1 h1; omega
+        · omega
+      exact ⟨Or.inr key, fun _ => key⟩
+    · contradiction
+  | taConv a =>
+    simp only [cstep] at h
+    split at h
+    · rename_i hg
+      injection h with h; subst h
+      have key : 0 < s.taxed + (a - a * s.B / (s.ira + s.ta)) := by
+        rcases h1 with h1 | h1
+        · have := frac_lt hg.1 h1; omega
+        · omega
+      exact ⟨Or.inr key, fun _ => key⟩
+    · contradiction
+
+theorem crun_inv (years lim : Nat) : ∀ (ms : List CM) (s s' : C), Inv s → crun years lim s ms = some s' → Inv s'
+  | [], s, s', hi, h => by
+    simp only [crun] at h; injection h with h; subst h; exact hi
+  | m :: ms, s, s', hi, h => by
+    simp only [crun] at h
+    split at h
+    · contradiction
+    · rename_i s1 hs
+      exact crun_inv years lim ms s1 s' (cstep_inv years lim s s1 m hi hs) h
+
+/-- S4's starting position in the cut-down model: $30,000 cash, $100,000 pre-tax IRA, empty Trump account. -/
+def c0 : C := { yr := 0, cash := 30000, ira := 100000, ta := 0, B := 0, cvN := 0, cvT := 0, taxed := 0, iraYr := 0 }
+
+theorem c0_inv : Inv c0 := by
+  refine ⟨Or.inl (by decide), ?_⟩
+  intro h; exact absurd h (by decide)
+
+/-- **Over all move sequences** (any length, any amounts, any horizon, any contribution limit): under the closed
+rule nothing is ever converted from S4's starting position without income being recognised. In particular the
+plan's result (converted money, zero income) is unreachable. -/
+theorem red_closed_no_free_conversion (years lim : Nat) (ms : List CM) (s : C)
+    (h : crun years lim c0 ms = some s) : 0 < s.cvN + s.cvT → 0 < s.taxed :=
+  (crun_inv years lim ms c0 s c0_inv h).2
+
+theorem red_closed_plan_unreachable (years lim : Nat) (ms : List CM) (s : C)
+    (h : crun years lim c0 ms = some s) : ¬ (0 < s.cvN ∧ s.taxed = 0) := by
+  intro ⟨h1, h2⟩
+  have := red_closed_no_free_conversion years lim ms s h (by omega)
+  omega
+
+#print axioms red_closed_no_free_conversion
+#print axioms red_closed_plan_unreachable
+
+/-! ### The cut-down model agrees with the full closed `step` on every position the S4 search reaches (compiled
+check, not a proof) -/
+
+def proj (s : St) : C :=
+  { yr := s.yr, cash := s.cash, ira := s.ira, ta := s.ta, B := s.iraB + s.taB, cvN := s.cvN, cvT := s.cvT,
+    taxed := s.taxed, iraYr := s.iraYr }
+
+def cm : Move → Option CM
+  | .nextYear => some .next | .tradContrib a => some (.trad a) | .convert a => some (.conv a)
+  | .taAdult a => some (.taAdult a) | .taConvert a => some (.taConv a) | _ => none
+
+def agree : IO Unit := do
+  let allowed := isK [0, 1, 3, 7, 8]
+  let mut frontier : Array St := #[sS4]
+  let mut seen : Std.HashSet St := {}
+  seen := seen.insert sS4
+  let mut pairs := 0
+  let mut legal := 0
+  let mut bad := 0
+  let mut badBasis := 0
+  for _ in [0:7] do
+    let mut next : Array St := #[]
+    for s in frontier do
+      if s.iraB > s.ira || s.taB > s.ta then badBasis := badBasis + 1
+      for m in cands cS4 s allowed do
+        match cm m with
+        | none => bad := bad + 1
+        | some m' =>
+          pairs := pairs + 1
+          let full := (step cS4 s m).map proj
+          if full.isSome then legal := legal + 1
+          if full != cstep 2 7000 (proj s) m' then bad := bad + 1
+          match step cS4 s m with
+          | none => pure ()
+          | some s' => if !seen.contains s' then
+                         seen := seen.insert s'
+                         next := next.push s'
+    frontier := next
+  IO.println s!"cut-down vs full closed step: positions {seen.size}; (position, move) pairs {pairs}; legal {legal}; disagreements {bad}; basis>balance {badBasis}"
+
+#eval agree
+#eval (crun 2 7000 c0 [.taAdult 7000, .next, .taAdult 7000, .taConv 14000])
+
+end Legal.USTax.Hunt.Accounts

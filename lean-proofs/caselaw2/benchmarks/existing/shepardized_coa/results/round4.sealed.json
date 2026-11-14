@@ -1,0 +1,117 @@
+{
+ "asof": 20101119,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\data",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\out",
+  "status_sha1": "ece2365efc536dfcb39425e8c95efe842c57e3a6"
+ },
+ "court": "federal",
+ "dataset": "shepardized_coa",
+ "generated": "2026-11-13T23:14:21+00:00",
+ "label": "round4",
+ "link": {
+  "fail_reasons": {},
+  "linked": 9897,
+  "n_items": 10105,
+  "note": "sealed-half counts from round6/history/split/SPLIT.md (no per-case sealed file is read)"
+ },
+ "metrics": {
+  "agreement": {
+   "hi": 0.9767258318625799,
+   "k": 9608,
+   "lo": 0.9704072002041272,
+   "n": 9867,
+   "p": 0.9737508867943651
+  },
+  "clean": {
+   "hi": 1.0,
+   "k": 9586,
+   "lo": 0.9995994241512993,
+   "n": 9586,
+   "p": 1.0
+  },
+  "link_rate": {
+   "hi": 0.9820077996821345,
+   "k": 9897,
+   "lo": 0.9764600959131183,
+   "n": 10105,
+   "p": 0.9794161306284018
+  },
+  "mod_kept": {
+   "hi": 1.0,
+   "k": 13,
+   "lo": 0.7719046248681998,
+   "n": 13,
+   "p": 1.0
+  },
+  "precision": {
+   "hi": 0.9801091125830901,
+   "k": 8,
+   "lo": 0.565000291629209,
+   "n": 9,
+   "p": 0.8888888888888888
+  },
+  "precision_lenient": {
+   "hi": 1.0,
+   "k": 9,
+   "lo": 0.700854948272956,
+   "n": 9,
+   "p": 1.0
+  },
+  "recall": {
+   "hi": 0.06138144130359591,
+   "k": 8,
+   "lo": 0.016172286571689298,
+   "n": 252,
+   "p": 0.031746031746031744
+  },
+  "recall_lenient": {
+   "hi": 0.06138144130359591,
+   "k": 8,
+   "lo": 0.016172286571689298,
+   "n": 252,
+   "p": 0.031746031746031744
+  },
+  "recall_part": {
+   "hi": 0.283287377981482,
+   "k": 1,
+   "lo": 0.011119344641247308,
+   "n": 16,
+   "p": 0.0625
+  },
+  "recall_sub_enbanc_different": {
+   "hi": 0.10426999901587139,
+   "k": 0,
+   "lo": 0.0,
+   "n": 33,
+   "p": 0.0
+  },
+  "recall_sub_panel_withdrawn": {
+   "hi": 0.13319225276039096,
+   "k": 0,
+   "lo": 0.0,
+   "n": 25,
+   "p": 0.0
+  },
+  "recall_sub_sc_reversed": {
+   "hi": 0.08560803644682757,
+   "k": 5,
+   "lo": 0.016286179025278416,
+   "n": 132,
+   "p": 0.03787878787878788
+  },
+  "recall_sub_sc_vacated": {
+   "hi": 0.13491127619620483,
+   "k": 3,
+   "lo": 0.016865982537479257,
+   "n": 61,
+   "p": 0.04918032786885246
+  }
+ },
+ "notes": "DERIVED, not a sealed run: round-4 figure over all cases (round6/shepardized/results/asof20101119/tables.tsv, aggregate lines) minus the round-4 dev half (re-run here: shepardized_coa/runs/round4_dev/headline.tsv). This is the 'sealed before' column of round6/history/ROUND6.md ('all cases minus the dev half, arithmetic, not a second sealed run'); checked equal: recall 8/252 ok; recall_sub_sc_reversed 5/132 ok; recall_sub_sc_vacated 3/61 ok; recall_sub_panel_withdrawn 0/25 ok; recall_sub_enbanc_different 0/33 ok; recall_part 1/16 ok; precision 8/9 ok; clean 9586/9586 ok; mod_kept 13/13 ok. agreement / recall_lenient / precision_lenient are the same subtraction (not in ROUND6.md). No set-aside variant.",
+ "primary": "recall",
+ "row_label": "Shepardized Courts of Appeals: decision reversed/vacated/withdrawn (same case)",
+ "split": "sealed",
+ "tests": "same-case"
+}

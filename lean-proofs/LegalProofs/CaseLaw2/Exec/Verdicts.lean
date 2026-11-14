@@ -2,6 +2,7 @@ import LegalProofs.CaseLaw2.Exec.Env
 import LegalProofs.CaseLaw2.Spec.Findings
 import LegalProofs.CaseLaw2.Spec.Splits
 import LegalProofs.CaseLaw2.Spec.Lines
+import LegalProofs.CaseLaw2.CueTable
 
 /-!
 # Exec: verdicts for one citation, one decision, one issue
@@ -133,5 +134,76 @@ def histPower (L : Lookups) (b x : Decision) : Option Bool :=
       (B.system == X.system && X.tier.rank < B.tier.rank &&
         (B.system != 0 || (B.circuit == 13 && B.tier == .appellate) || (B.circuit == X.circuit && B.circuit != 0))))
   | _, _ => none
+
+/-! Round 8 (`round8/DESIGN8.md` §6, D8-12): old circuits, claim-gated. Before 1 Oct 1981 the district courts of the
+Eleventh Circuit were in the Fifth; before 1 Mar 1929 those of the Tenth were in the Eighth. A history row with the
+claim `oldCircuit` whose acting court of appeals is refused power over such a district (or bankruptcy) court by
+`histPower` gets it when one listed triple (acting circuit, target circuit, acting date before; cue table
+`old_circuit`) holds. Without the claim the authority is `histPower`'s. -/
+
+/-- One listed old-circuit triple holds for acting epoch `B` (a federal court of appeals) and target epoch `X` (a
+federal district or bankruptcy court), with the acting decision's date `bDate` known and before the triple's date. -/
+def oldCircuitOk (B X : CourtEpoch) (bDate : Nat) : Bool :=
+  B.system == 0 && B.tier == .appellate && X.system == 0 && (X.tier == .trial || X.tier == .special) &&
+    Cert.oldCircuitRules.any (fun t => B.circuit == t.1 && X.circuit == t.2.1 && decide (0 < bDate) &&
+      decide (bDate < t.2.2))
+
+/-- `histPower8` with the old-circuit test as a parameter (for the mutants). -/
+def histPower8With (ok : CourtEpoch → CourtEpoch → Nat → Bool) (L : Lookups) (b x : Decision) (claim : Bool) :
+    Option Bool :=
+  match histPower L b x with
+  | some false =>
+    if claim && (match L.epochAt b.court b.date, L.epochAt x.court x.date with
+      | some B, some X => ok B X b.date
+      | _, _ => false) then some true else some false
+  | r => r
+
+/-- **The runner's history authority in round 8** (`claim`: the row carries `oldCircuit`). -/
+def histPower8 : Lookups → Decision → Decision → Bool → Option Bool := histPower8With oldCircuitOk
+
+/-- **No claim, no change**: without the claim the authority is round 7's (`histPower`). -/
+theorem oldCircuit_no_claim (L : Lookups) (b x : Decision) : histPower8 L b x false = histPower L b x := by
+  unfold histPower8 histPower8With
+  split <;> simp_all
+
+/-- **Old circuits**: an admitted claimed row that the round-7 authority refuses satisfies one listed triple, with the
+acting court a federal court of appeals, the target a federal district or bankruptcy court, and date(B) known and
+before the triple's date. -/
+theorem oldCircuit_sound (L : Lookups) (b x : Decision) (h : histPower8 L b x true = some true)
+    (hr : histPower L b x ≠ some true) :
+    histPower L b x = some false ∧ ∃ B X, L.epochAt b.court b.date = some B ∧ L.epochAt x.court x.date = some X ∧
+      B.system = 0 ∧ B.tier = .appellate ∧ X.system = 0 ∧ (X.tier = .trial ∨ X.tier = .special) ∧
+      ∃ t ∈ Cert.oldCircuitRules, B.circuit = t.1 ∧ X.circuit = t.2.1 ∧ 0 < b.date ∧ b.date < t.2.2 := by
+  unfold histPower8 histPower8With at h
+  cases hp : histPower L b x with
+  | none => simp [hp] at h
+  | some v =>
+    cases v with
+    | true => exact absurd hp hr
+    | false =>
+      simp only [hp, Bool.true_and] at h
+      refine ⟨rfl, ?_⟩
+      cases hB : L.epochAt b.court b.date with
+      | none => simp [hB] at h
+      | some B =>
+        cases hX : L.epochAt x.court x.date with
+        | none => simp [hB, hX] at h
+        | some X =>
+          simp only [hB, hX] at h
+          by_cases hok : oldCircuitOk B X b.date = true
+          · simp only [oldCircuitOk, Bool.and_eq_true, beq_iff_eq, Bool.or_eq_true, List.any_eq_true,
+              decide_eq_true_eq] at hok
+            obtain ⟨⟨⟨⟨h1, h2⟩, h3⟩, h4⟩, t, ht, ⟨⟨⟨h5, h6⟩, h7⟩, h8⟩⟩ := hok
+            exact ⟨B, X, rfl, rfl, h1, h2, h3, h4, t, ht, h5, h6, h7, h8⟩
+          · simp [hok] at h
+
+/-- The claim only ever turns a refusal into power: every other verdict of `histPower` is kept. -/
+theorem histPower8_keeps (L : Lookups) (b x : Decision) (c : Bool) (h : histPower L b x ≠ some false) :
+    histPower8 L b x c = histPower L b x := by
+  unfold histPower8 histPower8With
+  split
+  · rename_i hp
+    exact absurd hp h
+  · rfl
 
 end CaseLaw2.Exec

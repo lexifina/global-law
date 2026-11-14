@@ -1,0 +1,22 @@
+y95009: 4 disagreeing rows 
+
+10 universes, 1 with a disagreement, 0 where the Lean runner wrote no output, 0 where the reference failed
+  status    0 of 2039 keys disagree
+  findings  1 of 729 keys disagree
+  certs     1 of 2880 keys disagree
+  splits    0 of 270 keys disagree
+  conflicts 0 of 170 keys disagree
+  lines     0 of 78 keys disagree
+  horty     0 of 26 keys disagree
+  classes   1 of 804 keys disagree
+  summary   1 of 320 keys disagree
+  class (file, bucket, rule): universes   first example
+  findings  onlyA                                atRisk:inferred                1   e.g. y95009 atRisk:inferred 228 227 A=1 B=
+  certs     okMismatch:ok/witnessNoStanding      treatment                      1   e.g. y95009 treatment:tr6 A=ok B=witnessNoStanding
+  classes   verdict                              ok/witnessNoStanding           1   e.g. y95009 tr6 A=ok B=witnessNoStanding
+  summary   count                                zone_checked_rows              1   e.g. y95009 zone_checked_rows A=51 B=50
+  info  findings uncompared lean:citesNotCitable:force               20
+  info  findings uncompared lean:hortyConsistentBase                 24
+  info  findings uncompared lean:hortySelfInconsistent               5
+  info  findings uncompared lean:inconsistentBindingBase             2
+rc=1

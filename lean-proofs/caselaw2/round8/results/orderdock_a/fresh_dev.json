@@ -1,0 +1,639 @@
+{
+ "gold_pairs": 165,
+ "inputs": {
+  "findings": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\out\\orderdock_a\\findings.tsv",
+  "status": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\out\\orderdock_a\\status.tsv",
+  "status_rows": 666010,
+  "status_sha1": "8f141d2337083d6ee89b7f424ec892e09c12a2d1",
+  "treatments": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\stage\\orderdock_a\\treatments.tsv"
+ },
+ "label": "r8_orderdock_a",
+ "precision_side": {
+  "classes": {
+   "listed": 81,
+   "targetListedOtherOverruler": 1,
+   "unlisted": 12
+  },
+  "distinct_targets_in_this_half": 94,
+  "in_this_half": 94,
+  "listed_share": {
+   "k": 81,
+   "n": 94,
+   "rate": 0.8617,
+   "wilson95": [
+    0.7776,
+    0.9174
+   ]
+  },
+  "model_scotus_on_scotus_overruled_pairs_all": 170,
+  "note": "unlisted = in no fresh list; the lists are incomplete, so this is not an error count"
+ },
+ "recall": {
+  "all": {
+   "all": {
+    "c_with_gold_actor": 24,
+    "lenient": {
+     "k": 111,
+     "n": 165,
+     "rate": 0.6727,
+     "wilson95": [
+      0.5979,
+      0.7397
+     ]
+    },
+    "n": 165,
+    "outcomes": {
+     "a": 51,
+     "a_date": 30,
+     "a_kind": 0,
+     "b": 5,
+     "c": 25,
+     "d": 0,
+     "e": 54
+    },
+    "strict": {
+     "k": 51,
+     "n": 165,
+     "rate": 0.3091,
+     "wilson95": [
+      0.2436,
+      0.3833
+     ]
+    }
+   }
+  },
+  "burned_crs": {
+   "inCRS": {
+    "c_with_gold_actor": 21,
+    "lenient": {
+     "k": 106,
+     "n": 146,
+     "rate": 0.726,
+     "wilson95": [
+      0.6486,
+      0.7919
+     ]
+    },
+    "n": 146,
+    "outcomes": {
+     "a": 50,
+     "a_date": 29,
+     "a_kind": 0,
+     "b": 5,
+     "c": 22,
+     "d": 0,
+     "e": 40
+    },
+    "strict": {
+     "k": 50,
+     "n": 146,
+     "rate": 0.3425,
+     "wilson95": [
+      0.2704,
+      0.4226
+     ]
+    }
+   },
+   "notInCRS": {
+    "c_with_gold_actor": 3,
+    "lenient": {
+     "k": 5,
+     "n": 19,
+     "rate": 0.2632,
+     "wilson95": [
+      0.1181,
+      0.4879
+     ]
+    },
+    "n": 19,
+    "outcomes": {
+     "a": 1,
+     "a_date": 1,
+     "a_kind": 0,
+     "b": 0,
+     "c": 3,
+     "d": 0,
+     "e": 14
+    },
+    "strict": {
+     "k": 1,
+     "n": 19,
+     "rate": 0.0526,
+     "wilson95": [
+      0.0094,
+      0.2464
+     ]
+    }
+   }
+  },
+  "era": {
+   "1946-1991": {
+    "c_with_gold_actor": 13,
+    "lenient": {
+     "k": 55,
+     "n": 78,
+     "rate": 0.7051,
+     "wilson95": [
+      0.5962,
+      0.7948
+     ]
+    },
+    "n": 78,
+    "outcomes": {
+     "a": 17,
+     "a_date": 21,
+     "a_kind": 0,
+     "b": 3,
+     "c": 14,
+     "d": 0,
+     "e": 23
+    },
+    "strict": {
+     "k": 17,
+     "n": 78,
+     "rate": 0.2179,
+     "wilson95": [
+      0.1408,
+      0.3216
+     ]
+    }
+   },
+   "1992on": {
+    "c_with_gold_actor": 3,
+    "lenient": {
+     "k": 21,
+     "n": 29,
+     "rate": 0.7241,
+     "wilson95": [
+      0.5428,
+      0.853
+     ]
+    },
+    "n": 29,
+    "outcomes": {
+     "a": 16,
+     "a_date": 2,
+     "a_kind": 0,
+     "b": 0,
+     "c": 3,
+     "d": 0,
+     "e": 8
+    },
+    "strict": {
+     "k": 16,
+     "n": 29,
+     "rate": 0.5517,
+     "wilson95": [
+      0.3755,
+      0.7159
+     ]
+    }
+   },
+   "to1945": {
+    "c_with_gold_actor": 8,
+    "lenient": {
+     "k": 35,
+     "n": 58,
+     "rate": 0.6034,
+     "wilson95": [
+      0.4749,
+      0.7191
+     ]
+    },
+    "n": 58,
+    "outcomes": {
+     "a": 18,
+     "a_date": 7,
+     "a_kind": 0,
+     "b": 2,
+     "c": 8,
+     "d": 0,
+     "e": 23
+    },
+    "strict": {
+     "k": 18,
+     "n": 58,
+     "rate": 0.3103,
+     "wilson95": [
+      0.2062,
+      0.438
+     ]
+    }
+   }
+  },
+  "express": {
+   "express": {
+    "c_with_gold_actor": 23,
+    "lenient": {
+     "k": 106,
+     "n": 145,
+     "rate": 0.731,
+     "wilson95": [
+      0.6536,
+      0.7966
+     ]
+    },
+    "n": 145,
+    "outcomes": {
+     "a": 51,
+     "a_date": 28,
+     "a_kind": 0,
+     "b": 3,
+     "c": 24,
+     "d": 0,
+     "e": 39
+    },
+    "strict": {
+     "k": 51,
+     "n": 145,
+     "rate": 0.3517,
+     "wilson95": [
+      0.2787,
+      0.4324
+     ]
+    }
+   },
+   "implied": {
+    "c_with_gold_actor": 1,
+    "lenient": {
+     "k": 5,
+     "n": 20,
+     "rate": 0.25,
+     "wilson95": [
+      0.1119,
+      0.4687
+     ]
+    },
+    "n": 20,
+    "outcomes": {
+     "a": 0,
+     "a_date": 2,
+     "a_kind": 0,
+     "b": 2,
+     "c": 1,
+     "d": 0,
+     "e": 15
+    },
+    "strict": {
+     "k": 0,
+     "n": 20,
+     "rate": 0.0,
+     "wilson95": [
+      0.0,
+      0.1611
+     ]
+    }
+   }
+  },
+  "n_sources": {
+   "1": {
+    "c_with_gold_actor": 14,
+    "lenient": {
+     "k": 55,
+     "n": 95,
+     "rate": 0.5789,
+     "wilson95": [
+      0.4785,
+      0.6733
+     ]
+    },
+    "n": 95,
+    "outcomes": {
+     "a": 27,
+     "a_date": 11,
+     "a_kind": 0,
+     "b": 2,
+     "c": 15,
+     "d": 0,
+     "e": 40
+    },
+    "strict": {
+     "k": 27,
+     "n": 95,
+     "rate": 0.2842,
+     "wilson95": [
+      0.2033,
+      0.3819
+     ]
+    }
+   },
+   "2+": {
+    "c_with_gold_actor": 10,
+    "lenient": {
+     "k": 56,
+     "n": 70,
+     "rate": 0.8,
+     "wilson95": [
+      0.6918,
+      0.877
+     ]
+    },
+    "n": 70,
+    "outcomes": {
+     "a": 24,
+     "a_date": 19,
+     "a_kind": 0,
+     "b": 3,
+     "c": 10,
+     "d": 0,
+     "e": 14
+    },
+    "strict": {
+     "k": 24,
+     "n": 70,
+     "rate": 0.3429,
+     "wilson95": [
+      0.2425,
+      0.4596
+     ]
+    }
+   }
+  },
+  "scope": {
+   "full": {
+    "c_with_gold_actor": 18,
+    "lenient": {
+     "k": 101,
+     "n": 152,
+     "rate": 0.6645,
+     "wilson95": [
+      0.5862,
+      0.7347
+     ]
+    },
+    "n": 152,
+    "outcomes": {
+     "a": 51,
+     "a_date": 28,
+     "a_kind": 0,
+     "b": 3,
+     "c": 19,
+     "d": 0,
+     "e": 51
+    },
+    "strict": {
+     "k": 51,
+     "n": 152,
+     "rate": 0.3355,
+     "wilson95": [
+      0.2653,
+      0.4138
+     ]
+    }
+   },
+   "partial": {
+    "c_with_gold_actor": 6,
+    "lenient": {
+     "k": 10,
+     "n": 13,
+     "rate": 0.7692,
+     "wilson95": [
+      0.4974,
+      0.9182
+     ]
+    },
+    "n": 13,
+    "outcomes": {
+     "a": 0,
+     "a_date": 2,
+     "a_kind": 0,
+     "b": 2,
+     "c": 6,
+     "d": 0,
+     "e": 3
+    },
+    "strict": {
+     "k": 0,
+     "n": 13,
+     "rate": 0.0,
+     "wilson95": [
+      0.0,
+      0.2281
+     ]
+    }
+   }
+  },
+  "scope_express": {
+   "full+express": {
+    "c_with_gold_actor": 17,
+    "lenient": {
+     "k": 96,
+     "n": 132,
+     "rate": 0.7273,
+     "wilson95": [
+      0.6457,
+      0.796
+     ]
+    },
+    "n": 132,
+    "outcomes": {
+     "a": 51,
+     "a_date": 26,
+     "a_kind": 0,
+     "b": 1,
+     "c": 18,
+     "d": 0,
+     "e": 36
+    },
+    "strict": {
+     "k": 51,
+     "n": 132,
+     "rate": 0.3864,
+     "wilson95": [
+      0.3076,
+      0.4715
+     ]
+    }
+   },
+   "full+implied": {
+    "c_with_gold_actor": 1,
+    "lenient": {
+     "k": 5,
+     "n": 20,
+     "rate": 0.25,
+     "wilson95": [
+      0.1119,
+      0.4687
+     ]
+    },
+    "n": 20,
+    "outcomes": {
+     "a": 0,
+     "a_date": 2,
+     "a_kind": 0,
+     "b": 2,
+     "c": 1,
+     "d": 0,
+     "e": 15
+    },
+    "strict": {
+     "k": 0,
+     "n": 20,
+     "rate": 0.0,
+     "wilson95": [
+      0.0,
+      0.1611
+     ]
+    }
+   },
+   "partial+express": {
+    "c_with_gold_actor": 6,
+    "lenient": {
+     "k": 10,
+     "n": 13,
+     "rate": 0.7692,
+     "wilson95": [
+      0.4974,
+      0.9182
+     ]
+    },
+    "n": 13,
+    "outcomes": {
+     "a": 0,
+     "a_date": 2,
+     "a_kind": 0,
+     "b": 2,
+     "c": 6,
+     "d": 0,
+     "e": 3
+    },
+    "strict": {
+     "k": 0,
+     "n": 13,
+     "rate": 0.0,
+     "wilson95": [
+      0.0,
+      0.2281
+     ]
+    }
+   }
+  },
+  "source": {
+   "blaustein_field_1958": {
+    "c_with_gold_actor": 10,
+    "lenient": {
+     "k": 41,
+     "n": 72,
+     "rate": 0.5694,
+     "wilson95": [
+      0.4544,
+      0.6774
+     ]
+    },
+    "n": 72,
+    "outcomes": {
+     "a": 20,
+     "a_date": 8,
+     "a_kind": 0,
+     "b": 3,
+     "c": 10,
+     "d": 0,
+     "e": 31
+    },
+    "strict": {
+     "k": 20,
+     "n": 72,
+     "rate": 0.2778,
+     "wilson95": [
+      0.1876,
+      0.3905
+     ]
+    }
+   },
+   "gerhardt_1991": {
+    "c_with_gold_actor": 10,
+    "lenient": {
+     "k": 64,
+     "n": 84,
+     "rate": 0.7619,
+     "wilson95": [
+      0.6606,
+      0.8403
+     ]
+    },
+    "n": 84,
+    "outcomes": {
+     "a": 28,
+     "a_date": 21,
+     "a_kind": 0,
+     "b": 4,
+     "c": 11,
+     "d": 0,
+     "e": 20
+    },
+    "strict": {
+     "k": 28,
+     "n": 84,
+     "rate": 0.3333,
+     "wilson95": [
+      0.2418,
+      0.4395
+     ]
+    }
+   },
+   "payne_n1_1991": {
+    "c_with_gold_actor": 4,
+    "lenient": {
+     "k": 17,
+     "n": 18,
+     "rate": 0.9444,
+     "wilson95": [
+      0.7424,
+      0.9901
+     ]
+    },
+    "n": 18,
+    "outcomes": {
+     "a": 0,
+     "a_date": 12,
+     "a_kind": 0,
+     "b": 1,
+     "c": 4,
+     "d": 0,
+     "e": 1
+    },
+    "strict": {
+     "k": 0,
+     "n": 18,
+     "rate": 0.0,
+     "wilson95": [
+      0.0,
+      0.1759
+     ]
+    }
+   },
+   "wikipedia": {
+    "c_with_gold_actor": 13,
+    "lenient": {
+     "k": 63,
+     "n": 80,
+     "rate": 0.7875,
+     "wilson95": [
+      0.6858,
+      0.8629
+     ]
+    },
+    "n": 80,
+    "outcomes": {
+     "a": 31,
+     "a_date": 18,
+     "a_kind": 0,
+     "b": 1,
+     "c": 13,
+     "d": 0,
+     "e": 17
+    },
+    "strict": {
+     "k": 31,
+     "n": 80,
+     "rate": 0.3875,
+     "wilson95": [
+      0.2882,
+      0.4971
+     ]
+    }
+   }
+  }
+ },
+ "split": "dev"
+}

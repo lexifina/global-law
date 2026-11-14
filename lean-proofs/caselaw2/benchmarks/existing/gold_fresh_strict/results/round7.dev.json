@@ -1,0 +1,36 @@
+{
+ "blind": false,
+ "build": {
+  "source": "benchmarks/existing/gold_fresh/runs/views/round7/fresh7_dev.json"
+ },
+ "court": "supreme",
+ "dataset": "gold_fresh_strict",
+ "generated": "2026-11-14T00:13:43+00:00",
+ "label": "round7",
+ "link": {},
+ "metrics": {
+  "recall_attributed": {
+   "hi": 0.566522357506093,
+   "k": 81,
+   "lo": 0.41570949467122575,
+   "n": 165,
+   "p": 0.4909090909090909
+  },
+  "recall_model": {
+   "hi": 0.38327435571617696,
+   "k": 51,
+   "lo": 0.24359454000751987,
+   "n": 165,
+   "p": 0.3090909090909091
+  }
+ },
+ "notes": "round7/score_fresh7.py --split dev, both views. Rounds 5-7 were developed with the dev half in view.",
+ "plot": [
+  "recall_model",
+  "recall_attributed"
+ ],
+ "primary": "recall_model",
+ "row_label": "Fresh overruling lists, strict: the listed overruling case named",
+ "split": "dev",
+ "tests": "overruling"
+}

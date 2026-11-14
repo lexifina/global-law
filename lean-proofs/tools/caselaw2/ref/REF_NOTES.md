@@ -919,3 +919,217 @@ decisions dated outside their court's epoch (citing, treating, target), and `fac
   Lean-format rendering of the reference's two files gives 0 disagreements over 1,637 line keys and 550 Horty keys.
 - Real data without edges: 105 `status_lines.tsv` rows for 41 decisions; 44 Horty bases, 43 consistent, 1
   inconsistent (`horty:preemption_express`).
+
+## Round 5 (non-announced overrulings)
+
+Contract: `caselaw-lean-2/round5/DESIGN5.md`. Written from that file only; no Lean was read. The full list of
+readings chosen where the design is silent (A-1 to A-31), the self-tests and the evidence are in
+`caselaw-lean-2/round5/ref/NOTES.md`. This section is the short form.
+
+### Mode
+
+`treatment_class.tsv` in the data directory turns round-5 mode on. Without it every output file is byte for byte
+what the reference wrote before round 5 (checked on the fixtures, the real data, the regression set and
+generated universes with witness rows; NOTES.md (d)).
+
+### Implemented
+
+- **Class table.** `id, claim, field_limit, doctrine, src`. Bad lines (fewer than 5 fields, unknown claim,
+  unknown id) are counted; a later line for an id is ignored; a `recognised` claim counts only on a witness row,
+  an `operativeWords` claim only on a non-witness row.
+- **Recognised check** (`_recog_text`, `_recog_rules`). The round-4 witness checks in recognised text mode (cue
+  list `recognised`, disqualifiers `disqualify_recognised`, X and Y named in the quote itself), then W's power
+  over X on every domain, all three dates known and ordered, evidence for X and Y different, Y's power not shown
+  absent. Verdict `okRecognised` / `okRecognisedUnverifiedBy`; a failed claim keeps the round-4 verdict. Decided
+  per rule set (the firm run has its own).
+- **Effects** (`effects`, part B2). Per issue set, as an explicit row by Y: e1 `unknown recognisedLater` from
+  date(Y) to Y's first lapse; e2 the negative of the kind from date(W) to the first lapse of Y or W. Power
+  unknown: both `unknown power`. Fixed ends, no revival.
+- **Operative words** (`check_operative`). `operativeBadRow`, cue list `operative`, disqualifiers
+  `disqualify_treat` + `disqualify_operative`, target in the quote. No fallback. Without a phrase of
+  `operative_whole` the row is demoted: partial on the whole decision, unknown on a holding, never negative.
+- **Classes** (`_build_classes`), `classes.tsv`, and `oclass`: the fourth element of a status state in round-5
+  mode, the least class among the live treatment-row effects whose contribution equals the status.
+- **Findings.** `atRisk C X recognisedLater` when the cited decision is `unknown recognisedLater` in the citing
+  line on the citing date and not by the citing decision's own doing; no `inferred` finding for a row recognised
+  under the full rule set; a fifth element `oclass`.
+
+### Output columns added (round-5 mode only)
+
+`status.tsv` and `findings.tsv`: `oclass` after `firm`. `status_lines.tsv`: `oclass` after `line`. `certs.tsv`:
+the two recognised verdicts and `operativeBadRow`. `classes.tsv`: `id, class, claim, verdict, field_limit,
+doctrine, witness`. `ref_stats.tsv`: `class_rows`, `class_bad_rows`, `recognised_rows`, `operative_rows`.
+
+### Comparison (`diff.py`, `labels.json`)
+
+`unknown:recognisedLater` is its own canonical class. `okRecognised*` is the canonical verdict `recognised`
+(passed, but not `ok`). `oclass` is compared on status rows, line rows and findings; `classes.tsv` and the four
+counters are compared. All of it is skipped when neither side has the round-5 columns or files.
+
+### Generator (`gen.py`, round-5 layer; `--no-r5` omits it)
+
+Witness rows (the generator wrote none before), `treatment_witness.tsv`, and in about seven universes of eight
+`treatment_class.tsv`: recognised claims that pass and that fail at each step, operative claims with and without
+a whole phrase on every scope form, bad class rows, an explicit row for the same pair, lapses of Y and of W,
+citations before Y, between Y and W and after W. Coverage figures: NOTES.md (e).
+
+## Round 6 (anchored history certificate)
+
+Written from `caselaw-lean-2/round6/history/DESIGN6.md` section 4 only; no Lean file was read. Readings of what
+the design leaves open, with the lead's rulings: `round6/history/REF_QUESTIONS.md` (Q-1 to Q-15).
+
+- `Data`: the optional `history_anchor.tsv` (id, a_start, a_end, a_quote, a_part, src) -> `Data.anchor`, the
+  first good line per history id; bad lines, unknown ids and duplicates are ignored and counted.
+- `Engine.check_anchored`: a history row with an anchor line. In order: `anchorMismatch` (the anchor quote, not
+  empty, is the text at its offset of a usable window of the row's text), `anchorNoCue` (list `anchor`),
+  `anchorDisqualified` (list `disqualify_anchor`), `anchorUnresolved` (the row's target evidence resolves inside
+  the anchor quote alone; a citation also through `cite_index.tsv` when supplied), `anchorPart` (majority,
+  plurality, perCuriam, headmatter), then the plain check of the disposition quote without the target-evidence
+  test. No fall-back to the plain check. A row without an anchor line is checked as before.
+- `ref_stats.tsv`: `anchor_rows`, `anchor_unknown_ids`, `anchor_duplicates`, `anchor_bad_rows`, only when the
+  table has a line. Without the file, or with an empty one, every output is byte for byte what it was.
+- `diff.py`, `labels.json`: the five anchor reasons; the four counters (the Lean's `bad_rows history_anchor.tsv`
+  line is `anchor_bad_rows`), compared only when a side has one.
+- Universes and drivers: `round6/history/difftest/` (`make_r6.py`: gen.py universes with an anchored overlay,
+  main / probe / fuzz flavours; `r6_drt_run.py`; `base_identity.py`) and `wsl/r6_drt.sh`.
+
+## Round 7 (joined certificates, doctrine rows, history claims)
+
+Written from `caselaw-lean-2/round7/DESIGN7.md` §1-3 and the lead's ruling D7-6 only (no Lean source read). The
+readings where the design was silent are in `round7/agents/ref/REF_QUESTIONS7.md` (Q7-n), and the work log is in
+`round7/agents/ref/NOTES.md`.
+- `precedent_ref.py`:
+  - Optional `joined.tsv` (9 fields; treatments rows only, at most two lines kept; history lines, lines on witness
+    rows, third lines, unknown ids and bad lines are counted).
+  - Optional `history_claim.tsv` (3 fields; a set of claims per id).
+  - The claim `doctrine` in `treatment_class.tsv`.
+  - `Engine.check_joined`: joinedMismatch, joinedPart, joinedDisqualified, joinedRelation (`antecedent`: gap ≤
+    `joined_gap_max`, an anaphor and a plain cue in the main quote; `doctrineTie`: the label in both quotes, a tie
+    cue in the joined quote, doctrine rows only), joinedUnresolved, then the main check without the target
+    evidence, in plain, operative or doctrine mode.
+  - Doctrine rows: `doctrineBadRow`; `doctrineAmbiguous` (labels shared by passing rows with different targets);
+    always demoted; class `doctrine`.
+  - `orderHead` (head matter admitted for Supreme Court order-list dispositions from 2013, five kinds, an
+    `order_line` cue, ≤ 400 characters; else `orderHeadNotAllowed`) and `setAside` ("set aside" as a vacatur cue on
+    `vacated` rows), in the plain and the anchored check.
+  - Counters in `ref_stats.tsv` only when a table has a line.
+  - The cue lists come from `cue_table.json` (`R7_CUE_SOURCE`).
+  - With neither table and no doctrine line, the outputs are byte for byte round 6's. The evidence is in NOTES.md:
+    267 universes and the real frozen build `final2`.
+- `diff.py`, `labels.json`: the eight new reasons are canonical rejections. The round-7 counters are mapped (the Lean's
+  `bad_rows joined.tsv` and `bad_rows history_claim.tsv` lines are `joined_bad_rows` and `hclaim_bad_rows`) and
+  compared only when a side has one.
+- Universes and drivers are in `round7/agents/ref/`: `make_r7.py` (main, probe, no-r5 and fuzz flavours, a
+  self-check against the generator's intent, the empty-table identity check and the report), `difftest7.sh` (WSL:
+  setup, regress, kept, sweep, all), `r7_drt_run.py`, `check_a.py` / `check_a.sh`, and `check_real.sh` /
+  `check_real7.sh`.
+
+## Round 8 (agent `ref8`; round8/DESIGN8.md §4-5; readings in round8/agents/ref8/REF_QUESTIONS8.md)
+
+- Bridge evidence (§4, D8-3, D8-9): optional `history_bridge.tsv` (id, w_node, b_start, b_end, b_quote, src), joined
+  like `history_anchor.tsv` (bad line / unknown id / duplicate, first line wins). A history row with a bridge line is
+  checked by `Engine.check_bridge`: bridgeMismatch (W's own text, ≤ `bridge_max_len`), bridgeDate (date W ≥ date O,
+  0 fails), bridgeClause (no ";"), bridgeTarget (an index key mapping to X in the compact quote; p1 = the first),
+  bridgeCue (`bridge_cue` of the kind after p1; p2 = the first), bridgeChain (no index key starts between the end of
+  X's citation and p2), bridgeActor (the longest key at the first compact position after p2 maps to O), then the
+  plain check (with the row's history claims) with selfText. Positions compare offsets in the normalised quote.
+  An anchor line of the same row is not used. Counters `bridge_rows`, `bridge_unknown_ids`, `bridge_duplicates`,
+  `bridge_bad_rows` only when the table has a line.
+- `anchorWide` (§5, D8-5): a history claim; on an anchored row the anchor-cue list is `anchor ++ anchor_wide`.
+  Counter `hclaim_anchorwide_unused` when some claim line is `anchorWide`.
+- `bridge_cue`, `bridge_max_len`, `anchor_wide` are read from `cue_table.json` (fallback: DESIGN8's lists).
+- `diff.py` / `labels.json`: the seven bridge reasons are canonical rejections; SUMMARY_KEYS8 and the
+  `bad_rows history_bridge[.tsv]` mapping.
+- Without `history_bridge.tsv` and anchorWide lines the outputs are round 7's byte for byte (435 earlier universes;
+  `make_r8.py empty`). Universes and drivers: `round8/agents/ref8/` (`make_r8.py`, `difftest8.sh`,
+  `check_regress8.sh`).
+
+## Round 9 (agent `ref9`; round9/DESIGN9.md §4, §5, §7, §8; readings in round9/agents/ref9/REF_QUESTIONS9.md)
+
+- Part zones (§4, D9-4): optional `part_zone.tsv` (node, z_start, z_end, part, src). A bad line (not UTF-8, not 5
+  fields, non-digit node / offsets) is counted (`zone_bad_rows`, the Lean's `bad_rows part_zone.tsv`) and touches no
+  node; `z_start >= z_end`, an unknown part (case-sensitive) or two overlapping zones (a < d and c < b) drop every
+  zone of the node (`zone_bad_nodes`). `Engine.zone_result` looks up the zones of the quote's text owner (`by`; W for
+  a witness row; the target for a history row certified from the target's own text) and asks that the main quote and
+  every joined quote lie in one zone of the row's part / j_part (anchor and bridge quotes are not checked).
+  `zone_apply` runs only on a row whose complete round-8 verdict passes: `ok`, past the Lean's date order and power
+  checks (`lean_cert_passes`: treatments targetLater = date(by) < date(target) both known, witness date(Y) < date(X);
+  noAuthority = status-changing kind and can_change(scope domain) no; history noAuthority = same_case_power no), or a
+  recognised verdict; failing, the verdict is `partZone` (a recognised row is then not recognised); the doctrine
+  ambiguity pass is decided first. The plain check of an operativeWords row is zone-checked too (not counted).
+  Counters `zone_nodes`, `zone_lines`, `zone_bad_nodes`, `zone_bad_rows`, `zone_checked_rows`, `zone_failed_rows`,
+  `zone_missing_rows` only when the table has a line.
+- `joinedFar` (§5, D9-5, D9-7): a class-line claim; an antecedent joined quote may end up to `joined_far_max` (1200)
+  before the main quote: joinedFarGap, joinedFarWindow (a usable window of the row's text covering [j_end, start)),
+  joinedFarKey (no index key of another node starts in [j_end, start)), then the anaphor / kind-cue tests. No
+  paragraph test (D9-7).
+- `implicitReject` (§7, D9-5): a class-line claim; a soft-kind row's cue test is its kind's list plus
+  `implicit_reject`; any other kind fails `implicitBadKind` (tested before the witness path).
+- `anchorWide` (§8, D9-9): also the judge strings (`anchor_wide9`, else "district judge", "magistrate judge",
+  "trial judge").
+- `joined_far_max`, `implicit_reject`, `anchor_wide9` are read from `cue_table.json` (fallback: DESIGN9's values).
+- `diff.py` / `labels.json`: partZone, joinedFarGap / Window / Para / Key, implicitBadKind are canonical rejections;
+  SUMMARY_KEYS9 and the `bad_rows part_zone[.tsv]` mapping.
+- Without part_zone.tsv and the new claim lines the outputs are round 8's byte for byte (534 stored universes;
+  `make_r9.py empty`). Universes and drivers: `round9/agents/ref9/` (`make_r9.py`, `difftest9.sh`,
+  `check_regress9.sh`, `powercheck.py`, `zone_verdicts9.py`).
+
+## Round 10 (agent `ref10`; round10/DESIGN10.md §4 + D10-5 + D10-6; readings in round10/agents/ref10/REF_QUESTIONS10.md)
+
+- `history_remand.tsv` (optional, 9 columns: id, b_node, b_start, b_end, docket, bd_start, bd_end, t_start, t_end).
+  Loading: a bad line (not UTF-8, not 9 fields, a node / offset column not ASCII digits) counts `remand_bad_rows`
+  (the Lean's `bad_rows history_remand.tsv n`) and takes no id; an id of no history row is ignored (no counter); a
+  later good line for a taken id counts `remand_dup_rows` (first line wins). `remand_lines` = ids kept.
+- `Engine.check_remand` (`remandBridge`), on a history row with a line whose complete round-9 verdict is `ok` (after
+  targetLater and the zone check): remandCourt (decisions2 raw court of B = of the target; a missing row fails),
+  remandDate (date(order) <= date(B) <= date(order) + `remand_days_max` calendar days, date(target) < date(order);
+  0 / missing / non-calendar dates fail), remandDocket (compact docket >= 4 chars with a digit, inside the compact
+  B span and target span, each non-empty and <= `remand_docket_span_max`, read from a usable covering window of
+  that node's own text), remandCue (B's quote [b_start, b_end) from a usable window of B's text, <=
+  `remand_quote_max`, holds `remand_court` and a `remand_cue` phrase), remandTie (an index key mapping to the order,
+  or the compact docket, inside compact(B quote); or a date form of date(order) - full month name / per-month
+  `remand_months_abbr`, day without leading zero - inside the lower-cased quote). First failure is the reason.
+- Power gate (D9-4 (2)): a row the Lean writes noAuthority (same_case_power `no`) is not checked or counted; when
+  its remand check fails its findings are dropped (`remand_mute`, Q10-10, as D9-13).
+- Counters `remand_lines`, `remand_checked_rows`, `remand_failed_rows`, `remand_dup_rows`, `remand_bad_rows` only
+  when the file has a line. `diff.py` / `labels.json`: the five reasons are canonical rejections; SUMMARY_KEYS10.
+- Without history_remand.tsv the outputs are round 9's byte for byte (543 universes: 534 stored + 9 round-9 kept;
+  `make_r10.py empty`). Universes and drivers: `round10/agents/ref10/` (`make_r10.py`, `check_regress10.*`,
+  `gen10.sh`, `kept10.sh`, `realv9c.sh`).
+- D10-7 (§4 amendment 2): 12 columns (+ tie, o_start, o_end); remandTie = (a) index key of the order in compact(B
+  quote), (c) a date form, or (c2) a span of the ORDER's own text (non-empty, <= `remand_order_span_max` 300, usable
+  window) holding "in light of" with compact(tie) (>= 8 chars) in it and in compact(B quote). Tie (b) is dropped.
+- §6 `trialBridge` (D10-8, D10-9 = REF_QUESTIONS10 Q10-12..17): a history claim; on a reversed / vacated row with an
+  anchor line and no bridge line, the anchored check runs with the main quote's kind-cue test replaced by
+  `trialBridgeD` (kind cue + a `trial_court_names` phrase, no `intermediate_court_names` phrase), then
+  `trialBridgeT` (history_tbridge.tsv quote of T's own text, <= 600, holds "affirm", no `tbridge_negative`), then
+  `trialBridgeDate` (date(T) < date(D) <= +1,826, court(T) != court(D)); then the round-9 tail. A claim on any other
+  row is ignored. history_tbridge.tsv: bad / unknown / dup as the remand table; counters tbridge_lines,
+  tbridge_dup_rows, tbridge_bad_rows (only with a line).
+- Differential (round10/agents/ref10/NOTES.md, runner e7e32592): kept 9, sweeps 20 main / 10 probe / 10 fuzz, 543
+  earlier universes, real data v9c (vs round9/out/v9c) and v10c: every remand and trialBridge row agrees; the only
+  disagreements are the known round-5 witness (W) class, reproduced by the round-9 binary on the same universes
+  stripped of round-10 inputs.
+
+## Round 11 (agent `ref11`; round11/DESIGN11.md §5.1 + D11-4; readings in round11/agents/ref11/REF_QUESTIONS11.md)
+
+- History claim `anchorTribunal` (HCLAIMS): on a row checked by checkAnchored (anchor line, no bridge line;
+  trialBridge rows included), check 2 (anchorNoCue) tests the union `anchor` ++ `anchor_wide` ++ `anchor_wide9` ++
+  `anchor_tribunal` (JSON key `anchor_tribunal`, else DESIGN11's six strings) on ascii_lower(norm_quote(anchor
+  quote)); with `anchorWide` too, the same union. Every other check unchanged. Loading as every claim (bad /
+  unknown id / duplicate); before round 11 such a line was a bad line.
+- Counters (only when some kept claim line has the value): `hclaim_anchortribunal` (ids with the claim),
+  `hclaim_anchortribunal_unused` (of those, no anchor line or a bridge line). diff.py SUMMARY_KEYS11 (either side,
+  missing = 0).
+- Without an anchorTribunal line the outputs are round 10's byte for byte (552 universes: 534 r8ref + 9 round-9
+  kept + 9 round-10 kept; `make_r11.py empty`). Universes and drivers: `round11/agents/ref11/` (`make_r11.py`,
+  `gen11.sh`, `kept11.sh`, `check_regress11.sh`, `difftest11.sh`, `realv10d.sh`).
+- §5.2 (D11-5) `history_identity.tsv` (optional, 7 columns: id, form docket|cite|date, token, d_start, d_end,
+  t_start, t_end). Loading: bad (not UTF-8, != 7 fields, unknown form, offset not ASCII digits) -> identity_bad_rows,
+  no id; unknown id ignored (internal count only, Q11-6); later good line for a taken id -> identity_dup_rows.
+  `Engine.check_identity` (`identityTie`), after the complete round-10 verdict (incl. the remand check) is ok and
+  the Lean admits the row (power not `no`): both spans (by's and target's own text, usable window, 0 < len <=
+  `identity_span_max` 200) hold compact(token) (>= 4 chars, a digit) for docket / cite; for date the token is 8
+  ASCII digits = date(T) != 0 and both lower-cased spans hold a round-10 date form. noAuthority rows: not counted,
+  findings muted on failure (as Q10-10). Counters identity_lines / _checked_rows / _failed_rows / _dup_rows /
+  _bad_rows only when the file has a line. labels.json identityTie; diff.py SUMMARY_KEYS11 + bad_rows map.

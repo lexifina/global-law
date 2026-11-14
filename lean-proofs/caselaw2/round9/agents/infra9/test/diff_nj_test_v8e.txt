@@ -1,0 +1,81 @@
+status        -0 +9
+   + 4006682	-	-	0	19540328	good	noneAdmitted	1	-	-	-	-
+   + 4006682	-	-	19540329	19770928	unknown:recognisedLater	unknown	1	tw:4018149:4006682:13821:4061823	4018149	recognised	recognised
+   + 4006682	-	-	19770929	19790506	neg:overruled	negativeAdmitted	1	tw:4018149:4006682:13821:4061823	4018149	recognised	recognised
+   + 4006682	-	-	19790507	20261112	unknown:recognisedLater	unknown	1	tw:4018149:4006682:13821:4061823	4018149	recognised	recognised
+   + 4016514	-	-	0	19620617	good	noneAdmitted	1	-	-	-	-
+   + 4016514	-	-	19620618	20261112	unknown:partialScope	unknown	1	t8:4058244:4016514:17127	4058244	treatment	operativeWords
+   + 4086271	-	-	0	19390205	good	noneAdmitted	1	-	-	-	-
+   + 4086271	-	-	19390206	19490622	unknown:recognisedLater	unknown	1	tw:3991335:4086271:4616:4089451	3991335	recognised	recognised
+   + 4086271	-	-	19490623	20261112	neg:overruled	negativeAdmitted	1	tw:3991335:4086271:4616:4089451	3991335	recognised	recognised
+certs         -3 +3
+   - treatment	t8:4058244:4016514:17127	noAuthority	noAuthority
+   - treatment	tw:3991335:4086271:4616:4089451	witnessNoStanding	witnessNoStanding
+   - treatment	tw:4018149:4006682:13821:4061823	disqualified	disqualified
+   + treatment	t8:4058244:4016514:17127	ok	ok
+   + treatment	tw:3991335:4086271:4616:4089451	okRecognised	okRecognised
+   + treatment	tw:4018149:4006682:13821:4061823	okRecognised	okRecognised
+classes       -3 +3
+   - t8:4058244:4016514:17127	operativeWords	operativeWords	noAuthority	-	-	-
+   - tw:3991335:4086271:4616:4089451	atRiskWitness	recognised	witnessNoStanding	-	-	4089451
+   - tw:4018149:4006682:13821:4061823	atRiskWitness	recognised	disqualified	-	-	4061823
+   + t8:4058244:4016514:17127	operativeWords	operativeWords	ok	-	-	-
+   + tw:3991335:4086271:4616:4089451	recognised	recognised	okRecognised	-	-	4089451
+   + tw:4018149:4006682:13821:4061823	recognised	recognised	okRecognised	-	-	4061823
+findings      -4 +20
+   - atRisk	4058244	4016514	-	claim:disapproved	1	assumeHomeDomain>sisterCourt>noPower	operativeWords
+   - atRisk	4058519	4016236	-	soft:questioned	1	assumeHomeDomain>sisterCourt>noPower	-
+   - citesVacated	4090117	4087060	-	neg:reversed	1	assumeHomeDomain>S44	-
+   - citesVacated	4090966	4087060	-	neg:reversed	1	assumeHomeDomain>S44	-
+   + atRisk	1891060	4006682	-	recognisedLater	1	assumeHomeDomain>otherSystem	recognised
+   + atRisk	4026259	4006682	-	recognisedLater	1	assumeHomeDomain>lowerToHigher	recognised
+   + atRisk	4031079	4006682	-	recognisedLater	1	assumeHomeDomain>lowerToHigher	recognised
+   + atRisk	4039045	4006682	-	recognisedLater	1	assumeHomeDomain>lowerToHigher	recognised
+   + atRisk	4058519	4016236	-	soft:questioned	1	assumeHomeDomain>sisterCourt>sameCourtSoft	-
+   + atRisk	5218724	4006682	-	recognisedLater	1	assumeHomeDomain>otherSystem	recognised
+   + citesOverruled	1559605	4086271	-	neg:overruled	1	assumeHomeDomain>E1King	recognised
+   + citesOverruled	2091849	4086271	-	neg:overruled	1	assumeHomeDomain>otherSystem	recognised
+   + citesOverruled	285314	4086271	-	neg:overruled	1	assumeHomeDomain>E1King	recognised
+   + citesOverruled	4016947	4086271	-	neg:overruled	1	assumeHomeDomain>S44	recognised
+   + citesOverruled	4061823	4006682	-	neg:overruled	1	assumeHomeDomain>sisterCourt	recognised
+   + citesOverruled	4067920	4086271	-	neg:overruled	1	assumeHomeDomain>S44	recognised
+   + citesOverruled	4089451	4086271	-	neg:overruled	1	assumeHomeDomain>adopted>S44	recognised
+   + citesOverruled	4089829	4086271	-	neg:overruled	1	assumeHomeDomain>adopted>S44	recognised
+   + citesOverruled	5211680	4086271	-	neg:overruled	1	assumeHomeDomain>otherSystem	recognised
+   + citesOverruled	5260014	4086271	-	neg:overruled	1	assumeHomeDomain>otherSystem	recognised
+   + citesOverruled	5264763	4086271	-	neg:overruled	1	assumeHomeDomain>otherSystem	recognised
+   + citesOverruled	6359004	4086271	-	neg:overruled	1	assumeHomeDomain>otherSystem	recognised
+   + citesVacated	4090117	4087060	-	neg:reversed	1	assumeHomeDomain>adopted>S44	-
+   + citesVacated	4090966	4087060	-	neg:reversed	1	assumeHomeDomain>adopted>S44	-
+splits        -0 +0
+horty         -0 +0
+status_lines  -0 +0
+summary       -42 +42
+   - findings	41628
+   - findings	41833
+   - findings	41916
+   - findings	42041
+   - findings	42079
+   - findings	42152
+   - findings	42418
+   - findings	42521
+   - operative_rows	1071
+   - recognised_rows	6478
+   - rows_admitted	220452
+   - rows_rejected	9600
+   - status_rows	84375
+   - status_rows	84598
+   + findings	41632
+   + findings	41834
+   + findings	41917
+   + findings	42043
+   + findings	42080
+   + findings	42153
+   + findings	42421
+   + findings	42524
+   + operative_rows	1072
+   + recognised_rows	6480
+   + rows_admitted	220455
+   + rows_rejected	9597
+   + status_rows	84378
+   + status_rows	84604

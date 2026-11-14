@@ -1,0 +1,136 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round13\\stage\\v13a",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round13\\out\\v13a",
+  "status_sha1": "e49626a29314ae354ff481fcbf6b2e920995c6aa"
+ },
+ "court": "federal",
+ "dataset": "fedcir_dataset",
+ "generated": "2026-11-14T12:04:39+00:00",
+ "label": "round13",
+ "link": {
+  "fail_reasons": {
+   "below_not_found": 2386,
+   "below_several_cited": 4,
+   "below_several_uncited": 169,
+   "cafc_ambiguous": 72,
+   "cafc_not_in_corpus": 45
+  },
+  "linked": 893,
+  "n_items": 3569
+ },
+ "metrics": {
+  "clean": {
+   "hi": 0.9973044140635954,
+   "k": 376,
+   "lo": 0.9769892298117211,
+   "n": 379,
+   "p": 0.9920844327176781
+  },
+  "clean_all": {
+   "hi": 0.9980875794362957,
+   "k": 531,
+   "lo": 0.98361435387735,
+   "n": 534,
+   "p": 0.9943820224719101
+  },
+  "link_rate": {
+   "hi": 0.26468370802846064,
+   "k": 893,
+   "lo": 0.23627371744927642,
+   "n": 3569,
+   "p": 0.2502101428971701
+  },
+  "link_rate_cited": {
+   "hi": 0.19799931460474976,
+   "k": 660,
+   "lo": 0.17252970945550292,
+   "n": 3569,
+   "p": 0.1849257495096666
+  },
+  "link_rate_pre2019": {
+   "hi": 0.34062391713006895,
+   "k": 825,
+   "lo": 0.3044399393546186,
+   "n": 2560,
+   "p": 0.322265625
+  },
+  "part": {
+   "hi": 0.583068952150227,
+   "k": 61,
+   "lo": 0.4090471902465911,
+   "n": 123,
+   "p": 0.4959349593495935
+  },
+  "part_all": {
+   "hi": 0.5062234596743425,
+   "k": 63,
+   "lo": 0.34888857519356026,
+   "n": 148,
+   "p": 0.42567567567567566
+  },
+  "precision": {
+   "hi": 0.9580559412479036,
+   "k": 90,
+   "lo": 0.8471171277629918,
+   "n": 98,
+   "p": 0.9183673469387755
+  },
+  "precision_all": {
+   "hi": 0.9589065387268155,
+   "k": 92,
+   "lo": 0.8500189223072278,
+   "n": 100,
+   "p": 0.92
+  },
+  "precision_lenient": {
+   "hi": 0.9943853858954805,
+   "k": 96,
+   "lo": 0.9286178883365213,
+   "n": 98,
+   "p": 0.9795918367346939
+  },
+  "precision_lenient_all": {
+   "hi": 0.9944980324993383,
+   "k": 98,
+   "lo": 0.9299882086824253,
+   "n": 100,
+   "p": 0.98
+  },
+  "recall": {
+   "hi": 0.6749567931953754,
+   "k": 90,
+   "lo": 0.5200491578541916,
+   "n": 150,
+   "p": 0.6
+  },
+  "recall_all": {
+   "hi": 0.6143458062585582,
+   "k": 92,
+   "lo": 0.46618734210600776,
+   "n": 170,
+   "p": 0.5411764705882353
+  },
+  "recall_lenient": {
+   "hi": 0.7432417870943695,
+   "k": 101,
+   "lo": 0.5947685280582136,
+   "n": 150,
+   "p": 0.6733333333333333
+  },
+  "recall_lenient_all": {
+   "hi": 0.6817825249611353,
+   "k": 104,
+   "lo": 0.536807449171258,
+   "n": 170,
+   "p": 0.611764705882353
+  }
+ },
+ "notes": "Primary population: linked decisions below (district court, Court of Federal Claims, Court of International Trade, Court of Appeals for Veterans Claims) cited by the linked Federal Circuit decision (MAPPING.md). recall/precision/clean/part on that population; *_all = every linked decision below (cited or caption-only). recall_lenient counts UNK_HIST as negative; precision_lenient counts PART as source-negative. link_rate: key items linked to one Federal Circuit and one decision-below node; link_rate_pre2019: items dated before 2019 (lower-court corpus ends 2017-2019). Cited units by tribunal: {'DCT': 'recall 23/39, clean 93/94', 'CFC': 'recall 46/69, clean 184/185', 'CIT': 'recall 16/31, clean 80/81', 'CAVC': 'recall 5/11, clean 19/19'}. Units by class/cited: {'CLEAN/0': 155, 'CLEAN/1': 379, 'NEG/0': 20, 'NEG/1': 150, 'PART/0': 25, 'PART/1': 123}. Cited units class>model: {'CLEAN>GOOD': 376, 'CLEAN>NEG_HIST': 2, 'CLEAN>UNK_HIST': 1, 'NEG>GOOD': 48, 'NEG>NEG_HIST': 90, 'NEG>NEG_OTHER': 1, 'NEG>UNK_HIST': 11, 'PART>GOOD': 62, 'PART>NEG_HIST': 6, 'PART>UNK_HIST': 55}.",
+ "primary": "recall",
+ "row_label": "Federal Circuit: decision below reversed/vacated (Fed. Cir. Dataset Project)",
+ "split": "h0",
+ "tests": "same-case"
+}

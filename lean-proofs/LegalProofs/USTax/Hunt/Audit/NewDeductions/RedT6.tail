@@ -1,0 +1,122 @@
+/-! T6: kernel replays (no `#eval`, no `native_decide`). -/
+
+def run (f : Facts) : State → List Move → Option State
+  | s, [] => some s
+  | s, m :: p => match step f s m with
+    | some s' => run f s' p
+    | none => none
+
+def reach (f : Facts) (ms : List Move) : Nat → State → List State
+  | 0, s => [s]
+  | n+1, s => s :: ms.flatMap (fun m => match step f s m with | some s' => reach f ms n s' | none => [])
+
+def plan : List Move :=
+  [.fileSeparately false, .fileSeparately true, .itemize false false, .itemize false true, .itemize true false, .itemize true true]
+def plain : List Move := [.itemize false false, .itemize true false]
+
+/-- The plan is a legal sequence of moves and, under the word-for-word reading, costs $259,622 over two years. -/
+theorem plan_literal : (run equalEarners {} plan).map (totalTax true true equalEarners) = some 259622 := by decide +kernel
+/-- The plain filing (joint, itemizing both years) costs $270,646 under either reading. -/
+theorem plain_literal : (run equalEarners {} plain).map (totalTax true true equalEarners) = some 270646 := by decide +kernel
+theorem plain_closed : (run equalEarners {} plain).map (totalTax true false equalEarners) = some 270646 := by decide +kernel
+/-- The gain: 270,646 − 259,622 = 11,024. -/
+theorem gain_literal : 270646 - 259622 = 11024 := by decide
+/-- The same plan under the closed-gap rule (reduction taken from the halved amount): $269,594, a gain of $1,052. -/
+theorem plan_closed : (run equalEarners {} plan).map (totalTax true false equalEarners) = some 269594 := by decide +kernel
+/-- The SALT allowed on one separate return at $300,000 under each reading. -/
+def sepRet : Ret :=
+  { joint := false, aged := 0, wages := 300000, overtime := 0, tipsEmp := 0, tipsBiz := 0, other := 0,
+    wagerGain := 0, wagerLoss := 0, salt := 19000, mortgage := 0, gifts := 0, carInt := 0, itemize := true,
+    spouseItemizes := true }
+theorem salt_literal : (compute true true sepRet).itemized = 13075 := by decide +kernel
+theorem salt_closed : (compute true false sepRet).itemized = 5950 := by decide +kernel
+
+/-! ### All move sequences -/
+
+theorem rank_le (m : Move) : m.rank ≤ 15 := by
+  cases m with
+  | tipsAsBusiness b => cases b <;> simp [Move.rank]
+  | spousePays y => cases y <;> simp [Move.rank]
+  | fileSeparately y => cases y <;> simp [Move.rank]
+  | itemize y b => cases y <;> cases b <;> simp [Move.rank]
+  | _ => simp [Move.rank]
+
+theorem step_rank {f : Facts} {s s' : State} {m : Move} (h : step f s m = some s') :
+    s.rank < s'.rank ∧ s'.rank ≤ 15 := by
+  have hm := rank_le m
+  unfold step at h
+  split at h
+  · cases h
+  · rename_i hr
+    have hr' : s.rank < m.rank := Nat.lt_of_not_le hr
+    have key : s'.rank = m.rank := by
+      split at h <;> (try split at h) <;> first | (cases h; rfl) | (cases h)
+    omega
+
+theorem run_len {f : Facts} : ∀ (p : List Move) (s t : State), run f s p = some t → s.rank + p.length ≤ t.rank ∧ t.rank ≤ max s.rank 15
+  | [], s, t, h => by simp [run] at h; subst h; simp; omega
+  | m :: p, s, t, h => by
+    simp only [run] at h
+    split at h
+    · rename_i s' hs
+      have h1 := step_rank hs
+      have h2 := run_len p s' t h
+      simp only [List.length_cons]
+      omega
+    · cases h
+
+theorem run_mem {f : Facts} {ms : List Move} : ∀ (p : List Move) (s t : State) (n : Nat), p.length ≤ n → (∀ m ∈ p, m ∈ ms) →
+    run f s p = some t → t ∈ reach f ms n s
+  | [], s, t, n, _, _, h => by
+    simp [run] at h; subst h
+    cases n <;> simp [reach]
+  | m :: p, s, t, n, hn, hms, h => by
+    cases n with
+    | zero => simp at hn
+    | succ n =>
+      simp only [run] at h
+      split at h
+      · rename_i s' hs
+        have ih := run_mem (f := f) (ms := ms) p s' t n (by simpa using hn) (fun x hx => hms x (List.mem_cons_of_mem _ hx)) h
+        simp only [reach]
+        refine List.mem_cons_of_mem _ (List.mem_flatMap.mpr ⟨m, hms m (List.mem_cons_self), ?_⟩)
+        simp only [hs]; exact ih
+      · cases h
+
+/-- Every sequence of allowed moves, of any length, ends in one of the positions listed by `reach … 15`. -/
+theorem all_paths {f : Facts} (p : List Move) (t : State) (hms : ∀ m ∈ p, m ∈ moves f) (h : run f {} p = some t) :
+    t ∈ reach f (moves f) 15 {} := by
+  have hl := run_len p {} t h
+  have : p.length ≤ 15 := by
+    have h0 : ({} : State).rank = 0 := rfl
+    omega
+  exact run_mem p {} t 15 this hms h
+
+/-- Checked by the kernel over all 2,016 positions: under the closed-gap rule nothing is below $268,265. -/
+theorem closed_floor : (reach equalEarners (moves equalEarners) 15 {}).all (fun s => decide (268265 ≤ totalTax true false equalEarners s)) = true := by
+  decide +kernel
+
+/-- Under the closed-gap rule, no sequence of the model's moves, of any length, brings the equal-earner couple's
+two-year tax below $268,265; in particular none reaches the plan's $259,622. -/
+theorem closed_gap_no_plan (p : List Move) (t : State) (hms : ∀ m ∈ p, m ∈ moves equalEarners)
+    (h : run equalEarners {} p = some t) : 259622 < totalTax true false equalEarners t := by
+  have hmem := all_paths p t hms h
+  have hall := List.all_eq_true.mp closed_floor t hmem
+  have : 268265 ≤ totalTax true false equalEarners t := by simpa using hall
+  omega
+
+/-- And under the word-for-word reading nothing is below $259,151 (the plan plus bunching gifts). -/
+theorem literal_floor : (reach equalEarners (moves equalEarners) 15 {}).all (fun s => decide (259151 ≤ totalTax true true equalEarners s)) = true := by
+  decide +kernel
+
+#print axioms plan_literal
+#print axioms plain_literal
+#print axioms plain_closed
+#print axioms plan_closed
+#print axioms salt_literal
+#print axioms salt_closed
+#print axioms step_rank
+#print axioms all_paths
+#print axioms closed_floor
+#print axioms closed_gap_no_plan
+#print axioms literal_floor

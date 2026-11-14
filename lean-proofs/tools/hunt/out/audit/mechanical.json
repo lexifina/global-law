@@ -1,0 +1,606 @@
+{
+ "Accounts": {
+  "lines": 744,
+  "rules_lines": 458,
+  "search_lines": 285,
+  "technique_words_in_rule_code": [
+   "strip"
+  ],
+  "technique_words_in_rule_comments": [
+   [
+    78,
+    "beta : Nat := 25              -- premium (%) for a dollar whose future growth is sheltered"
+   ]
+  ],
+  "bypass_constructs": [],
+  "sections_cited": 21,
+  "sections_missing": [],
+  "figures_in_rules": 14,
+  "figures_in_statute": [
+   1000,
+   5000,
+   7000,
+   35000,
+   145000
+  ],
+  "figures_not_in_statute": [
+   999,
+   4300,
+   7500,
+   8550,
+   11250,
+   19000,
+   23500,
+   70000,
+   108000
+  ],
+  "moves": 33,
+  "moves_cited": 31,
+  "moves_uncited": [
+   "Move.nextYear",
+   "Move.giveCash"
+  ],
+  "generator_literals": null
+ },
+ "Basis": {
+  "lines": 582,
+  "rules_lines": 410,
+  "search_lines": 171,
+  "technique_words_in_rule_code": [],
+  "technique_words_in_rule_comments": [],
+  "bypass_constructs": [],
+  "sections_cited": 26,
+  "sections_missing": [],
+  "figures_in_rules": 28,
+  "figures_in_statute": [
+   200,
+   3000,
+   6000,
+   75000,
+   250000,
+   500000,
+   15000000
+  ],
+  "figures_not_in_statute": [
+   1350,
+   2050,
+   12400,
+   16100,
+   19000,
+   24800,
+   49450,
+   50400,
+   98900,
+   100800,
+   105700,
+   201775,
+   211400,
+   256225,
+   403550,
+   512450,
+   545500,
+   613700,
+   640600,
+   768700,
+   1000000000000
+  ],
+  "moves": 7,
+  "moves_cited": 3,
+  "moves_uncited": [
+   "Move.sell",
+   "Move.donateCash",
+   "Move.die",
+   "Move.nextYear"
+  ],
+  "generator_literals": []
+ },
+ "Charity": {
+  "lines": 384,
+  "rules_lines": 223,
+  "search_lines": 160,
+  "technique_words_in_rule_code": [],
+  "technique_words_in_rule_comments": [
+   [
+    48,
+    "/-- \u00a71(h): net capital gain stacked on top of ordinary taxable income, 0 / 15 / 20 percent. -/"
+   ]
+  ],
+  "bypass_constructs": [],
+  "sections_cited": 20,
+  "sections_missing": [
+   "671-677"
+  ],
+  "figures_in_rules": 19,
+  "figures_in_statute": [
+   200,
+   1000,
+   1700,
+   2000,
+   250000
+  ],
+  "figures_not_in_statute": [
+   3300,
+   16000,
+   16250,
+   24800,
+   32200,
+   98900,
+   100800,
+   111000,
+   211400,
+   403550,
+   512450,
+   613700,
+   768700,
+   1000000000
+  ],
+  "moves": 0,
+  "moves_cited": 0,
+  "moves_uncited": [],
+  "generator_literals": [
+   100,
+   1700,
+   2000
+  ]
+ },
+ "Corporate": {
+  "lines": 557,
+  "rules_lines": 408,
+  "search_lines": 148,
+  "technique_words_in_rule_code": [],
+  "technique_words_in_rule_comments": [],
+  "bypass_constructs": [],
+  "sections_cited": 50,
+  "sections_missing": [],
+  "figures_in_rules": 8,
+  "figures_in_statute": [
+   250,
+   2000,
+   3180,
+   10000
+  ],
+  "figures_not_in_statute": [
+   2100,
+   2380,
+   4080,
+   15000
+  ],
+  "moves": 13,
+  "moves_cited": 11,
+  "moves_uncited": [
+   "Move.pSellOut",
+   "Move.wait"
+  ],
+  "generator_literals": [
+   250
+  ]
+ },
+ "Entity": {
+  "lines": 527,
+  "rules_lines": 354,
+  "search_lines": 172,
+  "technique_words_in_rule_code": [],
+  "technique_words_in_rule_comments": [
+   [
+    53,
+    "/-- \u00a71(h): net capital gain and qualified dividends (\u00a71(h)(11)) stacked on ordinary taxable income; joint 2026. -/"
+   ],
+   [
+    127,
+    "lastTI : Nat        -- final year's taxable income (ordinary, then capital), for stacking the sale"
+   ]
+  ],
+  "bypass_constructs": [],
+  "sections_cited": 45,
+  "sections_missing": [
+   "531-535",
+   "541-543",
+   "1366-1368",
+   "1367-1368"
+  ],
+  "figures_in_rules": 26,
+  "figures_in_statute": [
+   1000,
+   2500,
+   5000,
+   10000,
+   25000,
+   150000,
+   250000,
+   600000,
+   15000000
+  ],
+  "figures_not_in_statute": [
+   765,
+   9235,
+   16100,
+   24500,
+   24800,
+   32200,
+   72000,
+   98900,
+   100800,
+   184500,
+   211400,
+   360000,
+   403500,
+   403550,
+   512450,
+   613700,
+   768700
+  ],
+  "moves": 15,
+  "moves_cited": 12,
+  "moves_uncited": [
+   "Move.spouseDefer",
+   "Move.spousePS",
+   "Move.sell"
+  ],
+  "generator_literals": []
+ },
+ "Household": {
+  "lines": 687,
+  "rules_lines": 439,
+  "search_lines": 247,
+  "technique_words_in_rule_code": [],
+  "technique_words_in_rule_comments": [],
+  "bypass_constructs": [],
+  "sections_cited": 22,
+  "sections_missing": [],
+  "figures_in_rules": 85,
+  "figures_in_statute": [
+   419,
+   500,
+   1000,
+   2000,
+   2200,
+   2500,
+   3000,
+   3750,
+   4000,
+   5000,
+   5500,
+   6000,
+   7000,
+   7500,
+   10000,
+   12500,
+   15000,
+   15750,
+   20000,
+   23625,
+   25000,
+   30000,
+   40000,
+   75000,
+   80000,
+   150000,
+   160000,
+   200000,
+   300000,
+   400000
+  ],
+  "figures_not_in_statute": [
+   210,
+   314,
+   450,
+   660,
+   765,
+   844,
+   996,
+   1350,
+   1598,
+   1600,
+   1700,
+   2106,
+   2700,
+   3400,
+   4500,
+   5200,
+   8490,
+   10620,
+   11600,
+   11925,
+   12730,
+   13300,
+   15650,
+   17000,
+   17280,
+   17730,
+   17880,
+   23350,
+   23500,
+   23750,
+   23850,
+   25500,
+   30470,
+   31500,
+   35625,
+   38250,
+   39500,
+   47500,
+   48475,
+   51000,
+   59250,
+   64850,
+   79000,
+   96950,
+   103350,
+   197300,
+   206700,
+   250500,
+   250525,
+   259190,
+   375800,
+   394600,
+   501050,
+   626350,
+   751600
+  ],
+  "moves": 8,
+  "moves_cited": 8,
+  "moves_uncited": [],
+  "generator_literals": [
+   100,
+   2000,
+   3750,
+   7500
+  ]
+ },
+ "Instruments": {
+  "lines": 854,
+  "rules_lines": 550,
+  "search_lines": 303,
+  "technique_words_in_rule_code": [],
+  "technique_words_in_rule_comments": [],
+  "bypass_constructs": [],
+  "sections_cited": 20,
+  "sections_missing": [],
+  "figures_in_rules": 7,
+  "figures_in_statute": [
+   365,
+   2000,
+   3000,
+   10000
+  ],
+  "figures_not_in_statute": [
+   364,
+   380,
+   3700
+  ],
+  "moves": 0,
+  "moves_cited": 0,
+  "moves_uncited": [],
+  "generator_literals": null
+ },
+ "NewDeductions": {
+  "lines": 467,
+  "rules_lines": 294,
+  "search_lines": 172,
+  "technique_words_in_rule_code": [],
+  "technique_words_in_rule_comments": [],
+  "bypass_constructs": [],
+  "sections_cited": 21,
+  "sections_missing": [],
+  "figures_in_rules": 36,
+  "figures_in_statute": [
+   200,
+   400,
+   1000,
+   2000,
+   6000,
+   10000,
+   25000,
+   40400,
+   75000,
+   100000,
+   125000,
+   150000,
+   200000,
+   250000,
+   300000,
+   505000
+  ],
+  "figures_not_in_statute": [
+   765,
+   999,
+   1650,
+   9235,
+   12400,
+   16100,
+   24800,
+   32200,
+   50400,
+   100800,
+   105700,
+   201750,
+   201775,
+   211400,
+   256225,
+   384350,
+   403500,
+   403550,
+   512450,
+   768700
+  ],
+  "moves": 10,
+  "moves_cited": 8,
+  "moves_uncited": [
+   "Move.giveLate",
+   "Move.spousePays"
+  ],
+  "generator_literals": []
+ },
+ "Partnership": {
+  "lines": 901,
+  "rules_lines": 601,
+  "search_lines": 299,
+  "technique_words_in_rule_code": [],
+  "technique_words_in_rule_comments": [],
+  "bypass_constructs": [],
+  "sections_cited": 38,
+  "sections_missing": [],
+  "figures_in_rules": 1,
+  "figures_in_statute": [
+   250
+  ],
+  "figures_not_in_statute": [],
+  "moves": 11,
+  "moves_cited": 10,
+  "moves_uncited": [
+   "Move.wait"
+  ],
+  "generator_literals": []
+ },
+ "RealEstate": {
+  "lines": 486,
+  "rules_lines": 325,
+  "search_lines": 160,
+  "technique_words_in_rule_code": [],
+  "technique_words_in_rule_comments": [
+   [
+    69,
+    "/-- \u00a71(h)(1)(B)\u2013(D): adjusted net capital gain stacked on top of `base`: 0% to $96,700, 15% to $600,050, 20% above. -/"
+   ]
+  ],
+  "bypass_constructs": [],
+  "sections_cited": 22,
+  "sections_missing": [
+   "1400Z-2"
+  ],
+  "figures_in_rules": 25,
+  "figures_in_statute": [
+   200,
+   250,
+   1000,
+   10000,
+   25000,
+   100000,
+   250000,
+   500000,
+   1000000
+  ],
+  "figures_not_in_statute": [
+   220,
+   240,
+   320,
+   350,
+   370,
+   23850,
+   31500,
+   42000,
+   96700,
+   96950,
+   206700,
+   394600,
+   501050,
+   600050,
+   751600,
+   1000000000000
+  ],
+  "moves": 2,
+  "moves_cited": 1,
+  "moves_uncited": [
+   "Move.hold"
+  ],
+  "generator_literals": null
+ },
+ "Residence": {
+  "lines": 516,
+  "rules_lines": 361,
+  "search_lines": 154,
+  "technique_words_in_rule_code": [],
+  "technique_words_in_rule_comments": [],
+  "bypass_constructs": [],
+  "sections_cited": 23,
+  "sections_missing": [],
+  "figures_in_rules": 16,
+  "figures_in_statute": [
+   1000,
+   2000,
+   3000,
+   3500,
+   10000
+  ],
+  "figures_not_in_statute": [
+   256,
+   365,
+   380,
+   512,
+   1024,
+   1098,
+   2048,
+   4000,
+   19000,
+   130000,
+   890000
+  ],
+  "moves": 8,
+  "moves_cited": 2,
+  "moves_uncited": [
+   "Move.present",
+   "Move.absent",
+   "Move.relocate",
+   "Move.sell",
+   "Move.giftUS",
+   "Move.giftNRA"
+  ],
+  "generator_literals": null
+ },
+ "Transfer": {
+  "lines": 966,
+  "rules_lines": 618,
+  "search_lines": 347,
+  "technique_words_in_rule_code": [],
+  "technique_words_in_rule_comments": [],
+  "bypass_constructs": [],
+  "sections_cited": 42,
+  "sections_missing": [],
+  "figures_in_rules": 33,
+  "figures_in_statute": [
+   1000,
+   1800,
+   3800,
+   8200,
+   10000,
+   13000,
+   18200,
+   20000,
+   23800,
+   38800,
+   40000,
+   60000,
+   70800,
+   80000,
+   100000,
+   150000,
+   155800,
+   248300,
+   250000,
+   345800,
+   500000,
+   750000,
+   1000000,
+   15000000
+  ],
+  "figures_not_in_statute": [
+   238,
+   761,
+   762,
+   1276,
+   1403,
+   5000,
+   5751,
+   19000,
+   1420000
+  ],
+  "moves": 14,
+  "moves_cited": 13,
+  "moves_uncited": [
+   "Move.remarry"
+  ],
+  "generator_literals": [
+   1000000
+  ]
+ }
+}

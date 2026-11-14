@@ -1,0 +1,66 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round6\\history\\stage\\final2",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round6\\history\\out\\final2",
+  "status_sha1": "96888c8b4381d3230e83d90c5d6f2fa45dfeeb8e"
+ },
+ "court": "state",
+ "dataset": "state_overruled_tables",
+ "generated": "2026-11-13T23:35:42+00:00",
+ "label": "round6",
+ "link": {
+  "fail_reasons": {
+   "date_order": 6,
+   "federal_court": 12,
+   "other_system": 5,
+   "x_name_mismatch": 10,
+   "y_bad_citation": 5,
+   "y_name_mismatch": 2,
+   "y_no_citation": 6,
+   "y_not_in_corpus": 3,
+   "y_reporter_not_in_corpus": 5,
+   "y_several_on_page": 11,
+   "y_text_does_not_cite_x": 37,
+   "y_volume_not_in_corpus": 6
+  },
+  "linked": 173,
+  "n_items": 281
+ },
+ "metrics": {
+  "actor_agreement": {
+   "hi": 1.0,
+   "k": 8,
+   "lo": 0.6755924316585924,
+   "n": 8,
+   "p": 1.0
+  },
+  "link_rate": {
+   "hi": 0.6706105483492252,
+   "k": 173,
+   "lo": 0.5575865696380405,
+   "n": 281,
+   "p": 0.6156583629893239
+  },
+  "recall": {
+   "hi": 0.10722742168555338,
+   "k": 8,
+   "lo": 0.028820716021608878,
+   "n": 142,
+   "p": 0.056338028169014086
+  },
+  "recall_any": {
+   "hi": 0.10722742168555338,
+   "k": 8,
+   "lo": 0.028820716021608878,
+   "n": 142,
+   "p": 0.056338028169014086
+  }
+ },
+ "notes": "Unit = overruled decision X (linked); recall = model negative/unknown via treatment/prospective path with actor among the listed overruling decisions, or an admitted overruled/abrogated/disapproved/recededFrom treatment by one of them; recall_any = same by any actor; actor_agreement = of X with a model overruling actor dated by the end of the table's publication year, share where such an actor is listed. link_rate counts primary table rows ((treated, treating) citation pairs); h0/h1 link counts exclude rows whose treated side did not link (no split key). No precision metric (positives-only key; see MAPPING.md).",
+ "primary": "recall",
+ "row_label": "State tables of overruled cases (GA 1922, CA 1860/1874, NY 1893, Greenleaf 1838)",
+ "split": "h1",
+ "tests": "overruling"
+}

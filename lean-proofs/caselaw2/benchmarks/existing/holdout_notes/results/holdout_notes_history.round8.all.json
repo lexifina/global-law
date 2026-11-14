@@ -1,0 +1,61 @@
+{
+ "asof": null,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\stage\\v8e",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\out\\v8e",
+  "status_sha1": "da6f3c30f9b5a71536c253fc26744e565a71d89e"
+ },
+ "court": "mixed",
+ "dataset": "holdout_notes_history",
+ "generated": "2026-11-14T02:04:55+00:00",
+ "label": "round8",
+ "link": {
+  "fail_reasons": {},
+  "linked": 20843,
+  "n_items": 20843,
+  "note": "items are (X, Y) pairs of the frozen split (round5/tests/split); targets and Y are corpus nodes by construction (regex 'nearest citation', not audited)"
+ },
+ "metrics": {
+  "any_signal": {
+   "hi": 0.3975665785460578,
+   "k": 8148,
+   "lo": 0.3843188447700552,
+   "n": 20843,
+   "p": 0.39092261190807465
+  },
+  "precision": {
+   "hi": 0.8377189725172456,
+   "k": 4982,
+   "lo": 0.818662560128564,
+   "n": 6014,
+   "p": 0.8284003990688393
+  },
+  "recall": {
+   "hi": 0.3797114492478627,
+   "k": 7777,
+   "lo": 0.3665810521638201,
+   "n": 20843,
+   "p": 0.3731228709878616
+  },
+  "recall_byAnyone": {
+   "hi": 0.3006645594840536,
+   "k": 6137,
+   "lo": 0.28828995830696735,
+   "n": 20843,
+   "p": 0.2944393801276208
+  },
+  "recall_strict": {
+   "hi": 0.243121510091277,
+   "k": 4946,
+   "lo": 0.23157109398498274,
+   "n": 20843,
+   "p": 0.23729789377728733
+  }
+ },
+ "notes": "Scorer round5/tests/score_holdout.py (existing/holdout_notes/runs/round8/holdout_round8.json). Pair level, Y named, history family; each (X, Y) read on the date of its first holdout statement. recall = negOrPartly (X negative or partly negative by any actor on that date); recall_strict = whole-decision negative by Y; precision = reverse direction (of the model's whole-decision negative (X, actor) rows whose X a holdout note of this family names with a Y, the share where the note names the model's actor). Blind in input: holdout speakers never feed the model (check_no_leak.py); round-5 builders did see these aggregate scores at each iteration (TESTS.md, results/holdout_it*).",
+ "primary": "recall",
+ "row_label": "Later-court notes 'X, rev'd/vacated by Y' from courts with no power over X (held out)",
+ "split": "all",
+ "tests": "same-case"
+}

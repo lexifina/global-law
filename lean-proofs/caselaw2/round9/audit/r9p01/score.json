@@ -1,0 +1,550 @@
+{
+ "run": "r9p01",
+ "type": "A",
+ "self_test": false,
+ "answer_files": [
+  "ans_1.jsonl",
+  "ans_1_b.jsonl"
+ ],
+ "items_in_key": 26,
+ "items_answered": 26,
+ "unanswered": [],
+ "classes": {
+  "PJT": {
+   "population": 23,
+   "in_key": 23,
+   "answered": 23,
+   "all": {
+    "n": 23,
+    "right": {
+     "k": 23,
+     "n": 23,
+     "p": 1.0,
+     "lo": 0.8569,
+     "hi": 1.0
+    },
+    "right_extent": {
+     "k": 23,
+     "n": 23,
+     "p": 1.0,
+     "lo": 0.8569,
+     "hi": 1.0
+    },
+    "link": {
+     "k": 23,
+     "n": 23,
+     "p": 1.0,
+     "lo": 0.8569,
+     "hi": 1.0
+    }
+   },
+   "flag": "interval reaches below 0.90",
+   "weighted": {
+    "right": {
+     "p": 1.0,
+     "population": 23,
+     "rows_folded_from_unanswered_strata": 0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_eff": null
+    },
+    "right_extent": {
+     "p": 1.0,
+     "population": 23,
+     "rows_folded_from_unanswered_strata": 0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "n_eff": null
+    }
+   },
+   "by_system": {
+    "fed": {
+     "n": 23,
+     "right": {
+      "k": 23,
+      "n": 23,
+      "p": 1.0,
+      "lo": 0.8569,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 23,
+      "n": 23,
+      "p": 1.0,
+      "lo": 0.8569,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 23,
+      "n": 23,
+      "p": 1.0,
+      "lo": 0.8569,
+      "hi": 1.0
+     }
+    }
+   },
+   "by_decade": {
+    "1990s": {
+     "n": 6,
+     "right": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     }
+    },
+    "2000s": {
+     "n": 11,
+     "right": {
+      "k": 11,
+      "n": 11,
+      "p": 1.0,
+      "lo": 0.7412,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 11,
+      "n": 11,
+      "p": 1.0,
+      "lo": 0.7412,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 11,
+      "n": 11,
+      "p": 1.0,
+      "lo": 0.7412,
+      "hi": 1.0
+     }
+    },
+    "2010s": {
+     "n": 6,
+     "right": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     }
+    }
+   },
+   "by_effect": {
+    "own_part": {
+     "n": 17,
+     "right": {
+      "k": 17,
+      "n": 17,
+      "p": 1.0,
+      "lo": 0.8157,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 17,
+      "n": 17,
+      "p": 1.0,
+      "lo": 0.8157,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 17,
+      "n": 17,
+      "p": 1.0,
+      "lo": 0.8157,
+      "hi": 1.0
+     }
+    },
+    "own_whole": {
+     "n": 6,
+     "right": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     }
+    }
+   },
+   "answer_distribution": {
+    "overrule": 46
+   },
+   "failures": {},
+   "strata": {
+    "fed|1990s": {
+     "n": 6,
+     "right": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "population": 6,
+     "sampled": 6
+    },
+    "fed|2000s": {
+     "n": 11,
+     "right": {
+      "k": 11,
+      "n": 11,
+      "p": 1.0,
+      "lo": 0.7412,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 11,
+      "n": 11,
+      "p": 1.0,
+      "lo": 0.7412,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 11,
+      "n": 11,
+      "p": 1.0,
+      "lo": 0.7412,
+      "hi": 1.0
+     },
+     "population": 11,
+     "sampled": 11
+    },
+    "fed|2010s": {
+     "n": 6,
+     "right": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 6,
+      "n": 6,
+      "p": 1.0,
+      "lo": 0.6097,
+      "hi": 1.0
+     },
+     "population": 6,
+     "sampled": 6
+    }
+   }
+  }
+ },
+ "decoys": {
+  "in_key": {
+   "wrong": 2,
+   "right": 1
+  },
+  "accuracy": {
+   "k": 4,
+   "n": 6,
+   "p": 0.6667,
+   "lo": 0.3,
+   "hi": 0.9032
+  },
+  "known_wrong_rejected": {
+   "k": 2,
+   "n": 4,
+   "p": 0.5,
+   "lo": 0.15,
+   "hi": 0.85
+  },
+  "known_right_confirmed": {
+   "k": 2,
+   "n": 2,
+   "p": 1.0,
+   "lo": 0.3424,
+   "hi": 1.0
+  },
+  "per_pack": {
+   "pack_1": {
+    "accuracy": {
+     "k": 4,
+     "n": 6,
+     "p": 0.6667,
+     "lo": 0.3,
+     "hi": 0.9032
+    },
+    "wrong_rejected": {
+     "k": 2,
+     "n": 4,
+     "p": 0.5,
+     "lo": 0.15,
+     "hi": 0.85
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   }
+  },
+  "per_file": {
+   "ans_1.jsonl": {
+    "accuracy": {
+     "k": 2,
+     "n": 3,
+     "p": 0.6667,
+     "lo": 0.2077,
+     "hi": 0.9385
+    },
+    "wrong_rejected": {
+     "k": 1,
+     "n": 2,
+     "p": 0.5,
+     "lo": 0.0945,
+     "hi": 0.9055
+    },
+    "right_confirmed": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    }
+   },
+   "ans_1_b.jsonl": {
+    "accuracy": {
+     "k": 2,
+     "n": 3,
+     "p": 0.6667,
+     "lo": 0.2077,
+     "hi": 0.9385
+    },
+    "wrong_rejected": {
+     "k": 1,
+     "n": 2,
+     "p": 0.5,
+     "lo": 0.0945,
+     "hi": 0.9055
+    },
+    "right_confirmed": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    }
+   }
+  },
+  "per_family": {
+   "r5:test_it0:recognised": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r7:r7a02:opwwhole": {
+    "accuracy": {
+     "k": 0,
+     "n": 2,
+     "p": 0.0,
+     "lo": 0.0,
+     "hi": 0.6576
+    },
+    "wrong_rejected": {
+     "k": 0,
+     "n": 2,
+     "p": 0.0,
+     "lo": 0.0,
+     "hi": 0.6576
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r7:r7a09:scctl": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   }
+  },
+  "missed": [
+   [
+    "qhv6z2s",
+    "ans_1.jsonl"
+   ],
+   [
+    "qhv6z2s",
+    "ans_1_b.jsonl"
+   ]
+  ]
+ },
+ "readers": {
+  "ans_1.jsonl": {
+   "items": 26,
+   "packs": [
+    "1"
+   ],
+   "real_right": {
+    "k": 23,
+    "n": 23,
+    "p": 1.0,
+    "lo": 0.8569,
+    "hi": 1.0
+   },
+   "decoy_accuracy": {
+    "k": 2,
+    "n": 3,
+    "p": 0.6667,
+    "lo": 0.2077,
+    "hi": 0.9385
+   },
+   "unsure": 0,
+   "low_confidence": 0
+  },
+  "ans_1_b.jsonl": {
+   "items": 26,
+   "packs": [
+    "1"
+   ],
+   "real_right": {
+    "k": 23,
+    "n": 23,
+    "p": 1.0,
+    "lo": 0.8569,
+    "hi": 1.0
+   },
+   "decoy_accuracy": {
+    "k": 2,
+    "n": 3,
+    "p": 0.6667,
+    "lo": 0.2077,
+    "hi": 0.9385
+   },
+   "unsure": 0,
+   "low_confidence": 0
+  }
+ },
+ "agreement": {
+  "items_read_twice": 26,
+  "agree_right": {
+   "k": 26,
+   "n": 26,
+   "p": 1.0,
+   "lo": 0.8713,
+   "hi": 1.0
+  },
+  "agree_act": {
+   "k": 26,
+   "n": 26,
+   "p": 1.0,
+   "lo": 0.8713,
+   "hi": 1.0
+  },
+  "rule": "a measure holds only if it holds for every reader"
+ },
+ "problems": [],
+ "unknown_items": [],
+ "threshold": 0.9,
+ "definitions": {
+  "right": "speaks_of_x yes, own_opinion yes, act agrees with the effect class (report_*: and other_decision names Y)",
+  "right_extent": "right and (own_whole / report_whole => extent whole)",
+  "interval": "Wilson 95%; weighted: Wilson at the Kish effective sample size, finite-population corrected, strata weighted by population",
+  "decoy_accuracy": "known wrong: not confirmed (A: not right; B: not link); known right: right"
+ }
+}

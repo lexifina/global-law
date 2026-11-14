@@ -1,0 +1,71 @@
+{
+ "run": "r8f03",
+ "class": "fjc8_s1",
+ "type": "B",
+ "brief": "B",
+ "table": "history",
+ "self_test": false,
+ "created": "2026-11-14 01:10:08",
+ "args": {
+  "cls": "fjc8_s1",
+  "cert": [
+   "round8/agents/fjc8/scope_cert"
+  ],
+  "out": "round8/audit/r8f03/",
+  "n": 80,
+  "exclude": [],
+  "ids": null,
+  "pairs": null,
+  "match": [
+   "table=history"
+  ],
+  "lean_classes": null,
+  "lean_certs": null,
+  "seed": 7,
+  "pack_size": 40,
+  "decoy_share": 0.12,
+  "decoy_wrong_share": 0.6,
+  "decoy_families": "",
+  "pad_min": 500,
+  "pad_max": 1600,
+  "dry_run": false,
+  "force": false,
+  "mark_selftest": false
+ },
+ "inputs": [
+  {
+   "treatments": null,
+   "history": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/agents/fjc8/scope_cert/history_delta.tsv",
+   "witness": null,
+   "class": null,
+   "joined": null,
+   "anchor": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/agents/fjc8/scope_cert/history_anchor_delta.tsv",
+   "hclaim": null,
+   "sha1": {
+    "history": "2b21a35ae0dedcd30788f9c6780f1cf5263208ea",
+    "anchor": "7c8c0ece4c6a82d9013aeec1d4c142e4cd20f241"
+   },
+   "bad_rows": 0,
+   "cert": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/agents/fjc8/scope_cert",
+   "rows": 29,
+   "kept": 29
+  }
+ ],
+ "population": 29,
+ "real": 29,
+ "decoys_wrong": 2,
+ "decoys_right": 2,
+ "packs": {
+  "pack_1.md": {
+   "items": 33,
+   "real": 29,
+   "decoys": 4
+  }
+ },
+ "relocated_quotes": 0,
+ "decoy_pool": {
+  "path": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/audit/decoy_pool_B.jsonl",
+  "sha1": "45cc542ecece5e34c757d12d3fc67b0028bef470"
+ },
+ "warnings": []
+}

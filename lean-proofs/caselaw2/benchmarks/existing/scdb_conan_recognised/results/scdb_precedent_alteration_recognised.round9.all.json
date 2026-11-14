@@ -1,0 +1,32 @@
+{
+ "blind": false,
+ "build": {
+  "source": "round9/results/v9c/old_by_class.txt"
+ },
+ "court": "supreme",
+ "dataset": "scdb_precedent_alteration_recognised",
+ "generated": "2026-11-14T03:43:02+00:00",
+ "label": "round9",
+ "link": {},
+ "metrics": {
+  "precision": {
+   "hi": 0.865014216598336,
+   "k": 177,
+   "lo": 0.7627108753940414,
+   "n": 216,
+   "p": 0.8194444444444444
+  },
+  "recall": {
+   "hi": 0.6910082693260261,
+   "k": 177,
+   "lo": 0.5786468775840995,
+   "n": 278,
+   "p": 0.6366906474820144
+  }
+ },
+ "notes": "Burned key (not blind). The explicit-only row is scdb_precedent_alteration. Round 9 refuses Supreme Court syllabus quotes (the reporter's words), which removed a few rows deliberately.",
+ "primary": "recall",
+ "row_label": "SCDB precedentAlteration, counting overrulings recognised by a later court",
+ "split": "all",
+ "tests": "overruling"
+}

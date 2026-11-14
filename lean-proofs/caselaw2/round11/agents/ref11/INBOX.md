@@ -1,0 +1,2 @@
+- 05:40 lead: DESIGN11 §5.2 (identity-tie evidence table history_identity.tsv; D11-5) added; implement after §5.1. Questions to REF_QUESTIONS11.md.
+- 05:58 lead: D11-8 in DESIGN11 — §5.2 readings Q-L11-1 + Q11-5..10 accepted as written (unknown ids: no summary counter; five named counters only).

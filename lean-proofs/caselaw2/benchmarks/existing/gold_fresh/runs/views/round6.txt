@@ -1,0 +1,73 @@
+fresh gold (round 7, two date views), split=dev, label=round6, pairs=165, result_sha1=e34da4c5f8fd6d77d8673196d54b88f3fca23469
+
+fresh gold, split=dev, label=round6, view=model, pairs=165
+dimension     key                          n       a a_date a_kind      b      c      d      e   strict (95% CI)            lenient (95% CI)
+all           all                        165      50     30      0      5     23      0     57   0.303 [0.238,0.377]      0.654 [0.579,0.723]
+burned_crs    inCRS                      146      49     29      0      5     20      0     43   0.336 [0.264,0.416]      0.706 [0.627,0.773]
+burned_crs    notInCRS                    19       1      1      0      0      3      0     14   0.053 [0.009,0.246]      0.263 [0.118,0.488]
+era           1946-1991                   78      16     21      0      3     13      0     25   0.205 [0.130,0.307]      0.679 [0.570,0.772]
+era           1992on                      29      16      2      0      0      3      0      8   0.552 [0.376,0.716]      0.724 [0.543,0.853]
+era           to1945                      58      18      7      0      2      7      0     24   0.310 [0.206,0.438]      0.586 [0.458,0.704]
+express       express                    145      50     28      0      3     22      0     42   0.345 [0.272,0.425]      0.710 [0.632,0.778]
+express       implied                     20       0      2      0      2      1      0     15   0.000 [0.000,0.161]      0.250 [0.112,0.469]
+n_sources     1                           95      26     11      0      2     14      0     42   0.274 [0.194,0.371]      0.558 [0.458,0.654]
+n_sources     2+                          70      24     19      0      3      9      0     15   0.343 [0.242,0.460]      0.786 [0.676,0.866]
+scope         full                       152      50     28      0      3     17      0     54   0.329 [0.259,0.407]      0.645 [0.566,0.716]
+scope         partial                     13       0      2      0      2      6      0      3   0.000 [0.000,0.228]      0.769 [0.497,0.918]
+scope_express full+express               132      50     26      0      1     16      0     39   0.379 [0.301,0.464]      0.705 [0.622,0.776]
+scope_express full+implied                20       0      2      0      2      1      0     15   0.000 [0.000,0.161]      0.250 [0.112,0.469]
+scope_express partial+express             13       0      2      0      2      6      0      3   0.000 [0.000,0.228]      0.769 [0.497,0.918]
+source        blaustein_field_1958        72      19      8      0      3      8      0     34   0.264 [0.176,0.376]      0.528 [0.414,0.639]
+source        gerhardt_1991               84      28     21      0      4     10      0     21   0.333 [0.242,0.440]      0.750 [0.648,0.830]
+source        payne_n1_1991               18       0     12      0      1      4      0      1   0.000 [0.000,0.176]      0.944 [0.742,0.990]
+source        wikipedia                   80      31     18      0      1     13      0     17   0.388 [0.288,0.497]      0.787 [0.686,0.863]
+precision side (model view, this half of the model's Supreme Court overrulings): {"listed": 80, "unlisted": 12, "targetListedOtherOverruler": 1} of 93; all halves: 169
+
+fresh gold, split=dev, label=round6, view=attributed, pairs=165
+dimension     key                          n       a a_date a_kind      b      c      d      e   strict (95% CI)            lenient (95% CI)
+all           all                        165      80      0      0      5     23      0     57   0.485 [0.410,0.561]      0.654 [0.579,0.723]
+burned_crs    inCRS                      146      78      0      0      5     20      0     43   0.534 [0.454,0.613]      0.706 [0.627,0.773]
+burned_crs    notInCRS                    19       2      0      0      0      3      0     14   0.105 [0.029,0.314]      0.263 [0.118,0.488]
+era           1946-1991                   78      37      0      0      3     13      0     25   0.474 [0.367,0.584]      0.679 [0.570,0.772]
+era           1992on                      29      18      0      0      0      3      0      8   0.621 [0.440,0.773]      0.724 [0.543,0.853]
+era           to1945                      58      25      0      0      2      7      0     24   0.431 [0.312,0.559]      0.586 [0.458,0.704]
+express       express                    145      78      0      0      3     22      0     42   0.538 [0.457,0.617]      0.710 [0.632,0.778]
+express       implied                     20       2      0      0      2      1      0     15   0.100 [0.028,0.301]      0.250 [0.112,0.469]
+n_sources     1                           95      37      0      0      2     14      0     42   0.390 [0.297,0.490]      0.558 [0.458,0.654]
+n_sources     2+                          70      43      0      0      3      9      0     15   0.614 [0.497,0.720]      0.786 [0.676,0.866]
+scope         full                       152      78      0      0      3     17      0     54   0.513 [0.434,0.591]      0.645 [0.566,0.716]
+scope         partial                     13       2      0      0      2      6      0      3   0.154 [0.043,0.422]      0.769 [0.497,0.918]
+scope_express full+express               132      76      0      0      1     16      0     39   0.576 [0.490,0.657]      0.705 [0.622,0.776]
+scope_express full+implied                20       2      0      0      2      1      0     15   0.100 [0.028,0.301]      0.250 [0.112,0.469]
+scope_express partial+express             13       2      0      0      2      6      0      3   0.154 [0.043,0.422]      0.769 [0.497,0.918]
+source        blaustein_field_1958        72      27      0      0      3      8      0     34   0.375 [0.272,0.490]      0.528 [0.414,0.639]
+source        gerhardt_1991               84      49      0      0      4     10      0     21   0.583 [0.476,0.683]      0.750 [0.648,0.830]
+source        payne_n1_1991               18      12      0      0      1      4      0      1   0.667 [0.438,0.837]      0.944 [0.742,0.990]
+source        wikipedia                   80      49      0      0      1     13      0     17   0.613 [0.503,0.712]      0.787 [0.686,0.863]
+precision side (attributed view, this half of the model's Supreme Court overrulings): {"listed": 80, "unlisted": 12, "targetListedOtherOverruler": 1} of 93; all halves: 169
+
+side by side (k/n, rate [Wilson 95%]); model = R5-3 timeline, attributed = recognised overrulings dated from Y
+dimension     key                          n  strict model                strict attributed           lenient model               lenient attributed          
+all           all                        165   50 0.303 [0.238,0.377]      80 0.485 [0.410,0.561]     108 0.654 [0.579,0.723]     108 0.654 [0.579,0.723]     
+burned_crs    inCRS                      146   49 0.336 [0.264,0.416]      78 0.534 [0.454,0.613]     103 0.706 [0.627,0.773]     103 0.706 [0.627,0.773]     
+burned_crs    notInCRS                    19    1 0.053 [0.009,0.246]       2 0.105 [0.029,0.314]       5 0.263 [0.118,0.488]       5 0.263 [0.118,0.488]     
+era           1946-1991                   78   16 0.205 [0.130,0.307]      37 0.474 [0.367,0.584]      53 0.679 [0.570,0.772]      53 0.679 [0.570,0.772]     
+era           1992on                      29   16 0.552 [0.376,0.716]      18 0.621 [0.440,0.773]      21 0.724 [0.543,0.853]      21 0.724 [0.543,0.853]     
+era           to1945                      58   18 0.310 [0.206,0.438]      25 0.431 [0.312,0.559]      34 0.586 [0.458,0.704]      34 0.586 [0.458,0.704]     
+express       express                    145   50 0.345 [0.272,0.425]      78 0.538 [0.457,0.617]     103 0.710 [0.632,0.778]     103 0.710 [0.632,0.778]     
+express       implied                     20    0 0.000 [0.000,0.161]       2 0.100 [0.028,0.301]       5 0.250 [0.112,0.469]       5 0.250 [0.112,0.469]     
+n_sources     1                           95   26 0.274 [0.194,0.371]      37 0.390 [0.297,0.490]      53 0.558 [0.458,0.654]      53 0.558 [0.458,0.654]     
+n_sources     2+                          70   24 0.343 [0.242,0.460]      43 0.614 [0.497,0.720]      55 0.786 [0.676,0.866]      55 0.786 [0.676,0.866]     
+scope         full                       152   50 0.329 [0.259,0.407]      78 0.513 [0.434,0.591]      98 0.645 [0.566,0.716]      98 0.645 [0.566,0.716]     
+scope         partial                     13    0 0.000 [0.000,0.228]       2 0.154 [0.043,0.422]      10 0.769 [0.497,0.918]      10 0.769 [0.497,0.918]     
+scope_express full+express               132   50 0.379 [0.301,0.464]      76 0.576 [0.490,0.657]      93 0.705 [0.622,0.776]      93 0.705 [0.622,0.776]     
+scope_express full+implied                20    0 0.000 [0.000,0.161]       2 0.100 [0.028,0.301]       5 0.250 [0.112,0.469]       5 0.250 [0.112,0.469]     
+scope_express partial+express             13    0 0.000 [0.000,0.228]       2 0.154 [0.043,0.422]      10 0.769 [0.497,0.918]      10 0.769 [0.497,0.918]     
+source        blaustein_field_1958        72   19 0.264 [0.176,0.376]      27 0.375 [0.272,0.490]      38 0.528 [0.414,0.639]      38 0.528 [0.414,0.639]     
+source        gerhardt_1991               84   28 0.333 [0.242,0.440]      49 0.583 [0.476,0.683]      63 0.750 [0.648,0.830]      63 0.750 [0.648,0.830]     
+source        payne_n1_1991               18    0 0.000 [0.000,0.176]      12 0.667 [0.438,0.837]      17 0.944 [0.742,0.990]      17 0.944 [0.742,0.990]     
+source        wikipedia                   80   31 0.388 [0.288,0.497]      49 0.613 [0.503,0.712]      63 0.787 [0.686,0.863]      63 0.787 [0.686,0.863]     
+
+moves model -> attributed: {"a_date->a": 30}
+attributed reading of status.tsv: {"groups": 9227, "groups_recognisedLater_without_neg_unchanged": 50, "groups_with_neg": 1582, "groups_with_neg_issue": 913, "groups_with_neg_whole": 669, "moved_gap_shows_other_actor_neg": 4, "recognisedLater_rows_read_negative": 1787, "recognised_rows": 19131, "rows_changed": 1791, "start_already_dateY_dateY_eq_dateW": 7, "start_already_dateY_via_recognisedLater_rows": 1571, "start_moved_to_dateY_no_recognisedLater_row": 4}
+written: benchmarks/existing/gold_fresh/runs/views/round6\fresh7_dev.json

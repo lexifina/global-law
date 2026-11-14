@@ -503,3 +503,40 @@ These entries are the whole reading. The reference was written from them alone.
     both answers. Lean keeps the writ-refused decision (precedence 3 over 2), which is the doctrine of S-TX-3.
     The reference's `_resolve.binds` now refuses to let the unpromoted decision displace or equal the promoted one
     (R4-86). The universe is `fixtures/regress/r4-63322`. Real-data conflict rows did not change (92, 0 differ).
+
+## Round 5 (13 Nov 2026): recognised overrulings and operative words (`round5/DESIGN5.md`)
+
+87. **A status may change on a later court's words.** Rounds 1-4: only the overruling court's own words. Round 5: a
+    later decision W of a court with power over X, stating in a certified majority sentence naming X and Y that X
+    was overruled by Y, makes X `unknown:recognisedLater` from date(Y) and negative from date(W)
+    (`Spec.recogEffects`, `Cert.checkRecognised`). The model never backdates the negative to date(Y). No revival of a
+    recognised effect after Y or W is reinstated (conservative).
+88. **Cue lists for the round-5 text modes** (`recognised`, `disqualify_recognised`, `operative`, `operative_whole`,
+    `operative_limit`, `disqualify_operative`, `self_announced`) are data in the one cue table. Substring matching
+    means a disqualifier can refuse a true statement (for instance "declining" in a neighbouring clause); never the
+    reverse.
+89. **Operative words are checked strictly only where a row claims the class.** Rows of rounds 2-3 with such wording
+    keep their effect and are only classified `operativeWords`. The rows of this round failed their blind audit
+    (79% / 27%) and are not installed.
+90. **Class of a row** (`Cert.classOf`) is computed from the verdict, the explicit flag and the quote; `oclass` on a
+    status row is the least class among the treatment effects that make the status (history and statutes have none).
+91. **Open, found by the round-5 generator, not fixed:** an unknown date (0) is read as a real day in the power
+    lookup (`powerAnyDomain`, `powerOn`, the `citesLaterNegated` test): Lean can give or refuse power to an undated
+    decision where the reference says unknown (13 of 300 generated universes, no status key). And
+    `canChangeStatus` gives a successor court its predecessor's power only between courts of last resort; 2 real
+    recognised rows (New Jersey) are refused by Lean and admitted by the reference.
+
+## Round 6 (13 Nov 2026): anchored history rows (`round6/history/DESIGN6.md` §4)
+
+92. **A history row may be certified by two quotes of the acting decision's text.** Rounds 1-5: the target evidence
+    had to be in the disposition quote or its ±400-character window. Round 6: with a line in `history_anchor.tsv`,
+    the evidence must instead be in a second quote (the anchor: "Reported below: …", "Certiorari to …") anywhere in
+    the same text, with an anchor cue, no mark of an earlier proceeding ("former appeal", "see also" …) and a part
+    of majority, plurality, per curiam or head matter (`Cert.checkAnchored`). The anchor proves where the citation
+    is, not that the cited decision is the one the judgment line disposes of; that link is the linker's rule and is
+    audited, not proved. A failed anchor rejects the row (no fall-back to the one-quote check).
+93. **Anchor table rules.** The first line for a history id wins; later lines for the id and lines whose id is no
+    history row are ignored and counted (`anchor_duplicates`, `anchor_unknown_ids`); a malformed line is a bad row
+    and its history row is checked as if it had no anchor. The cue lists `anchor` and `disqualify_anchor` are data
+    in the one cue table; substring matching can refuse a true anchor (e.g. "see also" elsewhere in the sentence),
+    never admit one without a cue.

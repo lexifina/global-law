@@ -1,0 +1,18 @@
+== A3 QSBS post-2025 age 2, full exit, A only, no gifts: 41807 positions, 58959 moves tried, 130 move families
+   baseline (plain): family 25680, A 25680, total tax 14320
+   +10465  family 36145, A 36145, tax 3855  [contribP + sellP-stock + sellStock]
+        wait 5y; A sells 1/5 of shares to outsider; A contributes 1/1 of C shares to P (§351); A sells all P stock to outsider
+   +10037  family 35717, A 35717, tax 4283  [sellStock]
+        wait 5y; A sells 1/5 of shares to outsider; A sells 1/4 of shares to outsider; wait 1y; A sells 1/1 of shares to outsider
+   +8608  family 34288, A 34288, tax 5712  [contribP + sellP-stock]
+        wait 5y; A contributes 1/1 of C shares to P (§351); A sells all P stock to outsider
+   +5038  family 30718, A 30718, tax 9282  [electS + liquidate]
+        C elects S; wait 1y; wait 5y; C liquidates
+   +4800  family 30480, A 30480, tax 9520  [dividend + electS + sellAsset]
+        C elects S; wait 1y; wait 5y; C sells asset; C pays dividend 40000
+   +3808  family 29488, A 29488, tax 10512  [liquidate]
+        wait 5y; C liquidates
+   +398  family 26078, A 26078, tax 13922  [P-liquidate + P-sellStock + contribP + dividend]
+        C pays dividend 10000; A contributes 1/1 of C shares to P (§351); P sells its C shares to outsider; wait 1y; P liquidates
+   +398  family 26078, A 26078, tax 13922  [P-distribute + P-sellStock + contribP + dividend]
+        C pays dividend 10000; A contributes 1/1 of C shares to P (§351); P sells its C shares to outsider; P distributes 23910 to A

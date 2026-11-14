@@ -1,0 +1,92 @@
+<h2 id="model">What changed in the model</h2>
+
+<p>Until this round the model changed a case's status on one kind of evidence only: a sentence of the overruling
+court itself, in its majority opinion, that names the case and uses a word such as "overrule". Every such sentence
+is quoted, and a checker written in Lean verifies the quote against the opinion's text and verifies that the court
+had the power to overrule the case. <i>Brown</i> has no such sentence about <i>Plessy</i>, so <i>Plessy</i> stayed
+"good law, at risk".</p>
+
+<p>The round adds two more kinds of evidence. Neither is an inference: both are still quoted sentences of a court
+with power, checked the same way.</p>
+
+<h3>Four classes of row</h3>
+<div class="tw"><table>
+<thead><tr><th>Class</th><th>What the quoted sentence is</th><th>Effect on the earlier case</th><th>New?</th></tr></thead>
+<tbody>
+<tr><td><b>Self-announced</b></td><td>The overruling court's own words, with a term of art: overrule, disapprove,
+recede from, abrogate.</td><td>Overruled from the overruling decision's date (or partly negative when the words
+are limited).</td><td>No. This is the model of rounds 1 to 4.</td></tr>
+<tr><td><b>Operative words</b></td><td>The court's own words on a named case, or on "the language / doctrine / rule
+of" a named case, with another verb: rejected, repudiated, no longer the law, not to be followed.</td><td>Partly
+negative, unless the sentence disposes of the whole case ("X is no longer good law") and has no limiting words
+("to the extent", "in the field of").</td><td>Partly: rounds 2 and 3 already admitted some such wordings as
+overrulings; the round adds a stricter check for new rows and reports the class separately.</td></tr>
+<tr><td><b>Recognised</b></td><td>A <i>later</i> decision W, of a court that itself has the power to overrule X,
+says in its majority opinion that X was overruled by Y. Both cases must be named inside the quoted
+sentence.</td><td>Good law before Y. "Unknown: recognised later" from Y's date to the day before W. Overruled from
+W's date, attributed to Y.</td><td>Yes. This is the main change.</td></tr>
+<tr><td><b>At-risk witness</b></td><td>The same kind of later statement where the later court has only standing
+(a panel speaking of its own court's case), or the sentence fails the stricter check.</td><td>None. The case
+shows as "at risk".</td><td>No. Round 4's tier, kept as it was.</td></tr>
+</tbody></table></div>
+
+<h3>The timeline of a recognised overruling</h3>
+<div class="tw"><table>
+<thead><tr><th>Question date</th><th>Status of X</th><th>A citation to X on that date is reported as</th></tr></thead>
+<tbody>
+<tr><td>before Y is decided</td><td>good law</td><td>nothing</td></tr>
+<tr><td>from Y's date to the day before W</td><td>unknown: recognised later</td><td>"at risk" (new finding), never
+"cites an overruled case"</td></tr>
+<tr><td>from W's date</td><td>overruled, by Y</td><td>"cites an overruled case", tagged <i>recognised</i></td></tr>
+</tbody></table></div>
+<p>The model does not backdate. It never says X was overruled on a day when no court with power had yet said so in
+words. That is a deliberate choice: the alternative, marking X overruled from Y's date, would be the model adopting
+a later court's reading of an earlier opinion as if the earlier court had written it.</p>
+
+<h3>What is proved</h3>
+<p>The Lean sources contain no <code>sorry</code>, no new axiom and no <code>native_decide</code>. Build 1 has 175
+machine-checked theorems (141 before; none of the 141 statements changed) and 34 deliberately broken variants of the
+rules ("mutants"; 27 before), every one of which is caught by at least one of 35 executable properties.</p>
+<div class="tw"><table>
+<thead><tr><th>Theorem (Lean name)</th><th>What it says</th></tr></thead>
+<tbody>
+<tr><td><code>recognised_never_neg_before_witness</code></td><td>If a case is negative on a date before the later
+court spoke, the negative comes from some other event, never from the recognised row.</td></tr>
+<tr><td><code>recognised_needs_power</code>, <code>checkRecognised_needs_power</code>,
+<code>recognised_effect_needs_power</code></td><td>Without the later court's power over the case, the checker never
+recognises the row and the row has no effect at all.</td></tr>
+<tr><td><code>checkRecognised_sound</code></td><td>A recognised row passed every check: majority part, a
+recognition word, no negation or question, both cases named in the quote, dates in order, power.</td></tr>
+<tr><td><code>checkRecognised_fallback</code>, <code>checkRecognised_no_claim</code>,
+<code>witness_without_claim_no_effect</code></td><td>A row that is not recognised is treated exactly as round 4
+treated it: at risk, no change of status.</td></tr>
+<tr><td><code>status_append_comm</code> (with the unchanged <code>status_perm</code>)</td><td>The order in which
+rows are read still does not matter.</td></tr>
+<tr><td><code>explicit_recognised_agree_from_witness</code></td><td>If Y also said it itself, the self-announced
+row and the recognised row give the same status from the later court's date on.</td></tr>
+<tr><td><code>recognised_never_weakens</code></td><td>Adding a recognised row never makes any status less
+severe.</td></tr>
+<tr><td><code>recognised_unknown_between</code>, <code>recognised_neg_from_witness</code>,
+<code>plessy_timeline</code></td><td>The three-step timeline above, in general and on the <i>Plessy</i>
+example.</td></tr>
+<tr><td><code>recognisedLater_not_citesOverruled</code></td><td>A citation made between Y and W is never reported as
+citing an overruled case.</td></tr>
+<tr><td><code>demoted_never_neg</code>, <code>checkOperative_sound</code></td><td>Operative words that do not dispose
+of the whole case can make it partly negative at most; an admitted operative-words row names its target in the
+quote and is not about an argument or a contention.</td></tr>
+</tbody></table></div>
+<p class="muted">With no round-5 input table present, the new program's output on the round-4 data is identical,
+byte for byte, to round 4's (status, findings, certificates, splits). Counts are for build 1 (12:05, 13 November);
+the final counts are in the round report.</p>
+
+<h3>What was left out on purpose</h3>
+<ul>
+<li><b>Inconsistency with no words anywhere.</b> If the later case simply decides the other way and no court with
+power ever says in words that the earlier case is overruled, the model records nothing. Lawyers' lists count these;
+the model does not, and will not.</li>
+<li><b>Doctrines and lines of cases.</b> "The separate-but-equal doctrine" is a target only when the sentence ties it
+to exactly one named case; then the row is on that case, with partial scope, and the doctrine is kept as a label.
+"The <i>Adair</i>-<i>Coppage</i> line of cases" resolves to nothing.</li>
+<li><b>Field limits.</b> "In the field of public education" is stored and shown, and makes the scope partial. The
+model does not reason about fields.</li>
+</ul>

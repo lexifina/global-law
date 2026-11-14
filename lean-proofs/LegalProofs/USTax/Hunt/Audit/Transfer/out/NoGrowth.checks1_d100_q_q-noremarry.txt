@@ -1,0 +1,221 @@
+-- FINDINGS check 1 (scenario A lives)
+  QTIP held to death: wealth=45599981 xfer=54400019 itax=0 builtin=0 kv=45599981 kb=45599981
+  yr5 release unmarried: wealth=45599981 xfer=54400019 itax=0 builtin=0 kv=45599981 kb=45599981
+  yr5 remarry+consent+release: wealth=55199982 xfer=44800018 itax=0 builtin=0 kv=55199982 kb=55199982
+  reverse-QTIP: yr5 release unmarried: wealth=43560000 xfer=56440000 itax=0 builtin=0 kv=43560000 kb=43560000
+  reverse-QTIP: yr5 remarry+consent+release: wealth=47520000 xfer=52480000 itax=0 builtin=0 kv=47520000 kb=47520000
+-- direct plays on the QTIP scenario, trust 100000000 (incFrac=0, split2519=true, spTaxFromTrust=true)
+  hold to death: wealth=45599981 xfer=54400019 itax=0 builtin=0 kv=45599981 kb=45599981
+  yr0 release unmarried: wealth=45599981 xfer=54400019 itax=0 builtin=0 kv=45599981 kb=45599981
+  yr0 remarry, no consent, release: wealth=45599981 xfer=54400019 itax=0 builtin=0 kv=45599981 kb=45599981
+  yr0 remarry+consent+release: wealth=55199982 xfer=44800018 itax=0 builtin=0 kv=55199982 kb=55199982
+  yr5 release unmarried: wealth=45599981 xfer=54400019 itax=0 builtin=0 kv=45599981 kb=45599981
+  yr5 remarry+consent+release: wealth=55199982 xfer=44800018 itax=0 builtin=0 kv=55199982 kb=55199982
+==== QTIP scenario ====
+simple will: grandchildren end with $45.59M after tax; transfer tax $54.40M, built-in income tax $0.00M
+  period 0 Legal.USTax.Hunt.Transfer.Phase.plan: 231 positions, kept 38
+  period 1 Legal.USTax.Hunt.Transfer.Phase.plan: 508 positions, kept 42
+  period 1 Legal.USTax.Hunt.Transfer.Phase.bed: 81 positions, kept 42
+  period 1 Legal.USTax.Hunt.Transfer.Phase.estate (Legal.USTax.Hunt.Transfer.Who.W): 29 positions, kept 29
+  period 2 Legal.USTax.Hunt.Transfer.Phase.plan: 345 positions, kept 55
+  period 3 Legal.USTax.Hunt.Transfer.Phase.plan: 373 positions, kept 55
+  period 4 Legal.USTax.Hunt.Transfer.Phase.plan: 412 positions, kept 60
+  period 4 Legal.USTax.Hunt.Transfer.Phase.bed: 101 positions, kept 60
+  period 4 Legal.USTax.Hunt.Transfer.Phase.estate (Legal.USTax.Hunt.Transfer.Who.C): 43 positions, kept 43
+positions examined: 6486; plans at the end: 43
+#1  $59.11M  (+$13.51M vs simple will)  transfer tax $40.88M, income tax paid $0.00M, built-in $0.00M
+    family: split, C-gift, §2519, trust→child, trust→grandchildren, remarry
+      W marries again
+      consent to split gifts (§2513)
+      spouse gives up QTIP income interest (§2519)
+      trust(H) pays tuition
+      C gives the annual exclusion each year to grandchildren
+      consent to split gifts (§2513)
+      trust(H) pays tuition
+      C gives the annual exclusion each year to grandchildren
+      trust(H) distributes $15.00M to child
+      C gives $14.81M to grandchildren (cash first)
+      trust(H) distributes $0.19M to child
+      trust(H) distributes $8.17M to grandchildren
+      trust(H) distributes $4.76M to grandchildren
+      C gives the annual exclusion each year to grandchildren
+      trust(H) distributes $0.19M to child
+      trust(H) distributes $2.70M to grandchildren
+      C gives the annual exclusion each year to grandchildren
+      trust(W) distributes $0.19M to child
+      trust(W) distributes $0.19M to grandchildren
+      C gives $0.19M to grandchildren (cash first)
+#2  $59.06M  (+$13.46M vs simple will)  transfer tax $40.93M, income tax paid $0.00M, built-in $0.00M
+    family: split, C-gift, §2519, trust→child, remarry
+      W marries again
+      consent to split gifts (§2513)
+      spouse gives up QTIP income interest (§2519)
+      trust(H) pays tuition
+      C gives the annual exclusion each year to grandchildren
+      consent to split gifts (§2513)
+      trust(H) pays tuition
+      C gives the annual exclusion each year to grandchildren
+      trust(H) distributes $15.00M to child
+      C gives $14.81M to grandchildren (cash first)
+      trust(H) distributes $0.19M to child
+      C gives the annual exclusion each year to grandchildren
+      trust(H) distributes $0.19M to child
+#3  $58.97M  (+$13.38M vs simple will)  transfer tax $41.02M, income tax paid $0.00M, built-in $0.00M
+    family: split, §2519, trust→child, trust→grandchildren, remarry
+      W marries again
+      consent to split gifts (§2513)
+      spouse gives up QTIP income interest (§2519)
+      trust(W) distributes $15.00M to child
+      trust(H) pays tuition
+      trust(H) distributes $14.74M to grandchildren
+      trust(H) pays tuition
+      trust(H) distributes $8.35M to grandchildren
+      trust(H) distributes $4.87M to grandchildren
+      trust(W) distributes $8.74M to grandchildren
+      trust(H) distributes $2.84M to grandchildren
+      trust(W) distributes $5.10M to grandchildren
+      trust(W) distributes $2.97M to grandchildren
+      trust(H) distributes $1.65M to grandchildren
+      trust(H) distributes $0.96M to grandchildren
+      trust(H) distributes $0.56M to grandchildren
+      trust(H) distributes $0.78M to grandchildren
+      C gives the annual exclusion each year to grandchildren
+#4  $58.97M  (+$13.38M vs simple will)  transfer tax $41.02M, income tax paid $0.00M, built-in $0.00M
+    family: split, §2519, trust→child, remarry
+      W marries again
+      consent to split gifts (§2513)
+      spouse gives up QTIP income interest (§2519)
+      trust(H) pays tuition
+      C gives the annual exclusion each year to grandchildren
+      consent to split gifts (§2513)
+      trust(H) pays tuition
+      C gives the annual exclusion each year to grandchildren
+      trust(W) distributes $15.00M to child
+      C gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+#5  $55.47M  (+$9.88M vs simple will)  transfer tax $44.52M, income tax paid $0.00M, built-in $0.00M
+    family: split, §2519, trust→grandchildren, remarry
+      W marries again
+      consent to split gifts (§2513)
+      spouse gives up QTIP income interest (§2519)
+      trust(H) pays tuition
+      trust(H) distributes $14.74M to grandchildren
+      trust(W) distributes $36.00M to grandchildren
+      trust(H) pays tuition
+      trust(H) distributes $8.35M to grandchildren
+      trust(H) distributes $4.87M to grandchildren
+      trust(H) distributes $2.84M to grandchildren
+      trust(H) distributes $1.65M to grandchildren
+      trust(H) distributes $0.96M to grandchildren
+      trust(H) distributes $0.56M to grandchildren
+      C gives the annual exclusion each year to grandchildren
+      trust(H) distributes $0.32M to grandchildren
+      trust(H) distributes $0.19M to grandchildren
+#6  $55.47M  (+$9.88M vs simple will)  transfer tax $44.52M, income tax paid $0.00M, built-in $0.00M
+    family: split, §2519, remarry
+      W marries again
+      consent to split gifts (§2513)
+      spouse gives up QTIP income interest (§2519)
+      trust(H) pays tuition
+      C gives the annual exclusion each year to grandchildren
+      consent to split gifts (§2513)
+      trust(H) pays tuition
+      W gives the annual exclusion each year to child
+      C gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+  one- and two-idea plans (best of each family):
+    +$5.00M  [§2519, trust→child]
+    +$4.75M  [C-gift, trust→child]
+    +$4.64M  [trust→child, trust→grandchildren]
+    +$4.63M  [trust→child, remarry]
+    +$4.63M  [trust→child]
+    +$0.37M  [§2519, trust→grandchildren]
+    +$0.37M  [§2519, remarry]
+    +$0.37M  [§2519]
+    +$0.00M  [trust→grandchildren, remarry]
+    +$0.00M  [trust→grandchildren]
+    +$0.00M  [remarry]
+    +$0.00M  []
+  kind of move: best plan with it / best plan without it
+    split: $59.11M / $50.78M
+    C-gift: $59.11M / $58.97M
+    529: $50.78M / $59.11M
+    annual→child: $55.47M / $59.11M
+    annual→grandchildren: $59.11M / $50.23M
+    §2519: $59.11M / $50.35M
+    trust→child: $59.11M / $55.47M
+    trust→grandchildren: $59.11M / $59.06M
+    trust-tuition: $59.11M / $50.35M
+    remarry: $59.11M / $50.65M
+==== QTIP scenario, no remarry ====
+simple will: grandchildren end with $45.59M after tax; transfer tax $54.40M, built-in income tax $0.00M
+  period 0 Legal.USTax.Hunt.Transfer.Phase.plan: 56 positions, kept 13
+  period 1 Legal.USTax.Hunt.Transfer.Phase.plan: 89 positions, kept 14
+  period 1 Legal.USTax.Hunt.Transfer.Phase.bed: 21 positions, kept 14
+  period 1 Legal.USTax.Hunt.Transfer.Phase.estate (Legal.USTax.Hunt.Transfer.Who.W): 11 positions, kept 11
+  period 2 Legal.USTax.Hunt.Transfer.Phase.plan: 114 positions, kept 22
+  period 3 Legal.USTax.Hunt.Transfer.Phase.plan: 116 positions, kept 22
+  period 4 Legal.USTax.Hunt.Transfer.Phase.plan: 126 positions, kept 24
+  period 4 Legal.USTax.Hunt.Transfer.Phase.bed: 40 positions, kept 24
+  period 4 Legal.USTax.Hunt.Transfer.Phase.estate (Legal.USTax.Hunt.Transfer.Who.C): 17 positions, kept 17
+positions examined: 1706; plans at the end: 17
+#1  $50.84M  (+$5.24M vs simple will)  transfer tax $49.15M, income tax paid $0.00M, built-in $0.00M
+    family: C-gift, §2519, trust→child
+      spouse gives up QTIP income interest (§2519)
+      trust(W) distributes $15.00M to child
+      trust(W) pays tuition
+      C funds 529 with five-year election
+      trust(W) pays tuition
+      W gives the annual exclusion each year to child
+      C gives $14.81M to grandchildren (cash first)
+      trust(W) distributes $0.19M to child
+      C gives the annual exclusion each year to grandchildren
+      trust(W) distributes $0.19M to child
+      C gives the annual exclusion each year to grandchildren
+      trust(W) distributes $0.19M to child
+      C gives the annual exclusion each year to grandchildren
+      trust(W) distributes $0.19M to child
+#2  $50.60M  (+$5.00M vs simple will)  transfer tax $49.39M, income tax paid $0.00M, built-in $0.00M
+    family: §2519, trust→child, trust→grandchildren
+      spouse gives up QTIP income interest (§2519)
+      trust(W) distributes $15.00M to child
+      trust(W) pays tuition
+      trust(W) distributes $15.00M to grandchildren
+      trust(W) pays tuition
+      trust(W) distributes $34.80M to grandchildren
+      W gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+#3  $50.60M  (+$5.00M vs simple will)  transfer tax $49.39M, income tax paid $0.00M, built-in $0.00M
+    family: §2519, trust→child
+      spouse gives up QTIP income interest (§2519)
+      trust(W) pays tuition
+      W gives the annual exclusion each year to child
+      trust(W) pays tuition
+      W gives the annual exclusion each year to child
+      W gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+      trust(W) distributes $15.00M to child
+  one- and two-idea plans (best of each family):
+    +$5.00M  [§2519, trust→child]
+    +$4.75M  [C-gift, trust→child]
+    +$4.66M  [trust→child, trust→grandchildren]
+    +$4.63M  [trust→child]
+    +$0.37M  [§2519, trust→grandchildren]
+    +$0.37M  [§2519]
+    +$0.00M  [trust→grandchildren]
+    +$0.00M  []
+  kind of move: best plan with it / best plan without it
+    C-gift: $50.84M / $50.60M
+    529: $50.84M / $50.60M
+    annual→child: $50.84M / $50.60M
+    annual→grandchildren: $50.84M / $0.00M
+    §2519: $50.84M / $50.35M
+    trust→child: $50.84M / $45.97M
+    trust→grandchildren: $50.78M / $50.84M
+    trust-tuition: $50.84M / $50.35M
+
+real	0m9.386s
+user	0m0.046s
+sys	0m0.030s

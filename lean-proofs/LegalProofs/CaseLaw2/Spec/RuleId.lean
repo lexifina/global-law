@@ -125,6 +125,8 @@ inductive RuleId where
   | revival
   /-- TM2: prospective overruling (*Sunburst*). -/
   | prospective
+  /-- Round 5 (DESIGN5 §2): an overruling recognised by a later court with power over the target. -/
+  | recognised
   -- fallbacks for unknown data (DESIGN D5)
   /-- Issue domain unknown: the source court's home domain (§8.2 anonymous issue). -/
   | assumeHomeDomain

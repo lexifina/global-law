@@ -1,0 +1,422 @@
+==== S1 HSA + small old IRA, age 56, high earner, family coverage, 2 years ====
+baseline (plain use): worth 80010 (11460 over doing nothing)
+    HSA contribution $9550
+    -- next year --
+    HSA contribution $9550
+searched 8279 positions to depth 8; 41 families
+  +3550 vs baseline  [trad IRA contrib, IRA->Roth conversion, HSA contrib]
+      traditional IRA contribution $8000
+      HSA contribution $9550
+      -- next year --
+      traditional IRA contribution $8000
+      convert $25000 of the IRA to Roth
+      HSA contribution $9550
+==== S1b the same, but only $12,000 of spare cash ====
+baseline (plain use): worth 27750 (7200 over doing nothing)
+    HSA contribution $9550
+    -- next year --
+    HSA contribution $2450
+searched 14597 positions to depth 8; 45 families
+  +2130 vs baseline  [HSA contrib, IRA->HSA]
+      HSA contribution $9550
+      -- next year --
+      HSA contribution $2450
+      IRA -> HSA funding distribution $7100
+  +1135 vs baseline  [trad IRA contrib, IRA->Roth conversion, IRA withdrawal, HSA contrib]
+      withdraw $9000 from the IRA
+      HSA contribution $9550
+      -- next year --
+      HSA contribution $9550
+      traditional IRA contribution $1900
+      convert $1900 of the IRA to Roth
+  +660 vs baseline  [IRA withdrawal, HSA contrib]
+      withdraw $9000 from the IRA
+      HSA contribution $9550
+      -- next year --
+      HSA contribution $9550
+==== S1c self-only -> family mid-year, $12,000 of spare cash, IRA $20,000 ====
+baseline (plain use): worth 38200 (7200 over doing nothing)
+    HSA contribution $9550
+    -- next year --
+    HSA contribution $2450
+searched 44922 positions to depth 8; 49 families
+  +2130 vs baseline  [HSA contrib, IRA->HSA]
+      HSA contribution $9550
+      -- next year --
+      HSA contribution $2450
+      IRA -> HSA funding distribution $7100
+  +179 vs baseline  [trad IRA contrib, IRA->Roth conversion, IRA withdrawal, HSA contrib]
+      traditional IRA contribution $8000
+      convert $8000 of the IRA to Roth
+      convert $5715 of the IRA to Roth
+      withdraw $14285 from the IRA
+      HSA contribution $9550
+      -- next year --
+      HSA contribution $8735
+==== S1d HDHP only from December, none next year ====
+baseline (plain use): worth 50790 (1790 over doing nothing)
+    HSA contribution $9550
+searched 32 positions to depth 6; 7 families
+  nothing beats the baseline
+==== S2 age 72, IRA $30,000 with $20,000 basis, $10,000 pledge a year, deductible IRA contributions ====
+baseline (plain use): worth 53820 (4320 over doing nothing)
+    traditional IRA contribution $8000
+    -- next year --
+    traditional IRA contribution $8000
+    gift to charity from cash $20000
+searched 29946 positions to depth 8; 32 families
+  +4800 vs baseline  [trad IRA contrib, IRA->Roth conversion]
+      convert $30000 of the IRA to Roth
+      traditional IRA contribution $8000
+      -- next year --
+      traditional IRA contribution $8000
+  +1180 vs baseline  [IRA->Roth conversion, QCD (IRA)]
+      charitable distribution from the IRA $10000
+      convert $20000 of the IRA to Roth
+  +480 vs baseline  [IRA->Roth conversion]
+      convert $30000 of the IRA to Roth
+==== S3 Trump account, age 17 -> 19, child's own 10% rate ====
+baseline (plain use): worth 93500 (4500 over doing nothing)
+    Roth IRA contribution $6000
+    Trump account contribution (minor) $5000
+    -- next year --
+    Roth IRA contribution $6000
+    -- next year --
+    Roth IRA contribution $6000
+searched 38097 positions to depth 9; 84 families
+  +15250 vs baseline  [Roth IRA contrib, Trump acct contrib (minor), Trump acct->Roth conversion]
+      Roth IRA contribution $6000
+      Trump account contribution (minor) $5000
+      -- next year --
+      Roth IRA contribution $6000
+      -- next year --
+      Roth IRA contribution $6000
+      convert $65000 of the Trump account to Roth
+  +15250 vs baseline  [trad IRA contrib, IRA->Roth conversion, Trump acct contrib (minor), Trump acct->Roth conversion]
+      traditional IRA contribution $6000
+      Trump account contribution (minor) $5000
+      -- next year --
+      traditional IRA contribution $6000
+      -- next year --
+      traditional IRA contribution $6000
+      convert $18000 of the IRA to Roth
+      convert $65000 of the Trump account to Roth
+  +14000 vs baseline  [Roth IRA contrib, Trump acct->Roth conversion]
+      Roth IRA contribution $6000
+      -- next year --
+      Roth IRA contribution $6000
+      -- next year --
+      Roth IRA contribution $6000
+      convert $60000 of the Trump account to Roth
+  +14000 vs baseline  [trad IRA contrib, IRA->Roth conversion, Trump acct->Roth conversion]
+      traditional IRA contribution $6000
+      -- next year --
+      traditional IRA contribution $6000
+      -- next year --
+      traditional IRA contribution $6000
+      convert $18000 of the IRA to Roth
+      convert $60000 of the Trump account to Roth
+  +13750 vs baseline  [Trump acct contrib (minor), Trump acct contrib (18+), Trump acct->Roth conversion]
+      Trump account contribution (minor) $5000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $6000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $6000
+      convert $77000 of the Trump account to Roth
+  +12500 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion]
+      -- next year --
+      Trump account contribution (18+, IRA rules) $6000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $6000
+      convert $72000 of the Trump account to Roth
+  +10750 vs baseline  [Trump acct contrib (minor), Trump acct->Roth conversion]
+      Trump account contribution (minor) $5000
+      -- next year --
+      convert $65000 of the Trump account to Roth
+  +9500 vs baseline  [Trump acct->Roth conversion]
+      -- next year --
+      convert $60000 of the Trump account to Roth
+==== S3b the same, ABLE-eligible ====
+baseline (plain use): worth 93500 (4500 over doing nothing)
+    Roth IRA contribution $6000
+    Trump account contribution (minor) $5000
+    -- next year --
+    Roth IRA contribution $6000
+    -- next year --
+    Roth IRA contribution $6000
+searched 18909 positions to depth 9; 50 families
+  +17250 vs baseline  [Roth IRA contrib, Trump acct contrib (minor), Trump acct->ABLE]
+      Roth IRA contribution $6000
+      Trump account contribution (minor) $5000
+      roll the whole Trump account into the ABLE account
+      -- next year --
+      Roth IRA contribution $6000
+      -- next year --
+      Roth IRA contribution $6000
+  +16000 vs baseline  [Roth IRA contrib, Trump acct->ABLE]
+      roll the whole Trump account into the ABLE account
+      Roth IRA contribution $6000
+      -- next year --
+      Roth IRA contribution $6000
+      -- next year --
+      Roth IRA contribution $6000
+  +15750 vs baseline  [Trump acct contrib (minor), Trump acct contrib (18+), Trump acct->Roth conversion, Trump acct->ABLE]
+      roll the whole Trump account into the ABLE account
+      Trump account contribution (minor) $5000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $6000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $6000
+      convert $17000 of the Trump account to Roth
+  +15250 vs baseline  [Roth IRA contrib, Trump acct contrib (minor), Trump acct->Roth conversion]
+      Roth IRA contribution $6000
+      Trump account contribution (minor) $5000
+      -- next year --
+      Roth IRA contribution $6000
+      -- next year --
+      Roth IRA contribution $6000
+      convert $65000 of the Trump account to Roth
+  +14500 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion, Trump acct->ABLE]
+      roll the whole Trump account into the ABLE account
+      -- next year --
+      Trump account contribution (18+, IRA rules) $6000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $6000
+      convert $12000 of the Trump account to Roth
+  +14000 vs baseline  [Roth IRA contrib, Trump acct->Roth conversion]
+      Roth IRA contribution $6000
+      -- next year --
+      Roth IRA contribution $6000
+      -- next year --
+      Roth IRA contribution $6000
+      convert $60000 of the Trump account to Roth
+  +13750 vs baseline  [Trump acct contrib (minor), Trump acct contrib (18+), Trump acct->Roth conversion]
+      Trump account contribution (minor) $5000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $6000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $6000
+      convert $77000 of the Trump account to Roth
+  +12750 vs baseline  [Trump acct contrib (minor), Trump acct->ABLE]
+      Trump account contribution (minor) $5000
+      roll the whole Trump account into the ABLE account
+==== S3k Trump account, age 18 -> 19, parents' 35% rate, family HDHP, employer plan, $8,000 cash ====
+baseline (plain use): worth 71800 (4800 over doing nothing)
+    HSA contribution $8000
+searched 72911 positions to depth 8; 121 families
+  +12565 vs baseline  [Trump acct->Roth conversion, HSA contrib, Trump acct->HSA, Trump acct->employer plan]
+      HSA contribution $8000
+      -- next year --
+      Trump account -> HSA funding distribution $8550
+      roll $11450 of the Trump account into the employer plan
+      convert $40000 of the Trump account to Roth
+  +12518 vs baseline  [Roth IRA contrib, Trump acct->Roth conversion, Trump acct withdrawal, HSA contrib, Trump acct->employer plan]
+      convert $40000 of the Trump account to Roth
+      roll $6666 of the Trump account into the employer plan
+      withdraw $13334 from the Trump account
+      HSA contribution $8550
+      -- next year --
+      HSA contribution $8550
+      Roth IRA contribution $4234
+  +12518 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion, Trump acct withdrawal, HSA contrib, Trump acct->employer plan]
+      convert $40000 of the Trump account to Roth
+      roll $6666 of the Trump account into the employer plan
+      withdraw $13334 from the Trump account
+      HSA contribution $8550
+      -- next year --
+      HSA contribution $8550
+      Trump account contribution (18+, IRA rules) $4234
+      convert $4234 of the Trump account to Roth
+  +12333 vs baseline  [Trump acct->Roth conversion, Trump acct withdrawal, HSA contrib, Trump acct->employer plan]
+      convert $40000 of the Trump account to Roth
+      convert $6666 of the Trump account to Roth
+      roll $4444 of the Trump account into the employer plan
+      withdraw $8890 from the Trump account
+      HSA contribution $8550
+      -- next year --
+      HSA contribution $8340
+  +12185 vs baseline  [Roth IRA contrib, Trump acct->Roth conversion, Trump acct withdrawal, HSA contrib, Trump acct->HSA]
+      Roth IRA contribution $6000
+      convert $40000 of the Trump account to Roth
+      Trump account -> HSA funding distribution $6666
+      withdraw $13334 from the Trump account
+      HSA contribution $1884
+      -- next year --
+      HSA contribution $8550
+      Roth IRA contribution $4900
+  +12168 vs baseline  [Trump acct->Roth conversion, Trump acct withdrawal, HSA contrib, Trump acct->HSA]
+      Trump account -> HSA funding distribution $8550
+      -- next year --
+      convert $40000 of the Trump account to Roth
+      convert $8902 of the Trump account to Roth
+      convert $1981 of the Trump account to Roth
+      withdraw $567 from the Trump account
+      HSA contribution $8550
+  +11992 vs baseline  [Trump acct->Roth conversion, HSA contrib, Trump acct->HSA]
+      HSA contribution $8000
+      -- next year --
+      Trump account -> HSA funding distribution $8550
+      convert $51450 of the Trump account to Roth
+  +11815 vs baseline  [Trump acct->Roth conversion, Trump acct withdrawal, HSA contrib]
+      convert $40000 of the Trump account to Roth
+      convert $6666 of the Trump account to Roth
+      convert $4444 of the Trump account to Roth
+      withdraw $8890 from the Trump account
+      HSA contribution $8550
+      -- next year --
+      HSA contribution $8340
+==== S3m as S3k but a dependent, no employer plan ====
+baseline (plain use): worth 69000 (2000 over doing nothing)
+    Roth IRA contribution $6000
+    -- next year --
+    Roth IRA contribution $2000
+searched 9929 positions to depth 8; 16 families
+  +9000 vs baseline  [Roth IRA contrib, Trump acct->Roth conversion]
+      Roth IRA contribution $6000
+      -- next year --
+      Roth IRA contribution $2000
+      convert $60000 of the Trump account to Roth
+  +9000 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion]
+      Trump account contribution (18+, IRA rules) $6000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $2000
+      convert $68000 of the Trump account to Roth
+  +7000 vs baseline  [Trump acct->Roth conversion]
+      convert $60000 of the Trump account to Roth
+==== S4 adult, age 30, high earner, empty Trump account + $100,000 rollover IRA, 2 years ====
+baseline (plain use): worth 125000 (0 over doing nothing)
+searched 566 positions to depth 7; 11 families
+  +3500 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion]
+      Trump account contribution (18+, IRA rules) $7000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $7000
+      convert $14000 of the Trump account to Roth
+==== S4b the same adult with no Trump account ====
+baseline (plain use): worth 125000 (0 over doing nothing)
+searched 443 positions to depth 7; 4 families
+  nothing beats the baseline
+==== S5 leftover 529 ($50,000, basis $30,000), age 23, modest income, 3 years ====
+baseline (plain use): worth 60850 (7250 over doing nothing)
+    Roth IRA contribution $7000
+    -- next year --
+    non-education 529 withdrawal $50000
+    Roth IRA contribution $7000
+    -- next year --
+    Roth IRA contribution $7000
+searched 625 positions to depth 9; 30 families
+  +1848 vs baseline  [529->Roth, 529 withdrawal]
+      529 -> Roth IRA transfer $7000
+      -- next year --
+      529 -> Roth IRA transfer $7000
+      -- next year --
+      529 -> Roth IRA transfer $7000
+      non-education 529 withdrawal $29000
+  +688 vs baseline  [529->Roth]
+      529 -> Roth IRA transfer $7000
+      -- next year --
+      529 -> Roth IRA transfer $7000
+      -- next year --
+      529 -> Roth IRA transfer $7000
+==== S5b own old 529 ($50,000, basis $30,000), age 45, high earner, 3 years ====
+baseline (plain use): worth 73200 (0 over doing nothing)
+searched 599 positions to depth 9; 24 families
+  +8106 vs baseline  [529->Roth]
+      529 -> Roth IRA transfer $7000
+      -- next year --
+      529 -> Roth IRA transfer $7000
+      -- next year --
+      529 -> Roth IRA transfer $7000
+  +5250 vs baseline  [trad IRA contrib, IRA->Roth conversion]
+      traditional IRA contribution $7000
+      -- next year --
+      traditional IRA contribution $7000
+      -- next year --
+      traditional IRA contribution $7000
+      convert $21000 of the IRA to Roth
+==== S6 workplace plans, age 61, one year ====
+baseline (plain use): worth 216912 (16912 over doing nothing)
+    pre-tax elective deferral $23500
+    Roth catch-up $11250
+    457(b) pre-tax deferral $23500
+searched 315 positions to depth 9; 252 families
+  +19125 vs baseline  [pre-tax deferral, pre-tax catch-up (2nd employer), 457 pre-tax, 457 Roth, after-tax (2nd employer), in-plan Roth rollover (2nd), employer contrib (2nd)]
+      pre-tax elective deferral $23500
+      pre-tax catch-up $11250 (second employer's plan)
+      457(b) pre-tax deferral $23500
+      457(b) Roth deferral $11250
+      employer contribution, second employer $15000
+      after-tax contribution, second employer's plan $45000
+      in-plan Roth rollover, second employer's plan $45000
+  +18563 vs baseline  [pre-tax deferral, Roth catch-up, 457 pre-tax, 457 Roth, after-tax (2nd employer), in-plan Roth rollover (2nd), employer contrib (2nd)]
+      pre-tax elective deferral $23500
+      Roth catch-up $11250
+      457(b) pre-tax deferral $23500
+      457(b) Roth deferral $11250
+      employer contribution, second employer $15000
+      after-tax contribution, second employer's plan $45000
+      in-plan Roth rollover, second employer's plan $45000
+  +18375 vs baseline  [pre-tax deferral, pre-tax catch-up (2nd employer), 457 pre-tax, 457 Roth, after-tax (2nd employer), in-plan Roth rollover (2nd)]
+      pre-tax elective deferral $23500
+      pre-tax catch-up $11250 (second employer's plan)
+      457(b) pre-tax deferral $23500
+      457(b) Roth deferral $11250
+      after-tax contribution, second employer's plan $60000
+      in-plan Roth rollover, second employer's plan $60000
+  +17950 vs baseline  [pre-tax deferral, pre-tax catch-up (2nd employer), 457 Roth, after-tax (2nd employer), in-plan Roth rollover (2nd), employer contrib (2nd)]
+      pre-tax elective deferral $23500
+      pre-tax catch-up $11250 (second employer's plan)
+      457(b) Roth deferral $34750
+      employer contribution, second employer $15000
+      after-tax contribution, second employer's plan $45000
+      in-plan Roth rollover, second employer's plan $45000
+  +17950 vs baseline  [Roth deferral, pre-tax catch-up (2nd employer), 457 pre-tax, 457 Roth, after-tax (2nd employer), in-plan Roth rollover (2nd), employer contrib (2nd)]
+      Roth elective deferral $23500
+      pre-tax catch-up $11250 (second employer's plan)
+      457(b) pre-tax deferral $23500
+      457(b) Roth deferral $11250
+      employer contribution, second employer $15000
+      after-tax contribution, second employer's plan $45000
+      in-plan Roth rollover, second employer's plan $45000
+  +17813 vs baseline  [pre-tax deferral, Roth catch-up, 457 pre-tax, 457 Roth, after-tax (2nd employer), in-plan Roth rollover (2nd)]
+      pre-tax elective deferral $23500
+      Roth catch-up $11250
+      457(b) pre-tax deferral $23500
+      457(b) Roth deferral $11250
+      after-tax contribution, second employer's plan $60000
+      in-plan Roth rollover, second employer's plan $60000
+  +17388 vs baseline  [pre-tax deferral, Roth catch-up, 457 Roth, after-tax (2nd employer), in-plan Roth rollover (2nd), employer contrib (2nd)]
+      pre-tax elective deferral $23500
+      Roth catch-up $11250
+      457(b) Roth deferral $34750
+      employer contribution, second employer $15000
+      after-tax contribution, second employer's plan $45000
+      in-plan Roth rollover, second employer's plan $45000
+  +17388 vs baseline  [Roth deferral, Roth catch-up, 457 pre-tax, 457 Roth, after-tax (2nd employer), in-plan Roth rollover (2nd), employer contrib (2nd)]
+      Roth elective deferral $23500
+      Roth catch-up $11250
+      457(b) pre-tax deferral $23500
+      457(b) Roth deferral $11250
+      employer contribution, second employer $15000
+      after-tax contribution, second employer's plan $45000
+      in-plan Roth rollover, second employer's plan $45000
+==== S7 early spending: $60,000 needed at age 58 ====
+baseline (plain use): worth 280000 (-6000 over doing nothing)
+    withdraw $60000 from the IRA
+searched 646 positions to depth 10; 11 families
+  +6000 vs baseline  [IRA->Roth conversion, Roth withdrawal]
+      convert $300000 of the IRA to Roth
+      -- next year --
+      -- next year --
+      -- next year --
+      -- next year --
+      -- next year --
+      withdraw $320000 from the Roth IRA
+  +6000 vs baseline  [Roth withdrawal, 457 withdrawal]
+      withdraw $20000 from the Roth IRA
+      457(b) withdrawal $50000
+  +5000 vs baseline  [IRA withdrawal, 457 withdrawal]
+      457(b) withdrawal $50000
+      withdraw $10000 from the IRA
+  +2000 vs baseline  [IRA withdrawal, Roth withdrawal]
+      withdraw $20000 from the Roth IRA
+      withdraw $40000 from the IRA

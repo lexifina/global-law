@@ -1,0 +1,54 @@
+<h2 id="round10">Round 10 (done)</h2>
+<p>14 November 2026, 03:42 to 05:05. The base is the round-9 frozen build <code>v9c</code>. Frozen build:
+<code>v10d</code>. Report: <code>round10/ROUND10.md</code>; contract <code>round10/DESIGN10.md</code>; log
+<code>round10/LOG.md</code>; sealed runs <code>round10/SEALED_LOG.md</code>.</p>
+
+<h3>What round 10 did</h3>
+<ul>
+<li>State courts: a linker from a state court of last resort's judgment to the intermediate appellate decision it
+reviewed, ported from the federal FJC linker (2,696 rows; blind audits 74/80, 76/80 and 34/34). Two further forms
+(the judgment names only the trial court; decisions below that are not cited) failed their audits and were left
+out.</li>
+<li>FJC appeals: a district decision cited under another case name is accepted when both sides of its caption appear
+in the appeal's own caption, with partial dispositions marked partial (1,317 rows; audit 73/80).</li>
+<li>SCDB disposition: the citation of the decision below tied back to the sentence that names that court acting
+(75 rows; 70/75), and whole-judgment scope where each court's judgment has its own verb (9 rows; 9/9).</li>
+<li>Shadow Docket: orders linked to the decision below when exactly one candidate carries the party's full printed name
+(126 rows; 77/80). The remand decision that ties an order to its decision below is now checked by the Lean checker
+(316 rows checked, none failed).</li>
+<li>Syllabus quotes: three overrulings that were quoted from the Supreme Court's syllabus are now quoted from the
+opinion (3/3).</li>
+<li>Lean: 292 theorems (20 new, none changed), 83 mutants, all killed; the Lean checker and the independent reference
+agree on every row (0 differences).</li>
+<li>A new held-out key, built blind and scored once after the freeze: the Federal Circuit Dataset Project.</li>
+</ul>
+
+<h3>Round-8 keys: tuning half h0, and half h1 scored a third time after the freeze (Wilson 95%)</h3>
+<table>
+<tr><th>key</th><th>h0: v9c to v10d</th><th>h1 (third use): v9c to v10d</th></tr>
+<tr><td>FJC appeals, recall</td><td>55.2% to 56.3% [54.5, 58.1]</td><td>55.9% to 57.0% [55.2, 58.8]</td></tr>
+<tr><td>Shadow Docket, recall</td><td>44.9% to 48.5% [45.5, 51.5]</td><td>46.5% to 48.5% [45.5, 51.5]</td></tr>
+<tr><td>SCDB disposition, recall</td><td>75.1% to 75.9% [74.1, 77.5]</td><td>75.5% to 76.1% [74.4, 77.8]</td></tr>
+<tr><td>State tables, recall</td><td>13.6% to 13.6%</td><td>7.7% to 7.7%</td></tr>
+</table>
+
+<h3>Held-out keys of round 9 (second use) and the new key (first use)</h3>
+<table>
+<tr><th>key</th><th>v9c</th><th>v10d</th></tr>
+<tr><td>Brace and Hall: state court of last resort reversed the decision below, recall</td><td>835/1,670 = 50.0% [47.6, 52.4]</td><td>924/1,670 = 55.3% [52.9, 57.7]; precision 93.1% to 93.6%</td></tr>
+<tr><td>Songer: court of appeals reversed or vacated the district decision, recall</td><td>94/228 = 41.2% [35.0, 47.7]</td><td>101/228 = 44.3% [38.0, 50.8]; precision 97.1%</td></tr>
+<tr><td>Federal Circuit: reversed or vacated the decision below, recall (new)</td><td>158/300 = 52.7% [47.0, 58.2]</td><td>52.7% (unchanged; no rule aimed at it); precision 89.8%</td></tr>
+</table>
+
+<h3>Older tests</h3>
+<table>
+<tr><th>measure</th><th>v9c</th><th>v10d</th></tr>
+<tr><td>Fresh lists, open half: lenient / strict / attributed (165)</td><td>112 / 52 / 82</td><td>112 / 52 / 82</td></tr>
+<tr><td>Fresh lists, sealed half, sixth use (127): lenient / strict / attributed</td><td>76 / 31 / 56</td><td>77 / 32 / 57</td></tr>
+<tr><td>Shepardized dev, negative history found (254) / precision</td><td>145 / 93.5%</td><td>146 / 93.6%</td></tr>
+<tr><td>Shepardized sealed, fifth use (252) / precision</td><td>125 = 49.6% / 92.6%</td><td>128 = 50.8% / 92.8%</td></tr>
+<tr><td>Held-out notes, history</td><td>82.2%</td><td>82.5%</td></tr>
+</table>
+<p>Gains are now one to two points a round on the federal keys and none on the state overruling tables, where the
+remaining misses are source errors, decisions missing from the corpus, or overrulings the court implied without saying
+so. State review of intermediate decisions gave this round's largest held-out gain and still has room.</p>

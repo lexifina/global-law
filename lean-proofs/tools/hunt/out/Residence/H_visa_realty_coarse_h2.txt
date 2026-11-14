@@ -1,0 +1,22 @@
+=== alien resident by substantial presence (no green card), 5 years in; Legal.USTax.Hunt.Residence.Asset.usRealty; grid #[30, 152, 183]; horizon 2y; student false; gifts false; foreign tax: salary 0bp, gain 0bp ===
+positions 5531, finished plans (asset disposed of) 326, families 4
+baseline (sell, in the US every day, no other move): tax on the gain $238000, all US tax $447994
+- gain tax $200000 (all US tax $357351; exemption used $0); US days 547/730: realty sold as nonresident (§897)
+  y0: US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] RELOCATE US[31-182] SELL out[183-365]
+- gain tax $200000 (all US tax $357351; exemption used $0); US days 547/730: closer-connection exception, realty sold as nonresident (§897)
+  y0: SELL RELOCATE US[1-30] US[31-182] out[183-365]
+  y1: RELOCATE US[1-30] US[31-182] US[183-365]
+- gain tax $238000 (all US tax $447994; exemption used $0); US days 730/730: sold while taxed on worldwide income
+  y0: SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+- gain tax $238000 (all US tax $395351; exemption used $0); US days 547/730: sold while taxed on worldwide income, closer-connection exception
+  y0: SELL US[1-30] US[31-182] US[183-365]
+  y1: RELOCATE US[1-30] US[31-182] out[183-365]
+frontier (most US days for each level of tax on the gain):
+  days 730: gain tax $238000 (all US tax $447994)
+  y0: SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+  days 547: gain tax $200000 (all US tax $357351)
+  y0: SELL RELOCATE US[1-30] US[31-182] out[183-365]
+  y1: RELOCATE US[1-30] US[31-182] US[183-365]

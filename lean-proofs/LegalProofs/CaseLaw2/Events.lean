@@ -82,6 +82,18 @@ structure HEvent where
   promotes : Bool := true
   deriving Repr, DecidableEq, Inhabited
 
+/-- Round 5 (DESIGN5 §2): a later decision W of a court with power over the target states, in a certified majority
+sentence, that the target was overruled by the row's by-decision Y. The runner fills it only when the recognised
+check (`Cert.checkRecognised`) passes. -/
+structure Recog where
+  /-- the recognising decision W -/
+  witness : Nat
+  /-- date(W) -/
+  date : Date
+  /-- W's court has power to overrule the target (`canChangeStatus`, on every domain the issue could have) -/
+  power : Bool
+  deriving Repr, DecidableEq, Inhabited
+
 /-- A later-case treatment. -/
 structure TEvent where
   id : Nat
@@ -95,6 +107,9 @@ structure TEvent where
   /-- `false`: admitted without verified power (`okUnverifiedBy`): its effect is `unknown powerUnknown`, not
   negative (D5) -/
   powerKnown : Bool := true
+  /-- round 5: the recognition of an implicit row (`explicit = false`) by a later court with power; `none` on every
+  explicit row and on a witness row that is only "at risk" -/
+  recog : Option Recog := none
   deriving Repr, DecidableEq, Inhabited
 
 /-- A supersession by enactment (§7), joined to its law change. -/

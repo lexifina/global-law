@@ -1,0 +1,117 @@
+{
+ "asof": null,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\data",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\out",
+  "status_sha1": "ece2365efc536dfcb39425e8c95efe842c57e3a6"
+ },
+ "court": "mixed",
+ "dataset": "holdout_notes",
+ "generated": "2026-11-13T23:13:51+00:00",
+ "label": "round4",
+ "link": {
+  "fail_reasons": {},
+  "linked": 12354,
+  "n_items": 12354,
+  "note": "items are (X, Y) pairs of the frozen split (round5/tests/split); targets and Y are corpus nodes by construction (regex 'nearest citation', not audited)"
+ },
+ "metrics": {
+  "any_signal": {
+   "hi": 0.32198366502338643,
+   "k": 3876,
+   "lo": 0.3056212030830378,
+   "n": 12354,
+   "p": 0.31374453618261294
+  },
+  "pool_all_recall": {
+   "hi": 0.03497577188487616,
+   "k": 293,
+   "lo": 0.02792158690153047,
+   "n": 9374,
+   "p": 0.03125666737785364
+  },
+  "pool_all_recall_strict": {
+   "hi": 0.003806922718306371,
+   "k": 24,
+   "lo": 0.0017211573957159742,
+   "n": 9374,
+   "p": 0.002560273095796885
+  },
+  "pool_alsoInFeed_recall": {
+   "hi": 0.01881994143841365,
+   "k": 36,
+   "lo": 0.009866142829811433,
+   "n": 2640,
+   "p": 0.013636363636363636
+  },
+  "pool_alsoInFeed_recall_strict": {
+   "hi": 0.0027581546659641593,
+   "k": 2,
+   "lo": 0.00020777918568744562,
+   "n": 2640,
+   "p": 0.0007575757575757576
+  },
+  "pool_holdoutOnly_recall": {
+   "hi": 0.04301017430753848,
+   "k": 257,
+   "lo": 0.03384551635266812,
+   "n": 6734,
+   "p": 0.038164538164538166
+  },
+  "pool_holdoutOnly_recall_strict": {
+   "hi": 0.004941875411024702,
+   "k": 22,
+   "lo": 0.0021585378553389827,
+   "n": 6734,
+   "p": 0.003267003267003267
+  },
+  "precision": {
+   "hi": 0.9498183019522883,
+   "k": 598,
+   "lo": 0.9108583688108516,
+   "n": 641,
+   "p": 0.9329173166926678
+  },
+  "recall": {
+   "hi": 0.2720532396585261,
+   "k": 3264,
+   "lo": 0.2565052048412626,
+   "n": 12354,
+   "p": 0.2642059252064109
+  },
+  "recall_byAnyone": {
+   "hi": 0.06037618413185276,
+   "k": 694,
+   "lo": 0.052252017444646005,
+   "n": 12354,
+   "p": 0.05617613728347094
+  },
+  "recall_explicit": {
+   "hi": 0.9984102640499293,
+   "k": 2971,
+   "lo": 0.9942698232863849,
+   "n": 2980,
+   "p": 0.9969798657718121
+  },
+  "recall_notExplicit": {
+   "hi": 0.03497577188487616,
+   "k": 293,
+   "lo": 0.02792158690153047,
+   "n": 9374,
+   "p": 0.03125666737785364
+  },
+  "recall_strict": {
+   "hi": 0.05417789468588174,
+   "k": 620,
+   "lo": 0.04647410534340945,
+   "n": 12354,
+   "p": 0.050186174518374614
+  }
+ },
+ "notes": "Scorer round5/tests/score_holdout.py (existing/holdout_notes/runs/round4/holdout_round4.json). Pair level, Y named, precedent family; each (X, Y) read on the date of its first holdout statement. recall = negOrPartly (X negative or partly negative by any actor on that date); recall_strict = whole-decision negative by Y; precision = reverse direction (of the model's whole-decision negative (X, actor) rows whose X a holdout note of this family names with a Y, the share where the note names the model's actor). pool_* = the frozen testable pool (9,374 pairs not explicitly admitted by round 4; alsoInFeed / holdoutOnly halves); 71%% of the pool is 'overruled on other grounds' notes where partly is the right answer. Blind in input: holdout speakers never feed the model (check_no_leak.py); round-5 builders did see these aggregate scores at each iteration (TESTS.md, results/holdout_it*).",
+ "primary": "recall",
+ "row_label": "Later-court notes 'X, overruled/abrogated by Y' from courts with no power over X (held out)",
+ "split": "all",
+ "tests": "overruling"
+}

@@ -6,6 +6,7 @@ import LegalProofs.CaseLaw2.Spec.RuleId
 import LegalProofs.CaseLaw2.Spec.Authority
 import LegalProofs.CaseLaw2.Spec.AuthorityThms
 import LegalProofs.CaseLaw2.Spec.Status
+import LegalProofs.CaseLaw2.Spec.Recognised
 import LegalProofs.CaseLaw2.Spec.Splits
 import LegalProofs.CaseLaw2.Spec.Findings
 import LegalProofs.CaseLaw2.Spec.Horty

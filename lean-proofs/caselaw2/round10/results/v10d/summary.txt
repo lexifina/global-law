@@ -1,0 +1,45 @@
+round 10 variant v10d: dev-side scores (results in round10/results/v10d/)
+scored 2026-11-14 05:02:00
+stage args: v10d --remove round10/agents/syl10/cert_ro_treat/remove_ids.txt --delta round10/agents/syl10/cert_ro_treat --delta round10/agents/scdb10/delta10v4_a10 --delta round10/agents/shadow10/cert_cap_b --delta round10/agents/stlink10/delta_s1 --delta round10/agents/stlink10/delta_g2 --delta round10/agents/shadow10/cert_remand --replace round10/agents/scdb10/replace_s10.tsv --delta round10/agents/stlink10/delta_d2 --delta round10/agents/fjc10b/delta_n2h --procs 8
+Lean run: NOBUILD R10BIN=~/caselaw2/r10_bin/caselaw2_lean10 run, binary sha1 e7e32592cc6c6393506e25dc9654d4254af218ea, 2026-11-14 05:01:55 GMT, slot 1
+stage round10/stage/v10d; data dir data_r10_v10d; staged = base mirror: treatment_witness treatment_class joined history_bridge adoption succession; copied: treatments history history_anchor history_claim cert_text window_sha cite_index part_zone history_remand; left out: none
+Lean summary (shard 0): rows_admitted 225676, rows_rejected 9732, class_rows 7994, class_bad_rows 0, recognised_rows 6480, operative_rows 1072, anchor_rows 43505, anchor_unknown_ids 0, anchor_duplicates 0, anchored_admitted 42199, anchored_rejected 1306, joined_rows 595, joined_lines 595, joined_unknown_ids 0, joined_extra 0, joined_history_ignored 0, joined_witness_ignored 0, joined_admitted 553, joined_rejected 42, hclaim_rows 3726, hclaim_unknown_ids 0, hclaim_duplicates 0, hclaim_admitted 3696, hclaim_rejected 30, hclaim_anchorwide 554, hclaim_anchorwide_unused 0, hclaim_oldcircuit 26, hclaim_oldcircuit_used 26, doctrine_rows 17, doctrine_admitted 17, doctrine_ambiguous 0, bridge_anchor_ignored 0, zone_nodes 213710, zone_lines 596267, zone_bad_nodes 0, zone_bad_rows 0, zone_checked_rows 225745, zone_failed_rows 69, zone_missing_rows 0, remand_lines 316, remand_checked_rows 316, remand_failed_rows 0, remand_dup_rows 0, remand_bad_rows 0
+round-8 rows by verdict: h8 ok 10296, t8 noAuthority 391, t8 ok 1091
+round-9 rows by verdict: h9 noAuthority 26, h9 ok 1107, t9 noAuthority 3, t9 ok 144
+round-10 rows by verdict: h10 noAuthority 37, h10 ok 4177, t10 ok 3
+
+FRESH LISTS, dev (165 pairs): strict 52/165 = 31.5% (24.9-39.0); lenient 112/165 = 67.9% (60.4-74.5)
+  precision side: listed 82/95 = 86.3% (78.0-91.8); classes {"listed": 82, "targetListedOtherOverruler": 1, "unlisted": 12}
+  view attributed strict 82/165 = 49.7% (42.2-57.2); lenient 112/165 = 67.9% (60.4-74.5)
+  view model      strict 52/165 = 31.5% (24.9-39.0); lenient 112/165 = 67.9% (60.4-74.5)
+NO-LEAK: exit 0 (0 = no leak)
+HOLDOUT NOTES: precedent, Y named strict 799/12354 = 6.5% (6.0-6.9); byAnyone 941/12354 = 7.6% (7.2-8.1); negOrPartly 4664/12354 = 37.8% (36.9-38.6); anySignal 5328/12354 = 43.1% (42.3-44.0)
+HOLDOUT NOTES: precedent, explicitly admitted pairs strict 665/3247 = 20.5% (19.1-21.9); byAnyone 681/3247 = 21.0% (19.6-22.4); negOrPartly 3188/3247 = 98.2% (97.7-98.6); anySignal 3201/3247 = 98.6% (98.1-98.9)
+HOLDOUT NOTES: history 5204/6305 = 82.5% (81.6-83.5)
+HOLDOUT NOTES: precedent 800/856 = 93.5% (91.6-94.9)
+HOLDOUT NOTES: alsoInFeed strict 53/2640 = 2.0% (1.5-2.6); byAnyone 65/2640 = 2.5% (1.9-3.1); negOrPartly 1068/2640 = 40.5% (38.6-42.3); anySignal 1290/2640 = 48.9% (47.0-50.8)
+HOLDOUT NOTES: holdoutOnly strict 107/6734 = 1.6% (1.3-1.9); byAnyone 223/6734 = 3.3% (2.9-3.8); negOrPartly 666/6734 = 9.9% (9.2-10.6); anySignal 1097/6734 = 16.3% (15.4-17.2)
+OLD LISTS (burned, non-blind): SCDB 146/278 explicit rows, 178/278 with recognised; CRS current 167/292, 199/292 with recognised; rows by class {"selfAnnounced": 24703, "operativeWords": 2845, "recognised": 6157, "doctrine": 17}
+SHEPARDIZED, dev half (raw k/n share [95%]; with documented errors set aside):
+  agreement      overall, scored classes (NEG, PART, MOD, CLEAN)                9858/9985 98.7% [98.5%-98.9%]; set aside 9858/9977 98.8%
+  (a) recall     NEG: model NEG_HIST (strict)                                   146/254 57.5% [51.3%-63.4%]; set aside 146/252 57.9%
+  (a) recall     NEG: model NEG_HIST or UNK_HIST (lenient)                      156/254 61.4% [55.3%-67.2%]; set aside 156/252 61.9%
+  (a) recall     PART: model NEG_HIST or UNK_HIST                               3/11 27.3% [9.7%-56.6%]; set aside 3/11 27.3%
+  (a) recall     NEG and PART together: model as expected                       149/265 56.2% [50.2%-62.1%]; set aside 149/263 56.7%
+  (b) precision  of model NEG_HIST: Shepardized NEG (strict; AMBIG left out)    146/156 93.6% [88.6%-96.5%]; set aside 146/151 96.7%
+  (b) precision  of model NEG_HIST: Shepardized NEG or PART (lenient; AMBIG lef 146/156 93.6% [88.6%-96.5%]; set aside 146/151 96.7%
+  (c) clean      CLEAN: model shows no same-case negative                       9694/9704 99.9% [99.8%-99.9%]; set aside 9694/9698 100.0%
+  (c) clean      MOD: model CLEAN or UNK_HIST                                   15/16 93.8% [71.7%-98.9%]; set aside 15/16 93.8%
+  subclass       NEG/enbanc_different                                           16/27 59.3%
+  subclass       NEG/panel_withdrawn                                            10/27 37.0%
+  subclass       NEG/sc_reversed                                                87/129 67.4%
+  subclass       NEG/sc_vacated                                                 33/71 46.5%
+  subclass       PART/sc_part                                                   3/11 27.3%
+  dev_fp.tsv dev CLEAN/MOD cases shown negative for a same-case reason 11 (CLEAN 10, MOD 1)
+NEW KEYS, h0 half only (k/n = share (Wilson 95%); primary first):
+  fjc_idb_appeals            recall 1595/2832 = 56.3% (54.5-58.1); clean 6075/6229 = 97.5% (97.1-97.9); link_rate 16636/120585 = 13.8% (13.6-14.0); part 643/1489 = 43.2% (40.7-45.7); precision 1595/1763 = 90.5% (89.0-91.8)
+  shadow_docket              recall 514/1059 = 48.5% (45.5-51.5); clean 43774/43811 = 99.9% (99.9-99.9); link_rate 46148/104632 = 44.1% (43.8-44.4); precision 514/559 = 92.0% (89.4-93.9)
+  scdb_disposition           recall 1826/2407 = 75.9% (74.1-77.5); clean 1998/2052 = 97.4% (96.6-98.0); link_rate 4534/13875 = 32.7% (31.9-33.5); part 44/75 = 58.7% (47.4-69.1); precision 1826/1872 = 97.5% (96.7-98.2)
+  scdb_disposition.federal   recall 1463/1933 = 75.7% (73.7-77.5); clean 1551/1590 = 97.5% (96.7-98.2); link_rate 3651/10455 = 34.9% (34.0-35.8); part 39/67 = 58.2% (46.3-69.3); precision 1463/1494 = 97.9% (97.1-98.5)
+  scdb_disposition.state     recall 363/474 = 76.6% (72.6-80.2); clean 447/462 = 96.8% (94.7-98.0); link_rate 883/3420 = 25.8% (24.4-27.3); part 5/8 = 62.5% (30.6-86.3); precision 363/378 = 96.0% (93.6-97.6)
+  state_overruled_tables     recall 18/132 = 13.6% (8.8-20.5); actor_agreement 18/19 = 94.7% (75.4-99.1); link_rate 175/290 = 60.3% (54.6-65.8); recall_any 20/132 = 15.2% (10.0-22.2)

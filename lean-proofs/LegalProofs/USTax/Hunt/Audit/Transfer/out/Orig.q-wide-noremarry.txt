@@ -1,0 +1,85 @@
+==== QTIP scenario, wide beam, no remarry ====
+simple will: grandchildren end with $218.55M after tax; transfer tax $191.18M, built-in income tax $7.10M
+  period 0 Legal.USTax.Hunt.Transfer.Phase.plan: 146 positions, kept 23
+  period 1 Legal.USTax.Hunt.Transfer.Phase.plan: 461 positions, kept 52
+  period 1 Legal.USTax.Hunt.Transfer.Phase.bed: 192 positions, kept 52
+  period 1 Legal.USTax.Hunt.Transfer.Phase.estate (Legal.USTax.Hunt.Transfer.Who.W): 16 positions, kept 16
+  period 2 Legal.USTax.Hunt.Transfer.Phase.plan: 462 positions, kept 63
+  period 3 Legal.USTax.Hunt.Transfer.Phase.plan: 481 positions, kept 63
+  period 4 Legal.USTax.Hunt.Transfer.Phase.plan: 502 positions, kept 66
+  period 4 Legal.USTax.Hunt.Transfer.Phase.bed: 188 positions, kept 62
+  period 4 Legal.USTax.Hunt.Transfer.Phase.estate (Legal.USTax.Hunt.Transfer.Who.C): 53 positions, kept 53
+positions examined: 20213; plans at the end: 53
+#1  $251.70M  (+$33.15M vs simple will)  transfer tax $110.07M, income tax paid $0.00M, built-in $31.00M
+    family: C-gift, allocate-GST, §2519, trust→child
+      spouse gives up QTIP income interest (§2519)
+      trust(W) distributes $15.00M to child
+      C gives $15.00M to grandchildren (cash first)
+      trust(W) distributes $11.59M to child
+      C pays tuition
+      C funds 529 with five-year election
+      C gives $1.95M to grandchildren (cash first)
+      C pays tuition
+      W allocates $1.95M GST exemption to trust
+      C funds 529 with five-year election
+      W gives the annual exclusion each year to child
+      C gives $2.20M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+      C gives $2.49M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+      C gives $2.82M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+#2  $251.25M  (+$32.70M vs simple will)  transfer tax $110.94M, income tax paid $0.00M, built-in $30.58M
+    family: C-gift, §2519, trust→child
+      spouse gives up QTIP income interest (§2519)
+      trust(W) distributes $15.00M to child
+      C gives $15.00M to grandchildren (cash first)
+      trust(W) distributes $11.59M to child
+      C pays tuition
+      C funds 529 with five-year election
+      C gives $1.95M to grandchildren (cash first)
+      C pays tuition
+      C funds 529 with five-year election
+      W gives the annual exclusion each year to child
+      W gives the annual exclusion each year to grandchildren
+      C gives $2.20M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+      C gives $2.49M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+      C gives $2.82M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+#3  $242.63M  (+$24.08M vs simple will)  transfer tax $133.69M, income tax paid $0.00M, built-in $16.45M
+    family: allocate-GST, §2519, trust→child
+      spouse gives up QTIP income interest (§2519)
+      trust(W) pays tuition
+      trust(W) pays tuition
+      W allocates $1.95M GST exemption to trust
+      W gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+      trust(W) distributes $24.46M to child
+  one- and two-idea plans (best of each family):
+    +$23.68M  [§2519, trust→child]
+    +$15.97M  [allocate-GST, §2519]
+    +$15.52M  [§2519]
+    +$13.70M  [C-gift, trust→child]
+    +$11.07M  [§2519, trust→grandchildren]
+    +$8.71M  [trust→child]
+    +$5.33M  [trust→child, trust→grandchildren]
+    +$0.00M  []
+    -$3.68M  [trust→grandchildren]
+  kind of move: best plan with it / best plan without it
+    C-gift: $251.70M / $242.63M
+    529: $251.70M / $242.63M
+    annual→child: $251.70M / $251.70M
+    annual→grandchildren: $251.70M / $229.31M
+    tuition: $251.70M / $242.63M
+    allocate-GST: $251.70M / $251.25M
+    §2519: $251.70M / $232.26M
+    trust→child: $251.70M / $234.52M
+    trust→grandchildren: $251.31M / $251.70M
+    trust-tuition: $242.63M / $251.70M
+
+real	0m14.231s
+user	0m0.015s
+sys	0m0.045s

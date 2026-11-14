@@ -59,6 +59,8 @@ def main():
     ap.add_argument('--prefix', default='gen')
     ap.add_argument('--n', type=int, default=60)
     ap.add_argument('--legacy', action='store_true', help='with --seeds: the pre-layer generator (gen.py --legacy)')
+    ap.add_argument('--no-r5', action='store_true',
+                    help='with --seeds: without the round-5 layer (a counterexample seed of a sweep before round 5)')
     ap.add_argument('--ref-only', action='store_true', help='run the reference alone (no Lean, no diff)')
     a = ap.parse_args()
     os.makedirs(REG, exist_ok=True)
@@ -69,7 +71,7 @@ def main():
         for s in a.seeds.split(','):
             d = os.path.join(REG, '%s-%s' % (a.prefix, s))
             shutil.rmtree(d, ignore_errors=True)
-            gen.generate(int(s), d, a.n, a.legacy)
+            gen.generate(int(s), d, a.n, a.legacy, r5=not a.no_r5)
         return
     if a.ref_only:
         bad = 0

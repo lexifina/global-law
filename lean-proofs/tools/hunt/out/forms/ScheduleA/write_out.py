@@ -1,0 +1,80 @@
+import json, os
+OUT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+d = {
+ "forms": ["Schedule A (Form 1040) 2025 + instructions (SALT worksheet)", "Schedule A (Form 1040) 2026 draft (created 5/12/26; instructions not posted)",
+           "Form 1040 2026 draft (8/19/26)", "Form 6251 2025 + instructions", "Form 6251 2026 draft (5/26/26) + draft instructions (11/6/26)",
+           "Form 8960 2025 + instructions", "Form 8960 2026 draft (6/1/26) + draft instructions (10/15/26)",
+           "Form 8959 2025 + instructions", "Form 8959 2026 draft (5/27/26)",
+           "Form 8995 2025 + instructions", "Form 8995 2026 draft (5/1/26) + draft instructions (6/17/26)",
+           "Form 8995-A 2025 + instructions", "Form 8995-A 2026 draft (5/26/26)",
+           "Form 1040-ES 2026 and Pub. 505 (2026) (Worksheets 2-5, 2-6), used as the IRS's stated 2026 method"],
+ "grid_points": 42137,
+ "differences": [
+  {"form_line": "Schedule A line 5e and State and Local Tax Deduction Worksheet (2025; same wording on the 2026 draft face): the half limit and half threshold go to filing status \"married filing separately\" only",
+   "statute": "164(b)(6)(B), (7)(B)(i): \"a married individual filing a separate return\". Section 164 does not refer to 7703, and 7703(b) (married, living apart, treated as not married) applies only \"for purposes of those provisions of this title which refer to this subsection\"; 2(c) covers Part I only. Read literally, a married person who lives apart and files as head of household is still a married individual filing a separate return.",
+   "direction": "form gives more",
+   "example": "2026, head of household under 7703(b), MAGI $375,000, SALT paid $45,000: form $40,400; literal statute $5,000 (half of the $10,000 floor after phasedown from half threshold $252,500). 2025, MAGI under $250,000, SALT $30,000: form $30,000, statute $20,000.",
+   "dollars": "deduction gap up to $20,000 (2025) / $20,200 (2026) below the half threshold, up to $35,000 / $35,400 between the half and full thresholds; tax up to about $12,000. Affects married people living apart who file as head of household and pay more than $20,000 of state and local tax (more than $5,000 at high income).",
+   "explained_by": "nothing found; no regulation or notice under 164(b)(6). Other sections say it expressly (63(g), 55(d)(1), 1411(b)(2), 3101(b)(2)(B), 1(d)).",
+   "published": "not found (1 search)", "confidence": "medium: the text is clear, but the form follows practice since 2018 and a court could read \"married\" with 7703"},
+  {"form_line": "Form 6251 (2026 draft) lines 1a, 1b, 2a, 3 and draft instructions (Nov 6, 2026): line 1a starts from Form 1040 line 14, which contains line 12e = Schedule A line 18, the itemized deductions after the new overall limitation; no line and no instruction takes the limitation back out",
+   "statute": "56(b)(1)(E): \"Section 68 shall not apply\" in determining alternative minimum taxable income; 68(a) reduction is 2/37 of the lesser of itemized deductions or taxable income over the 37% bracket start",
+   "direction": "statute gives more",
+   "example": "Single, AGI $1,400,000, itemized deductions $100,000 (of which $10,000 taxes): section 68 reduction $5,405. Statute AMTI $1,310,000; form AMTI $1,315,405.",
+   "dollars": "AMTI too high by the whole section 68 reduction (5.405% of itemized deductions for those well into the 37% bracket); at 28% that is $1,514 of AMT per $100,000 of itemized deductions ($15,135 on $1,000,000). Affects itemizers in the 37% bracket who owe AMT (large ISO exercises, private activity bond interest, etc.), and their minimum tax credit.",
+   "explained_by": "nothing; the draft instructions do not mention section 68. Before 2018 Form 6251 had a line for this (2017 line 6).",
+   "published": "not found (1 search)", "confidence": "high on the draft text; the 2026 Schedule A instructions (Itemized Deductions Worksheet) are not posted, but line 18 of the draft form is plainly the limited amount"},
+  {"form_line": "Schedule A (2026 draft) lines 11-15: line 13 = line 6 of a \"Charitable Contribution Limitation Worksheet\" on this year's gifts, line 14 \"Carryover from prior year\", line 15 = 13 + 14. Pub. 505 (2026) Worksheet 2-5 shows the 6 lines: gifts (cash + other) minus 0.5% of AGI",
+   "statute": "170(b)(1)(I): contributions \"otherwise allowable (without regard to this subparagraph)\" are allowed only to the extent their aggregate exceeds 0.5% of the contribution base, so the floor comes after the percentage limits and covers carryovers, which 170(d)(1)(A) treats as paid in the later year; 170(d)(1)(C) adds the floor amount back to the carryover only in a year a limit is exceeded",
+   "direction": "form gives more",
+   "example": "(a) AGI $2,000,000, no gifts this year, $50,000 carryover: form $50,000, statute $40,000. (b) AGI $2,000,000, cash gifts $1,500,000: form min($1,490,000, 60% limit) = $1,200,000, statute $1,200,000 - $10,000 = $1,190,000 (the $10,000 joins the carryover).",
+   "dollars": "up to 0.5% of AGI of deduction in the year ($5,000 per $1,000,000 of AGI; $1,850 tax at 37%). Affects donors using a carryover in a year of small gifts, and donors over a percentage limit (for them a timing difference).",
+   "explained_by": "not known: the 2026 Schedule A instructions and 2026 Pub. 526 are not posted, so the worksheet text and the line 14 instruction could still cure it",
+   "published": "not found (1 search)", "confidence": "low to medium: inferred from the face of the draft form and Pub. 505"},
+  {"form_line": "State and Local Tax Deduction Worksheet (2025) lines 3b-3d, 4: modified AGI = AGI + Form 2555 line 45 + line 50 + Form 4563 line 15 + Puerto Rico exclusion",
+   "statute": "164(b)(7)(B)(iv): AGI \"increased by any amount excluded from gross income under section 911, 931, or 933\". Form 2555 line 45 is the exclusions less the deductions disallowed under 911(d)(6) (unlike 1411(d), nothing in 164 nets them); line 50 is the housing deduction of 911(c)(4), a deduction, not an exclusion",
+   "direction": "form gives more (line 44 netting) / statute gives more (line 50 added)",
+   "example": "Single, AGI $450,000, exclusions $130,000, $20,000 of deductions allocable to them, SALT $25,000: statute $16,000, form $22,000. Single, AGI $425,000, exclusions $130,000, housing deduction $15,000: statute $23,500, form $19,000.",
+   "dollars": "30% of Form 2555 line 44 (form more) or of line 50 (statute more), a few thousand dollars of deduction; only people abroad with modified AGI over $500,000 who still pay state and local tax",
+   "explained_by": "none; same convention as Schedule 8812 under the same words in 24(b)(1)",
+   "published": "not searched", "confidence": "medium"},
+  {"form_line": "Form 8995-A (2026 draft) lines 37-41: line 39 = line 37 + line 38 (co-op deduction passed through under 199A(g)); line 41 = greater of line 39 or the $400 minimum",
+   "statute": "199A(i)(1): the minimum applies to \"the deduction allowed under subsection (a)\"; the patron's deduction is allowed separately by 199A(g)(2)(A) and limited by taxable income after the (a) deduction",
+   "direction": "statute gives more",
+   "example": "Co-op patron, active QBI $1,000 but subsection (a) deduction $0 (losses elsewhere), (g) deduction passed through $2,000, taxable income $60,000: statute $400 + $2,000 = $2,400; form greater of $2,000 or $400 = $2,000.",
+   "dollars": "at most $400 of deduction (under $150 of tax); patrons of agricultural co-ops whose own deduction is under $400",
+   "explained_by": "none; 2026 instructions for Form 8995-A not posted", "published": "not searched", "confidence": "medium"},
+  {"form_line": "Form 8960 (2026 draft instructions) Lines 9 and 10 Section 68 Limitation Worksheet line 9, Pub. 505 (2026) Worksheet 2-6 line 12, Form 1040-ES (2026): \"Multiply by 5.4% (0.054)\"",
+   "statute": "68(a): \"reduced by 2/37\" (5.4054...%)",
+   "direction": "form gives more",
+   "example": "Itemized deductions $1,000,000 well inside the 37% bracket: statute reduction $54,054, form $54,000. The Form 8960 example itself gives $8,378 on $155,000, which is 2/37; 0.054 gives $8,370.",
+   "dollars": "$54 of deduction per $1,000,000 ($20 of tax); every itemizer in the 37% bracket if the Schedule A worksheet uses the same factor",
+   "explained_by": "rounding of the rate, not a stated rounding rule", "published": "not found (1 search); one adviser paper rounds the other way (5.41%)",
+   "confidence": "high for Form 8960 and Pub. 505; the Schedule A worksheet itself is not posted"}
+ ],
+ "checked_no_difference": [
+  "SALT worksheet 2025: reduce by 30% of excess, floor $10,000, then halve for separate filers (floor $5,000) = 164(b)(6)(B), (7)(B)",
+  "Schedule A 2026 line 18 screen: AGI minus Form 1040 lines 13a, 13b against $384,350 = taxable income without 68 plus itemized deductions (68(a)(2)); 199A taxable income taken before 68 (Form 8995 line 11) = 199A(e)(1)",
+  "Form 6251 2026 exemption: $90,100 / $140,200 / $70,100, phase-out 50% from $500,000 / $1,000,000 / $500,000 = 55(d)(4). Married-separate add-back at 50% over $640,200 matches the statute if \"50 percent\" replaces both \"25 percent\" in 55(d)(2); if only the first, the form adds up to $34,950 more AMTI (alternative reading, not counted)",
+  "Form 8960 lines 12-17 and thresholds; Form 8959 Parts I-III (2025 and 2026 draft)",
+  "Form 8995 2026: thresholds, $75,000 / $150,000 ranges, $400 minimum when active QBI from line 1 is at least $1,000, not capped by taxable income = 199A(i)",
+  "170(p): Form 1040 2026 line 12f exists; no dollar effect found from the 60% limit, which the statute keeps"],
+ "not_retrieved": ["2026 Instructions for Schedule A (the posted draft i1040sca is the 2025 one): Charitable Contribution Limitation Worksheet, Itemized Deductions Worksheet",
+                   "2026 Pub. 526 (draft posted is 2025)", "2026 Form 1040 instructions (line 12f, 170(p)); posted draft is 2025",
+                   "2026 Instructions for Form 8995-A (posted draft is 2025)", "2026 Instructions for Form 8959 (not requested)"]
+}
+json.dump(d, open(os.path.join(OUT, 'ScheduleA.json'), 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
+md = ["# Schedule A and related forms: where form and statute differ", "",
+      "Statute: Title 26 through Pub. L. 119-138 (`tools/hunt/sec.py`). Forms: irs.gov 2025 revisions and 2026 drafts. Model and grid: `ScheduleA/compare.py` (42,137 points), output `ScheduleA/grid.json`; form texts in `ScheduleA/*.txt`.", "",
+      "## Differences, largest first", ""]
+for i, x in enumerate(d['differences'], 1):
+    md += [f"### {i}. {x['form_line'].split(':')[0]}", "", f"- Form: {x['form_line']}", f"- Statute: {x['statute']}", f"- Direction: {x['direction']}",
+           f"- Example: {x['example']}", f"- Size and who: {x['dollars']}", f"- Explained by: {x['explained_by']}", f"- Published: {x['published']}", f"- Confidence: {x['confidence']}", ""]
+md += ["## Checked, no difference", ""] + [f"- {c}" for c in d['checked_no_difference']]
+md += ["", "## Not retrieved", ""] + [f"- {c}" for c in d['not_retrieved']]
+md += ["", "## Notes", "",
+       "- Form 8960 worksheet line 1 says \"taxable income reported on Form 1040, line 15, plus allowable itemized deductions\". Line 15 is already after section 68; the statute starts from taxable income without section 68. The two agree only if \"allowable\" means the amount after the reduction. Matters only within the first dollars above the 37% bracket.",
+       "- The same worksheet applies section 68 to estates and trusts ($16,000). New section 68 says \"in the case of an individual\" and dropped the old exclusion for estates and trusts; 641(b) carries it over. Not a difference.",
+       "- 199A(c)(2) loss carryforward: Form 8995 tests the $1,000 on line 1 (this year's active businesses) before the carryforward on line 3. The statute does not say whether a carried loss belongs to an \"active\" business; treated as the same."]
+open(os.path.join(OUT, 'ScheduleA.md'), 'w', encoding='utf-8', newline='\n').write('\n'.join(md) + '\n')
+print('ok')

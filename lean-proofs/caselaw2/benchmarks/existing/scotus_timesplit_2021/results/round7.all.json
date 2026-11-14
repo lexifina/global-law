@@ -1,0 +1,32 @@
+{
+ "blind": true,
+ "build": {
+  "source": "round7/heldout/results/r7-v3/tables.tsv"
+ },
+ "court": "mixed",
+ "dataset": "scotus_timesplit_2021",
+ "generated": "2026-11-14T00:13:43+00:00",
+ "label": "round7",
+ "link": {},
+ "metrics": {
+  "precision": {
+   "hi": 0.9666964987156199,
+   "k": 60,
+   "lo": 0.8322406663848037,
+   "n": 65,
+   "p": 0.9230769230769231
+  },
+  "recall": {
+   "hi": 0.3431499914725271,
+   "k": 34,
+   "lo": 0.19361536869148754,
+   "n": 130,
+   "p": 0.26153846153846155
+  }
+ },
+ "notes": "Round-7 time-split key (round7/heldout/HELDOUT.md), each build scored once by the round-7 lead (RUNS.log); precision = admitted rows by a key order that point to that order's lower decision. Round 4 not scored on this key.",
+ "primary": "recall",
+ "row_label": "Supreme Court judgments 2021 on (docket record): decision below reversed or vacated",
+ "split": "all",
+ "tests": "same-case"
+}

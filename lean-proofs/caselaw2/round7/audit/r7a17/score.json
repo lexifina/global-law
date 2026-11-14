@@ -1,0 +1,1138 @@
+{
+ "run": "r7a17",
+ "type": "B",
+ "self_test": false,
+ "answer_files": [
+  "ans_1.jsonl",
+  "ans_2.jsonl"
+ ],
+ "items_in_key": 90,
+ "items_answered": 90,
+ "unanswered": [],
+ "classes": {
+  "rh_eb": {
+   "population": 748,
+   "in_key": 80,
+   "answered": 80,
+   "all": {
+    "n": 80,
+    "right": {
+     "k": 78,
+     "n": 80,
+     "p": 0.975,
+     "lo": 0.9134,
+     "hi": 0.9931
+    },
+    "right_extent": {
+     "k": 78,
+     "n": 80,
+     "p": 0.975,
+     "lo": 0.9134,
+     "hi": 0.9931
+    },
+    "link": {
+     "k": 80,
+     "n": 80,
+     "p": 1.0,
+     "lo": 0.9542,
+     "hi": 1.0
+    },
+    "link_effect": {
+     "k": 79,
+     "n": 80,
+     "p": 0.9875,
+     "lo": 0.9325,
+     "hi": 0.9978
+    }
+   },
+   "flag": "ok",
+   "weighted": {
+    "right": {
+     "p": 0.9809,
+     "population": 748,
+     "rows_folded_from_unanswered_strata": 0,
+     "lo": 0.9192,
+     "hi": 0.9957,
+     "n_eff": 74.9
+    },
+    "right_extent": {
+     "p": 0.9809,
+     "population": 748,
+     "rows_folded_from_unanswered_strata": 0,
+     "lo": 0.9192,
+     "hi": 0.9957,
+     "n_eff": 74.9
+    }
+   },
+   "by_system": {
+    "fed": {
+     "n": 78,
+     "right": {
+      "k": 77,
+      "n": 78,
+      "p": 0.9872,
+      "lo": 0.9309,
+      "hi": 0.9977
+     },
+     "right_extent": {
+      "k": 77,
+      "n": 78,
+      "p": 0.9872,
+      "lo": 0.9309,
+      "hi": 0.9977
+     },
+     "link": {
+      "k": 78,
+      "n": 78,
+      "p": 1.0,
+      "lo": 0.9531,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 77,
+      "n": 78,
+      "p": 0.9872,
+      "lo": 0.9309,
+      "hi": 0.9977
+     }
+    },
+    "state": {
+     "n": 2,
+     "right": {
+      "k": 1,
+      "n": 2,
+      "p": 0.5,
+      "lo": 0.0945,
+      "hi": 0.9055
+     },
+     "right_extent": {
+      "k": 1,
+      "n": 2,
+      "p": 0.5,
+      "lo": 0.0945,
+      "hi": 0.9055
+     },
+     "link": {
+      "k": 2,
+      "n": 2,
+      "p": 1.0,
+      "lo": 0.3424,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 2,
+      "n": 2,
+      "p": 1.0,
+      "lo": 0.3424,
+      "hi": 1.0
+     }
+    }
+   },
+   "by_decade": {
+    "1970s": {
+     "n": 16,
+     "right": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     }
+    },
+    "1980s": {
+     "n": 16,
+     "right": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     }
+    },
+    "1990s": {
+     "n": 15,
+     "right": {
+      "k": 14,
+      "n": 15,
+      "p": 0.9333,
+      "lo": 0.7018,
+      "hi": 0.9881
+     },
+     "right_extent": {
+      "k": 14,
+      "n": 15,
+      "p": 0.9333,
+      "lo": 0.7018,
+      "hi": 0.9881
+     },
+     "link": {
+      "k": 15,
+      "n": 15,
+      "p": 1.0,
+      "lo": 0.7961,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 14,
+      "n": 15,
+      "p": 0.9333,
+      "lo": 0.7018,
+      "hi": 0.9881
+     }
+    },
+    "2000s": {
+     "n": 16,
+     "right": {
+      "k": 15,
+      "n": 16,
+      "p": 0.9375,
+      "lo": 0.7167,
+      "hi": 0.9889
+     },
+     "right_extent": {
+      "k": 15,
+      "n": 16,
+      "p": 0.9375,
+      "lo": 0.7167,
+      "hi": 0.9889
+     },
+     "link": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     }
+    },
+    "2010s": {
+     "n": 16,
+     "right": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     }
+    },
+    "2020s": {
+     "n": 1,
+     "right": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     }
+    }
+   },
+   "by_effect": {
+    "modified": {
+     "n": 1,
+     "right": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     }
+    },
+    "rehearingEnBancGranted": {
+     "n": 43,
+     "right": {
+      "k": 42,
+      "n": 43,
+      "p": 0.9767,
+      "lo": 0.8794,
+      "hi": 0.9959
+     },
+     "right_extent": {
+      "k": 42,
+      "n": 43,
+      "p": 0.9767,
+      "lo": 0.8794,
+      "hi": 0.9959
+     },
+     "link": {
+      "k": 43,
+      "n": 43,
+      "p": 1.0,
+      "lo": 0.918,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 42,
+      "n": 43,
+      "p": 0.9767,
+      "lo": 0.8794,
+      "hi": 0.9959
+     }
+    },
+    "reinstated": {
+     "n": 1,
+     "right": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     }
+    },
+    "vacated": {
+     "n": 35,
+     "right": {
+      "k": 34,
+      "n": 35,
+      "p": 0.9714,
+      "lo": 0.8547,
+      "hi": 0.9949
+     },
+     "right_extent": {
+      "k": 34,
+      "n": 35,
+      "p": 0.9714,
+      "lo": 0.8547,
+      "hi": 0.9949
+     },
+     "link": {
+      "k": 35,
+      "n": 35,
+      "p": 1.0,
+      "lo": 0.9011,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 35,
+      "n": 35,
+      "p": 1.0,
+      "lo": 0.9011,
+      "hi": 1.0
+     }
+    }
+   },
+   "answer_distribution": {
+    "modified": 1,
+    "rehearing_en_banc_only": 39,
+    "reinstated": 1,
+    "reversed_or_vacated_in_part": 2,
+    "review_denied": 1,
+    "vacated": 35,
+    "withdrawn_or_superseded": 1
+   },
+   "failures": {
+    "kind": 1,
+    "kind (same status effect)": 1
+   },
+   "strata": {
+    "fed|1970s": {
+     "n": 16,
+     "right": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "population": 48,
+     "sampled": 16
+    },
+    "fed|1980s": {
+     "n": 15,
+     "right": {
+      "k": 15,
+      "n": 15,
+      "p": 1.0,
+      "lo": 0.7961,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 15,
+      "n": 15,
+      "p": 1.0,
+      "lo": 0.7961,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 15,
+      "n": 15,
+      "p": 1.0,
+      "lo": 0.7961,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 15,
+      "n": 15,
+      "p": 1.0,
+      "lo": 0.7961,
+      "hi": 1.0
+     },
+     "population": 157,
+     "sampled": 15
+    },
+    "fed|1990s": {
+     "n": 15,
+     "right": {
+      "k": 14,
+      "n": 15,
+      "p": 0.9333,
+      "lo": 0.7018,
+      "hi": 0.9881
+     },
+     "right_extent": {
+      "k": 14,
+      "n": 15,
+      "p": 0.9333,
+      "lo": 0.7018,
+      "hi": 0.9881
+     },
+     "link": {
+      "k": 15,
+      "n": 15,
+      "p": 1.0,
+      "lo": 0.7961,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 14,
+      "n": 15,
+      "p": 0.9333,
+      "lo": 0.7018,
+      "hi": 0.9881
+     },
+     "population": 199,
+     "sampled": 15
+    },
+    "fed|2000s": {
+     "n": 15,
+     "right": {
+      "k": 15,
+      "n": 15,
+      "p": 1.0,
+      "lo": 0.7961,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 15,
+      "n": 15,
+      "p": 1.0,
+      "lo": 0.7961,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 15,
+      "n": 15,
+      "p": 1.0,
+      "lo": 0.7961,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 15,
+      "n": 15,
+      "p": 1.0,
+      "lo": 0.7961,
+      "hi": 1.0
+     },
+     "population": 148,
+     "sampled": 15
+    },
+    "fed|2010s": {
+     "n": 16,
+     "right": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 16,
+      "n": 16,
+      "p": 1.0,
+      "lo": 0.8064,
+      "hi": 1.0
+     },
+     "population": 193,
+     "sampled": 16
+    },
+    "fed|2020s": {
+     "n": 1,
+     "right": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "population": 1,
+     "sampled": 1
+    },
+    "state|1980s": {
+     "n": 1,
+     "right": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "population": 1,
+     "sampled": 1
+    },
+    "state|2000s": {
+     "n": 1,
+     "right": {
+      "k": 0,
+      "n": 1,
+      "p": 0.0,
+      "lo": 0.0,
+      "hi": 0.7935
+     },
+     "right_extent": {
+      "k": 0,
+      "n": 1,
+      "p": 0.0,
+      "lo": 0.0,
+      "hi": 0.7935
+     },
+     "link": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "population": 1,
+     "sampled": 1
+    }
+   }
+  }
+ },
+ "decoys": {
+  "in_key": {
+   "wrong": 6,
+   "right": 4
+  },
+  "accuracy": {
+   "k": 10,
+   "n": 10,
+   "p": 1.0,
+   "lo": 0.7225,
+   "hi": 1.0
+  },
+  "known_wrong_rejected": {
+   "k": 6,
+   "n": 6,
+   "p": 1.0,
+   "lo": 0.6097,
+   "hi": 1.0
+  },
+  "known_right_confirmed": {
+   "k": 4,
+   "n": 4,
+   "p": 1.0,
+   "lo": 0.5101,
+   "hi": 1.0
+  },
+  "per_pack": {
+   "pack_1": {
+    "accuracy": {
+     "k": 5,
+     "n": 5,
+     "p": 1.0,
+     "lo": 0.5655,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 3,
+     "n": 3,
+     "p": 1.0,
+     "lo": 0.4385,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   },
+   "pack_2": {
+    "accuracy": {
+     "k": 5,
+     "n": 5,
+     "p": 1.0,
+     "lo": 0.5655,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 3,
+     "n": 3,
+     "p": 1.0,
+     "lo": 0.4385,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   }
+  },
+  "per_file": {
+   "ans_1.jsonl": {
+    "accuracy": {
+     "k": 5,
+     "n": 5,
+     "p": 1.0,
+     "lo": 0.5655,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 3,
+     "n": 3,
+     "p": 1.0,
+     "lo": 0.4385,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   },
+   "ans_2.jsonl": {
+    "accuracy": {
+     "k": 5,
+     "n": 5,
+     "p": 1.0,
+     "lo": 0.5655,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 3,
+     "n": 3,
+     "p": 1.0,
+     "lo": 0.4385,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   }
+  },
+  "per_family": {
+   "r6:a3:below/sc/weak2": {
+    "accuracy": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r6:a3:decoy_base": {
+    "accuracy": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    },
+    "right_confirmed": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    }
+   },
+   "r6:a3:decoy_wrong": {
+    "accuracy": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r6:a3:rehear/docket": {
+    "accuracy": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r6:a3:rehear/enbanc-cite": {
+    "accuracy": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    },
+    "right_confirmed": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    }
+   },
+   "r6:r1:rehear/self": {
+    "accuracy": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r6:v1:decoy_base": {
+    "accuracy": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    },
+    "right_confirmed": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    }
+   },
+   "r6:v1:decoy_wrong": {
+    "accuracy": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r6:v2:below/sc/sc_a1": {
+    "accuracy": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    },
+    "right_confirmed": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    }
+   },
+   "r6:v2:decoy_wrong": {
+    "accuracy": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 1,
+     "n": 1,
+     "p": 1.0,
+     "lo": 0.2065,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   }
+  },
+  "missed": []
+ },
+ "readers": {
+  "ans_1.jsonl": {
+   "items": 45,
+   "packs": [
+    "1"
+   ],
+   "real_right": {
+    "k": 39,
+    "n": 40,
+    "p": 0.975,
+    "lo": 0.8712,
+    "hi": 0.9956
+   },
+   "decoy_accuracy": {
+    "k": 5,
+    "n": 5,
+    "p": 1.0,
+    "lo": 0.5655,
+    "hi": 1.0
+   },
+   "unsure": 0,
+   "low_confidence": 0
+  },
+  "ans_2.jsonl": {
+   "items": 45,
+   "packs": [
+    "2"
+   ],
+   "real_right": {
+    "k": 39,
+    "n": 40,
+    "p": 0.975,
+    "lo": 0.8712,
+    "hi": 0.9956
+   },
+   "decoy_accuracy": {
+    "k": 5,
+    "n": 5,
+    "p": 1.0,
+    "lo": 0.5655,
+    "hi": 1.0
+   },
+   "unsure": 0,
+   "low_confidence": 0
+  }
+ },
+ "agreement": null,
+ "problems": [],
+ "unknown_items": [],
+ "threshold": 0.9,
+ "definitions": {
+  "right": "link and the disposition agrees with the kind",
+  "right_extent": "right and (scope all => whole yes)",
+  "interval": "Wilson 95%; weighted: Wilson at the Kish effective sample size, finite-population corrected, strata weighted by population",
+  "decoy_accuracy": "known wrong: not confirmed (A: not right; B: not link); known right: right"
+ }
+}

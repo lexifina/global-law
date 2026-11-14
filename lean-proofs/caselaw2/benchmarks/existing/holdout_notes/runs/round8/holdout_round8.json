@@ -1,0 +1,820 @@
+{
+ "explicit_admitted_pairs_in_model": 27908,
+ "holdout_statements": 103610,
+ "label": "round8",
+ "pool": {
+  "file": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round5/tests/results/testable_pool_baseline-round4.tsv",
+  "moved_from_to": {
+   "atRiskOnly->laterOnly": 7,
+   "atRiskOnly->negByOther": 16,
+   "atRiskOnly->negByY": 12,
+   "atRiskOnly->partlyByOther": 16,
+   "atRiskOnly->partlyByY": 46,
+   "laterOnly->atRiskOnly": 2,
+   "laterOnly->negByOther": 1,
+   "laterOnly->negByY": 1,
+   "laterOnly->partlyByOther": 6,
+   "laterOnly->partlyByY": 27,
+   "negByOther->atRiskOnly": 2,
+   "negByOther->nothing": 1,
+   "negByY->atRiskOnly": 1,
+   "negByY->nothing": 4,
+   "nothing->atRiskOnly": 130,
+   "nothing->laterOnly": 45,
+   "nothing->negByOther": 36,
+   "nothing->negByY": 120,
+   "nothing->partlyByOther": 105,
+   "nothing->partlyByY": 1052,
+   "partlyByOther->atRiskOnly": 3,
+   "partlyByOther->laterOnly": 5,
+   "partlyByOther->negByOther": 10,
+   "partlyByOther->negByY": 1,
+   "partlyByOther->nothing": 2,
+   "partlyByOther->partlyByY": 4,
+   "partlyByY->nothing": 1
+  },
+  "pairs": 9374,
+  "sha256": "5233ce410116cc125e93c20ecc643c4664cc1bcd0117b9197d9796be40365dcb"
+ },
+ "precedent_pairs_explicit": 3231,
+ "precedent_pairs_named": 12354,
+ "precedent_pairs_not_explicit": 9123,
+ "reverse": {
+  "history": {
+   "other": 1032,
+   "same": 4982
+  },
+  "history:h": {
+   "other": 76,
+   "same": 1606
+  },
+  "history:h6": {
+   "other": 638,
+   "same": 2769
+  },
+  "history:h7": {
+   "other": 165,
+   "same": 369
+  },
+  "history:h8": {
+   "other": 153,
+   "same": 238
+  },
+  "precedent": {
+   "other": 56,
+   "same": 797
+  },
+  "precedent:t": {
+   "other": 43,
+   "same": 606
+  },
+  "precedent:t7": {
+   "other": 1,
+   "same": 8
+  },
+  "precedent:t8": {
+   "other": 1,
+   "same": 15
+  },
+  "precedent:tw": {
+   "other": 11,
+   "same": 168
+  }
+ },
+ "split_manifest_holdout_sha256": "94bb61aed717070b6f44ef036a36172fb136d4243f5c7460994dc579c504107c",
+ "status": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/out/v8e/status.tsv",
+ "status_sha256": "e8479f3f5496d09ce73f711ee14b97c9c473b988df6eb0624af5fd8bc71ad534",
+ "tables": {
+  "pair|all|named": {
+   "history": {
+    "atRiskOnly": 371,
+    "laterOnly": 79,
+    "negByOther": 1191,
+    "negByY": 4946,
+    "nothing": 12616,
+    "partlyByOther": 259,
+    "partlyByY": 1381
+   },
+   "precedent": {
+    "atRiskOnly": 664,
+    "laterOnly": 124,
+    "negByOther": 140,
+    "negByY": 792,
+    "nothing": 6924,
+    "partlyByOther": 315,
+    "partlyByY": 3395
+   }
+  },
+  "pair|all|noBy": {
+   "enactment": {
+    "atRiskOnly": 117,
+    "laterOnly": 24,
+    "negByOther": 4,
+    "negByY": 0,
+    "nothing": 2178,
+    "partlyByOther": 58,
+    "partlyByY": 0
+   },
+   "history": {
+    "atRiskOnly": 56,
+    "laterOnly": 25,
+    "negByOther": 357,
+    "negByY": 0,
+    "nothing": 2066,
+    "partlyByOther": 94,
+    "partlyByY": 0
+   },
+   "precedent": {
+    "atRiskOnly": 269,
+    "laterOnly": 83,
+    "negByOther": 262,
+    "negByY": 0,
+    "nothing": 3889,
+    "partlyByOther": 840,
+    "partlyByY": 0
+   }
+  },
+  "pair|explicitAdmitted|named": {
+   "precedent:explicit": {
+    "atRiskOnly": 13,
+    "laterOnly": 29,
+    "negByOther": 16,
+    "negByY": 662,
+    "nothing": 15,
+    "partlyByOther": 21,
+    "partlyByY": 2475
+   },
+   "precedent:notExplicit": {
+    "atRiskOnly": 651,
+    "laterOnly": 95,
+    "negByOther": 124,
+    "negByY": 130,
+    "nothing": 6909,
+    "partlyByOther": 294,
+    "partlyByY": 920
+   }
+  },
+  "pair|kind|named": {
+   "abrogated": {
+    "atRiskOnly": 258,
+    "laterOnly": 29,
+    "negByOther": 24,
+    "negByY": 36,
+    "nothing": 2608,
+    "partlyByOther": 37,
+    "partlyByY": 370
+   },
+   "disapproved": {
+    "atRiskOnly": 29,
+    "laterOnly": 9,
+    "negByOther": 6,
+    "negByY": 42,
+    "nothing": 432,
+    "partlyByOther": 38,
+    "partlyByY": 391
+   },
+   "overruled": {
+    "atRiskOnly": 375,
+    "laterOnly": 85,
+    "negByOther": 109,
+    "negByY": 701,
+    "nothing": 3841,
+    "partlyByOther": 232,
+    "partlyByY": 2577
+   },
+   "recededFrom": {
+    "atRiskOnly": 2,
+    "laterOnly": 1,
+    "negByOther": 1,
+    "negByY": 13,
+    "nothing": 43,
+    "partlyByOther": 8,
+    "partlyByY": 57
+   },
+   "reversed": {
+    "atRiskOnly": 240,
+    "laterOnly": 54,
+    "negByOther": 345,
+    "negByY": 3970,
+    "nothing": 9354,
+    "partlyByOther": 103,
+    "partlyByY": 1126
+   },
+   "vacated": {
+    "atRiskOnly": 131,
+    "laterOnly": 25,
+    "negByOther": 846,
+    "negByY": 976,
+    "nothing": 3262,
+    "partlyByOther": 156,
+    "partlyByY": 255
+   }
+  },
+  "pair|kind|noBy": {
+   "abrogated": {
+    "atRiskOnly": 88,
+    "laterOnly": 16,
+    "negByOther": 14,
+    "negByY": 0,
+    "nothing": 1028,
+    "partlyByOther": 75,
+    "partlyByY": 0
+   },
+   "disapproved": {
+    "atRiskOnly": 13,
+    "laterOnly": 9,
+    "negByOther": 14,
+    "negByY": 0,
+    "nothing": 315,
+    "partlyByOther": 83,
+    "partlyByY": 0
+   },
+   "overruled": {
+    "atRiskOnly": 168,
+    "laterOnly": 58,
+    "negByOther": 232,
+    "negByY": 0,
+    "nothing": 2538,
+    "partlyByOther": 667,
+    "partlyByY": 0
+   },
+   "recededFrom": {
+    "atRiskOnly": 0,
+    "laterOnly": 0,
+    "negByOther": 2,
+    "negByY": 0,
+    "nothing": 8,
+    "partlyByOther": 15,
+    "partlyByY": 0
+   },
+   "reversed": {
+    "atRiskOnly": 21,
+    "laterOnly": 10,
+    "negByOther": 177,
+    "negByY": 0,
+    "nothing": 1212,
+    "partlyByOther": 58,
+    "partlyByY": 0
+   },
+   "supersededByEnactment": {
+    "atRiskOnly": 117,
+    "laterOnly": 24,
+    "negByOther": 4,
+    "negByY": 0,
+    "nothing": 2178,
+    "partlyByOther": 58,
+    "partlyByY": 0
+   },
+   "vacated": {
+    "atRiskOnly": 35,
+    "laterOnly": 15,
+    "negByOther": 180,
+    "negByY": 0,
+    "nothing": 854,
+    "partlyByOther": 36,
+    "partlyByY": 0
+   }
+  },
+  "pair|scope|named": {
+   "history:all": {
+    "atRiskOnly": 139,
+    "laterOnly": 33,
+    "negByOther": 524,
+    "negByY": 1653,
+    "nothing": 3594,
+    "partlyByOther": 81,
+    "partlyByY": 163
+   },
+   "history:otherGrounds": {
+    "atRiskOnly": 200,
+    "laterOnly": 44,
+    "negByOther": 641,
+    "negByY": 3238,
+    "nothing": 7946,
+    "partlyByOther": 158,
+    "partlyByY": 937
+   },
+   "history:partialUnknown": {
+    "atRiskOnly": 32,
+    "laterOnly": 2,
+    "negByOther": 26,
+    "negByY": 55,
+    "nothing": 1076,
+    "partlyByOther": 20,
+    "partlyByY": 281
+   },
+   "precedent:all": {
+    "atRiskOnly": 177,
+    "laterOnly": 56,
+    "negByOther": 65,
+    "negByY": 317,
+    "nothing": 1753,
+    "partlyByOther": 75,
+    "partlyByY": 408
+   },
+   "precedent:otherGrounds": {
+    "atRiskOnly": 460,
+    "laterOnly": 65,
+    "negByOther": 68,
+    "negByY": 458,
+    "nothing": 4879,
+    "partlyByOther": 208,
+    "partlyByY": 2819
+   },
+   "precedent:partialUnknown": {
+    "atRiskOnly": 27,
+    "laterOnly": 3,
+    "negByOther": 7,
+    "negByY": 17,
+    "nothing": 292,
+    "partlyByOther": 32,
+    "partlyByY": 168
+   }
+  },
+  "pair|scope|noBy": {
+   "enactment:all": {
+    "atRiskOnly": 44,
+    "laterOnly": 12,
+    "negByOther": 3,
+    "negByY": 0,
+    "nothing": 930,
+    "partlyByOther": 22,
+    "partlyByY": 0
+   },
+   "enactment:otherGrounds": {
+    "atRiskOnly": 69,
+    "laterOnly": 11,
+    "negByOther": 1,
+    "negByY": 0,
+    "nothing": 1187,
+    "partlyByOther": 35,
+    "partlyByY": 0
+   },
+   "enactment:partialUnknown": {
+    "atRiskOnly": 4,
+    "laterOnly": 1,
+    "negByOther": 0,
+    "negByY": 0,
+    "nothing": 61,
+    "partlyByOther": 1,
+    "partlyByY": 0
+   },
+   "history:all": {
+    "atRiskOnly": 35,
+    "laterOnly": 20,
+    "negByOther": 200,
+    "negByY": 0,
+    "nothing": 970,
+    "partlyByOther": 23,
+    "partlyByY": 0
+   },
+   "history:otherGrounds": {
+    "atRiskOnly": 21,
+    "laterOnly": 4,
+    "negByOther": 153,
+    "negByY": 0,
+    "nothing": 927,
+    "partlyByOther": 52,
+    "partlyByY": 0
+   },
+   "history:partialUnknown": {
+    "atRiskOnly": 0,
+    "laterOnly": 1,
+    "negByOther": 4,
+    "negByY": 0,
+    "nothing": 169,
+    "partlyByOther": 19,
+    "partlyByY": 0
+   },
+   "precedent:all": {
+    "atRiskOnly": 147,
+    "laterOnly": 60,
+    "negByOther": 166,
+    "negByY": 0,
+    "nothing": 2570,
+    "partlyByOther": 210,
+    "partlyByY": 0
+   },
+   "precedent:otherGrounds": {
+    "atRiskOnly": 104,
+    "laterOnly": 19,
+    "negByOther": 88,
+    "negByY": 0,
+    "nothing": 1133,
+    "partlyByOther": 550,
+    "partlyByY": 0
+   },
+   "precedent:partialUnknown": {
+    "atRiskOnly": 18,
+    "laterOnly": 4,
+    "negByOther": 8,
+    "negByY": 0,
+    "nothing": 186,
+    "partlyByOther": 80,
+    "partlyByY": 0
+   }
+  },
+  "pool|frozenPool|named": {
+   "all": {
+    "atRiskOnly": 653,
+    "laterOnly": 99,
+    "negByOther": 126,
+    "negByY": 153,
+    "nothing": 6910,
+    "partlyByOther": 299,
+    "partlyByY": 1134
+   },
+   "alsoInFeed": {
+    "atRiskOnly": 223,
+    "laterOnly": 44,
+    "negByOther": 12,
+    "negByY": 50,
+    "nothing": 1316,
+    "partlyByOther": 44,
+    "partlyByY": 951
+   },
+   "holdoutOnly": {
+    "atRiskOnly": 430,
+    "laterOnly": 55,
+    "negByOther": 114,
+    "negByY": 103,
+    "nothing": 5594,
+    "partlyByOther": 255,
+    "partlyByY": 183
+   },
+   "kind:abrogated": {
+    "atRiskOnly": 257,
+    "laterOnly": 29,
+    "negByOther": 24,
+    "negByY": 16,
+    "nothing": 2607,
+    "partlyByOther": 36,
+    "partlyByY": 280
+   },
+   "kind:disapproved": {
+    "atRiskOnly": 29,
+    "laterOnly": 8,
+    "negByOther": 6,
+    "negByY": 2,
+    "nothing": 431,
+    "partlyByOther": 35,
+    "partlyByY": 106
+   },
+   "kind:overruled": {
+    "atRiskOnly": 366,
+    "laterOnly": 61,
+    "negByOther": 95,
+    "negByY": 135,
+    "nothing": 3829,
+    "partlyByOther": 220,
+    "partlyByY": 738
+   },
+   "kind:recededFrom": {
+    "atRiskOnly": 1,
+    "laterOnly": 1,
+    "negByOther": 1,
+    "negByY": 0,
+    "nothing": 43,
+    "partlyByOther": 8,
+    "partlyByY": 10
+   },
+   "scope:all": {
+    "atRiskOnly": 175,
+    "laterOnly": 47,
+    "negByOther": 62,
+    "negByY": 58,
+    "nothing": 1752,
+    "partlyByOther": 73,
+    "partlyByY": 101
+   },
+   "scope:otherGrounds": {
+    "atRiskOnly": 451,
+    "laterOnly": 49,
+    "negByOther": 58,
+    "negByY": 95,
+    "nothing": 4867,
+    "partlyByOther": 195,
+    "partlyByY": 984
+   },
+   "scope:partialUnknown": {
+    "atRiskOnly": 27,
+    "laterOnly": 3,
+    "negByOther": 6,
+    "negByY": 0,
+    "nothing": 291,
+    "partlyByOther": 31,
+    "partlyByY": 49
+   }
+  },
+  "statement|all|named": {
+   "history": {
+    "atRiskOnly": 1097,
+    "laterOnly": 121,
+    "negByOther": 4772,
+    "negByY": 15127,
+    "nothing": 27220,
+    "partlyByOther": 1203,
+    "partlyByY": 3528
+   },
+   "precedent": {
+    "atRiskOnly": 2811,
+    "laterOnly": 314,
+    "negByOther": 241,
+    "negByY": 3201,
+    "nothing": 15191,
+    "partlyByOther": 538,
+    "partlyByY": 11344
+   }
+  },
+  "statement|all|noBy": {
+   "enactment": {
+    "atRiskOnly": 365,
+    "laterOnly": 39,
+    "negByOther": 6,
+    "negByY": 0,
+    "nothing": 4867,
+    "partlyByOther": 271,
+    "partlyByY": 0
+   },
+   "history": {
+    "atRiskOnly": 87,
+    "laterOnly": 29,
+    "negByOther": 476,
+    "negByY": 0,
+    "nothing": 3002,
+    "partlyByOther": 127,
+    "partlyByY": 0
+   },
+   "precedent": {
+    "atRiskOnly": 461,
+    "laterOnly": 124,
+    "negByOther": 617,
+    "negByY": 0,
+    "nothing": 5029,
+    "partlyByOther": 1402,
+    "partlyByY": 0
+   }
+  },
+  "statement|kind|named": {
+   "abrogated": {
+    "atRiskOnly": 1234,
+    "laterOnly": 70,
+    "negByOther": 39,
+    "negByY": 253,
+    "nothing": 6373,
+    "partlyByOther": 79,
+    "partlyByY": 1087
+   },
+   "disapproved": {
+    "atRiskOnly": 55,
+    "laterOnly": 17,
+    "negByOther": 13,
+    "negByY": 87,
+    "nothing": 637,
+    "partlyByOther": 55,
+    "partlyByY": 1182
+   },
+   "overruled": {
+    "atRiskOnly": 1519,
+    "laterOnly": 225,
+    "negByOther": 188,
+    "negByY": 2815,
+    "nothing": 8109,
+    "partlyByOther": 385,
+    "partlyByY": 8904
+   },
+   "recededFrom": {
+    "atRiskOnly": 3,
+    "laterOnly": 2,
+    "negByOther": 1,
+    "negByY": 46,
+    "nothing": 72,
+    "partlyByOther": 19,
+    "partlyByY": 171
+   },
+   "reversed": {
+    "atRiskOnly": 626,
+    "laterOnly": 72,
+    "negByOther": 834,
+    "negByY": 11635,
+    "nothing": 18179,
+    "partlyByOther": 217,
+    "partlyByY": 2515
+   },
+   "vacated": {
+    "atRiskOnly": 471,
+    "laterOnly": 49,
+    "negByOther": 3938,
+    "negByY": 3492,
+    "nothing": 9041,
+    "partlyByOther": 986,
+    "partlyByY": 1013
+   }
+  },
+  "statement|kind|noBy": {
+   "abrogated": {
+    "atRiskOnly": 153,
+    "laterOnly": 19,
+    "negByOther": 34,
+    "negByY": 0,
+    "nothing": 1341,
+    "partlyByOther": 131,
+    "partlyByY": 0
+   },
+   "disapproved": {
+    "atRiskOnly": 16,
+    "laterOnly": 13,
+    "negByOther": 20,
+    "negByY": 0,
+    "nothing": 355,
+    "partlyByOther": 140,
+    "partlyByY": 0
+   },
+   "overruled": {
+    "atRiskOnly": 292,
+    "laterOnly": 92,
+    "negByOther": 561,
+    "negByY": 0,
+    "nothing": 3323,
+    "partlyByOther": 1106,
+    "partlyByY": 0
+   },
+   "recededFrom": {
+    "atRiskOnly": 0,
+    "laterOnly": 0,
+    "negByOther": 2,
+    "negByY": 0,
+    "nothing": 10,
+    "partlyByOther": 25,
+    "partlyByY": 0
+   },
+   "reversed": {
+    "atRiskOnly": 27,
+    "laterOnly": 10,
+    "negByOther": 202,
+    "negByY": 0,
+    "nothing": 1688,
+    "partlyByOther": 63,
+    "partlyByY": 0
+   },
+   "supersededByEnactment": {
+    "atRiskOnly": 365,
+    "laterOnly": 39,
+    "negByOther": 6,
+    "negByY": 0,
+    "nothing": 4867,
+    "partlyByOther": 271,
+    "partlyByY": 0
+   },
+   "vacated": {
+    "atRiskOnly": 60,
+    "laterOnly": 19,
+    "negByOther": 274,
+    "negByY": 0,
+    "nothing": 1314,
+    "partlyByOther": 64,
+    "partlyByY": 0
+   }
+  },
+  "statement|scope|named": {
+   "history:all": {
+    "atRiskOnly": 382,
+    "laterOnly": 51,
+    "negByOther": 1678,
+    "negByY": 3755,
+    "nothing": 6924,
+    "partlyByOther": 334,
+    "partlyByY": 377
+   },
+   "history:otherGrounds": {
+    "atRiskOnly": 651,
+    "laterOnly": 64,
+    "negByOther": 3008,
+    "negByY": 11191,
+    "nothing": 17876,
+    "partlyByOther": 814,
+    "partlyByY": 2332
+   },
+   "history:partialUnknown": {
+    "atRiskOnly": 64,
+    "laterOnly": 6,
+    "negByOther": 86,
+    "negByY": 181,
+    "nothing": 2420,
+    "partlyByOther": 55,
+    "partlyByY": 819
+   },
+   "precedent:all": {
+    "atRiskOnly": 356,
+    "laterOnly": 107,
+    "negByOther": 87,
+    "negByY": 999,
+    "nothing": 2285,
+    "partlyByOther": 96,
+    "partlyByY": 869
+   },
+   "precedent:otherGrounds": {
+    "atRiskOnly": 2298,
+    "laterOnly": 168,
+    "negByOther": 137,
+    "negByY": 1943,
+    "nothing": 12271,
+    "partlyByOther": 397,
+    "partlyByY": 9642
+   },
+   "precedent:partialUnknown": {
+    "atRiskOnly": 157,
+    "laterOnly": 39,
+    "negByOther": 17,
+    "negByY": 259,
+    "nothing": 635,
+    "partlyByOther": 45,
+    "partlyByY": 833
+   }
+  },
+  "statement|scope|noBy": {
+   "enactment:all": {
+    "atRiskOnly": 141,
+    "laterOnly": 17,
+    "negByOther": 5,
+    "negByY": 0,
+    "nothing": 1605,
+    "partlyByOther": 126,
+    "partlyByY": 0
+   },
+   "enactment:otherGrounds": {
+    "atRiskOnly": 215,
+    "laterOnly": 20,
+    "negByOther": 1,
+    "negByY": 0,
+    "nothing": 3074,
+    "partlyByOther": 132,
+    "partlyByY": 0
+   },
+   "enactment:partialUnknown": {
+    "atRiskOnly": 9,
+    "laterOnly": 2,
+    "negByOther": 0,
+    "negByY": 0,
+    "nothing": 188,
+    "partlyByOther": 13,
+    "partlyByY": 0
+   },
+   "history:all": {
+    "atRiskOnly": 62,
+    "laterOnly": 23,
+    "negByOther": 237,
+    "negByY": 0,
+    "nothing": 1308,
+    "partlyByOther": 32,
+    "partlyByY": 0
+   },
+   "history:otherGrounds": {
+    "atRiskOnly": 24,
+    "laterOnly": 5,
+    "negByOther": 235,
+    "negByY": 0,
+    "nothing": 1418,
+    "partlyByOther": 69,
+    "partlyByY": 0
+   },
+   "history:partialUnknown": {
+    "atRiskOnly": 1,
+    "laterOnly": 1,
+    "negByOther": 4,
+    "negByY": 0,
+    "nothing": 276,
+    "partlyByOther": 26,
+    "partlyByY": 0
+   },
+   "precedent:all": {
+    "atRiskOnly": 234,
+    "laterOnly": 80,
+    "negByOther": 393,
+    "negByY": 0,
+    "nothing": 3086,
+    "partlyByOther": 309,
+    "partlyByY": 0
+   },
+   "precedent:otherGrounds": {
+    "atRiskOnly": 195,
+    "laterOnly": 32,
+    "negByOther": 189,
+    "negByY": 0,
+    "nothing": 1673,
+    "partlyByOther": 938,
+    "partlyByY": 0
+   },
+   "precedent:partialUnknown": {
+    "atRiskOnly": 32,
+    "laterOnly": 12,
+    "negByOther": 35,
+    "negByY": 0,
+    "nothing": 270,
+    "partlyByOther": 155,
+    "partlyByY": 0
+   }
+  }
+ },
+ "treatment_rows": 45254
+}

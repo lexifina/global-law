@@ -106,7 +106,7 @@ def main(inp, out):
     o = [f'<svg viewBox="0 0 {W} {H:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" '
          f'aria-label="Lean declaration map: the previous tax-code formalism beside what was added for the Tax Court work">',
          f'<rect width="{W}" height="{H:.0f}" rx="14" fill="#0f1720"/>',
-         f'<text x="44" y="56" font-family="{F}" font-size="21" fill="#9aa6b5">Recreating Tax Court rulings · what was added to the Lean code</text>']
+         f'<text x="44" y="56" font-family="{F}" font-size="24" fill="#9aa6b5">Extending our tax law formalism with court procedure</text>']
     xm = cx[3] - PGAP / 2
     heads = [("PREVIOUS POST: FORMALIZING THE US TAX CODE", 44, stats[0], "#8b97a6"), ("ADDED FOR THIS POST", xm + 20, stats[1], "#f2b24a")]
     for lab, x0, st, c in heads:
@@ -115,8 +115,7 @@ def main(inp, out):
             xx = x0 + i * 140
             o.append(f'<text x="{xx}" y="150" font-family="{F}" font-weight="600" font-size="30" fill="#eef1f5">{v}</text>')
             o.append(f'<text x="{xx}" y="172" font-family="{M}" font-size="11" letter-spacing="1" fill="#8b97a6">{s}</text>')
-    o.append(f'<text x="{xm + 20}" y="200" font-family="{F}" font-size="14" fill="#c9d1db">+ {guards} court holdings re-checked on every build</text>')
-    o.append(f'<text x="{xm + 20}" y="220" font-family="{F}" font-size="14" fill="#ffd27a">{cross} calls into the previous post’s code (gold lines)</text>')
+    o.append(f'<text x="{xm + 20}" y="200" font-family="{F}" font-size="14" fill="#ffd27a">{cross} calls into the previous post’s code (gold lines)</text>')
     o.append(f'<line x1="{xm:.0f}" x2="{xm:.0f}" y1="84" y2="{H - 70:.0f}" stroke="#2a3644" stroke-dasharray="4 5"/>')
     o.append(f'<text x="44" y="{Y0 - 40}" font-family="{M}" font-size="12" letter-spacing="1" fill="#8b97a6">DEPENDENCY DEPTH ↓ · FOUNDATIONS TO RESULTS</text>')
     for d in range(0, maxd + 1, 2):

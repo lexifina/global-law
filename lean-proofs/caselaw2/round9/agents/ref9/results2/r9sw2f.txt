@@ -1,0 +1,31 @@
+x96000: 1 disagreeing rows 
+x96001: 5 disagreeing rows 
+x96003: 2 disagreeing rows 
+x96004: 2 disagreeing rows 
+x96005: 2 disagreeing rows 
+x96007: 2 disagreeing rows 
+x96008: 1 disagreeing rows 
+x96009: 1 disagreeing rows 
+
+10 universes, 8 with a disagreement, 0 where the Lean runner wrote no output, 0 where the reference failed
+  status    0 of 2489 keys disagree
+  findings  1 of 858 keys disagree
+  certs     1 of 4602 keys disagree
+  splits    0 of 231 keys disagree
+  conflicts 0 of 258 keys disagree
+  lines     0 of 108 keys disagree
+  horty     0 of 31 keys disagree
+  classes   1 of 1544 keys disagree
+  summary   13 of 320 keys disagree
+  class (file, bucket, rule): universes   first example
+  summary   count                                zone_checked_rows              8   e.g. x96000 zone_checked_rows A=80 B=82
+  summary   count                                zone_failed_rows               4   e.g. x96001 zone_failed_rows A=40 B=41
+  findings  onlyA                                atRisk:inferred                1   e.g. x96001 atRisk:inferred 244 243 A=1 B=
+  certs     okMismatch:ok/witnessNoStanding      treatment                      1   e.g. x96001 treatment:tr8 A=ok B=witnessNoStanding
+  classes   verdict                              ok/witnessNoStanding           1   e.g. x96001 tr8 A=ok B=witnessNoStanding
+  summary   count                                zone_missing_rows              1   e.g. x96007 zone_missing_rows A=46 B=47
+  info  findings uncompared lean:citesNotCitable:force               62
+  info  findings uncompared lean:hortyConsistentBase                 21
+  info  findings uncompared lean:hortySelfInconsistent               7
+  info  findings uncompared lean:inconsistentBindingBase             10
+rc=1

@@ -1,0 +1,138 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round12\\stage\\v12a",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round12\\out\\v12a",
+  "status_sha1": "a9129b97edcbe249b4d60c9abbdf4ef8eca19dea"
+ },
+ "court": "state",
+ "dataset": "brace_hall_state",
+ "generated": "2026-11-14T07:44:10+00:00",
+ "label": "round12",
+ "link": {
+  "fail_reasons": {
+   "below_not_found": 3623,
+   "below_several_cited": 5,
+   "below_several_uncited": 80,
+   "ssc_ambiguous": 197,
+   "ssc_not_in_corpus": 551,
+   "trial_below_not_found": 15277,
+   "trial_below_several_uncited": 11
+  },
+  "linked": 3787,
+  "n_items": 23531
+ },
+ "metrics": {
+  "clean": {
+   "hi": 0.9640227863001029,
+   "k": 1195,
+   "lo": 0.9406259201580961,
+   "n": 1253,
+   "p": 0.9537110933758979
+  },
+  "clean_all": {
+   "hi": 0.9669964680264502,
+   "k": 1384,
+   "lo": 0.9461469210518394,
+   "n": 1445,
+   "p": 0.9577854671280277
+  },
+  "link_rate": {
+   "hi": 0.48469395662937315,
+   "k": 3685,
+   "lo": 0.4625111339083267,
+   "n": 7781,
+   "p": 0.47358951291607765
+  },
+  "link_rate_all": {
+   "hi": 0.16568710851944463,
+   "k": 3787,
+   "lo": 0.15629685181956426,
+   "n": 23531,
+   "p": 0.16093663677701756
+  },
+  "link_rate_cited": {
+   "hi": 0.43924993708002064,
+   "k": 3332,
+   "lo": 0.41726608756866695,
+   "n": 7781,
+   "p": 0.42822259349697983
+  },
+  "part": {
+   "hi": 0.47758255786355797,
+   "k": 171,
+   "lo": 0.38092257177654676,
+   "n": 399,
+   "p": 0.42857142857142855
+  },
+  "part_all": {
+   "hi": 0.43561821969692716,
+   "k": 175,
+   "lo": 0.3457622213859839,
+   "n": 449,
+   "p": 0.3897550111358575
+  },
+  "precision": {
+   "hi": 0.9490352660841602,
+   "k": 942,
+   "lo": 0.9185587490748349,
+   "n": 1007,
+   "p": 0.9354518371400199
+  },
+  "precision_all": {
+   "hi": 0.9502775284824507,
+   "k": 967,
+   "lo": 0.9205121008244859,
+   "n": 1032,
+   "p": 0.937015503875969
+  },
+  "precision_lenient": {
+   "hi": 0.9798749457433739,
+   "k": 978,
+   "lo": 0.9589468562929847,
+   "n": 1007,
+   "p": 0.971201588877855
+  },
+  "precision_lenient_all": {
+   "hi": 0.9803642092991601,
+   "k": 1003,
+   "lo": 0.9599341265599929,
+   "n": 1032,
+   "p": 0.9718992248062015
+  },
+  "recall": {
+   "hi": 0.5876808448731019,
+   "k": 942,
+   "lo": 0.5401687784377138,
+   "n": 1670,
+   "p": 0.5640718562874252
+  },
+  "recall_all": {
+   "hi": 0.54453164505674,
+   "k": 967,
+   "lo": 0.4990908191081869,
+   "n": 1853,
+   "p": 0.521856449001619
+  },
+  "recall_lenient": {
+   "hi": 0.66573857768546,
+   "k": 1074,
+   "lo": 0.6198320762517827,
+   "n": 1670,
+   "p": 0.6431137724550898
+  },
+  "recall_lenient_all": {
+   "hi": 0.6184479192688164,
+   "k": 1105,
+   "lo": 0.5738140524210467,
+   "n": 1853,
+   "p": 0.5963302752293578
+  }
+ },
+ "notes": "Primary population: linked decisions below cited by the linked state supreme court decision (MAPPING.md). recall/precision/clean/part on that population; *_all = every linked decision below (cited or caption-only). recall_lenient counts UNK_HIST as negative; precision_lenient counts PART as source-negative. link_rate: key items reviewing an intermediate appellate decision (rev_ct=3) linked to one supreme court and one decision-below node; link_rate_all: all key items (rev_ct 1-3). Intermediate-appellate-only cited units: recall 938/1663, clean 1178/1236. Units by class/cited: {'CLEAN/0': 192, 'CLEAN/1': 1253, 'NEG/0': 183, 'NEG/1': 1670, 'PART/0': 50, 'PART/1': 399}. Cited units class>model: {'CLEAN>GOOD': 1182, 'CLEAN>NEG_HIST': 29, 'CLEAN>NEG_OTHER': 4, 'CLEAN>UNK_HIST': 29, 'CLEAN>UNK_OTHER': 9, 'NEG>GOOD': 592, 'NEG>NEG_HIST': 942, 'NEG>NEG_OTHER': 1, 'NEG>UNK_HIST': 132, 'NEG>UNK_OTHER': 3, 'PART>GOOD': 223, 'PART>NEG_HIST': 36, 'PART>NEG_OTHER': 2, 'PART>UNK_HIST': 135, 'PART>UNK_OTHER': 3}.",
+ "primary": "recall",
+ "row_label": "Brace-Hall: state decision below reversed/vacated by state supreme court",
+ "split": "all",
+ "tests": "same-case"
+}

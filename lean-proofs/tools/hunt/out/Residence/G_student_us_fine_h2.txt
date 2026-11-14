@@ -1,0 +1,19 @@
+=== F-1 student, in the US; Legal.USTax.Hunt.Residence.Asset.usStock; grid #[30, 90, 62, 1, 182]; horizon 2y; student true; gifts false; foreign tax: salary 0bp, gain 0bp ===
+positions 337606, finished plans (asset disposed of) 10797, families 3
+baseline (sell, in the US every day, no other move): tax on the gain $300000, all US tax $509994
+- gain tax $0 (all US tax $162148; exemption used $0); US days 548/730: sold as nonresident, foreign tax home
+  y0: US[1-30] US[31-120] US[121-182] US[183-183] SELL RELOCATE out[184-365]
+  y1: RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+- gain tax $0 (all US tax $157353; exemption used $0); US days 547/730: sold as nonresident, US tax home, under 183 days
+  y0: SELL RELOCATE RELOCATE out[1-30] out[31-120] out[121-182] out[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+- gain tax $300000 (all US tax $509994; exemption used $0); US days 730/730: sold as nonresident, §871(a)(2) 30%
+  y0: SELL RELOCATE RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+frontier (most US days for each level of tax on the gain):
+  days 730: gain tax $300000 (all US tax $509994)
+  y0: SELL RELOCATE RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  days 548: gain tax $0 (all US tax $162148)
+  y0: US[1-30] US[31-120] US[121-182] US[183-183] SELL RELOCATE out[184-365]
+  y1: RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]

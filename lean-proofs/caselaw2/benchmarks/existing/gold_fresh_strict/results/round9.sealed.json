@@ -1,0 +1,37 @@
+{
+ "blind": true,
+ "build": {
+  "source": "round9/SEALED_LOG.md"
+ },
+ "court": "supreme",
+ "dataset": "gold_fresh_strict",
+ "generated": "2026-11-14T03:43:02+00:00",
+ "label": "round9",
+ "link": {},
+ "metrics": {
+  "recall_attributed": {
+   "hi": 0.5277699976292878,
+   "k": 56,
+   "lo": 0.35758744084433436,
+   "n": 127,
+   "p": 0.4409448818897638
+  },
+  "recall_model": {
+   "hi": 0.3255920208304077,
+   "k": 31,
+   "lo": 0.17762354588862203,
+   "n": 127,
+   "p": 0.2440944881889764
+  }
+ },
+ "notes": "Fifth use of this half.",
+ "plot": [
+  "recall_model",
+  "recall_attributed"
+ ],
+ "primary": "recall_model",
+ "row_label": "Fresh overruling lists, strict: the listed overruling case named (sealed half, used 5 times)",
+ "split": "sealed",
+ "tests": "overruling",
+ "use_note": "sealed half, 5th use"
+}

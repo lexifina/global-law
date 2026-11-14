@@ -1,0 +1,12 @@
+name = "caselaw2runner"
+version = "0.1.0"
+defaultTargets = ["caselaw2"]
+
+# The compiled runner for caselaw-lean-2: the CaseLaw2 modules of lean-proofs, built native.
+[[require]]
+name = "LegalProofs"
+path = "../../../global-law-lean/lean-proofs"
+
+[[lean_exe]]
+name = "caselaw2"
+root = "Main"

@@ -1,0 +1,62 @@
+{
+ "asof": null,
+ "blind": false,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round13\\stage\\v13a",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round13\\out\\v13a",
+  "status_sha1": "e49626a29314ae354ff481fcbf6b2e920995c6aa"
+ },
+ "court": "supreme",
+ "dataset": "conan_overruled",
+ "generated": "2026-11-14T12:05:25+00:00",
+ "label": "round13",
+ "link": {
+  "fail_reasons": {
+   "unresolved": 2
+  },
+  "linked": 292,
+  "n_items": 294
+ },
+ "metrics": {
+  "link_rate": {
+   "hi": 0.9981324618729214,
+   "k": 292,
+   "lo": 0.9755399109701716,
+   "n": 294,
+   "p": 0.9931972789115646
+  },
+  "precision": {
+   "hi": 0.8806413762515103,
+   "k": 168,
+   "lo": 0.7784048965942197,
+   "n": 201,
+   "p": 0.835820895522388
+  },
+  "recall": {
+   "hi": 0.627374800865317,
+   "k": 167,
+   "lo": 0.5145931307383873,
+   "n": 292,
+   "p": 0.571917808219178
+  },
+  "recall_2016_all": {
+   "hi": 0.5185539164478938,
+   "k": 144,
+   "lo": 0.40839344276672707,
+   "n": 311,
+   "p": 0.4630225080385852
+  },
+  "recall_2016_express": {
+   "hi": 0.6326302766693526,
+   "k": 139,
+   "lo": 0.5091611394024151,
+   "n": 243,
+   "p": 0.5720164609053497
+  }
+ },
+ "notes": "Scorer tools/caselaw2/eval/score.py (existing/scdb_conan/runs/round13/results.json); it counts admitted explicit treatment rows (certificate ok, explicit = 1, kinds overruled/disapproved/recededFrom/abrogated/supersededByEnactment); the implicit tier and round-5 'recognised' status rows are not counted (ROUND5.md reports 175/278 SCDB and 195/292 CRS with recognised rows, from another scorer). NOT blind: these keys were used to evaluate and tune rounds 1-4 (eval/score_round*.txt). Unit: (overruling, overruled) pair. recall = current table (2022 + 2026 supp.) pairs the model admits; recall_2016_express / recall_2016_all = the 2016 edition; precision = of the model's admitted Supreme-Court-on-Supreme-Court pairs, the share in any CRS edition (an incomplete list: a lower bound).",
+ "primary": "recall",
+ "row_label": "Constitution Annotated (CRS) table of overruled Supreme Court decisions",
+ "split": "all",
+ "tests": "overruling"
+}

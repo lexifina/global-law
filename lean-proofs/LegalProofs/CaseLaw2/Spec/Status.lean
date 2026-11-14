@@ -35,10 +35,13 @@ inductive Unk where
   /-- an explicit overruling-type treatment whose power the data leave open: a court epoch is unknown, or the
   target's issue domain is unknown and the candidate domains disagree (D5; D4 triage, DIFFTEST.md) -/
   | powerUnknown
+  /-- round 5 (DESIGN5 §2.3): a later court with power has said the decision was overruled by an earlier decision
+  that did not say so itself; this is the status between that earlier decision and the later court's statement -/
+  | recognisedLater
   deriving Repr, DecidableEq, Inhabited
 
 def Unk.idx : Unk → Nat
-  | .partialScope => 0 | .enBancRuleUnknown => 1 | .powerUnknown => 2
+  | .partialScope => 0 | .enBancRuleUnknown => 1 | .powerUnknown => 2 | .recognisedLater => 3
 
 inductive Status where
   | good | unknown (r : Unk) | neg (n : Neg)
@@ -375,6 +378,40 @@ def treatEffect (byHist : List HEvent) (tr : TEvent) : Option Effect :=
            src := tr.id, actor := some tr.by_ }
   else none
 
+/-- The earlier of two optional dates. -/
+def minOpt : Option Date → Option Date → Option Date
+  | none, b => b
+  | a, none => a
+  | some a, some b => some (min a b)
+
+/-- **Recognised overruling** (round 5, DESIGN5 §2.3). A row with `recog = some r` says: a later decision W
+(`r.witness`, dated `r.date`) of a court with power over the target states that the target was overruled by the
+row's by-decision Y, which did not say so itself (`explicit = false`). Two effects: from date(Y) the status is
+`unknown recognisedLater` (the overruling had happened, no court with power had said so); from date(W) it is
+negative, attributed to Y. Both lapse when Y does; the second also when W does. There is no revival. `byHist` is
+Y's history, `wHist` W's. Without W's power there is no effect at all. -/
+def recogEffects (byHist wHist : List HEvent) (tr : TEvent) : List Effect :=
+  match tr.recog with
+  | none => []
+  | some r =>
+    if !tr.explicit && tr.kind.changesStatus && r.power && tr.date ≤ r.date then
+      let lapseY := lapseOfDecision byHist tr.date
+      let neg : Status := if tr.powerKnown then .neg (if tr.kind == .abrogated then .abrogated else .overruled)
+                          else .unknown .powerUnknown
+      let e1 : Effect :=
+        { eff := if tr.powerKnown then .unknown .recognisedLater else .unknown .powerUnknown, start := tr.date,
+          lapse := lapseY, scope := tr.scope, conductFrom := temporalConductFrom tr.temporal tr.date,
+          rule := .recognised, src := tr.id, actor := some tr.by_ }
+      [e1, { e1 with eff := neg, start := r.date, lapse := minOpt lapseY (lapseOfDecision wHist r.date) }]
+    else []
+
+/-- Round 5 (DESIGN5 §3.3): the scope of an operative-words row that does not dispose of the case as a whole. Some
+issue is reached, unknown which: the target is partly negative, never overruled (`demoted_never_neg`). -/
+def demote : Scope → Scope
+  | .all => .someIssue
+  | .issues ks => .someOf ks
+  | s => s
+
 /-- The effect of an explicit supersession by enactment (§7 AB1): known from enactment, reaching conduct from the
 retroactive date if any, else from the effective date. -/
 def superEffect (s : SEvent) : Option Effect :=
@@ -474,8 +511,12 @@ def effectsOf (L : Lookups) (E : EventLookups) (dec : Nat → Option Decision) (
     let reach := match dec tr.by_, dec x with
       | some b, some xd => reachOf L b xd
       | _, _ => .all
-    (treatEffects (vacatingGrants L ((dec tr.by_).bind (fun d => L.epochAt d.court d.date)) (E.histOf tr.by_)) tr).map
-      (fun e => { e with reach })) ++
+    let byHist := vacatingGrants L ((dec tr.by_).bind (fun d => L.epochAt d.court d.date)) (E.histOf tr.by_)
+    -- round 5: a recognised row's effects (none unless `tr.recog` is set); W's history read through W's court
+    let wHist := match tr.recog with
+      | some r => vacatingGrants L ((dec r.witness).bind (fun d => L.epochAt d.court d.date)) (E.histOf r.witness)
+      | none => []
+    (treatEffects byHist tr ++ recogEffects byHist wHist tr).map (fun e => { e with reach })) ++
   (E.supersOf x).filterMap superEffect
 
 /-- **Status of issue `k` of decision `x` on question date `t` for conduct date `u`.** -/

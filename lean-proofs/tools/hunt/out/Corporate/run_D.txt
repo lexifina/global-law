@@ -1,0 +1,46 @@
+== D1 P deficit 8000, not PHC, AET min credit 250, keep business: 35247 positions, 67396 moves tried, 152 move families
+   baseline (plain): family 7620, A 7620, total tax 2380
+   +60  family 7680, A 7680, tax 2320  [gift-S + redeem-A]
+        A gives 1/2 of shares to S; C redeems 1/2 of A's shares
+   +60  family 7680, A 0, tax 2320  [gift-S + redeem-S]
+        A gives 1/2 of shares to S; C redeems 1/2 of S's shares
+   +60  family 7680, A 0, tax 2320  [gift-K + gift-S + redeem-K]
+        A gives 1/2 of shares to K; A gives 1/1 of shares to S; C redeems 1/2 of K's shares
+   +35  family 7655, A 7655, tax 2344  [P-distribute + contribP + dividend + redeem-A]
+        A contributes 1/4 of C shares to P (§351); C redeems 1/4 of A's shares; C pays dividend 2500; wait 1y; P distributes 621 to A
+== D2 same, AET credit counts deficit (literal): 35247 positions, 67396 moves tried, 152 move families
+   baseline (plain): family 7620, A 7620, total tax 2380
+   +1234  family 8854, A 8854, tax 1146  [P-distribute + contribP + dividend]
+        A contributes 1/2 of C shares to P (§351); A contributes 1/2 of C shares to P (§351); C pays dividend 10000; wait 1y; P distributes 6949 to A
+   +60  family 7680, A 0, tax 2320  [gift-S + redeem-S]
+        A gives 1/2 of shares to S; C redeems 1/2 of S's shares
+   +60  family 7680, A 7680, tax 2320  [gift-S + redeem-A]
+        A gives 1/2 of shares to S; C redeems 1/2 of A's shares
+   +60  family 7680, A 0, tax 2320  [gift-K + gift-S + redeem-K]
+        A gives 1/2 of shares to K; A gives 1/1 of shares to S; C redeems 1/2 of K's shares
+== D3 same, P is a PHC: 35247 positions, 67396 moves tried, 152 move families
+   baseline (plain): family 7620, A 7620, total tax 2380
+   +60  family 7680, A 7680, tax 2320  [gift-S + redeem-A]
+        A gives 1/2 of shares to S; C redeems 1/2 of A's shares
+   +60  family 7680, A 0, tax 2320  [gift-S + redeem-S]
+        A gives 1/2 of shares to S; C redeems 1/2 of S's shares
+   +60  family 7680, A 0, tax 2320  [gift-K + gift-S + redeem-K]
+        A gives 1/2 of shares to K; A gives 1/1 of shares to S; C redeems 1/2 of K's shares
+== D4 P no deficit (E&P 0, basis 8000), literal: 35247 positions, 67396 moves tried, 152 move families
+   baseline (plain): family 7620, A 7620, total tax 2380
+   +60  family 7680, A 7680, tax 2320  [gift-S + redeem-A]
+        A gives 1/2 of shares to S; C redeems 1/2 of A's shares
+   +60  family 7680, A 0, tax 2320  [gift-S + redeem-S]
+        A gives 1/2 of shares to S; C redeems 1/2 of S's shares
+   +60  family 7680, A 0, tax 2320  [gift-K + gift-S + redeem-K]
+        A gives 1/2 of shares to K; A gives 1/1 of shares to S; C redeems 1/2 of K's shares
+== D5 deficit, stock 1 year old (§1059), literal: 35656 positions, 67600 moves tried, 152 move families
+   baseline (plain): family 7620, A 7620, total tax 2380
+   +1190  family 8810, A 8810, tax 1190  [P-distribute + contribP + dividend]
+        wait 2y; A contributes 1/1 of C shares to P (§351); C pays dividend 10000; wait 1y; P distributes 9062 to A
+   +60  family 7680, A 0, tax 2320  [gift-S + redeem-S]
+        A gives 1/2 of shares to S; C redeems 1/2 of S's shares
+   +60  family 7680, A 7680, tax 2320  [gift-S + redeem-A]
+        A gives 1/2 of shares to S; C redeems 1/2 of A's shares
+   +60  family 7680, A 0, tax 2320  [gift-K + gift-S + redeem-K]
+        A gives 1/2 of shares to K; A gives 1/1 of shares to S; C redeems 1/2 of K's shares

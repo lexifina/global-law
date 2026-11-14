@@ -1,0 +1,448 @@
+[S1 X 1000/100, Y 1000/1000] depth 1: 6 new positions, 7 in all
+[S1 X 1000/100, Y 1000/1000] depth 2: 31 new positions, 38 in all
+[S1 X 1000/100, Y 1000/1000] depth 3: 193 new positions, 231 in all
+[S1 X 1000/100, Y 1000/1000] depth 4: 1406 new positions, 1637 in all
+[S1 X 1000/100, Y 1000/1000] depth 5: 10059 new positions, 11696 in all
+[S1 X 1000/100, Y 1000/1000] depth 6: 68561 new positions, 80257 in all
+[S1 X 1000/100, Y 1000/1000] plain sale of everything: everyone $214200, family $214200
+[S1 X 1000/100, Y 1000/1000] == X sold out of the family for cash, Y kept: 160 families of plans, 9 not dominated; best 4 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 7  [contribute + dist-property + own-sale + wait]
+    B contributes Y; A contributes X; wait to year 7; distribute to B: X; holder sells X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 1000/1000 Y:A basis 100/1000  carry 0
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 7  [contribute + dist-property + sell-interest + wait]
+    B contributes Y; A contributes X; wait to year 7; B sells interest to D; distribute to D: X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:D basis 1000/1000 Y:A basis 100/1000  carry 0
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 7  [contribute + cash-in + dist-property + wait]
+    D contributes cash 1000; B contributes Y; A contributes X; wait to year 7; distribute to D: X; distribute to A: Y
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:D basis 1000/1000 Y:A basis 100/1000  carry 0
+  family tax now $214200  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 0  [own-sale]
+    holder sells X
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:B basis 1000/1000  carry 0
+[S1 X 1000/100, Y 1000/1000] == cash in hand, X and Y kept: 10 families of plans, 1 not dominated; best 4 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 0  [contribute + borrow + dist-cash]
+    B contributes Y; A contributes X; partnership borrows 1000, borne by B; distribute to B: cash 900
+    A[cash 0 cap 1000 out 100 liab 0 cg 0 oi 0] B[cash 900 cap 100 out 1100 liab 1000 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 100/1000 Y:pship basis 1000/1000  carry 0
+[S1 X 1000/100, Y 1000/1000] == every asset sold: 78 families of plans, 2 not dominated; best 4 by tax now ==
+  family tax now $214200  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 0  [own-sale]
+    holder sells Y; holder sells X
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:sold basis 1000/1000  carry 0
+  family tax now $214200  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 0  [contribute + pship-sale]
+    B contributes Y; A contributes X; partnership sells Y; partnership sells X
+    A[cash 0 cap 1000 out 1000 liab 0 cg 900 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:sold basis 1000/1000  carry 0
+[S1 X 1000/100, Y 1000/1000] == a loss taken while the family keeps every asset: 0 families of plans, 0 not dominated; best 4 by tax now ==
+[S1s X 300/60, Y 300/300] depth 1: 6 new positions, 7 in all
+[S1s X 300/60, Y 300/300] depth 2: 31 new positions, 38 in all
+[S1s X 300/60, Y 300/300] depth 3: 193 new positions, 231 in all
+[S1s X 300/60, Y 300/300] depth 4: 1408 new positions, 1639 in all
+[S1s X 300/60, Y 300/300] depth 5: 10105 new positions, 11744 in all
+[S1s X 300/60, Y 300/300] plain sale of everything: everyone $57120, family $57120
+[S1s X 300/60, Y 300/300] == X sold out of the family for cash, Y kept: 75 families of plans, 8 not dominated; best 2 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $57120  year 7  [contribute + dist-property + sell-interest + wait]
+    B contributes Y; A contributes X; wait to year 7; B sells interest to D; distribute to D: X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 300 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 600 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 300 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:D basis 300/300 Y:A basis 60/300  carry 0
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $57120  year 7  [contribute + dist-property + own-sale + wait]
+    B contributes Y; A contributes X; wait to year 7; distribute to B: X; holder sells X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 300 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 600 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 600 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 300/300 Y:A basis 60/300  carry 0
+[S1s X 300/60, Y 300/300] == cash in hand, X and Y kept: 4 families of plans, 1 not dominated; best 2 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $57120  year 0  [contribute + borrow + dist-cash]
+    B contributes Y; A contributes X; partnership borrows 300, borne by B; distribute to B: cash 270
+    A[cash 0 cap 300 out 60 liab 0 cg 0 oi 0] B[cash 270 cap 30 out 330 liab 300 cg 0 oi 0] C[cash 600 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 600 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 60/300 Y:pship basis 300/300  carry 0
+[S1s X 300/60, Y 300/300] == every asset sold: 29 families of plans, 2 not dominated; best 2 by tax now ==
+  family tax now $57120  (unrelated partners now $0)  everyone, once all is sold and wound up $57120  year 0  [own-sale]
+    holder sells Y; holder sells X
+    A[cash 300 cap 0 out 0 liab 0 cg 240 oi 0] B[cash 300 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 600 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 600 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 60/300 Y:sold basis 300/300  carry 0
+  family tax now $57120  (unrelated partners now $0)  everyone, once all is sold and wound up $57120  year 0  [contribute + pship-sale]
+    B contributes Y; A contributes X; partnership sells Y; partnership sells X
+    A[cash 0 cap 300 out 300 liab 0 cg 240 oi 0] B[cash 0 cap 300 out 300 liab 0 cg 0 oi 0] C[cash 600 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 600 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 60/300 Y:sold basis 300/300  carry 0
+[S1s X 300/60, Y 300/300] == a loss taken while the family keeps every asset: 0 families of plans, 0 not dominated; best 2 by tax now ==
+[S2 Y built-in loss 1000/1600] depth 1: 6 new positions, 7 in all
+[S2 Y built-in loss 1000/1600] depth 2: 31 new positions, 38 in all
+[S2 Y built-in loss 1000/1600] depth 3: 193 new positions, 231 in all
+[S2 Y built-in loss 1000/1600] depth 4: 1430 new positions, 1661 in all
+[S2 Y built-in loss 1000/1600] depth 5: 10604 new positions, 12265 in all
+[S2 Y built-in loss 1000/1600] depth 6: 75802 new positions, 88067 in all
+[S2 Y built-in loss 1000/1600] plain sale of everything: everyone $71400, family $71400
+[S2 Y built-in loss 1000/1600] == X sold out of the family for cash, Y kept: 165 families of plans, 19 not dominated; best 8 by tax now ==
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 7  [contribute + dist-property + own-sale + wait]
+    B contributes Y; A contributes X; wait to year 7; distribute to B: X; holder sells X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 1600/1000 Y:A basis 100/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 7  [contribute + dist-property + sell-interest + wait]
+    B contributes Y; A contributes X; wait to year 7; B sells interest to D; distribute to D: X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:D basis 1000/1000 Y:A basis 100/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 7  [contribute + cash-in + dist-property + wait]
+    D contributes cash 1000; B contributes Y; A contributes X; wait to year 7; distribute to D: X; distribute to A: Y
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:D basis 1000/1000 Y:A basis 100/1000  carry 0
+  family tax now $71400  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 0  [contribute + sell-interest]
+    B contributes Y; B sells interest to D; D contributes Y; D sells interest to B; A contributes X; A sells interest to D
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 0 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:D basis 1000/1000 Y:B basis 1000/1000  carry 0
+  family tax now $71400  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 2  [contribute + cash-in + dist-cash + own-sale + wait]
+    B contributes Y; wait to year 2; holder sells X; A contributes cash 1000; distribute to B: cash 1000
+    A[cash 0 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:A basis 1000/1000  carry 0
+  family tax now $71400  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 2  [contribute + dist-cash + pship-sale + wait]
+    B contributes Y; wait to year 2; A contributes X; partnership sells X; distribute to B: cash 1000
+    A[cash 0 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:A basis 1000/1000  carry 0
+  family tax now $71400  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 2  [contribute + borrow + dist-cash + own-sale + wait]
+    B contributes Y; wait to year 2; A contributes X; partnership borrows 1000, borne by A; distribute to B: cash 1000; holder sells X
+    A[cash 0 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:A basis 1000/1000  carry 0
+  family tax now $71400  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 7  [contribute + dist-property + pship-sale + wait]
+    B contributes Y; A contributes X; wait to year 7; partnership sells X; distribute to A: Y
+    A[cash 0 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:A basis 1000/1000  carry 0
+[S2 Y built-in loss 1000/1600] == cash in hand, X and Y kept: 10 families of plans, 4 not dominated; best 8 by tax now ==
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 0  [contribute + borrow + dist-cash + sell-interest]
+    B contributes Y; A contributes X; B sells interest to D; partnership borrows 1000, borne by D; distribute to D: cash 900; D sells interest to B
+    A[cash 0 cap 1000 out 100 liab 0 cg 0 oi 0] B[cash 900 cap 100 out 1100 liab 1000 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 100/1000 Y:pship basis 1600/1000  carry 0
+  family tax now $-128520  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 0  [contribute + cash-in + borrow + dist-cash]
+    D contributes cash 1000; B contributes Y; distribute to B: cash 900; partnership borrows 1000, borne by B; A contributes X; distribute to D: cash 1000
+    A[cash 0 cap 1000 out 100 liab 0 cg 0 oi 0] B[cash 900 cap 100 out 1160 liab 1000 cg -540 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 100/1000 Y:pship basis 1060/1000  carry 0
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 2  [contribute + borrow + dist-cash + wait]
+    B contributes Y; wait to year 2; A contributes X; partnership borrows 1000, borne by B; distribute to B: cash 900
+    A[cash 0 cap 1000 out 100 liab 0 cg 0 oi 0] B[cash 900 cap 100 out 1700 liab 1000 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 100/1000 Y:pship basis 1600/1000  carry 0
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $199920  year 0  [contribute + borrow + dist-cash]
+    B contributes Y; A contributes X; partnership borrows 1000, borne by B; distribute to B: cash 900
+    A[cash 0 cap 1000 out 100 liab 0 cg 0 oi 0] B[cash 900 cap 100 out 1160 liab 1000 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 100/1000 Y:pship basis 1060/1000  carry 0
+[S2 Y built-in loss 1000/1600] == every asset sold: 79 families of plans, 3 not dominated; best 8 by tax now ==
+  family tax now $-71400  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 0  [contribute + sell-interest + pship-sale]
+    B contributes Y; A contributes X; B sells interest to D; D sells interest to B; partnership sells Y; partnership sells X
+    A[cash 0 cap 1000 out 1000 liab 0 cg 900 oi 0] B[cash 0 cap 1000 out 400 liab 0 cg -1200 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:sold basis 1600/1000  carry 0
+  family tax now $71400  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 0  [own-sale]
+    holder sells Y; holder sells X
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:sold basis 1600/1000  carry 0
+  family tax now $71400  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 0  [contribute + pship-sale]
+    B contributes Y; A contributes X; partnership sells Y; partnership sells X
+    A[cash 0 cap 1000 out 1000 liab 0 cg 900 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:sold basis 1600/1000  carry 0
+[S2 Y built-in loss 1000/1600] == a loss taken while the family keeps every asset: 21 families of plans, 4 not dominated; best 8 by tax now ==
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 0  [contribute + sell-interest]
+    B contributes Y; B sells interest to D; D contributes Y; D sells interest to B
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 0 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:A basis 100/1000 Y:B basis 1000/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 0  [contribute + cash-in + dist-property + dist-cash]
+    D contributes cash 1000; C contributes cash 1000; B contributes Y; distribute to B: cash 1000; B contributes cash 1000; distribute to B: Y
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 0 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 1000 cap 1000 out 1000 liab 0 cg 0 oi 0] D[cash 1000 cap 1000 out 1000 liab 0 cg 0 oi 0]
+    X:A basis 100/1000 Y:B basis 1000/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $71400  year 2  [contribute + borrow + dist-cash + wait]
+    B contributes Y; wait to year 2; A contributes X; partnership borrows 1000, borne by A; distribute to B: cash 1000
+    A[cash -1000 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:A basis 100/1000 Y:A basis 1000/1000  carry 0
+  family tax now $-12852  (unrelated partners now $0)  everyone, once all is sold and wound up $201348  year 0  [contribute + borrow + dist-cash]
+    B contributes Y; A contributes X; partnership borrows 1000, borne by A; distribute to B: cash 900; distribute to B: cash 100
+    A[cash -1000 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -54 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:A basis 100/1000 Y:A basis 1000/1000  carry 0
+[S3 C holds securities Z 1000/400] depth 1: 8 new positions, 9 in all
+[S3 C holds securities Z 1000/400] depth 2: 46 new positions, 55 in all
+[S3 C holds securities Z 1000/400] depth 3: 317 new positions, 372 in all
+[S3 C holds securities Z 1000/400] depth 4: 2428 new positions, 2800 in all
+[S3 C holds securities Z 1000/400] depth 5: 18195 new positions, 20995 in all
+[S3 C holds securities Z 1000/400] plain sale of everything: everyone $357000, family $214200
+[S3 C holds securities Z 1000/400] == X sold out of the family for cash, Y kept: 112 families of plans, 9 not dominated; best 3 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $357000  year 7  [contribute + dist-property + own-sale + wait]
+    B contributes Y; A contributes X; wait to year 7; distribute to B: X; holder sells X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 1000/1000 Y:A basis 100/1000 Z:C basis 400/1000  carry 0
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $357000  year 7  [contribute + dist-property + sell-interest + wait]
+    B contributes Y; A contributes X; wait to year 7; B sells interest to D; distribute to D: X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 0 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:D basis 1000/1000 Y:A basis 100/1000 Z:C basis 400/1000  carry 0
+  family tax now $214200  (unrelated partners now $0)  everyone, once all is sold and wound up $357000  year 0  [own-sale]
+    holder sells X
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:B basis 1000/1000 Z:C basis 400/1000  carry 0
+[S3 C holds securities Z 1000/400] == cash in hand, X and Y kept: 5 families of plans, 1 not dominated; best 3 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $357000  year 0  [contribute + borrow + dist-cash]
+    B contributes Y; A contributes X; partnership borrows 1000, borne by B; distribute to B: cash 900
+    A[cash 0 cap 1000 out 100 liab 0 cg 0 oi 0] B[cash 900 cap 100 out 1100 liab 1000 cg 0 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 100/1000 Y:pship basis 1000/1000 Z:C basis 400/1000  carry 0
+[S3 C holds securities Z 1000/400] == every asset sold: 8 families of plans, 1 not dominated; best 3 by tax now ==
+  family tax now $357000  (unrelated partners now $142800)  everyone, once all is sold and wound up $357000  year 0  [own-sale]
+    holder sells Z; holder sells Y; holder sells X
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 600 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:sold basis 1000/1000 Z:sold basis 400/1000  carry 0
+[S3 C holds securities Z 1000/400] == a loss taken while the family keeps every asset: 0 families of plans, 0 not dominated; best 3 by tax now ==
+[S4 Y inventory 1000/400] depth 1: 5 new positions, 6 in all
+[S4 Y inventory 1000/400] depth 2: 21 new positions, 27 in all
+[S4 Y inventory 1000/400] depth 3: 104 new positions, 131 in all
+[S4 Y inventory 1000/400] depth 4: 650 new positions, 781 in all
+[S4 Y inventory 1000/400] depth 5: 4103 new positions, 4884 in all
+[S4 Y inventory 1000/400] depth 6: 24954 new positions, 29838 in all
+[S4 Y inventory 1000/400] plain sale of everything: everyone $459000, family $459000
+[S4 Y inventory 1000/400] == X sold out of the family for cash, Y kept: 93 families of plans, 9 not dominated; best 4 by tax now ==
+  family tax now $214200  (unrelated partners now $0)  everyone, once all is sold and wound up $459000  year 0  [own-sale]
+    holder sells X
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:B basis 400/1000  carry 0
+  family tax now $214200  (unrelated partners now $0)  everyone, once all is sold and wound up $459000  year 0  [contribute + sell-interest]
+    A contributes X; A sells interest to C
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:C basis 1000/1000 Y:B basis 400/1000  carry 0
+  family tax now $214200  (unrelated partners now $0)  everyone, once all is sold and wound up $459000  year 0  [contribute + dist-property + pship-sale]
+    B contributes Y; A contributes X; partnership sells X; distribute to B: Y
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:B basis 400/1000  carry 0
+  family tax now $214200  (unrelated partners now $0)  everyone, once all is sold and wound up $459000  year 0  [contribute + cash-in + dist-cash + pship-sale]
+    C contributes cash 1000; A contributes X; partnership sells X; distribute to C: cash 1000
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:B basis 400/1000  carry 0
+[S4 Y inventory 1000/400] == cash in hand, X and Y kept: 10 families of plans, 2 not dominated; best 4 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $459000  year 2  [contribute + borrow + dist-cash + wait]
+    B contributes Y; wait to year 2; A contributes X; partnership borrows 1000, borne by B; distribute to B: cash 900
+    A[cash 0 cap 1000 out 100 liab 0 cg 0 oi 0] B[cash 900 cap 100 out 500 liab 1000 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 100/1000 Y:pship basis 400/1000  carry 0
+  family tax now $192780  (unrelated partners now $0)  everyone, once all is sold and wound up $459000  year 0  [contribute + borrow + dist-cash]
+    B contributes Y; A contributes X; partnership borrows 1000, borne by B; distribute to A: cash 900
+    A[cash 900 cap 100 out 10 liab 0 cg 810 oi 0] B[cash 0 cap 1000 out 1400 liab 1000 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 910/1000 Y:pship basis 400/1000  carry 0
+[S4 Y inventory 1000/400] == every asset sold: 79 families of plans, 2 not dominated; best 4 by tax now ==
+  family tax now $459000  (unrelated partners now $0)  everyone, once all is sold and wound up $459000  year 0  [own-sale]
+    holder sells Y; holder sells X
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg 0 oi 600] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:sold basis 400/1000  carry 0
+  family tax now $459000  (unrelated partners now $0)  everyone, once all is sold and wound up $459000  year 0  [contribute + pship-sale]
+    B contributes Y; A contributes X; partnership sells Y; partnership sells X
+    A[cash 0 cap 1000 out 1000 liab 0 cg 900 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg 0 oi 600] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:sold basis 400/1000  carry 0
+[S4 Y inventory 1000/400] == a loss taken while the family keeps every asset: 0 families of plans, 0 not dominated; best 4 by tax now ==
+[S5 as S1, debt-financed exception on] depth 1: 5 new positions, 6 in all
+[S5 as S1, debt-financed exception on] depth 2: 21 new positions, 27 in all
+[S5 as S1, debt-financed exception on] depth 3: 102 new positions, 129 in all
+[S5 as S1, debt-financed exception on] depth 4: 604 new positions, 733 in all
+[S5 as S1, debt-financed exception on] depth 5: 3551 new positions, 4284 in all
+[S5 as S1, debt-financed exception on] plain sale of everything: everyone $214200, family $214200
+[S5 as S1, debt-financed exception on] == X sold out of the family for cash, Y kept: 47 families of plans, 8 not dominated; best 3 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 7  [contribute + dist-property + sell-interest + wait]
+    B contributes Y; A contributes X; wait to year 7; B sells interest to C; distribute to C: X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:C basis 1000/1000 Y:A basis 100/1000  carry 0
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 7  [contribute + dist-property + own-sale + wait]
+    B contributes Y; A contributes X; wait to year 7; distribute to B: X; holder sells X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 1000/1000 Y:A basis 100/1000  carry 0
+  family tax now $214200  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 0  [own-sale]
+    holder sells X
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:B basis 1000/1000  carry 0
+[S5 as S1, debt-financed exception on] == cash in hand, X and Y kept: 4 families of plans, 1 not dominated; best 3 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 0  [contribute + borrow + dist-cash]
+    B contributes Y; A contributes X; partnership borrows 1000, borne by B; distribute to B: cash 900
+    A[cash 0 cap 1000 out 100 liab 0 cg 0 oi 0] B[cash 900 cap 100 out 1100 liab 1000 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 100/1000 Y:pship basis 1000/1000  carry 0
+[S5 as S1, debt-financed exception on] == every asset sold: 29 families of plans, 2 not dominated; best 3 by tax now ==
+  family tax now $214200  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 0  [own-sale]
+    holder sells Y; holder sells X
+    A[cash 1000 cap 0 out 0 liab 0 cg 900 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:sold basis 1000/1000  carry 0
+  family tax now $214200  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 0  [contribute + pship-sale]
+    B contributes Y; A contributes X; partnership sells Y; partnership sells X
+    A[cash 0 cap 1000 out 1000 liab 0 cg 900 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg 0 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:sold basis 1000/1000  carry 0
+[S5 as S1, debt-financed exception on] == a loss taken while the family keeps every asset: 0 families of plans, 0 not dominated; best 3 by tax now ==
+[S6 existing partnership, parcels under $250k] depth 1: 21 new positions, 22 in all
+[S6 existing partnership, parcels under $250k] depth 2: 185 new positions, 207 in all
+[S6 existing partnership, parcels under $250k] depth 3: 969 new positions, 1176 in all
+[S6 existing partnership, parcels under $250k] depth 4: 3476 new positions, 4652 in all
+[S6 existing partnership, parcels under $250k] depth 5: 8398 new positions, 13050 in all
+[S6 existing partnership, parcels under $250k] depth 6: 11280 new positions, 24330 in all
+[S6 existing partnership, parcels under $250k] plain sale of everything: everyone $85680, family $85680
+[S6 existing partnership, parcels under $250k] == X sold out of the family for cash, Y kept: 8 families of plans, 2 not dominated; best 4 by tax now ==
+  family tax now $-21420  (unrelated partners now $-21420)  everyone, once all is sold and wound up $85680  year 8  [dist-property + pship-sale + own-sale + 754]
+    distribute to C: Z; §754 election; distribute to A: asset3; distribute to A: Y; holder sells Z; partnership sells X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 0 cap 200 out 110 liab 0 cg -90 oi 0] C[cash 200 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 0 cap 200 out 110 liab 0 cg -90 oi 0]
+    X:sold basis 380/200 Y:A basis 0/200 Z:sold basis 200/200 asset3:A basis 40/200  carry 0
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $85680  year 8  [dist-property]
+    distribute to D: X; distribute to C: asset3; distribute to A: Z; distribute to A: Y
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 200 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 0 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:D basis 200/200 Y:A basis 20/200 Z:A basis 20/200 asset3:C basis 200/200  carry 0
+[S6 existing partnership, parcels under $250k] == cash in hand, X and Y kept: 8 families of plans, 2 not dominated; best 4 by tax now ==
+  family tax now $-21420  (unrelated partners now $-21420)  everyone, once all is sold and wound up $85680  year 8  [dist-property + pship-sale + own-sale + 754]
+    distribute to C: Z; §754 election; distribute to A: Y; distribute to A: X; partnership sells asset3; holder sells Z
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 0 cap 200 out 110 liab 0 cg -90 oi 0] C[cash 200 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 0 cap 200 out 110 liab 0 cg -90 oi 0]
+    X:A basis 0/200 Y:A basis 40/200 Z:sold basis 200/200 asset3:sold basis 380/200  carry 0
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $85680  year 8  [dist-property]
+    distribute to D: asset3; distribute to C: Z; distribute to A: Y; distribute to A: X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 200 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 0 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:A basis 0/200 Y:A basis 40/200 Z:C basis 200/200 asset3:D basis 200/200  carry 0
+[S6 existing partnership, parcels under $250k] == every asset sold: 4 families of plans, 2 not dominated; best 4 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $85680  year 8  [dist-property + pship-sale + own-sale]
+    distribute to D: Z; distribute to C: X; partnership sells asset3; holder sells Z; partnership sells Y; holder sells X
+    A[cash 0 cap 400 out 40 liab 0 cg 0 oi 0] B[cash 0 cap 200 out 200 liab 0 cg 0 oi 0] C[cash 200 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 200 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 200/200 Y:sold basis 200/200 Z:sold basis 200/200 asset3:sold basis 200/200  carry 0
+  family tax now $85680  (unrelated partners now $0)  everyone, once all is sold and wound up $85680  year 8  [pship-sale]
+    partnership sells asset3; partnership sells Z; partnership sells Y; partnership sells X
+    A[cash 0 cap 400 out 400 liab 0 cg 360 oi 0] B[cash 0 cap 200 out 200 liab 0 cg 0 oi 0] C[cash 0 cap 200 out 200 liab 0 cg 0 oi 0] D[cash 0 cap 200 out 200 liab 0 cg 0 oi 0]
+    X:sold basis 20/200 Y:sold basis 200/200 Z:sold basis 20/200 asset3:sold basis 200/200  carry 0
+[S6 existing partnership, parcels under $250k] == a loss taken while the family keeps every asset: 0 families of plans, 0 not dominated; best 4 by tax now ==
+[S6b same, single pieces over $250k] depth 1: 7 new positions, 8 in all
+[S6b same, single pieces over $250k] depth 2: 20 new positions, 28 in all
+[S6b same, single pieces over $250k] depth 3: 23 new positions, 51 in all
+[S6b same, single pieces over $250k] depth 4: 9 new positions, 60 in all
+[S6b same, single pieces over $250k] plain sale of everything: everyone $85680, family $85680
+[S6b same, single pieces over $250k] == X sold out of the family for cash, Y kept: 1 families of plans, 1 not dominated; best 4 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $85680  year 8  [dist-property + own-sale]
+    distribute to B: X; distribute to A: Y; holder sells X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 400 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 200 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 400/400 Y:A basis 40/400  carry 0
+[S6b same, single pieces over $250k] == cash in hand, X and Y kept: 0 families of plans, 0 not dominated; best 4 by tax now ==
+[S6b same, single pieces over $250k] == every asset sold: 5 families of plans, 3 not dominated; best 4 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $85680  year 8  [dist-property + pship-sale + own-sale]
+    partnership sells Y; distribute to B: X; holder sells X
+    A[cash 0 cap 400 out 40 liab 0 cg 0 oi 0] B[cash 400 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 0 cap 200 out 200 liab 0 cg 0 oi 0]
+    X:sold basis 400/400 Y:sold basis 400/400  carry -360
+  family tax now $85680  (unrelated partners now $0)  everyone, once all is sold and wound up $85680  year 8  [pship-sale]
+    partnership sells Y; partnership sells X
+    A[cash 0 cap 400 out 400 liab 0 cg 360 oi 0] B[cash 0 cap 400 out 400 liab 0 cg 0 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 0 cap 200 out 200 liab 0 cg 0 oi 0]
+    X:sold basis 40/400 Y:sold basis 400/400  carry 0
+  family tax now $85680  (unrelated partners now $0)  everyone, once all is sold and wound up $85680  year 8  [dist-property + own-sale]
+    distribute to B: Y; distribute to A: X; holder sells Y; holder sells X
+    A[cash 400 cap 0 out 0 liab 0 cg 360 oi 0] B[cash 400 cap 0 out 0 liab 0 cg 0 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 200 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 40/400 Y:sold basis 400/400  carry 0
+[S6b same, single pieces over $250k] == a loss taken while the family keeps every asset: 0 families of plans, 0 not dominated; best 4 by tax now ==
+[S7 existing partnership with loss asset and securities] depth 1: 20 new positions, 21 in all
+[S7 existing partnership with loss asset and securities] depth 2: 264 new positions, 285 in all
+[S7 existing partnership with loss asset and securities] depth 3: 2683 new positions, 2968 in all
+[S7 existing partnership with loss asset and securities] depth 4: 23514 new positions, 26482 in all
+[S7 existing partnership with loss asset and securities] plain sale of everything: everyone $214200, family $71400
+[S7 existing partnership with loss asset and securities] == X sold out of the family for cash, Y kept: 31 families of plans, 7 not dominated; best 6 by tax now ==
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 8  [borrow + dist-property + dist-cash]
+    partnership borrows 1000, borne by C; distribute to B: cash 1000; distribute to A: Y
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash -1000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:C basis 640/1000 Y:A basis 100/1000 Z:C basis 760/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 8  [dist-property + own-sale]
+    distribute to C: Z; distribute to B: X; holder sells X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 1600/1000 Y:A basis 100/1000 Z:C basis 400/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 8  [dist-property + sell-interest]
+    distribute to C: Z; B sells interest to D; distribute to D: X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:D basis 1000/1000 Y:A basis 100/1000 Z:C basis 400/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 8  [dist-property + pship-sale + 754]
+    §754 election; distribute to A: Y; partnership sells Z; distribute to C: X
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:C basis 400/1000 Y:A basis 100/1000 Z:sold basis 1000/1000  carry 0
+  family tax now $-71400  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 8  [dist-property + pship-sale]
+    distribute to C: X; partnership sells Z; distribute to A: Y
+    A[cash 0 cap 0 out 0 liab 0 cg 300 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:C basis 400/1000 Y:A basis 400/1000 Z:sold basis 400/1000  carry 0
+  family tax now $142800  (unrelated partners now $285600)  everyone, once all is sold and wound up $214200  year 8  [dist-property+cash + sell-interest + pship-sale]
+    C sells interest to D; B sells interest to D; partnership sells Z; distribute to D: X + cash 1000
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 600 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 600 oi 0]
+    X:D basis 1600/1000 Y:A basis 100/1000 Z:sold basis 400/1000  carry 0
+[S7 existing partnership with loss asset and securities] == cash in hand, X and Y kept: 6 families of plans, 2 not dominated; best 6 by tax now ==
+  family tax now $0  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 8  [borrow + dist-property + dist-cash]
+    distribute to C: Z; partnership borrows 1000, borne by B; distribute to B: cash 900
+    A[cash 0 cap 1000 out 100 liab 0 cg 0 oi 0] B[cash 900 cap 100 out 1700 liab 1000 cg 0 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 100/1000 Y:pship basis 1600/1000 Z:C basis 400/1000  carry 0
+  family tax now $142800  (unrelated partners now $142800)  everyone, once all is sold and wound up $214200  year 8  [borrow + dist-cash + pship-sale]
+    partnership borrows 1000, borne by B; distribute to B: cash 900; partnership sells Z; distribute to C: cash 1000
+    A[cash 0 cap 1000 out 100 liab 0 cg 0 oi 0] B[cash 900 cap 100 out 1700 liab 1000 cg 0 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 600 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:pship basis 100/1000 Y:pship basis 1600/1000 Z:sold basis 400/1000  carry 0
+[S7 existing partnership with loss asset and securities] == every asset sold: 7 families of plans, 2 not dominated; best 6 by tax now ==
+  family tax now $0  (unrelated partners now $142800)  everyone, once all is sold and wound up $214200  year 8  [dist-property + pship-sale + own-sale]
+    partnership sells Z; partnership sells Y; distribute to C: X; holder sells X
+    A[cash 0 cap 1000 out 100 liab 0 cg 0 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg -600 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 600 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 1000/1000 Y:sold basis 1600/1000 Z:sold basis 400/1000  carry -900
+  family tax now $214200  (unrelated partners now $142800)  everyone, once all is sold and wound up $214200  year 8  [pship-sale]
+    partnership sells Z; partnership sells Y; partnership sells X
+    A[cash 0 cap 1000 out 1000 liab 0 cg 900 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg -600 oi 0] C[cash 0 cap 1000 out 1000 liab 0 cg 600 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:sold basis 100/1000 Y:sold basis 1600/1000 Z:sold basis 400/1000  carry 0
+[S7 existing partnership with loss asset and securities] == a loss taken while the family keeps every asset: 12 families of plans, 5 not dominated; best 6 by tax now ==
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 8  [borrow + dist-property + dist-cash]
+    distribute to C: Z; partnership borrows 1000, borne by A; distribute to B: cash 1000
+    A[cash -1000 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:A basis 100/1000 Y:A basis 1000/1000 Z:C basis 400/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $214200  year 8  [dist-property + sell-interest]
+    distribute to C: Z; B sells interest to D; D sells interest to B; distribute to B: Y
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 0 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:A basis 100/1000 Y:B basis 1000/1000 Z:C basis 400/1000  carry 0
+  family tax now $0  (unrelated partners now $142800)  everyone, once all is sold and wound up $214200  year 8  [contribute + dist-property]
+    distribute to B: Z; B contributes Z; distribute to C: Z; distribute to B: Y
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 0 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 0 cap 0 out 0 liab 0 cg 600 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:A basis 100/1000 Y:B basis 1000/1000 Z:C basis 1000/1000  carry 0
+  family tax now $0  (unrelated partners now $142800)  everyone, once all is sold and wound up $214200  year 8  [borrow + dist-cash + pship-sale]
+    partnership borrows 1000, borne by A; distribute to B: cash 1000; partnership sells Z; distribute to C: cash 1000
+    A[cash -1000 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 600 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:A basis 100/1000 Y:A basis 1000/1000 Z:sold basis 400/1000  carry 0
+  family tax now $0  (unrelated partners now $142800)  everyone, once all is sold and wound up $214200  year 8  [borrow + dist-property+cash + sell-interest]
+    C sells interest to D; B sells interest to D; partnership borrows 1000, borne by A; distribute to D: Z + cash 1000
+    A[cash -1000 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 600 oi 0] D[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0]
+    X:A basis 100/1000 Y:A basis 1000/1000 Z:D basis 1000/1000  carry 0
+[S8 loss asset, family holds half] depth 1: 14 new positions, 15 in all
+[S8 loss asset, family holds half] depth 2: 85 new positions, 100 in all
+[S8 loss asset, family holds half] depth 3: 243 new positions, 343 in all
+[S8 loss asset, family holds half] plain sale of everything: everyone $-142800, family $-142800
+[S8 loss asset, family holds half] == X sold out of the family for cash, Y kept: 0 families of plans, 0 not dominated; best 4 by tax now ==
+[S8 loss asset, family holds half] == cash in hand, X and Y kept: 0 families of plans, 0 not dominated; best 4 by tax now ==
+[S8 loss asset, family holds half] == every asset sold: 16 families of plans, 4 not dominated; best 4 by tax now ==
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $-142800  year 3  [pship-sale]
+    partnership sells Y
+    A[cash 0 cap 1000 out 1000 liab 0 cg 0 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg -600 oi 0] C[cash 0 cap 2000 out 2000 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    Y:sold basis 1600/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $-142800  year 3  [dist-property + own-sale]
+    distribute to C: Y; holder sells Y
+    A[cash 0 cap 1000 out 1000 liab 0 cg 0 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg -600 oi 0] C[cash 1000 cap 1000 out 1000 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    Y:sold basis 1000/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $-142800  year 3  [dist-property+cash + own-sale]
+    distribute to C: Y + cash 1000; holder sells Y
+    A[cash 0 cap 1000 out 1000 liab 0 cg 0 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    Y:sold basis 1000/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $-142800  year 3  [dist-cash + own-sale]
+    distribute to C: cash 2000; distribute to A: cash 1000; holder sells Y
+    A[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    Y:sold basis 1600/1000  carry 0
+[S8 loss asset, family holds half] == a loss taken while the family keeps every asset: 7 families of plans, 2 not dominated; best 4 by tax now ==
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $-142800  year 3  [dist-property]
+    distribute to A: Y
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg -600 oi 0] C[cash 0 cap 2000 out 2000 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    Y:A basis 1000/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $-142800  year 3  [dist-cash]
+    distribute to C: cash 2000; distribute to B: cash 1000
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    Y:A basis 1000/1000  carry 0
+[S8b loss asset, family holds two thirds] depth 1: 12 new positions, 13 in all
+[S8b loss asset, family holds two thirds] depth 2: 59 new positions, 72 in all
+[S8b loss asset, family holds two thirds] depth 3: 145 new positions, 217 in all
+[S8b loss asset, family holds two thirds] plain sale of everything: everyone $-142800, family $-142800
+[S8b loss asset, family holds two thirds] == X sold out of the family for cash, Y kept: 0 families of plans, 0 not dominated; best 4 by tax now ==
+[S8b loss asset, family holds two thirds] == cash in hand, X and Y kept: 0 families of plans, 0 not dominated; best 4 by tax now ==
+[S8b loss asset, family holds two thirds] == every asset sold: 12 families of plans, 3 not dominated; best 4 by tax now ==
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $-142800  year 3  [pship-sale]
+    partnership sells Y
+    A[cash 0 cap 1000 out 1000 liab 0 cg 0 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg -600 oi 0] C[cash 0 cap 1000 out 1000 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    Y:sold basis 1600/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $-142800  year 3  [dist-property + own-sale]
+    distribute to C: Y; holder sells Y
+    A[cash 0 cap 1000 out 1000 liab 0 cg 0 oi 0] B[cash 0 cap 1000 out 1000 liab 0 cg -600 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    Y:sold basis 1000/1000  carry 0
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $-142800  year 3  [dist-cash + own-sale]
+    distribute to C: cash 1000; distribute to A: cash 1000; holder sells Y
+    A[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    Y:sold basis 1600/1000  carry 0
+[S8b loss asset, family holds two thirds] == a loss taken while the family keeps every asset: 4 families of plans, 1 not dominated; best 4 by tax now ==
+  family tax now $-142800  (unrelated partners now $0)  everyone, once all is sold and wound up $-142800  year 3  [dist-cash]
+    distribute to C: cash 1000; distribute to B: cash 1000
+    A[cash 0 cap 0 out 0 liab 0 cg 0 oi 0] B[cash 1000 cap 0 out 0 liab 0 cg -600 oi 0] C[cash 1000 cap 0 out 0 liab 0 cg 0 oi 0] D[cash 2000 cap 0 out 0 liab 0 cg 0 oi 0]
+    Y:A basis 1000/1000  carry 0

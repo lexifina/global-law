@@ -1,0 +1,75 @@
+{
+ "run": "r10t06",
+ "class": "stlink_d2",
+ "type": "B",
+ "brief": "B",
+ "table": "history",
+ "self_test": false,
+ "created": "2026-11-14 04:45:47",
+ "args": {
+  "cls": "stlink_d2",
+  "cert": [
+   "round10/agents/stlink10/delta_d2"
+  ],
+  "out": "round10/audit/r10t06/",
+  "n": 80,
+  "exclude": [],
+  "ids": null,
+  "pairs": null,
+  "match": [
+   "table=history"
+  ],
+  "lean_classes": null,
+  "lean_certs": null,
+  "seed": 7,
+  "pack_size": 40,
+  "decoy_share": 0.12,
+  "decoy_wrong_share": 0.6,
+  "decoy_families": "",
+  "pad_min": 500,
+  "pad_max": 1600,
+  "dry_run": false,
+  "force": false,
+  "mark_selftest": false
+ },
+ "inputs": [
+  {
+   "treatments": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round10/agents/stlink10/delta_d2/treatments_delta.tsv",
+   "history": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round10/agents/stlink10/delta_d2/history_delta.tsv",
+   "witness": null,
+   "class": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round10/agents/stlink10/delta_d2/treatment_class_delta.tsv",
+   "joined": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round10/agents/stlink10/delta_d2/joined_delta.tsv",
+   "anchor": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round10/agents/stlink10/delta_d2/history_anchor_delta.tsv",
+   "hclaim": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round10/agents/stlink10/delta_d2/history_claim_delta.tsv",
+   "sha1": {
+    "treatments": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "history": "7566759ca1c923b6890b47d528b18ed0413b4983",
+    "class": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "joined": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "anchor": "eacfbae252de31537b8e4a46fc2afc36e653c7e0",
+    "hclaim": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+   },
+   "bad_rows": 0,
+   "cert": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round10/agents/stlink10/delta_d2",
+   "rows": 34,
+   "kept": 34
+  }
+ ],
+ "population": 34,
+ "real": 34,
+ "decoys_wrong": 2,
+ "decoys_right": 2,
+ "packs": {
+  "pack_1.md": {
+   "items": 38,
+   "real": 34,
+   "decoys": 4
+  }
+ },
+ "relocated_quotes": 0,
+ "decoy_pool": {
+  "path": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round10/audit/decoy_pool_B.jsonl",
+  "sha1": "94e51e89a0be67b6fa48c2ce28caa98d2e4ed81b"
+ },
+ "warnings": []
+}

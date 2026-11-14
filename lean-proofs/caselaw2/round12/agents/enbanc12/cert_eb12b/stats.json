@@ -1,0 +1,69 @@
+{
+ "args": [
+  "--rows",
+  "round12/agents/enbanc12/work/eb12_rows.jsonl",
+  "--out",
+  "round12/agents/enbanc12/cert_eb12b",
+  "--procs",
+  "8"
+ ],
+ "base": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round11/stage/v11d",
+ "cue_source": {
+  "hist": "cue_table.json",
+  "disqualify_hist": "cue_table.json",
+  "anchor": "cue_table.json",
+  "disqualify_anchor": "cue_table.json",
+  "disqualify_treat": "cue_table.json",
+  "operative": "cue_table.json",
+  "disqualify_operative": "cue_table.json",
+  "treat": "cue_table.json",
+  "anaphor": "cue_table.json",
+  "doctrine_tie": "cue_table.json",
+  "doctrine_reject": "cue_table.json",
+  "disqualify_joined": "cue_table.json",
+  "order_line": "cue_table.json",
+  "set_aside": "cue_table.json",
+  "order_head_from": "cue_table.json",
+  "joined_gap_max": "cue_table.json",
+  "order_head_max_len": "cue_table.json"
+ },
+ "scotus_court_id": 2906,
+ "order_head_from": 20130101,
+ "joined_gap_max": 300,
+ "counts": {
+  "admitted": 101,
+  "admitted:history": 101,
+  "admitted:history:claim:-": 101,
+  "alias_keys_added": 0,
+  "cite_collisions": 0,
+  "cite_index_lines": 36,
+  "claim_setAside_other_kind": 0,
+  "input:history": 101,
+  "input_rows": 101,
+  "rejected": 0,
+  "texts_read": 101,
+  "windows": 166
+ },
+ "admitted_by_kind": {
+  "history:vacated": 101
+ },
+ "alias_keys_added_by_form": {},
+ "by_rule": {
+  "rehear:eb12_e": {
+   "admitted": 101,
+   "admitted:vacated": 101,
+   "input": 101
+  }
+ },
+ "sha1": {
+  "treatments_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "treatment_class_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "joined_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "history_delta.tsv": "b63109f1cc0c0baa0b34ac1122f30cda82e09ca8",
+  "history_anchor_delta.tsv": "7c3fd3787bd08ef1f87e9557a6d3618910d8793d",
+  "history_claim_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "cert_text_delta.tsv": "f1a4b200faef42c0ad3aed3f961b764eff9116be",
+  "window_sha_delta.tsv": "00eeb1185451ca92b9d3afcc5c3a1a15c739fac1",
+  "cite_index_delta.tsv": "e008e3711a063a3b54abfc19cf79b028bf15fd00"
+ }
+}

@@ -1,0 +1,11 @@
+round8 h0 benchmark shadow READY (2026-11-14 00:29:17 GMTST, agent infra)
+verified: round 6 and round 4 builds reproduce benchmarks/<key>/results/round{6,4}.h0.json metrics exactly (verify_h0.py: VERIFY OK)
+score any build:  python round8/bench_h0/score_h0.py --out <outdir> --data <stagedir> --label <x>   -> round8/results/<x>/bench/
+compare builds:   python round8/bench_h0/diff_h0.py v3 <x> [--tsv FILE]
+per-case h0 outcomes of the base v3: round8/results/v3/bench/<key>.h0.cases.tsv
+v3 h0 baseline (round7/out/v3 + round7/stage/v3), primary = recall, Wilson 95%:
+  fjc_idb_appeals         recall 1418/2832 = 50.1% [48.2, 51.9]   precision 1418/1576 = 90.0%   clean 6087/6229 = 97.7%
+  shadow_docket           recall  156/1059 = 14.7% [12.7, 17.0]   precision  156/189  = 82.5%   clean 43781/43811 = 99.9%
+  scdb_disposition        recall 1681/2407 = 69.8% [68.0, 71.6]   precision 1681/1724 = 97.5%   clean 2002/2052 = 97.6%
+  state_overruled_tables  recall   13/132  =  9.8% [ 5.8, 16.1]   recall_any 15/132 = 11.4%     actor_agreement 13/14
+(all sub-metrics: round8/results/v3/bench/SUMMARY.tsv)

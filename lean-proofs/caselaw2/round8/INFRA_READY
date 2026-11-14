@@ -1,0 +1,11 @@
+round8 infrastructure READY (2026-11-14 00:33:42 GMTST, agent infra)
+frozen v3 checker: ~/caselaw2/r8_bin/caselaw2_r7v3 (WSL), sha1 3270d7f3443fee00121ea55358b951eca8df9fea (copy of ~/caselaw2/r7_bin/caselaw2_v3)
+base reproduction: stage8.py base (31/31 tables = hard links to round7/stage/v3) + NOBUILD=1 r8_run.sh base ->
+  round8/out/base/{certs,classes,findings,horty,splits,status,status_lines}.tsv cmp-identical to round7/out/v3;
+  summary.tsv identical except its per-shard timing lines (load_ms, run_ms).
+certify:  python -X utf8 round8/certify8.py --rows ROWS.jsonl --out round8/agents/<you>/cert --procs 10   (ids t8:/h8:; base v3)
+          recognised / operativeWords answers: round8/CERTIFIERS.md (certify_recog8.py, certify_opwords8.py)
+stage:    python -X utf8 round8/stage8.py <name> --delta DIR [...] [--remove F] [--drop F] [--replace F] [--claims F]
+run:      MSYS_NO_PATHCONV=1 wsl.exe -d Ubuntu -- bash -lc 'NOBUILD=1 bash /mnt/c/Users/$USER/Documents/us-caselaw-lean-work/caselaw-lean-2/wsl/r8_run.sh <name>'
+          (-> round8/out/<name>/; without NOBUILD needs round8/LEAN_READY; R8BIN=<path> selects another binary)
+score:    bash round8/score8.sh <name>   (-> round8/results/<name>/summary.txt; dev halves + new keys h0)

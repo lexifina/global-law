@@ -1,0 +1,154 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\data",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\out",
+  "status_sha1": "ece2365efc536dfcb39425e8c95efe842c57e3a6"
+ },
+ "court": "mixed",
+ "dataset": "shadow_docket",
+ "extra_metrics": {
+  "clean_affirmed": {
+   "hi": 0.9801091125830901,
+   "k": 8,
+   "lo": 0.565000291629209,
+   "n": 9,
+   "p": 0.8888888888888888
+  },
+  "clean_cert_denied": {
+   "hi": 0.9998246288878497,
+   "k": 43312,
+   "lo": 0.9994866506692183,
+   "n": 43325,
+   "p": 0.9996999422965955
+  },
+  "clean_cert_dismissed": {
+   "hi": 0.9993554590316509,
+   "k": 273,
+   "lo": 0.9796201088882117,
+   "n": 274,
+   "p": 0.9963503649635036
+  },
+  "clean_dig": {
+   "hi": 1.0,
+   "k": 5,
+   "lo": 0.5655175313406071,
+   "n": 5,
+   "p": 1.0
+  },
+  "part_neg_or_unk": {
+   "hi": 0.18283466100127826,
+   "k": 1,
+   "lo": 0.006568145908046982,
+   "n": 27,
+   "p": 0.037037037037037035
+  },
+  "precision_lenient": {
+   "hi": 0.6925677314239751,
+   "k": 14,
+   "lo": 0.33985615629965205,
+   "n": 27,
+   "p": 0.5185185185185185
+  },
+  "recall_at_order_plus_90d": {
+   "hi": 0.015575022369741386,
+   "k": 9,
+   "lo": 0.004338027692728721,
+   "n": 1093,
+   "p": 0.008234217749313814
+  },
+  "recall_gvr": {
+   "hi": 0.010209067359084131,
+   "k": 4,
+   "lo": 0.001551929148204189,
+   "n": 1003,
+   "p": 0.003988035892323031
+  },
+  "recall_lenient": {
+   "hi": 0.0225193975216277,
+   "k": 15,
+   "lo": 0.008334158028517162,
+   "n": 1093,
+   "p": 0.013723696248856358
+  },
+  "recall_reversed": {
+   "hi": 0.27363177045790593,
+   "k": 9,
+   "lo": 0.0853579592905131,
+   "n": 57,
+   "p": 0.15789473684210525
+  },
+  "recall_sc_order_in_corpus": {
+   "hi": 0.029086896572698626,
+   "k": 14,
+   "lo": 0.010426407850108921,
+   "n": 802,
+   "p": 0.017456359102244388
+  },
+  "recall_sc_order_not_in_corpus": {
+   "hi": 0.013028896600469549,
+   "k": 0,
+   "lo": 0.0,
+   "n": 291,
+   "p": 0.0
+  },
+  "recall_vacated": {
+   "hi": 0.15318725526474106,
+   "k": 1,
+   "lo": 0.005369410477441133,
+   "n": 33,
+   "p": 0.030303030303030304
+  }
+ },
+ "generated": "2026-11-13T23:52:27+00:00",
+ "label": "round4",
+ "link": {
+  "fail_reasons": {
+   "court_unmapped": 10,
+   "date_mismatch": 2160,
+   "docket_not_in_corpus": 44745,
+   "multiple_candidates": 405,
+   "no_docket_in_source": 11151,
+   "only_after_order": 44,
+   "only_too_old": 10
+  },
+  "linked": 45932,
+  "n_items": 104457
+ },
+ "metrics": {
+  "clean": {
+   "hi": 0.999791551721116,
+   "k": 43598,
+   "lo": 0.9994325677302387,
+   "n": 43613,
+   "p": 0.9996560658519249
+  },
+  "link_rate": {
+   "hi": 0.4427337954924852,
+   "k": 45932,
+   "lo": 0.4367138537497722,
+   "n": 104457,
+   "p": 0.4397216079343653
+  },
+  "precision": {
+   "hi": 0.6925677314239751,
+   "k": 14,
+   "lo": 0.33985615629965205,
+   "n": 27,
+   "p": 0.5185185185185185
+  },
+  "recall": {
+   "hi": 0.02138506932578835,
+   "k": 14,
+   "lo": 0.0076450686430773835,
+   "n": 1093,
+   "p": 0.012808783165599268
+  }
+ },
+ "notes": "Supreme Court orders 1993-2025 terms (Kastellec & Taboni v2.0). NEG = GVR / judgment vacated / summary reversal; CLEAN = cert denied / dismissed / DIG / summarily affirmed. Linked by lower-court docket number + court + date window (link.py); unit = linked lower decision. Recall: model NEG_HIST; clean: model not NEG_HIST/UNK_HIST. extra_metrics: lenient, by sub-class, status at order+90d, and split by whether the Supreme Court order text is in the corpus. See REPORT.md.",
+ "primary": "recall",
+ "row_label": "Shadow docket: lower decision vacated (GVR) / summarily reversed",
+ "split": "h1",
+ "tests": "same-case"
+}

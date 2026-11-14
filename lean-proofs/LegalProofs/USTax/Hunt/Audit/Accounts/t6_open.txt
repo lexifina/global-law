@@ -1,0 +1,40 @@
+
+/-! ## RED T6 (open rule): the plan replayed through the kernel, on the unmodified `step` -/
+
+def run (c : Cfg) : St → List Move → Option St
+  | s, [] => some s
+  | s, m :: ms => match step c s m with
+    | none => none
+    | some s' => run c s' ms
+
+def cS4 : Cfg := { age0 := 30, years := 2, comp := 300000, hasTA := true }
+def sS4 : St := { cash := 30000, ira := 100000 }
+def planS4 : List Move := [.taAdult 7000, .nextYear, .taAdult 7000, .taConvert 14000]
+
+/-- What the audit looks at: cash, IRA, IRA basis, Trump account, its basis, untaxed and taxed converted money,
+income recognised, deductions, additional tax. -/
+def view (s : St) : List Nat := [s.cash, s.ira, s.iraB, s.ta, s.taB, s.cvN, s.cvT, s.taxed, s.deducted, s.penalty]
+
+set_option maxRecDepth 100000 in
+/-- The plan is legal under the encoded rules and ends with $14,000 in the Roth IRA, nothing included in income,
+and the $100,000 pre-tax IRA untouched. -/
+theorem red_plan_replay :
+    (run cS4 sS4 planS4).map view = some [16000, 100000, 0, 0, 0, 14000, 0, 0, 0, 0] := by decide
+
+set_option maxRecDepth 100000 in
+theorem red_plan_worth : (run cS4 sS4 planS4).map (worth cS4) = some 128500 := by decide
+
+set_option maxRecDepth 100000 in
+theorem red_start_worth : worth cS4 sS4 = 125000 := by decide
+
+set_option maxRecDepth 100000 in
+/-- The ordinary backdoor in the same position: the same two contributions made to the ordinary IRA and the same
+$14,000 converted. $12,281 is included in income. -/
+theorem red_ordinary_backdoor :
+    (run cS4 sS4 [.tradContrib 7000, .nextYear, .tradContrib 7000, .convert 14000]).map view
+      = some [16000, 100000, 12281, 0, 0, 1719, 12281, 12281, 0, 0] := by decide
+
+#print axioms red_plan_replay
+#print axioms red_plan_worth
+#print axioms red_start_worth
+#print axioms red_ordinary_backdoor

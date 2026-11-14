@@ -1,0 +1,235 @@
+{
+ "model": "caselaw-lean-2",
+ "inputs": {
+  "treatments": 41464,
+  "admitted": 25035,
+  "history": 54940,
+  "status_rows": 519386,
+  "certs": 356753
+ },
+ "v1_published": {
+  "notes_named": 51895,
+  "agree": 13842,
+  "another": 1503,
+  "none": 36550,
+  "agree_rate": 0.27,
+  "blind_agreements_held": "36/37 (97%)",
+  "blind_express_found": "36/79 (about half)",
+  "heldout_acts_overruling": "94/120",
+  "heldout_acts_right_target": "79/120",
+  "crs2016_express_found": "70/236 (30%)",
+  "source": "blog draft sections 4-7; PROGRESS.md"
+ },
+ "reports": {
+  "recall_of_notes": {
+   "abrogated": {
+    "notes_named": 6396,
+    "agree": 1232,
+    "another": 82,
+    "none": 5082,
+    "agree_rate": 0.1926,
+    "scope:all": "225/1209",
+    "scope:partialUnknown": "63/357",
+    "scope:otherGrounds": "944/4830"
+   },
+   "disapproved": {
+    "notes_named": 3056,
+    "agree": 1992,
+    "another": 101,
+    "none": 963,
+    "agree_rate": 0.6518,
+    "scope:all": "236/525",
+    "scope:partialUnknown": "98/143",
+    "scope:otherGrounds": "1658/2388"
+   },
+   "overruled": {
+    "notes_named": 15768,
+    "agree": 7887,
+    "another": 506,
+    "none": 7375,
+    "agree_rate": 0.5002,
+    "scope:all": "1566/3928",
+    "scope:partialUnknown": "809/1434",
+    "scope:otherGrounds": "5512/10406"
+   },
+   "recededFrom": {
+    "notes_named": 265,
+    "agree": 143,
+    "another": 10,
+    "none": 112,
+    "agree_rate": 0.5396,
+    "scope:all": "27/44",
+    "scope:partialUnknown": "25/37",
+    "scope:otherGrounds": "91/184"
+   },
+   "reversed": {
+    "notes_named": 32968,
+    "agree": 5162,
+    "another": 332,
+    "none": 27474,
+    "agree_rate": 0.1566,
+    "scope:all": "1376/9156",
+    "scope:partialUnknown": "382/2990",
+    "scope:otherGrounds": "3404/20822"
+   },
+   "vacated": {
+    "notes_named": 11113,
+    "agree": 791,
+    "another": 155,
+    "none": 10167,
+    "agree_rate": 0.0712,
+    "scope:all": "288/4832",
+    "scope:partialUnknown": "104/1100",
+    "scope:otherGrounds": "399/5181"
+   }
+  },
+  "precision_of_admitted": {
+   "abrogated": {
+    "admitted": 50,
+    "noteNamesSameBy": 13,
+    "noteOtherOrUnnamed": 6,
+    "noNote": 31,
+    "confirmed_rate": 0.26,
+    "confirmed_rate_among_noted": 0.6842
+   },
+   "disapproved": {
+    "admitted": 6838,
+    "noteNamesSameBy": 1610,
+    "noteOtherOrUnnamed": 369,
+    "noNote": 4859,
+    "confirmed_rate": 0.2354,
+    "confirmed_rate_among_noted": 0.8135
+   },
+   "overruled": {
+    "admitted": 17072,
+    "noteNamesSameBy": 4158,
+    "noteOtherOrUnnamed": 941,
+    "noNote": 11973,
+    "confirmed_rate": 0.2436,
+    "confirmed_rate_among_noted": 0.8155
+   },
+   "recededFrom": {
+    "admitted": 603,
+    "noteNamesSameBy": 109,
+    "noteOtherOrUnnamed": 31,
+    "noNote": 463,
+    "confirmed_rate": 0.1808,
+    "confirmed_rate_among_noted": 0.7786
+   },
+   "supersededByEnactment": {
+    "admitted": 472,
+    "noteNamesSameBy": 5,
+    "noteOtherOrUnnamed": 168,
+    "noNote": 299,
+    "confirmed_rate": 0.0106,
+    "confirmed_rate_among_noted": 0.0289
+   }
+  }
+ },
+ "scdb": {
+  "flagged_decisions": 278,
+  "flagged_with_admitted_overruling": 141,
+  "recall": 0.5072,
+  "scotus_decisions_with_admitted_overruling_of_scotus": 152,
+  "of_which_flagged": 141,
+  "precision": 0.9276,
+  "unflagged_examples": [
+   5945277,
+   6044406,
+   6045070,
+   6107658,
+   6129345,
+   6149775,
+   6164047,
+   6164051,
+   6169041,
+   6239868,
+   6239875
+  ]
+ },
+ "crs": {
+  "current_table": {
+   "pairs": 294,
+   "resolved": 292,
+   "found": 162,
+   "recall": 0.5548
+  },
+  "2016_express": {
+   "pairs": 252,
+   "resolved": 243,
+   "found": 135,
+   "recall": 0.5556
+  },
+  "2016_all": {
+   "pairs": 320,
+   "resolved": 311,
+   "found": 139,
+   "recall": 0.4469
+  },
+  "admitted_scotus_on_scotus": 187,
+  "of_which_in_crs": 163
+ },
+ "cert_reasons": {
+  "historys:ok": 48170,
+  "historys:noCue": 2926,
+  "historys:targetUnresolved": 386,
+  "historys:noAuthority": 3452,
+  "historys:partNotMajority": 1,
+  "treatments:ok": 33316,
+  "treatments:noAuthority": 1933,
+  "treatments:disqualified": 26,
+  "treatments:targetLater": 12,
+  "treatments:targetUnresolved": 4,
+  "treatments:okUnverifiedBy": 14,
+  "treatments:witnessNoStanding": 10,
+  "treatments:okRecognised": 6040,
+  "treatments:okRecognisedUnverifiedBy": 109,
+  "holdings:ok": 260349,
+  "historys:disqualified": 5
+ },
+ "implicit_tier": {
+  "rows": 186,
+  "by_kind": {
+   "overruled": 153,
+   "disapproved": 2,
+   "abrogated": 31
+  },
+  "by_cert": {
+   "ok": 115,
+   "noAuthority": 19,
+   "okUnverifiedBy": 7,
+   "okRecognised": 36,
+   "witnessNoStanding": 9
+  },
+  "pairs_in_crs_any_edition": 12,
+  "note": "atRisk only; not in recall_of_notes, precision_of_admitted, scdb or crs"
+ },
+ "splits": {
+  "gold_statutory": 714,
+  "gold_statutory_conflict_language": 461,
+  "missed": 542,
+  "section": 148,
+  "subsection+circuits": 5,
+  "section+circuits": 19,
+  "recall_section": 0.2409,
+  "recall_section_hc": 0.2473,
+  "splits_detected_on_or_after_resolution": 482,
+  "splits_rows": 455,
+  "honest_gold_rows_with_conflict_decisions": 464,
+  "honest_any": 9,
+  "honest_opposite": 0,
+  "honest_recall_any": 0.0194,
+  "honest_recall_opposite": 0.0
+ },
+ "findings": {
+  "atRisk": 120538,
+  "panelDepartsWithoutEnBanc": 573,
+  "citesOverruled": 67065,
+  "citesVacated": 36020,
+  "citesWithdrawn": 5642,
+  "citesNotCitable": 5701,
+  "hortyConsistentBase": 42,
+  "inconsistentBindingBase": 1,
+  "hortySelfInconsistent": 1
+ }
+}

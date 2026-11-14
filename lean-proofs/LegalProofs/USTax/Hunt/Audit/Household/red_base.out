@@ -1,0 +1,36 @@
+T0 reproduction (unmodified rules, all moves)
+-- H6 unmarried: 630 plans; default -5799; best year1 -14326 gain 8527 [claims+keeper+pretax+adopt] child 1 claimed by B; B keeps up the home; B pre-tax saving $2000; A pays 50% of the adoption expenses | year1 -14326 | §23 refundable 10000 nonref 2431 | carry used [1209, 0, 0, 0, 0] expired 3640 | six-year -25010
+   adopt only: gain 6951 [adopt] A pays 50% of the adoption expenses | year1 -12750 | §23 refundable 10000 nonref 1951 | carry used [1689, 0, 0, 0, 0] expired 3640 | six-year -18434
+   best without adopt choice: gain 3527 [claims+keeper+pretax] child 1 claimed by B; B keeps up the home; B pre-tax saving $2000 | year1 -9326 | §23 refundable 5000 nonref 2431 | carry used [2431, 2431, 2431, 2431, 125] expired 0 | six-year -28650
+-- H6 married: 286 plans; default -5000; best year1 -5000 gain 0 [default]  | year1 -5000 | §23 refundable 5000 nonref 2183 | carry used [2183, 2183, 2183, 2183, 1365] expired 0 | six-year -4182
+   adopt only: gain 0 [default]  | year1 -5000 | §23 refundable 5000 nonref 2183 | carry used [2183, 2183, 2183, 2183, 1365] expired 0 | six-year -4182
+   best without adopt choice: gain 0 [default]  | year1 -5000 | §23 refundable 5000 nonref 2183 | carry used [2183, 2183, 2183, 2183, 1365] expired 0 | six-year -4182
+T3 ablation
+-- no adopt move: 210 plans; default -5799; best year1 -9326 gain 3527 [claims+keeper+pretax] child 1 claimed by B; B keeps up the home; B pre-tax saving $2000 | year1 -9326 | §23 refundable 5000 nonref 2431 | carry used [2431, 2431, 2431, 2431, 125] expired 0 | six-year -28650
+   adopt only: gain 0 [default]  | year1 -5799 | §23 refundable 5000 nonref 0 | carry used [0, 0, 0, 0, 0] expired 12280 | six-year -9794
+   best without adopt choice: gain 3527 [claims+keeper+pretax] child 1 claimed by B; B keeps up the home; B pre-tax saving $2000 | year1 -9326 | §23 refundable 5000 nonref 2431 | carry used [2431, 2431, 2431, 2431, 125] expired 0 | six-year -28650
+-- adopt moves only: 3 plans; default -5799; best year1 -12750 gain 6951 [adopt] A pays 50% of the adoption expenses | year1 -12750 | §23 refundable 10000 nonref 1951 | carry used [1689, 0, 0, 0, 0] expired 3640 | six-year -18434
+   adopt only: gain 6951 [adopt] A pays 50% of the adoption expenses | year1 -12750 | §23 refundable 10000 nonref 1951 | carry used [1689, 0, 0, 0, 0] expired 3640 | six-year -18434
+   best without adopt choice: gain 0 [default]  | year1 -5799 | §23 refundable 5000 nonref 0 | carry used [0, 0, 0, 0, 0] expired 12280 | six-year -9794
+-- no claim: 210 plans; default -5799; best year1 -13687 gain 7888 [pretax+adopt] A pre-tax saving $7000; A pays 50% of the adoption expenses | year1 -13687 | §23 refundable 10000 nonref 1951 | carry used [1689, 0, 0, 0, 0] expired 3640 | six-year -24056
+   adopt only: gain 6951 [adopt] A pays 50% of the adoption expenses | year1 -12750 | §23 refundable 10000 nonref 1951 | carry used [1689, 0, 0, 0, 0] expired 3640 | six-year -18434
+   best without adopt choice: gain 1963 [pretax] A pre-tax saving $7000; B pre-tax saving $7000 | year1 -7762 | §23 refundable 5000 nonref 0 | carry used [0, 0, 0, 0, 0] expired 12280 | six-year -21572
+-- no keep: 315 plans; default -5799; best year1 -13901 gain 8102 [claims+pretax+adopt] child 1 claimed by B; B pre-tax saving $7000; A pays 50% of the adoption expenses | year1 -13901 | §23 refundable 10000 nonref 2431 | carry used [1209, 0, 0, 0, 0] expired 3640 | six-year -22460
+   adopt only: gain 6951 [adopt] A pays 50% of the adoption expenses | year1 -12750 | §23 refundable 10000 nonref 1951 | carry used [1689, 0, 0, 0, 0] expired 3640 | six-year -18434
+   best without adopt choice: gain 3102 [claims+pretax] child 1 claimed by B; B pre-tax saving $7000 | year1 -8901 | §23 refundable 5000 nonref 2431 | carry used [2431, 2431, 2431, 2431, 125] expired 0 | six-year -26100
+-- no pretax/roth/fsa: 18 plans; default -5799; best year1 -13789 gain 7990 [claims+keeper+adopt] child 1 claimed by B; B keeps up the home; A pays 50% of the adoption expenses | year1 -13789 | §23 refundable 10000 nonref 2431 | carry used [1209, 0, 0, 0, 0] expired 3640 | six-year -21788
+   adopt only: gain 6951 [adopt] A pays 50% of the adoption expenses | year1 -12750 | §23 refundable 10000 nonref 1951 | carry used [1689, 0, 0, 0, 0] expired 3640 | six-year -18434
+   best without adopt choice: gain 2990 [claims+keeper] child 1 claimed by B; B keeps up the home | year1 -8789 | §23 refundable 5000 nonref 2431 | carry used [2431, 2431, 2431, 2431, 125] expired 0 | six-year -25428
+-- no fileJoint/fileSeparate/claimElder: 630 plans; default -5799; best year1 -14326 gain 8527 [claims+keeper+pretax+adopt] child 1 claimed by B; B keeps up the home; B pre-tax saving $2000; A pays 50% of the adoption expenses | year1 -14326 | §23 refundable 10000 nonref 2431 | carry used [1209, 0, 0, 0, 0] expired 3640 | six-year -25010
+   adopt only: gain 6951 [adopt] A pays 50% of the adoption expenses | year1 -12750 | §23 refundable 10000 nonref 1951 | carry used [1689, 0, 0, 0, 0] expired 3640 | six-year -18434
+   best without adopt choice: gain 3527 [claims+keeper+pretax] child 1 claimed by B; B keeps up the home; B pre-tax saving $2000 | year1 -9326 | §23 refundable 5000 nonref 2431 | carry used [2431, 2431, 2431, 2431, 125] expired 0 | six-year -28650
+single payer comparison (year 1 and six-year)
+   A pays 100%: lawful true [default]  | year1 -5799 | §23 refundable 5000 nonref 0 | carry used [0, 0, 0, 0, 0] expired 12280 | six-year -9794
+    A: head of household, AGI 38000, taxable 14375, tax 1437, credits [§24 2200, §32 1987, §23 5000], net -7750
+    B: single, AGI 34000, taxable 18250, tax 1951, credits [], net 1951
+   A pays 50%: lawful true [adopt] A pays 50% of the adoption expenses | year1 -12750 | §23 refundable 10000 nonref 1951 | carry used [1689, 0, 0, 0, 0] expired 3640 | six-year -18434
+    A: head of household, AGI 38000, taxable 14375, tax 1437, credits [§24 2200, §32 1987, §23 5000], net -7750
+    B: single, AGI 34000, taxable 18250, tax 1951, credits [§23 6951], net -5000
+   A pays 0%: lawful true [adopt] A pays 0% of the adoption expenses | year1 -7750 | §23 refundable 5000 nonref 1951 | carry used [1951, 1951, 1951, 1951, 1951] expired 574 | six-year -21500
+    A: head of household, AGI 38000, taxable 14375, tax 1437, credits [§24 2200, §32 1987], net -2750
+    B: single, AGI 34000, taxable 18250, tax 1951, credits [§23 6951], net -5000

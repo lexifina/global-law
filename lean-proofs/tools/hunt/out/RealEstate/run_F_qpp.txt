@@ -1,0 +1,38 @@
+
+=== F. D with a $4m property, wages 600k (461(l) binds) ===
+wages only, 12 years (nominal): 1656828.  buy, let, straight line, sell: 2326593.  same, die: 1656828
+positions 23082, finished plans 9264, families 28
+-- best families ending SELL, any use (saving vs. buy-let-straight-line SELL) --
+120616  tax 2205977  [factory, QPP | let+produce | SELL]  let x4, produce x8 SELL
+78542  tax 2248051  [factory, QPP | let(pro)+exchange | SELL]  let(pro) x10, EXCHANGE, let(pro) x2 SELL
+75027  tax 2251566  [factory, QPP | let(pro) | SELL]  let(pro) x12 SELL
+31578  tax 2295015  [factory, QPP | produce+exchange | SELL]  produce x1, EXCHANGE, produce x11 SELL
+1  tax 2326592  [factory, QPP | let | SELL]  let x12 SELL
+-262242  tax 2588835  [factory, QPP | produce | SELL]  produce x12 SELL
+-- best families ending SELL, never lived in (saving vs. buy-let-straight-line SELL) --
+120616  tax 2205977  [factory, QPP | let+produce | SELL]  let x4, produce x8 SELL
+78542  tax 2248051  [factory, QPP | let(pro)+exchange | SELL]  let(pro) x10, EXCHANGE, let(pro) x2 SELL
+75027  tax 2251566  [factory, QPP | let(pro) | SELL]  let(pro) x12 SELL
+31578  tax 2295015  [factory, QPP | produce+exchange | SELL]  produce x1, EXCHANGE, produce x11 SELL
+1  tax 2326592  [factory, QPP | let | SELL]  let x12 SELL
+-262242  tax 2588835  [factory, QPP | produce | SELL]  produce x12 SELL
+-- best families ending DIE, any use (saving vs. buy-let-straight-line DIE) --
+730722  tax 926106  [factory, QPP | produce | DIE]  produce x12 DIE
+728107  tax 928721  [factory, QPP | let+let(pro)+produce | DIE]  produce x10, let x1, let(pro) x1 DIE
+441641  tax 1215187  [factory, QPP | let(pro)+produce+exchange | DIE]  produce x10, let(pro) x1, EXCHANGE, let(pro) x1 DIE
+392227  tax 1264601  [factory, QPP | let+let(pro)+produce+exchange | DIE]  produce x10, let x1, EXCHANGE, let(pro) x1 DIE
+370004  tax 1286824  [factory, QPP | let(pro)+exchange | DIE]  let(pro) x1, EXCHANGE, let(pro) x11 DIE
+363374  tax 1293454  [factory, QPP | let+let(pro) | DIE]  let(pro) x7, let x1, let(pro) x4 DIE
+309980  tax 1346848  [factory, QPP | produce+exchange | DIE]  produce x1, EXCHANGE, produce x11 DIE
+0  tax 1656828  [factory, QPP | let | DIE]  let x12 DIE
+-62400  tax 1719228  [factory, QPP | let+exchange | DIE]  let x1, EXCHANGE, let x11 DIE
+-- best families ending DIE, never lived in (saving vs. buy-let-straight-line DIE) --
+730722  tax 926106  [factory, QPP | produce | DIE]  produce x12 DIE
+728107  tax 928721  [factory, QPP | let+let(pro)+produce | DIE]  produce x10, let x1, let(pro) x1 DIE
+441641  tax 1215187  [factory, QPP | let(pro)+produce+exchange | DIE]  produce x10, let(pro) x1, EXCHANGE, let(pro) x1 DIE
+392227  tax 1264601  [factory, QPP | let+let(pro)+produce+exchange | DIE]  produce x10, let x1, EXCHANGE, let(pro) x1 DIE
+370004  tax 1286824  [factory, QPP | let(pro)+exchange | DIE]  let(pro) x1, EXCHANGE, let(pro) x11 DIE
+363374  tax 1293454  [factory, QPP | let+let(pro) | DIE]  let(pro) x7, let x1, let(pro) x4 DIE
+309980  tax 1346848  [factory, QPP | produce+exchange | DIE]  produce x1, EXCHANGE, produce x11 DIE
+0  tax 1656828  [factory, QPP | let | DIE]  let x12 DIE
+-62400  tax 1719228  [factory, QPP | let+exchange | DIE]  let x1, EXCHANGE, let x11 DIE

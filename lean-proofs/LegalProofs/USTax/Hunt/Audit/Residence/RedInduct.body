@@ -1,0 +1,157 @@
+-- NOSEARCH
+/-! ## T6: every move sequence, unbounded (induction on the list): the §877A(a)(3) limit is never exceeded and the
+built-in gain never grows, for all parameters and all starting positions that are not citizen and green-card holder
+at once. -/
+
+theorem settle_fields (p : Params) (s : St) (pd : Pend) (y : Nat) (r : Bool) :
+    (settle p s pd y r).gainLeft = s.gainLeft ∧ (settle p s pd y r).exclAmt = s.exclAmt ∧
+    (settle p s pd y r).isCit = s.isCit ∧ (settle p s pd y r).isLPR = s.isLPR := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> (unfold settle; dsimp only; repeat' split) <;> rfl
+
+def Inv (p : Params) (s : St) : Prop :=
+  ¬(s.isCit = true ∧ s.isLPR = true) ∧ (s.exclAmt = 0 ∨ (s.isCit = false ∧ s.isLPR = false ∧ s.exclAmt ≤ p.exclusion))
+
+theorem endYear_fields (p : Params) (s s' : St) (h : endYear p s = some s') :
+    s'.gainLeft = s.gainLeft ∧ s'.exclAmt = s.exclAmt ∧ s'.isCit = s.isCit ∧ s'.isLPR = s.isLPR := by
+  unfold endYear at h
+  dsimp only at h
+  have hs := settle_fields p
+  repeat' split at h
+  all_goals first
+    | contradiction
+    | (have h2 := Option.some.inj h; subst h2; simp [hs])
+
+theorem exitTax_inv (p : Params) (s : St) (e c : Bool) (h0 : s.exclAmt = 0) :
+    (exitTax p s e c).exclAmt ≤ p.exclusion ∧ (exitTax p s e c).isCit = s.isCit ∧ (exitTax p s e c).isLPR = s.isLPR ∧
+    (exitTax p s e c).gainLeft ≤ s.gainLeft := by
+  unfold exitTax
+  repeat' split
+  all_goals simp [h0]
+  all_goals omega
+
+theorem giftTransfer_fields (p : Params) (s : St) (d : Bool) :
+    (giftTransfer p s d).exclAmt = s.exclAmt ∧ (giftTransfer p s d).isCit = s.isCit ∧ (giftTransfer p s d).isLPR = s.isLPR := by
+  refine ⟨?_, ?_, ?_⟩ <;> (unfold giftTransfer; dsimp only; repeat' split) <;> rfl
+
+theorem step_inv (p : Params) (s s' : St) (m : Move) (hi : Inv p s) (h : step p s m = some s') :
+    Inv p s' ∧ s'.gainLeft ≤ s.gainLeft := by
+  have key : ∀ t : St, t.gainLeft ≤ s.gainLeft → t.exclAmt = s.exclAmt → t.isCit = s.isCit → t.isLPR = s.isLPR →
+      Inv p t ∧ t.gainLeft ≤ s.gainLeft := by
+    intro t h1 h2 h3 h4
+    unfold Inv at *
+    rw [h2, h3, h4]
+    exact ⟨hi, h1⟩
+  cases m with
+  | present =>
+    unfold step at h; dsimp only at h
+    split at h
+    · obtain ⟨a, b, c, d⟩ := endYear_fields _ _ _ h
+      exact key _ (by rw [a]; exact Nat.le_refl _) (by rw [b]) (by rw [c]) (by rw [d])
+    · have h2 := Option.some.inj h; subst h2; exact key _ (Nat.le_refl _) rfl rfl rfl
+  | absent =>
+    unfold step at h; dsimp only at h
+    split at h
+    · obtain ⟨a, b, c, d⟩ := endYear_fields _ _ _ h
+      exact key _ (by rw [a]; exact Nat.le_refl _) (by rw [b]) (by rw [c]) (by rw [d])
+    · have h2 := Option.some.inj h; subst h2; exact key _ (Nat.le_refl _) rfl rfl rfl
+  | relocate =>
+    unfold step at h; dsimp only at h
+    split at h
+    · have h2 := Option.some.inj h; subst h2; exact key _ (Nat.le_refl _) rfl rfl rfl
+    · contradiction
+  | sell =>
+    unfold step at h; dsimp only at h
+    split at h
+    · have h2 := Option.some.inj h; subst h2; exact key _ (Nat.zero_le _) rfl rfl rfl
+    · contradiction
+  | giftUS =>
+    unfold step at h; dsimp only at h
+    split at h
+    · have h2 := Option.some.inj h; subst h2
+      obtain ⟨b, c, d⟩ := giftTransfer_fields p s true
+      exact key _ (Nat.zero_le _) b c d
+    · contradiction
+  | giftNRA =>
+    unfold step at h; dsimp only at h
+    split at h
+    · have h2 := Option.some.inj h; subst h2
+      obtain ⟨b, c, d⟩ := giftTransfer_fields p s false
+      exact key _ (Nat.zero_le _) b c d
+    · contradiction
+  | renounce c =>
+    unfold step at h; dsimp only at h
+    split at h
+    · rename_i hc
+      have h2 := Option.some.inj h; subst h2
+      have hcit : s.isCit = true := by simp at hc; exact hc.1.1
+      have h0 : s.exclAmt = 0 := by
+        rcases hi.2 with h0 | ⟨hf, _, _⟩
+        · exact h0
+        · rw [hcit] at hf; contradiction
+      have hl : s.isLPR = false := by
+        cases hL : s.isLPR with
+        | false => rfl
+        | true => exact absurd ⟨hcit, hL⟩ hi.1
+      obtain ⟨a, b, c', d⟩ := exitTax_inv p { s with isCit := false, citUntil := s.seg } true c h0
+      refine ⟨⟨?_, Or.inr ⟨?_, ?_, a⟩⟩, d⟩
+      · rw [b]; simp
+      · rw [b]
+      · rw [c']; exact hl
+    · contradiction
+  | abandon c =>
+    unfold step at h; dsimp only at h
+    split at h
+    · rename_i hc
+      have h2 := Option.some.inj h; subst h2
+      have hlpr : s.isLPR = true := by simp at hc; exact hc.1.1
+      have h0 : s.exclAmt = 0 := by
+        rcases hi.2 with h0 | ⟨_, hf, _⟩
+        · exact h0
+        · rw [hlpr] at hf; contradiction
+      have hcit : s.isCit = false := by
+        cases hC : s.isCit with
+        | false => rfl
+        | true => exact absurd ⟨hC, hlpr⟩ hi.1
+      obtain ⟨a, b, c', d⟩ := exitTax_inv p { s with isLPR := false, lprUntil := s.seg } (s.lprYears + 1 ≥ 8) c h0
+      refine ⟨⟨?_, Or.inr ⟨?_, ?_, a⟩⟩, d⟩
+      · rw [c']; simp
+      · rw [b]; exact hcit
+      · rw [c']
+    · contradiction
+
+def runMoves (p : Params) (s : St) : List Move → Option St
+  | [] => some s
+  | m :: ms => (step p s m).bind fun s' => runMoves p s' ms
+
+/-- For every parameter set (so for the original rules and for every red-team variant), every starting position and
+EVERY sequence of moves of any length: the gain removed by §877A(a)(3) never exceeds the exclusion (it cannot be
+used twice), and the untaxed built-in gain never grows. -/
+theorem all_sequences (p : Params) (ms : List Move) : ∀ (s s' : St), Inv p s → runMoves p s ms = some s' →
+    s'.exclAmt ≤ p.exclusion ∧ s'.gainLeft ≤ s.gainLeft := by
+  induction ms with
+  | nil =>
+    intro s s' hi h
+    have h2 := Option.some.inj h; subst h2
+    refine ⟨?_, Nat.le_refl _⟩
+    rcases hi.2 with h0 | ⟨_, _, h3⟩
+    · rw [h0]; exact Nat.zero_le _
+    · exact h3
+  | cons m ms ih =>
+    intro s s' hi h
+    unfold runMoves at h
+    cases hstep : step p s m with
+    | none => rw [hstep] at h; contradiction
+    | some t =>
+      rw [hstep] at h
+      obtain ⟨hit, hg⟩ := step_inv p s t m hi hstep
+      obtain ⟨a, b⟩ := ih t s' hit h
+      exact ⟨a, Nat.le_trans b hg⟩
+
+theorem init_inv (p : Params) (b : Start) (hb : ¬(b.isCit = true ∧ b.isLPR = true)) : Inv p (initSt p b) :=
+  ⟨hb, Or.inl rfl⟩
+
+end Legal.USTax.Hunt.Audit.ResidenceRed
+namespace Legal.USTax.Hunt.Audit.ResidenceRed
+#print axioms step_inv
+#print axioms all_sequences
+#print axioms init_inv

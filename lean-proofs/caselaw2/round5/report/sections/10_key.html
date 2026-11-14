@@ -1,0 +1,55 @@
+<h2 id="key">The fresh answer key</h2>
+<p>The two lists we already score on (the Supreme Court Database and the Constitution Annotated table) are burned: we
+improved the reader by reading what it missed on them. So we built a key from lists this project had never opened.</p>
+<div class="tw"><table><thead><tr><th>Source</th><th>Status</th><th>Rows</th><th>Scoreable pairs</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Wikipedia, list of overruled Supreme Court decisions</td><td>Obtained</td><td>146</td><td>145</td><td>Revision of 13 Oct 2026, CC BY-SA. Thin before 1957.</td></tr>
+<tr><td>Blaustein &amp; Field, 57 Mich. L. Rev. 151 (1958), appendix</td><td>Obtained</td><td>123</td><td>121</td><td>Marks each row express or implied.</td></tr>
+<tr><td>Gerhardt, 60 Geo. Wash. L. Rev. 68 (1991), appendix</td><td>Obtained</td><td>145</td><td>145</td><td>Constitutional cases; gives the overturning words.</td></tr>
+<tr><td><i>Payne v. Tennessee</i>, 501 U.S. 808, 828 n.1 (1991)</td><td>Obtained</td><td>37</td><td>37</td><td>The Court’s own list. It is corpus text, so the reader can see it.</td></tr>
+<tr><td>Gerhardt, <i>The Power of Precedent</i> (2008)</td><td>Not obtained</td><td></td><td></td><td>Not openly readable; his 1991 appendix stands in.</td></tr>
+<tr><td>Brenner &amp; Spaeth, <i>Stare Indecisis</i> (1995)</td><td>Not obtained</td><td></td><td></td><td>Paywalled; no open copy or data found.</td></tr>
+</tbody></table></div>
+<p>Together: 451 rows, <b>292 distinct pairs</b> of overruling and overruled decision, covering 285 overruled decisions.
+171 pairs are in one list only, 86 in two and 35 in three. The sources mark 41 pairs as implied and 28 as partial.</p>
+<h3>How it is split</h3>
+<p>The pairs are split once, by a hash of the overruled decision’s citation: <b>165 pairs are open</b> for iterating
+against and <b>127 are sealed</b>. The sealed half is scored once, after the rules, code and data are frozen. Iterating
+against the whole key would burn it the way the first two lists were burned.</p>
+<h3>How independent it really is</h3>
+<div class="tw"><table><thead><tr><th></th><th>Pairs</th><th>Also in the Constitution Annotated (any edition)</th><th>Overruling decision flagged in the Supreme Court Database</th><th>In neither</th></tr></thead><tbody>
+<tr><td>All</td><td>292</td><td>265 (91%)</td><td>279 (96%)</td><td>11</td></tr>
+<tr><td>Open half</td><td>165</td><td>146</td><td>157</td><td>6</td></tr>
+<tr><td>Sealed half</td><td>127</td><td>119</td><td>122</td><td>5</td></tr>
+</tbody></table></div>
+<p><b>The key is fresh as a compilation, not in content.</b> Only 27 pairs are outside the Constitution Annotated. The
+lists mostly record the same overrulings, so a gain here is weaker evidence than a gain on a truly unseen list would be.
+The scorer reports the 27 separately, but that is a small sample.</p>
+<h3>The model before this round, on the fresh key</h3>
+<div class="tw"><table><thead><tr><th>Half</th><th>Pairs</th><th>Overruled by the listed case</th><th>By another case</th><th>Partly negative</th><th>At risk only</th><th>Nothing</th><th>Strict</th><th>Lenient</th></tr></thead><tbody>
+<tr><td>Open</td><td>165</td><td>50</td><td>2</td><td>34</td><td>12</td><td>67</td><td>30.3% <span class="muted">[23.8, 37.7]</span></td><td>52.1% <span class="muted">[44.5, 59.6]</span></td></tr>
+<tr><td>Sealed</td><td>127</td><td>32</td><td>1</td><td>26</td><td>17</td><td>51</td><td>25.2% <span class="muted">[18.4, 33.4]</span></td><td>46.5% <span class="muted">[38.0, 55.1]</span></td></tr>
+</tbody></table></div>
+<ul>
+<li><b>Scope is the largest gap.</b> In 59 of the 60 partly-negative cases the model had found the right overruling
+decision but left its scope unknown, so it reads “partly negative” where the lists say overruled.</li>
+<li><b>Implied overrulings:</b> 0% strict and about 5% lenient on both halves.</li>
+<li><b>Partial overrulings:</b> 0% strict; 69% lenient on the open half and 47% on the sealed half.</li>
+<li><b>Outside the Constitution Annotated:</b> 1 of 19 strict on the open half and 1 of 8 on the sealed half.</li>
+<li><b>Precision side:</b> of the Supreme Court decisions the model marks overruled, 50 of 53 on the open half are on a
+fresh list; on the sealed half 32 of 43 are, 1 is listed under another overruler, and 10 are unlisted. Unlisted is not
+the same as wrong, because the lists are incomplete.</li>
+</ul>
+<h3>The lists disagree on <i>Brown</i> and <i>Plessy</i></h3>
+<p>Wikipedia lists <i>Brown</i> as overruling <i>Plessy</i> without qualification. Blaustein &amp; Field name
+<i>Gayle v. Browder</i> (1956) as <i>Plessy</i>’s overruler and call it implied. The 2016 Constitution Annotated had the
+<i>Brown</i> / <i>Plessy</i> row and the 2022 edition dropped it.</p>
+<h3>Doubts about the key</h3>
+<ul>
+<li>268 rows were typed by hand from page images. Each citation was checked against the corpus by name and year, but a
+wrong pairing inside a multi-case row would not be caught.</li>
+<li>Eight Blaustein pairs are a case overruling its own earlier disposition on rehearing. The model treats those as
+history, so they count as misses.</li>
+<li>The lists disagree on the partial flag for 20 pairs; the key uses the union.</li>
+<li>The small cells (partial, implied, <i>Payne</i>, outside the Constitution Annotated) have 8 to 21 pairs per half, so
+their intervals are wide.</li>
+</ul>

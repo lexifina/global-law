@@ -1,0 +1,37 @@
+round 8 variant rehear8_b: dev-side scores (results in round8/results/rehear8_b/)
+scored 2026-11-14 00:48:28
+stage args: rehear8_b --delta round8/agents/rehear8/cert_grant --delta round8/agents/rehear8/cert_nodate_noreinst
+Lean run: NOBUILD frozen r7v3 run, binary sha1 3270d7f3443fee00121ea55358b951eca8df9fea, 2026-11-14 00:48:28 GMT
+stage round8/stage/rehear8_b; data dir data_r8_rehear8_b; staged = base mirror: treatments treatment_witness treatment_class history_claim joined cite_index; copied: history history_anchor cert_text window_sha; left out: none
+Lean summary (shard 0): rows_admitted 209625, rows_rejected 9208, class_rows 7523, class_bad_rows 0, recognised_rows 6478, operative_rows 888, anchor_rows 35507, anchor_unknown_ids 0, anchor_duplicates 0, anchored_admitted 34264, anchored_rejected 1243, joined_rows 508, joined_lines 508, joined_unknown_ids 0, joined_extra 0, joined_history_ignored 0, joined_witness_ignored 0, joined_admitted 474, joined_rejected 34, hclaim_rows 97, hclaim_unknown_ids 0, hclaim_duplicates 0, hclaim_admitted 89, hclaim_rejected 8, doctrine_rows 17, doctrine_admitted 17, doctrine_ambiguous 0
+round-8 rows by verdict: h8 ok 546
+
+FRESH LISTS, dev (165 pairs): strict 51/165 = 30.9% (24.4-38.3); lenient 111/165 = 67.3% (59.8-74.0)
+  precision side: listed 81/94 = 86.2% (77.8-91.7); classes {"listed": 81, "targetListedOtherOverruler": 1, "unlisted": 12}
+  view attributed strict 81/165 = 49.1% (41.6-56.6); lenient 111/165 = 67.3% (59.8-74.0)
+  view model      strict 51/165 = 30.9% (24.4-38.3); lenient 111/165 = 67.3% (59.8-74.0)
+NO-LEAK: exit 0 (0 = no leak)
+HOLDOUT NOTES: precedent, Y named strict 772/12354 = 6.2% (5.8-6.7); byAnyone 902/12354 = 7.3% (6.9-7.8); negOrPartly 4544/12354 = 36.8% (35.9-37.6); anySignal 5199/12354 = 42.1% (41.2-43.0)
+HOLDOUT NOTES: precedent, explicitly admitted pairs strict 648/3143 = 20.6% (19.2-22.1); byAnyone 663/3143 = 21.1% (19.7-22.6); negOrPartly 3087/3143 = 98.2% (97.7-98.6); anySignal 3100/3143 = 98.6% (98.2-99.0)
+HOLDOUT NOTES: history 4786/5708 = 83.8% (82.9-84.8)
+HOLDOUT NOTES: precedent 782/837 = 93.4% (91.5-94.9)
+HOLDOUT NOTES: alsoInFeed strict 47/2640 = 1.8% (1.3-2.4); byAnyone 57/2640 = 2.2% (1.7-2.8); negOrPartly 1038/2640 = 39.3% (37.5-41.2); anySignal 1256/2640 = 47.6% (45.7-49.5)
+HOLDOUT NOTES: holdoutOnly strict 86/6734 = 1.3% (1.0-1.6); byAnyone 192/6734 = 2.9% (2.5-3.3); negOrPartly 576/6734 = 8.6% (7.9-9.2); anySignal 1002/6734 = 14.9% (14.0-15.7)
+OLD LISTS (burned, non-blind): SCDB 146/278 explicit rows, 178/278 with recognised; CRS current 166/292, 198/292 with recognised; rows by class {"selfAnnounced": 23778, "operativeWords": 2640, "recognised": 6155, "doctrine": 17}
+SHEPARDIZED, dev half (raw k/n share [95%]; with documented errors set aside):
+  agreement      overall, scored classes (NEG, PART, MOD, CLEAN)                9856/9985 98.7% [98.5%-98.9%]; set aside 9855/9977 98.8%
+  (a) recall     NEG: model NEG_HIST (strict)                                   143/254 56.3% [50.2%-62.3%]; set aside 143/252 56.7%
+  (a) recall     NEG: model NEG_HIST or UNK_HIST (lenient)                      152/254 59.8% [53.7%-65.7%]; set aside 152/252 60.3%
+  (a) recall     PART: model NEG_HIST or UNK_HIST                               3/11 27.3% [9.7%-56.6%]; set aside 3/11 27.3%
+  (a) recall     NEG and PART together: model as expected                       146/265 55.1% [49.1%-61.0%]; set aside 146/263 55.5%
+  (b) precision  of model NEG_HIST: Shepardized NEG (strict; AMBIG left out)    143/152 94.1% [89.1%-96.9%]; set aside 143/148 96.6%
+  (b) precision  of model NEG_HIST: Shepardized NEG or PART (lenient; AMBIG lef 143/152 94.1% [89.1%-96.9%]; set aside 143/148 96.6%
+  (c) clean      CLEAN: model shows no same-case negative                       9695/9704 99.9% [99.8%-100.0%]; set aside 9694/9698 100.0%
+  (c) clean      MOD: model CLEAN or UNK_HIST                                   15/16 93.8% [71.7%-98.9%]; set aside 15/16 93.8%
+  subclass       NEG/enbanc_different                                           16/27 59.3%
+  subclass       NEG/panel_withdrawn                                            10/27 37.0%
+  subclass       NEG/sc_reversed                                                87/129 67.4%
+  subclass       NEG/sc_vacated                                                 30/71 42.3%
+  subclass       PART/sc_part                                                   3/11 27.3%
+  dev_fp.tsv dev CLEAN/MOD cases shown negative for a same-case reason 10 (CLEAN 9, MOD 1)
+NEW KEYS, h0: not available (round8/bench_h0/score_h0.py not run)

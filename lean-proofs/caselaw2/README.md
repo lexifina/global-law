@@ -47,6 +47,60 @@ present-tense words, and about half of the known Supreme Court overrulings are s
 holds. [report/sections/why_recall.html](report/sections/why_recall.html) and [LIMITS.md](LIMITS.md) say where the
 rest goes.
 
+## Rounds 5 to 13 (13–14 November 2026)
+
+Each round adds rules to the model and the reader, under one protocol (`benchmarks/CONTRACT.md`):
+- rules are built on the development half of every answer key only;
+- a rule enters the certified tier only after a blind audit at 0.90 or better;
+- each build is frozen (file hashes in the round's `FREEZE.md`) before the sealed halves are scored, once
+  (`SEALED_LOG.md`).
+
+Every round's notes, scripts, audits, agent briefs and scores are in `round5/` to `round13/`. Each round's
+`ROUNDn.md` is its summary (round 6's is `round6/shepardized/SHEPARDIZED.md`).
+
+| Round | What it added |
+|---|---|
+| 5 | Overrulings recognised by a later court with power (`Spec/Recognised.lean`), operative words, the first fresh held-out lists |
+| 6 | Same-case history, the Shepardized Courts of Appeals key |
+| 7 | Joined certificates, a stronger reader, queued reading, scope, dates |
+| 8 | The own-act queue, links through later citations, rehearing, multi-case acts, state courts, new keys |
+| 9 | Shadow Docket remand links, FJC anchors, part zones in Lean, state joins, two fresh held-out keys |
+| 10 | A state-court review linker, the remand and trial-judgment bridges in Lean, the Federal Circuit key |
+| 11 | Supreme Court order lists as staged data, state review of uncited decisions below, a Federal Circuit tribunal linker |
+| 12 | Shadow Docket order nodes, en banc, Federal Circuit district targets, a third Brace & Hall tie |
+| 13 | The Shadow Docket leftover rules, and three held classes installed below the audit bar (marked as such) |
+
+The frozen round-13 build is `v13a`. It has 305 theorems with locked statements (`audit/statements.lock`) and 89
+deliberately broken versions, each caught by the properties. It shows 0 disagreements with the Python reference in
+every table (status 532,639 rows, findings 329,990, certificates 498,507). Its outputs are in
+[../data/caselaw2/out_v13a/](../data/caselaw2/out_v13a/).
+
+**Recall and precision on the sealed half of each blind answer key, v13a:**
+
+| Answer key | Recall | Precision |
+|---|---|---|
+| Supreme Court Database: reversed or vacated below | 76.5% | 97.2% |
+| Shadow Docket Database: vacated or summarily reversed | 68.3% | 94.6% |
+| FJC Integrated Database, unpublished appeals | 64.1% | 94.8% |
+| FJC Integrated Database, district decisions reversed or vacated | 57.0% | 89.4% |
+| Brace & Hall, state supreme courts | 56.8% | 93.6% |
+| Federal Circuit Dataset Project | 56.0% | 90.3% |
+| Beim, Hirsch & Kastellec, en banc rehearings | 52.9% | – |
+| Shepardized Courts of Appeals | 52.0% (131 of 252) | 92.9% |
+| Songer Courts of Appeals | 44.3% | 97.1% |
+| Unopened overruling lists | 60.6% | 75% |
+| Overruling notes from courts without power (held out) | 37.8% | 93.5% |
+| Pre-1930 tables of overruled state cases | 7.7% | – |
+
+Each key's source, licence, linking and scorer are in `benchmarks/<key>/` (`SOURCE.md`, `MAPPING.md`,
+`DISAGREEMENTS.md`). The scores of every build are in `benchmarks/graph/rows.tsv`, and the figure is
+`benchmarks/graph/benchmarks.png`. The keys' own rows are not copied here: download them from the sources named in
+each `SOURCE.md`. Only our linking summaries, errors we found in the sources, and the scores are published. For the
+Supreme Court Database (CC BY-NC) and the Songer data, only identifiers, aggregates and scores are included, and the
+SCDB coding columns are blank. Lindquist's state supreme court data sits behind a click-through agreement and was not
+used. Audit packets quote court opinions, which are public domain. The opinion texts given to the readers are not
+kept here: they are rebuilt from the corpus.
+
 ## What the proofs do and do not show
 
 [TRUST.md](TRUST.md) is the full inventory: what is proved by the kernel, what is computed by compiled code, what is
@@ -61,7 +115,7 @@ Lean 4.35.0, core library only (the toolchain is pinned in `../lean-toolchain`).
 ```sh
 cd lean-proofs
 lake build LegalProofs.CaseLaw2 LegalProofs.USCaseLaw   # model, proofs, 223 #guard checks, mutation matrix, statement lock
-python3 caselaw2/audit/audit.py check                    # 141 theorems; 0 statement changes; 0 problems
+python3 caselaw2/audit/audit.py check                    # 305 theorems (round 13); 0 statement changes; 0 problems
 cd caselaw2
 bash run_lean.sh 2 fixtures/data fixtures/edges /tmp/fx  # the runner on the fixtures (compare with fixtures/out; summary.tsv also carries timings)
 python3 ../tools/caselaw2/ref/precedent_ref.py run --data fixtures/data --edges fixtures/edges --out /tmp/fxref

@@ -1,0 +1,36 @@
+binary ~/caselaw2/r10_bin/caselaw2_lean10 sha1 e7e32592cc6c6393506e25dc9654d4254af218ea; ref a1bd948552b3b28c15b1ae0d8a56bd52b6abcc8f; cue_table bcb2acc2666329dc4a500658891cf2a3a21a8b31; 2026-11-14 04:56:18
+z90001: 2 disagreeing rows 
+u90001: 2 disagreeing rows 
+u94016: 3 disagreeing rows 
+u94043: 2 disagreeing rows 
+u94052: 1 disagreeing rows 
+p95009: 3 disagreeing rows 
+p95013: 3 disagreeing rows 
+p95028: 3 disagreeing rows 
+v84006: 3 disagreeing rows 
+v84024: 3 disagreeing rows 
+v84039: 3 disagreeing rows 
+g86000: 1 disagreeing rows 
+g86013: 1 disagreeing rows 
+
+543 universes, 13 with a disagreement, 0 failed (binary ~/caselaw2/r10ref/bin/runner)
+  status    0 of 95139 keys disagree
+  findings  11 of 40060 keys disagree
+  certs     10 of 131326 keys disagree
+  splits    0 of 11001 keys disagree
+  conflicts 0 of 5799 keys disagree
+  lines     0 of 6158 keys disagree
+  horty     0 of 1206 keys disagree
+  classes   9 of 25259 keys disagree
+  summary   0 of 6196 keys disagree
+  class (file, bucket, rule): universes   first example
+  certs     okMismatch:ok/witnessNoStanding      treatment                     10   e.g. z90001 treatment:tr1 A=noAuthority B=witnessNoStanding
+  classes   verdict                              ok/witnessNoStanding           9   e.g. z90001 tr1 A=noAuthority B=witnessNoStanding
+  findings  onlyA                                atRisk:inferred                9   e.g. u94016 atRisk:inferred 212 211 A=1 B=
+  findings  onlyB                                atRisk:inferred                1   e.g. v84006 atRisk:inferred 238 237 A= B=1
+  findings  onlyA                                atRisk:citesLaterNegated       1   e.g. g86013 atRisk:citesLaterNegated 234 232 A=1 B=
+  info  findings uncompared lean:citesNotCitable:force               1452
+  info  findings uncompared lean:hortyConsistentBase                 802
+  info  findings uncompared lean:hortySelfInconsistent               273
+  info  findings uncompared lean:inconsistentBindingBase             404
+rc=1

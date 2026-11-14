@@ -1,0 +1,100 @@
+== C: cash, stock to public charity, SGO, QCD ==
+baseline (cash 150000 a year): tax 13182, end wealth 4207318
+year 2026: 74 year-plans tried, 74 positions kept
+year 2027: 5630 year-plans tried, 3573 positions kept
+year 2028: 166764 year-plans tried, 60918 positions kept
+12 families deliver exactly 450000 (9506 ms); best 10:
+  50630 vs baseline (tax 13292, carry G0 B0 C46500 D0 corp0) [stock gift + SGO + QCD]
+      stockPC 45000, QCD 111000, |, stockPC 45000, SGO 1700, QCD 111000, |, stockPC 45000, SGO 1700, QCD 89600, |
+  50430 vs baseline (tax 13052, carry G0 B0 C46500 D0 corp0) [cash gift + stock gift + SGO + QCD]
+      cashPC 2000, stockPC 45000, QCD 111000, |, stockPC 45000, SGO 1700, QCD 111000, |, stockPC 45000, SGO 1700, QCD 87600, |
+  47978 vs baseline (tax 16692, carry G0 B0 C46500 D0 corp0) [stock gift + QCD]
+      stockPC 45000, QCD 111000, |, stockPC 45000, QCD 111000, |, stockPC 45000, QCD 93000, |
+  47778 vs baseline (tax 16452, carry G0 B0 C46500 D0 corp0) [cash gift + stock gift + QCD]
+      cashPC 2000, stockPC 45000, QCD 111000, |, stockPC 45000, QCD 111000, |, stockPC 45000, QCD 91000, |
+  40842 vs baseline (tax 7892, carry G0 B0 C0 D0 corp0) [cash gift + SGO + QCD]
+      cashPC 45000, QCD 111000, |, cashPC 45000, SGO 1700, QCD 111000, |, cashPC 45000, SGO 1700, QCD 89600, |
+  38190 vs baseline (tax 11292, carry G0 B0 C0 D0 corp0) [cash gift + QCD]
+      cashPC 45000, QCD 111000, |, cashPC 45000, QCD 111000, |, cashPC 45000, QCD 93000, |
+  35979 vs baseline (tax 26962, carry G0 B0 C308050 D0 corp0) [cash gift + stock gift + SGO]
+      cashPC 2000, stockPC 45000, |, cashPC 2000, stockPC 45000, SGO 1700, |, cashPC 2000, stockPC 352300, |
+  35934 vs baseline (tax 27682, carry G0 B0 C314050 D0 corp0) [stock gift + SGO]
+      stockPC 45000, |, stockPC 45000, SGO 1700, |, stockPC 358300, |
+  34470 vs baseline (tax 28662, carry G0 B0 C310500 D0 corp0) [cash gift + stock gift]
+      cashPC 2000, stockPC 300000, |, cashPC 2000, |, cashPC 2000, stockPC 144000, |
+  34425 vs baseline (tax 29382, carry G0 B0 C317250 D0 corp0) [stock gift]
+      stockPC 150000, |, stockPC 150000, |, stockPC 150000, |
+== C: stock to either, QCD ==
+baseline (cash 150000 a year): tax 13182, end wealth 4207318
+year 2026: 57 year-plans tried, 57 positions kept
+year 2027: 1602 year-plans tried, 894 positions kept
+year 2028: 17056 year-plans tried, 7621 positions kept
+2 families deliver exactly 450000 (1288 ms); best 10:
+  47978 vs baseline (tax 16692, carry G0 B0 C15500 D31000 corp0) [stock gift + QCD]
+      stockPC 45000, QCD 111000, |, stockPF 45000, QCD 111000, |, stockPC 45000, QCD 93000, |
+  34425 vs baseline (tax 29382, carry G0 B0 C15750 D300000 corp0) [stock gift]
+      stockPC 150000, stockPF 300000, |, |, |
+== C: stock, QCD, children's trust ==
+baseline (cash 150000 a year): tax 13182, end wealth 4207318
+year 2026: 112 year-plans tried, 112 positions kept
+year 2027: 8348 year-plans tried, 5399 positions kept
+year 2028: 282315 year-plans tried, 147424 positions kept
+6 families deliver exactly 450000 (16220 ms); best 10:
+  50925 vs baseline (tax 16692, carry G0 B0 C1000 D0 corp0) [stock gift + QCD + children's trust]
+      stockPC 45000, QCD 111000, |, stockPC 45000, QCD 111000, |, QCD 111000, fundTrust 36000, trustSell 36000, trustPay 27000, |
+  48952 vs baseline (tax 22040, carry G0 B0 C0 D0 corp0) [QCD + children's trust]
+      QCD 111000, |, QCD 111000, |, QCD 111000, fundTrust 156000, trustSell 156000, trustPay 117000, |
+  47978 vs baseline (tax 16692, carry G0 B0 C46500 D0 corp0) [stock gift + QCD]
+      stockPC 45000, QCD 111000, |, stockPC 45000, QCD 111000, |, stockPC 45000, QCD 93000, |
+  45088 vs baseline (tax 30532, carry G0 B0 C0 D0 corp0) [stock gift + children's trust]
+      stockPC 45000, fundTrust 200000, trustSell 200000, trustPay 150000, |, stockPC 45000, fundTrust 200000, trustSell 200000, trustPay 150000, |, stockPC 45000, fundTrust 20000, trustSell 20000, trustPay 15000, |
+  35115 vs baseline (tax 45567, carry G0 B0 C0 D0 corp0) [children's trust]
+      fundTrust 200000, trustSell 200000, trustPay 150000, |, fundTrust 200000, trustSell 200000, trustPay 150000, |, fundTrust 200000, trustSell 200000, trustPay 150000, |
+  34425 vs baseline (tax 29382, carry G0 B0 C317250 D0 corp0) [stock gift]
+      stockPC 150000, |, stockPC 150000, |, stockPC 150000, |
+== F: cash, stock to public charity, SGO, QCD ==
+baseline (cash 150000 a year): tax 187788, end wealth 3691712
+year 2026: 32 year-plans tried, 32 positions kept
+year 2027: 827 year-plans tried, 433 positions kept
+year 2028: 7074 year-plans tried, 1587 positions kept
+12 families deliver exactly 450000 (346 ms); best 10:
+  81722 vs baseline (tax 186088, carry G0 B0 C800 D0 corp0) [stock gift + SGO]
+      stockPC 300000, |, SGO 1700, |, stockPC 148300, |
+  81557 vs baseline (tax 185896, carry G0 B0 C0 D0 corp0) [cash gift + stock gift + SGO]
+      stockPC 300000, |, SGO 1700, |, cashPC 2000, stockPC 146300, |
+  80448 vs baseline (tax 187308, carry G0 B0 C500 D0 corp0) [cash gift + stock gift]
+      stockPC 300000, |, |, cashPC 2000, stockPC 148000, |
+  80325 vs baseline (tax 187788, carry G0 B0 C0 D0 corp0) [stock gift]
+      stockPC 150000, |, stockPC 150000, |, stockPC 150000, |
+  73049 vs baseline (tax 185836, carry G0 B0 C0 D0 corp0) [stock gift + SGO + QCD]
+      stockPC 300000, |, SGO 1700, QCD 50000, |, stockPC 98300, |
+  72692 vs baseline (tax 185836, carry G0 B0 C0 D0 corp0) [cash gift + stock gift + SGO + QCD]
+      stockPC 300000, |, cashPC 2000, SGO 1700, QCD 50000, |, stockPC 96300, |
+  72600 vs baseline (tax 186588, carry G0 B0 C0 D0 corp0) [stock gift + QCD]
+      stockPC 150000, QCD 50000, |, stockPC 250000, |, |
+  72243 vs baseline (tax 186588, carry G0 B0 C0 D0 corp0) [cash gift + stock gift + QCD]
+      stockPC 150000, QCD 50000, |, cashPC 2000, stockPC 248000, |, |
+  20858 vs baseline (tax 218240, carry G0 B0 C0 D0 corp0) [cash gift + SGO + QCD]
+      QCD 111000, |, SGO 1700, QCD 111000, |, cashPC 150000, SGO 1700, QCD 74600, |
+  18648 vs baseline (tax 221640, carry G0 B0 C0 D0 corp0) [cash gift + QCD]
+      cashPC 150000, QCD 111000, |, QCD 111000, |, QCD 78000, |
+== F: stock to either, no QCD ==
+baseline (cash 150000 a year): tax 187788, end wealth 3691712
+year 2026: 10 year-plans tried, 10 positions kept
+year 2027: 45 year-plans tried, 25 positions kept
+year 2028: 107 year-plans tried, 38 positions kept
+1 families deliver exactly 450000 (8 ms); best 10:
+  80325 vs baseline (tax 187788, carry G0 B0 C2500 D0 corp0) [stock gift]
+      stockPC 150000, |, stockPC 300000, |, |
+== F: stock, children's trust ==
+baseline (cash 150000 a year): tax 187788, end wealth 3691712
+year 2026: 21 year-plans tried, 21 positions kept
+year 2027: 284 year-plans tried, 140 positions kept
+year 2028: 1666 year-plans tried, 518 positions kept
+3 families deliver exactly 450000 (84 ms); best 10:
+  86145 vs baseline (tax 289068, carry G0 B0 C0 D0 corp0) [stock gift + children's trust]
+      stockPC 150000, fundTrust 200000, trustSell 200000, |, stockPC 150000, fundTrust 200000, trustSell 200000, |, stockPC 150000, fundTrust 200000, trustSell 200000, |
+  80325 vs baseline (tax 187788, carry G0 B0 C0 D0 corp0) [stock gift]
+      stockPC 150000, |, stockPC 150000, |, stockPC 150000, |
+  -9250 vs baseline (tax 518338, carry G0 B0 C0 D0 corp0) [children's trust]
+      fundTrust 600000, trustSell 600000, |, fundTrust 600000, trustSell 600000, |, fundTrust 600000, trustSell 600000, trustPay 450000, |

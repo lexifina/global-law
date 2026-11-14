@@ -1,0 +1,37 @@
+{
+ "blind": true,
+ "build": {
+  "source": "round8/SEALED_LOG.md"
+ },
+ "court": "supreme",
+ "dataset": "gold_fresh_strict",
+ "generated": "2026-11-14T02:05:42+00:00",
+ "label": "round8",
+ "link": {},
+ "metrics": {
+  "recall_attributed": {
+   "hi": 0.5355580610240079,
+   "k": 57,
+   "lo": 0.365085052319798,
+   "n": 127,
+   "p": 0.44881889763779526
+  },
+  "recall_model": {
+   "hi": 0.3339951612177421,
+   "k": 32,
+   "lo": 0.1845060803714713,
+   "n": 127,
+   "p": 0.25196850393700787
+  }
+ },
+ "notes": "Fourth use of this half: burned.",
+ "plot": [
+  "recall_model",
+  "recall_attributed"
+ ],
+ "primary": "recall_model",
+ "row_label": "Fresh overruling lists, strict: the listed overruling case named (sealed half, used 4 times)",
+ "split": "sealed",
+ "tests": "overruling",
+ "use_note": "sealed half, 4th use"
+}

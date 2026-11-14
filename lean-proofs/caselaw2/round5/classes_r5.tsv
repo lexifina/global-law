@@ -1,0 +1,11 @@
+# Class mapping for tests/behaviour.py, round 5 (the first matching rule wins). Columns as classes_default.tsv.
+# oclass is the round-5 trailing column of status.tsv (DESIGN5 5.1); on a round-4 output it is absent and the
+# oclass rules match nothing, so the baseline classes come out as in classes_default.tsv.
+recognised	status	status~recognisedLater & path~recogn	recognised overruling, whole decision; the event is date(Y), the first non-good row
+recognised	status	status~^neg & path~recogn	recognised overruling whose date(W) = date(Y)
+partlyRecognised	status	status~partialScope & path~recogn	recognised overruling, part of the decision (in part / other grounds)
+operativeWords	status	status~^neg & oclass~^operativeWords$	operative words, whole decision
+partlyOperative	status	status~partialScope & oclass~^operativeWords$	operative words, part of the decision
+explicit	status	status~^neg:(overruled|abrogated|disapproved|recededFrom) & path~^(treatment|prospective)$	self-announced overruling, whole decision
+partly	status	status~partial|partly & path~^(treatment|prospective)$	self-announced, part of the decision (unknown:partialScope)
+implicit	findings	finding~^atRisk$ & detail~^inferredRejection	witness tier: at risk only

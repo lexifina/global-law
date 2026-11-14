@@ -1,0 +1,37 @@
+<h2 id="tests">The two other tests</h2>
+<h3>Later-court notes, split by who is speaking</h3>
+<p>The corpus holds 193,411 statements by later courts of the form “X, overruled by Y”. The planned rule lets such a
+statement change X’s status only when the speaking court has power over X. So the statements are split, and the split
+is enforced in code: a leak check fails the build if any held-out statement reaches the model.</p>
+<div class="tw"><table><thead><tr><th>Side</th><th>Who is speaking</th><th>Statements</th></tr></thead><tbody>
+<tr><td>Feed</td><td>The case’s own court, or a court with power over it</td><td>89,542</td></tr>
+<tr><td>Held out</td><td>Another court without power</td><td>103,610</td></tr>
+<tr><td>Undetermined</td><td>Power cannot be decided</td><td>259</td></tr>
+</tbody></table></div>
+<ul>
+<li><b>Testable pool.</b> Held-out statements that name an overruling decision give 12,354 distinct pairs. The model
+already admitted 2,980 explicitly, leaving <b>9,374 pairs</b> on which the change can be tested.</li>
+<li><b>Most of the pool is partial.</b> 6,699 of the 9,374 are “overruled on other grounds” notes, which should land as
+partly negative, not overruled.</li>
+<li><b>Only some are reachable.</b> 2,640 are also stated by a court with power, so the rule can reach them; 6,734 are
+stated by held-out courts only.</li>
+<li><b>Reverse check.</b> Where a held-out note concerns a decision the model already has negative, it names the same
+overruling decision in 598 of 641 (93.3%).</li>
+</ul>
+<p><b>What would count as support:</b> the 2,640 reachable pairs move to negative or partly negative while the 6,734
+unreachable ones stay near 3.8%, and the new rows confirm in reverse at about 93%.</p>
+<h3>Behaviour, with no labels</h3>
+<p>If a case really lost its force on a date, courts it bound should cite it less afterwards. Each overruled case is
+matched to controls of the same court, year and prior citation level, and the fall is compared. Explicit overrulings
+calibrate the test: they lose about 40% of their citations against controls, and a placebo with a fake date shows
+nothing. The table of classes is under Scores so far.</p>
+<h3>Caveats</h3>
+<ul>
+<li>Held-out courts are not independent in substance: lower courts repeat what higher courts say.</li>
+<li>The notes are an unaudited pattern extraction, so agreement cannot reach 100%.</li>
+<li>A citation is not a following; the data has almost no typed “followed” citations.</li>
+<li>Half of all overruled cases drop out of the behavioural test because nothing they bound cited them in the prior ten
+years.</li>
+<li>Same-court panels are on the feed side, including 36,570 statements by a panel about a decision of its own court
+that it could not itself overrule. The strict rule does not feed those.</li>
+</ul>

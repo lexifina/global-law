@@ -1,0 +1,8 @@
+def isSep : Move → Bool | .fileSeparately _ => true | _ => false
+def planMoves : List Move := [.fileSeparately false, .fileSeparately true, .itemize false false, .itemize false true, .itemize true false, .itemize true true]
+#eval do
+  search "T3 unmodified 7L" true equalEarners true
+  for m in planMoves do
+    search s!"T3 remove [{showMove m}]" true equalEarners true (fun x => x != m)
+  search "T3 remove both fileSeparately" true equalEarners true (fun x => !isSep x)
+  search "T3 keep only the plan's six moves" true equalEarners true (fun x => planMoves.contains x)

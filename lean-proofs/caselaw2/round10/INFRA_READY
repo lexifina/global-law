@@ -1,0 +1,17 @@
+INFRA_READY 2026-11-14 04:09 GMT (agent infra10). Items 1-6 done and self-tested; notes round10/agents/infra10/NOTES.md.
+- round10/certify10.py (= certify9: base round9/stage/v9c, ids t10:/h10:), certify_recog10.py, certify_opwords10.py,
+  certify10_claims.py (round 9's claims joinedFar / implicitReject = state9's certify9_claims port; plain certify9/10
+  rejects those claims as badRow).
+- round10/stage10.py <name> --delta DIR ... [--remove/--drop/--replace/--claims/--table NAME=FILE/--no-zones]:
+  base round9/stage/v9c in place (hard links), extra tables history_bridge, part_zone, history_remand (DESIGN10 s4);
+  adoption/succession listed in TABLES.txt; part zones added automatically for new rows' text nodes (round10/zones10.py
+  = calpart9's builder). v9c with no delta -> all tables the same files as v9c; zone rebuild of all 209,669 v9c nodes
+  byte-identical.
+- wsl/r10_run.sh <name> [ref] (NOBUILD=1 -> frozen round-9 binary 22bab5cd at ~/caselaw2/r10_bin/caselaw2_r9v9c;
+  R10BIN= override; build needs round10/LEAN_READY; 2 slots; one run per name; refuses under 8 GB free on C:).
+  NOBUILD v9c_check (no delta) -> round9/out/v9c byte for byte (every table; summary except timing lines).
+- round10/score10.sh <name> [beh] [noold] [nobench] -> round10/results/<name>/summary.txt; v9c_check summary =
+  round9/results/v9c/summary.txt except the header lines.
+- round10/clean10.sh <name> [--dry-run] (refuses names in round10/KEEP.txt and running names; keeps results/).
+- round10/audit/ (READY, HOWTO.md): make_packs10 / score_audit10 / more_text10 / decoys10 / selftest10 (PASS);
+  run names r10<letter><nn>.

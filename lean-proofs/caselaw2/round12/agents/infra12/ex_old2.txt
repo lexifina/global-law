@@ -1,0 +1,7 @@
+    def rkey(r):
+        return (r["table"], str(r["by"]), str(r["target"]), r["kind"])
+    n_xkey = sum(1 for r in pop if r["id"] not in excluded and (rkey(r) in excluded_keys or (
+        r.get("row2") and rkey(r["row2"]) in excluded_keys)))
+    print("class %s: %d rows in the inputs (%s), %d after filters, %d with valid nodes; %d strata; excluded ids %d; "
+          "rows excluded by identity (table, by, target, kind) only %d"
+          % (a.cls, n_in, table, len(rows), len(pop), len(popn), len(excluded), n_xkey))

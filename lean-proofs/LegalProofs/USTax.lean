@@ -6,3 +6,4 @@ import LegalProofs.USTax.Retirement
 import LegalProofs.USTax.Trusts
 import LegalProofs.USTax.WashSale
 import LegalProofs.USTax.Family
+import LegalProofs.USTax.Entity

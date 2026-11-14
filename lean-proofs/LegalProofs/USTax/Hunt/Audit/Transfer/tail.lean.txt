@@ -1,0 +1,185 @@
+/-! ## RED tail (audit code; not in the original) -/
+
+def qStart (v : Nat := 100000000) : St :=
+  { h := { alive := false }, q := { v := v, b := v, doneeW := true, toTrust := true } }
+def schedQ : Sched := [none, some .W, none, none, some .C]
+
+def showX (label : String) (sc : Sched) (s0 : St) (script : List (Option Move)) : IO Unit :=
+  match play sc s0 script with
+  | none => IO.println s!"  {label}: NOT ALLOWED"
+  | some s => IO.println s!"  {label}: wealth={wealth s} xfer={s.xfer} itax={s.itax} builtin={builtIn s} kv={s.k.v} kb={s.k.b}"
+
+def redDirect (v : Nat) : IO Unit := do
+  let s0 := qStart v
+  IO.println s!"-- direct plays on the QTIP scenario, trust {v} (incFrac={incFrac}, split2519={split2519}, spTaxFromTrust={spTaxFromTrust})"
+  showX "hold to death" schedQ s0 []
+  showX "yr0 release unmarried" schedQ s0 [some .releaseQtip]
+  showX "yr0 remarry, no consent, release" schedQ s0 [some (.remarry .W), some .releaseQtip]
+  showX "yr0 remarry+consent+release" schedQ s0 [some (.remarry .W), some .consentSplit, some .releaseQtip]
+  showX "yr5 release unmarried" schedQ s0 [none, some .releaseQtip]
+  showX "yr5 remarry+consent+release" schedQ s0 [none, some (.remarry .W), some .consentSplit, some .releaseQtip]
+
+def redChecks1 : IO Unit := do
+  let sc := schedA
+  let s0 := start
+  let q : Option Move := some (.bequeath (.qtip false true) (100000000 * 1403 / 1000))
+  IO.println "-- FINDINGS check 1 (scenario A lives)"
+  showX "QTIP held to death" sc s0 [none, none, q, none]
+  showX "yr5 release unmarried" sc s0 [none, none, q, none, some .releaseQtip]
+  showX "yr5 remarry+consent+release" sc s0 [none, none, q, none, some (.remarry .W), some .consentSplit, some .releaseQtip]
+  let qr : Option Move := some (.bequeath (.qtip true true) (100000000 * 1403 / 1000))
+  showX "reverse-QTIP: yr5 release unmarried" sc s0 [none, none, qr, none, some .releaseQtip]
+  showX "reverse-QTIP: yr5 remarry+consent+release" sc s0 [none, none, qr, none, some (.remarry .W), some .consentSplit, some .releaseQtip]
+
+def qName := "QTIP scenario"
+def onlyKinds (ks : List Nat) : St → Move → Bool := fun _ m => ks.contains (kind m)
+def notKind (k : Nat) : St → Move → Bool := fun _ m => kind m != k
+
+/-- Sum of everything anyone holds (dollars), including what is in an open estate. -/
+def tot (s : St) : Nat :=
+  s.h.own.v + s.w.own.v + s.c.own.v + s.k.v + s.k529 + s.tH.v + s.tW.v + s.gH.v + s.gW.v + s.q.v
+    + s.eSp + s.eQ + s.eT + s.eC + s.eK
+def bas (s : St) : Nat :=
+  s.h.own.b + s.w.own.b + s.c.own.b + s.k.b + s.k529 + s.tH.b + s.tW.b + s.gH.b + s.gW.b + s.q.b
+    + s.eSp + s.eQ + s.eT + s.eC + s.eK
+def limitsOk (s : St) : Bool :=
+  let ok := fun (p : Person) => p.gst ≤ exclAt s.t && p.cred ≤ tent (exclAt s.t + p.dsue) && p.own.b ≤ p.own.v
+  ok s.h && ok s.w && s.c.cred ≤ tent (exclAt s.t) && s.tH.af ≤ 1000000 && s.tW.af ≤ 1000000 && s.q.af ≤ 1000000
+    && s.tH.b ≤ s.tH.v && s.tW.b ≤ s.tW.v && s.k.b ≤ s.k.v && s.q.b ≤ s.q.v && s.c.own.b ≤ s.c.own.v
+
+/-- The search of the original, with a conservation check on every step and every phase end it takes. -/
+def searchChk (name : String) (sc : Sched) (s0 : St) (cfg : Cfg := {}) : IO Unit := do
+  IO.println s!"==== conservation: {name} ===="
+  let mut xs : Array Node := #[(s0, [])]
+  let mut first := true
+  let mut nStep := 0
+  let mut badVal : Std.HashMap Nat (Nat × Nat) := {}
+  let mut badBas : Std.HashMap Nat (Nat × Nat) := {}
+  let mut badLim := 0
+  let mut nAdv := 0
+  let mut badAdv : Std.HashMap String (Nat × Nat) := {}
+  let mut exAdv : List String := []
+  for _ in [0:3 * sc.length] do
+    if xs.size > 0 && xs[0]!.1.t < sc.length then
+      let ph := xs[0]!.1.phase
+      let (m, r) := match ph with
+        | .plan => (if first then cfg.mFirst else cfg.mPlan, cfg.rounds)
+        | .bed => (cfg.mBed, 1)
+        | .estate _ => (cfg.mEstate, 0)
+      first := false
+      let mut ys := expand sc m cfg.allowed xs
+      for _ in [0:r] do
+        ys := prune sc cfg.cap cfg.perSig ys
+        ys := expand sc 1 cfg.allowed ys
+      for (s, _) in ys do
+        if !limitsOk s then badLim := badLim + 1
+        for mv in moves sc s do
+          match step sc s mv with
+          | none => pure ()
+          | some s2 =>
+            nStep := nStep + 1
+            let a := tot s + s.xfer + s.itax
+            let b := tot s2 + s2.xfer + s2.itax
+            if a != b then
+              let (c, d) := badVal.getD (kind mv) (0, 0)
+              badVal := badVal.insert (kind mv) (c + 1, max d (if a > b then a - b else b - a))
+            if bas s2 > bas s then
+              let (c, d) := badBas.getD (kind mv) (0, 0)
+              badBas := badBas.insert (kind mv) (c + 1, max d (bas s2 - bas s))
+        for port in [false, true] do
+          let s2 := advance sc s port
+          nAdv := nAdv + 1
+          let a := tot s + s.xfer + s.itax
+          let b := tot s2 + s2.xfer + s2.itax
+          let bound := (tot s) * 1403 / 1000 + s.xfer + s.itax + 10
+          let (lab, bad, dev) := match s.phase with
+            | .plan => ("plan(growth): after > before x growth + 10", decide (b > bound), b - bound)
+            | .bed => ("last-year: value changed", a != b, if a > b then a - b else b - a)
+            | .estate _ => (if b > a then "estate: money created" else "estate: money lost", a != b, if a > b then a - b else b - a)
+          if bad then
+            let (c, d) := badAdv.getD lab (0, 0)
+            badAdv := badAdv.insert lab (c + 1, max d dev)
+            if dev > 1000 && exAdv.length < 4 then
+              exAdv := s!"{lab}: dev {dev} at t={s.t}, port={port}, eSp={s.eSp} eT={s.eT} eC={s.eC} eK={s.eK} eQ={s.eQ} own={s.h.own.v}/{s.w.own.v}/{s.c.own.v} q={s.q.v} gtax3={s.h.gtax3}/{s.w.gtax3}/{s.c.gtax3} incl={s.h.incl}/{s.w.incl}/{s.c.incl}" :: exAdv
+      let zs := closeOut sc ys
+      xs := prune sc cfg.cap cfg.perSig zs
+  IO.println s!"steps checked: {nStep}; phase ends checked: {nAdv}; positions breaking a limit (exemption, credit, basis>value): {badLim}"
+  IO.println s!"value not conserved in a step, by kind (count, max dev $): {badVal.toList.map fun (k, v) => (kindName k, v)}"
+  IO.println s!"basis increased in a step, by kind (count, max $): {badBas.toList.map fun (k, v) => (kindName k, v)}"
+  IO.println s!"phase ends not conserving: {badAdv.toList}"
+  for e in exAdv do IO.println s!"   e.g. {e}"
+  let fin := xs.map fun (s, _) => (tot s + s.xfer + s.itax, wealth s, s.xfer)
+  let mx := fin.foldl (fun a (g, _, _) => max a g) 0
+  let mw := fin.foldl (fun a (_, w, _) => max a w) 0
+  let mn := fin.foldl (fun a (_, _, x) => min a x) 1000000000000
+  IO.println s!"end plans {fin.size}: max(holdings+tax paid)={mx}; max wealth={mw}; min transfer tax={mn}; untaxed growth bound={tot s0 * 1403 ^ sc.length / 1000 ^ sc.length}"
+
+def wide : Cfg := { mFirst := 3, mPlan := 2, rounds := 3, cap := 1400, perSig := 4 }
+
+/-- Does a later spouse's exclusion or exemption ever get used without a consented split gift by the other spouse?
+Counts over every position the search keeps or expands. -/
+def searchLeak (name : String) (sc : Sched) (s0 : St) (cfg : Cfg := {}) : IO Unit := do
+  IO.println s!"==== later-spouse leak check: {name} ===="
+  let mut xs : Array Node := #[(s0, [])]
+  let mut first := true
+  let mut n := 0
+  let mut withNew := 0
+  let mut used := 0
+  let mut usedNoSplit := 0
+  let mut gstOverGifts := 0
+  let mut usedNo2519NoOwnGift := 0
+  let mut newOwns := 0
+  for _ in [0:3 * sc.length] do
+    if xs.size > 0 && xs[0]!.1.t < sc.length then
+      let ph := xs[0]!.1.phase
+      let (m, r) := match ph with
+        | .plan => (if first then cfg.mFirst else cfg.mPlan, cfg.rounds)
+        | .bed => (cfg.mBed, 1)
+        | .estate _ => (cfg.mEstate, 0)
+      first := false
+      let mut ys := expand sc m cfg.allowed xs
+      for _ in [0:r] do
+        ys := prune sc cfg.cap cfg.perSig ys
+        ys := expand sc 1 cfg.allowed ys
+      for (s, p) in ys do
+        n := n + 1
+        for (isN, per) in [(s.newH, s.h), (s.newW, s.w)] do
+          if isN then
+            withNew := withNew + 1
+            let g := sig p
+            if per.own.v > 0 then newOwns := newOwns + 1
+            if per.gifts > 0 || per.gst > 0 || per.cred > 0 || per.dsue > 0 then
+              used := used + 1
+              if (g >>> 0) % 2 == 0 then usedNoSplit := usedNoSplit + 1
+              -- no §2519 release and no lump gift by a grandparent anywhere in the path
+              if (g >>> 15) % 2 == 0 && (g >>> 5) % 2 == 0 && (g >>> 6) % 2 == 0 && (g >>> 7) % 2 == 0 && (g >>> 26) % 2 == 0 then
+                usedNo2519NoOwnGift := usedNo2519NoOwnGift + 1
+            if per.gst > per.gifts then gstOverGifts := gstOverGifts + 1
+      let zs := closeOut sc ys
+      xs := prune sc cfg.cap cfg.perSig zs
+  IO.println s!"positions {n}; with a later spouse {withNew}; later spouse's exclusion/exemption used {used}; of those with no consent in the path {usedNoSplit}; with no §2519 and no lump gift in the path {usedNo2519NoOwnGift}; exemption allocated > gifts attributed {gstOverGifts}; later spouse owning property {newOwns}"
+
+def redScenario : String → IO Unit
+  | "leak-q" => searchLeak qName schedQ qStart
+  | "leak-A" => searchLeak "A" schedA start
+  | "checks1" => redChecks1
+  | "d100" => redDirect 100000000
+  | "d30" => redDirect 30000000
+  | "d40" => redDirect 40000000
+  | "q" => search qName schedQ qStart {} 6
+  | "q-noremarry" => search (qName ++ ", no remarry") schedQ qStart { allowed := notKind 28 } 3
+  | "q-nosplit" => search (qName ++ ", no consent") schedQ qStart { allowed := notKind 0 } 3
+  | "q-no2519" => search (qName ++ ", no §2519") schedQ qStart { allowed := notKind 15 } 3
+  | "q-only" => search (qName ++ ", only the kinds plan #1 uses") schedQ qStart { allowed := onlyKinds [0, 1, 10, 12, 15, 16, 18, 28] } 3
+  | "q-only3" => search (qName ++ ", only remarry, consent, §2519") schedQ qStart { allowed := onlyKinds [0, 15, 28] } 3
+  | "q-wide" => search (qName ++ ", wide beam") schedQ qStart wide 4
+  | "q-wide-noremarry" => search (qName ++ ", wide beam, no remarry") schedQ qStart { wide with allowed := notKind 28 } 3
+  | "q30" => search "QTIP 30M" schedQ (qStart 30000000) {} 4
+  | "q30-noremarry" => search "QTIP 30M, no remarry" schedQ (qStart 30000000) { allowed := notKind 28 } 3
+  | "cons-q" => searchChk qName schedQ qStart
+  | "cons-A" => searchChk "A" schedA start { cap := 140 }
+  | "A" => search "A" schedA start {} 3
+  | x => IO.println s!"unknown {x}"
+
+def redMain (args : List String) : IO Unit := do
+  for a in args do redScenario a

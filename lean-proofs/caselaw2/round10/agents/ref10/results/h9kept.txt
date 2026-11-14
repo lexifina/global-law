@@ -1,0 +1,68 @@
+binary ~/caselaw2/r10_bin/caselaw2_r9v9c sha1 22bab5cdc71237876c807a8c9354cad7a47c6e1f; ref 3aa34d409f18f45fba7ab82f3a76248f269b6619; cue_table 994a2a41964756b0e3097a98adda57f539e7477b; 2026-11-14 04:02:52
+f100201: 32 disagreeing rows 
+f100200: 75 disagreeing rows 
+q100100: 28 disagreeing rows 
+q100102: 34 disagreeing rows 
+r100001: 42 disagreeing rows 
+r100002: 42 disagreeing rows 
+q100101: 47 disagreeing rows 
+r100000: 82 disagreeing rows 
+r100003: 57 disagreeing rows 
+
+9 universes, 9 with a disagreement, 0 failed (binary ~/caselaw2/r10ref/bin/runner)
+  status    110 of 2191 keys disagree
+  findings  67 of 777 keys disagree
+  certs     197 of 3617 keys disagree
+  splits    11 of 263 keys disagree
+  conflicts 3 of 257 keys disagree
+  lines     0 of 84 keys disagree
+  horty     0 of 25 keys disagree
+  classes   1 of 1170 keys disagree
+  summary   46 of 333 keys disagree
+  class (file, bucket, rule): universes   first example
+  status    status:negative/none                 vacated                        9   e.g. f100201 623/-@20220613 A=negative|vacated B=none|-
+  certs     okMismatch:ok/remandDocket           history                        9   e.g. f100201 history:h7:436:435:reversed A=ok B=remandDocket
+  certs     okMismatch:ok/remandDate             history                        9   e.g. f100201 history:h7:438:437:affirmed A=ok B=remandDate
+  certs     okMismatch:ok/remandCue              history                        9   e.g. f100201 history:h7:465:464:certDenied A=ok B=remandCue
+  summary   count                                remand_lines                   9   e.g. f100201 remand_lines A=0 B=41
+  summary   count                                remand_checked_rows            9   e.g. f100201 remand_checked_rows A=0 B=31
+  summary   count                                remand_failed_rows             9   e.g. f100201 remand_failed_rows A=0 B=22
+  summary   count                                remand_dup_rows                9   e.g. f100201 remand_dup_rows A=0 B=2
+  summary   count                                remand_bad_rows                9   e.g. f100201 remand_bad_rows A=0 B=6
+  status    status:negative/none                 reversed                       8   e.g. f100201 435/-@20220215 A=negative|reversed B=none|-
+  findings  onlyA                                cites:vacated                  8   e.g. f100201 cites 903 901 vacated A=1 B=
+  certs     okMismatch:ok/remandCourt            history                        8   e.g. f100201 history:h8:638:637:reviewDismissed A=ok B=remandCourt
+  certs     okMismatch:ok/remandTie              history                        8   e.g. f100201 history:h8:857:856:affirmed A=ok B=remandTie
+  status    status:negative/none                 withdrawn                      6   e.g. f100200 29/-@19660125 A=negative|withdrawn B=none|-
+  findings  onlyA                                cites:reversed                 5   e.g. f100200 cites 456 454 reversed A=1 B=
+  findings  onlyA                                cites:withdrawn                4   e.g. f100200 cites 211 210 withdrawn A=1 B=
+  status    status:partial/none                  partialScope                   3   e.g. q100100 43/-@19820209 A=partial|partialScope B=none|-
+  status    status:none/recognisedLater          recognisedLater                2   e.g. f100200 209/-@19830116 A=none|- B=recognisedLater|recognisedLater
+  findings  onlyB                                atRisk:citesLaterNegated       2   e.g. f100200 atRisk:citesLaterNegated 212 209 A= B=1
+  status    status:unknown/none                  enBancRuleUnknown              2   e.g. r100002 17/-@19400120 A=unknown|enBancRuleUnknown B=none|-
+  status    status:none/negative                 recededFrom                    1   e.g. f100200 209/-@19880604 A=none|- B=negative|recededFrom
+  findings  onlyB                                atRisk:claim                   1   e.g. f100200 atRisk:claim 32 23 A= B=1
+  findings  onlyB                                atRisk:recognisedLater         1   e.g. f100200 atRisk:recognisedLater 213 209 A= B=1
+  findings  onlyB                                cites:overruled                1   e.g. f100200 cites 211 209 overruled A= B=1
+  splits    onlyA                                fed.a                          1   e.g. f100200 fed.a 1001|101 A=split B=
+  conflicts onlyA                                fed.a                          1   e.g. f100200 fed.a 201/- A=no,yes B=
+  status    status:unknown/none                  partialScope                   1   e.g. q100101 5/h5fedb@19150301 A=unknown|partialScope B=none|-
+  status    status:recognisedLater/negative      overruled                      1   e.g. q100101 191/-@20060710 A=recognisedLater|recognisedLater B=negative|overruled
+  status    status:none/partial                  recognisedLater                1   e.g. q100101 206/-@19710601 A=none|- B=partial|recognisedLater:partial
+  status    status:none/negative                 overruled                      1   e.g. q100101 206/h206feda@19720107 A=none|- B=negative|overruled
+  splits    onlyB                                ky.a                           1   e.g. q100101 ky.a 503|603 A= B=split
+  status    status:negative/none                 depublished                    1   e.g. r100000 13/-@19260729 A=negative|depublished B=none|-
+  findings  onlyB                                atRisk:contraryBinding         1   e.g. r100000 atRisk:contraryBinding 138 50 A= B=1
+  findings  onlyA                                atRisk:inferred                1   e.g. r100000 atRisk:inferred 190 189 A=1 B=
+  findings  onlyB                                atRisk:soft                    1   e.g. r100000 atRisk:soft 47 13 A= B=1
+  findings  onlyA                                cites:depublished              1   e.g. r100000 cites 16 13 depublished A=1 B=
+  certs     okMismatch:ok/witnessNoStanding      treatment                      1   e.g. r100000 treatment:tr2 A=ok B=witnessNoStanding
+  splits    onlyB                                ca.a                           1   e.g. r100000 ca.a 101|704 A= B=split
+  classes   verdict                              ok/witnessNoStanding           1   e.g. r100000 tr2 A=ok B=witnessNoStanding
+  summary   count                                zone_missing_rows              1   e.g. r100000 zone_missing_rows A=48 B=47
+  info  certs reasonOnly cue/witnessBadRow                           1
+  info  findings uncompared lean:citesNotCitable:force               59
+  info  findings uncompared lean:hortyConsistentBase                 16
+  info  findings uncompared lean:hortySelfInconsistent               8
+  info  findings uncompared lean:inconsistentBindingBase             9
+rc=1

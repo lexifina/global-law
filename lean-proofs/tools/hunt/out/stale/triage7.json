@@ -1,0 +1,51 @@
+{
+  "chunk": 7,
+  "counts": {"noise": 71, "intended": 10, "gap": 1},
+  "counts_note": "Counts cover the 82 chunk entries (#7.0-#7.81). Two further gaps found while reading the same new provisions are in 'gaps' with entry marked off-list; the script did not list them.",
+  "gaps": [
+    {
+      "entry": "off-list (found reading #7.0-#7.8; new §128)",
+      "new": "§128 exclusion for employer contributions to Trump accounts (Pub. L. 119-21)",
+      "list": "§3121(a)(18), §3306(b)(13), §3401(a)(18): payments excludable 'under section 127, 129, 134(b)(4), or 134(b)(5)' are not wages. §128 is not named in any of the three, nor anywhere else in §§3121, 3306, 3401, 3231.",
+      "effect": "With §128 read in: the contribution is free of FICA, FUTA and income tax withholding, like §127 and §129 benefits. Without: it is excluded from the employee's gross income but is still FICA wages (and nominally subject to withholding and FUTA). §3121(a)(5)(G) (cafeteria plans) does not help: it only covers payments that would not be wages apart from the plan.",
+      "who_gains": "government",
+      "example": "Employer pays $2,500 to an employee's child's Trump account. Income tax: $0. FICA: 7.65% employee + 7.65% employer on $2,500 = $191.25 + $191.25. Same $2,500 paid as §129 dependent care: $0 FICA. For 1,000 employees: $382,500 a year.",
+      "dollars": 382.5,
+      "could_cover": "Nothing in the statute. Treasury has no power to exempt wages from FICA by guidance. For employees above the social security wage base only the 1.45% + 1.45% (+0.9%) Medicare part applies, so the cost falls to about $72.50-$95 per employee.",
+      "confidence": "high"
+    },
+    {
+      "entry": "off-list (related to #7.30-#7.32; new §170(c)(6))",
+      "new": "§170(c)(6) federally chartered §501(c)(19) organization (Pub. L. 118-146), with partner §170(b)(1)(A)(x)",
+      "list": "§2522(a)(4) gift tax deduction: 'posts or organizations of war veterans' only (the same words as §170(c)(3), the limit the 2024 Act was passed to get round). §2055(a)(4) estate tax already covers 'any veterans' organization incorporated by Act of Congress'.",
+      "effect": "With (c)(6) read in: a lifetime gift to a federally chartered veterans' organization that is not a war veterans' organization is deductible for gift tax. Without: the gift is deductible for income tax (at the 50%/60% limit) and deductible if left at death, but is a taxable gift during life.",
+      "who_gains": "government",
+      "example": "Donor who has used the lifetime exemption gives $1,000,000 cash. Gift tax: 40% x ($1,000,000 - $19,000 annual exclusion) = $392,400. The same sum left by will: $0 estate tax under §2055(a)(4). For a donor under the exemption no tax is paid but $981,000 of exemption is used and a gift tax return is due.",
+      "dollars": 392400,
+      "could_cover": "The organization may also qualify as a war veterans' organization in fact (then §2522(a)(4) applies); donor can give to the organization's §501(c)(3) foundation (§2522(a)(2)); or give by will. Gifts under $19,000 per donor are unaffected.",
+      "confidence": "high on the words; medium that it bites often"
+    },
+    {
+      "entry": "#7.5",
+      "new": "§128 employer contributions to Trump accounts; §128(c) borrows the §129(d)(2), (3), (6), (7), (8) nondiscrimination tests",
+      "list": "§414(n)(3)(C) (leased employees) and §414(t)(2) (controlled groups, affiliated service groups): 'section 79, 106, 117(d), 125, 127, 129, 132, 137, 274(j), 505, or 4980B'. §128 is in neither.",
+      "effect": "With §128 read in: the eligibility test and the 55% average-benefits test are run over the whole controlled group plus leased employees, as for §129. Without: each legal entity is its own 'employer', and leased staff are not counted, so a group can put its executives in one company and give the benefit only there. §414(q)(7) still identifies highly compensated employees group-wide, but nothing aggregates the population tested.",
+      "who_gains": "taxpayer",
+      "example": "Group: OpCo with 500 staff, ManagementCo with 10 executives. ManagementCo alone adopts the program: 10 x $2,500 = $25,000 excluded, 37% = $9,250 a year income tax saved ($925 each). If aggregated, passing the 55% test needs an average of $1,375 for 500 staff = $687,500. Net value is lower than $925: excluded contributions carry no basis, so the child pays tax on withdrawal (say 12% of $2,500 = $300, 18+ years later); FICA is still due (first gap).",
+      "dollars": 925,
+      "could_cover": "§128(c) asks for requirements 'similar to' §129(d)'s, and guidance could read that to carry §129's aggregation in; a company with only highly compensated employees may fail the 55% test on its face (no non-highly-compensated average to compare). §129(d)(4) (25% cap for 5% owners) is not borrowed at all, so owner concentration is not policed either way.",
+      "confidence": "medium"
+    }
+  ],
+  "other": [
+    "§128(c) does not borrow §129(d)(9) (ignore employees under 21 or with under 1 year of service, and bargaining-unit employees) although it borrows the two tests (d)(3) and (d)(8) that (d)(9) serves. A Trump account program must count new hires and union staff as non-highly-compensated employees with zero benefit; a salary-reduction program is more likely to fail the 55% test than the same dependent care plan. Bites employers.",
+    "§128 does not borrow §129(e)(3)-(4) (self-employed treated as employees) or §129(d)(4) (25% cap for 5% owners). Sole proprietors and partners get no exclusion; owner-employees of a corporation face no owner cap. A married couple's S corporation with no other staff can pay $2,500 for each spouse = $5,000, the whole §530A(c)(2) annual limit for one child, pre-tax.",
+    "§128 is not excluded from 'qualified benefit' in §125(f)(1) (which excludes only 106(b), 117, 127, 132), so it can be funded by salary reduction; §6039D(d)(1) (fringe benefit plan returns: 79, 105, 106, 125, 127, 129, 137) does not name §128.",
+    "§128(b)(1) cap is $2,500 'with respect to any employee', not per child and not per household: two working parents with different employers can exclude $5,000 for one child. No joint-return or aggregation rule (compare §129(a)(2)(A), which halves the cap for married filing separately and applies it per return).",
+    "MAGI add-back lists (§§74(d)(2)(B), 85(c), 86(b)(2)(A), 219(g)(3)(A)(ii), 221(b)(2)(C), 469(i)(3)(E)) do not add back §128, but they do not add back §127 or §129 either; treated as intended.",
+    "#7.31: §170(f)(18)(A)(i) bars deductions for gifts to donor advised funds sponsored by organizations in §170(c)(3), (4), (5) but not new (c)(6). A federally chartered §501(c)(19) body that is not a war veterans' organization can sponsor a deductible donor advised fund; one that is also described in (c)(3) cannot. No tax edge over a community foundation fund, so treated as harmless.",
+    "§170(b)(1)(A): clause (ix) ends with 'or' and new clause (x) ends with a comma; drafting only.",
+    "#7.57 and #7.58 are a renumbering mis-read: §48(a)(6) is the old phaseout paragraph, not new in 2023.",
+    "§6426(k) sustainable aviation fuel credit expired for sales or uses after 30 September 2025; the §6426(a) registration sentence and §6426(i)/§6427(e)(5) U.S.-connection rules do not name it, but §6426(k)(2)-(3) import §40B's own registration and U.S. production and fuelling requirements."
+  ]
+}

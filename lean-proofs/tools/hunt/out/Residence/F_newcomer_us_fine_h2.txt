@@ -1,0 +1,34 @@
+=== alien abroad, never resident; Legal.USTax.Hunt.Residence.Asset.usStock; grid #[30, 90, 62, 1, 182]; horizon 2y; student false; gifts false; foreign tax: salary 0bp, gain 0bp ===
+positions 330166, finished plans (asset disposed of) 27840, families 8
+baseline: none
+- gain tax $0 (all US tax $201365; exemption used $0); US days 700/730: sold as nonresident, foreign tax home
+  y0: SELL out[1-30] RELOCATE US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+- gain tax $0 (all US tax $164490; exemption used $0); US days 547/730: sold as nonresident, foreign tax home, closer-connection exception
+  y0: RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: SELL RELOCATE out[1-30] out[31-120] out[121-182] out[183-183] US[184-365]
+- gain tax $0 (all US tax $157353; exemption used $0); US days 547/730: sold as nonresident, US tax home, under 183 days
+  y0: SELL RELOCATE out[1-30] out[31-120] out[121-182] out[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+- gain tax $0 (all US tax $104712; exemption used $0); US days 364/730: sold as nonresident, US tax home, under 183 days, closer-connection exception
+  y0: SELL RELOCATE out[1-30] RELOCATE out[31-120] out[121-182] out[183-183] US[184-365]
+  y1: out[1-30] out[31-120] out[121-182] out[183-183] US[184-365]
+- gain tax $238000 (all US tax $447994; exemption used $0); US days 730/730: sold while taxed on worldwide income
+  y0: SELL RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+- gain tax $238000 (all US tax $395353; exemption used $0); US days 547/730: sold while taxed on worldwide income, closer-connection exception
+  y0: SELL RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: RELOCATE out[1-30] out[31-120] out[121-182] out[183-183] US[184-365]
+- gain tax $300000 (all US tax $501365; exemption used $0); US days 700/730: sold as nonresident, §871(a)(2) 30%
+  y0: SELL RELOCATE out[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+- gain tax $300000 (all US tax $448724; exemption used $0); US days 517/730: sold as nonresident, §871(a)(2) 30%, closer-connection exception
+  y0: SELL RELOCATE out[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: RELOCATE out[1-30] out[31-120] out[121-182] out[183-183] US[184-365]
+frontier (most US days for each level of tax on the gain):
+  days 730: gain tax $238000 (all US tax $447994)
+  y0: SELL RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  days 700: gain tax $0 (all US tax $201365)
+  y0: SELL out[1-30] RELOCATE US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]

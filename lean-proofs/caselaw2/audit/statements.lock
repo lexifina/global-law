@@ -10,6 +10,409 @@
   ]
  },
  {
+  "name": "CaseLaw2.Cert.actorCiteWhere_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.actorCiteWhere_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (ok : Nat → Bool)\n  (p n : Nat),\n  CaseLaw2.Cert.actorCiteWhere c b ok = some (p, n) →\n    ∃ m,\n      c.citeIndex = some m ∧\n        ok p = true ∧\n          ∃ s,\n            s <:+ CaseLaw2.Cert.bridgeAlnum b ∧\n              CaseLaw2.Cert.headPos s = some p ∧\n                CaseLaw2.Cert.citeFirst m b.lens s = some n ∧ ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some n",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.allSuffix_spec",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "@CaseLaw2.Cert.allSuffix_spec : ∀ {α : Type} (p : List α → Bool) (l : List α),\n  CaseLaw2.Cert.allSuffix p l = true → ∀ (s : List α), s <:+ l → p s = true",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.ambiguousLabel_filter",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The runner decides a label's ambiguity on the rows that carry it (a bucket per label); that is the same answer as on the whole table.",
+  "statement": "CaseLaw2.Cert.ambiguousLabel_filter : ∀ (rows : List CaseLaw2.Cert.DoctrineRow) (l : String),\n  CaseLaw2.Cert.ambiguousLabel (List.filter (fun r => r.labels.contains l) rows) l = CaseLaw2.Cert.ambiguousLabel rows l",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.anchorTail_none",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.anchorTail_none : ∀ (h : CaseLaw2.Cert.HClaims) (c : CaseLaw2.Cert.Input),\n  CaseLaw2.Cert.anchorTail none h c =\n    CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.anchorTribunal_eq",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Tribunal anchor, exactly** (§5.1): with the claim, an anchored row without a bridge line is checked by the round-10 anchored check with the union cue list (whatever `anchorWide` says).",
+  "statement": "CaseLaw2.Cert.anchorTribunal_eq : ∀ (t? : Option CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input)\n  (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),\n  h.anchorTribunal = true →\n    CaseLaw2.Cert.checkHistory8A t? c (some a) none h =\n      CaseLaw2.Cert.anchoredBy CaseLaw2.Cert.anchorTribunalCue (CaseLaw2.Cert.anchorTail t? h c) c a",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.anchorTribunal_no_claim",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No claim, no change** (§5.1): without the claim the cue test is round 10's, and the round-11 steps are round 10's (`checkHistory8T`, `checkHistory10T`).",
+  "statement": "CaseLaw2.Cert.anchorTribunal_no_claim : ∀ (t? : Option CaseLaw2.Cert.TBridge) (rm? : Option CaseLaw2.Cert.Remand)\n  (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),\n  h.anchorTribunal = false →\n    CaseLaw2.Cert.anchorCueOk11 h = CaseLaw2.Cert.anchorCueOk9 h ∧\n      CaseLaw2.Cert.checkHistory8A t? c a? b? h = CaseLaw2.Cert.checkHistory8T t? c a? b? h ∧\n        CaseLaw2.Cert.checkHistory11 t? rm? zs c a? b? h = CaseLaw2.Cert.checkHistory10T t? rm? zs c a? b? h",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.anchorTribunal_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Tribunal anchor soundness** (§5.1): an admitted anchored row (no bridge line) with the claim has a cue of `anchor ++ anchor_wide ++ anchor_wide9 ++ anchor_tribunal` in its anchor quote, and every other anchored check holds (the anchor quote at its offset, no anchor disqualifier, the target named in the anchor quote, the anchor part, and the row's last step — the claimed check, or the trial check of a counted trialBridge claim — admits).",
+  "statement": "CaseLaw2.Cert.anchorTribunal_sound : ∀ (t? : Option CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input)\n  (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),\n  h.anchorTribunal = true →\n    (CaseLaw2.Cert.checkHistory8A t? c (some a) none h).admitted = true →\n      (CaseLaw2.Cert.anchorCues ++ CaseLaw2.Cert.anchorWideCues ++ CaseLaw2.Cert.anchorWide9Cues ++\n                CaseLaw2.Cert.anchorTribunalCues).any\n            (CaseLaw2.Cert.hasSub (CaseLaw2.Cert.norm a.quote).toLower) =\n          true ∧\n        CaseLaw2.Cert.anchorQuoteOk c a = true ∧\n          CaseLaw2.Cert.anchorDisqualified a = false ∧\n            CaseLaw2.Cert.anchorResolves c a = true ∧\n              CaseLaw2.Cert.anchorPartOk a = true ∧\n                (CaseLaw2.Cert.anchorTail t? h c\n                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                        ordered := c.ordered, authority := c.authority, selfText := true,\n                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,\n                        mode := c.mode }).admitted =\n                  true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.anchorWide9_no_claim",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No claim, no change** (§8): without an `anchorWide` claim the step is round 8's, and the round-9 history step is `checkHistory9`.",
+  "statement": "CaseLaw2.Cert.anchorWide9_no_claim : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims) (zs : List CaseLaw2.Cert.Zone),\n  h.anchorWide = false →\n    CaseLaw2.Cert.checkHistory8J c a? b? h = CaseLaw2.Cert.checkHistory8 c a? b? h ∧\n      CaseLaw2.Cert.checkHistory9J zs c a? b? h = CaseLaw2.Cert.checkHistory9 zs c a? b? h",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.anchorWide9_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Judge-form cues** (§8): an admitted anchored row with the claim has a cue of `anchor ++ anchor_wide ++ anchor_wide9` in its anchor quote, and every other anchored check holds.",
+  "statement": "CaseLaw2.Cert.anchorWide9_sound : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),\n  h.anchorWide = true →\n    (CaseLaw2.Cert.checkHistory8J c (some a) none h).admitted = true →\n      (CaseLaw2.Cert.anchorCues ++ CaseLaw2.Cert.anchorWideCues ++ CaseLaw2.Cert.anchorWide9Cues).any\n            (CaseLaw2.Cert.hasSub (CaseLaw2.Cert.norm a.quote).toLower) =\n          true ∧\n        CaseLaw2.Cert.anchorQuoteOk c a = true ∧\n          CaseLaw2.Cert.anchorDisqualified a = false ∧\n            CaseLaw2.Cert.anchorResolves c a = true ∧\n              CaseLaw2.Cert.anchorPartOk a = true ∧\n                (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h\n                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                        ordered := c.ordered, authority := c.authority, selfText := true,\n                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,\n                        mode := c.mode }).admitted =\n                  true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.anchorWide_no_claim",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "§5: **without the claim** the anchor-cue test and the anchored check are round 7's.",
+  "statement": "CaseLaw2.Cert.anchorWide_no_claim : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),\n  h.anchorWide = false →\n    CaseLaw2.Cert.anchorCueOk h a = CaseLaw2.Cert.anchorHasCue a ∧\n      CaseLaw2.Cert.checkHistory8 c (some a) none h = CaseLaw2.Cert.checkHistory7 c (some a) h",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.anchorWide_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "§5: an admitted anchored row **with the claim** has a cue of `anchor ++ anchor_wide`, and every other anchored check holds.",
+  "statement": "CaseLaw2.Cert.anchorWide_sound : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),\n  h.anchorWide = true →\n    (CaseLaw2.Cert.checkHistory8 c (some a) none h).admitted = true →\n      (CaseLaw2.Cert.anchorCues ++ CaseLaw2.Cert.anchorWideCues).any\n            (CaseLaw2.Cert.hasSub (CaseLaw2.Cert.norm a.quote).toLower) =\n          true ∧\n        CaseLaw2.Cert.anchorQuoteOk c a = true ∧\n          CaseLaw2.Cert.anchorDisqualified a = false ∧\n            CaseLaw2.Cert.anchorResolves c a = true ∧\n              CaseLaw2.Cert.anchorPartOk a = true ∧\n                (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h\n                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                        ordered := c.ordered, authority := c.authority, selfText := true,\n                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,\n                        mode := c.mode }).admitted =\n                  true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.anchoredBy_admitted",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "An admitted `anchoredBy`: the five anchored checks hold and the last step admits.",
+  "statement": "CaseLaw2.Cert.anchoredBy_admitted : ∀ (cue : CaseLaw2.Cert.Anchor → Bool)\n  (fin : CaseLaw2.Cert.Input → CaseLaw2.Cert.Result) (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),\n  (CaseLaw2.Cert.anchoredBy cue fin c a).admitted = true →\n    CaseLaw2.Cert.anchorQuoteOk c a = true ∧\n      cue a = true ∧\n        CaseLaw2.Cert.anchorDisqualified a = false ∧\n          CaseLaw2.Cert.anchorResolves c a = true ∧\n            CaseLaw2.Cert.anchorPartOk a = true ∧\n              (fin\n                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,\n                      target := c.target, citeIndex := c.citeIndex, mode := c.mode }).admitted =\n                true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.anchoredThen_fin",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "An admitted `anchoredThen` row passed its last step on the row's input with the evidence taken as given.",
+  "statement": "CaseLaw2.Cert.anchoredThen_fin : ∀ (fin : CaseLaw2.Cert.Input → CaseLaw2.Cert.Result) (c : CaseLaw2.Cert.Input)\n  (a : CaseLaw2.Cert.Anchor),\n  (CaseLaw2.Cert.anchoredThen fin c a).admitted = true →\n    (fin\n          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n            authority := c.authority, selfText := true, hashRequired := c.hashRequired, target := c.target,\n            citeIndex := c.citeIndex, mode := c.mode }).admitted =\n      true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.antecedentFar_gap",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Far antecedents** (§5): an admitted claimed row's `antecedent` line is before the main quote and within `joinedFarMax`, the main quote has an anaphor and a cue of its kind, and beyond `joinedGapMax` a usable window of the row's text covers the gap, in which no index key of another node begins.",
+  "statement": "CaseLaw2.Cert.antecedentFar_gap : ∀ (lens : List Nat) (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkTreatmentF true lens c e cl js).admitted = true →\n    ∀ (j : CaseLaw2.Cert.Joined),\n      j ∈ js →\n        j.rel = CaseLaw2.Cert.JRel.antecedent →\n          j.stop ≤ c.start ∧\n            c.start - j.stop ≤ CaseLaw2.Cert.joinedFarMax ∧\n              CaseLaw2.Cert.anaphorCue c.quote = true ∧\n                CaseLaw2.Cert.kindCue c = true ∧\n                  (c.start - j.stop ≤ CaseLaw2.Cert.joinedGapMax ∨\n                    ∃ w,\n                      w ∈ c.windows ∧\n                        CaseLaw2.Cert.usable (CaseLaw2.Cert.farInput c j) w = true ∧\n                          ∀ (m : Std.HashMap String Nat),\n                            c.citeIndex = some m →\n                              ∀ (s : List (Char × Nat)),\n                                s <:+ CaseLaw2.Cert.farAlnum c j w →\n                                  ∀ (p : Nat),\n                                    CaseLaw2.Cert.headPos s = some p →\n                                      p < c.start - j.stop →\n                                        ∀ (L : Nat),\n                                          L ∈ lens → ∀ (n : Nat), CaseLaw2.Cert.citeOf m s L = some n → n = c.target)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.antecedent_gap",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Antecedent**: an admitted row's `antecedent` quote ends before the main quote and at most `joinedGapMax` (300, cue table) characters before it; the main quote has an anaphor and a cue of the row's kind.",
+  "statement": "CaseLaw2.Cert.antecedent_gap : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →\n    ∀ (j : CaseLaw2.Cert.Joined),\n      j ∈ js →\n        j.rel = CaseLaw2.Cert.JRel.antecedent →\n          j.stop ≤ c.start ∧\n            c.start - j.stop ≤ CaseLaw2.Cert.joinedGapMax ∧\n              CaseLaw2.Cert.anaphorCue c.quote = true ∧ CaseLaw2.Cert.kindCue c = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.bridgeActorCite_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.bridgeActorCite_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (p2 pO n : Nat),\n  CaseLaw2.Cert.bridgeActorCite c b p2 = some (pO, n) →\n    ∃ m,\n      c.citeIndex = some m ∧\n        p2 < pO ∧\n          ∃ s,\n            s <:+ CaseLaw2.Cert.bridgeAlnum b ∧\n              CaseLaw2.Cert.headPos s = some pO ∧\n                CaseLaw2.Cert.citeFirst m b.lens s = some n ∧ ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some n",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.bridgeChainOk_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.bridgeChainOk_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (p2 : Nat),\n  CaseLaw2.Cert.bridgeChainOk c b p2 = true →\n    ∃ e, CaseLaw2.Cert.bridgeXEnd c b = some e ∧ CaseLaw2.Cert.noKeyBetween c b e p2 = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.bridgeFail_authority",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The bridge steps do not read the acting court's power (the runner decides them once per row).",
+  "statement": "CaseLaw2.Cert.bridgeFail_authority : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (a : Option Bool),\n  CaseLaw2.Cert.bridgeFail\n      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n        authority := a, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,\n        citeIndex := c.citeIndex, mode := c.mode }\n      b =\n    CaseLaw2.Cert.bridgeFail c b",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.bridgeFail_none_iff",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "Steps 1–6 all hold exactly when the bridge steps report no failure.",
+  "statement": "CaseLaw2.Cert.bridgeFail_none_iff : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge),\n  CaseLaw2.Cert.bridgeFail c b = none ↔\n    CaseLaw2.Cert.bridgeQuoteOk c b = true ∧\n      CaseLaw2.Cert.bridgeDateOk b = true ∧\n        CaseLaw2.Cert.bridgeClauseOk b = true ∧\n          ∃ p1 p2,\n            CaseLaw2.Cert.bridgeP1 c b = some p1 ∧\n              CaseLaw2.Cert.bridgeP2 c b p1 = some p2 ∧\n                CaseLaw2.Cert.bridgeChainOk c b p2 = true ∧\n                  Option.map (fun x => x.snd) (CaseLaw2.Cert.bridgeActorCite c b p2) = some b.actor",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.bridgeP1_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.bridgeP1_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (p1 : Nat),\n  CaseLaw2.Cert.bridgeP1 c b = some p1 →\n    ∃ m,\n      c.citeIndex = some m ∧\n        ∃ s,\n          s <:+ CaseLaw2.Cert.bridgeAlnum b ∧\n            CaseLaw2.Cert.headPos s = some p1 ∧ ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some c.target",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.bridgeP2_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.bridgeP2_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (p1 p2 : Nat),\n  CaseLaw2.Cert.bridgeP2 c b p1 = some p2 →\n    p1 < p2 ∧ CaseLaw2.Cert.cueHere c.kind (List.drop p2 (CaseLaw2.Cert.bridgeText b)) = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.bridgeX_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "Step 4 and 5b read the same suffix: X's key at p1 ends at `e`.",
+  "statement": "CaseLaw2.Cert.bridgeX_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (p1 e : Nat),\n  CaseLaw2.Cert.bridgeP1 c b = some p1 →\n    CaseLaw2.Cert.bridgeXEnd c b = some e →\n      ∃ m,\n        c.citeIndex = some m ∧\n          ∃ s,\n            s <:+ CaseLaw2.Cert.bridgeAlnum b ∧\n              CaseLaw2.Cert.headPos s = some p1 ∧\n                ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some c.target ∧ CaseLaw2.Cert.keyEnd s L = e",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.bridge_admitted_iff",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Admission is exactly steps 1–6 and the row's own check.**",
+  "statement": "CaseLaw2.Cert.bridge_admitted_iff : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),\n  (CaseLaw2.Cert.checkBridge c b h).admitted = true ↔\n    CaseLaw2.Cert.bridgeQuoteOk c b = true ∧\n      CaseLaw2.Cert.bridgeDateOk b = true ∧\n        CaseLaw2.Cert.bridgeClauseOk b = true ∧\n          (∃ p1 p2,\n              CaseLaw2.Cert.bridgeP1 c b = some p1 ∧\n                CaseLaw2.Cert.bridgeP2 c b p1 = some p2 ∧\n                  CaseLaw2.Cert.bridgeChainOk c b p2 = true ∧\n                    Option.map (fun x => x.snd) (CaseLaw2.Cert.bridgeActorCite c b p2) = some b.actor) ∧\n            (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h\n                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n                    authority := c.authority, selfText := true, hashRequired := c.hashRequired, target := c.target,\n                    citeIndex := c.citeIndex, mode := c.mode }).admitted =\n              true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.bridge_order",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Order**: X's citation, then the cue (with no key between X's citation and the cue), then O's citation.",
+  "statement": "CaseLaw2.Cert.bridge_order : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),\n  (CaseLaw2.Cert.checkBridge c b h).admitted = true →\n    ∃ p1 e p2 pO,\n      CaseLaw2.Cert.bridgeP1 c b = some p1 ∧\n        CaseLaw2.Cert.bridgeXEnd c b = some e ∧\n          CaseLaw2.Cert.bridgeP2 c b p1 = some p2 ∧\n            CaseLaw2.Cert.bridgeActorCite c b p2 = some (pO, b.actor) ∧\n              p1 < p2 ∧ p2 < pO ∧ CaseLaw2.Cert.noKeyBetween c b e p2 = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.bridge_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Bridge soundness** (DESIGN8 §4, steps 1–7).",
+  "statement": "CaseLaw2.Cert.bridge_sound : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),\n  (CaseLaw2.Cert.checkBridge c b h).admitted = true →\n    (b.quote ≠ \"\" ∧\n        b.start < b.stop ∧\n          b.stop - b.start ≤ CaseLaw2.Cert.bridgeMaxLen ∧\n            ∃ w,\n              CaseLaw2.Cert.coveringWindow (b.input c) = some w ∧\n                w ∈ b.windows ∧\n                  CaseLaw2.Cert.usable (b.input c) w = true ∧ CaseLaw2.Cert.quoteAt (b.input c) w = true) ∧\n      (0 < b.oDate ∧ 0 < b.wDate ∧ b.oDate ≤ b.wDate) ∧\n        CaseLaw2.Cert.hasSub (CaseLaw2.Cert.norm b.quote) \";\" = false ∧\n          (∃ m,\n              c.citeIndex = some m ∧\n                ∃ p1 e p2 pO,\n                  (∃ s,\n                      s <:+ CaseLaw2.Cert.bridgeAlnum b ∧\n                        CaseLaw2.Cert.headPos s = some p1 ∧\n                          ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some c.target ∧ CaseLaw2.Cert.keyEnd s L = e) ∧\n                    p1 < p2 ∧\n                      CaseLaw2.Cert.cueHere c.kind (List.drop p2 (CaseLaw2.Cert.bridgeText b)) = true ∧\n                        (∀ (s : List (Char × Nat)),\n                            s <:+ CaseLaw2.Cert.bridgeAlnum b →\n                              ∀ (p : Nat),\n                                CaseLaw2.Cert.headPos s = some p →\n                                  e ≤ p → p < p2 → ∀ (L : Nat), L ∈ b.lens → CaseLaw2.Cert.citeOf m s L = none) ∧\n                          p2 < pO ∧\n                            ∃ s,\n                              s <:+ CaseLaw2.Cert.bridgeAlnum b ∧\n                                CaseLaw2.Cert.headPos s = some pO ∧\n                                  ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some b.actor) ∧\n            (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h\n                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,\n                      target := c.target, citeIndex := c.citeIndex, mode := c.mode }).admitted =\n                true ∧\n              CaseLaw2.Cert.checkBridge c b h =\n                CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h\n                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n                    authority := c.authority, selfText := true, hashRequired := c.hashRequired, target := c.target,\n                    citeIndex := c.citeIndex, mode := c.mode }",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkAnchored_admitted_iff",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Admission is exactly the six checks**: an anchored row is admitted if and only if the anchor passes its five checks and the disposition quote passes `check` with the target evidence taken as given.",
+  "statement": "CaseLaw2.Cert.checkAnchored_admitted_iff : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),\n  (CaseLaw2.Cert.checkAnchored c a).admitted = true ↔\n    CaseLaw2.Cert.anchorQuoteOk c a = true ∧\n      CaseLaw2.Cert.anchorHasCue a = true ∧\n        CaseLaw2.Cert.anchorDisqualified a = false ∧\n          CaseLaw2.Cert.anchorResolves c a = true ∧\n            CaseLaw2.Cert.anchorPartOk a = true ∧\n              (CaseLaw2.Cert.check\n                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,\n                      target := c.target, citeIndex := c.citeIndex, mode := c.mode }).admitted =\n                true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkAnchored_cite_index",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Citation index**: with a citation index and `cite:` evidence, an admitted anchored row's citation is one the index resolves to the row's target node.",
+  "statement": "CaseLaw2.Cert.checkAnchored_cite_index : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),\n  (CaseLaw2.Cert.checkAnchored c a).admitted = true →\n    c.evidence.startsWith \"cite:\" = true →\n      ∀ (m : Std.HashMap String Nat),\n        c.citeIndex = some m → m.get? (CaseLaw2.Cert.compact (c.evidence.drop 5).toString) = some c.target",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkAnchored_disposition",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**The disposition quote of an anchored row**: every conjunct of `checkCert_sound` except `resolves` (the anchor carries the target evidence): a known hash, the quote at its offset in a usable window, a cue of the kind, no disqualifier, an allowed part, the date order, and `ok` only with verified power.",
+  "statement": "CaseLaw2.Cert.checkAnchored_disposition : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),\n  (CaseLaw2.Cert.checkAnchored c a).admitted = true →\n    CaseLaw2.Cert.shaOk c = true ∧\n      (∃ w, CaseLaw2.Cert.coveringWindow c = some w ∧ CaseLaw2.Cert.quoteAt c w = true) ∧\n        CaseLaw2.Cert.hasCue c = true ∧\n          CaseLaw2.Cert.disqualified c = false ∧\n            CaseLaw2.Cert.partOk c = true ∧\n              c.ordered = true ∧\n                (CaseLaw2.Cert.checkAnchored c a = CaseLaw2.Cert.Result.ok → c.authority = some true) ∧\n                  (CaseLaw2.Cert.checkAnchored c a = CaseLaw2.Cert.Result.okUnverifiedBy → c.authority = none)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkAnchored_quote_nonempty",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Both quotes are non-empty**: an admitted anchored row quotes at least one character for the anchor and for the disposition, each at a non-empty span.",
+  "statement": "CaseLaw2.Cert.checkAnchored_quote_nonempty : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),\n  (CaseLaw2.Cert.checkAnchored c a).admitted = true → a.quote ≠ \"\" ∧ a.start < a.stop ∧ c.quote ≠ \"\" ∧ c.start < c.stop",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkAnchored_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Anchored soundness**: an admitted anchored row has the anchor quote at its offset in a usable window of the certificate's own text, an anchor cue, no anchor disqualifier, the target evidence resolved inside the anchor quote, an allowed anchor part, and passes `check` with the target evidence taken as given; its verdict is that check's.",
+  "statement": "CaseLaw2.Cert.checkAnchored_sound : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),\n  (CaseLaw2.Cert.checkAnchored c a).admitted = true →\n    (∃ w,\n        CaseLaw2.Cert.coveringWindow (a.input c) = some w ∧\n          w ∈ c.windows ∧ CaseLaw2.Cert.usable (a.input c) w = true ∧ CaseLaw2.Cert.quoteAt (a.input c) w = true) ∧\n      CaseLaw2.Cert.anchorHasCue a = true ∧\n        CaseLaw2.Cert.anchorDisqualified a = false ∧\n          CaseLaw2.Cert.anchorResolves c a = true ∧\n            CaseLaw2.Cert.anchorPartOk a = true ∧\n              (CaseLaw2.Cert.check\n                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                        ordered := c.ordered, authority := c.authority, selfText := true,\n                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,\n                        mode := c.mode }).admitted =\n                  true ∧\n                CaseLaw2.Cert.checkAnchored c a =\n                  CaseLaw2.Cert.check\n                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,\n                      target := c.target, citeIndex := c.citeIndex, mode := c.mode }",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkAnchored_window_hash",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Anchor window hash**: an admitted anchored row's anchor sits in a well-formed window whose SHA-1, computed by the checker itself, equals the recorded digest; when the hash file is supplied, a digest must have been recorded.",
+  "statement": "CaseLaw2.Cert.checkAnchored_window_hash : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),\n  (CaseLaw2.Cert.checkAnchored c a).admitted = true →\n    ∃ w,\n      CaseLaw2.Cert.coveringWindow (a.input c) = some w ∧\n        CaseLaw2.Cert.quoteAt (a.input c) w = true ∧\n          CaseLaw2.Cert.wellFormed (a.input c) w = true ∧\n            (∀ (s : String), w.hash = some s → CaseLaw2.Sha1.hex w.text = s) ∧\n              (c.hashRequired = true → w.hash.isSome = true)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkBridge_admitted",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The verdict of a bridged row: a failing step's reason, else step 7.",
+  "statement": "CaseLaw2.Cert.checkBridge_admitted : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),\n  (CaseLaw2.Cert.checkBridge c b h).admitted = true ↔\n    CaseLaw2.Cert.bridgeFail c b = none ∧\n      (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h\n            { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n              evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n              authority := c.authority, selfText := true, hashRequired := c.hashRequired, target := c.target,\n              citeIndex := c.citeIndex, mode := c.mode }).admitted =\n        true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkByX_admitted",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "An admitted `checkByX`: the cue test passed, the extra test passed, and `checkBy` admits.",
+  "statement": "CaseLaw2.Cert.checkByX_admitted : ∀ (cueOk : CaseLaw2.Cert.Input → Bool) (f : CaseLaw2.Cert.Reason)\n  (partRes extra : CaseLaw2.Cert.Input → Option CaseLaw2.Cert.Reason) (c : CaseLaw2.Cert.Input),\n  (CaseLaw2.Cert.checkByX cueOk f partRes extra c).admitted = true →\n    cueOk c = true ∧ extra c = none ∧ (CaseLaw2.Cert.checkBy cueOk partRes c).admitted = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkByX_none",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.checkByX_none : ∀ (cueOk : CaseLaw2.Cert.Input → Bool)\n  (partRes : CaseLaw2.Cert.Input → Option CaseLaw2.Cert.Reason) (c : CaseLaw2.Cert.Input),\n  CaseLaw2.Cert.checkByX cueOk CaseLaw2.Cert.Reason.noCue partRes (fun x => none) c =\n    CaseLaw2.Cert.checkBy cueOk partRes c",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkBy_check",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "`checkBy` with the kind's cues and the plain part test is `check`.",
+  "statement": "CaseLaw2.Cert.checkBy_check : ∀ (c : CaseLaw2.Cert.Input),\n  CaseLaw2.Cert.checkBy CaseLaw2.Cert.hasCue\n      (fun c => if CaseLaw2.Cert.partOk c = true then none else some CaseLaw2.Cert.Reason.partNotMajority) c =\n    CaseLaw2.Cert.check c",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkBy_cue_eq",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.checkBy_cue_eq : ∀ (cue1 cue2 : CaseLaw2.Cert.Input → Bool)\n  (partRes : CaseLaw2.Cert.Input → Option CaseLaw2.Cert.Reason) (c : CaseLaw2.Cert.Input),\n  cue1 c = true → cue2 c = true → CaseLaw2.Cert.checkBy cue1 partRes c = CaseLaw2.Cert.checkBy cue2 partRes c",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkBy_cue_part",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "An admitted `checkBy` row passed the cue test it was given and the part test it was given.",
+  "statement": "CaseLaw2.Cert.checkBy_cue_part : ∀ (cueOk : CaseLaw2.Cert.Input → Bool)\n  (partRes : CaseLaw2.Cert.Input → Option CaseLaw2.Cert.Reason) (c : CaseLaw2.Cert.Input),\n  (CaseLaw2.Cert.checkBy cueOk partRes c).admitted = true → cueOk c = true ∧ partRes c = none",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
   "name": "CaseLaw2.Cert.checkCert_cite_index",
   "module": "LegalProofs.CaseLaw2.Certificate",
   "doc": "**Citation-index resolution**: when the citation index is supplied, an admitted row whose target evidence is a citation (and whose quote is not the target's own text) cites a citation that the index resolves to the row's target node: `index(cite) = target`.",
@@ -54,6 +457,303 @@
   ]
  },
  {
+  "name": "CaseLaw2.Cert.checkDoctrine_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Doctrine rows**: an admitted doctrine row is an explicit `disapproved` row with a `doctrineTie` line that passes the joined check in doctrine mode: its main quote has a doctrine-reject cue and none of the treatment and operative disqualifiers.",
+  "statement": "CaseLaw2.Cert.checkDoctrine_sound : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkDoctrine c e js).admitted = true →\n    c.kind = CaseLaw2.Cert.Kind.treat CaseLaw2.TKind.disapproved ∧\n      e = true ∧\n        (∃ j, j ∈ js ∧ j.rel = CaseLaw2.Cert.JRel.doctrineTie) ∧\n          (CaseLaw2.Cert.checkJoined c e CaseLaw2.Cert.TClaim.doctrine js).admitted = true ∧\n            CaseLaw2.Cert.hasCue\n                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n                    authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired,\n                    target := c.target, citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.doctrine } =\n                true ∧\n              CaseLaw2.Cert.disqualified\n                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n                    authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired,\n                    target := c.target, citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.doctrine } =\n                false",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkHistory7_claims",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**What a history row's claims let through**: an admitted row passed the cue test under its claims, and its part is the opinion of the court or head matter under an `orderHead` claim whose conditions hold.",
+  "statement": "CaseLaw2.Cert.checkHistory7_claims : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (h : CaseLaw2.Cert.HClaims),\n  (CaseLaw2.Cert.checkHistory7 c a? h).admitted = true →\n    CaseLaw2.Cert.claimCueOk h c = true ∧\n      (CaseLaw2.Cert.partOk c = true ∨\n        c.part = \"headmatter\" ∧ h.orderHead = true ∧ CaseLaw2.Cert.orderHeadOk h c = true)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkHistory8AWith_cue9",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The parametrised step at round 10's cue test is round 10's step.",
+  "statement": "CaseLaw2.Cert.checkHistory8AWith_cue9 : ∀ (t? : Option CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input)\n  (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),\n  CaseLaw2.Cert.checkHistory8AWith CaseLaw2.Cert.anchorCueOk9 t? c a? b? h = CaseLaw2.Cert.checkHistory8T t? c a? b? h",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkHistory8T_claimed",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The claimed step on a reversed / vacated anchored row without a bridge line.",
+  "statement": "CaseLaw2.Cert.checkHistory8T_claimed : ∀ (t : CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input)\n  (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),\n  CaseLaw2.Cert.trialKind c.kind = true →\n    CaseLaw2.Cert.checkHistory8T (some t) c (some a) none h =\n      CaseLaw2.Cert.anchoredBy (CaseLaw2.Cert.anchorCueOk9 h)\n        (CaseLaw2.Cert.checkTrialWith CaseLaw2.Cert.trialBridgeDOk\n          (CaseLaw2.Cert.trialFailWith CaseLaw2.Cert.trialBridgeTOk CaseLaw2.Cert.trialBridgeDateOk) h t)\n        c a",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkHistory8_bridge",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "A row with a bridge line gets `checkBridge`'s verdict (an anchor line is not used).",
+  "statement": "CaseLaw2.Cert.checkHistory8_bridge : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (b : CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),\n  CaseLaw2.Cert.checkHistory8 c a? (some b) h = CaseLaw2.Cert.checkBridge c b h",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkHistory9_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "An admitted round-9 history row whose node has zones: round 8 admits it, with the same verdict, and its quote lies inside a zone of its part.",
+  "statement": "CaseLaw2.Cert.checkHistory9_sound : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)\n  (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),\n  zs ≠ [] →\n    (CaseLaw2.Cert.checkHistory9 zs c a? b? h).admitted = true →\n      (CaseLaw2.Cert.checkHistory8 c a? b? h).admitted = true ∧\n        CaseLaw2.Cert.checkHistory9 zs c a? b? h = CaseLaw2.Cert.checkHistory8 c a? b? h ∧\n          ∃ z, z ∈ zs ∧ z.start ≤ c.start ∧ c.stop ≤ z.stop ∧ z.part = c.part",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkHistory_anchored",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "A history row with an anchor line gets `checkAnchored`'s verdict.",
+  "statement": "CaseLaw2.Cert.checkHistory_anchored : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),\n  CaseLaw2.Cert.checkHistory c (some a) = CaseLaw2.Cert.checkAnchored c a",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkHistory_no_anchor",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No anchor, no change**: a history row without an anchor line gets `check`'s verdict.",
+  "statement": "CaseLaw2.Cert.checkHistory_no_anchor : ∀ (c : CaseLaw2.Cert.Input),\n  CaseLaw2.Cert.checkHistory c none = CaseLaw2.Cert.check c",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkJoinedFarWith_rel",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.checkJoinedFarWith_rel : ∀ (fr : CaseLaw2.Cert.Input → CaseLaw2.Cert.Joined → Option CaseLaw2.Cert.Reason)\n  (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim) (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoinedFarWith fr c e cl js).admitted = true →\n    List.findSome? (CaseLaw2.Cert.farRelWith fr cl c) js = none",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkJoinedFar_eq",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "A row the joined check admits gets the same verdict from the far check.",
+  "statement": "CaseLaw2.Cert.checkJoinedFar_eq : ∀ (fr : CaseLaw2.Cert.Input → CaseLaw2.Cert.Joined → Option CaseLaw2.Cert.Reason)\n  (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim) (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →\n    CaseLaw2.Cert.checkJoinedFarWith fr c e cl js = CaseLaw2.Cert.checkJoined c e cl js",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkJoined_admitted_bool",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The six checks as booleans (the form the other theorems unpack).",
+  "statement": "CaseLaw2.Cert.checkJoined_admitted_bool : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true ↔\n    (CaseLaw2.Cert.joinedCountOk js && js.all (CaseLaw2.Cert.joinedQuoteOk c)) = true ∧\n      js.all CaseLaw2.Cert.joinedPartOk = true ∧\n        js.any (CaseLaw2.Cert.joinedDisqualified c) = false ∧\n          js.all (CaseLaw2.Cert.relationOk cl c) = true ∧\n            js.any (CaseLaw2.Cert.joinedResolves c) = true ∧\n              (CaseLaw2.Cert.mainCheck\n                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,\n                      target := c.target, citeIndex := c.citeIndex, mode := c.mode }\n                    e cl).admitted =\n                true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkJoined_admitted_iff",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Admission is exactly the six checks** (with the count bound in check 1).",
+  "statement": "CaseLaw2.Cert.checkJoined_admitted_iff : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true ↔\n    CaseLaw2.Cert.joinedCountOk js = true ∧\n      (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.joinedQuoteOk c j = true) ∧\n        (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.joinedPartOk j = true) ∧\n          (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.joinedDisqualified c j = false) ∧\n            (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.relationOk cl c j = true) ∧\n              (∃ j, j ∈ js ∧ CaseLaw2.Cert.joinedResolves c j = true) ∧\n                (CaseLaw2.Cert.mainCheck\n                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                        ordered := c.ordered, authority := c.authority, selfText := true,\n                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex, mode := c.mode }\n                      e cl).admitted =\n                  true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkJoined_bounded",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**One or two joined lines.**",
+  "statement": "CaseLaw2.Cert.checkJoined_bounded : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true → 1 ≤ js.length ∧ js.length ≤ 2",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkJoined_cite_index",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Citation index**: with a citation index and `cite:` evidence, an admitted joined row's citation is one the index resolves to the row's target node.",
+  "statement": "CaseLaw2.Cert.checkJoined_cite_index : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →\n    c.evidence.startsWith \"cite:\" = true →\n      ∀ (m : Std.HashMap String Nat),\n        c.citeIndex = some m → m.get? (CaseLaw2.Cert.compact (c.evidence.drop 5).toString) = some c.target",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkJoined_disposition",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**The main quote of an admitted joined row**: every conjunct of `checkCert_sound` except `resolves` (a joined quote carries the target evidence), read in the row's mode: a known hash, the quote at its offset in a usable window, a cue, no disqualifier, an allowed part, the date order.",
+  "statement": "CaseLaw2.Cert.checkJoined_disposition : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →\n    CaseLaw2.Cert.shaOk c = true ∧\n      (∃ w, CaseLaw2.Cert.coveringWindow c = some w ∧ CaseLaw2.Cert.quoteAt c w = true) ∧\n        CaseLaw2.Cert.hasCue (cl.apply c) = true ∧\n          CaseLaw2.Cert.disqualified (cl.apply c) = false ∧ CaseLaw2.Cert.partOk c = true ∧ c.ordered = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkJoined_quote_nonempty",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Joined quotes are non-empty**, each at a non-empty span.",
+  "statement": "CaseLaw2.Cert.checkJoined_quote_nonempty : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →\n    ∀ (j : CaseLaw2.Cert.Joined), j ∈ js → j.quote ≠ \"\" ∧ j.start < j.stop",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkJoined_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Joined soundness**: every joined quote at its offset in a usable window of the row's own text, from the opinion of the court, without disqualifier, its relation holding; the evidence in one joined quote; the main check with the evidence taken as given admits, and its verdict is the row's.",
+  "statement": "CaseLaw2.Cert.checkJoined_sound : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →\n    (∀ (j : CaseLaw2.Cert.Joined),\n        j ∈ js →\n          ∃ w,\n            CaseLaw2.Cert.coveringWindow (j.input c) = some w ∧\n              w ∈ c.windows ∧ CaseLaw2.Cert.usable (j.input c) w = true ∧ CaseLaw2.Cert.quoteAt (j.input c) w = true) ∧\n      (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.joinedPartOk j = true) ∧\n        (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.joinedDisqualified c j = false) ∧\n          (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.relationOk cl c j = true) ∧\n            (∃ j, j ∈ js ∧ CaseLaw2.Cert.joinedResolves c j = true) ∧\n              (CaseLaw2.Cert.mainCheck\n                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                        ordered := c.ordered, authority := c.authority, selfText := true,\n                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex, mode := c.mode }\n                      e cl).admitted =\n                  true ∧\n                CaseLaw2.Cert.checkJoined c e cl js =\n                  CaseLaw2.Cert.mainCheck\n                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,\n                      target := c.target, citeIndex := c.citeIndex, mode := c.mode }\n                    e cl",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkJoined_text",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The joined check admits with the power taken as verified whenever it admits.",
+  "statement": "CaseLaw2.Cert.checkJoined_text : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →\n    (CaseLaw2.Cert.checkJoined\n          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n            authority := some true, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,\n            citeIndex := c.citeIndex, mode := c.mode }\n          e cl js).admitted =\n      true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkJoined_window_hash",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Joined window hash**: every joined quote sits in a well-formed window whose SHA-1, computed by the checker, is the recorded digest; when the hash file is supplied a digest must have been recorded.",
+  "statement": "CaseLaw2.Cert.checkJoined_window_hash : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →\n    ∀ (j : CaseLaw2.Cert.Joined),\n      j ∈ js →\n        ∃ w,\n          CaseLaw2.Cert.coveringWindow (j.input c) = some w ∧\n            CaseLaw2.Cert.quoteAt (j.input c) w = true ∧\n              CaseLaw2.Cert.wellFormed (j.input c) w = true ∧\n                (∀ (s : String), w.hash = some s → CaseLaw2.Sha1.hex w.text = s) ∧\n                  (c.hashRequired = true → w.hash.isSome = true)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkOperative_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Operative-words soundness**: an admitted operative-words row is an explicit `disapproved` row whose quote has an operative cue and none of the round-4 or operative disqualifiers, names the target in the quote itself, and passes every other check of `check`.",
+  "statement": "CaseLaw2.Cert.checkOperative_sound : ∀ (c : CaseLaw2.Cert.Input) (explicit : Bool),\n  (CaseLaw2.Cert.checkOperative c explicit).admitted = true →\n    c.kind = CaseLaw2.Cert.Kind.treat CaseLaw2.TKind.disapproved ∧\n      explicit = true ∧\n        (CaseLaw2.Cert.check\n                { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                  evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n                  authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,\n                  citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.operative }).admitted =\n            true ∧\n          CaseLaw2.Cert.hasCue\n                { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                  evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n                  authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,\n                  citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.operative } =\n              true ∧\n            CaseLaw2.Cert.disqualified\n                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n                    authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired,\n                    target := c.target, citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.operative } =\n                false ∧\n              CaseLaw2.Cert.resolves\n                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n                    authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired,\n                    target := c.target, citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.operative } =\n                true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkRecognised_fallback",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Fallback**: a row that is not recognised has exactly its round-4 witness verdict.",
+  "statement": "CaseLaw2.Cert.checkRecognised_fallback : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),\n  (CaseLaw2.Cert.checkRecognised c w).isRecognised = false →\n    CaseLaw2.Cert.checkRecognised c w = CaseLaw2.Cert.RResult.witness (CaseLaw2.Cert.checkWitness c w)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkRecognised_needs_power",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Never without W's power**: a witness row whose W lacks power over X is never recognised.",
+  "statement": "CaseLaw2.Cert.checkRecognised_needs_power : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),\n  w.power = false → (CaseLaw2.Cert.checkRecognised c w).isRecognised = false",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkRecognised_no_claim",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No claim, no change**: without a `recognised` claim the verdict is the round-4 witness verdict.",
+  "statement": "CaseLaw2.Cert.checkRecognised_no_claim : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),\n  w.claim = false → CaseLaw2.Cert.checkRecognised c w = CaseLaw2.Cert.RResult.witness (CaseLaw2.Cert.checkWitness c w)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkRecognised_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Recognition soundness**: a recognised row made the claim; W has power over X; the three dates are known; the two names differ; and the row passes every witness check read in `recog` mode: it is `explicit = 0` with a status-changing kind, W's text passes the text checks (recognition cue, no recognition disqualifier, X named in the quote, majority part), Y is named in the quote, the dates are ordered X ≤ Y ≤ W, and W has standing.",
+  "statement": "CaseLaw2.Cert.checkRecognised_sound : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),\n  (CaseLaw2.Cert.checkRecognised c w).isRecognised = true →\n    w.claim = true ∧\n      w.power = true ∧\n        w.datesKnown = true ∧\n          CaseLaw2.Cert.distinctEvidence c w = true ∧\n            w.known = true ∧\n              w.explicit = false ∧\n                w.changes = true ∧\n                  (CaseLaw2.Cert.textCheck\n                          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                            ordered := c.ordered, authority := c.authority, selfText := c.selfText,\n                            hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,\n                            mode := CaseLaw2.Cert.Mode.recog }).admitted =\n                      true ∧\n                    CaseLaw2.Cert.byResolves\n                          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n                            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,\n                            ordered := c.ordered, authority := c.authority, selfText := c.selfText,\n                            hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,\n                            mode := CaseLaw2.Cert.Mode.recog }\n                          w =\n                        true ∧\n                      c.ordered = true ∧ w.witnessOrdered = true ∧ w.standing = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkTreatment9_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "An admitted round-9 treatments row whose node has zones: round 7's step admits it, with the same verdict; its main quote and every joined quote lie inside a zone of their parts.",
+  "statement": "CaseLaw2.Cert.checkTreatment9_sound : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input) (e : Bool)\n  (cl : CaseLaw2.Cert.TClaim) (js : List CaseLaw2.Cert.Joined),\n  zs ≠ [] →\n    (CaseLaw2.Cert.checkTreatment9 zs c e cl js).admitted = true →\n      (CaseLaw2.Cert.checkTreatment c e cl js).admitted = true ∧\n        CaseLaw2.Cert.checkTreatment9 zs c e cl js = CaseLaw2.Cert.checkTreatment c e cl js ∧\n          (∃ z, z ∈ zs ∧ z.start ≤ c.start ∧ c.stop ≤ z.stop ∧ z.part = c.part) ∧\n            ∀ (j : CaseLaw2.Cert.Joined), j ∈ js → ∃ z, z ∈ zs ∧ z.start ≤ j.start ∧ j.stop ≤ z.stop ∧ z.part = j.part",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkTreatment_joined",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**A row with joined lines is the joined check's**: under the round-7 treatment step, an admitted row with joined lines passes `checkJoined` (a doctrine row in doctrine mode).",
+  "statement": "CaseLaw2.Cert.checkTreatment_joined : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  js ≠ [] →\n    (CaseLaw2.Cert.checkTreatment c e cl js).admitted = true → (CaseLaw2.Cert.checkJoined c e cl js).admitted = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.checkTreatment_text",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**The text check**: a treatments row admitted under a rule set is admitted with the acting court's power taken as verified (so the doctrine collision set, which is read on the text check, holds every admitted doctrine row).",
+  "statement": "CaseLaw2.Cert.checkTreatment_text : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkTreatment c e cl js).admitted = true →\n    (CaseLaw2.Cert.checkTreatment\n          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n            authority := some true, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,\n            citeIndex := c.citeIndex, mode := c.mode }\n          e cl js).admitted =\n      true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
   "name": "CaseLaw2.Cert.checkWitness_inferred",
   "module": "LegalProofs.CaseLaw2.Certificate",
   "doc": "**A witness row is never explicit**: an admitted witness row carries `explicit = false`, so the event built from it has no status effect (with `Spec.inferred_treatment_no_effect`: `Examples.witness_row_no_effect`).",
@@ -87,10 +787,699 @@
   ]
  },
  {
+  "name": "CaseLaw2.Cert.check_text",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "`check` admits with the power taken as verified whenever it admits.",
+  "statement": "CaseLaw2.Cert.check_text : ∀ (c : CaseLaw2.Cert.Input),\n  (CaseLaw2.Cert.check c).admitted = true →\n    (CaseLaw2.Cert.check\n          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n            authority := some true, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,\n            citeIndex := c.citeIndex, mode := c.mode }).admitted =\n      true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.citeOf_key",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The key `citeOf` looks up: `L ≥ 1` consecutive alphanumeric characters of the quote.",
+  "statement": "CaseLaw2.Cert.citeOf_key : ∀ (m : Std.HashMap String Nat) (s : List (Char × Nat)) (L n : Nat),\n  CaseLaw2.Cert.citeOf m s L = some n →\n    0 < L ∧ (List.take L s).length = L ∧ m.get? (String.ofList (List.map (fun x => x.fst) (List.take L s))) = some n",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.classOf7_no_doctrine",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Without a doctrine row the class is round 5's.**",
+  "statement": "CaseLaw2.Cert.classOf7_no_doctrine : ∀ (e r : Bool) (q : String),\n  CaseLaw2.Cert.classOf7 e r false q = CaseLaw2.Cert.classOf e r q",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.classOf_recognised_iff",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "A row is classed `recognised` exactly when the recognised check passed.",
+  "statement": "CaseLaw2.Cert.classOf_recognised_iff : ∀ (explicit recognised : Bool) (quote : String),\n  CaseLaw2.Cert.classOf explicit recognised quote = CaseLaw2.Cert.OClass.recognised ↔ recognised = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.doctrineTie_label",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Doctrine tie**: an admitted row's `doctrineTie` line is on a doctrine row; its label has two words or more and eight characters or more and occurs in both quotes; the joined quote has a tie cue.",
+  "statement": "CaseLaw2.Cert.doctrineTie_label : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →\n    ∀ (j : CaseLaw2.Cert.Joined),\n      j ∈ js →\n        j.rel = CaseLaw2.Cert.JRel.doctrineTie →\n          cl = CaseLaw2.Cert.TClaim.doctrine ∧\n            CaseLaw2.Cert.labelOk j.label = true ∧\n              CaseLaw2.Cert.labelIn c.quote j.label = true ∧\n                CaseLaw2.Cert.labelIn j.quote j.label = true ∧ CaseLaw2.Cert.tieCue j.quote = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.doctrine_unique",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Doctrine uniqueness**: two doctrine rows admitted after the table's uniqueness test, each admitted only when its text check passed, that share a compact label have the same target.",
+  "statement": "CaseLaw2.Cert.doctrine_unique : ∀ (rows : List CaseLaw2.Cert.DoctrineRow) (r1 r2 : CaseLaw2.Cert.DoctrineRow),\n  r1 ∈ rows →\n    r2 ∈ rows →\n      ∀ (v1 v2 : CaseLaw2.Cert.Result),\n        (CaseLaw2.Cert.doctrineFinal rows r1 v1).admitted = true →\n          (CaseLaw2.Cert.doctrineFinal rows r2 v2).admitted = true →\n            (v1.admitted = true → r1.text = true) →\n              (v2.admitted = true → r2.text = true) →\n                ∀ (l : String), l ∈ r1.labels → l ∈ r2.labels → r1.target = r2.target",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.farKeyOk_spec",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.farKeyOk_spec : ∀ (lens : List Nat) (c : CaseLaw2.Cert.Input) (j : CaseLaw2.Cert.Joined)\n  (w : CaseLaw2.Cert.Window),\n  CaseLaw2.Cert.farKeyOk lens c j w = true →\n    ∀ (m : Std.HashMap String Nat),\n      c.citeIndex = some m →\n        ∀ (s : List (Char × Nat)),\n          s <:+ CaseLaw2.Cert.farAlnum c j w →\n            ∀ (p : Nat),\n              CaseLaw2.Cert.headPos s = some p →\n                p < c.start - j.stop →\n                  ∀ (L : Nat), L ∈ lens → ∀ (n : Nat), CaseLaw2.Cert.citeOf m s L = some n → n = c.target",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.farRel_none",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.farRel_none : ∀ (lens : List Nat) (cl : CaseLaw2.Cert.TClaim) (c : CaseLaw2.Cert.Input)\n  (j : CaseLaw2.Cert.Joined),\n  j.rel = CaseLaw2.Cert.JRel.antecedent →\n    CaseLaw2.Cert.farRelWith (CaseLaw2.Cert.farReason lens) cl c j = none →\n      j.stop ≤ c.start ∧\n        c.start - j.stop ≤ CaseLaw2.Cert.joinedFarMax ∧\n          CaseLaw2.Cert.anaphorCue c.quote = true ∧\n            CaseLaw2.Cert.kindCue c = true ∧\n              (c.start - j.stop ≤ CaseLaw2.Cert.joinedGapMax ∨\n                ∃ w,\n                  w ∈ c.windows ∧\n                    CaseLaw2.Cert.usable (CaseLaw2.Cert.farInput c j) w = true ∧\n                      ∀ (m : Std.HashMap String Nat),\n                        c.citeIndex = some m →\n                          ∀ (s : List (Char × Nat)),\n                            s <:+ CaseLaw2.Cert.farAlnum c j w →\n                              ∀ (p : Nat),\n                                CaseLaw2.Cert.headPos s = some p →\n                                  p < c.start - j.stop →\n                                    ∀ (L : Nat),\n                                      L ∈ lens → ∀ (n : Nat), CaseLaw2.Cert.citeOf m s L = some n → n = c.target)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.farWindow_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.farWindow_some : ∀ (c : CaseLaw2.Cert.Input) (j : CaseLaw2.Cert.Joined) (w : CaseLaw2.Cert.Window),\n  CaseLaw2.Cert.farWindow c j = some w → w ∈ c.windows ∧ CaseLaw2.Cert.usable (CaseLaw2.Cert.farInput c j) w = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.findSome_farRel_none",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.findSome_farRel_none : ∀ (fr : CaseLaw2.Cert.Input → CaseLaw2.Cert.Joined → Option CaseLaw2.Cert.Reason)\n  (cl : CaseLaw2.Cert.TClaim) (c : CaseLaw2.Cert.Input) (js : List CaseLaw2.Cert.Joined),\n  js.all (CaseLaw2.Cert.relationOk cl c) = true → List.findSome? (CaseLaw2.Cert.farRelWith fr cl c) js = none",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.firstCue_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.firstCue_some : ∀ (k : CaseLaw2.Cert.Kind) (p1 : Nat) (q : List Char) (i j : Nat),\n  CaseLaw2.Cert.firstCue k p1 q i = some j → i ≤ j ∧ p1 < j ∧ CaseLaw2.Cert.cueHere k (List.drop (j - i) q) = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.firstSuffix_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "@CaseLaw2.Cert.firstSuffix_some : ∀ {α : Type} (p : List α → Bool) (l s : List α),\n  CaseLaw2.Cert.firstSuffix p l = some s → s <:+ l ∧ p s = true",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.identityFormOk_spec",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.identityFormOk_spec : ∀ (i : CaseLaw2.Cert.Identity) (d t : String),\n  CaseLaw2.Cert.identityFormOk i d t = true →\n    (i.form = \"docket\" ∨ i.form = \"cite\") ∧\n        4 ≤ (CaseLaw2.Cert.compact i.token).length ∧\n          (CaseLaw2.Cert.compact i.token).any Char.isDigit = true ∧\n            CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact d) (CaseLaw2.Cert.compact i.token) = true ∧\n              CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact t) (CaseLaw2.Cert.compact i.token) = true ∨\n      i.form = \"date\" ∧\n        CaseLaw2.Cert.validDate i.tDate = true ∧\n          i.token.length = 8 ∧\n            i.token.all Char.isDigit = true ∧\n              i.token.toNat? = some i.tDate ∧\n                (CaseLaw2.Cert.dateForms i.tDate).any (CaseLaw2.Cert.hasSub d) = true ∧\n                  (CaseLaw2.Cert.dateForms i.tDate).any (CaseLaw2.Cert.hasSub t) = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.identityOk_spec",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.identityOk_spec : ∀ (c : CaseLaw2.Cert.Input) (i : CaseLaw2.Cert.Identity),\n  CaseLaw2.Cert.identityOk c i = true →\n    ∃ d t,\n      CaseLaw2.Cert.identitySpan c i.dSha i.dWindows i.dStart i.dStop = some d ∧\n        CaseLaw2.Cert.identitySpan c i.tSha i.tWindows i.tStart i.tStop = some t ∧\n          CaseLaw2.Cert.identityFormOk i d t = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.identitySpan_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.identitySpan_some : ∀ (c : CaseLaw2.Cert.Input) (sha : String) (ws : List CaseLaw2.Cert.Window)\n  (s e : Nat) (x : String),\n  CaseLaw2.Cert.identitySpan c sha ws s e = some x →\n    s < e ∧\n      e - s ≤ CaseLaw2.Cert.identitySpanMax ∧\n        ∃ w,\n          w ∈ ws ∧\n            CaseLaw2.Cert.usable (CaseLaw2.Cert.spanInput c sha ws s e) w = true ∧\n              x = (CaseLaw2.Cert.slice (CaseLaw2.Cert.norm w.text) (s - w.start0) (e - s)).toLower",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.identityThen_fail_keeps",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**A failing verdict keeps its reason** (§5.2).",
+  "statement": "CaseLaw2.Cert.identityThen_fail_keeps : ∀ (i? : Option CaseLaw2.Cert.Identity) (c : CaseLaw2.Cert.Input)\n  (res : CaseLaw2.Cert.Result), res.admitted = false → CaseLaw2.Cert.identityThen i? c res = res",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.identityThen_some_admitted",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The general form of the soundness on any verdict.",
+  "statement": "CaseLaw2.Cert.identityThen_some_admitted : ∀ (i : CaseLaw2.Cert.Identity) (c : CaseLaw2.Cert.Input)\n  (res : CaseLaw2.Cert.Result),\n  (CaseLaw2.Cert.identityThen (some i) c res).admitted = true →\n    res.admitted = true ∧ CaseLaw2.Cert.identityThen (some i) c res = res ∧ CaseLaw2.Cert.identityOk c i = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.identityTie_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Identity-tie soundness** (§5.2): an admitted row with a line has an admitted round-11 verdict (which is the verdict); D's span and T's span are each non-empty, at most `identitySpanMax` characters, the lower-cased text of a usable window of that node's own text; and the form's condition holds on the two spans: for `docket` / `cite` the compact token (≥ 4 characters, a digit) is in both compact spans; for `date` the token is the 8 digits of date(T) (known) and both spans hold a date form of it.",
+  "statement": "CaseLaw2.Cert.identityTie_sound : ∀ (i : CaseLaw2.Cert.Identity) (t? : Option CaseLaw2.Cert.TBridge)\n  (rm? : Option CaseLaw2.Cert.Remand) (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)\n  (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),\n  (CaseLaw2.Cert.checkHistory11I (some i) t? rm? zs c a? b? h).admitted = true →\n    (CaseLaw2.Cert.checkHistory11 t? rm? zs c a? b? h).admitted = true ∧\n      CaseLaw2.Cert.checkHistory11I (some i) t? rm? zs c a? b? h = CaseLaw2.Cert.checkHistory11 t? rm? zs c a? b? h ∧\n        i.dStart < i.dStop ∧\n          i.dStop - i.dStart ≤ CaseLaw2.Cert.identitySpanMax ∧\n            i.tStart < i.tStop ∧\n              i.tStop - i.tStart ≤ CaseLaw2.Cert.identitySpanMax ∧\n                ∃ d t,\n                  CaseLaw2.Cert.identitySpan c i.dSha i.dWindows i.dStart i.dStop = some d ∧\n                    CaseLaw2.Cert.identitySpan c i.tSha i.tWindows i.tStart i.tStop = some t ∧\n                      (∃ w,\n                          w ∈ i.dWindows ∧\n                            CaseLaw2.Cert.usable (CaseLaw2.Cert.spanInput c i.dSha i.dWindows i.dStart i.dStop) w =\n                                true ∧\n                              d =\n                                (CaseLaw2.Cert.slice (CaseLaw2.Cert.norm w.text) (i.dStart - w.start0)\n                                    (i.dStop - i.dStart)).toLower) ∧\n                        (∃ w,\n                            w ∈ i.tWindows ∧\n                              CaseLaw2.Cert.usable (CaseLaw2.Cert.spanInput c i.tSha i.tWindows i.tStart i.tStop) w =\n                                  true ∧\n                                t =\n                                  (CaseLaw2.Cert.slice (CaseLaw2.Cert.norm w.text) (i.tStart - w.start0)\n                                      (i.tStop - i.tStart)).toLower) ∧\n                          ((i.form = \"docket\" ∨ i.form = \"cite\") ∧\n                              4 ≤ (CaseLaw2.Cert.compact i.token).length ∧\n                                (CaseLaw2.Cert.compact i.token).any Char.isDigit = true ∧\n                                  CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact d) (CaseLaw2.Cert.compact i.token) =\n                                      true ∧\n                                    CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact t) (CaseLaw2.Cert.compact i.token) =\n                                      true ∨\n                            i.form = \"date\" ∧\n                              CaseLaw2.Cert.validDate i.tDate = true ∧\n                                i.token.length = 8 ∧\n                                  i.token.all Char.isDigit = true ∧\n                                    i.token.toNat? = some i.tDate ∧\n                                      (CaseLaw2.Cert.dateForms i.tDate).any (CaseLaw2.Cert.hasSub d) = true ∧\n                                        (CaseLaw2.Cert.dateForms i.tDate).any (CaseLaw2.Cert.hasSub t) = true)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.implicitReject_no_claim",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No claim, no change** (§7): without the claim the treatment step (and its cue test) is round 8's.",
+  "statement": "CaseLaw2.Cert.implicitReject_no_claim : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  CaseLaw2.Cert.checkTreatmentI false c e cl js = CaseLaw2.Cert.checkTreatment c e cl js",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.implicitReject_soft",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Soft kinds only** (§7): an admitted claimed row is of a soft kind.",
+  "statement": "CaseLaw2.Cert.implicitReject_soft : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkImplicit c e js).admitted = true → CaseLaw2.Cert.implicitSoft c.kind = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.joinedFar_extends",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**The claim only extends** (§5): every row admitted without the claim is admitted with it, with the same verdict.",
+  "statement": "CaseLaw2.Cert.joinedFar_extends : ∀ (lens : List Nat) (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined),\n  (CaseLaw2.Cert.checkTreatment c e cl js).admitted = true →\n    CaseLaw2.Cert.checkTreatmentF true lens c e cl js = CaseLaw2.Cert.checkTreatment c e cl js",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.joinedFar_no_claim",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No claim, no change** (§5).",
+  "statement": "CaseLaw2.Cert.joinedFar_no_claim : ∀ (lens : List Nat),\n  CaseLaw2.Cert.checkTreatmentF false lens = CaseLaw2.Cert.checkTreatment",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.joinedQuoteOk_window",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "A joined quote that passes check 1 sits in a usable window of the row's own text.",
+  "statement": "CaseLaw2.Cert.joinedQuoteOk_window : ∀ (c : CaseLaw2.Cert.Input) (j : CaseLaw2.Cert.Joined),\n  CaseLaw2.Cert.joinedQuoteOk c j = true →\n    ∃ w,\n      CaseLaw2.Cert.coveringWindow (j.input c) = some w ∧\n        w ∈ c.windows ∧ CaseLaw2.Cert.usable (j.input c) w = true ∧ CaseLaw2.Cert.quoteAt (j.input c) w = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.keyTie_spec",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.keyTie_spec : ∀ (c : CaseLaw2.Cert.Input) (r : CaseLaw2.Cert.Remand) (q : String),\n  CaseLaw2.Cert.keyTie c r q = true →\n    ∃ m o,\n      c.citeIndex = some m ∧\n        r.order = some o ∧\n          ∃ s, s <:+ CaseLaw2.Cert.alnumPos q.toList 0 ∧ ∃ L, L ∈ r.lens ∧ CaseLaw2.Cert.citeOf m s L = some o",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.mainCheck_check",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The main check admits only if `check` admits the main quote read in the row's mode.",
+  "statement": "CaseLaw2.Cert.mainCheck_check : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim),\n  (CaseLaw2.Cert.mainCheck c e cl).admitted = true → (CaseLaw2.Cert.check (cl.apply c)).admitted = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.mainCheck_text",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The main check admits with the power taken as verified whenever it admits.",
+  "statement": "CaseLaw2.Cert.mainCheck_text : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim),\n  (CaseLaw2.Cert.mainCheck c e cl).admitted = true →\n    (CaseLaw2.Cert.mainCheck\n          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n            authority := some true, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,\n            citeIndex := c.citeIndex, mode := c.mode }\n          e cl).admitted =\n      true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.noKeyBetween_spec",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "Step 5b: no key begins at a position in `[e, p2)`.",
+  "statement": "CaseLaw2.Cert.noKeyBetween_spec : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (e p2 : Nat),\n  CaseLaw2.Cert.noKeyBetween c b e p2 = true →\n    ∃ m,\n      c.citeIndex = some m ∧\n        ∀ (s : List (Char × Nat)),\n          s <:+ CaseLaw2.Cert.bridgeAlnum b →\n            ∀ (p : Nat),\n              CaseLaw2.Cert.headPos s = some p →\n                e ≤ p → p < p2 → ∀ (L : Nat), L ∈ b.lens → CaseLaw2.Cert.citeOf m s L = none",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.no_bridge_no_change",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No bridge line, no claim `anchorWide`: no change** (the round-7 history step).",
+  "statement": "CaseLaw2.Cert.no_bridge_no_change : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (h : CaseLaw2.Cert.HClaims),\n  h.anchorWide = false → CaseLaw2.Cert.checkHistory8 c a? none h = CaseLaw2.Cert.checkHistory7 c a? h",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.no_identity_line_no_change",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No identity line, no change** (§5.2): without a line the step is §5.1's, and the wrapper is the identity.",
+  "statement": "CaseLaw2.Cert.no_identity_line_no_change : ∀ (t? : Option CaseLaw2.Cert.TBridge) (rm? : Option CaseLaw2.Cert.Remand)\n  (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims) (res : CaseLaw2.Cert.Result),\n  CaseLaw2.Cert.checkHistory11I none t? rm? zs c a? b? h = CaseLaw2.Cert.checkHistory11 t? rm? zs c a? b? h ∧\n    CaseLaw2.Cert.identityThen none c res = res",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.no_joined_no_change",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No joined line, no claim: no change.** A treatments row without joined lines (no doctrine claim) gets the round-6 verdict (`check`, or `checkOperative` for an operative-words claim); a history row without claims gets `checkHistory`'s (plain or anchored).",
+  "statement": "CaseLaw2.Cert.no_joined_no_change : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (a? : Option CaseLaw2.Cert.Anchor)\n  (h : CaseLaw2.Cert.HClaims),\n  h.orderHead = false →\n    h.setAside = false →\n      CaseLaw2.Cert.checkTreatment c e CaseLaw2.Cert.TClaim.plain [] = CaseLaw2.Cert.check c ∧\n        CaseLaw2.Cert.checkTreatment c e CaseLaw2.Cert.TClaim.operative [] = CaseLaw2.Cert.checkOperative c e ∧\n          CaseLaw2.Cert.checkHistory7 c a? h = CaseLaw2.Cert.checkHistory c a?",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.no_remand_line_no_change",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No remand line, no change**: without a line the round-10 step is the round-9 step (and the wrapper is the identity on any verdict).",
+  "statement": "CaseLaw2.Cert.no_remand_line_no_change : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)\n  (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims)\n  (res : CaseLaw2.Cert.Result),\n  CaseLaw2.Cert.checkHistory10 none zs c a? b? h = CaseLaw2.Cert.checkHistory9J zs c a? b? h ∧\n    CaseLaw2.Cert.remandThen none c res = res",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.no_tbridge_table_no_change",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Presence** (§6): a claimed row (reversed / vacated, anchored, no bridge line) without a `history_tbridge.tsv` line is not admitted; rows without the claim are unchanged whatever the table holds (`trialBridge_no_claim`).",
+  "statement": "CaseLaw2.Cert.no_tbridge_table_no_change : ∀ (t : CaseLaw2.Cert.TBridge),\n  t.line = none →\n    ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),\n      CaseLaw2.Cert.trialKind c.kind = true → (CaseLaw2.Cert.checkHistory8T (some t) c (some a) none h).admitted = false",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.no_tribunal_claim_no_change",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Presence** (§5.1): the claim has no effect on a row with no anchor line or with a bridge line (the bridge takes the row): the round-11 steps are round 10's whatever the claims.",
+  "statement": "CaseLaw2.Cert.no_tribunal_claim_no_change : ∀ (t? : Option CaseLaw2.Cert.TBridge) (rm? : Option CaseLaw2.Cert.Remand)\n  (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),\n  a? = none ∨ b?.isSome = true →\n    CaseLaw2.Cert.checkHistory8A t? c a? b? h = CaseLaw2.Cert.checkHistory8T t? c a? b? h ∧\n      CaseLaw2.Cert.checkHistory11 t? rm? zs c a? b? h = CaseLaw2.Cert.checkHistory10T t? rm? zs c a? b? h",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.no_zone_no_change",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No zone line, no change**: with no zone the three round-9 steps are round 8's (and the wrappers are the identity on any verdict).",
+  "statement": "CaseLaw2.Cert.no_zone_no_change : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims) (e : Bool) (cl : CaseLaw2.Cert.TClaim)\n  (js : List CaseLaw2.Cert.Joined) (w : CaseLaw2.Cert.Witness) (r : CaseLaw2.Cert.Result) (v : CaseLaw2.Cert.RResult),\n  CaseLaw2.Cert.checkHistory9 [] c a? b? h = CaseLaw2.Cert.checkHistory8 c a? b? h ∧\n    CaseLaw2.Cert.checkTreatment9 [] c e cl js = CaseLaw2.Cert.checkTreatment c e cl js ∧\n      CaseLaw2.Cert.checkRecognised9 [] c w = CaseLaw2.Cert.checkRecognised c w ∧\n        CaseLaw2.Cert.zoneThen [] c js r = r ∧ CaseLaw2.Cert.zoneR [] c v = v",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.nodeZones_valid",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "The zones a node keeps are valid.",
+  "statement": "CaseLaw2.Cert.nodeZones_valid : ∀ (zs : List CaseLaw2.Cert.Zone),\n  CaseLaw2.Cert.zonesValid (CaseLaw2.Cert.nodeZones zs) = true",
+  "axioms": []
+ },
+ {
+  "name": "CaseLaw2.Cert.orderHead_no_claim",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No claim, no head matter**: without an `orderHead` claim a head-matter quote fails as before.",
+  "statement": "CaseLaw2.Cert.orderHead_no_claim : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (h : CaseLaw2.Cert.HClaims),\n  h.orderHead = false → c.part = \"headmatter\" → (CaseLaw2.Cert.checkHistory7 c a? h).admitted = false",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.orderHead_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**orderHead**: an admitted history row whose quote is head matter has the `orderHead` claim, a Supreme Court acting decision dated on or after `orderHeadFrom` (20130101), a listed kind, an order-line cue of its kind, and at most `orderHeadMaxLen` (400) characters.",
+  "statement": "CaseLaw2.Cert.orderHead_sound : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (h : CaseLaw2.Cert.HClaims),\n  (CaseLaw2.Cert.checkHistory7 c a? h).admitted = true →\n    c.part = \"headmatter\" →\n      h.orderHead = true ∧\n        h.scotus = true ∧\n          CaseLaw2.Cert.orderHeadFrom ≤ h.date ∧\n            CaseLaw2.Cert.orderHeadKind c.kind = true ∧\n              CaseLaw2.Cert.orderLineCue c = true ∧ c.quote.length ≤ CaseLaw2.Cert.orderHeadMaxLen",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.partZone_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Zone soundness**: an admitted row whose node has zones has its main quote inside a zone of the row's part and every joined quote inside a zone of its own part, and the round-8 verdict admits and is the verdict.",
+  "statement": "CaseLaw2.Cert.partZone_sound : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)\n  (js : List CaseLaw2.Cert.Joined) (r : CaseLaw2.Cert.Result),\n  zs ≠ [] →\n    (CaseLaw2.Cert.zoneThen zs c js r).admitted = true →\n      r.admitted = true ∧\n        CaseLaw2.Cert.zoneThen zs c js r = r ∧\n          (∃ z, z ∈ zs ∧ z.start ≤ c.start ∧ c.stop ≤ z.stop ∧ z.part = c.part) ∧\n            ∀ (j : CaseLaw2.Cert.Joined), j ∈ js → ∃ z, z ∈ zs ∧ z.start ≤ j.start ∧ j.stop ≤ z.stop ∧ z.part = j.part",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.partZone_sound_witness",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "Zone soundness on a witness row: the round-8 witness verdict admits and is the verdict, and the main quote lies inside a zone of the row's part.",
+  "statement": "CaseLaw2.Cert.partZone_sound_witness : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)\n  (v : CaseLaw2.Cert.RResult),\n  zs ≠ [] →\n    (CaseLaw2.Cert.zoneR zs c v).admitted = true →\n      v.admitted = true ∧\n        CaseLaw2.Cert.zoneR zs c v = v ∧ ∃ z, z ∈ zs ∧ z.start ≤ c.start ∧ c.stop ≤ z.stop ∧ z.part = c.part",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.partZone_unique",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Zone uniqueness**: in non-overlapping zones at most one zone contains a non-empty quote.",
+  "statement": "CaseLaw2.Cert.partZone_unique : ∀ (zs : List CaseLaw2.Cert.Zone),\n  CaseLaw2.Cert.noOverlap zs = true →\n    ∀ (s e : Nat),\n      s < e →\n        ∀ (z1 z2 : CaseLaw2.Cert.Zone),\n          z1 ∈ zs → z2 ∈ zs → z1.start ≤ s ∧ e ≤ z1.stop → z2.start ≤ s ∧ e ≤ z2.stop → z1 = z2",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.quoteOk_window",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "A quote accepted by `quoteOk` sits in a usable window of the input's windows.",
+  "statement": "CaseLaw2.Cert.quoteOk_window : ∀ (c : CaseLaw2.Cert.Input),\n  CaseLaw2.Cert.quoteOk c = true →\n    ∃ w,\n      CaseLaw2.Cert.coveringWindow c = some w ∧\n        w ∈ c.windows ∧ CaseLaw2.Cert.usable c w = true ∧ CaseLaw2.Cert.quoteAt c w = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.reasonTie_spec",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.reasonTie_spec : ∀ (c : CaseLaw2.Cert.Input) (r : CaseLaw2.Cert.Remand) (q : String),\n  CaseLaw2.Cert.reasonTie c r q = true →\n    ∃ o,\n      CaseLaw2.Cert.spanText c r.oSha r.oWindows r.oStart r.oStop CaseLaw2.Cert.remandOrderSpanMax = some o ∧\n        CaseLaw2.Cert.remandOrderCues.any (CaseLaw2.Cert.hasSub o.toLower) = true ∧\n          CaseLaw2.Cert.remandTieMin ≤ (CaseLaw2.Cert.compact r.tie).length ∧\n            CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact o) (CaseLaw2.Cert.compact r.tie) = true ∧\n              CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact q) (CaseLaw2.Cert.compact r.tie) = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.recogOf_isSome",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "An event carries a recognition only when the recognised check passed.",
+  "statement": "CaseLaw2.Cert.recogOf_isSome : ∀ (v : CaseLaw2.Cert.RResult) (witness date : Nat),\n  (CaseLaw2.Cert.recogOf v witness date).isSome = v.isRecognised",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.remandBridge_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Remand bridge soundness** (DESIGN10 §4, D10-5, D10-7): an admitted row with a line has an admitted round-9 verdict (which is the verdict); B and the target share the court; the target is before the order, B from the order to `remandDaysMax` days after it (three calendar dates); the compact docket token (≥ 4 characters, a digit) is in a span of B's text and in a span of the target's text; B's quote holds \"supreme court\" and a remand cue, and a tie to the order: a key of the order, the order's date as printed, or a reason case named after \"in light of\" in a span of the order's text and in B's quote.",
+  "statement": "CaseLaw2.Cert.remandBridge_sound : ∀ (r : CaseLaw2.Cert.Remand) (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)\n  (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),\n  (CaseLaw2.Cert.checkHistory10 (some r) zs c a? b? h).admitted = true →\n    (CaseLaw2.Cert.checkHistory9J zs c a? b? h).admitted = true ∧\n      CaseLaw2.Cert.checkHistory10 (some r) zs c a? b? h = CaseLaw2.Cert.checkHistory9J zs c a? b? h ∧\n        r.bCourt.isSome = true ∧\n          r.bCourt = r.tCourt ∧\n            CaseLaw2.Cert.validDate r.oDate = true ∧\n              CaseLaw2.Cert.validDate r.bDate = true ∧\n                CaseLaw2.Cert.validDate r.tDate = true ∧\n                  r.tDate < r.oDate ∧\n                    r.oDate ≤ r.bDate ∧\n                      CaseLaw2.Cert.dayNum r.bDate ≤ CaseLaw2.Cert.dayNum r.oDate + CaseLaw2.Cert.remandDaysMax ∧\n                        4 ≤ (CaseLaw2.Cert.compact r.docket).length ∧\n                          (CaseLaw2.Cert.compact r.docket).any Char.isDigit = true ∧\n                            (∃ s,\n                                CaseLaw2.Cert.spanText c r.bSha r.bWindows r.bdStart r.bdStop\n                                      CaseLaw2.Cert.remandDocketSpanMax =\n                                    some s ∧\n                                  CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact s) (CaseLaw2.Cert.compact r.docket) =\n                                    true) ∧\n                              (∃ s,\n                                  CaseLaw2.Cert.spanText c r.tSha r.tWindows r.tStart r.tStop\n                                        CaseLaw2.Cert.remandDocketSpanMax =\n                                      some s ∧\n                                    CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact s) (CaseLaw2.Cert.compact r.docket) =\n                                      true) ∧\n                                ∃ q,\n                                  CaseLaw2.Cert.remandQuote c r = some q ∧\n                                    CaseLaw2.Cert.remandCourtCues.any (CaseLaw2.Cert.hasSub q) = true ∧\n                                      CaseLaw2.Cert.remandCues.any (CaseLaw2.Cert.hasSub q) = true ∧\n                                        (CaseLaw2.Cert.keyTie c r q = true ∨\n                                          (CaseLaw2.Cert.dateForms r.oDate).any (CaseLaw2.Cert.hasSub q) = true ∨\n                                            ∃ o,\n                                              CaseLaw2.Cert.spanText c r.oSha r.oWindows r.oStart r.oStop\n                                                    CaseLaw2.Cert.remandOrderSpanMax =\n                                                  some o ∧\n                                                CaseLaw2.Cert.remandOrderCues.any (CaseLaw2.Cert.hasSub o.toLower) =\n                                                    true ∧\n                                                  CaseLaw2.Cert.remandTieMin ≤ (CaseLaw2.Cert.compact r.tie).length ∧\n                                                    CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact o)\n                                                          (CaseLaw2.Cert.compact r.tie) =\n                                                        true ∧\n                                                      CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact q)\n                                                          (CaseLaw2.Cert.compact r.tie) =\n                                                        true)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.remandFail_none",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**What `remandFail = none` means**: every step holds.",
+  "statement": "CaseLaw2.Cert.remandFail_none : ∀ (c : CaseLaw2.Cert.Input) (r : CaseLaw2.Cert.Remand),\n  CaseLaw2.Cert.remandFail c r = none →\n    CaseLaw2.Cert.remandCourtOk r = true ∧\n      CaseLaw2.Cert.remandDateOk r = true ∧\n        CaseLaw2.Cert.remandDocketOk c r = true ∧\n          ∃ q,\n            CaseLaw2.Cert.remandQuote c r = some q ∧\n              CaseLaw2.Cert.remandCueOk q = true ∧ CaseLaw2.Cert.remandTieOk c r q = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.remandThen_fail_keeps",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**A failing verdict keeps its reason.**",
+  "statement": "CaseLaw2.Cert.remandThen_fail_keeps : ∀ (rm? : Option CaseLaw2.Cert.Remand) (c : CaseLaw2.Cert.Input)\n  (res : CaseLaw2.Cert.Result), res.admitted = false → CaseLaw2.Cert.remandThen rm? c res = res",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.remandThen_some_admitted",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "An admitted verdict after a line: the verdict before it admits and is kept, and every step holds.",
+  "statement": "CaseLaw2.Cert.remandThen_some_admitted : ∀ (r : CaseLaw2.Cert.Remand) (c : CaseLaw2.Cert.Input)\n  (res : CaseLaw2.Cert.Result),\n  (CaseLaw2.Cert.remandThen (some r) c res).admitted = true →\n    res.admitted = true ∧ CaseLaw2.Cert.remandFail c r = none ∧ CaseLaw2.Cert.remandThen (some r) c res = res",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.setAside_no_claim",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No claim, no set aside**: without a `setAside` claim an admitted history row has a cue of its kind.",
+  "statement": "CaseLaw2.Cert.setAside_no_claim : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (h : CaseLaw2.Cert.HClaims),\n  h.setAside = false → (CaseLaw2.Cert.checkHistory7 c a? h).admitted = true → CaseLaw2.Cert.hasCue c = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.setAside_only_vacated",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**setAside only on vacated rows**: an admitted history row whose quote has no cue of its kind is a `vacated` row with a `setAside` claim and a set-aside phrase.",
+  "statement": "CaseLaw2.Cert.setAside_only_vacated : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)\n  (h : CaseLaw2.Cert.HClaims),\n  (CaseLaw2.Cert.checkHistory7 c a? h).admitted = true →\n    CaseLaw2.Cert.hasCue c = false →\n      h.setAside = true ∧ c.kind = CaseLaw2.Cert.Kind.hist CaseLaw2.HKind.vacated ∧ CaseLaw2.Cert.setAsideCue c = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.spanHas_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.spanHas_some : ∀ (c : CaseLaw2.Cert.Input) (sha : String) (ws : List CaseLaw2.Cert.Window) (s e : Nat)\n  (k : String),\n  CaseLaw2.Cert.spanHas c sha ws s e k = true →\n    ∃ t,\n      CaseLaw2.Cert.spanText c sha ws s e CaseLaw2.Cert.remandDocketSpanMax = some t ∧\n        CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact t) k = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.spanText_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.spanText_some : ∀ (c : CaseLaw2.Cert.Input) (sha : String) (ws : List CaseLaw2.Cert.Window) (s e n : Nat)\n  (t : String),\n  CaseLaw2.Cert.spanText c sha ws s e n = some t →\n    s < e ∧\n      e - s ≤ n ∧\n        ∃ w,\n          w ∈ ws ∧\n            CaseLaw2.Cert.usable (CaseLaw2.Cert.spanInput c sha ws s e) w = true ∧\n              t = CaseLaw2.Cert.slice (CaseLaw2.Cert.norm w.text) (s - w.start0) (e - s)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.tbridgeQuote_selfText",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.tbridgeQuote_selfText : ∀ (c : CaseLaw2.Cert.Input) (t : CaseLaw2.Cert.TBridge),\n  CaseLaw2.Cert.tbridgeQuote\n      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,\n        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,\n        authority := c.authority, selfText := true, hashRequired := c.hashRequired, target := c.target,\n        citeIndex := c.citeIndex, mode := c.mode }\n      t =\n    CaseLaw2.Cert.tbridgeQuote c t",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.tbridgeQuote_some",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.tbridgeQuote_some : ∀ (c : CaseLaw2.Cert.Input) (t : CaseLaw2.Cert.TBridge) (q : String),\n  CaseLaw2.Cert.tbridgeQuote c t = some q →\n    ∃ s e w,\n      t.line = some (s, e) ∧\n        s < e ∧\n          e - s ≤ CaseLaw2.Cert.tbridgeQuoteMax ∧\n            w ∈ t.tWindows ∧\n              CaseLaw2.Cert.usable (CaseLaw2.Cert.spanInput c t.tSha t.tWindows s e) w = true ∧\n                q = (CaseLaw2.Cert.slice (CaseLaw2.Cert.norm w.text) (s - w.start0) (e - s)).toLower",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.trialBridge_no_claim",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**No claim, no change** (§6): without a counted claim the step is round 9's, and the round-10 step is §4's.",
+  "statement": "CaseLaw2.Cert.trialBridge_no_claim : ∀ (zs : List CaseLaw2.Cert.Zone) (rm? : Option CaseLaw2.Cert.Remand)\n  (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge)\n  (h : CaseLaw2.Cert.HClaims),\n  CaseLaw2.Cert.checkHistory8T none c a? b? h = CaseLaw2.Cert.checkHistory8J c a? b? h ∧\n    CaseLaw2.Cert.checkHistory9T none zs c a? b? h = CaseLaw2.Cert.checkHistory9J zs c a? b? h ∧\n      CaseLaw2.Cert.checkHistory10T none rm? zs c a? b? h = CaseLaw2.Cert.checkHistory10 rm? zs c a? b? h",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.trialBridge_sound",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**Trial bridge soundness** (§6): an admitted claimed row passed the anchored checks; D's quote has a cue of its kind (under its claims), a trial-court name and no intermediate-court name; T's quote (of T's own text) affirms and has no negative cue; T is before D by at most `tbridgeDaysMax` days, the courts differ; and the round-9 tail of the anchored row (D's quote at its offset, no disqualifier, part, order, power) admits.",
+  "statement": "CaseLaw2.Cert.trialBridge_sound : ∀ (t : CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor)\n  (h : CaseLaw2.Cert.HClaims),\n  (CaseLaw2.Cert.checkHistory8T (some t) c (some a) none h).admitted = true →\n    CaseLaw2.Cert.trialKind c.kind = true →\n      CaseLaw2.Cert.anchorQuoteOk c a = true ∧\n        CaseLaw2.Cert.anchorCueOk9 h a = true ∧\n          CaseLaw2.Cert.anchorDisqualified a = false ∧\n            CaseLaw2.Cert.anchorResolves c a = true ∧\n              CaseLaw2.Cert.anchorPartOk a = true ∧\n                CaseLaw2.Cert.claimCueOk h c = true ∧\n                  CaseLaw2.Cert.trialCourtNames.any (CaseLaw2.Cert.hasSub (CaseLaw2.Cert.dQuote c)) = true ∧\n                    CaseLaw2.Cert.intermediateCourtNames.any (CaseLaw2.Cert.hasSub (CaseLaw2.Cert.dQuote c)) = false ∧\n                      (∃ q,\n                          CaseLaw2.Cert.tbridgeQuote c t = some q ∧\n                            CaseLaw2.Cert.tbridgeCues.any (CaseLaw2.Cert.hasSub q) = true ∧\n                              CaseLaw2.Cert.tbridgeNegative.any (CaseLaw2.Cert.hasSub q) = false) ∧\n                        CaseLaw2.Cert.validDate t.tDate = true ∧\n                          CaseLaw2.Cert.validDate t.dDate = true ∧\n                            t.tDate < t.dDate ∧\n                              CaseLaw2.Cert.dayNum t.dDate ≤\n                                  CaseLaw2.Cert.dayNum t.tDate + CaseLaw2.Cert.tbridgeDaysMax ∧\n                                t.tCourt.isSome = true ∧\n                                  t.dCourt.isSome = true ∧\n                                    t.tCourt ≠ t.dCourt ∧\n                                      (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk\n                                            h\n                                            { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop,\n                                              quote := c.quote, evidence := c.evidence, part := c.part, shas := c.shas,\n                                              windows := c.windows, ordered := c.ordered, authority := c.authority,\n                                              selfText := true, hashRequired := c.hashRequired, target := c.target,\n                                              citeIndex := c.citeIndex, mode := c.mode }).admitted =\n                                        true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.trialFail_none",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.trialFail_none : ∀ (tOk : CaseLaw2.Cert.Input → CaseLaw2.Cert.TBridge → Bool)\n  (dateOk : CaseLaw2.Cert.TBridge → Bool) (t : CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input),\n  CaseLaw2.Cert.trialFailWith tOk dateOk t c = none → tOk c t = true ∧ dateOk t = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
   "name": "CaseLaw2.Cert.witnessTail_sound",
   "module": "LegalProofs.CaseLaw2.Certificate",
   "doc": "",
   "statement": "CaseLaw2.Cert.witnessTail_sound : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),\n  (CaseLaw2.Cert.witnessTail c w).admitted = true →\n    CaseLaw2.Cert.byResolves c w = true ∧ c.ordered = true ∧ w.witnessOrdered = true ∧ w.standing = true",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.zoneHas_spec",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "",
+  "statement": "CaseLaw2.Cert.zoneHas_spec : ∀ (zs : List CaseLaw2.Cert.Zone) (s e : Nat) (p : String),\n  CaseLaw2.Cert.zoneHas zs s e p = true → ∃ z, z ∈ zs ∧ z.start ≤ s ∧ e ≤ z.stop ∧ z.part = p",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.zoneThen_fail_keeps",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "A failing verdict is never changed by the zone test (the first failure keeps its reason).",
+  "statement": "CaseLaw2.Cert.zoneThen_fail_keeps : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)\n  (js : List CaseLaw2.Cert.Joined) (r : CaseLaw2.Cert.Result), r.admitted = false → CaseLaw2.Cert.zoneThen zs c js r = r",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Cert.zone_bad_node_ignored",
+  "module": "LegalProofs.CaseLaw2.Certificate",
+  "doc": "**A bad node is ignored**: a node with a malformed zone or two overlapping zones keeps none, and its rows get the round-8 verdict.",
+  "statement": "CaseLaw2.Cert.zone_bad_node_ignored : ∀ (zs : List CaseLaw2.Cert.Zone),\n  (∃ z, z ∈ zs ∧ CaseLaw2.Cert.zoneWellFormed z = false) ∨ CaseLaw2.Cert.noOverlap zs = false →\n    ∀ (c : CaseLaw2.Cert.Input) (js : List CaseLaw2.Cert.Joined) (r : CaseLaw2.Cert.Result) (v : CaseLaw2.Cert.RResult),\n      CaseLaw2.Cert.nodeZones zs = [] ∧\n        CaseLaw2.Cert.zoneThen (CaseLaw2.Cert.nodeZones zs) c js r = r ∧\n          CaseLaw2.Cert.zoneR (CaseLaw2.Cert.nodeZones zs) c v = v",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Examples.implicitReject_never_neg",
+  "module": "LegalProofs.CaseLaw2.Examples",
+  "doc": "**Implicit rejection never changes status** (§7): an admitted claimed row is of a soft kind, so its event has no effect and every status is unchanged.",
+  "statement": "CaseLaw2.Examples.implicitReject_never_neg : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (js : List CaseLaw2.Cert.Joined)\n  (k : CaseLaw2.TKind),\n  c.kind = CaseLaw2.Cert.Kind.treat k →\n    (CaseLaw2.Cert.checkImplicit c e js).admitted = true →\n      ∀ (bh : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),\n        tr.kind = k →\n          ∀ (l : List CaseLaw2.Spec.Effect) (n t u : Nat),\n            CaseLaw2.Spec.treatEffect bh tr = none ∧\n              CaseLaw2.Spec.status ((CaseLaw2.Spec.treatEffect bh tr).toList ++ l) n t u = CaseLaw2.Spec.status l n t u",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Examples.implicitSoft_softNegative",
+  "module": "LegalProofs.CaseLaw2.Examples",
+  "doc": "Soft means `softNegative`.",
+  "statement": "CaseLaw2.Examples.implicitSoft_softNegative : ∀ (k : CaseLaw2.TKind),\n  CaseLaw2.Cert.implicitSoft (CaseLaw2.Cert.Kind.treat k) = k.softNegative",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Examples.plessy_timeline",
+  "module": "LegalProofs.CaseLaw2.Examples",
+  "doc": "**The Plessy timeline** (round 5): good law until the day before *Brown*; `unknown recognisedLater` from *Brown* (17 May 1954) until the day before the later court says so; overruled from that day.",
+  "statement": "CaseLaw2.Examples.plessy_timeline : CaseLaw2.Spec.status CaseLaw2.Examples.plessyEffs 0 19540516 19540516 =\n    CaseLaw2.Spec.Status.good ∧\n  CaseLaw2.Spec.status CaseLaw2.Examples.plessyEffs 0 19540517 19540517 =\n      CaseLaw2.Spec.Status.unknown CaseLaw2.Spec.Unk.recognisedLater ∧\n    CaseLaw2.Spec.status CaseLaw2.Examples.plessyEffs 0 19920628 19920628 =\n        CaseLaw2.Spec.Status.unknown CaseLaw2.Spec.Unk.recognisedLater ∧\n      CaseLaw2.Spec.status CaseLaw2.Examples.plessyEffs 0 19920629 19920629 =\n        CaseLaw2.Spec.Status.neg CaseLaw2.Spec.Neg.overruled",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Examples.recognised_effect_needs_power",
+  "module": "LegalProofs.CaseLaw2.Examples",
+  "doc": "**No recognised effect without the checker's verdict and W's power**: the runner sets an event's recognition with `Cert.recogOf` from the recognised check; when W lacks power over X the check never recognises the row (`Cert.checkRecognised_needs_power`), the event carries no recognition and has no recognised effect. With `witness_row_no_effect`, such a row has no status effect at all.",
+  "statement": "CaseLaw2.Examples.recognised_effect_needs_power : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),\n  w.power = false →\n    ∀ (wn d : Nat) (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),\n      tr.recog = CaseLaw2.Cert.recogOf (CaseLaw2.Cert.checkRecognised c w) wn d →\n        CaseLaw2.Spec.recogEffects byHist wHist tr = []",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Examples.recognised_row_only_recog_effects",
+  "module": "LegalProofs.CaseLaw2.Examples",
+  "doc": "**A recognised row is never an explicit row**: the recognised check passes only on `explicit = 0`, so the event's `treatEffect` is none: its only effects are the two recognised ones.",
+  "statement": "CaseLaw2.Examples.recognised_row_only_recog_effects : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),\n  (CaseLaw2.Cert.checkRecognised c w).isRecognised = true →\n    ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),\n      tr.explicit = w.explicit → CaseLaw2.Spec.treatEffect byHist tr = none",
   "axioms": [
    "Classical.choice",
    "Quot.sound",
@@ -175,12 +1564,40 @@
   ]
  },
  {
+  "name": "CaseLaw2.Exec.histPower8_keeps",
+  "module": "LegalProofs.CaseLaw2.Exec.Verdicts",
+  "doc": "The claim only ever turns a refusal into power: every other verdict of `histPower` is kept.",
+  "statement": "CaseLaw2.Exec.histPower8_keeps : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision) (c : Bool),\n  CaseLaw2.Exec.histPower L b x ≠ some false → CaseLaw2.Exec.histPower8 L b x c = CaseLaw2.Exec.histPower L b x",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
   "name": "CaseLaw2.Exec.index_getD",
   "module": "LegalProofs.CaseLaw2.Exec.Index",
   "doc": "",
   "statement": "@CaseLaw2.Exec.index_getD : ∀ {α : Type u_1} {K : Type u_2} [inst : BEq K] [inst_1 : Hashable K] [LawfulBEq K]\n  [LawfulHashable K] (key : α → K) (l : List α) (k : K),\n  (CaseLaw2.Exec.index key l).getD k [] = List.filter (fun x => key x == k) l",
   "axioms": [
    "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Exec.oldCircuit_no_claim",
+  "module": "LegalProofs.CaseLaw2.Exec.Verdicts",
+  "doc": "**No claim, no change**: without the claim the authority is round 7's (`histPower`).",
+  "statement": "CaseLaw2.Exec.oldCircuit_no_claim : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision),\n  CaseLaw2.Exec.histPower8 L b x false = CaseLaw2.Exec.histPower L b x",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Exec.oldCircuit_sound",
+  "module": "LegalProofs.CaseLaw2.Exec.Verdicts",
+  "doc": "**Old circuits**: an admitted claimed row that the round-7 authority refuses satisfies one listed triple, with the acting court a federal court of appeals, the target a federal district or bankruptcy court, and date(B) known and before the triple's date.",
+  "statement": "CaseLaw2.Exec.oldCircuit_sound : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision),\n  CaseLaw2.Exec.histPower8 L b x true = some true →\n    CaseLaw2.Exec.histPower L b x ≠ some true →\n      CaseLaw2.Exec.histPower L b x = some false ∧\n        ∃ B X,\n          L.epochAt b.court b.date = some B ∧\n            L.epochAt x.court x.date = some X ∧\n              B.system = 0 ∧\n                B.tier = CaseLaw2.Tier.appellate ∧\n                  X.system = 0 ∧\n                    (X.tier = CaseLaw2.Tier.trial ∨ X.tier = CaseLaw2.Tier.special) ∧\n                      ∃ t,\n                        t ∈ CaseLaw2.Cert.oldCircuitRules ∧\n                          B.circuit = t.fst ∧ X.circuit = t.snd.fst ∧ 0 < b.date ∧ b.date < t.snd.snd",
+  "axioms": [
    "Quot.sound",
    "propext"
   ]
@@ -541,10 +1958,56 @@
   ]
  },
  {
+  "name": "CaseLaw2.Spec.Status.join_eq_neg_right",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "A join is negative only if a side is; when the left side is not negative, it is the right side.",
+  "statement": "@CaseLaw2.Spec.Status.join_eq_neg_right : ∀ {a b : CaseLaw2.Spec.Status} {n : CaseLaw2.Spec.Neg},\n  a.rank < 10 → a.join b = CaseLaw2.Spec.Status.neg n → b = CaseLaw2.Spec.Status.neg n",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
   "name": "CaseLaw2.Spec.Status.join_good",
   "module": "LegalProofs.CaseLaw2.Spec.Status",
   "doc": "",
   "statement": "CaseLaw2.Spec.Status.join_good : ∀ (a : CaseLaw2.Spec.Status), a.join CaseLaw2.Spec.Status.good = a",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.join_self",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Status.join_self : ∀ (a : CaseLaw2.Spec.Status), a.join a = a",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.join_unknown_neg",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Status.join_unknown_neg : ∀ (q : CaseLaw2.Spec.Unk) (n : CaseLaw2.Spec.Neg),\n  (CaseLaw2.Spec.Status.unknown q).join (CaseLaw2.Spec.Status.neg n) = CaseLaw2.Spec.Status.neg n",
+  "axioms": []
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.partially_rank",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "",
+  "statement": "CaseLaw2.Spec.Status.partially_rank : ∀ (s : CaseLaw2.Spec.Status), s.partially.rank < 10",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.Status.partially_rank_le",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "What a partial event says is good or `unknown partialScope`.",
+  "statement": "CaseLaw2.Spec.Status.partially_rank_le : ∀ (s : CaseLaw2.Spec.Status), s.partially.rank ≤ 1",
   "axioms": [
    "Quot.sound",
    "propext"
@@ -575,6 +2038,27 @@
   "doc": "",
   "statement": "CaseLaw2.Spec.Status.rank_zero_iff : ∀ (a : CaseLaw2.Spec.Status), a.rank = 0 ↔ a = CaseLaw2.Spec.Status.good",
   "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.adoptedSameTier_power",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "**An adopter of the target's dated tier holds the adopted decision as its own**: an adopter that is not a court of last resort, not the target's court, not above the target in its system, and of the target's dated tier or above, under a soft or no horizontal rule, has power (*In re Estate of Johnson*, 240 N.J. Super. 134 (App. Div. 1990)).",
+  "statement": "CaseLaw2.Spec.adoptedSameTier_power : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision) (dom? : Option CaseLaw2.Domain)\n  (B X : CaseLaw2.CourtEpoch),\n  L.epochAt b.court b.date = some B →\n    L.epochAt x.court x.date = some X →\n      x.date ≤ b.date →\n        B.scotus = false →\n          B.tier ≠ CaseLaw2.Tier.last →\n            B.court ≠ X.court →\n              ¬(B.system = X.system ∧ X.tier.rank < B.tier.rank) →\n                ((CaseLaw2.Spec.adoptionsOf L x).any fun x => x.adopter == b.court) = true →\n                  X.tier.rank ≤ B.tier.rank →\n                    L.rules.horizontal B.court B.system x.date = some CaseLaw2.HRule.none ∨\n                        L.rules.horizontal B.court B.system x.date = some CaseLaw2.HRule.soft →\n                      CaseLaw2.Spec.canChangeStatus L b x dom? = some (true, CaseLaw2.RuleId.sameCourtSoft)",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.adopted_lowerTier_noPower",
+  "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
+  "doc": "**No power below the target's dated tier**: a court ranked below the target's dated tier (the Supreme Court of the United States aside) has no power over it, whatever the adoption rows say (the Appellate Division under the Court of Errors and Appeals; Kentucky 1976).",
+  "statement": "CaseLaw2.Spec.adopted_lowerTier_noPower : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision)\n  (dom? : Option CaseLaw2.Domain) (B X : CaseLaw2.CourtEpoch),\n  L.epochAt b.court b.date = some B →\n    L.epochAt x.court x.date = some X →\n      B.scotus = false →\n        B.tier.rank < X.tier.rank → Option.map (fun x => x.fst) (CaseLaw2.Spec.canChangeStatus L b x dom?) = some false",
+  "axioms": [
+   "Quot.sound",
    "propext"
   ]
  },
@@ -653,12 +2137,108 @@
   ]
  },
  {
+  "name": "CaseLaw2.Spec.contrib_before_start",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "An effect that has not started contributes nothing.",
+  "statement": "CaseLaw2.Spec.contrib_before_start : ∀ (e : CaseLaw2.Spec.Effect) (k t u : Nat),\n  t < e.start → e.contrib k t u = CaseLaw2.Spec.Status.good",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.contrib_congr",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "Effects that agree on what they impose, on their scope and on being live contribute the same.",
+  "statement": "CaseLaw2.Spec.contrib_congr : ∀ (a b : CaseLaw2.Spec.Effect) (k t u : Nat),\n  a.eff = b.eff → a.scope = b.scope → a.live t u = b.live t u → a.contrib k t u = b.contrib k t u",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.contrib_join_dominated",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "Two effects with the same scope that are live together, the second at least as severe and neither `good`: the second decides.",
+  "statement": "CaseLaw2.Spec.contrib_join_dominated : ∀ (a b : CaseLaw2.Spec.Effect) (k t u : Nat),\n  a.scope = b.scope →\n    a.live t u = b.live t u →\n      a.eff.rank ≤ b.eff.rank →\n        a.eff ≠ CaseLaw2.Spec.Status.good →\n          b.eff ≠ CaseLaw2.Spec.Status.good → (a.contrib k t u).join (b.contrib k t u) = b.contrib k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.contrib_unknown_rank",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "An effect that imposes an unknown never contributes a negative.",
+  "statement": "CaseLaw2.Spec.contrib_unknown_rank : ∀ (e : CaseLaw2.Spec.Effect) (r : CaseLaw2.Spec.Unk),\n  e.eff = CaseLaw2.Spec.Status.unknown r → ∀ (k t u : Nat), (e.contrib k t u).rank < 10",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.demoted_contrib_le",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "A demoted effect contributes `good` or `unknown partialScope`.",
+  "statement": "CaseLaw2.Spec.demoted_contrib_le : ∀ (e : CaseLaw2.Spec.Effect) (s : CaseLaw2.Scope),\n  e.scope = CaseLaw2.Spec.demote s → ∀ (k t u : Nat), (e.contrib k t u).rank ≤ 1",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.demoted_never_neg",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**A demoted effect never makes anything negative** (DESIGN5 §3.3): operative words that do not dispose of the case as a whole leave the target partly negative (`unknown partialScope`) at most.",
+  "statement": "CaseLaw2.Spec.demoted_never_neg : ∀ (e : CaseLaw2.Spec.Effect) (s : CaseLaw2.Scope),\n  e.scope = CaseLaw2.Spec.demote s → ∀ (k t u : Nat), (e.contrib k t u).rank < 10",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.demoted_status_le",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "So the status of a list of demoted effects is `good` or `unknown partialScope` (rank at most 1).",
+  "statement": "CaseLaw2.Spec.demoted_status_le : ∀ (l : List CaseLaw2.Spec.Effect),\n  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → ∃ s, e.scope = CaseLaw2.Spec.demote s) →\n    ∀ (k t u : Nat), (CaseLaw2.Spec.status l k t u).rank ≤ 1",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.demoted_status_never_neg",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "So the status of a list of demoted effects is never negative.",
+  "statement": "CaseLaw2.Spec.demoted_status_never_neg : ∀ (l : List CaseLaw2.Spec.Effect),\n  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → ∃ s, e.scope = CaseLaw2.Spec.demote s) →\n    ∀ (k t u : Nat), (CaseLaw2.Spec.status l k t u).rank < 10",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
   "name": "CaseLaw2.Spec.division_cannot_overrule",
   "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
   "doc": "Hunt H6, *M.A.P. v. Ryan*: where a court of last resort has a strong court-level horizontal row, a division (a panel) of it has no power over the court's own decision; only an en banc–equivalent bench has.",
   "statement": "CaseLaw2.Spec.division_cannot_overrule : ∀ (L : CaseLaw2.Lookups) (X B : CaseLaw2.CourtEpoch) (b x : CaseLaw2.Decision),\n  B.court = X.court →\n    L.rules.horizontalCourt X.court x.date = some CaseLaw2.HRule.strong →\n      b.bench = some CaseLaw2.Bench.panel ∨ b.bench = some CaseLaw2.Bench.division →\n        CaseLaw2.Spec.lastResortBench L X B b x = (false, CaseLaw2.RuleId.strongNeedsEnBanc)",
   "axioms": [
    "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.doctrine_effects_demoted",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**Every effect of a doctrine row has a demoted scope.**",
+  "statement": "CaseLaw2.Spec.doctrine_effects_demoted : ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)\n  (e : CaseLaw2.Spec.Effect), e ∈ CaseLaw2.Spec.doctrineEffects byHist tr → ∃ s, e.scope = CaseLaw2.Spec.demote s",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.doctrine_never_neg",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**A doctrine row never makes a status negative**: with any other effects, a negative status is theirs; alone, the row gives at most `unknown partialScope` (DESIGN7 §2.4).",
+  "statement": "CaseLaw2.Spec.doctrine_never_neg : ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)\n  (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  (∀ (n : CaseLaw2.Spec.Neg),\n      CaseLaw2.Spec.status (CaseLaw2.Spec.doctrineEffects byHist tr ++ l) k t u = CaseLaw2.Spec.Status.neg n →\n        CaseLaw2.Spec.status l k t u = CaseLaw2.Spec.Status.neg n) ∧\n    (CaseLaw2.Spec.status (CaseLaw2.Spec.doctrineEffects byHist tr) k t u = CaseLaw2.Spec.Status.good ∨\n      CaseLaw2.Spec.status (CaseLaw2.Spec.doctrineEffects byHist tr) k t u =\n        CaseLaw2.Spec.Status.unknown CaseLaw2.Spec.Unk.partialScope)",
+  "axioms": [
    "Quot.sound",
    "propext"
   ]
@@ -680,6 +2260,16 @@
   "statement": "CaseLaw2.Spec.erie_one_directional : ∀ (L : CaseLaw2.Lookups) (x : CaseLaw2.Decision) (h : CaseLaw2.Holding) (p : Bool)\n  (q : CaseLaw2.Spec.Query) (S : CaseLaw2.CourtEpoch),\n  CaseLaw2.Spec.sourceEpoch L x p = some S →\n    CaseLaw2.Spec.adoptionsOf L x = [] →\n      ∀ (r : CaseLaw2.Force × List CaseLaw2.RuleId),\n        CaseLaw2.Spec.force L x h p q = some r →\n          (S.system ≠ 0 →\n              (∃ d, h.domain = some d ∧ d.federal = true) → q.dst.system = 0 → r.fst ≠ CaseLaw2.Force.binding) ∧\n            (S.system = 0 →\n              (∃ s, h.domain = some (CaseLaw2.Domain.stateLaw s)) → q.dst.system ≠ 0 → r.fst ≠ CaseLaw2.Force.binding)",
   "axioms": [
    "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.explicit_recognised_agree_from_witness",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**An explicit row and a recognised row for the same pair agree from date(W)**: the same by-decision, target, kind, scope and temporal reach, once as the overruling court's own words and once as a later court's recognition, give the same status on every question date from date(W) on, while neither Y nor W has lapsed.",
+  "statement": "CaseLaw2.Spec.explicit_recognised_agree_from_witness : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)\n  (r : CaseLaw2.Recog),\n  tr.explicit = true →\n    tr.kind.changesStatus = true →\n      r.power = true →\n        tr.date ≤ r.date →\n          CaseLaw2.Spec.lapseOfDecision byHist tr.date = none →\n            CaseLaw2.Spec.lapseOfDecision wHist r.date = none →\n              ∀ (k t u : Nat),\n                r.date ≤ t →\n                  CaseLaw2.Spec.status (CaseLaw2.Spec.treatEffects byHist tr) k t u =\n                    CaseLaw2.Spec.status\n                      (CaseLaw2.Spec.recogEffects byHist wHist\n                        { id := tr.id, by_ := tr.by_, target := tr.target, date := tr.date, kind := tr.kind,\n                          scope := tr.scope, temporal := tr.temporal, explicit := false, powerKnown := tr.powerKnown,\n                          recog := some r })\n                      k t u",
+  "axioms": [
    "Quot.sound",
    "propext"
   ]
@@ -1086,6 +2676,93 @@
   ]
  },
  {
+  "name": "CaseLaw2.Spec.recogEffects_shape",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "The shape of a recognised row's effects: none, or two: the first imposes an unknown, the second starts on date(W).",
+  "statement": "CaseLaw2.Spec.recogEffects_shape : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent) (r : CaseLaw2.Recog),\n  tr.recog = some r →\n    CaseLaw2.Spec.recogEffects byHist wHist tr = [] ∨\n      ∃ e1 e2 q,\n        CaseLaw2.Spec.recogEffects byHist wHist tr = [e1, e2] ∧\n          e1.eff = CaseLaw2.Spec.Status.unknown q ∧ e2.start = r.date",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.recognisedLater_not_citesOverruled",
+  "module": "LegalProofs.CaseLaw2.Spec.Findings",
+  "doc": "**Between the overruling and its recognition a citation is at risk, not \"cites overruled\"** (round 5): a citation whose cited status is `unknown recognisedLater` is never reported as citing an overruled, vacated or withdrawn decision.",
+  "statement": "CaseLaw2.Spec.recognisedLater_not_citesOverruled : ∀ (c : CaseLaw2.Spec.CiteFacts),\n  CaseLaw2.Spec.citedRecognisedLater c = true →\n    CaseLaw2.Spec.citesOverruled c = false ∧\n      CaseLaw2.Spec.citesVacated c = false ∧ CaseLaw2.Spec.citesWithdrawn c = false",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.recognised_needs_power",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**Never without W's power**: a row whose recognising court lacks power over the target has no effect.",
+  "statement": "CaseLaw2.Spec.recognised_needs_power : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)\n  (r : CaseLaw2.Recog), tr.recog = some r → r.power = false → CaseLaw2.Spec.recogEffects byHist wHist tr = []",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.recognised_neg_from_witness",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**The timeline, from W**: with verified power, on the whole decision, while Y and W stand, the status from date(W) is negative: overruled (abrogated for an `abrogated` row).",
+  "statement": "CaseLaw2.Spec.recognised_neg_from_witness : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)\n  (r : CaseLaw2.Recog),\n  tr.recog = some r →\n    tr.explicit = false →\n      tr.kind.changesStatus = true →\n        r.power = true →\n          tr.powerKnown = true →\n            tr.scope = CaseLaw2.Scope.all →\n              tr.date ≤ r.date →\n                CaseLaw2.Spec.lapseOfDecision byHist tr.date = none →\n                  CaseLaw2.Spec.lapseOfDecision wHist r.date = none →\n                    ∀ (k t u : Nat),\n                      r.date ≤ t →\n                        CaseLaw2.Spec.temporalConductFrom tr.temporal tr.date ≤ u →\n                          CaseLaw2.Spec.status (CaseLaw2.Spec.recogEffects byHist wHist tr) k t u =\n                            CaseLaw2.Spec.Status.neg\n                              (if (tr.kind == CaseLaw2.TKind.abrogated) = true then CaseLaw2.Spec.Neg.abrogated\n                              else CaseLaw2.Spec.Neg.overruled)",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.recognised_never_neg_before_witness",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**Never negative before date(W) on a recognised row**: if the status is negative on a question date before the recognising decision, the negative comes from the other effects, not from the recognised row.",
+  "statement": "CaseLaw2.Spec.recognised_never_neg_before_witness : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)\n  (r : CaseLaw2.Recog),\n  tr.recog = some r →\n    ∀ (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n      t < r.date →\n        ∀ (n : CaseLaw2.Spec.Neg),\n          CaseLaw2.Spec.status (CaseLaw2.Spec.recogEffects byHist wHist tr ++ l) k t u = CaseLaw2.Spec.Status.neg n →\n            CaseLaw2.Spec.status l k t u = CaseLaw2.Spec.Status.neg n",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.recognised_never_weakens",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**A recognised row never weakens an existing status**: with the row, the status is at least as severe.",
+  "statement": "CaseLaw2.Spec.recognised_never_weakens : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)\n  (l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  (CaseLaw2.Spec.status l k t u).rank ≤\n    (CaseLaw2.Spec.status (CaseLaw2.Spec.recogEffects byHist wHist tr ++ l) k t u).rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.recognised_not_explicit",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**A row is explicit or recognised, never both**: an explicit row has no recognised effects (its effects are `treatEffects`; with `inferred_treatment_no_effect` each row has one source of effects at most).",
+  "statement": "CaseLaw2.Spec.recognised_not_explicit : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),\n  tr.explicit = true → CaseLaw2.Spec.recogEffects byHist wHist tr = []",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.recognised_rank_before_witness",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "Before date(W) the recognised effects are not negative.",
+  "statement": "CaseLaw2.Spec.recognised_rank_before_witness : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)\n  (r : CaseLaw2.Recog),\n  tr.recog = some r →\n    ∀ (k t u : Nat), t < r.date → (CaseLaw2.Spec.status (CaseLaw2.Spec.recogEffects byHist wHist tr) k t u).rank < 10",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.recognised_unknown_between",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**The timeline, between Y and W**: with verified power, on the whole decision, while Y stands, the status from date(Y) up to the day before date(W) is `unknown recognisedLater`.",
+  "statement": "CaseLaw2.Spec.recognised_unknown_between : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)\n  (r : CaseLaw2.Recog),\n  tr.recog = some r →\n    tr.explicit = false →\n      tr.kind.changesStatus = true →\n        r.power = true →\n          tr.powerKnown = true →\n            tr.scope = CaseLaw2.Scope.all →\n              CaseLaw2.Spec.lapseOfDecision byHist tr.date = none →\n                ∀ (k t u : Nat),\n                  tr.date ≤ t →\n                    t < r.date →\n                      CaseLaw2.Spec.temporalConductFrom tr.temporal tr.date ≤ u →\n                        CaseLaw2.Spec.status (CaseLaw2.Spec.recogEffects byHist wHist tr) k t u =\n                          CaseLaw2.Spec.Status.unknown CaseLaw2.Spec.Unk.recognisedLater",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
   "name": "CaseLaw2.Spec.relation_fed_on_state",
   "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
   "doc": "",
@@ -1274,6 +2951,36 @@
   ]
  },
  {
+  "name": "CaseLaw2.Spec.status_append",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "The status of two lists of effects together is the join of their statuses.",
+  "statement": "CaseLaw2.Spec.status_append : ∀ (a l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  CaseLaw2.Spec.status (a ++ l) k t u = (CaseLaw2.Spec.status a k t u).join (CaseLaw2.Spec.status l k t u)",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.status_append_comm",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**Order independence across groups of effects** (round 5): the effects of a recognised row, of an explicit row and of anything else may be taken in any order (a corollary of `status_perm`).",
+  "statement": "CaseLaw2.Spec.status_append_comm : ∀ (a b l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  CaseLaw2.Spec.status (a ++ b ++ l) k t u = CaseLaw2.Spec.status (b ++ a ++ l) k t u",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.status_append_rank_le",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "Adding effects never makes a status less severe.",
+  "statement": "CaseLaw2.Spec.status_append_rank_le : ∀ (a l : List CaseLaw2.Spec.Effect) (k t u : Nat),\n  (CaseLaw2.Spec.status l k t u).rank ≤ (CaseLaw2.Spec.status (a ++ l) k t u).rank",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
   "name": "CaseLaw2.Spec.status_cons",
   "module": "LegalProofs.CaseLaw2.Spec.Status",
   "doc": "",
@@ -1364,6 +3071,25 @@
   ]
  },
  {
+  "name": "CaseLaw2.Spec.treatEffect_scope",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "A treatment's effect has the treatment's scope.",
+  "statement": "CaseLaw2.Spec.treatEffect_scope : ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent) (e : CaseLaw2.Spec.Effect),\n  CaseLaw2.Spec.treatEffect byHist tr = some e → e.scope = tr.scope",
+  "axioms": [
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.treatEffects_scope",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "Every effect of a treatment (the effect, and its revival) has the treatment's scope.",
+  "statement": "CaseLaw2.Spec.treatEffects_scope : ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent) (e : CaseLaw2.Spec.Effect),\n  e ∈ CaseLaw2.Spec.treatEffects byHist tr → e.scope = tr.scope",
+  "axioms": [
+   "Quot.sound",
+   "propext"
+  ]
+ },
+ {
   "name": "CaseLaw2.Spec.trial_never_binding",
   "module": "LegalProofs.CaseLaw2.Spec.AuthorityThms",
   "doc": "§9 22(d), F13/§4.4: a trial court's decision (not promoted, not adopted) is at most persuasive for every court.",
@@ -1380,6 +3106,15 @@
   "statement": "CaseLaw2.Spec.unionBase_sub_lineBase : ∀ (inLine : Nat → Bool) (t : Nat)\n  (hs : List (CaseLaw2.Spec.Held CaseLaw2.Spec.Horty.FCase)) (c : CaseLaw2.Spec.Horty.FCase),\n  c ∈ CaseLaw2.Spec.heldUnion t hs → c ∈ CaseLaw2.Spec.lineBase inLine t hs",
   "axioms": [
    "Quot.sound",
+   "propext"
+  ]
+ },
+ {
+  "name": "CaseLaw2.Spec.witness_without_claim_no_effect",
+  "module": "LegalProofs.CaseLaw2.Spec.Recognised",
+  "doc": "**A witness row without recognition has no status effect**: the round-4 \"at risk\" tier is unchanged.",
+  "statement": "CaseLaw2.Spec.witness_without_claim_no_effect : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),\n  tr.recog = none → CaseLaw2.Spec.recogEffects byHist wHist tr = []",
+  "axioms": [
    "propext"
   ]
  }

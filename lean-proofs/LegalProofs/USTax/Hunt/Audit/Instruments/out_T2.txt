@@ -1,0 +1,45 @@
+T2 open: hold FundA: tax $(some 42806)
+T2 closed: hold FundA: tax $(some 42806)
+T2 open: PLAN: tax $(some 41038)
+T2 closed: PLAN: tax $(some 42806)
+T2 closed: hold 201 days: tax $(some 41038)
+T2 closed: sold day 162, no wash: tax $(some 42806)
+T2 closed: sold day 130 into FundA, GainFund rebought day 131, sold day 162: tax $(some 42806)
+T2 search, out by day 162, open: positions 2570, finals 144, plain $42806, best $41038, saves $1768
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 131: buy GainFund
+     day 131: sell GainFund (bought day 129)
+     day 162: buy DivStock
+     day 162: sell GainFund (bought day 131)
+T2 search, out by day 162, closed: positions 2570, finals 144, plain $42806, best $42275, saves $531
+     day 129: buy DivStock
+     day 129: sell FundA (bought day 5)
+     day 330: buy FundA
+     day 330: sell DivStock (bought day 129)
+T2 search, open: positions 3706, finals 269, plain $42806, best $41038, saves $1768
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 330: buy DivStock
+     day 330: sell GainFund (bought day 129)
+T2 search, closed: positions 3739, finals 277, plain $42806, best $41038, saves $1768
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 330: buy DivStock
+     day 330: sell GainFund (bought day 129)
+C1 open: positions 3723, finals 283, plain $42806, best $41038, saves $1768
+     day 100: sell FundA (bought day 5)
+     day 100: buy GainFund
+     day 310: buy DivStock
+     day 310: sell GainFund (bought day 100)
+C1 closed: positions 3756, finals 291, plain $42806, best $41038, saves $1768
+     day 100: sell FundA (bought day 5)
+     day 100: buy GainFund
+     day 310: buy DivStock
+     day 310: sell GainFund (bought day 100)
+A1 open: positions 52150, finals 19921, plain $53516, best $49789, saves $3727
+     day 150: buy FundB
+     day 150: sell FundA (bought day 5)
+A1 closed: positions 52150, finals 19921, plain $53516, best $49789, saves $3727
+     day 150: buy FundB
+     day 150: sell FundA (bought day 5)

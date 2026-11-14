@@ -1,0 +1,46 @@
+{
+ "asof": 20101119,
+ "blind": true,
+ "build": {
+  "source": "round10/SEALED_LOG.md (compare.py --split sealed on round10/out/v10d)"
+ },
+ "court": "federal",
+ "dataset": "shepardized_coa",
+ "generated": "2026-11-14T05:07:03+00:00",
+ "label": "round10",
+ "link": {
+  "fail_reasons": {},
+  "linked": 9897,
+  "n_items": 10105,
+  "note": "sealed-half counts from round6/history/split/SPLIT.md (no per-case sealed file is read)"
+ },
+ "metrics": {
+  "clean": {
+   "hi": 0.9995059669651924,
+   "k": 9577,
+   "lo": 0.9982164709942936,
+   "n": 9586,
+   "p": 0.999061130815773
+  },
+  "precision": {
+   "hi": 0.9601657132408945,
+   "k": 128,
+   "lo": 0.8717490240345562,
+   "n": 138,
+   "p": 0.927536231884058
+  },
+  "recall": {
+   "hi": 0.5690775879756362,
+   "k": 128,
+   "lo": 0.4465570946027486,
+   "n": 252,
+   "p": 0.5079365079365079
+  }
+ },
+ "notes": "Reused from the round-10 lead's single logged run. Fifth use of this half.",
+ "primary": "recall",
+ "row_label": "Shepardized Courts of Appeals: decision reversed/vacated/withdrawn (sealed half, used 5 times)",
+ "split": "sealed",
+ "tests": "same-case",
+ "use_note": "sealed half, 5th use"
+}

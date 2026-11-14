@@ -1,0 +1,53 @@
+{
+ "asof": null,
+ "blind": true,
+ "build": {
+  "source": "round12/SEALED_LOG.md + round12/results/v12a/sealed/fresh_test.txt"
+ },
+ "court": "supreme",
+ "dataset": "gold_fresh",
+ "generated": "2026-11-14T07:47:36+00:00",
+ "label": "round12",
+ "link": {
+  "fail_reasons": {},
+  "linked": 127,
+  "n_items": 127,
+  "note": "key pairs are resolved by construction (GOLD_FRESH.md: 449 of 451 source rows scoreable; the 2 unresolved rows are outside both halves)"
+ },
+ "metrics": {
+  "precision": {
+   "hi": 0.8337107264667001,
+   "k": 57,
+   "lo": 0.6422324806394772,
+   "n": 76,
+   "p": 0.75
+  },
+  "recall": {
+   "hi": 0.6869512217439016,
+   "k": 77,
+   "lo": 0.5194053890035784,
+   "n": 127,
+   "p": 0.6062992125984252
+  },
+  "recall_strict": {
+   "hi": 0.3339951612177421,
+   "k": 32,
+   "lo": 0.1845060803714713,
+   "n": 127,
+   "p": 0.25196850393700787
+  },
+  "recall_strict_attributed": {
+   "hi": 0.5355580610240079,
+   "k": 57,
+   "lo": 0.365085052319798,
+   "n": 127,
+   "p": 0.44881889763779526
+  }
+ },
+ "notes": "Reused from the round12 lead's single logged run. Use 8 of this half.",
+ "primary": "recall",
+ "row_label": "Fresh overruling lists, Supreme Court (sealed half, used 8 times)",
+ "split": "sealed",
+ "tests": "overruling",
+ "use_note": "sealed half, 8th use"
+}

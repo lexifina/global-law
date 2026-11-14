@@ -1,0 +1,57 @@
+<h2 id="limits">What this does not show</h2>
+
+<h3>How many overrulings are announced? The measured shares</h3>
+<p>For the open half of the fresh lists every pair was sorted by what the opinions say: the 52 pairs the round-4 model
+already had from the overruling court's own words, and the 113 it missed, each read by a Claude reader
+(<code>round5/diag2/dev_misses.tsv</code>). Base: 165 pairs from four published lists of overruled Supreme Court
+decisions. The sealed half was not read, so there is no such table for it.</p>
+<div class="tw"><table>
+<thead><tr><th>What the texts contain</th><th>Pairs</th><th>Share of 165</th><th>In the frozen build</th></tr></thead>
+<tbody>
+<tr><td>The overruling opinion says it, with a term of art (overrule, disapprove …)</td><td>84</td><td>50.9%</td><td>50 overruled from the overruling date, 13 from a later Court's date, 2 by another case, 10 partly negative, 9 missed by the reader</td></tr>
+<tr><td>The overruling opinion acts on the named case in other words ("not to be followed", "no longer controlling", "repudiated to the extent …")</td><td>30</td><td>18.2%</td><td>10 overruled from a later Court's date, 9 partly negative, 11 nothing</td></tr>
+<tr><td>The overruling opinion speaks only of a doctrine or a line of cases, or holds the contrary without a verb on the case; no later Court sentence</td><td>20</td><td>12.1%</td><td>18 nothing, 1 partly negative, 1 by another case</td></tr>
+<tr><td>The overruling opinion has no act on the case; a later Court says "X was overruled by Y"</td><td>9</td><td>5.5%</td><td>7 overruled from the later Court's date, 2 partly negative</td></tr>
+<tr><td>Nothing in words, in the overruling opinion or later</td><td>4</td><td>2.4%</td><td>4 nothing</td></tr>
+<tr><td>The list's entry looks wrong (same case on rehearing, the Court credits another decision, the opinion says nothing is overruled)</td><td>18</td><td>10.9%</td><td>15 nothing, 2 by another case, 1 partly negative</td></tr>
+</tbody></table></div>
+<p>Read plainly: on these lists about half of the overrulings are announced with the word. Another fifth are announced
+by the overruling court in other words. For about a fifth (33 of 165, the third to fifth rows) the overruling court
+never acts on the named case in words at all; for most of those no later Court sentence was found either. A tenth of
+the entries are doubtful as entries. A later Court sentence naming both cases exists for 44 of the 113 pairs the
+round-4 model missed, which is why the recognised class moves the lenient figure and nothing else does.</p>
+<p>The earlier, burned figure points the same way from another list: of the 278 decisions the Supreme Court Database
+flags, 66 (24%) have no overruling words in the overruling opinion; that was a third of the 196 the model then
+missed. Read in this round, 10 of the 66 are recognised by a later Court in words, 4 have the Court's own operative
+verb on the case, and 35 have nothing the model could quote.</p>
+
+<h3>Limits of the tests</h3>
+<ul>
+<li><b>The fresh lists are fresh in compilation, not in content.</b> 91% of the pairs are also in an edition of the
+Constitution Annotated and 96% have a Supreme Court Database flag. On the 27 pairs outside the Constitution
+Annotated the build gains one pair in each half. The honest claim is that the split was never tuned on, not that the
+content is new.</li>
+<li><b>Strict recall did not move and cannot.</b> The model dates a recognised overruling from the later court's
+statement. Lists date it from the overruling decision. Whoever needs "overruled since 1954" has to read the model's
+"unknown: recognised later" interval as that; the model will not say it.</li>
+<li><b>The date of recognition is the date of the first sentence the reader found</b>, not of the first sentence that
+exists. <i>Plessy</i> shows as overruled from 2022; a fuller read of the 1955–2021 opinions might move that
+earlier. About 2,350 looser Supreme Court passages were screened by a smaller model first, which may have dropped
+true statements.</li>
+<li><b>Lists and footnotes.</b> The <i>Payne v. Tennessee</i> footnote supplies 12 of the 30 new open-half hits. Its
+introducing sentence says "in whole or in part"; entries not marked "in part" were read as whole.</li>
+<li><b>The audits are by Claude agents, on about 70 rows per class, with no working decoys.</b> Intervals are wide:
+the lower bound for whole-case recognised rows is 82.5% when the extent is also required.</li>
+<li><b>The opinion-part map</b> cannot tell an opinion announcing the judgment for one Justice from the opinion of
+the Court. One such row was found (through the open half) and removed; others may remain.</li>
+<li><b>Behaviour is correlation with matched controls.</b> Recognised cases are heavily cited cases; the drop is
+measured from the overruling decision's date, which is not the date the model changes the status.</li>
+<li><b>Operative words are measured, not installed.</b> 665 rows were certified; the audit put them at 79% (part)
+and 27% (whole), so none changes a status. The earlier rounds' rows with such wording (2,315 rows, among them 26 of
+the 141 Supreme Court Database hits) were not re-audited in this round.</li>
+<li><b>Two known differences between Lean and the reference remain</b>: an unknown date read as a real day (13 of
+300 generated universes; no status key), and the power of a successor court that is not a court of last resort (2
+real rows; Lean refuses them). The fuzzer was not extended to the new input table.</li>
+<li><b>The frozen build is a staged data folder</b> (<code>round5/stage/final</code>), not yet installed over the
+live tables; nothing was committed.</li>
+</ul>

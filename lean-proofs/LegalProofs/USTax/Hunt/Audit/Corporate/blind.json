@@ -1,0 +1,45 @@
+{
+  "name": "Corporate",
+  "positions": 2104,
+  "terminal_positions": 13,
+  "baseline": {"moves": ["sell all five fifths of C in one sale"], "taxable_gain": 25000000, "excluded": 15000000, "value": 5950000},
+  "best": {
+    "moves": [
+      "form N; transfer 1 fifth of C to N for N stock (s.351 applies; N holds 20% of C, so s.1202(h)(4)(D) fails: N unit is not QSBS, basis 0)",
+      "sell that N unit for $8,000,000 (fully taxable; a buyer now holds N stock)",
+      "transfer 2 fifths of C to N for N stock (A holds 2 of 3 N units = 66.7% < 80%: s.351 does not apply; taxable exchange of C QSBS, $16,000,000 eligible gain on C stock; N units take a fair-value basis)",
+      "transfer the last 2 fifths of C to N for N stock (A holds 4 of 5 N units = 80%: s.351 applies; N holds 100% of C: s.1202(h)(4)(A) treats these 2 N units as QSBS)",
+      "sell the 2 fair-value-basis N units for $16,000,000 (no gain)",
+      "sell the 2 QSBS N units for $16,000,000 ($16,000,000 eligible gain on N stock)",
+      "all in one taxable year (either year)"
+    ],
+    "taxable_gain": 10000000,
+    "excluded": 30000000,
+    "value": 2380000,
+    "gain": 3570000
+  },
+  "runners_up": [
+    {"family": "transfer 4 fifths to N (control of C, N stock is QSBS), sell the kept fifth of C and all N stock; 3 terminal positions incl. variants", "taxable_gain": 17000000, "excluded": 23000000, "value": 4046000, "gain": 1904000},
+    {"family": "mixed transfers where only one N unit qualifies and C gain uses its own limit", "taxable_gain": 24000000, "excluded": 16000000, "value": 5712000, "gain": 238000},
+    {"family": "direct sales of C in one year or split over two years; or all five fifths into N; or N never controlling C", "taxable_gain": 25000000, "excluded": 15000000, "value": 5950000, "gain": 0}
+  ],
+  "judgment_calls": [
+    "s.1202(b) per-issuer limit read literally: N stock treated as QSBS under (h)(4)(A) is 'stock issued by' N, so it has its own $15,000,000 limit separate from C's. This drives every plan that beats the baseline.",
+    "A s.351 exchange that fails the 80% control test is a taxable 'exchange' of C stock whose gain is eligible gain on C stock under s.1202(a)/(b)(2); the N stock received takes a fair-value basis (s.358 not applicable; cost basis assumed, s.1012 not on my list).",
+    "Control under s.351(a) is tested mechanically immediately after each transfer, counting N stock already sold to the buyer as held by a non-transferor; successive transfers are treated as separate transactions.",
+    "s.1202(h)(4)(D) tested per transfer: N must hold at least 4 fifths of C immediately after that transfer; N units from earlier transfers that failed it stay non-QSBS.",
+    "N stock under (h)(4)(A) is taken as satisfying (c)(2)(A) active business (look-through (e)(5)(A), N holds >50% of C) for the whole tacked holding period, including time before N existed.",
+    "Rate: no 'section 1202 gain' under s.1(h)(7) because the percentage limitation is 100%; gain over the per-issuer limit taxed at 20% + 3.8%. s.1411 threshold amount ignored (flat 3.8% on included gain); excluded gain is not net investment income (s.1411(c)(1)(A)(iii)).",
+    "One N unit = N stock issued for one fifth of C, worth $8,000,000; N stock sold one unit at a time; the buyer pays fair value with no discount for a minority or holding-company stake.",
+    "Move list read as allowing more than one transfer to the same new corporation, at different times; only one new corporation."
+  ],
+  "silences": [
+    "s.1202(b) does not say that stock treated as QSBS under (h)(4) shares the per-issuer limit of the corporation whose stock was exchanged.",
+    "s.1202(k) authorises regulations against split-ups and shell corporations; no such rule is in the text read, so none is encoded.",
+    "s.351(a) says 'immediately after' and nothing about pre-arranged sales, step transactions or integrated plans; none encoded.",
+    "s.1202 has no cross-reference to s.1411; s.1411 reaches gain only 'to the extent taken into account in computing taxable income'.",
+    "s.1202(i)(1) covers property 'other than money or stock'; it is silent on stock-for-stock exchanges, so no fair-value basis floor was applied to N stock.",
+    "s.1202(h)(4)(B) cap (gain built in at transfer) equals the whole gain here because value does not change; whether N is itself a qualified small business at transfer does not matter to the result.",
+    "s.1202(b)(5) inflation adjustment not applied: no indexed figure was given, $15,000,000 used for both years."
+  ]
+}

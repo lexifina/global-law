@@ -1,0 +1,43 @@
+{
+  "name": "Household",
+  "plan": "H6 unmarried: two co-adopters split $20,000 of adoption expenses 50/50 and each take the $5,000 refundable part of the adoption credit, section 23(a)(4)",
+  "claimed_gain": 6951,
+  "tests": [
+    {"id": "T1", "result": "partial", "detail": "The per-return $5,000 survives the strict reading, but with the section 23(c) carryforward valued the 50/50 plan is worse than one payer and the best split gains 0 to 574 nominal over the best one-payer filing.",
+     "numbers": {"year1_vs_default": 6951, "year1_vs_best_one_payer": 5000, "plan_vs_B_pays_all_six_year": -3066, "plan_vs_A_pays_all_B_claims_six_year": -3640, "best_split_vs_best_one_payer_six_year_nominal": 0, "same_A_keeps_child": 574, "pv4_gain": 635, "pv4_gain_A_keeps_child": 1252, "with_retirement_moves_nominal": 3934, "plans_searched": 21210, "gain_2026_amounts_vs_default": 7071}},
+    {"id": "T2", "result": "partial", "detail": "Adding (a)(4) to section 23(i) leaves both baselines unmoved and removes the $5,000, but the adopt family still shows 1,951 from B's tax absorbing credit the default strands on A.",
+     "numbers": {"baseline_unmarried": -5799, "baseline_married": -5000, "best_before": 8527, "best_after": 3527, "adopt_family_after": 1951, "adopt_family_after_carryforward_valued": 0}},
+    {"id": "T3", "result": "pass", "detail": "Without the adopt move the plan is gone; with only the adopt move it is found at 6,951; claim, keep, retirement and filing moves are decoration.",
+     "numbers": {"no_adopt_best": 3527, "no_adopt_plans": 210, "adopt_only_gain": 6951, "adopt_only_plans": 3}},
+    {"id": "T4", "result": "partial", "detail": "Without (a)(4) the $5,000 disappears but the search still returns 1,951 for the adopt family (payer choice under a model that drops the carryforward).",
+     "numbers": {"default_old_law": -799, "adopt_family_old_law": 1951, "split_vs_one_payer_carryforward_valued": 0}},
+    {"id": "T5", "result": "pass", "detail": "No conservation, limit, paid-amount, nonrefundable or refundable-cap violation in 39,706 plans and 11 stressed variants; two adults with no income get $10,000, which the text allows.",
+     "numbers": {"plans": 39706, "violations": 0, "max_refundable_unmarried": 10000, "max_refundable_married": 5000, "min_net_no_refundable_rule": 650}},
+    {"id": "T6", "result": "pass", "detail": "Plan, baselines, closed-gap result and six-year figures replay by decide; under the closed rule no move sequence from the default, for any facts, exceeds $5,000 refundable; axioms propext and Quot.sound only.",
+     "numbers": {"theorems": 36, "sorryAx": 0, "ofReduceBool": 0, "own_axioms": 0}},
+    {"id": "T7", "result": "pass", "detail": "Python from the statute gives the same figures as the Lean, including the six-year ones.",
+     "numbers": {"default": -5799, "plan": -12750, "gain": 6951, "married": -5000, "plan_six_year": -18434, "B_pays_all_six_year": -21500}},
+    {"id": "T8", "result": "pass", "detail": "No guidance divides the $5,000 between unmarried co-adopters and no writing found describes the plan; the IRS does read the $5,000 as per eligible child.",
+     "numbers": {"searches": 4, "fetches": 8}}
+  ],
+  "divergences": [
+    "section 23(c) carryforward counted as lost (stated); the claimed figure depends on it",
+    "default has the adult with no tax left after section 24 pay all the expenses, adding 1,951 to the gain",
+    "adopt move offers only 0/50/100 percent; 50/50 strands 3,640 on A",
+    "section 23 amounts are 2025 ($5,000, $17,280) in a file labelled 2026 (reported 2026: $5,120, $17,670)",
+    "section 23(a)(2) year rule not modelled; expenses allowed in two years reach (a)(4) twice for any filer",
+    "sharing of the (b)(1) limit rests on Notice 97-9 and form instructions, not regulations; limit share tied to payment share where the instructions allow any agreed division",
+    "Facts.adoption, Plan.adoptA, Move.adopt, adoptShare and household H6 exist only for this plan",
+    "findings file attributes 'divide as they agree' to Notice 97-9; it is in the Form 8839 instructions"
+  ],
+  "authority": [
+    {"source": "Instructions for Form 8839 (2025), line 2", "url": "https://www.irs.gov/instructions/i8839", "effect": "supports", "quote": "the $17,280 limit must be divided between the two of you. You can divide it in any way you both agree."},
+    {"source": "Instructions for Form 8839 (2025), What's New and line 13", "url": "https://www.irs.gov/instructions/i8839", "effect": "silent", "quote": "The amount of the refundable credit portion is determined separately for each eligible child."},
+    {"source": "Notice 97-9, 1997-1 C.B. 365, section I.D.1", "url": "https://webharvest.gov/peth04/20041019065003/http:/www.irs.gov/pub/irs-utl/adoptionnotices.pdf", "effect": "silent", "quote": "an unmarried couple that seeks to adopt an eligible child must apply the $5,000 (or $6,000) limitation to the couple's combined qualified adoption expenses."},
+    {"source": "IRS FS-2026-03 (Feb. 2026), Topic A Q2", "url": "https://www.irs.gov/node/156801", "effect": "silent", "quote": "$5,000 of which may be refundable per child, if all other requirements are met."},
+    {"source": "IRS adoption credit page (updated 19-Oct-2026); IR-2026-123 (16 Oct 2026)", "url": "https://www.irs.gov/adoption", "effect": "silent", "quote": "For tax year 2025 only, unused adoption credit carryforwards from 2020–2024 may be refundable up to $5,000 per eligible child."},
+    {"source": "Bloomberg Tax, A. Leahey, 12 May 2026", "url": "https://news.bgov.com/daily-tax-report/adoption-credits-refundability-makes-it-valuable-and-vulnerable", "effect": "silent", "quote": "Any time a credit can produce a check from the government, fraudsters will pounce."}
+  ],
+  "verdict": "holds on the text",
+  "verdict_reason": "Two unmarried co-adopters each get up to $5,000 refundable on the statute and the 2025 form, and no guidance divides it; but the $6,951 is 1,951 of baseline artifact plus 5,000 of acceleration, the lasting gain at these facts is 0 to 574 once the carryforward is valued, and the 50/50 split as found is 3,066 to 3,640 worse over six years than one adult paying everything."
+}

@@ -6,8 +6,12 @@ Windows Application Control may block the compiled runner (caselaw2.exe); `lake 
 Lean runner over all of them through caselaw-lean-2/runner/RunBatch.lean (the built Run module, imported once per
 batch process), merges each universe's output as gen.run_lean does, and diffs canonically with diff.py.
 
-  python drt.py --seed 50000 --rounds 1000 [--n 60] --out DIR [--jobs 16] [--batches 12] [--keep]
+  python drt.py --seed 50000 --rounds 1000 [--n 60] --out DIR [--jobs 16] [--batches 12] [--keep] [--no-r5]
   python drt.py --dirs DIR1,DIR2,...  --out DIR     # existing universes (data/, edges/), e.g. the regression set
+
+Round 5: generated universes carry the round-5 layer (witness rows, treatment_witness.tsv, and in most of them
+treatment_class.tsv, which turns round-5 mode on) unless --no-r5 is given, which reproduces the universes of the
+earlier sweeps byte for byte. The Lean headers follow the data directory (gen.lean_headers).
 """
 import argparse
 import os
@@ -28,6 +32,7 @@ LP = os.path.normpath(os.path.join(HERE, '..', '..', '..'))
 LAKE = 'lake.exe' if os.name == 'nt' else 'lake'
 BATCH = os.path.join(gen.WORK, 'runner', 'RunBatch.lean')
 FILES = ('status', 'findings', 'certs', 'splits', 'conflicts', 'lines', 'horty')
+FILES5 = ('classes', 'summary')      # round 5: printed only when compared
 # the toolchain's own binaries first: Application Control may block the elan proxies in ~/.elan/bin
 TC = os.path.expanduser('~/.elan/toolchains/leanprover--lean4---v4.35.0/bin')
 ENV = dict(os.environ, PATH=TC + os.pathsep + os.path.expanduser('~/.elan/bin') + os.pathsep + os.environ.get('PATH', ''))
@@ -38,9 +43,9 @@ def fwd(p):
 
 
 def prep(job):
-    seed, d, n = job
+    seed, d, n, r5 = job
     if seed is not None:
-        gen.generate(seed, d, n)
+        gen.generate(seed, d, n, r5=r5)
     shutil.rmtree(os.path.join(d, 'ref'), ignore_errors=True)
     shutil.rmtree(os.path.join(d, 'lean'), ignore_errors=True)
     subprocess.run([sys.executable, os.path.join(HERE, 'precedent_ref.py'), 'run', '--data', os.path.join(d, 'data'),
@@ -53,15 +58,7 @@ def prep(job):
 
 
 def merge(d):
-    out = os.path.join(d, 'lean')
-    for name, head in gen.LEAN_HEADERS.items():
-        src = os.path.join(out, '%s-00.tsv' % name)
-        with open(src, encoding='utf-8') as a:
-            body = a.read()
-        with open(os.path.join(out, name + '.tsv'), 'w', encoding='utf-8', newline='\n') as b:
-            b.write(head + '\n' + body)
-        os.remove(src)
-    os.replace(os.path.join(out, 'summary-00.tsv'), os.path.join(out, 'summary.tsv'))
+    gen.merge_lean(d)     # (round 5: the headers gain oclass and classes.tsv is merged when d/data has the class table)
 
 
 def diff_one(job):
@@ -102,13 +99,15 @@ def main():
     ap.add_argument('--jobs', type=int, default=16)
     ap.add_argument('--batches', type=int, default=12)
     ap.add_argument('--keep', action='store_true')
+    ap.add_argument('--no-r5', action='store_true',
+                    help='generate without the round-5 layer (the universes of the sweeps before round 5)')
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     subprocess.run([os.path.join(TC, LAKE), 'build', 'LegalProofs.CaseLaw2.Run'], cwd=LP, check=True, stdout=subprocess.DEVNULL, env=ENV)
     if a.dirs:
-        jobs = [(None, d, a.n) for d in a.dirs.split(',')]
+        jobs = [(None, d, a.n, False) for d in a.dirs.split(',')]
     else:
-        jobs = [(a.seed + r, os.path.join(a.out, 'r%05d' % (a.seed + r)), a.n) for r in range(a.rounds)]
+        jobs = [(a.seed + r, os.path.join(a.out, 'r%05d' % (a.seed + r)), a.n, not a.no_r5) for r in range(a.rounds)]
     with Pool(a.jobs) as pool:
         items = pool.map(prep, jobs)
     run_batches(items, a.batches, a.out)
@@ -137,7 +136,7 @@ def main():
         for r in sorted(allrows, key=lambda r: tuple(str(x) for x in r)):
             f.write('\t'.join(str(x) for x in r) + '\n')
     print('\n%d universes, %d with a disagreement' % (len(items), disagreeing))
-    for fn in FILES:
+    for fn in FILES + tuple(fn for fn in FILES5 if comp[fn]):
         print('  %-9s %d of %d keys disagree' % (fn, bad[fn], comp[fn]))
     print('  class (file, bucket, rule): rounds   first example')
     for k, v in sorted(buckets.items(), key=lambda kv: -kv[1]):

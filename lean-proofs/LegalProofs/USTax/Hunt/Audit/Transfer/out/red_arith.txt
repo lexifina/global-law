@@ -1,0 +1,12 @@
+scenario qtip, release in year 0, model conventions
+  hold       wealth       218551910 (Lean 218551878, diff +32)   transfer tax       191188530 (Lean 191188579, diff -49)
+  unmarried  wealth       233157954 (Lean 233157839, diff +115)   transfer tax       142742566 (Lean 142742786, diff -220)
+  married    wealth       269507706 (Lean 269507610, diff +96)   transfer tax       117172564 (Lean 117172745, diff -181)
+  gain from the later spouse: 36,349,752 (Lean 36,349,771)
+  check 1, yr-5 release unmarried  wealth       226135482 (Lean 226135352, diff +130)
+  check 1, yr-5 release married    wealth       256570951 (Lean 256570861, diff +90)
+  check 1 gain: 30,435,469 (Lean 30,435,509)
+sensitivities (Python only)
+  no growth                              hold    45,600,000  unmarried    45,600,000  married    55,200,000  gain    9,600,000
+  net gift per Reg. 25.2519-1(c)(4)      hold   218,551,910  unmarried   264,842,718  married   295,601,042  gain   30,758,323
+  exclusion of the year of death      

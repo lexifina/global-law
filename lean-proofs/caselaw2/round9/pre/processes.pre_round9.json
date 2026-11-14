@@ -1,0 +1,47 @@
+[
+  {
+    "work": "Film: remove the Brown / Plessy panel",
+    "state": "Done",
+    "note": "Cut 6 is live on lexifina.com (Stream `c54cd672e5945160b07fef7e01b7ee27`, commit `03835dd`)."
+  },
+  {
+    "work": "Fresh answer key",
+    "state": "Done",
+    "note": "292 pairs from four lists; 165 open, 127 sealed; baseline scored on both halves."
+  },
+  {
+    "work": "Notes split and behavioural test",
+    "state": "Done",
+    "note": "Both scripts built, run on the baseline, leak check in place."
+  },
+  {
+    "work": "Lean expansion (recognised overrulings, operative words)",
+    "state": "Done",
+    "note": "Recognised overrulings are in the frozen build (6,161 rows admitted by the checker; blind audit 94-97% right). Operative words were built and audited at 79% / 27% and are not installed. 175 theorems locked, 34 mutants killed, round-4 output reproduced byte for byte."
+  },
+  {
+    "work": "Sealed test, single run",
+    "state": "Done",
+    "note": "Run once at 14:06 after the freeze record: lenient 46.5% -> 60.6% [51.9, 68.7] on 127 pairs; strict unchanged at 25.2% (by design). The open half moved by the same amount."
+  },
+  {
+    "work": "Blog wording",
+    "state": "Done",
+    "note": "Proposals are in the last section of this page. The post was not edited."
+  },
+  {
+    "work": "Same-case history",
+    "state": "Done",
+    "note": "Round 6. Frozen 18:23; sealed half scored once: Shepard's negatives found 104 of 252 (was 8), precision 104 of 113, clean 9,579 of 9,586. Open half: 105 of 254, 105 of 111. Nothing installed in the model's own tables."
+  },
+  {
+    "work": "Round 7: joined certificates, stronger reader, queued reading, scope, dates, same-case history",
+    "state": "Done",
+    "note": "Frozen 00:08, 14 Nov (v3). Sealed runs once each: fresh lists lenient 60.6% (unchanged; third use), strict 25.2% (44.9% as attributed today); Shepardized negatives 104 -> 120 of 252 at precision 92.3% (second use); new 2021+ time split: reversals found 14 -> 21 of 83, vacaturs 9 -> 13 of 47. Held-out notes stated by a court with power 35.6% -> 39.3%. Lean 183 -> 220 theorems, 40 -> 53 mutants. Details in section Round 7."
+  },
+  {
+    "work": "Round 8: own-act queue, docket links, rehearing, multi-case acts, state courts, new held-out keys",
+    "state": "Done",
+    "note": "Frozen 01:59, 14 Nov (v8e). Held-out halves scored once: FJC appeals 50.6% -> 54.7%, Shadow Docket 16.0% -> 39.0% (precision 91.4%), SCDB disposition 71.8% -> 75.4%, state tables 7.0% -> 7.7%; fresh lists sealed unchanged (fourth use); Shepardized sealed 120 -> 123 of 252. Lean 220 -> 245 theorems, 53 -> 63 mutants. Details in section Round 8."
+  }
+]

@@ -1,0 +1,56 @@
+=== stock (fund + future): exit wanted, 70 days of exposure tolerated (regs true) ===
+positions examined 1574; final positions 200; families 37
+plain plan: tax (future value) if everything is sold at the end $16972; if the final position is kept $16972
+-- best families, everything sold at the end --
+saves $652 (tax sold $16320, kept $16320, unrealized at end $0) using [cover FundA, sell FundA, short FundA]
+     day 340: sell FundA short
+     day 385: buy to close the FundA short of day 340
+     day 470: sell FundA (bought day 100)
+saves $652 (tax sold $16320, kept $16320, unrealized at end $0) using [cover FundA, cover IndexFuture, sell FundA, short FundA, short IndexFuture]
+     day 340: sell FundA short
+     day 364: sell IndexFuture short
+     day 364: buy to close the FundA short of day 340
+     day 385: buy to close the IndexFuture short of day 364
+     day 470: sell FundA (bought day 100)
+saves $652 (tax sold $16320, kept $16320, unrealized at end $0) using [cover IndexFuture, sell FundA, short IndexFuture]
+     day 340: sell IndexFuture short
+     day 385: buy to close the IndexFuture short of day 340
+     day 470: sell FundA (bought day 100)
+saves $0 (tax sold $16972, kept $16972, unrealized at end $0) using [buy IndexFuture, cover FundA, sell FundA, sell IndexFuture, short FundA]
+     day 340: sell FundA (bought day 100)
+     day 364: sell FundA short
+     day 364: buy IndexFuture
+     day 385: buy to close the FundA short of day 364
+     day 470: sell IndexFuture (bought day 364)
+saves $0 (tax sold $16972, kept $16972, unrealized at end $0) using [buy FundA, deliver FundA, sell FundA, short FundA]
+     day 340: sell FundA short
+     day 385: buy FundA
+     day 385: sell FundA (bought day 100)
+     day 470: deliver FundA (bought day 385) to close the short of day 340
+-- best families, final position kept --
+saves $652 (tax sold $16320, kept $16320, unrealized at end $0) using [cover FundA, sell FundA, short FundA]
+     day 340: sell FundA short
+     day 385: buy to close the FundA short of day 340
+     day 470: sell FundA (bought day 100)
+saves $652 (tax sold $16320, kept $16320, unrealized at end $0) using [cover FundA, cover IndexFuture, sell FundA, short FundA, short IndexFuture]
+     day 340: sell FundA short
+     day 364: sell IndexFuture short
+     day 364: buy to close the FundA short of day 340
+     day 385: buy to close the IndexFuture short of day 364
+     day 470: sell FundA (bought day 100)
+saves $652 (tax sold $16320, kept $16320, unrealized at end $0) using [cover IndexFuture, sell FundA, short IndexFuture]
+     day 340: sell IndexFuture short
+     day 385: buy to close the IndexFuture short of day 340
+     day 470: sell FundA (bought day 100)
+saves $0 (tax sold $25132, kept $16972, unrealized at end $0) using [buy IndexFuture, cover IndexFuture, sell IndexFuture, short FundA, short IndexFuture]
+     day 340: sell IndexFuture short
+     day 364: sell FundA short
+     day 364: buy to close the IndexFuture short of day 340
+     day 385: buy IndexFuture
+     day 470: sell IndexFuture (bought day 385)
+saves $0 (tax sold $23500, kept $16972, unrealized at end $0) using [buy FundA, cover IndexFuture, sell FundA, short FundA, short IndexFuture]
+     day 340: sell FundA (bought day 100)
+     day 385: sell IndexFuture short
+     day 385: buy FundA
+     day 470: buy to close the IndexFuture short of day 385
+     day 470: sell FundA short

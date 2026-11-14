@@ -1,0 +1,93 @@
+{
+ "run": "selftest8/nest/run_C",
+ "class": "selftest-pair",
+ "type": "C",
+ "brief": "B",
+ "table": "history",
+ "self_test": true,
+ "created": "2026-11-14 00:24:59",
+ "args": {
+  "cls": "selftest-pair",
+  "cert": [
+   "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\audit\\selftest8\\cert_B",
+   "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\audit\\selftest8\\cert_B2"
+  ],
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\audit\\selftest8\\nest\\run_C",
+  "n": 12,
+  "exclude": [],
+  "ids": null,
+  "pairs": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\audit\\selftest8\\pairs.tsv",
+  "match": [],
+  "lean_classes": null,
+  "seed": 79,
+  "pack_size": 8,
+  "decoy_share": 0.12,
+  "decoy_wrong_share": 0.6,
+  "decoy_families": "",
+  "pad_min": 500,
+  "pad_max": 1600,
+  "dry_run": false,
+  "force": true,
+  "mark_selftest": true
+ },
+ "inputs": [
+  {
+   "treatments": null,
+   "history": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/audit/selftest8/cert_B/history_delta.tsv",
+   "witness": null,
+   "class": null,
+   "joined": null,
+   "anchor": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/audit/selftest8/cert_B/history_anchor_delta.tsv",
+   "hclaim": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/audit/selftest8/cert_B/history_claim_delta.tsv",
+   "sha1": {
+    "history": "1642703ae47ac443fe591d1b1cdd17ebbd1ddc37",
+    "anchor": "d7d00a062d94b504686651bd6095828941762aff",
+    "hclaim": "dc80bd5e0dbaa43253dbbbf18d1355c56cfe90d8"
+   },
+   "bad_rows": 0,
+   "cert": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/audit/selftest8/cert_B",
+   "rows": 49,
+   "kept": 49
+  },
+  {
+   "treatments": null,
+   "history": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/audit/selftest8/cert_B2/history_delta.tsv",
+   "witness": null,
+   "class": null,
+   "joined": null,
+   "anchor": null,
+   "hclaim": null,
+   "sha1": {
+    "history": "f4f222b34f70fd576afa8b269c498f12c77b1f72"
+   },
+   "bad_rows": 0,
+   "cert": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/audit/selftest8/cert_B2",
+   "rows": 49,
+   "kept": 49
+  }
+ ],
+ "population": 49,
+ "real": 12,
+ "decoys_wrong": 2,
+ "decoys_right": 2,
+ "packs": {
+  "pack_1.md": {
+   "items": 8,
+   "real": 6,
+   "decoys": 2
+  },
+  "pack_2.md": {
+   "items": 8,
+   "real": 6,
+   "decoys": 2
+  }
+ },
+ "relocated_quotes": 0,
+ "decoy_pool": {
+  "path": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/audit/decoy_pool_B.jsonl",
+  "sha1": "45cc542ecece5e34c757d12d3fc67b0028bef470"
+ },
+ "warnings": [
+  "pairs: 1 lines whose rows are not both in the inputs (a header line counts here)"
+ ]
+}

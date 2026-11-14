@@ -1,0 +1,13 @@
+INFRA_READY 2026-11-14 05:29 (agent infra11). Base round10/stage/v10d + round10/out/v10d; frozen binary e7e32592 (~/caselaw2/r11_bin/caselaw2_r10v10d).
+- certify: round11/certify11.py (ids t11:/h11:), round11/certify11_claims.py (joinedFar / implicitReject rows),
+  round11/certify_recog11.py, round11/certify_opwords11.py
+- stage:   python -X utf8 round11/stage11.py <name> --delta DIR ... [--remove F] [--drop F] [--replace F] [--table NAME=F]
+           (unchanged tables = hard links to v10d; part zones added for new rows' nodes; --nodes DIR: DESIGN11 section 4, see NOTES)
+- run:     MSYS_NO_PATHCONV=1 wsl.exe -d Ubuntu -- bash -lc 'NOBUILD=1 bash /mnt/c/Users/$USER/Documents/us-caselaw-lean-work/caselaw-lean-2/wsl/r11_run.sh <name>'
+           -> round11/out/<name>/ (two run slots machine-wide; refuses under 8 GB free)
+- score:   bash round11/score11.sh <name> [noold] -> round11/results/<name>/summary.txt (dev + four round-8 keys h0 only)
+- clean:   bash round11/clean11.sh <name>  (refuses names in round11/KEEP.txt)
+- audit:   round11/audit/HOWTO.md (marker round11/audit/READY)
+Self-tests: stage11 with no delta = v10d byte for byte (hard links, sha1); NOBUILD r11_run v10d_check = round10/out/v10d
+byte for byte (8 tables; summary timing lines excepted); score11 v10d_check summary = round10/results/v10d/summary.txt
+(header lines excepted); certify11 / certify11_claims reproduce certify10 / state9 outputs (ids rewritten); audit selftest11 PASS.

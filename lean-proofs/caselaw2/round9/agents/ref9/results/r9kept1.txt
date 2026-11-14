@@ -1,0 +1,31 @@
+x92000: 7 disagreeing rows 
+x92001: 6 disagreeing rows 
+y91000: 7 disagreeing rows 
+y91002: 5 disagreeing rows 
+y91001: 2 disagreeing rows 
+z90001: 7 disagreeing rows 
+z90002: 5 disagreeing rows 
+z90000: 8 disagreeing rows 
+z90003: 9 disagreeing rows 
+
+9 universes, 9 with a disagreement, 0 where the Lean runner wrote no output, 0 where the reference failed
+  status    0 of 2150 keys disagree
+  findings  54 of 776 keys disagree
+  certs     1 of 3605 keys disagree
+  splits    0 of 280 keys disagree
+  conflicts 0 of 92 keys disagree
+  lines     0 of 90 keys disagree
+  horty     0 of 28 keys disagree
+  classes   1 of 1174 keys disagree
+  summary   0 of 288 keys disagree
+  class (file, bucket, rule): universes   first example
+  findings  onlyB                                atRisk:claim                   9   e.g. x92000 atRisk:claim 116 115 A= B=1
+  findings  onlyB                                panelDepartsWithoutEnBanc      4   e.g. x92000 panelDepartsWithoutEnBanc 116 115 A= B=1
+  findings  onlyB                                ignoresBindingInUnit           1   e.g. y91000 ignoresBindingInUnit 80 74 A= B=0
+  certs     okMismatch:ok/witnessNoStanding      treatment                      1   e.g. z90001 treatment:tr1 A=noAuthority B=witnessNoStanding
+  classes   verdict                              ok/witnessNoStanding           1   e.g. z90001 tr1 A=noAuthority B=witnessNoStanding
+  info  findings uncompared lean:citesNotCitable:force               18
+  info  findings uncompared lean:hortyConsistentBase                 19
+  info  findings uncompared lean:hortySelfInconsistent               7
+  info  findings uncompared lean:inconsistentBindingBase             9
+rc=1

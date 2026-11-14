@@ -1,0 +1,33 @@
+74018: 1 disagreeing rows 
+74034: 3 disagreeing rows 
+74032: 1 disagreeing rows 
+74144: 3 disagreeing rows 
+74150: 3 disagreeing rows 
+74153: 2 disagreeing rows 
+74181: 3 disagreeing rows 
+74188: 3 disagreeing rows 
+74200: 3 disagreeing rows 
+74232: 1 disagreeing rows 
+74258: 1 disagreeing rows 
+74262: 3 disagreeing rows 
+74264: 3 disagreeing rows 
+
+300 universes, 13 with a disagreement
+  status    0 of 55055 keys disagree
+  findings  11 of 24754 keys disagree
+  certs     10 of 63569 keys disagree
+  splits    0 of 6849 keys disagree
+  conflicts 0 of 4776 keys disagree
+  lines     0 of 4380 keys disagree
+  horty     0 of 854 keys disagree
+  classes   9 of 14713 keys disagree
+  summary   0 of 1060 keys disagree
+  class (file, bucket, rule): rounds   first example
+  findings  onlyA                                atRisk:inferred               10   e.g. 74034 atRisk:inferred 222 221 A=1 B=
+  certs     okMismatch:ok/witnessNoStanding      treatment                     10   e.g. 74034 treatment:tr6 A=ok B=witnessNoStanding
+  classes   verdict                              ok/witnessNoStanding           9   e.g. 74034 tr6 A=ok B=witnessNoStanding
+  findings  onlyB                                atRisk:inferred                1   e.g. 74018 atRisk:inferred 220 219 A= B=1
+  info  findings uncompared lean:citesNotCitable:force               926
+  info  findings uncompared lean:hortyConsistentBase                 544
+  info  findings uncompared lean:hortySelfInconsistent               182
+  info  findings uncompared lean:inconsistentBindingBase             310

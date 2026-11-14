@@ -1,0 +1,43 @@
+=== green-card holder, 9th year (long-term resident); Legal.USTax.Hunt.Residence.Asset.usRealty; grid #[30, 152, 183]; horizon 2y; student false; gifts false; foreign tax: salary 0bp, gain 0bp ===
+positions 35643, finished plans (asset disposed of) 1756, families 12
+baseline (sell, in the US every day, no other move): tax on the gain $238000, all US tax $447994
+- gain tax $26180 (all US tax $236174; exemption used $0); US days 730/730: §877A mark to market, gave up citizenship / green card
+  y0: ABANDON-LPR SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+- gain tax $26180 (all US tax $183531; exemption used $0); US days 547/730: §877A mark to market, closer-connection exception, gave up citizenship / green card
+  y0: ABANDON-LPR SELL RELOCATE US[1-30] US[31-182] out[183-365]
+  y1: RELOCATE US[1-30] US[31-182] US[183-365]
+- gain tax $26180 (all US tax $190675; exemption used $0); US days 395/730: §877A mark to market, §911 exclusion, gave up citizenship / green card
+  y0: RELOCATE US[1-30] ABANDON-LPR SELL out[31-182] out[183-365]
+  y1: RELOCATE US[1-30] US[31-182] US[183-365]
+- gain tax $26180 (all US tax $138032; exemption used $0); US days 212/730: §877A mark to market, §911 exclusion, closer-connection exception, gave up citizenship / green card
+  y0: RELOCATE US[1-30] out[31-182] out[183-365]
+  y1: ABANDON-LPR SELL US[1-30] US[31-182] out[183-365]
+- gain tax $238000 (all US tax $447994; exemption used $0); US days 730/730: sold while taxed on worldwide income, §877A mark to market, gave up citizenship / green card
+  y0: SELL RELOCATE RELOCATE US[1-30] ABANDON-LPR US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+- gain tax $238000 (all US tax $447994; exemption used $0); US days 730/730: sold while taxed on worldwide income
+  y0: SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]
+- gain tax $238000 (all US tax $447994; exemption used $0); US days 547/730: sold while taxed on worldwide income, closer-connection exception
+  y0: SELL RELOCATE US[1-30] US[31-182] out[183-365]
+  y1: RELOCATE US[1-30] US[31-182] US[183-365]
+- gain tax $238000 (all US tax $447994; exemption used $0); US days 547/730: sold while taxed on worldwide income, §877A mark to market, closer-connection exception, gave up citizenship / green card
+  y0: SELL RELOCATE US[1-30] ABANDON-LPR US[31-182] out[183-365]
+  y1: RELOCATE US[1-30] US[31-182] US[183-365]
+- gain tax $238000 (all US tax $402495; exemption used $0); US days 395/730: sold while taxed on worldwide income, §911 exclusion
+  y0: SELL RELOCATE US[1-30] out[31-182] out[183-365]
+  y1: RELOCATE US[1-30] US[31-182] US[183-365]
+- gain tax $238000 (all US tax $402495; exemption used $0); US days 395/730: sold while taxed on worldwide income, §877A mark to market, §911 exclusion, gave up citizenship / green card
+  y0: SELL RELOCATE US[1-30] ABANDON-LPR out[31-182] out[183-365]
+  y1: RELOCATE US[1-30] US[31-182] US[183-365]
+- gain tax $238000 (all US tax $402495; exemption used $0); US days 212/730: sold while taxed on worldwide income, §911 exclusion, closer-connection exception
+  y0: SELL RELOCATE US[1-30] out[31-182] out[183-365]
+  y1: US[1-30] US[31-182] out[183-365]
+- gain tax $238000 (all US tax $349852; exemption used $0); US days 212/730: sold while taxed on worldwide income, §877A mark to market, §911 exclusion, closer-connection exception, gave up citizenship / green card
+  y0: SELL RELOCATE US[1-30] out[31-182] out[183-365]
+  y1: ABANDON-LPR US[1-30] US[31-182] out[183-365]
+frontier (most US days for each level of tax on the gain):
+  days 730: gain tax $26180 (all US tax $236174)
+  y0: ABANDON-LPR SELL RELOCATE RELOCATE US[1-30] US[31-182] US[183-365]
+  y1: US[1-30] US[31-182] US[183-365]

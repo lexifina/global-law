@@ -1,0 +1,59 @@
+
+/-! ## RED T5: every position reached, checked against conservation laws (unmodified rules) -/
+
+def reach (c : Cfg) (s0 : St) (depth : Nat) (allowed : Move → Bool) : Array St := Id.run do
+  let mut frontier : Array St := #[s0]
+  let mut seen : Std.HashSet St := {}
+  let mut all : Array St := #[s0]
+  seen := seen.insert s0
+  for _ in [0:depth] do
+    let mut next : Array St := #[]
+    for s in frontier do
+      for m in cands c s allowed do
+        match step c s m with
+        | none => pure ()
+        | some s' =>
+          if !seen.contains s' then
+            seen := seen.insert s'
+            next := next.push s'
+            all := all.push s'
+    frontier := next
+  return all
+
+/-- Every dollar the person holds, less the gifts still owed. No move should change it (tax is booked, not paid). -/
+def assets (s : St) : Int :=
+  let I (n : Nat) : Int := n
+  I (s.cash + s.ira + s.ta + s.rc + s.cvT + s.cvN + s.re + s.hsa + s.p529 + s.able + s.planPre + s.planRoth
+     + s.planBAT + s.p457) - I s.pledge
+
+/-- Pre-tax dollars still inside + dollars taxed - dollars deducted (HSA money counted as pre-tax). -/
+def preBook (s : St) : Int :=
+  let I (n : Nat) : Int := n
+  I ((s.ira - s.iraB) + (s.ta - s.taB) + s.planPre + s.p457 + s.hsa) + I s.taxed - I s.deducted
+
+def check (title : String) (c : Cfg) (s0 : St) (depth : Nat) (allowed _plain : Move → Bool) : IO Unit := do
+  let all := reach c s0 depth allowed
+  let a0 := assets s0
+  let badCons := (all.filter fun s => assets s != a0).size
+  let badBasis := (all.filter fun s => s.iraB > s.ira || s.taB > s.ta || s.p529B > s.p529).size
+  let badLim := (all.filter fun s => s.iraYr > iraLim c s || s.tradYr > s.iraYr).size
+  let maxW := all.foldl (fun m s => max m (worth c s)) (worth c s0)
+  IO.println s!"{title}: positions {all.size}; conservation violations {badCons}; basis>balance {badBasis}; IRA limit exceeded {badLim}; max worth {maxW} (start {worth c s0})"
+
+def checkS4 (title : String) (depth : Nat) (allowed : Move → Bool) : IO Unit := do
+  let c : Cfg := { age0 := 30, years := 2, comp := 300000, hasTA := true }
+  let s0 : St := { cash := 30000, ira := 100000 }
+  let all := reach c s0 depth allowed
+  let pre (s : St) : Nat := (s.ira - s.iraB) + (s.ta - s.taB) + s.planPre + s.hsa + s.p457
+  let badPre := (all.filter fun s => preBook s != 100000).size
+  let ded := (all.filter fun s => s.deducted > 0).size
+  let escaped := (all.filter fun s => s.taxed == 0 && pre s < 100000).size
+  let over := (all.filter fun s => s.rc + s.cvN > 14000).size
+  let rich := (all.filter fun s => worth c s > 128500).size
+  let maxW := all.foldl (fun m s => max m (worth c s)) (worth c s0)
+  let maxFree := all.foldl (fun m s => max m (s.rc + s.cvN)) 0
+  let free14 := (all.filter fun s => s.cvN == 14000 && s.taxed == 0).size
+  IO.println s!"{title}: positions {all.size}; pre-tax book != 100000: {badPre}; any deduction: {ded}; pre-tax money gone with zero tax: {escaped}; untaxed Roth money > 2 x 7000: {over}; worth > 128500: {rich}; max worth {maxW}; max untaxed Roth money {maxFree}; positions with 14000 converted at zero tax: {free14}"
+
+#eval checkS4 "T5 S4 own move set, depth 7" 7 (isK [0, 1, 3, 7, 8])
+#eval checkS4 "T5 S4 every move kind, depth 6" 6 (fun _ => true)

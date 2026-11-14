@@ -6,6 +6,8 @@ systems with dual or changing last-resort courts, intermediate courts with units
 adoptions, dated system rules (tags S/L/U), decisions with bench/publication/form, issues, holdings, Marks rows,
 treatments, same-case history, law changes and supersessions, with real decision texts so every certificate
 can be checked, some deliberately broken (wrong offsets, sha, part, missing verb or target). Plus citation edges.
+Round 5 (r5_layer; off with --no-r5): witness rows with treatment_witness.tsv, and treatment_class.tsv (absent in
+about one universe in eight) with recognised and operativeWords claims that pass and fail each step, and bad rows.
 
   python gen.py --seed 1 --out DIR                 # one universe: DIR/data/*.tsv, DIR/edges/edges-00.tsv
   python gen.py --seed 1 --rounds 50 --out DIR --ref [--lean] [--diff]
@@ -179,14 +181,17 @@ def epoch_at(crows, c, d):
     return None
 
 
-def generate(seed, out, n_dec=60, legacy=False, hunt=True, lines=True):
+def generate(seed, out, n_dec=60, legacy=False, hunt=True, lines=True, r5=True):
     """One universe. The original random stream R is consumed exactly as before the "five limits" layer was added,
     so every old seed reproduces its old universe row for row; the layer (new_layer, its own random.Random) only
     appends courts, rules, decisions (node ids >= the old count), rows and the optional files. legacy=True omits it.
     The hunt layer (hunt_layer, a third stream) appends after it in the same way; hunt=False (--no-hunt) omits it and
     reproduces the universes generated before it byte for byte. The lines layer (lines_layer, a fourth stream,
     DEVIATIONS 79) appends after the hunt layer and needs it; lines=False (--no-lines) omits it and reproduces the
-    universes generated before round 2 byte for byte."""
+    universes generated before round 2 byte for byte. The round-5 layer (r5_layer, a fifth stream, DESIGN5) appends
+    after the lines layer: witness rows, treatment_witness.tsv and (in most universes) treatment_class.tsv; it
+    needs the five-limits layer only. r5=False (--no-r5) omits it and reproduces the universes generated before
+    round 5 byte for byte."""
     R = random.Random(seed)
     crows, succ, adopt, split, kyc = courts(R)
     srules = system_rules(R)
@@ -336,6 +341,11 @@ def generate(seed, out, n_dec=60, legacy=False, hunt=True, lines=True):
     N2 = len(decs)
     LL = None if HL is None or not lines else lines_layer(random.Random(seed * 1000003 + 2026), decs, crows, succ,
                                                           adopt, srules, issues)
+    # round-5 layer (DESIGN5; own random stream; appends only, after the lines layer; adds no court and no rule)
+    N3 = len(decs)
+    RL = None if (L is None or not r5) else r5_layer(
+        random.Random(seed * 1000003 + 5005), decs, crows, issues,
+        [t['id'] for t in treatments] + [t['id'] for lay in (L, HL, LL) if lay for t in lay['treatments']])
     # texts, shas, offsets
     texts, shas = {}, {}
     for x in decs:
@@ -388,8 +398,9 @@ def generate(seed, out, n_dec=60, legacy=False, hunt=True, lines=True):
             rng.choice([None] * 9 + ['offset'])) + ['gen', 0.9]
 
     def treat_row(t, c):
+        # (round 5: a witness row's certificate is from W's text, `owner`; every other row's from the by-decision's)
         return [t['id'], t['by'], t['target'], t['date'], t['kind'], t['scope'], t['temporal'], t['explicit']] + cert(
-            t['by'], t['loc'], t['quote'], t['prefix'], t['tev'], t['part'], c) + ['gen', 0.9]
+            t.get('owner', t['by']), t['loc'], t['quote'], t['prefix'], t['tev'], t['part'], c) + ['gen', 0.9]
 
     def hist_row(y, c):
         return [y['id'], y['target'], y['by'], y['date'], y['kind'], y['scope']] + cert(
@@ -416,6 +427,19 @@ def generate(seed, out, n_dec=60, legacy=False, hunt=True, lines=True):
         qcorr = lambda: None if qr.random() < 0.96 else qr.choice(['offset', 'sha', 'quote', 'target'])
         hrows += [hold_row(h, _Rare(qr)) for h in LL['holdings']]
         trows += [treat_row(t, qcorr()) for t in LL['treatments']]
+    if RL:                                               # after every other layer: its windows are the new tail
+        vr = RL['rng']
+        vcorr = lambda: None if vr.random() < 0.95 else vr.choice(['offset', 'sha', 'quote', 'target'])
+        hrows += [hold_row(h, _Rare(vr)) for h in RL['holdings']]
+        trows += [treat_row(t, vcorr()) for t in RL['treatments']]
+        yrows += [hist_row(y, None) for y in RL['history']]
+    # round 5: written by the round-5 layer only; never left over (the class table is absent in some universes)
+    for name, rows in (('treatment_witness.tsv', RL['witness'] if RL else None),
+                       ('treatment_class.tsv', RL['klass'] if RL else None)):
+        if rows is not None:
+            W(name, rows)
+        elif os.path.exists(os.path.join(out, 'data', name)):
+            os.remove(os.path.join(out, 'data', name))
     for name in ('factors.tsv', 'factor_cases.tsv'):     # written by the lines layer only; never left over
         if LL:
             W(name, LL[name[:-4]])
@@ -456,8 +480,11 @@ def generate(seed, out, n_dec=60, legacy=False, hunt=True, lines=True):
             edges += HL['edges']
         if LL:
             edges += LL['edges']
+        if RL:
+            edges += RL['edges']
         write_layer_files(L, out, decs, ct, N1, HL['rng'] if HL else None, {shas[x['node']] for x in decs[N1:N2]},
-                          N2, LL['rng'] if LL else None, {shas[x['node']] for x in decs[N2:]})
+                          N2, LL['rng'] if LL else None, {shas[x['node']] for x in decs[N2:N3]},
+                          N3, RL['rng'] if RL else None, {shas[x['node']] for x in decs[N3:]})
     write(os.path.join(out, 'edges', 'edges-00.tsv'), sorted({tuple(e) for e in edges}))
     return len(decs)
 
@@ -655,20 +682,24 @@ def new_layer(G, decs, crows, adopt, srules, issues, holdings, history):
     return out
 
 
-def write_layer_files(L, out, decs, ct, n1=None, hrng=None, hshas=(), n2=None, qrng=None, qshas=()):
+def write_layer_files(L, out, decs, ct, n1=None, hrng=None, hshas=(), n2=None, qrng=None, qshas=(),
+                      n3=None, vrng=None, vshas=()):
     """Optional files. Decisions from n1 on and windows of texts in hshas belong to the hunt layer and draw from
     its stream (hrng), so the five-limits stream G is consumed exactly as before that layer existed. Decisions from
-    n2 on and windows of texts in qshas belong to the lines layer and draw from its stream (qrng) in the same way."""
+    n2 on and windows of texts in qshas belong to the lines layer and draw from its stream (qrng) in the same way;
+    decisions from n3 on and windows of texts in vshas belong to the round-5 layer (vrng)."""
     G0 = L['rng']
     n1 = len(decs) if n1 is None else n1
     n2 = len(decs) if n2 is None else n2
+    n3 = len(decs) if n3 is None else n3
     P = lambda name: os.path.join(out, 'data', name)
     if L['present']['commission']:   # (no draw)
         write(P('commission.tsv'), [[n, c, k, NOTE_TEXT[k]] for (n, c, k) in L['commission']])
     if L['present']['cite_index']:
         rows = []
         for x in decs:
-            G, top = (G0, n1) if x['node'] < n1 else ((hrng, n2) if x['node'] < n2 else (qrng, len(decs)))
+            G, top = (G0, n1) if x['node'] < n1 else ((hrng, n2) if x['node'] < n2 else (
+                (qrng, n3) if x['node'] < n3 else (vrng, len(decs))))
             r = G.random()
             if r < 0.85:
                 rows.append([x['cite'], x['node']])
@@ -681,7 +712,7 @@ def write_layer_files(L, out, decs, ct, n1=None, hrng=None, hshas=(), n2=None, q
     if L['present']['window_sha']:
         rows = []
         for (sha, s0, e0, w) in ct:
-            G = qrng if sha in qshas else (hrng if sha in hshas else G0)
+            G = vrng if sha in vshas else (qrng if sha in qshas else (hrng if sha in hshas else G0))
             r = G.random()
             if r < 0.90:
                 rows.append([sha, s0, e0, hashlib.sha1(w.encode('utf-8')).hexdigest(), 'gen'])
@@ -1096,6 +1127,370 @@ def lines_layer(Q, decs, crows, succ, adopt, srules, issues):
     return out
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# Round-5 layer (caselaw-lean-2/round5/DESIGN5.md; REF_NOTES "Round 5"). Own random stream, appended after the lines
+# layer; it adds no court and no rule, and its rows sit only in its own new decisions (an old decision's text, and
+# so its sha, never changes). It writes what no earlier layer wrote: witness rows (round 4: a later decision W
+# says "X was overruled by Y"), treatment_witness.tsv, and treatment_class.tsv with `recognised` and
+# `operativeWords` claims that pass and that fail each step of DESIGN5 §2.2 and §3.2, bad class rows, and, in about
+# one universe in eight, no class table at all (round-4 mode with witness rows).
+
+# (target court, courts of the overruling decision Y, courts of the witness W): W in the target's court of last
+# resort has power; a panel of the target's own court has standing and, under a strong horizontal rule, no power;
+# a lower or sister court has neither. A court that the universe does not have is skipped.
+R5_CFG = [
+    (2906, (2906,), (2906, 2906, 2906, 2906, 101, 501)),
+    (101, (2906, 2906, 101, 101, 102), (2906, 2906, 2906, 2906, 101, 101, 201, 102)),
+    (502, (501, 501, 502, 2906), (501, 501, 501, 501, 502, 503, 2906)),
+    (703, (701, 702, 703, 704, 2906), (701, 701, 701, 701, 703, 705, 702)),
+    (201, (101, 2906, 201), (101, 101, 2906, 2906, 201)),
+    (902, (901, 901, 902, 2906), (901, 901, 901, 901, 902, 903)),
+    (1002, (1001, 1001, 1002), (1001, 1001, 1001, 1002, 1002)),
+]
+R5_ISSUES = {0: ['fed.a', 'fed.b', 'unk.a'], 5: ['ca.a', 'fed.a', 'unk.a'], 44: ['tx.a', 'fed.a'],
+             10: ['fl.a', 'fed.a'], 36: ['fed.a', 'unk.a']}
+# Round-5 test quotes are built at run time from the lists of the generated cue table (cue_table.py; never copied
+# here), so a change of a list changes the quotes with it. A slot is filled with one phrase of a list, stripped,
+# between single spaces: {c} `recognised` (witness) or `operative`, {w} `operative_whole`, {l} `operative_limit`,
+# {D} `disqualify_recognised` (witness) or `disqualify_operative`, {T} `disqualify_treat`, {s} `self_announced`.
+# Each template names the case it tests, and the finished quote is checked against the lists as they stand
+# (r5_layer, `fits`): a quote that is not exactly its case (a "whole" quote with a limit phrase or a disqualifier,
+# a cue that is itself a whole phrase, a fixed sentence the lists no longer read that way) is drawn again.
+# witness sentences: (weight, case, sentence template, quote template). {X} and {Y} are "name, cite". Cases:
+# 'cue' = a recognition cue and no recognition disqualifier; 'dq' = a disqualifier; 'nocue' = no recognition cue.
+R5_WITNESS = [
+    (6, 'cue', 'We note {q}.', 'the {c}ing of {X} by {Y}'),
+    (6, 'cue', 'As we have said, {q}.', '{X} was {c}ed by {Y}'),                 # round 4: "overruled by" disqualifies
+    (3, 'cue', 'In our view {q}.', '{X} has been {c}ed by {Y}'),
+    (1, 'cue', 'We recall that {q}.', '{X} was {c}ed in {Y}'),
+    (1.5, 'nocue', 'It follows that {q}.', '{X} is no longer good law after {Y}'),
+    (0.7, 'nocue', 'We add that {q}.', '{X} must be read in the light of {Y}'),
+    (1.5, 'dq', 'We do not decide {q}.', 'on {D} the {c}ing of {X} by {Y}'),
+    (1.5, 'cue', 'We turn to {X}. We recall {q}.', 'the {c}ing of that decision by {Y}'),   # X in the window
+    (1.5, 'cue', 'See {Y}. It was there that {q}.', 'the {c}ing of {X} occurred'),          # Y in the window
+]
+# the kind a witness row states for a recognition cue (it need not agree with the cue: one row in seven does not)
+R5_KIND_OF_CUE = {'overrul': 'overruled', 'abrogat': 'abrogated', 'disapprov': 'disapproved', 'reced': 'recededFrom'}
+# operative sentences: (weight, case, sentence template, quote template). The case is the exact set of properties
+# of the quote: c = a phrase of `operative`, w = of `operative_whole`, l = of `operative_limit`; 'd' = a
+# disqualifier (`disqualify_treat` or `disqualify_operative`), whatever else; '' = no operative cue, no disqualifier.
+R5_OPERATIVE = [
+    (3, 'cw', 'We hold that {q}.', 'of {X} we say: {w}'),                                   # whole
+    (3, 'c', 'Today {q}.', 'of {X} we say: {c}'),                                           # not whole: demoted
+    (2.5, 'cwl', 'We hold that {q}.', 'of {X} we say, {l} it is contrary to this finding: {w}'),   # whole + limit
+    (1.5, 'cl', 'Today {q}.', 'of {X} we say, {l} it is contrary to this finding: {c}'),
+    (2, 'd', 'Today {q}.', 'of {X} and the {D} we say: {c}'),                               # the new disqualifiers
+    (1, 'd', 'Today {q}.', 'of {X} and the {D} we say: {w}'),
+    (1, 'd', 'Today {q}.', 'of {X} and the {T} we say: {c}'),                               # the round-4 ones
+    (2, '', 'We hold that {q}.', '{X} is disapproved'),                                     # no operative cue
+    (1, 'cw', 'We turn to {X}. {q}.', 'Of that decision we say: {w}'),                      # target in the window
+    (1, 'c', 'We turn to {X}. {q}.', 'Of that decision we say: {c}'),
+    (1, 'c', 'Today {q}.', 'of {X} we say: {c} and {s}'),                                   # and self-announced
+    (1, 'cw', 'We hold that {q}.', '{X} is no longer good law'),
+    (1, 'cw', 'We hold that {q}.', '{X} must be regarded as overthrown'),
+    (1, 'c', 'We hold that {q}.', 'any language in {X} contrary to this finding is rejected'),
+    (1, 'cwl', 'We hold that {q}.', 'in the field of public education {X} is no longer good law'),
+]
+R5_FIELD = ['-', '-', '-', 'in the field of public education', 'as respects interstate carriers']
+R5_DOCTRINE = ['-', '-', '-', 'separate but equal', 'the rule of the earlier case']
+
+
+def r5_layer(V, decs, crows, issues, old_treat_ids):
+    sys.path.insert(0, HERE)
+    import cue_table as cues
+    # the lists as they stand in the generated table (read here, at run time; none is copied into this file)
+    cue_list = lambda name: [p for p in getattr(cues, name, ()) if p.strip()]
+    REC, DQ_REC = cue_list('RECOGNISED'), cue_list('DISQUALIFY_RECOGNISED')
+    OPV, OPW, OPL = cue_list('OPERATIVE'), cue_list('OPERATIVE_WHOLE'), cue_list('OPERATIVE_LIMIT')
+    DQ_OP, DQ_TREAT, SELF = cue_list('DISQUALIFY_OPERATIVE'), cue_list('DISQUALIFY_TREAT'), cue_list('SELF_ANNOUNCED')
+    has = lambda q, phrases: any(p in q.lower() for p in phrases)
+    slot = lambda phrases: V.choice(phrases).strip() if phrases else 'zzz'
+
+    def fits(case, q, witness):
+        """Is the finished quote exactly the case its template names, under the lists as they stand?"""
+        if witness:
+            cue, dq = has(q, REC), has(q, DQ_REC)
+            return {'cue': cue and not dq, 'dq': dq, 'nocue': not cue}[case]
+        props = ''.join(k for (k, ph) in (('c', OPV), ('w', OPW), ('l', OPL)) if has(q, ph))
+        dq = has(q, DQ_TREAT) or has(q, DQ_OP)
+        return dq if case == 'd' else (not dq and props == case)
+
+    def draw(table, witness, **names):
+        """A template and its quote, slots filled from the lists; drawn again until the quote is its case."""
+        for _ in range(60):
+            t = pick(table)
+            c = slot(REC if witness else OPV)
+            q = t[3].format(c=c, w=slot(OPW), l=slot(OPL), D=slot(DQ_REC if witness else DQ_OP),
+                            T=slot(DQ_TREAT), s=slot(SELF), **names)
+            if fits(t[1], q, witness):
+                break
+        return t, c, q
+
+    have = {r[0] for r in crows}
+    system = {r[0]: r[4] for r in crows}
+    tier = {r[0]: r[5] for r in crows}
+    unit0 = {r[0]: r[8] for r in crows}
+    cfgs = [(x, [c for c in ys if c in have], [c for c in ws if c in have]) for (x, ys, ws) in R5_CFG if x in have]
+    cfgs = [c for c in cfgs if c[1] and c[2]]
+    ikeys = {i[0] for i in issues}
+    out = {'rng': V, 'holdings': [], 'treatments': [], 'history': [], 'edges': [], 'witness': [], 'klass': []}
+    pick = lambda table: V.choices(table, [t[0] for t in table])[0]
+
+    def newdec(court, date, bench=None):
+        u = V.randint(1, 3) if court in (502, 902) else (unit0.get(court, 0) if tier.get(court) in ('A', 'T') else 0)
+        x = {'court': court, 'date': date, 'unit': u,
+             'bench': bench or V.choice(['panel'] * 3 + ['enBanc'] * 3 + ['wholeCourt', 'division', 'unknown']),
+             'pub': V.choice(['published'] * 9 + ['unknown']), 'form': V.choice(['full'] * 9 + ['perCuriam']),
+             'node': len(decs)}
+        x['name'] = '%s v. %s' % tuple(V.sample(WORDS, 2))
+        x['cite'] = '%d Rep. %d' % (V.randint(1, 900), V.randint(1, 1500))
+        x['sent'] = ['%s, %s.' % (x['name'], x['cite'])]
+        decs.append(x)
+        return x
+
+    def sentence(x, text):
+        x['sent'].append(text)
+        return (x['node'], len(x['sent']) - 1)
+
+    def holding(x, issue):
+        hid = 'h%d%s' % (x['node'], issue.replace('.', ''))
+        if issue not in ikeys or any(h['id'] == hid for h in out['holdings']):
+            return None
+        ans = V.choice(['yes', 'no'])
+        prop = 'The answer to %s is %s.' % (issue, ans)
+        h = {'id': hid, 'node': x['node'], 'issue': issue, 'prop': prop, 'answer': ans, 'role': 'majority',
+             'loc': sentence(x, 'Held: ' + prop)}
+        out['holdings'].append(h)
+        return h
+
+    def ref(x):
+        return '%s, %s' % (x['name'], x['cite'])
+
+    def evidence(x):
+        return ('cite:' + x['cite']) if V.random() < 0.4 else (
+            'name:' + ' '.join(x['name'].replace('.', '').split()[::2]))
+
+    def cap(d):
+        return min(d, 20221228)
+
+    def scope_for(x):
+        hk = [h['issue'] for h in out['holdings'] if h['node'] == x['node']]
+        r = V.random()
+        if r < 0.6:
+            return 'all'
+        if r < 0.85:
+            return 'issues:' + (V.choice(hk) if (hk and V.random() < 0.8) else V.choice(sorted(ikeys)))
+        return 'partialUnknown' if r < 0.93 else 'otherGrounds'
+
+    def temporal_for(d):
+        r = V.random()
+        return 'retroactive' if r < 0.45 else ('unknown' if r < 0.85 else (
+            'pureProspective' if r < 0.93 else 'prospectiveFrom:%d' % (d + V.randint(0, 3) * 10000)))
+
+    def klass(tid, claim):
+        out['klass'].append([tid, claim, V.choice(R5_FIELD), V.choice(R5_DOCTRINE), 'gen'])
+
+    def lapse(x, lo, hi, tag):
+        """A same-case event on x in its own text (by = -1), dated in [lo, hi]; sometimes reinstated later."""
+        kind = V.choice(['withdrawn', 'withdrawn', 'vacated', 'vacated', 'reversed', 'depublished', 'substitutedBy',
+                         'rehearingEnBancGranted'])
+        hk = [h['issue'] for h in out['holdings'] if h['node'] == x['node']]
+        scope = V.choice(['all'] * 8 + ['unknown'] + (['issues:' + V.choice(hk)] if hk else ['all']))
+        d = cap(add_days(lo, V.randint(0, max(0, days_between(lo, hi)))))
+        n = len(out['history'])
+
+        def row(k, date):
+            quote = 'The opinion %s' % VERB_TEXT[k]
+            out['history'].append({'id': 'yr%d%s' % (len(out['history']), tag), 'target': x['node'], 'by': -1,
+                                   'date': date, 'kind': k, 'scope': scope if k != 'reinstated' else 'all',
+                                   'quote': quote, 'tev': 'name:' + x['name'].split()[0], 'part': 'majority',
+                                   'loc': sentence(x, quote + '.'), 'prefix': 0})
+        row(kind, d)
+        if V.random() < 0.35:
+            row('reinstated', cap(add_days(d, V.randint(1, 2500))))
+        return n
+
+    def citers(x, cfg, marks):
+        """New decisions citing x on or around the dates in `marks` (date(Y), date(W)): before Y, on the day of Y,
+        between Y and W, on the day of W, after W; some hold on one of x's issues."""
+        hk = [h['issue'] for h in out['holdings'] if h['node'] == x['node']]
+        lows = [c for c in ({2906: (101, 501, 201), 101: (201,), 502: (503, 504), 703: (705,), 201: (),
+                             902: (903,), 1002: ()}.get(cfg[0], ())) if c in have]
+        pool = [cfg[0]] * 2 + cfg[2] + lows * 3
+        lo = x['date'] or 19600101
+        ds = sorted(d for d in marks if d)
+        pts = []
+        if ds:
+            y0, w0 = ds[0], ds[-1]
+            if y0 > lo:
+                pts.append(add_days(lo, V.randint(0, max(0, days_between(lo, y0) - 1))))       # before Y
+            pts.append(y0)                                                                     # the day of Y
+            if w0 > y0:
+                pts.append(add_days(y0, V.randint(0, max(0, days_between(y0, w0) - 1))))       # between
+                pts.append(add_days(y0, V.randint(0, max(0, days_between(y0, w0) - 1))))
+            pts.append(w0)                                                                     # the day of W
+            pts.append(cap(add_days(w0, V.randint(1, 4000))))                                  # after W
+            pts.append(cap(add_days(w0, V.randint(1, 9000))))
+        for d in V.sample(pts, min(len(pts), V.randint(2, 5))):
+            c = newdec(V.choice(pool), d)
+            out['edges'].append([c['node'], x['node']])
+            if hk and V.random() < 0.3:
+                holding(c, V.choice(hk))
+
+    # --- witness rows (round 4), most with a recognised claim
+    for i in range(V.randint(5, 9)):
+        cfg = V.choice(cfgs)
+        variant = V.choice(['ok'] * 16 + ['zeroX', 'zeroY', 'zeroW', 'sameEv', 'rowDate', 'rowDate', 'earlierW',
+                                          'laterX'])
+        xd = rdate(V, 1960, 1995)
+        yd = cap(add_days(xd, V.randint(30, 12 * 365)))
+        wd = yd if V.random() < 0.12 else cap(add_days(yd, V.randint(1, 12 * 365)))
+        if variant == 'earlierW':
+            wd = add_days(yd, -V.randint(1, 300))
+        if variant == 'laterX':
+            xd = add_days(yd, V.randint(1, 300))
+        x = newdec(cfg[0], xd, bench=V.choice(['panel'] * 4 + ['enBanc', 'unknown']))
+        for k in V.sample(R5_ISSUES.get(system[cfg[0]], ['fed.a']), V.choice([0, 1, 1, 2])):
+            holding(x, k)
+        y = newdec(V.choice(cfg[1]), yd)
+        w = newdec(V.choice(cfg[2]), wd)
+        if variant == 'sameEv':
+            y['name'] = '%s v. %s' % (x['name'].split()[0], y['name'].split()[-1])
+            y['sent'][0] = '%s, %s.' % (y['name'], y['cite'])
+        ((_, case, stpl, _), cue, quote) = draw(R5_WITNESS, True, X=ref(x), Y=ref(y))
+        kind = R5_KIND_OF_CUE.get(cue, 'overruled') if case != 'nocue' else 'overruled'
+        if V.random() < 0.15:
+            kind = V.choice(['overruled', 'abrogated', 'disapproved', 'recededFrom'])   # kind and cue need not agree
+        sent = stpl.format(X=ref(x), Y=ref(y), q=quote)
+        loc = sentence(w, sent)
+        tev, bev = evidence(x), evidence(y)
+        if variant == 'sameEv':
+            tev = bev = 'name:' + x['name'].split()[0]
+        r = V.random()
+        if r < 0.05:
+            bev = 'cite:1 Rep. 1'                         # the by-evidence resolves to nothing
+        elif r < 0.08:
+            bev = tev                                      # the same evidence for X and Y
+        if variant == 'zeroX':
+            x['date'] = 0
+        elif variant == 'zeroY':
+            y['date'] = 0
+        elif variant == 'zeroW':
+            w['date'] = 0
+        r = V.random()
+        explicit = 1 if r < 0.025 else 0                   # a witness row marked explicit: witnessBadRow
+        if 0.025 <= r < 0.05:
+            kind = V.choice(['limited', 'questioned'])     # not a status-changing kind: witnessBadRow
+        rowdate = y['date']
+        if variant == 'rowDate' and y['date']:
+            # the row's date column is not Y's date: later, earlier, or 0 (never used: DESIGN5 §9, A-7)
+            rowdate = V.choice([cap(add_days(y['date'], V.randint(1, 4000))), add_days(y['date'], -V.randint(1, 4000)), 0])
+        tid = 'tr%d' % i
+        out['treatments'].append({
+            'id': tid, 'by': y['node'], 'target': x['node'], 'date': rowdate, 'kind': kind, 'scope': scope_for(x),
+            'temporal': temporal_for(yd), 'explicit': explicit, 'quote': quote, 'tev': tev,
+            'part': V.choice(['majority'] * 20 + ['perCuriam', 'plurality', 'dissent', 'concurrence']),
+            'loc': loc, 'prefix': sent.index(quote), 'owner': w['node']})
+        wn = w['node'] if V.random() < 0.975 else len(decs) + 5000 + i     # an unknown witness node
+        out['witness'].append([tid, wn, bev, 'gen'])
+        r = V.random()
+        if r < 0.72:
+            klass(tid, 'recognised')
+        elif r < 0.8:
+            klass(tid, 'operativeWords')                   # a claim that means nothing on a witness row
+        made_tx = False
+        if V.random() < 0.12 and y['date'] and x['date']:  # an explicit row by Y for the same pair
+            made_tx = True
+            q2 = '%s, %s' % (ref(x), VERB_TEXT['overruled'])
+            out['treatments'].append({
+                'id': 'tx%d' % i, 'by': y['node'], 'target': x['node'], 'date': y['date'], 'kind': 'overruled',
+                'scope': V.choice(['all', 'all', 'partialUnknown']), 'temporal': 'retroactive', 'explicit': 1,
+                'quote': q2, 'tev': 'cite:' + x['cite'], 'part': 'majority',
+                'loc': sentence(y, 'We hold that ' + q2 + '.'), 'prefix': len('We hold that ')})
+        if y['date'] and V.random() < 0.2:                 # Y lapses: between Y and W, or after W
+            hi = w['date'] if (w['date'] and w['date'] > y['date'] and V.random() < 0.55) else cap(
+                add_days(max(y['date'], w['date'] or 0), 3000))
+            lapse(y, y['date'], hi, 'y')
+        if w['date'] and V.random() < 0.14:                # W lapses
+            lapse(w, w['date'], cap(add_days(w['date'], 3000)), 'w')
+        if y['date'] and not made_tx and V.random() < 0.05:
+            # a lapse event of Y dated BEFORE date(Y): ignored by a recognised effect (DESIGN5 §9, A-14). Only where
+            # Y makes no explicit row: for those the reference's round-4 lapse test differs (NOTES.md A-14).
+            lapse(y, add_days(y['date'], -900), add_days(y['date'], -1), 'p')
+        if V.random() < 0.7:
+            out['edges'].append([y['node'], x['node']])    # Y's own citation of X
+        if V.random() < 0.7:
+            out['edges'].append([w['node'], x['node']])
+        out['edges'].append([w['node'], y['node']])
+        citers(x, cfg, [y['date'], w['date']])
+    # --- operative words (DESIGN5 §3): ordinary explicit rows, most with an operativeWords claim
+    for i in range(V.randint(2, 5)):
+        cfg = V.choice(cfgs)
+        xd = rdate(V, 1960, 1995)
+        yd = cap(add_days(xd, V.randint(30, 12 * 365)))
+        x = newdec(cfg[0], xd, bench=V.choice(['panel'] * 4 + ['enBanc', 'unknown']))
+        for k in V.sample(R5_ISSUES.get(system[cfg[0]], ['fed.a']), V.choice([0, 1, 1, 2])):
+            holding(x, k)
+        y = newdec(V.choice(cfg[1]), yd, bench=V.choice(['enBanc'] * 3 + ['wholeCourt', 'panel', 'unknown']))
+        ((_, case, stpl, _), _, quote) = draw(R5_OPERATIVE, False, X=ref(x))
+        sent = stpl.format(X=ref(x), q=quote)
+        r = V.random()
+        kind = 'disapproved' if r < 0.85 else ('overruled' if r < 0.93 else V.choice(['recededFrom', 'limited']))
+        tid = 'to%d' % i
+        # (DESIGN5 §9, A-7: the row's date column is never used; in one row of twelve it is not the by-decision's
+        # date, and one of those in four is 0)
+        rowdate = y['date'] if V.random() < 0.92 else V.choice([cap(add_days(y['date'], V.randint(1, 4000)))] * 2
+                                                               + [add_days(y['date'], -V.randint(1, 4000)), 0])
+        out['treatments'].append({
+            'id': tid, 'by': y['node'], 'target': x['node'], 'date': rowdate, 'kind': kind, 'scope': scope_for(x),
+            'temporal': temporal_for(yd), 'explicit': 1 if V.random() < 0.93 else 0, 'quote': quote,
+            'tev': evidence(x), 'part': V.choice(['majority'] * 12 + ['dissent']), 'loc': sentence(y, sent),
+            'prefix': sent.index(quote)})
+        r = V.random()
+        if r < 0.75:
+            klass(tid, 'operativeWords')
+        elif r < 0.82:
+            klass(tid, 'recognised')                       # a claim that means nothing on a non-witness row
+        if V.random() < 0.15:
+            lapse(y, y['date'], cap(add_days(y['date'], 3000)), 'o')
+        out['edges'].append([y['node'], x['node']])
+        citers(x, cfg, [y['date'], y['date']])
+    # --- claims on rows of the earlier layers, bad class rows, a shuffled table; sometimes no table at all
+    for tid in V.sample(old_treat_ids, min(len(old_treat_ids), V.randint(0, 3))):
+        klass(tid, V.choice(CLAIMS5))
+    good = [r[0] for r in out['klass']]
+    if V.random() < 0.6:
+        ids = good + [t['id'] for t in out['treatments']]
+        for what in V.sample(['short', 'claim', 'id', 'dup', 'dup', 'long', 'empty'], V.randint(1, 4)):
+            tid = V.choice(ids)
+            if what == 'short':
+                out['klass'].append([tid, V.choice(CLAIMS5), '-', '-'])                       # 4 fields
+            elif what == 'claim':
+                out['klass'].append([tid, V.choice(['implied', 'Recognised', '']), '-', '-', 'gen'])
+            elif what == 'id':
+                out['klass'].append(['nosuch%d' % V.randint(0, 99), V.choice(CLAIMS5), '-', '-', 'gen'])
+            elif what == 'dup' and good:                                                      # the first line wins
+                g = V.choice(good)
+                out['klass'].append([g, V.choice(CLAIMS5), V.choice(R5_FIELD), V.choice(R5_DOCTRINE), 'gen dup'])
+            elif what == 'long':                                                              # 6 fields: bad too
+                out['klass'].append([tid, V.choice(CLAIMS5), '-', '-', 'gen', 'a sixth field'])
+            elif what == 'empty':
+                out['klass'].append(['', V.choice(CLAIMS5), '-', '-', 'gen'])
+    V.shuffle(out['klass'])
+    if V.random() < 0.12:
+        out['klass'] = None                                # round-4 mode: witness rows, no class table
+    return out
+
+
+CLAIMS5 = ['recognised', 'operativeWords']
+
+
+def days_between(a, b):
+    import datetime
+    f = lambda d: datetime.date(d // 10000, d // 100 % 100, d % 100)
+    return (f(b) - f(a)).days
+
+
 def write(path, rows):
     with open(path, 'w', encoding='utf-8', newline='\n') as f:
         for r in rows:
@@ -1131,7 +1526,7 @@ def mutant_check(a, py):
     for r in range(a.rounds):
         seed = a.seed + r
         d = os.path.join(a.out, 'm%04d' % seed)
-        generate(seed, d, a.n, getattr(a, 'legacy', False))
+        generate(seed, d, a.n, getattr(a, 'legacy', False), r5=not getattr(a, 'no_r5', False))
         args = ['--data', os.path.join(d, 'data'), '--edges', os.path.join(d, 'edges')]
         subprocess.run([py, os.path.join(HERE, 'precedent_ref.py'), 'run'] + args + ['--out', os.path.join(d, 'ref')],
                        check=True, stderr=subprocess.DEVNULL)
@@ -1157,6 +1552,36 @@ LEAN_HEADERS = {
     'status_lines': 'node\tissue\tholding\tfrom\tto\tstatus\tclass\tfirm\twitness_row\tactor\tpath\tline',
     'horty': 'family\tcourt\tverdict\tcases\tfirm',
 }
+# round 5 (DESIGN5 §5.1): in round-5 mode (the data directory has treatment_class.tsv) the status, status_lines and
+# findings headers gain `oclass`, and there is one more file, classes.tsv
+R5_OCLASS = ('status', 'status_lines', 'findings')
+CLASSES_HEADER = 'id\tclass\tclaim\tverdict\tfield_limit\tdoctrine\twitness'
+
+
+def lean_headers(data_dir):
+    """The header lines of the Lean runner's merged files for a data directory, as run_lean.sh writes them."""
+    if not os.path.exists(os.path.join(data_dir, 'treatment_class.tsv')):
+        return dict(LEAN_HEADERS)
+    h = {k: v + ('\toclass' if k in R5_OCLASS else '') for k, v in LEAN_HEADERS.items()}
+    h['classes'] = CLASSES_HEADER
+    return h
+
+
+def merge_lean(d):
+    """Merge the single shard the runner wrote in d/lean as run_lean.sh merges shards: header line + body. The
+    round-5 shard file is assumed to be classes-00.tsv, by the pattern of the others; when the runner wrote none,
+    no classes.tsv is made and diff.py reports it as missing."""
+    out = os.path.join(d, 'lean')
+    for name, head in lean_headers(os.path.join(d, 'data')).items():
+        src = os.path.join(out, '%s-00.tsv' % name)
+        if name == 'classes' and not os.path.exists(src):
+            continue
+        with open(src, encoding='utf-8') as a:
+            body = a.read()
+        with open(os.path.join(out, name + '.tsv'), 'w', encoding='utf-8', newline='\n') as b:
+            b.write(head + '\n' + body)
+        os.remove(src)
+    os.replace(os.path.join(out, 'summary-00.tsv'), os.path.join(out, 'summary.tsv'))
 
 
 def fwd(p):
@@ -1205,23 +1630,19 @@ def run_lean(d, asof=20261112):
         nodes = 1 + max([int(l.split('\t', 1)[0]) for l in f if l.strip()] or [0])
     _launch_lean([fwd(os.path.join(d, 'data')), fwd(os.path.join(d, 'edges')), '0', '1', fwd(out), str(nodes),
                   str(asof)])
-    for name, head in LEAN_HEADERS.items():
-        src = os.path.join(out, '%s-00.tsv' % name)
-        with open(src, encoding='utf-8') as a:
-            body = a.read()
-        with open(os.path.join(out, name + '.tsv'), 'w', encoding='utf-8', newline='\n') as b:
-            b.write(head + '\n' + body)
-        os.remove(src)
-    os.replace(os.path.join(out, 'summary-00.tsv'), os.path.join(out, 'summary.tsv'))
+    merge_lean(d)
 
 
 def one_round(job):
     """Generate, run the reference and/or the Lean, diff canonically."""
     seed, d, a = job
     n = generate(seed, d, a.n, getattr(a, 'legacy', False), not getattr(a, 'no_hunt', False),
-                 not getattr(a, 'no_lines', False))
+                 not getattr(a, 'no_lines', False), not getattr(a, 'no_r5', False))
     py = sys.executable
     if a.ref:
+        # (round 5: a round-4 run writes no classes.tsv; one left by an earlier run in the same directory must go)
+        import shutil
+        shutil.rmtree(os.path.join(d, 'ref'), ignore_errors=True)
         subprocess.run([py, os.path.join(HERE, 'precedent_ref.py'), 'run', '--data', os.path.join(d, 'data'),
                         '--edges', os.path.join(d, 'edges'), '--out', os.path.join(d, 'ref')], check=True,
                        stderr=subprocess.DEVNULL)
@@ -1235,7 +1656,7 @@ def one_round(job):
     with open(os.path.join(d, 'diff.tsv'), 'w', encoding='utf-8', newline='\n') as f:
         for r in D.rows:
             f.write('\t'.join(str(x) for x in r) + '\n')
-    files = ('status', 'findings', 'certs', 'splits', 'conflicts', 'lines', 'horty')
+    files = dmod.FILES + tuple(fn for fn in dmod.FILES5 if D.compared[fn])
     summ =' | '.join('%s %d/%d' % (fn, D.bad_keys[fn], D.compared[fn]) for fn in files)
     rows = [(seed,) + tuple(r) for r in D.rows]
     return seed, n, summ, rows, dict(D.compared), dict(D.bad_keys), dict(D.info)
@@ -1258,6 +1679,8 @@ def main():
                     help='omit the hunt layer (H2/H3b/H4 patterns): the universe as generated before it')
     ap.add_argument('--no-lines', action='store_true',
                     help='omit the lines layer (round 2, per-line status): the universe as generated before it')
+    ap.add_argument('--no-r5', action='store_true',
+                    help='omit the round-5 layer (witness rows, class table): the universe as generated before it')
     ap.add_argument('--keep', action='store_true', help='keep every universe (default: only disagreeing ones)')
     ap.add_argument('--quiet', action='store_true', help='no per-round lines')
     ap.add_argument('--big', type=int, help='write a scale-test universe with this many decisions')
@@ -1309,7 +1732,8 @@ def main():
             for r in sorted(allrows, key=lambda r: tuple(str(x) for x in r)):
                 f.write('\t'.join(str(x) for x in r) + '\n')
         print('\n%d rounds, %d with a disagreement' % (a.rounds, disagreeing))
-        for fn in ('status', 'findings', 'certs', 'splits', 'conflicts', 'lines', 'horty'):
+        for fn in ('status', 'findings', 'certs', 'splits', 'conflicts', 'lines', 'horty') + tuple(
+                fn for fn in ('classes', 'summary') if comp[fn]):
             print('  %-9s %d of %d keys disagree' % (fn, bad[fn], comp[fn]))
         print('  class (file, bucket, rule): rounds   first example')
         for k, v in sorted(buckets.items(), key=lambda kv: -kv[1]):

@@ -1,0 +1,94 @@
+{
+ "args": [
+  "--rows",
+  "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/agents/ownact/rows.jsonl",
+  "--out",
+  "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round8/agents/ownact/cert.new",
+  "--procs",
+  "6"
+ ],
+ "base": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/stage/v3",
+ "cue_source": {
+  "hist": "cue_table.json",
+  "disqualify_hist": "cue_table.json",
+  "anchor": "cue_table.json",
+  "disqualify_anchor": "cue_table.json",
+  "disqualify_treat": "cue_table.json",
+  "operative": "cue_table.json",
+  "disqualify_operative": "cue_table.json",
+  "treat": "cue_table.json",
+  "anaphor": "cue_table.json",
+  "doctrine_tie": "cue_table.json",
+  "doctrine_reject": "cue_table.json",
+  "disqualify_joined": "cue_table.json",
+  "order_line": "cue_table.json",
+  "set_aside": "cue_table.json",
+  "order_head_from": "cue_table.json",
+  "joined_gap_max": "cue_table.json",
+  "order_head_max_len": "cue_table.json"
+ },
+ "scotus_court_id": 2906,
+ "order_head_from": 20130101,
+ "joined_gap_max": 300,
+ "counts": {
+  "admitted": 677,
+  "admitted:treatments": 677,
+  "admitted:treatments:claim:-": 195,
+  "admitted:treatments:claim:operativeWords": 482,
+  "admitted_treatments_joined_0": 673,
+  "admitted_treatments_joined_1": 4,
+  "alias_keys_added": 0,
+  "cite_collisions": 0,
+  "cite_index_lines": 174,
+  "claim_setAside_other_kind": 0,
+  "in_base_skipped:treatments": 26,
+  "input:treatments": 744,
+  "input_rows": 744,
+  "reject:treatments:disqualified": 13,
+  "reject:treatments:noCue": 28,
+  "rejected": 41,
+  "texts_read": 618,
+  "windows": 586
+ },
+ "admitted_by_kind": {
+  "treatments:disapproved": 510,
+  "treatments:overruled": 158,
+  "treatments:recededFrom": 9
+ },
+ "alias_keys_added_by_form": {},
+ "by_rule": {
+  "ownact:joined": {
+   "admitted": 4,
+   "admitted:overruled": 4,
+   "in_base_skipped": 1,
+   "input": 5
+  },
+  "ownact:onesentence": {
+   "admitted": 191,
+   "admitted:disapproved": 28,
+   "admitted:overruled": 154,
+   "admitted:recededFrom": 9,
+   "in_base_skipped": 25,
+   "input": 217,
+   "reject:disqualified": 1
+  },
+  "ownact:operative": {
+   "admitted": 482,
+   "admitted:disapproved": 482,
+   "input": 522,
+   "reject:disqualified": 12,
+   "reject:noCue": 28
+  }
+ },
+ "sha1": {
+  "treatments_delta.tsv": "499f8af5a87bfd0c1508ea288c3c561121524d4b",
+  "treatment_class_delta.tsv": "92784e16c7568aaba3de034adfb94dc4f0704621",
+  "joined_delta.tsv": "306684de3e9643efad203449e0119aadb067cf51",
+  "history_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "history_anchor_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "history_claim_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "cert_text_delta.tsv": "b26881a1ad35e9745df091b4b21c6061465c027d",
+  "window_sha_delta.tsv": "f8fc32235c75664a3bd5aaca2fac0b4a29c67523",
+  "cite_index_delta.tsv": "527d9314a34a5b9d12142835f837ce00480f0385"
+ }
+}

@@ -1,0 +1,44 @@
+z94000: 5 disagreeing rows 
+z94001: 6 disagreeing rows 
+z94002: 7 disagreeing rows 
+z94003: 10 disagreeing rows 
+z94005: 10 disagreeing rows 
+z94004: 4 disagreeing rows 
+z94006: 2 disagreeing rows 
+z94011: 4 disagreeing rows 
+z94008: 4 disagreeing rows 
+z94007: 8 disagreeing rows 
+z94010: 5 disagreeing rows 
+z94009: 4 disagreeing rows 
+z94012: 2 disagreeing rows 
+z94014: 5 disagreeing rows 
+z94016: 10 disagreeing rows 
+z94013: 4 disagreeing rows 
+z94018: 4 disagreeing rows 
+z94017: 6 disagreeing rows 
+z94015: 6 disagreeing rows 
+z94019: 7 disagreeing rows 
+
+20 universes, 20 with a disagreement, 0 where the Lean runner wrote no output, 0 where the reference failed
+  status    0 of 5150 keys disagree
+  findings  111 of 1897 keys disagree
+  certs     0 of 9165 keys disagree
+  splits    0 of 411 keys disagree
+  conflicts 0 of 319 keys disagree
+  lines     0 of 220 keys disagree
+  horty     0 of 65 keys disagree
+  classes   0 of 3074 keys disagree
+  summary   2 of 640 keys disagree
+  class (file, bucket, rule): universes   first example
+  findings  onlyB                                atRisk:claim                  20   e.g. z94000 atRisk:claim 179 174 A= B=1
+  findings  onlyB                                panelDepartsWithoutEnBanc      5   e.g. z94001 panelDepartsWithoutEnBanc 52 5 A= B=1
+  findings  onlyB                                ignoresBindingInUnit           1   e.g. z94014 ignoresBindingInUnit 74 65 A= B=1
+  summary   count                                zone_checked_rows              1   e.g. z94016 zone_checked_rows A=94 B=93
+  summary   count                                zone_failed_rows               1   e.g. z94016 zone_failed_rows A=39 B=38
+  info  certs reasonOnly partZone/witnessNoStanding                  1
+  info  classes reasonOnly partZone/witnessNoStanding                1
+  info  findings uncompared lean:citesNotCitable:force               100
+  info  findings uncompared lean:hortyConsistentBase                 33
+  info  findings uncompared lean:hortySelfInconsistent               25
+  info  findings uncompared lean:inconsistentBindingBase             32
+rc=1

@@ -15,6 +15,613 @@ For every registered theorem: its exact statement and its axioms. If a statement
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Cert.Window.digest_eq
 
+/-- info: CaseLaw2.Cert.actorCiteWhere_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (ok : Nat → Bool)
+  (p n : Nat),
+  CaseLaw2.Cert.actorCiteWhere c b ok = some (p, n) →
+    ∃ m,
+      c.citeIndex = some m ∧
+        ok p = true ∧
+          ∃ s,
+            s <:+ CaseLaw2.Cert.bridgeAlnum b ∧
+              CaseLaw2.Cert.headPos s = some p ∧
+                CaseLaw2.Cert.citeFirst m b.lens s = some n ∧ ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some n -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.actorCiteWhere_some
+
+/-- info: 'CaseLaw2.Cert.actorCiteWhere_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.actorCiteWhere_some
+
+/-- info: @CaseLaw2.Cert.allSuffix_spec : ∀ {α : Type} (p : List α → Bool) (l : List α),
+  CaseLaw2.Cert.allSuffix p l = true → ∀ (s : List α), s <:+ l → p s = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.allSuffix_spec
+
+/-- info: 'CaseLaw2.Cert.allSuffix_spec' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.allSuffix_spec
+
+/-- info: CaseLaw2.Cert.ambiguousLabel_filter : ∀ (rows : List CaseLaw2.Cert.DoctrineRow) (l : String),
+  CaseLaw2.Cert.ambiguousLabel (List.filter (fun r => r.labels.contains l) rows) l = CaseLaw2.Cert.ambiguousLabel rows l -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.ambiguousLabel_filter
+
+/-- info: 'CaseLaw2.Cert.ambiguousLabel_filter' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.ambiguousLabel_filter
+
+/-- info: CaseLaw2.Cert.anchorTail_none : ∀ (h : CaseLaw2.Cert.HClaims) (c : CaseLaw2.Cert.Input),
+  CaseLaw2.Cert.anchorTail none h c =
+    CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.anchorTail_none
+
+/-- info: 'CaseLaw2.Cert.anchorTail_none' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.anchorTail_none
+
+/-- info: CaseLaw2.Cert.anchorTribunal_eq : ∀ (t? : Option CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input)
+  (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),
+  h.anchorTribunal = true →
+    CaseLaw2.Cert.checkHistory8A t? c (some a) none h =
+      CaseLaw2.Cert.anchoredBy CaseLaw2.Cert.anchorTribunalCue (CaseLaw2.Cert.anchorTail t? h c) c a -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.anchorTribunal_eq
+
+/-- info: 'CaseLaw2.Cert.anchorTribunal_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.anchorTribunal_eq
+
+/-- info: CaseLaw2.Cert.anchorTribunal_no_claim : ∀ (t? : Option CaseLaw2.Cert.TBridge) (rm? : Option CaseLaw2.Cert.Remand)
+  (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),
+  h.anchorTribunal = false →
+    CaseLaw2.Cert.anchorCueOk11 h = CaseLaw2.Cert.anchorCueOk9 h ∧
+      CaseLaw2.Cert.checkHistory8A t? c a? b? h = CaseLaw2.Cert.checkHistory8T t? c a? b? h ∧
+        CaseLaw2.Cert.checkHistory11 t? rm? zs c a? b? h = CaseLaw2.Cert.checkHistory10T t? rm? zs c a? b? h -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.anchorTribunal_no_claim
+
+/-- info: 'CaseLaw2.Cert.anchorTribunal_no_claim' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.anchorTribunal_no_claim
+
+/-- info: CaseLaw2.Cert.anchorTribunal_sound : ∀ (t? : Option CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input)
+  (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),
+  h.anchorTribunal = true →
+    (CaseLaw2.Cert.checkHistory8A t? c (some a) none h).admitted = true →
+      (CaseLaw2.Cert.anchorCues ++ CaseLaw2.Cert.anchorWideCues ++ CaseLaw2.Cert.anchorWide9Cues ++
+                CaseLaw2.Cert.anchorTribunalCues).any
+            (CaseLaw2.Cert.hasSub (CaseLaw2.Cert.norm a.quote).toLower) =
+          true ∧
+        CaseLaw2.Cert.anchorQuoteOk c a = true ∧
+          CaseLaw2.Cert.anchorDisqualified a = false ∧
+            CaseLaw2.Cert.anchorResolves c a = true ∧
+              CaseLaw2.Cert.anchorPartOk a = true ∧
+                (CaseLaw2.Cert.anchorTail t? h c
+                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                        ordered := c.ordered, authority := c.authority, selfText := true,
+                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,
+                        mode := c.mode }).admitted =
+                  true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.anchorTribunal_sound
+
+/-- info: 'CaseLaw2.Cert.anchorTribunal_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.anchorTribunal_sound
+
+/-- info: CaseLaw2.Cert.anchorWide9_no_claim : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims) (zs : List CaseLaw2.Cert.Zone),
+  h.anchorWide = false →
+    CaseLaw2.Cert.checkHistory8J c a? b? h = CaseLaw2.Cert.checkHistory8 c a? b? h ∧
+      CaseLaw2.Cert.checkHistory9J zs c a? b? h = CaseLaw2.Cert.checkHistory9 zs c a? b? h -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.anchorWide9_no_claim
+
+/-- info: 'CaseLaw2.Cert.anchorWide9_no_claim' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.anchorWide9_no_claim
+
+/-- info: CaseLaw2.Cert.anchorWide9_sound : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),
+  h.anchorWide = true →
+    (CaseLaw2.Cert.checkHistory8J c (some a) none h).admitted = true →
+      (CaseLaw2.Cert.anchorCues ++ CaseLaw2.Cert.anchorWideCues ++ CaseLaw2.Cert.anchorWide9Cues).any
+            (CaseLaw2.Cert.hasSub (CaseLaw2.Cert.norm a.quote).toLower) =
+          true ∧
+        CaseLaw2.Cert.anchorQuoteOk c a = true ∧
+          CaseLaw2.Cert.anchorDisqualified a = false ∧
+            CaseLaw2.Cert.anchorResolves c a = true ∧
+              CaseLaw2.Cert.anchorPartOk a = true ∧
+                (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h
+                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                        ordered := c.ordered, authority := c.authority, selfText := true,
+                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,
+                        mode := c.mode }).admitted =
+                  true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.anchorWide9_sound
+
+/-- info: 'CaseLaw2.Cert.anchorWide9_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.anchorWide9_sound
+
+/-- info: CaseLaw2.Cert.anchorWide_no_claim : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),
+  h.anchorWide = false →
+    CaseLaw2.Cert.anchorCueOk h a = CaseLaw2.Cert.anchorHasCue a ∧
+      CaseLaw2.Cert.checkHistory8 c (some a) none h = CaseLaw2.Cert.checkHistory7 c (some a) h -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.anchorWide_no_claim
+
+/-- info: 'CaseLaw2.Cert.anchorWide_no_claim' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.anchorWide_no_claim
+
+/-- info: CaseLaw2.Cert.anchorWide_sound : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),
+  h.anchorWide = true →
+    (CaseLaw2.Cert.checkHistory8 c (some a) none h).admitted = true →
+      (CaseLaw2.Cert.anchorCues ++ CaseLaw2.Cert.anchorWideCues).any
+            (CaseLaw2.Cert.hasSub (CaseLaw2.Cert.norm a.quote).toLower) =
+          true ∧
+        CaseLaw2.Cert.anchorQuoteOk c a = true ∧
+          CaseLaw2.Cert.anchorDisqualified a = false ∧
+            CaseLaw2.Cert.anchorResolves c a = true ∧
+              CaseLaw2.Cert.anchorPartOk a = true ∧
+                (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h
+                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                        ordered := c.ordered, authority := c.authority, selfText := true,
+                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,
+                        mode := c.mode }).admitted =
+                  true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.anchorWide_sound
+
+/-- info: 'CaseLaw2.Cert.anchorWide_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.anchorWide_sound
+
+/-- info: CaseLaw2.Cert.anchoredBy_admitted : ∀ (cue : CaseLaw2.Cert.Anchor → Bool)
+  (fin : CaseLaw2.Cert.Input → CaseLaw2.Cert.Result) (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),
+  (CaseLaw2.Cert.anchoredBy cue fin c a).admitted = true →
+    CaseLaw2.Cert.anchorQuoteOk c a = true ∧
+      cue a = true ∧
+        CaseLaw2.Cert.anchorDisqualified a = false ∧
+          CaseLaw2.Cert.anchorResolves c a = true ∧
+            CaseLaw2.Cert.anchorPartOk a = true ∧
+              (fin
+                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,
+                      target := c.target, citeIndex := c.citeIndex, mode := c.mode }).admitted =
+                true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.anchoredBy_admitted
+
+/-- info: 'CaseLaw2.Cert.anchoredBy_admitted' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.anchoredBy_admitted
+
+/-- info: CaseLaw2.Cert.anchoredThen_fin : ∀ (fin : CaseLaw2.Cert.Input → CaseLaw2.Cert.Result) (c : CaseLaw2.Cert.Input)
+  (a : CaseLaw2.Cert.Anchor),
+  (CaseLaw2.Cert.anchoredThen fin c a).admitted = true →
+    (fin
+          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+            authority := c.authority, selfText := true, hashRequired := c.hashRequired, target := c.target,
+            citeIndex := c.citeIndex, mode := c.mode }).admitted =
+      true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.anchoredThen_fin
+
+/-- info: 'CaseLaw2.Cert.anchoredThen_fin' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.anchoredThen_fin
+
+/-- info: CaseLaw2.Cert.antecedentFar_gap : ∀ (lens : List Nat) (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkTreatmentF true lens c e cl js).admitted = true →
+    ∀ (j : CaseLaw2.Cert.Joined),
+      j ∈ js →
+        j.rel = CaseLaw2.Cert.JRel.antecedent →
+          j.stop ≤ c.start ∧
+            c.start - j.stop ≤ CaseLaw2.Cert.joinedFarMax ∧
+              CaseLaw2.Cert.anaphorCue c.quote = true ∧
+                CaseLaw2.Cert.kindCue c = true ∧
+                  (c.start - j.stop ≤ CaseLaw2.Cert.joinedGapMax ∨
+                    ∃ w,
+                      w ∈ c.windows ∧
+                        CaseLaw2.Cert.usable (CaseLaw2.Cert.farInput c j) w = true ∧
+                          ∀ (m : Std.HashMap String Nat),
+                            c.citeIndex = some m →
+                              ∀ (s : List (Char × Nat)),
+                                s <:+ CaseLaw2.Cert.farAlnum c j w →
+                                  ∀ (p : Nat),
+                                    CaseLaw2.Cert.headPos s = some p →
+                                      p < c.start - j.stop →
+                                        ∀ (L : Nat),
+                                          L ∈ lens → ∀ (n : Nat), CaseLaw2.Cert.citeOf m s L = some n → n = c.target) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.antecedentFar_gap
+
+/-- info: 'CaseLaw2.Cert.antecedentFar_gap' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.antecedentFar_gap
+
+/-- info: CaseLaw2.Cert.antecedent_gap : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →
+    ∀ (j : CaseLaw2.Cert.Joined),
+      j ∈ js →
+        j.rel = CaseLaw2.Cert.JRel.antecedent →
+          j.stop ≤ c.start ∧
+            c.start - j.stop ≤ CaseLaw2.Cert.joinedGapMax ∧
+              CaseLaw2.Cert.anaphorCue c.quote = true ∧ CaseLaw2.Cert.kindCue c = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.antecedent_gap
+
+/-- info: 'CaseLaw2.Cert.antecedent_gap' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.antecedent_gap
+
+/-- info: CaseLaw2.Cert.bridgeActorCite_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (p2 pO n : Nat),
+  CaseLaw2.Cert.bridgeActorCite c b p2 = some (pO, n) →
+    ∃ m,
+      c.citeIndex = some m ∧
+        p2 < pO ∧
+          ∃ s,
+            s <:+ CaseLaw2.Cert.bridgeAlnum b ∧
+              CaseLaw2.Cert.headPos s = some pO ∧
+                CaseLaw2.Cert.citeFirst m b.lens s = some n ∧ ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some n -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.bridgeActorCite_some
+
+/-- info: 'CaseLaw2.Cert.bridgeActorCite_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.bridgeActorCite_some
+
+/-- info: CaseLaw2.Cert.bridgeChainOk_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (p2 : Nat),
+  CaseLaw2.Cert.bridgeChainOk c b p2 = true →
+    ∃ e, CaseLaw2.Cert.bridgeXEnd c b = some e ∧ CaseLaw2.Cert.noKeyBetween c b e p2 = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.bridgeChainOk_some
+
+/-- info: 'CaseLaw2.Cert.bridgeChainOk_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.bridgeChainOk_some
+
+/-- info: CaseLaw2.Cert.bridgeFail_authority : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (a : Option Bool),
+  CaseLaw2.Cert.bridgeFail
+      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+        authority := a, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,
+        citeIndex := c.citeIndex, mode := c.mode }
+      b =
+    CaseLaw2.Cert.bridgeFail c b -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.bridgeFail_authority
+
+/-- info: 'CaseLaw2.Cert.bridgeFail_authority' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.bridgeFail_authority
+
+/-- info: CaseLaw2.Cert.bridgeFail_none_iff : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge),
+  CaseLaw2.Cert.bridgeFail c b = none ↔
+    CaseLaw2.Cert.bridgeQuoteOk c b = true ∧
+      CaseLaw2.Cert.bridgeDateOk b = true ∧
+        CaseLaw2.Cert.bridgeClauseOk b = true ∧
+          ∃ p1 p2,
+            CaseLaw2.Cert.bridgeP1 c b = some p1 ∧
+              CaseLaw2.Cert.bridgeP2 c b p1 = some p2 ∧
+                CaseLaw2.Cert.bridgeChainOk c b p2 = true ∧
+                  Option.map (fun x => x.snd) (CaseLaw2.Cert.bridgeActorCite c b p2) = some b.actor -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.bridgeFail_none_iff
+
+/-- info: 'CaseLaw2.Cert.bridgeFail_none_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.bridgeFail_none_iff
+
+/-- info: CaseLaw2.Cert.bridgeP1_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (p1 : Nat),
+  CaseLaw2.Cert.bridgeP1 c b = some p1 →
+    ∃ m,
+      c.citeIndex = some m ∧
+        ∃ s,
+          s <:+ CaseLaw2.Cert.bridgeAlnum b ∧
+            CaseLaw2.Cert.headPos s = some p1 ∧ ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some c.target -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.bridgeP1_some
+
+/-- info: 'CaseLaw2.Cert.bridgeP1_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.bridgeP1_some
+
+/-- info: CaseLaw2.Cert.bridgeP2_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (p1 p2 : Nat),
+  CaseLaw2.Cert.bridgeP2 c b p1 = some p2 →
+    p1 < p2 ∧ CaseLaw2.Cert.cueHere c.kind (List.drop p2 (CaseLaw2.Cert.bridgeText b)) = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.bridgeP2_some
+
+/-- info: 'CaseLaw2.Cert.bridgeP2_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.bridgeP2_some
+
+/-- info: CaseLaw2.Cert.bridgeX_some : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (p1 e : Nat),
+  CaseLaw2.Cert.bridgeP1 c b = some p1 →
+    CaseLaw2.Cert.bridgeXEnd c b = some e →
+      ∃ m,
+        c.citeIndex = some m ∧
+          ∃ s,
+            s <:+ CaseLaw2.Cert.bridgeAlnum b ∧
+              CaseLaw2.Cert.headPos s = some p1 ∧
+                ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some c.target ∧ CaseLaw2.Cert.keyEnd s L = e -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.bridgeX_some
+
+/-- info: 'CaseLaw2.Cert.bridgeX_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.bridgeX_some
+
+/-- info: CaseLaw2.Cert.bridge_admitted_iff : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),
+  (CaseLaw2.Cert.checkBridge c b h).admitted = true ↔
+    CaseLaw2.Cert.bridgeQuoteOk c b = true ∧
+      CaseLaw2.Cert.bridgeDateOk b = true ∧
+        CaseLaw2.Cert.bridgeClauseOk b = true ∧
+          (∃ p1 p2,
+              CaseLaw2.Cert.bridgeP1 c b = some p1 ∧
+                CaseLaw2.Cert.bridgeP2 c b p1 = some p2 ∧
+                  CaseLaw2.Cert.bridgeChainOk c b p2 = true ∧
+                    Option.map (fun x => x.snd) (CaseLaw2.Cert.bridgeActorCite c b p2) = some b.actor) ∧
+            (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h
+                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+                    authority := c.authority, selfText := true, hashRequired := c.hashRequired, target := c.target,
+                    citeIndex := c.citeIndex, mode := c.mode }).admitted =
+              true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.bridge_admitted_iff
+
+/-- info: 'CaseLaw2.Cert.bridge_admitted_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.bridge_admitted_iff
+
+/-- info: CaseLaw2.Cert.bridge_order : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),
+  (CaseLaw2.Cert.checkBridge c b h).admitted = true →
+    ∃ p1 e p2 pO,
+      CaseLaw2.Cert.bridgeP1 c b = some p1 ∧
+        CaseLaw2.Cert.bridgeXEnd c b = some e ∧
+          CaseLaw2.Cert.bridgeP2 c b p1 = some p2 ∧
+            CaseLaw2.Cert.bridgeActorCite c b p2 = some (pO, b.actor) ∧
+              p1 < p2 ∧ p2 < pO ∧ CaseLaw2.Cert.noKeyBetween c b e p2 = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.bridge_order
+
+/-- info: 'CaseLaw2.Cert.bridge_order' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.bridge_order
+
+/-- info: CaseLaw2.Cert.bridge_sound : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),
+  (CaseLaw2.Cert.checkBridge c b h).admitted = true →
+    (b.quote ≠ "" ∧
+        b.start < b.stop ∧
+          b.stop - b.start ≤ CaseLaw2.Cert.bridgeMaxLen ∧
+            ∃ w,
+              CaseLaw2.Cert.coveringWindow (b.input c) = some w ∧
+                w ∈ b.windows ∧
+                  CaseLaw2.Cert.usable (b.input c) w = true ∧ CaseLaw2.Cert.quoteAt (b.input c) w = true) ∧
+      (0 < b.oDate ∧ 0 < b.wDate ∧ b.oDate ≤ b.wDate) ∧
+        CaseLaw2.Cert.hasSub (CaseLaw2.Cert.norm b.quote) ";" = false ∧
+          (∃ m,
+              c.citeIndex = some m ∧
+                ∃ p1 e p2 pO,
+                  (∃ s,
+                      s <:+ CaseLaw2.Cert.bridgeAlnum b ∧
+                        CaseLaw2.Cert.headPos s = some p1 ∧
+                          ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some c.target ∧ CaseLaw2.Cert.keyEnd s L = e) ∧
+                    p1 < p2 ∧
+                      CaseLaw2.Cert.cueHere c.kind (List.drop p2 (CaseLaw2.Cert.bridgeText b)) = true ∧
+                        (∀ (s : List (Char × Nat)),
+                            s <:+ CaseLaw2.Cert.bridgeAlnum b →
+                              ∀ (p : Nat),
+                                CaseLaw2.Cert.headPos s = some p →
+                                  e ≤ p → p < p2 → ∀ (L : Nat), L ∈ b.lens → CaseLaw2.Cert.citeOf m s L = none) ∧
+                          p2 < pO ∧
+                            ∃ s,
+                              s <:+ CaseLaw2.Cert.bridgeAlnum b ∧
+                                CaseLaw2.Cert.headPos s = some pO ∧
+                                  ∃ L, L ∈ b.lens ∧ CaseLaw2.Cert.citeOf m s L = some b.actor) ∧
+            (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h
+                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,
+                      target := c.target, citeIndex := c.citeIndex, mode := c.mode }).admitted =
+                true ∧
+              CaseLaw2.Cert.checkBridge c b h =
+                CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h
+                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+                    authority := c.authority, selfText := true, hashRequired := c.hashRequired, target := c.target,
+                    citeIndex := c.citeIndex, mode := c.mode } -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.bridge_sound
+
+/-- info: 'CaseLaw2.Cert.bridge_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.bridge_sound
+
+/-- info: CaseLaw2.Cert.checkAnchored_admitted_iff : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),
+  (CaseLaw2.Cert.checkAnchored c a).admitted = true ↔
+    CaseLaw2.Cert.anchorQuoteOk c a = true ∧
+      CaseLaw2.Cert.anchorHasCue a = true ∧
+        CaseLaw2.Cert.anchorDisqualified a = false ∧
+          CaseLaw2.Cert.anchorResolves c a = true ∧
+            CaseLaw2.Cert.anchorPartOk a = true ∧
+              (CaseLaw2.Cert.check
+                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,
+                      target := c.target, citeIndex := c.citeIndex, mode := c.mode }).admitted =
+                true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkAnchored_admitted_iff
+
+/-- info: 'CaseLaw2.Cert.checkAnchored_admitted_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkAnchored_admitted_iff
+
+/-- info: CaseLaw2.Cert.checkAnchored_cite_index : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),
+  (CaseLaw2.Cert.checkAnchored c a).admitted = true →
+    c.evidence.startsWith "cite:" = true →
+      ∀ (m : Std.HashMap String Nat),
+        c.citeIndex = some m → m.get? (CaseLaw2.Cert.compact (c.evidence.drop 5).toString) = some c.target -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkAnchored_cite_index
+
+/-- info: 'CaseLaw2.Cert.checkAnchored_cite_index' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkAnchored_cite_index
+
+/-- info: CaseLaw2.Cert.checkAnchored_disposition : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),
+  (CaseLaw2.Cert.checkAnchored c a).admitted = true →
+    CaseLaw2.Cert.shaOk c = true ∧
+      (∃ w, CaseLaw2.Cert.coveringWindow c = some w ∧ CaseLaw2.Cert.quoteAt c w = true) ∧
+        CaseLaw2.Cert.hasCue c = true ∧
+          CaseLaw2.Cert.disqualified c = false ∧
+            CaseLaw2.Cert.partOk c = true ∧
+              c.ordered = true ∧
+                (CaseLaw2.Cert.checkAnchored c a = CaseLaw2.Cert.Result.ok → c.authority = some true) ∧
+                  (CaseLaw2.Cert.checkAnchored c a = CaseLaw2.Cert.Result.okUnverifiedBy → c.authority = none) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkAnchored_disposition
+
+/-- info: 'CaseLaw2.Cert.checkAnchored_disposition' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkAnchored_disposition
+
+/-- info: CaseLaw2.Cert.checkAnchored_quote_nonempty : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),
+  (CaseLaw2.Cert.checkAnchored c a).admitted = true → a.quote ≠ "" ∧ a.start < a.stop ∧ c.quote ≠ "" ∧ c.start < c.stop -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkAnchored_quote_nonempty
+
+/-- info: 'CaseLaw2.Cert.checkAnchored_quote_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkAnchored_quote_nonempty
+
+/-- info: CaseLaw2.Cert.checkAnchored_sound : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),
+  (CaseLaw2.Cert.checkAnchored c a).admitted = true →
+    (∃ w,
+        CaseLaw2.Cert.coveringWindow (a.input c) = some w ∧
+          w ∈ c.windows ∧ CaseLaw2.Cert.usable (a.input c) w = true ∧ CaseLaw2.Cert.quoteAt (a.input c) w = true) ∧
+      CaseLaw2.Cert.anchorHasCue a = true ∧
+        CaseLaw2.Cert.anchorDisqualified a = false ∧
+          CaseLaw2.Cert.anchorResolves c a = true ∧
+            CaseLaw2.Cert.anchorPartOk a = true ∧
+              (CaseLaw2.Cert.check
+                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                        ordered := c.ordered, authority := c.authority, selfText := true,
+                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,
+                        mode := c.mode }).admitted =
+                  true ∧
+                CaseLaw2.Cert.checkAnchored c a =
+                  CaseLaw2.Cert.check
+                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,
+                      target := c.target, citeIndex := c.citeIndex, mode := c.mode } -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkAnchored_sound
+
+/-- info: 'CaseLaw2.Cert.checkAnchored_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkAnchored_sound
+
+/-- info: CaseLaw2.Cert.checkAnchored_window_hash : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),
+  (CaseLaw2.Cert.checkAnchored c a).admitted = true →
+    ∃ w,
+      CaseLaw2.Cert.coveringWindow (a.input c) = some w ∧
+        CaseLaw2.Cert.quoteAt (a.input c) w = true ∧
+          CaseLaw2.Cert.wellFormed (a.input c) w = true ∧
+            (∀ (s : String), w.hash = some s → CaseLaw2.Sha1.hex w.text = s) ∧
+              (c.hashRequired = true → w.hash.isSome = true) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkAnchored_window_hash
+
+/-- info: 'CaseLaw2.Cert.checkAnchored_window_hash' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkAnchored_window_hash
+
+/-- info: CaseLaw2.Cert.checkBridge_admitted : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),
+  (CaseLaw2.Cert.checkBridge c b h).admitted = true ↔
+    CaseLaw2.Cert.bridgeFail c b = none ∧
+      (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk h
+            { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+              evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+              authority := c.authority, selfText := true, hashRequired := c.hashRequired, target := c.target,
+              citeIndex := c.citeIndex, mode := c.mode }).admitted =
+        true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkBridge_admitted
+
+/-- info: 'CaseLaw2.Cert.checkBridge_admitted' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkBridge_admitted
+
+/-- info: CaseLaw2.Cert.checkByX_admitted : ∀ (cueOk : CaseLaw2.Cert.Input → Bool) (f : CaseLaw2.Cert.Reason)
+  (partRes extra : CaseLaw2.Cert.Input → Option CaseLaw2.Cert.Reason) (c : CaseLaw2.Cert.Input),
+  (CaseLaw2.Cert.checkByX cueOk f partRes extra c).admitted = true →
+    cueOk c = true ∧ extra c = none ∧ (CaseLaw2.Cert.checkBy cueOk partRes c).admitted = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkByX_admitted
+
+/-- info: 'CaseLaw2.Cert.checkByX_admitted' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkByX_admitted
+
+/-- info: CaseLaw2.Cert.checkByX_none : ∀ (cueOk : CaseLaw2.Cert.Input → Bool)
+  (partRes : CaseLaw2.Cert.Input → Option CaseLaw2.Cert.Reason) (c : CaseLaw2.Cert.Input),
+  CaseLaw2.Cert.checkByX cueOk CaseLaw2.Cert.Reason.noCue partRes (fun x => none) c =
+    CaseLaw2.Cert.checkBy cueOk partRes c -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkByX_none
+
+/-- info: 'CaseLaw2.Cert.checkByX_none' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkByX_none
+
+/-- info: CaseLaw2.Cert.checkBy_check : ∀ (c : CaseLaw2.Cert.Input),
+  CaseLaw2.Cert.checkBy CaseLaw2.Cert.hasCue
+      (fun c => if CaseLaw2.Cert.partOk c = true then none else some CaseLaw2.Cert.Reason.partNotMajority) c =
+    CaseLaw2.Cert.check c -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkBy_check
+
+/-- info: 'CaseLaw2.Cert.checkBy_check' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkBy_check
+
+/-- info: CaseLaw2.Cert.checkBy_cue_eq : ∀ (cue1 cue2 : CaseLaw2.Cert.Input → Bool)
+  (partRes : CaseLaw2.Cert.Input → Option CaseLaw2.Cert.Reason) (c : CaseLaw2.Cert.Input),
+  cue1 c = true → cue2 c = true → CaseLaw2.Cert.checkBy cue1 partRes c = CaseLaw2.Cert.checkBy cue2 partRes c -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkBy_cue_eq
+
+/-- info: 'CaseLaw2.Cert.checkBy_cue_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkBy_cue_eq
+
+/-- info: CaseLaw2.Cert.checkBy_cue_part : ∀ (cueOk : CaseLaw2.Cert.Input → Bool)
+  (partRes : CaseLaw2.Cert.Input → Option CaseLaw2.Cert.Reason) (c : CaseLaw2.Cert.Input),
+  (CaseLaw2.Cert.checkBy cueOk partRes c).admitted = true → cueOk c = true ∧ partRes c = none -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkBy_cue_part
+
+/-- info: 'CaseLaw2.Cert.checkBy_cue_part' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkBy_cue_part
+
 /-- info: CaseLaw2.Cert.checkCert_cite_index : ∀ (c : CaseLaw2.Cert.Input),
   (CaseLaw2.Cert.check c).admitted = true →
     c.selfText = false →
@@ -70,6 +677,432 @@ For every registered theorem: its exact statement and its axioms. If a statement
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Cert.checkCert_window_hash
 
+/-- info: CaseLaw2.Cert.checkDoctrine_sound : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkDoctrine c e js).admitted = true →
+    c.kind = CaseLaw2.Cert.Kind.treat CaseLaw2.TKind.disapproved ∧
+      e = true ∧
+        (∃ j, j ∈ js ∧ j.rel = CaseLaw2.Cert.JRel.doctrineTie) ∧
+          (CaseLaw2.Cert.checkJoined c e CaseLaw2.Cert.TClaim.doctrine js).admitted = true ∧
+            CaseLaw2.Cert.hasCue
+                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+                    authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired,
+                    target := c.target, citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.doctrine } =
+                true ∧
+              CaseLaw2.Cert.disqualified
+                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+                    authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired,
+                    target := c.target, citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.doctrine } =
+                false -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkDoctrine_sound
+
+/-- info: 'CaseLaw2.Cert.checkDoctrine_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkDoctrine_sound
+
+/-- info: CaseLaw2.Cert.checkHistory7_claims : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (h : CaseLaw2.Cert.HClaims),
+  (CaseLaw2.Cert.checkHistory7 c a? h).admitted = true →
+    CaseLaw2.Cert.claimCueOk h c = true ∧
+      (CaseLaw2.Cert.partOk c = true ∨
+        c.part = "headmatter" ∧ h.orderHead = true ∧ CaseLaw2.Cert.orderHeadOk h c = true) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkHistory7_claims
+
+/-- info: 'CaseLaw2.Cert.checkHistory7_claims' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkHistory7_claims
+
+/-- info: CaseLaw2.Cert.checkHistory8AWith_cue9 : ∀ (t? : Option CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input)
+  (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),
+  CaseLaw2.Cert.checkHistory8AWith CaseLaw2.Cert.anchorCueOk9 t? c a? b? h = CaseLaw2.Cert.checkHistory8T t? c a? b? h -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkHistory8AWith_cue9
+
+/-- info: 'CaseLaw2.Cert.checkHistory8AWith_cue9' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkHistory8AWith_cue9
+
+/-- info: CaseLaw2.Cert.checkHistory8T_claimed : ∀ (t : CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input)
+  (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),
+  CaseLaw2.Cert.trialKind c.kind = true →
+    CaseLaw2.Cert.checkHistory8T (some t) c (some a) none h =
+      CaseLaw2.Cert.anchoredBy (CaseLaw2.Cert.anchorCueOk9 h)
+        (CaseLaw2.Cert.checkTrialWith CaseLaw2.Cert.trialBridgeDOk
+          (CaseLaw2.Cert.trialFailWith CaseLaw2.Cert.trialBridgeTOk CaseLaw2.Cert.trialBridgeDateOk) h t)
+        c a -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkHistory8T_claimed
+
+/-- info: 'CaseLaw2.Cert.checkHistory8T_claimed' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkHistory8T_claimed
+
+/-- info: CaseLaw2.Cert.checkHistory8_bridge : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (b : CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),
+  CaseLaw2.Cert.checkHistory8 c a? (some b) h = CaseLaw2.Cert.checkBridge c b h -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkHistory8_bridge
+
+/-- info: 'CaseLaw2.Cert.checkHistory8_bridge' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkHistory8_bridge
+
+/-- info: CaseLaw2.Cert.checkHistory9_sound : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)
+  (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),
+  zs ≠ [] →
+    (CaseLaw2.Cert.checkHistory9 zs c a? b? h).admitted = true →
+      (CaseLaw2.Cert.checkHistory8 c a? b? h).admitted = true ∧
+        CaseLaw2.Cert.checkHistory9 zs c a? b? h = CaseLaw2.Cert.checkHistory8 c a? b? h ∧
+          ∃ z, z ∈ zs ∧ z.start ≤ c.start ∧ c.stop ≤ z.stop ∧ z.part = c.part -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkHistory9_sound
+
+/-- info: 'CaseLaw2.Cert.checkHistory9_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkHistory9_sound
+
+/-- info: CaseLaw2.Cert.checkHistory_anchored : ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor),
+  CaseLaw2.Cert.checkHistory c (some a) = CaseLaw2.Cert.checkAnchored c a -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkHistory_anchored
+
+/-- info: 'CaseLaw2.Cert.checkHistory_anchored' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkHistory_anchored
+
+/-- info: CaseLaw2.Cert.checkHistory_no_anchor : ∀ (c : CaseLaw2.Cert.Input),
+  CaseLaw2.Cert.checkHistory c none = CaseLaw2.Cert.check c -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkHistory_no_anchor
+
+/-- info: 'CaseLaw2.Cert.checkHistory_no_anchor' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkHistory_no_anchor
+
+/-- info: CaseLaw2.Cert.checkJoinedFarWith_rel : ∀ (fr : CaseLaw2.Cert.Input → CaseLaw2.Cert.Joined → Option CaseLaw2.Cert.Reason)
+  (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim) (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoinedFarWith fr c e cl js).admitted = true →
+    List.findSome? (CaseLaw2.Cert.farRelWith fr cl c) js = none -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkJoinedFarWith_rel
+
+/-- info: 'CaseLaw2.Cert.checkJoinedFarWith_rel' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkJoinedFarWith_rel
+
+/-- info: CaseLaw2.Cert.checkJoinedFar_eq : ∀ (fr : CaseLaw2.Cert.Input → CaseLaw2.Cert.Joined → Option CaseLaw2.Cert.Reason)
+  (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim) (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →
+    CaseLaw2.Cert.checkJoinedFarWith fr c e cl js = CaseLaw2.Cert.checkJoined c e cl js -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkJoinedFar_eq
+
+/-- info: 'CaseLaw2.Cert.checkJoinedFar_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkJoinedFar_eq
+
+/-- info: CaseLaw2.Cert.checkJoined_admitted_bool : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true ↔
+    (CaseLaw2.Cert.joinedCountOk js && js.all (CaseLaw2.Cert.joinedQuoteOk c)) = true ∧
+      js.all CaseLaw2.Cert.joinedPartOk = true ∧
+        js.any (CaseLaw2.Cert.joinedDisqualified c) = false ∧
+          js.all (CaseLaw2.Cert.relationOk cl c) = true ∧
+            js.any (CaseLaw2.Cert.joinedResolves c) = true ∧
+              (CaseLaw2.Cert.mainCheck
+                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,
+                      target := c.target, citeIndex := c.citeIndex, mode := c.mode }
+                    e cl).admitted =
+                true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkJoined_admitted_bool
+
+/-- info: 'CaseLaw2.Cert.checkJoined_admitted_bool' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkJoined_admitted_bool
+
+/-- info: CaseLaw2.Cert.checkJoined_admitted_iff : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true ↔
+    CaseLaw2.Cert.joinedCountOk js = true ∧
+      (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.joinedQuoteOk c j = true) ∧
+        (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.joinedPartOk j = true) ∧
+          (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.joinedDisqualified c j = false) ∧
+            (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.relationOk cl c j = true) ∧
+              (∃ j, j ∈ js ∧ CaseLaw2.Cert.joinedResolves c j = true) ∧
+                (CaseLaw2.Cert.mainCheck
+                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                        ordered := c.ordered, authority := c.authority, selfText := true,
+                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex, mode := c.mode }
+                      e cl).admitted =
+                  true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkJoined_admitted_iff
+
+/-- info: 'CaseLaw2.Cert.checkJoined_admitted_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkJoined_admitted_iff
+
+/-- info: CaseLaw2.Cert.checkJoined_bounded : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true → 1 ≤ js.length ∧ js.length ≤ 2 -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkJoined_bounded
+
+/-- info: 'CaseLaw2.Cert.checkJoined_bounded' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkJoined_bounded
+
+/-- info: CaseLaw2.Cert.checkJoined_cite_index : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →
+    c.evidence.startsWith "cite:" = true →
+      ∀ (m : Std.HashMap String Nat),
+        c.citeIndex = some m → m.get? (CaseLaw2.Cert.compact (c.evidence.drop 5).toString) = some c.target -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkJoined_cite_index
+
+/-- info: 'CaseLaw2.Cert.checkJoined_cite_index' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkJoined_cite_index
+
+/-- info: CaseLaw2.Cert.checkJoined_disposition : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →
+    CaseLaw2.Cert.shaOk c = true ∧
+      (∃ w, CaseLaw2.Cert.coveringWindow c = some w ∧ CaseLaw2.Cert.quoteAt c w = true) ∧
+        CaseLaw2.Cert.hasCue (cl.apply c) = true ∧
+          CaseLaw2.Cert.disqualified (cl.apply c) = false ∧ CaseLaw2.Cert.partOk c = true ∧ c.ordered = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkJoined_disposition
+
+/-- info: 'CaseLaw2.Cert.checkJoined_disposition' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkJoined_disposition
+
+/-- info: CaseLaw2.Cert.checkJoined_quote_nonempty : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →
+    ∀ (j : CaseLaw2.Cert.Joined), j ∈ js → j.quote ≠ "" ∧ j.start < j.stop -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkJoined_quote_nonempty
+
+/-- info: 'CaseLaw2.Cert.checkJoined_quote_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkJoined_quote_nonempty
+
+/-- info: CaseLaw2.Cert.checkJoined_sound : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →
+    (∀ (j : CaseLaw2.Cert.Joined),
+        j ∈ js →
+          ∃ w,
+            CaseLaw2.Cert.coveringWindow (j.input c) = some w ∧
+              w ∈ c.windows ∧ CaseLaw2.Cert.usable (j.input c) w = true ∧ CaseLaw2.Cert.quoteAt (j.input c) w = true) ∧
+      (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.joinedPartOk j = true) ∧
+        (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.joinedDisqualified c j = false) ∧
+          (∀ (j : CaseLaw2.Cert.Joined), j ∈ js → CaseLaw2.Cert.relationOk cl c j = true) ∧
+            (∃ j, j ∈ js ∧ CaseLaw2.Cert.joinedResolves c j = true) ∧
+              (CaseLaw2.Cert.mainCheck
+                      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                        ordered := c.ordered, authority := c.authority, selfText := true,
+                        hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex, mode := c.mode }
+                      e cl).admitted =
+                  true ∧
+                CaseLaw2.Cert.checkJoined c e cl js =
+                  CaseLaw2.Cert.mainCheck
+                    { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                      evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                      ordered := c.ordered, authority := c.authority, selfText := true, hashRequired := c.hashRequired,
+                      target := c.target, citeIndex := c.citeIndex, mode := c.mode }
+                    e cl -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkJoined_sound
+
+/-- info: 'CaseLaw2.Cert.checkJoined_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkJoined_sound
+
+/-- info: CaseLaw2.Cert.checkJoined_text : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →
+    (CaseLaw2.Cert.checkJoined
+          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+            authority := some true, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,
+            citeIndex := c.citeIndex, mode := c.mode }
+          e cl js).admitted =
+      true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkJoined_text
+
+/-- info: 'CaseLaw2.Cert.checkJoined_text' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkJoined_text
+
+/-- info: CaseLaw2.Cert.checkJoined_window_hash : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →
+    ∀ (j : CaseLaw2.Cert.Joined),
+      j ∈ js →
+        ∃ w,
+          CaseLaw2.Cert.coveringWindow (j.input c) = some w ∧
+            CaseLaw2.Cert.quoteAt (j.input c) w = true ∧
+              CaseLaw2.Cert.wellFormed (j.input c) w = true ∧
+                (∀ (s : String), w.hash = some s → CaseLaw2.Sha1.hex w.text = s) ∧
+                  (c.hashRequired = true → w.hash.isSome = true) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkJoined_window_hash
+
+/-- info: 'CaseLaw2.Cert.checkJoined_window_hash' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkJoined_window_hash
+
+/-- info: CaseLaw2.Cert.checkOperative_sound : ∀ (c : CaseLaw2.Cert.Input) (explicit : Bool),
+  (CaseLaw2.Cert.checkOperative c explicit).admitted = true →
+    c.kind = CaseLaw2.Cert.Kind.treat CaseLaw2.TKind.disapproved ∧
+      explicit = true ∧
+        (CaseLaw2.Cert.check
+                { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                  evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+                  authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,
+                  citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.operative }).admitted =
+            true ∧
+          CaseLaw2.Cert.hasCue
+                { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                  evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+                  authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,
+                  citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.operative } =
+              true ∧
+            CaseLaw2.Cert.disqualified
+                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+                    authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired,
+                    target := c.target, citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.operative } =
+                false ∧
+              CaseLaw2.Cert.resolves
+                  { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                    evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+                    authority := c.authority, selfText := c.selfText, hashRequired := c.hashRequired,
+                    target := c.target, citeIndex := c.citeIndex, mode := CaseLaw2.Cert.Mode.operative } =
+                true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkOperative_sound
+
+/-- info: 'CaseLaw2.Cert.checkOperative_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkOperative_sound
+
+/-- info: CaseLaw2.Cert.checkRecognised_fallback : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),
+  (CaseLaw2.Cert.checkRecognised c w).isRecognised = false →
+    CaseLaw2.Cert.checkRecognised c w = CaseLaw2.Cert.RResult.witness (CaseLaw2.Cert.checkWitness c w) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkRecognised_fallback
+
+/-- info: 'CaseLaw2.Cert.checkRecognised_fallback' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkRecognised_fallback
+
+/-- info: CaseLaw2.Cert.checkRecognised_needs_power : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),
+  w.power = false → (CaseLaw2.Cert.checkRecognised c w).isRecognised = false -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkRecognised_needs_power
+
+/-- info: 'CaseLaw2.Cert.checkRecognised_needs_power' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkRecognised_needs_power
+
+/-- info: CaseLaw2.Cert.checkRecognised_no_claim : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),
+  w.claim = false → CaseLaw2.Cert.checkRecognised c w = CaseLaw2.Cert.RResult.witness (CaseLaw2.Cert.checkWitness c w) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkRecognised_no_claim
+
+/-- info: 'CaseLaw2.Cert.checkRecognised_no_claim' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkRecognised_no_claim
+
+/-- info: CaseLaw2.Cert.checkRecognised_sound : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),
+  (CaseLaw2.Cert.checkRecognised c w).isRecognised = true →
+    w.claim = true ∧
+      w.power = true ∧
+        w.datesKnown = true ∧
+          CaseLaw2.Cert.distinctEvidence c w = true ∧
+            w.known = true ∧
+              w.explicit = false ∧
+                w.changes = true ∧
+                  (CaseLaw2.Cert.textCheck
+                          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                            ordered := c.ordered, authority := c.authority, selfText := c.selfText,
+                            hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,
+                            mode := CaseLaw2.Cert.Mode.recog }).admitted =
+                      true ∧
+                    CaseLaw2.Cert.byResolves
+                          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+                            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows,
+                            ordered := c.ordered, authority := c.authority, selfText := c.selfText,
+                            hashRequired := c.hashRequired, target := c.target, citeIndex := c.citeIndex,
+                            mode := CaseLaw2.Cert.Mode.recog }
+                          w =
+                        true ∧
+                      c.ordered = true ∧ w.witnessOrdered = true ∧ w.standing = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkRecognised_sound
+
+/-- info: 'CaseLaw2.Cert.checkRecognised_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkRecognised_sound
+
+/-- info: CaseLaw2.Cert.checkTreatment9_sound : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input) (e : Bool)
+  (cl : CaseLaw2.Cert.TClaim) (js : List CaseLaw2.Cert.Joined),
+  zs ≠ [] →
+    (CaseLaw2.Cert.checkTreatment9 zs c e cl js).admitted = true →
+      (CaseLaw2.Cert.checkTreatment c e cl js).admitted = true ∧
+        CaseLaw2.Cert.checkTreatment9 zs c e cl js = CaseLaw2.Cert.checkTreatment c e cl js ∧
+          (∃ z, z ∈ zs ∧ z.start ≤ c.start ∧ c.stop ≤ z.stop ∧ z.part = c.part) ∧
+            ∀ (j : CaseLaw2.Cert.Joined), j ∈ js → ∃ z, z ∈ zs ∧ z.start ≤ j.start ∧ j.stop ≤ z.stop ∧ z.part = j.part -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkTreatment9_sound
+
+/-- info: 'CaseLaw2.Cert.checkTreatment9_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkTreatment9_sound
+
+/-- info: CaseLaw2.Cert.checkTreatment_joined : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  js ≠ [] →
+    (CaseLaw2.Cert.checkTreatment c e cl js).admitted = true → (CaseLaw2.Cert.checkJoined c e cl js).admitted = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkTreatment_joined
+
+/-- info: 'CaseLaw2.Cert.checkTreatment_joined' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkTreatment_joined
+
+/-- info: CaseLaw2.Cert.checkTreatment_text : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkTreatment c e cl js).admitted = true →
+    (CaseLaw2.Cert.checkTreatment
+          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+            authority := some true, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,
+            citeIndex := c.citeIndex, mode := c.mode }
+          e cl js).admitted =
+      true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.checkTreatment_text
+
+/-- info: 'CaseLaw2.Cert.checkTreatment_text' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.checkTreatment_text
+
 /-- info: CaseLaw2.Cert.checkWitness_inferred : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),
   (CaseLaw2.Cert.checkWitness c w).admitted = true → w.explicit = false -/
 #guard_msgs (whitespace := lax) in
@@ -103,6 +1136,818 @@ For every registered theorem: its exact statement and its axioms. If a statement
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Cert.check_fail_reason
 
+/-- info: CaseLaw2.Cert.check_text : ∀ (c : CaseLaw2.Cert.Input),
+  (CaseLaw2.Cert.check c).admitted = true →
+    (CaseLaw2.Cert.check
+          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+            authority := some true, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,
+            citeIndex := c.citeIndex, mode := c.mode }).admitted =
+      true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.check_text
+
+/-- info: 'CaseLaw2.Cert.check_text' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.check_text
+
+/-- info: CaseLaw2.Cert.citeOf_key : ∀ (m : Std.HashMap String Nat) (s : List (Char × Nat)) (L n : Nat),
+  CaseLaw2.Cert.citeOf m s L = some n →
+    0 < L ∧ (List.take L s).length = L ∧ m.get? (String.ofList (List.map (fun x => x.fst) (List.take L s))) = some n -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.citeOf_key
+
+/-- info: 'CaseLaw2.Cert.citeOf_key' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.citeOf_key
+
+/-- info: CaseLaw2.Cert.classOf7_no_doctrine : ∀ (e r : Bool) (q : String),
+  CaseLaw2.Cert.classOf7 e r false q = CaseLaw2.Cert.classOf e r q -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.classOf7_no_doctrine
+
+/-- info: 'CaseLaw2.Cert.classOf7_no_doctrine' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.classOf7_no_doctrine
+
+/-- info: CaseLaw2.Cert.classOf_recognised_iff : ∀ (explicit recognised : Bool) (quote : String),
+  CaseLaw2.Cert.classOf explicit recognised quote = CaseLaw2.Cert.OClass.recognised ↔ recognised = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.classOf_recognised_iff
+
+/-- info: 'CaseLaw2.Cert.classOf_recognised_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.classOf_recognised_iff
+
+/-- info: CaseLaw2.Cert.doctrineTie_label : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkJoined c e cl js).admitted = true →
+    ∀ (j : CaseLaw2.Cert.Joined),
+      j ∈ js →
+        j.rel = CaseLaw2.Cert.JRel.doctrineTie →
+          cl = CaseLaw2.Cert.TClaim.doctrine ∧
+            CaseLaw2.Cert.labelOk j.label = true ∧
+              CaseLaw2.Cert.labelIn c.quote j.label = true ∧
+                CaseLaw2.Cert.labelIn j.quote j.label = true ∧ CaseLaw2.Cert.tieCue j.quote = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.doctrineTie_label
+
+/-- info: 'CaseLaw2.Cert.doctrineTie_label' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.doctrineTie_label
+
+/-- info: CaseLaw2.Cert.doctrine_unique : ∀ (rows : List CaseLaw2.Cert.DoctrineRow) (r1 r2 : CaseLaw2.Cert.DoctrineRow),
+  r1 ∈ rows →
+    r2 ∈ rows →
+      ∀ (v1 v2 : CaseLaw2.Cert.Result),
+        (CaseLaw2.Cert.doctrineFinal rows r1 v1).admitted = true →
+          (CaseLaw2.Cert.doctrineFinal rows r2 v2).admitted = true →
+            (v1.admitted = true → r1.text = true) →
+              (v2.admitted = true → r2.text = true) →
+                ∀ (l : String), l ∈ r1.labels → l ∈ r2.labels → r1.target = r2.target -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.doctrine_unique
+
+/-- info: 'CaseLaw2.Cert.doctrine_unique' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.doctrine_unique
+
+/-- info: CaseLaw2.Cert.farKeyOk_spec : ∀ (lens : List Nat) (c : CaseLaw2.Cert.Input) (j : CaseLaw2.Cert.Joined)
+  (w : CaseLaw2.Cert.Window),
+  CaseLaw2.Cert.farKeyOk lens c j w = true →
+    ∀ (m : Std.HashMap String Nat),
+      c.citeIndex = some m →
+        ∀ (s : List (Char × Nat)),
+          s <:+ CaseLaw2.Cert.farAlnum c j w →
+            ∀ (p : Nat),
+              CaseLaw2.Cert.headPos s = some p →
+                p < c.start - j.stop →
+                  ∀ (L : Nat), L ∈ lens → ∀ (n : Nat), CaseLaw2.Cert.citeOf m s L = some n → n = c.target -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.farKeyOk_spec
+
+/-- info: 'CaseLaw2.Cert.farKeyOk_spec' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.farKeyOk_spec
+
+/-- info: CaseLaw2.Cert.farRel_none : ∀ (lens : List Nat) (cl : CaseLaw2.Cert.TClaim) (c : CaseLaw2.Cert.Input)
+  (j : CaseLaw2.Cert.Joined),
+  j.rel = CaseLaw2.Cert.JRel.antecedent →
+    CaseLaw2.Cert.farRelWith (CaseLaw2.Cert.farReason lens) cl c j = none →
+      j.stop ≤ c.start ∧
+        c.start - j.stop ≤ CaseLaw2.Cert.joinedFarMax ∧
+          CaseLaw2.Cert.anaphorCue c.quote = true ∧
+            CaseLaw2.Cert.kindCue c = true ∧
+              (c.start - j.stop ≤ CaseLaw2.Cert.joinedGapMax ∨
+                ∃ w,
+                  w ∈ c.windows ∧
+                    CaseLaw2.Cert.usable (CaseLaw2.Cert.farInput c j) w = true ∧
+                      ∀ (m : Std.HashMap String Nat),
+                        c.citeIndex = some m →
+                          ∀ (s : List (Char × Nat)),
+                            s <:+ CaseLaw2.Cert.farAlnum c j w →
+                              ∀ (p : Nat),
+                                CaseLaw2.Cert.headPos s = some p →
+                                  p < c.start - j.stop →
+                                    ∀ (L : Nat),
+                                      L ∈ lens → ∀ (n : Nat), CaseLaw2.Cert.citeOf m s L = some n → n = c.target) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.farRel_none
+
+/-- info: 'CaseLaw2.Cert.farRel_none' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.farRel_none
+
+/-- info: CaseLaw2.Cert.farWindow_some : ∀ (c : CaseLaw2.Cert.Input) (j : CaseLaw2.Cert.Joined) (w : CaseLaw2.Cert.Window),
+  CaseLaw2.Cert.farWindow c j = some w → w ∈ c.windows ∧ CaseLaw2.Cert.usable (CaseLaw2.Cert.farInput c j) w = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.farWindow_some
+
+/-- info: 'CaseLaw2.Cert.farWindow_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.farWindow_some
+
+/-- info: CaseLaw2.Cert.findSome_farRel_none : ∀ (fr : CaseLaw2.Cert.Input → CaseLaw2.Cert.Joined → Option CaseLaw2.Cert.Reason)
+  (cl : CaseLaw2.Cert.TClaim) (c : CaseLaw2.Cert.Input) (js : List CaseLaw2.Cert.Joined),
+  js.all (CaseLaw2.Cert.relationOk cl c) = true → List.findSome? (CaseLaw2.Cert.farRelWith fr cl c) js = none -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.findSome_farRel_none
+
+/-- info: 'CaseLaw2.Cert.findSome_farRel_none' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.findSome_farRel_none
+
+/-- info: CaseLaw2.Cert.firstCue_some : ∀ (k : CaseLaw2.Cert.Kind) (p1 : Nat) (q : List Char) (i j : Nat),
+  CaseLaw2.Cert.firstCue k p1 q i = some j → i ≤ j ∧ p1 < j ∧ CaseLaw2.Cert.cueHere k (List.drop (j - i) q) = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.firstCue_some
+
+/-- info: 'CaseLaw2.Cert.firstCue_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.firstCue_some
+
+/-- info: @CaseLaw2.Cert.firstSuffix_some : ∀ {α : Type} (p : List α → Bool) (l s : List α),
+  CaseLaw2.Cert.firstSuffix p l = some s → s <:+ l ∧ p s = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.firstSuffix_some
+
+/-- info: 'CaseLaw2.Cert.firstSuffix_some' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.firstSuffix_some
+
+/-- info: CaseLaw2.Cert.identityFormOk_spec : ∀ (i : CaseLaw2.Cert.Identity) (d t : String),
+  CaseLaw2.Cert.identityFormOk i d t = true →
+    (i.form = "docket" ∨ i.form = "cite") ∧
+        4 ≤ (CaseLaw2.Cert.compact i.token).length ∧
+          (CaseLaw2.Cert.compact i.token).any Char.isDigit = true ∧
+            CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact d) (CaseLaw2.Cert.compact i.token) = true ∧
+              CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact t) (CaseLaw2.Cert.compact i.token) = true ∨
+      i.form = "date" ∧
+        CaseLaw2.Cert.validDate i.tDate = true ∧
+          i.token.length = 8 ∧
+            i.token.all Char.isDigit = true ∧
+              i.token.toNat? = some i.tDate ∧
+                (CaseLaw2.Cert.dateForms i.tDate).any (CaseLaw2.Cert.hasSub d) = true ∧
+                  (CaseLaw2.Cert.dateForms i.tDate).any (CaseLaw2.Cert.hasSub t) = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.identityFormOk_spec
+
+/-- info: 'CaseLaw2.Cert.identityFormOk_spec' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.identityFormOk_spec
+
+/-- info: CaseLaw2.Cert.identityOk_spec : ∀ (c : CaseLaw2.Cert.Input) (i : CaseLaw2.Cert.Identity),
+  CaseLaw2.Cert.identityOk c i = true →
+    ∃ d t,
+      CaseLaw2.Cert.identitySpan c i.dSha i.dWindows i.dStart i.dStop = some d ∧
+        CaseLaw2.Cert.identitySpan c i.tSha i.tWindows i.tStart i.tStop = some t ∧
+          CaseLaw2.Cert.identityFormOk i d t = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.identityOk_spec
+
+/-- info: 'CaseLaw2.Cert.identityOk_spec' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.identityOk_spec
+
+/-- info: CaseLaw2.Cert.identitySpan_some : ∀ (c : CaseLaw2.Cert.Input) (sha : String) (ws : List CaseLaw2.Cert.Window)
+  (s e : Nat) (x : String),
+  CaseLaw2.Cert.identitySpan c sha ws s e = some x →
+    s < e ∧
+      e - s ≤ CaseLaw2.Cert.identitySpanMax ∧
+        ∃ w,
+          w ∈ ws ∧
+            CaseLaw2.Cert.usable (CaseLaw2.Cert.spanInput c sha ws s e) w = true ∧
+              x = (CaseLaw2.Cert.slice (CaseLaw2.Cert.norm w.text) (s - w.start0) (e - s)).toLower -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.identitySpan_some
+
+/-- info: 'CaseLaw2.Cert.identitySpan_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.identitySpan_some
+
+/-- info: CaseLaw2.Cert.identityThen_fail_keeps : ∀ (i? : Option CaseLaw2.Cert.Identity) (c : CaseLaw2.Cert.Input)
+  (res : CaseLaw2.Cert.Result), res.admitted = false → CaseLaw2.Cert.identityThen i? c res = res -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.identityThen_fail_keeps
+
+/-- info: 'CaseLaw2.Cert.identityThen_fail_keeps' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.identityThen_fail_keeps
+
+/-- info: CaseLaw2.Cert.identityThen_some_admitted : ∀ (i : CaseLaw2.Cert.Identity) (c : CaseLaw2.Cert.Input)
+  (res : CaseLaw2.Cert.Result),
+  (CaseLaw2.Cert.identityThen (some i) c res).admitted = true →
+    res.admitted = true ∧ CaseLaw2.Cert.identityThen (some i) c res = res ∧ CaseLaw2.Cert.identityOk c i = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.identityThen_some_admitted
+
+/-- info: 'CaseLaw2.Cert.identityThen_some_admitted' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.identityThen_some_admitted
+
+/-- info: CaseLaw2.Cert.identityTie_sound : ∀ (i : CaseLaw2.Cert.Identity) (t? : Option CaseLaw2.Cert.TBridge)
+  (rm? : Option CaseLaw2.Cert.Remand) (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)
+  (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),
+  (CaseLaw2.Cert.checkHistory11I (some i) t? rm? zs c a? b? h).admitted = true →
+    (CaseLaw2.Cert.checkHistory11 t? rm? zs c a? b? h).admitted = true ∧
+      CaseLaw2.Cert.checkHistory11I (some i) t? rm? zs c a? b? h = CaseLaw2.Cert.checkHistory11 t? rm? zs c a? b? h ∧
+        i.dStart < i.dStop ∧
+          i.dStop - i.dStart ≤ CaseLaw2.Cert.identitySpanMax ∧
+            i.tStart < i.tStop ∧
+              i.tStop - i.tStart ≤ CaseLaw2.Cert.identitySpanMax ∧
+                ∃ d t,
+                  CaseLaw2.Cert.identitySpan c i.dSha i.dWindows i.dStart i.dStop = some d ∧
+                    CaseLaw2.Cert.identitySpan c i.tSha i.tWindows i.tStart i.tStop = some t ∧
+                      (∃ w,
+                          w ∈ i.dWindows ∧
+                            CaseLaw2.Cert.usable (CaseLaw2.Cert.spanInput c i.dSha i.dWindows i.dStart i.dStop) w =
+                                true ∧
+                              d =
+                                (CaseLaw2.Cert.slice (CaseLaw2.Cert.norm w.text) (i.dStart - w.start0)
+                                    (i.dStop - i.dStart)).toLower) ∧
+                        (∃ w,
+                            w ∈ i.tWindows ∧
+                              CaseLaw2.Cert.usable (CaseLaw2.Cert.spanInput c i.tSha i.tWindows i.tStart i.tStop) w =
+                                  true ∧
+                                t =
+                                  (CaseLaw2.Cert.slice (CaseLaw2.Cert.norm w.text) (i.tStart - w.start0)
+                                      (i.tStop - i.tStart)).toLower) ∧
+                          ((i.form = "docket" ∨ i.form = "cite") ∧
+                              4 ≤ (CaseLaw2.Cert.compact i.token).length ∧
+                                (CaseLaw2.Cert.compact i.token).any Char.isDigit = true ∧
+                                  CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact d) (CaseLaw2.Cert.compact i.token) =
+                                      true ∧
+                                    CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact t) (CaseLaw2.Cert.compact i.token) =
+                                      true ∨
+                            i.form = "date" ∧
+                              CaseLaw2.Cert.validDate i.tDate = true ∧
+                                i.token.length = 8 ∧
+                                  i.token.all Char.isDigit = true ∧
+                                    i.token.toNat? = some i.tDate ∧
+                                      (CaseLaw2.Cert.dateForms i.tDate).any (CaseLaw2.Cert.hasSub d) = true ∧
+                                        (CaseLaw2.Cert.dateForms i.tDate).any (CaseLaw2.Cert.hasSub t) = true) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.identityTie_sound
+
+/-- info: 'CaseLaw2.Cert.identityTie_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.identityTie_sound
+
+/-- info: CaseLaw2.Cert.implicitReject_no_claim : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  CaseLaw2.Cert.checkTreatmentI false c e cl js = CaseLaw2.Cert.checkTreatment c e cl js -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.implicitReject_no_claim
+
+/-- info: 'CaseLaw2.Cert.implicitReject_no_claim' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.implicitReject_no_claim
+
+/-- info: CaseLaw2.Cert.implicitReject_soft : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkImplicit c e js).admitted = true → CaseLaw2.Cert.implicitSoft c.kind = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.implicitReject_soft
+
+/-- info: 'CaseLaw2.Cert.implicitReject_soft' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.implicitReject_soft
+
+/-- info: CaseLaw2.Cert.joinedFar_extends : ∀ (lens : List Nat) (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined),
+  (CaseLaw2.Cert.checkTreatment c e cl js).admitted = true →
+    CaseLaw2.Cert.checkTreatmentF true lens c e cl js = CaseLaw2.Cert.checkTreatment c e cl js -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.joinedFar_extends
+
+/-- info: 'CaseLaw2.Cert.joinedFar_extends' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.joinedFar_extends
+
+/-- info: CaseLaw2.Cert.joinedFar_no_claim : ∀ (lens : List Nat),
+  CaseLaw2.Cert.checkTreatmentF false lens = CaseLaw2.Cert.checkTreatment -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.joinedFar_no_claim
+
+/-- info: 'CaseLaw2.Cert.joinedFar_no_claim' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.joinedFar_no_claim
+
+/-- info: CaseLaw2.Cert.joinedQuoteOk_window : ∀ (c : CaseLaw2.Cert.Input) (j : CaseLaw2.Cert.Joined),
+  CaseLaw2.Cert.joinedQuoteOk c j = true →
+    ∃ w,
+      CaseLaw2.Cert.coveringWindow (j.input c) = some w ∧
+        w ∈ c.windows ∧ CaseLaw2.Cert.usable (j.input c) w = true ∧ CaseLaw2.Cert.quoteAt (j.input c) w = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.joinedQuoteOk_window
+
+/-- info: 'CaseLaw2.Cert.joinedQuoteOk_window' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.joinedQuoteOk_window
+
+/-- info: CaseLaw2.Cert.keyTie_spec : ∀ (c : CaseLaw2.Cert.Input) (r : CaseLaw2.Cert.Remand) (q : String),
+  CaseLaw2.Cert.keyTie c r q = true →
+    ∃ m o,
+      c.citeIndex = some m ∧
+        r.order = some o ∧
+          ∃ s, s <:+ CaseLaw2.Cert.alnumPos q.toList 0 ∧ ∃ L, L ∈ r.lens ∧ CaseLaw2.Cert.citeOf m s L = some o -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.keyTie_spec
+
+/-- info: 'CaseLaw2.Cert.keyTie_spec' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.keyTie_spec
+
+/-- info: CaseLaw2.Cert.mainCheck_check : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim),
+  (CaseLaw2.Cert.mainCheck c e cl).admitted = true → (CaseLaw2.Cert.check (cl.apply c)).admitted = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.mainCheck_check
+
+/-- info: 'CaseLaw2.Cert.mainCheck_check' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.mainCheck_check
+
+/-- info: CaseLaw2.Cert.mainCheck_text : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (cl : CaseLaw2.Cert.TClaim),
+  (CaseLaw2.Cert.mainCheck c e cl).admitted = true →
+    (CaseLaw2.Cert.mainCheck
+          { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+            evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+            authority := some true, selfText := c.selfText, hashRequired := c.hashRequired, target := c.target,
+            citeIndex := c.citeIndex, mode := c.mode }
+          e cl).admitted =
+      true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.mainCheck_text
+
+/-- info: 'CaseLaw2.Cert.mainCheck_text' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.mainCheck_text
+
+/-- info: CaseLaw2.Cert.noKeyBetween_spec : ∀ (c : CaseLaw2.Cert.Input) (b : CaseLaw2.Cert.Bridge) (e p2 : Nat),
+  CaseLaw2.Cert.noKeyBetween c b e p2 = true →
+    ∃ m,
+      c.citeIndex = some m ∧
+        ∀ (s : List (Char × Nat)),
+          s <:+ CaseLaw2.Cert.bridgeAlnum b →
+            ∀ (p : Nat),
+              CaseLaw2.Cert.headPos s = some p →
+                e ≤ p → p < p2 → ∀ (L : Nat), L ∈ b.lens → CaseLaw2.Cert.citeOf m s L = none -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.noKeyBetween_spec
+
+/-- info: 'CaseLaw2.Cert.noKeyBetween_spec' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.noKeyBetween_spec
+
+/-- info: CaseLaw2.Cert.no_bridge_no_change : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (h : CaseLaw2.Cert.HClaims),
+  h.anchorWide = false → CaseLaw2.Cert.checkHistory8 c a? none h = CaseLaw2.Cert.checkHistory7 c a? h -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.no_bridge_no_change
+
+/-- info: 'CaseLaw2.Cert.no_bridge_no_change' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.no_bridge_no_change
+
+/-- info: CaseLaw2.Cert.no_identity_line_no_change : ∀ (t? : Option CaseLaw2.Cert.TBridge) (rm? : Option CaseLaw2.Cert.Remand)
+  (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims) (res : CaseLaw2.Cert.Result),
+  CaseLaw2.Cert.checkHistory11I none t? rm? zs c a? b? h = CaseLaw2.Cert.checkHistory11 t? rm? zs c a? b? h ∧
+    CaseLaw2.Cert.identityThen none c res = res -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.no_identity_line_no_change
+
+/-- info: 'CaseLaw2.Cert.no_identity_line_no_change' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.no_identity_line_no_change
+
+/-- info: CaseLaw2.Cert.no_joined_no_change : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (a? : Option CaseLaw2.Cert.Anchor)
+  (h : CaseLaw2.Cert.HClaims),
+  h.orderHead = false →
+    h.setAside = false →
+      CaseLaw2.Cert.checkTreatment c e CaseLaw2.Cert.TClaim.plain [] = CaseLaw2.Cert.check c ∧
+        CaseLaw2.Cert.checkTreatment c e CaseLaw2.Cert.TClaim.operative [] = CaseLaw2.Cert.checkOperative c e ∧
+          CaseLaw2.Cert.checkHistory7 c a? h = CaseLaw2.Cert.checkHistory c a? -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.no_joined_no_change
+
+/-- info: 'CaseLaw2.Cert.no_joined_no_change' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.no_joined_no_change
+
+/-- info: CaseLaw2.Cert.no_remand_line_no_change : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)
+  (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims)
+  (res : CaseLaw2.Cert.Result),
+  CaseLaw2.Cert.checkHistory10 none zs c a? b? h = CaseLaw2.Cert.checkHistory9J zs c a? b? h ∧
+    CaseLaw2.Cert.remandThen none c res = res -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.no_remand_line_no_change
+
+/-- info: 'CaseLaw2.Cert.no_remand_line_no_change' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.no_remand_line_no_change
+
+/-- info: CaseLaw2.Cert.no_tbridge_table_no_change : ∀ (t : CaseLaw2.Cert.TBridge),
+  t.line = none →
+    ∀ (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor) (h : CaseLaw2.Cert.HClaims),
+      CaseLaw2.Cert.trialKind c.kind = true → (CaseLaw2.Cert.checkHistory8T (some t) c (some a) none h).admitted = false -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.no_tbridge_table_no_change
+
+/-- info: 'CaseLaw2.Cert.no_tbridge_table_no_change' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.no_tbridge_table_no_change
+
+/-- info: CaseLaw2.Cert.no_tribunal_claim_no_change : ∀ (t? : Option CaseLaw2.Cert.TBridge) (rm? : Option CaseLaw2.Cert.Remand)
+  (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),
+  a? = none ∨ b?.isSome = true →
+    CaseLaw2.Cert.checkHistory8A t? c a? b? h = CaseLaw2.Cert.checkHistory8T t? c a? b? h ∧
+      CaseLaw2.Cert.checkHistory11 t? rm? zs c a? b? h = CaseLaw2.Cert.checkHistory10T t? rm? zs c a? b? h -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.no_tribunal_claim_no_change
+
+/-- info: 'CaseLaw2.Cert.no_tribunal_claim_no_change' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.no_tribunal_claim_no_change
+
+/-- info: CaseLaw2.Cert.no_zone_no_change : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims) (e : Bool) (cl : CaseLaw2.Cert.TClaim)
+  (js : List CaseLaw2.Cert.Joined) (w : CaseLaw2.Cert.Witness) (r : CaseLaw2.Cert.Result) (v : CaseLaw2.Cert.RResult),
+  CaseLaw2.Cert.checkHistory9 [] c a? b? h = CaseLaw2.Cert.checkHistory8 c a? b? h ∧
+    CaseLaw2.Cert.checkTreatment9 [] c e cl js = CaseLaw2.Cert.checkTreatment c e cl js ∧
+      CaseLaw2.Cert.checkRecognised9 [] c w = CaseLaw2.Cert.checkRecognised c w ∧
+        CaseLaw2.Cert.zoneThen [] c js r = r ∧ CaseLaw2.Cert.zoneR [] c v = v -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.no_zone_no_change
+
+/-- info: 'CaseLaw2.Cert.no_zone_no_change' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.no_zone_no_change
+
+/-- info: CaseLaw2.Cert.nodeZones_valid : ∀ (zs : List CaseLaw2.Cert.Zone),
+  CaseLaw2.Cert.zonesValid (CaseLaw2.Cert.nodeZones zs) = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.nodeZones_valid
+
+/-- info: 'CaseLaw2.Cert.nodeZones_valid' does not depend on any axioms -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.nodeZones_valid
+
+/-- info: CaseLaw2.Cert.orderHead_no_claim : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (h : CaseLaw2.Cert.HClaims),
+  h.orderHead = false → c.part = "headmatter" → (CaseLaw2.Cert.checkHistory7 c a? h).admitted = false -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.orderHead_no_claim
+
+/-- info: 'CaseLaw2.Cert.orderHead_no_claim' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.orderHead_no_claim
+
+/-- info: CaseLaw2.Cert.orderHead_sound : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (h : CaseLaw2.Cert.HClaims),
+  (CaseLaw2.Cert.checkHistory7 c a? h).admitted = true →
+    c.part = "headmatter" →
+      h.orderHead = true ∧
+        h.scotus = true ∧
+          CaseLaw2.Cert.orderHeadFrom ≤ h.date ∧
+            CaseLaw2.Cert.orderHeadKind c.kind = true ∧
+              CaseLaw2.Cert.orderLineCue c = true ∧ c.quote.length ≤ CaseLaw2.Cert.orderHeadMaxLen -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.orderHead_sound
+
+/-- info: 'CaseLaw2.Cert.orderHead_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.orderHead_sound
+
+/-- info: CaseLaw2.Cert.partZone_sound : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)
+  (js : List CaseLaw2.Cert.Joined) (r : CaseLaw2.Cert.Result),
+  zs ≠ [] →
+    (CaseLaw2.Cert.zoneThen zs c js r).admitted = true →
+      r.admitted = true ∧
+        CaseLaw2.Cert.zoneThen zs c js r = r ∧
+          (∃ z, z ∈ zs ∧ z.start ≤ c.start ∧ c.stop ≤ z.stop ∧ z.part = c.part) ∧
+            ∀ (j : CaseLaw2.Cert.Joined), j ∈ js → ∃ z, z ∈ zs ∧ z.start ≤ j.start ∧ j.stop ≤ z.stop ∧ z.part = j.part -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.partZone_sound
+
+/-- info: 'CaseLaw2.Cert.partZone_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.partZone_sound
+
+/-- info: CaseLaw2.Cert.partZone_sound_witness : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)
+  (v : CaseLaw2.Cert.RResult),
+  zs ≠ [] →
+    (CaseLaw2.Cert.zoneR zs c v).admitted = true →
+      v.admitted = true ∧
+        CaseLaw2.Cert.zoneR zs c v = v ∧ ∃ z, z ∈ zs ∧ z.start ≤ c.start ∧ c.stop ≤ z.stop ∧ z.part = c.part -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.partZone_sound_witness
+
+/-- info: 'CaseLaw2.Cert.partZone_sound_witness' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.partZone_sound_witness
+
+/-- info: CaseLaw2.Cert.partZone_unique : ∀ (zs : List CaseLaw2.Cert.Zone),
+  CaseLaw2.Cert.noOverlap zs = true →
+    ∀ (s e : Nat),
+      s < e →
+        ∀ (z1 z2 : CaseLaw2.Cert.Zone),
+          z1 ∈ zs → z2 ∈ zs → z1.start ≤ s ∧ e ≤ z1.stop → z2.start ≤ s ∧ e ≤ z2.stop → z1 = z2 -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.partZone_unique
+
+/-- info: 'CaseLaw2.Cert.partZone_unique' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.partZone_unique
+
+/-- info: CaseLaw2.Cert.quoteOk_window : ∀ (c : CaseLaw2.Cert.Input),
+  CaseLaw2.Cert.quoteOk c = true →
+    ∃ w,
+      CaseLaw2.Cert.coveringWindow c = some w ∧
+        w ∈ c.windows ∧ CaseLaw2.Cert.usable c w = true ∧ CaseLaw2.Cert.quoteAt c w = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.quoteOk_window
+
+/-- info: 'CaseLaw2.Cert.quoteOk_window' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.quoteOk_window
+
+/-- info: CaseLaw2.Cert.reasonTie_spec : ∀ (c : CaseLaw2.Cert.Input) (r : CaseLaw2.Cert.Remand) (q : String),
+  CaseLaw2.Cert.reasonTie c r q = true →
+    ∃ o,
+      CaseLaw2.Cert.spanText c r.oSha r.oWindows r.oStart r.oStop CaseLaw2.Cert.remandOrderSpanMax = some o ∧
+        CaseLaw2.Cert.remandOrderCues.any (CaseLaw2.Cert.hasSub o.toLower) = true ∧
+          CaseLaw2.Cert.remandTieMin ≤ (CaseLaw2.Cert.compact r.tie).length ∧
+            CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact o) (CaseLaw2.Cert.compact r.tie) = true ∧
+              CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact q) (CaseLaw2.Cert.compact r.tie) = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.reasonTie_spec
+
+/-- info: 'CaseLaw2.Cert.reasonTie_spec' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.reasonTie_spec
+
+/-- info: CaseLaw2.Cert.recogOf_isSome : ∀ (v : CaseLaw2.Cert.RResult) (witness date : Nat),
+  (CaseLaw2.Cert.recogOf v witness date).isSome = v.isRecognised -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.recogOf_isSome
+
+/-- info: 'CaseLaw2.Cert.recogOf_isSome' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.recogOf_isSome
+
+/-- info: CaseLaw2.Cert.remandBridge_sound : ∀ (r : CaseLaw2.Cert.Remand) (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)
+  (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge) (h : CaseLaw2.Cert.HClaims),
+  (CaseLaw2.Cert.checkHistory10 (some r) zs c a? b? h).admitted = true →
+    (CaseLaw2.Cert.checkHistory9J zs c a? b? h).admitted = true ∧
+      CaseLaw2.Cert.checkHistory10 (some r) zs c a? b? h = CaseLaw2.Cert.checkHistory9J zs c a? b? h ∧
+        r.bCourt.isSome = true ∧
+          r.bCourt = r.tCourt ∧
+            CaseLaw2.Cert.validDate r.oDate = true ∧
+              CaseLaw2.Cert.validDate r.bDate = true ∧
+                CaseLaw2.Cert.validDate r.tDate = true ∧
+                  r.tDate < r.oDate ∧
+                    r.oDate ≤ r.bDate ∧
+                      CaseLaw2.Cert.dayNum r.bDate ≤ CaseLaw2.Cert.dayNum r.oDate + CaseLaw2.Cert.remandDaysMax ∧
+                        4 ≤ (CaseLaw2.Cert.compact r.docket).length ∧
+                          (CaseLaw2.Cert.compact r.docket).any Char.isDigit = true ∧
+                            (∃ s,
+                                CaseLaw2.Cert.spanText c r.bSha r.bWindows r.bdStart r.bdStop
+                                      CaseLaw2.Cert.remandDocketSpanMax =
+                                    some s ∧
+                                  CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact s) (CaseLaw2.Cert.compact r.docket) =
+                                    true) ∧
+                              (∃ s,
+                                  CaseLaw2.Cert.spanText c r.tSha r.tWindows r.tStart r.tStop
+                                        CaseLaw2.Cert.remandDocketSpanMax =
+                                      some s ∧
+                                    CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact s) (CaseLaw2.Cert.compact r.docket) =
+                                      true) ∧
+                                ∃ q,
+                                  CaseLaw2.Cert.remandQuote c r = some q ∧
+                                    CaseLaw2.Cert.remandCourtCues.any (CaseLaw2.Cert.hasSub q) = true ∧
+                                      CaseLaw2.Cert.remandCues.any (CaseLaw2.Cert.hasSub q) = true ∧
+                                        (CaseLaw2.Cert.keyTie c r q = true ∨
+                                          (CaseLaw2.Cert.dateForms r.oDate).any (CaseLaw2.Cert.hasSub q) = true ∨
+                                            ∃ o,
+                                              CaseLaw2.Cert.spanText c r.oSha r.oWindows r.oStart r.oStop
+                                                    CaseLaw2.Cert.remandOrderSpanMax =
+                                                  some o ∧
+                                                CaseLaw2.Cert.remandOrderCues.any (CaseLaw2.Cert.hasSub o.toLower) =
+                                                    true ∧
+                                                  CaseLaw2.Cert.remandTieMin ≤ (CaseLaw2.Cert.compact r.tie).length ∧
+                                                    CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact o)
+                                                          (CaseLaw2.Cert.compact r.tie) =
+                                                        true ∧
+                                                      CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact q)
+                                                          (CaseLaw2.Cert.compact r.tie) =
+                                                        true) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.remandBridge_sound
+
+/-- info: 'CaseLaw2.Cert.remandBridge_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.remandBridge_sound
+
+/-- info: CaseLaw2.Cert.remandFail_none : ∀ (c : CaseLaw2.Cert.Input) (r : CaseLaw2.Cert.Remand),
+  CaseLaw2.Cert.remandFail c r = none →
+    CaseLaw2.Cert.remandCourtOk r = true ∧
+      CaseLaw2.Cert.remandDateOk r = true ∧
+        CaseLaw2.Cert.remandDocketOk c r = true ∧
+          ∃ q,
+            CaseLaw2.Cert.remandQuote c r = some q ∧
+              CaseLaw2.Cert.remandCueOk q = true ∧ CaseLaw2.Cert.remandTieOk c r q = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.remandFail_none
+
+/-- info: 'CaseLaw2.Cert.remandFail_none' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.remandFail_none
+
+/-- info: CaseLaw2.Cert.remandThen_fail_keeps : ∀ (rm? : Option CaseLaw2.Cert.Remand) (c : CaseLaw2.Cert.Input)
+  (res : CaseLaw2.Cert.Result), res.admitted = false → CaseLaw2.Cert.remandThen rm? c res = res -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.remandThen_fail_keeps
+
+/-- info: 'CaseLaw2.Cert.remandThen_fail_keeps' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.remandThen_fail_keeps
+
+/-- info: CaseLaw2.Cert.remandThen_some_admitted : ∀ (r : CaseLaw2.Cert.Remand) (c : CaseLaw2.Cert.Input)
+  (res : CaseLaw2.Cert.Result),
+  (CaseLaw2.Cert.remandThen (some r) c res).admitted = true →
+    res.admitted = true ∧ CaseLaw2.Cert.remandFail c r = none ∧ CaseLaw2.Cert.remandThen (some r) c res = res -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.remandThen_some_admitted
+
+/-- info: 'CaseLaw2.Cert.remandThen_some_admitted' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.remandThen_some_admitted
+
+/-- info: CaseLaw2.Cert.setAside_no_claim : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (h : CaseLaw2.Cert.HClaims),
+  h.setAside = false → (CaseLaw2.Cert.checkHistory7 c a? h).admitted = true → CaseLaw2.Cert.hasCue c = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.setAside_no_claim
+
+/-- info: 'CaseLaw2.Cert.setAside_no_claim' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.setAside_no_claim
+
+/-- info: CaseLaw2.Cert.setAside_only_vacated : ∀ (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor)
+  (h : CaseLaw2.Cert.HClaims),
+  (CaseLaw2.Cert.checkHistory7 c a? h).admitted = true →
+    CaseLaw2.Cert.hasCue c = false →
+      h.setAside = true ∧ c.kind = CaseLaw2.Cert.Kind.hist CaseLaw2.HKind.vacated ∧ CaseLaw2.Cert.setAsideCue c = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.setAside_only_vacated
+
+/-- info: 'CaseLaw2.Cert.setAside_only_vacated' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.setAside_only_vacated
+
+/-- info: CaseLaw2.Cert.spanHas_some : ∀ (c : CaseLaw2.Cert.Input) (sha : String) (ws : List CaseLaw2.Cert.Window) (s e : Nat)
+  (k : String),
+  CaseLaw2.Cert.spanHas c sha ws s e k = true →
+    ∃ t,
+      CaseLaw2.Cert.spanText c sha ws s e CaseLaw2.Cert.remandDocketSpanMax = some t ∧
+        CaseLaw2.Cert.hasSub (CaseLaw2.Cert.compact t) k = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.spanHas_some
+
+/-- info: 'CaseLaw2.Cert.spanHas_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.spanHas_some
+
+/-- info: CaseLaw2.Cert.spanText_some : ∀ (c : CaseLaw2.Cert.Input) (sha : String) (ws : List CaseLaw2.Cert.Window) (s e n : Nat)
+  (t : String),
+  CaseLaw2.Cert.spanText c sha ws s e n = some t →
+    s < e ∧
+      e - s ≤ n ∧
+        ∃ w,
+          w ∈ ws ∧
+            CaseLaw2.Cert.usable (CaseLaw2.Cert.spanInput c sha ws s e) w = true ∧
+              t = CaseLaw2.Cert.slice (CaseLaw2.Cert.norm w.text) (s - w.start0) (e - s) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.spanText_some
+
+/-- info: 'CaseLaw2.Cert.spanText_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.spanText_some
+
+/-- info: CaseLaw2.Cert.tbridgeQuote_selfText : ∀ (c : CaseLaw2.Cert.Input) (t : CaseLaw2.Cert.TBridge),
+  CaseLaw2.Cert.tbridgeQuote
+      { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop, quote := c.quote,
+        evidence := c.evidence, part := c.part, shas := c.shas, windows := c.windows, ordered := c.ordered,
+        authority := c.authority, selfText := true, hashRequired := c.hashRequired, target := c.target,
+        citeIndex := c.citeIndex, mode := c.mode }
+      t =
+    CaseLaw2.Cert.tbridgeQuote c t -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.tbridgeQuote_selfText
+
+/-- info: 'CaseLaw2.Cert.tbridgeQuote_selfText' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.tbridgeQuote_selfText
+
+/-- info: CaseLaw2.Cert.tbridgeQuote_some : ∀ (c : CaseLaw2.Cert.Input) (t : CaseLaw2.Cert.TBridge) (q : String),
+  CaseLaw2.Cert.tbridgeQuote c t = some q →
+    ∃ s e w,
+      t.line = some (s, e) ∧
+        s < e ∧
+          e - s ≤ CaseLaw2.Cert.tbridgeQuoteMax ∧
+            w ∈ t.tWindows ∧
+              CaseLaw2.Cert.usable (CaseLaw2.Cert.spanInput c t.tSha t.tWindows s e) w = true ∧
+                q = (CaseLaw2.Cert.slice (CaseLaw2.Cert.norm w.text) (s - w.start0) (e - s)).toLower -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.tbridgeQuote_some
+
+/-- info: 'CaseLaw2.Cert.tbridgeQuote_some' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.tbridgeQuote_some
+
+/-- info: CaseLaw2.Cert.trialBridge_no_claim : ∀ (zs : List CaseLaw2.Cert.Zone) (rm? : Option CaseLaw2.Cert.Remand)
+  (c : CaseLaw2.Cert.Input) (a? : Option CaseLaw2.Cert.Anchor) (b? : Option CaseLaw2.Cert.Bridge)
+  (h : CaseLaw2.Cert.HClaims),
+  CaseLaw2.Cert.checkHistory8T none c a? b? h = CaseLaw2.Cert.checkHistory8J c a? b? h ∧
+    CaseLaw2.Cert.checkHistory9T none zs c a? b? h = CaseLaw2.Cert.checkHistory9J zs c a? b? h ∧
+      CaseLaw2.Cert.checkHistory10T none rm? zs c a? b? h = CaseLaw2.Cert.checkHistory10 rm? zs c a? b? h -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.trialBridge_no_claim
+
+/-- info: 'CaseLaw2.Cert.trialBridge_no_claim' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.trialBridge_no_claim
+
+/-- info: CaseLaw2.Cert.trialBridge_sound : ∀ (t : CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input) (a : CaseLaw2.Cert.Anchor)
+  (h : CaseLaw2.Cert.HClaims),
+  (CaseLaw2.Cert.checkHistory8T (some t) c (some a) none h).admitted = true →
+    CaseLaw2.Cert.trialKind c.kind = true →
+      CaseLaw2.Cert.anchorQuoteOk c a = true ∧
+        CaseLaw2.Cert.anchorCueOk9 h a = true ∧
+          CaseLaw2.Cert.anchorDisqualified a = false ∧
+            CaseLaw2.Cert.anchorResolves c a = true ∧
+              CaseLaw2.Cert.anchorPartOk a = true ∧
+                CaseLaw2.Cert.claimCueOk h c = true ∧
+                  CaseLaw2.Cert.trialCourtNames.any (CaseLaw2.Cert.hasSub (CaseLaw2.Cert.dQuote c)) = true ∧
+                    CaseLaw2.Cert.intermediateCourtNames.any (CaseLaw2.Cert.hasSub (CaseLaw2.Cert.dQuote c)) = false ∧
+                      (∃ q,
+                          CaseLaw2.Cert.tbridgeQuote c t = some q ∧
+                            CaseLaw2.Cert.tbridgeCues.any (CaseLaw2.Cert.hasSub q) = true ∧
+                              CaseLaw2.Cert.tbridgeNegative.any (CaseLaw2.Cert.hasSub q) = false) ∧
+                        CaseLaw2.Cert.validDate t.tDate = true ∧
+                          CaseLaw2.Cert.validDate t.dDate = true ∧
+                            t.tDate < t.dDate ∧
+                              CaseLaw2.Cert.dayNum t.dDate ≤
+                                  CaseLaw2.Cert.dayNum t.tDate + CaseLaw2.Cert.tbridgeDaysMax ∧
+                                t.tCourt.isSome = true ∧
+                                  t.dCourt.isSome = true ∧
+                                    t.tCourt ≠ t.dCourt ∧
+                                      (CaseLaw2.Cert.checkClaimedWith CaseLaw2.Cert.orderHeadOk CaseLaw2.Cert.claimCueOk
+                                            h
+                                            { kind := c.kind, textSha := c.textSha, start := c.start, stop := c.stop,
+                                              quote := c.quote, evidence := c.evidence, part := c.part, shas := c.shas,
+                                              windows := c.windows, ordered := c.ordered, authority := c.authority,
+                                              selfText := true, hashRequired := c.hashRequired, target := c.target,
+                                              citeIndex := c.citeIndex, mode := c.mode }).admitted =
+                                        true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.trialBridge_sound
+
+/-- info: 'CaseLaw2.Cert.trialBridge_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.trialBridge_sound
+
+/-- info: CaseLaw2.Cert.trialFail_none : ∀ (tOk : CaseLaw2.Cert.Input → CaseLaw2.Cert.TBridge → Bool)
+  (dateOk : CaseLaw2.Cert.TBridge → Bool) (t : CaseLaw2.Cert.TBridge) (c : CaseLaw2.Cert.Input),
+  CaseLaw2.Cert.trialFailWith tOk dateOk t c = none → tOk c t = true ∧ dateOk t = true -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.trialFail_none
+
+/-- info: 'CaseLaw2.Cert.trialFail_none' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.trialFail_none
+
 /-- info: CaseLaw2.Cert.witnessTail_sound : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),
   (CaseLaw2.Cert.witnessTail c w).admitted = true →
     CaseLaw2.Cert.byResolves c w = true ∧ c.ordered = true ∧ w.witnessOrdered = true ∧ w.standing = true -/
@@ -112,6 +1957,100 @@ For every registered theorem: its exact statement and its axioms. If a statement
 /-- info: 'CaseLaw2.Cert.witnessTail_sound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Cert.witnessTail_sound
+
+/-- info: CaseLaw2.Cert.zoneHas_spec : ∀ (zs : List CaseLaw2.Cert.Zone) (s e : Nat) (p : String),
+  CaseLaw2.Cert.zoneHas zs s e p = true → ∃ z, z ∈ zs ∧ z.start ≤ s ∧ e ≤ z.stop ∧ z.part = p -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.zoneHas_spec
+
+/-- info: 'CaseLaw2.Cert.zoneHas_spec' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.zoneHas_spec
+
+/-- info: CaseLaw2.Cert.zoneThen_fail_keeps : ∀ (zs : List CaseLaw2.Cert.Zone) (c : CaseLaw2.Cert.Input)
+  (js : List CaseLaw2.Cert.Joined) (r : CaseLaw2.Cert.Result), r.admitted = false → CaseLaw2.Cert.zoneThen zs c js r = r -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.zoneThen_fail_keeps
+
+/-- info: 'CaseLaw2.Cert.zoneThen_fail_keeps' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.zoneThen_fail_keeps
+
+/-- info: CaseLaw2.Cert.zone_bad_node_ignored : ∀ (zs : List CaseLaw2.Cert.Zone),
+  (∃ z, z ∈ zs ∧ CaseLaw2.Cert.zoneWellFormed z = false) ∨ CaseLaw2.Cert.noOverlap zs = false →
+    ∀ (c : CaseLaw2.Cert.Input) (js : List CaseLaw2.Cert.Joined) (r : CaseLaw2.Cert.Result) (v : CaseLaw2.Cert.RResult),
+      CaseLaw2.Cert.nodeZones zs = [] ∧
+        CaseLaw2.Cert.zoneThen (CaseLaw2.Cert.nodeZones zs) c js r = r ∧
+          CaseLaw2.Cert.zoneR (CaseLaw2.Cert.nodeZones zs) c v = v -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Cert.zone_bad_node_ignored
+
+/-- info: 'CaseLaw2.Cert.zone_bad_node_ignored' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Cert.zone_bad_node_ignored
+
+/-- info: CaseLaw2.Examples.implicitReject_never_neg : ∀ (c : CaseLaw2.Cert.Input) (e : Bool) (js : List CaseLaw2.Cert.Joined)
+  (k : CaseLaw2.TKind),
+  c.kind = CaseLaw2.Cert.Kind.treat k →
+    (CaseLaw2.Cert.checkImplicit c e js).admitted = true →
+      ∀ (bh : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),
+        tr.kind = k →
+          ∀ (l : List CaseLaw2.Spec.Effect) (n t u : Nat),
+            CaseLaw2.Spec.treatEffect bh tr = none ∧
+              CaseLaw2.Spec.status ((CaseLaw2.Spec.treatEffect bh tr).toList ++ l) n t u = CaseLaw2.Spec.status l n t u -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Examples.implicitReject_never_neg
+
+/-- info: 'CaseLaw2.Examples.implicitReject_never_neg' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Examples.implicitReject_never_neg
+
+/-- info: CaseLaw2.Examples.implicitSoft_softNegative : ∀ (k : CaseLaw2.TKind),
+  CaseLaw2.Cert.implicitSoft (CaseLaw2.Cert.Kind.treat k) = k.softNegative -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Examples.implicitSoft_softNegative
+
+/-- info: 'CaseLaw2.Examples.implicitSoft_softNegative' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Examples.implicitSoft_softNegative
+
+/-- info: CaseLaw2.Examples.plessy_timeline : CaseLaw2.Spec.status CaseLaw2.Examples.plessyEffs 0 19540516 19540516 =
+    CaseLaw2.Spec.Status.good ∧
+  CaseLaw2.Spec.status CaseLaw2.Examples.plessyEffs 0 19540517 19540517 =
+      CaseLaw2.Spec.Status.unknown CaseLaw2.Spec.Unk.recognisedLater ∧
+    CaseLaw2.Spec.status CaseLaw2.Examples.plessyEffs 0 19920628 19920628 =
+        CaseLaw2.Spec.Status.unknown CaseLaw2.Spec.Unk.recognisedLater ∧
+      CaseLaw2.Spec.status CaseLaw2.Examples.plessyEffs 0 19920629 19920629 =
+        CaseLaw2.Spec.Status.neg CaseLaw2.Spec.Neg.overruled -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Examples.plessy_timeline
+
+/-- info: 'CaseLaw2.Examples.plessy_timeline' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Examples.plessy_timeline
+
+/-- info: CaseLaw2.Examples.recognised_effect_needs_power : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),
+  w.power = false →
+    ∀ (wn d : Nat) (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),
+      tr.recog = CaseLaw2.Cert.recogOf (CaseLaw2.Cert.checkRecognised c w) wn d →
+        CaseLaw2.Spec.recogEffects byHist wHist tr = [] -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Examples.recognised_effect_needs_power
+
+/-- info: 'CaseLaw2.Examples.recognised_effect_needs_power' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Examples.recognised_effect_needs_power
+
+/-- info: CaseLaw2.Examples.recognised_row_only_recog_effects : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),
+  (CaseLaw2.Cert.checkRecognised c w).isRecognised = true →
+    ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),
+      tr.explicit = w.explicit → CaseLaw2.Spec.treatEffect byHist tr = none -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Examples.recognised_row_only_recog_effects
+
+/-- info: 'CaseLaw2.Examples.recognised_row_only_recog_effects' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Examples.recognised_row_only_recog_effects
 
 /-- info: CaseLaw2.Examples.witness_row_no_effect : ∀ (c : CaseLaw2.Cert.Input) (w : CaseLaw2.Cert.Witness),
   (CaseLaw2.Cert.checkWitness c w).admitted = true →
@@ -185,6 +2124,15 @@ For every registered theorem: its exact statement and its axioms. If a statement
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Exec.exec_status_eq_spec
 
+/-- info: CaseLaw2.Exec.histPower8_keeps : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision) (c : Bool),
+  CaseLaw2.Exec.histPower L b x ≠ some false → CaseLaw2.Exec.histPower8 L b x c = CaseLaw2.Exec.histPower L b x -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Exec.histPower8_keeps
+
+/-- info: 'CaseLaw2.Exec.histPower8_keeps' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Exec.histPower8_keeps
+
 /-- info: @CaseLaw2.Exec.index_getD : ∀ {α : Type u_1} {K : Type u_2} [inst : BEq K] [inst_1 : Hashable K] [LawfulBEq K]
   [LawfulHashable K] (key : α → K) (l : List α) (k : K),
   (CaseLaw2.Exec.index key l).getD k [] = List.filter (fun x => key x == k) l -/
@@ -194,6 +2142,36 @@ For every registered theorem: its exact statement and its axioms. If a statement
 /-- info: 'CaseLaw2.Exec.index_getD' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Exec.index_getD
+
+/-- info: CaseLaw2.Exec.oldCircuit_no_claim : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision),
+  CaseLaw2.Exec.histPower8 L b x false = CaseLaw2.Exec.histPower L b x -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Exec.oldCircuit_no_claim
+
+/-- info: 'CaseLaw2.Exec.oldCircuit_no_claim' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Exec.oldCircuit_no_claim
+
+/-- info: CaseLaw2.Exec.oldCircuit_sound : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision),
+  CaseLaw2.Exec.histPower8 L b x true = some true →
+    CaseLaw2.Exec.histPower L b x ≠ some true →
+      CaseLaw2.Exec.histPower L b x = some false ∧
+        ∃ B X,
+          L.epochAt b.court b.date = some B ∧
+            L.epochAt x.court x.date = some X ∧
+              B.system = 0 ∧
+                B.tier = CaseLaw2.Tier.appellate ∧
+                  X.system = 0 ∧
+                    (X.tier = CaseLaw2.Tier.trial ∨ X.tier = CaseLaw2.Tier.special) ∧
+                      ∃ t,
+                        t ∈ CaseLaw2.Cert.oldCircuitRules ∧
+                          B.circuit = t.fst ∧ X.circuit = t.snd.fst ∧ 0 < b.date ∧ b.date < t.snd.snd -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Exec.oldCircuit_sound
+
+/-- info: 'CaseLaw2.Exec.oldCircuit_sound' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Exec.oldCircuit_sound
 
 /-- info: CaseLaw2.Force.le_binding : ∀ (a : CaseLaw2.Force), a.rank ≤ CaseLaw2.Force.binding.rank -/
 #guard_msgs (whitespace := lax) in
@@ -545,6 +2523,15 @@ For every registered theorem: its exact statement and its axioms. If a statement
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Spec.Status.join_comm
 
+/-- info: @CaseLaw2.Spec.Status.join_eq_neg_right : ∀ {a b : CaseLaw2.Spec.Status} {n : CaseLaw2.Spec.Neg},
+  a.rank < 10 → a.join b = CaseLaw2.Spec.Status.neg n → b = CaseLaw2.Spec.Status.neg n -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.Status.join_eq_neg_right
+
+/-- info: 'CaseLaw2.Spec.Status.join_eq_neg_right' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.Status.join_eq_neg_right
+
 /-- info: CaseLaw2.Spec.Status.join_good : ∀ (a : CaseLaw2.Spec.Status), a.join CaseLaw2.Spec.Status.good = a -/
 #guard_msgs (whitespace := lax) in
 #check @CaseLaw2.Spec.Status.join_good
@@ -552,6 +2539,39 @@ For every registered theorem: its exact statement and its axioms. If a statement
 /-- info: 'CaseLaw2.Spec.Status.join_good' depends on axioms: [propext, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Spec.Status.join_good
+
+/-- info: CaseLaw2.Spec.Status.join_self : ∀ (a : CaseLaw2.Spec.Status), a.join a = a -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.Status.join_self
+
+/-- info: 'CaseLaw2.Spec.Status.join_self' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.Status.join_self
+
+/-- info: CaseLaw2.Spec.Status.join_unknown_neg : ∀ (q : CaseLaw2.Spec.Unk) (n : CaseLaw2.Spec.Neg),
+  (CaseLaw2.Spec.Status.unknown q).join (CaseLaw2.Spec.Status.neg n) = CaseLaw2.Spec.Status.neg n -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.Status.join_unknown_neg
+
+/-- info: 'CaseLaw2.Spec.Status.join_unknown_neg' does not depend on any axioms -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.Status.join_unknown_neg
+
+/-- info: CaseLaw2.Spec.Status.partially_rank : ∀ (s : CaseLaw2.Spec.Status), s.partially.rank < 10 -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.Status.partially_rank
+
+/-- info: 'CaseLaw2.Spec.Status.partially_rank' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.Status.partially_rank
+
+/-- info: CaseLaw2.Spec.Status.partially_rank_le : ∀ (s : CaseLaw2.Spec.Status), s.partially.rank ≤ 1 -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.Status.partially_rank_le
+
+/-- info: 'CaseLaw2.Spec.Status.partially_rank_le' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.Status.partially_rank_le
 
 /-- info: @CaseLaw2.Spec.Status.rank_inj : ∀ {a b : CaseLaw2.Spec.Status}, a.rank = b.rank → a = b -/
 #guard_msgs (whitespace := lax) in
@@ -576,6 +2596,40 @@ For every registered theorem: its exact statement and its axioms. If a statement
 /-- info: 'CaseLaw2.Spec.Status.rank_zero_iff' depends on axioms: [propext] -/
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Spec.Status.rank_zero_iff
+
+/-- info: CaseLaw2.Spec.adoptedSameTier_power : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision) (dom? : Option CaseLaw2.Domain)
+  (B X : CaseLaw2.CourtEpoch),
+  L.epochAt b.court b.date = some B →
+    L.epochAt x.court x.date = some X →
+      x.date ≤ b.date →
+        B.scotus = false →
+          B.tier ≠ CaseLaw2.Tier.last →
+            B.court ≠ X.court →
+              ¬(B.system = X.system ∧ X.tier.rank < B.tier.rank) →
+                ((CaseLaw2.Spec.adoptionsOf L x).any fun x => x.adopter == b.court) = true →
+                  X.tier.rank ≤ B.tier.rank →
+                    L.rules.horizontal B.court B.system x.date = some CaseLaw2.HRule.none ∨
+                        L.rules.horizontal B.court B.system x.date = some CaseLaw2.HRule.soft →
+                      CaseLaw2.Spec.canChangeStatus L b x dom? = some (true, CaseLaw2.RuleId.sameCourtSoft) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.adoptedSameTier_power
+
+/-- info: 'CaseLaw2.Spec.adoptedSameTier_power' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.adoptedSameTier_power
+
+/-- info: CaseLaw2.Spec.adopted_lowerTier_noPower : ∀ (L : CaseLaw2.Lookups) (b x : CaseLaw2.Decision)
+  (dom? : Option CaseLaw2.Domain) (B X : CaseLaw2.CourtEpoch),
+  L.epochAt b.court b.date = some B →
+    L.epochAt x.court x.date = some X →
+      B.scotus = false →
+        B.tier.rank < X.tier.rank → Option.map (fun x => x.fst) (CaseLaw2.Spec.canChangeStatus L b x dom?) = some false -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.adopted_lowerTier_noPower
+
+/-- info: 'CaseLaw2.Spec.adopted_lowerTier_noPower' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.adopted_lowerTier_noPower
 
 /-- info: CaseLaw2.Spec.adopted_status_per_heir : ∀ (inLine : Nat → Bool) (e : CaseLaw2.Spec.Effect)
   (l : List CaseLaw2.Spec.Effect) (k t u : Nat) (orig : Bool) (reached unreached : List Nat) (a : Nat),
@@ -660,6 +2714,84 @@ For every registered theorem: its exact statement and its axioms. If a statement
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Spec.contraryBinding_needs_binding
 
+/-- info: CaseLaw2.Spec.contrib_before_start : ∀ (e : CaseLaw2.Spec.Effect) (k t u : Nat),
+  t < e.start → e.contrib k t u = CaseLaw2.Spec.Status.good -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.contrib_before_start
+
+/-- info: 'CaseLaw2.Spec.contrib_before_start' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.contrib_before_start
+
+/-- info: CaseLaw2.Spec.contrib_congr : ∀ (a b : CaseLaw2.Spec.Effect) (k t u : Nat),
+  a.eff = b.eff → a.scope = b.scope → a.live t u = b.live t u → a.contrib k t u = b.contrib k t u -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.contrib_congr
+
+/-- info: 'CaseLaw2.Spec.contrib_congr' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.contrib_congr
+
+/-- info: CaseLaw2.Spec.contrib_join_dominated : ∀ (a b : CaseLaw2.Spec.Effect) (k t u : Nat),
+  a.scope = b.scope →
+    a.live t u = b.live t u →
+      a.eff.rank ≤ b.eff.rank →
+        a.eff ≠ CaseLaw2.Spec.Status.good →
+          b.eff ≠ CaseLaw2.Spec.Status.good → (a.contrib k t u).join (b.contrib k t u) = b.contrib k t u -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.contrib_join_dominated
+
+/-- info: 'CaseLaw2.Spec.contrib_join_dominated' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.contrib_join_dominated
+
+/-- info: CaseLaw2.Spec.contrib_unknown_rank : ∀ (e : CaseLaw2.Spec.Effect) (r : CaseLaw2.Spec.Unk),
+  e.eff = CaseLaw2.Spec.Status.unknown r → ∀ (k t u : Nat), (e.contrib k t u).rank < 10 -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.contrib_unknown_rank
+
+/-- info: 'CaseLaw2.Spec.contrib_unknown_rank' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.contrib_unknown_rank
+
+/-- info: CaseLaw2.Spec.demoted_contrib_le : ∀ (e : CaseLaw2.Spec.Effect) (s : CaseLaw2.Scope),
+  e.scope = CaseLaw2.Spec.demote s → ∀ (k t u : Nat), (e.contrib k t u).rank ≤ 1 -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.demoted_contrib_le
+
+/-- info: 'CaseLaw2.Spec.demoted_contrib_le' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.demoted_contrib_le
+
+/-- info: CaseLaw2.Spec.demoted_never_neg : ∀ (e : CaseLaw2.Spec.Effect) (s : CaseLaw2.Scope),
+  e.scope = CaseLaw2.Spec.demote s → ∀ (k t u : Nat), (e.contrib k t u).rank < 10 -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.demoted_never_neg
+
+/-- info: 'CaseLaw2.Spec.demoted_never_neg' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.demoted_never_neg
+
+/-- info: CaseLaw2.Spec.demoted_status_le : ∀ (l : List CaseLaw2.Spec.Effect),
+  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → ∃ s, e.scope = CaseLaw2.Spec.demote s) →
+    ∀ (k t u : Nat), (CaseLaw2.Spec.status l k t u).rank ≤ 1 -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.demoted_status_le
+
+/-- info: 'CaseLaw2.Spec.demoted_status_le' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.demoted_status_le
+
+/-- info: CaseLaw2.Spec.demoted_status_never_neg : ∀ (l : List CaseLaw2.Spec.Effect),
+  (∀ (e : CaseLaw2.Spec.Effect), e ∈ l → ∃ s, e.scope = CaseLaw2.Spec.demote s) →
+    ∀ (k t u : Nat), (CaseLaw2.Spec.status l k t u).rank < 10 -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.demoted_status_never_neg
+
+/-- info: 'CaseLaw2.Spec.demoted_status_never_neg' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.demoted_status_never_neg
+
 /-- info: CaseLaw2.Spec.division_cannot_overrule : ∀ (L : CaseLaw2.Lookups) (X B : CaseLaw2.CourtEpoch) (b x : CaseLaw2.Decision),
   B.court = X.court →
     L.rules.horizontalCourt X.court x.date = some CaseLaw2.HRule.strong →
@@ -671,6 +2803,30 @@ For every registered theorem: its exact statement and its axioms. If a statement
 /-- info: 'CaseLaw2.Spec.division_cannot_overrule' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Spec.division_cannot_overrule
+
+/-- info: CaseLaw2.Spec.doctrine_effects_demoted : ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)
+  (e : CaseLaw2.Spec.Effect), e ∈ CaseLaw2.Spec.doctrineEffects byHist tr → ∃ s, e.scope = CaseLaw2.Spec.demote s -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.doctrine_effects_demoted
+
+/-- info: 'CaseLaw2.Spec.doctrine_effects_demoted' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.doctrine_effects_demoted
+
+/-- info: CaseLaw2.Spec.doctrine_never_neg : ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)
+  (l : List CaseLaw2.Spec.Effect) (k t u : Nat),
+  (∀ (n : CaseLaw2.Spec.Neg),
+      CaseLaw2.Spec.status (CaseLaw2.Spec.doctrineEffects byHist tr ++ l) k t u = CaseLaw2.Spec.Status.neg n →
+        CaseLaw2.Spec.status l k t u = CaseLaw2.Spec.Status.neg n) ∧
+    (CaseLaw2.Spec.status (CaseLaw2.Spec.doctrineEffects byHist tr) k t u = CaseLaw2.Spec.Status.good ∨
+      CaseLaw2.Spec.status (CaseLaw2.Spec.doctrineEffects byHist tr) k t u =
+        CaseLaw2.Spec.Status.unknown CaseLaw2.Spec.Unk.partialScope) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.doctrine_never_neg
+
+/-- info: 'CaseLaw2.Spec.doctrine_never_neg' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.doctrine_never_neg
 
 /-- info: CaseLaw2.Spec.effectsFor_known : ∀ (L : CaseLaw2.Lookups) (c : CaseLaw2.Decision) (effs : List CaseLaw2.Spec.Effect),
   c.date ≠ 0 →
@@ -699,6 +2855,30 @@ For every registered theorem: its exact statement and its axioms. If a statement
 /-- info: 'CaseLaw2.Spec.erie_one_directional' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Spec.erie_one_directional
+
+/-- info: CaseLaw2.Spec.explicit_recognised_agree_from_witness : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)
+  (r : CaseLaw2.Recog),
+  tr.explicit = true →
+    tr.kind.changesStatus = true →
+      r.power = true →
+        tr.date ≤ r.date →
+          CaseLaw2.Spec.lapseOfDecision byHist tr.date = none →
+            CaseLaw2.Spec.lapseOfDecision wHist r.date = none →
+              ∀ (k t u : Nat),
+                r.date ≤ t →
+                  CaseLaw2.Spec.status (CaseLaw2.Spec.treatEffects byHist tr) k t u =
+                    CaseLaw2.Spec.status
+                      (CaseLaw2.Spec.recogEffects byHist wHist
+                        { id := tr.id, by_ := tr.by_, target := tr.target, date := tr.date, kind := tr.kind,
+                          scope := tr.scope, temporal := tr.temporal, explicit := false, powerKnown := tr.powerKnown,
+                          recog := some r })
+                      k t u -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.explicit_recognised_agree_from_witness
+
+/-- info: 'CaseLaw2.Spec.explicit_recognised_agree_from_witness' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.explicit_recognised_agree_from_witness
 
 /-- info: @CaseLaw2.Spec.filter_congr_mem : ∀ {α : Type} (l : List α) (p q : α → Bool),
   (∀ (x : α), x ∈ l → p x = q x) → List.filter p l = List.filter q l -/
@@ -1166,6 +3346,132 @@ For every registered theorem: its exact statement and its axioms. If a statement
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Spec.reaches_congr
 
+/-- info: CaseLaw2.Spec.recogEffects_shape : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent) (r : CaseLaw2.Recog),
+  tr.recog = some r →
+    CaseLaw2.Spec.recogEffects byHist wHist tr = [] ∨
+      ∃ e1 e2 q,
+        CaseLaw2.Spec.recogEffects byHist wHist tr = [e1, e2] ∧
+          e1.eff = CaseLaw2.Spec.Status.unknown q ∧ e2.start = r.date -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.recogEffects_shape
+
+/-- info: 'CaseLaw2.Spec.recogEffects_shape' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.recogEffects_shape
+
+/-- info: CaseLaw2.Spec.recognisedLater_not_citesOverruled : ∀ (c : CaseLaw2.Spec.CiteFacts),
+  CaseLaw2.Spec.citedRecognisedLater c = true →
+    CaseLaw2.Spec.citesOverruled c = false ∧
+      CaseLaw2.Spec.citesVacated c = false ∧ CaseLaw2.Spec.citesWithdrawn c = false -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.recognisedLater_not_citesOverruled
+
+/-- info: 'CaseLaw2.Spec.recognisedLater_not_citesOverruled' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.recognisedLater_not_citesOverruled
+
+/-- info: CaseLaw2.Spec.recognised_needs_power : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)
+  (r : CaseLaw2.Recog), tr.recog = some r → r.power = false → CaseLaw2.Spec.recogEffects byHist wHist tr = [] -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.recognised_needs_power
+
+/-- info: 'CaseLaw2.Spec.recognised_needs_power' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.recognised_needs_power
+
+/-- info: CaseLaw2.Spec.recognised_neg_from_witness : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)
+  (r : CaseLaw2.Recog),
+  tr.recog = some r →
+    tr.explicit = false →
+      tr.kind.changesStatus = true →
+        r.power = true →
+          tr.powerKnown = true →
+            tr.scope = CaseLaw2.Scope.all →
+              tr.date ≤ r.date →
+                CaseLaw2.Spec.lapseOfDecision byHist tr.date = none →
+                  CaseLaw2.Spec.lapseOfDecision wHist r.date = none →
+                    ∀ (k t u : Nat),
+                      r.date ≤ t →
+                        CaseLaw2.Spec.temporalConductFrom tr.temporal tr.date ≤ u →
+                          CaseLaw2.Spec.status (CaseLaw2.Spec.recogEffects byHist wHist tr) k t u =
+                            CaseLaw2.Spec.Status.neg
+                              (if (tr.kind == CaseLaw2.TKind.abrogated) = true then CaseLaw2.Spec.Neg.abrogated
+                              else CaseLaw2.Spec.Neg.overruled) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.recognised_neg_from_witness
+
+/-- info: 'CaseLaw2.Spec.recognised_neg_from_witness' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.recognised_neg_from_witness
+
+/-- info: CaseLaw2.Spec.recognised_never_neg_before_witness : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)
+  (r : CaseLaw2.Recog),
+  tr.recog = some r →
+    ∀ (l : List CaseLaw2.Spec.Effect) (k t u : Nat),
+      t < r.date →
+        ∀ (n : CaseLaw2.Spec.Neg),
+          CaseLaw2.Spec.status (CaseLaw2.Spec.recogEffects byHist wHist tr ++ l) k t u = CaseLaw2.Spec.Status.neg n →
+            CaseLaw2.Spec.status l k t u = CaseLaw2.Spec.Status.neg n -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.recognised_never_neg_before_witness
+
+/-- info: 'CaseLaw2.Spec.recognised_never_neg_before_witness' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.recognised_never_neg_before_witness
+
+/-- info: CaseLaw2.Spec.recognised_never_weakens : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)
+  (l : List CaseLaw2.Spec.Effect) (k t u : Nat),
+  (CaseLaw2.Spec.status l k t u).rank ≤
+    (CaseLaw2.Spec.status (CaseLaw2.Spec.recogEffects byHist wHist tr ++ l) k t u).rank -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.recognised_never_weakens
+
+/-- info: 'CaseLaw2.Spec.recognised_never_weakens' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.recognised_never_weakens
+
+/-- info: CaseLaw2.Spec.recognised_not_explicit : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),
+  tr.explicit = true → CaseLaw2.Spec.recogEffects byHist wHist tr = [] -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.recognised_not_explicit
+
+/-- info: 'CaseLaw2.Spec.recognised_not_explicit' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.recognised_not_explicit
+
+/-- info: CaseLaw2.Spec.recognised_rank_before_witness : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)
+  (r : CaseLaw2.Recog),
+  tr.recog = some r →
+    ∀ (k t u : Nat), t < r.date → (CaseLaw2.Spec.status (CaseLaw2.Spec.recogEffects byHist wHist tr) k t u).rank < 10 -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.recognised_rank_before_witness
+
+/-- info: 'CaseLaw2.Spec.recognised_rank_before_witness' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.recognised_rank_before_witness
+
+/-- info: CaseLaw2.Spec.recognised_unknown_between : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent)
+  (r : CaseLaw2.Recog),
+  tr.recog = some r →
+    tr.explicit = false →
+      tr.kind.changesStatus = true →
+        r.power = true →
+          tr.powerKnown = true →
+            tr.scope = CaseLaw2.Scope.all →
+              CaseLaw2.Spec.lapseOfDecision byHist tr.date = none →
+                ∀ (k t u : Nat),
+                  tr.date ≤ t →
+                    t < r.date →
+                      CaseLaw2.Spec.temporalConductFrom tr.temporal tr.date ≤ u →
+                        CaseLaw2.Spec.status (CaseLaw2.Spec.recogEffects byHist wHist tr) k t u =
+                          CaseLaw2.Spec.Status.unknown CaseLaw2.Spec.Unk.recognisedLater -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.recognised_unknown_between
+
+/-- info: 'CaseLaw2.Spec.recognised_unknown_between' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.recognised_unknown_between
+
 /-- info: CaseLaw2.Spec.relation_fed_on_state : ∀ (L : CaseLaw2.Lookups) (S : CaseLaw2.CourtEpoch) (x : CaseLaw2.Decision)
   (s : Nat) (q : CaseLaw2.Spec.Query),
   S.system = 0 →
@@ -1375,6 +3681,33 @@ For every registered theorem: its exact statement and its axioms. If a statement
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Spec.statusFor_le_status
 
+/-- info: CaseLaw2.Spec.status_append : ∀ (a l : List CaseLaw2.Spec.Effect) (k t u : Nat),
+  CaseLaw2.Spec.status (a ++ l) k t u = (CaseLaw2.Spec.status a k t u).join (CaseLaw2.Spec.status l k t u) -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.status_append
+
+/-- info: 'CaseLaw2.Spec.status_append' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.status_append
+
+/-- info: CaseLaw2.Spec.status_append_comm : ∀ (a b l : List CaseLaw2.Spec.Effect) (k t u : Nat),
+  CaseLaw2.Spec.status (a ++ b ++ l) k t u = CaseLaw2.Spec.status (b ++ a ++ l) k t u -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.status_append_comm
+
+/-- info: 'CaseLaw2.Spec.status_append_comm' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.status_append_comm
+
+/-- info: CaseLaw2.Spec.status_append_rank_le : ∀ (a l : List CaseLaw2.Spec.Effect) (k t u : Nat),
+  (CaseLaw2.Spec.status l k t u).rank ≤ (CaseLaw2.Spec.status (a ++ l) k t u).rank -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.status_append_rank_le
+
+/-- info: 'CaseLaw2.Spec.status_append_rank_le' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.status_append_rank_le
+
 /-- info: CaseLaw2.Spec.status_cons : ∀ (e : CaseLaw2.Spec.Effect) (l : List CaseLaw2.Spec.Effect) (k t u : Nat),
   CaseLaw2.Spec.status (e :: l) k t u = (e.contrib k t u).join (CaseLaw2.Spec.status l k t u) -/
 #guard_msgs (whitespace := lax) in
@@ -1461,6 +3794,24 @@ For every registered theorem: its exact statement and its axioms. If a statement
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Spec.top_sub
 
+/-- info: CaseLaw2.Spec.treatEffect_scope : ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent) (e : CaseLaw2.Spec.Effect),
+  CaseLaw2.Spec.treatEffect byHist tr = some e → e.scope = tr.scope -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.treatEffect_scope
+
+/-- info: 'CaseLaw2.Spec.treatEffect_scope' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.treatEffect_scope
+
+/-- info: CaseLaw2.Spec.treatEffects_scope : ∀ (byHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent) (e : CaseLaw2.Spec.Effect),
+  e ∈ CaseLaw2.Spec.treatEffects byHist tr → e.scope = tr.scope -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.treatEffects_scope
+
+/-- info: 'CaseLaw2.Spec.treatEffects_scope' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.treatEffects_scope
+
 /-- info: CaseLaw2.Spec.trial_never_binding : ∀ (L : CaseLaw2.Lookups) (x : CaseLaw2.Decision) (h : CaseLaw2.Holding)
   (q : CaseLaw2.Spec.Query) (S : CaseLaw2.CourtEpoch),
   L.epochAt x.court x.date = some S →
@@ -1484,4 +3835,13 @@ For every registered theorem: its exact statement and its axioms. If a statement
 /-- info: 'CaseLaw2.Spec.unionBase_sub_lineBase' depends on axioms: [propext, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms CaseLaw2.Spec.unionBase_sub_lineBase
+
+/-- info: CaseLaw2.Spec.witness_without_claim_no_effect : ∀ (byHist wHist : List CaseLaw2.HEvent) (tr : CaseLaw2.TEvent),
+  tr.recog = none → CaseLaw2.Spec.recogEffects byHist wHist tr = [] -/
+#guard_msgs (whitespace := lax) in
+#check @CaseLaw2.Spec.witness_without_claim_no_effect
+
+/-- info: 'CaseLaw2.Spec.witness_without_claim_no_effect' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms CaseLaw2.Spec.witness_without_claim_no_effect
 

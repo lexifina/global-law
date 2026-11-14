@@ -1,0 +1,45 @@
+{
+ "asof": 20101119,
+ "blind": true,
+ "build": {
+  "source": "round7/SEALED_LOG.md (compare.py --split sealed on round7/out/v3, logged by the round-7 lead)"
+ },
+ "court": "federal",
+ "dataset": "shepardized_coa",
+ "generated": "2026-11-14T00:13:43+00:00",
+ "label": "round7",
+ "link": {
+  "fail_reasons": {},
+  "linked": 9897,
+  "n_items": 10105,
+  "note": "sealed-half counts from round6/history/split/SPLIT.md (no per-case sealed file is read)"
+ },
+ "metrics": {
+  "clean": {
+   "hi": 0.9995059669651924,
+   "k": 9577,
+   "lo": 0.9982164709942936,
+   "n": 9586,
+   "p": 0.999061130815773
+  },
+  "precision": {
+   "hi": 0.9576825631101845,
+   "k": 120,
+   "lo": 0.8641853462762413,
+   "n": 130,
+   "p": 0.9230769230769231
+  },
+  "recall": {
+   "hi": 0.5377473657802379,
+   "k": 120,
+   "lo": 0.41534858648460726,
+   "n": 252,
+   "p": 0.47619047619047616
+  }
+ },
+ "notes": "Reused from the round-7 lead's single logged sealed run; not re-run here.",
+ "primary": "recall",
+ "row_label": "Shepardized Courts of Appeals: decision reversed/vacated/withdrawn (same case)",
+ "split": "sealed",
+ "tests": "same-case"
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Transfer",
+  "positions": 82156,
+  "baseline": 72000000,
+  "best": {
+    "moves": [
+      "W marries N",
+      "W consents to s.2513 splitting",
+      "N consents to s.2513 splitting",
+      "W gives all or any part of her income interest to C or G (s.2519: transfer of the $100M remainder, split $50M / $50M)",
+      "W pays $10M of the $28M gift tax from her own property and recovers $18M from the trust (s.2207A(b), broad reading)",
+      "W dies; nothing in her estate (s.2044(b)(2))"
+    ],
+    "value": 82000000,
+    "gain": 10000000,
+    "conditions": "Income interest valued at $0; s.2207A(b) recovery reaches the tax on N's half. On the strict reading this plan cannot be funded and the best is 76000000 (gain 4000000)."
+  },
+  "runners_up": [
+    {"family": "strict s.2207A(b) best: no splitting; W disposes of any part of the income interest, pays $10M of $34M gift tax herself, recovers $24M", "value": 76000000, "gain": 4000000},
+    {"family": "married, split, s.2519 disposition, full recovery of $28M", "value": 78000000, "gain": 6000000},
+    {"family": "married, split gift of own $10M to C or G, no disposition", "value": 74000000, "gain": 2000000},
+    {"family": "own gifts only, unmarried; or unmarried disposition with full recovery", "value": 72000000, "gain": 0},
+    {"family": "sensitivity: income interest worth $20M, give 1% and keep 99%", "value_strict": 83920000, "value_broad": 89920000},
+    {"family": "sensitivity: income interest worth $40M, married, split, give 1% and keep 99%", "value_strict": 97840000, "value_broad": 97840000}
+  ],
+  "judgment_calls": [
+    "Income interest valued at $0 in headline runs (no age given; W dies as last step); $20M and $40M run as sensitivity",
+    "A s.2519 deemed transfer is treated as 'a gift made by one spouse' that s.2513 can split",
+    "s.2207A(b): strict reading (only W's half recoverable) and broad reading (N's half too) both run",
+    "W may leave her s.2207A(b) recovery unexercised without that being a further gift",
+    "W pays N's gift tax under s.2513(d) joint liability without a gift to N",
+    "Flat 40% above the exclusion; one calendar year of gifts"
+  ],
+  "silences": [
+    "No listed provision returns gift tax paid before death to W's estate (s.2035 not in list)",
+    "No listed provision taxes the part of the income interest W keeps after a partial disposition; s.2044(b)(2) switches s.2044 off (s.2036 not in list)",
+    "s.2519 does not reduce the transfer by tax recovered under s.2207A(b)",
+    "s.2513 has no restriction on a later spouse splitting a transfer of the first spouse's QTIP property",
+    "GST exemption never binds: trust remainder is fixed on C, only W's own $10M can reach G"
+  ]
+}

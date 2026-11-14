@@ -1,0 +1,117 @@
+
+/-! ## RED T6: kernel (closed-gap rule: §2513 does not reach a §2519 transfer) -/
+def planQ : List (Option Move) := [some (.remarry .W), some .consentSplit, some .releaseQtip]
+theorem closed_hold : (play schedQ qStart []).map wealth = some 218551878 := by decide +kernel
+theorem closed_unmarried : (play schedQ qStart [some .releaseQtip]).map wealth = some 233157839 := by decide +kernel
+theorem closed_plan : (play schedQ qStart planQ).map wealth = some 233157839 := by decide +kernel
+theorem closed_plan_xfer : (play schedQ qStart planQ).map (·.xfer) = some 142742786 := by decide +kernel
+
+/-- Forget the consent flag and whoever is in the husband's slot. -/
+def core (s : St) : St := { s with split := false, newH := false, h := {} }
+/-- One move; a move that is not allowed leaves the position as it was. -/
+def stepL (sc : Sched) (s : St) (m : Move) : St := (step sc s m).getD s
+def runL (sc : Sched) (ms : List Move) (s : St) : St := ms.foldl (stepL sc) s
+/-- The three kinds of move the plan is made of. -/
+def PlanMove (m : Move) : Prop := m = .consentSplit ∨ m = .remarry .W ∨ m = .releaseQtip
+/-- The wife is the income beneficiary of the QTIP, or there is none. -/
+def Inv (s : St) : Prop := s.q.doneeW = true ∨ s.q.v = 0
+
+theorem core_consent (sc : Sched) (s : St) : core (stepL sc s .consentSplit) = core s := by
+  simp only [stepL, step]
+  split <;> rfl
+
+theorem core_remarry (sc : Sched) (s : St) : core (stepL sc s (.remarry .W)) = core s := by
+  simp only [stepL, step]
+  split <;> rfl
+
+theorem q_consent (sc : Sched) (s : St) : (stepL sc s .consentSplit).q = s.q := by
+  simp only [stepL, step]
+  split <;> rfl
+
+theorem q_remarry (sc : Sched) (s : St) : (stepL sc s (.remarry .W)).q = s.q := by
+  simp only [stepL, step]
+  split <;> rfl
+
+theorem rel_core (sc : Sched) (s : St) (h : s.q.doneeW = true) :
+    core (stepL sc s .releaseQtip) = core (stepL sc (core s) .releaseQtip) := by
+  cases s with
+  | mk t phase hh w c k k529 tH tW gH gW q split tuit eSp eQ eQrev eQtt eT eC eK newH newW farm xfer itax =>
+  simp only at h
+  simp only [stepL, step, core, h, lifetime, St.per, St.setPer, St.married, taxGift, putTrust, St.trust, St.setTrust,
+    sp, Bool.false_and, Bool.false_eq_true, ↓reduceIte, List.foldl_cons, List.foldl_nil]
+  split
+  · rfl
+  · split
+    · rfl
+    · split
+      · rfl
+      · split <;> rfl
+
+theorem rel_fail (sc : Sched) (s : St) (h : s.q.v = 0) : stepL sc s .releaseQtip = s := by
+  simp [stepL, step, h]
+
+theorem rel_core' (sc : Sched) (s : St) (h : Inv s) :
+    core (stepL sc s .releaseQtip) = core (stepL sc (core s) .releaseQtip) := by
+  cases h with
+  | inl hd => exact rel_core sc s hd
+  | inr hv =>
+    have h2 : (core s).q.v = 0 := hv
+    rw [rel_fail sc s hv, rel_fail sc (core s) h2]
+    rfl
+
+theorem rel_inv (sc : Sched) (s : St) (h : Inv s) : Inv (stepL sc s .releaseQtip) := by
+  cases h with
+  | inr hv => rw [rel_fail sc s hv]; exact Or.inr hv
+  | inl hd =>
+    simp only [stepL, step, hd, putTrust, St.setPer, St.setTrust, sp, ↓reduceIte]
+    repeat' split
+    all_goals first
+      | exact Or.inl hd
+      | exact Or.inr rfl
+
+/-- Under the closed-gap rule: take ANY sequence of marriages, consents to split and §2519 releases, from ANY position
+in which the wife is the income beneficiary. Deleting every marriage and every consent from the sequence leaves the
+same position, apart from the consent flag and the later spouse's own slot. So no ordering or repetition of the
+plan's three moves gets anything out of the later spouse. (One phase; the other move kinds are not covered.) -/
+theorem closed_plan_moves_do_nothing (sc : Sched) :
+    ∀ (ms : List Move), (∀ m ∈ ms, PlanMove m) → ∀ (s u : St), Inv s → core s = core u →
+      core (runL sc ms s) = core (runL sc (ms.filter (· == .releaseQtip)) u) := by
+  intro ms
+  induction ms with
+  | nil => intro _ s u _ hc; exact hc
+  | cons m ms ih =>
+    intro hms s u hs hc
+    have hm : PlanMove m := hms m (List.mem_cons_self ..)
+    have hrest : ∀ x ∈ ms, PlanMove x := fun x hx => hms x (List.mem_cons_of_mem _ hx)
+    have hq0 : (core s).q = (core u).q := congrArg St.q hc
+    have hq : s.q = u.q := hq0
+    rcases hm with hm | hm | hm
+    · subst hm
+      have hi : Inv (stepL sc s .consentSplit) := by unfold Inv; rw [q_consent]; exact hs
+      have := ih hrest (stepL sc s .consentSplit) u hi ((core_consent sc s).trans hc)
+      rw [List.filter_cons_of_neg (by decide)]
+      exact this
+    · subst hm
+      have hi : Inv (stepL sc s (.remarry .W)) := by unfold Inv; rw [q_remarry]; exact hs
+      have := ih hrest (stepL sc s (.remarry .W)) u hi ((core_remarry sc s).trans hc)
+      rw [List.filter_cons_of_neg (by decide)]
+      exact this
+    · subst hm
+      have hu : Inv u := by unfold Inv; rw [← hq]; exact hs
+      have hc2 : core (stepL sc s .releaseQtip) = core (stepL sc u .releaseQtip) := by
+        rw [rel_core' sc s hs, rel_core' sc u hu, hc]
+      have := ih hrest (stepL sc s .releaseQtip) (stepL sc u .releaseQtip) (rel_inv sc s hs) hc2
+      rw [List.filter_cons_of_pos (by decide)]
+      exact this
+
+theorem closed_drop_marriage (sc : Sched) (ms : List Move) (hms : ∀ m ∈ ms, PlanMove m) (s : St) (hs : Inv s) :
+    core (runL sc ms s) = core (runL sc (ms.filter (· == .releaseQtip)) s) :=
+  closed_plan_moves_do_nothing sc ms hms s s hs rfl
+
+#print axioms closed_hold
+#print axioms closed_unmarried
+#print axioms closed_plan
+#print axioms closed_plan_xfer
+#print axioms rel_core
+#print axioms closed_plan_moves_do_nothing
+#print axioms closed_drop_marriage

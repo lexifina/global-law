@@ -1,0 +1,53 @@
+{
+ "asof": null,
+ "blind": true,
+ "build": {
+  "source": "round9/SEALED_LOG.md + round9/results/v9c/sealed/fresh_test.txt"
+ },
+ "court": "supreme",
+ "dataset": "gold_fresh",
+ "generated": "2026-11-14T03:43:02+00:00",
+ "label": "round9",
+ "link": {
+  "fail_reasons": {},
+  "linked": 127,
+  "n_items": 127,
+  "note": "key pairs are resolved by construction (GOLD_FRESH.md: 449 of 451 source rows scoreable; the 2 unresolved rows are outside both halves)"
+ },
+ "metrics": {
+  "precision": {
+   "hi": 0.8313995069212958,
+   "k": 56,
+   "lo": 0.6378967304264598,
+   "n": 75,
+   "p": 0.7466666666666667
+  },
+  "recall": {
+   "hi": 0.6795821206503079,
+   "k": 76,
+   "lo": 0.5114888152269885,
+   "n": 127,
+   "p": 0.5984251968503937
+  },
+  "recall_strict": {
+   "hi": 0.3255920208304077,
+   "k": 31,
+   "lo": 0.17762354588862203,
+   "n": 127,
+   "p": 0.2440944881889764
+  },
+  "recall_strict_attributed": {
+   "hi": 0.5277699976292878,
+   "k": 56,
+   "lo": 0.35758744084433436,
+   "n": 127,
+   "p": 0.4409448818897638
+  }
+ },
+ "notes": "Reused from the round-9 lead's single logged run. Fifth use of this half.",
+ "primary": "recall",
+ "row_label": "Fresh overruling lists, Supreme Court (sealed half, used 5 times)",
+ "split": "sealed",
+ "tests": "overruling",
+ "use_note": "sealed half, 5th use"
+}

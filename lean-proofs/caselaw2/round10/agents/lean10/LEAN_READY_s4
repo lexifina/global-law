@@ -1,0 +1,10 @@
+Round 10 Lean ready, section 4 (remand bridge, D10-5/D10-6/D10-7) (agent lean10), Sat 14 Nov 2026 04:31 (clock from `date`)
+contract: round10/DESIGN10.md §4 + amendments D10-5, D10-7; readings D10-6/D10-9 (ref10 Q10-1..11); round10/LEAN10.md §0, §1, §1b, §2
+runner binary: sha1 43efb9942340bdb1664c2428631007a94bca66f5 (WSL ~/caselaw2/r10_bin/caselaw2_lean10_s4; use NOBUILD=1 R10BIN=~/caselaw2/r10_bin/caselaw2_lean10_s4)
+theorems 272 -> 281 (vs round 9's lock: 0 removed, 0 changed, 9 added: no_remand_line_no_change, remandThen_fail_keeps, remandBridge_sound + 6 helpers); audit.py check: 281 theorems, 0 changes, 0 problems
+mutants 74 -> 79 (M75 B before the order, M76 B of another court, M77 docket of B only, M78 no tie, M79 tie string in B only); #guard Examples 441 -> 514, Mutants 20 -> 23
+table: history_remand.tsv, 12 columns (id b_node b_start b_end docket bd_start bd_end t_start t_end tie o_start o_end); counters remand_lines/checked_rows/failed_rows/dup_rows/bad_rows; cue keys remand_court, remand_cue, remand_months, remand_months_abbr, remand_quote_max, remand_docket_span_max, remand_days_max, remand_order_cue, remand_order_span_max, remand_tie_min
+fixtures: round10/fixtures/remand (+ round-9 farimplicit/zone, round-8, round-7): green
+regressions a a2 b c byte-identical; round9/out/v9c and round8/out/v8e reproduced byte for byte with this binary (summary timing lines aside)
+log: round10/agents/lean10/r10_final.log; WSL ~/caselaw2/r10_final_logs/
+NOTE: the Windows Lean tree already holds section 6 (trialBridge), under its own gates; round10/LEAN_READY is written after those.

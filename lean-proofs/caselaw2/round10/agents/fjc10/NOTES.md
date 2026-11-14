@@ -1,0 +1,4 @@
+# fjc10 NOTES
+- 03:48 start: read BRIEF, DESIGN10 §0, COMMON. df /c 27G free. INFRA_READY absent, audit/ absent.
+- 03:50 v9c h0 miss trace (diag10.py, fjc9 diag on v9c): 1,268 NEG cited misses (1,379 pairs). Per case: named_other_case 282, no_court_phrase 281, row 139, later 93, signal 69, earlier 63, interlocutory 56, no_disposition 56(+24), no_cw 39, no_design_cue 33, one_side 29, bare_no_caption 24. named_other_case pairs 290: cap1 236, cap0 54. peek10.py: forms = district caption cited by own name (officer substitution, abbreviations, consolidated appeal caption in head matter).
+- 03:54 read1 (4 opus readers, 40 items: 30 named_other_case + 10 one_side, decade-stratified seed 20261114): named 24 REV / 4 PART / 2 EARLIER; one_side 10/10 REV. Ties named by readers: court_phrase 40, caption 39, date 7, appeal_from 8, docket 1, judge 1. Name differs: public officer substituted 9, consolidated appeal ~8, party dropped / different lead party ~10, spelling/abbrev 4.

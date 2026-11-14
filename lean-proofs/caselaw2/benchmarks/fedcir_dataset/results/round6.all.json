@@ -1,0 +1,136 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round6\\history\\stage\\final2",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round6\\history\\out\\final2",
+  "status_sha1": "96888c8b4381d3230e83d90c5d6f2fa45dfeeb8e"
+ },
+ "court": "federal",
+ "dataset": "fedcir_dataset",
+ "generated": "2026-11-14T05:06:17+00:00",
+ "label": "round6",
+ "link": {
+  "fail_reasons": {
+   "below_not_found": 4775,
+   "below_several_cited": 6,
+   "below_several_uncited": 313,
+   "cafc_ambiguous": 150,
+   "cafc_not_in_corpus": 106
+  },
+  "linked": 1811,
+  "n_items": 7161
+ },
+ "metrics": {
+  "clean": {
+   "hi": 0.9954228221957824,
+   "k": 735,
+   "lo": 0.9806559293018122,
+   "n": 742,
+   "p": 0.9905660377358491
+  },
+  "clean_all": {
+   "hi": 0.9962137758679156,
+   "k": 1064,
+   "lo": 0.9853434891756457,
+   "n": 1072,
+   "p": 0.9925373134328358
+  },
+  "link_rate": {
+   "hi": 0.2630958454038726,
+   "k": 1811,
+   "lo": 0.24296440445508635,
+   "n": 7161,
+   "p": 0.25289763999441417
+  },
+  "link_rate_cited": {
+   "hi": 0.19262785551915207,
+   "k": 1314,
+   "lo": 0.17469938737733298,
+   "n": 7161,
+   "p": 0.1834939254294093
+  },
+  "link_rate_pre2019": {
+   "hi": 0.34242893185587187,
+   "k": 1684,
+   "lo": 0.3166691824978579,
+   "n": 5112,
+   "p": 0.32942097026604067
+  },
+  "part": {
+   "hi": 0.5182393595882221,
+   "k": 117,
+   "lo": 0.3970936280931229,
+   "n": 256,
+   "p": 0.45703125
+  },
+  "part_all": {
+   "hi": 0.4456520396413621,
+   "k": 121,
+   "lo": 0.3376780524299993,
+   "n": 310,
+   "p": 0.3903225806451613
+  },
+  "precision": {
+   "hi": 0.9335573290596677,
+   "k": 156,
+   "lo": 0.8424147129382051,
+   "n": 174,
+   "p": 0.896551724137931
+  },
+  "precision_all": {
+   "hi": 0.9224143292055311,
+   "k": 159,
+   "lo": 0.8282324554737874,
+   "n": 180,
+   "p": 0.8833333333333333
+  },
+  "precision_lenient": {
+   "hi": 0.9910247490863093,
+   "k": 170,
+   "lo": 0.9423908956357696,
+   "n": 174,
+   "p": 0.9770114942528736
+  },
+  "precision_lenient_all": {
+   "hi": 0.9880778780423912,
+   "k": 175,
+   "lo": 0.9366319291712623,
+   "n": 180,
+   "p": 0.9722222222222222
+  },
+  "recall": {
+   "hi": 0.5759231995708551,
+   "k": 156,
+   "lo": 0.4635710815722857,
+   "n": 300,
+   "p": 0.52
+  },
+  "recall_all": {
+   "hi": 0.5178697840879811,
+   "k": 159,
+   "lo": 0.4127342560475378,
+   "n": 342,
+   "p": 0.4649122807017544
+  },
+  "recall_lenient": {
+   "hi": 0.6441760506139014,
+   "k": 177,
+   "lo": 0.5335482145302328,
+   "n": 300,
+   "p": 0.59
+  },
+  "recall_lenient_all": {
+   "hi": 0.5815220350229102,
+   "k": 181,
+   "lo": 0.4763079315308241,
+   "n": 342,
+   "p": 0.5292397660818714
+  }
+ },
+ "notes": "Primary population: linked decisions below (district court, Court of Federal Claims, Court of International Trade, Court of Appeals for Veterans Claims) cited by the linked Federal Circuit decision (MAPPING.md). recall/precision/clean/part on that population; *_all = every linked decision below (cited or caption-only). recall_lenient counts UNK_HIST as negative; precision_lenient counts PART as source-negative. link_rate: key items linked to one Federal Circuit and one decision-below node; link_rate_pre2019: items dated before 2019 (lower-court corpus ends 2017-2019). Cited units by tribunal: {'DCT': 'recall 53/94, clean 191/195', 'CFC': 'recall 63/113, clean 351/353', 'CIT': 'recall 29/65, clean 150/151', 'CAVC': 'recall 11/28, clean 43/43'}. Units by class/cited: {'CLEAN/0': 330, 'CLEAN/1': 742, 'NEG/0': 42, 'NEG/1': 300, 'PART/0': 54, 'PART/1': 256}. Cited units class>model: {'CLEAN>GOOD': 735, 'CLEAN>NEG_HIST': 4, 'CLEAN>UNK_HIST': 3, 'NEG>GOOD': 121, 'NEG>NEG_HIST': 156, 'NEG>NEG_OTHER': 1, 'NEG>UNK_HIST': 21, 'NEG>UNK_OTHER': 1, 'PART>GOOD': 139, 'PART>NEG_HIST': 14, 'PART>UNK_HIST': 103}.",
+ "primary": "recall",
+ "row_label": "Federal Circuit: decision below reversed/vacated (Fed. Cir. Dataset Project)",
+ "split": "all",
+ "tests": "same-case"
+}

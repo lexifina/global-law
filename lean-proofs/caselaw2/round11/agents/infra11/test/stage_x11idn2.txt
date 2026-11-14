@@ -1,0 +1,58 @@
+base: round10/stage/v10d
+base rows: treatments 45401, treatment_witness 6607, treatment_class 7994, history 190007, history_anchor 43505, history_claim 3726, joined 595, cert_text 286022, window_sha 542280, cite_index 108089, history_bridge 879, part_zone 596267, history_remand 316, history_tbridge 0, history_identity 0
+delta round11/agents/stlink11/delta_u2c: cert_text_delta.tsv cite_index_delta.tsv history_anchor_delta.tsv history_claim_delta.tsv history_delta.tsv joined_delta.tsv treatment_class_delta.tsv treatments_delta.tsv window_sha_delta.tsv
+  treatments +0 (id present 0, wrong column count 0)
+  history +543 (id present 0, wrong column count 0)
+  treatment_witness +0 (no row 0, second line for an id 0, wrong column count 0)
+  treatment_class +0 (no row 0, second line for an id 0, wrong column count 0)
+  history_anchor +543 (no row 0, second line for an id 0, wrong column count 0)
+  history_claim +0 (no row 0, second line for an id and claim 0, wrong column count 0)
+  joined +0 (no row 0, same line 0, third line for an id 0, malformed 0)
+  cert_text +1076 (key present with other content 0)
+  window_sha +1073 (key present with other content 0)
+  cite_index +0 (skipped, would make a resolving key ambiguous 0)
+  history_bridge (extra) +0 (same line present 0)
+  part_zone (extra) +0 (same line present 0)
+  history_remand (extra) +0 (same line present 0)
+  history_tbridge (extra) +0 (same line present 0)
+  history_identity (extra) +0 (same line present 0)
+delta round11/agents/stlink11/delta_u2c_ident: cert_text_delta.tsv history_identity_delta.tsv window_sha_delta.tsv
+  treatments +0 (id present 0, wrong column count 0)
+  history +0 (id present 0, wrong column count 0)
+  treatment_witness +0 (no row 0, second line for an id 0, wrong column count 0)
+  treatment_class +0 (no row 0, second line for an id 0, wrong column count 0)
+  history_anchor +0 (no row 0, second line for an id 0, wrong column count 0)
+  history_claim +0 (no row 0, second line for an id and claim 0, wrong column count 0)
+  joined +0 (no row 0, same line 0, third line for an id 0, malformed 0)
+  cert_text +278 (key present with other content 0)
+  window_sha +278 (key present with other content 0)
+  cite_index +0 (skipped, would make a resolving key ambiguous 0)
+  history_bridge (extra) +0 (same line present 0)
+  part_zone (extra) +0 (same line present 0)
+  history_remand (extra) +0 (same line present 0)
+  history_tbridge (extra) +0 (same line present 0)
+  history_identity (extra) +139 (same line present 0)
+part zones: 524 text nodes of 524 staged rows had no zone line; built 1289 zone lines for 524 nodes (calpart9 build_zones.work, pm2+PJ; missing text 0, zone errors 0, order nodes with no part (no zone line, round-11 rule) 0), 4s
+  part_zone (extra) +1289 (same line present 0)
+cite_index compact keys with two nodes: 0
+doctrine class lines 17; compact labels with two targets 0
+treatments rows by id prefix: t 35158, t10 3, t7 1979, t8 1482, t9 147, ti 25, tw 6607
+history rows by id prefix: h 51422, h10 4214, h11 543, h6 120183, h7 2759, h8 10296, h9 1133
+treatments.tsv	45401 rows	sha1 ce8654e67f324864b11bf2d7625e26ced1ddbe58	base (hard link)
+treatment_witness.tsv	6607 rows	sha1 3570179eed68b9fad4a6755bbb63f83b9cf01532	base (hard link)
+treatment_class.tsv	7994 rows	sha1 9fa4c19eb768086d470171032e04d9ba040ec06c	base (hard link)
+history.tsv	190550 rows	sha1 6d6eba6635a42236952e281b9ff9766e3e4fc616	written
+history_anchor.tsv	44048 rows	sha1 0952d9afa8fe08ed87919c731d167e213d2deb18	written
+history_claim.tsv	3726 rows	sha1 348c205d9d1bf9a6b4042baacfce7d58121f6c29	base (hard link)
+joined.tsv	595 rows	sha1 eb8a18d6c8889f7b8b10e1c31c075bb6f7a9fc3b	base (hard link)
+cert_text.tsv	287376 rows	sha1 6b1ed39ee39a16d381527b1b3578506f948d4c39	written
+window_sha.tsv	543631 rows	sha1 6a608ad761eb1011877501e2b200258b89c5ab68	written
+cite_index.tsv	108089 rows	sha1 f5a6c8fc9b4d18d14aa2b411c2052ba683aff71c	base (hard link)
+history_bridge.tsv	879 rows	sha1 8bfc2cbcfa7e87d4c0b2cd80efe4b68148545f13	base (hard link)
+part_zone.tsv	597556 rows	sha1 886cf8d77a7c28545b8fb45f4966182b98cc66f7	written
+history_remand.tsv	316 rows	sha1 7d959452b3428dfb6c5a26971e573e238de7fd54	base (hard link)
+history_tbridge.tsv	0 rows	extra table, empty: not written
+history_identity.tsv	139 rows	sha1 a55a73774ae8cabec8613c4ac4711a2103ba1f45	written
+adoption.tsv	43 rows	sha1 88e9cb42c0ffdca69c1036330cd228a23366b666	base (hard link, listed)
+succession.tsv	63 rows	sha1 c7b19e325e5232738d129073913be179f0317fb6	base (hard link, listed)
+hard links made for the other tables: 19

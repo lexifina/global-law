@@ -1,0 +1,128 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round13\\stage\\v13a",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round13\\out\\v13a",
+  "status_sha1": "e49626a29314ae354ff481fcbf6b2e920995c6aa"
+ },
+ "court": "federal",
+ "dataset": "songer_treat",
+ "generated": "2026-11-14T12:04:37+00:00",
+ "label": "round13",
+ "link": {
+  "fail_reasons": {
+   "app_ambiguous": 23,
+   "app_court_mismatch": 6,
+   "app_not_in_corpus": 29,
+   "app_wrong_year": 25,
+   "below_ambiguous": 4,
+   "below_date_mismatch": 14,
+   "below_name_mismatch": 66,
+   "below_not_district_court": 687,
+   "below_not_in_corpus": 901,
+   "below_state_mismatch": 121,
+   "priorpub_unparseable": 133
+  },
+  "linked": 2391,
+  "n_items": 4400
+ },
+ "metrics": {
+  "clean": {
+   "hi": 0.998248453534048,
+   "k": 580,
+   "lo": 0.9849813290037145,
+   "n": 583,
+   "p": 0.9948542024013722
+  },
+  "clean_any": {
+   "hi": 0.9989105459818948,
+   "k": 934,
+   "lo": 0.9906291806230552,
+   "n": 937,
+   "p": 0.9967982924226254
+  },
+  "link_rate": {
+   "hi": 0.5580828546442399,
+   "k": 2391,
+   "lo": 0.5286595959109713,
+   "n": 4400,
+   "p": 0.543409090909091
+  },
+  "part": {
+   "hi": 0.3640434897059962,
+   "k": 21,
+   "lo": 0.17627558879351457,
+   "n": 81,
+   "p": 0.25925925925925924
+  },
+  "part_any": {
+   "hi": 0.2469407475891322,
+   "k": 21,
+   "lo": 0.11446678655312742,
+   "n": 123,
+   "p": 0.17073170731707318
+  },
+  "precision": {
+   "hi": 0.9901418171738942,
+   "k": 101,
+   "lo": 0.918599598387548,
+   "n": 104,
+   "p": 0.9711538461538461
+  },
+  "precision_any": {
+   "hi": 0.9901418171738942,
+   "k": 101,
+   "lo": 0.918599598387548,
+   "n": 104,
+   "p": 0.9711538461538461
+  },
+  "precision_lenient": {
+   "hi": 0.9999999999999999,
+   "k": 104,
+   "lo": 0.9643786450856121,
+   "n": 104,
+   "p": 1.0
+  },
+  "precision_lenient_any": {
+   "hi": 0.9999999999999999,
+   "k": 104,
+   "lo": 0.9643786450856121,
+   "n": 104,
+   "p": 1.0
+  },
+  "recall": {
+   "hi": 0.507875298708448,
+   "k": 101,
+   "lo": 0.37997909918286193,
+   "n": 228,
+   "p": 0.44298245614035087
+  },
+  "recall_any": {
+   "hi": 0.28293065675928936,
+   "k": 101,
+   "lo": 0.20158292961084331,
+   "n": 421,
+   "p": 0.23990498812351543
+  },
+  "recall_lenient": {
+   "hi": 0.5470688213434414,
+   "k": 110,
+   "lo": 0.4184248395461925,
+   "n": 228,
+   "p": 0.4824561403508772
+  },
+  "recall_lenient_any": {
+   "hi": 0.30527310738572816,
+   "k": 110,
+   "lo": 0.2216092253101471,
+   "n": 421,
+   "p": 0.26128266033254155
+  }
+ },
+ "notes": "Primary population: linked decisions below (named by Songer/Kuersten-Haire PRIORPUB) cited by the linked appellate decision (MAPPING.md). recall/precision/clean/part on that population; *_any = every linked decision below. recall_lenient counts UNK_HIST as negative; precision_lenient counts PART as source-negative. link_rate: Songer cases with TREAT class NEG/PART/CLEAN and a PRIORPUB, linked to one appellate and one district/bankruptcy decision. Linked items excluded for freshness (FJC key overlap): {'fjc_dist_node+fjc_app_node': 816, 'fjc_dist_node': 62, 'fjc_app_node': 32}. Units by class/cited: {'CLEAN/0': 354, 'CLEAN/1': 583, 'NEG/0': 193, 'NEG/1': 228, 'OTHER/0': 27, 'OTHER/1': 36, 'PART/0': 42, 'PART/1': 81}. Cited units class x model: {'CLEAN>GOOD': 579, 'CLEAN>UNK_HIST': 3, 'CLEAN>UNK_OTHER': 1, 'NEG>GOOD': 118, 'NEG>NEG_HIST': 101, 'NEG>UNK_HIST': 9, 'OTHER>GOOD': 35, 'OTHER>NEG_HIST': 1, 'PART>GOOD': 60, 'PART>NEG_HIST': 3, 'PART>UNK_HIST': 18}.",
+ "primary": "recall",
+ "row_label": "Songer appeals: district decision reversed/vacated",
+ "split": "all",
+ "tests": "same-case"
+}

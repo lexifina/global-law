@@ -1,0 +1,61 @@
+=== distributions: other ST and LT gains 50k (regs true) ===
+positions examined 3723; final positions 283; families 14
+plain plan: tax (future value) if everything is sold at the end $67082; if the final position is kept $65892
+-- best families, everything sold at the end --
+saves $1768 (tax sold $65314, kept $64124, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell FundA, sell GainFund]
+     day 120: buy GainFund
+     day 120: sell FundA (bought day 5)
+     day 130: sell GainFund (bought day 120)
+     day 130: buy GainFund
+     day 195: buy DivStock
+     day 195: sell GainFund (bought day 130)
+     day 310: buy FundA
+     day 310: sell DivStock (bought day 195)
+saves $1768 (tax sold $65314, kept $64124, unrealized at end $5000) using [buy FundA, buy GainFund, sell FundA, sell GainFund]
+     day 120: buy GainFund
+     day 120: sell FundA (bought day 5)
+     day 310: sell GainFund (bought day 120)
+     day 310: buy FundA
+saves $1768 (tax sold $65314, kept $64124, unrealized at end $5000) using [buy DivStock, buy GainFund, sell FundA, sell GainFund]
+     day 120: buy GainFund
+     day 120: sell FundA (bought day 5)
+     day 310: sell GainFund (bought day 120)
+     day 310: buy DivStock
+saves $1768 (tax sold $65314, kept $64124, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell FundA, sell GainFund]
+     day 100: sell FundA (bought day 5)
+     day 100: buy GainFund
+     day 130: buy GainFund
+     day 130: sell GainFund (bought day 100)
+     day 195: sell GainFund (bought day 130)
+     day 195: buy FundA
+     day 310: buy DivStock
+     day 310: sell FundA (bought day 195)
+-- best families, final position kept --
+saves $1768 (tax sold $65314, kept $64124, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell FundA, sell GainFund]
+     day 120: buy GainFund
+     day 120: sell FundA (bought day 5)
+     day 130: sell GainFund (bought day 120)
+     day 130: buy GainFund
+     day 195: buy DivStock
+     day 195: sell GainFund (bought day 130)
+     day 310: buy FundA
+     day 310: sell DivStock (bought day 195)
+saves $1768 (tax sold $65314, kept $64124, unrealized at end $5000) using [buy FundA, buy GainFund, sell FundA, sell GainFund]
+     day 120: buy GainFund
+     day 120: sell FundA (bought day 5)
+     day 310: sell GainFund (bought day 120)
+     day 310: buy FundA
+saves $1768 (tax sold $65314, kept $64124, unrealized at end $5000) using [buy DivStock, buy GainFund, sell FundA, sell GainFund]
+     day 120: buy GainFund
+     day 120: sell FundA (bought day 5)
+     day 310: sell GainFund (bought day 120)
+     day 310: buy DivStock
+saves $1768 (tax sold $65314, kept $64124, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell FundA, sell GainFund]
+     day 100: sell FundA (bought day 5)
+     day 100: buy GainFund
+     day 130: buy GainFund
+     day 130: sell GainFund (bought day 100)
+     day 195: sell GainFund (bought day 130)
+     day 195: buy FundA
+     day 310: buy DivStock
+     day 310: sell FundA (bought day 195)

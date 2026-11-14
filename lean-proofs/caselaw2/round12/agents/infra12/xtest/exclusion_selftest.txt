@@ -1,0 +1,38 @@
+=== (a) --exclude round11/audit/r11k02/sample.tsv
+class olC6: 431 rows in the inputs (history), 395 after filters, 395 with valid nodes; 2 strata; excluded ids 98; rows excluded by identity (table, by, target, kind) only 80
+  --exclude round11/audit/r11k02/sample.tsv: 80 real rows (80 identities with kind, 0 (by, target) pairs without); excluded 80 rows of this class (by id 0, by identity 80, by (by, target) 0)
+excluded rows left in the draw: 0
+dry run: 80 rows would be sampled
+=== (b) --exclude round12/agents/infra12/xtest/synth_h10h11.tsv
+class olC6: 431 rows in the inputs (history), 395 after filters, 395 with valid nodes; 2 strata; excluded ids 80; rows excluded by identity (table, by, target, kind) only 80
+  --exclude round12/agents/infra12/xtest/synth_h10h11.tsv: 80 real rows (80 identities with kind, 0 (by, target) pairs without); excluded 80 rows of this class (by id 0, by identity 80, by (by, target) 0)
+excluded rows left in the draw: 0
+dry run: 80 rows would be sampled
+=== (c) --exclude round12/agents/infra12/xtest/synth_nokind.tsv
+class olC6: 431 rows in the inputs (history), 395 after filters, 395 with valid nodes; 2 strata; excluded ids 80; rows excluded by identity (table, by, target, kind) only 80
+  --exclude round12/agents/infra12/xtest/synth_nokind.tsv: 80 real rows (0 identities with kind, 80 (by, target) pairs without); excluded 80 rows of this class (by id 0, by identity 0, by (by, target) 80)
+excluded rows left in the draw: 0
+dry run: 80 rows would be sampled
+=== (none) 
+class olC6: 431 rows in the inputs (history), 395 after filters, 395 with valid nodes; 2 strata; excluded ids 0; rows excluded by identity (table, by, target, kind) only 0
+excluded rows left in the draw: 0
+dry run: 80 rows would be sampled
+=== (d) real pack, two files: r11k02 sample + synthetic h10/h11 ids
+class olC6: 431 rows in the inputs (history), 395 after filters, 395 with valid nodes; 2 strata; excluded ids 178; rows excluded by identity (table, by, target, kind) only 80
+  --exclude round11/audit/r11k02/sample.tsv: 80 real rows (80 identities with kind, 0 (by, target) pairs without); excluded 80 rows of this class (by id 0, by identity 80, by (by, target) 0)
+  --exclude round12/agents/infra12/xtest/synth_nokind.tsv: 80 real rows (0 identities with kind, 80 (by, target) pairs without); excluded 80 rows of this class (by id 0, by identity 0, by (by, target) 80)
+excluded rows left in the draw: 0
+wrote ~\Documents\us-caselaw-lean-work\caselaw-lean-2\round12\audit\r12x01: 90 items (80 real, 6 known-wrong decoys, 4 known-right decoys) in 2 packs [45, 45]
+r12x01 sample: real 80, ids prefix ['h12']; pairs shared with r11k02 real rows: 0
+pack_1.md: 54295 chars; order-node captions shown (Journal "Petitioner v."): 78; first item excerpt:
+# Audit pack 1 of run r12x01 (45 items)
+
+Read `round12/audit/r12x01/BRIEF.md` first. Answer every item, in this order, one JSON line each, into `round12/audit/r12x01/answers/ans_1.jsonl`.
+
+## ITEM qymgjuf
+
+ACTING DECISION: Anthony Lee Cruz, Petitioner v. United States, Supreme Court of the United States, docket 07-9281, decided 2009-01-21
+TARGET DECISION: United States v. Cruz, 254 F. App'x 550, United States Court of Appeals for the Seventh Circuit, docket 06-4013, decided 2007-11-09
+TEXT SHOWN IS FROM: the acting decision
+
+[PASSAGE 1

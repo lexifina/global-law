@@ -1,0 +1,56 @@
+Filesystem      Size  Used Avail Use% Mounted on
+C:\             953G  927G   27G  98% /mnt/c
+v9c_check: run slot 1
+building the base mirror ~/caselaw2/us-caselaw-lean-work/caselaw-lean-2/base_r10_v9c from data_r9_v9c (hard links)
+base mirror built and checked: 33 tables
+NOBUILD frozen r9v9c: runner 22bab5cdc712 (no sync, no build)
+data dir data_r10_v9c_check: 33 tables; staged = base mirror: treatments treatment_witness treatment_class history history_anchor history_claim joined cert_text window_sha cite_index history_bridge part_zone adoption succession; copied: none; left out (empty): none
+
+real	3m52.179s
+      8 zone_nodes	209669
+      8 zone_missing_rows	0
+      8 zone_lines	585526
+      8 zone_failed_rows	72
+      8 zone_checked_rows	221568
+      8 zone_bad_rows	0
+      8 zone_bad_nodes	0
+      8 rows_rejected	9698
+      8 rows_admitted	221496
+      8 joined_witness_ignored	0
+      8 joined_unknown_ids	0
+      8 joined_rows	595
+      8 joined_rejected	42
+      8 joined_lines	595
+      8 joined_history_ignored	0
+      8 joined_extra	0
+      8 joined_admitted	553
+      8 hclaim_unknown_ids	0
+      8 hclaim_rows	3667
+      8 hclaim_rejected	30
+      8 hclaim_oldcircuit_used	26
+      8 hclaim_oldcircuit	26
+      8 hclaim_duplicates	0
+      8 hclaim_anchorwide_unused	0
+      8 hclaim_anchorwide	554
+      8 hclaim_admitted	3637
+      8 doctrine_rows	17
+      8 doctrine_ambiguous	0
+      8 doctrine_admitted	17
+      8 class_rows	7994
+history verdicts, round-10 rows (h10:):
+treatment verdicts, round-10 rows (t10:):
+total 91332
+drwxrwxrwx 1 user user     4096 Nov 14 04:04 .
+drwxrwxrwx 1 user user     4096 Nov 14 04:04 ..
+-rwxrwxrwx 1 user user      390 Nov 14 04:04 RUN.txt
+-rwxrwxrwx 1 user user 16682301 Nov 14 04:04 certs.tsv
+-rwxrwxrwx 1 user user  2135103 Nov 14 04:04 classes.tsv
+-rwxrwxrwx 1 user user 25419641 Nov 14 04:04 findings.tsv
+-rwxrwxrwx 1 user user     5370 Nov 14 04:04 horty.tsv
+-rwxrwxrwx 1 user user     1079 Nov 14 04:04 lean.log
+-rwxrwxrwx 1 user user    41321 Nov 14 04:04 splits.tsv
+-rwxrwxrwx 1 user user 49154603 Nov 14 04:04 status.tsv
+-rwxrwxrwx 1 user user    56609 Nov 14 04:04 status_lines.tsv
+-rwxrwxrwx 1 user user     8845 Nov 14 04:04 summary.tsv
+RUN v9c_check done
+rc=0

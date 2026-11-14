@@ -1,0 +1,43 @@
+{
+  "chunk": 3,
+  "counts": {"noise": 72, "intended": 10, "gap": 1},
+  "gaps": [
+    {
+      "entry": "#3.11",
+      "new": "§23(a)(4) ($5,000 of the adoption credit is refundable; Pub. L. 119-21)",
+      "list": "§23(i) (Treasury may treat unmarried co-adopters of the same child as 1 taxpayer 'for purposes of applying the dollar amounts in subsections (a)(3) and (b)(1)')",
+      "effect": "With (a)(4) read in, two unmarried individuals adopting the same child share one $5,000 refundable amount. Without it, the regulation power does not reach (a)(4), so each of them has a separate $5,000 refundable amount (their combined expenses stay capped by (b)(1)). The same law added (a)(4) to the inflation list in §23(h)(1) and wrote §23(h)(3) for it, but did not touch §23(i).",
+      "who_gains": "taxpayer",
+      "example": "Unmarried couple with no income tax liability adopt one child; $10,000 of qualified expenses (the statute's (b)(1) figure), each pays $5,000. Each has a credit under (a)(1) of $5,000, all of it refundable under (a)(4): $10,000 paid out. A married couple (joint return required by §23(f)(1)) with the same facts gets $5,000 refundable and carries $5,000 forward, which a no-liability family never uses.",
+      "dollars": 5000,
+      "could_cover": "§23(i) opens with a general power ('such regulations as may be appropriate to carry out this section'), and the co-adopter rule is introduced by 'including', so Treasury could argue a regulation covering (a)(4) is within the general grant; but the specific grant names only (a)(3) and (b)(1), and no such regulation exists for (a)(4). No statutory anti-abuse rule applies.",
+      "confidence": "high (confirmed by hand in the brief; not re-derived here)"
+    }
+  ],
+  "other": [
+    {
+      "where": "§23(a)(4) against §23(a)(2) and §23(b)(1)",
+      "note": "The $5,000 refundable cap is written per taxable year ('so much of the credit allowed under paragraph (1) as does not exceed $5,000'), not per child or per adoption; §23(b)(1), by contrast, says 'for all taxable years with respect to the adoption of a child'. Because §23(a)(2) allows pre-finality expenses in the year after payment and later expenses in the year paid, one adoption's credit can fall in two or three taxable years, each with its own $5,000 refundable amount. Example: no-liability family, $10,000 of expenses for one child; $5,000 paid in 2025 (credit year 2026) and $5,000 paid in 2026 with the adoption final in 2027 (credit year 2027) gives $10,000 refundable; the same $10,000 paid in one year gives $5,000 refundable and $5,000 of carryforward that expires unused after 5 years (§23(c)(2)). Taxpayer gains up to $5,000 per extra year by timing payments. The reverse bites: two children adopted in one year share one $5,000. Special-needs deemed expenses under (a)(3) all fall in the year of finality, so no splitting there. Confidence the words are per-year: medium-high. Not a script entry (#3.10 itself is noise)."
+    },
+    {
+      "where": "§128(c) (employer Trump account contributions) against §414(n)(3)(C) and §414(t)(2)",
+      "note": "The script paired these lists with §139J, which is noise (139J excludes general contributions from the child's income and has no employer test). The real omission is §128, added by the same law: its program must meet requirements 'similar to' §129(d)(2), (3), (6), (7), (8) (non-discrimination, 55% average benefits), but §128 is not in §414(t)(2) (controlled group treated as one employer) or §414(n)(3)(C) (leased employees counted), both of which name 79, 106, 117(d), 125, 127, 129, 132 and 137. On the words, an employer could run the $2,500 program in an entity employing only highly paid staff and test that entity alone. About $925 a year per executive at 37% ($2,500 x 37%). Possible cover: 'similar to' §129(d) may carry §129's aggregation with it. §414(t)(2) does not appear among the script's §128 entries at all. Likely belongs to the chunk holding the §128 entries."
+    },
+    {
+      "where": "§128(c) against §129(d)(9)",
+      "note": "§128(c) imports §129(d)(3) and (d)(8) but not (d)(9), which is the rule that excludes under-21s, employees with under 1 year of service and collectively bargained employees 'for purposes of paragraphs (3) and (8)'. Read literally, a Trump account program must count those employees in the 55% average-benefits test, which a dependent care plan need not. Bites employers. It also skips (d)(4) (25% cap on benefits to more-than-5% owners), which favours owners. Low-medium confidence that either is unintended."
+    },
+    {
+      "where": "§6695B against §6694(c) and §6703(c)",
+      "note": "Preparer penalties (§6694(c)) and promoter/aiding penalties (§6703(c)) let the person pay 15% and sue for refund with collection stayed; §6695B (10% of the underpayment, minimum $5,000) has no such rule, and §6703(a) (burden of proof on the Secretary) does not reach it, so a supplier must pay in full and prove reasonable cause. Same position as §6695 and §6695A, so probably deliberate."
+    },
+    {
+      "where": "§6504(10) and §6511(i)(7)",
+      "note": "Cross references to §6696(d) still name only §6694 and §6695; they omit §6695A (2006) and §6695B (2025), and do not mention the 6-year periods. No legal effect."
+    },
+    {
+      "where": "§6011(e)",
+      "note": "Two paragraphs are designated (6) and there is no (7); the new QOF paragraph is (8). §6724(c)'s shield covers only failures under regulations prescribed under §6011(e)(2), so it does not protect a QOF that files a §6039K return on paper; that return has no numerical threshold."
+    }
+  ]
+}

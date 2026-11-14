@@ -1,0 +1,14 @@
+'Legal.USTax.Hunt.Accounts.red_closed_replay' depends on axioms: [propext]
+'Legal.USTax.Hunt.Accounts.red_closed_worth' depends on axioms: [propext]
+'Legal.USTax.Hunt.Accounts.red_closed_no_free_conversion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Legal.USTax.Hunt.Accounts.red_closed_plan_unreachable' depends on axioms: [propext, Classical.choice, Quot.sound]
+cut-down vs full closed step: positions 1323; (position, move) pairs 4243; legal 2140; disagreements 0; basis>balance 0
+some { yr := 1,
+  cash := 16000,
+  ira := 100000,
+  ta := 0,
+  B := 12281,
+  cvN := 1719,
+  cvT := 12281,
+  taxed := 12281,
+  iraYr := 7000 }

@@ -1,0 +1,108 @@
+import json, os
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+OUT = os.path.dirname(HERE)
+D = []
+
+
+def d(**k):
+    D.append(k)
+
+
+d(form_line="Part II lines 4-5 and instructions p.102 TIP (Notice 2025-69): an employee or self-employed person in a listed tipped occupation is treated as not in a specified service trade or business; the IRS list itself includes musicians and singers (206), digital content creators (209), dancers (205), exercise trainers (608)",
+  statute="224(d)(2)(B): qualified tips exclude any amount unless \"the trade or business in the course of which the individual receives such amount is not a specified service trade or business (as defined in section 199A(d)(2))\" (performing arts, health, athletics...)",
+  direction="form gives more",
+  example="Single self-employed musician, MAGI 50,000, 20,000 tips on Form 1099-K, net income above 20,000: statute 0, form 20,000 (grid block D: up to the 25,000 cap)",
+  dollars="up to 25,000 of deduction per return (about 5,500 of tax at 22%)",
+  explained_by="Notice 2025-69 transition relief until final SSTB regulations; no statutory text behind it (224(d)(2)(C) only lets the Secretary add requirements)",
+  published="Yes - the relief is in Notice 2025-69 and stated in the instructions themselves",
+  confidence="high")
+d(form_line="Part II lines 4a/5 and Part III lines 14a/14b; instructions pp.103, 106-108: for 2025 the taxpayer works out qualified tips or overtime from box 7, Forms 4070, pay stubs, tip logs, or \"a reasonable method\" (total overtime pay divided by 3), with no separately stated amount on any W-2 or 1099",
+  statute="224(a): tips \"included on statements furnished to the individual pursuant to section 6041(d)(3), 6041A(e)(3), 6050W(f)(2), or 6051(a)(18)\" or on Form 4137; 225(a): overtime \"included on statements furnished ... pursuant to section 6041(d)(4) or 6051(a)(19)\". Pub. L. 119-21 secs. 70201(k) and 70202(m) (not in the Code; recalled, not re-read here) let the PAYOR approximate a separately accounted amount for pre-2026 periods; nothing lets the recipient self-determine it",
+  direction="form gives more",
+  example="Single, MAGI 50,000, 9,000 FLSA premium not shown on any statement: statute (strict) 0, form 9,000. Tips: 20,000 employee + 9,000 self-employed, none separately stated: statute 0, form 25,000",
+  dollars="up to 12,500 / 25,000 overtime and 25,000 tips of deduction; reaches essentially every 2025 claimant whose payor did not separately report",
+  explained_by="Notice 2025-69; partly grounded in the Act's off-Code transition rules for payors",
+  published="Yes - widely written about",
+  confidence="high that the form is wider than the Code text; medium on how a court would read \"included on statements\" for 2025")
+d(form_line="Part I line 2c: add Form 2555 line 50 (foreign housing DEDUCTION) to AGI",
+  statute="224(b)(2)(B), 225(b)(2)(B), 163(h)(4)(C)(ii)(II), 151(d)(5)(C)(iii)(II): AGI \"increased by any amount excluded from gross income under section 911, 931, or 933\"; the 911(c)(4)(A) housing amount of a self-employed person is \"a deduction allowable in computing adjusted gross income\", not an exclusion",
+  direction="statute gives more",
+  example="MFJ both 66, AGI 20,000, FEIE 130,000, housing deduction 50,000: statute MAGI 150,000 -> 12,000; form MAGI 200,000 -> 6,000. Single, 8,000 car interest, AGI 20,000, FEIE 70,000, housing deduction 50,000: statute 8,000, form 0",
+  dollars="lost deduction = 6% (12% for two seniors) / 10% (tips, overtime, whole thousands) / 20% (car) of the housing deduction; grid max 8,000 car, 6,000 seniors, 5,000 tips or overtime. Only self-employed people abroad with a housing deduction",
+  explained_by="None found. The same add-back sits on other forms under the identical statutory phrase; no regulation or notice cited",
+  published="Not found (1 search); secondary sources just repeat \"lines 45 and 50\"",
+  confidence="medium-high")
+d(form_line="Part I line 2b: add Form 2555 line 45, which is line 43 (total exclusions) MINUS line 44 (deductions allocable to the excluded income)",
+  statute="same MAGI words: the \"amount excluded from gross income under section 911\" is the gross amount (Form 2555 line 43); 911(d)(6) separately disallows the allocable deductions, and AGI already reflects that",
+  direction="form gives more",
+  example="Single self-employed abroad, gross 200,000, expenses 60,000 (39,000 allocable to the 130,000 exclusion), AGI 49,000: statute MAGI 179,000, form MAGI 140,000 -> two seniors on a joint return at the same figures would differ by 12% of 39,000. Grid: car interest 8,000, statute 0, form 7,800",
+  dollars="extra deduction = 6%/12% / 10% / 20% of Form 2555 line 44; grid max 7,800 car, 4,680 seniors, 3,900 tips or overtime. Self-employed FEIE claimants with business expenses or the half-SE-tax deduction",
+  explained_by="None found; long-standing forms convention (line 45 is the net figure carried to Schedule 1 line 8d)",
+  published="Not found",
+  confidence="medium")
+d(form_line="Part IV instructions p.109 \"Change in obligor by reason of previous obligor's death\": interest paid by a person who inherits the vehicle and its loan is QPVLI",
+  statute="163(h)(4)(B)(i): interest on \"indebtedness incurred by the taxpayer after December 31, 2024\"",
+  direction="form gives more",
+  example="Heir pays 6,000 interest in 2025 on a decedent's 2025 loan: statute 0, form 6,000",
+  dollars="up to 10,000 of deduction; few taxpayers",
+  explained_by="Prop. Reg. 1.163-16(d)(5), cited in the instructions",
+  published="Yes, in the proposed regulations",
+  confidence="medium")
+d(form_line="Schedule 1-A Part V caution p.110 (applies to 1040-NR line 13c): \"The special rules that apply to U.S. nationals; residents of Canada, Mexico, and South Korea; and residents of India ... don't apply to the enhanced deduction for seniors\"",
+  statute="151(d)(5)(C)(v) bars only \"a married individual (within the meaning of section 7703)\"; a married nonresident from Canada or Mexico (or a U.S. national) who meets 7703(b) (lives apart, keeps a home for a dependent child) is not married and files Single on Form 1040-NR",
+  direction="statute gives more",
+  example="Married Canadian-resident nonresident aged 66, living apart with a dependent child, work-valid SSN, MAGI 60,000: statute 6,000; form 0 if the caution switches off the lives-apart Single rule (6,000 if it only means no extra exemption for a spouse)",
+  dollars="6,000 of deduction; very few people",
+  explained_by="Unclear wording; the 1040-NR instructions say to follow the guidance for the filing status checked, which points the other way",
+  published="Not found",
+  confidence="low (depends on what the caution means)")
+
+summ = json.load(open(os.path.join(HERE, "grid_summary.json")))
+out = {
+    "forms": ["Schedule 1-A (Form 1040) 2025 (created 11/4/25)",
+              "2025 Instructions for Form 1040, pp. 101-110 (Instructions for Schedule 1-A)",
+              "Form 1040-NR 2025 and 2025 Instructions for Form 1040-NR (p. 34, Schedule 1-A)",
+              "Form 2555 2025 (lines 43-50)", "Notice 2025-69",
+              "Schedule 1-A (Form 1040) 2026 draft (created 6/16/26)", "Pub. 519 (new-deductions passages)"],
+    "grid_points": summ["grid_points"],
+    "differences": D,
+    "no_difference": [
+        "Phase-out rounding: lines 11 and 19 round down (224/225 \"for each $1,000\"); line 28 rounds up (163(h)(4)(C)(ii)(I) \"or portion thereof\"); line 34 is an exact 6% (151(d)(5)(C)(iii)). Core grid block, every threshold at -1, 0, +1, +499, +500, +999, +1,000, +1,001: 0 differences",
+        "Order: all four parts use one MAGI (line 3 = AGI + exclusions); none of the four is a section 62 deduction, so there is no circularity and no ordering effect",
+        "Joint/separate: Parts II, III, V barred to married filing separately (224(f), 225(e), 151(d)(5)(C)(v)); Part IV open to married filing separately at the 100,000 threshold, 10,000 per return (163(h)(4) has no joint-return rule); QSS and HOH use the non-joint thresholds",
+        "Tips cap: 25,000 per return, including a joint return with two tipped spouses (224(b)(1) has no joint doubling; 225(b)(1) does)",
+        "224(c): line 5 worksheet limits tips business by business to net profit less other allocable deductions (half SE tax, SEP, SE health insurance); 0 differences. Line 5's face text says only \"net profit\"",
+        "225(c): only the FLSA section 7 half-time premium; double-time excess, state-law-only overtime and holiday pay excluded; tips excluded",
+        "Seniors: 6,000 per person, each reduced; \"born before January 2, 1961\" is the common-law age rule; decedent rule matches",
+        "Nonresident, single, 65+, work-valid SSN: Form 1040-NR line 13c takes Schedule 1-A Part V, so the form allows it; the statute agrees - 873(b)(3) allows \"the deduction for personal exemptions allowed by section 151\" whether or not connected with ECI, and the senior deduction reaches taxable income at all only through that same phrase in 63(b)(2). One person only (no joint return)",
+        "Nonresident, married (H-2B, J-1): must check Married filing separately on Form 1040-NR (6013(a)(1) bars a joint return), and the instructions say to use only the guidance for the status checked, so Parts II, III, V give 0; the statute agrees (224(f), 225(e), 151(d)(5)(C)(v)). Only routes: a 6013(g)/(h) election with a U.S. spouse (then Form 1040), or the lives-apart Single rule limited to Canada/Mexico/U.S. nationals/South Korea/India, which tracks 7703(b) with 152(b)(3) and 873(b)(3)",
+        "Nonresident car loan: the 1040-NR instructions say \"Generally, nonresident aliens are not eligible\"; the statute reaches the same result through 873(a) (personal-use interest is not connected with ECI), not through any joint-return rule. Schedule 1-A's face and line 38 do not themselves block Part IV for a 1040-NR filer",
+    ],
+    "notes": [
+        "Instructions p.103 Example 2 adds Form 4137 unreported tips (4,000) to box 7 or Form 4070 tips, while line 4c says \"larger of\" 4a and 4b (Form 4137 line 1 column (c) is total tips): same answer with Form 4070 (24,000), but 19,000 against 24,000 if box 7 is used. Internal inconsistency, not a statute difference",
+        "Line 14a lets overtime \"not included in box 1\" (for example elective deferrals) be deducted; 225(a) does not require the overtime to be in gross income, so the form follows the statute, but it is a deduction for income not taxed that year",
+        "2026 draft: Part I lines 2b/2c unchanged; tips and overtime move to W-2 box 12 and dedicated 1099 boxes, so the 2025 self-computation is gone",
+    ],
+    "grid_blocks": summ["groups"],
+    "not_retrieved": ["Prop. Reg. 1.163-16 text - relied on the instructions' description",
+                      "2026 draft instructions for Schedule 1-A", "Pub. L. 119-21 secs. 70201(k), 70202(m) text (not in sec.py; cited from memory)",
+                      "Form 4563 (line 15 taken from Schedule 1-A's own description)"],
+    "web_searches_used": 1,
+}
+json.dump(out, open(os.path.join(OUT, "Schedule1A.json"), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
+md = ["# Schedule 1-A (Form 1040) 2025 against sections 224, 225, 163(h)(4), 151(d)(5)(C)", "",
+      "Sources: " + "; ".join(out["forms"]) + ". Statute from `tools/hunt/sec.py` (224, 225, 163(h), 151(d), 63(b), 63(c)(6), 873, 911(c)(4), 911(d)(6), 6013(a)(1)).",
+      "",
+      f"Method: `Schedule1A/compare.py` holds `statute()` and `form()`, each written from its own text; {out['grid_points']:,} grid points in four blocks (core arithmetic, 224(c), foreign amounts in MAGI, relief flags). Output: `Schedule1A/grid_out.txt`. Dollar figures are deduction amounts, not tax.",
+      "", "## Differences (largest first)", ""]
+for i, x in enumerate(D, 1):
+    md += [f"### {i}. {x['direction'].capitalize()}: {x['dollars']}", "",
+           f"- Form: {x['form_line']}", f"- Statute: {x['statute']}", f"- Example: {x['example']}",
+           f"- Explained by: {x['explained_by']}", f"- Already written about: {x['published']}",
+           f"- Confidence: {x['confidence']}", ""]
+md += ["## Checked, no difference", ""] + [f"- {s}" for s in out["no_difference"]]
+md += ["", "## Notes", ""] + [f"- {s}" for s in out["notes"]]
+md += ["", "## Not retrieved", ""] + [f"- {s}" for s in out["not_retrieved"]] + [""]
+open(os.path.join(OUT, "Schedule1A.md"), "w", encoding="utf-8", newline="\n").write("\n".join(md))
+print("ok", out["grid_points"])

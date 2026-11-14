@@ -1,0 +1,319 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=block">
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#04070d}
+canvas{position:absolute;inset:0}
+#ov{position:absolute;inset:0;pointer-events:none;color:#eef1f5;font-family:'IBM Plex Sans',sans-serif}
+.k{position:absolute;left:120px;top:96px;font:600 22px 'IBM Plex Sans';letter-spacing:.22em;text-transform:uppercase}
+.t{position:absolute;left:120px;top:132px;font:600 58px/1.1 'Source Serif 4',serif;max-width:1680px;white-space:nowrap;text-shadow:0 2px 30px rgba(0,0,0,.7)}
+.s{position:absolute;left:122px;top:214px;font:400 26px/1.4 'IBM Plex Sans';color:#a6b5cc;max-width:1500px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud{position:absolute;right:120px;top:100px;text-align:right;font:500 22px 'JetBrains Mono',monospace;color:#a6b5cc;line-height:1.7}
+#hud b{font:700 64px 'Source Serif 4',serif;color:#f2b24a;display:block;line-height:1.1}
+.sc{position:absolute;inset:0;display:none}
+.sc>*,.abs{position:absolute}
+.tag{font:600 22px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8fa2bd;white-space:nowrap;text-transform:uppercase}
+.panel{padding:24px 30px;border-radius:16px;background:rgba(8,14,26,.82);border:1px solid rgba(120,160,220,.25);box-sizing:border-box}
+.ph{font:600 22px 'IBM Plex Sans';letter-spacing:.18em;text-transform:uppercase;color:#8fa2bd;margin-bottom:12px}
+.qq{font:italic 400 36px/1.32 'Source Serif 4',serif;color:#eef1f5}
+.nm{font:600 38px/1.2 'Source Serif 4',serif;color:#eef1f5}
+.sub{font:400 25px/1.5 'IBM Plex Sans';color:#a6b5cc}
+.mono{font:400 23px/1.6 'JetBrains Mono',monospace;color:#d8e2f2;white-space:nowrap;font-variant-ligatures:none}
+.note{font:400 25px/1.45 'IBM Plex Sans';color:#a6b5cc}
+.hl{border-radius:6px;padding:1px 5px;margin:0 -5px}
+.ck{display:grid;grid-template-columns:60px 1fr auto;align-items:center;border-top:1px solid rgba(120,160,220,.16);font:500 31px 'IBM Plex Sans';white-space:nowrap}
+.ck:first-child{border-top:none}
+.ck svg{display:block}
+.ck .cd{font:400 22px 'JetBrains Mono',monospace}
+.ck .lb i{font-style:normal;font:400 25px 'JetBrains Mono',monospace;margin-left:14px}
+.verdict{font:700 54px/1.1 'Source Serif 4',serif}
+.cap{width:520px;text-align:center;font:600 28px/1.3 'IBM Plex Sans'}
+.cap .num{display:block;font:700 92px/1.05 'Source Serif 4',serif;margin-bottom:8px}
+.cap small{display:block;font:400 24px/1.42 'IBM Plex Sans';color:#a6b5cc;margin-top:12px}
+.mut{display:grid;grid-template-columns:repeat(9,34px);gap:9px;justify-content:center;margin-top:26px}
+.mut span{width:34px;height:34px;border-radius:7px;box-sizing:border-box}
+.kv{display:grid;grid-template-columns:auto 1fr;column-gap:28px;font:400 26px/1.6 'JetBrains Mono',monospace;color:#eef1f5;white-space:nowrap}
+.kv .a{color:#8fa2bd}
+#big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#big .bt{font:700 96px/1.05 'Source Serif 4',serif;margin:0 0 36px;text-shadow:0 0 70px rgba(80,220,160,.25)}
+#big .bs{font:400 36px 'IBM Plex Sans';color:#a8b8d0}
+#fade{position:absolute;inset:0;background:#000}
+#scrim{position:absolute;left:0;top:0;width:1920px;height:300px;background:linear-gradient(rgba(4,7,13,.9),rgba(4,7,13,.7) 55%,rgba(4,7,13,0))}
+svg text{font-family:'IBM Plex Sans',sans-serif}
+</style></head><body>
+<canvas id="stars" width="1920" height="1080"></canvas>
+<div id="ov">
+  <div id="big"><div class="bt">How the Lean model decides</div><div class="bs">One Supreme Court sentence, followed through every check</div></div>
+  <div id="scrim"></div>
+  <div class="k" id="k"></div><div class="t" id="tt"></div><div class="s" id="ss"></div>
+  <div id="hud"></div>
+  <div id="stage"></div>
+  <div id="fade"></div>
+</div>
+<script>
+// window.LIT is written by render_lean_in_testing.py --build-data (lean_in_testing_data.json); sources in lean_in_testing_sources.md
+const D = window.LIT, LW = D.law, RJ = D.rej, ST = D.status, FN = D.find, SD = D.scdb, CR = D.crs, V = D.ver;
+const W = 1920, H = 1080;
+// scene starts; each scene runs to the next start. Every scene builds in two beats: the first is finished before 40%
+// of the scene, the second runs between 45% and 85%, so the frames at 40% and 90% are at rest.
+const T = { s1: 2.5, s2: 8.5, s3: 15.5, s4: 22.5, s5: 29.5, s6: 36, s7: 42.5, s8: 49, s9: 55, s10: 62, end: 69.5 };
+const DUR = 69.5;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const fadeIO = (t, a, b, d = .35) => seg(t, a, a + d) * (1 - seg(t, b - d, b));
+function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rng(2026);
+const fmt = n => Math.round(n).toLocaleString('en-US');
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const $ = id => document.getElementById(id);
+const CY = '#5fe0ff', AM = '#f2b24a', GR = '#5fd3a0', RD = '#ff6a55', MU = '#8fa2bd', TX = '#eef1f5';
+const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const mix = (a, b, k) => { const x = rgb(a), y = rgb(b); return `rgb(${x.map((v, i) => Math.round(v + (y[i] - v) * clamp(k))).join(',')})`; };
+const rgba = (h, a) => `rgba(${rgb(h).join(',')},${a})`;
+const day = d => `${d % 100} ${['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][Math.floor(d / 100) % 100 - 1]} ${Math.floor(d / 10000)}`;
+const yfrac = d => { const y = Math.floor(d / 10000), t0 = Date.UTC(y, 0, 1), t1 = Date.UTC(y + 1, 0, 1); return y + (Date.UTC(y, Math.floor(d / 100) % 100 - 1, d % 100) - t0) / (t1 - t0); };
+
+// ---------- background: the set's dark field with faint stars ----------
+{ const g = $('stars').getContext('2d'); g.fillStyle = '#04070d'; g.fillRect(0, 0, W, H);
+  for (let i = 0; i < 900; i++) { const x = R() * W, y = R() * H, b = .1 + R() * .26, r = .6 + R() * 1.1;
+    g.fillStyle = `rgba(${Math.round(205 * b + 40)},${Math.round(230 * b + 45)},${Math.round(255 * b + 55)},${b})`; g.beginPath(); g.arc(x, y, r, 0, 6.283); g.fill(); } }
+
+// ---------- DOM scenes ----------
+const st = $('stage');
+const mk = (id, html) => { const d = document.createElement('div'); d.className = 'sc'; d.id = id; d.innerHTML = html; st.appendChild(d); return d; };
+const at = (a, style = '') => `data-a="${a}" style="${style}"`;
+const cnt = (n, a, d = 1.6) => `<span data-n="${n}" data-c="${a}" data-d="${d}">0</span>`;
+const ICON = bad => `<svg width="44" height="44" viewBox="0 0 40 40"><circle class="rg" cx="20" cy="20" r="16" fill="none" stroke="${MU}" stroke-width="2.5"/><path class="tk" d="${bad ? 'M13.5 13.5l13 13M26.5 13.5l-13 13' : 'M12 20.5l5.5 5.5L28.5 14.5'}" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>`;
+// one check of Certificate.lean: label, the reason code it fails with, the time it is decided
+const ck = (t, label, code, h, bad = 0) => `<div class="ck" data-ck="${t}" data-bad="${bad}" style="height:${h}px">${ICON(bad)}<span class="lb">${label}</span><span class="cd">${code}</span></div>`;
+const C = D.checks;   // shaUnknown … noAuthority, in the checker's order
+const arrow = (x, y0, y1, id) => `<svg class="abs" id="${id}" style="left:0;top:0" width="1920" height="1080"><path class="ar" d="M${x} ${y0}V${y1 - 4}M${x - 13} ${y1 - 18}L${x} ${y1 - 3}L${x + 13} ${y1 - 18}" fill="none" stroke="${MU}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const short = s => s.replace('United States Court of Appeals for the ', '').replace(' of the United States', '');
+
+// scene 1: a sentence goes in
+mk('s1', `
+ <div ${at(.4, 'left:120px;top:322px;width:1680px;font:italic 400 84px/1.14 \'Source Serif 4\',serif')}>“${esc(LW.quote)}”</div>
+ <div ${at(1.1, 'left:122px;top:548px;display:flex;align-items:baseline;gap:18px;white-space:nowrap')}><span style="width:14px;height:14px;border-radius:50%;background:${CY};align-self:center"></span><span class="nm">${esc(LW.by)}</span><span class="sub" style="font-size:27px">${esc(short(LW.court))} · ${esc(LW.by_day)} · ${esc(LW.part)} opinion</span></div>
+ <div class="panel" ${at(2.9, 'left:120px;top:672px;width:1680px')}><div class="ph" style="color:${AM}">What a reader claims <span style="color:${MU}">· untrusted until Lean checks it</span></div>
+  <div style="display:grid;grid-template-columns:250px 660px 400px 1fr;row-gap:4px;white-space:nowrap">
+   ${['kind', 'target', 'characters', 'evidence'].map(h => `<span class="tag" style="letter-spacing:.08em">${h}</span>`).join('')}
+   ${[esc(LW.kind), `${esc(LW.target)}, ${esc(LW.target_cite)}`, `${fmt(LW.start)}–${fmt(LW.end)}`, esc(LW.evidence)].map((v, i) => `<span data-a="${3.3 + i * .3}" style="font:400 30px/1.6 'JetBrains Mono',monospace">${v}</span>`).join('')}
+  </div></div>`);
+
+// scene 2: the text checks
+const SX = 120, SW = 860, hx0 = SX + SW * (LW.start - LW.w0) / (LW.w1 - LW.w0), hx1 = SX + SW * (LW.end - LW.w0) / (LW.w1 - LW.w0);
+const qcue = (q, cue) => { const i = q.toLowerCase().indexOf(cue); return esc(q.slice(0, i)) + `<span class="hl cue">${esc(q.slice(i, i + cue.length))}</span>` + esc(q.slice(i + cue.length)); };
+mk('s2', `
+ <div class="tag" ${at(.4, 'left:120px;top:318px')}>the opinion’s text hash</div>
+ <div class="mono" id="s2sha" ${at(.4, 'left:120px;top:352px')}>${LW.sha}</div>
+ <div class="mono" ${at(.6, `left:${(hx0 + hx1) / 2}px;top:414px;transform:translateX(-50%);color:${CY}`)}>${fmt(LW.start)}–${fmt(LW.end)}</div>
+ <div id="s2strip" ${at(.6, `left:${SX}px;top:456px;width:${SW}px;height:56px;border-radius:10px;box-sizing:border-box;border:1px solid rgba(120,160,220,.35);background:repeating-linear-gradient(90deg,rgba(150,175,215,.2) 0 3px,rgba(150,175,215,.05) 3px 7px)`)}></div>
+ <div id="s2span" ${at(.6, `left:${hx0}px;top:456px;width:${hx1 - hx0}px;height:56px;box-sizing:border-box;background:${rgba(CY, .55)};border:2px solid ${CY};border-radius:4px`)}></div>
+ <div class="mono" ${at(.6, `left:${SX}px;top:518px;color:${MU}`)}>${fmt(LW.w0)}</div>
+ <div class="mono" ${at(.6, `left:${SX + SW}px;top:518px;transform:translateX(-100%);color:${MU}`)}>${fmt(LW.w1)}</div>
+ <svg class="abs" ${at(.8, 'left:0;top:0')} width="1920" height="1080"><path d="M${hx0} 513L${SX} 590H${SX + SW}L${hx1} 513Z" fill="${rgba(CY, .08)}" stroke="${rgba(CY, .35)}"/></svg>
+ <div class="panel" id="s2q" ${at(.8, `left:${SX}px;top:590px;width:${SW}px`)}><div class="qq">“${qcue(LW.quote, LW.cue)}”</div></div>
+ <div class="tag" ${at(1.0, 'left:120px;top:772px')}>SHA-1 of that window</div>
+ <div class="kv" id="s2w" ${at(1.0, 'left:120px;top:808px;font-size:23px')}><span class="a">Lean computes</span><span>${LW.wsha}</span><span class="a">audit copy</span><span>${LW.wsha}</span></div>
+ <div ${at(.5, 'left:1080px;top:318px;width:720px')}>
+  ${ck(1.0, 'text hash is known', C[0], 86)}${ck(1.5, 'a window covers the quote', C[1], 86)}${ck(2.0, 'window hash matches', C[2], 86)}
+  ${ck(3.4, 'quote is at its offset', C[3], 86)}${ck(4.2, `cue word<i>“${esc(LW.cue)}”</i>`, C[4], 86)}${ck(5.0, 'no disqualifier', C[5], 86)}</div>
+ <div class="note" ${at(.9, 'left:1080px;top:858px;width:720px')}>The first failure is the row’s reason code.</div>`);
+
+// scenes 3 and 4: the two decisions of a row, as cards
+const card = (a, y, id, name, l1, l2, quote = '') => `<div class="panel" id="${id}" ${at(a, `left:120px;top:${y}px;width:820px`)}>${quote ? `<div class="qq" style="font-size:32px;margin-bottom:14px">“${esc(quote)}”</div>` : ''}<div class="nm"${quote ? ' style="font-size:32px"' : ''}>${name}</div><div class="sub">${l1}</div><div class="sub">${l2}</div></div>`;
+const kchip = (a, y, id, k) => `<div id="${id}" ${at(a, `left:566px;top:${y}px;font:600 24px 'JetBrains Mono',monospace;color:${AM};padding:5px 14px;border:1px solid ${AM};border-radius:10px;background:rgba(6,12,22,.7)`)}>${esc(k)}</div>`;
+mk('s3',
+  card(.4, 330, 's3a', esc(LW.by), `${esc(LW.by_cite)} · <span class="hl" id="s3c1">${esc(short(LW.court))}</span>`, `<span class="hl" id="s3d1">${esc(LW.by_day)}</span> · <span class="hl" id="s3p">${esc(LW.part)} opinion</span>`) +
+  arrow(530, 532, 648, 's3ar') + kchip(.7, 566, 's3k', LW.kind) +
+  card(.7, 652, 's3b', `Bowers v. <span class="hl" id="s3n">Hardwick</span>`, `${esc(LW.target_cite)} · <span class="hl" id="s3c2">${esc(short(LW.court))}</span>`, `<span class="hl" id="s3d2">${esc(LW.target_day)}</span>`) + `
+ <div ${at(.5, 'left:1060px;top:318px;width:740px')}>
+  ${ck(1.0, `names its target<i>“${esc(LW.evidence.split(':')[1])}”</i>`, C[6], 98)}${ck(1.8, `${esc(LW.part)} opinion`, C[7], 98)}
+  ${ck(3.4, `target is earlier<i>${LW.target_year} ≤ ${LW.by_year}</i>`, C[8], 98)}${ck(4.2, 'court has the power', C[9], 98)}</div>
+ <div class="panel" ${at(5.0, `left:1060px;top:742px;width:740px;border-color:${rgba(GR, .6)}`)}><div style="display:flex;align-items:baseline;justify-content:space-between"><span class="verdict" style="color:${GR}">Admitted</span><span class="mono" style="color:${GR}">certs.tsv: ${esc(LW.result)}</span></div>
+  <div class="note" style="margin-top:12px"><span style="font:400 23px 'JetBrains Mono',monospace;color:#d8e2f2">checkCert_sound</span>: an admitted row satisfies every condition.</div></div>`);
+
+const rjBy = RJ.by.replace(/^.*\((In re [^)]+)\)$/, '$1');
+mk('s4',
+  card(.4, 318, 's4a', `${esc(rjBy)}, ${esc(RJ.by_cite)}`, `<span class="hl" id="s4c1">${esc(RJ.court.replace('United States', 'US').replace(' for the Southern District of New York', ', S.D.N.Y.'))}</span>`, `${esc(RJ.by_day)} · ${esc(RJ.part)} opinion`, RJ.quote) +
+  arrow(530, 594, 742, 's4ar') + kchip(.8, 646, 's4k', RJ.kind) +
+  card(.8, 746, 's4b', esc(RJ.target), `${esc(RJ.target_cite)} · <span class="hl" id="s4c2">${esc(short(RJ.target_court))}</span>`, `${RJ.target_year}`) + `
+ <div class="tag" ${at(.9, 'left:1060px;top:330px')}>the same checks, in order</div>
+ <div ${at(.9, 'left:1060px;top:378px;display:flex;gap:16px')}>${C.slice(0, 9).map((c, i) => `<span class="ck" data-ck="${1.2 + i * .14}" data-bad="0" style="display:block;border:none">${ICON(0)}</span>`).join('')}</div>
+ <div class="note" ${at(2.2, 'left:1060px;top:440px')}>Text, cue, target, part and dates all pass.</div>
+ <div ${at(3.3, 'left:1060px;top:510px;width:740px')}>${ck(4.2, 'court has the power', C[9], 98, 1)}</div>
+ <div class="panel" ${at(4.9, `left:1060px;top:652px;width:740px;border-color:${rgba(RD, .6)}`)}><div style="display:flex;align-items:baseline;justify-content:space-between"><span class="verdict" style="color:${RD}">Rejected</span><span class="mono" style="color:${RD}">certs.tsv: ${esc(RJ.result)}</span></div>
+  <div class="note" style="margin-top:12px">A bankruptcy court has no power over a Supreme Court decision.</div></div>`);
+
+// scene 5: the status timeline of Bowers
+const TX0 = 200, TX1 = 1720, Y0 = Math.floor(ST.decided / 10000), Y1 = Math.floor(ST.run_to / 10000) + 1;
+const tx = d => TX0 + (yfrac(d) - Y0) / (Y1 - Y0) * (TX1 - TX0), xd = tx(ST.decided), xg = tx(ST.good_to), xn = tx(ST.neg_from), xe = tx(ST.run_to);
+mk('s5', `
+ <div ${at(.3, 'left:200px;top:318px;white-space:nowrap')}><span class="nm" style="font-size:42px">${esc(LW.target)}</span><span class="sub" style="margin-left:20px;font-size:27px">${esc(LW.target_cite)} · decided ${esc(LW.target_day)}</span></div>
+ <svg class="abs" style="left:0;top:0" width="1920" height="1080">
+  <g data-a=".4"><line x1="${TX0}" x2="${TX1}" y1="700" y2="700" stroke="rgba(140,170,210,.45)" stroke-width="2"/>
+   ${[1990, 2000, 2010, 2020].map(y => `<line x1="${tx(y * 10000 + 101)}" x2="${tx(y * 10000 + 101)}" y1="700" y2="714" stroke="rgba(140,170,210,.45)" stroke-width="2"/><text x="${tx(y * 10000 + 101)}" y="748" text-anchor="middle" font-size="23" fill="${MU}" style="font-family:'JetBrains Mono'">${y}</text>`).join('')}</g>
+  <rect id="s5g" x="${xd}" y="568" width="0" height="92" rx="10" fill="${rgba(GR, .22)}" stroke="${GR}" stroke-width="2"/>
+  <text data-a="1.7" x="${(xd + xg) / 2}" y="626" text-anchor="middle" font-size="34" font-weight="600" fill="${GR}">good law</text>
+  <line id="s5m" x1="${xn}" x2="${xn}" y1="462" y2="462" stroke="${AM}" stroke-width="3"/>
+  <rect id="s5r" x="${xn + 4}" y="568" width="0" height="92" rx="10" fill="${rgba(RD, .22)}" stroke="${RD}" stroke-width="2"/>
+  <text data-a="4.3" x="${(xn + xe) / 2}" y="626" text-anchor="middle" font-size="34" font-weight="600" fill="${RD}">overruled</text>
+ </svg>
+ <div ${at(3.0, `left:${xn}px;top:392px;transform:translateX(-50%);text-align:center;white-space:nowrap`)}><span style="font:600 32px 'Source Serif 4',serif;color:${AM}">${esc(ST.neg_from_day)}</span><span class="sub" style="margin-left:14px">${esc(LW.by)}, admitted</span></div>
+ <div class="tag" ${at(4.9, 'left:200px;top:812px')}>the same pair in the Lean source · re-checked on every build</div>
+ <div class="mono" ${at(4.9, 'left:200px;top:852px;font-size:25px')}>#guard st 2 0 ${ST.good_to} ${ST.good_to} == .good<br>#guard st 2 0 ${ST.neg_from} ${ST.neg_from} == .neg .overruled</div>`);
+
+// scene 6: status is a join; the order of the effects does not matter (Spec/Status.lean: status, Status.join, status_perm)
+const EF = ['reviewPending', 'superseded', 'overruled'].map(n => [n, D.neg.indexOf(n)]);   // constructors of Neg, least severe first
+const SLOT = [300, 760, 1220], PERM = [[0, 1, 2], [2, 0, 1], [1, 2, 0]];
+mk('s6', `
+ <div ${at(.4, 'left:120px;top:318px;white-space:nowrap;font:400 36px \'Source Serif 4\',serif')}>status = the <b style="font-weight:600;color:${AM}">join</b> of every admitted effect <span class="sub" style="margin-left:18px">join keeps the more severe of two</span></div>
+ ${EF.map(([n, i], k) => `<div class="panel ef" data-a="${.8 + k * .2}" style="left:${SLOT[k]}px;top:440px;width:400px;height:150px;text-align:center"><div style="font:600 32px 'JetBrains Mono',monospace;color:${i === 3 ? RD : TX}">${n}</div>
+   <div style="display:flex;gap:8px;justify-content:center;margin-top:22px">${D.neg.map((_, j) => `<span style="width:22px;height:22px;border-radius:50%;box-sizing:border-box;${j <= i ? `background:${i === 3 ? RD : MU}` : 'border:2px solid rgba(143,162,189,.45)'}"></span>`).join('')}</div></div>`).join('')}
+ <svg class="abs" ${at(1.6, 'left:0;top:0')} width="1920" height="1080"><path d="M500 606V640H1420V606M960 640V726M946 710L960 725L974 710" fill="none" stroke="${MU}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+ <div class="panel" id="s6r" ${at(1.8, `left:680px;top:732px;width:560px;text-align:center;border-color:${rgba(RD, .6)}`)}><div class="ph" style="margin-bottom:4px">status</div><div style="font:700 56px/1.15 'Source Serif 4',serif;color:${RD}">overruled</div></div>
+ <div class="mono" ${at(5.0, 'left:0;top:930px;width:1920px;text-align:center;font-size:26px')}><span style="color:${AM}">theorem status_perm</span> (h : l₁.Perm l₂) : status l₁ k t u = status l₂ k t u</div>`);
+const EFE = [...document.querySelectorAll('#s6 .ef')];
+
+// scene 7: findings on Bowers, one dot per finding, by the citing decision's date
+const FX0 = 200, FX1 = 1720, FYA = Math.floor(ST.neg_from / 10000), FYB = Math.floor(FN.dates[FN.dates.length - 1] / 10000) + 1, FPY = (FX1 - FX0) / (FYB - FYA), FBASE = 852, FP = 26;
+const FD = (() => { const per = {}; return FN.dates.map((d, i) => { const y = Math.floor(d / 10000), j = per[y] = (per[y] || 0) + 1;
+  return { d, x: FX0 + (y - FYA + .5) * FPY + ((j - 1) % 2 ? FP / 2 : -FP / 2), y: FBASE - FP / 2 - Math.floor((j - 1) / 2) * FP, t0: .5 + 1.7 * i / FN.dates.length, ex: -1 }; }); })();
+FN.examples.forEach((e, k) => { const o = FD.find(o => o.d === e.date && o.ex < 0); o.ex = k; e.o = o; });
+const ycx = y => FX0 + (y - FYA + .5) * FPY;
+const LBY = [462, 462, 640];
+const top7 = y => Math.min(...FD.filter(o => Math.floor(o.d / 10000) === y).map(o => o.y));
+mk('s7', `<svg class="abs" style="left:0;top:0" width="1920" height="1080">
+  <g data-a=".3"><line x1="${FX0}" x2="${FX1}" y1="${FBASE}" y2="${FBASE}" stroke="rgba(140,170,210,.45)" stroke-width="2"/>
+   ${[...Array(FYB - FYA)].map((_, i) => `<text x="${FX0 + (i + .5) * FPY}" y="${FBASE + 38}" text-anchor="middle" font-size="22" fill="${MU}" style="font-family:'JetBrains Mono'">${FYA + i}</text>`).join('')}</g>
+  ${FD.map((o, i) => `<circle class="fd" cx="${o.x}" cy="${o.y}" r="10" fill="${AM}" opacity="0"/>`).join('')}
+  ${FN.examples.map((e, k) => `<g data-a="${3.0 + k * .7}"><circle cx="${e.o.x}" cy="${e.o.y}" r="14" fill="none" stroke="${TX}" stroke-width="3"/><path d="M${ycx(e.year)} ${LBY[k] + 46}V${top7(e.year) - 20}" stroke="${TX}" stroke-width="2" opacity=".7"/></g>`).join('')}
+ </svg>` +
+ FN.examples.map((e, k) => `<div ${at(3.0 + k * .7, `top:${LBY[k]}px;${k === 0 ? `left:${FX0 + 16}px` : k === 1 ? `left:${ycx(e.year)}px;transform:translateX(-50%)` : `right:${W - FX1 + 16}px`};white-space:nowrap;font:600 30px 'Source Serif 4',serif`)}>${esc(e.name)} <span class="sub" style="font-weight:400">${e.year}</span></div>`).join(''));
+const FDE = [...document.querySelectorAll('#s7 .fd')];
+
+// scene 8: the model's answer beside two published lists
+const eq = (y, t) => `<svg class="abs" id="s8e${t}" style="left:0;top:0" width="1920" height="1080"><path class="ln" d="M900 ${y}H1020" stroke="${MU}" stroke-width="3" stroke-dasharray="8 8"/><circle class="bg" cx="960" cy="${y}" r="30" fill="#0a1220" stroke="${MU}" stroke-width="3"/><path class="tk" d="M946 ${y + 1}l10 10L976 ${y - 11}" fill="none" stroke="${GR}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>`;
+mk('s8', `
+ <div class="panel" ${at(.4, `left:120px;top:400px;width:780px;height:330px;border-color:${rgba(CY, .5)}`)}><div class="ph" style="color:${CY}">Lean’s answer</div>
+  <div class="nm" style="font-size:44px;line-height:1.25">${esc(LW.by)}<br><span style="color:${RD}">overruled</span><br>${esc(LW.target)}</div><div class="mono" style="margin-top:14px;color:${MU}">from ${esc(ST.neg_from_day)}</div></div>
+ <div class="panel" ${at(1.0, 'left:1020px;top:330px;width:780px;height:220px')}><div class="ph">Supreme Court Database</div>
+  <div class="kv"><span class="a">usCite</span><span>${esc(SD.law_cite)}</span><span class="a">precedentAlteration</span><span>${esc(SD.law_alt)}</span></div></div>
+ <div class="panel" ${at(1.5, 'left:1020px;top:580px;width:780px;height:220px')}><div class="ph">Constitution Annotated table</div>
+  <div class="nm" style="font-size:32px;line-height:1.35">${esc(CR.target)}, ${esc(CR.target_cite)}</div><div class="sub">overruled by ${esc(CR.by)}, ${esc(CR.by_cite)}</div></div>
+ ${eq(440, 1)}${eq(690, 2)}
+ <div ${at(4.2, `left:120px;top:800px;width:780px;text-align:center;font:600 40px 'Source Serif 4',serif;color:${GR}`)}>The same answer, twice</div>
+ <div class="note" ${at(1.5, 'left:1020px;top:830px;width:780px')}>Both lists are kept for the test. The model does not read them.</div>`);
+
+// scene 9: the whole Supreme Court Database list
+const GC = 26, GP = 46, GX = 120, GY = 336, GS = 36;
+mk('s9', `<div ${at(.3, `left:${GX}px;top:${GY}px`)}>${SD.cells.map(([y, f], i) => `<span class="gc abs" data-f="${f}" style="left:${(i % GC) * GP}px;top:${Math.floor(i / GC) * GP}px;width:${GS}px;height:${GS}px;border-radius:6px;box-sizing:border-box;${i === SD.law_index ? `outline:3px solid ${TX};outline-offset:3px` : ''}"></span>`).join('')}</div>
+ <div class="mono" ${at(.3, `left:${GX}px;top:${GY + 11 * GP + 4}px;color:${MU};width:${GC * GP - 10}px;display:flex;justify-content:space-between`)}><span>${SD.first_year} →</span><span>→ ${SD.last_year}</span></div>
+ <div ${at(.6, `left:${GX}px;top:${GY + 11 * GP + 62}px;display:flex;gap:44px;align-items:center;white-space:nowrap;font:400 25px 'IBM Plex Sans';color:#d8e2f2`)}>
+  <span style="display:flex;align-items:center;gap:12px"><i style="width:26px;height:26px;border-radius:5px;background:${GR}"></i>found by the model</span>
+  <span style="display:flex;align-items:center;gap:12px"><i style="width:26px;height:26px;border-radius:5px;box-sizing:border-box;border:2px solid rgba(143,162,189,.6)"></i>not found</span>
+  <span style="display:flex;align-items:center;gap:14px"><i style="width:22px;height:22px;border-radius:5px;background:${GR};outline:3px solid ${TX};outline-offset:3px;margin-left:4px"></i>${esc(LW.by)}</span></div>
+ <div class="cap" ${at(.5, `left:1370px;top:356px;width:430px;color:${GR}`)}><span class="num">${cnt(SD.found, .5, 1.9)}</span>of ${SD.flagged} on the list are found</div>
+ <div class="cap" ${at(3.4, `left:1370px;top:640px;width:430px;color:${CY}`)}><span class="num">${SD.found}</span>of the ${SD.named} decisions the model names are on the list</div>`);
+const GCE = [...document.querySelectorAll('#s9 .gc')];
+
+// scene 10: checked three ways
+mk('s10', `
+ <div class="cap" ${at(.5, `left:120px;top:430px;color:${GR}`)}><span class="num">${V.theorems}</span>theorems proved<small>Each one is checked by Lean’s kernel.</small></div>
+ <div class="cap" ${at(1.1, `left:700px;top:430px;color:${CY}`)}><span class="num">0</span>differences from a second engine<small>An independent Python reference, on the same input: ${fmt(V.dt_certs)} certificates, ${fmt(V.dt_status)} status rows, ${fmt(V.dt_findings)} findings.</small></div>
+ <div class="cap" ${at(1.7, `left:1280px;top:430px;color:${AM}`)}><span class="num">${V.mutants} of ${V.mutants}</span>broken rules caught<small>One of them: a checker that accepts dissents.</small>
+  <div class="mut">${[...Array(V.mutants)].map((_, i) => `<span data-mut="${3.5 + i * .07}"></span>`).join('')}</div></div>`);
+
+// ---------- per-scene extras ----------
+const hl = (id, k, col) => { $(id).style.background = rgba(col, .3 * k); };
+const X = {
+  s2(lt) {
+    $('s2sha').style.color = mix('#d8e2f2', GR, seg(lt, 1.0, 1.3));
+    $('s2strip').style.borderColor = mix('#3a4d6b', GR, seg(lt, 1.5, 1.8));
+    $('s2w').style.color = mix(TX, GR, seg(lt, 2.0, 2.3));
+    $('s2q').style.borderColor = mix('#2b3d5c', GR, seg(lt, 3.4, 3.7));
+    const c = document.querySelector('#s2 .cue'); c.style.background = rgba(AM, .38 * seg(lt, 4.2, 4.5));
+  },
+  s3(lt) {
+    hl('s3n', seg(lt, 1.0, 1.3), GR); hl('s3p', seg(lt, 1.8, 2.1), GR); hl('s3d1', seg(lt, 3.4, 3.7), GR); hl('s3d2', seg(lt, 3.4, 3.7), GR);
+    const k = seg(lt, 4.2, 4.5); hl('s3c1', k, GR); hl('s3c2', k, GR);
+    document.querySelector('#s3ar .ar').setAttribute('stroke', mix(MU, GR, k)); $('s3k').style.color = $('s3k').style.borderColor = mix(AM, GR, k);
+  },
+  s4(lt) {
+    const k = seg(lt, 4.2, 4.5); hl('s4c1', k, RD); hl('s4c2', k, RD);
+    const a = document.querySelector('#s4ar .ar'); a.setAttribute('stroke', mix(MU, RD, k)); a.setAttribute('stroke-dasharray', k > .5 ? '7 10' : 'none');
+    $('s4k').style.color = $('s4k').style.borderColor = mix(AM, RD, k); $('s4k').style.textDecoration = k > .5 ? 'line-through' : 'none';
+  },
+  s5(lt) {
+    $('s5g').setAttribute('width', Math.max(0, (xg - xd) * ease(seg(lt, .7, 2.1))));
+    $('s5m').setAttribute('y2', 462 + (700 - 462) * easeOut(seg(lt, 3.0, 3.5)));
+    const w = (xe - xn - 4) * ease(seg(lt, 3.6, 4.6)); $('s5r').setAttribute('width', Math.max(0, w)); $('s5r').style.opacity = w > 0 ? 1 : 0;
+  },
+  s6(lt) {
+    const k1 = ease(seg(lt, 3.0, 3.8)), k2 = ease(seg(lt, 4.3, 5.1));
+    EFE.forEach((e, i) => { const x0 = SLOT[PERM[0][i]], x1 = SLOT[PERM[1][i]], x2 = SLOT[PERM[2][i]], x = x0 + (x1 - x0) * k1 + (x2 - x1) * k2;
+      const lift = Math.sin(Math.PI * k1) * (i % 2 ? 34 : -34) + Math.sin(Math.PI * k2) * (i % 2 ? -34 : 34); e.style.left = x + 'px'; e.style.top = (440 + lift) + 'px'; });
+    const p = Math.sin(Math.PI * seg(lt, 3.8, 4.25)) + Math.sin(Math.PI * seg(lt, 5.1, 5.5));
+    $('s6r').style.boxShadow = `0 0 ${50 * p}px ${rgba(RD, .55 * p)}`; $('s6r').style.transform = `scale(${1 + .04 * p})`;
+  },
+  s7(lt) {
+    let n = 0; FD.forEach((o, i) => { const k = seg(lt, o.t0, o.t0 + .25); if (k > .5) n++; FDE[i].setAttribute('opacity', k * .92); FDE[i].setAttribute('r', 10 + 5 * Math.sin(Math.PI * k)); });
+    $('hud').innerHTML = `<b>${n}</b>citesOverruled findings`; $('hud').style.opacity = seg(lt, .3, .7);
+  },
+  s8(lt) {
+    [[1, 2.9], [2, 3.5]].forEach(([i, t0]) => { const k = seg(lt, t0, t0 + .4), g = $('s8e' + i); g.style.opacity = seg(lt, 1.6, 2.0);
+      g.querySelector('.ln').setAttribute('stroke', mix(MU, GR, k)); g.querySelector('.bg').setAttribute('stroke', mix(MU, GR, k)); g.querySelector('.tk').setAttribute('stroke-dashoffset', 1 - k); });
+  },
+  s9(lt) {
+    GCE.forEach((e, i) => { const k = seg(lt, .5 + 1.8 * i / GCE.length, .75 + 1.8 * i / GCE.length), f = e.dataset.f === '1';
+      e.style.background = f ? rgba(GR, .12 + .88 * k) : 'transparent'; e.style.border = f ? 'none' : `2px solid rgba(143,162,189,${.15 + .45 * k})`; });
+  },
+};
+
+// ---------- generic per-element animation ----------
+const SCN = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'].map((id, i, all) => { const el = $(id), q = s => [...el.querySelectorAll(s)];
+  return { id, a: T[id], b: T[all[i + 1]] || T.end, el, fa: q('[data-a]'), cn: q('[data-n]'), ck: q('[data-ck]'), mu: q('[data-mut]') }; });
+function dom(t) { for (const s of SCN) { const on = t >= s.a && t < s.b; s.el.style.display = on ? 'block' : 'none'; if (!on) continue;
+  s.el.style.opacity = fadeIO(t, s.a + .05, s.b - .05); const lt = t - s.a;
+  for (const e of s.fa) e.style.opacity = seg(lt, +e.dataset.a, +e.dataset.a + .45);
+  for (const e of s.cn) e.textContent = fmt(+e.dataset.n * easeOut(seg(lt, +e.dataset.c, +e.dataset.c + +e.dataset.d)));
+  for (const e of s.ck) { const k = seg(lt, +e.dataset.ck, +e.dataset.ck + .3), col = e.dataset.bad === '1' ? RD : GR, lb = e.querySelector('.lb'), cd = e.querySelector('.cd');
+    const rg = e.querySelector('.rg'); rg.setAttribute('stroke', mix(MU, col, k)); rg.setAttribute('fill', rgba(col, .16 * k));
+    const tk = e.querySelector('.tk'); tk.setAttribute('stroke', col); tk.setAttribute('stroke-dashoffset', 1 - k);
+    if (lb) lb.style.color = mix(MU, TX, k); if (cd) cd.style.color = mix('#66758c', col, k); }
+  for (const e of s.mu) { const k = seg(lt, +e.dataset.mut, +e.dataset.mut + .25); e.style.background = k > .5 ? 'rgba(95,211,160,.9)' : 'rgba(255,106,85,.22)'; e.style.border = k > .5 ? 'none' : '2px solid rgba(255,106,85,.75)'; }
+  if (X[s.id]) X[s.id](lt); } }
+
+const CAP = {
+  s1: ['The input', CY, 'A sentence goes in', ''],
+  s2: ['The certificate · text', GR, 'Is the sentence really there?', ''],
+  s3: ['The certificate · law', GR, 'May this court overrule that case?', ''],
+  s4: ['A rejected row', RD, 'It can say no', ''],
+  s5: ['Status', CY, 'The event becomes a status', ''],
+  s6: ['A theorem', AM, 'The order of events does not matter', `${LW.target.split(' v.')[0]} has one admitted effect. The rule is proved for any list, such as this one.`],
+  s7: ['Findings', AM, `Later decisions that cite ${LW.target.split(' v.')[0]}`, `One dot per citation after ${ST.neg_from_day}: a flag for the reader, not a claim of error.`],
+  s8: ['The test', GR, 'Against lists the model never read', ''],
+  s9: ['The whole list', GR, 'Every decision the Database says altered precedent', ''],
+  s10: ['Checked three ways', CY, 'The model itself is tested', ''],
+};
+function caption(k, c, t, s, a) { $('k').textContent = k; $('k').style.color = c; $('tt').textContent = t; $('ss').textContent = s; for (const id of ['k', 'tt', 'ss']) $(id).style.opacity = a; }
+
+window.render = function (t) {
+  $('fade').style.opacity = Math.max(1 - seg(t, 0, .35), seg(t, DUR - .6, DUR - .05));
+  $('big').style.opacity = seg(t, .05, .4) * (1 - seg(t, T.s1 - .22, T.s1 - .02)); $('big').style.transform = `translateY(${(1 - easeOut(seg(t, .05, .9))) * 18}px)`;
+  $('hud').style.opacity = 0;
+  dom(t);
+  const s = SCN.find(s => t >= s.a && t < s.b);
+  if (s) { const a = fadeIO(t, s.a + .05, s.b - .05); caption(...CAP[s.id], a); $('scrim').style.opacity = a * .5; if (s.id === 's7') $('hud').style.opacity *= a; }
+  else { caption('', '', '', '', 0); $('scrim').style.opacity = 0; }
+};
+window.DUR = DUR;
+window.SCENES = [['title', 0, T.s1], ...SCN.map(s => [s.id, s.a, s.b])];
+// load every face the hidden scenes use before the first frame
+const FACES = ["600 22px 'IBM Plex Sans'", "400 26px 'IBM Plex Sans'", "500 31px 'IBM Plex Sans'", "400 23px 'JetBrains Mono'", "600 22px 'JetBrains Mono'",
+  "400 36px 'Source Serif 4'", "600 58px 'Source Serif 4'", "700 96px 'Source Serif 4'", "italic 400 36px 'Source Serif 4'"];
+const TXT = document.body.textContent + '0123456789,';
+Promise.all(FACES.map(f => document.fonts.load(f, TXT))).then(() => document.fonts.ready).then(() => { window.render(0); window.READY = true; });
+</script></body></html>

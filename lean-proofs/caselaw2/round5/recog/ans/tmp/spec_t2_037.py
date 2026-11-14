@@ -1,0 +1,53 @@
+# -*- coding: utf-8 -*-
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from mk_t2_034_037 import run
+
+T, F = "T", "F"
+spec = [
+    ("r128319", T, "d", "part", "Yisrael v. State, 938 So.2d 546", "993 So.2d 952", 0.7),
+    ("r128320", T, "d", "part", "Yisrael v. State, 938 So.2d 546", "993 So.2d 952", 0.7),
+    ("r167425", T, "o", "part", "Scott-Pontzer v. Liberty Mut.", "100 Ohio St.3d 216", 0.92),
+    ("r121946", T, "o", "part", "Chandler v. Gober", "242 F.3d 1050", 0.9),
+    ("r121955", T, "o", "part", "Chandler v. Gober", "242 F.3d 1050", 0.6),
+    ("r7320", T, "a", "other", "State v. Richmond", "185 Ariz. 319", 0.9),
+    ("r4024", T, "o", "part", "Garvin v. Shewbart", "547 So.2d 90", 0.88),
+    ("r136593", F, "ownAct", 0.92),
+    ("r117474", T, "o", "part", "Hayko v. Colo. & Utah Coal Co.", "175 Colo. 537", 0.92),
+    ("r111161", T, "d", "part", "Shapoff v. Scull", "7 Cal.4th 503", 0.92),
+    ("r133293", T, "o", "part", "People v. Morthole", "75 Ill. App. 3d 560", 0.9),
+    ("r190278", T, "o", "part", "Crislip v. Cain", "57 W. Va. 98", 0.9),
+    ("r109732", T, "o", "part", "Kite v. Campbell", "41 Cal.3d 883", 0.92),
+    ("r152935", T, "o", "other", "State v. Clark", "68 S.W.3d 418", 0.9),
+    ("r166269", T, "o", "other", "Brink v. Curless", "234 N.W.2d 1", 0.9),
+    ("r166321", T, "o", "other", "Brink v. Curless", "234 N.W.2d 1", 0.9),
+    ("r167762", T, "o", "part", "Fletcher v. State", "824 P.2d 391", 0.88),
+    ("r131067", T, "o", "part", "Hicks v. State", "276 Ga. 861", 0.9),
+    ("r192677", T, "o", "part", "Weiland v. Paulin, 2002 WI App 311", "260 Wis. 2d 277", 0.8),
+    ("r155034", T, "o", "part", "Gebhart v. Tri-State", "188 Neb. 516", 0.9),
+    ("r145217", T, "a", "part", "Dillon v. State", "289 Md. 167", 0.88),
+    ("r28366", F, "notMajority", 0.6),
+    ("r121718", T, "o", "part", "United States v. Baker", "37 MJ 370", 0.9),
+    ("r190713", T, "o", "part", "Freshwater v. Booth", "189 W.Va. 570", 0.92),
+    ("r190988", T, "o", "part", "Freshwater v. Booth", "189 W.Va. 570", 0.9),
+    ("r161535", T, "o", "part", "Romero v. Shumate Constructors", "121 N.M. 657", 0.88),
+    ("r109501", F, "otherDecision", 0.92),
+    ("r142713", T, "o", "part", "Chase v. Kearns", "481 A.2d 139", 0.92),
+    ("r108681", T, "d", "part", "People v. Morris", "70 Cal.2d 604", 0.85),
+    ("r185933", T, "o", "part", "126 Tex. 99", "665 S.W.2d 414", 0.88),
+    ("r173239", T, "o", "part", "Dillon County School Dist.", "319 S.C. 556", 0.9),
+    ("r161556", T, "o", "part", "State v. Watchman", "122 N.M. 228", 0.9),
+    ("r154885", T, "o", "part", "Story v. City of Bozeman", "318 Mont. 103", 0.9),
+    ("r190351", T, "o", "part", "State v. Fortner", "168 W.Va. 211", 0.9),
+    ("r190361", T, "o", "part", "State v. Fortner", "168 W.Va. 211", 0.88),
+    ("r190418", T, "o", "part", "State v. Fortner", "168 W.Va. 211", 0.9),
+    ("r132593", T, "o", "part", "Sorenson v. Adams", "102 Idaho 31", 0.88),
+    ("r190256", F, "notMajority", 0.65),
+    ("r157794", T, "a", "part", "Darwin v. Gooberman", "173 N.J. 328", 0.9),
+    ("r131714", T, "o", "part", "State v. Dumlao", "70 Haw. 173", 0.9),
+    ("r135502", T, "a", "other", "Ernst v. Sparacino", "271 Ind. 368", 0.9),
+    ("r190925", T, "o", "part", "Soliva v. Shand", "177 W.Va. 734", 0.9),
+    ("r131083", T, "o", "part", "Eason v. State", "271 Ga. 361", 0.9),
+    ("r6972", T, "o", "other", "State v. Herman", "105 Ariz. 553", 0.9),
+]
+run("pack_T2_037", spec)

@@ -1,0 +1,70 @@
+{
+ "run": "r7a11",
+ "class": "dct",
+ "type": "A",
+ "table": "treatments",
+ "self_test": false,
+ "created": "2026-11-13 23:45:02",
+ "args": {
+  "cls": "dct",
+  "cert": [
+   "round7/agents/doctrine/cert2"
+  ],
+  "out": "round7/audit/r7a11/",
+  "n": 19,
+  "exclude": [],
+  "ids": null,
+  "match": [],
+  "lean_classes": null,
+  "seed": 7,
+  "pack_size": 40,
+  "decoy_share": 0.12,
+  "decoy_wrong_share": 0.6,
+  "decoy_families": "",
+  "pad_min": 500,
+  "pad_max": 1600,
+  "dry_run": false,
+  "force": false,
+  "mark_selftest": false
+ },
+ "inputs": [
+  {
+   "treatments": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/agents/doctrine/cert2/treatments_delta.tsv",
+   "history": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/agents/doctrine/cert2/history_delta.tsv",
+   "witness": null,
+   "class": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/agents/doctrine/cert2/treatment_class_delta.tsv",
+   "joined": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/agents/doctrine/cert2/joined_delta.tsv",
+   "anchor": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/agents/doctrine/cert2/history_anchor_delta.tsv",
+   "hclaim": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/agents/doctrine/cert2/history_claim_delta.tsv",
+   "sha1": {
+    "treatments": "5d6b782911018cc66d3823e23b47ad3c941b2157",
+    "history": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "class": "6844962524f4e5af53f8d9b05d60d39e613d4a56",
+    "joined": "737b7c7c1c88684d490333e7e24b375f36d82a6c",
+    "anchor": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "hclaim": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+   },
+   "bad_rows": 0,
+   "cert": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/agents/doctrine/cert2",
+   "rows": 19,
+   "kept": 19
+  }
+ ],
+ "population": 19,
+ "real": 19,
+ "decoys_wrong": 2,
+ "decoys_right": 1,
+ "packs": {
+  "pack_1.md": {
+   "items": 22,
+   "real": 19,
+   "decoys": 3
+  }
+ },
+ "relocated_quotes": 0,
+ "decoy_pool": {
+  "path": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/audit/decoy_pool_A.jsonl",
+  "sha1": "2a3b065a0077fc09a3cea27358bfae8930751803"
+ },
+ "warnings": []
+}

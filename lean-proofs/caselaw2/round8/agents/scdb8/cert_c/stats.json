@@ -1,0 +1,306 @@
+{
+ "args": [
+  "--rows",
+  "round8/agents/scdb8/rows_c.jsonl",
+  "--out",
+  "round8/agents/scdb8/cert_c",
+  "--procs",
+  "10"
+ ],
+ "base": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/stage/v3",
+ "cue_source": {
+  "hist": "cue_table.json",
+  "disqualify_hist": "cue_table.json",
+  "anchor": "cue_table.json",
+  "disqualify_anchor": "cue_table.json",
+  "disqualify_treat": "cue_table.json",
+  "operative": "cue_table.json",
+  "disqualify_operative": "cue_table.json",
+  "treat": "cue_table.json",
+  "anaphor": "cue_table.json",
+  "doctrine_tie": "cue_table.json",
+  "doctrine_reject": "cue_table.json",
+  "disqualify_joined": "cue_table.json",
+  "order_line": "cue_table.json",
+  "set_aside": "cue_table.json",
+  "order_head_from": "cue_table.json",
+  "joined_gap_max": "cue_table.json",
+  "order_head_max_len": "cue_table.json"
+ },
+ "scotus_court_id": 2906,
+ "order_head_from": 20130101,
+ "joined_gap_max": 300,
+ "counts": {
+  "admitted": 580,
+  "admitted:history": 580,
+  "admitted:history:claim:-": 580,
+  "admitted_via_alias": 174,
+  "alias_keys_added": 172,
+  "cite_collisions": 0,
+  "cite_index_lines": 519,
+  "claim_setAside_other_kind": 0,
+  "input:history": 580,
+  "input_rows": 580,
+  "rejected": 0,
+  "texts_read": 575,
+  "windows": 1148
+ },
+ "admitted_by_kind": {
+  "history:affirmed": 288,
+  "history:modified": 5,
+  "history:reversed": 251,
+  "history:reviewDismissed": 10,
+  "history:vacated": 26
+ },
+ "alias_keys_added_by_form": {
+  "alias:fed": 16,
+  "alias:fed2d": 6,
+  "alias:fedappx": 3,
+  "alias:fedrep": 129,
+  "alias:humph": 1,
+  "alias:kans": 1,
+  "alias:ndak": 2,
+  "alias:nwrep": 1,
+  "alias:ohst": 3,
+  "alias:past": 5,
+  "alias:scar": 1,
+  "alias:sdak": 3,
+  "alias:socar": 1
+ },
+ "by_rule": {
+  "below:sc8_anchor_a1": {
+   "admitted": 61,
+   "admitted:affirmed": 22,
+   "admitted:reversed": 35,
+   "admitted:vacated": 4,
+   "admitted_via_alias": 2,
+   "input": 61
+  },
+  "below:sc8_anchor_a1w": {
+   "admitted": 9,
+   "admitted:affirmed": 3,
+   "admitted:reversed": 4,
+   "admitted:vacated": 2,
+   "input": 9
+  },
+  "below:sc8_anchor_a3": {
+   "admitted": 2,
+   "admitted:reversed": 2,
+   "admitted_via_alias": 1,
+   "input": 2
+  },
+  "below:sc8_anchor_hm_a1": {
+   "admitted": 2,
+   "admitted:vacated": 2,
+   "input": 2
+  },
+  "below:sc8_anchor_hm_rep": {
+   "admitted": 2,
+   "admitted:affirmed": 2,
+   "admitted_via_alias": 1,
+   "input": 2
+  },
+  "below:sc8_anchor_hm_syl": {
+   "admitted": 149,
+   "admitted:affirmed": 94,
+   "admitted:modified": 2,
+   "admitted:reversed": 53,
+   "admitted_via_alias": 93,
+   "input": 149
+  },
+  "below:sc8_anchor_l_body": {
+   "admitted": 3,
+   "admitted:affirmed": 3,
+   "input": 3
+  },
+  "below:sc8_anchor_l_hm": {
+   "admitted": 22,
+   "admitted:affirmed": 14,
+   "admitted:reversed": 6,
+   "admitted:reviewDismissed": 1,
+   "admitted:vacated": 1,
+   "admitted_via_alias": 10,
+   "input": 22
+  },
+  "below:sc8_anchor_l_zone": {
+   "admitted": 2,
+   "admitted:reversed": 1,
+   "admitted:vacated": 1,
+   "input": 2
+  },
+  "below:sc8_disp_a1": {
+   "admitted": 120,
+   "admitted:affirmed": 55,
+   "admitted:modified": 2,
+   "admitted:reversed": 52,
+   "admitted:reviewDismissed": 4,
+   "admitted:vacated": 7,
+   "admitted_via_alias": 25,
+   "input": 120
+  },
+  "below:sc8_disp_a1w": {
+   "admitted": 9,
+   "admitted:affirmed": 5,
+   "admitted:reversed": 4,
+   "input": 9
+  },
+  "below:sc8_disp_a3": {
+   "admitted": 5,
+   "admitted:affirmed": 3,
+   "admitted:reversed": 2,
+   "input": 5
+  },
+  "below:sc8_disp_hm_a1": {
+   "admitted": 15,
+   "admitted:affirmed": 7,
+   "admitted:reversed": 7,
+   "admitted:reviewDismissed": 1,
+   "admitted_via_alias": 7,
+   "input": 15
+  },
+  "below:sc8_disp_hm_rep": {
+   "admitted": 3,
+   "admitted:affirmed": 2,
+   "admitted:reversed": 1,
+   "admitted_via_alias": 2,
+   "input": 3
+  },
+  "below:sc8_disp_hm_syl": {
+   "admitted": 21,
+   "admitted:affirmed": 14,
+   "admitted:reversed": 5,
+   "admitted:reviewDismissed": 2,
+   "admitted_via_alias": 12,
+   "input": 21
+  },
+  "below:sc8_disp_l_body": {
+   "admitted": 5,
+   "admitted:affirmed": 1,
+   "admitted:reversed": 3,
+   "admitted:reviewDismissed": 1,
+   "input": 5
+  },
+  "below:sc8_disp_l_hm": {
+   "admitted": 5,
+   "admitted:affirmed": 3,
+   "admitted:reversed": 2,
+   "admitted_via_alias": 2,
+   "input": 5
+  },
+  "below:sc8_disp_l_zone": {
+   "admitted": 4,
+   "admitted:affirmed": 2,
+   "admitted:reversed": 2,
+   "input": 4
+  },
+  "below:sc8_multi_a1": {
+   "admitted": 4,
+   "admitted:affirmed": 2,
+   "admitted:reversed": 2,
+   "input": 4
+  },
+  "below:sc8_multi_hm_syl": {
+   "admitted": 13,
+   "admitted:affirmed": 11,
+   "admitted:reversed": 2,
+   "admitted_via_alias": 10,
+   "input": 13
+  },
+  "below:sc8_multi_l_hm": {
+   "admitted": 3,
+   "admitted:affirmed": 1,
+   "admitted:reversed": 1,
+   "admitted:vacated": 1,
+   "input": 3
+  },
+  "below:sc8_r4_a1": {
+   "admitted": 10,
+   "admitted:affirmed": 1,
+   "admitted:reversed": 9,
+   "input": 10
+  },
+  "below:sc8_r4_l_hm": {
+   "admitted": 1,
+   "admitted:affirmed": 1,
+   "admitted_via_alias": 1,
+   "input": 1
+  },
+  "below:sc8_r4rep_a1": {
+   "admitted": 22,
+   "admitted:affirmed": 5,
+   "admitted:reversed": 13,
+   "admitted:vacated": 4,
+   "input": 22
+  },
+  "below:sc8_r5_a1": {
+   "admitted": 10,
+   "admitted:affirmed": 1,
+   "admitted:reversed": 9,
+   "input": 10
+  },
+  "below:sc8_r5_l_body": {
+   "admitted": 5,
+   "admitted:affirmed": 3,
+   "admitted:reversed": 2,
+   "input": 5
+  },
+  "below:sc8_r5_l_zone": {
+   "admitted": 2,
+   "admitted:reversed": 2,
+   "input": 2
+  },
+  "below:sc8_r5_weak_r3": {
+   "admitted": 6,
+   "admitted:affirmed": 3,
+   "admitted:reversed": 2,
+   "admitted:vacated": 1,
+   "input": 6
+  },
+  "below:sc8_trial_a1": {
+   "admitted": 50,
+   "admitted:affirmed": 24,
+   "admitted:modified": 1,
+   "admitted:reversed": 21,
+   "admitted:reviewDismissed": 1,
+   "admitted:vacated": 3,
+   "admitted_via_alias": 2,
+   "input": 50
+  },
+  "below:sc8_trial_a3": {
+   "admitted": 4,
+   "admitted:affirmed": 1,
+   "admitted:reversed": 3,
+   "input": 4
+  },
+  "below:sc8_trial_hm_syl": {
+   "admitted": 5,
+   "admitted:affirmed": 3,
+   "admitted:reversed": 2,
+   "admitted_via_alias": 5,
+   "input": 5
+  },
+  "below:sc8_trial_l_body": {
+   "admitted": 4,
+   "admitted:affirmed": 2,
+   "admitted:reversed": 2,
+   "input": 4
+  },
+  "below:sc8_trial_l_hm": {
+   "admitted": 2,
+   "admitted:reversed": 2,
+   "admitted_via_alias": 1,
+   "input": 2
+  }
+ },
+ "sha1": {
+  "treatments_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "treatment_class_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "joined_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "history_delta.tsv": "c84209b34e693dc86aea056ff0b20d5b7947d361",
+  "history_anchor_delta.tsv": "8a9c1361b14b7e95da45ea5c9208086fa0c2edbd",
+  "history_claim_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "cert_text_delta.tsv": "80000a92f4a232755ad10c7cd18fbd4b29311785",
+  "window_sha_delta.tsv": "69adba139eaf0cb48777f06b9c7e6d5f8e04e8c9",
+  "cite_index_delta.tsv": "e7e99bc8608df65da93a7f49ee79698e1a3b373e"
+ }
+}

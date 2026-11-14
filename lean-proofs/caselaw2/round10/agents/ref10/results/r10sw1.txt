@@ -1,0 +1,25 @@
+binary ~/caselaw2/r10_bin/caselaw2_lean10 sha1 e7e32592cc6c6393506e25dc9654d4254af218ea; ref a1bd948552b3b28c15b1ae0d8a56bd52b6abcc8f; cue_table bcb2acc2666329dc4a500658891cf2a3a21a8b31; 2026-11-14 04:55:00
+r104001: 2 disagreeing rows 
+r104015: 1 disagreeing rows 
+
+20 universes, 2 with a disagreement, 0 failed (binary ~/caselaw2/r10ref/bin/runner)
+  status    0 of 4360 keys disagree
+  findings  1 of 1563 keys disagree
+  certs     0 of 9367 keys disagree
+  splits    0 of 449 keys disagree
+  conflicts 0 of 303 keys disagree
+  lines     0 of 190 keys disagree
+  horty     0 of 61 keys disagree
+  classes   0 of 3061 keys disagree
+  summary   2 of 800 keys disagree
+  class (file, bucket, rule): universes   first example
+  summary   count                                zone_checked_rows              1   e.g. r104001 zone_checked_rows A=94 B=93
+  summary   count                                zone_failed_rows               1   e.g. r104001 zone_failed_rows A=38 B=37
+  findings  onlyA                                atRisk:inferred                1   e.g. r104015 atRisk:inferred 208 207 A=1 B=
+  info  certs reasonOnly partZone/witnessNoStanding                  1
+  info  classes reasonOnly partZone/witnessNoStanding                1
+  info  findings uncompared lean:citesNotCitable:force               28
+  info  findings uncompared lean:hortyConsistentBase                 40
+  info  findings uncompared lean:hortySelfInconsistent               13
+  info  findings uncompared lean:inconsistentBindingBase             21
+rc=1

@@ -1,0 +1,104 @@
+{
+ "args": [
+  "--rows",
+  "agents/doctrine/rows.jsonl",
+  "--out",
+  "agents/doctrine/cert"
+ ],
+ "base": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round6/history/stage/final2",
+ "cue_source": {
+  "hist": "cue_table.json",
+  "disqualify_hist": "cue_table.json",
+  "anchor": "cue_table.json",
+  "disqualify_anchor": "cue_table.json",
+  "disqualify_treat": "cue_table.json",
+  "operative": "cue_table.json",
+  "disqualify_operative": "cue_table.json",
+  "treat": "cue_table.json",
+  "anaphor": "cue_table.json",
+  "doctrine_tie": "cue_table.json",
+  "doctrine_reject": "cue_table.json",
+  "disqualify_joined": "cue_table.json",
+  "order_line": "cue_table.json",
+  "set_aside": "cue_table.json",
+  "order_head_from": "cue_table.json",
+  "joined_gap_max": "cue_table.json",
+  "order_head_max_len": "cue_table.json"
+ },
+ "scotus_court_id": 2906,
+ "order_head_from": 20130101,
+ "joined_gap_max": 300,
+ "counts": {
+  "admitted": 12,
+  "admitted:treatments": 12,
+  "admitted:treatments:claim:doctrine": 12,
+  "admitted_treatments_joined_1": 12,
+  "alias_keys_added": 0,
+  "cite_collisions": 0,
+  "cite_index_lines": 1,
+  "claim_setAside_other_kind": 0,
+  "input:treatments": 29,
+  "input_rows": 29,
+  "reject:treatments:duplicate": 3,
+  "reject:treatments:joinedDisqualified": 5,
+  "reject:treatments:noCue": 9,
+  "rejected": 17,
+  "texts_read": 21,
+  "windows": 19
+ },
+ "admitted_by_kind": {
+  "treatments:disapproved": 12
+ },
+ "alias_keys_added_by_form": {},
+ "by_rule": {
+  "doctrine:epon:A": {
+   "admitted": 3,
+   "admitted:disapproved": 3,
+   "input": 4,
+   "reject:noCue": 1
+  },
+  "doctrine:epon:B": {
+   "input": 1,
+   "reject:joinedDisqualified": 1
+  },
+  "doctrine:ofq:A": {
+   "admitted": 1,
+   "admitted:disapproved": 1,
+   "input": 1
+  },
+  "doctrine:ofu:A": {
+   "admitted": 2,
+   "admitted:disapproved": 2,
+   "input": 3,
+   "reject:duplicate": 1
+  },
+  "doctrine:ofu:B": {
+   "input": 2,
+   "reject:duplicate": 2
+  },
+  "doctrine:pre:A": {
+   "admitted": 3,
+   "admitted:disapproved": 3,
+   "input": 10,
+   "reject:noCue": 7
+  },
+  "doctrine:pre:B": {
+   "admitted": 3,
+   "admitted:disapproved": 3,
+   "input": 8,
+   "reject:joinedDisqualified": 4,
+   "reject:noCue": 1
+  }
+ },
+ "sha1": {
+  "treatments_delta.tsv": "347f85de2c9782b0aac5b3c1f499ed8e07befd5c",
+  "treatment_class_delta.tsv": "c8352af00ace2c23a4a223e1288312b0ae81ac2e",
+  "joined_delta.tsv": "b366c0341e314d9313e9495b65b57a5ee700aba0",
+  "history_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "history_anchor_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "history_claim_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "cert_text_delta.tsv": "7de7ca0d43dc2bbd856f153e11c29694cab03612",
+  "window_sha_delta.tsv": "00d58de06b57f6be3fdc53ae66eb18de43b25a31",
+  "cite_index_delta.tsv": "f387eeb63d5de2d8d9a06df29df195cc35d4a798"
+ }
+}

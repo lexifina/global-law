@@ -1,0 +1,17 @@
+
+def c9 : Params := { base with grid := coarse }
+def r9 : Params := { base with grid := coarse, asset := .usRealty, covered := false }
+def noAbandon : List Move := [.present, .absent, .relocate, .sell, .renounce true, .renounce false, .giftUS, .giftNRA]
+
+#eval report "H plan1 heirs" c9 greenCard9
+#eval report "H plan2 heirs" r9 greenCard9
+#eval report "T5 gain below exclusion 500,000" { c9 with gain := 500000 } greenCard9
+#eval report "T5 student gc? citizen student flag" { c9 with student := true } student
+#eval report "T4 pre2008 plan2b usStock not covered" { c9 with pre2008 := true, covered := false } greenCard9
+#eval report "T4 pre2008 citizen" { c9 with pre2008 := true } citizen
+-- T5 free lunch on unmodified rules
+#eval report "T5 gifts on, gc9 usStock" { c9 with gifts := true } greenCard9
+#eval report "T5 gifts on, gc9 realty covered" { c9 with gifts := true, asset := .usRealty } greenCard9
+#eval report "T5 citizen gifts" { c9 with gifts := true } citizen
+#eval report "T5 gain 0" { c9 with gain := 0 } greenCard9
+#eval report "T5 gain 5,000,000" { c9 with gain := 5000000 } greenCard9

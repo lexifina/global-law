@@ -1,0 +1,151 @@
+{
+ "grid_points": 42137,
+ "diffs": {
+  "SALT:MAGI uses Form 2555 line 45 + line 50 (statute more)": {
+   "n": 110,
+   "max": 4500.0,
+   "ex": {
+    "input": {
+     "year": 2025,
+     "salt": 25000,
+     "agi": 425000,
+     "excl": 130000,
+     "l44": 0,
+     "l50": 15000,
+     "status": "S"
+    },
+    "statute": 23500.0,
+    "form": 19000.0
+   }
+  },
+  "SALT:MAGI uses Form 2555 line 45 + line 50 (form more)": {
+   "n": 209,
+   "max": 6000.0,
+   "ex": {
+    "input": {
+     "year": 2025,
+     "salt": 25000,
+     "agi": 450000,
+     "excl": 130000,
+     "l44": 20000,
+     "l50": 0,
+     "status": "S"
+    },
+    "statute": 16000.0,
+    "form": 22000.0
+   }
+  },
+  "SALT:married living apart filing as head of household (form more)": {
+   "n": 214,
+   "max": 35400.0,
+   "ex": {
+    "input": {
+     "year": 2026,
+     "salt": 45000,
+     "agi": 375000,
+     "excl": 0,
+     "l44": 0,
+     "l50": 0,
+     "status": "HOH_married_apart"
+    },
+    "statute": 5000.0,
+    "form": 40400.0
+   }
+  },
+  "S68: 5.4% instead of 2/37 (form reduces less)": {
+   "n": 1910,
+   "max": 54.05405405405327,
+   "ex": {
+    "input": {
+     "item": 1000000,
+     "agi": 1400000,
+     "status": "MFS"
+    },
+    "statute": -54054.05,
+    "form": -54000.0
+   }
+  },
+  "CHAR: carryover added after the floor (current gifts below 0.5% of AGI) (form more)": {
+   "n": 544,
+   "max": 10000.0,
+   "ex": {
+    "input": {
+     "agi": 2000000,
+     "cur": 0,
+     "carry": 50000
+    },
+    "statute": 40000.0,
+    "form": 50000.0
+   }
+  },
+  "CHAR: other (form more)": {
+   "n": 62,
+   "max": 9000.0,
+   "ex": {
+    "input": {
+     "agi": 1800000,
+     "cur": 700000,
+     "carry": 400000
+    },
+    "statute": 1071000.0,
+    "form": 1080000.0
+   }
+  },
+  "CHAR: gifts over the 60% limit, floor taken off gross gifts (form more)": {
+   "n": 330,
+   "max": 10000.0,
+   "ex": {
+    "input": {
+     "agi": 2000000,
+     "cur": 1500000,
+     "carry": 0
+    },
+    "statute": 1190000.0,
+    "form": 1200000.0
+   }
+  },
+  "AMT: married-separate add-back if \"25 percent\" in the flush sentence is not substituted (alternative reading only)": {
+   "n": 56,
+   "max": 34950.0,
+   "ex": {
+    "input": {
+     "amti": 780000,
+     "status": "MFS"
+    },
+    "statute": 814950.0,
+    "form": 849900.0
+   }
+  },
+  "AMT: section 68 reduction left in AMTI (statute lower AMTI)": {
+   "n": 388,
+   "max": 54054.05405405408,
+   "ex": {
+    "input": {
+     "item": 1000000,
+     "agi": 1400000,
+     "status": "MFS"
+    },
+    "statute": 410000.0,
+    "form": 464054.05
+   }
+  },
+  "199A: minimum deduction compared after adding the co-op (g) deduction (statute more)": {
+   "n": 3372,
+   "max": 400.0,
+   "ex": {
+    "input": {
+     "qbi_active": 1000,
+     "qbi_passive": -5000,
+     "w2": 0,
+     "ubia": 0,
+     "ti": 60000,
+     "ncg": 0,
+     "dpad": 2000,
+     "status": "S"
+    },
+    "statute": 2400.0,
+    "form": 2000.0
+   }
+  }
+ }
+}

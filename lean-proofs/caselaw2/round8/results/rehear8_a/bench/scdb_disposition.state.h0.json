@@ -1,0 +1,85 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "round8/stage/rehear8_a",
+  "out": "round8/out/rehear8_a",
+  "status_sha1": "b4c2e9f1450116732a297b46080b886d5ca34287"
+ },
+ "court": "state",
+ "dataset": "scdb_disposition_state",
+ "generated": "2026-11-14T00:40:20+00:00",
+ "label": "rehear8_a",
+ "link": {
+  "fail_reasons": {
+   "ambiguous_several": 137,
+   "candidate_date_mismatch": 56,
+   "candidate_name_mismatch": 140,
+   "court_unmapped": 47,
+   "no_candidate_in_source_court": 640,
+   "no_citation_in_text": 358,
+   "no_cited_decision_in_corpus": 1125,
+   "sc_ambiguous": 1,
+   "sc_date_mismatch": 4,
+   "sc_not_in_corpus": 29
+  },
+  "linked": 883,
+  "n_items": 3420
+ },
+ "metrics": {
+  "clean": {
+   "hi": 0.9834832561185752,
+   "k": 449,
+   "lo": 0.952457484422296,
+   "n": 462,
+   "p": 0.9718614718614719
+  },
+  "link_rate": {
+   "hi": 0.2731199999891498,
+   "k": 883,
+   "lo": 0.24379688419963286,
+   "n": 3420,
+   "p": 0.25818713450292397
+  },
+  "part": {
+   "hi": 0.8631557152608771,
+   "k": 5,
+   "lo": 0.30574239265377096,
+   "n": 8,
+   "p": 0.625
+  },
+  "precision": {
+   "hi": 0.9787176114951182,
+   "k": 346,
+   "lo": 0.9390385926241616,
+   "n": 359,
+   "p": 0.9637883008356546
+  },
+  "precision_lenient": {
+   "hi": 0.9787176114951182,
+   "k": 346,
+   "lo": 0.9390385926241616,
+   "n": 359,
+   "p": 0.9637883008356546
+  },
+  "recall": {
+   "hi": 0.7679600811368658,
+   "k": 346,
+   "lo": 0.688258181109305,
+   "n": 474,
+   "p": 0.729957805907173
+  },
+  "recall_lenient": {
+   "hi": 0.7977631767244889,
+   "k": 361,
+   "lo": 0.7212374151885864,
+   "n": 474,
+   "p": 0.7616033755274262
+  }
+ },
+ "notes": "Linked scored cases 944 (NEG 474, PART 8, CLEAN 462). Secondary: of 346 NEG_HIST hits, kind as expected (reversed for 3/4, vacated for 5/8) 335, actor = our Supreme Court opinion 336. NEG cases by model class {'NEG_HIST': 346, 'GOOD': 112, 'UNK_HIST': 15, 'UNK_OTHER': 1}; CLEAN cases by model class {'GOOD': 445, 'NEG_HIST': 13, 'UNK_OTHER': 4}. NEG cases not shown NEG_HIST although an admitted reversed/vacated history row by the SC opinion exists: 13. Link rate denominator: scored SCDB rows whose caseSource is a state court; split by court of the linked decision below (metrics) / SCDB caseSource (link rate).",
+ "primary": "recall",
+ "row_label": "SCDB: Supreme Court reversed/vacated a state decision below",
+ "split": "h0",
+ "tests": "same-case"
+}

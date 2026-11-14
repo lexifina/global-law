@@ -29,3 +29,58 @@ VERBS = {
 TREAT_KINDS = ('overruled', 'disapproved', 'recededFrom', 'abrogated', 'supersededByEnactment', 'limited', 'questioned', 'criticized', 'distinguished', 'followed', 'declinedToFollow')
 DISQUALIFY_TREAT = ('point of error', 'points of error', 'assignment of error', 'assignments of error', 'issue is overruled', 'issues are overruled', 'point is overruled', 'points are overruled', 'overrule appellant', 'overrule appellee', 'overrule his ', 'overrule her ', 'overrule their ', 'complaint is overruled', 'overruled by', 'overruled on other grounds by', 'overruled in part by', 'abrogated by', 'abrogated on other grounds by', 'disapproved by', 'disapproved of by', 'disapproved on other grounds', 'receded from by', 'as stated in', 'as recognized in', 'recognized as abrogated', 'decline to overrule', 'declined to overrule', 'declining to overrule', 'refuse to overrule', 'refused to overrule', 'not overrule', 'would overrule', 'should not be overruled', 'urges us to overrule', 'asks us to overrule')
 DISQUALIFY_HIST = ('would revers', 'would vacat', 'would affirm')
+SELF_ANNOUNCED = ('overrul', 'disapprov', ' reced', 'abrogat')
+RECOGNISED = ('overrul', 'abrogat', 'disapprov', ' reced')
+DISQUALIFY_RECOGNISED = ('not overrul', "n't overrul", 'never overrul', 'not been overrul', 'never been overrul', 'not abrogat', "n't abrogat", 'not been abrogat', 'not disapprov', 'whether', 'without overruling', 'rather than overrul', 'declin', 'refus', 'would overrule', 'should be overruled', 'should overrule', 'to overrule', 'contend', 'dissent', 'question', 'doubt', 'argues', 'argued', 'arguing', 'argument', 'urges', 'urged', 'urging')
+OPERATIVE = ('reject', 'repudiat', 'disavow', 'no longer', 'not survive', 'cannot survive', 'overthrown', 'abandon', 'discard', 'overturn', 'depart from', 'wrongly decided', 'cannot stand', 'no place', 'decline to follow', 'declines to follow', 'refuse to follow', 'not follow', 'not be followed', 'not to be followed', 'not good law', 'not the law', 'authoritative effect', 'not tenable', 'sapped', 'correct rule of law', 'expressing the law', 'regarded as controlling')
+OPERATIVE_WHOLE = ('no longer good law', 'no longer the law', 'no longer law', 'no longer authorit', 'no longer be regarded as', 'no longer be considered as', 'no longer be followed', 'no longer to be followed', 'not to be followed', 'overthrown', 'is repudiated', 'are repudiated', 'is overturned', 'are overturned', 'wrongly decided', 'correct rule of law')
+OPERATIVE_LIMIT = ('to the extent', 'to that extent', 'to this extent', 'insofar', 'in so far', 'so far as', 'in part', 'on this issue', 'on this point', 'as respects', 'in the field of')
+DISQUALIFY_OPERATIVE = ('argument', 'contention', 'contend', ' claim ', ' claim,', ' claim.', ' claims', 'claim that', 'claim of', 'suggestion', 'invitation', ' request', ' motion', 'petition ', 'petition,', 'petition.', 'petitions', 'objection', 'evidence', 'testimony', 'urges', 'asks us', 'would reject', 'not reject', 'decline to reject', 'need not', ' reading of', 'reliance on', 'assertion', 'whether', 'we rejected', 'court rejected', 'rejected in', 'rejected by', 'repudiated in', 'repudiated by', 'abandoned in', 'abandoned by', 'discarded in', 'discarded by', 'overturned by', 'overturned in', 'has been rejected', 'have been rejected', 'was rejected', 'were rejected', 'has been repudiated', 'was repudiated', 'has been abandoned', 'was abandoned', 'did not survive')
+ANCHOR = ('court of appeals', 'court of appeal', 'circuit court', 'district court', 'court below', 'appellate division', 'appellate court', 'appellate term', 'superior court', 'supreme court', 'court of civil appeals', 'court of criminal appeals', 'trial court', 'certiorari', 'appeal from', 'error to', 'reported below', 'decision below', 'opinion below', 'judgment below', 'sub nom', 'c. a.', 'rehearing', 'en banc', 'in banc', 'panel', 'former opinion', 'prior opinion', 'original opinion', 'earlier opinion', 'previous opinion', 'opinion of', 'opinion filed', 'opinion in this case', 'decision of this court', 'commonwealth court', 'tax court', 'board of tax appeals', 'court of claims', 'bankruptcy')
+DISQUALIFY_ANCHOR = ('former appeal', 'prior appeal', 'first appeal', 'earlier appeal', 'previous appeal', 'see also')
+ANAPHOR = ('those cases', 'these cases', 'that case', 'those decisions', 'these decisions', 'that decision', 'such cases', 'such decisions', 'those opinions', 'these opinions', 'that opinion', 'those holdings', 'these holdings', 'that holding', 'both cases', 'both decisions', 'both opinions', 'each of them', 'each of those', 'each of these', 'those precedents', 'these precedents', 'those authorities', 'these authorities', 'that line of cases', 'this line of cases', 'they are overruled', 'it is overruled', 'they are disapproved', 'it is disapproved', 'they are abrogated', 'it is abrogated', 'they are no longer', 'it is no longer', 'we overrule them', 'we overrule it', 'overrule both', 'to the extent they', 'insofar as they', 'all of them', 'both of them', 'said case', 'said cases', 'said decision', 'said decisions', 'the earlier decisions', 'the earlier cases', 'the prior decisions', 'the former decisions', 'the foregoing cases', 'the cases cited', 'the cases above cited', 'the above cases', 'the above-cited cases', 'overrule them', 'overrule it', 'disapprove them', 'disapprove it', 'recede from them', 'recede from it', 'recede from those', 'recede from that', 'they are hereby overruled', 'it is hereby overruled', 'it likewise is overruled', 'to the extent that they', 'in so far as they', 'to the extent it', 'to the extent that it', 'insofar as it')
+DOCTRINE_TIE = ('doctrine of', 'doctrine announced', 'doctrine established', 'doctrine first', 'doctrine adopted', 'doctrine set forth', 'doctrine enunciated', 'rule of', 'rule announced', 'rule laid down', 'rule established', 'rule adopted', 'rule set forth', 'announced in', 'established in', 'adopted in', 'laid down in', 'set forth in', 'enunciated in', 'articulated in', 'formulated in', 'the rule in', 'first announced', 'originated in', 'made its appearance', 'test of', 'adopted by', 'established by', 'first adopted', 'principle of', 'presumption of')
+DOCTRINE_REJECT = ('has no place', 'have no place', 'is rejected', 'are rejected', 'we reject', 'we now reject', 'repudiate', 'abandon', 'is overruled', 'are overruled', 'we overrule', 'no longer', 'discard', 'disapprove', 'disavow', 'cannot stand', 'is abrogated', 'are abrogated', 'depart from', 'departing from', 'unsound', 'overrule', 'abolish', 'expressly reject', 'therefore reject', 'accordingly reject', 'hereby reject', 'be rejected', 'no proper place', 'recede from', 'decline to follow', 'renounce', 'jettison', 'cannot survive', 'not the law')
+DISQUALIFY_JOINED = ('the dissent', 'dissenting', 'the concurrence', 'concurring', 'argues', 'argued', 'contends', 'contended', 'urges', 'urged', 'we need not', 'we do not decide', 'we express no')
+SET_ASIDE = ('set aside', 'sets aside', 'is set aside', 'are set aside', 'be set aside')
+ORDER_LINE = {
+    'certDenied': ('certiorari denied', 'certiorari is denied', 'petition for writ of certiorari denied', 'petition for a writ of certiorari denied', 'petition for writ of certiorari is denied', 'petition for a writ of certiorari is denied', 'petitions for writs of certiorari denied', 'petition for writ of certiorari before judgment denied', 'petition for writ of certiorari to the ... denied', 'petition for a writ of certiorari to the ... denied', 'petitions for writs of certiorari to the ... denied'),
+    'vacated': ('certiorari granted, judgment vacated', 'judgment vacated, and case remanded', 'judgment vacated and case remanded', 'judgment vacated', 'judgments vacated', 'judgment is vacated'),
+    'reversed': ('judgment reversed', 'judgments reversed', 'judgment is reversed', 'certiorari granted and judgment reversed'),
+    'affirmed': ('judgment affirmed', 'judgments affirmed', 'judgment is affirmed', 'affirmed by an equally divided court'),
+    'reviewDismissed': ('appeal dismissed', 'appeals dismissed', 'appeal is dismissed', 'certiorari dismissed', 'certiorari is dismissed', 'writ of certiorari dismissed', 'dismissed as improvidently granted', 'petition for writ of certiorari dismissed', 'dismissed for want of', 'petition for writ of certiorari to the ... dismissed', 'petition for a writ of certiorari to the ... dismissed', 'petitions for writs of certiorari to the ... dismissed'),
+}
+JOINED_GAP_MAX = 300
+ORDER_HEAD_FROM = 20130101
+ORDER_HEAD_MAX_LEN = 400
+ANCHOR_WIDE = ('circuit', '(ca1', '(ca2', '(ca3', '(ca4', '(ca5', '(ca6', '(ca7', '(ca8', '(ca9', '(cadc', '(cafc', 'c.a.', 'judicial court', 'court of errors', 'case below')
+BRIDGE_CUE = {
+    'certDenied': ('cert. denied', 'certiorari denied', 'cert denied'),
+    'vacated': ('vacated', 'judgment vacated', 'vacated and remanded'),
+    'reversed': ("rev'd", 'reversed'),
+    'affirmed': ("aff'd", 'affirmed'),
+    'reviewDismissed': ('cert. dismissed', 'certiorari dismissed', 'appeal dismissed'),
+}
+BRIDGE_MAX_LEN = 600
+OLD_CIRCUIT = ((5, 11, 19811001), (8, 10, 19290301))
+IMPLICIT_REJECT = ('cannot agree', 'do not agree', 'unpersuaded', 'not convinced', 'wrongly decided', 'incorrectly decided', 'erroneously decided', 'unsound', 'erroneous', 'incorrect', 'mistaken', 'undermined', 'eroded', 'discredited', 'called into question', 'contrary to', 'depart from', 'departs from')
+ANCHOR_WIDE9 = ('district judge', 'magistrate judge', 'trial judge')
+JOINED_FAR_MAX = 1200
+REMAND_COURT = ('supreme court',)
+REMAND_CUE = ('vacat', 'remand', 'in light of', 'further consideration')
+REMAND_MONTHS = ('january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december')
+REMAND_MONTHS_ABBR = (('jan.',), ('feb.',), ('mar.',), ('apr.',), (), (), (), ('aug.',), ('sept.', 'sep.'), ('oct.',), ('nov.',), ('dec.',))
+REMAND_QUOTE_MAX = 600
+REMAND_DOCKET_SPAN_MAX = 200
+REMAND_DAYS_MAX = 1826
+REMAND_ORDER_CUE = ('in light of',)
+REMAND_ORDER_SPAN_MAX = 300
+REMAND_TIE_MIN = 8
+TRIAL_COURT_NAMES = ('trial court', 'district court', 'circuit court', 'superior court', 'county court', 'court of common pleas', 'chancery court', 'probate court', 'court below')
+INTERMEDIATE_COURT_NAMES = ('court of appeal', 'appellate', 'court of special appeals', 'court of civil appeals', 'court of criminal appeals', 'commonwealth court', 'district court of appeal')
+TBRIDGE_CUE = ('affirm',)
+TBRIDGE_NEGATIVE = ('reversed', 'reverse', 'vacate', 'set aside', 'remand')
+TBRIDGE_QUOTE_MAX = 600
+TBRIDGE_DAYS_MAX = 1826
+ANCHOR_TRIBUNAL = ('court of international trade', 'customs court', 'court of federal claims', 'claims court', 'veterans court', 'court of veterans appeals')
+IDENTITY_SPAN_MAX = 200

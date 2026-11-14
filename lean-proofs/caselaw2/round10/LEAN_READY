@@ -1,0 +1,9 @@
+Round 10 Lean ready, section 4 (remand bridge; D10-5, D10-6, D10-7) + section 6 (trialBridge; D10-8, D10-9) (agent lean10), Sat 14 Nov 2026 04:54 (clock from `date`)
+contract: round10/DESIGN10.md §4 (+ amendments D10-5, D10-7) and §6; readings D10-6 / D10-9 (ref10 Q10-1..17); round10/LEAN10.md
+runner binary: sha1 e7e32592cc6c6393506e25dc9654d4254af218ea (WSL ~/caselaw2/r10_bin/caselaw2_lean10; the §4-only binary 43efb994… kept as ~/caselaw2/r10_bin/caselaw2_lean10_s4)
+theorems 272 -> 292 (vs round 9's lock: 0 removed, 0 changed, 20 added; stated: no_remand_line_no_change, remandThen_fail_keeps, remandBridge_sound, trialBridge_no_claim, no_tbridge_table_no_change, trialBridge_sound; 14 helpers); audit.py check: 292 theorems, 0 changes, 0 problems; axioms of the added: propext, Quot.sound, Classical.choice
+mutants 74 -> 83 (M75-M79 remand, M80-M83 trial bridge; properties 75 -> 84); #guard Examples 441 -> 548, Mutants 20 -> 26
+tables: history_remand.tsv (12 columns), history_tbridge.tsv (id t_start t_end) + history_claim.tsv value trialBridge; counters remand_* (5), tbridge_lines/dup_rows/bad_rows; cue keys in LEAN10 L10-12, L10-18, L10-26
+fixtures: round10/fixtures/remand, round10/fixtures/tbridge (data_noclaim = the frozen round-9 binary's output), round-9 farimplicit + zone, round-8, round-7: green
+regressions a a2 b c byte-identical; round9/out/v9c and round8/out/v8e reproduced byte for byte with this binary (summary timing lines aside)
+log: round10/agents/lean10/r10_final.log (§4: r10_final_s4.log); WSL ~/caselaw2/r10_final_logs/

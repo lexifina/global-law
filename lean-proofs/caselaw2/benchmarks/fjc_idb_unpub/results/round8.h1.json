@@ -1,0 +1,126 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\stage\\v8e",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\out\\v8e",
+  "status_sha1": "da6f3c30f9b5a71536c253fc26744e565a71d89e"
+ },
+ "court": "federal",
+ "dataset": "fjc_idb_unpub",
+ "generated": "2026-11-14T07:47:15+00:00",
+ "label": "round8",
+ "link": {
+  "fail_reasons": {
+   "docket_type_mismatch": 4644,
+   "excluded_docket": 1044,
+   "idb_no_district": 26,
+   "idb_no_district_docket": 1178,
+   "name_mismatch": 1660,
+   "name_unverifiable": 3534,
+   "no_decision_with_docket": 284983,
+   "outside_date_window": 7892,
+   "several_in_docket": 1168
+  },
+  "linked": 8951,
+  "n_items": 315080
+ },
+ "metrics": {
+  "clean": {
+   "hi": 0.9970588360808323,
+   "k": 722,
+   "lo": 0.9840020920957337,
+   "n": 727,
+   "p": 0.9931224209078404
+  },
+  "clean_all": {
+   "hi": 0.9993423078156526,
+   "k": 7192,
+   "lo": 0.9976261946828483,
+   "n": 7201,
+   "p": 0.9987501735870018
+  },
+  "link_rate": {
+   "hi": 0.028994535307952363,
+   "k": 8951,
+   "lo": 0.02783428008281728,
+   "n": 315080,
+   "p": 0.02840865811857306
+  },
+  "part": {
+   "hi": 0.549055779215906,
+   "k": 22,
+   "lo": 0.2926090869375998,
+   "n": 53,
+   "p": 0.41509433962264153
+  },
+  "part_all": {
+   "hi": 0.10568165312644615,
+   "k": 25,
+   "lo": 0.05000083518903406,
+   "n": 342,
+   "p": 0.07309941520467836
+  },
+  "precision": {
+   "hi": 0.9785167672589278,
+   "k": 45,
+   "lo": 0.8316456183361519,
+   "n": 48,
+   "p": 0.9375
+  },
+  "precision_all": {
+   "hi": 0.9271272389407114,
+   "k": 49,
+   "lo": 0.7467553528622327,
+   "n": 57,
+   "p": 0.8596491228070176
+  },
+  "precision_lenient": {
+   "hi": 0.9963128890632689,
+   "k": 47,
+   "lo": 0.8910078189694375,
+   "n": 48,
+   "p": 0.9791666666666666
+  },
+  "precision_lenient_all": {
+   "hi": 0.9619483284628987,
+   "k": 52,
+   "lo": 0.8105512279941347,
+   "n": 57,
+   "p": 0.9122807017543859
+  },
+  "recall": {
+   "hi": 0.7362977873790606,
+   "k": 45,
+   "lo": 0.517572197038739,
+   "n": 71,
+   "p": 0.6338028169014085
+  },
+  "recall_all": {
+   "hi": 0.10975444967285061,
+   "k": 49,
+   "lo": 0.06438070667550694,
+   "n": 581,
+   "p": 0.08433734939759036
+  },
+  "recall_lenient": {
+   "hi": 0.7487725194855646,
+   "k": 46,
+   "lo": 0.5318206211867402,
+   "n": 71,
+   "p": 0.647887323943662
+  },
+  "recall_lenient_all": {
+   "hi": 0.11358038326589483,
+   "k": 51,
+   "lo": 0.06739423348537489,
+   "n": 581,
+   "p": 0.08777969018932874
+  }
+ },
+ "notes": "Primary population: linked district decisions cited by the reviewing (unpublished) appellate decision found in the corpus by appeal docket + date (MAPPING.md). recall/precision/clean/part on that population; *_all = every linked decision. recall_lenient counts UNK_HIST as negative; precision_lenient counts PART as source-negative. link_rate: IDB appeal records not in the CCAD crosswalk and not published (district/bankruptcy appeal types, outcome NEG/PART/CLEAN) linked to one district decision. Units by class/reviewed: {'CLEAN/0': 6474, 'CLEAN/1': 727, 'NEG/0': 510, 'NEG/1': 71, 'PART/0': 289, 'PART/1': 53}. Reviewed units class x model: {'CLEAN>GOOD': 722, 'CLEAN>NEG_HIST': 1, 'CLEAN>UNK_HIST': 4, 'NEG>GOOD': 25, 'NEG>NEG_HIST': 45, 'NEG>UNK_HIST': 1, 'PART>GOOD': 31, 'PART>NEG_HIST': 2, 'PART>UNK_HIST': 20}.",
+ "primary": "recall",
+ "row_label": "FJC unpublished appeals: district decision reversed/vacated",
+ "split": "h1",
+ "tests": "same-case"
+}

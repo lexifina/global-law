@@ -1,0 +1,9 @@
+Round 9 Lean ready, section 4 + batch 2 (§5 joinedFar, §6 New Jersey, §7 implicitReject, §8 judge-form anchor cues) (agent lean9), Sat 14 Nov 2026 03:32 (clock from `date`)
+contract: round9/DESIGN9.md §4 (D9-3, D9-4), §5 (D9-5, D9-7), §6 (D9-6), §7 (D9-5, D9-12), §8 (D9-9); ref9's Q9-12..18 as ruled 02:40; round9/LEAN9.md
+runner binary: sha1 22bab5cdc71237876c807a8c9354cad7a47c6e1f (WSL ~/caselaw2/r9_bin/caselaw2_lean9; the section-4-only binary 65bbc36d… kept as ~/caselaw2/r9_bin/caselaw2_lean9_s4)
+theorems 245 -> 272 (section 4: +10; batch 2: +17 (stated: joinedFar_no_claim, joinedFar_extends, antecedentFar_gap, implicitReject_no_claim, implicitReject_soft, implicitSoft_softNegative, implicitReject_never_neg, adoptedSameTier_power, adopted_lowerTier_noPower, anchorWide9_no_claim, anchorWide9_sound; helpers); 0 removed, 0 changed); audit.py check: 272 theorems, 0 changes, 0 problems
+mutants 63 -> 74 (M64-M66 zones; M67-M69 far antecedent, M70-M71 implicit, M72-M73 New Jersey adoption, M74 judge cues; properties 64 -> 75; diagonals 3x3 and 8x8); #guard Examples 365 -> 441, Mutants 14 -> 20
+fixtures: round9/fixtures/partzone, round9/fixtures/farimplicit, round-8 bridge, round-7 joined: green
+regressions a a2 b c byte-identical (a, b in r9_final2; a2, c rerun in r9_final2_rest after the 03:21 C:-full / WSL read-only interruption); round8/out/v8e reproduced byte for byte with this binary (round9/out/lean9_base; summary timing lines aside)
+claims: joinedFar / implicitReject are treatment_class.tsv claim values (as doctrine); judge cues apply under the existing anchorWide history claim; New Jersey is data only (round9/nj/adoption.tsv, succession.tsv via stage9.py --table)
+log: round9/agents/lean9/r9_final2.log, r9_final2_rest.log; WSL ~/caselaw2/r9_final2_logs/

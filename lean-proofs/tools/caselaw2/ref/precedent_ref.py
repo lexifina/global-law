@@ -17,6 +17,34 @@ status_lines.tsv (R2-75: status per line of authority), horty.tsv (R2-78: Horty 
 
 Optional inputs read when present (REF_NOTES "Revisions: five limits"): cite_index.tsv (citation -> node, T2),
 window_sha.tsv (window hashes, T3), commission.tsv (H4 notations, T4); factors.tsv and factor_cases.tsv (R2-78).
+
+Round 5 (caselaw-lean-2/round5/DESIGN5.md, written from that file only; REF_NOTES "Round 5"; the readings chosen
+where the design is silent are in caselaw-lean-2/round5/ref/NOTES.md, numbered A-n): the presence of
+treatment_class.tsv in the data directory turns round-5 mode on. Then: recognised overrulings (a later court with
+power says X was overruled by Y: `unknown recognisedLater` from date(Y), the negative from date(W)),
+operative-words rows (demoted to a partial scope unless the quote has a whole-case phrase and no limit phrase), one
+class per status-changing row,
+classes.tsv, a trailing `oclass` column on status.tsv, status_lines.tsv and findings.tsv, the finding
+`atRisk ... recognisedLater`, and four more lines in ref_stats.tsv. Without that file every output is byte for byte
+what this program wrote before round 5.
+
+Round 6 (caselaw-lean-2/round6/history/DESIGN6.md §4, written from that section only; readings where it is silent
+are in round6/history/REF_QUESTIONS.md, numbered Q-n): the optional table history_anchor.tsv gives a history row a
+second quote, the anchor, from the text of its certificate. Such a row is checked by Engine.check_anchored (reasons
+anchorMismatch, anchorNoCue, anchorDisqualified, anchorUnresolved, anchorPart, then the plain check without the
+target-evidence test); a row without an anchor line is checked as before. Four more lines in ref_stats.tsv when the
+table has a line. Without the file, or with an empty one, every output is byte for byte what it was.
+
+Round 7 (caselaw-lean-2/round7/DESIGN7.md §1-3, written from that file only; readings where it is silent are in
+round7/agents/ref/REF_QUESTIONS7.md, numbered Q7-n): two optional tables and one claim. joined.tsv gives a treatments
+row one or two further quotes from the text of its certificate, with a relation to the main quote (`antecedent`: an
+overruling stated across two sentences; `doctrineTie`: a doctrine tied to the named case); such a row is checked by
+Engine.check_joined (joinedMismatch, joinedPart, joinedDisqualified, joinedRelation, joinedUnresolved, then the
+row's own check without the target-evidence test). A class line with claim `doctrine` makes a doctrine row (checked
+in doctrine mode, unique by label inside the table, always demoted: at most a partial scope, class `doctrine`).
+history_claim.tsv claims `orderHead` (a Supreme Court order-list disposition quoted from head matter) or `setAside`
+("set aside" as a vacatur cue) for a history row. Without the two tables and without a doctrine claim every output
+is byte for byte what it was (round 6).
 """
 import argparse
 import array
@@ -100,7 +128,9 @@ KIND_POS = {k: i for i, k in enumerate(KIND_ORDER)}
 # withdrawn even if it was overruled earlier); ties by earliest start, then KIND_ORDER
 SEVERITY = {'reviewGranted': 0, 'supersededByEnactment': 1, 'abrogated': 2, 'overruled': 3, 'disapproved': 3,
             'recededFrom': 3, 'reversed': 4, 'depublished': 5, 'reviewGrantedDepublished': 5, 'vacated': 6,
-            'rehearingEnBancGranted': 6, 'withdrawn': 7, 'substitutedBy': 7}
+            'rehearingEnBancGranted': 6, 'withdrawn': 7, 'substitutedBy': 7,
+            # round 5 (DESIGN5 §2.3): the most severe unknown; the kind occurs only in round-5 mode, on unknown rows
+            'recognisedLater': 100}
 
 FIND_OVERRULED = ('overruled', 'disapproved', 'recededFrom', 'abrogated')
 FIND_VACATED = ('vacated', 'withdrawn', 'substitutedBy', 'depublished', 'rehearingEnBancGranted',
@@ -113,6 +143,218 @@ FIND_VACATED = ('vacated', 'withdrawn', 'substitutedBy', 'depublished', 'reheari
 # reader's copy and the Lean's CueTable.lean
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from cue_table import VERBS, DISQUALIFY_TREAT, DISQUALIFY_HIST  # noqa: E402
+import cue_table as _CUES  # noqa: E402
+# round 5 (DESIGN5 §6): the six new lists of the same generated table (read from the module, never copied here)
+SELF_ANNOUNCED = tuple(getattr(_CUES, 'SELF_ANNOUNCED', ()))
+RECOGNISED = tuple(getattr(_CUES, 'RECOGNISED', ()))
+DISQUALIFY_RECOGNISED = tuple(getattr(_CUES, 'DISQUALIFY_RECOGNISED', ()))
+OPERATIVE = tuple(getattr(_CUES, 'OPERATIVE', ()))
+OPERATIVE_WHOLE = tuple(getattr(_CUES, 'OPERATIVE_WHOLE', ()))
+# (DESIGN5 §9, ruling of 12:50: a whole-case phrase counts only when the quote has no phrase of this list)
+OPERATIVE_LIMIT = tuple(getattr(_CUES, 'OPERATIVE_LIMIT', ()))
+DISQUALIFY_OPERATIVE = tuple(getattr(_CUES, 'DISQUALIFY_OPERATIVE', ()))
+
+
+def _r6_list(name, key, fallback):
+    """Round 6 (round6/history/DESIGN6.md §4): a list of the single cue table. Read from the generated module; when
+    the module was generated before the key existed, from cue_table.json; when the table has no such key yet, the
+    initial list of DESIGN6 §4 (`fallback`)."""
+    v = getattr(_CUES, name, None)
+    if v is None:
+        try:
+            import json
+            with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'cues', 'cue_table.json'),
+                      encoding='utf-8') as f:
+                v = json.load(f).get(key)
+        except (OSError, ValueError):
+            v = None
+    return tuple(v) if v is not None else tuple(fallback)
+
+
+# round 6 (DESIGN6 §4): the cues an anchor quote must contain, and the marks of an earlier proceeding it must not
+ANCHOR = _r6_list('ANCHOR', 'anchor', (
+    'court of appeals', 'court of appeal', 'circuit court', 'district court', 'court below', 'appellate division',
+    'appellate court', 'appellate term', 'superior court', 'supreme court', 'court of civil appeals',
+    'court of criminal appeals', 'trial court', 'certiorari', 'appeal from', 'error to', 'reported below',
+    'decision below', 'opinion below', 'judgment below', 'sub nom', 'c. a.', 'rehearing', 'en banc', 'in banc',
+    'panel', 'former opinion', 'prior opinion', 'original opinion', 'earlier opinion', 'previous opinion',
+    'opinion of', 'opinion filed', 'opinion in this case', 'decision of this court', 'commonwealth court',
+    'tax court', 'board of tax appeals', 'court of claims', 'bankruptcy'))
+DISQUALIFY_ANCHOR = _r6_list('DISQUALIFY_ANCHOR', 'disqualify_anchor', (
+    'former appeal', 'prior appeal', 'first appeal', 'earlier appeal', 'previous appeal', 'see also'))
+ANCHOR_PARTS = ('majority', 'plurality', 'perCuriam', 'headmatter')
+# round 9 (round9/DESIGN9.md §4): the part names a part_zone.tsv line may carry (the row part names; case-sensitive)
+ZONE_PARTS = ('majority', 'plurality', 'perCuriam', 'concurrence', 'dissent', 'headmatter', 'other')
+
+
+# round 7 (round7/DESIGN7.md §2-3): the new keys of the single cue table. Read from cue_table.json first (the source
+# the generated modules come from; `order_line` is a map kind -> list and two keys are numbers, whose generated
+# Python form is not fixed by the design), then from the generated module (the key upper-cased), and only when the
+# table has no such key yet from the example lists of DESIGN7 (`R7_CUE_SOURCE` records which; NOTES.md says so).
+R7_CUE_SOURCE = {}
+_R7_JSON = None
+
+
+def _r7(key, fallback):
+    global _R7_JSON
+    if _R7_JSON is None:
+        try:
+            import json
+            with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'cues', 'cue_table.json'),
+                      encoding='utf-8') as f:
+                _R7_JSON = json.load(f)
+        except (OSError, ValueError):
+            _R7_JSON = {}
+    v = _R7_JSON.get(key)
+    src = 'json'
+    if v is None:
+        v, src = getattr(_CUES, key.upper(), None), 'module'
+    if v is None:
+        v, src = fallback, 'design7-fallback'
+    R7_CUE_SOURCE[key] = src
+    if isinstance(fallback, int):
+        return int(v)
+    if isinstance(fallback, dict):
+        return {k: tuple(x) for k, x in dict(v).items()}
+    return tuple(v)
+
+
+ANAPHOR = _r7('anaphor', ('those cases', 'these cases', 'that case', 'those decisions', 'these decisions',
+                          'that decision', 'such cases', 'those opinions', 'those holdings', 'both cases',
+                          'each of them', 'they are overruled', 'it is overruled'))
+DOCTRINE_TIE = _r7('doctrine_tie', ('doctrine of', 'doctrine announced', 'doctrine established', 'rule of',
+                                    'rule announced', 'rule laid down', 'announced in', 'established in',
+                                    'adopted in', 'laid down in', 'the rule in', 'first announced', 'originated in'))
+DOCTRINE_REJECT = _r7('doctrine_reject', ('has no place', 'is rejected', 'we reject', 'repudiate', 'abandon',
+                                          'is overruled', 'no longer', 'discard', 'disapprove'))
+DISQUALIFY_JOINED = _r7('disqualify_joined', ())
+ORDER_LINE = _r7('order_line', {
+    'certDenied': ('certiorari denied', 'petition for writ of certiorari denied'),
+    'vacated': ('certiorari granted, judgment vacated', 'judgment vacated, and case remanded'),
+    'reversed': ('judgment reversed',),
+    'affirmed': ('judgment affirmed',),
+    'reviewDismissed': ('appeal dismissed', 'certiorari dismissed', 'writ of certiorari dismissed')})
+SET_ASIDE = _r7('set_aside', ('set aside', 'sets aside', 'is set aside', 'are set aside', 'be set aside'))
+JOINED_GAP_MAX = _r7('joined_gap_max', 300)
+ORDER_HEAD_FROM = _r7('order_head_from', 20130101)
+ORDER_HEAD_KINDS = ('certDenied', 'vacated', 'reversed', 'affirmed', 'reviewDismissed')
+ORDER_HEAD_MAXLEN = _r7('order_head_max_len', 400)
+# round 8 (round8/DESIGN8.md §4, D8-3): bridge evidence for history rows. `bridge_cue` (kind -> list) and
+# `bridge_max_len` are read from cue_table.json first (as the round-7 keys), else DESIGN8 §4's lists. A kind
+# without a list fails bridgeCue (REF_QUESTIONS8.md Q8-7).
+BRIDGE_CUE = _r7('bridge_cue', {
+    'certDenied': ('cert. denied', 'certiorari denied', 'cert denied'),
+    'vacated': ('vacated', 'judgment vacated', 'vacated and remanded'),
+    'reversed': ("rev'd", 'reversed'),
+    'affirmed': ("aff'd", 'affirmed'),
+    'reviewDismissed': ('cert. dismissed', 'certiorari dismissed', 'appeal dismissed')})
+BRIDGE_MAX_LEN = _r7('bridge_max_len', 600)
+# round 8 (round8/DESIGN8.md §6, D8-12): the old circuits, for a history row with the claim `oldCircuit`:
+# (acting court-of-appeals circuit, target district / bankruptcy court circuit, acting date before which it holds)
+OLD_CIRCUIT = tuple(tuple(int(x) for x in t) for t in _r7('old_circuit', [[5, 11, 19811001], [8, 10, 19290301]]))
+# round 8 (round8/DESIGN8.md §5, D8-5): the wider anchor cues, used only by an anchored row with the history claim
+# `anchorWide` (anchor ++ anchor_wide); JSON first, else DESIGN8 §5's list
+ANCHOR_WIDE = _r7('anchor_wide', ('circuit', '(ca1', '(ca2', '(ca3', '(ca4', '(ca5', '(ca6', '(ca7', '(ca8', '(ca9',
+                                  '(cadc', '(cafc', 'c.a.', 'judicial court', 'court of errors', 'case below'))
+# round 9 (round9/DESIGN9.md §8, D9-9): the judge-form strings `anchorWide` adds (a JSON list `anchor_wide9`, else
+# DESIGN9's three; the Lean may instead extend `anchor_wide` itself: a string in both lists is harmless)
+ANCHOR_WIDE9 = _r7('anchor_wide9', ('district judge', 'magistrate judge', 'trial judge'))
+# round 11 (round11/DESIGN11.md §5.1, D11-4): the tribunal names an anchored row with the history claim
+# `anchorTribunal` adds to the union `anchorWide` uses (a JSON list `anchor_tribunal` first, else DESIGN11's six)
+ANCHOR_TRIBUNAL = _r7('anchor_tribunal', ('court of international trade', 'customs court', 'court of federal claims',
+                                          'claims court', 'veterans court', 'court of veterans appeals'))
+SCOTUS_COURT = 2906          # lead ruling D7-6 (8): the Supreme Court is court 2906 of the court table
+JOINED_TABLES = ('treatments', 'history')
+JOINED_RELS = ('antecedent', 'doctrineTie')
+HCLAIMS = ('orderHead', 'setAside', 'anchorWide', 'oldCircuit',    # round 8 (DESIGN8 §5, §6)
+           'trialBridge',                                           # round 10 (DESIGN10 §6, D10-8)
+           'anchorTribunal')                                        # round 11 (DESIGN11 §5.1, D11-4)
+# round 5 (DESIGN5 §5): the classes in their order for ties, and the claims a class-table row may make. Round 7
+# (DESIGN7 §2.4): `doctrine` after `recognised` and before `atRiskWitness`, and the claim `doctrine`.
+CLASS_ORDER = {'selfAnnounced': 0, 'operativeWords': 1, 'recognised': 2, 'doctrine': 3, 'atRiskWitness': 4}
+CLAIMS = ('recognised', 'operativeWords', 'doctrine', 'joinedFar', 'implicitReject')   # round 9: DESIGN9 §5, §7
+# round 9 (round9/DESIGN9.md §5, D9-5): a far antecedent joined quote, with the claim `joinedFar` only; JSON first
+JOINED_FAR_MAX = _r7('joined_far_max', 1200)
+# round 9 (round9/DESIGN9.md §7, D9-5): the cues a soft-kind row with the claim `implicitReject` adds to its kind's list
+IMPLICIT_REJECT = _r7('implicit_reject', (
+    'cannot agree', 'do not agree', 'unpersuaded', 'not convinced', 'wrongly decided', 'incorrectly decided',
+    'erroneously decided', 'unsound', 'erroneous', 'incorrect', 'mistaken', 'undermined', 'eroded', 'discredited',
+    'called into question', 'contrary to', 'depart from', 'departs from'))
+# round 10 (round10/DESIGN10.md §4 + D10-5): remand bridge evidence for history rows (history_remand.tsv). JSON
+# first, else DESIGN10's values (round10/agents/ref10/REF_QUESTIONS10.md Q10-7).
+REMAND_COURT = _r7('remand_court', ('supreme court',))
+REMAND_CUE = _r7('remand_cue', ('vacat', 'remand', 'in light of', 'further consideration'))
+REMAND_QUOTE_MAX = _r7('remand_quote_max', 600)
+REMAND_DOCKET_SPAN_MAX = _r7('remand_docket_span_max', 200)
+REMAND_DAYS = _r7('remand_days_max', 1826)
+# D10-7: the reason-case tie (c2): a span of the order's own text (<= remand_order_span_max) holding "in light of"
+# (`remand_order_cue`) and compact(tie) (>= remand_tie_min characters), compact(tie) also in compact(B quote)
+REMAND_ORDER_SPAN_MAX = _r7('remand_order_span_max', 300)
+REMAND_ORDER_CUE = _r7('remand_order_cue', ('in light of',))
+REMAND_TIE_MIN = _r7('remand_tie_min', 8)
+# round 10 (round10/DESIGN10.md §6, D10-8, D10-9): the trial-judgment bridge of a history row with the claim
+# `trialBridge`. JSON first, else DESIGN10's values (REF_QUESTIONS10.md Q10-14..Q10-16).
+TRIAL_COURT_NAMES = _r7('trial_court_names', (
+    'trial court', 'district court', 'circuit court', 'superior court', 'county court', 'court of common pleas',
+    'chancery court', 'probate court', 'court below'))
+INTERMEDIATE_COURT_NAMES = _r7('intermediate_court_names', (
+    'court of appeal', 'appellate', 'court of special appeals', 'court of civil appeals', 'court of criminal appeals',
+    'commonwealth court', 'district court of appeal'))
+TBRIDGE_QUOTE_MAX = _r7('tbridge_quote_max', 600)
+TBRIDGE_CUE = _r7('tbridge_cue', ('affirm',))
+TBRIDGE_NEGATIVE = _r7('tbridge_negative', ('reversed', 'reverse', 'vacate', 'set aside', 'remand'))
+TBRIDGE_DAYS = _r7('tbridge_days_max', 1826)
+TBRIDGE_KINDS = ('reversed', 'vacated')
+# D10-6 (Q10-1): the order's date "as printed", exactly two forms: "<month> <d>, <yyyy>" (full lower-case name, day
+# without a leading zero) and "<abbr> <d>, <yyyy>" for the abbreviations of that month (May, June, July: full form
+# only). cue_table.json `remand_months` (12 names) and `remand_months_abbr` (12 lists, one per month) first, else
+# DESIGN10's values.
+_MONTHS = _r7('remand_months', ('january', 'february', 'march', 'april', 'may', 'june', 'july', 'august',
+                                'september', 'october', 'november', 'december'))
+REMAND_MONTHS_ABBR = tuple(tuple(x) for x in _r7('remand_months_abbr', (
+    ('jan.',), ('feb.',), ('mar.',), ('apr.',), (), (), (), ('aug.',), ('sept.', 'sep.'), ('oct.',), ('nov.',),
+    ('dec.',))))
+
+
+# round 11 (round11/DESIGN11.md §5.2, D11-5): identity-tie evidence (history_identity.tsv); JSON first, else 200
+IDENTITY_SPAN_MAX = _r7('identity_span_max', 200)
+IDENTITY_FORMS = ('docket', 'cite', 'date')
+
+
+def date_forms(d):
+    """Round 10 (D10-6): the printed forms of a yyyymmdd date; () for 0 or a non-calendar date."""
+    if d <= 0:
+        return ()
+    try:
+        x = datetime.date(d // 10000, d // 100 % 100, d % 100)
+    except (ValueError, OverflowError):
+        return ()
+    forms = ['%s %d, %d' % (_MONTHS[x.month - 1], x.day, x.year)]
+    for a in (REMAND_MONTHS_ABBR[x.month - 1] if x.month - 1 < len(REMAND_MONTHS_ABBR) else ()):
+        f = '%s %d, %d' % (a, x.day, x.year)
+        if f not in forms:
+            forms.append(f)
+    return tuple(forms)
+
+
+def day_number(d):
+    """Round 10 (Q10-6): proleptic Gregorian day number of a yyyymmdd date; None for 0 or a non-calendar date."""
+    if d <= 0:
+        return None
+    try:
+        return datetime.date(d // 10000, d // 100 % 100, d % 100).toordinal()
+    except (ValueError, OverflowError):
+        return None
+# round 5 (DESIGN5 §5.1 `oclass`): "the effects that make the row's status" are those whose contribution equals the
+# status, so the reference's finer event kinds are read in the status vocabulary of the Lean output: one negative
+# kind per group below, and four unknown reasons. Their order (the join) is: every negative above every unknown;
+# partialScope < enBancRuleUnknown < powerUnknown < recognisedLater (DESIGN5 §2.3 and §9, ruling on A-25).
+STATUS_KIND = {'overruled': 'overruled', 'disapproved': 'overruled', 'recededFrom': 'overruled',
+               'abrogated': 'abrogated', 'supersededByEnactment': 'superseded', 'withdrawn': 'withdrawn',
+               'substitutedBy': 'withdrawn', 'vacated': 'vacated', 'rehearingEnBancGranted': 'vacated',
+               'reversed': 'reversed', 'depublished': 'depublished', 'reviewGrantedDepublished': 'depublished',
+               'reviewGranted': 'reviewPending'}
+UNK_RANK = {'partialScope': 1, 'enBancRuleUnknown': 2, 'powerUnknown': 3, 'recognisedLater': 4}
 CERT_PARTS = ('majority', 'plurality', 'perCuriam')
 # round 4 (DEVIATIONS 84): the words a panelDepartsWithoutEnBanc finding needs in the certified quote
 PANEL_OWN_WORDS = ('overrul', 'disapprov', 'recede from', 'receded from', 'recedes from', 'receding from')
@@ -383,6 +625,227 @@ class Data:
         if os.path.exists(J('treatment_witness.tsv')):
             for p in read_tsv(J('treatment_witness.tsv'), 4, nat=(1,)):
                 self.witness[p[0]] = (toint(p[1], -1), p[2])
+        # round 5 (DESIGN5 §1, R5-1): the class table. Its presence turns round-5 mode on; absent, nothing below
+        # is used and every output is round 4's. id -> (claim, field_limit, doctrine). A line that cannot be read,
+        # has not exactly 5 fields, names an unknown claim or an id with no treatments row is ignored and counted;
+        # a later line for an id already taken is ignored and not counted (the first line wins). NOTES.md A-1..A-3.
+        self.r5 = os.path.exists(J('treatment_class.tsv'))
+        self.klass = {}
+        self.class_bad = 0
+        if self.r5:
+            ids = {r['id'] for r in self.treatments}
+            for line in read_lines(J('treatment_class.tsv')):
+                p = line.split('\t') if line is not None else None
+                if p is None or len(p) != 5 or p[1] not in CLAIMS or p[0] not in ids:
+                    self.class_bad += 1
+                    continue
+                if p[0] not in self.klass:
+                    self.klass[p[0]] = (p[1], p[2], p[3])
+        # round 6 (round6/history/DESIGN6.md §4): the optional anchor table. history id -> (a_start, a_end, a_quote,
+        # a_part, src). A history row with a line here is checked by Engine.check_anchored, every other row as
+        # before. Absent or empty: nothing below is used and every output is what it was. Readings where the
+        # design is silent are in round6/history/REF_QUESTIONS.md (Q-n):
+        #   Q-1 a line that is not valid UTF-8, has not exactly 6 fields, or whose a_start / a_end is not ASCII
+        #       digits is a bad line: ignored, counted (anchor_bad_rows), and it does not take the id;
+        #   Q-2 "a history row id" = the id of a history.tsv line that loads (13 fields, numeric columns), whatever
+        #       its kind or nodes; a line for any other id is ignored and counted (anchor_unknown_ids);
+        #   Q-3 the first good line for an id wins; a later good line for it is ignored and counted
+        #       (anchor_duplicates); tests in the order bad line, unknown id, duplicate;
+        #   Q-4 an anchor is keyed by id: when history.tsv has several rows with that id, each is anchored.
+        self.anchor = {}
+        self.anchor_bad = self.anchor_unknown = self.anchor_dup = 0
+        if os.path.exists(J('history_anchor.tsv')):
+            ids = {r['id'] for r in self.history}
+            for line in read_lines(J('history_anchor.tsv')):
+                p = line.split('\t') if line is not None else None
+                if p is None or len(p) != 6 or not _NAT_RX.match(p[1]) or not _NAT_RX.match(p[2]):
+                    self.anchor_bad += 1
+                    BAD_ROWS['history_anchor.tsv'] += 1
+                elif p[0] not in ids:
+                    self.anchor_unknown += 1      # (the summary's anchor_unknown_ids)
+                elif p[0] in self.anchor:
+                    self.anchor_dup += 1          # (the summary's anchor_duplicates)
+                else:
+                    self.anchor[p[0]] = (int(p[1]), int(p[2]), p[3], p[4], p[5])
+        # round 7 (round7/DESIGN7.md §1, §2.1): the optional joined table. treatments id -> [(rel, j_start, j_end,
+        # j_quote, j_part, label, src)], at most two lines, in file order. Readings (REF_QUESTIONS7.md):
+        #   Q7-1 a bad line (not valid UTF-8, not exactly 9 fields, j_start / j_end not ASCII digits, a `table` or
+        #        `rel` outside the design's values) is ignored, counted (joined_bad_rows = the Lean's
+        #        `bad_rows joined.tsv n`) and takes no id;
+        #   Q7-2 tests in the order bad line, unknown id (no loaded row of the named table has it:
+        #        joined_unknown_ids; lead ruling D7-6 (11): first, for both tables), history line
+        #        (joined_history_ignored), a line for a witness row (a treatments id with a treatment_witness line:
+        #        ignored and counted, joined_witness_ignored; D7-6 (1)), third and later line for a treatments id
+        #        (joined_extra); a line with an unknown part or an empty quote is a good line that fails the check.
+        self.joined = {}
+        self.joined_any = False
+        self.joined_bad = self.joined_unknown = self.joined_extra = self.joined_hist = self.joined_wit = 0
+        if os.path.exists(J('joined.tsv')):
+            tids = {r['id'] for r in self.treatments}
+            hids = {r['id'] for r in self.history}
+            for line in read_lines(J('joined.tsv')):
+                self.joined_any = True
+                p = line.split('\t') if line is not None else None
+                if (p is None or len(p) != 9 or p[1] not in JOINED_TABLES or p[2] not in JOINED_RELS
+                        or not _NAT_RX.match(p[3]) or not _NAT_RX.match(p[4])):
+                    self.joined_bad += 1
+                    BAD_ROWS['joined.tsv'] += 1
+                elif p[0] not in (tids if p[1] == 'treatments' else hids):
+                    self.joined_unknown += 1
+                elif p[1] == 'history':
+                    self.joined_hist += 1            # reserved this round (DESIGN7 §2.1, D7-2)
+                elif p[0] in self.witness:
+                    self.joined_wit += 1             # D7-6 (1): the row is checked as in round 6
+                elif len(self.joined.get(p[0], ())) >= 2:
+                    self.joined_extra += 1
+                else:
+                    self.joined.setdefault(p[0], []).append((p[2], int(p[3]), int(p[4]), p[5], p[6], p[7], p[8]))
+        # round 7 (DESIGN7 §1, §3): the optional history claim table. history id -> set of claims. Q7-3: a bad line
+        # (not UTF-8, not exactly 3 fields, an unknown claim) is counted (hclaim_bad_rows = the Lean's
+        # `bad_rows history_claim.tsv n`); an id of no loaded history line is counted (hclaim_unknown_ids); a
+        # second line with the same id and claim is ignored and counted (hclaim_duplicates); one id may carry both
+        # claims.
+        self.hclaim = {}
+        self.hclaim_any = False
+        self.hclaim_bad = self.hclaim_unknown = self.hclaim_dup = 0
+        if os.path.exists(J('history_claim.tsv')):
+            hids = {r['id'] for r in self.history}
+            for line in read_lines(J('history_claim.tsv')):
+                self.hclaim_any = True
+                p = line.split('\t') if line is not None else None
+                if p is None or len(p) != 3 or p[1] not in HCLAIMS:
+                    self.hclaim_bad += 1
+                    BAD_ROWS['history_claim.tsv'] += 1
+                elif p[0] not in hids:
+                    self.hclaim_unknown += 1
+                elif p[1] in self.hclaim.get(p[0], ()):
+                    self.hclaim_dup += 1
+                else:
+                    self.hclaim.setdefault(p[0], set()).add(p[1])
+        # round 8 (round8/DESIGN8.md §4, D8-3): the optional bridge table. history id -> (w_node, b_start, b_end,
+        # b_quote, src). Joined like history_anchor.tsv (REF_QUESTIONS8.md Q8-1): a bad line (not valid UTF-8, not
+        # exactly 6 fields, w_node / b_start / b_end not ASCII digits) is counted (bridge_bad_rows = the Lean's
+        # `bad_rows history_bridge.tsv n`) and takes no id; then an id of no loaded history line (bridge_unknown_ids);
+        # then a second good line for an id (bridge_duplicates: the first line wins). Absent / empty: nothing below
+        # is used and every output is round 7's.
+        self.bridge = {}
+        self.bridge_any = False
+        self.bridge_bad = self.bridge_unknown = self.bridge_dup = 0
+        if os.path.exists(J('history_bridge.tsv')):
+            hids = {r['id'] for r in self.history}
+            for line in read_lines(J('history_bridge.tsv')):
+                self.bridge_any = True
+                p = line.split('\t') if line is not None else None
+                if p is None or len(p) != 6 or not all(_NAT_RX.match(p[c]) for c in (1, 2, 3)):
+                    self.bridge_bad += 1
+                    BAD_ROWS['history_bridge.tsv'] += 1
+                elif p[0] not in hids:
+                    self.bridge_unknown += 1
+                elif p[0] in self.bridge:
+                    self.bridge_dup += 1
+                else:
+                    self.bridge[p[0]] = (int(p[1]), int(p[2]), int(p[3]), p[4], p[5])
+        # round 10 (round10/DESIGN10.md §4 + D10-5 + D10-7): the optional remand table. history id -> (b_node, b_start,
+        # b_end, docket, bd_start, bd_end, t_start, t_end, tie, o_start, o_end). Q10-9: a bad line (not UTF-8, not
+        # exactly 12 fields (D10-7), a node or
+        # offset column not ASCII digits) is counted (remand_bad_rows = the Lean's `bad_rows history_remand.tsv n`)
+        # and takes no id; then an id of no loaded history line (ignored, not counted); then a later good line for a
+        # taken id (remand_dup_rows; the first line wins). Absent / empty: nothing below is used.
+        self.remand = {}
+        self.remand_any = False
+        self.remand_bad = self.remand_unknown = self.remand_dup = 0
+        if os.path.exists(J('history_remand.tsv')):
+            hids = {r['id'] for r in self.history}
+            for line in read_lines(J('history_remand.tsv')):
+                self.remand_any = True
+                p = line.split('\t') if line is not None else None
+                if p is None or len(p) != 12 or not all(_NAT_RX.match(p[c]) for c in (1, 2, 3, 5, 6, 7, 8, 10, 11)):
+                    self.remand_bad += 1
+                    BAD_ROWS['history_remand.tsv'] += 1
+                elif p[0] not in hids:
+                    self.remand_unknown += 1
+                elif p[0] in self.remand:
+                    self.remand_dup += 1
+                else:
+                    self.remand[p[0]] = (int(p[1]), int(p[2]), int(p[3]), p[4], int(p[5]), int(p[6]), int(p[7]),
+                                         int(p[8]), p[9], int(p[10]), int(p[11]))
+        # round 11 (round11/DESIGN11.md §5.2, D11-5): the optional identity-tie table. history id -> (form, token,
+        # d_start, d_end, t_start, t_end). A bad line (not UTF-8, not 7 fields, an unknown form, an offset not ASCII
+        # digits) counts identity_bad_rows and takes no id; then an id of no history line (ignored; counted only
+        # internally, REF_QUESTIONS11 Q11-6); then a later good line for a taken id (identity_dup_rows; first wins).
+        self.identity = {}
+        self.identity_any = False
+        self.identity_bad = self.identity_unknown = self.identity_dup = 0
+        if os.path.exists(J('history_identity.tsv')):
+            hids = {r['id'] for r in self.history}
+            for line in read_lines(J('history_identity.tsv')):
+                self.identity_any = True
+                p = line.split('\t') if line is not None else None
+                if (p is None or len(p) != 7 or p[1] not in IDENTITY_FORMS
+                        or not all(_NAT_RX.match(p[c]) for c in (3, 4, 5, 6))):
+                    self.identity_bad += 1
+                    BAD_ROWS['history_identity.tsv'] += 1
+                elif p[0] not in hids:
+                    self.identity_unknown += 1
+                elif p[0] in self.identity:
+                    self.identity_dup += 1
+                else:
+                    self.identity[p[0]] = (p[1], p[2], int(p[3]), int(p[4]), int(p[5]), int(p[6]))
+        # round 10 (round10/DESIGN10.md §6, D10-8, D10-9): the optional trial-bridge table. history id -> (t_start,
+        # t_end), a quote of the target T's own text. Q10-17: a bad line (not UTF-8, not 3 fields, offsets not ASCII
+        # digits) counts tbridge_bad_rows and takes no id; an unknown id is ignored (not counted); a later good line
+        # for a taken id counts tbridge_dup_rows. Absent / empty: nothing below is used.
+        self.tbridge = {}
+        self.tbridge_any = False
+        self.tbridge_bad = self.tbridge_unknown = self.tbridge_dup = 0
+        if os.path.exists(J('history_tbridge.tsv')):
+            hids = {r['id'] for r in self.history}
+            for line in read_lines(J('history_tbridge.tsv')):
+                self.tbridge_any = True
+                p = line.split('\t') if line is not None else None
+                if p is None or len(p) != 3 or not all(_NAT_RX.match(p[c]) for c in (1, 2)):
+                    self.tbridge_bad += 1
+                    BAD_ROWS['history_tbridge.tsv'] += 1
+                elif p[0] not in hids:
+                    self.tbridge_unknown += 1
+                elif p[0] in self.tbridge:
+                    self.tbridge_dup += 1
+                else:
+                    self.tbridge[p[0]] = (int(p[1]), int(p[2]))
+        # round 9 (round9/DESIGN9.md §4): the optional part-zone table. node -> [(z_start, z_end, part)], sorted.
+        # Readings (round9/agents/ref9/REF_QUESTIONS9.md): Q9-6 a line that is not valid UTF-8, has not exactly 5
+        # fields, or whose node / z_start / z_end is not ASCII digits is a bad line (zone_bad_rows = the Lean's
+        # `bad_rows part_zone.tsv n`) and touches no node; a parsed line with z_start >= z_end or a part outside the
+        # seven names poisons its node; Q9-7 two zones of a node overlap when a < d and c < b. A poisoned or
+        # overlapping node loses ALL its zones (zone_bad_nodes). Absent / empty: nothing below is used.
+        self.zones = {}
+        self.zone_any = False
+        self.zone_bad = self.zone_bad_nodes = self.zone_lines = 0
+        if os.path.exists(J('part_zone.tsv')):
+            raw = defaultdict(list)
+            poisoned = set()
+            for line in read_lines(J('part_zone.tsv')):
+                self.zone_any = True
+                p = line.split('\t') if line is not None else None
+                if p is None or len(p) != 5 or not all(_NAT_RX.match(p[c]) for c in (0, 1, 2)):
+                    self.zone_bad += 1
+                    BAD_ROWS['part_zone.tsv'] += 1
+                    continue
+                n, zs, ze = int(p[0]), int(p[1]), int(p[2])
+                if zs >= ze or p[3] not in ZONE_PARTS:
+                    poisoned.add(n)
+                    continue
+                raw[n].append((zs, ze, p[3]))
+            for n, zl in raw.items():
+                if n in poisoned:
+                    continue
+                zl.sort()
+                if any(zl[i + 1][0] < zl[i][1] for i in range(len(zl) - 1)):
+                    poisoned.add(n)          # sorted by start: some pair overlaps iff some neighbour pair does
+                    continue
+                self.zones[n] = zl
+                self.zone_lines += len(zl)
+            self.zone_bad_nodes = len(poisoned)
         # L7 (five limits, T3): optional window hashes. A window is usable only if a row with its (sha, start0, end0)
         # exists and sha1(window as stored) equals it. File absent: every window is usable (hash flag True).
         wsha = None
@@ -453,6 +916,10 @@ class Data:
             need.add(r['target'])
         for (wn, _) in self.witness.values():
             need.add(wn)
+        for b in self.bridge.values():
+            need.add(b[0])                    # round 8: the bridge text W's sha
+        for m in self.remand.values():
+            need.add(m[0])                    # round 10: the remand decision B's sha
         self._load_decisions(J('decisions2.tsv'), need)
         self.state_name = self._state_names()
         self.log('loaded %s in %.1fs (%d decisions, %d treatments, %d history, %d holdings)' % (
@@ -573,6 +1040,16 @@ class Engine:
         self.adm_holdings_by_node = defaultdict(list)
         self.sup_by_target = defaultdict(list)
         self.linked_treat = set()
+        # round 5 (DESIGN5): all empty and unused without the class table
+        self.r5 = D.r5
+        self.recog_text = {}        # shared: witness row id -> the rule-independent recognised checks pass (§2.2)
+        self.recog_all = {}         # shared: row id -> okRecognised | okRecognisedUnverifiedBy, full rule set
+        self.row_class = {}         # shared: row id -> class (§5), for every row of a status-changing kind
+        self.demoted = set()        # shared: admitted operativeWords rows without a whole-case phrase (§3.3)
+        self.op_admitted = set()    # shared: operativeWords rows whose text checks pass
+        self.cert_plain = {}        # shared: operativeWords-claim row id -> its round-4 (plain) check result
+        self.recog = {}             # this rule set: row id -> verdict string
+        self.recog_by_target = defaultdict(list)   # this rule set: target -> [(row, W)]
 
     # ---------------------------------------------------------------- courts, rules
     def epoch(self, c, d):
@@ -1145,7 +1622,14 @@ class Engine:
         return ('no', 'T2.crossSystem')
 
     # ---------------------------------------------------------------- certificates (DESIGN layer 4; R19-R22)
-    def check_cert(self, cert, owners, kind, need_target, require_verb=True, target=None):
+    def check_cert(self, cert, owners, kind, need_target, require_verb=True, target=None, mode=None, hclaim=None,
+                   by=None, extra_cues=(), tbridge=False):
+        """mode (round 5 only; None = the round-4 check, unchanged): 'recognised' (DESIGN5 §2.2) and 'operative'
+        (§3.2) replace the cue list and the disqualifier lists and resolve the target in the quote itself; round 7
+        'doctrine' (DESIGN7 §2.4): the cue list `doctrine_reject`, the disqualifiers of 'operative'.
+        hclaim (round 7, DESIGN7 §3; history rows only): the row's claims. `setAside` on a `vacated` row adds the
+        list `set_aside` to the cue list; `orderHead` admits part `headmatter` under §3.1's conditions (acting
+        decision `by`), else the reason is orderHeadNotAllowed. None or empty: the check is unchanged."""
         D = self.D
         shas = {D.sha.get(o) for o in owners if o is not None and o >= 0 and D.has(o)}
         shas.discard(None)
@@ -1175,22 +1659,44 @@ class Engine:
                 return 'windowHash'
             return 'quoteMismatch'
         ql = ascii_lower(q)    # fuzz: as Lean's toLower
-        if require_verb and kind == 'other':
-            return 'noVerb'                  # R28 (c): no verb names an 'other' event, so none can be certified
-        if require_verb:
-            verbs = VERBS.get(kind)
-            if verbs and not any(v in ql for v in verbs):
+        if mode is not None:
+            # round 5 text mode: the cue list and the disqualifier lists of the claim, not of the kind (round 7:
+            # doctrine mode, the list `doctrine_reject` and the operative disqualifiers)
+            cues = RECOGNISED if mode == 'recognised' else (DOCTRINE_REJECT if mode == 'doctrine' else OPERATIVE)
+            if not any(v in ql for v in cues):
                 return 'noVerb'
-        if require_verb and kind in NEG_TREAT and any(x in ql for x in DISQUALIFY_TREAT):
+            if any(x in ql for x in (DISQUALIFY_RECOGNISED if mode == 'recognised'
+                                     else DISQUALIFY_TREAT + DISQUALIFY_OPERATIVE)):
+                return 'disqualified'
+        elif require_verb and kind == 'other':
+            return 'noVerb'                  # R28 (c): no verb names an 'other' event, so none can be certified
+        if mode is None and require_verb:
+            verbs = VERBS.get(kind)
+            if hclaim and 'setAside' in hclaim and kind == 'vacated':
+                verbs = tuple(verbs or ()) + SET_ASIDE      # round 7 (DESIGN7 §3.2): claim-gated vacatur cue
+            if extra_cues:
+                verbs = tuple(verbs or ()) + tuple(extra_cues)   # round 9 (DESIGN9 §7): implicitReject
+            if tbridge:
+                # round 10 (DESIGN10 §6, trialBridgeD; Q10-14): the kind-cue test is replaced: a cue of the kind,
+                # a trial-court name, and no intermediate-court name
+                if (not verbs or not any(v in ql for v in verbs) or not any(n in ql for n in TRIAL_COURT_NAMES)
+                        or any(n in ql for n in INTERMEDIATE_COURT_NAMES)):
+                    return 'trialBridgeD'
+            elif verbs and not any(v in ql for v in verbs):
+                return 'noVerb'
+        if mode is None and require_verb and kind in NEG_TREAT and any(x in ql for x in DISQUALIFY_TREAT):
             return 'disqualified'
-        if require_verb and kind in HIST_KINDS_ALL and any(x in ql for x in DISQUALIFY_HIST):
+        if mode is None and require_verb and kind in HIST_KINDS_ALL and any(x in ql for x in DISQUALIFY_HIST):
             return 'disqualified'
         if need_target:
             # R21 (revised, D4 real data): the target is named in the quote or in its covering window (the reader
             # quotes the treating sentence; the citation or caption is often next to it); citations compare as
             # lowercase letters and digits (SCHEMA cite:<normalised citation>); names as whole words of >= 3 chars
             ev = cert.tev or ''
-            ctx = (q + ' ' + ' '.join(norm_quote(w) for (s0, w) in usable))   # L7: usable windows only
+            if mode is not None:
+                ctx = q                       # round 5: named in the quote itself, not in the window
+            else:
+                ctx = (q + ' ' + ' '.join(norm_quote(w) for (s0, w) in usable))   # L7: usable windows only
             ctx = ascii_lower(ctx)    # fuzz: as Lean's toLower
             if ev.startswith('cite:'):
                 c = alnum(ev[5:])
@@ -1209,7 +1715,466 @@ class Engine:
             else:
                 return 'noTarget'
         if cert.part not in CERT_PARTS and not ('certAcceptsDissent' in MUT and cert.part == 'dissent'):
+            if cert.part == 'headmatter' and hclaim and 'orderHead' in hclaim:
+                # round 7 (DESIGN7 §3.1): the part rule admits head matter only under all the claim's conditions
+                return 'ok' if self.order_head_ok(by, kind, ql) else 'orderHeadNotAllowed'
             return 'part'
+        return 'ok'
+
+    def order_head_ok(self, by, kind, ql):
+        """Round 7 (DESIGN7 §3.1): may a history row with an `orderHead` claim quote its disposition from head matter?
+        The acting decision is a decision of the Supreme Court of the United States (lead ruling D7-6 (8): its
+        court is court 2906 and has an epoch on the decision's date), dated (decisions2; 0 fails) on or after
+        `order_head_from`; the kind is one of the five order-list kinds; the normalised lower-cased quote `ql`
+        contains a phrase of `order_line` for that kind and is at most 400 characters long."""
+        D = self.D
+        if by is None or by < 0 or not D.has(by):
+            return False
+        e = self.epoch(D.court[by], D.date[by])
+        if e is None or e.court != SCOTUS_COURT or D.date[by] < ORDER_HEAD_FROM:
+            return False
+        if kind not in ORDER_HEAD_KINDS or len(ql) > ORDER_HEAD_MAXLEN:
+            return False
+        return any(self.order_line_hit(ql, c) for c in ORDER_LINE.get(kind, ()))
+
+    @staticmethod
+    def order_line_hit(ql, entry):
+        """Round 7, lead ruling D7-9: an `order_line` entry that splits on " ... " into exactly two parts a, b means
+        hasInOrder(ql, a, b): ql split on a gives at least two pieces and b occurs in the concatenation of the
+        pieces after the first. Any other entry is a plain substring test."""
+        parts = entry.split(' ... ')
+        if len(parts) == 2:
+            a, b = parts
+            pieces = ql.split(a) if a else [ql]
+            return len(pieces) >= 2 and b in ''.join(pieces[1:])
+        return entry in ql
+
+    @staticmethod
+    def ev_resolves_in(ev, ql, target, cite_index):
+        """Round 6/7: does target evidence `ev` resolve inside the lower-cased quote `ql` alone? `cite:`: the compact
+        citation occurs in the compact quote and, with the citation index, the index maps it to `target`; `name:`:
+        every token of 3 or more characters is a whole word (a maximal run of ASCII letters and digits) of the
+        quote. Anything else, an empty citation, or a name with no such token resolves nothing (Q-7)."""
+        ev = ev or ''
+        if ev.startswith('cite:'):
+            c = alnum(ev[5:])
+            if not c or c not in alnum(ql):
+                return False
+            return cite_index is None or cite_index.get(c) == target
+        if ev.startswith('name:'):
+            words = set(re.findall(r'[0-9a-z]+', ql))
+            toks = [x for x in (alnum(t) for t in ev[5:].split(' ')) if len(x) >= 3]
+            return bool(toks) and all(x in words for x in toks)
+        return False
+
+    def check_joined(self, r, lines, mode, far=False, implicit=False):
+        """Round 7 (round7/DESIGN7.md §2.1-2.4, `checkJoined`): a treatments row with one or two joined lines, each a
+        further quote from the text of the row's own certificate with a relation to the main quote. Checks in the
+        design's order, the first failure is the reason; no fall-back to the one-quote check. mode: None (plain,
+        an explicit row), 'operative' (an operativeWords claim), 'doctrine' (a doctrine claim). Readings of what the
+        design leaves open: REF_QUESTIONS7.md."""
+        D = self.D
+        cert = r['cert']
+        kind = r['kind']
+        wins = D.cert_text.get(cert.sha, ())
+        qs = []
+        # 1. joinedMismatch: every joined quote is non-empty, j_start < j_end, and the text at that offset of a
+        #    usable window (well formed, covering, hash-consistent) filed under the row's own text_sha as written
+        #    (Q-5 of round 6: whether that sha is the acting decision's is the main check's shaMismatch, step 6)
+        for (rel, s, e, jq, jp, label, src) in lines:
+            q = norm_quote(jq)
+            if not q or e <= s or len(q) != e - s:
+                return 'joinedMismatch'
+            if not any(s0 <= s and e <= e0 and len(w) == e0 - s0 and hok and norm_quote(w)[s - s0:e - s0] == q
+                       for (s0, e0, w, hok) in wins):
+                return 'joinedMismatch'
+            qs.append(ascii_lower(q))
+        # 2. joinedPart: an opinion-of-the-court part (exact, case-sensitive; Q-10 of round 6)
+        if any(l[4] not in CERT_PARTS for l in lines):
+            return 'joinedPart'
+        # 3. joinedDisqualified: the plain list of the row's kind (`disqualify_treat` for a status-changing kind,
+        #    none for another kind) and the new list `disqualify_joined`, in every mode (lead ruling D7-6 (5): not
+        #    the operative / doctrine additions)
+        disq = (DISQUALIFY_TREAT if kind in NEG_TREAT else ()) + DISQUALIFY_JOINED
+        if any(any(x in ql for x in disq) for ql in qs):
+            return 'joinedDisqualified'
+        # 4. joinedRelation
+        mq = ascii_lower(norm_quote(cert.quote))
+        for (rel, s, e, jq, jp, label, src), ql in zip(lines, qs):
+            if rel == 'antecedent':
+                # §2.2: the joined quote ends before the main quote starts, at most `joined_gap_max` characters
+                # before it; the main quote has an anaphor and a cue of the row's kind (the plain list)
+                if not e <= cert.start:
+                    return 'joinedRelation'
+                if cert.start - e > JOINED_GAP_MAX:
+                    # round 9 (DESIGN9 §5): with the claim `joinedFar`, a gap up to joined_far_max on the row's own
+                    # text: a usable window covering [j_end, start), no index key of another node starting there
+                    # (no paragraph test: D9-7) (REF_QUESTIONS9.md Q9-12..Q9-15); the anaphor / cue tests below as §2.2
+                    if not far:
+                        return 'joinedRelation'
+                    v = self.far_gap(cert, e, r['target'])
+                    if v is not None:
+                        return v
+                if not any(a in mq for a in ANAPHOR):
+                    return 'joinedRelation'
+                if not any(v in mq for v in VERBS.get(kind, ())):
+                    return 'joinedRelation'
+            else:
+                # §2.3: only on a doctrine row; the label D (normalised, lower-cased) has >= 2 words (pieces between
+                # spaces, Q7-7) and >= 8 characters, occurs in both quotes, and the joined quote has a tie cue
+                if mode != 'doctrine':
+                    return 'joinedRelation'
+                dl = ascii_lower(norm_quote(label))
+                if len([w for w in dl.split(' ') if w]) < 2 or len(dl) < 8:
+                    return 'joinedRelation'
+                if dl not in mq or dl not in ql:
+                    return 'joinedRelation'
+                if not any(t in ql for t in DOCTRINE_TIE):
+                    return 'joinedRelation'
+        # 5. joinedUnresolved: the target evidence resolves inside one joined quote alone
+        if not any(self.ev_resolves_in(cert.tev, ql, r['target'], D.cite_index) for ql in qs):
+            return 'joinedUnresolved'
+        # 6. the row's own check on its main quote, the target evidence taken as given (selfText), in its mode.
+        #    Q7-8: an operativeWords claim's operativeBadRow test belongs to this step (DESIGN5 §3.2 puts it first
+        #    in the operative check). Date order and authority: the status layer, as for every treatments row.
+        if mode == 'operative' and (kind != 'disapproved' or r['explicit'] != 1):
+            return 'operativeBadRow'
+        return self.check_cert(cert, [r['by']], kind, False, target=r['target'], mode=mode,
+                               extra_cues=IMPLICIT_REJECT if implicit else ())
+
+    def far_gap(self, cert, e, target):
+        """Round 9 (round9/DESIGN9.md §5, claim `joinedFar`): the tests of a joined antecedent quote ending at `e`
+        more than joined_gap_max characters before the main quote starts. -> a failure reason, or None. Order (Q9-12):
+        joinedFarGap (start - e > joined_far_max), joinedFarWindow (no usable window of the row's text_sha - well
+        formed, covering [e, start), hash-consistent - the first in cert_text order is used), joinedFarKey (an index key that maps to a node other than the target
+        starts at a compact position whose offset is in [e, start); the compact form is that of the window's text
+        from e to its end, so a key may run past start; an ambiguous key is no key, D8-15; Q9-14)."""
+        D = self.D
+        start = cert.start
+        if start - e > JOINED_FAR_MAX:
+            return 'joinedFarGap'
+        win = None
+        for (s0, e0, w, hok) in D.cert_text.get(cert.sha, ()):
+            if s0 <= e and start <= e0 and len(w) == e0 - s0 and hok:
+                win = (s0, w)
+                break
+        if win is None:
+            return 'joinedFarWindow'
+        s0, w = win
+        # (DESIGN9 §5 test 1, joinedFarPara, was dropped by D9-7: no paragraph test)
+        if D.cite_index is None:
+            return None
+        self._cite_keys_of(target)          # builds the key lengths
+        lens, idx = self._key_lens, D.cite_index
+        tail = ascii_lower(w[e - s0:])
+        comp, pos = [], []
+        for i, ch in enumerate(tail):
+            if '0' <= ch <= '9' or 'a' <= ch <= 'z':
+                comp.append(ch)
+                pos.append(e + i)
+        c = ''.join(comp)
+        for i in range(len(c)):
+            if pos[i] >= start:
+                break
+            for L in lens:
+                if i + L > len(c):
+                    break
+                v = idx.get(c[i:i + L])
+                if v is not None and v != target:
+                    return 'joinedFarKey'
+        return None
+
+    def check_anchored(self, r, a, hclaim=None, tbridge=False):
+        """Round 6 (round6/history/DESIGN6.md §4, `checkAnchored`): a history row with a line in history_anchor.tsv.
+        The anchor is a second quote from the text of the row's certificate (the same text_sha); it carries the
+        target evidence, so the disposition quote's own window need not. Checks in the design's order, the first
+        failure is the reason. Written from DESIGN6 §4 only; readings of what it leaves open: REF_QUESTIONS.md."""
+        D = self.D
+        cert = r['cert']
+        a_start, a_end, a_quote, a_part = a[0], a[1], a[2], a[3]
+        # 1. anchorMismatch: the anchor quote is not empty and is the text, at the stated offset, of a usable
+        #    window of the same text: well formed (text length = end0 - start0), covering [a_start, a_end), and
+        #    hash-consistent when window_sha.tsv is supplied (as for the main quote). Q-5: the window is looked up
+        #    under the row's text_sha as written; that this sha is the sha of the target or of the acting decision
+        #    is step 6's test (shaMismatch), so a row with a foreign sha fails here only if that sha has no such
+        #    window.
+        aq = norm_quote(a_quote)
+        if a_end <= a_start or len(aq) != a_end - a_start:
+            return 'anchorMismatch'
+        if not any(s0 <= a_start and a_end <= e0 and len(w) == e0 - s0 and hok
+                   and norm_quote(w)[a_start - s0:a_end - s0] == aq
+                   for (s0, e0, w, hok) in D.cert_text.get(cert.sha, ())):
+            return 'anchorMismatch'
+        al = ascii_lower(aq)
+        # 2. anchorNoCue: a cue of the list `anchor` in the lower-cased anchor quote (round 8, DESIGN8 §5: with the
+        #    history claim `anchorWide`, of `anchor` ++ `anchor_wide`; without it the list is unchanged)
+        #    (round 11, DESIGN11 §5.1: with the claim `anchorTribunal`, of `anchor` ++ `anchor_wide` ++
+        #    `anchor_wide9` ++ `anchor_tribunal`; with both claims the same union; REF_QUESTIONS11 Q11-2, Q11-3)
+        if hclaim and 'anchorTribunal' in hclaim:
+            cues = ANCHOR + ANCHOR_WIDE + ANCHOR_WIDE9 + ANCHOR_TRIBUNAL
+        elif hclaim and 'anchorWide' in hclaim:
+            cues = ANCHOR + ANCHOR_WIDE + ANCHOR_WIDE9
+        else:
+            cues = ANCHOR
+        if not any(c in al for c in cues):
+            return 'anchorNoCue'
+        # 3. anchorDisqualified: no mark of an earlier proceeding (list `disqualify_anchor`)
+        if any(x in al for x in DISQUALIFY_ANCHOR):
+            return 'anchorDisqualified'
+        # 4. anchorUnresolved: the row's target evidence resolves inside the anchor quote alone (never its window).
+        #    Q-6: also for a row whose certificate is from the target's own text (the plain check asks such a row
+        #    for no evidence; the design makes no exception here). Evidence that is neither cite: nor name:, an
+        #    empty citation, and a name with no token of 3 or more characters do not resolve (as the plain check).
+        ev = cert.tev or ''
+        if ev.startswith('cite:'):
+            c = alnum(ev[5:])
+            if not c or c not in alnum(al):
+                return 'anchorUnresolved'
+            if D.cite_index is not None and D.cite_index.get(c) != r['target']:
+                return 'anchorUnresolved'
+        elif ev.startswith('name:'):
+            words = set(re.findall(r'[0-9a-z]+', al))
+            toks = [x for x in (alnum(t) for t in ev[5:].split(' ')) if len(x) >= 3]
+            if not toks or not all(x in words for x in toks):
+                return 'anchorUnresolved'
+        else:
+            return 'anchorUnresolved'
+        # 5. anchorPart
+        if a_part not in ANCHOR_PARTS:
+            return 'anchorPart'
+        # 6. the plain check of the row's own certificate (the disposition quote), with the target evidence taken
+        #    as given: hash, window, quote at offset, a cue of the kind, no disqualifier, part. (Date order and
+        #    authority are decided in the status layer, as for every history row.)
+        #    (round 7, DESIGN7 §3: a history claim changes this step's cue list or part rule, as in the plain check)
+        return self.check_cert(cert, [r['target'], r['by']], r['kind'], False, target=r['target'], hclaim=hclaim,
+                               by=r['by'], tbridge=tbridge)
+
+    def check_tbridge(self, r):
+        """Round 10 (round10/DESIGN10.md §6, D10-8, D10-9; Q10-15, Q10-16): after the anchored check of a
+        trialBridge row passed: trialBridgeT (T's quote from history_tbridge.tsv: a usable window of T's own text,
+        non-empty, <= tbridge_quote_max, holds a tbridge_cue phrase and no tbridge_negative phrase), then
+        trialBridgeDate (date(T) < date(D) <= date(T) + 1,826 days, court(T) != court(D); decisions2 raw values)."""
+        D = self.D
+        T, Dn = r['target'], r['by']
+        t = D.tbridge.get(r['id'])
+        if t is None or t[1] - t[0] > TBRIDGE_QUOTE_MAX:
+            return 'trialBridgeT'
+        q = self.node_span(T, t[0], t[1])
+        if q is None:
+            return 'trialBridgeT'
+        ql = ascii_lower(q)
+        if not any(c in ql for c in TBRIDGE_CUE) or any(x in ql for x in TBRIDGE_NEGATIVE):
+            return 'trialBridgeT'
+        if Dn is None or Dn < 0 or not D.has(Dn) or not D.has(T):
+            return 'trialBridgeDate'
+        dt, dd = day_number(D.date[T]), day_number(D.date[Dn])
+        if dt is None or dd is None or not (dt < dd <= dt + TBRIDGE_DAYS) or D.court[T] == D.court[Dn]:
+            return 'trialBridgeDate'
+        return 'ok'
+
+    def _cite_keys_of(self, node):
+        """Round 8: the compact keys of cite_index.tsv that the index maps to `node` (an ambiguous key, indexed to
+        two or more nodes, maps to none). Built once, with the set of key lengths used by check_bridge step 6."""
+        if getattr(self, '_keys_by_node', None) is None:
+            m = defaultdict(list)
+            for k, v in self.D.cite_index.items():
+                if v is not None:
+                    m[v].append(k)
+            self._keys_by_node = m
+            self._key_lens = sorted({len(k) for k in self.D.cite_index})
+        return self._keys_by_node.get(node, ())
+
+    def check_bridge(self, r, b, hclaim=None):
+        """Round 8 (round8/DESIGN8.md §4, `checkBridge`, D8-3): a history row (O = the acting decision `by`, X = the
+        target) with a line in history_bridge.tsv: a quote of a third decision W whose subsequent-history clause
+        cites X, then a cue of the row's kind, then O ("X, 123 F.3d 456 (5th Cir. 2015), cert. denied, 577 U.S.
+        1001"). Checks in the design's order, the first failure is the reason; no fall-back to the plain check.
+        Readings of what the design leaves open: round8/agents/ref8/REF_QUESTIONS8.md (Q8-n). Positions p1, p2 and
+        the position of O's citation are code-point offsets in the normalised, lower-cased quote; a compact
+        citation's position is that of its first character there (Q8-4)."""
+        D = self.D
+        w, s, e, bq = b[0], b[1], b[2], b[3]
+        q = norm_quote(bq)
+        # 1. bridgeMismatch: non-empty, b_start < b_end, b_end - b_start <= bridge_max_len, and the text at that
+        #    offset of a usable window (well formed, covering, hash-consistent) of W's own text (W's sha in
+        #    decisions2; a W with no decisions2 row has no text: Q8-3)
+        if not q or e <= s or e - s > BRIDGE_MAX_LEN or len(q) != e - s:
+            return 'bridgeMismatch'
+        wsha = D.sha.get(w) if D.has(w) else None
+        if wsha is None or not any(s0 <= s and e <= e0 and len(win) == e0 - s0 and hok
+                                   and norm_quote(win)[s - s0:e - s0] == q
+                                   for (s0, e0, win, hok) in D.cert_text.get(wsha, ())):
+            return 'bridgeMismatch'
+        # 2. bridgeDate: date(W) >= date(O), both from decisions2; a date of 0 (or an O with no decisions2 row,
+        #    by = -1 included) fails
+        O = r['by']
+        do = D.date[O] if (O is not None and O >= 0 and D.has(O)) else 0
+        dw = D.date[w]
+        if dw == 0 or do == 0 or dw < do:
+            return 'bridgeDate'
+        # 3. bridgeClause: one citation clause, no ';' in the normalised quote
+        if ';' in q:
+            return 'bridgeClause'
+        ql = ascii_lower(q)
+        comp, pos = [], []
+        for i, ch in enumerate(ql):
+            if '0' <= ch <= '9' or 'a' <= ch <= 'z':
+                comp.append(ch)
+                pos.append(i)
+        c = ''.join(comp)
+        # 4. bridgeTarget: the compact quote contains a compact citation the index maps to X; p1 = the first such
+        #    (without cite_index.tsv nothing maps to X: Q8-5)
+        if D.cite_index is None:
+            return 'bridgeTarget'
+        i1 = l1 = None                         # X's citation: compact index and length (longest key at i1)
+        for k in self._cite_keys_of(r['target']):
+            i = c.find(k)
+            if i >= 0 and (i1 is None or i < i1 or (i == i1 and len(k) > l1)):
+                i1, l1 = i, len(k)
+        if i1 is None:
+            return 'bridgeTarget'
+        p1 = pos[i1]
+        # 5. bridgeCue: after p1, a phrase of bridge_cue for the row's kind; p2 = the first such position > p1
+        p2 = None
+        for ph in BRIDGE_CUE.get(r['kind'], ()):
+            j = ql.find(ph, p1 + 1) if ph else -1
+            if j >= 0 and (p2 is None or j < p2):
+                p2 = j
+        if p2 is None:
+            return 'bridgeCue'
+        lens = self._key_lens
+        idx = D.cite_index
+
+        def keys_at(i):
+            # differential run 1 (01:39, Q8-16): a compact key indexed to two or more nodes is not a key of the
+            # index (the Lean drops it when the index is loaded), so it neither chains (5b) nor is a citation (6)
+            return [c[i:i + L] for L in lens if i + L <= len(c) and idx.get(c[i:i + L]) is not None]
+        # 5b. bridgeChain (D8-9): no index key (X's own keys included) starts between the end of X's citation
+        #     (compact index i1 + l1) and p2 (Q8-13)
+        for j in range(i1 + l1, len(c)):
+            if pos[j] >= p2:
+                break
+            if keys_at(j):
+                return 'bridgeChain'
+        # 6. bridgeActor: the first compact citation after p2 (lead ruling D8-9 on lean8's L8-6: the first compact
+        #    position after p2 at which some index key starts, taking the longest key starting there) is one the
+        #    index maps to O (Q8-6, Q8-16)
+        first = None
+        for i in range(len(c)):
+            if pos[i] <= p2:
+                continue
+            hits = keys_at(i)
+            if hits:
+                first = max(hits, key=len)
+                break
+        if first is None or idx[first] != O:
+            return 'bridgeActor'
+        # 7. the row's own check (plain, or with its history claims) with the target evidence taken as given
+        #    (selfText): hash, window, quote, cue, disqualifiers, part; date order is the caller's targetLater
+        #    test and authority the status layer's, as for every history row
+        return self.check_cert(r['cert'], [r['target'], r['by']], r['kind'], False, target=r['target'],
+                               hclaim=hclaim, by=r['by'])
+
+    def node_span(self, node, s, e):
+        """Round 10 (D10-6, Q10-2/3): the text [s, e) of `node`'s own text (its decisions2 sha), from the first
+        usable window in file order (well formed, covering, hash-consistent), normalised one for one (tab / CR / LF
+        -> space); None when the node has no row, the span is empty, or no usable window covers it."""
+        D = self.D
+        if e <= s or not D.has(node):
+            return None
+        sha = D.sha.get(node)
+        if sha is None:
+            return None
+        for (s0, e0, win, hok) in D.cert_text.get(sha, ()):
+            if s0 <= s and e <= e0 and len(win) == e0 - s0 and hok:
+                return norm_quote(win)[s - s0:e - s0]
+        return None
+
+    def check_remand(self, r, m):
+        """Round 10 (round10/DESIGN10.md §4, D10-5, D10-6; `remandBridge`): a history row (order O = `by`, target X)
+        with a line of history_remand.tsv naming the remand decision B, B's quote [b_start, b_end), a docket token,
+        a span of B's text and a span of X's text holding the docket. Checks in the design's order, the first
+        failure is the reason; 'ok' when all pass."""
+        D = self.D
+        B, bs, be, docket, ds, de, ts, te, tie, os_, oe = m
+        O, X = r['by'], r['target']
+        # 1a. remandCourt: decisions2 raw court ids of B and X equal; a missing row fails
+        if not D.has(B) or not D.has(X) or D.court[B] != D.court[X]:
+            return 'remandCourt'
+        # 1b. remandDate: date(O) <= date(B) <= date(O) + 1,826 calendar days, date(X) < date(O); 0 / missing /
+        #     non-calendar dates fail
+        if O is None or O < 0 or not D.has(O):
+            return 'remandDate'
+        do, db, dx = day_number(D.date[O]), day_number(D.date[B]), day_number(D.date[X])
+        if do is None or db is None or dx is None or not (do <= db <= do + REMAND_DAYS) or not dx < do:
+            return 'remandDate'
+        # 2. remandDocket: compact(docket) >= 4 chars with a digit, inside compact(B span) and compact(X span); each
+        #    span non-empty, <= remand_docket_span_max, from a usable window of that node's own text
+        dk = alnum(docket)
+        if len(dk) < 4 or not any('0' <= ch <= '9' for ch in dk):
+            return 'remandDocket'
+        if de - ds > REMAND_DOCKET_SPAN_MAX or te - ts > REMAND_DOCKET_SPAN_MAX:
+            return 'remandDocket'
+        bsp, tsp = self.node_span(B, ds, de), self.node_span(X, ts, te)
+        if bsp is None or tsp is None or dk not in alnum(bsp) or dk not in alnum(tsp):
+            return 'remandDocket'
+        # 3. remandCue: B's quote (usable window, <= remand_quote_max) holds "supreme court" and a remand_cue phrase
+        if be - bs > REMAND_QUOTE_MAX:
+            return 'remandCue'
+        q = self.node_span(B, bs, be)
+        if q is None:
+            return 'remandCue'
+        ql = ascii_lower(q)
+        if not any(c in ql for c in REMAND_COURT) or not any(c in ql for c in REMAND_CUE):
+            return 'remandCue'
+        # 4. remandTie (D10-7): (a) an index key mapping to O inside compact(B quote); (c) a date form of date(O)
+        #    inside the lower-cased B quote; (c2) a span of O's own text (non-empty, <= remand_order_span_max, usable
+        #    window) holding "in light of", and compact(tie) (>= remand_tie_min chars) inside compact(O span) and
+        #    compact(B quote). Tie (b) (B's docket in B's quote) is dropped.
+        cq = alnum(ql)
+        if D.cite_index is not None and any(k in cq for k in self._cite_keys_of(O)):
+            return 'ok'
+        if any(f in ql for f in date_forms(D.date[O])):
+            return 'ok'
+        ck = alnum(tie)
+        if len(ck) >= REMAND_TIE_MIN and ck in cq and oe - os_ <= REMAND_ORDER_SPAN_MAX:
+            osp = self.node_span(O, os_, oe)
+            if osp is not None:
+                ol = ascii_lower(osp)
+                if any(c in ol for c in REMAND_ORDER_CUE) and ck in alnum(ol):
+                    return 'ok'
+        return 'remandTie'
+
+    def check_identity(self, r, m):
+        """Round 11 (round11/DESIGN11.md §5.2, D11-5; `identityTie`): a history row (acting D = `by`, target T) with
+        a line of history_identity.tsv: a span of D's own text and a span of T's own text (each non-empty, <=
+        identity_span_max, from a usable window of that node's text, normalised one for one, ASCII lower-cased)
+        hold the identity token: docket / cite: compact(token) >= 4 characters with a digit, inside both compact
+        spans; date: the token is yyyymmdd = date(T) (0 / missing fails) and both spans hold a date form of it."""
+        D = self.D
+        form, token, ds, de, ts, te = m
+        Dn, T = r['by'], r['target']
+        if de - ds > IDENTITY_SPAN_MAX or te - ts > IDENTITY_SPAN_MAX:
+            return 'identityTie'
+        if Dn is None or Dn < 0:
+            return 'identityTie'
+        dsp, tsp = self.node_span(Dn, ds, de), self.node_span(T, ts, te)
+        if dsp is None or tsp is None:
+            return 'identityTie'
+        if form in ('docket', 'cite'):
+            k = alnum(token)
+            if len(k) < 4 or not any('0' <= ch <= '9' for ch in k):
+                return 'identityTie'
+            return 'ok' if (k in alnum(dsp) and k in alnum(tsp)) else 'identityTie'
+        # date (REF_QUESTIONS11 Q11-7: the token is exactly eight ASCII digits)
+        if not (len(token) == 8 and _NAT_RX.match(token)) or not D.has(T) or not D.date[T]:
+            return 'identityTie'
+        if int(token) != D.date[T]:
+            return 'identityTie'
+        forms = date_forms(D.date[T])
+        dl, tl = ascii_lower(dsp), ascii_lower(tsp)
+        if not forms or not any(f in dl for f in forms) or not any(f in tl for f in forms):
+            return 'identityTie'
         return 'ok'
 
     def check_witness(self, r, W, by_ev):
@@ -1234,32 +2199,353 @@ class Engine:
             return 'witnessNoStanding'
         return 'ok'
 
+    # ---------------------------------------------------------------- round 5 (DESIGN5 §2, §3, §5)
+    def _recog_text(self, r, W, by_ev):
+        """DESIGN5 §2.2, the parts of the recognised check that no rule set changes: the row is a well-formed
+        witness row (witnessBadRow), the text checks pass in recognised text mode for the target evidence and for
+        the by-evidence (cue of the list `recognised`, no phrase of `disqualify_recognised`, X and Y both named in
+        the quote itself, a majority part), and (step 4) the two pieces of evidence differ once compacted."""
+        D = self.D
+        X, Y = r['target'], r['by']
+        if not D.has(W) or r['explicit'] != 0 or r['kind'] not in NEG_TREAT:
+            return False
+        c = r['cert']
+        if self.check_cert(c, [W], r['kind'], True, target=X, mode='recognised') != 'ok':
+            return False
+        c2 = Cert([c.sha, str(c.start), str(c.end), c.quote, by_ev, c.part])
+        if self.check_cert(c2, [W], r['kind'], True, target=Y, mode='recognised') != 'ok':
+            return False
+        return alnum(by_ev[5:]) != alnum((c.tev or '')[5:])
+
+    def _scope_dom(self, scope):
+        """The issue domain a row's scope names: the one domain of its `issues:` keys, else unknown. (The round-4
+        certificate verdicts ok / okUnverifiedBy / noAuthority of the regression outputs are can_change on this
+        domain; NOTES.md A-6.)"""
+        if scope.startswith('issues:'):
+            ds = {self.domain_of(x) for x in scope[7:].split(',') if x}
+            if len(ds) == 1:
+                return ds.pop()
+        return 'unknown'
+
+    def _recog_rules(self, r, W):
+        """DESIGN5 §2.2, the parts that depend on the rule set: date order X <= Y <= W with all three dates known
+        (targetLater, witnessEarlier, step 3), W's power over X on every domain the issue could have (step 2; it
+        implies the round-4 standing test), and Y's power over X not shown absent (noAuthority). -> the verdict
+        string, or None (not recognised under this rule set: the verdict is the round-4 one)."""
+        D = self.D
+        X, Y = r['target'], r['by']
+        dx, dy, dw = D.date[X], D.date[Y], D.date[W]
+        if dx == 0 or dy == 0 or dw == 0 or dy < dx or dw < dy:
+            return None
+        if self.can_change(W, X, 'unknown')[0] != 'yes':
+            return None
+        pw = self.can_change(Y, X, self._scope_dom(r['scope']))[0]
+        if pw == 'no':
+            return None
+        return 'okRecognised' if pw == 'yes' else 'okRecognisedUnverifiedBy'
+
+    def _build_recog(self):
+        """The rows recognised under this rule set (the text part is shared; the firm run decides its own)."""
+        D = self.D
+        self.recog = {}
+        self.recog_by_target = defaultdict(list)
+        for r in D.treatments:
+            if not self.recog_text.get(r['id']):
+                continue
+            W = D.witness[r['id']][0]
+            v = self._recog_rules(r, W)
+            if v:
+                self.recog[r['id']] = v
+                self.recog_by_target[r['target']].append((r, W))
+
+    def check_operative(self, r):
+        """DESIGN5 §3.2: a non-witness row with an operativeWords claim. No fallback to the round-4 check."""
+        if r['kind'] != 'disapproved' or r['explicit'] != 1:
+            return 'operativeBadRow'
+        return self.check_cert(r['cert'], [r['by']], r['kind'], True, target=r['target'], mode='operative')
+
+    def _build_classes(self):
+        """DESIGN5 §5: one class per treatments row of a status-changing kind, from the full rule set."""
+        for r in self.D.treatments:
+            if r['kind'] not in NEG_TREAT:
+                continue
+            if r['id'] in self.recog_all:
+                c = 'recognised'
+            elif r['explicit'] != 1:
+                c = 'atRiskWitness'
+            elif self._doctrine_claim(r):
+                c = 'doctrine'       # round 7 (DESIGN7 §2.4; lead ruling D7-6 (9))
+            elif any(p in ascii_lower(norm_quote(r['cert'].quote)) for p in SELF_ANNOUNCED):
+                c = 'selfAnnounced'
+            else:
+                c = 'operativeWords'
+            self.row_class[r['id']] = c
+
+    def _doctrine_claim(self, r):
+        """Round 7 (lead ruling D7-6 (9)): the row is of class `doctrine`: a class line with claim `doctrine`, kind
+        `disapproved`, explicit = 1, whatever its verdict."""
+        D = self.D
+        return (D.r5 and r['id'] in D.klass and D.klass[r['id']][0] == 'doctrine' and r['kind'] == 'disapproved'
+                and r['explicit'] == 1)
+
+    def _plain(self, tid):
+        """The round-4 certificate result of a treatments row, which is what a `laterCourtSays:<id>` supersession
+        needs (DESIGN5 §9, ruling on A-21): a recognised verdict does not count, and for a row with an
+        operativeWords claim it is the plain check, not the operative one. Without the class table: cert_ok."""
+        v = self.cert_plain.get(tid)
+        return v if v is not None else self.cert_ok.get(('treatments.tsv', tid))
+
+    def cert_verdict(self, table, rid):
+        """The verdict string of certs.tsv and classes.tsv: round 4's, or the recognised verdict (full rule set)."""
+        if table == 'treatments.tsv' and rid in self.recog_all:
+            return self.recog_all[rid]
+        return self.cert_ok.get((table, rid))
+
+    def zone_result(self, owner, r, jl):
+        """Round 9 (round9/DESIGN9.md §4, `checkPartZone`; readings D9-4): None when the text owner `owner` (the node
+        whose text the main quote is from: `by`, the witness W, or the target for a history row certified from the
+        target's own text) has no kept zone; else whether the main quote [start, end) lies inside one zone
+        (z_start <= start, end <= z_end) whose part equals the row's `part`, and every joined line's quote likewise
+        with its `j_part` (same text owner)."""
+        z = self.D.zones.get(owner)
+        if not z:
+            return None
+        c = r['cert']
+        spans = [(c.start, c.end, c.part)] + [(l[1], l[2], l[4]) for l in (jl or ())]
+        return all(any(zs <= s and e <= ze and zp == p for (zs, ze, zp) in z) for (s, e, p) in spans)
+
+    def lean_cert_passes(self, table, r):
+        """Round 9 (D9-4 (2)): does the row pass the checks the Lean runner makes after the text checks, which the
+        reference otherwise leaves to the status layer? (A row it fails is the Lean's `targetLater` or
+        `noAuthority`, canonically a passed certificate, and is not zone-checked.) Measured against the stored
+        round-8 Lean outputs (round9/agents/ref9/powercheck.py): a treatments row is `targetLater` when date(by) <
+        date(target), both known (a witness row: date(Y) < date(X), as check_witness), and `noAuthority` when its
+        kind changes status and can_change(by, target, scope domain) is no; a history row is `noAuthority` when
+        same_case_power(by, target, claims) is no (its targetLater is the reference's own verdict already)."""
+        D = self.D
+        b, t = r['by'], r['target']
+        if table == 'history':
+            return self.same_case_power(b, t, D.hclaim.get(r['id'])) != 'no'
+        if r['id'] in D.witness:
+            if D.date[b] < D.date[t]:
+                return False
+        elif D.date[b] and D.date[t] and D.date[b] < D.date[t]:
+            return False
+        return r['kind'] not in NEG_TREAT or self.can_change(b, t, self._scope_dom(r['scope']))[0] != 'no'
+
+    def zone_apply(self, res, zr, passes=True, key=None):
+        """Round 9: a row whose complete round-8 verdict is `ok` (D9-4 (2): `passes` = also past the Lean's date
+        order and power checks) and whose zone result is False becomes `partZone`; counts the rows that reach the
+        check (zone_missing_rows: no kept zone of the text owner). D9-13: a row the Lean writes targetLater /
+        noAuthority (passes False; the reference's `ok`) keeps that verdict, but when its quote fails the zone test
+        it feeds no findings: `key` (table, id) goes to zone_mute and the row is not put in the admitted views."""
+        if res != 'ok':
+            return res
+        if not passes:
+            if zr is False and key is not None:
+                self.zone_mute.add(key)
+            return res
+        return self.zone_count(zr)
+
+    def zone_count(self, zr):
+        if zr is None:
+            self.zone_missing += 1
+            return 'ok'
+        self.zone_checked += 1
+        if zr:
+            return 'ok'
+        self.zone_failed += 1
+        return 'partZone'
+
     def admit(self):
         """Run every certificate check once; build the admitted views used by status/findings/splits."""
         D = self.D
+        self.zone_fail = set()     # round 9: recognised rows failing the zone check (D9-4 (3))
+        self.zone_missing = self.zone_checked = self.zone_failed = 0
+        self.zone_mute = set()     # round 9 (D9-13): (t|h, id) of rows kept at targetLater / noAuthority whose zone fails
+        self.remand_checked = self.remand_failed = 0    # round 10 (DESIGN10 §4)
+        self.remand_mute = set()   # round 10 (Q10-10): (h, id) of rows kept at noAuthority whose remand check fails
+        # (round 11, DESIGN11 §5.2: also those whose identity check fails)
+        self.identity_checked = self.identity_failed = 0
+        results = []         # [row, verdict] of every treatments row, in file order
+        doctrine_rows = []   # round 7: ([row, verdict], compact labels of its doctrineTie lines) per doctrine row
         for r in D.treatments:
             wit = D.witness.get(r['id'])
-            if wit is not None and D.has(r['by']) and D.has(r['target']):
-                res = self.check_witness(r, wit[0], wit[1])
+            claim = D.klass[r['id']][0] if (D.r5 and r['id'] in D.klass) else None
+            jl = D.joined.get(r['id'])
+            if claim == 'doctrine':
+                # round 7 (DESIGN7 §2.4): doctrineBadRow first; then checkJoined in doctrine mode. Lead ruling D7-6
+                # (2): a doctrine claim on a witness row fails doctrineBadRow (its joined lines were ignored at
+                # load, D7-6 (1)). (3): the labels are the joined lines' `label` column, compacted.
+                labels = frozenset(alnum(l[5]) for l in (jl or ()) if l[0] == 'doctrineTie')
+                if wit is not None or r['kind'] != 'disapproved' or r['explicit'] != 1 or not labels:
+                    res = 'doctrineBadRow'
+                else:
+                    res = self.check_joined(r, jl, 'doctrine')
+            elif claim == 'implicitReject' and r['kind'] not in SOFT_TREAT:
+                res = 'implicitBadKind'            # round 9 (DESIGN9 §7; Q9-16): only a soft kind takes the claim
+            elif wit is not None and D.has(r['by']) and D.has(r['target']):
+                res = self.check_witness(r, wit[0], wit[1])   # (round 7: its joined lines were ignored at load)
+            elif jl and wit is None:
+                # round 7 (DESIGN7 §2.1): a row with joined lines; no fall-back to the one-quote check
+                res = self.check_joined(r, jl, 'operative' if claim == 'operativeWords' else None,
+                                        far=claim == 'joinedFar', implicit=claim == 'implicitReject')
+                if claim == 'operativeWords':
+                    plain = self.check_cert(r['cert'], [r['by']], r['kind'], True, target=r['target'])
+            elif claim == 'operativeWords' and wit is None:
+                res = self.check_operative(r)      # round 5: a claim on a witness row is ignored (DESIGN5 §1)
+                plain = self.check_cert(r['cert'], [r['by']], r['kind'], True, target=r['target'])
             else:
-                res = self.check_cert(r['cert'], [r['by']], r['kind'], True, target=r['target'])
+                res = self.check_cert(r['cert'], [r['by']], r['kind'], True, target=r['target'],
+                                      extra_cues=IMPLICIT_REJECT if claim == 'implicitReject' else ())
             # fuzz: a row naming an unknown kind or temporal value, or a node with no decisions2 row, asserts
             # nothing (Lean: badRow); it was admitted when only the target's decision was missing, and an empty
             # temporal read as 'unknown'
             if (r['kind'] not in _TKINDS or not _temporal_ok(r['temporal_raw']) or not D.has(r['by'])
                     or not D.has(r['target'])):
                 res = 'badRow'
+            rtext = None
+            if claim == 'recognised' and wit is not None and D.has(r['by']) and D.has(r['target'])                     and res != 'badRow':
+                rtext = self._recog_text(r, wit[0], wit[1])
+            if D.zone_any:
+                # round 9 (DESIGN9 §4, D9-4): the zone check after the complete round-8 verdict; the text owner is
+                # W for a witness row, else `by`; a doctrine row after the ambiguity pass below; a row recognised
+                # under the full rule set (round-8 verdict okRecognised*) is checked as such and, failing, is
+                # `partZone` and not recognised; the plain check of an operativeWords row likewise (not counted)
+                zr = self.zone_result(wit[0] if wit is not None else r['by'], r, jl)
+                if claim == 'doctrine':
+                    pass
+                elif rtext and self._recog_rules(r, wit[0]) is not None:
+                    if self.zone_count(zr) == 'partZone':
+                        self.zone_fail.add(r['id'])
+                        res = 'partZone'
+                else:
+                    res = self.zone_apply(res, zr, self.lean_cert_passes('treatments', r), ('t', r['id']))
+                if (claim == 'operativeWords' and wit is None and plain == 'ok' and zr is False
+                        and self.lean_cert_passes('treatments', r)):
+                    plain = 'partZone'
             self.cert_ok[('treatments.tsv', r['id'])] = res
             self.treat_by_id[r['id']] = r
-            if res == 'ok':
+            entry = [r, res]
+            results.append(entry)          # (admitted after the round-7 uniqueness pass, in this order)
+            if claim == 'doctrine' and res != 'badRow':
+                doctrine_rows.append((entry, labels))
+            if claim is not None and res != 'badRow':
+                # round 5: a recognised claim counts only on a witness row, an operativeWords claim only on a
+                # non-witness row (DESIGN5 §1); a row that does not parse makes no claim
+                if claim == 'recognised' and wit is not None and D.has(r['by']) and D.has(r['target']):
+                    # (round 9, Q9-4: a witness row failing its zone check is not recognised)
+                    self.recog_text[r['id']] = bool(rtext) and r['id'] not in self.zone_fail
+                elif claim == 'operativeWords' and wit is None:
+                    self.cert_plain[r['id']] = plain   # the round-4 check, for laterCourtSays (ruling on A-21)
+                    if res == 'ok':
+                        self.op_admitted.add(r['id'])
+                        ql = ascii_lower(norm_quote(r['cert'].quote))
+                        # §3.3 and §9: `whole` = a phrase of operative_whole AND no phrase of operative_limit
+                        if not any(p in ql for p in OPERATIVE_WHOLE) or any(p in ql for p in OPERATIVE_LIMIT):
+                            self.demoted.add(r['id'])      # not whole: the scope is demoted
+        if doctrine_rows:
+            # round 7 (DESIGN7 §2.4, doctrineAmbiguous): after every doctrine row is checked, a compact label that
+            # two passing rows share with different targets makes every doctrine row with that label fail. Q7-11:
+            # "pass" = the certificate verdict `ok` (power and date order are the status layer's, as for every
+            # treatments row); a row that already failed keeps its own reason; a row's labels are those of its
+            # doctrineTie lines.
+            targets = defaultdict(set)
+            for (entry, labels) in doctrine_rows:
+                if entry[1] == 'ok':
+                    for lb in labels:
+                        targets[lb].add(entry[0]['target'])
+            amb = {lb for lb, ts in targets.items() if len(ts) > 1}
+            for (entry, labels) in doctrine_rows:
+                # (differential run 1, Q7-11: the row fails; when its acting decision has no power over the target
+                # the reason shown is the Lean's noAuthority, which outranks doctrineAmbiguous; either way the row
+                # is not admitted)
+                if entry[1] == 'ok' and labels & amb:
+                    v = 'noAuthority' if self.can_change(entry[0]['by'], entry[0]['target'],
+                                                         self._scope_dom(entry[0]['scope']))[0] == 'no'                         else 'doctrineAmbiguous'
+                    entry[1] = v
+                    self.cert_ok[('treatments.tsv', entry[0]['id'])] = v
+            if D.zone_any:
+                # round 9 (DESIGN9 §4, Q9-3): the zone check of a doctrine row comes after the ambiguity pass
+                for (entry, labels) in doctrine_rows:
+                    v = self.zone_apply(entry[1], self.zone_result(entry[0]['by'], entry[0],
+                                                                   D.joined.get(entry[0]['id'])),
+                                        self.lean_cert_passes('treatments', entry[0]), ('t', entry[0]['id']))
+                    if v != entry[1]:
+                        entry[1] = v
+                        self.cert_ok[('treatments.tsv', entry[0]['id'])] = v
+            for (entry, labels) in doctrine_rows:
+                if entry[1] == 'ok':
+                    self.demoted.add(entry[0]['id'])   # always demoted: at most a partial scope, never negative
+        for (r, res) in results:
+            if res == 'ok' and ('t', r['id']) not in self.zone_mute:      # (round 9, D9-13)
                 self.adm_treat[r['target']].append(r)
         for r in D.history:
-            own_text = D.sha.get(r['target']) == r['cert'].sha
-            res = self.check_cert(r['cert'], [r['target'], r['by']], r['kind'], not own_text, target=r['target'])
+            anc = D.anchor.get(r['id'])
+            hc = D.hclaim.get(r['id'])                 # round 7 (DESIGN7 §3): the row's history claims, if any
+            brg = D.bridge.get(r['id'])
+            if brg is not None:
+                # round 8 (DESIGN8 §4): a row with a bridge line is checked by checkBridge, whose last step is the
+                # plain check with selfText; an anchor line of the same row is not used (Q8-2)
+                res = self.check_bridge(r, brg, hc)
+            elif anc is not None and hc and 'trialBridge' in hc and r['kind'] in TBRIDGE_KINDS:
+                # round 10 (DESIGN10 §6, D10-8, D10-9; Q10-12, Q10-13): the anchored check with trialBridgeD in the
+                # cue's place, then trialBridgeT, then trialBridgeDate (a claim on any other row is ignored)
+                res = self.check_anchored(r, anc, hc, tbridge=True)
+                if res == 'ok':
+                    res = self.check_tbridge(r)
+            elif anc is not None:
+                res = self.check_anchored(r, anc, hc)  # round 6 (DESIGN6 §4): a row with an anchor line
+            else:
+                own_text = D.sha.get(r['target']) == r['cert'].sha
+                res = self.check_cert(r['cert'], [r['target'], r['by']], r['kind'], not own_text,
+                                      target=r['target'], hclaim=hc, by=r['by'])
             if r['kind'] not in _HKINDS or not D.has(r['target']):    # fuzz: as Lean's badRow
                 res = 'badRow'
+            # round 6, lead ruling on D-1 (round6/history/REF_QUESTIONS.md section C): date order is part of the
+            # check of every history row (DESIGN6 §4 step 6): a target dated after the acting decision is
+            # `targetLater` (a passed text certificate, canonically) and has no effect. A date of 0 is unknown and
+            # counts as ordered; so does an unknown acting decision (by = -1).
+            if (res == 'ok' and r['by'] >= 0 and D.has(r['by']) and D.date[r['by']] and D.date[r['target']]
+                    and D.date[r['by']] < D.date[r['target']]):
+                res = 'targetLater'
+            if D.zone_any:
+                # round 9 (DESIGN9 §4, D9-4): the main quote only (an anchor or bridge quote is not checked); the
+                # text owner is the target when the certificate is the target's own text (as the plain check's
+                # own_text), else the acting decision
+                owner = r['target'] if D.sha.get(r['target']) == r['cert'].sha else r['by']
+                res = self.zone_apply(res, self.zone_result(owner, r, None), self.lean_cert_passes('history', r),
+                                      ('h', r['id']))
+            rm = D.remand.get(r['id'])
+            if rm is not None and res == 'ok':
+                # round 10 (DESIGN10 §4, D10-6): after the complete round-9 verdict. A row the Lean admits (power
+                # not `no`) is checked and counted; a failure is its reason. A row the Lean writes noAuthority (the
+                # reference's ok) keeps its verdict, is not counted, and feeds no findings when the check fails
+                # (Q10-10, as D9-13).
+                rr = self.check_remand(r, rm)
+                if self.lean_cert_passes('history', r):
+                    self.remand_checked += 1
+                    if rr != 'ok':
+                        self.remand_failed += 1
+                        res = rr
+                elif rr != 'ok':
+                    self.remand_mute.add(('h', r['id']))
+            idl = D.identity.get(r['id'])
+            if idl is not None and res == 'ok' and ('h', r['id']) not in self.remand_mute:
+                # round 11 (DESIGN11 §5.2, D11-5): after the complete round-10 verdict, as the remand check: a row
+                # the Lean admits is checked and counted, a failure is its reason; a row the Lean writes
+                # noAuthority keeps its verdict, is not counted, and feeds no findings when the check fails.
+                ri = self.check_identity(r, idl)
+                if self.lean_cert_passes('history', r):
+                    self.identity_checked += 1
+                    if ri != 'ok':
+                        self.identity_failed += 1
+                        res = ri
+                elif ri != 'ok':
+                    self.remand_mute.add(('h', r['id']))
             self.cert_ok[('history.tsv', r['id'])] = res
-            if res == 'ok':
+            if (res == 'ok' and ('h', r['id']) not in self.zone_mute               # (round 9, D9-13)
+                    and ('h', r['id']) not in self.remand_mute):                    # (round 10, Q10-10)
                 self.adm_hist[r['target']].append(r)
         for h in D.holdings.values():
             res = self.check_cert(h['cert'], [h['node']], None, False, require_verb=False)
@@ -1274,19 +2560,30 @@ class Engine:
             ev = s['evidence']
             if ev.startswith('laterCourtSays:'):
                 self.linked_treat.add(ev.split(':', 1)[1])
+        if D.r5:
+            self._build_recog()
+            self.recog_all.update(self.recog)
+            self._build_classes()
 
     def share_admission(self, other):
         for a in ('cert_ok', 'adm_hist', 'adm_treat', 'treat_by_id', 'adm_holdings', 'adm_holdings_by_node',
-                  'sup_by_target', 'linked_treat'):
+                  'sup_by_target', 'linked_treat', 'recog_text', 'recog_all', 'row_class', 'demoted',
+                  'op_admitted', 'cert_plain'):
             setattr(self, a, getattr(other, a))
+        if self.D.r5:
+            self._build_recog()     # round 5: recognition is decided per rule set (DESIGN5 §2.2)
 
-    def same_case_power(self, B, X):
+    def same_case_power(self, B, X, claims=None):
         """R25 (§5.1 A, T1(a), H3, F1). A same-case event acts on X's own judgment or opinion, so it is decided by
         X's court itself (withdrawal, substitution, rehearing, reinstatement: any bench), a successor of X's court,
         a court that reviews X: a higher court of X's system (in the federal system, X's own circuit, or the
         Federal Circuit, which hears appeals from every district court and the Court of Federal Claims), or SCOTUS
         (federal decisions, and state decisions on federal questions). -> 'yes' | 'no' | 'unknown' (deciding
-        decision or an epoch unknown: admitted, like a row with by = -1)."""
+        decision or an epoch unknown: admitted, like a row with by = -1).
+        claims (round 8, DESIGN8 §6): the history row's claims; with `oldCircuit` a federal court of appeals of
+        circuit a also reviews a federal district (tier T) or bankruptcy (tier S) court of circuit b when the acting
+        decision is dated (decisions2, 0 fails) before d, for each (a, b, d) of `old_circuit` (REF_QUESTIONS8 Q8-14).
+        Without the claim the test is the round-7 one."""
         D = self.D
         if B is None or B < 0 or not D.has(B) or not D.has(X):
             return 'unknown'
@@ -1314,11 +2611,16 @@ class Engine:
             if (be.system != 0 and be.tier != 'S') or (
                     be.system == 0 and be.tier == 'A' and (be.circuit == 13 or be.circuit == xe.circuit != 0)):
                 return 'yes'
+        if (claims and 'oldCircuit' in claims and be.system == 0 and xe.system == 0 and be.tier == 'A'
+                and xe.tier in ('T', 'S') and D.date[B] != 0
+                and any(be.circuit == a and xe.circuit == b and D.date[B] < d for (a, b, d) in OLD_CIRCUIT)):
+            return 'yes'          # round 8 (DESIGN8 §6): the old Fifth / Eighth Circuit, claim-gated
         return 'no'
 
     def hist_rows(self, node):
         """Admitted same-case history of `node` (certificate passed) whose deciding court may act on it (R25)."""
-        return [r for r in self.adm_hist.get(node, ()) if self.same_case_power(r['by'], node) != 'no']
+        return [r for r in self.adm_hist.get(node, ())
+                if self.same_case_power(r['by'], node, self.D.hclaim.get(r['id'])) != 'no']
 
     # ---------------------------------------------------------------- status (§5, §6, §7, §8.2; D5)
     def keyset_for(self, node, holding_id):
@@ -1362,7 +2664,8 @@ class Engine:
         # prospectivity) for state law; a prospective overruling must say so (TM2 detection phrases)
         return [(0, OPEN, None)]
 
-    def effects(self, node, keyset):
+    def _hist_effects(self, node, keyset):
+        """Part A of `effects`: the same-case history effects, before empty intervals are dropped."""
         D = self.D
         E = []   # [start, end, cfrom, cto, status, kind, by, dep]
         # A. same-case history (§5.1 A, F4, F8, TM3, S-CA)
@@ -1408,35 +2711,72 @@ class Engine:
             elif app in ('unknownScope', 'otherGrounds'):
                 status, kind = UNK, app + ':' + k
             E.append([dt, OPEN, 0, OPEN, status, kind, str(r['by']), None])
+        return E
+
+    def _app_power(self, r, node, keyset):
+        """How a status-changing treatment row reaches an issue set of `node`, and the treating decision's power
+        there: (scope_applies value, issue domain, can_change result), or None when the scope does not reach it."""
+        B = r['by']
+        app = self.scope_applies(r['scope'], keyset)
+        if app == 'none':
+            return None
+        if keyset:
+            dom = self.domain_of(next(iter(keyset)))
+            pw = self.can_change(B, node, dom)
+        elif r['scope'].startswith('issues:'):
+            # T1(b): power over each issue the treatment names, on that issue's domain; the anonymous
+            # issue is reached (partially) if power over some named issue is shown (D4 triage)
+            ds = {self.domain_of(x) for x in r['scope'][7:].split(',') if x}
+            dom = ds.pop() if len(ds) == 1 else 'unknown'
+            pws = [self.can_change(B, node, self.domain_of(x)) for x in r['scope'][7:].split(',') if x]
+            pw = next((p for p in pws if p[0] == 'yes'), None) or next(
+                (p for p in pws if p[0] == 'unknown'), None) or (pws[0] if pws else ('no', 'T2.noIssue'))
+        else:
+            dom = 'unknown'
+            pw = self.can_change(B, node, dom)
+        return app, dom, pw
+
+    def _first_lapse(self, B, frm):
+        """Round 5 (DESIGN5 §2.3 and §9, ruling on A-14): the date of the earliest lapse event of decision B dated
+        on or after `frm` (whole-decision withdrawn, vacated, substituted, depublished or reversed, or an en banc
+        grant that vacates under B's own court's rule; the events of R15); OPEN when there is none. An event dated
+        before `frm` is ignored, even if nothing reinstated B since. An event undone on its own day (an empty
+        interval) is not a lapse."""
+        self._overruler_lapsed(B, 0)
+        return min([e[0] for e in self._tl[('lapse', B)] if e[0] >= frm] or [OPEN])
+
+    def _tdate(self, r):
+        """The event date of a treatments row: the by-decision's decisions2 date (0 = unknown)."""
+        B = r['by']
+        return self.D.date[B] if self.D.has(B) else 0
+
+    def effects(self, node, keyset):
+        D = self.D
+        E = self._hist_effects(node, keyset)
         # B. later-case treatments (§5.1 B, T1, T2, T3, F14, TM2)
-        for r in sorted(self.adm_treat.get(node, ()), key=lambda r: (r['date'], str(r['id']))):
+        # DESIGN5 §9 (ruling on A-7): the event date of every treatments row is the by-decision's decisions2 date; the
+        # row's own date column is never used. (Before round 5 it was used when non-zero. The two agree in every
+        # universe generated before round 5 and on the real data, so no earlier output changes.)
+        for r in sorted(self.adm_treat.get(node, ()), key=lambda r: (self._tdate(r), str(r['id']))):
             k = r['kind']
             B = r['by']
-            dt = r['date'] or (D.date[B] if D.has(B) else 0)
+            dt = self._tdate(r)
             if dt == 0:
                 continue
             if k in NEG_TREAT:
-                app = self.scope_applies(r['scope'], keyset)
-                if app == 'none':
+                ap = self._app_power(r, node, keyset)
+                if ap is None:
                     continue
-                if keyset:
-                    dom = self.domain_of(next(iter(keyset)))
-                    pw = self.can_change(B, node, dom)
-                elif r['scope'].startswith('issues:'):
-                    # T1(b): power over each issue the treatment names, on that issue's domain; the anonymous
-                    # issue is reached (partially) if power over some named issue is shown (D4 triage)
-                    ds = {self.domain_of(x) for x in r['scope'][7:].split(',') if x}
-                    dom = ds.pop() if len(ds) == 1 else 'unknown'
-                    pws = [self.can_change(B, node, self.domain_of(x)) for x in r['scope'][7:].split(',') if x]
-                    pw = next((p for p in pws if p[0] == 'yes'), None) or next(
-                        (p for p in pws if p[0] == 'unknown'), None) or (pws[0] if pws else ('no', 'T2.noIssue'))
-                else:
-                    dom = 'unknown'
-                    pw = self.can_change(B, node, dom)
+                app, dom, pw = ap
                 if pw[0] == 'no':
                     continue                 # T2: a claim, not a status change (kept for findings)
                 if r['explicit'] != 1:
                     continue                 # R26 (§9.26): an inferred treatment never proves status (atRisk only)
+                if self.r5 and app == 'full' and r['id'] in self.demoted:
+                    # round 5 (DESIGN5 §3.3): operative words without a whole-case phrase. The event's scope is
+                    # demoted (all -> someIssue, issues ks -> someOf ks): the whole decision is reached in part,
+                    # a holding in scope is reached or not, unknown which. Never a negative.
+                    app = 'partial' if keyset is None else 'unknownScope'
                 status, kind = 'negative', k
                 if pw[0] == 'unknown':
                     status, kind = UNK, 'power:' + pw[1]
@@ -1454,10 +2794,45 @@ class Engine:
                 reach = self._reach(node, B, dt)   # H4
                 for (cf, ct, ov) in self.temporal_ranges(r['temporal'], dt, dom):
                     st, kd = (ov if (ov and status == 'negative') else (status, kind))
-                    E.append([dt, OPEN, cf, ct, st, kd, str(B), (B, depkeys), reach])
+                    eff = [dt, OPEN, cf, ct, st, kd, str(B), (B, depkeys), reach]
+                    if self.r5:
+                        eff.append(self.row_class.get(r['id']))   # element 9: the row's class (DESIGN5 §5.1)
+                    E.append(eff)
             # R27 (c): a supersededByEnactment *treatment* is evidence, not the event (T1(d): legislation changes
             # status). Without a supersessions row joining it to a law change there is no effective date, no
             # retroactivity and no amended block (AB1), so it changes nothing; with one, that row carries it.
+        # B2. round 5 (DESIGN5 §2.3, R5-3): a witness row recognised under this rule set. For each event an
+        # explicit row by Y with the same scope would yield here (same reach of the issue set, same power test,
+        # same conduct range, same lines), two effects with actor Y: e1 from date(Y), `unknown recognisedLater`
+        # (power known) until Y first lapses; e2 from date(W), the negative of the row's kind, until Y or W first
+        # lapses. With power unknown both are `unknown power`. No revival: the ends are fixed dates, and the
+        # effects carry no dependency on Y (element 7 is None). date(Y) and date(W) are the decisions2 dates, for
+        # the starts, the conduct range, the lapse search and the lines (DESIGN5 §9, ruling on A-7).
+        if self.r5:
+            for (r, W) in sorted(self.recog_by_target.get(node, ()), key=lambda x: (self._tdate(x[0]), str(x[0]['id']))):
+                k, Y = r['kind'], r['by']
+                dt = dy = D.date[Y]
+                ap = self._app_power(r, node, keyset)
+                if ap is None:
+                    continue
+                app, dom, pw = ap
+                if pw[0] == 'no':
+                    continue
+                if pw[0] == 'yes':
+                    s1, s2 = (UNK, 'recognisedLater'), ('negative', k)
+                else:
+                    s1 = s2 = (UNK, 'power:' + pw[1])
+                if app == 'partial':
+                    s1, s2 = (s1[0], s1[1] + ':partial'), (s2[0], s2[1] + ':partial')
+                elif app in ('unknownScope', 'otherGrounds'):
+                    s1 = s2 = (UNK, app + ':' + k)
+                reach = self._reach(node, Y, dt)
+                dw = D.date[W]
+                end1 = self._first_lapse(Y, dy)
+                end2 = min(end1, self._first_lapse(W, dw))
+                for (cf, ct, ov) in self.temporal_ranges(r['temporal'], dt, dom):
+                    E.append([dy, end1, cf, ct, s1[0], s1[1], str(Y), None, reach, 'recognised'])
+                    E.append([dw, end2, cf, ct, s2[0], s2[1], str(Y), None, reach, 'recognised'])
         # C. supersession by enactment (§7 AB1)
         E.extend(e for (_, e) in self._sup_effects(node, keyset))
         return [e for e in E if e[0] < e[1]]
@@ -1473,7 +2848,7 @@ class Engine:
             ev = s['evidence']
             if ev.startswith('laterCourtSays:'):
                 tid = ev.split(':', 1)[1]
-                if self.cert_ok.get(('treatments.tsv', tid)) != 'ok':
+                if self._plain(tid) != 'ok':    # (round 5: the round-4 check of the row, ruling on A-21)
                     continue
             if s['issue'] not in ('-', ''):
                 scope = 'issues:' + s['issue']
@@ -1721,10 +3096,40 @@ class Engine:
                 segs.append((p, q, pieces))
         return segs
 
+    @staticmethod
+    def _contrib(st, kind):
+        """Round 5: an effect state in the status vocabulary of the Lean output (see STATUS_KIND, UNK_RANK)."""
+        if st == 'negative' and not kind.endswith(':partial'):
+            b = kind.split(':')[0]
+            return ('neg', STATUS_KIND.get(b, b))
+        if kind.endswith(':partial') or kind.startswith('unknownScope:') or kind.startswith('otherGrounds:'):
+            return ('unknown', 'partialScope')
+        if kind == 'recognisedLater':
+            return ('unknown', 'recognisedLater')
+        if kind.startswith('power:'):
+            return ('unknown', 'powerUnknown')
+        if kind.startswith('enBancGrantVacatesPanel'):
+            return ('unknown', 'enBancRuleUnknown')
+        return ('unknown', kind)
+
+    def _with_oclass(self, s, live):
+        """Round 5 (DESIGN5 §5.1): the state with a fourth element `oclass`: the least class among the live effects
+        of a treatments row (explicit or recognised) whose contribution equals the status; '-' when there is none
+        (good law, or a status made by same-case history or a supersession alone)."""
+        if s[0] == 'none':
+            return s + ('-',)
+        if s[0] == 'negative' and not s[1].endswith(':partial'):
+            top = self._contrib(s[0], s[1])
+        else:       # no whole negative is live: the status is the most severe unknown contribution
+            top = max((self._contrib(e[4], e[5]) for e in live), key=lambda c: UNK_RANK.get(c[1], 0))
+        cs = [e[9] for e in live if len(e) > 9 and e[9] and self._contrib(e[4], e[5]) == top]
+        return s + (min(cs, key=lambda c: CLASS_ORDER[c]) if cs else '-',)
+
     def _eval(self, effs, t, u):
         best_neg = None
         best_unk = None
         best_part = None
+        live = [] if self.r5 else None
         for e in effs:
             if not (e[0] <= t < e[1] and e[2] <= u < e[3]):
                 continue
@@ -1737,6 +3142,8 @@ class Engine:
                 # leaves the overruling standing until a court restores the old rule.
                 if self._overruler_lapsed(e[7][0], t):
                     continue
+            if live is not None:
+                live.append(e)
             rank = (kind.endswith(':partial'), -SEVERITY.get(kind.split(':')[0], -1), e[0],
                     KIND_POS.get(kind.split(':')[0], 99), by)   # R32: whole-decision before partial
             if st == 'negative' and kind.endswith(':partial'):
@@ -1749,13 +3156,8 @@ class Engine:
             elif st == UNK:
                 if best_unk is None or rank < best_unk[0]:
                     best_unk = (rank, (st, kind, by))
-        if best_neg:
-            return best_neg[1]
-        if best_unk:
-            return best_unk[1]
-        if best_part:
-            return best_part[1]
-        return ('none', '-', '-')
+        res = (best_neg or best_unk or best_part or (None, ('none', '-', '-')))[1]
+        return res if live is None else self._with_oclass(res, live)
 
     def _overruler_lapsed(self, B, t):
         """R15: has decision B's opinion been withdrawn, substituted, vacated, depublished or reversed, as a whole,
@@ -1763,8 +3165,10 @@ class Engine:
         key = ('lapse', B)
         effs = self._tl.get(key)
         if effs is None:
-            effs = self._tl[key] = [e for e in self.effects(B, None) if e[7] is None and e[4] == 'negative'
-                                    and not e[5].endswith(':partial')
+            # (round 5: read from the history part alone, which is where every such effect comes from; a
+            # recognised row on B asks for the lapse of other decisions and must not come back here)
+            effs = self._tl[key] = [e for e in self._hist_effects(B, None) if e[0] < e[1] and e[7] is None
+                                    and e[4] == 'negative' and not e[5].endswith(':partial')
                                     and e[5].split(':')[0] in LAPSE_KINDS + ('reversed',)]
         return any(e[0] <= t < e[1] for e in effs)
 
@@ -1797,6 +3201,8 @@ class Engine:
     def status_targets(self):
         D = self.D
         t = set(self.adm_hist) | set(self.adm_treat) | set(self.sup_by_target)
+        if self.r5:
+            t |= set(self.recog_by_target)    # a recognised row need not pass the round-4 witness check
         return sorted(x for x in t if D.has(x))
 
     def status_rows(self, split_by=None):
@@ -1818,7 +3224,7 @@ class Engine:
                     bounds = sorted({f, to} | {x for x in cuts if f < x < to})
                     for (f1, t1) in zip(bounds, bounds[1:]):
                         for (c, s) in pieces:
-                            rows.append((node, issue, hid, f1, t1, s[0], s[1], s[2], c))
+                            rows.append((node, issue, hid, f1, t1, s[0], s[1], s[2], c) + tuple(s[3:]))
         return rows
 
     def line_rows(self, split_by=None):
@@ -1846,7 +3252,7 @@ class Engine:
                         bounds = sorted({f, to} | {x for x in cuts if f < x < to})
                         for (f1, t1) in zip(bounds, bounds[1:]):
                             for (c, s) in pieces:
-                                rows.append((node, issue, hid, f1, t1, s[0], s[1], s[2], c, line))
+                                rows.append((node, issue, hid, f1, t1, s[0], s[1], s[2], c, line) + tuple(s[3:]))
         return rows
 
     # ---------------------------------------------------------------- splits (§9.24 / DESIGN layer 5)
@@ -2206,6 +3612,29 @@ class Engine:
         return rows
 
     # ---------------------------------------------------------------- findings (§9.27)
+    def _f(self, kind, C, X, detail, oclass='-'):
+        """A finding row. Round 5 (DESIGN5 §5.1): a fifth element `oclass`; without the class table, as before."""
+        return (kind, C, X, detail, oclass) if self.r5 else (kind, C, X, detail)
+
+    @staticmethod
+    def _oc(s):
+        """The oclass of a status state ('-' for a three-element state: round 4, or the cycle sentinel)."""
+        return s[3] if len(s) > 3 else '-'
+
+    def _cites_recognised_later(self, C, X, t):
+        """Round 5 (DESIGN5 §2.5, R5-4): C (decided t) cites X while X, as a whole decision and in C's line, is
+        `unknown recognisedLater` on (t, t), and that is not C's own doing: not every live recognisedLater effect
+        has C as its actor (the test of `_only_by`, on the unknown)."""
+        top = self.status_citing(C, X, None, t, t)
+        if top[0] != UNK or top[1] != 'recognisedLater':
+            return False
+        effs = self._cite_effects(C, X, None)
+        if effs is None:
+            effs = self.effects(X, None)
+        bys = {e[6] for e in effs if e[4] == UNK and e[5] == 'recognisedLater'
+               and e[0] <= t < e[1] and e[2] <= t < e[3]}
+        return bys != {str(C)}
+
     def findings(self, edges):
         D = self.D
         out = set()
@@ -2220,7 +3649,9 @@ class Engine:
                 out.add(f)
             ln = self._cites_later_negated(C, X, t)
             if ln:
-                out.add(('atRisk', C, X, 'citesLaterNegated:' + ln))
+                out.add(self._f('atRisk', C, X, 'citesLaterNegated:' + ln[0], ln[1]))
+            if self.r5 and self._cites_recognised_later(C, X, t):
+                out.add(self._f('atRisk', C, X, 'recognisedLater', 'recognised'))
         # treatment-based findings
         for X, trs in self.adm_treat.items():
             for r in trs:
@@ -2228,7 +3659,7 @@ class Engine:
                 if not D.has(C) or not D.has(X):
                     continue
                 k = r['kind']
-                t = r['date'] or D.date[C]
+                t = D.date[C]
                 if D.date[X] > D.date[C]:
                     continue             # T1: an earlier decision cannot treat a later one (a data error)
                 ce = self.epoch(D.court[C], t)
@@ -2240,20 +3671,20 @@ class Engine:
                         f = self.authority(X, None, None, D.court[C], t, D.unit[C], D.extra.get(C))
                         up = upper(f)
                         if up is not None and FORCE_RANK[up] < 7:
-                            out.add(('citesUnpublishedAsBinding', C, X, f[0] if f[0] != UNK else '<=' + up))
+                            out.add(self._f('citesUnpublishedAsBinding', C, X, f[0] if f[0] != UNK else '<=' + up))
                     if FORM[D.form[X]] == 'plurality' and X not in self.marks_nodes:
                         base = self._authority_as_majority(X, D.court[C], t, D.unit[C], D.extra.get(C))
                         if base[0] == 'binding':
-                            out.add(('pluralityTreatedAsBinding', C, X, 'noMarks'))
+                            out.add(self._f('pluralityTreatedAsBinding', C, X, 'noMarks'))
                 wrow = r['id'] in D.witness     # round 4: the words are a later court's: atRisk only
                 # round 4 (DEVIATIONS 84): the panel finding needs the panel's own overruling words
                 own = any(v in ascii_lower(norm_quote(r['cert'].quote)) for v in PANEL_OWN_WORDS)
                 if k in NEG_TREAT and own and not wrow:       # (c) a decline to follow is not a purported overruling
                     pd = self._panel_departs(C, X, r)
                     if pd:
-                        out.add(('panelDepartsWithoutEnBanc', C, X, pd))
+                        out.add(self._f('panelDepartsWithoutEnBanc', C, X, pd, self.row_class.get(r['id'], '-')))
                 if (k in NEG_TREAT or k == 'declinedToFollow') and not wrow and self._ignores_binding_in_unit(C, X, r):
-                    out.add(('ignoresBindingInUnit', C, X, k))
+                    out.add(self._f('ignoresBindingInUnit', C, X, k, self.row_class.get(r['id'], '-')))
         for f in self.at_risk():
             out.add(f)
         return out
@@ -2264,7 +3695,7 @@ class Engine:
         its own unit (an intermediate court of B's unit under trialScope ownUnitThenAny / ownUnitOnly) or its own court
         (the appellate division of B's trial court and unit, §4.4), B having no power over X."""
         D = self.D
-        t = r['date'] or D.date[B]
+        t = D.date[B]
         if D.date[X] == 0 or D.date[B] < D.date[X] or t == 0:
             return False
         be = self.epoch(D.court[B], t)
@@ -2314,7 +3745,8 @@ class Engine:
         """L2 (five limits; T1(c), §9.26, F14): atRisk citesLaterNegated. C (decided t) cites X; X's anonymous issue
         is wholly negative on asOf (on the diagonal) but not wholly negative on (t, t), and one live negative effect
         on asOf comes from a decision whose court binds C's court (force `binding` at that decision's date). A law
-        change or an unknown deciding decision is not a court that binds C. -> the reported kind, or None."""
+        change or an unknown deciding decision is not a court that binds C. -> (the reported kind, the oclass of
+        the as-of status read: round 5), or None."""
         D = self.D
         asof = getattr(self, 'asof', 20261112)
         if t >= asof:
@@ -2338,7 +3770,7 @@ class Engine:
             if f is None:
                 f = cache[k] = self.authority(B, None, None, D.court[C], D.date[B], D.unit[C], D.extra.get(C))
             if f[0] == 'binding':
-                return top[1].split(':')[0]
+                return (top[1].split(':')[0], self._oc(top))
         return None
 
     def _authority_as_majority(self, X, dst, t, du, ctx):
@@ -2370,13 +3802,13 @@ class Engine:
         res = []
         top = self.status_citing(C, X, None, t, t)   # H4: every status here is relative to C's line
         if top[0] == 'negative' and top[2] == str(C) and not self._only_by(X, None, t, C):
-            top = (top[0], top[1], '-')      # another decision's effect makes the same status
+            top = (top[0], top[1], '-') + tuple(top[3:])     # another decision's effect makes the same status
         sup_only = False
         if top[0] == 'negative' and top[2] != str(C) and not top[1].endswith(':partial'):
             base = top[1].split(':')[0]
             fk = self._finding_kind(base)
             if fk:
-                res.append((fk, C, X, '%s:%s' % (base, top[2])))
+                res.append(self._f(fk, C, X, '%s:%s' % (base, top[2]), self._oc(top)))
             if base != 'supersededByEnactment':
                 return res
             sup_only = True                  # H2: a wholly superseded decision: only the atRisk row below
@@ -2400,7 +3832,7 @@ class Engine:
                               and e[0] <= t < e[1] and e[2] <= t < e[3]]
                     hit = any(self._usc_match(D.issues.get(k, {}).get('usc', '-'), b) for k in cis for b in blocks)
                 if hit:
-                    res.append(('atRisk', C, X, 'supersededConductUnknown:' + h['issue']))
+                    res.append(self._f('atRisk', C, X, 'supersededConductUnknown:' + h['issue']))
             if sup_only:
                 return res
             if cis:
@@ -2408,12 +3840,14 @@ class Engine:
                     if h['issue'] in cis and s[0] == 'negative' and s[2] != str(C):
                         fk = self._finding_kind(s[1].split(':')[0])
                         if fk:
-                            res.append((fk, C, X, '%s:%s:%s' % (s[1].split(':')[0], s[2], h['issue'])))
+                            res.append(self._f(fk, C, X, '%s:%s:%s' % (s[1].split(':')[0], s[2], h['issue']),
+                                               self._oc(s)))
             elif all(s[0] == 'negative' and s[2] != str(C) for (_, s) in states):
                 for (h, s) in states:
                     fk = self._finding_kind(s[1].split(':')[0])
                     if fk:
-                        res.append((fk, C, X, '%s:%s:allHoldings' % (s[1].split(':')[0], s[2])))
+                        res.append(self._f(fk, C, X, '%s:%s:allHoldings' % (s[1].split(':')[0], s[2]),
+                                           self._oc(s)))
         return res
 
     @staticmethod
@@ -2429,7 +3863,7 @@ class Engine:
     def _panel_departs(self, B, X, r):
         """F7 / §9.27: a panel of a strong-horizontal court departs from binding precedent without en banc."""
         D = self.D
-        bd = r['date'] or D.date[B]
+        bd = D.date[B]
         be = self.epoch(D.court[B], bd)
         hs = self.holders(X, bd)
         if be is None or not hs:
@@ -2469,7 +3903,7 @@ class Engine:
         for X, trs in self.adm_treat.items():
             for r in trs:
                 C, k = r['by'], r['kind']
-                t = r['date'] or (D.date[C] if D.has(C) else 0)
+                t = self._tdate(r)
                 if t == 0:
                     continue
                 if D.has(C) and D.has(X) and D.date[C] < D.date[X]:
@@ -2478,21 +3912,24 @@ class Engine:
                 if st0[0] == 'negative' and not st0[1].endswith(':partial'):
                     continue             # already wholly negative (a partial event leaves the rest at risk)
                 if k in SOFT_TREAT:
-                    out.append(('atRisk', C, X, 'soft:' + k))
+                    out.append(self._f('atRisk', C, X, 'soft:' + k))
                 elif k in NEG_TREAT:
                     pw = self.can_change(C, X, 'unknown')
                     if pw[0] == 'no':
                         if r['id'] not in D.witness:
-                            out.append(('atRisk', C, X, 'claim:' + k))
+                            out.append(self._f('atRisk', C, X, 'claim:' + k, self.row_class.get(r['id'], '-')))
                     elif r['explicit'] != 1:
-                        out.append(('atRisk', C, X, 'inferred:' + k))
+                        # round 5 (DESIGN5 §2.5): a row recognised under the full rule set emits no
+                        # inferredRejection: its status rows carry it (recog_all is empty without the class table)
+                        if r['id'] not in self.recog_all:
+                            out.append(self._f('atRisk', C, X, 'inferred:' + k, self.row_class.get(r['id'], '-')))
         for X, sups in self.sup_by_target.items():
             for s in sups:
                 ev = s['evidence']
-                if ev.startswith('laterCourtSays:') and self.cert_ok.get(('treatments.tsv', ev.split(':', 1)[1])) != 'ok':
+                if ev.startswith('laterCourtSays:') and self._plain(ev.split(':', 1)[1]) != 'ok':
                     continue             # the court's words it rests on are not certified
                 if s['explicit'] != 1 and s['lc'] in D.lawchanges:
-                    out.append(('atRisk', 'lc:' + s['lc'], X, 'possiblySuperseded'))
+                    out.append(self._f('atRisk', 'lc:' + s['lc'], X, 'possiblySuperseded'))
         # F14: a later contrary holding of a court whose decisions bind the holder (abrogation candidate)
         by_issue = defaultdict(list)
         for h in self.adm_holdings.values():
@@ -2522,7 +3959,7 @@ class Engine:
                         break
                     if self.status_view(Y, y['id'], t, t, vw)[0] != 'none':
                         continue
-                    out.append(('atRisk', Y, X, 'contraryBinding:' + y['id']))
+                    out.append(self._f('atRisk', Y, X, 'contraryBinding:' + y['id']))
                     break
         return out
 
@@ -2591,8 +4028,24 @@ def run(args):
         Fm.asof = args.asof
     os.makedirs(args.out, exist_ok=True)
     # certs
+    # (round 5: a recognised row's verdict is okRecognised / okRecognisedUnverifiedBy; cert_verdict is the round-4
+    # string for every other row and for every row without the class table)
     write_tsv(os.path.join(args.out, 'certs.tsv'),
-              [(f, i, r) for (f, i), r in sorted(A.cert_ok.items(), key=lambda kv: (kv[0][0], str(kv[0][1])))])
+              [(f, i, A.cert_verdict(f, i) if D.r5 else r)
+               for (f, i), r in sorted(A.cert_ok.items(), key=lambda kv: (kv[0][0], str(kv[0][1])))])
+    if D.r5:
+        # round 5 (DESIGN5 §5.1): classes.tsv, one line per treatments row of a status-changing kind that parses:
+        # id, class, claim, verdict (as in certs.tsv), field_limit, doctrine, W's node
+        crows = []
+        for rid in sorted(A.row_class, key=str):
+            v = A.cert_verdict('treatments.tsv', rid)
+            if v == 'badRow':
+                continue
+            c = D.klass.get(rid)
+            w = D.witness.get(rid)
+            crows.append((rid, A.row_class[rid], c[0] if c else '-', v, c[1] if c else '-', c[2] if c else '-',
+                          w[0] if w else '-'))
+        write_tsv(os.path.join(args.out, 'classes.tsv'), crows)
     # status
     rows = A.status_rows(Fm)
 
@@ -2601,7 +4054,7 @@ def run(args):
         # conduct_from), as the Lean does; not row identity, which also depends on where the firm run segments
         if Fm is None:
             return 1
-        node, issue, hid, f, to, st, kind, by, c = r
+        node, issue, hid, f, to, st, kind, by, c = r[:9]
         ks = None if hid == '-' else frozenset([issue])
         tl = Fm.timeline(node, ks) or []
         tla = A.timeline(node, ks) or []
@@ -2613,7 +4066,7 @@ def run(args):
         # reaches; an adopter that is no heir there is in no reach list, so its view is then the S/L `orig` view)
         if Fm is None:
             return 1
-        node, issue, hid, f, to, st, kind, by, c, line = r
+        node, issue, hid, f, to, st, kind, by, c, line = r[:10]
         ks = None if hid == '-' else frozenset([issue])
         view = frozenset() if line == 'orig' else frozenset([line])
         tl = Fm.timeline_view(node, ks, view) or []
@@ -2626,18 +4079,24 @@ def run(args):
         st, kind = x[0], x[1]
         if st == 'negative' and not kind.endswith(':partial'):
             return ('negative', SEVERITY.get(kind.split(':')[0], -1))
+        # (round 5, DESIGN5 §9, ruling on A-19: unchanged; `recognisedLater` is an unknown like any other here)
         return (st if not kind.endswith(':partial') else 'partial',)
-    write_tsv(os.path.join(args.out, 'status.tsv'), [r + (firm_of(r),) for r in rows])
+    # (round 5: a row carries its oclass as a last element; it is written after firm, and after line)
+    write_tsv(os.path.join(args.out, 'status.tsv'), [r[:9] + (firm_of(r),) + r[9:] for r in rows])
     log('status: %d rows (%.1fs)' % (len(rows), time.time() - t0))
     # R2-75: status per line of authority (always written; empty when no decision has a line-limited effect)
     lrows = A.line_rows(Fm)
-    write_tsv(os.path.join(args.out, 'status_lines.tsv'), [r[:9] + (firm_of_line(r), r[9]) for r in lrows])
+    write_tsv(os.path.join(args.out, 'status_lines.tsv'), [r[:9] + (firm_of_line(r), r[9]) + r[10:] for r in lrows])
     log('status_lines: %d rows (%.1fs)' % (len(lrows), time.time() - t0))
     # findings
     targets = set()
     for r in rows:
         if r[5] == 'negative':
             targets.add(str(r[0]))
+    if D.r5:
+        # round 5: a decision under a recognised row may be `unknown recognisedLater` and never negative (Y lapsed
+        # before W spoke); citations of it are read too (atRisk recognisedLater)
+        targets |= {str(x) for x in A.recog_by_target} | ({str(x) for x in Fm.recog_by_target} if Fm else set())
     edges = list(iter_edges(args.edges, targets)) if args.edges else []
     log('edges into negative targets: %d (%.1fs)' % (len(edges), time.time() - t0))
     fa = A.findings(edges)
@@ -2650,8 +4109,10 @@ def run(args):
             return f[:3] + (SEVERITY.get(k, k),)   # cites: the same kind of negative status
         return f[:3]
     fkeys = {fkey(f) for f in ff}
+    # (round 5: a finding carries its oclass as a fifth element; it is written after firm)
     write_tsv(os.path.join(args.out, 'findings.tsv'),
-              [f + ((1 if fkey(f) in fkeys else 0),) for f in sorted(fa, key=lambda f: tuple(str(x) for x in f))])
+              [f[:4] + ((1 if fkey(f) in fkeys else 0),) + f[4:]
+               for f in sorted(fa, key=lambda f: tuple(str(x) for x in f))])
     log('findings: %d (%.1fs)' % (len(fa), time.time() - t0))
     # splits
     sp = A.splits()
@@ -2676,9 +4137,88 @@ def run(args):
              ('edges_scanned_hits', len(edges)), ('seconds', round(time.time() - t0, 1)),
              ('peak_mb', round(peak_mb()))]
     cnt = defaultdict(int)
-    for v in A.cert_ok.values():
-        cnt['cert_' + v] += 1
+    for (f, i), v in A.cert_ok.items():
+        cnt['cert_' + (A.cert_verdict(f, i) if D.r5 else v)] += 1    # (round 5: the verdict certs.tsv shows)
     stats += sorted(cnt.items())
+    if D.r5:
+        # round 5 (DESIGN5 §5.1): the four extra summary lines (NOTES.md A-4 for what each counts)
+        # operative_rows (ruling on A-4): the claim is admitted under the full rule set, i.e. the text checks pass
+        # and the acting decision's power over the target is not shown absent (the Lean's ok / okUnverifiedBy)
+        nop = sum(1 for i in A.op_admitted
+                  if A.can_change(A.treat_by_id[i]['by'], A.treat_by_id[i]['target'],
+                                  A._scope_dom(A.treat_by_id[i]['scope']))[0] != 'no')
+        stats += [('class_rows', len(D.klass)), ('class_bad_rows', D.class_bad),
+                  ('recognised_rows', len(A.recog_all)), ('operative_rows', nop)]
+    if D.anchor or D.anchor_bad or D.anchor_unknown or D.anchor_dup:
+        # round 6 (DESIGN6 §4): only when history_anchor.tsv has a line (absent or empty: the file is as before).
+        # anchor_rows = history ids with an anchor; the other three = lines ignored, by reason (REF_QUESTIONS
+        # Q-1..3, Q-11). The first three names are the Lean summary's; anchor_bad_rows is its
+        # `bad_rows <tab> history_anchor.tsv <tab> n` line (diff.py maps it).
+        stats += [('anchor_rows', len(D.anchor)), ('anchor_unknown_ids', D.anchor_unknown),
+                  ('anchor_duplicates', D.anchor_dup), ('anchor_bad_rows', D.anchor_bad)]
+    if D.joined_any:
+        # round 7 (DESIGN7 §1): only when joined.tsv has a line. joined_rows = treatments ids with a kept line;
+        # joined_bad_rows is the Lean's `bad_rows <tab> joined.tsv <tab> n` (diff.py maps it); Q7-2, Q7-14
+        stats += [('joined_rows', len(D.joined)), ('joined_unknown_ids', D.joined_unknown),
+                  ('joined_extra', D.joined_extra), ('joined_history_ignored', D.joined_hist),
+                  ('joined_witness_ignored', D.joined_wit),
+                  ('joined_bad_rows', D.joined_bad)]
+    if D.hclaim_any:
+        # round 7 (DESIGN7 §1): only when history_claim.tsv has a line; hclaim_bad_rows is the Lean's
+        # `bad_rows <tab> history_claim.tsv <tab> n`; Q7-3, Q7-14
+        stats += [('hclaim_rows', len(D.hclaim)), ('hclaim_unknown_ids', D.hclaim_unknown),
+                  ('hclaim_duplicates', D.hclaim_dup), ('hclaim_bad_rows', D.hclaim_bad)]
+        if any('anchorWide' in c for c in D.hclaim.values()):
+            # round 8 (DESIGN8 §5; Q8-11): history ids with an anchorWide claim whose row is not checked by
+            # checkAnchored (no anchor line, or a bridge line, which takes the row: Q8-2). Written only when some
+            # line has the claim, so round-7 summaries do not move.
+            stats.append(('hclaim_anchorwide_unused', sum(1 for i, c in D.hclaim.items() if 'anchorWide' in c
+                                                          and (i not in D.anchor or i in D.bridge))))
+        if any('anchorTribunal' in c for c in D.hclaim.values()):
+            # round 11 (DESIGN11 §5.1; REF_QUESTIONS11 Q11-4): ids with the claim, and those of them whose row is
+            # not checked by checkAnchored (as hclaim_anchorwide_unused). Only when some kept line has the claim.
+            stats.append(('hclaim_anchortribunal', sum(1 for c in D.hclaim.values() if 'anchorTribunal' in c)))
+            stats.append(('hclaim_anchortribunal_unused', sum(1 for i, c in D.hclaim.items()
+                                                              if 'anchorTribunal' in c
+                                                              and (i not in D.anchor or i in D.bridge))))
+    if D.bridge_any:
+        # round 8 (DESIGN8 §4): only when history_bridge.tsv has a line. bridge_rows = history ids with a kept line;
+        # bridge_bad_rows is the Lean's `bad_rows <tab> history_bridge.tsv <tab> n` (diff.py maps it); Q8-1, Q8-9
+        stats += [('bridge_rows', len(D.bridge)), ('bridge_unknown_ids', D.bridge_unknown),
+                  ('bridge_duplicates', D.bridge_dup), ('bridge_bad_rows', D.bridge_bad)]
+    if D.zone_any:
+        # round 9 (DESIGN9 §4): only when part_zone.tsv has a line. zone_bad_rows is the Lean's `bad_rows <tab>
+        # part_zone.tsv <tab> n` (diff.py maps it); the row counters count rows whose round-8 verdict is ok (Q9-9)
+        stats += [('zone_nodes', len(D.zones)), ('zone_lines', D.zone_lines), ('zone_bad_nodes', D.zone_bad_nodes),
+                  ('zone_bad_rows', D.zone_bad), ('zone_checked_rows', A.zone_checked),
+                  ('zone_failed_rows', A.zone_failed), ('zone_missing_rows', A.zone_missing)]
+    if D.tbridge_any:
+        # round 10 (DESIGN10 §6, Q10-17): only when history_tbridge.tsv has a line; tbridge_bad_rows is the Lean's
+        # `bad_rows <tab> history_tbridge.tsv <tab> n`
+        stats += [('tbridge_lines', len(D.tbridge)), ('tbridge_dup_rows', D.tbridge_dup),
+                  ('tbridge_bad_rows', D.tbridge_bad)]
+    if D.remand_any:
+        # round 10 (DESIGN10 §4, D10-6 / Q10-9): only when history_remand.tsv has a line. remand_bad_rows is the
+        # Lean's `bad_rows <tab> history_remand.tsv <tab> n` (diff.py maps it); remand_lines = ids kept; the row
+        # counters count rows the Lean admits (round-9 verdict ok, power not `no`) that reach the check
+        stats += [('remand_lines', len(D.remand)), ('remand_checked_rows', A.remand_checked),
+                  ('remand_failed_rows', A.remand_failed), ('remand_dup_rows', D.remand_dup),
+                  ('remand_bad_rows', D.remand_bad)]
+    if D.identity_any:
+        # round 11 (DESIGN11 §5.2): only when history_identity.tsv has a line. identity_bad_rows is the Lean's
+        # `bad_rows <tab> history_identity.tsv <tab> n` (diff.py maps it); identity_lines = ids kept
+        stats += [('identity_lines', len(D.identity)), ('identity_checked_rows', A.identity_checked),
+                  ('identity_failed_rows', A.identity_failed), ('identity_dup_rows', D.identity_dup),
+                  ('identity_bad_rows', D.identity_bad)]
+    if D.r5 and any(c[0] == 'doctrine' for c in D.klass.values()):
+        # round 7 (Q7-14; names as the Lean summary's, seen in the first differential run): doctrine_rows = class
+        # lines kept with the claim `doctrine`; doctrine_admitted = doctrine rows admitted under the full rule set
+        # (text checks pass, power not shown absent), as operative_rows
+        ndoc = sum(1 for i in A.demoted if A._doctrine_claim(A.treat_by_id[i])
+                   and A.can_change(A.treat_by_id[i]['by'], A.treat_by_id[i]['target'],
+                                    A._scope_dom(A.treat_by_id[i]['scope']))[0] != 'no')
+        stats += [('doctrine_rows', sum(1 for c in D.klass.values() if c[0] == 'doctrine')),
+                  ('doctrine_admitted', ndoc)]
     write_tsv(os.path.join(args.out, 'ref_stats.tsv'), stats)
     log('done in %.1fs, peak %.0f MB' % (time.time() - t0, peak_mb()))
 

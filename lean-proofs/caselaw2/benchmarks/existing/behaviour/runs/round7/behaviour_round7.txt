@@ -1,0 +1,117 @@
+behavioural test, label round7
+status ~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/out/v3/status.tsv
+citations: raw counts (no followed/negative typing in the data); corpus end 20190101; 4 controls asked, 1000 bootstrap draws
+
+SAMPLES
+  recognised         events 662; short exposure before or after 109; fewer than 1 bound citations in the 10 years before 302; no control inside the caliper 42; used 209
+  partlyRecognised   events 3152; short exposure before or after 581; fewer than 1 bound citations in the 10 years before 1421; no control inside the caliper 100; used 1050
+  operativeWords     events 479; short exposure before or after 40; fewer than 1 bound citations in the 10 years before 244; no control inside the caliper 14; used 181
+  partlyOperative    events 1955; short exposure before or after 270; fewer than 1 bound citations in the 10 years before 898; no control inside the caliper 43; used 744
+  explicit           events 4766; short exposure before or after 831; fewer than 1 bound citations in the 10 years before 2305; no control inside the caliper 104; used 1526
+  partly             events 17942; short exposure before or after 2992; fewer than 1 bound citations in the 10 years before 9036; no control inside the caliper 246; used 5668
+  implicit           events 81; short exposure before or after 15; fewer than 1 bound citations in the 10 years before 4; no control inside the caliper 15; used 47
+  first status rows with no class (left out): neg:reversed | history | h 11067; neg:reversed | history | h6 10784; unknown:partialScope | history | h6 4459; neg:vacated | history | h6 3406; unknown:partialScope | history | h 2671; neg:vacated | history | h 1974; neg:vacated | history | h7 983; neg:reversed | history | h7 584
+
+k = 5 years, series bound
+  class                        n    pre/yr   post/yr   ratio    ctrl  DiD (95%)                index DiD (95%)            share of explicit (95%)
+  recognised                 209     4.327     3.035   0.701   0.932  0.753 (0.564-0.880)      -0.028 (-0.103 to 0.047)   0.85 (0.39 to 1.93)
+  placebo:recognised         181     1.539     1.221   0.793   0.743  1.067 (0.926-1.227)      +0.019 (-0.067 to 0.102)   
+  partlyRecognised          1050     1.622     0.929   0.573   0.698  0.821 (0.749-0.885)      -0.034 (-0.066 to 0.000)   0.59 (0.33 to 1.05)
+  placebo:partlyRecognised     947     1.351     0.912   0.675   0.682  0.991 (0.916-1.079)      -0.045 (-0.082 to -0.007)  
+  operativeWords             181     1.432     0.838   0.585   0.870  0.672 (0.468-0.880)      -0.128 (-0.213 to -0.050)  1.19 (0.41 to 2.63)
+  placebo:operativeWords     164     0.790     0.513   0.649   0.685  0.948 (0.762-1.150)      -0.069 (-0.158 to 0.027)   
+  partlyOperative            744     1.139     0.613   0.538   0.637  0.845 (0.742-0.952)      -0.047 (-0.086 to -0.010)  0.51 (0.14 to 1.02)
+  placebo:partlyOperative     676     1.026     0.621   0.606   0.638  0.949 (0.862-1.048)      -0.014 (-0.059 to 0.032)   
+  explicit                  1526     1.016     0.509   0.501   0.699  0.716 (0.638-0.806)      -0.113 (-0.140 to -0.086)  
+  placebo:explicit          1433     0.854     0.587   0.687   0.711  0.966 (0.884-1.068)      -0.003 (-0.034 to 0.031)   
+  partly                    5668     0.809     0.363   0.449   0.634  0.709 (0.677-0.740)      -0.066 (-0.080 to -0.051)  1.03 (0.75 to 1.67)
+  placebo:partly            5333     0.699     0.427   0.612   0.648  0.944 (0.899-0.992)      -0.016 (-0.031 to 0.001)   
+  implicit                    47     4.627     4.365   0.944   0.761  1.239 (0.827-1.758)      +0.073 (-0.042 to 0.194)   -0.64 (-1.89 to 0.56)
+  placebo:implicit            37     3.543     2.524   0.712   0.806  0.884 (0.515-1.606)      -0.075 (-0.236 to 0.092)   
+
+k = 5 years, series boundClean
+  class                        n    pre/yr   post/yr   ratio    ctrl  DiD (95%)                index DiD (95%)            share of explicit (95%)
+  recognised                 209     4.323     2.628   0.608   0.931  0.653 (0.517-0.780)      -0.084 (-0.159 to -0.012)  0.98 (0.55 to 1.69)
+  placebo:recognised         181     1.539     1.219   0.792   0.742  1.066 (0.926-1.226)      +0.021 (-0.064 to 0.104)   
+  partlyRecognised          1050     1.620     0.819   0.506   0.697  0.725 (0.659-0.788)      -0.100 (-0.134 to -0.065)  0.74 (0.49 to 1.14)
+  placebo:partlyRecognised     947     1.349     0.911   0.675   0.681  0.991 (0.916-1.079)      -0.045 (-0.082 to -0.007)  
+  operativeWords             181     1.428     0.794   0.556   0.870  0.639 (0.440-0.848)      -0.150 (-0.230 to -0.067)  1.03 (0.37 to 2.10)
+  placebo:operativeWords     164     0.790     0.512   0.648   0.685  0.946 (0.763-1.146)      -0.069 (-0.156 to 0.028)   
+  partlyOperative            744     1.137     0.566   0.498   0.636  0.783 (0.683-0.888)      -0.085 (-0.125 to -0.047)  0.56 (0.26 to 0.97)
+  placebo:partlyOperative     676     1.023     0.620   0.606   0.637  0.952 (0.865-1.050)      -0.013 (-0.057 to 0.033)   
+  explicit                  1526     1.013     0.458   0.453   0.699  0.647 (0.576-0.732)      -0.144 (-0.171 to -0.117)  
+  placebo:explicit          1433     0.853     0.586   0.687   0.711  0.966 (0.884-1.069)      -0.004 (-0.035 to 0.031)   
+  partly                    5668     0.806     0.315   0.391   0.633  0.617 (0.588-0.646)      -0.110 (-0.124 to -0.095)  1.11 (0.86 to 1.59)
+  placebo:partly            5333     0.697     0.426   0.611   0.647  0.945 (0.899-0.993)      -0.015 (-0.031 to 0.001)   
+  implicit                    47     4.627     3.984   0.861   0.756  1.139 (0.712-1.666)      -0.002 (-0.126 to 0.129)   -0.30 (-1.24 to 0.74)
+  placebo:implicit            37     3.538     2.524   0.713   0.789  0.904 (0.532-1.644)      -0.070 (-0.232 to 0.095)   
+
+k = 5 years, series all
+  class                        n    pre/yr   post/yr   ratio    ctrl  DiD (95%)                index DiD (95%)            share of explicit (95%)
+  recognised                 209     5.397     3.844   0.712   0.881  0.808 (0.672-0.959)      +0.032 (-0.030 to 0.089)   0.72 (0.13 to 1.51)
+  placebo:recognised         181     2.339     1.783   0.762   0.695  1.097 (0.966-1.252)      +0.007 (-0.050 to 0.072)   
+  partlyRecognised          1050     3.324     1.932   0.581   0.658  0.883 (0.821-0.944)      +0.036 (0.013 to 0.060)    0.42 (0.18 to 0.76)
+  placebo:partlyRecognised     947     2.432     1.584   0.652   0.644  1.012 (0.950-1.077)      +0.005 (-0.020 to 0.032)   
+  operativeWords             181     2.053     1.194   0.582   0.803  0.724 (0.557-0.911)      -0.071 (-0.140 to -0.004)  1.09 (0.33 to 2.23)
+  placebo:operativeWords     164     1.226     0.823   0.671   0.682  0.984 (0.835-1.151)      -0.038 (-0.109 to 0.033)   
+  partlyOperative            744     1.858     1.076   0.579   0.643  0.901 (0.820-0.986)      -0.015 (-0.052 to 0.020)   0.35 (0.05 to 0.74)
+  placebo:partlyOperative     676     1.548     0.952   0.615   0.631  0.974 (0.890-1.069)      +0.004 (-0.033 to 0.043)   
+  explicit                  1526     1.590     0.826   0.520   0.699  0.743 (0.682-0.814)      -0.076 (-0.100 to -0.053)  
+  placebo:explicit          1433     1.242     0.862   0.694   0.697  0.996 (0.928-1.073)      -0.003 (-0.030 to 0.025)   
+  partly                    5668     1.426     0.695   0.487   0.639  0.763 (0.737-0.789)      -0.053 (-0.065 to -0.041)  0.91 (0.68 to 1.32)
+  placebo:partly            5333     1.125     0.707   0.629   0.645  0.974 (0.939-1.010)      +0.004 (-0.010 to 0.019)   
+  implicit                    47     6.030     5.581   0.926   0.742  1.248 (0.882-1.736)      +0.082 (-0.021 to 0.200)   -0.75 (-2.03 to 0.49)
+  placebo:implicit            37     4.409     3.139   0.712   0.817  0.872 (0.575-1.398)      -0.097 (-0.234 to 0.042)   
+
+k = 10 years, series bound
+  class                        n    pre/yr   post/yr   ratio    ctrl  DiD (95%)                index DiD (95%)            share of explicit (95%)
+  recognised                 209     3.824     2.460   0.643   0.843  0.763 (0.485-0.901)      -0.057 (-0.121 to 0.007)   0.55 (0.21 to 1.66)
+  placebo:recognised         181     1.408     1.021   0.726   0.661  1.098 (0.945-1.288)      +0.040 (-0.028 to 0.119)   
+  partlyRecognised          1050     1.549     0.785   0.507   0.627  0.808 (0.735-0.878)      -0.062 (-0.090 to -0.032)  0.43 (0.25 to 0.71)
+  placebo:partlyRecognised     947     1.294     0.804   0.621   0.605  1.026 (0.936-1.126)      -0.040 (-0.073 to -0.007)  
+  operativeWords             181     1.279     0.721   0.564   0.969  0.582 (0.331-0.848)      -0.143 (-0.223 to -0.067)  1.10 (0.34 to 2.43)
+  placebo:operativeWords     164     0.671     0.467   0.696   0.652  1.067 (0.830-1.351)      -0.024 (-0.090 to 0.045)   
+  partlyOperative            744     1.033     0.507   0.490   0.604  0.812 (0.719-0.903)      -0.103 (-0.141 to -0.068)  0.42 (0.19 to 0.73)
+  placebo:partlyOperative     676     0.911     0.532   0.584   0.613  0.953 (0.861-1.054)      -0.031 (-0.072 to 0.010)   
+  explicit                  1526     0.956     0.388   0.405   0.663  0.611 (0.541-0.694)      -0.135 (-0.158 to -0.112)  
+  placebo:explicit          1433     0.774     0.531   0.686   0.693  0.989 (0.868-1.156)      +0.004 (-0.022 to 0.031)   
+  partly                    5668     0.740     0.280   0.378   0.591  0.640 (0.611-0.670)      -0.110 (-0.122 to -0.097)  0.91 (0.71 to 1.21)
+  placebo:partly            5333     0.631     0.368   0.584   0.605  0.966 (0.914-1.019)      -0.014 (-0.028 to 0.000)   
+  implicit                    47     4.292     3.833   0.893   0.882  1.012 (0.596-1.645)      +0.018 (-0.118 to 0.154)   -0.03 (-1.10 to 1.02)
+  placebo:implicit            37     3.178     2.050   0.645   0.895  0.720 (0.441-1.320)      -0.067 (-0.210 to 0.080)   
+
+k = 10 years, series boundClean
+  class                        n    pre/yr   post/yr   ratio    ctrl  DiD (95%)                index DiD (95%)            share of explicit (95%)
+  recognised                 209     3.821     2.134   0.558   0.843  0.663 (0.435-0.777)      -0.107 (-0.172 to -0.043)  0.68 (0.40 to 1.49)
+  placebo:recognised         181     1.408     1.020   0.725   0.660  1.098 (0.943-1.289)      +0.042 (-0.028 to 0.118)   
+  partlyRecognised          1050     1.548     0.678   0.438   0.626  0.700 (0.631-0.766)      -0.135 (-0.166 to -0.107)  0.59 (0.41 to 0.85)
+  placebo:partlyRecognised     947     1.293     0.802   0.620   0.605  1.025 (0.935-1.128)      -0.040 (-0.073 to -0.007)  
+  operativeWords             181     1.277     0.683   0.535   0.968  0.553 (0.306-0.822)      -0.165 (-0.242 to -0.089)  0.97 (0.33 to 2.05)
+  placebo:operativeWords     164     0.671     0.466   0.695   0.650  1.068 (0.830-1.355)      -0.023 (-0.089 to 0.046)   
+  partlyOperative            744     1.031     0.466   0.452   0.603  0.750 (0.661-0.842)      -0.139 (-0.175 to -0.104)  0.47 (0.27 to 0.73)
+  placebo:partlyOperative     676     0.908     0.531   0.584   0.612  0.956 (0.863-1.057)      -0.030 (-0.070 to 0.010)   
+  explicit                  1526     0.954     0.344   0.361   0.663  0.544 (0.479-0.622)      -0.167 (-0.190 to -0.143)  
+  placebo:explicit          1433     0.772     0.530   0.686   0.693  0.990 (0.870-1.158)      +0.003 (-0.022 to 0.032)   
+  partly                    5668     0.738     0.239   0.324   0.590  0.550 (0.522-0.576)      -0.151 (-0.163 to -0.138)  0.98 (0.80 to 1.27)
+  placebo:partly            5333     0.630     0.367   0.583   0.604  0.966 (0.915-1.020)      -0.013 (-0.028 to 0.002)   
+  implicit                    47     4.292     3.440   0.801   0.867  0.925 (0.543-1.508)      -0.073 (-0.203 to 0.064)   0.13 (-0.72 to 1.05)
+  placebo:implicit            37     3.171     2.050   0.646   0.847  0.763 (0.471-1.377)      -0.058 (-0.198 to 0.087)   
+
+k = 10 years, series all
+  class                        n    pre/yr   post/yr   ratio    ctrl  DiD (95%)                index DiD (95%)            share of explicit (95%)
+  recognised                 209     4.834     3.097   0.641   0.797  0.804 (0.587-0.930)      +0.016 (-0.041 to 0.066)   0.51 (0.17 to 1.39)
+  placebo:recognised         181     2.200     1.478   0.672   0.610  1.101 (0.975-1.261)      +0.044 (-0.006 to 0.098)   
+  partlyRecognised          1050     3.223     1.603   0.497   0.581  0.856 (0.792-0.920)      +0.019 (-0.004 to 0.040)   0.36 (0.19 to 0.59)
+  placebo:partlyRecognised     947     2.356     1.361   0.578   0.567  1.019 (0.948-1.094)      +0.001 (-0.024 to 0.025)   
+  operativeWords             181     1.972     1.002   0.508   0.866  0.586 (0.378-0.808)      -0.110 (-0.170 to -0.043)  1.25 (0.50 to 2.43)
+  placebo:operativeWords     164     1.079     0.730   0.677   0.641  1.056 (0.864-1.295)      -0.023 (-0.084 to 0.043)   
+  partlyOperative            744     1.712     0.868   0.507   0.595  0.853 (0.775-0.940)      -0.041 (-0.072 to -0.008)  0.37 (0.15 to 0.63)
+  placebo:partlyOperative     676     1.399     0.810   0.579   0.594  0.974 (0.885-1.061)      -0.012 (-0.045 to 0.021)   
+  explicit                  1526     1.528     0.636   0.417   0.638  0.653 (0.592-0.721)      -0.100 (-0.123 to -0.079)  
+  placebo:explicit          1433     1.153     0.773   0.671   0.650  1.033 (0.934-1.155)      +0.013 (-0.010 to 0.038)   
+  partly                    5668     1.339     0.539   0.402   0.577  0.697 (0.673-0.722)      -0.084 (-0.093 to -0.073)  0.85 (0.67 to 1.10)
+  placebo:partly            5333     1.048     0.608   0.580   0.583  0.994 (0.952-1.037)      +0.012 (-0.001 to 0.024)   
+  implicit                    47     5.634     4.906   0.871   0.850  1.024 (0.661-1.553)      +0.022 (-0.088 to 0.135)   -0.06 (-1.08 to 1.02)
+  placebo:implicit            37     4.014     2.651   0.660   0.862  0.766 (0.506-1.242)      -0.063 (-0.199 to 0.077)   
+
+run time 16s

@@ -1,0 +1,138 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\data",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\out",
+  "status_sha1": "ece2365efc536dfcb39425e8c95efe842c57e3a6"
+ },
+ "court": "state",
+ "dataset": "brace_hall_state",
+ "generated": "2026-11-14T03:42:02+00:00",
+ "label": "round4",
+ "link": {
+  "fail_reasons": {
+   "below_not_found": 1799,
+   "below_several_cited": 4,
+   "below_several_uncited": 36,
+   "ssc_ambiguous": 110,
+   "ssc_not_in_corpus": 284,
+   "trial_below_not_found": 7688,
+   "trial_below_several_uncited": 2
+  },
+  "linked": 1851,
+  "n_items": 11774
+ },
+ "metrics": {
+  "clean": {
+   "hi": 0.9840538396418784,
+   "k": 604,
+   "lo": 0.9584933277977966,
+   "n": 620,
+   "p": 0.9741935483870968
+  },
+  "clean_all": {
+   "hi": 0.9860622597454158,
+   "k": 693,
+   "lo": 0.9636580343890695,
+   "n": 709,
+   "p": 0.9774330042313117
+  },
+  "link_rate": {
+   "hi": 0.48488948460880626,
+   "k": 1807,
+   "lo": 0.4533859858590455,
+   "n": 3852,
+   "p": 0.4691069574247144
+  },
+  "link_rate_all": {
+   "hi": 0.16389734957883542,
+   "k": 1851,
+   "lo": 0.15074786549041977,
+   "n": 11774,
+   "p": 0.15721080346526245
+  },
+  "link_rate_cited": {
+   "hi": 0.43752476948706537,
+   "k": 1625,
+   "lo": 0.4063484793433833,
+   "n": 3852,
+   "p": 0.421858774662513
+  },
+  "part": {
+   "hi": 0.2646479842595086,
+   "k": 40,
+   "lo": 0.15280297107760177,
+   "n": 197,
+   "p": 0.20304568527918782
+  },
+  "part_all": {
+   "hi": 0.23706536137899092,
+   "k": 40,
+   "lo": 0.1358260942202174,
+   "n": 221,
+   "p": 0.18099547511312217
+  },
+  "precision": {
+   "hi": 0.9341769962645302,
+   "k": 247,
+   "lo": 0.8641138410004198,
+   "n": 273,
+   "p": 0.9047619047619048
+  },
+  "precision_all": {
+   "hi": 0.9341769962645302,
+   "k": 247,
+   "lo": 0.8641138410004198,
+   "n": 273,
+   "p": 0.9047619047619048
+  },
+  "precision_lenient": {
+   "hi": 0.9746792394509618,
+   "k": 261,
+   "lo": 0.9247525183724434,
+   "n": 273,
+   "p": 0.9560439560439561
+  },
+  "precision_lenient_all": {
+   "hi": 0.9746792394509618,
+   "k": 261,
+   "lo": 0.9247525183724434,
+   "n": 273,
+   "p": 0.9560439560439561
+  },
+  "recall": {
+   "hi": 0.34078309022991804,
+   "k": 247,
+   "lo": 0.2770077337522846,
+   "n": 802,
+   "p": 0.30798004987531175
+  },
+  "recall_all": {
+   "hi": 0.30385005875764587,
+   "k": 247,
+   "lo": 0.24573999808974617,
+   "n": 902,
+   "p": 0.2738359201773836
+  },
+  "recall_lenient": {
+   "hi": 0.35608255569308,
+   "k": 259,
+   "lo": 0.2914908014853146,
+   "n": 802,
+   "p": 0.3229426433915212
+  },
+  "recall_lenient_all": {
+   "hi": 0.3175187886427701,
+   "k": 259,
+   "lo": 0.2585659707430105,
+   "n": 902,
+   "p": 0.28713968957871394
+  }
+ },
+ "notes": "Primary population: linked decisions below cited by the linked state supreme court decision (MAPPING.md). recall/precision/clean/part on that population; *_all = every linked decision below (cited or caption-only). recall_lenient counts UNK_HIST as negative; precision_lenient counts PART as source-negative. link_rate: key items reviewing an intermediate appellate decision (rev_ct=3) linked to one supreme court and one decision-below node; link_rate_all: all key items (rev_ct 1-3). Intermediate-appellate-only cited units: recall 246/799, clean 598/614. Units by class/cited: {'CLEAN/0': 89, 'CLEAN/1': 620, 'NEG/0': 100, 'NEG/1': 802, 'PART/0': 24, 'PART/1': 197}. Cited units class>model: {'CLEAN>GOOD': 600, 'CLEAN>NEG_HIST': 12, 'CLEAN>NEG_OTHER': 1, 'CLEAN>UNK_HIST': 4, 'CLEAN>UNK_OTHER': 3, 'NEG>GOOD': 540, 'NEG>NEG_HIST': 247, 'NEG>UNK_HIST': 12, 'NEG>UNK_OTHER': 3, 'PART>GOOD': 155, 'PART>NEG_HIST': 14, 'PART>NEG_OTHER': 1, 'PART>UNK_HIST': 26, 'PART>UNK_OTHER': 1}.",
+ "primary": "recall",
+ "row_label": "Brace-Hall: state decision below reversed/vacated by state supreme court",
+ "split": "h1",
+ "tests": "same-case"
+}

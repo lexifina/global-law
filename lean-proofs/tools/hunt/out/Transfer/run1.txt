@@ -1,0 +1,138 @@
+==== A: H dies (yr 5), W (yr 10), C (yr 15) ====
+simple will: grandchildren end with $142.76M after tax; transfer tax $104.40M, built-in income tax $0.00M
+  period 0 Legal.USTax.Hunt.Transfer.Phase.bed: 4629 positions, kept 188
+  period 0 Legal.USTax.Hunt.Transfer.Phase.estate (Legal.USTax.Hunt.Transfer.Who.H): 10804 positions, kept 400
+  period 1 Legal.USTax.Hunt.Transfer.Phase.plan: 10224 positions, kept 400
+  period 1 Legal.USTax.Hunt.Transfer.Phase.bed: 217287 positions, kept 400
+  period 1 Legal.USTax.Hunt.Transfer.Phase.estate (Legal.USTax.Hunt.Transfer.Who.W): 9842 positions, kept 400
+  period 2 Legal.USTax.Hunt.Transfer.Phase.plan: 4491 positions, kept 400
+  period 2 Legal.USTax.Hunt.Transfer.Phase.bed: 14945 positions, kept 400
+  period 2 Legal.USTax.Hunt.Transfer.Phase.estate (Legal.USTax.Hunt.Transfer.Who.C): 2214 positions, kept 400
+  period 3 Legal.USTax.Hunt.Transfer.Phase.plan: 391 positions, kept 391
+positions examined at phase ends: 274827; distinct families at the end: 391
+#1  $174.56M  (+$31.80M vs simple will)  transfer tax $65.82M, income tax paid $0.00M, built-in $13.86M
+    family: C-gift, gift-grandchildren, GRAT→child, 529, annual→grandchildren
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      C funds 529 with five-year election
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.51M (cash first), remainder child
+      C funds 529 with five-year election
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+#2  $174.54M  (+$31.78M vs simple will)  transfer tax $65.84M, income tax paid $0.00M, built-in $13.86M
+    family: C-gift, gift-grandchildren, GRAT→child, 529
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      C funds 529 with five-year election
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.51M (cash first), remainder child
+      C funds 529 with five-year election
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)
+#3  $174.53M  (+$31.77M vs simple will)  transfer tax $65.86M, income tax paid $0.00M, built-in $13.88M
+    family: C-gift, gift-grandchildren, GRAT→child, 529, annual→grandchildren, tuition
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      C funds 529 with five-year election
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.51M (cash first), remainder child
+      W pays tuition
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+#4  $174.51M  (+$31.75M vs simple will)  transfer tax $65.87M, income tax paid $0.00M, built-in $13.88M
+    family: C-gift, gift-grandchildren, GRAT→child, 529, tuition
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      C funds 529 with five-year election
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.51M (cash first), remainder child
+      W pays tuition
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)
+#5  $174.48M  (+$31.72M vs simple will)  transfer tax $65.91M, income tax paid $0.00M, built-in $13.90M
+    family: C-gift, gift-grandchildren, GRAT→child, annual→grandchildren, tuition
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      H pays tuition
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.39M (cash first), remainder child
+      W pays tuition
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+#6  $174.46M  (+$31.70M vs simple will)  transfer tax $65.92M, income tax paid $0.00M, built-in $13.90M
+    family: C-gift, gift-grandchildren, GRAT→child, tuition
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      H pays tuition
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.39M (cash first), remainder child
+      W pays tuition
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)
+#7  $174.45M  (+$31.69M vs simple will)  transfer tax $65.93M, income tax paid $0.00M, built-in $13.86M
+    family: C-gift, gift-grandchildren, GRAT→child, 529, annual→child, annual→grandchildren
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      C funds 529 with five-year election
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.51M (cash first), remainder child
+      W gives the annual exclusion each year to child
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+#8  $174.44M  (+$31.68M vs simple will)  transfer tax $65.94M, income tax paid $0.00M, built-in $13.86M
+    family: C-gift, gift-grandchildren, GRAT→child, 529, annual→child
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      C funds 529 with five-year election
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.51M (cash first), remainder child
+      W gives the annual exclusion each year to child
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)
+#9  $174.41M  (+$31.65M vs simple will)  transfer tax $65.97M, income tax paid $0.00M, built-in $13.86M
+    family: C-gift, gift-spouse, gift-grandchildren, GRAT→child, 529, annual→grandchildren
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      H gives $4.54M to spouse (cash first)
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.51M (cash first), remainder child
+      C funds 529 with five-year election
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+#10  $174.40M  (+$31.64M vs simple will)  transfer tax $65.98M, income tax paid $0.00M, built-in $13.89M
+    family: C-gift, gift-grandchildren, GRAT→child, annual→child, annual→grandchildren, tuition
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      H pays tuition
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.39M (cash first), remainder child
+      W gives the annual exclusion each year to child
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+#11  $174.39M  (+$31.63M vs simple will)  transfer tax $65.99M, income tax paid $0.00M, built-in $13.86M
+    family: C-gift, gift-spouse, gift-grandchildren, GRAT→child, 529
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      H gives $4.54M to spouse (cash first)
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.51M (cash first), remainder child
+      C funds 529 with five-year election
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)
+#12  $174.38M  (+$31.62M vs simple will)  transfer tax $65.99M, income tax paid $0.00M, built-in $13.89M
+    family: C-gift, gift-grandchildren, GRAT→child, annual→child, tuition
+      H gives $15.00M to grandchildren (cash first)
+      H funds GRAT $85.00M (cash first), remainder child
+      H pays tuition
+      W gives $16.95M to grandchildren (cash first)
+      W funds GRAT $91.39M (cash first), remainder child
+      W gives the annual exclusion each year to child
+      C gives $19.15M to grandchildren (cash first)
+      C gives $19.15M to grandchildren (cash first)

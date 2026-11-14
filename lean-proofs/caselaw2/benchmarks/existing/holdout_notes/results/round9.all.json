@@ -1,0 +1,38 @@
+{
+ "asof": null,
+ "blind": true,
+ "build": {
+  "source": "round9/results/v9c/summary.txt (HOLDOUT NOTES lines)"
+ },
+ "court": "mixed",
+ "dataset": "holdout_notes",
+ "generated": "2026-11-14T03:43:02+00:00",
+ "label": "round9",
+ "link": {
+  "fail_reasons": {},
+  "linked": 12354,
+  "n_items": 12354,
+  "note": "items are (X, Y) pairs of the frozen split (round5/tests/split); targets and Y are corpus nodes by construction (regex 'nearest citation', not audited)"
+ },
+ "metrics": {
+  "precision": {
+   "hi": 0.9492789313988722,
+   "k": 800,
+   "lo": 0.9159968613827268,
+   "n": 856,
+   "p": 0.9345794392523364
+  },
+  "recall": {
+   "hi": 0.38562697035265,
+   "k": 4658,
+   "lo": 0.36853721680669754,
+   "n": 12354,
+   "p": 0.3770438724299822
+  }
+ },
+ "notes": "From the round-9 lead's dev-side summary; same scorer and figures as this folder's run (checked on round 8).",
+ "primary": "recall",
+ "row_label": "Later-court notes 'X, overruled/abrogated by Y' from courts with no power over X (held out)",
+ "split": "all",
+ "tests": "overruling"
+}

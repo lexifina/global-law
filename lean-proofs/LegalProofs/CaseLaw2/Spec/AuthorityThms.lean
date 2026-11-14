@@ -285,4 +285,55 @@ theorem no_cross_system (L : Lookups) (b x : Decision) (dom : Option Domain) (B 
   · rfl
   simp [hsc, h1, h2, hA]
 
+
+/-! ## Round 9 (`round9/DESIGN9.md` §6, D9-6): adoption by a successor court of like jurisdiction
+
+New Jersey's rule is carried by data (adoption rows `1099 ← 1095`, `1222 ← 1206`); these two theorems state what the
+existing `canChangeStatus` does with such a row, for any court system. -/
+
+/-- **An adopter of the target's dated tier holds the adopted decision as its own**: an adopter that is not a court
+of last resort, not the target's court, not above the target in its system, and of the target's dated tier or above,
+under a soft or no horizontal rule, has power (*In re Estate of Johnson*, 240 N.J. Super. 134 (App. Div. 1990)). -/
+theorem adoptedSameTier_power (L : Lookups) (b x : Decision) (dom? : Option Domain) (B X : CourtEpoch)
+    (hB : L.epochAt b.court b.date = some B) (hX : L.epochAt x.court x.date = some X) (hd : x.date ≤ b.date)
+    (hs : B.scotus = false) (hl : B.tier ≠ .last) (hc : B.court ≠ X.court)
+    (hh : ¬(B.system = X.system ∧ X.tier.rank < B.tier.rank))
+    (ha : (adoptionsOf L x).any (·.adopter == b.court) = true) (ht : X.tier.rank ≤ B.tier.rank)
+    (hr : L.rules.horizontal B.court B.system x.date = some .none ∨
+      L.rules.horizontal B.court B.system x.date = some .soft) :
+    canChangeStatus L b x dom? = some (true, .sameCourtSoft) := by
+  have hlt : ¬ b.date < x.date := Nat.not_lt.mpr hd
+  have hl' : (B.tier == Tier.last) = false := by simpa using hl
+  have hc' : (B.court == X.court) = false := by simpa using hc
+  have hsys : (B.system == X.system && decide (X.tier.rank < B.tier.rank)) = false := by
+    by_cases he : B.system = X.system
+    · have hn : ¬ X.tier.rank < B.tier.rank := fun h => hh ⟨he, h⟩
+      simp [he, hn]
+    · simp [he]
+  have hdt : decide (X.tier.rank ≤ B.tier.rank) = true := decide_eq_true ht
+  have hbr : benchRule L B B b { x with unit := none } = (true, .sameCourtSoft) := by
+    unfold benchRule
+    rcases hr with hr | hr <;> simp [hr]
+  unfold canChangeStatus
+  simp only [hB, hX, hlt, hs, hsys, hl', hc', ha, hdt, hbr, Bool.false_and, Bool.and_false, Bool.true_and,
+    Bool.and_self, Bool.false_eq_true, ↓reduceIte, if_false]
+
+/-- **No power below the target's dated tier**: a court ranked below the target's dated tier (the Supreme Court of the
+United States aside) has no power over it, whatever the adoption rows say (the Appellate Division under the Court of
+Errors and Appeals; Kentucky 1976). -/
+theorem adopted_lowerTier_noPower (L : Lookups) (b x : Decision) (dom? : Option Domain) (B X : CourtEpoch)
+    (hB : L.epochAt b.court b.date = some B) (hX : L.epochAt x.court x.date = some X) (hs : B.scotus = false)
+    (hlow : B.tier.rank < X.tier.rank) :
+    (canChangeStatus L b x dom?).map (·.1) = some false := by
+  have hBl : B.tier ≠ .last := by
+    intro h
+    rw [h] at hlow
+    cases hx : X.tier <;> simp [Tier.rank, hx] at hlow
+  have hl' : (B.tier == Tier.last) = false := by simpa using hBl
+  have hd1 : decide (X.tier.rank < B.tier.rank) = false := decide_eq_false (by omega)
+  have hd2 : decide (X.tier.rank ≤ B.tier.rank) = false := decide_eq_false (by omega)
+  unfold canChangeStatus
+  simp only [hB, hX, hs, hd1, hd2, hl', Bool.false_and, Bool.and_false, Bool.false_eq_true, ↓reduceIte, if_false]
+  split <;> (try split) <;> rfl
+
 end CaseLaw2.Spec

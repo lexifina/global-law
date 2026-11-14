@@ -1,0 +1,39 @@
+
+def c9 : Params := { base with grid := coarse }
+def r9 : Params := { base with grid := coarse, asset := .usRealty, covered := false }
+def noAbandon : List Move := [.present, .absent, .relocate, .sell, .renounce true, .renounce false, .giftUS, .giftNRA]
+
+-- T0 reproduce
+#eval report "T0 plan1: gc9 covered usStock (original rules)" c9 greenCard9
+#eval report "T0 plan2: gc9 not covered usRealty (original rules)" r9 greenCard9
+#eval report "T0 plan2b: gc9 not covered usStock" { c9 with covered := false } greenCard9
+#eval report "T0 citizen covered usStock" c9 citizen
+-- T1 strict
+#eval report "T1 plan1 strict: noSeg0Exit" { c9 with noSeg0Exit := true } greenCard9
+#eval report "T1 plan1 strict: noSeg0Exit + IRA 500k distributed (§877A(e))" { c9 with noSeg0Exit := true, ira := 500000 } greenCard9
+#eval report "T1 plan1: exclusion 866000 (2024, if day-before falls in 2024)" { c9 with exclusion := 866000 } greenCard9
+#eval report "T1 plan2 strict: noSeg0Exit" { r9 with noSeg0Exit := true } greenCard9
+#eval report "T1 gc 7th year (lprYears 6): not long-term" c9 ⟨"gc7", false, true, 6, 365, true, 6, true⟩
+#eval report "T1 gc 8th year (lprYears 7)" c9 ⟨"gc8", false, true, 7, 365, true, 7, true⟩
+-- T2
+#eval report "T2 fixA plan1" { c9 with fixA := true } greenCard9
+#eval report "T2 fixA citizen" { c9 with fixA := true } citizen
+#eval report "T2 fixA plan2" { r9 with fixA := true } greenCard9
+#eval report "T2 fixC plan2" { r9 with fixC := true } greenCard9
+#eval report "T2 fixA+fixC plan2" { r9 with fixA := true, fixC := true } greenCard9
+#eval report "T2 fixA+fixC plan1" { c9 with fixA := true, fixC := true } greenCard9
+#eval report "T2 fixA+fixC visa holder (must not move)" { c9 with fixA := true, fixC := true } visaHolder
+#eval report "T2 orig visa holder" c9 visaHolder
+-- T3 ablation, plan 1
+#eval report "T3 p1 no abandon" c9 greenCard9 noAbandon
+#eval report "T3 p1 no sell" c9 greenCard9 [.present, .absent, .relocate, .renounce true, .renounce false, .abandon true, .abandon false, .giftUS, .giftNRA]
+#eval report "T3 p1 no present" c9 greenCard9 [.absent, .relocate, .sell, .renounce true, .renounce false, .abandon true, .abandon false, .giftUS, .giftNRA]
+#eval report "T3 p1 no relocate" c9 greenCard9 [.present, .absent, .sell, .renounce true, .renounce false, .abandon true, .abandon false, .giftUS, .giftNRA]
+#eval report "T3 p1 only used moves (present, sell, abandon true)" c9 greenCard9 [.present, .sell, .abandon true]
+-- T3 plan 2
+#eval report "T3 p2 no abandon-without-certification" r9 greenCard9 [.present, .absent, .relocate, .sell, .renounce true, .renounce false, .abandon true, .giftUS, .giftNRA]
+#eval report "T3 p2 only (present, sell, abandon false)" r9 greenCard9 [.present, .sell, .abandon false]
+#eval report "T3 p2 leaver, only (present, absent, relocate, sell, abandon false)" r9 greenCard9 [.present, .absent, .relocate, .sell, .abandon false]
+-- T4
+#eval report "T4 pre2008 plan1" { c9 with pre2008 := true } greenCard9
+#eval report "T4 pre2008 plan2" { r9 with pre2008 := true } greenCard9

@@ -1,0 +1,98 @@
+<h2 id="history">Round 6: same-case history</h2>
+
+<p>A different question from the rest of this page: not whether a decision was overruled by a later case, but what
+happened to it later in its own case (reversed, vacated, withdrawn, reheard en banc). The reference is the
+Shepardized Courts of Appeals Database, a hand-coded research file built from Shepard's citator for 20,354 published
+federal appeals decisions from 1925 to 2002; 19,916 of them were linked to a decision in the corpus.</p>
+
+<h3>Where it started</h3>
+<div class="tw"><table>
+<thead><tr><th>Measure (all linked cases, model of 12 November)</th><th>Result</th><th>95% interval</th></tr></thead>
+<tbody>
+<tr><td>Decisions Shepard's shows reversed, vacated or withdrawn that the model also shows negative</td><td>14 of 506 (2.8%)</td><td>1.7%–4.6%</td></tr>
+<tr><td>Decisions the model shows negative for a same-case reason that Shepard's also shows negative</td><td>14 of 18 (77.8%)</td><td>54.8%–91.0%</td></tr>
+<tr><td>Decisions Shepard's shows clean that the model also shows clean</td><td>19,287 of 19,290 (99.98%)</td><td>99.95%–99.99%</td></tr>
+</tbody></table></div>
+<p>For 471 of the 518 missed cases the later ruling is in the corpus, and in 354 it cites the decision it reviewed.
+The model failed to connect them.</p>
+
+<h3>What is being done</h3>
+<ul>
+<li>The Shepardized cases were split in two by a hash of the citation before any fix. Misses are read only in the
+open half; the sealed half is scored once, after the rules, code and data are frozen.</li>
+<li>Every fix is a general rule that runs over all 6.9 million decisions: finding the decision under review from a
+procedural-history sentence without a party name, linking Supreme Court summary orders to the decision below by
+caption, court and date, linking opinions on rehearing and en banc to the panel opinion they replace, and
+reading old citation forms such as "F. (2d)".</li>
+<li>A link whose two sentences are far apart is certified by two quotations from the acting court's opinion (the
+sentence that identifies the decision under review, and the judgment line); the Lean checker gets one new step
+for the second quotation.</li>
+<li>Precision is measured on the whole corpus, not on Shepardized: sub-agents read samples of the new events blind,
+without being told the rule.</li>
+</ul>
+<h3>First scored version (v1, 13 November 17:42; open half only)</h3>
+<p>The first version of the new rules, run through the Lean checker and scored on the open half of the Shepardized
+cases (10,019 linked decisions). The sealed half has not been scored. These rules are not final: the readers'
+check of a sample of the new events across the whole corpus is still running, and nothing here is installed in the
+model's own tables.</p>
+<div class="tw"><table>
+<thead><tr><th>Open half (as of 19 Nov 2010)</th><th>Before</th><th>v1</th><th>v1, 95% interval</th></tr></thead>
+<tbody>
+<tr><td>Shepard's negative, model negative (all)</td><td>6 of 254</td><td>105 of 254 (41.3%)</td><td>35.5%–47.5%</td></tr>
+<tr><td>… reversed by the Supreme Court</td><td>5 of 129</td><td>73 of 129 (56.6%)</td><td>48.0%–64.8%</td></tr>
+<tr><td>… vacated by the Supreme Court</td><td>1 of 71</td><td>32 of 71 (45.1%)</td><td>34.0%–56.6%</td></tr>
+<tr><td>… withdrawn or changed on panel rehearing</td><td>0 of 27</td><td>0 of 27</td><td>0%–12.5%</td></tr>
+<tr><td>… different result en banc</td><td>0 of 27</td><td>0 of 27</td><td>0%–12.5%</td></tr>
+<tr><td>Supreme Court affirmed in part, reversed in part: model negative or partly negative</td><td>0 of 11</td><td>4 of 11</td><td>15.2%–64.6%</td></tr>
+<tr><td>Model negative for a same-case reason, Shepard's negative (precision)</td><td>6 of 9</td><td>105 of 123 (85.4%)</td><td>78.1%–90.5%</td></tr>
+<tr><td>Shepard's clean, model clean</td><td>9,701 of 9,704</td><td>9,687 of 9,704 (99.8%)</td><td>99.7%–99.9%</td></tr>
+</tbody></table></div>
+<p>New same-case events in v1 across the whole corpus: 153,067 rows passed the round-6 certificate script and
+151,276 were admitted by the Lean checker (19,064 affirmed, 16,227 reversed, 3,916 vacated, 991 modified, 3,862
+review dismissed, 109,007 certiorari denied; 33,201 of them carry two quotations). Rehearing and en banc rules
+are not in v1.</p>
+<h3>Second scored version (v2, 13 November 18:04; open half only)</h3>
+<p>v2 keeps only the rule classes that passed the first blind reading (or were tightened since, and are being
+re-read now), removes 3,381 old history rows that eight measured guard rules show to be attached to the wrong
+decision, and runs the same guards over the new rows.</p>
+<div class="tw"><table>
+<thead><tr><th>Open half (as of 19 Nov 2010)</th><th>Before</th><th>v2</th><th>v2, 95% interval</th></tr></thead>
+<tbody>
+<tr><td>Shepard's negative, model negative (all)</td><td>6 of 254</td><td>112 of 254 (44.1%)</td><td>38.1%–50.2%</td></tr>
+<tr><td>… reversed by the Supreme Court</td><td>5 of 129</td><td>81 of 129 (62.8%)</td><td>54.2%–70.6%</td></tr>
+<tr><td>… vacated by the Supreme Court</td><td>1 of 71</td><td>31 of 71 (43.7%)</td><td>32.7%–55.2%</td></tr>
+<tr><td>… withdrawn or changed on panel rehearing / different result en banc</td><td>0 of 54</td><td>0 of 54</td><td>(rules not yet in)</td></tr>
+<tr><td>Model negative for a same-case reason, Shepard's negative (precision)</td><td>6 of 9</td><td>112 of 115 (97.4%)</td><td>92.6%–99.1%</td></tr>
+<tr><td>Shepard's clean, model clean</td><td>9,701 of 9,704</td><td>9,700 of 9,704</td><td>99.9%–100%</td></tr>
+</tbody></table></div>
+<p>Eight errors in the Shepardized file have been found so far by reading the opinions (four before this round,
+four more in the open half this round, quoted in <code>round6/history/shep_errors.tsv</code>); with those set
+aside the open-half figures move by at most two cases.</p>
+<p>Blind reading of a sample of the first version's new events across the whole corpus (395 items, readers not told
+the rule): status-changing rows right — decisions below of other courts 54 of 60, Supreme Court opinions 52 of
+60, Supreme Court orders linked by citation 57 of 60, orders linked by caption 49 of 60. Rule variants that read
+below 90% were taken out or tightened, and the tightened ones are being read again on fresh samples.</p>
+<h3>Frozen version and the sealed half (13 November 18:23)</h3>
+<p>After two more blind readings of fresh samples (rule variants that read below 90% were left out; the
+docket-linked and en banc rehearing rules stayed below and are not installed), the rules, code and data were frozen
+(<code>round6/history/FREEZE.md</code>) and the sealed half was scored exactly once.</p>
+<div class="tw"><table>
+<thead><tr><th>Measure</th><th>Open half, before</th><th>Open half, frozen</th><th>Sealed half, before</th><th>Sealed half, frozen</th></tr></thead>
+<tbody>
+<tr><td>Shepard's negative, model negative</td><td>6 of 254</td><td>105 of 254 (41.3%; 35.5–47.5)</td><td>8 of 252</td><td>104 of 252 (41.3%; 35.4–47.4)</td></tr>
+<tr><td>… Supreme Court reversed</td><td>5 of 129</td><td>67 of 129</td><td>5 of 132</td><td>73 of 132 (55.3%)</td></tr>
+<tr><td>… Supreme Court vacated</td><td>1 of 71</td><td>30 of 71</td><td>3 of 61</td><td>28 of 61 (45.9%)</td></tr>
+<tr><td>… panel rehearing</td><td>0 of 27</td><td>5 of 27</td><td>0 of 25</td><td>3 of 25</td></tr>
+<tr><td>… different result en banc</td><td>0 of 27</td><td>3 of 27</td><td>0 of 33</td><td>0 of 33</td></tr>
+<tr><td>Precision (model negative, Shepard's negative)</td><td>6 of 9</td><td>105 of 111 (94.6%; 88.7–97.5)</td><td>8 of 9</td><td>104 of 113 (92.0%; 85.6–95.8)</td></tr>
+<tr><td>Shepard's clean, model clean</td><td>9,701 of 9,704</td><td>9,698 of 9,704</td><td>9,586 of 9,586</td><td>9,579 of 9,586</td></tr>
+</tbody></table></div>
+<p>The sealed "before" column is the earlier all-cases figure minus the open half (arithmetic, not a second sealed
+run). The two halves agree within their intervals. About 118,600 new same-case events across all courts were
+admitted by the Lean checker; each installed rule class was read blind on a sample of 58 to 60 status-changing rows
+at 90% to 98% right. Of the remaining misses in the open half, 13 of 254 have no later decision in the corpus;
+most of the rest are cited but not linked by rules precise enough to install, and 36 are en banc or rehearing cases
+whose rules read 72% and 88% and were left out (with them the open half would be 122 of 254 at 93% precision).
+Eleven coding errors in the Shepardized file are documented with quotations. Full account:
+<code>round6/history/ROUND6.md</code>.</p>
+<p class="muted">Round 6 finished 13 November 18:28.</p>

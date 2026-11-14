@@ -1,0 +1,75 @@
+{
+ "args": [
+  "--rows",
+  "rows_S.jsonl",
+  "--out",
+  "cert_S"
+ ],
+ "base": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round12/stage/v12a",
+ "cue_source": {
+  "hist": "cue_table.json",
+  "disqualify_hist": "cue_table.json",
+  "anchor": "cue_table.json",
+  "disqualify_anchor": "cue_table.json",
+  "disqualify_treat": "cue_table.json",
+  "operative": "cue_table.json",
+  "disqualify_operative": "cue_table.json",
+  "treat": "cue_table.json",
+  "anaphor": "cue_table.json",
+  "doctrine_tie": "cue_table.json",
+  "doctrine_reject": "cue_table.json",
+  "disqualify_joined": "cue_table.json",
+  "order_line": "cue_table.json",
+  "set_aside": "cue_table.json",
+  "order_head_from": "cue_table.json",
+  "joined_gap_max": "cue_table.json",
+  "order_head_max_len": "cue_table.json"
+ },
+ "scotus_court_id": 2906,
+ "order_head_from": 20130101,
+ "joined_gap_max": 300,
+ "counts": {
+  "admitted": 11,
+  "admitted:history": 11,
+  "admitted:history:claim:-": 10,
+  "admitted:history:claim:orderHead": 1,
+  "alias_keys_added": 0,
+  "cite_collisions": 0,
+  "cite_index_lines": 0,
+  "claim_setAside_other_kind": 0,
+  "input:history": 11,
+  "input_rows": 11,
+  "rejected": 0,
+  "texts_read": 11,
+  "windows": 11
+ },
+ "admitted_by_kind": {
+  "history:reversed": 1,
+  "history:vacated": 10
+ },
+ "alias_keys_added_by_form": {},
+ "by_rule": {
+  "shadow13:cap-S": {
+   "admitted": 4,
+   "admitted:reversed": 1,
+   "admitted:vacated": 3,
+   "input": 4
+  },
+  "shadow13:olist-S": {
+   "admitted": 7,
+   "admitted:vacated": 7,
+   "input": 7
+  }
+ },
+ "sha1": {
+  "treatments_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "treatment_class_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "joined_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "history_delta.tsv": "85b25355a999154aca1b5632ade8a0fe2b79bcee",
+  "history_anchor_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "history_claim_delta.tsv": "2b7e6d9f6356c4c6019cfa4996f88ccfa70a56c2",
+  "cert_text_delta.tsv": "891b719c921829d66d18eb6b6663ef4a5ac6f908",
+  "window_sha_delta.tsv": "a93f6e5085663dbbdcb7793698be6e3cb06a50ef",
+  "cite_index_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+ }
+}

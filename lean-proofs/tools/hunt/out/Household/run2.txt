@@ -1,0 +1,181 @@
+== H1 unmarried: default net tax -1650; 10528 lawful plans, depth 9
+    A: head of household, AGI 60000, taxable 36375, tax 4025, credits [§21 2100, §24 4400], net -2475
+    B: single, AGI 24000, taxable 8250, tax 825, credits [], net 825
+  9503 better [claims+fsa+pretax]: child 2 claimed by B; A dependent-care exclusion $7500; B dependent-care exclusion $3750; A pre-tax saving $23500
+    A: head of household, AGI 29000, taxable 5375, tax 537, credits [§25B 537, §24 1700, §32 3425], net -5125
+    B: single, AGI 20250, taxable 4500, tax 450, credits [§24 2150, §32 4328], net -6028
+  8200 better [claims+pretax]: child 1 claimed by B; A pre-tax saving $23500
+  7712 better [fsa+pretax]: A dependent-care exclusion $7500; A pre-tax saving $23500; B pre-tax saving $2000
+  6132 better [pretax]: A pre-tax saving $23500; B pre-tax saving $2000
+  3653 better [claims+fsa+roth]: child 2 claimed by B; A dependent-care exclusion $7500; B dependent-care exclusion $3750; A Roth IRA $2000
+  3603 better [claims+fsa]: child 1 claimed by B; B dependent-care exclusion $3750
+  3519 better [claims]: child 1 claimed by B; child 2 claimed by B
+  413 better [fsa+roth]: A dependent-care exclusion $7500; A Roth IRA $2000; B Roth IRA $2000
+  400 better [roth]: B Roth IRA $2000
+  best without retirement saving: 3603 better [claims+fsa]: child 1 claimed by B; B dependent-care exclusion $3750
+    A: head of household, AGI 60000, taxable 36375, tax 4025, credits [§21 1050, §24 2200], net 775
+    B: single, AGI 20250, taxable 4500, tax 450, credits [§24 2150, §32 4328], net -6028
+== H1 married: default net tax -677; 8096 lawful plans, depth 10
+    joint: joint, AGI 84000, taxable 52500, tax 5823, credits [§21 2100, §24 4400], net -677
+  5130 better [fsa+pretax]: A dependent-care exclusion $7500; A pre-tax saving $23500; B pre-tax saving $7000
+    joint: joint, AGI 46000, taxable 14500, tax 1450, credits [§25B 1450, §24 3400, §32 2407], net -5807
+  3550 better [pretax]: A pre-tax saving $23500
+  nothing beats the default without retirement saving
+## H1: best unmarried -11153, best married -5807; marrying costs 5346
+== H2 unmarried: default net tax -16613; 3024 lawful plans, depth 9
+    A: head of household, AGI 78000, taxable 54375, tax 6185, credits [§21 990, §24 6600, §36B 11936], net -13341
+    B: single, AGI 30000, taxable 14250, tax 1471, credits [§36B 4743], net -3272
+  7653 better [claims+pretax]: child 2 claimed by B; child 3 claimed by B; A pre-tax saving $7000; B pre-tax saving $2000
+    A: head of household, AGI 71000, taxable 47375, tax 5345, credits [§21 1050, §24 2200, §36B 3429], net -1334
+    B: single, AGI 28000, taxable 12250, tax 1231, credits [§25B 200, §24 4400, §32 5751, §36B 13812], net -22932
+  5774 better [claims+roth]: child 2 claimed by B; child 3 claimed by B; B Roth IRA $2000
+  5574 better [claims]: child 2 claimed by B; child 3 claimed by B
+  4447 better [pretax]: A pre-tax saving $7000; B pre-tax saving $7000
+  200 better [roth]: B Roth IRA $2000
+  best without retirement saving: 5574 better [claims]: child 2 claimed by B; child 3 claimed by B
+    A: head of household, AGI 78000, taxable 54375, tax 6185, credits [§21 990, §24 2200, §36B 2732], net 263
+    B: single, AGI 30000, taxable 14250, tax 1471, credits [§24 4400, §32 5751, §36B 13770], net -22450
+== H2 married: default net tax -13523; 2340 lawful plans, depth 10
+    joint: joint, AGI 108000, taxable 76500, tax 8703, credits [§21 1050, §24 6600, §36B 14576], net -13523
+  4090 better [pretax]: A pre-tax saving $7000; B pre-tax saving $7000
+    joint: joint, AGI 94000, taxable 62500, tax 7023, credits [§21 1050, §24 6600, §36B 16986], net -17613
+  nothing beats the default without retirement saving
+## H2: best unmarried -24266, best married -17613; marrying costs 6653
+== H3 unmarried: default net tax -775; 648 lawful plans, depth 8
+    A: head of household, AGI 52000, taxable 4375, tax 437, credits [§24 2137], net -1700
+    B: single, AGI 46000, taxable 9250, tax 925, credits [], net 925
+  1633 better [claims+keeper]: child 1 claimed by B; B keeps up the home
+    A: head of household, AGI 52000, taxable 4375, tax 437, credits [§24 437], net 0
+    B: head of household, AGI 46000, taxable 1375, tax 137, credits [§24 1837, §32 708], net -2408
+  1633 better [claims+pretax]: child 1 claimed by B; B pre-tax saving $7000
+  1208 better [claims]: child 1 claimed by B
+  900 better [pretax]: B pre-tax saving $7000
+  best without retirement saving: 1633 better [claims+keeper]: child 1 claimed by B; B keeps up the home
+    A: head of household, AGI 52000, taxable 4375, tax 437, credits [§24 437], net 0
+    B: head of household, AGI 46000, taxable 1375, tax 137, credits [§24 1837, §32 708], net -2408
+== H3 married: default net tax 1083; 576 lawful plans, depth 9
+    joint: joint, AGI 98000, taxable 35500, tax 3783, credits [§24 2700], net 1083
+  1633 better [pretax]: A pre-tax saving $7000; B pre-tax saving $7000
+    joint: joint, AGI 84000, taxable 21500, tax 2150, credits [§24 2700], net -550
+  nothing beats the default without retirement saving
+## H3: best unmarried -2408, best married -550; marrying costs 1858
+== H4 unmarried: default net tax -7420; 3234 lawful plans, depth 8
+    A: single, AGI 95000, taxable 79250, tax 12349, credits [], net 12349
+    B: head of household, AGI 40000, taxable 16375, tax 1637, credits [§21 1110, §24 3927, §32 3645, §36B 12724], net -19769
+  7861 better [claims+fsa+pretax]: child 1 claimed by A; child 2 claimed by A; B dependent-care exclusion $6000; A pre-tax saving $23500; B pre-tax saving $7000
+    A: single, AGI 71500, taxable 55750, tax 7179, credits [§24 4400, §36B 7973], net -5194
+    B: head of household, AGI 27000, taxable 3375, tax 337, credits [§25B 337, §32 4909, §36B 5178], net -10087
+  7543 better [fsa+pretax]: B dependent-care exclusion $6000; A pre-tax saving $23500; B pre-tax saving $7000
+  6153 better [pretax]: A pre-tax saving $23500; B pre-tax saving $7000
+  2226 better [fsa+roth]: B dependent-care exclusion $6000; B Roth IRA $2000
+  2189 better [fsa]: B dependent-care exclusion $6000
+  best without retirement saving: 2189 better [fsa]: B dependent-care exclusion $6000
+    A: single, AGI 95000, taxable 79250, tax 12349, credits [], net 12349
+    B: head of household, AGI 34000, taxable 10375, tax 1037, credits [§24 4400, §32 4909, §36B 13686], net -21958
+== H4 married: default net tax -7420; 5568 lawful plans, depth 12
+    A: married separate, AGI 95000, taxable 79250, tax 12349, credits [], net 12349
+    B: head of household, AGI 40000, taxable 16375, tax 1637, credits [§21 1110, §24 3927, §32 3645, §36B 12724], net -19769
+  7543 better [fsa+pretax]: B dependent-care exclusion $6000; A pre-tax saving $23500; B pre-tax saving $7000
+    A: married separate, AGI 71500, taxable 55750, tax 7179, credits [], net 7179
+    B: head of household, AGI 27000, taxable 3375, tax 337, credits [§25B 337, §24 3400, §32 4909, §36B 13833], net -22142
+  6153 better [pretax]: A pre-tax saving $23500; B pre-tax saving $7000
+  2226 better [fsa+roth]: B dependent-care exclusion $6000; B Roth IRA $2000
+  2189 better [fsa]: B dependent-care exclusion $6000
+  best without retirement saving: 2189 better [fsa]: B dependent-care exclusion $6000
+    A: married separate, AGI 95000, taxable 79250, tax 12349, credits [], net 12349
+    B: head of household, AGI 34000, taxable 10375, tax 1037, credits [§24 4400, §32 4909, §36B 13686], net -21958
+## H4: best unmarried -15281, best married -14963; marrying costs 318
+== H5 unmarried: default net tax 14987; 756 lawful plans, depth 6
+    A: head of household, AGI 98000, taxable 74375, tax 9537, credits [§24 2700], net 6837
+    B: single, AGI 72000, taxable 56250, tax 7289, credits [], net 7289
+  10842 better [claims+keeper+pretax]: child 1 claimed by B; child 2 claimed by B; B keeps up the home; A pre-tax saving $23500; B pre-tax saving $23500
+    A: single, AGI 74500, taxable 58750, tax 7839, credits [], net 7839
+    B: head of household, AGI 48500, taxable 24875, tax 2645, credits [§25A 2500, §25B 200, §24 2645, §32 1855], net -4555
+  10509 better [claims+pretax]: child 1 claimed by B; A pre-tax saving $23500; B pre-tax saving $23500
+  10200 better [pretax]: A pre-tax saving $23500; B pre-tax saving $23500
+  2500 better [claims]: child 1 claimed by B
+  best without retirement saving: 2500 better [claims]: child 1 claimed by B
+    A: head of household, AGI 98000, taxable 74375, tax 9537, credits [§24 2200], net 7337
+    B: single, AGI 72000, taxable 56250, tax 7289, credits [§25A 2500, §24 500], net 4289
+== H5 married: default net tax 17209; 1980 lawful plans, depth 7
+    joint: joint, AGI 170000, taxable 138500, tax 20298, credits [§25A 1250, §24 2700], net 16348
+  11375 better [pretax]: A pre-tax saving $23500; B pre-tax saving $23500
+    joint: joint, AGI 123000, taxable 91500, tax 10503, credits [§25A 2500, §24 2700], net 5303
+  nothing beats the default without retirement saving
+## H5: best unmarried 4145, best married 5834; marrying costs 1689
+== H6 unmarried: default net tax -5799; 630 lawful plans, depth 8
+    A: head of household, AGI 38000, taxable 14375, tax 1437, credits [§24 2200, §32 1987, §23 5000], net -7750
+    B: single, AGI 34000, taxable 18250, tax 1951, credits [], net 1951
+  8527 better [claims+keeper+pretax+adopt]: child 1 claimed by B; B keeps up the home; B pre-tax saving $2000; A pays 50% of the adoption expenses
+    A: single, AGI 38000, taxable 22250, tax 2431, credits [§23 7431], net -5000
+    B: head of household, AGI 32000, taxable 8375, tax 837, credits [§25B 837, §24 1700, §32 2626, §23 5000], net -9326
+  8527 better [claims+keeper+roth+adopt]: child 1 claimed by B; B keeps up the home; B Roth IRA $2000; A pays 50% of the adoption expenses
+  8102 better [claims+pretax+adopt]: child 1 claimed by B; B pre-tax saving $7000; A pays 50% of the adoption expenses
+  7990 better [claims+keeper+adopt]: child 1 claimed by B; B keeps up the home; A pays 50% of the adoption expenses
+  7888 better [pretax+adopt]: A pre-tax saving $7000; A pays 50% of the adoption expenses
+  7351 better [roth+adopt]: A Roth IRA $2000; A pays 50% of the adoption expenses
+  7076 better [claims+adopt]: child 1 claimed by B; A pays 50% of the adoption expenses
+  6951 better [adopt]: A pays 50% of the adoption expenses
+  3527 better [claims+keeper+roth]: child 1 claimed by B; B keeps up the home; B Roth IRA $2000
+  3527 better [claims+keeper+pretax]: child 1 claimed by B; B keeps up the home; B pre-tax saving $2000
+  3102 better [claims+pretax]: child 1 claimed by B; B pre-tax saving $7000
+  2990 better [claims+keeper]: child 1 claimed by B; B keeps up the home
+  best without retirement saving: 7990 better [claims+keeper+adopt]: child 1 claimed by B; B keeps up the home; A pays 50% of the adoption expenses
+    A: single, AGI 38000, taxable 22250, tax 2431, credits [§23 7431], net -5000
+    B: head of household, AGI 34000, taxable 10375, tax 1037, credits [§24 2200, §32 2626, §23 5000], net -8789
+== H6 married: default net tax -5000; 286 lawful plans, depth 8
+    joint: joint, AGI 72000, taxable 40500, tax 4383, credits [§24 2200, §23 7183], net -5000
+  nothing beats the default without retirement saving
+## H6: best unmarried -14326, best married -5000; marrying costs 9326
+== H7 unmarried: default net tax -5468; 864 lawful plans, depth 8
+    A: single, AGI 30000, taxable 14250, tax 1471, credits [§24 500, §36B 5496], net -4525
+    B: head of household, AGI 68000, taxable 44375, tax 4985, credits [§24 2200, §36B 3728], net -943
+  5567 better [claims+elder+pretax]: child 1 claimed by A; elder claimed by B; A pre-tax saving $7000; B pre-tax saving $7000
+    A: single, AGI 23000, taxable 7250, tax 725, credits [§25B 725, §24 1700, §32 3265, §36B 10017], net -14982
+    B: single, AGI 61000, taxable 45250, tax 5191, credits [§24 500, §36B 744], net 3947
+  4743 better [claims+keeper+pretax]: child 1 claimed by A; A keeps up the home; A pre-tax saving $2000; B pre-tax saving $7000
+  4712 better [claims+pretax]: child 1 claimed by A; A pre-tax saving $2000; B pre-tax saving $7000
+  4595 better [elder+pretax]: elder claimed by B; A pre-tax saving $7000; B pre-tax saving $7000
+  3348 better [pretax]: A pre-tax saving $7000; B pre-tax saving $7000
+  2984 better [claims+elder+keeper+roth]: child 1 claimed by A; elder claimed by B; A keeps up the home; A Roth IRA $2000
+  2958 better [claims+keeper]: child 1 claimed by A; A keeps up the home
+  2687 better [claims+roth]: child 1 claimed by A; A Roth IRA $2000
+  2487 better [claims]: child 1 claimed by A
+  378 better [elder+roth]: elder claimed by B; A Roth IRA $2000
+  200 better [roth]: A Roth IRA $2000
+  178 better [elder]: elder claimed by B
+  best without retirement saving: 2958 better [claims+keeper]: child 1 claimed by A; A keeps up the home
+    A: head of household, AGI 30000, taxable 6375, tax 637, credits [§24 2337, §32 3265, §36B 9870], net -14835
+    B: single, AGI 68000, taxable 52250, tax 6409, credits [], net 6409
+== H7 married: default net tax -2537; 552 lawful plans, depth 9
+    joint: joint, AGI 98000, taxable 66500, tax 7503, credits [§24 2700, §36B 7340], net -2537
+  4065 better [pretax]: A pre-tax saving $7000; B pre-tax saving $7000
+    joint: joint, AGI 84000, taxable 52500, tax 5823, credits [§24 2700, §36B 9725], net -6602
+  nothing beats the default without retirement saving
+## H7: best unmarried -11035, best married -6602; marrying costs 4433
+== cliffs, H1 married: 15 points where $1 more of A's wages costs $2 or more
+  +$60 (§21 -60): 15 point(s), A wages $126001 to $182001
+== cliffs, H2 married: 57 points where $1 more of A's wages costs $2 or more
+  +$9901 (§36B -9901): 1 point(s), A wages $120601
+  +$521 (§36B -521): 1 point(s), A wages $20075
+  +$30 (§21 -30): 15 point(s), A wages $120001 to $176001
+  +$12 (§36B -11): 1 point(s), A wages $82950
+  +$12 (§36B -12): 4 point(s), A wages $79856 to $82085
+  +$11 (§36B -11): 18 point(s), A wages $75646 to $82582
+  +$10 (§36B -10): 1 point(s), A wages $74283
+  +$8 (§36B -7): 1 point(s), A wages $38584
+  +$7 (§36B -6): 1 point(s), A wages $34992
+  +$7 (§36B -7): 1 point(s), A wages $36788
+  +$3 (deduction lost): 1 point(s), A wages $35000
+  +$2 (deduction lost): 12 point(s), A wages $34991 to $82442
+== cliffs, H4 unmarried: 3 points where $1 more of A's wages costs $2 or more
+  +$366 (§36B -366): 1 point(s), A wages $62601
+  +$216 (§36B -216): 1 point(s), A wages $20815
+  +$2 (deduction lost): 1 point(s), A wages $20810
+== cliffs, H3 unmarried: 51 points where $1 more of A's wages costs $2 or more
+  +$925 (§24 -1837; §32 -708): 1 point(s), A wages $46000
+  +$25 (deduction lost): 50 point(s), A wages $151000 to $200000
+== cliffs, H1 married, each spouse puts $2,000 in a Roth IRA: 16 points where $1 more of A's wages costs $2 or more
+  +$400 (§25B -400): 1 point(s), A wages $55001
+  +$60 (§21 -60): 15 point(s), A wages $126001 to $182001
+search 57067 ms, cliffs 8670 ms

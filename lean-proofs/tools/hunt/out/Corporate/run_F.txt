@@ -1,0 +1,13 @@
+== F1 E&P 4000 < cash, not QSBS, keep business: 74901 positions, 120384 moves tried, 152 move families
+   baseline (plain): family 7858, A 7858, total tax 2142
+   nothing beats the baseline
+== F2 E&P 0, QSBS age 4 post-2025, conservative 301(c)(3): 9192 positions, 14513 moves tried, 111 move families
+   baseline (plain): family 7858, A 7858, total tax 2142
+   +2142  family 10000, A 10000, tax 0  [gift-S + redeem-A]
+        wait 1y; A gives 1/2 of shares to S; C redeems 1/2 of A's shares
+== F3 same, 301(c)(3) gain read as 1202 gain: 9479 positions, 14613 moves tried, 111 move families
+   baseline (plain): family 9285, A 9285, total tax 715
+   +715  family 10000, A 10000, tax 0  [dividend]
+        wait 1y; C pays dividend 10000
+   +715  family 10000, A 10000, tax 0  [redeem-A]
+        wait 1y; C redeems 1/4 of A's shares

@@ -1,0 +1,23 @@
+z90003: 2 disagreeing rows 
+z90001: 2 disagreeing rows 
+
+9 universes, 2 with a disagreement, 0 where the Lean runner wrote no output, 0 where the reference failed
+  status    0 of 2150 keys disagree
+  findings  0 of 722 keys disagree
+  certs     1 of 3605 keys disagree
+  splits    0 of 280 keys disagree
+  conflicts 0 of 92 keys disagree
+  lines     0 of 90 keys disagree
+  horty     0 of 28 keys disagree
+  classes   1 of 1174 keys disagree
+  summary   2 of 288 keys disagree
+  class (file, bucket, rule): universes   first example
+  summary   count                                zone_checked_rows              1   e.g. z90003 zone_checked_rows A=89 B=90
+  summary   count                                zone_failed_rows               1   e.g. z90003 zone_failed_rows A=43 B=44
+  certs     okMismatch:ok/witnessNoStanding      treatment                      1   e.g. z90001 treatment:tr1 A=noAuthority B=witnessNoStanding
+  classes   verdict                              ok/witnessNoStanding           1   e.g. z90001 tr1 A=noAuthority B=witnessNoStanding
+  info  findings uncompared lean:citesNotCitable:force               18
+  info  findings uncompared lean:hortyConsistentBase                 19
+  info  findings uncompared lean:hortySelfInconsistent               7
+  info  findings uncompared lean:inconsistentBindingBase             9
+rc=1

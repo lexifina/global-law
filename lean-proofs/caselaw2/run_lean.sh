@@ -38,12 +38,16 @@ seq 0 $((N-1)) | xargs -P ${PAR:-8} -I{} $RUN "$DATA" "$EDGES" {} "$N" "$OUT" "$
 merge () {  # name header
   { printf '%s\n' "$2"; cat "$OUT"/"$1"-*.tsv 2>/dev/null; } > "$OUT/$1.tsv"
 }
-merge status  $'node\tissue\tholding\tfrom\tto\tstatus\tclass\tfirm\twitness_row\tactor\tpath'
-merge findings $'finding\tciting\tcited\tissue\tdetail\tfirm\tpath'
+# round 5 (DESIGN5 section 1): treatment_class.tsv in the data dir turns round-5 output on: one more column
+# (oclass) on status, status_lines and findings, and classes.tsv
+OC=; [ -f "$DATA/treatment_class.tsv" ] && OC=$'\toclass'
+merge status  $'node\tissue\tholding\tfrom\tto\tstatus\tclass\tfirm\twitness_row\tactor\tpath'"$OC"
+merge findings $'finding\tciting\tcited\tissue\tdetail\tfirm\tpath'"$OC"
 merge certs   $'table\tid\tresult_all\tresult_firm'
 merge splits  $'kind	issue\tcourt1\tcourt2\tanswers1\tanswers2\tholdings1\tholdings2\tasOf\tfirm'
 # round 2: per-line status rows (DEVIATIONS 75) and Horty bases (DEVIATIONS 78)
-merge status_lines $'node	issue	holding	from	to	status	class	firm	witness_row	actor	path	line'
+merge status_lines $'node	issue	holding	from	to	status	class	firm	witness_row	actor	path	line'"$OC"
+if [ -n "$OC" ]; then merge classes $'id\tclass\tclaim\tverdict\tfield_limit\tdoctrine\twitness'; rm -f "$OUT"/classes-*.tsv; fi
 merge horty   $'family	court	verdict	cases	firm'
 cat "$OUT"/summary-*.tsv > "$OUT/summary.tsv"
 rm -f "$OUT"/status_lines-*.tsv "$OUT"/horty-*.tsv "$OUT"/status-*.tsv "$OUT"/findings-*.tsv "$OUT"/certs-*.tsv "$OUT"/splits-*.tsv "$OUT"/summary-*.tsv

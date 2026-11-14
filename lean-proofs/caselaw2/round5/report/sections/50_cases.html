@@ -1,0 +1,54 @@
+<h2 id="cases">Worked cases</h2>
+
+<h3><i>Plessy v. Ferguson</i> and <i>Brown v. Board of Education</i>, before and after</h3>
+<div class="tw"><table>
+<thead><tr><th>Question date</th><th>Round 4</th><th>Frozen build</th><th>The sentence that carries it</th></tr></thead>
+<tbody>
+<tr><td>18 May 1896 to 16 May 1954</td><td>good law</td><td>good law</td><td></td></tr>
+<tr><td>17 May 1954 (<i>Brown</i>) to 23 June 2022</td><td>good law; "at risk, see <i>Brown</i>"</td><td><b>unknown: recognised later</b>; a citation to <i>Plessy</i> in these years is "at risk"</td><td rowspan="2"><i>Dobbs v. Jackson Women's Health Organization</i>, 24 June 2022, opinion of the Court: "… <i>Brown</i> v. <i>Board of Education</i>, 347 U. S. 483 (1954), the Court repudiated the “separate but equal” doctrine, which had allowed States to maintain racially segregated schools and other facilities. … In so doing, the Court overruled the infamous decision in <i>Plessy</i> v. <i>Ferguson</i>, 163 U. S. 537"</td></tr>
+<tr><td>from 24 June 2022 (<i>Dobbs</i>)</td><td>good law; "at risk"</td><td><b>overruled</b>, by <i>Brown</i>, class recognised; a citation is "cites an overruled case"</td></tr>
+</tbody></table></div>
+<p>This is what the model outputs (<code>round5/out/final/status.tsv</code>, decision 5950738): the overruling is
+attributed to <i>Brown</i>, and it is dated from the first day on which a majority of the Supreme Court said, in a
+sentence naming both cases, that <i>Brown</i> overruled <i>Plessy</i>. Two things about that date.</p>
+<ul>
+<li>It is 2022 only because of what the reader found. Earlier Courts said similar things in other words: in 1970
+Justice Black wrote "<i>Plessy</i> v. <i>Ferguson</i>, 163 U. S. 537 (1896), overruled in <i>Brown</i> v. <i>Board of
+Education</i>" in <i>Oregon v. Mitchell</i>, but that opinion was his own, not the Court's. The first build took it for
+the Court's because the report prints it under "announcing the judgments of the Court"; the dev-half diagnosis caught
+it and the row was removed. <i>Patterson v. McLean Credit Union</i> (1989) mentions the two cases in a sentence about
+declining to overrule another case, and the checker refuses any quote containing "decline".</li>
+<li><i>Brown</i>'s own sentence, "Any language in <i>Plessy</i> v. <i>Ferguson</i> contrary to this finding is rejected",
+was found by the operative-words scan, read as the Court's own act on the language of <i>Plessy</i>, limited by
+"contrary to this finding", and admitted by the Lean checker as a partly-negative row. It is not in the frozen build
+because the class as a whole failed its audit. Had it been installed, the 1954 to 2022 status would be the same
+("unknown" outranks "partly negative").</li>
+</ul>
+
+<h3>Other recognised overrulings</h3>
+<div class="tw"><table>
+<thead><tr><th>Earlier case X</th><th>Overruling case Y</th><th>Later Court W and its sentence</th><th>Status of X</th></tr></thead>
+<tbody>
+<tr><td><i>Wolf v. Colorado</i>, 338 U.S. 25 (1949)</td><td><i>Mapp v. Ohio</i>, 19 June 1961, whose opinion has no sentence that overrules <i>Wolf</i> by name</td><td><i>Cleary v. Bolger</i>, 14 Jan 1963: "<i>Mapp</i> v. <i>Ohio</i>, 367 U. S. 643, overruling <i>Wolf</i> v. <i>Colorado</i>, 338 U. S. 25"</td><td>unknown from 19 June 1961; overruled from 14 Jan 1963. Round 4: at risk</td></tr>
+<tr><td><i>Olmstead v. United States</i>, 277 U.S. 438 (1928)</td><td><i>Katz v. United States</i>, 18 Dec 1967</td><td><i>Kaiser v. New York</i>, 24 Mar 1969: "<i>Olmstead</i>, then, stated the controlling interpretation of the Fourth Amendment with respect to wiretapping until it was overruled by <i>Katz</i>"</td><td>overruled from 24 Mar 1969</td></tr>
+<tr><td><i>Ohio v. Roberts</i>, 448 U.S. 56 (1980)</td><td><i>Crawford v. Washington</i>, 8 Mar 2004</td><td><i>Davis v. Washington</i>, 19 June 2006: "<i>Crawford</i>, in overruling <i>Roberts</i>"</td><td>overruled from 19 June 2006. Round 4: at risk</td></tr>
+<tr><td><i>Low v. Austin</i>, 13 Wall. 29 (1872)</td><td><i>Michelin Tire Corp. v. Wages</i>, 14 Jan 1976, which does say "is overruled"; the reader had kept an earlier "insofar as" sentence, so the case was only partly negative</td><td><i>Department of Revenue v. Association of Washington Stevedoring Cos.</i>, 26 Apr 1978: "<i>Low</i> v. <i>Austin</i>, 13 Wall. 29 (1872), overruled in <i>Michelin Tire Corp.</i> v. <i>Wages</i>"</td><td>partly negative from 1976; overruled from 26 Apr 1978. The recognition repairs a reader error</td></tr>
+<tr><td><i>Aguilar v. Texas</i>, 378 U.S. 108 (1964), and eleven more in the open half</td><td><i>Illinois v. Gates</i>, 8 June 1983</td><td><i>Payne v. Tennessee</i>, 27 June 1991, footnote 1: "<i>Illinois</i> v. <i>Gates</i>, 462 U. S. 213 (1983) (overruling <i>Aguilar</i> v. <i>Texas</i>, 378 U. S. 108"</td><td>overruled from 27 June 1991</td></tr>
+<tr><td>A state case (pattern row)</td><td>a later decision of the same supreme court</td><td>"512 So.2d 1377 (Ala.Civ.App.1987), overruled on other grounds by <i>Ex parte St. Regis Corp.</i>, 535 So.2d 160"</td><td>partly negative from the overruling decision's date, never overruled</td></tr>
+</tbody></table></div>
+<p class="muted">The <i>Payne</i> footnote deserves a caution. The sentence it hangs on says the Court had overruled
+33 decisions "in whole or in part". Entries the footnote itself marks "in part" are partly negative in the model;
+the others were read as whole-case statements. Twelve of the 30 new open-half hits rest on that footnote.</p>
+
+<h3>Failures</h3>
+<div class="tw"><table>
+<thead><tr><th>Kind</th><th>Example</th><th>What the model does</th></tr></thead>
+<tbody>
+<tr><td>No words anywhere</td><td><i>Atkins v. Virginia</i> on <i>Penry v. Lynaugh</i>: "we granted certiorari to revisit the issue that we first addressed in the <i>Penry</i> case." No later Court sentence names both with an overruling word.</td><td>Nothing. Out of scope by design.</td></tr>
+<tr><td>A doctrine or a line of cases</td><td><i>Lincoln Federal</i> on <i>Adair</i> and <i>Coppage</i>: "has steadily rejected the due process philosophy enunciated in the <i>Adair</i>-<i>Coppage</i> line of cases."</td><td>Nothing: the target is not one named case.</td></tr>
+<tr><td>A contrary holding, no verb on the case</td><td><i>Kilbourn v. Thompson</i>: "We must, therefore, hold, notwithstanding what is said in the case of <i>Anderson</i> v. <i>Dunn</i>, that …"</td><td>Nothing. 19 of the 66 old wordless misses are of this form.</td></tr>
+<tr><td>Operative words that are a report</td><td>"In light of the Supreme Court's more recent discussion, <i>Glover</i> is no longer good law" (a court reporting what a higher court's decision did)</td><td>Admitted by the reader and the checker as the court's own act on the whole case; the blind audit rejected it and 29 others like it of 41. Class not installed.</td></tr>
+<tr><td>The wrong speaker</td><td><i>Oregon v. Mitchell</i>, Black J.: "<i>Plessy</i> … overruled in <i>Brown</i>". An opinion announcing the judgment but joined by no one.</td><td>Was admitted as a majority sentence; removed. The opinion-part map cannot yet tell such an opinion from the Court's.</td></tr>
+<tr><td>A citation chain misread</td><td>"<i>Beroth</i> v. <i>Beroth</i>, 87 N.C. App. 93, …, disc. rev. denied, 321 N.C. 296, … disapproved …": the row took the review-denial citation for the disapproved case.</td><td>Pattern row; found wrong by the audit and removed. About 3 in 100 pattern rows are like this.</td></tr>
+<tr><td>Same case on rehearing</td><td><i>Jones v. Opelika</i> (1943) "overruling" <i>Jones v. Opelika</i> (1942); seven such pairs in the open half</td><td>Nothing as precedent: the model treats it as history of one case. Counted as a miss by the lists.</td></tr>
+</tbody></table></div>

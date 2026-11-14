@@ -1,0 +1,86 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round6\\history\\stage\\final2",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round6\\history\\out\\final2",
+  "status_sha1": "96888c8b4381d3230e83d90c5d6f2fa45dfeeb8e"
+ },
+ "court": "federal",
+ "dataset": "bhk_enbanc",
+ "generated": "2026-11-14T06:57:48+00:00",
+ "label": "round6",
+ "link": {
+  "fail_reasons": {
+   "no_reporter_cite": 17,
+   "panel_cite_date_mismatch": 3,
+   "panel_cite_not_in_corpus": 21,
+   "panel_cite_other_court": 1
+  },
+  "linked": 371,
+  "n_items": 413
+ },
+ "metrics": {
+  "link_rate": {
+   "hi": 0.9238808183191912,
+   "k": 371,
+   "lo": 0.8653880823390071,
+   "n": 413,
+   "p": 0.8983050847457628
+  },
+  "recall": {
+   "hi": 0.07215014677057012,
+   "k": 17,
+   "lo": 0.028803090884178078,
+   "n": 371,
+   "p": 0.04582210242587601
+  },
+  "recall_R": {
+   "hi": 0.06856478865706774,
+   "k": 10,
+   "lo": 0.02078211785906639,
+   "n": 263,
+   "p": 0.03802281368821293
+  },
+  "recall_S": {
+   "hi": 0.12719087239992485,
+   "k": 6,
+   "lo": 0.028359323515477652,
+   "n": 98,
+   "p": 0.061224489795918366
+  },
+  "recall_U": {
+   "hi": 0.4041500295247722,
+   "k": 1,
+   "lo": 0.017876212896073995,
+   "n": 10,
+   "p": 0.1
+  },
+  "recall_by_enbanc": {
+   "hi": 0.03208965146721654,
+   "k": 4,
+   "lo": 0.0049332502001084785,
+   "n": 316,
+   "p": 0.012658227848101266
+  },
+  "recall_confirmed": {
+   "hi": 0.07298237003943266,
+   "k": 14,
+   "lo": 0.02657151203910502,
+   "n": 316,
+   "p": 0.04430379746835443
+  },
+  "recall_lenient": {
+   "hi": 0.07538183020544564,
+   "k": 18,
+   "lo": 0.030906996543339647,
+   "n": 371,
+   "p": 0.04851752021563342
+  }
+ },
+ "notes": "Every unit is a published court of appeals panel decision (1986-2002) that the full court later reheard en banc (Beim, Hirsch & Kastellec 2016 + Clark 2009 en banc lists; Songer-sample rows excluded): expected NEG_HIST. No source-clean items, so precision/clean are not reported. recall_R / recall_S / recall_U: en banc decision of opposite / same / uncoded ideological direction. recall_confirmed: units whose linked en banc decision cites the panel decision in the corpus graph. recall_by_enbanc: of those, NEG_HIST with an admitted history row by that en banc decision. Units sub>model: {'R>GOOD': 251, 'R>NEG_HIST': 10, 'R>UNK_HIST': 1, 'R>UNK_OTHER': 1, 'S>GOOD': 92, 'S>NEG_HIST': 6, 'U>GOOD': 9, 'U>NEG_HIST': 1}.",
+ "primary": "recall",
+ "row_label": "Courts of appeals: panel decision reheard en banc (Beim-Hirsch-Kastellec)",
+ "split": "h0",
+ "tests": "same-case"
+}

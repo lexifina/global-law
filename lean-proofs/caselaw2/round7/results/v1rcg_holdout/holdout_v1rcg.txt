@@ -1,0 +1,130 @@
+holdout score, label v1rcg
+status ~/Documents/us-caselaw-lean-work/caselaw-lean-2/round7/out/v1rcg/status.tsv
+holdout statements 103610 (pairs W,X 99861); split manifest sha 94bb61aed717070b
+
+POOL SIZES (precedent family: overruled, abrogated, disapproved, recededFrom)
+  holdout statements naming Y: 33640; distinct (X, Y) pairs: 12354
+  pairs the model admits explicitly now: 2980; not explicit now: 9374
+  frozen testable pool (testable_pool_baseline-round4.tsv): 9374 pairs; 2640 also stated by a feed speaker, 6734 by holdout speakers only
+
+PAIR LEVEL (one (X, Y) counts once, read on its first holdout statement's date)
+  precedent, Y named                         strict 745/12354 = 6.0% (5.6-6.5); byAnyone 864/12354 = 7.0% (6.6-7.5); negOrPartly 4380/12354 = 35.5% (34.6-36.3); anySignal 5042/12354 = 40.8% (39.9-41.7)
+                                               [negByY 745, partlyByY 3221, negByOther 119, partlyByOther 295, atRiskOnly 662, laterOnly 125, nothing 7187]
+  history, Y named                           strict 4367/20843 = 21.0% (20.4-21.5); byAnyone 5202/20843 = 25.0% (24.4-25.6); negOrPartly 6662/20843 = 32.0% (31.3-32.6); anySignal 7092/20843 = 34.0% (33.4-34.7)
+                                               [negByY 4367, partlyByY 1255, negByOther 835, partlyByOther 205, atRiskOnly 430, laterOnly 72, nothing 13679]
+  precedent, no Y named                      byAnyone 244/5343 = 4.6% (4.0-5.2); negOrPartly 1037/5343 = 19.4% (18.4-20.5); anySignal 1306/5343 = 24.4% (23.3-25.6)
+                                               [negByY 0, partlyByY 0, negByOther 244, partlyByOther 793, atRiskOnly 269, laterOnly 81, nothing 3956]
+  history, no Y named                        byAnyone 260/2598 = 10.0% (8.9-11.2); negOrPartly 336/2598 = 12.9% (11.7-14.3); anySignal 396/2598 = 15.2% (13.9-16.7)
+                                               [negByY 0, partlyByY 0, negByOther 260, partlyByOther 76, atRiskOnly 60, laterOnly 16, nothing 2186]
+  enactment, no Y named                      byAnyone 3/2381 = 0.1% (0.0-0.4); negOrPartly 60/2381 = 2.5% (2.0-3.2); anySignal 177/2381 = 7.4% (6.4-8.6)
+                                               [negByY 0, partlyByY 0, negByOther 3, partlyByOther 57, atRiskOnly 117, laterOnly 23, nothing 2181]
+  precedent, explicitly admitted pairs       strict 631/2980 = 21.2% (19.7-22.7); byAnyone 645/2980 = 21.6% (20.2-23.2); negOrPartly 2930/2980 = 98.3% (97.8-98.7); anySignal 2941/2980 = 98.7% (98.2-99.0)
+                                               [negByY 631, partlyByY 2268, negByOther 14, partlyByOther 17, atRiskOnly 11, laterOnly 25, nothing 14]
+  precedent, pairs not explicit now          strict 114/9374 = 1.2% (1.0-1.5); byAnyone 219/9374 = 2.3% (2.0-2.7); negOrPartly 1450/9374 = 15.5% (14.8-16.2); anySignal 2101/9374 = 22.4% (21.6-23.3)
+                                               [negByY 114, partlyByY 953, negByOther 105, partlyByOther 278, atRiskOnly 651, laterOnly 100, nothing 7173]
+
+FROZEN TESTABLE POOL (the pairs on which the planned change is read)
+  all                                        strict 114/9374 = 1.2% (1.0-1.5); byAnyone 219/9374 = 2.3% (2.0-2.7); negOrPartly 1450/9374 = 15.5% (14.8-16.2); anySignal 2101/9374 = 22.4% (21.6-23.3)
+                                               [negByY 114, partlyByY 953, negByOther 105, partlyByOther 278, atRiskOnly 651, laterOnly 100, nothing 7173]
+  alsoInFeed                                 strict 42/2640 = 1.6% (1.2-2.1); byAnyone 52/2640 = 2.0% (1.5-2.6); negOrPartly 1019/2640 = 38.6% (36.8-40.5); anySignal 1236/2640 = 46.8% (44.9-48.7)
+                                               [negByY 42, partlyByY 925, negByOther 10, partlyByOther 42, atRiskOnly 217, laterOnly 44, nothing 1360]
+  holdoutOnly                                strict 72/6734 = 1.1% (0.8-1.3); byAnyone 167/6734 = 2.5% (2.1-2.9); negOrPartly 431/6734 = 6.4% (5.8-7.0); anySignal 865/6734 = 12.8% (12.1-13.7)
+                                               [negByY 72, partlyByY 28, negByOther 95, partlyByOther 236, atRiskOnly 434, laterOnly 56, nothing 5813]
+  scope:all                                  strict 40/2268 = 1.8% (1.3-2.4); byAnyone 95/2268 = 4.2% (3.4-5.1); negOrPartly 224/2268 = 9.9% (8.7-11.2); anySignal 399/2268 = 17.6% (16.1-19.2)
+                                               [negByY 40, partlyByY 63, negByOther 55, partlyByOther 66, atRiskOnly 175, laterOnly 47, nothing 1822]
+  scope:partialUnknown                       strict 0/407 = 0.0% (0.0-0.9); byAnyone 6/407 = 1.5% (0.7-3.2); negOrPartly 68/407 = 16.7% (13.4-20.6); anySignal 95/407 = 23.3% (19.5-27.7)
+                                               [negByY 0, partlyByY 32, negByOther 6, partlyByOther 30, atRiskOnly 27, laterOnly 3, nothing 309]
+  scope:otherGrounds                         strict 74/6699 = 1.1% (0.9-1.4); byAnyone 118/6699 = 1.8% (1.5-2.1); negOrPartly 1158/6699 = 17.3% (16.4-18.2); anySignal 1607/6699 = 24.0% (23.0-25.0)
+                                               [negByY 74, partlyByY 858, negByOther 44, partlyByOther 182, atRiskOnly 449, laterOnly 50, nothing 5042]
+  moved since frozen: atRiskOnly->laterOnly 7, atRiskOnly->negByOther 13, atRiskOnly->negByY 12, atRiskOnly->partlyByOther 13, atRiskOnly->partlyByY 38, laterOnly->atRiskOnly 3, laterOnly->negByOther 1, laterOnly->negByY 1, laterOnly->partlyByOther 6, laterOnly->partlyByY 24, negByOther->atRiskOnly 2, negByOther->nothing 1, negByY->atRiskOnly 1, negByY->nothing 4, nothing->atRiskOnly 113, nothing->laterOnly 44, nothing->negByOther 19, nothing->negByY 82, nothing->partlyByOther 85, nothing->partlyByY 882, partlyByOther->atRiskOnly 3, partlyByOther->laterOnly 5, partlyByOther->negByOther 9, partlyByOther->nothing 2, partlyByOther->partlyByY 4, partlyByY->nothing 1
+
+STATEMENT LEVEL (every holdout statement, read on its own date)
+  precedent, Y named                         strict 3134/33640 = 9.3% (9.0-9.6); byAnyone 3343/33640 = 9.9% (9.6-10.3); negOrPartly 14781/33640 = 43.9% (43.4-44.5); anySignal 17570/33640 = 52.2% (51.7-52.8)
+                                               [negByY 3134, partlyByY 10941, negByOther 209, partlyByOther 497, atRiskOnly 2789, laterOnly 316, nothing 15754]
+  history, Y named                           strict 13358/53068 = 25.2% (24.8-25.5); byAnyone 16738/53068 = 31.5% (31.1-31.9); negOrPartly 20529/53068 = 38.7% (38.3-39.1); anySignal 21794/53068 = 41.1% (40.7-41.5)
+                                               [negByY 13358, partlyByY 2968, negByOther 3380, partlyByOther 823, atRiskOnly 1265, laterOnly 102, nothing 31172]
+
+BY KIND, pair level, Y named
+  overruled                                  strict 655/7920 = 8.3% (7.7-8.9); byAnyone 746/7920 = 9.4% (8.8-10.1); negOrPartly 3416/7920 = 43.1% (42.0-44.2); anySignal 3788/7920 = 47.8% (46.7-48.9)
+                                               [negByY 655, partlyByY 2450, negByOther 91, partlyByOther 220, atRiskOnly 372, laterOnly 85, nothing 4047]
+  abrogated                                  strict 35/3362 = 1.0% (0.7-1.4); byAnyone 56/3362 = 1.7% (1.3-2.2); negOrPartly 440/3362 = 13.1% (12.0-14.3); anySignal 700/3362 = 20.8% (19.5-22.2)
+                                               [negByY 35, partlyByY 352, negByOther 21, partlyByOther 32, atRiskOnly 260, laterOnly 29, nothing 2633]
+  disapproved                                strict 42/947 = 4.4% (3.3-5.9); byAnyone 48/947 = 5.1% (3.8-6.7); negOrPartly 445/947 = 47.0% (43.8-50.2); anySignal 474/947 = 50.1% (46.9-53.2)
+                                               [negByY 42, partlyByY 362, negByOther 6, partlyByOther 35, atRiskOnly 29, laterOnly 10, nothing 463]
+  recededFrom                                strict 13/125 = 10.4% (6.2-17.0); byAnyone 14/125 = 11.2% (6.8-17.9); negOrPartly 79/125 = 63.2% (54.5-71.1); anySignal 80/125 = 64.0% (55.3-71.9)
+                                               [negByY 13, partlyByY 57, negByOther 1, partlyByOther 8, atRiskOnly 1, laterOnly 1, nothing 44]
+  reversed                                   strict 3607/15192 = 23.7% (23.1-24.4); byAnyone 3834/15192 = 25.2% (24.6-25.9); negOrPartly 4973/15192 = 32.7% (32.0-33.5); anySignal 5243/15192 = 34.5% (33.8-35.3)
+                                               [negByY 3607, partlyByY 1049, negByOther 227, partlyByOther 90, atRiskOnly 270, laterOnly 52, nothing 9897]
+  vacated                                    strict 760/5651 = 13.4% (12.6-14.4); byAnyone 1368/5651 = 24.2% (23.1-25.3); negOrPartly 1689/5651 = 29.9% (28.7-31.1); anySignal 1849/5651 = 32.7% (31.5-34.0)
+                                               [negByY 760, partlyByY 206, negByOther 608, partlyByOther 115, atRiskOnly 160, laterOnly 20, nothing 3782]
+  supersededByEnactment (no Y)               byAnyone 3/2381 = 0.1% (0.0-0.4); negOrPartly 60/2381 = 2.5% (2.0-3.2); anySignal 177/2381 = 7.4% (6.4-8.6)
+                                               [negByY 0, partlyByY 0, negByOther 3, partlyByOther 57, atRiskOnly 117, laterOnly 23, nothing 2181]
+
+BY SCOPE WORDS OF THE NOTE, precedent pairs, Y named
+  all                                        strict 296/2851 = 10.4% (9.3-11.6); byAnyone 354/2851 = 12.4% (11.3-13.7); negOrPartly 795/2851 = 27.9% (26.3-29.6); anySignal 972/2851 = 34.1% (32.4-35.9)
+                                               [negByY 296, partlyByY 373, negByOther 58, partlyByOther 68, atRiskOnly 177, laterOnly 56, nothing 1823]
+  partialUnknown                             strict 16/546 = 2.9% (1.8-4.7); byAnyone 23/546 = 4.2% (2.8-6.2); negOrPartly 206/546 = 37.7% (33.8-41.9); anySignal 233/546 = 42.7% (38.6-46.9)
+                                               [negByY 16, partlyByY 152, negByOther 7, partlyByOther 31, atRiskOnly 27, laterOnly 3, nothing 310]
+  otherGrounds                               strict 433/8957 = 4.8% (4.4-5.3); byAnyone 487/8957 = 5.4% (5.0-5.9); negOrPartly 3379/8957 = 37.7% (36.7-38.7); anySignal 3837/8957 = 42.8% (41.8-43.9)
+                                               [negByY 433, partlyByY 2696, negByOther 54, partlyByOther 196, atRiskOnly 458, laterOnly 66, nothing 5054]
+
+BY SPEAKER, precedent pairs, Y named (most frequent relation of the pair's speakers)
+  federalOnState                             strict 89/1572 = 5.7% (4.6-6.9); byAnyone 95/1572 = 6.0% (5.0-7.3); negOrPartly 848/1572 = 53.9% (51.5-56.4); anySignal 872/1572 = 55.5% (53.0-57.9)
+                                               [negByY 89, partlyByY 713, negByOther 6, partlyByOther 40, atRiskOnly 24, laterOnly 10, nothing 690]
+  higherCourt                                strict 7/104 = 6.7% (3.3-13.2); byAnyone 10/104 = 9.6% (5.3-16.8); negOrPartly 19/104 = 18.3% (12.0-26.8); anySignal 24/104 = 23.1% (16.0-32.0)
+                                               [negByY 7, partlyByY 8, negByOther 3, partlyByOther 1, atRiskOnly 5, laterOnly 2, nothing 78]
+  lowerCourt                                 strict 420/6626 = 6.3% (5.8-7.0); byAnyone 480/6626 = 7.2% (6.6-7.9); negOrPartly 2422/6626 = 36.6% (35.4-37.7); anySignal 2786/6626 = 42.0% (40.9-43.2)
+                                               [negByY 420, partlyByY 1768, negByOther 60, partlyByOther 174, atRiskOnly 364, laterOnly 81, nothing 3759]
+  otherState                                 strict 126/1551 = 8.1% (6.9-9.6); byAnyone 136/1551 = 8.8% (7.5-10.3); negOrPartly 703/1551 = 45.3% (42.9-47.8); anySignal 737/1551 = 47.5% (45.0-50.0)
+                                               [negByY 126, partlyByY 519, negByOther 10, partlyByOther 48, atRiskOnly 34, laterOnly 14, nothing 800]
+  sisterCourt                                strict 53/1502 = 3.5% (2.7-4.6); byAnyone 62/1502 = 4.1% (3.2-5.3); negOrPartly 222/1502 = 14.8% (13.1-16.7); anySignal 366/1502 = 24.4% (22.3-26.6)
+                                               [negByY 53, partlyByY 147, negByOther 9, partlyByOther 13, atRiskOnly 144, laterOnly 5, nothing 1131]
+  stateOnFederal                             strict 50/999 = 5.0% (3.8-6.5); byAnyone 81/999 = 8.1% (6.6-10.0); negOrPartly 166/999 = 16.6% (14.4-19.1); anySignal 257/999 = 25.7% (23.1-28.5)
+                                               [negByY 50, partlyByY 66, negByOther 31, partlyByOther 19, atRiskOnly 91, laterOnly 13, nothing 729]
+
+BY COURT SYSTEM OF X, precedent pairs, Y named (systems with 150 pairs or more; all in the tsv)
+  federal                                    strict 230/5650 = 4.1% (3.6-4.6); byAnyone 303/5650 = 5.4% (4.8-6.0); negOrPartly 844/5650 = 14.9% (14.0-15.9); anySignal 1395/5650 = 24.7% (23.6-25.8)
+                                               [negByY 230, partlyByY 464, negByOther 73, partlyByOther 77, atRiskOnly 551, laterOnly 51, nothing 4204]
+  California                                 strict 58/914 = 6.3% (4.9-8.1); byAnyone 64/914 = 7.0% (5.5-8.8); negOrPartly 580/914 = 63.5% (60.3-66.5); anySignal 602/914 = 65.9% (62.7-68.9)
+                                               [negByY 58, partlyByY 468, negByOther 6, partlyByOther 48, atRiskOnly 22, laterOnly 11, nothing 301]
+  Texas                                      strict 40/484 = 8.3% (6.1-11.1); byAnyone 43/484 = 8.9% (6.7-11.8); negOrPartly 246/484 = 50.8% (46.4-55.3); anySignal 258/484 = 53.3% (48.9-57.7)
+                                               [negByY 40, partlyByY 188, negByOther 3, partlyByOther 15, atRiskOnly 12, laterOnly 8, nothing 218]
+  Florida                                    strict 27/273 = 9.9% (6.9-14.0); byAnyone 30/273 = 11.0% (7.8-15.3); negOrPartly 139/273 = 50.9% (45.0-56.8); anySignal 147/273 = 53.8% (47.9-59.7)
+                                               [negByY 27, partlyByY 98, negByOther 3, partlyByOther 11, atRiskOnly 8, laterOnly 2, nothing 124]
+  Georgia                                    strict 17/247 = 6.9% (4.3-10.7); byAnyone 19/247 = 7.7% (5.0-11.7); negOrPartly 136/247 = 55.1% (48.8-61.1); anySignal 143/247 = 57.9% (51.7-63.9)
+                                               [negByY 17, partlyByY 108, negByOther 2, partlyByOther 9, atRiskOnly 7, laterOnly 0, nothing 104]
+  Missouri                                   strict 12/234 = 5.1% (3.0-8.7); byAnyone 13/234 = 5.6% (3.3-9.3); negOrPartly 103/234 = 44.0% (37.8-50.4); anySignal 106/234 = 45.3% (39.0-51.7)
+                                               [negByY 12, partlyByY 84, negByOther 1, partlyByOther 6, atRiskOnly 3, laterOnly 4, nothing 124]
+  Michigan                                   strict 29/206 = 14.1% (10.0-19.5); byAnyone 32/206 = 15.5% (11.2-21.1); negOrPartly 107/206 = 51.9% (45.1-58.7); anySignal 110/206 = 53.4% (46.6-60.1)
+                                               [negByY 29, partlyByY 70, negByOther 3, partlyByOther 5, atRiskOnly 3, laterOnly 0, nothing 96]
+  Indiana                                    strict 11/185 = 5.9% (3.4-10.3); byAnyone 12/185 = 6.5% (3.7-11.0); negOrPartly 82/185 = 44.3% (37.4-51.5); anySignal 85/185 = 45.9% (38.9-53.1)
+                                               [negByY 11, partlyByY 66, negByOther 1, partlyByOther 4, atRiskOnly 3, laterOnly 3, nothing 97]
+  Pennsylvania                               strict 15/185 = 8.1% (5.0-12.9); byAnyone 15/185 = 8.1% (5.0-12.9); negOrPartly 67/185 = 36.2% (29.6-43.4); anySignal 69/185 = 37.3% (30.7-44.5)
+                                               [negByY 15, partlyByY 43, negByOther 0, partlyByOther 9, atRiskOnly 2, laterOnly 3, nothing 113]
+  New Mexico                                 strict 11/182 = 6.0% (3.4-10.5); byAnyone 12/182 = 6.6% (3.8-11.2); negOrPartly 120/182 = 65.9% (58.8-72.4); anySignal 121/182 = 66.5% (59.3-72.9)
+                                               [negByY 11, partlyByY 97, negByOther 1, partlyByOther 11, atRiskOnly 1, laterOnly 3, nothing 58]
+  North Carolina                             strict 11/177 = 6.2% (3.5-10.8); byAnyone 12/177 = 6.8% (3.9-11.5); negOrPartly 93/177 = 52.5% (45.2-59.8); anySignal 94/177 = 53.1% (45.8-60.3)
+                                               [negByY 11, partlyByY 77, negByOther 1, partlyByOther 4, atRiskOnly 1, laterOnly 2, nothing 81]
+  Arizona                                    strict 15/171 = 8.8% (5.4-14.0); byAnyone 15/171 = 8.8% (5.4-14.0); negOrPartly 98/171 = 57.3% (49.8-64.5); anySignal 99/171 = 57.9% (50.4-65.0)
+                                               [negByY 15, partlyByY 76, negByOther 0, partlyByOther 7, atRiskOnly 1, laterOnly 2, nothing 70]
+  Wisconsin                                  strict 13/168 = 7.7% (4.6-12.8); byAnyone 16/168 = 9.5% (5.9-14.9); negOrPartly 82/168 = 48.8% (41.4-56.3); anySignal 86/168 = 51.2% (43.7-58.6)
+                                               [negByY 13, partlyByY 63, negByOther 3, partlyByOther 3, atRiskOnly 4, laterOnly 4, nothing 78]
+  Illinois                                   strict 16/168 = 9.5% (5.9-14.9); byAnyone 16/168 = 9.5% (5.9-14.9); negOrPartly 67/168 = 39.9% (32.8-47.4); anySignal 68/168 = 40.5% (33.3-48.0)
+                                               [negByY 16, partlyByY 47, negByOther 0, partlyByOther 4, atRiskOnly 1, laterOnly 2, nothing 98]
+  Alabama                                    strict 11/167 = 6.6% (3.7-11.4); byAnyone 17/167 = 10.2% (6.5-15.7); negOrPartly 79/167 = 47.3% (39.9-54.9); anySignal 80/167 = 47.9% (40.5-55.4)
+                                               [negByY 11, partlyByY 57, negByOther 6, partlyByOther 5, atRiskOnly 1, laterOnly 2, nothing 85]
+  South Carolina                             strict 10/158 = 6.3% (3.5-11.3); byAnyone 11/158 = 7.0% (3.9-12.0); negOrPartly 84/158 = 53.2% (45.4-60.8); anySignal 84/158 = 53.2% (45.4-60.8)
+                                               [negByY 10, partlyByY 70, negByOther 1, partlyByOther 3, atRiskOnly 0, laterOnly 2, nothing 72]
+  New York                                   strict 5/152 = 3.3% (1.4-7.5); byAnyone 5/152 = 3.3% (1.4-7.5); negOrPartly 14/152 = 9.2% (5.6-14.9); anySignal 32/152 = 21.1% (15.3-28.2)
+                                               [negByY 5, partlyByY 8, negByOther 0, partlyByOther 1, atRiskOnly 18, laterOnly 0, nothing 120]
+  Kentucky                                   strict 10/150 = 6.7% (3.7-11.8); byAnyone 11/150 = 7.3% (4.1-12.7); negOrPartly 107/150 = 71.3% (63.6-78.0); anySignal 109/150 = 72.7% (65.0-79.2)
+                                               [negByY 10, partlyByY 93, negByOther 1, partlyByOther 3, atRiskOnly 2, laterOnly 1, nothing 40]
+
+REVERSE: the model's whole-decision negative (X, actor) rows whose X a holdout statement of the same
+family notes with a named Y: does a statement name the model's actor?
+  history                            4375/5089 = 86.0% (85.0-86.9)
+  history:h                          1603/1679 = 95.5% (94.4-96.4)
+  history:h6                         2772/3410 = 81.3% (79.9-82.6)
+  precedent                          766/820 = 93.4% (91.5-94.9)
+  precedent:t                        598/641 = 93.3% (91.1-95.0)
+  precedent:tw                       168/179 = 93.9% (89.3-96.5)

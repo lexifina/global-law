@@ -17,7 +17,8 @@ interpreted path `run_lean.sh` falls back to when Windows Application Control bl
   for d in list.splitOn "\n" do
     if d.isEmpty then continue
     IO.eprintln s!"CASE {d}"
-    let out := System.FilePath.mk d / "runner"
+    -- FUZZ_OUTNAME (round 5): the output folder's name, so that two runners can read the same case dir
+    let out := System.FilePath.mk d / ((← IO.getEnv "FUZZ_OUTNAME").getD "runner")
     IO.FS.createDirAll out
     let rc ← try
         let r ← CaseLaw2.Run.main [d, edges, "0", "1", out.toString, "1000", "20261112"]

@@ -1,0 +1,138 @@
+{
+ "asof": null,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round5\\stage\\final",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round5\\out\\final",
+  "status_sha1": "58f9bb577e955e97249da63df61445ebb4c40a61"
+ },
+ "court": "supreme",
+ "dataset": "gold_fresh",
+ "generated": "2026-11-13T23:14:21+00:00",
+ "label": "round5",
+ "link": {
+  "fail_reasons": {},
+  "linked": 127,
+  "n_items": 127,
+  "note": "key pairs are resolved by construction (GOLD_FRESH.md: 449 of 451 source rows scoreable; the 2 unresolved rows are outside both halves)"
+ },
+ "metrics": {
+  "link_rate": {
+   "hi": 0.9999999999999999,
+   "k": 127,
+   "lo": 0.9706403542566647,
+   "n": 127,
+   "p": 1.0
+  },
+  "precision": {
+   "hi": 0.8337107264667001,
+   "k": 57,
+   "lo": 0.6422324806394772,
+   "n": 76,
+   "p": 0.75
+  },
+  "recall": {
+   "hi": 0.6869512217439016,
+   "k": 77,
+   "lo": 0.5194053890035784,
+   "n": 127,
+   "p": 0.6062992125984252
+  },
+  "recall_express": {
+   "hi": 0.7604914431943075,
+   "k": 72,
+   "lo": 0.5854617186356534,
+   "n": 106,
+   "p": 0.6792452830188679
+  },
+  "recall_full": {
+   "hi": 0.6675995994521601,
+   "k": 65,
+   "lo": 0.4877851839736495,
+   "n": 112,
+   "p": 0.5803571428571429
+  },
+  "recall_implied": {
+   "hi": 0.45091173858212674,
+   "k": 5,
+   "lo": 0.10628012955399624,
+   "n": 21,
+   "p": 0.23809523809523808
+  },
+  "recall_inCRS": {
+   "hi": 0.7038762252897623,
+   "k": 74,
+   "lo": 0.5322004239465776,
+   "n": 119,
+   "p": 0.6218487394957983
+  },
+  "recall_notInCRS": {
+   "hi": 0.694257607346229,
+   "k": 3,
+   "lo": 0.13684428473912286,
+   "n": 8,
+   "p": 0.375
+  },
+  "recall_partial": {
+   "hi": 0.9295245070826608,
+   "k": 12,
+   "lo": 0.5481455107594471,
+   "n": 15,
+   "p": 0.8
+  },
+  "recall_strict": {
+   "hi": 0.3339951612177421,
+   "k": 32,
+   "lo": 0.1845060803714713,
+   "n": 127,
+   "p": 0.25196850393700787
+  },
+  "recall_strict_express": {
+   "hi": 0.39494638872372995,
+   "k": 32,
+   "lo": 0.2226843271484184,
+   "n": 106,
+   "p": 0.3018867924528302
+  },
+  "recall_strict_full": {
+   "hi": 0.37539218006635405,
+   "k": 32,
+   "lo": 0.21024839746482044,
+   "n": 112,
+   "p": 0.2857142857142857
+  },
+  "recall_strict_implied": {
+   "hi": 0.15463902098714374,
+   "k": 0,
+   "lo": 0.0,
+   "n": 21,
+   "p": 0.0
+  },
+  "recall_strict_inCRS": {
+   "hi": 0.34597006596680463,
+   "k": 31,
+   "lo": 0.19001720967211327,
+   "n": 119,
+   "p": 0.2605042016806723
+  },
+  "recall_strict_notInCRS": {
+   "hi": 0.47088818505608376,
+   "k": 1,
+   "lo": 0.022417491199971912,
+   "n": 8,
+   "p": 0.125
+  },
+  "recall_strict_partial": {
+   "hi": 0.20388330359648707,
+   "k": 0,
+   "lo": 0.0,
+   "n": 15,
+   "p": 0.0
+  }
+ },
+ "notes": "Scorer round5/gold_fresh/score_fresh.py (REUSED, not re-run: round5/gold_fresh/sealed/results/final-frozen.json, label final-frozen, status sha1 58f9bb577e955e97249da63df61445ebb4c40a61). recall = lenient (overruled X is neg:* or unknown:* in status.tsv: outcomes a, a_date, a_kind, b, c); recall_strict = outcome a (neg:overruled/abrogated by the listed Y from Y's date). precision = of the model's Supreme-Court-on-Supreme-Court overrulings in this half, the share on a fresh list ('unlisted' is not 'wrong': the lists are incomplete, so this is a lower bound). 91% of key pairs are also in a CRS edition (GOLD_FRESH.md); recall_notInCRS is the truly new part. Blind. Round-5 frozen build (round5/out/final). No sealed run exists on round6 final2: the sealed half was scored once, on round 5, and is not re-run here.",
+ "primary": "recall",
+ "row_label": "Fresh overruling lists (Wikipedia, Blaustein-Field, Gerhardt, Payne n.1): Supreme Court",
+ "split": "sealed",
+ "tests": "overruling"
+}

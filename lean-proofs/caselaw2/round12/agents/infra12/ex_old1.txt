@@ -1,0 +1,20 @@
+    excluded = set()
+    excluded_keys = set()  # round 11 (infra11): (table, by, target, kind) of the excluded samples' rows
+    for e in a.exclude:
+        kr = A.read_tsv(A.resolve(e))
+        if kr:
+            col = kr[0].index("row_id") if "row_id" in kr[0] else 0
+            excluded |= {p[col] for p in kr[1:] if len(p) > col}
+            h = kr[0]
+            if all(c in h for c in ("table", "by_node", "target_node", "kind", "role")):
+                for p in kr[1:]:
+                    d = dict(zip(h, p + [""] * (len(h) - len(p))))
+                    if d["role"] != "real":
+                        continue
+                    excluded_keys.add((d["table"], str(d["by_node"]), str(d["target_node"]), d["kind"]))
+                    if d.get("row2_id") and d.get("kind2"):
+                        excluded_keys.add((d["table"], str(d["by_node"]), str(d["target_node"]), d["kind2"]))
+            for cname in ("decoy_id", "row2_id"):
+                if cname in kr[0]:
+                    dc = kr[0].index(cname)
+                    excluded |= {p[dc] for p in kr[1:] if len(p) > dc and p[dc]}

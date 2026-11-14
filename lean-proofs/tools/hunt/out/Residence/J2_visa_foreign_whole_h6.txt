@@ -1,0 +1,46 @@
+=== alien resident by substantial presence (no green card), 5 years in; Legal.USTax.Hunt.Residence.Asset.foreignStock; grid #[365]; horizon 6y; student false; gifts false; foreign tax: salary 0bp, gain 0bp ===
+positions 3393, finished plans (asset disposed of) 725, families 4
+baseline (sell, in the US every day, no other move): tax on the gain $238000, all US tax $868000
+- gain tax $0 (all US tax $560700; exemption used $0); US days 1825/2190: sold as nonresident, US tax home, under 183 days
+  y0: RELOCATE RELOCATE RELOCATE RELOCATE US[1-365]
+  y1: US[1-365]
+  y2: US[1-365]
+  y3: US[1-365]
+  y4: US[1-365]
+  y5: SELL out[1-365]
+- gain tax $0 (all US tax $525000; exemption used $0); US days 1825/2190: sold as nonresident, foreign tax home
+  y0: SELL RELOCATE RELOCATE RELOCATE out[1-365]
+  y1: RELOCATE US[1-365]
+  y2: US[1-365]
+  y3: US[1-365]
+  y4: US[1-365]
+  y5: US[1-365]
+- gain tax $200000 (all US tax $725000; exemption used $0); US days 1825/2190: sold as nonresident, US tax home, under 183 days, §7701(b)(10) charge
+  y0: SELL RELOCATE RELOCATE RELOCATE RELOCATE out[1-365]
+  y1: US[1-365]
+  y2: US[1-365]
+  y3: US[1-365]
+  y4: US[1-365]
+  y5: US[1-365]
+- gain tax $238000 (all US tax $868000; exemption used $0); US days 2190/2190: sold while taxed on worldwide income
+  y0: SELL RELOCATE RELOCATE RELOCATE RELOCATE US[1-365]
+  y1: US[1-365]
+  y2: US[1-365]
+  y3: US[1-365]
+  y4: US[1-365]
+  y5: US[1-365]
+frontier (most US days for each level of tax on the gain):
+  days 2190: gain tax $238000 (all US tax $868000)
+  y0: SELL RELOCATE RELOCATE RELOCATE RELOCATE US[1-365]
+  y1: US[1-365]
+  y2: US[1-365]
+  y3: US[1-365]
+  y4: US[1-365]
+  y5: US[1-365]
+  days 1825: gain tax $0 (all US tax $525000)
+  y0: SELL RELOCATE RELOCATE RELOCATE out[1-365]
+  y1: RELOCATE US[1-365]
+  y2: US[1-365]
+  y3: US[1-365]
+  y4: US[1-365]
+  y5: US[1-365]

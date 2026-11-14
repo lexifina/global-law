@@ -1,0 +1,125 @@
+<h2 id="results">Results of the frozen build</h2>
+
+<p>The frozen build is the round-4 model plus the <b>recognised</b> class and nothing else: 1,459 rows read by Claude
+readers, 4,685 rows of the fixed form "X, overruled on other grounds by Y" (these can only make a case partly
+negative), and the round-4 witness rows that pass the new check; 15 rows shown wrong were removed. The Lean checker
+admits 6,161 of them as recognised. The <b>operative-words</b> class was built, read and audited, failed the
+precision bar, and is not in the build (below). Rules, code and data were hashed in the freeze record before the
+sealed half was scored, once.</p>
+
+<h3>Fresh lists of overruled Supreme Court decisions</h3>
+<div class="tw"><table>
+<thead><tr><th></th><th colspan="2">Open half (165 pairs; used while building)</th><th colspan="2">Sealed half (127 pairs; scored once)</th></tr>
+<tr><th>Outcome for the listed pair</th><th>Round 4</th><th>Frozen build</th><th>Round 4</th><th>Frozen build</th></tr></thead>
+<tbody>
+<tr><td>Overruled by the listed case, from that case's own date ("strict")</td><td>50 = 30.3% <span class="muted">[23.8, 37.7]</span></td><td>50 = 30.3% <span class="muted">[23.8, 37.7]</span></td><td>32 = 25.2% <span class="muted">[18.4, 33.4]</span></td><td>32 = 25.2% <span class="muted">[18.4, 33.4]</span></td></tr>
+<tr><td>Overruled by the listed case, from the date a later Court said so (new)</td><td>0</td><td><b>30</b></td><td>0</td><td><b>25</b></td></tr>
+<tr><td>The two rows together</td><td>50 = 30.3%</td><td>80 = 48.5% <span class="muted">[41.0, 56.1]</span></td><td>32 = 25.2%</td><td>57 = 44.9% <span class="muted">[36.5, 53.6]</span></td></tr>
+<tr><td>Overruled, but by another case</td><td>2</td><td>5</td><td>1</td><td>1</td></tr>
+<tr><td>Partly negative only</td><td>34</td><td>23</td><td>26</td><td>19</td></tr>
+<tr><td>"At risk" only</td><td>12</td><td>0</td><td>17</td><td>4</td></tr>
+<tr><td>Nothing</td><td>67</td><td>57</td><td>51</td><td>46</td></tr>
+<tr><td><b>Any of the first four rows ("lenient")</b></td><td>86 = 52.1% <span class="muted">[44.5, 59.6]</span></td><td><b>108 = 65.5%</b> <span class="muted">[57.9, 72.3]</span></td><td>59 = 46.5% <span class="muted">[38.0, 55.1]</span></td><td><b>77 = 60.6%</b> <span class="muted">[51.9, 68.7]</span></td></tr>
+<tr><td>Pairs a list calls implied: lenient</td><td>1 of 20</td><td>5 of 20</td><td>1 of 21</td><td>5 of 21</td></tr>
+<tr><td>Pairs outside the Constitution Annotated: lenient</td><td>4 of 19</td><td>5 of 19</td><td>2 of 8</td><td>3 of 8</td></tr>
+</tbody></table></div>
+<p>Brackets are Wilson 95% intervals. The sealed half moved by the same amount as the open half (lenient +14.1 points
+against +13.3), so the gain was not fitted to the open half. The strict figure cannot move, by design: a recognised
+overruling is negative from the later court's date, and "strict" asks for the overruling decision's own date. The
+gain on pairs outside the Constitution Annotated is one pair in each half; on content that is truly new the test
+shows almost nothing, in either direction.</p>
+<p>The other side of the same table: of the Supreme Court decisions the frozen build marks overruled by a Supreme
+Court decision, 80 of 93 in the open half are on a fresh list (50 of 53 before), and 57 of 76 in the sealed half
+(32 of 43 before). "Not on a list" is not "wrong": the lists are incomplete, and the blind audit below is the
+measure of error.</p>
+
+<h3>Where the 80 open-half hits come from, by class</h3>
+<div class="tw"><table>
+<thead><tr><th>Class of the row that makes the case overruled</th><th>Pairs</th></tr></thead>
+<tbody>
+<tr><td>Self-announced (the overruling court's own "overrule", "disapprove" …)</td><td>40</td></tr>
+<tr><td>Operative words admitted in earlier rounds ("repudiate", "no longer follow" …)</td><td>4</td></tr>
+<tr><td>Recognised, where the later Court spoke on the day of the overruling decision or the day after</td><td>1</td></tr>
+<tr><td>Not tagged (the row is on one holding of the case)</td><td>5</td></tr>
+<tr><td>Recognised (new): negative from the later Court's date</td><td>30</td></tr>
+</tbody></table></div>
+
+<h3>Blind precision audits</h3>
+<p>Auditors were other Claude agents. Each saw about 2,000 characters of the speaking opinion and a neutral claim
+("X lost authority through Y"); not the class, not the quoted span, not why the row was chosen. "Right" means the
+court itself states it and both cases are the right ones. "Right and extent" also requires that a row treated as
+overruling the whole case is read as the whole case.</p>
+<div class="tw"><table>
+<thead><tr><th>Rows</th><th>Population</th><th>Sample</th><th>Right</th><th>Right and extent</th><th>Installed?</th></tr></thead>
+<tbody>
+<tr><td>Recognised, read, whole case</td><td>747</td><td>70</td><td>66 = 94.3% <span class="muted">[86.2, 97.8]</span></td><td>64 = 91.4% <span class="muted">[82.5, 96.0]</span></td><td>Yes</td></tr>
+<tr><td>Recognised, read, part of the case</td><td>683</td><td>70</td><td>68 = 97.1% <span class="muted">[90.2, 99.2]</span></td><td>97.1%</td><td>Yes</td></tr>
+<tr><td>Recognised, pattern ("overruled on other grounds by")</td><td>4,685</td><td>70</td><td>68 = 97.1% <span class="muted">[90.2, 99.2]</span></td><td>97.1%</td><td>Yes (partly negative only)</td></tr>
+<tr><td>Recognised, round-4 witness rows passing the new check</td><td>37</td><td>37</td><td>36 = 97.3% <span class="muted">[86.2, 99.5]</span></td><td>33 = 89.2% <span class="muted">[75.3, 95.7]</span></td><td>Yes</td></tr>
+<tr><td>Control: self-announced rows of earlier rounds</td><td>–</td><td>30</td><td>29 = 96.7% <span class="muted">[83.3, 99.4]</span></td><td>27 = 90.0%</td><td>(already in)</td></tr>
+<tr><td>Operative words, part of the case</td><td>614</td><td>80</td><td>63 = 78.8% <span class="muted">[68.6, 86.3]</span></td><td>78.8%</td><td><b>No</b></td></tr>
+<tr><td>Operative words, whole case</td><td>41</td><td>41</td><td>11 = 26.8% <span class="muted">[15.7, 41.9]</span></td><td>26.8%</td><td><b>No</b></td></tr>
+<tr><td>Control in the operative audit</td><td>–</td><td>20</td><td>20 = 100% <span class="muted">[83.9, 100]</span></td><td>19</td><td></td></tr>
+</tbody></table></div>
+<p>The bar for rows that change a status is about 90%. Every recognised stratum meets it on the point estimate and is
+level with the control. The operative-words rows do not: the usual error is a sentence such as "X is no longer the
+law in this state since the adoption of the new rules", which reports what a statute, a rule change or another
+decision did; it is not the speaking court's own act. The 14 recognised rows the auditors marked wrong were removed
+from the build. One weakness: the decoy passages failed to build (one decoy, which was accepted), so the auditors'
+readiness to say yes is measured only by the control rows and by the 17 + 47 rows they did reject.</p>
+
+<h3>Held-out later-court notes</h3>
+<p>The corpus has 193,411 notes by later courts ("X, overruled by Y"). Notes by a court <i>without</i> power over X
+(a district court, a sister circuit, another state) can never enter the model; they are the test. The pool is the
+9,374 pairs those courts state that the round-4 model did not already have.</p>
+<div class="tw"><table>
+<thead><tr><th></th><th>Round 4</th><th>Frozen build</th></tr></thead>
+<tbody>
+<tr><td>Whole pool (9,374 pairs): X negative or partly negative by the named Y</td><td>293 = 3.1% <span class="muted">(2.8–3.5)</span></td><td>1,302 = 13.9% <span class="muted">(13.2–14.6)</span></td></tr>
+<tr><td>Pairs that a court with power also states (2,640)</td><td>36 = 1.4%</td><td>932 = 35.3% <span class="muted">(33.5–37.1)</span></td></tr>
+<tr><td>Pairs only held-out courts state (6,734)</td><td>257 = 3.8%</td><td>370 = 5.5% <span class="muted">(5.0–6.1)</span></td></tr>
+<tr><td>The model's negative rows that a held-out note also speaks of: the note names the same overruler — self-announced rows</td><td>598 of 641 = 93.3%</td><td>598 of 641 = 93.3% <span class="muted">(91.1–95.0)</span></td></tr>
+<tr><td>The same, recognised rows</td><td>–</td><td>170 of 181 = 93.9% <span class="muted">(89.4–96.6)</span></td></tr>
+<tr><td>Leak check (does any model input rest on a held-out speaker?)</td><td>0 leaks</td><td>0 leaks; 16 warnings where power is undecided, all rows the checker refuses</td></tr>
+</tbody></table></div>
+<p>Most of the gain is "partly negative", which is right: 71% of the pool is "overruled on other grounds". Whole-case
+"negative by Y" stays near 1%. Held-out courts confirm the recognised rows' overruler as often as they confirm the
+self-announced rows'. The rise on pairs only held-out courts state (3.8% to 5.5%) is our own scan of Supreme Court
+opinions and the pattern rows finding statements by courts with power that the notes table had missed; it is not
+held-out text entering the model, which the leak check rules out.</p>
+
+<h3>Behaviour: do bound courts stop citing the case?</h3>
+<div class="tw"><table>
+<thead><tr><th>Class (frozen build)</th><th>Cases used</th><th>Citations a year before → after</th><th>Drop against matched controls (1.00 = none)</th><th>Placebo</th></tr></thead>
+<tbody>
+<tr><td>Self-announced, whole case (calibration)</td><td>1,474</td><td>0.96 → 0.40</td><td>0.64 <span class="muted">(0.57–0.72)</span></td><td>1.07 (0.94–1.24)</td></tr>
+<tr><td>Self-announced, part of the case</td><td>5,516</td><td>0.74 → 0.28</td><td>0.63 <span class="muted">(0.60–0.67)</span></td><td>1.00 (0.96–1.05)</td></tr>
+<tr><td><b>Recognised, whole case</b> (event dated at the overruling decision Y, not at the later statement)</td><td>207</td><td>3.75 → 2.46</td><td><b>0.78</b> <span class="muted">(0.50–0.91)</span></td><td>1.07 (0.91–1.24)</td></tr>
+<tr><td>The same, without citations that themselves report the overruling</td><td>207</td><td>3.75 → 2.13</td><td>0.68 <span class="muted">(0.45–0.79)</span></td><td>1.07</td></tr>
+<tr><td><b>Recognised, part of the case</b></td><td>957</td><td>1.54 → 0.83</td><td><b>0.85</b> <span class="muted">(0.75–0.95)</span></td><td>1.11 (1.00–1.24)</td></tr>
+<tr><td>What is left of round 4's at-risk tier</td><td>45</td><td>4.09 → 3.27</td><td>1.09 <span class="muted">(0.70–1.62)</span></td><td>0.84 (0.50–1.52)</td></tr>
+</tbody></table></div>
+<p>Ten years either side, citations from courts the case bound, 1,000 bootstrap draws. In round 4 the at-risk tier (88
+cases) showed nothing either way. The recognised class is 207 whole-case and 957 part-case decisions, and both
+intervals now exclude 1: courts bound by these cases cite them less after the overruling decision, by roughly half
+the drop seen for self-announced overrulings. Recognised cases are much more heavily cited to begin with (3.7 a year
+against 1.0), which is part of why a later court bothered to say they were overruled.</p>
+
+<h3>The old lists (not blind)</h3>
+<p>These lists were used to diagnose and direct rounds 1 to 4, so the figures are not a test. Supreme Court Database:
+141 of 278 flagged decisions with the earlier classes, 175 of 278 when recognised rows count. Constitution
+Annotated, current table: 162 of 292, then 195 of 292. By class, the self-announced rows alone give 115 and 130;
+the earlier rounds' operative-word rows add 26 and 32; the recognised rows add 34 and 33.</p>
+
+<h3>The proof side</h3>
+<div class="tw"><table>
+<thead><tr><th>Check</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td>Theorems, locked (<code>audit.py lock</code>, then <code>check</code>)</td><td>175 (141 + 34 new); 0 of the 141 earlier statements changed; 0 problems; axioms within propext, Classical.choice, Quot.sound; no <code>sorry</code>, no new axiom, no <code>native_decide</code></td></tr>
+<tr><td>Mutants</td><td>34 broken variants (27 + 7), all caught; 35 properties, each fails on at least one mutant</td></tr>
+<tr><td>Round-4 output from the new program</td><td>byte-identical (status, findings, certificates, splits, per-line rows)</td></tr>
+<tr><td>Lean against the Python reference, 118 regression universes</td><td>0 disagreements</td></tr>
+<tr><td>Lean against the reference, 300 + 300 new universes with witness rows and class claims</td><td>status: 0 of 55,638 and 0 of 55,055 keys. After one Lean fix (a class label), 13 of the second 300 universes differ on a certificate verdict and the finding that follows; one cause, older than this round (an unknown date read as a real day), not fixed</td></tr>
+<tr><td>Lean against the reference, real data, frozen build</td><td>agree on status, findings and certificates except 2 of 6,163 recognised rows (successor courts in New Jersey; Lean is the stricter side)</td></tr>
+<tr><td>Fuzzer for the new input table</td><td>not run (cut for time)</td></tr>
+</tbody></table></div>

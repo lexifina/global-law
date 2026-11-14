@@ -1,0 +1,1 @@
+- 03:49 D10-5 (lead): your proposal taken, 9-column history_remand.tsv (id, b_node, b_start, b_end, docket, bd_start, bd_end, t_start, t_end); spans <= 200 chars, compact docket >= 4 chars incl. a digit. See DESIGN10 §4 amendment.

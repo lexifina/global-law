@@ -1,0 +1,5 @@
+round12 node plumbing ready 2026-11-14 07:27 (agent infra12; NOTES.md; format note round12/data_orders/FORMAT12.md)
+- round12/nodes12.py: default = v11d's nodes (round11/data_orders); --nodes DIR / R12_NODES=DIR; R12_NODES=none = off; optional nodes.tsv column src (e.g. r12:longlist); check_prefix() (first 1,045 local ids = v11d's, same order; lists changed texts).
+- stage12.py --nodes DIR: decisions2 = v11d's corpus rows (first 6,892,454) + DIR's nodes from 6,892,454; refused when DIR does not start with v11d's local ids; logs base rows by nodes whose text changed (drop / replace them).
+- Self-test: stage12 --nodes round11/data_orders -> decisions2.tsv, decisions2_nodes.tsv, nodes.count, nodes_map.tsv cmp-identical to v11d's (sha1 d4bcf1b8); NOBUILD r12_run.sh on it (WSL decisions2 = head of the mirror + nodes, sha-checked) -> ALL SAME vs round11/out/v11d. Synthetic folder (1 changed text, 2 appended, src r12:longlist) staged as expected; swapped order refused. Test stages deleted.
+- Size of one --nodes variant: C: stage 873 MB (new decisions2) + out 91 MB; WSL data dir 874 MB + difftest 91 MB, until clean12.sh.

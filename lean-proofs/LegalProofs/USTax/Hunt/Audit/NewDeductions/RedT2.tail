@@ -1,0 +1,4 @@
+#eval do
+  search "T2 closed gap, flag false: 7 equal earners" true equalEarners false
+  search "T2 closed gap, flag TRUE (literal branch deleted): 7L" true equalEarners true
+  search "T2 closed gap: 7bL" true (unequal 350000 250000) true

@@ -1,0 +1,46 @@
+=== alien resident by substantial presence (no green card), 5 years in; Legal.USTax.Hunt.Residence.Asset.usStock; grid #[30, 90, 62, 1, 182]; horizon 2y; student false; gifts false; foreign tax: salary 0bp, gain 0bp ===
+positions 373186, finished plans (asset disposed of) 42997, families 12
+baseline (sell, in the US every day, no other move): tax on the gain $238000, all US tax $447994
+- gain tax $0 (all US tax $168352; exemption used $0); US days 548/730: sold as nonresident, foreign tax home
+  y0: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] SELL RELOCATE out[184-365]
+- gain tax $0 (all US tax $164490; exemption used $0); US days 547/730: sold as nonresident, foreign tax home, closer-connection exception
+  y0: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: SELL RELOCATE out[1-30] out[31-120] out[121-182] out[183-183] US[184-365]
+- gain tax $0 (all US tax $120763; exemption used $0); US days 395/730: sold as nonresident, US tax home, under 183 days
+  y0: RELOCATE RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: SELL US[1-30] out[31-120] out[121-182] out[183-183] out[184-365]
+- gain tax $0 (all US tax $71131; exemption used $0); US days 216/730: sold as nonresident, US tax home, under 183 days, closer-connection exception
+  y0: RELOCATE out[1-30] US[31-120] US[121-182] US[183-183] out[184-365]
+  y1: SELL RELOCATE out[1-30] out[31-120] US[121-182] US[183-183] out[184-365]
+- gain tax $198497 (all US tax $360360; exemption used $0); US days 547/730: sold as nonresident, foreign tax home, §7701(b)(10) charge, closer-connection exception
+  y0: RELOCATE out[1-30] out[31-120] out[121-182] out[183-183] SELL US[184-365]
+  y1: RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+- gain tax $198497 (all US tax $316633; exemption used $0); US days 395/730: sold as nonresident, foreign tax home, §7701(b)(10) charge
+  y0: RELOCATE US[1-30] out[31-120] out[121-182] out[183-183] SELL out[184-365]
+  y1: RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+- gain tax $198497 (all US tax $316633; exemption used $0); US days 395/730: sold as nonresident, US tax home, under 183 days, §7701(b)(10) charge
+  y0: RELOCATE RELOCATE US[1-30] out[31-120] out[121-182] out[183-183] SELL out[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+- gain tax $198505 (all US tax $316700; exemption used $0); US days 364/730: sold as nonresident, US tax home, under 183 days, §7701(b)(10) charge, closer-connection exception
+  y0: RELOCATE out[1-30] out[31-120] out[121-182] out[183-183] US[184-365]
+  y1: RELOCATE out[1-30] out[31-120] out[121-182] SELL out[183-183] US[184-365]
+- gain tax $238000 (all US tax $447994; exemption used $0); US days 730/730: sold while taxed on worldwide income
+  y0: SELL RELOCATE RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+- gain tax $238000 (all US tax $395353; exemption used $0); US days 547/730: sold while taxed on worldwide income, closer-connection exception
+  y0: SELL US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: RELOCATE out[1-30] out[31-120] out[121-182] out[183-183] US[184-365]
+- gain tax $300000 (all US tax $457721; exemption used $0); US days 517/730: sold as nonresident, §871(a)(2) 30%, closer-connection exception
+  y0: RELOCATE out[1-30] out[31-120] out[121-182] out[183-183] US[184-365]
+  y1: SELL RELOCATE out[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+- gain tax $300000 (all US tax $413994; exemption used $0); US days 365/730: sold as nonresident, §871(a)(2) 30%
+  y0: RELOCATE RELOCATE US[1-30] out[31-120] out[121-182] out[183-183] out[184-365]
+  y1: SELL out[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+frontier (most US days for each level of tax on the gain):
+  days 730: gain tax $238000 (all US tax $447994)
+  y0: SELL RELOCATE RELOCATE US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  days 548: gain tax $0 (all US tax $168352)
+  y0: US[1-30] US[31-120] US[121-182] US[183-183] US[184-365]
+  y1: US[1-30] US[31-120] US[121-182] US[183-183] SELL RELOCATE out[184-365]

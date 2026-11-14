@@ -1,0 +1,22 @@
+== C1 QSBS pre-2025 age 4, full exit: 363272 positions, 563821 moves tried, 435 move families
+   baseline (plain): family 25680, A 25680, total tax 14320
+   +9800  family 35480, A 21580, tax 4520  [gift-S + sellStock]
+        A sells 1/4 of shares to outsider; wait 1y; A sells 1/2 of shares to outsider; A gives 1/1 of shares to S; S sells 1/1 of shares to outsider
+   +9800  family 35480, A 21580, tax 4520  [gift-K + sellStock]
+        A sells 1/4 of shares to outsider; wait 1y; A sells 1/2 of shares to outsider; A gives 1/1 of shares to K; K sells 1/1 of shares to outsider
+   +9144  family 34824, A 34824, tax 5176  [sellStock]
+        wait 1y; A sells 1/4 of shares to outsider; wait 1y; A sells 1/1 of shares to outsider
+   +7318  family 32998, A 11499, tax 7002  [gift-K + gift-S + liquidate + redeem-S]
+        wait 1y; A gives 1/4 of shares to S; C redeems 1/1 of S's shares; A gives 1/2 of shares to K; C liquidates
+   +6943  family 32623, A 12099, tax 7376  [gift-K + gift-S + liquidate]
+        wait 1y; A gives 1/4 of shares to K; A gives 1/2 of shares to S; C liquidates
+   +5534  family 31214, A 14539, tax 8786  [gift-S + liquidate + redeem-S]
+        wait 1y; A gives 1/2 of shares to S; C redeems 1/2 of S's shares; wait 1y; C liquidates
+   +5534  family 31214, A 16675, tax 8786  [gift-S + liquidate + redeem-A]
+        wait 1y; A gives 1/2 of shares to S; C redeems 1/2 of A's shares; wait 1y; C liquidates
+   +5039  family 30719, A 23039, tax 9281  [electS + gift-K + liquidate]
+        C elects S; wait 1y; wait 5y; A gives 1/4 of shares to K; C liquidates
+== C2 QSBS pre-2025 age 4, keep business, A only: 37182 positions, 69709 moves tried, 152 move families
+   baseline (plain): family 7620, A 7620, total tax 2380
+   +2380  family 10000, A 10000, tax 0  [gift-S + redeem-A]
+        wait 1y; A gives 1/2 of shares to S; C redeems 1/2 of A's shares

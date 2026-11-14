@@ -1,0 +1,74 @@
+round-11 audit tools self-test
+inputs: {'A_rows': 100, 'A_joined': 3, 'B_rows': 80, 'B_anchor': 77}
+make_packs11 A: wrote ~\Documents\us-caselaw-lean-work\caselaw-lean-2\round11\audit\selftest11\run_A: 16 items (12 real, 2 known-wrong decoys, 2 known-right decoys) in 2 packs [8, 8]
+  ok   A type                         got A, want A
+  ok   A answered                     got 16, want 16
+  ok   A unanswered                   got 0, want 0
+  ok   A problems                     got 0, want 0
+  ok   A real n                       got 12, want 12
+  ok   A right k                      got 7, want 7
+  ok   A right_extent k               got 7, want 7
+  ok   A decoy answers                got 6, want 6
+  ok   A decoy accurate               got 4, want 4
+  ok   A decoys wrong in key          got 2, want 2
+  ok   A decoys right in key          got 2, want 2
+  ok   A pack 1 has a missed decoy    got True, want True
+  ok   A readers                      got 3, want 3
+  ok   A agreement items              got 8, want 8
+  ok   A wilson right                 got (0.3195, 0.8067), want (0.3195, 0.8067)
+  ok   A pack_1.md decoys >= 10%      got True, want True
+  ok   A pack_2.md decoys >= 10%      got True, want True
+  ok   A leaks                        got [], want []
+  ok   A more_text passages marked    got True, want True
+  ok   A more_text target             got True, want True
+  ok   A errors.tsv lines             got 9, want 9
+  A effect classes in the sample: ['own_part', 'own_whole', 'report_part', 'report_whole']; joined/anchor spans: 0 items with 2+ passages
+make_packs11 B: wrote ~\Documents\us-caselaw-lean-work\caselaw-lean-2\round11\audit\selftest11\run_B: 16 items (12 real, 2 known-wrong decoys, 2 known-right decoys) in 2 packs [8, 8]
+  ok   B type                         got B, want B
+  ok   B answered                     got 16, want 16
+  ok   B unanswered                   got 0, want 0
+  ok   B problems                     got 0, want 0
+  ok   B real n                       got 12, want 12
+  ok   B right k                      got 8, want 8
+  ok   B right_extent k               got 8, want 8
+  ok   B decoy answers                got 6, want 6
+  ok   B decoy accurate               got 4, want 4
+  ok   B decoys wrong in key          got 2, want 2
+  ok   B decoys right in key          got 2, want 2
+  ok   B pack 1 has a missed decoy    got True, want True
+  ok   B readers                      got 3, want 3
+  ok   B agreement items              got 8, want 8
+  ok   B wilson right                 got (0.3906, 0.8619), want (0.3906, 0.8619)
+  ok   B pack_1.md decoys >= 10%      got True, want True
+  ok   B pack_2.md decoys >= 10%      got True, want True
+  ok   B leaks                        got [], want []
+  ok   B more_text passages marked    got True, want True
+  ok   B more_text target             got True, want True
+  ok   B errors.tsv lines             got 7, want 7
+  B effect classes in the sample: ['other', 'status']; joined/anchor spans: 6 items with 2+ passages
+make_packs11 A joined: wrote ~\Documents\us-caselaw-lean-work\caselaw-lean-2\round11\audit\selftest11\run_A_joined: 4 items (3 real, 1 known-wrong decoys, 0 known-right decoys) in 1 packs [4]
+  ok   J joined rows sampled          got ['antecedent', 'antecedent', 'doctrineTie'], want ['antecedent', 'antecedent', 'doctrineTie']
+  ok   J doctrine effect              got ['doctrine'], want ['doctrine']
+  ok   J no overlap with run_A (rows, decoys) got [], want []
+  ok   J leaks                        got [], want []
+make_packs11 C (49 second rows): warning: pairs: 1 lines whose rows are not both in the inputs (a header line counts here)
+  ok   C type                         got C, want C
+  ok   C brief                        got B, want B
+  ok   C brief is B                   got True, want True
+  ok   C brief path nested            got True, want True
+  ok   C answered                     got 16, want 16
+  ok   C problems                     got [], want []
+  ok   C real n                       got 12, want 12
+  ok   C row 1 right                  got 6, want 6
+  ok   C row 2 right                  got 3, want 3
+  ok   C only row 1                   got 6, want 6
+  ok   C only row 2                   got 3, want 3
+  ok   C link                         got 9, want 9
+  ok   C decoys accurate              got (4, 4), want (4, 4)
+  ok   C quote order known            got ['2<1'], want ['2<1']
+  ok   C two quotes shown             got True, want True
+  ok   C leaks                        got [], want []
+  ok   C pack_1.md decoys >= 10%      got True, want True
+  ok   C pack_2.md decoys >= 10%      got True, want True
+  ok   C more_text nested run         got True, want True
+RESULT: PASS

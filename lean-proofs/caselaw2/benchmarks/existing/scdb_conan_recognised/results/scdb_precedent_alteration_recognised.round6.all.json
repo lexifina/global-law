@@ -1,0 +1,32 @@
+{
+ "blind": false,
+ "build": {
+  "source": "round7/results/base/old_by_class.txt ('selfAnnounced+operativeWords+recognised')"
+ },
+ "court": "supreme",
+ "dataset": "scdb_precedent_alteration_recognised",
+ "generated": "2026-11-14T00:13:43+00:00",
+ "label": "round6",
+ "link": {},
+ "metrics": {
+  "precision": {
+   "hi": 0.8776530039668915,
+   "k": 175,
+   "lo": 0.7770376286747163,
+   "n": 210,
+   "p": 0.8333333333333334
+  },
+  "recall": {
+   "hi": 0.6841407481507582,
+   "k": 175,
+   "lo": 0.5713220226062028,
+   "n": 278,
+   "p": 0.6294964028776978
+  }
+ },
+ "notes": "Burned key (not blind). The explicit-only row is scdb_precedent_alteration.",
+ "primary": "recall",
+ "row_label": "SCDB precedentAlteration, counting overrulings recognised by a later court",
+ "split": "all",
+ "tests": "overruling"
+}

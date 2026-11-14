@@ -1,0 +1,38 @@
+{
+  "chunk": 2,
+  "counts": {"noise": 69, "intended": 12, "gap": 2},
+  "gaps": [
+    {
+      "entry": "#2.71",
+      "new": "§6662(b)(10) (disallowance of a conservation-easement deduction under §170(h)(7)), added by Consolidated Appropriations Act, 2023",
+      "list": "§6676(c) (refund-claim penalty: excessive amounts from §6662(b)(6) transactions are never 'due to reasonable cause'). Partner list §6664(c)(2) was updated by the same law to name (b)(10); §6662(h)(2)(D) and §6751(b)(2)(A) were also updated; §6676 was not touched.",
+      "effect": "With (b)(10) read into §6676(c): a refund claim resting on a §170(h)(7)-barred deduction carries a 20% penalty with no reasonable-cause defence. Without it (the text): the 20% penalty falls away if reasonable cause is shown. On an original return the same deduction draws a 40% penalty (§6662(h)(2)(D)) with no defence (§6664(c)(2)) and no supervisor sign-off. So claiming the deduction by amended return instead of on the original return halves the penalty rate and restores a complete defence, provided the IRS disallows the claim before paying it (if it pays and later assesses, there is an underpayment and §6662 applies; §6676(d)).",
+      "who_gains": "taxpayer",
+      "example": "S corporation (rules apply to S corporations, §170(h)(7)(F)) with 10 unrelated shareholders, total relevant basis $1,000,000, claims a $2,600,000 easement deduction (over the 2.5x limit of $2,500,000, so the whole deduction fails). Each shareholder's share $260,000; tax at 37% = $96,200. Original return: penalty 40% x $96,200 = $38,480, no defence. File without the deduction, pay, then claim it on an amended return which is disallowed: penalty 20% x $96,200 = $19,240, and $0 if the shareholder shows reasonable cause (for example reliance on the entity's own computation of relevant basis, which the statute assigns to the entity). The deduction itself is lost either way; the cost of the route is paying $96,200 up front until the claim is decided.",
+      "dollars": "Penalty saved per shareholder: $19,240 (rate alone) to $38,480 (with reasonable cause); $192,400 to $384,800 across the ten. No tax saved.",
+      "could_cover": "§6676(d) switches §6676 off wherever a §6662 penalty applies, so the route fails if the refund is paid first and then assessed back. For partnerships under the centralized audit rules the partner cannot file an inconsistent claim; the partnership's administrative adjustment request flows into partners' later original returns, where §6662 applies - so the route is open mainly to S corporations and partnerships that elected out. Reasonable cause is hard to show against a bright-line 2.5x test. §170(h)(7)(G)(ii) anti-avoidance regulations address the deduction limit, not penalties. §6662(b)(6)/§6676(c) reach it only if the transaction also lacks economic substance.",
+      "confidence": "high",
+      "confidence_note": "High that the words leave (b)(10) out of §6676(c); medium that it is usable in practice."
+    },
+    {
+      "entry": "#2.57",
+      "new": "§6226(b)(4) (tiered structures: a partnership or S corporation partner either (I) passes statements on or (II) pays an imputed underpayment itself), added by Consolidated Appropriations Act, 2018",
+      "list": "§6226(c)(2) (push-out interest: partner level, from the reviewed-year due date, at the underpayment rate with 5 points in place of 3). The same law amended its opening words to add only 'or which is described in subsection (b)(4)(A)(ii)(I)'; (II) is not named, and (c)(2)(B) still speaks only of (b)(2) correction amounts.",
+      "effect": "With (II) read in: a pass-through partner that pays the imputed underpayment itself owes interest at the federal short-term rate plus 5 points. Without it (the text): that payment follows 'rules similar to section 6225', whose interest rule is §6233(a)(2) - ordinary chapter 67 interest, short-term rate plus 3 points. My recollection (NOT checked - no web access allowed) is that Treas. Reg. §301.6226-3(e)(4)(iv) charges the plus-5 rate on these payments; if so the regulation goes beyond the statute's words.",
+      "who_gains": "taxpayer",
+      "example": "Upper-tier partnership receives a push-out statement with a $1,000,000 share of adjustments, does not pass it on, and pays an imputed underpayment of $370,000 (37%, §6225(b)(1)(A)). Reviewed year 2021 (return due March 2022), paid September 2027: about 5.5 years. Two extra points on $370,000 is about $7,400 a year, roughly $41,000 simple and about $45,000 with daily compounding.",
+      "dollars": "About $41,000-$45,000 of interest on a $370,000 imputed underpayment over 5.5 years (2 points a year).",
+      "could_cover": "The first clause of (c)(2) ('an imputed underpayment with respect to which the application of this section is elected') can be read to follow the adjustment down every tier - but then the 2018 addition of (I) would have been unnecessary, which favours the narrow reading. 'Rules similar to' in (b)(4)(A)(ii)(II) and §7805 give Treasury room to write the regulation. Congress may equally have meant the ordinary rate here, since a tier that pays is acting like a partnership under §6225; on that view the statute is fine and only the regulation is exposed.",
+      "confidence": "medium",
+      "confidence_note": "High that (II) is not named; medium overall: the regulation text is recalled from memory and unverified, and the omission may be deliberate."
+    }
+  ],
+  "other": [
+    "§401(a)(39)(B)(ii): the inflation adjustment for qualified long-term care distributions points at 'the $2,500 amount in clause (i)(II)', but (i)(II) is the 10%-of-accrued-benefit limit; the $2,500 is in (i)(III). Read literally the $2,500 cap is never indexed (government gains; small).",
+    "§401(k)(16) starter plans and military make-up deferrals (#2.41): §414(u)(1)(A) lifts §402(g), §415 and similar limits for make-up contributions but not the starter plan's own $6,000-a-calendar-year cap in §401(k)(16)(D)(i)(II), and §414(u)(1)(C) names §401(k)(11) and (12) but not (13) or (16). A returning service member making up two years of deferrals in one year would by the words break starter status. Not counted as a gap: the only consequences are the §401(k)(3) and §416 tests, and (C) already says the plan does not fail those 'by reason of' the make-up contribution.",
+    "#2.35 and #2.39 (and the starter-plan concern generally): §416(g)(4)(H)(ii) does name §401(k)(16)(B) starter arrangements and §403(b)(16), so starter plans are exempt from the top-heavy rules.",
+    "§6662(b)(9) (overstated §170(p) deduction) was left out of the strict-liability rule in §6664(c)(2) although it shares the no-supervisor-approval rule with (b)(10) in §6751(b)(2)(A); harmless, §170(p) applied only to 2021.",
+    "§4104(a)(1) requires an information return from persons claiming §34, §40 and §40A fuel benefits but not the §40B sustainable aviation fuel credit (the excise-side claim is caught through §6426 in (a)(2)). Reporting only.",
+    "§6434 ($1,000 Trump account payment) is not in §6206 and has no recapture rule of its own in the section; §6434(c)(2) bars a second election by 'any other individual' but does not say who wins when two people elect for the same child at once. Section 6659 exists as a separate penalty file but was not read."
+  ]
+}

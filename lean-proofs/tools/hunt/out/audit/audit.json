@@ -1,0 +1,809 @@
+{
+ "tests": [
+  [
+   "blind",
+   "Blind twin",
+   "A second encoder, given the statute and a starting position and not told the result, writes the rules again and runs a search.",
+   "The original encoder wrote the answer in."
+  ],
+  [
+   "T1",
+   "Text fidelity",
+   "Every rule the plan uses is read against the statute's words; each difference is fixed in a copy and the search re-run.",
+   "A rule more generous than the text, or a restriction left out."
+  ],
+  [
+   "T2",
+   "Close the gap",
+   "One edit, the one Congress would make. The plan must disappear and the baseline must not move.",
+   "A gain that comes from somewhere other than the claimed provision."
+  ],
+  [
+   "T3",
+   "Ablation",
+   "Remove each move the plan uses (it must fail) and every move it does not use (it must survive).",
+   "Moves that are decoration, or a plan that leans on something unstated."
+  ],
+  [
+   "T4",
+   "Earlier law",
+   "Restore the text as it stood before the amendment the plan relies on.",
+   "A plan that does not depend on what it says it depends on."
+  ],
+  [
+   "T5",
+   "Free lunch",
+   "Point the search at absurd goals and check conservation over every position reached.",
+   "A model loose enough to create money."
+  ],
+  [
+   "T6",
+   "Kernel",
+   "Replay the plan and the closed-gap result as theorems checked by Lean's kernel; list the axioms.",
+   "A result that exists only in compiled search code."
+  ],
+  [
+   "T7",
+   "Arithmetic",
+   "Recompute the figures in Python from the statute text, not from the Lean.",
+   "An arithmetic slip shared by the search and its report."
+  ],
+  [
+   "T8",
+   "Authority",
+   "Regulations, IRS instructions and notices, practitioner writing.",
+   "A plan already closed, or already in print."
+  ]
+ ],
+ "claims": [
+  {
+   "name": "Accounts",
+   "short": "Trump account as a backdoor Roth",
+   "sec": "\u00a7530A(h)(4)",
+   "claim": "An adult who kept a childhood Trump account contributes $7,000 a year to it and converts that account alone, tax-free, despite $100,000 of pre-tax money in another IRA.",
+   "claimed": "+$3,500",
+   "restated": "$0 of tax in the model's own terms",
+   "share": 0,
+   "moves": [
+    "contribute $7,000",
+    "convert the account"
+   ],
+   "words": "Section 408(d)(2) shall be applied separately with respect to Trump Accounts and other individual retirement plans.",
+   "fix": "For any taxable year beginning before the first day of the calendar year in which the account beneficiary attains age 18, ",
+   "fix_pos": "before",
+   "found": "Two moves; 14 positions find it. The search added nothing to reading the sentence.",
+   "worst": "The +$3,500 is the objective's 25% premium on $14,000 of Roth money, not tax saved. It is zero with no premium, with equal rates now and later, or once the $100,000 is rolled into an employer plan, a move the model lacks.",
+   "outside": "IRS Notice 2025-68 states both halves: Trump accounts are disregarded \"at all times\" for other IRAs' basis, and contributions after 18 follow the ordinary IRA rules. Nothing closes it. Treasury has announced further guidance.",
+   "blind": "Reproduced. Contribute $7,000 and convert the account; the other IRA stays out of the ratio. The account's own $8,000 of untaxed money is taxed on the way.",
+   "tests": {
+    "blind": {
+     "r": "found",
+     "d": "Reproduced. Contribute $7,000 and convert the account; the other IRA stays out of the ratio. The account's own $8,000 of untaxed money is taxed on the way."
+    },
+    "T1": {
+     "r": "partial",
+     "d": "No reading of s.530A more generous than its words was found, but the gain depends on scenario facts and on the objective: it is zero with no growth premium, with a deductible IRA, with the IRA already rolled into a plan, with equal rates, or with about $70,000 of untaxed money in the Trump account."
+    },
+    "T2": {
+     "r": "pass",
+     "d": "Adding 'For any taxable year beginning before the first day of the calendar year in which the account beneficiary attains age 18,' to s.530A(h)(4) removes the plan and leaves all 15 baselines unchanged."
+    },
+    "T3": {
+     "r": "pass",
+     "d": "Removing either Trump-account move kills the plan; removing next-year halves it; removing every unused move, or allowing all 35, leaves +3,500."
+    },
+    "T4": {
+     "r": "pass",
+     "d": "Under the Code without s.530A nothing beats the baseline of 125,000."
+    },
+    "T5": {
+     "r": "pass",
+     "d": "Over every position reached, assets are conserved, pre-tax dollars are either still inside or taxed, basis never exceeds balance, and no limit is exceeded."
+    },
+    "T6": {
+     "r": "pass",
+     "d": "Plan and closed-gap replays pass the kernel by decide on the full state; a statement over all move sequences is proved by induction for a cut-down model whose agreement with the full closed step is checked by #eval only."
+    },
+    "T7": {
+     "r": "pass",
+     "d": "A Python script written from s.72(e)(8), s.408(d)(2)(C), s.408(o) and s.530A(h)(4) gives the same figures."
+    },
+    "T8": {
+     "r": "pass",
+     "d": "Notice 2025-68 states both halves of the plan (post-18 contributions under s.408(a)(1); non-aggregation 'at all times'); nothing closes it; no source found describing the combined plan."
+    }
+   },
+   "verdict": "holds on the text",
+   "reason": "s.530A(h)(4) has no age limit, Notice 2025-68 says the separation holds 'at all times' and that post-18 contributions follow s.408(a)(1), the closed-gap edit removes the plan without moving any baseline, and the kernel replays agree; but the +$3,500 is a 25% valuation premium that is zero under four ordinary changes of fact, the search itself is two hand-entered moves, and Treasury has reserved further guidance on exactly this treatment.",
+   "authority": [
+    {
+     "source": "Notice 2025-68, overview (Coordination with IRA rules)",
+     "url": "https://www.irs.gov/pub/irs-drop/n-25-68.pdf",
+     "effect": "supports",
+     "quote": "a Trump account continues to be a Trump account after the growth period. ... an account initially established as a Trump account can never be aggregated with other individual retirement arrangements when allocating basis related to a distribution from either the Trump account or another individual retirement arrangement."
+    },
+    {
+     "source": "Notice 2025-68, Q&A G-1",
+     "url": "https://www.irs.gov/pub/irs-drop/n-25-68.pdf",
+     "effect": "supports",
+     "quote": "at all times, Trump accounts are disregarded for purposes of determining the portion of a distribution from a traditional individual retirement arrangement that is not a Trump account that is allocated to basis. The Treasury Department and the IRS anticipate issuing additional guidance with respect to this tax treatment for individual retirement arrangements in general."
+    },
+    {
+     "source": "Notice 2025-68, Q&A A-9",
+     "url": "https://www.irs.gov/pub/irs-drop/n-25-68.pdf",
+     "effect": "supports",
+     "quote": "during the growth period, the limit on contributions is governed by section 530A(c)(2), while after the end of the growth period, the limit on contributions is governed by section 408(a)(1)."
+    },
+    {
+     "source": "Notice 2025-68, Q&A A-10",
+     "url": "https://www.irs.gov/pub/irs-drop/n-25-68.pdf",
+     "effect": "silent",
+     "quote": "The written governing instrument of the Trump account may provide that, immediately after the growth period, all of the assets of the Trump account will be transferred to a traditional IRA for the account beneficiary that is not a Trump account"
+    },
+    {
+     "source": "T.D. 10056, temporary s.1.530A-1T(c)(4)(ii) and (c)(6), 30 Sep 2026",
+     "url": "https://public-inspection.federalregister.gov/2026-20026.pdf",
+     "effect": "supports",
+     "quote": "After the growth period ... the rules under section 408 that apply to other traditional IRAs are generally applicable to Trump accounts, except as provided in section 530A(h). ... after the growth period, an unfunded Trump account that is not an auto account may be closed by the trustee if provided by the terms of the written governing instrument."
+    },
+    {
+     "source": "CC-00226466-26, proposed rule withdrawing REG-117270-25, 30 Sep 2026",
+     "url": "https://public-inspection.federalregister.gov/2026-20027.pdf",
+     "effect": "silent",
+     "quote": "the Treasury Department and the IRS are withdrawing the prior s.1.530A-1 NPRM and issuing these proposed regulations."
+    },
+    {
+     "source": "rothirahub.com, Trump accounts (updated 15 Oct 2026)",
+     "url": "https://rothirahub.com/trump-accounts/",
+     "effect": "supports",
+     "quote": "This is a deviation from the standard pro-rata aggregation rule for IRAs and is preserved on Roth conversion ... A move into a non-Trump Traditional IRA ... ends this special separation."
+    },
+    {
+     "source": "Kitces, Ben Henry-Moreland, 24 Dec 2025",
+     "url": "https://www.kitces.com/blog/taxable-accounts-custodial-kiddie-tax-obbba-trump-accounts-one-big-beautiful-act-roth-rmd-529-plan/",
+     "effect": "supports",
+     "quote": "Starting in the year the beneficiary turns 18, the contribution limit for standard IRAs applies ($7,500 in 2026)"
+    },
+    {
+     "source": "back9ins, Adam LeVine, 28 Jul 2026",
+     "url": "https://help.back9ins.com/a/Trump-Accounts-The-Mechanics-the-Roth-Conversion-and-the-Timing-Mistake-Everyone-Is-About-to-Make",
+     "effect": "silent",
+     "quote": "Notice 2025-68 confirms Trump Accounts are not aggregated with other IRAs for basis allocation purposes"
+    }
+   ],
+   "divergences": 8,
+   "blind_positions": 97750
+  },
+  {
+   "name": "Household",
+   "short": "Two unmarried adopters, two refunds",
+   "sec": "\u00a723(a)(4)",
+   "claim": "Two unmarried adults who adopt together split the expenses and each receive the $5,000 refundable part of the adoption credit; a married couple receives one.",
+   "claimed": "$6,951",
+   "restated": "$0 to $574 over six years; $5,000 arrives a year or more early",
+   "share": 8,
+   "moves": [
+    "A pays part",
+    "B pays the rest",
+    "each claims"
+   ],
+   "words": "\u2026regulations which treat unmarried individuals who pay or incur qualified adoption expenses with respect to the same child as 1 taxpayer for purposes of applying the dollar amounts in subsections (a)(3) and (b)(1)\u2026",
+   "fix": "(a)(4), ",
+   "fix_pos": "in",
+   "found": "Found by the search, on a grid of 0%, 50% or 100% of the expenses.",
+   "worst": "$1,951 of the $6,951 is a baseline error that remains with the refundable rule deleted. The rest is timing: the household collects the full $17,280 either way through the carryforward, which the model counted as lost. The 50/50 split the search reported is worse than one adult paying everything.",
+   "outside": "Nothing divides the $5,000 between co-adopters; Notice 97-9 and the Form 8839 instructions divide only the $17,280. The 2025 instructions and two 2026 IRS releases say \"$5,000 per eligible child\", which is not the statute's wording.",
+   "blind": "Reproduced. Each adult who pays at least $5,000 gets a separate $5,000; gain $6,037 with the carryforward reported separately.",
+   "tests": {
+    "blind": {
+     "r": "found",
+     "d": "Reproduced. Each adult who pays at least $5,000 gets a separate $5,000; gain $6,037 with the carryforward reported separately."
+    },
+    "T1": {
+     "r": "partial",
+     "d": "The per-return $5,000 survives the strict reading, but with the section 23(c) carryforward valued the 50/50 plan is worse than one payer and the best split gains 0 to 574 nominal over the best one-payer filing."
+    },
+    "T2": {
+     "r": "partial",
+     "d": "Adding (a)(4) to section 23(i) leaves both baselines unmoved and removes the $5,000, but the adopt family still shows 1,951 from B's tax absorbing credit the default strands on A."
+    },
+    "T3": {
+     "r": "pass",
+     "d": "Without the adopt move the plan is gone; with only the adopt move it is found at 6,951; claim, keep, retirement and filing moves are decoration."
+    },
+    "T4": {
+     "r": "partial",
+     "d": "Without (a)(4) the $5,000 disappears but the search still returns 1,951 for the adopt family (payer choice under a model that drops the carryforward)."
+    },
+    "T5": {
+     "r": "pass",
+     "d": "No conservation, limit, paid-amount, nonrefundable or refundable-cap violation in 39,706 plans and 11 stressed variants; two adults with no income get $10,000, which the text allows."
+    },
+    "T6": {
+     "r": "pass",
+     "d": "Plan, baselines, closed-gap result and six-year figures replay by decide; under the closed rule no move sequence from the default, for any facts, exceeds $5,000 refundable; axioms propext and Quot.sound only."
+    },
+    "T7": {
+     "r": "pass",
+     "d": "Python from the statute gives the same figures as the Lean, including the six-year ones."
+    },
+    "T8": {
+     "r": "pass",
+     "d": "No guidance divides the $5,000 between unmarried co-adopters and no writing found describes the plan; the IRS does read the $5,000 as per eligible child."
+    }
+   },
+   "verdict": "holds on the text",
+   "reason": "Two unmarried co-adopters each get up to $5,000 refundable on the statute and the 2025 form, and no guidance divides it; but the $6,951 is 1,951 of baseline artifact plus 5,000 of acceleration, the lasting gain at these facts is 0 to 574 once the carryforward is valued, and the 50/50 split as found is 3,066 to 3,640 worse over six years than one adult paying everything.",
+   "authority": [
+    {
+     "source": "Instructions for Form 8839 (2025), line 2",
+     "url": "https://www.irs.gov/instructions/i8839",
+     "effect": "supports",
+     "quote": "the $17,280 limit must be divided between the two of you. You can divide it in any way you both agree."
+    },
+    {
+     "source": "Instructions for Form 8839 (2025), What's New and line 13",
+     "url": "https://www.irs.gov/instructions/i8839",
+     "effect": "silent",
+     "quote": "The amount of the refundable credit portion is determined separately for each eligible child."
+    },
+    {
+     "source": "Notice 97-9, 1997-1 C.B. 365, section I.D.1",
+     "url": "https://webharvest.gov/peth04/20041019065003/http:/www.irs.gov/pub/irs-utl/adoptionnotices.pdf",
+     "effect": "silent",
+     "quote": "an unmarried couple that seeks to adopt an eligible child must apply the $5,000 (or $6,000) limitation to the couple's combined qualified adoption expenses."
+    },
+    {
+     "source": "IRS FS-2026-03 (Feb. 2026), Topic A Q2",
+     "url": "https://www.irs.gov/node/156801",
+     "effect": "silent",
+     "quote": "$5,000 of which may be refundable per child, if all other requirements are met."
+    },
+    {
+     "source": "IRS adoption credit page (updated 19-Oct-2026); IR-2026-123 (16 Oct 2026)",
+     "url": "https://www.irs.gov/adoption",
+     "effect": "silent",
+     "quote": "For tax year 2025 only, unused adoption credit carryforwards from 2020\u20132024 may be refundable up to $5,000 per eligible child."
+    },
+    {
+     "source": "Bloomberg Tax, A. Leahey, 12 May 2026",
+     "url": "https://news.bgov.com/daily-tax-report/adoption-credits-refundability-makes-it-valuable-and-vulnerable",
+     "effect": "silent",
+     "quote": "Any time a credit can produce a check from the government, fraudsters will pounce."
+    }
+   ],
+   "divergences": 8,
+   "blind_positions": 2226
+  },
+  {
+   "name": "Instruments",
+   "short": "Fund dividend, then a wash sale",
+   "sec": "\u00a7852(b)(4)(A)",
+   "claim": "Buy fund shares the day before a capital gain dividend, sell and rebuy on the ex-date, sell the new shares 33 days after the first purchase: the dividend is long-term gain, the loss short-term.",
+   "claimed": "$1,768 per $10,000",
+   "restated": "$0 more than holding six months",
+   "share": 0,
+   "moves": [
+    "buy before the dividend",
+    "sell at a loss",
+    "rebuy the same day",
+    "sell the new lot"
+   ],
+   "words": "\u2026any loss on the sale or exchange of such share shall, to the extent of the amount described in clause (i), be treated as a long-term capital loss.",
+   "fix": " (or of any stock or securities the basis of which is determined under section 1091(d) by reference to such share)",
+   "fix_pos": "after-share",
+   "found": "Not a search result. The original output never printed it; it is a hand-written check line. A search returns it only once plain holding is excluded.",
+   "worst": "It saves exactly what holding the shares for six months saves. Its only advantage is 33 days of exposure against 201, which the search's score does not value.",
+   "outside": "Regulations 1.852-4, 1.1091-1, 1.1091-2 and 1.1223-1 and Publication 550 are silent. Committee reports and paywalled literature were not reached.",
+   "blind": "Reproduced as one of three families tied at $1,700; the six-month hold is the simplest.",
+   "tests": {
+    "blind": {
+     "r": "found",
+     "d": "Reproduced as one of three families tied at $1,700; the six-month hold is the simplest."
+    },
+    "T1": {
+     "r": "pass",
+     "d": "Every step matches the words of ss.852(b)(3)(B), 852(b)(4)(A),(C), 246(c)(3), 1091(a),(d), 1223(3); divergences found are off the plan's path or against the taxpayer, and the plan survives the strict copy and two forms without a same-day round trip."
+    },
+    "T2": {
+     "r": "pass",
+     "d": "Adding '(or of any stock or securities the basis of which is determined under section 1091(d) by reference to such share)' to s.852(b)(4)(A) removes the plan and moves no baseline."
+    },
+    "T3": {
+     "r": "pass",
+     "d": "Removing s.1091(a), s.1091(d), s.852(b)(3)(B), 'buy GainFund', 'sell GainFund' or 'sell FundA' each kills it; s.1223(3) tacking, 'buy FundA' and the same-day second lot are decoration; with all 11 unused kinds of trade removed it is still found at the same figure."
+    },
+    "T4": {
+     "r": "pass",
+     "d": "No recent amendment is involved; under the pre-1984 'less than 31 days' text a plain 33-day holding already gives the same figure, so the wash sale only undoes the 1984 lengthening."
+    },
+    "T5": {
+     "r": "pass",
+     "d": "Over every final position recognized income is never below the pre-tax result (no double deduction, no vanished income); the model only ever destroys loss (24 positions, +10,000)."
+    },
+    "T6": {
+     "r": "pass",
+     "d": "Plan, baseline and closed-gap result replayed on the full rules by decide +kernel; in a cut-down model (one share class, no calendar) a theorem by induction over all move lists shows no short-term loss under the closed rule; axioms propext, Classical.choice, Quot.sound only."
+    },
+    "T7": {
+     "r": "pass",
+     "d": "Python from the statute gives baseline 42,806, plan 41,038, saving 1,768 (1,700 before interest), identical to the Lean; holding 201 days gives the identical saving."
+    },
+    "T8": {
+     "r": "partial",
+     "d": "Regulations 1.852-4, 1.1091-1, 1.1091-2, 1.1223-1 and Publication 550 retrieved and silent on the interaction, nothing found describing it, but committee reports and the paywalled secondary literature were not reached."
+    }
+   },
+   "verdict": "holds on the text",
+   "reason": "Every step is what ss.852(b)(4)(A), 1091(a),(d) and 1223(3) say, a one-phrase amendment removes it without moving any baseline, ablation and kernel replay confirm the mechanism, and no regulation or publication retrieved addresses it; but it saves nothing beyond the known six-month hold (both $1,768), was a hand-written check line rather than a printed search result, and depends on a same-price sale and repurchase being respected.",
+   "authority": [
+    {
+     "source": "Treas. Reg. 1.852-4(d)",
+     "url": "https://www.ecfr.gov/current/title-26/section-1.852-4",
+     "effect": "silent",
+     "quote": "The rules contained in section 246(c)(3) (relating to the determination of holding periods for purposes of the deduction for dividends received) shall be applied in determining whether, for purposes of section 852(b)(4) and this paragraph, a share of regulated investment company stock has been held for a period of less than 31 days."
+    },
+    {
+     "source": "Treas. Reg. 1.1091-1(a), (d), (e)",
+     "url": "https://www.ecfr.gov/current/title-26/section-1.1091-1",
+     "effect": "silent",
+     "quote": "The acquisition of any share of stock or any security which results in the nondeductibility of a loss under the provisions of this section shall be disregarded in determining the deductibility of any other loss."
+    },
+    {
+     "source": "Treas. Reg. 1.1091-2",
+     "url": "https://www.ecfr.gov/current/title-26/section-1.1091-2",
+     "effect": "silent",
+     "quote": "No loss from the sale is recognized under section 1091. The basis of the new share is $110; that is, the basis of the old share ($100) increased by $10"
+    },
+    {
+     "source": "Treas. Reg. 1.1223-1(d)",
+     "url": "https://www.ecfr.gov/current/title-26/section-1.1223-1",
+     "effect": "silent",
+     "quote": "the holding period of the newly acquired securities shall include the period for which the taxpayer held the securities with respect to which the loss was not allowable."
+    },
+    {
+     "source": "Temp. Treas. Reg. 1.1092(b)-1T(c)(1)",
+     "url": "https://www.ecfr.gov/current/title-26/section-1.1092(b)-1T",
+     "effect": "supports",
+     "quote": "If the disposition of a loss position would (but for the application of this section) result in a capital loss, the loss allowed under paragraph (b) of this section with respect to the disposition of the loss position shall be treated as a capital loss."
+    },
+    {
+     "source": "IRS Publication 550 (2025), Holding Period and Wash Sales",
+     "url": "https://www.irs.gov/publications/p550",
+     "effect": "silent",
+     "quote": "This adjustment postpones the loss deduction until the disposition of the new stock or securities. Your holding period for the new stock or securities includes the holding period of the stock or securities sold."
+    },
+    {
+     "source": "State Farm, Buying the Dividend or Capital Gain Distribution and Wash Sales",
+     "url": "https://www.statefarm.com/finances/mutual-funds/resources/dividend-capital-gain-distribution-wash-sales",
+     "effect": "silent",
+     "quote": "Your holding period for the replacement shares is also changed to include the amount of time you held the original shares."
+    },
+    {
+     "source": "Journal of Accountancy, March 2003, mutual fund redemptions",
+     "url": "https://www.journalofaccountancy.com/issues/2003/mar/mutualfundredemptions-mar-2003/",
+     "effect": "silent",
+     "quote": "The wash sale rule disallows a capital loss on the sale of shares to the extent the investor buys"
+    }
+   ],
+   "divergences": 9,
+   "blind_positions": 167502
+  },
+  {
+   "name": "Transfer",
+   "short": "A new spouse splits a QTIP release",
+   "sec": "\u00a72519 + \u00a72513",
+   "claim": "A widow holding her late husband's property in a QTIP trust remarries, gives up her income interest, and splits the resulting transfer with the new spouse, whose exclusion shelters half.",
+   "claimed": "$30M to $33M at year 25",
+   "restated": "$9.6M with no growth; not allowed at $100M on a strict reading",
+   "share": 30,
+   "moves": [
+    "remarry",
+    "both consent",
+    "release the income interest"
+   ],
+   "words": "A gift made by one spouse to any person other than his spouse shall, for the purposes of this chapter, be considered as made one-half by him and one-half by his spouse\u2026",
+   "fix": " (other than a transfer treated as made under section 2519)",
+   "fix_pos": "after-gift",
+   "found": "Found by the search, first through a modelling error that was then closed; it stayed first after the fix.",
+   "worst": "The gain is ordinary gift-splitting with a later spouse whose exclusion is spent at no cost, not an effect of \u00a72519: 70% to 100% of it survives the closing edit. As found, the trust pays the new spouse's $14M of gift tax, for which \u00a72207A(b) gives no right.",
+   "outside": "Regulation 25.2519-1 supports treating the transfer as the widow's gift and confirms it is two gifts. Nothing found closes or describes the plan; treatises were not retrieved.",
+   "blind": "Reproduced: $82M reaches the child against $72M, with no growth.",
+   "tests": {
+    "blind": {
+     "r": "found",
+     "d": "Reproduced: $82M reaches the child against $72M, with no growth."
+    },
+    "T1": {
+     "r": "partial",
+     "d": "Encoding matches the statute on the taxed amount and the closed modelling error leaves no residue, but it books the s.2511 income-interest gift and the s.2519 transfer as one, lets the trust pay the consenting spouse's $14M of tax without a s.2207A(b) right (strict copy: plan not allowed at $100M, allowed at a $30M severed trust), and treats the later spouse as free."
+    },
+    "T2": {
+     "r": "partial",
+     "d": "Excluding s.2519 transfers from s.2513 removes the plan in the model and leaves the baseline alone, but with the income-interest gift (s.2511) kept splittable as the regulation has it, 70% to 100% of the gain survives: the gain comes from ordinary gift-splitting with a later spouse."
+    },
+    "T3": {
+     "r": "pass",
+     "d": "Each of remarry, consent and the s.2519 release is necessary, and the plan is found with the same figure when every other kind of move is removed."
+    },
+    "T4": {
+     "r": "pass",
+     "d": "No recent amendment is needed (s.2513 1948, s.2519 1981, s.2652(a)(2) 1986); the 2025 Act only scales the gain with the exclusion."
+    },
+    "T5": {
+     "r": "partial",
+     "d": "No value is created on the candidate's path and no limit is exceeded, but scenario A creates up to $4,444,551 at 900 estate closings, three moves create basis up to $600,000, and with no growth the candidate's gain is $9.6M."
+    },
+    "T6": {
+     "r": "pass",
+     "d": "Plan, baseline and closed-gap result replay through the kernel on the full state, and under the closed rule a theorem over all sequences of marriages, consents and releases shows the marriages and consents change nothing but the consent flag and the later spouse's slot."
+    },
+    "T7": {
+     "r": "pass",
+     "d": "A Python script written from the statute steps agrees with the Lean to within $220."
+    },
+    "T8": {
+     "r": "pass",
+     "d": "Nine searches and four regulations read in full: nothing closes the plan and nothing describes it; the regulations support treating the s.2519 transfer as the donee spouse's gift and confirm the two-gift structure and the limit of the s.2207A(b) recovery."
+    }
+   },
+   "verdict": "holds on the text",
+   "reason": "The encoding, arithmetic, kernel replay and ablations stand and no authority closes it, but the gain is ordinary s.2513 splitting of the widow's own gift with a later spouse whose allowance is spent free (70% to 100% survives excluding s.2519 from s.2513), it is $9.6M without growth, and as found it relies on the trust paying the new spouse's $14M of tax with no statutory right.",
+   "authority": [
+    {
+     "source": "Treas. Reg. 25.2519-1(a)",
+     "url": "https://www.law.cornell.edu/cfr/text/26/25.2519-1",
+     "effect": "supports",
+     "quote": "the donee spouse is treated as making a gift under section 2519 of the entire trust less the qualifying income interest ... A transfer of all or a portion of the income interest of the spouse is a transfer by the spouse under section 2511."
+    },
+    {
+     "source": "Treas. Reg. 25.2519-1(c)(4)",
+     "url": "https://www.law.cornell.edu/cfr/text/26/25.2519-1",
+     "effect": "silent",
+     "quote": "The amount treated as a transfer under paragraph (c)(1) of this section is further reduced by the amount the donee spouse is entitled to recover under section 2207A(b)"
+    },
+    {
+     "source": "Treas. Reg. 25.2207A-1(a), (b)",
+     "url": "https://www.law.cornell.edu/cfr/text/26/25.2207A-1",
+     "effect": "silent",
+     "quote": "If an individual is treated as transferring an interest in property by reason of section 2519, the individual or the individual's estate is entitled to recover from the person receiving the property ... the amount of gift tax attributable to that property."
+    },
+    {
+     "source": "Treas. Reg. 25.2513-1(a), (b)",
+     "url": "https://www.law.cornell.edu/cfr/text/26/25.2513-1",
+     "effect": "silent",
+     "quote": "A gift made by one spouse to a person other than his (or her) spouse may, for the purpose of the gift tax, be considered as made one-half by his spouse"
+    },
+    {
+     "source": "Treas. Reg. 26.2652-1(a)(4)",
+     "url": "https://www.law.cornell.edu/cfr/text/26/26.2652-1",
+     "effect": "supports",
+     "quote": "the electing spouse is treated as the transferor of one-half of the entire value of the property transferred by the donor, regardless of the interest the electing spouse is actually deemed to have transferred under section 2513"
+    },
+    {
+     "source": "Instructions for Form 709 (2025), first 100,000 characters",
+     "url": "https://www.irs.gov/instructions/i709",
+     "effect": "silent",
+     "quote": "If divorced or widowed after the gift, you did not remarry during the rest of the calendar year."
+    },
+    {
+     "source": "PLR 200022031 (summary page, not the ruling text)",
+     "url": "https://ezel.ai/irs-rulings/0022031",
+     "effect": "silent",
+     "quote": "a condition of the Taxpayer's transfer is the agreement that the gift tax will be paid by the trustees of the Trust"
+    }
+   ],
+   "divergences": 9,
+   "blind_positions": 82156
+  },
+  {
+   "name": "Corporate",
+   "short": "Second \u00a71202 limit via a holding company",
+   "sec": "\u00a71202(b)(1), (h)(4)",
+   "claim": "A founder sells a fifth of qualified small business stock directly, moves the rest into a new holding company under \u00a7351, and sells the holding company: a second per-issuer limit.",
+   "claimed": "$1,857,000",
+   "restated": "$428,000 against selling over two years",
+   "share": 23,
+   "moves": [
+    "sell one fifth",
+    "contribute 80% to a new company",
+    "sell that company"
+   ],
+   "words": "\u2026the aggregate amount of such gain from dispositions of stock issued by such corporation which may be taken into account\u2026",
+   "fix": "(stock treated as qualified small business stock under subsection (h)(4) being treated as issued by the corporation whose stock was exchanged) ",
+   "fix_pos": "in",
+   "found": "Found by the search, but the second limit is one hand-written line in the sale move.",
+   "worst": "Already in print: a QSBS specialist writes that the issuer of replacement stock \"would be treated as a separate corporation\" for the limit. The gap dates from 1993, not 2025. Regulation 1.269-1 reaches a company formed to obtain an exclusion; the findings said no statute applied.",
+   "outside": "Scott Dolson (FBT Gibbons) states the separate limit. No ruling and no \u00a71202(k) regulation found.",
+   "blind": "Reproduced, and bettered: a different order of transfers saves $3.57M.",
+   "tests": {
+    "blind": {
+     "r": "found",
+     "d": "Reproduced, and bettered: a different order of transfers saves $3.57M."
+    },
+    "T1": {
+     "r": "partial",
+     "d": "The plan survives the strict copy ((h)(4)(B) limit always applied, P sold only after a year end) at 3,855, but the second limit is one hand-written line in sellP, and section 269, section 351 'immediately after' and section 1202(c)(2)(A) for P are not in the rules."
+    },
+    "T2": {
+     "r": "pass",
+     "d": "Treating (h)(4) stock as issued by the original corporation for subsection (b) removes the plan and leaves every baseline where it was."
+    },
+    "T3": {
+     "r": "pass",
+     "d": "Removing any of the three moves loses the plan; removing every other move keeps it at the same figure."
+    },
+    "T4": {
+     "r": "partial",
+     "d": "The plan does not depend on the 2025 amendment: the 1993-2025 text gives the same 1,857 saving, so the gap is 32 years old; without section 1202 nothing is returned."
+    },
+    "T5": {
+     "r": "pass",
+     "d": "Over every position to depth 4 no move raises family wealth plus tax, no yearly limit is exceeded and no basis is created; the only oddity is that buyers pay full value despite 6,300 of latent corporate tax."
+    },
+    "T6": {
+     "r": "pass",
+     "d": "Ten kernel replays (decide +kernel, no axioms) and one induction over all move lists (propext, Quot.sound only) confirm the plan, the baselines and that the closed rule caps A's excluded gain at 15,000; the induction is cut down to the plan's three kinds of move within one year."
+    },
+    "T7": {
+     "r": "pass",
+     "d": "A Python recomputation from the statute agrees to rounding, but shows the saving over the known two-year sale is 428, not 1,857."
+    },
+    "T8": {
+     "r": "fail",
+     "d": "A QSBS specialist has already written that the issuer of replacement stock 'would be treated as a separate corporation' for the limit, and Reg. 1.269-1 brings exclusions and newly organised corporations within section 269; nothing closes it."
+    }
+   },
+   "verdict": "already published",
+   "reason": "The model is sound (conservation, kernel replays, independent arithmetic, ablation and the closed-gap edit all behave) and the plan survives a strict reading of section 1202, but the separate limit for the issuer of (h)(4) replacement stock is already stated in practitioner writing, the encoding writes that reading into one line of sellP, section 269 reaches the plan as drawn, and the saving over the known two-year sale is 428 rather than 1,857.",
+   "authority": [
+    {
+     "source": "Scott W. Dolson, FBT Gibbons, Conversions, Reorganizations, Recapitalizations, Exchanges, and Stock Splits Involving QSBS",
+     "url": "https://fbtgibbons.com/conversions-reorganizations-recapitalizations-exchanges-and-stock-splits-involving-qualified-small-business-stock-qsbs/",
+     "effect": "supports",
+     "quote": "if the replacement QSBS is treated as having been issued by a new issuer for purposes of the Aggregate Gross Assets Test, then it seems reasonable to conclude that the corporation issuing the replacement QSBS would be treated as a separate corporation for purposes of Section 1202's gain exclusion cap (i.e., there would be no aggregating of gain exclusion of the corporations issuing the original and replacement QSBS)."
+    },
+    {
+     "source": "Same article, on replacement stock that is not itself qualified",
+     "url": "https://fbtgibbons.com/conversions-reorganizations-recapitalizations-exchanges-and-stock-splits-involving-qualified-small-business-stock-qsbs/",
+     "effect": "silent",
+     "quote": "there are no tax authorities addressing how Section 1202's gain exclusion cap would apply in this situation, but the most reasonable approach might be to aggregate sales of the original corporation's QSBS with sales of the non-QSBS received in the reorganization"
+    },
+    {
+     "source": "Same article, on a newco drop",
+     "url": "https://fbtgibbons.com/conversions-reorganizations-recapitalizations-exchanges-and-stock-splits-involving-qualified-small-business-stock-qsbs/",
+     "effect": "silent",
+     "quote": "The IRS might argue that dropping the existing subsidiary's stock into a newco subsidiary lacks a business purpose beyond positioning stockholders for eventually claiming Section 1202's gain exclusion."
+    },
+    {
+     "source": "Treas. Reg. 1.269-1(a), (c)",
+     "url": "https://www.ecfr.gov/current/title-26/section-1.269-1",
+     "effect": "silent",
+     "quote": "The term allowance refers to anything in the internal revenue laws which has the effect of diminishing tax liability. The term includes, among other things, a deduction, a credit, an adjustment, an exemption, or an exclusion."
+    },
+    {
+     "source": "Scott W. Dolson, FBT Gibbons, Maximizing Section 1202's Gain Exclusion, note 21 (fragments as returned by the fetch)",
+     "url": "https://fbtgibbons.com/maximizing-the-section-1202-gain-exclusion-amount/",
+     "effect": "silent",
+     "quote": "the IRS hasn't addressed Section 1202 income tax avoidance schemes through regulations"
+    },
+    {
+     "source": "Rev. Rul. 70-140 (summary only; ruling text not retrieved)",
+     "url": "https://www.bluej.com/resources/rev-rul-70-140",
+     "effect": "silent",
+     "quote": "Transitory stock ownership fails \u00a7 368(c) control"
+    }
+   ],
+   "divergences": 7,
+   "blind_positions": 2104
+  },
+  {
+   "name": "NewDeductions",
+   "short": "SALT cap on separate returns",
+   "sec": "\u00a7164(b)(6)\u2013(7)",
+   "claim": "Married equal earners at $300,000 each file separately; the phase-down reduces the full cap before it is halved, so each keeps $13,075 of deduction where halving first gives $5,950.",
+   "claimed": "$11,024 over two years",
+   "restated": "$9,974, and it is the IRS's own computation",
+   "share": 90,
+   "moves": [
+    "file separately",
+    "each itemizes",
+    "each pays own tax"
+   ],
+   "words": "\u2026shall not exceed the applicable limitation amount (half the applicable limitation amount in the case of a married individual filing a separate return).",
+   "fix": "; and in the case of such a return the reduction under paragraph (7)(B) shall be applied to that half",
+   "fix_pos": "after",
+   "found": "The reading was a switch set by hand. The search found only that separate returns win once it is on.",
+   "worst": "The findings said the IRS worksheet halves first and that a taxpayer would be filing against the form. That is false: the 2025 Schedule A worksheet reduces, floors at $10,000, then halves. This is how the form already works, not a gap.",
+   "outside": "Instructions for Schedule A (2025), line 5e worksheet. The Joint Committee explanation could not be retrieved.",
+   "blind": "Reproduced: the text-order reading gives $13,075, and the encoder judged it the one the words support best.",
+   "tests": {
+    "blind": {
+     "r": "found",
+     "d": "Reproduced: the text-order reading gives $13,075, and the encoder judged it the one the words support best."
+    },
+    "T1": {
+     "r": "partial",
+     "d": "The grammar supports only reduce-floor-halve and the plan survives the strict re-run, but the reading is a hand-set flag, the default branch is mislabelled as the IRS worksheet, and $1,050 of the gain comes from giving all household payments to one spouse."
+    },
+    "T2": {
+     "r": "pass",
+     "d": "With the reduction applied to the halved amount the plan falls to $1,052 (plan 3, not SALT) and the baseline does not move."
+    },
+    "T3": {
+     "r": "pass",
+     "d": "Each of the six moves is needed for the full figure and removing all unused moves leaves it unchanged; the plan is one one-year plan run twice."
+    },
+    "T4": {
+     "r": "pass",
+     "d": "Under the pre-2025 $10,000/$5,000 cap separate returns save $210 (2026 charity floor), and nothing once the 2026 charity and section 68 changes are also removed."
+    },
+    "T5": {
+     "r": "pass",
+     "d": "No conservation or absurd-goal violation in any reachable position of 18 runs over 10 households plus a zero-income household; checks not mutation-tested."
+    },
+    "T6": {
+     "r": "pass",
+     "d": "Kernel replays of plan, baseline and closed-gap result, and a theorem over all move sequences that the closed-gap rule never reaches the plan's figure; axioms propext, Classical.choice, Quot.sound only."
+    },
+    "T7": {
+     "r": "pass",
+     "d": "Python written from the statute text gives the same baseline, plan tax and gain to the dollar."
+    },
+    "T8": {
+     "r": "partial",
+     "d": "Nothing closes the plan; the IRS 2025 Schedule A worksheet itself uses reduce-floor-halve, contradicting the Findings, and the JCT explanation could not be retrieved."
+    }
+   },
+   "verdict": "holds on the text",
+   "reason": "The statute's words allow only reduce, floor, then halve; the figure reproduces in the kernel and in independent arithmetic, vanishes under the closing edit and under earlier law, and the IRS 2025 worksheet computes it the same way. The Findings are wrong that the IRS halves first, the reading was supplied by a flag and not found by the search, and the SALT gain alone is $9,974 over two years, not $11,024.",
+   "authority": [
+    {
+     "source": "IRS, Instructions for Schedule A (Form 1040) (2025), State and Local Tax Deduction Worksheet, line 5e",
+     "url": "https://www.irs.gov/instructions/i1040sca",
+     "effect": "supports",
+     "quote": "Yes. Enter $40,000 ... 5. Enter $500,000 ($250,000 if married filing separately) ... 7. Multiply line 6 by 30% (0.30) 8. Subtract line 7 from line 1 9. Enter the larger of the amount on line 8 or $10,000 10. State and local tax deduction. Enter the smaller of the amount on line 9 (half the amount on line 9 if married filing separately) or the amount from Schedule A, line 5d"
+    },
+    {
+     "source": "IRS Publication 17 (2025), What's New and chapter 11",
+     "url": "https://www.irs.gov/publications/p17",
+     "effect": "silent",
+     "quote": "The overall limit is reduced if your modified adjusted gross income is more than $500,000 ($250,000 if married filing separately) but will not be reduced below $10,000 ($5,000 if married filing separately). For more information, see the Instructions for Schedule A (Form 1040)."
+    },
+    {
+     "source": "fedratecalc.com SALT deduction calculator (rules checked October 28, 2026; read through a summarising fetch)",
+     "url": "https://fedratecalc.com/salt-deduction-calculator/",
+     "effect": "supports",
+     "quote": "the full amount becomes $40,000 \u2212 $15,000 = $25,000, and the cap is half of that, $12,500"
+    },
+    {
+     "source": "Joint Committee on Taxation, General Explanation (JCS-1-26)",
+     "url": "https://www.jct.gov/publications/2026/jcs-1-26/",
+     "effect": "silent",
+     "quote": "not retrieved (HTTP 403)"
+    }
+   ],
+   "divergences": 7,
+   "blind_positions": 7
+  },
+  {
+   "name": "Residence",
+   "short": "Expatriate and stay",
+   "sec": "\u00a7877A(a)",
+   "claim": "A long-term green-card holder gives up the card as a covered expatriate but stays in the US; the deemed sale excludes $890,000 of gain and raises basis by all of it.",
+   "claimed": "$211,820",
+   "restated": "a loss of $380,580 if the asset later goes to US persons from abroad",
+   "share": -100,
+   "moves": [
+    "give up the card",
+    "decline to certify",
+    "stay",
+    "sell"
+   ],
+   "words": "The amount which would (but for this paragraph) be includible in the gross income of any individual by reason of paragraph (1) shall be reduced (but not below zero) by $600,000.",
+   "fix": " This paragraph shall not apply to an individual who is a resident of the United States for the calendar year following the expatriation date.",
+   "fix_pos": "after",
+   "found": "Found by the search.",
+   "worst": "Covered status is permanent, and \u00a72801 taxes later gifts and bequests to US persons at 40%. The original charged it on one move only. The 2025 \u00a72801 regulations read \"resident\" as domicile, so staying on a temporary visa may not switch it off.",
+   "outside": "Notice 2009-85 Example 3 confirms the full basis adjustment. Nothing found closes or describes the plan.",
+   "blind": "Reproduced to the dollar: $26,180 against $238,000.",
+   "tests": {
+    "blind": {
+     "r": "found",
+     "d": "Reproduced to the dollar: $26,180 against $238,000."
+    },
+    "T1": {
+     "r": "partial",
+     "d": "The encoded rule matches \u00a7877A(a)(1)-(3), (g)(1)(C), (g)(2)(B), \u00a7877(a)(2)(C), (e)(2) word for word and the plan survives the strict re-run, but the figure omits \u00a72801 over the person's lifetime, \u00a7877A(d)/(e) acceleration, the prior-year exclusion on a 1 January act, and the immigration precondition."
+    },
+    "T2": {
+     "r": "partial",
+     "d": "Denying the exclusion to a person who is a resident for the calendar year after the expatriation year removes plan 1 and leaves the baseline and the leaver unchanged, but plan 2 for a leaver survives it and needs a second edit (no exclusion for a person covered solely under \u00a7877(a)(2)(C))."
+    },
+    "T3": {
+     "r": "pass",
+     "d": "Removing abandon returns $238,000, removing present leaves no 730-day plan, relocate is decoration, sell is needed only by the search's definition of a finished plan, and present+sell+abandon alone reproduce $26,180."
+    },
+    "T4": {
+     "r": "pass",
+     "d": "With the pre-2008 text (no \u00a7877A, \u00a7877(b) for covered expatriates) no 730-day plan is below $238,000; leavers pay $200,000 on domestic stock or realty, which was the known regime."
+    },
+    "T5": {
+     "r": "pass",
+     "d": "No invariant violation in any position reached: gain never created, tax on the gain never above all US tax, one expatriation at most, excluded gain never above the exclusion, ordinary tax of 730-day plans never below 209,994."
+    },
+    "T6": {
+     "r": "pass",
+     "d": "23 theorems by decide +kernel replay both plans, the closed-gap results and the earlier law through the full step function, plus bounded universals over every move sequence on the whole-year grid and one unbounded induction (exclusion never exceeded, gain never grows); axioms are propext and Quot.sound only."
+    },
+    "T7": {
+     "r": "pass",
+     "d": "A Python script written from the statute text gives the same four figures."
+    },
+    "T8": {
+     "r": "partial",
+     "d": "Notice 2009-85 and the 2025 Form 8854 instructions confirm the mechanics; nothing found closes or describes either plan; the 2025 \u00a72801 regulations read resident as domicile, which narrows the (g)(1)(C) switch-off the original relies on; several primary sources were not retrieved."
+    }
+   },
+   "verdict": "holds on the text",
+   "reason": "The deemed sale, the exclusion and the full basis adjustment are in \u00a7877A(a) as encoded and are confirmed by Notice 2009-85 Example 3; no word requires an expatriate to stop being a resident and \u00a7877(a)(2)(C) is satisfied by not certifying; ablation, earlier law, kernel replay and independent arithmetic all agree. The claimed gain is a gross ceiling: permanent covered status brings \u00a72801 at 40% on later transfers to US persons made from outside US domicile ($592,400 on this asset, more than the $211,820 or $173,820 saved), so both plans pay only for someone who will die US-domiciled or has no US donees, and plan 1 also needs an immigration status the model does not represent.",
+   "authority": [
+    {
+     "source": "Notice 2009-85, \u00a73.C and Example 3 (IRB 2009-45)",
+     "url": "https://www.irs.gov/irb/2009-45_IRB",
+     "effect": "supports",
+     "quote": "without regard to the exclusion amount provided in section 877A(a)(3) ... A's basis of $200,000 in Asset X is adjusted by $1,800,000 ... resulting in a basis of $2,000,000"
+    },
+    {
+     "source": "Notice 2009-85, \u00a73.B",
+     "url": "https://www.irs.gov/irb/2009-45_IRB",
+     "effect": "silent",
+     "quote": "Each individual is eligible for only one lifetime exclusion amount."
+    },
+    {
+     "source": "Notice 2009-85, \u00a75.F",
+     "url": "https://www.irs.gov/irb/2009-45_IRB",
+     "effect": "silent",
+     "quote": "such individual will not be treated as a covered expatriate during such period"
+    },
+    {
+     "source": "Instructions for Form 8854 (2025)",
+     "url": "https://www.irs.gov/instructions/i8854",
+     "effect": "supports",
+     "quote": "You fail to certify on Form 8854 that you have complied with all federal tax obligations ... For 2025, the net gain that you must otherwise include in your income is reduced (but not below zero) by $890,000."
+    },
+    {
+     "source": "T.D. 10027, Reg. \u00a728.2801-2(b), (h), 90 FR 3376 (14 Jan 2025)",
+     "url": "https://www.govinfo.gov/content/pkg/FR-2025-01-14/html/2025-00284.htm",
+     "effect": "silent",
+     "quote": "for purposes of chapter 11 or 12 of subtitle B, as the case may be ... subject to United States estate or gift tax (chapter 11 or chapter 12 of subtitle B) as a U.S. citizen or resident"
+    },
+    {
+     "source": "Phil Hodgen, When Covered Expatriates Come Back (26 Sep 2017)",
+     "url": "https://hodgen.com/articles/covered-expatriates-come-back",
+     "effect": "silent",
+     "quote": "Leaving the United States again, of course, will cause covered expatriate status to resume."
+    },
+    {
+     "source": "Phil Hodgen, Calculating Your Expatriation Tax Basis (2010, updated 2023)",
+     "url": "https://hodgen.com/articles/expatriation-tax-basis",
+     "effect": "silent",
+     "quote": "intend to exercise their regulatory authority to exclude from this step-up-in-basis rule United States real property interests"
+    },
+    {
+     "source": "Mondaq, New guidance on expatriation exit tax (2009), search summary only",
+     "url": "https://www.mondaq.com/unitedstates/tax-authorities/89228/new-guidance-on-expatriation-exit-tax",
+     "effect": "supports",
+     "quote": "not fetched; search summary: basis rises by the deemed gain measured without the exclusion, of limited value for property other than US real estate"
+    }
+   ],
+   "divergences": 8,
+   "blind_positions": 315
+  }
+ ],
+ "totals": {
+  "pass": 40,
+  "partial": 15,
+  "fail": 1
+ }
+}

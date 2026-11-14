@@ -8,6 +8,7 @@ import LegalProofs.CaseLaw2.Certificate
 loaders (`Data.loadTables`, `Data.loadDecisions`) and writes, into `<case-dir>/lean/`:
 * `<file>` for every SCHEMA file: the rows it kept, re-serialised column for column (so a second load of `lean/`
   must give the same rows: the round-trip property);
+* `treatment_witness.tsv`, `treatment_class.tsv` (optional tables; round 5): the rows kept, when the case has the file;
 * `problems.tsv`: file, rows, bad;
 * `quotes.tsv`: table, row id, `Cert.quoteOk` (with only the row's own hash), and the window slice the checker
   compares, `Cert.slice (Cert.norm w.text) (start - start0) (stop - start)` (`-` when no window covers).
@@ -66,6 +67,12 @@ def dumpDir (nodes : Nat) (dir : System.FilePath) : IO Unit := do
     toString r.effective, toString r.retroactiveTo, r.src])
   writeRows (o / "supersessions.tsv") (t.supersessions.map fun r => [r.id, toString r.target, r.issue, r.lawchange,
     r.evidence, ppmS r.score, b r.explicit, r.src])
+  -- the optional tables (round 4 witness rows, round 5 class claims): written only when the case has the file, so
+  -- that a second load is in the same mode (`round5` = the class file exists, even empty)
+  if ← (dir / "treatment_witness.tsv").pathExists then
+    writeRows (o / "treatment_witness.tsv") (t.witness.map fun r => [r.id, toString r.node, r.byEvidence, r.src])
+  if t.round5 then
+    writeRows (o / "treatment_class.tsv") (t.classes.map fun r => [r.id, r.claim, r.fieldLimit, r.doctrine, r.src])
   let mut dec : Array (List String) := #[]
   for n in [0:nodes] do
     if d.has n then

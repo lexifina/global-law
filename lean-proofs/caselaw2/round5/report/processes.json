@@ -1,0 +1,67 @@
+[
+  {
+    "work": "Film: remove the Brown / Plessy panel",
+    "state": "Done",
+    "note": "Cut 6 is live on lexifina.com (Stream `c54cd672e5945160b07fef7e01b7ee27`, commit `03835dd`)."
+  },
+  {
+    "work": "Fresh answer key",
+    "state": "Done",
+    "note": "292 pairs from four lists; 165 open, 127 sealed; baseline scored on both halves."
+  },
+  {
+    "work": "Notes split and behavioural test",
+    "state": "Done",
+    "note": "Both scripts built, run on the baseline, leak check in place."
+  },
+  {
+    "work": "Lean expansion (recognised overrulings, operative words)",
+    "state": "Done",
+    "note": "Recognised overrulings are in the frozen build (6,161 rows admitted by the checker; blind audit 94-97% right). Operative words were built and audited at 79% / 27% and are not installed. 175 theorems locked, 34 mutants killed, round-4 output reproduced byte for byte."
+  },
+  {
+    "work": "Sealed test, single run",
+    "state": "Done",
+    "note": "Run once at 14:06 after the freeze record: lenient 46.5% -> 60.6% [51.9, 68.7] on 127 pairs; strict unchanged at 25.2% (by design). The open half moved by the same amount."
+  },
+  {
+    "work": "Blog wording",
+    "state": "Done",
+    "note": "Proposals are in the last section of this page. The post was not edited."
+  },
+  {
+    "work": "Same-case history",
+    "state": "Done",
+    "note": "Round 6. Frozen 18:23; sealed half scored once: Shepard's negatives found 104 of 252 (was 8), precision 104 of 113, clean 9,579 of 9,586. Open half: 105 of 254, 105 of 111. Nothing installed in the model's own tables."
+  },
+  {
+    "work": "Round 7: joined certificates, stronger reader, queued reading, scope, dates, same-case history",
+    "state": "Done",
+    "note": "Frozen 00:08, 14 Nov (v3). Sealed runs once each: fresh lists lenient 60.6% (unchanged; third use), strict 25.2% (44.9% as attributed today); Shepardized negatives 104 -> 120 of 252 at precision 92.3% (second use); new 2021+ time split: reversals found 14 -> 21 of 83, vacaturs 9 -> 13 of 47. Held-out notes stated by a court with power 35.6% -> 39.3%. Lean 183 -> 220 theorems, 40 -> 53 mutants. Details in section Round 7."
+  },
+  {
+    "work": "Round 8: own-act queue, docket links, rehearing, multi-case acts, state courts, new held-out keys",
+    "state": "Done",
+    "note": "Frozen 01:59, 14 Nov (v8e). Held-out halves scored once: FJC appeals 50.6% -> 54.7%, Shadow Docket 16.0% -> 39.0% (precision 91.4%), SCDB disposition 71.8% -> 75.4%, state tables 7.0% -> 7.7%; fresh lists sealed unchanged (fourth use); Shepardized sealed 120 -> 123 of 252. Lean 220 -> 245 theorems, 53 -> 63 mutants. Details in section Round 8."
+  },
+  {
+    "work": "Round 9: FJC no-court-phrase pool, SCDB judgment lines, part zones in Lean, Shadow Docket GVRs, state implicit overruling, New Jersey successor courts, a new held-out key",
+    "state": "Done",
+    "note": "Done 03:40, 14 Nov. Frozen v9c. h1 (second use): FJC appeals 54.7 -> 55.9%, Shadow Docket 39.0 -> 46.5%, SCDB 75.4 -> 75.5%, state tables 7.7%. New held-out keys: Songer 36.0 -> 41.2%, Brace and Hall 50.0% (unchanged). Lean 272 theorems; Lean and reference agree on every row. Details in section Round 9."
+  },
+  {
+    "work": "Round 10: syllabus re-cuts, a state-court review linker, FJC named-other-case, SCDB bare citations, Shadow Docket remand bridge in Lean, one new held-out key",
+    "state": "done",
+    "note": "Done 05:05, 14 Nov. Frozen v10d. h1 (third use): FJC appeals 55.9 -> 57.0%, Shadow Docket 46.5 -> 48.5%, SCDB 75.5 -> 76.1%, state tables 7.7%. Held-out keys: Brace and Hall 50.0 -> 55.3%, Songer 41.2 -> 44.3%, new Federal Circuit key 52.7% (unchanged). Lean 292 theorems; Lean and reference agree on every row. Details in section Round 10."
+  },
+  {
+    "work": "Round 11: state review of uncited decisions below, a Federal Circuit linker, Supreme Court order lists as staged data, FJC two-tie identity, SCDB rehearing / en banc targets",
+    "state": "Done",
+    "note": "Shadow Docket h1 48.5% -> 65.5% (Supreme Court order lists 2006-09, 2020-26 added as staged data); Brace & Hall 55.3% -> 56.4%; Federal Circuit 52.7% -> 56.0%; SCDB h1 76.1% -> 76.5%; FJC, Songer unchanged; new en banc key 47.1%."
+  },
+  {
+    "work": "Round 12: Shadow Docket order nodes, en banc vacatur of the court's own panel, Federal Circuit district / other-target reviews, Brace & Hall third tie",
+    "state": "Done",
+    "note": "Frozen v12a (sealed once 07:43): Shadow h1 716 -> 735/1,093 = 67.2% (fifth use); B&H recall_all 955 -> 967/1,853 (fourth use; cited recall =); Songer, Federal Circuit, en banc, SCDB, FJC, state unchanged; new key baseline 64.1%. Installed: state third tie (402 rows, 0.950/0.938), Shadow C8 (67, 0.955), long-list and repaired-node rows (321, 0.963). Ligature repaired by re-extraction. No Lean change; reference 0 disagreements. Verdict: series near maxed out; see round12/ROUND12.md"
+  }
+]

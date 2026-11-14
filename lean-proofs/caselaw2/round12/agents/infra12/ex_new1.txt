@@ -1,0 +1,47 @@
+    excluded = set()
+    excluded_keys = set()  # round 11 (infra11): (table, by, target, kind) of the excluded samples' rows
+    excluded_pairs = set()  # round 12 (infra12): (by, target) of excluded rows whose file gives no kind
+    xfiles = []  # round 12: per file (name, ids, keys, pairs, real rows) for the per-file counts
+
+    def _xrow(d, rid_col, row2=False):
+        """(table, by, target, kind|None) of one real sample row (row 2 when row2): columns first, else the row id."""
+        rid = d.get("row2_id" if row2 else rid_col, "") or ""
+        pp = rid.split(":")
+        tab = d.get("table") or ""
+        if not tab and len(pp) >= 4:
+            tab = "history" if pp[0].startswith("h") else "treatments" if pp[0].startswith("t") else ""
+        by = str(d.get("by_node") or (pp[1] if len(pp) >= 4 else ""))
+        tg = str(d.get("target_node") or (pp[2] if len(pp) >= 4 else ""))
+        kind = d.get("kind2" if row2 else "kind") or None
+        if kind is None and tab == "history" and len(pp) >= 4:
+            kind = pp[3]
+        return tab, by, tg, kind
+
+    for e in a.exclude:
+        kr = A.read_tsv(A.resolve(e))
+        f_ids, f_keys, f_pairs, f_real = set(), set(), set(), 0
+        if kr:
+            h = kr[0]
+            col = h.index("row_id") if "row_id" in h else 0
+            f_ids |= {p[col] for p in kr[1:] if len(p) > col and p[col]}
+            for p in kr[1:]:
+                d = dict(zip(h, p + [""] * (len(h) - len(p))))
+                if "role" in h and d["role"] != "real":
+                    continue
+                f_real += 1
+                for r2 in ((False, True) if d.get("row2_id") else (False,)):
+                    tab, by, tg, kind = _xrow(d, h[col], r2)
+                    if not by or not tg or not by.lstrip("-").isdigit() or not tg.lstrip("-").isdigit():
+                        continue
+                    if kind:
+                        f_keys.add((tab, by, tg, kind))
+                    else:
+                        f_pairs.add((by, tg))
+            for cname in ("decoy_id", "row2_id"):
+                if cname in h:
+                    dc = h.index(cname)
+                    f_ids |= {p[dc] for p in kr[1:] if len(p) > dc and p[dc]}
+        excluded |= f_ids
+        excluded_keys |= f_keys
+        excluded_pairs |= f_pairs
+        xfiles.append((e, f_ids, f_keys, f_pairs, f_real))

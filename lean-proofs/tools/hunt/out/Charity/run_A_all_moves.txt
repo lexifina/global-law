@@ -1,0 +1,52 @@
+== A: moderate income, gifts and QCD only ==
+baseline (cash 12000 a year): tax 75522, end wealth 2138628
+year 2026: 140 year-plans tried, 32 positions kept
+year 2027: 1228 year-plans tried, 82 positions kept
+year 2028: 4462 year-plans tried, 166 positions kept
+14 families deliver exactly 36000 (205 ms); best 10:
+  9252 vs baseline (tax 66270, carry G0 B0 C0 D0 corp0) [cash gift + SGO + QCD]
+      |, SGO 1700, QCD 24000, |, cashPC 2000, SGO 1700, QCD 6600, |
+  9252 vs baseline (tax 66270, carry G0 B0 C0 D0 corp0) [SGO + QCD]
+      |, SGO 1700, QCD 24000, |, SGO 1700, QCD 8600, |
+  8332 vs baseline (tax 69890, carry G0 B0 C0 D0 corp0) [stock gift + SGO + QCD]
+      |, SGO 1700, |, stockPF 24000, SGO 1700, QCD 8600, |
+  8330 vs baseline (tax 69892, carry G0 B0 C0 D0 corp0) [cash gift + stock gift + SGO + QCD]
+      cashPC 2000, |, SGO 1700, |, stockPF 24000, SGO 1700, QCD 6600, |
+  8155 vs baseline (tax 71226, carry G0 B0 C0 D0 corp0) [stock gift + SGO]
+      |, SGO 1700, |, stockPF 34300, |
+  7930 vs baseline (tax 71226, carry G0 B0 C0 D0 corp0) [cash gift + stock gift + SGO]
+      cashPC 2000, |, SGO 1700, |, stockPF 32300, |
+  7020 vs baseline (tax 72552, carry G0 B0 C0 D0 corp0) [stock gift]
+      |, |, stockPF 36000, |
+  6795 vs baseline (tax 72552, carry G0 B0 C0 D0 corp0) [cash gift + stock gift]
+      cashPC 2000, |, stockPF 34000, |, |
+  6600 vs baseline (tax 68922, carry G0 B0 C0 D0 corp0) [QCD]
+      QCD 36000, |, |, |
+  6600 vs baseline (tax 68922, carry G0 B0 C0 D0 corp0) [cash gift + QCD]
+      cashPC 2000, |, QCD 24000, |, QCD 10000, |
+== A: every move but a sale ==
+baseline (cash 12000 a year): tax 75522, end wealth 2138628
+year 2026: 2048 year-plans tried, 654 positions kept
+year 2027: 124752 year-plans tried, 22780 positions kept
+year 2028: 1222547 year-plans tried, 192071 positions kept
+62 families deliver exactly 36000 (107674 ms); best 10:
+  10784 vs baseline (tax 69283, carry G0 B0 C0 D0 corp0) [cash gift + SGO + QCD + children's trust]
+      cashPC 2000, QCD 24000, fundTrust 13333, trustSell 13333, |, SGO 1700, fundTrust 11066, trustSell 11066, |, SGO 1700, QCD 6600, fundTrust 16000, trustSell 16000, |
+  10783 vs baseline (tax 69884, carry G0 B0 C0 D0 corp0) [SGO + QCD + children's trust]
+      QCD 12000, fundTrust 16000, trustSell 16000, |, SGO 1700, QCD 12000, fundTrust 13733, trustSell 13733, |, SGO 1700, QCD 8600, fundTrust 16000, trustSell 16000, |
+  9862 vs baseline (tax 73760, carry G0 B0 C0 D0 corp0) [stock gift + SGO + QCD + children's trust]
+      fundTrust 16000, trustSell 16000, |, SGO 1700, fundTrust 16000, trustSell 16000, |, stockPF 24000, SGO 1700, QCD 8600, fundTrust 16000, trustSell 16000, |
+  9860 vs baseline (tax 73762, carry G0 B0 C0 D0 corp0) [cash gift + stock gift + SGO + QCD + children's trust]
+      cashPC 2000, fundTrust 16000, trustSell 16000, |, SGO 1700, fundTrust 16000, trustSell 16000, |, stockPF 24000, SGO 1700, QCD 6600, fundTrust 16000, trustSell 16000, |
+  9805 vs baseline (tax 73412, carry G0 B0 C0 D0 corp0) [cash gift + stock gift + SGO + QCD + children's trust + CRAT]
+      cashPC 2000, stockPF 12000, fundTrust 16000, trustSell 16000, CRAT5 13333, |, SGO 1700, fundTrust 11065, trustSell 11065, |, SGO 1700, QCD 6599, fundTrust 16000, trustSell 16000, |
+  9805 vs baseline (tax 73712, carry G0 B0 C0 D0 corp0) [stock gift + SGO + QCD + children's trust + CRAT]
+      stockPF 12000, fundTrust 16000, trustSell 16000, CRAT5 13333, |, SGO 1700, fundTrust 13732, trustSell 13732, |, SGO 1700, QCD 8599, fundTrust 16000, trustSell 16000, |
+  9685 vs baseline (tax 75096, carry G0 B0 C0 D0 corp0) [stock gift + SGO + children's trust]
+      fundTrust 16000, trustSell 16000, |, SGO 1700, fundTrust 16000, trustSell 16000, |, stockPF 34300, fundTrust 16000, trustSell 16000, |
+  9671 vs baseline (tax 72796, carry G0 B0 C0 D0 corp0) [cash gift + stock gift + SGO + children's trust]
+      cashPC 2000, stockPF 24000, fundTrust 13333, trustSell 13333, |, cashPC 2000, SGO 1700, fundTrust 8400, trustSell 8400, |, cashPC 2000, SGO 1700, fundTrust 16000, trustSell 16000, trustPay 2600, |
+  9645 vs baseline (tax 75010, carry G0 B0 C0 D0 corp0) [stock gift + SGO + children's trust + CRAT]
+      fundTrust 16000, trustSell 16000, |, stockPF 24000, SGO 1700, fundTrust 13733, trustSell 13733, CRAT5 11444, |, fundTrust 16000, trustSell 16000, |
+  9623 vs baseline (tax 73294, carry G0 B0 C0 D0 corp0) [cash gift + stock gift + SGO + children's trust + CRAT]
+      cashPC 2000, stockPF 12000, fundTrust 16000, trustSell 16000, CRAT5 13333, |, cashPC 2000, SGO 1700, fundTrust 8398, trustSell 8398, |, cashPC 2000, SGO 1700, fundTrust 16000, trustSell 16000, trustPay 2599, |

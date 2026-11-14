@@ -1,0 +1,43 @@
+=== stock: no exposure, market up 30, other ST gains 50k (regs true) ===
+positions examined 2586; final positions 565; families 145
+plain plan: tax (future value) if everything is sold at the end $41616; if the final position is kept $41616
+-- best families, everything sold at the end --
+saves $2693 (tax sold $38923, kept $51163, unrealized at end $-30000) using [buy IndexFuture, sell IndexFuture, short FundB]
+     day 5: buy IndexFuture
+     day 5: sell FundB short
+     day 385: buy IndexFuture
+     day 385: sell IndexFuture (bought day 5)
+saves $2693 (tax sold $38923, kept $51163, unrealized at end $-30000) using [buy FundA, buy IndexFuture, sell IndexFuture, short FundB]
+     day 5: sell FundB short
+     day 5: buy IndexFuture
+     day 364: buy FundA
+     day 364: sell IndexFuture (bought day 5)
+saves $2693 (tax sold $38923, kept $38923, unrealized at end $0) using [buy FundB, buy IndexFuture, cover FundB, sell IndexFuture, short FundA, short FundB]
+     day 5: sell FundB short
+     day 5: buy IndexFuture
+     day 364: buy FundB
+     day 364: sell IndexFuture (bought day 5)
+     day 385: sell FundA short
+     day 385: buy to close the FundB short of day 5
+-- best families, final position kept --
+saves $2693 (tax sold $38923, kept $38923, unrealized at end $0) using [buy FundB, buy IndexFuture, cover FundA, sell IndexFuture, short FundA, short IndexFuture]
+     day 5: buy IndexFuture
+     day 5: sell FundA short
+     day 364: buy FundB
+     day 364: sell IndexFuture (bought day 5)
+     day 385: sell IndexFuture short
+     day 385: buy to close the FundA short of day 5
+saves $2693 (tax sold $38923, kept $38923, unrealized at end $0) using [buy FundB, buy IndexFuture, cover FundB, sell IndexFuture, short FundA, short FundB]
+     day 5: sell FundB short
+     day 5: buy IndexFuture
+     day 364: buy FundB
+     day 364: sell IndexFuture (bought day 5)
+     day 385: sell FundA short
+     day 385: buy to close the FundB short of day 5
+saves $2693 (tax sold $38923, kept $38923, unrealized at end $0) using [buy IndexFuture, cover FundB, sell IndexFuture, short FundA, short FundB]
+     day 5: sell FundB short
+     day 5: buy IndexFuture
+     day 364: buy IndexFuture
+     day 364: sell IndexFuture (bought day 5)
+     day 385: sell FundA short
+     day 385: buy to close the FundB short of day 5

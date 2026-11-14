@@ -1,0 +1,83 @@
+
+/-! ## Red-team search: same exhaustive walk, move list as an argument, statistics instead of families -/
+
+def allMoves : List Move :=
+  [.present, .absent, .relocate, .sell, .renounce true, .renounce false, .abandon true, .abandon false, .giftUS, .giftNRA]
+
+structure Stat where
+  positions : Nat := 0
+  terminals : Nat := 0
+  baseline : Nat := 0
+  minAll : Nat := 999999999
+  minFull : Nat := 999999999        -- in the US every day of the horizon
+  minFullNoExpat : Nat := 999999999 -- in the US every day, never gave anything up
+  minResAfter : Nat := 999999999    -- covered expatriate, resident for the calendar year after the expatriation year
+  minCovLeaver : Nat := 999999999   -- covered expatriate, not resident the year after
+  minNonCov : Nat := 999999999      -- gave up status, not covered
+  minHeirs : Nat := 999999999       -- with §2801 on a later transfer to US persons when not domiciled in the US at the end
+  minHeirsFull : Nat := 999999999
+  minHeirsCovLeaver : Nat := 999999999  -- covered, tax home abroad at the end, §2801 added
+  maxGainTax : Nat := 0
+  maxExits : Nat := 0
+  maxExcl : Nat := 0
+  minOrdFull : Nat := 999999999     -- usTax - gainTax over plans in the US every day
+  viol : Nat := 0                   -- positions violating the invariants
+  bestFull : List Move := []
+  bestAll : List Move := []
+  deriving Repr
+
+def baselineOf (p : Params) (b : Start) : Nat :=
+  let plain := (List.replicate (p.horizon * p.grid.size) Move.present).foldl
+    (fun (o : Option St) m => o.bind fun s => step p s m)
+    ((step p (initSt p b) .sell).bind fun s => if s.home then some s else step p s .relocate)
+  match plain with | some x => x.gainTax | none => 0
+
+def s2801 (p : Params) : Nat := bp giftRateBp (p.basis + p.gain - annualExclusion)
+
+def run (p : Params) (b : Start) (moves : List Move) : Stat := Id.run do
+  let mut stack : Array (St × List Move) := #[(initSt p b, [])]
+  let mut seen : Std.HashSet St := {}
+  let mut st : Stat := { baseline := baselineOf p b }
+  let full := 365 * p.horizon
+  while !stack.isEmpty do
+    let (s, path) := stack.back!
+    stack := stack.pop
+    -- invariants over every position (T5)
+    if s.gainLeft + s.saleGain > p.gain || s.gainTax > s.usTax || s.exits > 1 || s.exclAmt > p.exclusion then
+      st := { st with viol := st.viol + 1 }
+    if s.exits > st.maxExits then st := { st with maxExits := s.exits }
+    if s.exclAmt > st.maxExcl then st := { st with maxExcl := s.exclAmt }
+    if s.yr == p.horizon then
+      if !s.held && (!p.endInUS || s.d1 ≥ 183 || p.student) then
+        let g := s.gainTax
+        let expat := s.tags &&& tExpat != 0
+        let h := g + (if s.covExpat && !s.home then s2801 p else 0)
+        st := { st with terminals := st.terminals + 1 }
+        if g > st.maxGainTax then st := { st with maxGainTax := g }
+        if g < st.minAll then st := { st with minAll := g, bestAll := path }
+        if h < st.minHeirs then st := { st with minHeirs := h }
+        if s.covExpat && !s.home && h < st.minHeirsCovLeaver then st := { st with minHeirsCovLeaver := h }
+        if s.usDays == full then
+          if g < st.minFull then st := { st with minFull := g, bestFull := path }
+          if h < st.minHeirsFull then st := { st with minHeirsFull := h }
+          if !expat && g < st.minFullNoExpat then st := { st with minFullNoExpat := g }
+          if s.usTax - s.gainTax < st.minOrdFull then st := { st with minOrdFull := s.usTax - s.gainTax }
+        if s.covExpat && s.resAfter && g < st.minResAfter then st := { st with minResAfter := g }
+        if s.covExpat && !s.resAfter && g < st.minCovLeaver then st := { st with minCovLeaver := g }
+        if expat && !s.covExpat && g < st.minNonCov then st := { st with minNonCov := g }
+    else
+      for m in moves do
+        match step p s m with
+        | none => pure ()
+        | some s' =>
+          if !seen.contains s' then
+            seen := seen.insert s'
+            stack := stack.push (s', m :: path)
+  return { st with positions := seen.size }
+
+def report (label : String) (p : Params) (b : Start) (moves : List Move := allMoves) : IO Unit := do
+  let x := run p b moves
+  IO.println s!"## {label}"
+  IO.println s!"positions {x.positions} terminals {x.terminals} baseline {x.baseline} | minAll {x.minAll} minFull {x.minFull} minFullNoExpat {x.minFullNoExpat} | covered+resident-after {x.minResAfter} covered-leaver {x.minCovLeaver} non-covered {x.minNonCov} | with §2801 heirs: any {x.minHeirs} full {x.minHeirsFull} covered-abroad-at-end {x.minHeirsCovLeaver} | maxGainTax {x.maxGainTax} maxExits {x.maxExits} maxExcl {x.maxExcl} minOrdFull {x.minOrdFull} viol {x.viol}"
+  IO.print ("best in-US-every-day:\n" ++ showPath p.grid x.bestFull.reverse)
+  IO.print ("best overall:\n" ++ showPath p.grid x.bestAll.reverse)

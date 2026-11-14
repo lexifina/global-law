@@ -1,0 +1,11 @@
+
+/-! ## RED T6: kernel replays (original rules) -/
+def planQ : List (Option Move) := [some (.remarry .W), some .consentSplit, some .releaseQtip]
+theorem hold_wealth : (play schedQ qStart []).map wealth = some 218551878 := by decide +kernel
+theorem unmarried_wealth : (play schedQ qStart [some .releaseQtip]).map wealth = some 233157839 := by decide +kernel
+theorem plan_wealth : (play schedQ qStart planQ).map wealth = some 269507610 := by decide +kernel
+theorem plan_xfer : (play schedQ qStart planQ).map (·.xfer) = some 117172745 := by decide +kernel
+#print axioms hold_wealth
+#print axioms unmarried_wealth
+#print axioms plan_wealth
+#print axioms plan_xfer

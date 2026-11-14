@@ -1,0 +1,64 @@
+<h2 id="round8">Round 8 (done)</h2>
+<p>14 November 2026, 00:11 to 02:00. Frozen at 01:59 (variant <code>v8e</code>); the held-out halves were scored once after that. Report: <code>round8/ROUND8.md</code>. The base is the round-7 frozen build <code>v3</code>, which already contains
+rounds 5 and 6. Contract: <code>round8/DESIGN8.md</code>; log: <code>round8/LOG.md</code>; state:
+<code>round8/PROGRESS.md</code>.</p>
+
+<h3>What round 8 does</h3>
+<ul>
+<li>Reads the queue of overrulings in the acting court's own words that earlier rounds set aside.</li>
+<li>Links Supreme Court orders printed only in head matter to the lower decision by docket number.</li>
+<li>Links rehearing grant orders to the panel opinion they set aside, including docket rows without a date.</li>
+<li>Reads sentences that overrule several cases at once.</li>
+<li>Looks at state courts, where the model finds least.</li>
+<li>Re-checks 436 base rows that newer two-quote rows contradict, and looks at how doctrine is handled.</li>
+<li>Every fix is a general rule run over all 6.9 million decisions; no list of cases. Classes that change a case's
+status are installed only after a blind audit of at least 80 items at about 90% or better.</li>
+</ul>
+
+<h3>Four new held-out keys</h3>
+<p>Each key is split in two halves by a fixed hash. Work is tuned on half h0 only; half h1 is scored once, by the
+lead, after the freeze. Starting point (the round-7 build, half h0; Wilson 95%):</p>
+<table>
+<tr><th>key</th><th>what it tests</th><th>found (recall)</th><th>precision</th><th>clean cases kept clean</th></tr>
+<tr><td>FJC appeals (federal district decisions reversed or vacated on appeal)</td><td>same-case history</td><td>1,418/2,832 = 50.1% [48.2, 51.9]</td><td>1,418/1,576 = 90.0%</td><td>6,087/6,229 = 97.7%</td></tr>
+<tr><td>Shadow Docket (Supreme Court orders vacating or summarily reversing)</td><td>same-case history</td><td>156/1,059 = 14.7% [12.7, 17.0]</td><td>156/189 = 82.5%</td><td>43,781/43,811 = 99.9%</td></tr>
+<tr><td>SCDB disposition (Supreme Court reversed or vacated the decision below)</td><td>same-case history</td><td>1,681/2,407 = 69.8% [68.0, 71.6]</td><td>1,681/1,724 = 97.5%</td><td>2,002/2,052 = 97.6%</td></tr>
+<tr><td>State tables of overruled cases (Georgia 1922, California 1860/1874, New York 1893, Greenleaf 1838)</td><td>overruling</td><td>13/132 = 9.8% [5.8, 16.1]</td><td>(positives only)</td><td>-</td></tr>
+</table>
+
+<h3>Older tests, starting point (open / dev halves)</h3>
+<table>
+<tr><th>measure</th><th>round-7 build</th></tr>
+<tr><td>Fresh lists, open half, lenient (165)</td><td>111 = 67.3% [59.8, 74.0]</td></tr>
+<tr><td>Fresh lists, strict, model timeline / as attributed today</td><td>51 = 30.9% / 81 = 49.1%</td></tr>
+<tr><td>Held-out notes, pairs also stated by a court with power (2,640)</td><td>1,038 = 39.3% [37.5, 41.2]</td></tr>
+<tr><td>Shepardized dev, negative history found (254)</td><td>140 = 55.1% [49.0, 61.1]</td></tr>
+<tr><td>Shepardized dev, precision</td><td>140/149 = 94.0% [88.9, 96.8]</td></tr>
+</table>
+<h3>Result: round-7 build → round-8 build (h0 = half worked on; h1 = held-out half, scored once after the freeze)</h3>
+<table>
+<tr><th>key</th><th>h0 before → after</th><th>h1 before → after</th></tr>
+<tr><td>FJC appeals, found</td><td>50.1% → 54.2% (1,536/2,832)</td><td>50.6% → 54.7% (1,566/2,864) [52.9, 56.5]</td></tr>
+<tr><td>Shadow Docket, found</td><td>14.7% → 38.9% (412/1,059)</td><td>16.0% → 39.0% (426/1,093) [36.1, 41.9]; precision 83.3% → 91.4%</td></tr>
+<tr><td>SCDB disposition, found</td><td>69.8% → 75.2% (1,809/2,407)</td><td>71.8% → 75.4% (1,810/2,400) [73.7, 77.1]</td></tr>
+<tr><td>State tables, found</td><td>9.8% → 12.9% (17/132)</td><td>7.0% → 7.7% (11/142) [4.4, 13.3]</td></tr>
+</table>
+<table>
+<tr><th>older tests</th><th>round-7 build</th><th>round-8 build</th></tr>
+<tr><td>Fresh lists, open half: lenient / strict</td><td>111 / 51 of 165</td><td>112 / 52 of 165</td></tr>
+<tr><td>Fresh lists, sealed half (fourth use): lenient / strict</td><td>77 / 32 of 127</td><td>77 / 32 of 127 (unchanged)</td></tr>
+<tr><td>Shepardized dev, negative history found / precision</td><td>140/254 / 94.0%</td><td>143/254 / 93.5%</td></tr>
+<tr><td>Shepardized sealed (third use), found / precision</td><td>120/252 / 92.3%</td><td>123/252 / 92.5%</td></tr>
+<tr><td>Held-out notes, holdout speakers only, negative or partly</td><td>574/6,734 = 8.5%</td><td>655/6,734 = 9.7%</td></tr>
+</table>
+<p>The gains on FJC appeals, the Shadow Docket and SCDB held on the held-out halves. The state tables gain did
+not (four more on h0, one more on h1). Installed (each passed a blind audit of at least 80 items, or the whole
+class, at about 90% or better): the round-3 queue of courts' own overrulings (591 rows, 77/80), rehearing grant
+orders (299, 76/80) and undated rehearing acts (368, 72/80), Supreme Court orders linked through later citations
+(79/80 and 79/80) and order lists (80/80), sentences overruling several cases (706, 76/80), repaired reader rules for
+state courts (151, 77/80), courts of appeals reversing district decisions (2,081, 73/80), Supreme Court judgment
+readings and anchors (72/80 to 78/80 by class), unresolved-target acts (51, 38/39). Not installed: the base-row
+replacement rule (27/40), the first order lists (68/80), one-side captions (62/80), old-circuit claims on base rows
+(63/80), three Supreme Court judgment readings (23/32). The Lean checker grew from 220 to 245 theorems and from 53
+to 63 mutants: a checked link through a third text's citation history, wider anchor cues and the old
+Fifth/Eighth Circuit rule, each switched on only by a row's claim.</p>

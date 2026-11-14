@@ -1,0 +1,23 @@
+    def rkey(r):
+        return (r["table"], str(r["by"]), str(r["target"]), r["kind"])
+
+    def xhit(r, ids, keys, prs):
+        """0 = not excluded, 1 = by id, 2 = by identity (table, by, target, kind), 3 = by (by, target) only."""
+        for x in [r] + ([r["row2"]] if r.get("row2") else []):
+            if x["id"] in ids:
+                return 1
+        for x in [r] + ([r["row2"]] if r.get("row2") else []):
+            if rkey(x) in keys:
+                return 2
+            if (str(x["by"]), str(x["target"])) in prs:
+                return 3
+        return 0
+    n_xkey = sum(1 for r in pop if xhit(r, excluded, excluded_keys, excluded_pairs) in (2, 3))
+    print("class %s: %d rows in the inputs (%s), %d after filters, %d with valid nodes; %d strata; excluded ids %d; "
+          "rows excluded by identity (table, by, target, kind) only %d"
+          % (a.cls, n_in, table, len(rows), len(pop), len(popn), len(excluded), n_xkey))
+    for e, f_ids, f_keys, f_pairs, f_real in xfiles:  # round 12: per-file counts
+        hh = [xhit(r, f_ids, f_keys, f_pairs) for r in pop]
+        print("  --exclude %s: %d real rows (%d identities with kind, %d (by, target) pairs without); excluded %d rows "
+              "of this class (by id %d, by identity %d, by (by, target) %d)"
+              % (e, f_real, len(f_keys), len(f_pairs), sum(1 for x in hh if x), hh.count(1), hh.count(2), hh.count(3)))

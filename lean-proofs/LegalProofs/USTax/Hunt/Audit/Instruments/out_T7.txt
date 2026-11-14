@@ -1,0 +1,34 @@
+hold the fund                                                      y1 ST   50000 LT      0 | y2 ST  50000 LT  5000 | tax FV   42806.00
+buy the dividend, sell next day                                    y1 ST   50000 LT      0 | y2 ST  50000 LT  5000 | tax FV   42806.00
+buy the dividend, sell after 33 days                               y1 ST   50000 LT      0 | y2 ST  50000 LT  5000 | tax FV   42806.00
+buy the dividend, hold 201 days                                    y1 ST   40000 LT  10000 | y2 ST  50000 LT  5000 | tax FV   41038.00
+PLAN: wash sale on the ex-date, sell the replacement day 162       y1 ST   40000 LT  10000 | y2 ST  50000 LT  5000 | tax FV   41038.00
+PLAN under the closed-gap rule                                     y1 ST   50000 LT      0 | y2 ST  50000 LT  5000 | tax FV   42806.00
+
+baseline tax FV            42806.00   (Lean: 42806)
+plan tax FV                41038.00   (Lean: 41038)
+saving, future value       1768.00   (Lean: 1768)
+saving, in year-1 dollars  1700.00   = dividend x (40.8% - 23.8%) = 1700.00
+hold 201 days saving       1768.00   (identical: the plan adds no dollars to the known variant)
+closed-gap saving          0.00
+
+Economics, per 100,000 invested for 33 days (dividend rate d of the purchase price):
+  d=  2%  cost/trade  0bp  gross   340.00  costs    0.00  net   340.00
+  d=  2%  cost/trade  2bp  gross   340.00  costs   80.00  net   260.00
+  d=  2%  cost/trade  5bp  gross   340.00  costs  200.00  net   140.00
+  d=  2%  cost/trade 10bp  gross   340.00  costs  400.00  net   -60.00
+  d=  5%  cost/trade  0bp  gross   850.00  costs    0.00  net   850.00
+  d=  5%  cost/trade  2bp  gross   850.00  costs   80.00  net   770.00
+  d=  5%  cost/trade  5bp  gross   850.00  costs  200.00  net   650.00
+  d=  5%  cost/trade 10bp  gross   850.00  costs  400.00  net   450.00
+  d= 10%  cost/trade  0bp  gross  1700.00  costs    0.00  net  1700.00
+  d= 10%  cost/trade  2bp  gross  1700.00  costs   80.00  net  1620.00
+  d= 10%  cost/trade  5bp  gross  1700.00  costs  200.00  net  1500.00
+  d= 10%  cost/trade 10bp  gross  1700.00  costs  400.00  net  1300.00
+  d= 20%  cost/trade  0bp  gross  3400.00  costs    0.00  net  3400.00
+  d= 20%  cost/trade  2bp  gross  3400.00  costs   80.00  net  3320.00
+  d= 20%  cost/trade  5bp  gross  3400.00  costs  200.00  net  3200.00
+  d= 20%  cost/trade 10bp  gross  3400.00  costs  400.00  net  3000.00
+break-even dividend rate at c bp per trade: d* = 4c/17  -> 2bp: 0.471%, 5bp: 1.176%, 10bp: 2.353%, 25bp: 5.882%
+with no short-term gain to absorb: the ST loss nets against the LT dividend itself -> saving 0 (Lean g=0: 1190 = 1190)
+taxpayer in the 0%/15% capital-gain brackets, ordinary 24%: saving = d x (24% - 15%) = 9 points

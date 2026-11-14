@@ -1,0 +1,24 @@
+certify7 self-test on base rows of final2 (seed 7, n 2500 per table + up to 60 per Lean failure reason)
+
+agree	history	admitted	2500
+agree	history	disqualified	5
+agree	history	noCue	60
+agree	history	targetUnresolved	60
+agree	treatment	admitted	2486
+agree	treatment	disqualified	24
+agree	treatment	post-check duplicate	4
+agree	treatment	targetLater	12
+agree	treatment	targetUnresolved	4
+DISAGREE	treatment	Lean ok	certify7 targetUnresolved	10
+
+rows 5165; agree 5155; certify7 looser than Lean 0; certify7 stricter 10
+  treatment t:5298824:5295356:10372 Lean ok certify7 targetUnresolved
+  treatment t:5932190:5930671:10050 Lean ok certify7 targetUnresolved
+  treatment t:1679915:1754714:9468 Lean ok certify7 targetUnresolved
+  treatment t:1677828:1762596:17353 Lean ok certify7 targetUnresolved
+  treatment t:3756668:3755101:10807 Lean ok certify7 targetUnresolved
+  treatment t:1666691:1657330:31382 Lean ok certify7 targetUnresolved
+  treatment t:6707498:6706875:5723 Lean ok certify7 targetUnresolved
+  treatment t:3780391:3833608:10519 Lean ok certify7 targetUnresolved
+  treatment t:6396227:6589360:12972 Lean ok certify7 targetUnresolved
+  treatment t:6647922:6647021:2419 Lean ok certify7 targetUnresolved

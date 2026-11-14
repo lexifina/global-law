@@ -1,0 +1,145 @@
+{
+ "asof": 20101119,
+ "blind": true,
+ "build": {
+  "data": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round6/history/stage/final2",
+  "out": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round6/history/out/final2",
+  "status_sha1": "96888c8b4381d3230e83d90c5d6f2fa45dfeeb8e"
+ },
+ "court": "federal",
+ "dataset": "shepardized_coa",
+ "generated": "2026-11-13T23:14:21+00:00",
+ "label": "round6",
+ "link": {
+  "fail_reasons": {},
+  "linked": 9897,
+  "n_items": 10105,
+  "note": "sealed-half counts from round6/history/split/SPLIT.md (no per-case sealed file is read)"
+ },
+ "metrics": {
+  "agreement": {
+   "hi": 0.9855323256560814,
+   "k": 9701,
+   "lo": 0.9804440847360517,
+   "n": 9867,
+   "p": 0.9831762440458093
+  },
+  "agreement_setaside": {
+   "hi": 0.9858093611485743,
+   "k": 9701,
+   "lo": 0.9807647411760603,
+   "n": 9864,
+   "p": 0.9834752635847527
+  },
+  "clean": {
+   "hi": 0.9996462256879056,
+   "k": 9579,
+   "lo": 0.9984933203142056,
+   "n": 9586,
+   "p": 0.9992697684122679
+  },
+  "clean_setaside": {
+   "hi": 0.9996462256879056,
+   "k": 9579,
+   "lo": 0.9984933203142056,
+   "n": 9586,
+   "p": 0.9992697684122679
+  },
+  "link_rate": {
+   "hi": 0.9820077996821345,
+   "k": 9897,
+   "lo": 0.9764600959131183,
+   "n": 10105,
+   "p": 0.9794161306284018
+  },
+  "mod_kept": {
+   "hi": 0.986289578909774,
+   "k": 12,
+   "lo": 0.666860488286395,
+   "n": 13,
+   "p": 0.9230769230769231
+  },
+  "mod_kept_setaside": {
+   "hi": 0.986289578909774,
+   "k": 12,
+   "lo": 0.666860488286395,
+   "n": 13,
+   "p": 0.9230769230769231
+  },
+  "precision": {
+   "hi": 0.9575338225523766,
+   "k": 104,
+   "lo": 0.8555337384793149,
+   "n": 113,
+   "p": 0.9203539823008849
+  },
+  "precision_lenient": {
+   "hi": 0.9636922920414797,
+   "k": 105,
+   "lo": 0.8664924808014054,
+   "n": 113,
+   "p": 0.9292035398230089
+  },
+  "precision_lenient_setaside": {
+   "hi": 0.9636922920414797,
+   "k": 105,
+   "lo": 0.8664924808014054,
+   "n": 113,
+   "p": 0.9292035398230089
+  },
+  "precision_setaside": {
+   "hi": 0.9575338225523766,
+   "k": 104,
+   "lo": 0.8555337384793149,
+   "n": 113,
+   "p": 0.9203539823008849
+  },
+  "recall": {
+   "hi": 0.4743501926278407,
+   "k": 104,
+   "lo": 0.35366829900992436,
+   "n": 252,
+   "p": 0.4126984126984127
+  },
+  "recall_lenient": {
+   "hi": 0.5022086515527482,
+   "k": 111,
+   "lo": 0.38053122910936443,
+   "n": 252,
+   "p": 0.44047619047619047
+  },
+  "recall_lenient_setaside": {
+   "hi": 0.5059750780317032,
+   "k": 111,
+   "lo": 0.3837198515381208,
+   "n": 250,
+   "p": 0.444
+  },
+  "recall_part": {
+   "hi": 0.6135895962338866,
+   "k": 6,
+   "lo": 0.18481232451546453,
+   "n": 16,
+   "p": 0.375
+  },
+  "recall_part_setaside": {
+   "hi": 0.6425317004565552,
+   "k": 6,
+   "lo": 0.19824496026274246,
+   "n": 15,
+   "p": 0.4
+  },
+  "recall_setaside": {
+   "hi": 0.4779190356549883,
+   "k": 104,
+   "lo": 0.3566233586997476,
+   "n": 250,
+   "p": 0.416
+  }
+ },
+ "notes": "REUSED, not re-run: round6/history/SEALED_LOG.md line 5 (compare.py --split sealed on final2 after FREEZE.md, run once by the round-6 lead). Wilson recomputed with benchlib.metric from the logged k/n. Metric names as in run_existing.SHEP_MAP; *_setaside = shep_errors.tsv cases left out (the bracketed figures). The log gives no sub-class split.",
+ "primary": "recall",
+ "row_label": "Shepardized Courts of Appeals: decision reversed/vacated/withdrawn (same case)",
+ "split": "sealed",
+ "tests": "same-case"
+}

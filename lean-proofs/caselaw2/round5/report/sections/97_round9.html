@@ -1,0 +1,51 @@
+<h2 id="round9">Round 9 (done)</h2>
+<p>14 November 2026, 02:04 to 03:40. The base is the round-8 frozen build <code>v8e</code>. Frozen build:
+<code>v9c</code>. Report: <code>round9/ROUND9.md</code>; contract <code>round9/DESIGN9.md</code>; log
+<code>round9/LOG.md</code>; sealed runs <code>round9/SEALED_LOG.md</code>.</p>
+
+<h3>What round 9 did</h3>
+<ul>
+<li>Shadow Docket: Supreme Court orders that grant, vacate and remand are linked to the decision below through the
+lower court's own remand decision on the same docket (335 rows; blind audit 79/80).</li>
+<li>FJC appeals: the lower court found further back in the opinion, or named only as "the district judge" (643 rows;
+audits 72/80 each). The guard exception failed its audits (65/80, 67/80) and was left out.</li>
+<li>Opinion parts: header vote notes no longer open a false separate opinion, and the Lean checker now admits a quote
+only inside a zone of the part the row claims (585,526 zones; it refuses 72 quotes that sit in the syllabus or head
+matter).</li>
+<li>State courts: overrulings joined across a longer gap (52/52), and implied rejections recorded as "at risk" only
+(72/72).</li>
+<li>New Jersey: the 1947 Constitution and the courts' own statements settle when a successor court may depart from the
+court it replaced; the Lean checker and the independent reference now agree on every row (0 differences).</li>
+<li>Lean: 272 theorems (27 new, none changed), 74 mutants, all killed.</li>
+<li>Two new held-out keys, built blind and scored once after the freeze: Songer's courts-of-appeals database and Brace
+and Hall's state supreme court data.</li>
+</ul>
+
+<h3>Round-8 keys: tuning half h0, and half h1 scored a second time after the freeze (Wilson 95%)</h3>
+<table>
+<tr><th>key</th><th>h0: v8e to v9c</th><th>h1 (second use): v8e to v9c</th></tr>
+<tr><td>FJC appeals, recall</td><td>54.2% to 55.2% [53.4, 57.0]</td><td>54.7% to 55.9% [54.1, 57.7]</td></tr>
+<tr><td>Shadow Docket, recall</td><td>38.9% to 44.9% [41.9, 47.9]</td><td>39.0% to 46.5% [43.5, 49.4]</td></tr>
+<tr><td>SCDB disposition, recall</td><td>75.2% to 75.1%</td><td>75.4% to 75.5% [73.7, 77.2]</td></tr>
+<tr><td>State tables, recall</td><td>12.9% to 13.6%</td><td>7.7% to 7.7%</td></tr>
+</table>
+
+<h3>New held-out keys (first use; both halves untouched)</h3>
+<table>
+<tr><th>key</th><th>v8e</th><th>v9c</th></tr>
+<tr><td>Songer: court of appeals reversed or vacated the district decision, recall</td><td>82/228 = 36.0% [30.0, 42.4]</td><td>94/228 = 41.2% [35.0, 47.7]; precision 96.9%</td></tr>
+<tr><td>Brace and Hall: state supreme court reversed the decision below, recall</td><td>835/1,670 = 50.0% [47.6, 52.4]</td><td>50.0% (unchanged); precision 93.1%</td></tr>
+</table>
+
+<h3>Older tests</h3>
+<table>
+<tr><th>measure</th><th>v8e</th><th>v9c</th></tr>
+<tr><td>Fresh lists, open half: lenient / strict / attributed (165)</td><td>112 / 52 / 82</td><td>112 / 52 / 82</td></tr>
+<tr><td>Fresh lists, sealed half, fifth use (127): lenient / strict / attributed</td><td>77 / 32 / 57</td><td>76 / 31 / 56</td></tr>
+<tr><td>Shepardized dev, negative history found (254) / precision</td><td>143 / 93.5%</td><td>145 / 93.5%</td></tr>
+<tr><td>Shepardized sealed, fourth use (252) / precision</td><td>123 / 92.5%</td><td>125 = 49.6% / 92.6%</td></tr>
+<tr><td>Held-out notes, also stated by a court with power, negative or partly (2,640)</td><td>1,057</td><td>1,068</td></tr>
+</table>
+<p>The small losses on the sealed fresh lists and the old lists come from the new part check: it refuses quotes taken
+from the Supreme Court's syllabus, which is the reporter's summary, not the Court's words. The next round re-reads
+those overrulings from the opinion itself.</p>

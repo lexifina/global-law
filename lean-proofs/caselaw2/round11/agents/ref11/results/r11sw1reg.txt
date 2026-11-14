@@ -1,0 +1,40 @@
+NO52=1
+binary ~/caselaw2/r11_bin/caselaw2_lean11_s51 sha1 a1cc4296022b1bd07401cc64b04e50449d0de9b3; ref 987f5266c59cb619787baa96e3f01b5ba3218904; cue_table 24cac793f89ba201398a268fdfea5247e0f19d9e; 2026-11-14 06:15:30
+r100000: 4 disagreeing rows 
+z90001: 2 disagreeing rows 
+u90001: 2 disagreeing rows 
+u94016: 3 disagreeing rows 
+u94043: 2 disagreeing rows 
+u94052: 1 disagreeing rows 
+p95009: 3 disagreeing rows 
+p95013: 3 disagreeing rows 
+p95028: 3 disagreeing rows 
+v84006: 3 disagreeing rows 
+v84024: 3 disagreeing rows 
+v84039: 3 disagreeing rows 
+g86000: 1 disagreeing rows 
+g86013: 1 disagreeing rows 
+
+552 universes, 14 with a disagreement, 0 failed (binary ~/caselaw2/r11ref/bin/runner)
+  status    0 of 97179 keys disagree
+  findings  12 of 40759 keys disagree
+  certs     11 of 135133 keys disagree
+  splits    0 of 11263 keys disagree
+  conflicts 0 of 6050 keys disagree
+  lines     0 of 6242 keys disagree
+  horty     0 of 1231 keys disagree
+  classes   10 of 26429 keys disagree
+  summary   1 of 6556 keys disagree
+  class (file, bucket, rule): universes   first example
+  certs     okMismatch:ok/witnessNoStanding      treatment                     11   e.g. r100000 treatment:tr2 A=ok B=witnessNoStanding
+  findings  onlyA                                atRisk:inferred               10   e.g. r100000 atRisk:inferred 190 189 A=1 B=
+  classes   verdict                              ok/witnessNoStanding          10   e.g. r100000 tr2 A=ok B=witnessNoStanding
+  summary   count                                zone_missing_rows              1   e.g. r100000 zone_missing_rows A=53 B=52
+  findings  onlyB                                atRisk:inferred                1   e.g. v84006 atRisk:inferred 238 237 A= B=1
+  findings  onlyA                                atRisk:citesLaterNegated       1   e.g. g86013 atRisk:citesLaterNegated 234 232 A=1 B=
+  info  certs reasonOnly cue/witnessBadRow                           1
+  info  findings uncompared lean:citesNotCitable:force               1511
+  info  findings uncompared lean:hortyConsistentBase                 818
+  info  findings uncompared lean:hortySelfInconsistent               281
+  info  findings uncompared lean:inconsistentBindingBase             413
+rc=1

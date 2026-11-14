@@ -1,0 +1,117 @@
+==== QTIP scenario ====
+simple will: grandchildren end with $218.55M after tax; transfer tax $191.18M, built-in income tax $7.10M
+  period 0 Legal.USTax.Hunt.Transfer.Phase.plan: 173 positions, kept 38
+  period 1 Legal.USTax.Hunt.Transfer.Phase.plan: 963 positions, kept 78
+  period 1 Legal.USTax.Hunt.Transfer.Phase.bed: 320 positions, kept 78
+  period 1 Legal.USTax.Hunt.Transfer.Phase.estate (Legal.USTax.Hunt.Transfer.Who.W): 50 positions, kept 50
+  period 2 Legal.USTax.Hunt.Transfer.Phase.plan: 447 positions, kept 88
+  period 3 Legal.USTax.Hunt.Transfer.Phase.plan: 520 positions, kept 88
+  period 4 Legal.USTax.Hunt.Transfer.Phase.plan: 553 positions, kept 96
+  period 4 Legal.USTax.Hunt.Transfer.Phase.bed: 235 positions, kept 96
+  period 4 Legal.USTax.Hunt.Transfer.Phase.estate (Legal.USTax.Hunt.Transfer.Who.C): 72 positions, kept 72
+positions examined: 9834; plans at the end: 72
+#1  $999957.50M  (+$999738.95M vs simple will)  transfer tax $42.49M, income tax paid $0.00M, built-in $62.97M
+    family: split, C-gift, allocate-GST, §2519, trust→child, trust→grandchildren, remarry
+      W marries again
+      consent to split gifts (§2513)
+      spouse gives up QTIP income interest (§2519)
+      trust(W) distributes $15.00M to child
+      C gives $15.00M to grandchildren (cash first)
+      trust(H) distributes $36.00M to grandchildren
+      W allocates $1.95M GST exemption to trust
+      trust(W) distributes $29.46M to grandchildren
+      consent to split gifts (§2513)
+      W gives the annual exclusion each year to grandchildren
+#2  $999956.72M  (+$999738.17M vs simple will)  transfer tax $43.27M, income tax paid $0.00M, built-in $62.44M
+    family: split, C-gift, §2519, trust→child, trust→grandchildren, remarry
+      W marries again
+      consent to split gifts (§2513)
+      spouse gives up QTIP income interest (§2519)
+      trust(W) distributes $15.00M to child
+      C gives $15.00M to grandchildren (cash first)
+      trust(H) distributes $36.00M to grandchildren
+      consent to split gifts (§2513)
+      trust(W) distributes $29.46M to grandchildren
+      C gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+#3  $999955.19M  (+$999736.64M vs simple will)  transfer tax $44.80M, income tax paid $0.00M, built-in $58.27M
+    family: split, §2519, trust→grandchildren, remarry
+      W marries again
+      consent to split gifts (§2513)
+      spouse gives up QTIP income interest (§2519)
+      trust(H) distributes $36.00M to grandchildren
+      trust(W) distributes $36.00M to grandchildren
+      consent to split gifts (§2513)
+      W gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+#4  $999950.23M  (+$999731.68M vs simple will)  transfer tax $49.76M, income tax paid $0.00M, built-in $53.03M
+    family: C-gift, §2519, trust→child, trust→grandchildren
+      spouse gives up QTIP income interest (§2519)
+      trust(W) distributes $15.00M to child
+      trust(W) distributes $51.00M to grandchildren
+      C gives $15.00M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+      W gives the annual exclusion each year to grandchildren
+      C gives the annual exclusion each year to grandchildren
+#5  $999945.78M  (+$999727.23M vs simple will)  transfer tax $54.21M, income tax paid $0.00M, built-in $48.34M
+    family: §2519, trust→grandchildren
+      spouse gives up QTIP income interest (§2519)
+      trust(W) pays tuition
+      trust(W) distributes $65.40M to grandchildren
+      W gives the annual exclusion each year to child
+      C gives the annual exclusion each year to grandchildren
+#6  $999908.58M  (+$999690.03M vs simple will)  transfer tax $91.41M, income tax paid $0.00M, built-in $45.20M
+    family: split, C-gift, allocate-GST, §2519, trust→child, remarry
+      W marries again
+      consent to split gifts (§2513)
+      spouse gives up QTIP income interest (§2519)
+      trust(W) distributes $15.00M to child
+      C gives $15.00M to grandchildren (cash first)
+      trust(W) pays tuition
+      trust(H) distributes $1.95M to child
+      consent to split gifts (§2513)
+      W allocates $1.95M GST exemption to trust
+      trust(H) pays tuition
+      C gives $1.95M to grandchildren (cash first)
+      C gives the annual exclusion each year to grandchildren
+      trust(H) distributes $2.20M to child
+      C gives $1.11M to grandchildren (cash first)
+      trust(H) distributes $1.08M to child
+      C gives $3.55M to grandchildren (cash first)
+      trust(H) distributes $0.02M to child
+      trust(H) distributes $0.02M to child
+      C gives $0.82M to grandchildren (cash first)
+      trust(H) distributes $2.02M to child
+      C gives $2.02M to grandchildren (cash first)
+      C gives $0.00M to grandchildren (cash first)
+      C gives $0.00M to grandchildren (cash first)
+  one- and two-idea plans (best of each family):
+    +$999727.23M  [§2519, trust→grandchildren]
+    +$999666.31M  [trust→grandchildren]
+    +$999663.61M  [trust→child, trust→grandchildren]
+    +$999646.97M  [§2519, trust→child]
+    +$999641.30M  [allocate-GST, §2519]
+    +$999640.43M  [§2519]
+    +$999640.43M  [§2519, remarry]
+    +$999611.39M  [C-gift, trust→child]
+    +$999598.26M  [trust→child]
+    +$999590.25M  []
+    +$999590.25M  [split, remarry]
+  kind of move: best plan with it / best plan without it
+    split: $999957.50M / $999950.23M
+    C-gift: $999957.50M / $999955.19M
+    529: $999945.52M / $999957.50M
+    annual→child: $999950.23M / $999957.50M
+    annual→grandchildren: $999957.50M / $999945.52M
+    tuition: $999945.52M / $999957.50M
+    allocate-GST: $999957.50M / $999956.72M
+    §2519: $999957.50M / $999891.49M
+    trust→child: $999957.50M / $999955.19M
+    trust→grandchildren: $999957.50M / $999908.58M
+    trust-tuition: $999945.78M / $999957.50M
+    remarry: $999957.50M / $999950.23M
+
+real	0m17.048s
+user	0m0.030s
+sys	0m0.452s

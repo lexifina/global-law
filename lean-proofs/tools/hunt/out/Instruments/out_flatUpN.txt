@@ -1,0 +1,79 @@
+=== stock: no exposure, market up 30, other ST gains 50k, statute only (regs false) ===
+positions examined 2348; final positions 505; families 145
+plain plan: tax (future value) if everything is sold at the end $41616; if the final position is kept $41616
+-- best families, everything sold at the end --
+saves $5100 (tax sold $36516, kept $48756, unrealized at end $-30000) using [buy FundA, buy IndexFuture, sell FundA, short FundB]
+     day 5: buy FundA
+     day 5: sell FundB short
+     day 385: buy IndexFuture
+     day 385: sell FundA (bought day 5)
+saves $5100 (tax sold $36516, kept $48756, unrealized at end $30000) using [buy FundA, cover FundB, short FundA, short FundB]
+     day 5: buy FundA
+     day 5: sell FundB short
+     day 364: sell FundB short
+     day 364: buy to close the FundB short of day 5
+     day 385: sell FundA short
+     day 385: buy to close the FundB short of day 364
+saves $5100 (tax sold $36516, kept $48756, unrealized at end $-30000) using [buy FundA, sell FundA, short FundB]
+     day 5: sell FundB short
+     day 5: buy FundA
+     day 385: sell FundA (bought day 5)
+     day 385: buy FundA
+saves $5100 (tax sold $36516, kept $41616, unrealized at end $0) using [buy FundB, cover FundA, short FundA]
+     day 5: buy FundB
+     day 5: sell FundA short
+     day 385: sell FundA short
+     day 385: buy to close the FundA short of day 5
+saves $5100 (tax sold $36516, kept $48756, unrealized at end $-30000) using [buy FundA, buy IndexFuture, cover FundB, sell FundA, short FundB]
+     day 5: buy FundA
+     day 5: sell FundB short
+     day 364: sell FundB short
+     day 364: buy to close the FundB short of day 5
+     day 385: sell FundA (bought day 5)
+     day 385: buy IndexFuture
+saves $5100 (tax sold $36516, kept $36516, unrealized at end $0) using [buy FundA, cover FundB, sell FundA, short FundB]
+     day 5: sell FundB short
+     day 5: buy FundA
+     day 385: sell FundA (bought day 5)
+     day 385: buy to close the FundB short of day 5
+-- best families, final position kept --
+saves $5100 (tax sold $36516, kept $36516, unrealized at end $0) using [buy FundB, cover FundA, sell FundB, short FundA]
+     day 5: sell FundA short
+     day 5: buy FundB
+     day 364: sell FundA short
+     day 364: buy to close the FundA short of day 5
+     day 385: buy to close the FundA short of day 364
+     day 385: sell FundB (bought day 5)
+saves $5100 (tax sold $36516, kept $36516, unrealized at end $0) using [buy FundA, cover FundB, sell FundA, short FundB]
+     day 5: sell FundB short
+     day 5: buy FundA
+     day 385: sell FundA (bought day 5)
+     day 385: buy to close the FundB short of day 5
+saves $3183 (tax sold $38433, kept $38433, unrealized at end $0) using [buy FundA, buy IndexFuture, cover FundB, sell IndexFuture, short FundB, short IndexFuture]
+     day 5: buy IndexFuture
+     day 5: sell FundB short
+     day 364: sell IndexFuture (bought day 5)
+     day 364: buy to close the FundB short of day 5
+     day 385: buy FundA
+     day 385: sell IndexFuture short
+saves $3183 (tax sold $38433, kept $38433, unrealized at end $0) using [buy IndexFuture, cover FundB, sell IndexFuture, short FundA, short FundB]
+     day 5: buy IndexFuture
+     day 5: sell FundB short
+     day 364: buy to close the FundB short of day 5
+     day 364: sell FundA short
+     day 385: sell IndexFuture (bought day 5)
+     day 385: buy IndexFuture
+saves $3183 (tax sold $38433, kept $38433, unrealized at end $0) using [buy FundB, buy IndexFuture, cover FundB, sell IndexFuture, short FundB, short IndexFuture]
+     day 5: buy IndexFuture
+     day 5: sell FundB short
+     day 364: buy to close the FundB short of day 5
+     day 364: sell IndexFuture (bought day 5)
+     day 385: buy FundB
+     day 385: sell IndexFuture short
+saves $3183 (tax sold $38433, kept $38433, unrealized at end $0) using [buy FundB, buy IndexFuture, cover FundB, sell IndexFuture, short FundA, short FundB]
+     day 5: buy IndexFuture
+     day 5: sell FundB short
+     day 364: buy to close the FundB short of day 5
+     day 364: sell IndexFuture (bought day 5)
+     day 385: buy FundB
+     day 385: sell FundA short

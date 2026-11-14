@@ -1,0 +1,154 @@
+diag2 reader brief (round 5, caselaw-lean-2): why the model misses Supreme Court overrulings
+
+You read US Supreme Court opinions and record, for each pair (Y = overruling decision, X = overruled decision) of
+your shard, HOW Y disposes of X and whether a later opinion of the Court says "X was overruled by Y".
+Diagnosis only. All reading is done by you, locally.
+
+HARD RULES
+- Work only in ~\Documents\us-caselaw-lean-work\caselaw-lean-2\round5\diag2\ . Write exactly one file
+  there: shard_<k>.jsonl (k = your shard). Create or edit nothing else anywhere. No git commits. No .md files.
+- OFF LIMITS, never list, open or grep: round5\gold_fresh\sealed\ ; gold\scdb.tsv ; gold\crs_overruled.tsv .
+- Never open the big tables (data\decisions2.tsv, data\treatments.tsv, graph\nodes.tsv, data\cert_text.tsv).
+  Everything you need is already extracted into diag2 (pairs.tsv, model_rows.tsv, later_cands.tsv, text\<node>.md).
+- No external model API, no web access, no sub-agents. Answer from the texts, not from memory of the case law:
+  what you remember may guide where you look, but every claim needs words in the cached text.
+- Run the tools from the diag2 directory with absolute paths, e.g.
+  python "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round5/diag2/show.py" 12
+  One command at a time; keep outputs small (-m, -l). Write the JSONL with the Write tool (no shell heredocs), LF.
+
+TOOLS (all in diag2)
+- python show.py -s <k>          the pairs (idx) of shard k.
+- python show.py <idx> [-n N] [-all]
+      the pair, what the answer key says about it (partial / implied / the list's own wording), the baseline outcome,
+      the MODEL ROWS for the pair (kind, scope, quote, offsets, witness W if it is a later-court row), and the
+      LATER candidates: spans of later Supreme Court opinions with an overruling word and
+        both  = a reference to X and to Y in one span of <= 400 characters (W node, date, name, part, @offset);
+        weakx = X near an overruling word, Y not in reach;  weaky = Y's citation near an overruling word, X not named.
+      By default candidates in dissents / concurrences / head matter are hidden (-all shows them).
+- python ctx.py <node> -x "<regex>" [-c N] [-m MAX] [-l CHARS] [-a]
+      sentences of the cached text of <node> matching the regex (use X's party names, e.g. -x "Adamson|Twining"),
+      with the character offset (@n) and the part label (majority, perCuriam, dissent, concurrence, headmatter =
+      syllabus / counsel; a trailing ~ is an inferred label). Only the opinion of the Court is printed by default;
+      separate opinions and head matter are only counted (-a prints all). -c 1 adds a sentence either side.
+  python ctx.py <node> -k            sentences with an operative / overruling cue word.
+  python ctx.py <node> -o <offset> -w 1500     raw text around an offset.
+  python ctx.py <node> -p            the part map.
+  Part labels are sometimes wrong (old reports print a dissent inside "Majority"; slip opinions are page chunks):
+  judge from the text who is speaking. You may also Read text\<node>.md directly (offset/limit; some are long),
+  including text\<X>.md when you need to know what X held, and text\<W>.md for a later opinion.
+  Names in old reports are often OCR-damaged or spelled differently (Phoebus / Phœbus, "Himely v. Rose"): try
+  short regexes, the citation ("11 Pet"), or -k.
+- python verify.py shard_<k>.jsonl      MUST pass (0 problems) before you finish: it checks every quote is an exact
+  substring of the cached text.
+
+WHAT TO ESTABLISH FOR EACH PAIR
+Only the opinion of the Court counts (majority, per curiam, or a plurality announcing the judgment: say so in note),
+footnotes of that opinion included. Syllabus / head matter, counsel argument, concurrences and dissents do not count
+(mention them in note when they are the only place the overruling is stated).
+
+1. own_words / own_type: the sentence of Y's opinion of the Court that acts on X.
+   own_words = EXACT text copied from text\<Y>.md: one sentence (or one clause), characters as they are in the file
+   including OCR errors, no ellipsis, no added quotation marks, newlines replaced by one space each. "" if none.
+   own_offset = its character offset (the @n of ctx.py), -1 if none.
+   own_type:
+   - overrule : the Court itself uses overrul / disapprov / reced / abrogat on X ("X is overruled", "we overrule X",
+                "X ... must be, and is, overruled", "to the extent that X ... it is disapproved", "X is no longer
+                to be followed and is overruled"). Also when the word is in a footnote of the opinion, and when X is
+                named a sentence earlier and reached by clear anaphora ("that case is overruled") — then quote the
+                operative sentence and say in note where X is named.
+   - operative: another verb of lost authority on the NAMED case, present act of this Court: rejected, repudiated,
+                no longer the law / good law / to be followed, cannot survive / stand, must be regarded as
+                overthrown, we decline to follow, not bound by, we depart from, cannot adhere to, is disavowed,
+                abandoned, "can no longer be regarded as authority", "must be deemed to have been ...".
+   - contrary : the Court only states that it now holds the contrary of named X, no verb about X's authority
+                ("notwithstanding what was said in X", "contrary to the decision in X", "X was wrongly decided" with
+                nothing more, "we cannot agree with X").
+   - doctrine : the operative words are aimed at a doctrine, a rule, a test or a line of cases, X at most an example
+                ("the doctrine of 'separate but equal' has no place", "those cases", "the Swift doctrine").
+   - none     : nothing (X not cited, cited neutrally, distinguished, merely criticised, or the Court denies that it
+                overrules X; a REPORT that an earlier decision already overruled X is also none: name that decision
+                in note).
+   If several sentences qualify, take the strongest in the order overrule > operative > contrary > doctrine.
+2. whole: "true" when the words dispose of X as a whole (the case, or its only holding); "false" when only in part /
+   to the extent / insofar / on one point / in one field / "the language in X"; "unclear" otherwise.
+   limiting_words = the limiting words exactly as in the text ("to the extent that", "insofar as", "in so far as it
+   is inconsistent", "in the field of public education", "any language in"), "" if none.
+3. For outcome c only: look at the MODEL ROWS printed by show.py (rows with explicit=1 are the model reading Y;
+   rows with witness != - are later-court rows). model_scope = the scope of the explicit row(s) by Y, e.g.
+   "partialUnknown" or "issues:automatic-standing" ("" if there is no explicit row by Y; say in note where the c
+   status then comes from, see "baseline: ... actor"). scope_error:
+   - yes      : the Court overruled the case (or the one holding the case stands for) and the reader wrote a partial
+                scope: e.g. the sentence says flatly "X is overruled" and the row says partialUnknown; an "issues:"
+                scope produced from an issue mapping although the sentence disposes of the case;
+   - no       : the Court really overruled only part of X (its own limiting words, or X plainly has other holdings
+                left standing by Y);
+   - arguable : limiting words of the form "to the extent inconsistent", "insofar as it holds ..." where the part
+                named is the heart of X; or you cannot tell without knowing X in depth.
+   scope_reason = the reason in a few words (e.g. quote says "to the extent inconsistent"; flat "is overruled" but
+   scope partialUnknown; "issues:" from issue mapping; two cases joined by "and" in one sentence).
+   For d / e pairs: scope_error = "", scope_reason = "", model_scope = "" (or the row's scope if there is one).
+4. later: the EARLIEST later opinion OF THE COURT (Supreme Court majority / per curiam / plurality announcing the
+   judgment; not a dissent or concurrence, not the syllabus) that says, with an overruling word (overrul / abrogat /
+   disapprov), that X was overruled by Y, BOTH named in one span of <= 400 characters. Start from the "both"
+   candidates of show.py in date order; for each, check in the text (ctx.py <W> -o <offset>) who is speaking and that
+   the span really says Y overruled X (not "Y declined to overrule X", not "X overruled Z", not a quotation of
+   a party's argument, not a mislabelled dissent). Forms that count: "Y, overruling X", "X, overruled by Y",
+   "in Y we overruled X", "Y (overruling X)", "X was overruled in Y", "overruled in part" (say so in note), lists
+   such as Payne v. Tennessee n.1. A short form of a name counts ("Malloy", "Wolf"). Y's name may be replaced by
+   "supra" only if a citation or name of Y is still inside the span.
+   later_W = W's node id (number), later_W_date = yyyymmdd, later_span = EXACT substring of text\<W>.md, <= 400
+   characters, containing the overruling word and both names (newlines as single spaces; you may shorten the
+   candidate span, but only by cutting at its ends), later_form = one of "Y, overruling X" | "X, overruled by Y" |
+   "Y overruled X" | "list" | "other".  If none: later_W = "", later_W_date = "", later_span = "", later_form = "".
+   If the candidates run out before you find one, use show.py <idx> -n 60 to see the rest; do not search further.
+   later_weak_*: if there is no such statement, or there is an EARLIER / different weaker statement worth knowing,
+   give the earliest weaker one by the Court: names X with an overruling word but not Y (weakx), or says Y overruled
+   "the doctrine of X" / a both-named statement that is only in a separate opinion (say which in note):
+   later_weak_W, later_weak_date, later_weak_span (exact substring, any length up to 500), else "".
+   If a later opinion of the Court credits ANOTHER decision Z with overruling X, say so in note (that is a doubt
+   about the key).
+5. Labels (0/1 each; several can apply):
+   S = own_type is overrule (self-announced).
+   A = own_type is operative (operative verb other than overrule on the named case). contrary does NOT set A.
+   B = the Court's operative words (also) aim at a doctrine / rule / test / line of cases rather than one named
+       case. Name the doctrine in note.
+   C = the Court states the effect as limited to a field or set of situations ("in the field of ...", "to the
+       extent that", "insofar as it applies to ...").
+   D = step 4 found a later statement of the Court with both names in one span (later_span non-empty).
+   E = none of S, A, B, C, D (pure inconsistency, or only "contrary" words, or nothing).
+   primary: S if S; else A if A; else B or C (B first) if either; else D; else E.
+   fixable_by, the most direct legitimate way the model could get this pair, first that applies:
+   - gold_doubtful : the pair looks wrong: X is the same case before rehearing; a later Court credits another
+                     decision; Y expressly preserves or merely distinguishes X and no later Court says otherwise;
+                     nothing was overruled. Say why in note. (Use it sparingly: an implied overruling that a later
+                     Court confirms is not doubtful.)
+   - scope_fix     : S = 1, an explicit model row by Y exists, and scope_error = yes (or arguable and you think the
+                     whole-case reading is the better one; say so).
+   - reader_recall : S = 1 and there is no explicit model row by Y for X. recall_reason = why the reader probably
+                     missed it, one of: footnote | target named far away / by anaphora | passive or unusual form |
+                     OCR-damaged name or word | several cases in one sentence | per curiam / very short opinion |
+                     old report layout | unknown, plus a few words.
+   - recognised    : D = 1 (and none of the above).
+   - operative     : A = 1 (and none of the above). Note: with whole = false this gives only a partial status.
+   - doctrine_field: B or C only.
+   - none          : nothing would legitimately fix it (E; or S = 1 with a correct partial scope and no later
+                     statement: then the model's "partly overruled" is right and the key's flat listing is the
+                     difference: say so in note).
+   recall_reason = "" unless fixable_by is reader_recall.
+   note: at most 350 characters, plain facts (what Y actually did with X; where X is named; any doubt about the key).
+
+OUTPUT
+shard_<k>.jsonl: one JSON object per line (UTF-8, LF, no markdown), one line per pair of your shard, in idx order,
+keys exactly:
+  idx, pair_id, by_node, target_node, own_words, own_offset, own_type, whole, limiting_words, scope_error,
+  scope_reason, model_scope, later_W, later_W_date, later_span, later_form, later_weak_W, later_weak_date,
+  later_weak_span, S, A, B, C, D, E, primary, fixable_by, recall_reason, note
+(idx, by_node, target_node, own_offset, S..E as numbers; later_W / later_weak_W as numbers or ""; whole as the string
+"true" / "false" / "unclear"; everything else strings.) Write the file whole (rewrite it as you go, e.g. after
+every 5 pairs, so partial work survives); run verify.py on it and fix every problem it reports.
+
+Be strict and literal: quote, do not paraphrase. Do not skip pairs; if a text is missing or unreadable say so in
+note and fill what you can.
+
+FINAL REPLY (under 200 words): counts in your shard of fixable_by by outcome, of own_type, of scope_error for c
+pairs, of D; the pairs you marked gold_doubtful with one line each; anything surprising.

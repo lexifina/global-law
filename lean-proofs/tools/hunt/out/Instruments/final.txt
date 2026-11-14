@@ -1,0 +1,671 @@
+=== A1 stock: dip and recovery, other ST gains 50k (regs true) ===
+positions examined 52150; final positions 19921; families 565
+plain plan: tax (future value) if everything is sold at the end $53516; if the final position is kept $41616
+-- best families, everything sold at the end --
+saves $3727 (tax sold $49789, kept $33129, unrealized at end $70000) using [buy FundB, sell FundA]
+     day 150: buy FundB
+     day 150: sell FundA (bought day 5)
+saves $3727 (tax sold $49789, kept $33129, unrealized at end $70000) using [buy FundB, deliver FundB, sell FundA, short FundB]
+     day 150: buy FundB
+     day 150: sell FundA (bought day 5)
+     day 170: buy FundB
+     day 170: sell FundB short
+     day 190: deliver FundB (bought day 170) to close the short of day 170
+saves $3694 (tax sold $49822, kept $33978, unrealized at end $70000) using [buy FundB, cover FundB, sell FundA, short FundB]
+     day 150: buy FundB
+     day 150: sell FundB short
+     day 170: buy to close the FundB short of day 150
+     day 170: sell FundA (bought day 5)
+-- best families, final position kept --
+saves $8487 (tax sold $61689, kept $33129, unrealized at end $70000) using [buy FundB, deliver FundB, sell FundA, short FundA, short FundB]
+     day 150: buy FundB
+     day 150: sell FundA (bought day 5)
+     day 170: buy FundB
+     day 170: sell FundB short
+     day 190: deliver FundB (bought day 170) to close the short of day 170
+     day 364: sell FundA short
+     day 364: buy FundB
+saves $8487 (tax sold $61689, kept $33129, unrealized at end $138000) using [buy FundB, cover FundA, sell FundA, short FundA, short IndexFuture]
+     day 150: buy FundB
+     day 150: sell FundA (bought day 5)
+     day 170: buy FundB
+     day 170: sell FundA short
+     day 364: buy to close the FundA short of day 170
+     day 364: sell IndexFuture short
+saves $8487 (tax sold $61689, kept $33129, unrealized at end $70000) using [buy FundB, cover IndexFuture, sell FundA, short FundA, short IndexFuture]
+     day 150: buy FundB
+     day 150: sell FundA (bought day 5)
+     day 190: buy FundB
+     day 190: sell IndexFuture short
+     day 364: buy to close the IndexFuture short of day 190
+     day 364: sell FundA short
+=== A2 digital: dip and recovery, other ST gains 50k (regs true) ===
+positions examined 5706; final positions 2178; families 272
+plain plan: tax (future value) if everything is sold at the end $53516; if the final position is kept $41616
+-- best families, everything sold at the end --
+saves $3727 (tax sold $49789, kept $33129, unrealized at end $70000) using [buy Coin, sell Coin]
+     day 150: sell Coin (bought day 5)
+     day 150: buy Coin
+saves $3727 (tax sold $49789, kept $33129, unrealized at end $70000) using [buy CoinTrust, sell Coin]
+     day 150: buy CoinTrust
+     day 150: sell Coin (bought day 5)
+saves $3694 (tax sold $49822, kept $33978, unrealized at end $70000) using [buy CoinTrust, cover Coin, sell Coin, short Coin]
+     day 150: buy CoinTrust
+     day 150: sell Coin short
+     day 170: buy to close the Coin short of day 150
+     day 170: sell Coin (bought day 5)
+-- best families, final position kept --
+saves $8487 (tax sold $61689, kept $33129, unrealized at end $108000) using [buy Coin, cover Coin, sell Coin, short Coin, short CoinTrust]
+     day 150: sell Coin (bought day 5)
+     day 150: buy Coin
+     day 170: buy Coin
+     day 170: sell Coin short
+     day 364: buy to close the Coin short of day 170
+     day 364: sell CoinTrust short
+saves $8487 (tax sold $61689, kept $33129, unrealized at end $70000) using [buy Coin, cover CoinTrust, sell Coin, short CoinTrust]
+     day 150: sell Coin (bought day 5)
+     day 150: buy Coin
+     day 170: buy Coin
+     day 170: sell CoinTrust short
+     day 364: buy to close the CoinTrust short of day 170
+     day 364: sell CoinTrust short
+saves $8487 (tax sold $61689, kept $33129, unrealized at end $138000) using [buy Coin, buy CoinTrust, sell Coin, short CoinFuture]
+     day 150: sell Coin (bought day 5)
+     day 150: buy Coin
+     day 170: buy CoinTrust
+     day 170: sell CoinFuture short
+=== A3 digital: dip and recovery, statute only (regs false) ===
+positions examined 5621; final positions 2228; families 264
+plain plan: tax (future value) if everything is sold at the end $53516; if the final position is kept $41616
+-- best families, everything sold at the end --
+saves $12227 (tax sold $41289, kept $33129, unrealized at end $108000) using [buy Coin, cover CoinTrust, sell Coin, short Coin, short CoinTrust]
+     day 150: sell Coin (bought day 5)
+     day 150: buy Coin
+     day 170: buy Coin
+     day 170: sell CoinTrust short
+     day 364: buy to close the CoinTrust short of day 170
+     day 364: sell Coin short
+saves $12227 (tax sold $41289, kept $33129, unrealized at end $70000) using [buy Coin, cover CoinTrust, sell Coin, short CoinTrust]
+     day 150: sell Coin (bought day 5)
+     day 150: buy Coin
+     day 170: buy Coin
+     day 170: sell CoinTrust short
+     day 364: buy to close the CoinTrust short of day 170
+     day 364: sell CoinTrust short
+-- best families, final position kept --
+saves $8487 (tax sold $41289, kept $33129, unrealized at end $70000) using [buy Coin, cover CoinTrust, sell Coin, short CoinTrust]
+     day 150: sell Coin (bought day 5)
+     day 150: buy Coin
+     day 170: buy Coin
+     day 170: sell CoinTrust short
+     day 364: buy to close the CoinTrust short of day 170
+     day 364: sell CoinTrust short
+saves $8487 (tax sold $45165, kept $33129, unrealized at end $138000) using [buy Coin, buy CoinTrust, sell Coin, short CoinFuture]
+     day 150: sell Coin (bought day 5)
+     day 150: buy Coin
+     day 170: sell CoinFuture short
+     day 170: buy CoinTrust
+=== A4 stock (fund + future): appreciated, exit wanted (regs true) ===
+positions examined 1044; final positions 165; families 29
+plain plan: tax (future value) if everything is sold at the end $16972; if the final position is kept $16972
+-- best families, everything sold at the end --
+saves $0 (tax sold $16972, kept $16972, unrealized at end $0) using [sell FundA]
+     day 340: sell FundA (bought day 100)
+saves $0 (tax sold $16972, kept $16972, unrealized at end $0) using [cover FundA, deliver FundA, short FundA]
+     day 340: sell FundA short
+     day 385: buy to close the FundA short of day 340
+     day 385: sell FundA short
+     day 470: deliver FundA (bought day 100) to close the short of day 385
+-- best families, final position kept --
+saves $0 (tax sold $25132, kept $16972, unrealized at end $12000) using [buy FundA, cover IndexFuture, sell FundA, short IndexFuture]
+     day 340: sell IndexFuture short
+     day 385: buy to close the IndexFuture short of day 340
+     day 385: sell IndexFuture short
+     day 470: sell FundA (bought day 100)
+     day 470: buy FundA
+saves $0 (tax sold $25132, kept $16972, unrealized at end $20000) using [short IndexFuture]
+     day 340: sell IndexFuture short
+=== A5 stock (fund + future): exit wanted, 85 days of exposure tolerated (regs true) ===
+positions examined 1584; final positions 204; families 35
+plain plan: tax (future value) if everything is sold at the end $16972; if the final position is kept $16972
+-- best families, everything sold at the end --
+saves $652 (tax sold $16320, kept $16320, unrealized at end $0) using [cover FundA, sell FundA, short FundA]
+     day 340: sell FundA short
+     day 385: buy to close the FundA short of day 340
+     day 470: sell FundA (bought day 100)
+saves $652 (tax sold $16320, kept $16320, unrealized at end $0) using [cover FundA, cover IndexFuture, sell FundA, short FundA, short IndexFuture]
+     day 340: sell IndexFuture short
+     day 364: sell FundA short
+     day 364: buy to close the IndexFuture short of day 340
+     day 385: buy to close the FundA short of day 364
+     day 470: sell FundA (bought day 100)
+-- best families, final position kept --
+saves $652 (tax sold $16320, kept $16320, unrealized at end $0) using [cover FundA, sell FundA, short FundA]
+     day 340: sell FundA short
+     day 385: buy to close the FundA short of day 340
+     day 470: sell FundA (bought day 100)
+saves $652 (tax sold $16320, kept $16320, unrealized at end $0) using [cover FundA, cover IndexFuture, sell FundA, short FundA, short IndexFuture]
+     day 340: sell IndexFuture short
+     day 364: sell FundA short
+     day 364: buy to close the IndexFuture short of day 340
+     day 385: buy to close the FundA short of day 364
+     day 470: sell FundA (bought day 100)
+=== A6 stock with a second, not identical fund: exit wanted (regs true) ===
+positions examined 5946; final positions 1504; families 163
+plain plan: tax (future value) if everything is sold at the end $16972; if the final position is kept $16972
+-- best families, everything sold at the end --
+saves $652 (tax sold $16320, kept $17952, unrealized at end $4000) using [cover FundB, cover IndexFuture, short FundB, short IndexFuture]
+     day 340: sell FundB short
+     day 364: buy to close the FundB short of day 340
+     day 364: sell FundB short
+     day 385: sell IndexFuture short
+     day 385: buy to close the FundB short of day 364
+     day 470: sell FundB short
+     day 470: buy to close the IndexFuture short of day 385
+saves $652 (tax sold $16320, kept $19584, unrealized at end $-8000) using [buy FundA, sell FundA, short FundB]
+     day 340: sell FundB short
+     day 470: sell FundA (bought day 100)
+     day 470: buy FundA
+-- best families, final position kept --
+saves $16972 (tax sold $16320, kept $0, unrealized at end $40000) using [short FundB]
+     day 340: sell FundB short
+saves $16972 (tax sold $16320, kept $0, unrealized at end $40000) using [cover FundB, short FundB]
+     day 340: sell FundB short
+     day 364: sell FundB short
+     day 364: buy to close the FundB short of day 340
+=== A7 digital: appreciated, exit wanted (regs true) ===
+positions examined 7154; final positions 2238; families 186
+plain plan: tax (future value) if everything is sold at the end $16972; if the final position is kept $16972
+-- best families, everything sold at the end --
+saves $652 (tax sold $16320, kept $16320, unrealized at end $12000) using [buy CoinTrust, cover Coin, sell Coin, short Coin, short CoinFuture]
+     day 340: sell Coin short
+     day 385: sell Coin (bought day 100)
+     day 385: buy to close the Coin short of day 340
+     day 470: sell CoinFuture short
+     day 470: buy CoinTrust
+saves $652 (tax sold $16320, kept $0, unrealized at end $48000) using [cover Coin, short Coin]
+     day 340: sell Coin short
+     day 385: buy to close the Coin short of day 340
+     day 385: sell Coin short
+     day 470: buy to close the Coin short of day 385
+     day 470: sell Coin short
+-- best families, final position kept --
+saves $16972 (tax sold $16320, kept $0, unrealized at end $44000) using [cover CoinFuture, cover CoinTrust, short CoinFuture, short CoinTrust]
+     day 340: sell CoinTrust short
+     day 364: buy to close the CoinTrust short of day 340
+     day 364: sell CoinFuture short
+     day 385: sell CoinTrust short
+     day 385: buy to close the CoinFuture short of day 364
+saves $16972 (tax sold $16320, kept $0, unrealized at end $60000) using [short CoinFuture]
+     day 340: sell CoinFuture short
+=== A8 digital: exit wanted, statute only (regs false) ===
+positions examined 5740; final positions 1745; families 185
+plain plan: tax (future value) if everything is sold at the end $16972; if the final position is kept $16972
+-- best families, everything sold at the end --
+saves $7452 (tax sold $9520, kept $0, unrealized at end $40000) using [cover CoinTrust, short CoinTrust]
+     day 340: sell CoinTrust short
+     day 385: sell CoinTrust short
+     day 385: buy to close the CoinTrust short of day 340
+saves $7452 (tax sold $9520, kept $13872, unrealized at end $-16000) using [buy CoinFuture, cover CoinFuture, sell Coin, short CoinFuture, short CoinTrust]
+     day 340: sell CoinFuture short
+     day 385: sell CoinTrust short
+     day 385: buy to close the CoinFuture short of day 340
+     day 470: sell Coin (bought day 100)
+     day 470: buy CoinFuture
+-- best families, final position kept --
+saves $16972 (tax sold $9520, kept $0, unrealized at end $48000) using [cover CoinFuture, cover CoinTrust, short Coin, short CoinFuture, short CoinTrust]
+     day 340: sell CoinFuture short
+     day 385: sell CoinTrust short
+     day 385: buy to close the CoinFuture short of day 340
+     day 470: buy to close the CoinTrust short of day 385
+     day 470: sell Coin short
+saves $16972 (tax sold $9520, kept $0, unrealized at end $44000) using [cover CoinFuture, cover CoinTrust, short CoinFuture, short CoinTrust]
+     day 340: sell CoinFuture short
+     day 385: sell CoinTrust short
+     day 385: buy to close the CoinFuture short of day 340
+     day 470: sell CoinTrust short
+     day 470: buy to close the CoinTrust short of day 385
+=== A9 stock: exposure wanted for 10 months (regs true) ===
+positions examined 4141; final positions 832; families 231
+plain plan: tax (future value) if everything is sold at the end $10608; if the final position is kept $10608
+-- best families, everything sold at the end --
+saves $4420 (tax sold $6188, kept $6188, unrealized at end $0) using [buy FundB, buy IndexFuture, cover FundA, sell FundB, short FundA]
+     day 5: buy FundB
+     day 150: sell FundB (bought day 5)
+     day 150: buy IndexFuture
+     day 300: sell FundA short
+     day 364: buy to close the FundA short of day 300
+     day 364: sell FundA short
+saves $4420 (tax sold $6188, kept $6188, unrealized at end $0) using [buy FundB, buy IndexFuture, cover FundA, sell FundB, short FundA, short FundB]
+     day 5: buy FundB
+     day 150: sell FundB (bought day 5)
+     day 150: buy IndexFuture
+     day 300: sell FundA short
+     day 364: sell FundB short
+     day 364: buy to close the FundA short of day 300
+-- best families, final position kept --
+saves $12873 (tax sold $10269, kept $-2265, unrealized at end $45000) using [buy FundB, buy IndexFuture, cover FundA, sell IndexFuture, short FundA, short IndexFuture]
+     day 5: buy IndexFuture
+     day 150: buy FundB
+     day 150: sell IndexFuture (bought day 5)
+     day 300: sell FundA short
+     day 364: sell IndexFuture short
+     day 364: buy to close the FundA short of day 300
+saves $12873 (tax sold $10269, kept $-2265, unrealized at end $45000) using [buy FundB, buy IndexFuture, sell IndexFuture, short IndexFuture]
+     day 5: buy IndexFuture
+     day 150: buy FundB
+     day 150: sell IndexFuture (bought day 5)
+     day 300: sell IndexFuture short
+=== A10 stock: up 30 in year 1, down 25 in year 2 (regs true) ===
+positions examined 1372; final positions 537; families 130
+plain plan: tax (future value) if everything is sold at the end $1190; if the final position is kept $0
+-- best families, everything sold at the end --
+saves $0 (tax sold $1190, kept $4760, unrealized at end $-15000) using [buy FundA, buy FundB, sell FundB]
+     day 5: buy FundB
+     day 500: sell FundB (bought day 5)
+     day 500: buy FundA
+saves $0 (tax sold $1190, kept $4760, unrealized at end $20000) using [buy FundA, buy IndexFuture, short FundA]
+     day 5: buy FundA
+     day 500: buy IndexFuture
+     day 500: sell FundA short
+-- best families, final position kept --
+saves $0 (tax sold $2040, kept $0, unrealized at end $5000) using [buy FundB, cover IndexFuture, sell FundB, short IndexFuture]
+     day 5: buy FundB
+     day 364: buy FundB
+     day 364: sell IndexFuture short
+     day 500: sell FundB (bought day 364)
+     day 500: buy to close the IndexFuture short of day 364
+saves $0 (tax sold $2040, kept $0, unrealized at end $5000) using [buy FundA, buy IndexFuture, sell IndexFuture, short FundB]
+     day 5: buy FundA
+     day 364: sell FundB short
+     day 364: buy IndexFuture
+     day 500: sell IndexFuture (bought day 364)
+     day 500: buy FundA
+=== B1 no exposure, market up 30, other ST gains 50k (regs true) ===
+positions examined 2606; final positions 649; families 152
+plain plan: tax (future value) if everything is sold at the end $41616; if the final position is kept $41616
+-- best families, everything sold at the end --
+saves $2693 (tax sold $38923, kept $51163, unrealized at end $-30000) using [buy IndexFuture, cover FundA, cover FundB, short FundA, short FundB]
+     day 5: buy IndexFuture
+     day 5: sell FundB short
+     day 364: sell FundA short
+     day 364: buy to close the FundB short of day 5
+     day 385: sell FundB short
+     day 385: buy to close the FundA short of day 364
+saves $2693 (tax sold $38923, kept $51163, unrealized at end $-30000) using [buy FundA, buy IndexFuture, cover FundB, sell IndexFuture, short FundB]
+     day 5: buy IndexFuture
+     day 5: sell FundB short
+     day 364: buy to close the FundB short of day 5
+     day 364: sell IndexFuture (bought day 5)
+     day 385: sell FundB short
+     day 385: buy FundA
+saves $2693 (tax sold $38923, kept $51163, unrealized at end $-30000) using [buy FundA, buy IndexFuture, sell IndexFuture, short FundB]
+     day 5: buy IndexFuture
+     day 5: sell FundB short
+     day 385: buy FundA
+     day 385: sell IndexFuture (bought day 5)
+-- best families, final position kept --
+saves $2693 (tax sold $38923, kept $38923, unrealized at end $0) using [buy FundB, buy IndexFuture, cover FundA, sell IndexFuture, short FundA, short IndexFuture]
+     day 5: sell FundA short
+     day 5: buy IndexFuture
+     day 364: sell IndexFuture (bought day 5)
+     day 364: buy FundB
+     day 385: sell IndexFuture short
+     day 385: buy to close the FundA short of day 5
+saves $2693 (tax sold $38923, kept $38923, unrealized at end $0) using [buy FundB, buy IndexFuture, cover FundB, sell IndexFuture, short FundA, short FundB]
+     day 5: sell FundB short
+     day 5: buy IndexFuture
+     day 364: buy FundB
+     day 364: sell IndexFuture (bought day 5)
+     day 385: buy to close the FundB short of day 5
+     day 385: sell FundA short
+saves $2693 (tax sold $38923, kept $38923, unrealized at end $0) using [buy IndexFuture, cover FundB, sell IndexFuture, short FundA, short FundB]
+     day 5: buy IndexFuture
+     day 5: sell FundB short
+     day 364: buy IndexFuture
+     day 364: sell IndexFuture (bought day 5)
+     day 385: sell FundA short
+     day 385: buy to close the FundB short of day 5
+=== B2 no exposure, market down 25, other ST gains 50k (regs true) ===
+positions examined 2665; final positions 747; families 163
+plain plan: tax (future value) if everything is sold at the end $41616; if the final position is kept $41616
+-- best families, everything sold at the end --
+saves $2244 (tax sold $39372, kept $39372, unrealized at end $0) using [buy FundA, cover FundB, cover IndexFuture, sell FundA, short FundB, short IndexFuture]
+     day 5: sell IndexFuture short
+     day 5: buy FundA
+     day 364: buy to close the IndexFuture short of day 5
+     day 364: sell FundB short
+     day 385: sell FundA (bought day 5)
+     day 385: buy to close the FundB short of day 364
+saves $2244 (tax sold $39372, kept $39372, unrealized at end $0) using [buy FundA, buy IndexFuture, cover IndexFuture, sell FundA, short FundA, short IndexFuture]
+     day 5: sell IndexFuture short
+     day 5: buy FundA
+     day 364: sell FundA short
+     day 364: buy to close the IndexFuture short of day 5
+     day 385: sell FundA (bought day 5)
+     day 385: buy IndexFuture
+-- best families, final position kept --
+saves $2244 (tax sold $39372, kept $39372, unrealized at end $0) using [buy FundA, buy FundB, sell FundB, short IndexFuture]
+     day 5: buy FundB
+     day 5: sell IndexFuture short
+     day 385: buy FundA
+     day 385: sell FundB (bought day 5)
+saves $2244 (tax sold $39372, kept $39372, unrealized at end $0) using [buy FundA, buy IndexFuture, cover IndexFuture, sell FundA, short FundA, short IndexFuture]
+     day 5: sell IndexFuture short
+     day 5: buy FundA
+     day 364: sell FundA short
+     day 364: buy to close the IndexFuture short of day 5
+     day 385: sell FundA (bought day 5)
+     day 385: buy IndexFuture
+=== B3 no exposure, market up 30, other ST and LT gains 50k (regs true) ===
+positions examined 2606; final positions 649; families 152
+plain plan: tax (future value) if everything is sold at the end $65892; if the final position is kept $65892
+-- best families, everything sold at the end --
+saves $0 (tax sold $65892, kept $65892, unrealized at end $0) using [buy IndexFuture, cover FundA, cover FundB, short FundA, short FundB]
+     day 5: buy IndexFuture
+     day 5: sell FundB short
+     day 364: sell FundA short
+     day 364: buy to close the FundB short of day 5
+     day 385: buy to close the FundA short of day 364
+     day 385: sell FundA short
+saves $0 (tax sold $65892, kept $65892, unrealized at end $0) using [buy FundA, buy IndexFuture, sell IndexFuture, short FundB]
+     day 364: sell FundB short
+     day 364: buy IndexFuture
+     day 385: buy FundA
+     day 385: sell IndexFuture (bought day 364)
+-- best families, final position kept --
+saves $0 (tax sold $65892, kept $65892, unrealized at end $0) using [buy IndexFuture, cover FundA, cover FundB, short FundA, short FundB]
+     day 5: buy IndexFuture
+     day 5: sell FundB short
+     day 364: sell FundA short
+     day 364: buy to close the FundB short of day 5
+     day 385: buy to close the FundA short of day 364
+     day 385: sell FundA short
+saves $0 (tax sold $65892, kept $65892, unrealized at end $0) using [buy FundA, buy IndexFuture, sell IndexFuture, short FundB]
+     day 364: sell FundB short
+     day 364: buy IndexFuture
+     day 385: buy FundA
+     day 385: sell IndexFuture (bought day 364)
+=== B4 no exposure, market up 30, statute only (regs false) ===
+positions examined 2368; final positions 554; families 148
+plain plan: tax (future value) if everything is sold at the end $41616; if the final position is kept $41616
+-- best families, everything sold at the end --
+saves $5100 (tax sold $36516, kept $48756, unrealized at end $30000) using [buy FundA, cover FundB, short FundA, short FundB]
+     day 5: buy FundA
+     day 5: sell FundB short
+     day 385: sell FundA short
+     day 385: buy to close the FundB short of day 5
+saves $5100 (tax sold $36516, kept $48756, unrealized at end $-30000) using [buy FundB, sell FundB, short FundA]
+     day 5: buy FundB
+     day 5: sell FundA short
+     day 385: sell FundB (bought day 5)
+     day 385: buy FundB
+-- best families, final position kept --
+saves $5100 (tax sold $36516, kept $36516, unrealized at end $0) using [buy FundB, cover FundA, sell FundB, short FundA]
+     day 5: sell FundA short
+     day 5: buy FundB
+     day 364: sell FundA short
+     day 364: buy to close the FundA short of day 5
+     day 385: sell FundB (bought day 5)
+     day 385: buy to close the FundA short of day 364
+saves $5100 (tax sold $36516, kept $36516, unrealized at end $0) using [buy FundA, cover FundB, sell FundA, short FundB]
+     day 5: sell FundB short
+     day 5: buy FundA
+     day 385: buy to close the FundB short of day 5
+     day 385: sell FundA (bought day 5)
+=== C1 distributions, other ST gains 50k (regs true) ===
+positions examined 3723; final positions 283; families 14
+plain plan: tax (future value) if everything is sold at the end $42806; if the final position is kept $41616
+-- best families, everything sold at the end --
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell FundA, sell GainFund]
+     day 100: buy GainFund
+     day 100: sell FundA (bought day 5)
+     day 130: buy GainFund
+     day 130: sell GainFund (bought day 100)
+     day 195: sell GainFund (bought day 130)
+     day 195: buy DivStock
+     day 310: buy FundA
+     day 310: sell DivStock (bought day 195)
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy FundA, buy GainFund, sell FundA, sell GainFund]
+     day 120: buy GainFund
+     day 120: sell FundA (bought day 5)
+     day 310: sell GainFund (bought day 120)
+     day 310: buy FundA
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy GainFund, sell FundA, sell GainFund]
+     day 100: buy GainFund
+     day 100: sell FundA (bought day 5)
+     day 130: buy GainFund
+     day 130: sell GainFund (bought day 100)
+     day 310: sell GainFund (bought day 130)
+     day 310: buy DivStock
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell FundA, sell GainFund]
+     day 120: buy GainFund
+     day 120: sell FundA (bought day 5)
+     day 130: sell GainFund (bought day 120)
+     day 130: buy GainFund
+     day 195: sell GainFund (bought day 130)
+     day 195: buy FundA
+     day 310: sell FundA (bought day 195)
+     day 310: buy DivStock
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy GainFund, sell DivStock, sell FundA, sell GainFund]
+     day 100: buy GainFund
+     day 100: sell FundA (bought day 5)
+     day 130: buy GainFund
+     day 130: sell GainFund (bought day 100)
+     day 195: sell GainFund (bought day 130)
+     day 195: buy DivStock
+     day 310: sell DivStock (bought day 195)
+     day 310: buy GainFund
+saves $755 (tax sold $42051, kept $44091, unrealized at end $-5000) using [buy GainFund, sell FundA]
+     day 100: buy GainFund
+     day 100: sell FundA (bought day 5)
+saves $755 (tax sold $42051, kept $44091, unrealized at end $-5000) using [buy GainFund, sell FundA, sell GainFund]
+     day 120: buy GainFund
+     day 120: sell FundA (bought day 5)
+     day 195: buy GainFund
+     day 195: sell GainFund (bought day 120)
+saves $531 (tax sold $42275, kept $41085, unrealized at end $5000) using [buy DivStock, buy GainFund, sell DivStock, sell FundA]
+     day 100: buy DivStock
+     day 100: sell FundA (bought day 5)
+     day 195: buy GainFund
+     day 195: sell DivStock (bought day 100)
+saves $531 (tax sold $42275, kept $41085, unrealized at end $5000) using [buy DivStock, buy FundA, sell DivStock, sell FundA]
+     day 100: buy DivStock
+     day 100: sell FundA (bought day 5)
+     day 310: sell DivStock (bought day 100)
+     day 310: buy FundA
+saves $531 (tax sold $42275, kept $41085, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell FundA]
+     day 100: buy DivStock
+     day 100: sell FundA (bought day 5)
+     day 195: buy FundA
+     day 195: sell DivStock (bought day 100)
+     day 310: sell FundA (bought day 195)
+     day 310: buy GainFund
+-- best families, final position kept --
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell FundA, sell GainFund]
+     day 100: buy GainFund
+     day 100: sell FundA (bought day 5)
+     day 130: buy GainFund
+     day 130: sell GainFund (bought day 100)
+     day 195: sell GainFund (bought day 130)
+     day 195: buy DivStock
+     day 310: buy FundA
+     day 310: sell DivStock (bought day 195)
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy FundA, buy GainFund, sell FundA, sell GainFund]
+     day 120: buy GainFund
+     day 120: sell FundA (bought day 5)
+     day 310: sell GainFund (bought day 120)
+     day 310: buy FundA
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy GainFund, sell FundA, sell GainFund]
+     day 100: buy GainFund
+     day 100: sell FundA (bought day 5)
+     day 130: buy GainFund
+     day 130: sell GainFund (bought day 100)
+     day 310: sell GainFund (bought day 130)
+     day 310: buy DivStock
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell FundA, sell GainFund]
+     day 120: buy GainFund
+     day 120: sell FundA (bought day 5)
+     day 130: sell GainFund (bought day 120)
+     day 130: buy GainFund
+     day 195: sell GainFund (bought day 130)
+     day 195: buy FundA
+     day 310: sell FundA (bought day 195)
+     day 310: buy DivStock
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy GainFund, sell DivStock, sell FundA, sell GainFund]
+     day 100: buy GainFund
+     day 100: sell FundA (bought day 5)
+     day 130: buy GainFund
+     day 130: sell GainFund (bought day 100)
+     day 195: sell GainFund (bought day 130)
+     day 195: buy DivStock
+     day 310: sell DivStock (bought day 195)
+     day 310: buy GainFund
+saves $531 (tax sold $42275, kept $41085, unrealized at end $5000) using [buy DivStock, buy GainFund, sell DivStock, sell FundA]
+     day 100: buy DivStock
+     day 100: sell FundA (bought day 5)
+     day 195: buy GainFund
+     day 195: sell DivStock (bought day 100)
+saves $531 (tax sold $42275, kept $41085, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell FundA]
+     day 100: buy DivStock
+     day 100: sell FundA (bought day 5)
+     day 195: buy FundA
+     day 195: sell DivStock (bought day 100)
+     day 310: sell FundA (bought day 195)
+     day 310: buy GainFund
+saves $531 (tax sold $42275, kept $41085, unrealized at end $5000) using [buy DivStock, buy FundA, sell DivStock, sell FundA]
+     day 100: buy DivStock
+     day 100: sell FundA (bought day 5)
+     day 310: sell DivStock (bought day 100)
+     day 310: buy FundA
+saves $0 (tax sold $42806, kept $41616, unrealized at end $5000) using [buy DivStock, sell FundA]
+     day 130: buy DivStock
+     day 130: sell FundA (bought day 5)
+saves $0 (tax sold $42806, kept $41616, unrealized at end $5000) using [buy GainFund, sell FundA]
+     day 130: buy GainFund
+     day 130: sell FundA (bought day 5)
+=== C2 three days around a capital gain dividend, other ST gains 50k (regs true) ===
+positions examined 3706; final positions 269; families 14
+plain plan: tax (future value) if everything is sold at the end $42806; if the final position is kept $41616
+-- best families, everything sold at the end --
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell FundA, sell GainFund]
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 130: sell GainFund (bought day 129)
+     day 130: buy DivStock
+     day 131: buy GainFund
+     day 131: sell DivStock (bought day 130)
+     day 162: buy GainFund
+     day 162: sell GainFund (bought day 131)
+     day 330: buy FundA
+     day 330: sell GainFund (bought day 162)
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy FundA, buy GainFund, sell FundA, sell GainFund]
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 330: buy FundA
+     day 330: sell GainFund (bought day 129)
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy GainFund, sell FundA, sell GainFund]
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 162: sell GainFund (bought day 129)
+     day 162: buy GainFund
+     day 330: buy DivStock
+     day 330: sell GainFund (bought day 162)
+-- best families, final position kept --
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell FundA, sell GainFund]
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 130: sell GainFund (bought day 129)
+     day 130: buy DivStock
+     day 131: buy GainFund
+     day 131: sell DivStock (bought day 130)
+     day 162: buy GainFund
+     day 162: sell GainFund (bought day 131)
+     day 330: buy FundA
+     day 330: sell GainFund (bought day 162)
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy FundA, buy GainFund, sell FundA, sell GainFund]
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 330: buy FundA
+     day 330: sell GainFund (bought day 129)
+saves $1768 (tax sold $41038, kept $39848, unrealized at end $5000) using [buy DivStock, buy GainFund, sell FundA, sell GainFund]
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 162: sell GainFund (bought day 129)
+     day 162: buy GainFund
+     day 330: buy DivStock
+     day 330: sell GainFund (bought day 162)
+=== C3 capital loss + interest income; no regulations under 263(h)(4)(B) (regs false) ===
+positions examined 5810; final positions 2149; families 331
+plain plan: tax (future value) if everything is sold at the end $-2265; if the final position is kept $-2265
+-- best families, everything sold at the end --
+saves $4243 (tax sold $-6508, kept $-6508, unrealized at end $15000) using [buy DivStock, buy GainFund, sell GainFund, short GainFund]
+     day 120: sell GainFund short
+     day 120: buy GainFund
+     day 130: sell GainFund (bought day 120)
+     day 130: buy DivStock
+saves $4243 (tax sold $-6508, kept $-6508, unrealized at end $15000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell GainFund, short GainFund]
+     day 120: sell GainFund short
+     day 120: buy GainFund
+     day 130: sell GainFund (bought day 120)
+     day 130: buy DivStock
+     day 364: sell DivStock (bought day 130)
+     day 364: buy FundA
+-- best families, final position kept --
+saves $4243 (tax sold $-6508, kept $-6508, unrealized at end $15000) using [buy DivStock, buy GainFund, sell GainFund, short GainFund]
+     day 120: sell GainFund short
+     day 120: buy GainFund
+     day 130: sell GainFund (bought day 120)
+     day 130: buy DivStock
+saves $4243 (tax sold $-6508, kept $-6508, unrealized at end $15000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell GainFund, short GainFund]
+     day 120: sell GainFund short
+     day 120: buy GainFund
+     day 130: sell GainFund (bought day 120)
+     day 130: buy DivStock
+     day 364: sell DivStock (bought day 130)
+     day 364: buy FundA
+=== C4 capital loss + interest income; any hedge suspends the 263(h) period (regs true) ===
+positions examined 5613; final positions 2053; families 332
+plain plan: tax (future value) if everything is sold at the end $-2265; if the final position is kept $-2265
+-- best families, everything sold at the end --
+saves $0 (tax sold $-2265, kept $-2265, unrealized at end $5000) using [buy DivStock, buy GainFund, cover FundA, sell GainFund, short FundA, short GainFund]
+     day 120: sell FundA short
+     day 120: buy GainFund
+     day 130: sell GainFund (bought day 120)
+     day 130: buy to close the FundA short of day 120
+     day 364: sell GainFund short
+     day 364: buy DivStock
+saves $0 (tax sold $-2265, kept $-2265, unrealized at end $15000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell GainFund, short GainFund]
+     day 120: buy GainFund
+     day 120: sell GainFund short
+     day 130: sell GainFund (bought day 120)
+     day 130: buy DivStock
+     day 364: sell DivStock (bought day 130)
+     day 364: buy FundA
+-- best families, final position kept --
+saves $0 (tax sold $-2265, kept $-2265, unrealized at end $5000) using [buy DivStock, buy GainFund, cover FundA, sell GainFund, short FundA, short GainFund]
+     day 120: sell FundA short
+     day 120: buy GainFund
+     day 130: sell GainFund (bought day 120)
+     day 130: buy to close the FundA short of day 120
+     day 364: sell GainFund short
+     day 364: buy DivStock
+saves $0 (tax sold $-2265, kept $-2265, unrealized at end $15000) using [buy DivStock, buy FundA, buy GainFund, sell DivStock, sell GainFund, short GainFund]
+     day 120: buy GainFund
+     day 120: sell GainFund short
+     day 130: sell GainFund (bought day 120)
+     day 130: buy DivStock
+     day 364: sell DivStock (bought day 130)
+     day 364: buy FundA
+B1: nothing: tax $(some 41616)
+B1: long future + short FundB, closed day 385: tax $(some 38923)
+B2: long future + short FundB, closed day 385: tax $(some 41616)
+B1: the same, both legs closed on 31 December of year 1: tax $(some 41616)
+B3: long future + short FundB, closed day 385: tax $(some 66259)
+B1: long future + short FundA (same class), closed day 385: tax $(some 51163)
+C2: hold FundA: tax $(some 42806)
+C2: GainFund bought day 129, sold day 130: tax $(some 42806)
+C2: GainFund bought day 129, sold day 162: tax $(some 42806)
+C2: GainFund bought day 129, sold day 330 (201 days): tax $(some 41038)
+C2: GainFund bought day 129, sold and rebought day 130, sold day 162: tax $(some 41038)
+C2: GainFund bought day 129, sold and rebought day 130, sold day 131: tax $(some 45281)

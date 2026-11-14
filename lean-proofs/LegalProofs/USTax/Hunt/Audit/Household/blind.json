@@ -1,0 +1,41 @@
+{
+  "name": "Household",
+  "positions": 2226,
+  "positions_by_run": {"married": 126, "unmarried_text_only": 105, "unmarried_shared_limit_variant": 1995},
+  "baseline": {
+    "married": {"moves": ["split 20", "fileJoint"], "value": -5000.00, "carryforward": 7897.00},
+    "unmarried": {"moves": ["split 20 (A pays all)", "claim B", "fileA single", "fileB hoh"], "value": -3962.50, "carryforward": 9848.50},
+    "unmarried_both_single": {"value": -3048.50, "carryforward": 9848.50}
+  },
+  "best": {
+    "run": "unmarried (statute text only)",
+    "moves": ["split 7..13 (A pays $7k-$13k, B the rest)", "claim A", "fileA hoh", "fileB single"],
+    "value": -10000.00,
+    "carryforward": 6611.00,
+    "gain": 6037.50
+  },
+  "best_married": {"moves": ["any split", "fileJoint"], "value": -5000.00, "carryforward": 7897.00, "gain": 0},
+  "runners_up": [
+    {"run": "unmarried", "moves": ["split 8..13", "claim B", "fileA single", "fileB hoh"], "value": -10000.00, "carryforward": 6531.00},
+    {"run": "unmarried", "moves": ["split 8..13", "fileA single", "fileB single"], "value": -10000.00, "carryforward": 5617.00},
+    {"run": "unmarried", "moves": ["split 14", "claim B", "fileA single", "fileB hoh"], "value": -9962.50, "carryforward": 6568.50},
+    {"run": "unmarried, shared $17,280 variant", "moves": ["split 9", "claim A", "fileA hoh", "fileB single", "alloc 9000/8280"], "value": -10000.00, "carryforward": 3891.00, "gain": 6037.50},
+    {"run": "married", "moves": ["fileSeparate"], "value": 4383.00, "carryforward": 0}
+  ],
+  "judgment_calls": [
+    "Unmarried co-adopters are two taxpayers under the statute's words: each has a $17,280 cap and a $5,000 refundable amount. §23(i) only authorises regulations; shown as a variant.",
+    "In the shared-limit variant the one $17,280 is freely divisible between the two; (a)(4) is not shared because §23(i) does not name it.",
+    "A joint return is one taxpayer: one cap, one $5,000.",
+    "Head of household is open to the unmarried adult who claims the child, never both; §2(b)/§152 tests assumed met (not in the reading list).",
+    "Baseline is the best one-payer position, so the gain isolates the split.",
+    "The refundable $5,000 comes out of the credit first, before the §26(a) limit.",
+    "Tax from the rate schedule to the cent, no tax-table rounding."
+  ],
+  "silences": [
+    "§23 gives no rule for how non-spouse co-adopters share the (b)(1) or (a)(4) amounts; (i) leaves (b)(1) to regulations and omits (a)(4).",
+    "§23 does not require the child to be the claimant's dependent.",
+    "The listed text does not say whose payment it is when one adult funds the other's payment.",
+    "§23(c) carryforward base read as written: only the subpart A (nonrefundable) portion.",
+    "Five-year carryforward limit not modelled (single year)."
+  ]
+}

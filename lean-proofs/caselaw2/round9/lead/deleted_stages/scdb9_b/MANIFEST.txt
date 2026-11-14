@@ -1,0 +1,36 @@
+stage scdb9_b
+args: scdb9_b --delta round9/agents/scdb9/delta9_all --remove round9/agents/scdb9/delta9_remove.txt
+base: round8/stage/v8e
+base rows: treatments 45254, treatment_witness 6607, treatment_class 7921, history 184798, history_anchor 38755, history_claim 3134, joined 542, cert_text 273457, window_sha 529741, cite_index 102764, history_bridge 879, part_zone 0
+remove: 1 ids listed, 0 not in the base
+remove from base: history -1
+delta round9/agents/scdb9/delta9_all: cert_text_delta.tsv cite_index_delta.tsv history_anchor_delta.tsv history_claim_delta.tsv history_delta.tsv joined_delta.tsv treatment_class_delta.tsv treatments_delta.tsv window_sha_delta.tsv
+  treatments +0 (id present 0, wrong column count 0)
+  history +50 (id present 0, wrong column count 0)
+  treatment_witness +0 (no row 0, second line for an id 0, wrong column count 0)
+  treatment_class +0 (no row 0, second line for an id 0, wrong column count 0)
+  history_anchor +50 (no row 0, second line for an id 0, wrong column count 0)
+  history_claim +4 (no row 0, second line for an id and claim 0, wrong column count 0)
+  joined +0 (no row 0, same line 0, third line for an id 0, malformed 0)
+  cert_text +45 (key present with other content 0)
+  window_sha +45 (key present with other content 0)
+  cite_index +22 (skipped, would make a resolving key ambiguous 0)
+  history_bridge (extra) +0 (same line present 0)
+  part_zone (extra) +0 (same line present 0)
+cite_index compact keys with two nodes: 0
+doctrine class lines 17; compact labels with two targets 0
+treatments rows by id prefix: t 35161, t7 1979, t8 1482, ti 25, tw 6607
+history rows by id prefix: h 51559, h6 120183, h7 2759, h8 10296, h9 50
+treatments.tsv	45254 rows	sha1 206236cf340c0dbd0b5574a534df01d257098205	base (hard link)
+treatment_witness.tsv	6607 rows	sha1 3570179eed68b9fad4a6755bbb63f83b9cf01532	base (hard link)
+treatment_class.tsv	7921 rows	sha1 ce8bf6c44ffbd05e0dc760017473dd5d9c3208f1	base (hard link)
+history.tsv	184847 rows	sha1 e3282a8a49e9bf86f11ebbc21b56b1b8a7304fa0	written
+history_anchor.tsv	38805 rows	sha1 28fcfb924a178b9c999a4271de4e977dafc2b6b7	written
+history_claim.tsv	3138 rows	sha1 bae88bf7b689585fe4e50644ca76041c7f82b4b0	written
+joined.tsv	542 rows	sha1 aeba6ace46b90eaad0611dce82a5d6bdc5bbcae4	base (hard link)
+cert_text.tsv	273502 rows	sha1 fe004f193b1e8f52fbec017aa5b777071ff688eb	written
+window_sha.tsv	529786 rows	sha1 ecb8bddb8349c3f92eaa77063272797e50bb57f6	written
+cite_index.tsv	102786 rows	sha1 5cdf479f38200e67f743491fac05a5312e79d0bd	written
+history_bridge.tsv	879 rows	sha1 8bfc2cbcfa7e87d4c0b2cd80efe4b68148545f13	base (hard link)
+part_zone.tsv	0 rows	extra table, empty: not written
+hard links made for the other tables: 21

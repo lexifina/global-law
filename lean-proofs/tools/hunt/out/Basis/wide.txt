@@ -1,0 +1,156 @@
+
+===== 2b. P dies in year 1 (more than a year after a year-0 gift) =====
+  #0 stock of T: value 60000, basis 10000, held 3y
+  #1 stock of P: value 60000, basis 10000, held 3y
+  #2 stock of P: value 20000, basis 60000, held 3y
+baseline (owners sell, will to T): tax 207734
+positions 53016, finished plans 326, families 56, depth 10
+tax 199634 (saves 8100; gifts over the exclusion 22000; joint loss carryover left 0; 2 families)  [P sells, T sells, T→P gift, heir T]
+    y0 T gives #0 to P; y0 P sells #2; y1 P dies, heir T; y1 T sells #0; y1 T sells #1
+tax 199934 (saves 7800; gifts over the exclusion 22000; joint loss carryover left 0; 1 families)  [P sells, P→S sale, S sells, T sells, T→P gift, heir T]
+    y0 T gives #0 to P; y0 P sells #2 to S; y1 P sells #0; y1 P dies, heir T; y1 T sells #1; y1 S sells #2
+tax 200234 (saves 7500; gifts over the exclusion 22000; joint loss carryover left 0; 1 families)  [T sells, T→P gift, heir T]
+    y0 T gives #0 to P; y1 P dies, heir T; y1 T sells #0; y1 T sells #1; y1 T sells #2
+tax 201269 (saves 6465; gifts over the exclusion 22000; joint loss carryover left 0; 3 families)  [P sells, T→P gift, heir T]
+    y0 T gives #0 to P; y0 P sells #0; y0 P sells #2; y1 P sells #1; y1 P dies, heir T
+tax 203301 (saves 4433; gifts over the exclusion 22000; joint loss carryover left 0; 3 families)  [A sells, P sells, T sells, T→A gift, heir T]
+    y0 T gives #0 to A; y0 A sells #0; y0 P sells #2; y1 P dies, heir T; y1 T sells #1
+tax 203601 (saves 4133; gifts over the exclusion 22000; joint loss carryover left 0; 3 families)  [A sells, P sells, T→A gift, heir T]
+    y0 T gives #0 to A; y0 A sells #0; y0 P sells #2; y1 P sells #1; y1 P dies, heir T
+tax 203901 (saves 3833; gifts over the exclusion 22000; joint loss carryover left 0; 2 families)  [A sells, T sells, T→A gift, heir T]
+    y0 T gives #0 to A; y0 A sells #0; y1 P dies, heir T; y1 T sells #1; y1 T sells #2
+tax 204936 (saves 2798; gifts over the exclusion 23000; joint loss carryover left 0; 2 families)  [A sells, P sells, P→T gift, T sells, T→A gift, heir T]
+    y0 T gives #0 to A; y0 A sells #0; y0 P sells #1; y0 P gives #2 to T; y0 T sells #2; y1 P dies, heir T
+tax 206729 (saves 1005; gifts over the exclusion 22000; joint loss carryover left 0; 3 families)  [K sells, P sells, T sells, T→K gift, heir T]
+    y0 T gives #0 to K; y0 K sells #0; y0 P sells #2; y1 P dies, heir T; y1 T sells #1
+tax 206968 (saves 766; gifts over the exclusion 63000; joint loss carryover left 0; 2 families)  [A sells, P sells, P→A gift, T→A gift, heir T]
+    y0 T gives #0 to A; y0 A sells #0; y0 P gives #1 to A; y0 P sells #2; y1 A sells #1; y1 P dies, heir T
+tax 207029 (saves 705; gifts over the exclusion 22000; joint loss carryover left 0; 3 families)  [K sells, P sells, T→K gift, heir T]
+    y0 T gives #0 to K; y0 K sells #0; y0 P sells #2; y1 P sells #1; y1 P dies, heir T
+tax 207134 (saves 600; gifts over the exclusion 0; joint loss carryover left 0; 2 families)  [P sells, T sells, heir T]
+    y0 T sells #0; y0 P sells #2; y1 P dies, heir T; y1 T sells #1
+tax 207329 (saves 405; gifts over the exclusion 22000; joint loss carryover left 0; 2 families)  [K sells, T sells, T→K gift, heir T]
+    y0 T gives #0 to K; y0 K sells #0; y1 P dies, heir T; y1 T sells #1; y1 T sells #2
+tax 207434 (saves 300; gifts over the exclusion 0; joint loss carryover left 0; 1 families)  [P sells, P→S sale, S sells, T sells, heir T]
+    y0 T sells #0; y0 P sells #2 to S; y1 P sells #1; y1 P dies, heir T; y1 S sells #2
+
+===== 4b. QSBS, three blocks, four years, P dies in year 1 =====
+  #0 QSBS of T: value 12000000, basis 0, held 2y
+  #1 QSBS of T: value 12000000, basis 0, held 2y
+  #2 QSBS of T: value 12000000, basis 0, held 2y
+baseline (owners sell, will to T): tax 7591113
+positions 42855, finished plans 1185, families 18, depth 11
+tax 399298 (saves 7191815; gifts over the exclusion 23924000; joint loss carryover left 0; 5 families)  [T sells, T→P gift, heir T]
+    y0 T gives #0 to P; y0 T gives #1 to P; y1 P dies, heir T; y1 T sells #0; y1 T sells #1; y3 T sells #2
+tax 2079898 (saves 5511215; gifts over the exclusion 23924000; joint loss carryover left 0; 4 families)  [P sells, T sells, T→P gift, heir T]
+    y0 T gives #0 to P; y0 T gives #1 to P; y1 P sells #0; y1 P dies, heir T; y1 T sells #1; y3 T sells #2
+tax 2169385 (saves 5421728; gifts over the exclusion 23924000; joint loss carryover left 0; 2 families)  [A sells, T sells, T→A gift, heir T]
+    y0 T gives #0 to A; y0 T gives #1 to A; y1 P dies, heir T; y3 A sells #0; y3 A sells #1; y3 T sells #2
+tax 2190573 (saves 5400540; gifts over the exclusion 23924000; joint loss carryover left 0; 1 families)  [K sells, T sells, T→K gift, heir T]
+    y0 T gives #0 to K; y0 T gives #1 to K; y1 P dies, heir T; y3 K sells #0; y3 K sells #1; y3 T sells #2
+tax 3849985 (saves 3741128; gifts over the exclusion 35886000; joint loss carryover left 0; 1 families)  [A sells, P sells, T→A gift, T→P gift, heir T]
+    y0 T gives #0 to A; y0 T gives #1 to A; y0 T gives #2 to P; y1 P sells #2; y1 P dies, heir T; y3 A sells #0; y3 A sells #1
+tax 3871173 (saves 3719940; gifts over the exclusion 35886000; joint loss carryover left 0; 1 families)  [K sells, P sells, T→K gift, T→P gift, heir T]
+    y0 T gives #0 to K; y0 T gives #1 to K; y0 T gives #2 to P; y1 P sells #2; y1 P dies, heir T; y3 K sells #0; y3 K sells #1
+tax 4539472 (saves 3051641; gifts over the exclusion 35886000; joint loss carryover left 0; 1 families)  [A sells, T→A gift, heir T]
+    y0 T gives #0 to A; y0 A sells #0; y0 T gives #1 to A; y0 T gives #2 to A; y1 P dies, heir T; y3 A sells #1; y3 A sells #2
+tax 4581848 (saves 3009265; gifts over the exclusion 35886000; joint loss carryover left 0; 1 families)  [K sells, T→K gift, heir T]
+    y0 T gives #0 to K; y0 K sells #0; y0 T gives #1 to K; y0 T gives #2 to K; y1 P dies, heir T; y3 K sells #1; y3 K sells #2
+tax 4582928 (saves 3008185; gifts over the exclusion 0; joint loss carryover left 0; 1 families)  [T sells, heir T]
+    y0 T sells #0; y1 P dies, heir T; y3 T sells #1; y3 T sells #2
+tax 6668175 (saves 922938; gifts over the exclusion 35886000; joint loss carryover left 0; 1 families)  [P sells, T→P gift, heir T]
+    y0 T gives #0 to P; y0 P sells #0; y0 T gives #1 to P; y0 T gives #2 to P; y1 P sells #1; y1 P sells #2; y1 P dies, heir T
+
+===== 5a. home in three shares, three years =====
+  #0 home of T: value 500000, basis 100000, held 3y
+  #1 home of T: value 500000, basis 100000, held 3y
+  #2 home of T: value 500000, basis 100000, held 3y
+baseline (owners sell, will to T): tax 432166
+positions 33552, finished plans 681, families 21, depth 12
+tax 339906 (saves 92260; gifts over the exclusion 924000; joint loss carryover left 0; 1 families)  [K sells, P sells, T sells, T→K gift, T→P gift]
+    y0 T sells #0; y0 T gives #1 to K; y0 T gives #2 to P; y2 K sells #1; y2 P sells #2
+tax 369626 (saves 62540; gifts over the exclusion 462000; joint loss carryover left 0; 1 families)  [P sells, T sells, T→P gift]
+    y0 T sells #0; y0 T sells #1; y0 T gives #2 to P; y2 P sells #2
+tax 373978 (saves 58188; gifts over the exclusion 924000; joint loss carryover left 0; 1 families)  [A sells, P sells, T sells, T→A gift, T→P gift]
+    y0 T sells #0; y0 T gives #1 to A; y0 A sells #1; y0 T gives #2 to P; y2 P sells #2
+tax 374261 (saves 57905; gifts over the exclusion 462000; joint loss carryover left 0; 1 families)  [K sells, T sells, T→K gift]
+    y0 T sells #0; y0 T sells #1; y0 T gives #2 to K; y2 K sells #2
+tax 378613 (saves 53553; gifts over the exclusion 924000; joint loss carryover left 0; 1 families)  [A sells, K sells, T sells, T→A gift, T→K gift]
+    y0 T sells #0; y0 T gives #1 to K; y0 T gives #2 to A; y0 A sells #2; y2 K sells #1
+tax 389626 (saves 42540; gifts over the exclusion 1405000; joint loss carryover left 0; 1 families)  [A→T gift, P sells, T sells, T→A gift, T→P gift]
+    y0 T sells #0; y0 T gives #1 to A; y0 A gives #1 to T; y0 T sells #1; y0 T gives #2 to P; y2 P sells #2
+tax 394261 (saves 37905; gifts over the exclusion 1405000; joint loss carryover left 0; 1 families)  [A→T gift, K sells, T sells, T→A gift, T→K gift]
+    y0 T sells #0; y0 T gives #1 to K; y0 T gives #2 to A; y0 A gives #2 to T; y0 T sells #2; y2 K sells #1
+tax 394866 (saves 37300; gifts over the exclusion 1386000; joint loss carryover left 0; 1 families)  [K sells, P sells, T→K gift, T→P gift]
+    y0 T gives #0 to K; y0 T gives #1 to P; y0 P sells #1; y0 T gives #2 to P; y2 K sells #0; y2 P sells #2
+tax 396073 (saves 36093; gifts over the exclusion 1386000; joint loss carryover left 0; 1 families)  [A sells, K sells, P sells, T→A gift, T→K gift, T→P gift]
+    y0 T gives #0 to K; y0 T gives #1 to A; y0 A sells #1; y0 T gives #2 to P; y2 K sells #0; y2 P sells #2
+tax 408333 (saves 23833; gifts over the exclusion 462000; joint loss carryover left 0; 1 families)  [A sells, T sells, T→A gift]
+    y0 T sells #0; y0 T sells #1; y0 T gives #2 to A; y0 A sells #2
+
+===== 5b. home in three shares, P dies in year 0 =====
+  #0 home of T: value 500000, basis 100000, held 3y
+  #1 home of T: value 500000, basis 100000, held 3y
+  #2 home of T: value 500000, basis 100000, held 3y
+baseline (owners sell, will to T): tax 430996
+positions 93504, finished plans 581, families 45, depth 13
+tax 299181 (saves 131815; gifts over the exclusion 1386000; joint loss carryover left 0; 2 families)  [A sells, T→P gift, heir A]
+    y0 T gives #0 to P; y0 T gives #1 to P; y0 T gives #2 to P; y0 P dies, heir A; y0 A sells #0; y0 A sells #1; y0 A sells #2
+tax 321276 (saves 109720; gifts over the exclusion 1386000; joint loss carryover left 0; 2 families)  [A sells, K sells, T→K gift, T→P gift, heir A]
+    y0 T gives #0 to K; y0 T gives #1 to P; y0 T gives #2 to P; y0 P dies, heir A; y0 A sells #1; y0 A sells #2; y2 K sells #0
+tax 354141 (saves 76855; gifts over the exclusion 1386000; joint loss carryover left 0; 2 families)  [A sells, P sells, T→P gift, heir A]
+    y0 T gives #0 to P; y0 P sells #0; y0 T gives #1 to P; y0 T gives #2 to P; y0 P dies, heir A; y0 A sells #1; y0 A sells #2
+tax 355348 (saves 75648; gifts over the exclusion 1386000; joint loss carryover left 0; 2 families)  [A sells, T→A gift, T→P gift, heir A]
+    y0 T gives #0 to A; y0 A sells #0; y0 T gives #1 to P; y0 T gives #2 to P; y0 P dies, heir A; y0 A sells #1; y0 A sells #2
+tax 370996 (saves 60000; gifts over the exclusion 1405000; joint loss carryover left 0; 2 families)  [A→P gift, T sells, T→A gift, T→P gift, heir T]
+    y0 T sells #0; y0 T gives #1 to A; y0 A gives #1 to P; y0 T gives #2 to P; y0 P dies, heir T; y0 T sells #2; y2 T sells #1
+tax 373091 (saves 57905; gifts over the exclusion 462000; joint loss carryover left 0; 1 families)  [K sells, T sells, T→K gift, heir T]
+    y0 T sells #0; y0 T sells #1; y0 T gives #2 to K; y0 P dies, heir T; y2 K sells #2
+tax 376236 (saves 54760; gifts over the exclusion 1386000; joint loss carryover left 0; 2 families)  [A sells, K sells, P sells, T→K gift, T→P gift, heir A]
+    y0 T gives #0 to K; y0 T gives #1 to P; y0 P sells #1; y0 T gives #2 to P; y0 P dies, heir A; y0 A sells #2; y2 K sells #0
+tax 377443 (saves 53553; gifts over the exclusion 924000; joint loss carryover left 0; 2 families)  [A sells, K sells, T sells, T→A gift, T→K gift, heir T]
+    y0 T sells #0; y0 T gives #1 to K; y0 T gives #2 to A; y0 A sells #2; y0 P dies, heir T; y2 K sells #1
+tax 393091 (saves 37905; gifts over the exclusion 924000; joint loss carryover left 0; 3 families)  [K sells, T sells, T→K gift, T→P gift, heir T]
+    y0 T sells #0; y0 T gives #1 to K; y0 T gives #2 to P; y0 P dies, heir T; y0 T sells #2; y2 K sells #1
+tax 400456 (saves 30540; gifts over the exclusion 1405000; joint loss carryover left 0; 1 families)  [A→T gift, K sells, T sells, T→A gift, T→K gift, heir T]
+    y0 T sells #0; y0 T gives #1 to K; y0 T gives #2 to A; y0 P dies, heir T; y1 A gives #2 to T; y2 K sells #1; y2 T sells #2
+
+===== 6. wider: four lots, pledge, P dies in year 1 =====
+  #0 stock of T: value 60000, basis 10000, held 3y
+  #1 stock of T: value 30000, basis 10000, held 0y
+  #2 stock of T: value 20000, basis 50000, held 3y
+  #3 stock of P: value 60000, basis 10000, held 3y
+baseline (owners sell, will to T): tax 200818
+positions 3418562, finished plans 9458, families 262, depth 14
+tax 188829 (saves 11989; gifts over the exclusion 22000; joint loss carryover left 4000; 4 families)  [T sells, T→P gift, donate cash, heir T]
+    y0 T gives #0 to P; y0 T sells #1; y0 T sells #2; y0 donate cash; y1 P dies, heir T; y1 T sells #0; y1 T sells #3
+tax 189129 (saves 11689; gifts over the exclusion 22000; joint loss carryover left 24000; 5 families)  [P sells, T sells, T→P gift, donate property, heir T]
+    y0 T gives #0 to P; y0 T sells #2; y1 P sells #0; y1 donate #1; y1 P dies, heir T; y1 T sells #3
+tax 189544 (saves 11274; gifts over the exclusion 23000; joint loss carryover left 4000; 3 families)  [P→T gift, S→P sale, T sells, T→P gift, T→S gift, donate cash, donate property, heir T]
+    y0 T gives #0 to P; y0 T sells #1; y0 T gives #2 to S; y0 S sells #2 to P; y0 P gives #2 to T; y0 donate #2; y1 donate cash; y1 P dies, heir T; y1 T sells #0; y1 T sells #3
+tax 189844 (saves 10974; gifts over the exclusion 23000; joint loss carryover left 24000; 1 families)  [A sells, P sells, P→T gift, S→P sale, T sells, T→A gift, T→P gift, T→S gift, donate cash, donate property, heir T]
+    y0 T gives #0 to P; y0 T gives #1 to A; y0 T gives #2 to S; y0 S sells #2 to P; y0 P gives #2 to T; y0 donate #2; y1 P sells #0; y1 A sells #1; y1 donate cash; y1 P dies, heir T; y1 T sells #3
+tax 190754 (saves 10064; gifts over the exclusion 22000; joint loss carryover left 0; 4 families)  [T sells, T→P gift, donate cash, donate property, heir T]
+    y0 T gives #0 to P; y0 T gives #1 to P; y0 donate #2; y0 donate cash; y1 P dies, heir T; y1 T sells #0; y1 T sells #1; y1 T sells #3
+tax 191054 (saves 9764; gifts over the exclusion 22000; joint loss carryover left 0; 4 families)  [K sells, P sells, T sells, T→K gift, T→P gift, donate cash, heir T]
+    y0 T gives #0 to P; y0 T gives #1 to P; y0 P sells #1; y0 T gives #2 to K; y0 donate cash; y1 P sells #3; y1 P dies, heir T; y1 T sells #0; y1 K sells #2
+tax 191179 (saves 9639; gifts over the exclusion 23000; joint loss carryover left 24000; 1 families)  [A sells, P sells, P→T gift, S→P sale, T→A gift, T→P gift, T→S gift, donate cash, donate property, heir T]
+    y0 T gives #0 to P; y0 P sells #0; y0 T gives #1 to A; y0 T gives #2 to S; y0 S sells #2 to P; y0 P gives #2 to T; y0 donate #2; y1 A sells #1; y1 P sells #3; y1 donate cash; y1 P dies, heir T
+tax 191424 (saves 9394; gifts over the exclusion 22000; joint loss carryover left 24000; 1 families)  [K sells, T sells, T→K gift, T→P gift, donate cash, heir T]
+    y0 T gives #0 to P; y0 T gives #1 to K; y0 T sells #2; y0 donate cash; y1 K sells #1; y1 P dies, heir T; y1 T sells #0; y1 T sells #3
+tax 191724 (saves 9094; gifts over the exclusion 22000; joint loss carryover left 24000; 1 families)  [K sells, P sells, S→P sale, T sells, T→K gift, T→P gift, T→S gift, donate cash, heir T]
+    y0 T gives #0 to P; y0 T gives #1 to K; y0 T gives #2 to S; y0 S sells #2 to P; y0 donate cash; y1 K sells #1; y1 P sells #3; y1 P dies, heir T; y1 T sells #0; y1 T sells #2
+tax 192139 (saves 8679; gifts over the exclusion 23000; joint loss carryover left 24000; 1 families)  [K sells, P→T gift, S→P sale, T sells, T→K gift, T→P gift, T→S gift, donate cash, donate property, heir T]
+    y0 T gives #0 to P; y0 T gives #1 to K; y0 T gives #2 to S; y0 S sells #2 to P; y0 P gives #2 to T; y0 donate #2; y1 K sells #1; y1 donate cash; y1 P dies, heir T; y1 T sells #0; y1 T sells #3
+tax 192389 (saves 8429; gifts over the exclusion 22000; joint loss carryover left 0; 3 families)  [K sells, P sells, T→K gift, T→P gift, donate property, heir T]
+    y0 T gives #0 to P; y0 P sells #0; y0 T gives #2 to K; y0 K sells #2; y1 donate #1; y1 P sells #3; y1 P dies, heir T
+tax 192439 (saves 8379; gifts over the exclusion 23000; joint loss carryover left 24000; 1 families)  [K sells, P sells, P→T gift, S→P sale, T sells, T→K gift, T→P gift, T→S gift, donate cash, donate property, heir T]
+    y0 T gives #0 to P; y0 T gives #1 to K; y0 T gives #2 to S; y0 S sells #2 to P; y0 P gives #2 to T; y0 donate #2; y1 P sells #0; y1 K sells #1; y1 donate cash; y1 P dies, heir T; y1 T sells #3
+tax 192496 (saves 8322; gifts over the exclusion 22000; joint loss carryover left 4000; 11 families)  [A sells, T sells, T→A gift, donate cash, heir T]
+    y0 T gives #0 to A; y0 A sells #0; y0 T sells #1; y0 T sells #2; y0 donate cash; y1 P dies, heir T; y1 T sells #3
+tax 192796 (saves 8022; gifts over the exclusion 22000; joint loss carryover left 4000; 7 families)  [A sells, P sells, T sells, T→A gift, donate cash, heir T]
+    y0 T gives #0 to A; y0 A sells #0; y0 T sells #1; y0 T sells #2; y0 donate cash; y1 P sells #3; y1 P dies, heir T
+tax 192829 (saves 7989; gifts over the exclusion 23000; joint loss carryover left 24000; 1 families)  [P sells, P→T gift, S→P sale, T→P gift, T→S gift, donate cash, donate property, heir T]
+    y0 T gives #0 to P; y0 P sells #0; y0 T gives #1 to P; y0 T gives #2 to S; y0 S sells #2 to P; y0 P gives #2 to T; y0 donate #2; y0 P sells #3; y1 P sells #1; y1 donate cash; y1 P dies, heir T
+tax 193211 (saves 7607; gifts over the exclusion 23000; joint loss carryover left 4000; 4 families)  [A sells, P→T gift, S→P sale, T sells, T→A gift, T→S gift, donate cash, donate property, heir T]
+    y0 T gives #0 to A; y0 A sells #0; y0 T sells #1; y0 T gives #2 to S; y0 S sells #2 to P; y0 P gives #2 to T; y0 donate #2; y1 donate cash; y1 P dies, heir T; y1 T sells #3

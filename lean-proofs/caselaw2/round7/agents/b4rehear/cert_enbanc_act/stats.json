@@ -1,0 +1,102 @@
+{
+ "args": [
+  "--rows",
+  "round7/agents/b4rehear/rows_enbanc_act.jsonl",
+  "--out",
+  "round7/agents/b4rehear/cert_enbanc_act",
+  "--procs",
+  "22"
+ ],
+ "base": "~/Documents/us-caselaw-lean-work/caselaw-lean-2/round6/history/stage/final2",
+ "cue_source": {
+  "hist": "cue_table.json",
+  "disqualify_hist": "cue_table.json",
+  "anchor": "cue_table.json",
+  "disqualify_anchor": "cue_table.json",
+  "disqualify_treat": "cue_table.json",
+  "operative": "cue_table.json",
+  "disqualify_operative": "cue_table.json",
+  "treat": "cue_table.json",
+  "anaphor": "cue_table.json",
+  "doctrine_tie": "cue_table.json",
+  "doctrine_reject": "cue_table.json",
+  "disqualify_joined": "cue_table.json",
+  "order_line": "cue_table.json",
+  "set_aside": "cue_table.json",
+  "order_head_from": "cue_table.json",
+  "joined_gap_max": "cue_table.json",
+  "order_head_max_len": "cue_table.json"
+ },
+ "scotus_court_id": 2906,
+ "order_head_from": 20130101,
+ "joined_gap_max": 300,
+ "counts": {
+  "admitted": 437,
+  "admitted:history": 437,
+  "admitted:history:claim:-": 437,
+  "alias_keys_added": 0,
+  "cite_collisions": 0,
+  "cite_index_lines": 50,
+  "claim_setAside_other_kind": 0,
+  "in_base_skipped:history": 2,
+  "input:history": 439,
+  "input_rows": 439,
+  "rejected": 0,
+  "texts_read": 435,
+  "windows": 739
+ },
+ "admitted_by_kind": {
+  "history:modified": 1,
+  "history:reinstated": 18,
+  "history:reversed": 2,
+  "history:vacated": 378,
+  "history:withdrawn": 38
+ },
+ "alias_keys_added_by_form": {},
+ "by_rule": {
+  "r7rehear:enbanc:c-revpanel-cite-ctx": {
+   "admitted": 2,
+   "admitted:reversed": 2,
+   "input": 2
+  },
+  "r7rehear:enbanc:c-vac-cite-ctx": {
+   "admitted": 97,
+   "admitted:reinstated": 5,
+   "admitted:vacated": 91,
+   "admitted:withdrawn": 1,
+   "in_base_skipped": 2,
+   "input": 99
+  },
+  "r7rehear:enbanc:c-vac-cite-head": {
+   "admitted": 1,
+   "admitted:vacated": 1,
+   "input": 1
+  },
+  "r7rehear:enbanc:c-vac-cite-sent": {
+   "admitted": 79,
+   "admitted:reinstated": 7,
+   "admitted:vacated": 45,
+   "admitted:withdrawn": 27,
+   "input": 79
+  },
+  "r7rehear:enbanc:c-vac-docket": {
+   "admitted": 258,
+   "admitted:modified": 1,
+   "admitted:reinstated": 6,
+   "admitted:vacated": 241,
+   "admitted:withdrawn": 10,
+   "input": 258
+  }
+ },
+ "sha1": {
+  "treatments_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "treatment_class_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "joined_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "history_delta.tsv": "8481f75ed3b2fef35b54a80d3a1913f82c5ad3e3",
+  "history_anchor_delta.tsv": "9fed21b87ae67f6374d6a0a774a9986a274f1b33",
+  "history_claim_delta.tsv": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+  "cert_text_delta.tsv": "fd7eb3e2f1ea22e30659629b5e567635ef7b14fa",
+  "window_sha_delta.tsv": "c46ea321ae074b5cda964d093eb3b35e380cd471",
+  "cite_index_delta.tsv": "b6f6caac910335c36328d275834325f17a5cdd5e"
+ }
+}

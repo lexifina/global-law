@@ -1,0 +1,67 @@
+=== digital: 10-month horizon, other ST gains (regs true) ===
+positions examined 4073; final positions 803; families 220
+plain plan: tax (future value) if everything is sold at the end $52224; if the final position is kept $52224
+-- best families, everything sold at the end --
+saves $6692 (tax sold $45532, kept $63892, unrealized at end $-45000) using [buy Coin, buy CoinFuture, sell CoinFuture, short Coin]
+     day 5: buy CoinFuture
+     day 150: sell Coin short
+     day 150: buy CoinFuture
+     day 300: sell CoinFuture (bought day 150)
+     day 364: sell CoinFuture (bought day 5)
+     day 364: buy Coin
+saves $6692 (tax sold $45532, kept $63892, unrealized at end $-45000) using [buy CoinFuture, buy CoinTrust, sell CoinFuture, short Coin]
+     day 5: buy CoinFuture
+     day 150: sell Coin short
+     day 150: buy CoinFuture
+     day 300: sell CoinFuture (bought day 150)
+     day 364: sell CoinFuture (bought day 5)
+     day 364: buy CoinTrust
+saves $6692 (tax sold $45532, kept $63892, unrealized at end $-45000) using [buy Coin, buy CoinFuture, sell CoinFuture, short CoinTrust]
+     day 5: buy CoinFuture
+     day 150: sell CoinTrust short
+     day 150: buy CoinFuture
+     day 300: sell CoinFuture (bought day 5)
+     day 364: sell CoinFuture (bought day 150)
+     day 364: buy Coin
+saves $6692 (tax sold $45532, kept $63892, unrealized at end $-45000) using [buy CoinFuture, cover CoinTrust, sell CoinFuture, short CoinTrust]
+     day 5: buy CoinFuture
+     day 150: sell CoinTrust short
+     day 150: buy CoinFuture
+     day 300: sell CoinFuture (bought day 150)
+     day 364: sell CoinTrust short
+     day 364: buy to close the CoinTrust short of day 150
+saves $6692 (tax sold $45532, kept $63892, unrealized at end $-45000) using [buy CoinFuture, sell CoinFuture, short Coin]
+     day 5: buy CoinFuture
+     day 150: buy CoinFuture
+     day 150: sell Coin short
+     day 300: sell CoinFuture (bought day 5)
+-- best families, final position kept --
+saves $19095 (tax sold $51489, kept $33129, unrealized at end $45000) using [buy Coin, buy CoinFuture, sell CoinFuture, short Coin]
+     day 5: buy CoinFuture
+     day 150: buy Coin
+     day 150: sell CoinFuture (bought day 5)
+     day 300: sell Coin short
+saves $19095 (tax sold $51489, kept $33129, unrealized at end $45000) using [buy Coin, sell Coin, short Coin]
+     day 5: buy Coin
+     day 150: sell Coin (bought day 5)
+     day 150: buy Coin
+     day 300: sell Coin short
+saves $19095 (tax sold $51489, kept $33129, unrealized at end $45000) using [buy Coin, buy CoinFuture, cover CoinFuture, sell CoinFuture, short Coin, short CoinFuture]
+     day 5: buy CoinFuture
+     day 150: buy Coin
+     day 150: sell CoinFuture (bought day 5)
+     day 300: sell CoinFuture short
+     day 364: buy to close the CoinFuture short of day 300
+     day 364: sell Coin short
+saves $19095 (tax sold $51489, kept $33129, unrealized at end $45000) using [buy Coin, buy CoinTrust, sell CoinTrust, short Coin]
+     day 5: buy CoinTrust
+     day 150: sell CoinTrust (bought day 5)
+     day 150: buy Coin
+     day 300: sell Coin short
+saves $19095 (tax sold $51489, kept $33129, unrealized at end $45000) using [buy Coin, buy CoinFuture, cover CoinTrust, sell CoinFuture, short CoinTrust]
+     day 5: buy CoinFuture
+     day 150: buy Coin
+     day 150: sell CoinFuture (bought day 5)
+     day 300: sell CoinTrust short
+     day 364: buy to close the CoinTrust short of day 300
+     day 364: sell CoinTrust short

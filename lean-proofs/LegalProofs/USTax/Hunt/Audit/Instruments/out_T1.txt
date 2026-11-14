@@ -1,0 +1,25 @@
+T1 strict: hold FundA: tax $(some 42806)
+T1 strict: PLAN: tax $(some 41038)
+T1 strict: sold day 162, no wash: tax $(some 42806)
+T1 strict: hold 201 days: tax $(some 41038)
+T1 strict, search: positions 3704, finals 269, plain $42806, best $41038, saves $1768
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 330: buy DivStock
+     day 330: sell GainFund (bought day 129)
+T1 six=181: PLAN: tax $(some 41038)
+T1 six=184: PLAN: tax $(some 41038)
+T1 six=200: PLAN: tax $(some 41038)
+T1 six=200: hold 201 days: tax $(some 42806)
+T1 six=201: hold 201 days: tax $(some 42806)
+T1 six=201: PLAN: tax $(some 41038)
+T1 strict: sold day 130 into FundA, GainFund rebought day 131, sold day 162: tax $(some 41038)
+T1 strict, double-up: second lot bought day 130, first lot sold day 131, second sold day 162: tax $(some 41038)
+T1 strict, double-up: hold FundA: tax $none
+T1 strict: PLAN but final sale day 131: tax $(some 45281)
+T1 g=0: hold FundA: tax $(some 1190)
+T1 g=0: PLAN: tax $(some 1190)
+T1 g=5000: hold FundA: tax $(some 5351)
+T1 g=5000: PLAN: tax $(some 4467)
+T1 gLT=50000: hold FundA: tax $(some 67082)
+T1 gLT=50000: PLAN: tax $(some 65314)

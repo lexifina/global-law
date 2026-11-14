@@ -1,0 +1,14 @@
+==== conservation: A ====
+steps checked: 614278; phase ends checked: 49724; positions breaking a limit (exemption, credit, basis>value): 0
+value not conserved in a step, by kind (count, max dev $): []
+basis increased in a step, by kind (count, max $): [(trust-tuition, (2845, 600000)), (529, (5820, 380000)), (tuition, (3717, 600000))]
+phase ends not conserving: [(estate: money created, (900, 4444551))]
+   e.g. estate: money created: dev 2083265 at t=0, port=true, eSp=0 eT=0 eC=0 eK=0 eQ=0 own=0/0/42082550 q=7287950 gtax3=5208164/0/0 incl=0/0/0
+   e.g. estate: money created: dev 2083265 at t=0, port=false, eSp=0 eT=0 eC=0 eK=0 eQ=0 own=0/0/42082550 q=7287950 gtax3=5208164/0/0 incl=0/0/0
+   e.g. estate: money created: dev 2083265 at t=0, port=true, eSp=0 eT=0 eC=0 eK=0 eQ=0 own=0/0/44622550 q=7287950 gtax3=5208164/0/0 incl=0/0/0
+   e.g. estate: money created: dev 2083265 at t=0, port=false, eSp=0 eT=0 eC=0 eK=0 eQ=0 own=0/0/44622550 q=7287950 gtax3=5208164/0/0 incl=0/0/0
+end plans 100: max(holdings+tax paid)=470034989; max wealth=327664217; min transfer tax=27586301; untaxed growth bound=543611148
+
+real	1m24.965s
+user	0m0.030s
+sys	0m0.452s

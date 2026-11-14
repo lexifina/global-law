@@ -1,0 +1,64 @@
+stage calpart9_v2
+args: calpart9_v2 --delta round9/agents/calpart9/cert_pjt --delta round9/agents/calpart9/cert_pjr --delta round9/agents/calpart9/cert_recut --remove round9/agents/calpart9/cert_recut/remove_ids.txt --replace round9/agents/calpart9/cert_recut/replace_part.tsv
+base: round8/stage/v8e
+base rows: treatments 45254, treatment_witness 6607, treatment_class 7921, history 184798, history_anchor 38755, history_claim 3134, joined 542, cert_text 273457, window_sha 529741, cite_index 102764, history_bridge 879, part_zone 0
+remove: 137 ids listed, 0 not in the base
+remove from base: history -137
+delta round9/agents/calpart9/cert_pjt: cert_text_delta.tsv cite_index_delta.tsv history_anchor_delta.tsv history_claim_delta.tsv history_delta.tsv joined_delta.tsv treatment_class_delta.tsv treatments_delta.tsv window_sha_delta.tsv
+  treatments +23 (id present 0, wrong column count 0)
+  history +0 (id present 0, wrong column count 0)
+  treatment_witness +0 (no row 0, second line for an id 0, wrong column count 0)
+  treatment_class +0 (no row 0, second line for an id 0, wrong column count 0)
+  history_anchor +0 (no row 0, second line for an id 0, wrong column count 0)
+  history_claim +0 (no row 0, second line for an id and claim 0, wrong column count 0)
+  joined +1 (no row 0, same line 0, third line for an id 0, malformed 0)
+  cert_text +24 (key present with other content 0)
+  window_sha +22 (key present with other content 0)
+  cite_index +10 (skipped, would make a resolving key ambiguous 0)
+  history_bridge (extra) +0 (same line present 0)
+  part_zone (extra) +0 (same line present 0)
+delta round9/agents/calpart9/cert_pjr: cert_text_delta.tsv cite_index_delta.tsv history_anchor_delta.tsv history_claim_delta.tsv history_delta.tsv joined_delta.tsv treatment_class_delta.tsv treatments_delta.tsv window_sha_delta.tsv
+  treatments +0 (id present 0, wrong column count 0)
+  history +14 (id present 0, wrong column count 0)
+  treatment_witness +0 (no row 0, second line for an id 0, wrong column count 0)
+  treatment_class +0 (no row 0, second line for an id 0, wrong column count 0)
+  history_anchor +0 (no row 0, second line for an id 0, wrong column count 0)
+  history_claim +0 (no row 0, second line for an id and claim 0, wrong column count 0)
+  joined +0 (no row 0, same line 0, third line for an id 0, malformed 0)
+  cert_text +14 (key present with other content 0)
+  window_sha +14 (key present with other content 0)
+  cite_index +14 (skipped, would make a resolving key ambiguous 0)
+  history_bridge (extra) +0 (same line present 0)
+  part_zone (extra) +0 (same line present 0)
+delta round9/agents/calpart9/cert_recut: cert_text_delta.tsv cite_index_delta.tsv history_anchor_delta.tsv history_claim_delta.tsv history_delta.tsv joined_delta.tsv treatment_class_delta.tsv treatments_delta.tsv window_sha_delta.tsv
+  treatments +0 (id present 0, wrong column count 0)
+  history +137 (id present 0, wrong column count 0)
+  treatment_witness +0 (no row 0, second line for an id 0, wrong column count 0)
+  treatment_class +0 (no row 0, second line for an id 0, wrong column count 0)
+  history_anchor +15 (no row 0, second line for an id 0, wrong column count 0)
+  history_claim +0 (no row 0, second line for an id and claim 0, wrong column count 0)
+  joined +0 (no row 0, same line 0, third line for an id 0, malformed 0)
+  cert_text +152 (key present with other content 0)
+  window_sha +152 (key present with other content 0)
+  cite_index +0 (skipped, would make a resolving key ambiguous 0)
+  history_bridge (extra) +0 (same line present 0)
+  part_zone (extra) +0 (same line present 0)
+  NOTE: round9/agents/calpart9/cert_recut/remove_ids.txt lists 137 ids; not applied (pass it with --remove)
+replace round9/agents/calpart9/cert_recut/replace_part.tsv: history 14 rows changed, 0 identical, 0 ids not present
+cite_index compact keys with two nodes: 0
+doctrine class lines 17; compact labels with two targets 0
+treatments rows by id prefix: t 35161, t7 1979, t8 1482, t9 23, ti 25, tw 6607
+history rows by id prefix: h 51422, h6 120184, h7 2759, h8 10296, h9 151
+treatments.tsv	45277 rows	sha1 9f93c35f86be8876bc4992e43ed6a1eae5718383	written
+treatment_witness.tsv	6607 rows	sha1 3570179eed68b9fad4a6755bbb63f83b9cf01532	base (hard link)
+treatment_class.tsv	7921 rows	sha1 ce8bf6c44ffbd05e0dc760017473dd5d9c3208f1	base (hard link)
+history.tsv	184812 rows	sha1 43bc16a55a1251265f97f24891523b080adc0709	written
+history_anchor.tsv	38770 rows	sha1 ca6630f206b8fd59a3284db593f8a7d10354fe22	written
+history_claim.tsv	3134 rows	sha1 efd4f0d28ea38a941891eb0262abc8c104cd8e1e	base (hard link)
+joined.tsv	543 rows	sha1 ff976bcb96d3512c7b5eec5b59c607a10a6853b4	written
+cert_text.tsv	273647 rows	sha1 d10443dc73aecba20b672203846fe016fea29b6b	written
+window_sha.tsv	529929 rows	sha1 729b36e5940f958bd7c0274324f6e594dca53f8e	written
+cite_index.tsv	102788 rows	sha1 209a91978c0602cf1c141e3906fe852c6056c97d	written
+history_bridge.tsv	879 rows	sha1 8bfc2cbcfa7e87d4c0b2cd80efe4b68148545f13	base (hard link)
+part_zone.tsv	0 rows	extra table, empty: not written
+hard links made for the other tables: 21

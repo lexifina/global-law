@@ -592,3 +592,25 @@ inconsistent only there.
 - `Exec/Verdicts.lean` `candFor`: a writ-refused decision ranks as the court of last resort's.
 - `Mutants.lean`: property "checkWitness_sound / witness_row_no_effect", mutant M27. Matrix 27 × 27.
 - No locked statement changed. 141 theorems; no `sorry`, `axiom` or `native_decide`.
+
+## Round 5 (13 Nov 2026)
+
+175 theorems (141 + 34), 34 mutants x 35 properties, locked (`audit.py lock`, `check`: 0 problems). New:
+`Spec/Recognised.lean` (recognised overrulings: never negative before the later court's date, never without its
+power, order independence, agreement with an explicit row from that date, never weakens; demoted scope never
+negative), the round-5 section of `Certificate.lean` (`Mode`, `checkRecognised`, `checkOperative`, `classOf`,
+`recogOf`), `Findings.citedRecognisedLater`, `Examples.plessy_timeline`, mutants M28-M34. Runner: optional
+`treatment_class.tsv` turns on round-5 output (`classes.tsv`, `oclass` columns); without it the output is round 4's
+byte for byte (`wsl/r5_base.sh`). Details: `round5/DESIGN5.md`, `round5/ROUND5.md`.
+
+## Round 6: anchored history rows (13 Nov 2026; `round6/history/DESIGN6.md` §4, `round6/history/LEAN6.md`)
+
+183 theorems (175 + 8), 40 mutants x 41 properties, locked (`audit.py check`: 0 changes, 0 problems; the lock
+shows additions only). `Certificate.lean`: `Anchor`, `checkAnchored`, `checkHistory`, five reason codes
+(`anchorMismatch`, `anchorNoCue`, `anchorDisqualified`, `anchorUnresolved`, `anchorPart`); theorems
+`checkAnchored_sound`, `_disposition`, `_cite_index`, `_window_hash`, `_quote_nonempty`, `_admitted_iff`,
+`checkHistory_no_anchor`, `checkHistory_anchored`. Cue table keys `anchor`, `disqualify_anchor`. `Data.lean`: optional
+`history_anchor.tsv`. `Run.lean`: the history loop calls `Cert.checkHistory`; anchor counters in `summary.tsv` only
+when the file has a line. Mutants M35-M40, 31 new `#guard`s. Without the table (absent or empty) the output is
+byte-identical to round 5 (`round5/out/final`) and round 4 (`difftest/real20`) (`wsl/r6_lean_base.sh`). Fixture:
+`round6/history/fixtures/anchor/` (`wsl/r6_anchor_fixture.sh`). Backup: `round6/history/pre/`.

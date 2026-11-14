@@ -1,0 +1,48 @@
+{
+ "asof": null,
+ "blind": false,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round10\\stage\\v10d",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round10\\out\\v10d",
+  "status_sha1": "769e18df446aa400532bee631d832c649ef00d16"
+ },
+ "court": "supreme",
+ "dataset": "scdb_precedent_alteration",
+ "generated": "2026-11-14T05:06:33+00:00",
+ "label": "round10",
+ "link": {
+  "fail_reasons": {
+   "no corpus node": 0
+  },
+  "linked": 278,
+  "n_items": 278
+ },
+ "metrics": {
+  "link_rate": {
+   "hi": 1.0,
+   "k": 278,
+   "lo": 0.9863701426449333,
+   "n": 278,
+   "p": 1.0
+  },
+  "precision": {
+   "hi": 0.9382890020021949,
+   "k": 146,
+   "lo": 0.8455921871584108,
+   "n": 162,
+   "p": 0.9012345679012346
+  },
+  "recall": {
+   "hi": 0.5831370909518585,
+   "k": 146,
+   "lo": 0.46653622558421715,
+   "n": 278,
+   "p": 0.5251798561151079
+  }
+ },
+ "notes": "Scorer tools/caselaw2/eval/score.py (existing/scdb_conan/runs/round10/results.json); it counts admitted explicit treatment rows (certificate ok, explicit = 1, kinds overruled/disapproved/recededFrom/abrogated/supersededByEnactment); the implicit tier and round-5 'recognised' status rows are not counted (ROUND5.md reports 175/278 SCDB and 195/292 CRS with recognised rows, from another scorer). NOT blind: these keys were used to evaluate and tune rounds 1-4 (eval/score_round*.txt). Unit: the overruling decision. recall = of SCDB-flagged decisions, the model admits an overruling by it of a Supreme Court decision; precision = of Supreme Court decisions the model has overruling a Supreme Court decision, SCDB flags it.",
+ "primary": "recall",
+ "row_label": "SCDB precedentAlteration = 1: Supreme Court decision overrules a Supreme Court precedent",
+ "split": "all",
+ "tests": "overruling"
+}

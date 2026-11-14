@@ -176,3 +176,28 @@ These are `lake build LegalProofs.CaseLaw2`, `audit/audit.py check` and `LegalPr
 - **Assumed:** the Alabama reading (DEVIATIONS 73). The Court of Criminal Appeals row rests on the 1969 opinion's
   words and the court's own later practice (tag S). No source was found for the Court of Civil Appeals; its row
   stays U.
+
+## Round 5 addendum (13 Nov 2026)
+
+- Proved: the 34 round-5 theorems (list in `round5/ROUND5.md` and the report). Certificate-checked: every recognised
+  row (the later court's quote, both names in it, its power). Tested: Lean against the reference on 118 regression
+  universes (0), 600 new universes (status 0; one old cause differs on verdicts) and the real data (2 rows).
+- Assumed, new: the opinion-part map's "majority" label for the later court's sentence; the reader's judgment that a
+  sentence states the overruling as fact; the scope it assigns. Measured by blind audit at 94-97% right.
+- Not covered: the fuzzer does not yet generate `treatment_class.tsv`.
+
+## Round 6 addendum (13 Nov 2026): anchored history rows
+
+- **Proved** (8 theorems, `Certificate.lean`): an admitted anchored history row has (1) the anchor quote at its
+  stated offset in a well-formed window of the **same text** as the row's certificate, whose SHA-1, recomputed by the
+  checker, is the recorded one (required when `window_sha.tsv` is supplied); (2) an anchor cue and no anchor
+  disqualifier; (3) the target evidence inside the anchor quote itself, and with `cite_index.tsv` the citation
+  resolving through the index to the row's target; (4) an allowed anchor part; (5) the disposition quote passing every
+  check of `check` except target resolution (hash, window, quote at offset, cue of the kind, no disqualifier, part,
+  date order, authority). Both quotes are non-empty. A row without an anchor line gets `check`'s verdict
+  (`checkHistory_no_anchor`; also shown byte-identical on the round-5 and round-4 data).
+- **Not proved:** that the decision the anchor cites is the decision under review (rather than, say, a related
+  decision cited in the same head matter), and that the disposition sentence is about that decision. Both quotes are in
+  the acting court's text, but tying one to the other is the linker's rule (`round6/history/rules/*/RULES.md`),
+  measured by the blind audit (`DESIGN6.md` §5), not a theorem. The cue lists are substring tests (data, not
+  doctrine). The reference engine does not yet implement the anchored check.

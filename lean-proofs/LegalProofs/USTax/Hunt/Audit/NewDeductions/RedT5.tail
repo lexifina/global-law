@@ -1,0 +1,94 @@
+/-! T5: every position reachable on the unmodified rules, checked against conservation laws and absurd goals. -/
+def reach (f : Facts) (ms : List Move) : Nat → State → List State
+  | 0, s => [s]
+  | n+1, s => s :: ms.flatMap (fun m => match step f s m with | some s' => reach f ms n s' | none => [])
+
+def sumN (l : List Nat) : Nat := l.foldl (· + ·) 0
+
+/-- Violations found in one position; also returns the couple's largest SALT deduction in a separate year. -/
+def checkState (cut lit : Bool) (f : Facts) (s : State) : List String × Nat := Id.run do
+  let mut v : List String := []
+  let mut maxSepSalt := 0
+  let y1 := yearReturns f s false
+  let y2 := yearReturns f s true
+  let all := y1 ++ y2
+  -- money in = money reported: nothing created or lost by moving it between spouses or years
+  if sumN (all.map (·.wages)) != 2 * (f.a.wages + f.b.wages) then v := "wages not conserved" :: v
+  if sumN (all.map (fun r => r.tipsEmp + r.tipsBiz)) != 2 * (f.a.tips + f.b.tips) then v := "tips not conserved" :: v
+  if sumN (all.map (·.other)) != f.lump + 2 * f.invest then v := "other income not conserved" :: v
+  if sumN (all.map (·.wagerGain)) != 2 * f.wagerGain then v := "wager gains not conserved" :: v
+  if sumN (all.map (·.salt)) != 2 * (f.a.stateTax + f.b.stateTax + f.propertyTax + f.instalment) then v := "SALT paid not conserved" :: v
+  if sumN (all.map (·.mortgage)) != 2 * f.mortgage then v := "mortgage not conserved" :: v
+  if sumN (all.map (·.gifts)) != 2 * f.gifts then v := "gifts not conserved" :: v
+  if sumN (all.map (·.carInt)) != 2 * (f.carInt + f.carIntB) then v := "car interest not conserved" :: v
+  for yr in [y1, y2] do
+    let mut sepSalt := 0
+    for r in yr do
+      let c := compute cut lit r
+      let br := if r.joint then jointBrackets else sepBrackets
+      if c.taxable > c.agi then v := "taxable income above AGI" :: v
+      if c.tax > taxOn br c.agi then v := "tax above tax on AGI" :: v
+      -- every deduction is at most what was paid / earned
+      let stdMax := (if r.joint then stdJoint else stdSep) + stdAged * r.aged
+      let paid := r.salt + r.mortgage + r.gifts + r.wagerLoss
+      if c.itemized + c.cut68 > paid then v := "itemized deductions exceed amounts paid" :: v
+      if c.car > r.carInt then v := "car deduction exceeds interest" :: v
+      if c.tips > r.tipsEmp + r.tipsBiz then v := "tips deduction exceeds tips" :: v
+      if c.overtime > r.overtime then v := "overtime deduction exceeds overtime" :: v
+      if c.senior > 6000 * r.aged then v := "senior deduction exceeds 6000 each" :: v
+      if c.qbi > max 400 (20 * r.tipsBiz / 100) then v := "QBI deduction exceeds 20%" :: v
+      -- taxable income is never below AGI less the larger of (paid items, standard deduction + $2,000) less the others
+      let belowMax := if r.itemize then paid else stdMax + 2000
+      if c.taxable + belowMax + c.car + c.tips + c.overtime + c.senior + c.qbi < c.agi then v := "taxable income too low: a dollar deducted twice" :: v
+      -- §63(c)(6)(A): no standard deduction on a separate return when the spouse itemizes
+      if !r.joint && !r.itemize && r.spouseItemizes then
+        if c.taxable + 1000 + c.car + c.qbi < c.agi then v := "standard deduction taken although spouse itemizes" :: v
+      -- SALT actually deducted, recovered from the itemized total
+      if r.itemize then
+        let giftItem := min r.gifts (60 * c.agi / 100) - 5 * c.agi / 1000
+        let wagerDed := min (90 * r.wagerLoss / 100) r.wagerGain
+        let saltDed := c.itemized + c.cut68 - r.mortgage - giftItem - wagerDed
+        if saltDed > r.salt then v := "SALT deducted exceeds SALT paid" :: v
+        if saltDed > (if r.joint then saltCap else saltCap / 2) then v := "SALT deducted exceeds the statutory dollar limit" :: v
+        if !r.joint then sepSalt := sepSalt + saltDed
+    maxSepSalt := max maxSepSalt sepSalt
+  return (v, maxSepSalt)
+
+def audit (title : String) (cut lit : Bool) (f : Facts) : IO Unit := do
+  let states := reach f (moves f) 16 {}
+  let mut bad := 0
+  let mut kinds : List String := []
+  let mut mx := 0
+  let mut minTax := totalTax cut lit f {}
+  for s in states do
+    let (v, m) := checkState cut lit f s
+    if !v.isEmpty then
+      bad := bad + 1
+      for x in v do if !kinds.contains x then kinds := x :: kinds
+    mx := max mx m
+    minTax := min minTax (totalTax cut lit f s)
+  IO.println s!"{title}: {states.length} positions, {bad} with a violation {kinds}; lowest two-year tax ${minTax}; largest SALT deducted by the couple in a separate year ${mx}"
+
+#eval do
+  audit "7 IRS" true false equalEarners
+  audit "7L literal" true true equalEarners
+  audit "7b IRS" true false (unequal 350000 250000)
+  audit "7bL literal" true true (unequal 350000 250000)
+  audit "1 highTax" true false highTax
+  audit "1 highTax literal" true true highTax
+  audit "2 tipped" true false tipped
+  audit "2' tipped" false false tipped
+  audit "3 retired" true false retired
+  audit "4 bothTipped" true false bothTipped
+  audit "5 mixed" true false mixed
+  audit "5 mixed literal" true true mixed
+  audit "6 top" true false top
+  audit "6 top literal" true true top
+  audit "8 carLoans" true false carLoans
+  audit "9 gambler" true false gambler
+  audit "10 oneEarner" true false oneEarner
+  audit "10 oneEarner literal" true true oneEarner
+  -- absurd households
+  let zero : Facts := { a := nobody, b := nobody, propertyTax := 50000, instalment := 20000, mortgage := 40000, carInt := 9000, gifts := 30000, lump := 0, wagerGain := 0, wagerLoss := 50000 }
+  audit "zero income, large payments" true true zero
+  IO.println s!"zero-income household: lowest tax is the plain tax ${totalTax true true zero {}}"

@@ -1,0 +1,27 @@
+u90001: 2 disagreeing rows 
+u94016: 3 disagreeing rows 
+u94043: 2 disagreeing rows 
+u94052: 1 disagreeing rows 
+p95013: 3 disagreeing rows 
+p95009: 3 disagreeing rows 
+p95028: 3 disagreeing rows 
+
+435 universes, 7 with a disagreement, 0 where the Lean runner wrote no output, 0 where the reference failed
+  status    0 of 71217 keys disagree
+  findings  5 of 30777 keys disagree
+  certs     6 of 98331 keys disagree
+  splits    0 of 8440 keys disagree
+  conflicts 0 of 4075 keys disagree
+  lines     0 of 4616 keys disagree
+  horty     0 of 877 keys disagree
+  classes   6 of 19237 keys disagree
+  summary   0 of 3778 keys disagree
+  class (file, bucket, rule): universes   first example
+  certs     okMismatch:ok/witnessNoStanding      treatment                      6   e.g. u90001 treatment:tr1 A=noAuthority B=witnessNoStanding
+  classes   verdict                              ok/witnessNoStanding           6   e.g. u90001 tr1 A=noAuthority B=witnessNoStanding
+  findings  onlyA                                atRisk:inferred                5   e.g. u94016 atRisk:inferred 212 211 A=1 B=
+  info  findings uncompared lean:citesNotCitable:force               1220
+  info  findings uncompared lean:hortyConsistentBase                 584
+  info  findings uncompared lean:hortySelfInconsistent               195
+  info  findings uncompared lean:inconsistentBindingBase             293
+rc=1

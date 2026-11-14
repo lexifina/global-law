@@ -1,0 +1,39 @@
+{
+ "name": "Accounts",
+ "positions": 97750,
+ "baseline": {
+  "do_nothing": {"roth": 0, "income": 0, "value": 0},
+  "no_530A": {"moves": ["contribTrad 7000", "convTrad 107000"], "roth": 107000, "income": 100000, "value": 7000, "positions": 2754}
+ },
+ "best": {
+  "moves": ["contribTrump 7000 (nondeductible, 408(o))", "convTrump 27000 (408A(d)(3)(C))"],
+  "roth": 27000,
+  "income": 8000,
+  "value": 19000,
+  "gain": 19000,
+  "gain_vs_no_530A": 12000
+ },
+ "runners_up": [
+  {"family": "tie: also convert the pre-tax IRA (net zero per dollar)", "moves": ["contribTrad 7000", "convTrad 107000", "convTrump 20000"], "roth": 127000, "income": 108000, "value": 19000},
+  {"family": "rollover between pools, then convert", "moves": ["convTrad 100000", "rollTrumpToTrad 1000", "contribTrump 7000", "convTrump 26000"], "roth": 126000, "income": 107006, "value": 18994},
+  {"family": "convert 530A account, no contribution", "moves": ["convTrump 20000"], "roth": 20000, "income": 8000, "value": 12000},
+  {"family": "no 530A account: contribute and convert only 7000", "moves": ["contribTrad 7000", "convTrad 7000"], "roth": 7000, "income": 6542, "value": 458}
+ ],
+ "judgment_calls": [
+  "530A account accepts ordinary nondeductible IRA contributions after age 18 (530A(a); the age-limited bars do not bind)",
+  "530A account is convertible to a Roth IRA under 408A(d)(3)(C); 408A(e) not read",
+  "530A(h)(4) separate application of 408(d)(2) continues after 18 and governs conversion income",
+  "rollover between the two pools carries basis pro rata",
+  "compensation >= 7000; no rollover in the prior 12 months",
+  "conversions not counted under 408(d)(3)(B)",
+  "excess contributions not modelled",
+  "whole dollars, exclusions rounded down"
+ ],
+ "silences": [
+  "530A: contributions after age 18 neither barred nor expressly permitted",
+  "530A: whether the account keeps separate (h)(4) treatment after ordinary contributions",
+  "408(d)(3): which part of a partial IRA-to-IRA rollover is basis",
+  "408(d)(2): year-end computation where a rollover crosses separately-applied pools",
+  "whether a 530A account may be converted in part"
+ ]
+}

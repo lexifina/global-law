@@ -1,0 +1,55 @@
+Filesystem      Size  Used Avail Use% Mounted on
+C:\             953G  932G   22G  98% /mnt/c
+two round-11 runs are active: x11nodes waits for a run slot (05:31:32)
+x11nodes: run slot 1 (after waiting, 05:39:33)
+NOBUILD frozen r10v10d: runner e7e32592cc6c (no sync, no build)
+data dir data_r11_x11nodes: 34 tables; staged = base mirror: treatments treatment_witness treatment_class history_anchor history_claim joined cite_index history_bridge part_zone history_remand adoption succession; copied: history cert_text window_sha decisions2(base+3nodes); left out (empty): none
+
+real	4m21.150s
+      8 zone_nodes	213710
+      8 zone_missing_rows	1
+      8 zone_lines	596267
+      8 zone_failed_rows	69
+      8 zone_checked_rows	225745
+      8 zone_bad_rows	0
+      8 zone_bad_nodes	0
+      8 rows_rejected	9732
+      8 rows_admitted	225677
+      8 remand_lines	316
+      8 remand_failed_rows	0
+      8 remand_dup_rows	0
+      8 remand_checked_rows	316
+      8 remand_bad_rows	0
+      8 joined_witness_ignored	0
+      8 joined_unknown_ids	0
+      8 joined_rows	595
+      8 joined_rejected	42
+      8 joined_lines	595
+      8 joined_history_ignored	0
+      8 joined_extra	0
+      8 joined_admitted	553
+      8 hclaim_unknown_ids	0
+      8 hclaim_rows	3726
+      8 hclaim_rejected	30
+      8 hclaim_oldcircuit_used	26
+      8 hclaim_oldcircuit	26
+      8 hclaim_duplicates	0
+      8 hclaim_anchorwide_unused	0
+      8 hclaim_anchorwide	554
+history verdicts, round-11 rows (h11:):
+1	ok
+treatment verdicts, round-11 rows (t11:):
+total 92428
+drwxrwxrwx 1 user user     4096 Nov 14 05:44 .
+drwxrwxrwx 1 user user     4096 Nov 14 05:44 ..
+-rwxrwxrwx 1 user user      424 Nov 14 05:44 RUN.txt
+-rwxrwxrwx 1 user user 16861869 Nov 14 05:44 certs.tsv
+-rwxrwxrwx 1 user user  2135094 Nov 14 05:44 classes.tsv
+-rwxrwxrwx 1 user user 25791546 Nov 14 05:44 findings.tsv
+-rwxrwxrwx 1 user user     5370 Nov 14 05:44 horty.tsv
+-rwxrwxrwx 1 user user     1098 Nov 14 05:44 lean.log
+-rwxrwxrwx 1 user user    41321 Nov 14 05:44 splits.tsv
+-rwxrwxrwx 1 user user 49724693 Nov 14 05:44 status.tsv
+-rwxrwxrwx 1 user user    56609 Nov 14 05:44 status_lines.tsv
+-rwxrwxrwx 1 user user     9629 Nov 14 05:44 summary.tsv
+RUN x11nodes done

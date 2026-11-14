@@ -1,0 +1,103 @@
+==== T3-A original S4 ====
+baseline (plain use): worth 125000 (0 over doing nothing)
+searched 566 positions to depth 7; 11 families
+  +3500 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion]
+      Trump account contribution (18+, IRA rules) $7000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $7000
+      convert $14000 of the Trump account to Roth
+==== T3-B without 7 (Trump acct contrib 18+) ====
+baseline (plain use): worth 125000 (0 over doing nothing)
+searched 443 positions to depth 7; 4 families
+  nothing beats the baseline
+==== T3-C without 8 (Trump acct->Roth conversion) ====
+baseline (plain use): worth 125000 (0 over doing nothing)
+searched 530 positions to depth 7; 8 families
+  nothing beats the baseline
+==== T3-D without 0 (next year) ====
+baseline (plain use): worth 125000 (0 over doing nothing)
+searched 62 positions to depth 7; 7 families
+  +1750 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion]
+      Trump account contribution (18+, IRA rules) $7000
+      convert $7000 of the Trump account to Roth
+==== T3-E only the moves the plan uses [0,7,8] ====
+baseline (plain use): worth 125000 (0 over doing nothing)
+searched 14 positions to depth 7; 3 families
+  +3500 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion]
+      Trump account contribution (18+, IRA rules) $7000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $7000
+      convert $14000 of the Trump account to Roth
+==== T3-F every move kind allowed (depth 6) ====
+baseline (plain use): worth 125000 (0 over doing nothing)
+searched 1690 positions to depth 6; 71 families
+  +3500 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion]
+      Trump account contribution (18+, IRA rules) $7000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $7000
+      convert $14000 of the Trump account to Roth
+==== T1-a Trump account holds 5,000 of seed money and growth, no basis ====
+baseline (plain use): worth 129750 (0 over doing nothing)
+searched 1926 positions to depth 7; 16 families
+  +3250 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion]
+      Trump account contribution (18+, IRA rules) $7000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $7000
+      convert $19000 of the Trump account to Roth
+==== T1-b Trump account 60,000 with 40,000 basis ====
+baseline (plain use): worth 184000 (0 over doing nothing)
+searched 7502 positions to depth 7; 16 families
+  +12500 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion]
+      Trump account contribution (18+, IRA rules) $7000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $7000
+      convert $74000 of the Trump account to Roth
+  +9000 vs baseline  [Trump acct->Roth conversion]
+      convert $60000 of the Trump account to Roth
+==== T1-c Trump account 70,000, no basis ====
+baseline (plain use): worth 191500 (0 over doing nothing)
+searched 1885 positions to depth 7; 16 families
+  nothing beats the baseline
+==== T1-d no growth premium (beta 0) ====
+baseline (plain use): worth 106000 (0 over doing nothing)
+searched 566 positions to depth 7; 11 families
+  nothing beats the baseline
+==== T1-e IRA contributions deductible (no employer plan, s219(g) does not bite) ====
+baseline (plain use): worth 129200 (4200 over doing nothing)
+    traditional IRA contribution $7000
+    -- next year --
+    traditional IRA contribution $7000
+searched 52 positions to depth 7; 12 families
+  nothing beats the baseline
+==== T1-f the 100,000 already rolled into the employer plan (known isolation) ====
+baseline (plain use): worth 128500 (3500 over doing nothing)
+    traditional IRA contribution $7000
+    -- next year --
+    traditional IRA contribution $7000
+    convert $14000 of the IRA to Roth
+searched 21 positions to depth 7; 7 families
+  nothing beats the baseline
+==== T1-g rLater 35 (same rate now and later) ====
+baseline (plain use): worth 123500 (12250 over doing nothing)
+    traditional IRA contribution $7000
+    -- next year --
+    traditional IRA contribution $7000
+    convert $114000 of the IRA to Roth
+searched 566 positions to depth 7; 11 families
+  nothing beats the baseline
+==== T1-h age 17 at start (minor year, then adult year) ====
+baseline (plain use): worth 125000 (0 over doing nothing)
+searched 955 positions to depth 7; 27 families
+  +3000 vs baseline  [Trump acct contrib (minor), Trump acct contrib (18+), Trump acct->Roth conversion]
+      Trump account contribution (minor) $5000
+      -- next year --
+      Trump account contribution (18+, IRA rules) $7000
+      convert $12000 of the Trump account to Roth
+  +1750 vs baseline  [Trump acct contrib (18+), Trump acct->Roth conversion]
+      -- next year --
+      Trump account contribution (18+, IRA rules) $7000
+      convert $7000 of the Trump account to Roth
+  +1250 vs baseline  [Trump acct contrib (minor), Trump acct->Roth conversion]
+      Trump account contribution (minor) $5000
+      -- next year --
+      convert $5000 of the Trump account to Roth

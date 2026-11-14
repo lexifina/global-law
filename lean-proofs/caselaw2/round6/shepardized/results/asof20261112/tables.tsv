@@ -1,0 +1,161 @@
+# as-of 20261112; model out dir ~\Documents\us-caselaw-lean-work\caselaw-lean-2\out
+cases	20354	linked	19916
+
+## confusion: Shepardized class (rows) x model class (columns), linked cases
+class	NEG_HIST	UNK_HIST	NEG_OTHER	UNK_OTHER	GOOD	total
+NEG	14	0	0	1	491	506
+PART	1	0	0	0	26	27
+AMBIG	0	0	0	0	64	64
+MOD	0	0	0	0	29	29
+CLEAN	3	0	12	43	19232	19290
+total	18	0	12	44	19842	19916
+
+## confusion by Shepardized sub-class
+class	subclass	NEG_HIST	UNK_HIST	NEG_OTHER	UNK_OTHER	GOOD	total
+NEG	enbanc_different	0	0	0	0	60	60
+NEG	panel_withdrawn	0	0	0	0	52	52
+NEG	sc_reversed	10	0	0	0	251	261
+NEG	sc_vacated	4	0	0	1	127	132
+NEG	sc_vacated+enbanc_different	0	0	0	0	1	1
+PART	sc_part	1	0	0	0	26	27
+AMBIG	enbanc_granted	0	0	0	0	33	33
+AMBIG	enbanc_granted+rehearing_granted+sc_other	0	0	0	0	1	1
+AMBIG	rehearing_granted	0	0	0	0	19	19
+AMBIG	sc_granted_no_result	0	0	0	0	2	2
+AMBIG	sc_other	0	0	0	0	1	1
+AMBIG	sc_other_result	0	0	0	0	1	1
+AMBIG	uncoded	0	0	0	0	7	7
+MOD	modified	0	0	0	0	29	29
+CLEAN	cert_denied	0	0	4	10	4346	4360
+CLEAN	none	0	0	3	27	12084	12114
+CLEAN	other_history	1	0	0	2	397	400
+CLEAN	rehearing_denied	0	0	2	0	355	357
+CLEAN	related_only	2	0	3	3	1890	1898
+CLEAN	sc_affirmed	0	0	0	1	160	161
+
+## agreement (scored classes NEG, PART, MOD, CLEAN; AMBIG excluded: 64 cases)
+group	value	agree/n	share	lo95	hi95
+overall	all	19331/19852	97.4%	97.1%	97.6%
+class	NEG	14/506	2.8%	1.7%	4.6%
+class	PART	1/27	3.7%	0.7%	18.3%
+class	MOD	29/29	100.0%	88.3%	100.0%
+class	CLEAN	19287/19290	100.0%	100.0%	100.0%
+subclass	CLEAN/cert_denied	4360/4360	100.0%	99.9%	100.0%
+subclass	CLEAN/none	12114/12114	100.0%	100.0%	100.0%
+subclass	CLEAN/other_history	399/400	99.8%	98.6%	100.0%
+subclass	CLEAN/rehearing_denied	357/357	100.0%	98.9%	100.0%
+subclass	CLEAN/related_only	1896/1898	99.9%	99.6%	100.0%
+subclass	CLEAN/sc_affirmed	161/161	100.0%	97.7%	100.0%
+subclass	MOD/modified	29/29	100.0%	88.3%	100.0%
+subclass	NEG/enbanc_different	0/60	0.0%	0.0%	6.0%
+subclass	NEG/panel_withdrawn	0/52	0.0%	0.0%	6.9%
+subclass	NEG/sc_reversed	10/261	3.8%	2.1%	6.9%
+subclass	NEG/sc_vacated	4/132	3.0%	1.2%	7.5%
+subclass	NEG/sc_vacated+enbanc_different	0/1	0.0%	0.0%	79.3%
+subclass	PART/sc_part	1/27	3.7%	0.7%	18.3%
+decade	1920s	705/724	97.4%	95.9%	98.3%
+decade	1930s	1552/1602	96.9%	95.9%	97.6%
+decade	1940s	1536/1590	96.6%	95.6%	97.4%
+decade	1950s	1563/1603	97.5%	96.6%	98.2%
+decade	1960s	3001/3070	97.8%	97.2%	98.2%
+decade	1970s	3174/3259	97.4%	96.8%	97.9%
+decade	1980s	3381/3483	97.1%	96.5%	97.6%
+decade	1990s	3409/3479	98.0%	97.5%	98.4%
+decade	2000s	1010/1042	96.9%	95.7%	97.8%
+circuit	DC	1638/1686	97.2%	96.2%	97.8%
+circuit	1	1727/1778	97.1%	96.2%	97.8%
+circuit	2	1722/1764	97.6%	96.8%	98.2%
+circuit	3	1723/1763	97.7%	96.9%	98.3%
+circuit	4	1709/1765	96.8%	95.9%	97.5%
+circuit	5	1692/1750	96.7%	95.7%	97.4%
+circuit	6	1725/1773	97.3%	96.4%	98.0%
+circuit	7	1739/1782	97.6%	96.8%	98.2%
+circuit	8	1716/1753	97.9%	97.1%	98.5%
+circuit	9	1694/1747	97.0%	96.1%	97.7%
+circuit	10	1652/1681	98.3%	97.5%	98.8%
+circuit	11	594/610	97.4%	95.8%	98.4%
+
+## (a) recall on negative history: of Shepardized NEG, model NEG_HIST
+group	value	k/n	share	lo95	hi95
+recall	strict (NEG_HIST)	14/506	2.8%	1.7%	4.6%
+recall	lenient (NEG_HIST or UNK_HIST)	14/506	2.8%	1.7%	4.6%
+recall by subclass	enbanc_different	0/60	0.0%	0.0%	6.0%
+recall by subclass	panel_withdrawn	0/52	0.0%	0.0%	6.9%
+recall by subclass	sc_reversed	10/261	3.8%	2.1%	6.9%
+recall by subclass	sc_vacated	4/132	3.0%	1.2%	7.5%
+recall by subclass	sc_vacated+enbanc_different	0/1	0.0%	0.0%	79.3%
+recall by decade	1920s	0/17	0.0%	0.0%	18.4%
+recall by decade	1930s	1/46	2.2%	0.4%	11.3%
+recall by decade	1940s	0/45	0.0%	0.0%	7.9%
+recall by decade	1950s	2/40	5.0%	1.4%	16.5%
+recall by decade	1960s	3/70	4.3%	1.5%	11.9%
+recall by decade	1970s	3/82	3.7%	1.3%	10.2%
+recall by decade	1980s	3/103	2.9%	1.0%	8.2%
+recall by decade	1990s	2/72	2.8%	0.8%	9.6%
+recall by decade	2000s	0/31	0.0%	0.0%	11.0%
+recall by circuit	DC	0/44	0.0%	0.0%	8.0%
+recall by circuit	1	1/49	2.0%	0.4%	10.7%
+recall by circuit	2	1/39	2.6%	0.5%	13.2%
+recall by circuit	3	1/39	2.6%	0.5%	13.2%
+recall by circuit	4	2/55	3.6%	1.0%	12.3%
+recall by circuit	5	2/59	3.4%	0.9%	11.5%
+recall by circuit	6	2/48	4.2%	1.2%	14.0%
+recall by circuit	7	1/41	2.4%	0.4%	12.6%
+recall by circuit	8	3/40	7.5%	2.6%	19.9%
+recall by circuit	9	1/51	2.0%	0.3%	10.3%
+recall by circuit	10	0/25	0.0%	0.0%	13.3%
+recall by circuit	11	0/16	0.0%	0.0%	19.4%
+recall	PART: model NEG_HIST or UNK_HIST	1/27	3.7%	0.7%	18.3%
+
+## (b) precision: of model NEG_HIST (same-case negative), Shepardized agrees
+group	value	k/n	share	lo95	hi95
+model NEG_HIST linked	all	18
+model NEG_HIST linked	Shepardized AMBIG (left out)	0
+precision	strict (Shepardized NEG)	14/18	77.8%	54.8%	91.0%
+precision	lenient (Shepardized NEG or PART)	15/18	83.3%	60.8%	94.2%
+precision	AMBIG counted as agreeing	15/18	83.3%	60.8%	94.2%
+model UNK_HIST linked	all	0
+model UNK_HIST	Shepardized NEG or PART	0/0	-	-	-
+model NEG_HIST by Shepardized class	NEG	14
+model NEG_HIST by Shepardized class	PART	1
+model NEG_HIST by Shepardized class	AMBIG	0
+model NEG_HIST by Shepardized class	MOD	0
+model NEG_HIST by Shepardized class	CLEAN	3
+model NEG_HIST by Shepardized subclass	NEG/sc_reversed	10
+model NEG_HIST by Shepardized subclass	NEG/sc_vacated	4
+model NEG_HIST by Shepardized subclass	CLEAN/related_only	2
+model NEG_HIST by Shepardized subclass	PART/sc_part	1
+model NEG_HIST by Shepardized subclass	CLEAN/other_history	1
+
+## (c) of Shepardized CLEAN, model shows no same-case negative
+group	value	k/n	share	lo95	hi95
+clean	model CLEAN (GOOD, NEG_OTHER, UNK_OTHER)	19287/19290	100.0%	100.0%	100.0%
+clean	model GOOD only	19232/19290	99.7%	99.6%	99.8%
+clean by subclass	cert_denied	4360/4360	100.0%	99.9%	100.0%
+clean by subclass	none	12114/12114	100.0%	100.0%	100.0%
+clean by subclass	other_history	399/400	99.8%	98.6%	100.0%
+clean by subclass	rehearing_denied	357/357	100.0%	98.9%	100.0%
+clean by subclass	related_only	1896/1898	99.9%	99.6%	100.0%
+clean by subclass	sc_affirmed	161/161	100.0%	97.7%	100.0%
+
+## kind check: Shepardized NEG and model NEG_HIST (14 cases)
+group	value	k/n	share	lo95	hi95
+kind	model kind is an expected kind	13/14	92.9%	68.5%	98.7%
+kind pair	sc_reversed -> neg:reversed	10
+kind pair	sc_vacated -> neg:vacated	3
+kind pair	sc_vacated -> neg:withdrawn	1
+
+## actor/date check: Shepardized names a U.S. Reports decision and the model names an actor
+(the Shepardized file has no event dates; the check is whether the model's actor is the named Supreme Court decision)
+group	value	k/n	share	lo95	hi95
+named	linked cases where Shepardized gives a U.S. cite	274
+named	... and that cite resolves to a corpus node	273
+actor	model history actor is the named decision	13/13	100.0%	77.2%	100.0%
+
+## secondary: same-case event hidden behind a non-history status
+hidden	NEG_OTHER/UNK_OTHER with an admitted reversed/vacated/withdrawn history row	0
+hidden by Shepardized class	NEG	0
+hidden by Shepardized class	PART	0
+hidden by Shepardized class	AMBIG	0
+hidden by Shepardized class	MOD	0
+hidden by Shepardized class	CLEAN	0

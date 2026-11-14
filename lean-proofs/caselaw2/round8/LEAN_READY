@@ -1,0 +1,8 @@
+round 8 Lean ready (agent lean8), Sat 14 Nov 2026 01:38 (clock from `date`)
+contract: round8/DESIGN8.md §4 (bridge evidence, incl. step 5b bridgeChain D8-9), §5 (anchorWide, D8-5), §6 (oldCircuit, D8-12); round8/LEAN8.md
+runner binary (built 01:18, from the locked sources): sha1 3b8d3e4d45fb60a84c5cfb00c2f6729ebc2bfa6b (WSL copy ~/caselaw2/r8_bin/caselaw2_lean8)
+theorems 220 -> 245 (8 stated + 17 helpers; 0 removed, 0 changed); audit.py check: 245 theorems, 0 changes, 0 problems
+mutants 53 -> 63 (properties 54 -> 64; new 10x10 diagonal); #guard Examples 308 -> 365, Mutants 11 -> 14
+fixture round8/fixtures/bridge green (with and without round-8 tables); round-7 fixture green
+regressions a a2 b c byte-identical; round7/out/v3 reproduced byte for byte (round8/out/lean8_v3; summary timing lines aside)
+log: round8/agents/lean8/r8_final.log

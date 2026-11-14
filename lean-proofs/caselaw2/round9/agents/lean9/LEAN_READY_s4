@@ -1,0 +1,9 @@
+Round 9 Lean ready, section 4 (agent lean9), Sat 14 Nov 2026 03:05 (clock from `date`)
+contract: round9/DESIGN9.md §4 (part zones, D9-3, readings D9-4); round9/LEAN9.md §0, §1, §9, §10
+runner binary (built 02:31 from the sources locked at 02:39; the lock changes only Registry/Audit, not the runner): sha1 65bbc36dc26635cdd27922b7a997cbb60500d148 (WSL ~/caselaw2/r9_bin/caselaw2_lean9, kept also as ~/caselaw2/r9_bin/caselaw2_lean9_s4)
+theorems 245 -> 255 (4 stated + 6 helpers; 0 removed, 0 changed); audit.py check: 255 theorems, 0 changes, 0 problems
+mutants 63 -> 66 (properties 64 -> 67; new 3x3 diagonal); #guard Examples 365 -> 397, Mutants 14 -> 17
+fixture round9/fixtures/partzone green (with zones; without part_zone.tsv and with an empty one = the earlier fixtures' outputs byte for byte); round-8 and round-7 fixtures green
+regressions a a2 b c byte-identical; round8/out/v8e reproduced byte for byte (round9/out/lean9_base; summary timing lines aside; r9_final.sh FINAL rc=0 03:04:47)
+real data: round9/stage/lean9_z (v8e + calpart9 zone_delta): exactly 223 rows ok -> partZone, the ids of calpart9's refused.tsv; round9/out/lean9_z
+log: round9/agents/lean9/r9_final.log

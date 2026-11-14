@@ -56,6 +56,11 @@ T1: an overruling by a court with power over the target ends its force everywher
 def citesOverruled (c : CiteFacts) : Bool :=
   c.status == .neg .overruled || c.status == .neg .abrogated
 
+/-- Round 5 (DESIGN5 §2.5): the cited decision's status on the citing date is `unknown recognisedLater`: the
+citation falls between an overruling that was not announced and its recognition by a later court with power.
+Reported as `atRisk … recognisedLater`, never as `citesOverruled`. -/
+def citedRecognisedLater (c : CiteFacts) : Bool := c.status == .unknown .recognisedLater
+
 def citesVacated (c : CiteFacts) : Bool := c.status == .neg .vacated || c.status == .neg .reversed
 
 def citesWithdrawn (c : CiteFacts) : Bool := c.status == .neg .withdrawn
@@ -197,6 +202,14 @@ theorem panelDeparts_needs_panel_and_rule (f : TreatFacts) (h : panelDepartsWith
 /-- A cited holding that is good law is never reported as overruled, vacated or withdrawn. -/
 theorem good_cites_clean (c : CiteFacts) (h : c.status = .good) :
     citesOverruled c = false ∧ citesVacated c = false ∧ citesWithdrawn c = false := by
+  simp [citesOverruled, citesVacated, citesWithdrawn, h]
+
+/-- **Between the overruling and its recognition a citation is at risk, not "cites overruled"** (round 5): a
+citation whose cited status is `unknown recognisedLater` is never reported as citing an overruled, vacated or
+withdrawn decision. -/
+theorem recognisedLater_not_citesOverruled (c : CiteFacts) (h : citedRecognisedLater c = true) :
+    citesOverruled c = false ∧ citesVacated c = false ∧ citesWithdrawn c = false := by
+  simp only [citedRecognisedLater, beq_iff_eq] at h
   simp [citesOverruled, citesVacated, citesWithdrawn, h]
 
 /-- A panel departure is only reported when the power check failed for want of an en banc bench. -/

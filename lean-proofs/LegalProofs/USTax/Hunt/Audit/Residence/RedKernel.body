@@ -1,0 +1,120 @@
+-- NOSEARCH
+/-! ## T6: kernel replays (no `#eval`, no `native_decide`) -/
+
+def c9 : Params := { base with grid := coarse }
+def r9 : Params := { base with grid := coarse, asset := .usRealty, covered := false }
+
+def replay (p : Params) (b : Start) (ms : List Move) : Option St :=
+  ms.foldl (fun o m => o.bind fun s => step p s m) (some (initSt p b))
+
+def P : List Move := [.present, .present, .present, .present, .present, .present]
+/-- plan 1 as printed by the search (the two RELOCATEs cancel and are dropped; see T3) -/
+def plan1 : List Move := [.abandon true, .sell] ++ P
+/-- plan 1 with the abandonment after day 30 (strict reading: deemed sale inside year 0) -/
+def plan1b : List Move := [.present, .abandon true, .sell, .present, .present, .present, .present, .present]
+def plan2 : List Move := [.abandon false, .sell] ++ P
+def plan2cert : List Move := [.abandon true, .sell] ++ P
+def baselineMoves : List Move := [.sell] ++ P
+/-- plan 2 as a leaver: give up the card uncertified on day 1, tax home abroad, sell the realty, stay out -/
+def plan2leave (c : Bool) : List Move := [.abandon c, .relocate, .sell, .absent, .absent, .absent, .absent, .absent, .absent]
+
+def gt (o : Option St) : Option (Nat × Nat × Bool) := o.map fun s => (s.gainTax, s.usDays, s.held)
+
+theorem baseline_238000 : gt (replay c9 greenCard9 baselineMoves) = some (238000, 730, false) := by decide +kernel
+theorem plan1_26180 : gt (replay c9 greenCard9 plan1) = some (26180, 730, false) := by decide +kernel
+theorem plan1b_26180 : gt (replay c9 greenCard9 plan1b) = some (26180, 730, false) := by decide +kernel
+theorem plan1_resident_after :
+    (replay c9 greenCard9 plan1).map (fun s => (s.covExpat, s.resAfter, s.isLPR)) = some (true, true, false) := by decide +kernel
+theorem plan2_26180 : gt (replay r9 greenCard9 plan2) = some (26180, 730, false) := by decide +kernel
+theorem plan2_certified_238000 : gt (replay r9 greenCard9 plan2cert) = some (238000, 730, false) := by decide +kernel
+theorem plan2_leaver_26180 : gt (replay r9 greenCard9 (plan2leave false)) = some (26180, 0, false) := by decide +kernel
+theorem plan2_leaver_certified_200000 : gt (replay r9 greenCard9 (plan2leave true)) = some (200000, 0, false) := by decide +kernel
+
+-- closed gap (T2)
+theorem fixA_plan1_238000 : gt (replay { c9 with fixA := true } greenCard9 plan1) = some (238000, 730, false) := by decide +kernel
+theorem fixA_plan1b_238000 : gt (replay { c9 with fixA := true } greenCard9 plan1b) = some (238000, 730, false) := by decide +kernel
+theorem fixA_baseline : gt (replay { c9 with fixA := true } greenCard9 baselineMoves) = some (238000, 730, false) := by decide +kernel
+theorem fixA_plan2_stayer_238000 : gt (replay { r9 with fixA := true } greenCard9 plan2) = some (238000, 730, false) := by decide +kernel
+/-- fix A does NOT close plan 2 for a leaver -/
+theorem fixA_plan2_leaver_survives : gt (replay { r9 with fixA := true } greenCard9 (plan2leave false)) = some (26180, 0, false) := by decide +kernel
+theorem fixC_plan2_leaver_238000 : gt (replay { r9 with fixC := true } greenCard9 (plan2leave false)) = some (238000, 0, false) := by decide +kernel
+theorem fixC_plan2_238000 : gt (replay { r9 with fixC := true } greenCard9 plan2) = some (238000, 730, false) := by decide +kernel
+theorem fixC_baseline : gt (replay { r9 with fixC := true } greenCard9 baselineMoves) = some (238000, 730, false) := by decide +kernel
+-- earlier law (T4)
+theorem pre2008_plan1_238000 : gt (replay { c9 with pre2008 := true } greenCard9 plan1) = some (238000, 730, false) := by decide +kernel
+
+/-! ### Every move sequence, bounded: whole-year grid, two years.
+`reach` lists every position reachable by any sequence of the given moves (no deduplication). Each path has at most
+2 segment moves, 1 sale, 1 expatriating act and `maxReloc` = 2 relocations, so fuel 7 exhausts the tree; the theorems
+also assert that every leaf is at the horizon, which proves the fuel was enough. -/
+
+def reach (p : Params) (moves : List Move) : Nat → St → List St
+  | 0, s => [s]
+  | n + 1, s =>
+    if s.yr == p.horizon then [s]
+    else moves.flatMap fun m => match step p s m with
+      | none => []
+      | some s' => reach p moves n s'
+
+def w2 : Params := { base with grid := whole }
+def mv : List Move := [.present, .absent, .relocate, .sell, .abandon true, .abandon false]
+
+/-- original rules: some sequence ends with the asset sold, 730 US days, a covered expatriate who was a resident the
+year after, and $26,180 of tax on the gain -/
+theorem orig_exists_whole :
+    ((reach w2 mv 7 (initSt w2 greenCard9)).any fun s =>
+      s.yr == 2 && !s.held && s.usDays == 730 && s.covExpat && s.resAfter && s.gainTax == 26180) = true := by decide +kernel
+
+/-- closed gap A: over EVERY sequence of these moves, a finished plan by a covered expatriate who is a resident for
+the calendar year after the expatriation year pays at least the baseline $238,000 -/
+theorem fixA_all_whole :
+    ((reach { w2 with fixA := true } mv 7 (initSt w2 greenCard9)).all fun s =>
+      s.yr == 2 && (s.held || !(s.covExpat && s.resAfter) || s.gainTax ≥ 238000)) = true := by decide +kernel
+
+/-- what fix A leaves in the model: expatriate on 1 January of the LAST year, stay that year (730 US days); the model
+then assumes absence after the horizon, so this is a leaver with a one-year delay, not a stayer -/
+theorem fixA_last_year_exit_whole :
+    ((reach { w2 with fixA := true } mv 7 (initSt w2 greenCard9)).any fun s =>
+      s.yr == 2 && !s.held && s.usDays == 730 && s.exitYr == 1 && s.gainTax == 26180) = true := by decide +kernel
+
+/-- and with fix A every 730-day finished plan below the baseline expatriated in the last year -/
+theorem fixA_full_only_last_year_whole :
+    ((reach { w2 with fixA := true } mv 7 (initSt w2 greenCard9)).all fun s =>
+      s.held || s.usDays != 730 || s.gainTax ≥ 238000 || s.exitYr == 1) = true := by decide +kernel
+
+/-- and fix A leaves the covered leaver's result where it was: the minimum over leavers is still reached -/
+theorem fixA_leaver_whole :
+    ((reach { w2 with fixA := true } mv 7 (initSt w2 greenCard9)).any fun s =>
+      s.yr == 2 && !s.held && s.covExpat && !s.resAfter && s.gainTax == 26180) = true := by decide +kernel
+
+/-- earlier law: no sequence with 730 US days beats the baseline -/
+theorem pre2008_all_whole :
+    ((reach { w2 with pre2008 := true } mv 7 (initSt w2 greenCard9)).all fun s =>
+      s.yr == 2 && (s.held || s.usDays != 730 || s.gainTax ≥ 238000)) = true := by decide +kernel
+
+end Legal.USTax.Hunt.Audit.ResidenceRed
+namespace Legal.USTax.Hunt.Audit.ResidenceRed
+
+#print axioms baseline_238000
+#print axioms plan1_26180
+#print axioms plan1b_26180
+#print axioms plan1_resident_after
+#print axioms plan2_26180
+#print axioms plan2_certified_238000
+#print axioms plan2_leaver_26180
+#print axioms plan2_leaver_certified_200000
+#print axioms fixA_plan1_238000
+#print axioms fixA_plan1b_238000
+#print axioms fixA_baseline
+#print axioms fixA_plan2_stayer_238000
+#print axioms fixA_plan2_leaver_survives
+#print axioms fixC_plan2_leaver_238000
+#print axioms fixC_plan2_238000
+#print axioms fixC_baseline
+#print axioms pre2008_plan1_238000
+#print axioms orig_exists_whole
+#print axioms fixA_all_whole
+#print axioms fixA_leaver_whole
+#print axioms pre2008_all_whole
+#print axioms fixA_last_year_exit_whole
+#print axioms fixA_full_only_last_year_whole

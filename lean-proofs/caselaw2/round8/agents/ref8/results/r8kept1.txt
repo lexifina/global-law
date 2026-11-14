@@ -1,0 +1,23 @@
+q81000: 1 disagreeing rows 
+q81001: 3 disagreeing rows 
+q81002: 1 disagreeing rows 
+
+9 universes, 3 with a disagreement, 0 where the Lean runner wrote no output, 0 where the reference failed
+  status    1 of 1936 keys disagree
+  findings  1 of 724 keys disagree
+  certs     3 of 2608 keys disagree
+  splits    0 of 130 keys disagree
+  conflicts 0 of 217 keys disagree
+  lines     0 of 112 keys disagree
+  horty     0 of 28 keys disagree
+  classes   0 of 376 keys disagree
+  summary   0 of 190 keys disagree
+  class (file, bucket, rule): universes   first example
+  certs     okMismatch:ok/bridgeChain            history                        3   e.g. q81000 history:h8:312:311:affirmed A=ok B=bridgeChain
+  status    status:negative/none                 vacated                        1   e.g. q81001 264/-@20181103 A=negative|vacated B=none|-
+  findings  onlyA                                cites:vacated                  1   e.g. q81001 cites 268 264 vacated A=1 B=
+  info  findings uncompared lean:citesNotCitable:force               13
+  info  findings uncompared lean:hortyConsistentBase                 19
+  info  findings uncompared lean:hortySelfInconsistent               7
+  info  findings uncompared lean:inconsistentBindingBase             9
+rc=1

@@ -1,0 +1,44 @@
+binary ~/caselaw2/r10_bin/caselaw2_lean10 sha1 e7e32592cc6c6393506e25dc9654d4254af218ea; ref 4968ba65ff57c57c0e0a07dba698419d3bc9ecee; cue_table 223ac4f45c6fc96c6d0ee27b5e5f4543ed473c8a; 2026-11-14 05:30:06
+q110101: 24 disagreeing rows 
+q110100: 24 disagreeing rows 
+q110102: 24 disagreeing rows 
+f110200: 20 disagreeing rows 
+f110201: 22 disagreeing rows 
+r110000: 24 disagreeing rows 
+r110002: 20 disagreeing rows 
+r110001: 21 disagreeing rows 
+r110003: 20 disagreeing rows 
+
+9 universes, 9 with a disagreement, 0 failed (binary ~/caselaw2/r11ref/bin/runner)
+  status    0 of 2163 keys disagree
+  findings  0 of 739 keys disagree
+  certs     134 of 4278 keys disagree
+  splits    0 of 258 keys disagree
+  conflicts 0 of 242 keys disagree
+  lines     0 of 94 keys disagree
+  horty     0 of 32 keys disagree
+  classes   0 of 1176 keys disagree
+  summary   65 of 378 keys disagree
+  class (file, bucket, rule): universes   first example
+  certs     okMismatch:anchorNoCue/ok            history                        9   e.g. q110101 history:at110101_0 A=anchorNoCue B=ok
+  summary   count                                hclaim_unknown_ids             9   e.g. q110101 hclaim_unknown_ids A=2 B=3
+  summary   count                                hclaim_duplicates              9   e.g. q110101 hclaim_duplicates A=0 B=1
+  summary   count                                hclaim_bad_rows                9   e.g. q110101 hclaim_bad_rows A=43 B=6
+  summary   count                                hclaim_rows                    9   e.g. q110101 hclaim_rows A=73 B=98
+  summary   count                                zone_missing_rows              9   e.g. q110101 zone_missing_rows A=58 B=73
+  summary   count                                hclaim_anchortribunal          9   e.g. q110101 hclaim_anchortribunal A=0 B=35
+  summary   count                                hclaim_anchortribunal_unused     9   e.g. q110101 hclaim_anchortribunal_unused A=0 B=5
+  summary   count                                zone_checked_rows              1   e.g. r110000 zone_checked_rows A=84 B=85
+  summary   count                                zone_failed_rows               1   e.g. r110000 zone_failed_rows A=37 B=38
+  info  certs reasonOnly anchorNoCue/anchorDisqualified              8
+  info  certs reasonOnly anchorNoCue/anchorPart                      9
+  info  certs reasonOnly anchorNoCue/anchorUnresolved                13
+  info  certs reasonOnly anchorNoCue/cue                             7
+  info  certs reasonOnly anchorNoCue/partZone                        1
+  info  certs reasonOnly anchorNoCue/trialBridgeT                    8
+  info  certs reasonOnly sha/witnessBadRow                           1
+  info  findings uncompared lean:citesNotCitable:force               35
+  info  findings uncompared lean:hortyConsistentBase                 16
+  info  findings uncompared lean:hortySelfInconsistent               7
+  info  findings uncompared lean:inconsistentBindingBase             16
+rc=1

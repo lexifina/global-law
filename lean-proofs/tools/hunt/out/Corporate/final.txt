@@ -1,0 +1,89 @@
+== 1. not QSBS, full exit: 79680 positions, 124406 moves tried, 219 move families
+   baseline (plain): family 25680, A 25680, total tax 14320
+   +5040  family 30720, A 30720, tax 9280  [sellStock]
+        A sells 1/5 of shares to outsider; A sells 1/2 of shares to outsider; A sells 1/1 of shares to outsider
+   +5038  family 30718, A 30718, tax 9282  [contribP + sellP-stock]
+        A contributes 1/1 of C shares to P (§351); wait 1y; A sells all P stock to outsider
+   +5038  family 30718, A 30718, tax 9282  [electS + liquidate]
+        C elects S; wait 1y; wait 5y; C liquidates
+   +398  family 26078, A 26078, tax 13922  [P-distribute + P-sellStock + contribP + dividend]
+        C pays dividend 10000; A contributes 1/1 of C shares to P (§351); P sells its C shares to outsider; P distributes 23910 to A
+   +398  family 26078, A 26078, tax 13922  [P-distribute + P-sellStock + contribP + redeem-A]
+        C redeems 1/4 of A's shares; A contributes 1/1 of C shares to P (§351); P sells its C shares to outsider; P distributes 23910 to A
+   +240  family 25920, A 16588, tax 14080  [dividend + gift-S + liquidate]
+        A gives 1/5 of shares to S; A gives 1/5 of shares to S; C pays dividend 10000; C liquidates
+   +240  family 25920, A 16460, tax 14079  [gift-K + gift-S + liquidate + redeem-K]
+        A gives 1/5 of shares to S; A gives 1/5 of shares to K; C redeems 1/4 of K's shares; C liquidates
+   +240  family 25920, A 16588, tax 14080  [dividend + gift-K + liquidate]
+        A gives 1/5 of shares to K; A gives 1/5 of shares to K; C pays dividend 10000; C liquidates
+== 2. QSBS (post-2025 stock, 5 years old), full exit, money to A: 91723 positions, 133943 moves tried, 226 move families
+   baseline (plain): family 25680, A 25680, total tax 14320
+   +10465  family 36145, A 36145, tax 3855  [contribP + sellP-stock + sellStock]
+        A sells 1/5 of shares to outsider; A contributes 1/1 of C shares to P (§351); A sells all P stock to outsider
+   +10037  family 35717, A 35717, tax 4283  [sellStock]
+        A sells 1/5 of shares to outsider; A sells 1/4 of shares to outsider; wait 1y; A sells 1/1 of shares to outsider
+   +8608  family 34288, A 34288, tax 5712  [contribP + sellP-stock]
+        A contributes 1/1 of C shares to P (§351); A sells all P stock to outsider
+   +5038  family 30718, A 30718, tax 9282  [electS + liquidate]
+        C elects S; wait 1y; wait 5y; C liquidates
+   +3809  family 29489, A 29489, tax 10511  [liquidate + redeem-A + sellAsset]
+        C sells asset; C redeems 1/4 of A's shares; C redeems 1/4 of A's shares; C liquidates
+   +3808  family 29488, A 29488, tax 10512  [liquidate]
+        C liquidates
+   +398  family 26078, A 26078, tax 13922  [P-distribute + P-sellStock + contribP + dividend]
+        C pays dividend 10000; A contributes 1/1 of C shares to P (§351); P sells its C shares to outsider; P distributes 23910 to A
+   +398  family 26078, A 26078, tax 13922  [P-distribute + P-sellStock + contribP + redeem-A]
+        C redeems 1/4 of A's shares; A contributes 1/1 of C shares to P (§351); P sells its C shares to outsider; P distributes 23910 to A
+== 3. same, money to the family: 91723 positions, 133943 moves tried, 226 move families
+   baseline (plain): family 25680, A 25680, total tax 14320
+   +12179  family 37859, A 22001, tax 2141  [gift-S + sellStock]
+        A sells 1/5 of shares to outsider; A sells 1/2 of shares to outsider; A gives 1/1 of shares to S; S sells 1/1 of shares to outsider
+   +12179  family 37859, A 22001, tax 2141  [gift-K + sellStock]
+        A sells 1/5 of shares to outsider; A sells 1/2 of shares to outsider; A gives 1/1 of shares to K; K sells 1/1 of shares to outsider
+   +10929  family 36609, A 26609, tax 3391  [contribP + gift-S + redeem-S + sellP-stock]
+        A gives 1/4 of shares to S; C redeems 1/1 of S's shares; A contributes 1/1 of C shares to P (§351); A sells all P stock to outsider
+   +10465  family 36145, A 28145, tax 3855  [contribP + gift-K + redeem-K + sellP-stock]
+        A gives 1/5 of shares to K; A contributes 1/1 of C shares to P (§351); A sells all P stock to outsider; C redeems 1/1 of K's shares
+   +10465  family 36145, A 36145, tax 3855  [contribP + sellP-stock + sellStock]
+        A sells 1/5 of shares to outsider; A contributes 1/1 of C shares to P (§351); A sells all P stock to outsider
+   +10037  family 35717, A 35717, tax 4283  [sellStock]
+        A sells 1/5 of shares to outsider; A sells 1/4 of shares to outsider; wait 1y; A sells 1/1 of shares to outsider
+== 4. QSBS, keep the business, money to A: 19538 positions, 31250 moves tried, 111 move families
+   baseline (plain): family 7620, A 7620, total tax 2380
+   +2380  family 10000, A 10000, tax 0  [gift-S + redeem-A]
+        A gives 1/2 of shares to S; C redeems 1/2 of A's shares
+== 5. not QSBS, keep the business; P has an 8,000 deficit and A an 8,000 basis in it; §535(c)(2) credit 250: 146880 positions, 246126 moves tried, 152 move families
+   baseline (plain): family 7620, A 7620, total tax 2380
+   +60  family 7680, A 0, tax 2320  [gift-S + redeem-S]
+        A gives 1/2 of shares to S; C redeems 1/2 of S's shares
+   +60  family 7680, A 7680, tax 2320  [gift-S + redeem-A]
+        A gives 1/2 of shares to S; C redeems 1/2 of A's shares
+   +60  family 7680, A 0, tax 2320  [gift-K + gift-S + redeem-K]
+        A gives 1/2 of shares to K; A gives 1/1 of shares to S; C redeems 1/2 of K's shares
+   +35  family 7655, A 7655, tax 2344  [P-distribute + contribP + dividend + redeem-A]
+        A contributes 1/4 of C shares to P (§351); C redeems 1/4 of A's shares; C pays dividend 2500; wait 1y; P distributes 621 to A
+== 6. same; §535(c)(2) credit read literally (250 less a negative number): 146880 positions, 246126 moves tried, 152 move families
+   baseline (plain): family 7620, A 7620, total tax 2380
+   +1316  family 8936, A 7412, tax 1064  [P-distribute + contribP + dividend + gift-K]
+        A gives 1/5 of shares to K; A contributes 1/1 of C shares to P (§351); C pays dividend 10000; wait 1y; P distributes 7412 to A
+   +1316  family 8936, A 7412, tax 1064  [P-distribute + contribP + dividend + gift-S]
+        A gives 1/5 of shares to S; A contributes 1/1 of C shares to P (§351); C pays dividend 10000; wait 1y; P distributes 7412 to A
+   +1234  family 8854, A 8854, tax 1146  [P-distribute + contribP + dividend]
+        A contributes 1/2 of C shares to P (§351); A contributes 1/2 of C shares to P (§351); C pays dividend 10000; wait 1y; P distributes 6949 to A
+   +60  family 7680, A 0, tax 2320  [gift-S + redeem-S]
+        A gives 1/2 of shares to S; C redeems 1/2 of S's shares
+== 7. same; P is a personal holding company: 146880 positions, 246126 moves tried, 152 move families
+   baseline (plain): family 7620, A 7620, total tax 2380
+   +60  family 7680, A 0, tax 2320  [gift-S + redeem-S]
+        A gives 1/2 of shares to S; C redeems 1/2 of S's shares
+   +60  family 7680, A 7680, tax 2320  [gift-S + redeem-A]
+        A gives 1/2 of shares to S; C redeems 1/2 of A's shares
+   +60  family 7680, A 0, tax 2320  [gift-K + gift-S + redeem-K]
+        A gives 1/2 of shares to K; A gives 1/1 of shares to S; C redeems 1/2 of K's shares
+== 8. QSBS, C has no earnings and profits, keep the business; §301(c)(3) gain not §1202 gain: 2347 positions, 3421 moves tried, 65 move families
+   baseline (plain): family 7858, A 7858, total tax 2142
+   +2142  family 10000, A 10000, tax 0  [gift-S + redeem-A]
+        A gives 1/2 of shares to S; C redeems 1/2 of A's shares
+== 9. same; §301(c)(3) gain read as gain from the sale or exchange of the stock: 2347 positions, 3421 moves tried, 65 move families
+   baseline (plain): family 10000, A 10000, total tax 0
+   nothing beats the baseline

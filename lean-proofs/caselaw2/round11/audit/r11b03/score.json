@@ -1,0 +1,1152 @@
+{
+ "run": "r11b03",
+ "type": "B",
+ "self_test": false,
+ "answer_files": [
+  "ans_1.jsonl",
+  "ans_1_b.jsonl",
+  "ans_2.jsonl",
+  "ans_2_b.jsonl"
+ ],
+ "items_in_key": 90,
+ "items_answered": 90,
+ "unanswered": [],
+ "classes": {
+  "scdb11_r2": {
+   "population": 196,
+   "in_key": 80,
+   "answered": 80,
+   "all": {
+    "n": 80,
+    "right": {
+     "k": 41,
+     "n": 80,
+     "p": 0.5125,
+     "lo": 0.4049,
+     "hi": 0.6189
+    },
+    "right_extent": {
+     "k": 41,
+     "n": 80,
+     "p": 0.5125,
+     "lo": 0.4049,
+     "hi": 0.6189
+    },
+    "link": {
+     "k": 44,
+     "n": 80,
+     "p": 0.55,
+     "lo": 0.4412,
+     "hi": 0.6542
+    },
+    "link_effect": {
+     "k": 41,
+     "n": 80,
+     "p": 0.5125,
+     "lo": 0.4049,
+     "hi": 0.6189
+    }
+   },
+   "flag": "BELOW 0.90",
+   "weighted": {
+    "right": {
+     "p": 0.4889,
+     "population": 196,
+     "rows_folded_from_unanswered_strata": 0,
+     "lo": 0.3974,
+     "hi": 0.5812,
+     "n_eff": 109.8
+    },
+    "right_extent": {
+     "p": 0.4889,
+     "population": 196,
+     "rows_folded_from_unanswered_strata": 0,
+     "lo": 0.3974,
+     "hi": 0.5812,
+     "n_eff": 109.8
+    }
+   },
+   "by_system": {
+    "fed": {
+     "n": 79,
+     "right": {
+      "k": 40,
+      "n": 79,
+      "p": 0.5063,
+      "lo": 0.3984,
+      "hi": 0.6137
+     },
+     "right_extent": {
+      "k": 40,
+      "n": 79,
+      "p": 0.5063,
+      "lo": 0.3984,
+      "hi": 0.6137
+     },
+     "link": {
+      "k": 43,
+      "n": 79,
+      "p": 0.5443,
+      "lo": 0.435,
+      "hi": 0.6495
+     },
+     "link_effect": {
+      "k": 40,
+      "n": 79,
+      "p": 0.5063,
+      "lo": 0.3984,
+      "hi": 0.6137
+     }
+    },
+    "state": {
+     "n": 1,
+     "right": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     }
+    }
+   },
+   "by_decade": {
+    "1970s": {
+     "n": 1,
+     "right": {
+      "k": 0,
+      "n": 1,
+      "p": 0.0,
+      "lo": 0.0,
+      "hi": 0.7935
+     },
+     "right_extent": {
+      "k": 0,
+      "n": 1,
+      "p": 0.0,
+      "lo": 0.0,
+      "hi": 0.7935
+     },
+     "link": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 0,
+      "n": 1,
+      "p": 0.0,
+      "lo": 0.0,
+      "hi": 0.7935
+     }
+    },
+    "1980s": {
+     "n": 17,
+     "right": {
+      "k": 9,
+      "n": 17,
+      "p": 0.5294,
+      "lo": 0.3096,
+      "hi": 0.7383
+     },
+     "right_extent": {
+      "k": 9,
+      "n": 17,
+      "p": 0.5294,
+      "lo": 0.3096,
+      "hi": 0.7383
+     },
+     "link": {
+      "k": 10,
+      "n": 17,
+      "p": 0.5882,
+      "lo": 0.3601,
+      "hi": 0.7839
+     },
+     "link_effect": {
+      "k": 9,
+      "n": 17,
+      "p": 0.5294,
+      "lo": 0.3096,
+      "hi": 0.7383
+     }
+    },
+    "1990s": {
+     "n": 17,
+     "right": {
+      "k": 4,
+      "n": 17,
+      "p": 0.2353,
+      "lo": 0.0956,
+      "hi": 0.4726
+     },
+     "right_extent": {
+      "k": 4,
+      "n": 17,
+      "p": 0.2353,
+      "lo": 0.0956,
+      "hi": 0.4726
+     },
+     "link": {
+      "k": 5,
+      "n": 17,
+      "p": 0.2941,
+      "lo": 0.1328,
+      "hi": 0.5313
+     },
+     "link_effect": {
+      "k": 4,
+      "n": 17,
+      "p": 0.2353,
+      "lo": 0.0956,
+      "hi": 0.4726
+     }
+    },
+    "2000s": {
+     "n": 17,
+     "right": {
+      "k": 12,
+      "n": 17,
+      "p": 0.7059,
+      "lo": 0.4687,
+      "hi": 0.8672
+     },
+     "right_extent": {
+      "k": 12,
+      "n": 17,
+      "p": 0.7059,
+      "lo": 0.4687,
+      "hi": 0.8672
+     },
+     "link": {
+      "k": 12,
+      "n": 17,
+      "p": 0.7059,
+      "lo": 0.4687,
+      "hi": 0.8672
+     },
+     "link_effect": {
+      "k": 12,
+      "n": 17,
+      "p": 0.7059,
+      "lo": 0.4687,
+      "hi": 0.8672
+     }
+    },
+    "2010s": {
+     "n": 17,
+     "right": {
+      "k": 9,
+      "n": 17,
+      "p": 0.5294,
+      "lo": 0.3096,
+      "hi": 0.7383
+     },
+     "right_extent": {
+      "k": 9,
+      "n": 17,
+      "p": 0.5294,
+      "lo": 0.3096,
+      "hi": 0.7383
+     },
+     "link": {
+      "k": 9,
+      "n": 17,
+      "p": 0.5294,
+      "lo": 0.3096,
+      "hi": 0.7383
+     },
+     "link_effect": {
+      "k": 9,
+      "n": 17,
+      "p": 0.5294,
+      "lo": 0.3096,
+      "hi": 0.7383
+     }
+    },
+    "2020s": {
+     "n": 11,
+     "right": {
+      "k": 7,
+      "n": 11,
+      "p": 0.6364,
+      "lo": 0.3538,
+      "hi": 0.8483
+     },
+     "right_extent": {
+      "k": 7,
+      "n": 11,
+      "p": 0.6364,
+      "lo": 0.3538,
+      "hi": 0.8483
+     },
+     "link": {
+      "k": 7,
+      "n": 11,
+      "p": 0.6364,
+      "lo": 0.3538,
+      "hi": 0.8483
+     },
+     "link_effect": {
+      "k": 7,
+      "n": 11,
+      "p": 0.6364,
+      "lo": 0.3538,
+      "hi": 0.8483
+     }
+    }
+   },
+   "by_effect": {
+    "rehearingEnBancGranted": {
+     "n": 40,
+     "right": {
+      "k": 20,
+      "n": 40,
+      "p": 0.5,
+      "lo": 0.352,
+      "hi": 0.648
+     },
+     "right_extent": {
+      "k": 20,
+      "n": 40,
+      "p": 0.5,
+      "lo": 0.352,
+      "hi": 0.648
+     },
+     "link": {
+      "k": 20,
+      "n": 40,
+      "p": 0.5,
+      "lo": 0.352,
+      "hi": 0.648
+     },
+     "link_effect": {
+      "k": 20,
+      "n": 40,
+      "p": 0.5,
+      "lo": 0.352,
+      "hi": 0.648
+     }
+    },
+    "vacated": {
+     "n": 40,
+     "right": {
+      "k": 21,
+      "n": 40,
+      "p": 0.525,
+      "lo": 0.375,
+      "hi": 0.6706
+     },
+     "right_extent": {
+      "k": 21,
+      "n": 40,
+      "p": 0.525,
+      "lo": 0.375,
+      "hi": 0.6706
+     },
+     "link": {
+      "k": 24,
+      "n": 40,
+      "p": 0.6,
+      "lo": 0.446,
+      "hi": 0.7365
+     },
+     "link_effect": {
+      "k": 21,
+      "n": 40,
+      "p": 0.525,
+      "lo": 0.375,
+      "hi": 0.6706
+     }
+    }
+   },
+   "answer_distribution": {
+    "none": 72,
+    "rehearing_en_banc_only": 8,
+    "reinstated": 4,
+    "reversed_or_vacated_in_part": 1,
+    "vacated": 73,
+    "withdrawn_or_superseded": 2
+   },
+   "failures": {
+    "kind": 5,
+    "link": 72,
+    "scope": 1
+   },
+   "strata": {
+    "fed|1970s": {
+     "n": 1,
+     "right": {
+      "k": 0,
+      "n": 1,
+      "p": 0.0,
+      "lo": 0.0,
+      "hi": 0.7935
+     },
+     "right_extent": {
+      "k": 0,
+      "n": 1,
+      "p": 0.0,
+      "lo": 0.0,
+      "hi": 0.7935
+     },
+     "link": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 0,
+      "n": 1,
+      "p": 0.0,
+      "lo": 0.0,
+      "hi": 0.7935
+     },
+     "population": 1,
+     "sampled": 1
+    },
+    "fed|1980s": {
+     "n": 16,
+     "right": {
+      "k": 8,
+      "n": 16,
+      "p": 0.5,
+      "lo": 0.28,
+      "hi": 0.72
+     },
+     "right_extent": {
+      "k": 8,
+      "n": 16,
+      "p": 0.5,
+      "lo": 0.28,
+      "hi": 0.72
+     },
+     "link": {
+      "k": 9,
+      "n": 16,
+      "p": 0.5625,
+      "lo": 0.3318,
+      "hi": 0.769
+     },
+     "link_effect": {
+      "k": 8,
+      "n": 16,
+      "p": 0.5,
+      "lo": 0.28,
+      "hi": 0.72
+     },
+     "population": 38,
+     "sampled": 16
+    },
+    "fed|1990s": {
+     "n": 17,
+     "right": {
+      "k": 4,
+      "n": 17,
+      "p": 0.2353,
+      "lo": 0.0956,
+      "hi": 0.4726
+     },
+     "right_extent": {
+      "k": 4,
+      "n": 17,
+      "p": 0.2353,
+      "lo": 0.0956,
+      "hi": 0.4726
+     },
+     "link": {
+      "k": 5,
+      "n": 17,
+      "p": 0.2941,
+      "lo": 0.1328,
+      "hi": 0.5313
+     },
+     "link_effect": {
+      "k": 4,
+      "n": 17,
+      "p": 0.2353,
+      "lo": 0.0956,
+      "hi": 0.4726
+     },
+     "population": 60,
+     "sampled": 17
+    },
+    "fed|2000s": {
+     "n": 17,
+     "right": {
+      "k": 12,
+      "n": 17,
+      "p": 0.7059,
+      "lo": 0.4687,
+      "hi": 0.8672
+     },
+     "right_extent": {
+      "k": 12,
+      "n": 17,
+      "p": 0.7059,
+      "lo": 0.4687,
+      "hi": 0.8672
+     },
+     "link": {
+      "k": 12,
+      "n": 17,
+      "p": 0.7059,
+      "lo": 0.4687,
+      "hi": 0.8672
+     },
+     "link_effect": {
+      "k": 12,
+      "n": 17,
+      "p": 0.7059,
+      "lo": 0.4687,
+      "hi": 0.8672
+     },
+     "population": 55,
+     "sampled": 17
+    },
+    "fed|2010s": {
+     "n": 17,
+     "right": {
+      "k": 9,
+      "n": 17,
+      "p": 0.5294,
+      "lo": 0.3096,
+      "hi": 0.7383
+     },
+     "right_extent": {
+      "k": 9,
+      "n": 17,
+      "p": 0.5294,
+      "lo": 0.3096,
+      "hi": 0.7383
+     },
+     "link": {
+      "k": 9,
+      "n": 17,
+      "p": 0.5294,
+      "lo": 0.3096,
+      "hi": 0.7383
+     },
+     "link_effect": {
+      "k": 9,
+      "n": 17,
+      "p": 0.5294,
+      "lo": 0.3096,
+      "hi": 0.7383
+     },
+     "population": 30,
+     "sampled": 17
+    },
+    "fed|2020s": {
+     "n": 11,
+     "right": {
+      "k": 7,
+      "n": 11,
+      "p": 0.6364,
+      "lo": 0.3538,
+      "hi": 0.8483
+     },
+     "right_extent": {
+      "k": 7,
+      "n": 11,
+      "p": 0.6364,
+      "lo": 0.3538,
+      "hi": 0.8483
+     },
+     "link": {
+      "k": 7,
+      "n": 11,
+      "p": 0.6364,
+      "lo": 0.3538,
+      "hi": 0.8483
+     },
+     "link_effect": {
+      "k": 7,
+      "n": 11,
+      "p": 0.6364,
+      "lo": 0.3538,
+      "hi": 0.8483
+     },
+     "population": 11,
+     "sampled": 11
+    },
+    "state|1980s": {
+     "n": 1,
+     "right": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "right_extent": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "link_effect": {
+      "k": 1,
+      "n": 1,
+      "p": 1.0,
+      "lo": 0.2065,
+      "hi": 1.0
+     },
+     "population": 1,
+     "sampled": 1
+    }
+   }
+  }
+ },
+ "decoys": {
+  "in_key": {
+   "wrong": 6,
+   "right": 4
+  },
+  "accuracy": {
+   "k": 20,
+   "n": 20,
+   "p": 1.0,
+   "lo": 0.8389,
+   "hi": 1.0
+  },
+  "known_wrong_rejected": {
+   "k": 12,
+   "n": 12,
+   "p": 1.0,
+   "lo": 0.7575,
+   "hi": 1.0
+  },
+  "known_right_confirmed": {
+   "k": 8,
+   "n": 8,
+   "p": 1.0,
+   "lo": 0.6756,
+   "hi": 1.0
+  },
+  "per_pack": {
+   "pack_1": {
+    "accuracy": {
+     "k": 10,
+     "n": 10,
+     "p": 1.0,
+     "lo": 0.7225,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 6,
+     "n": 6,
+     "p": 1.0,
+     "lo": 0.6097,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 4,
+     "n": 4,
+     "p": 1.0,
+     "lo": 0.5101,
+     "hi": 1.0
+    }
+   },
+   "pack_2": {
+    "accuracy": {
+     "k": 10,
+     "n": 10,
+     "p": 1.0,
+     "lo": 0.7225,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 6,
+     "n": 6,
+     "p": 1.0,
+     "lo": 0.6097,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 4,
+     "n": 4,
+     "p": 1.0,
+     "lo": 0.5101,
+     "hi": 1.0
+    }
+   }
+  },
+  "per_file": {
+   "ans_1.jsonl": {
+    "accuracy": {
+     "k": 5,
+     "n": 5,
+     "p": 1.0,
+     "lo": 0.5655,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 3,
+     "n": 3,
+     "p": 1.0,
+     "lo": 0.4385,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   },
+   "ans_1_b.jsonl": {
+    "accuracy": {
+     "k": 5,
+     "n": 5,
+     "p": 1.0,
+     "lo": 0.5655,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 3,
+     "n": 3,
+     "p": 1.0,
+     "lo": 0.4385,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   },
+   "ans_2.jsonl": {
+    "accuracy": {
+     "k": 5,
+     "n": 5,
+     "p": 1.0,
+     "lo": 0.5655,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 3,
+     "n": 3,
+     "p": 1.0,
+     "lo": 0.4385,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   },
+   "ans_2_b.jsonl": {
+    "accuracy": {
+     "k": 5,
+     "n": 5,
+     "p": 1.0,
+     "lo": 0.5655,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 3,
+     "n": 3,
+     "p": 1.0,
+     "lo": 0.4385,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   }
+  },
+  "per_family": {
+   "r10:r10f11:fjc10b_h": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r10:r10k03:capC9": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   },
+   "r6:r1:rehear/self": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   },
+   "r6:v1:decoy_base": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   },
+   "r6:v2:below/other": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r6:v2:below/sc/weak": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r6:v2:memo/cap-2g": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r7:r7a19:rh_sil": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r9:r9f01:fjc9G": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "right_confirmed": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    }
+   },
+   "r9:r9p03:PJR": {
+    "accuracy": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    },
+    "wrong_rejected": {
+     "k": 0,
+     "n": 0,
+     "p": null,
+     "lo": null,
+     "hi": null
+    },
+    "right_confirmed": {
+     "k": 2,
+     "n": 2,
+     "p": 1.0,
+     "lo": 0.3424,
+     "hi": 1.0
+    }
+   }
+  },
+  "missed": []
+ },
+ "readers": {
+  "ans_1.jsonl": {
+   "items": 45,
+   "packs": [
+    "1"
+   ],
+   "real_right": {
+    "k": 20,
+    "n": 40,
+    "p": 0.5,
+    "lo": 0.352,
+    "hi": 0.648
+   },
+   "decoy_accuracy": {
+    "k": 5,
+    "n": 5,
+    "p": 1.0,
+    "lo": 0.5655,
+    "hi": 1.0
+   },
+   "unsure": 0,
+   "low_confidence": 2
+  },
+  "ans_1_b.jsonl": {
+   "items": 45,
+   "packs": [
+    "1"
+   ],
+   "real_right": {
+    "k": 20,
+    "n": 40,
+    "p": 0.5,
+    "lo": 0.352,
+    "hi": 0.648
+   },
+   "decoy_accuracy": {
+    "k": 5,
+    "n": 5,
+    "p": 1.0,
+    "lo": 0.5655,
+    "hi": 1.0
+   },
+   "unsure": 0,
+   "low_confidence": 0
+  },
+  "ans_2.jsonl": {
+   "items": 45,
+   "packs": [
+    "2"
+   ],
+   "real_right": {
+    "k": 21,
+    "n": 40,
+    "p": 0.525,
+    "lo": 0.375,
+    "hi": 0.6706
+   },
+   "decoy_accuracy": {
+    "k": 5,
+    "n": 5,
+    "p": 1.0,
+    "lo": 0.5655,
+    "hi": 1.0
+   },
+   "unsure": 0,
+   "low_confidence": 1
+  },
+  "ans_2_b.jsonl": {
+   "items": 45,
+   "packs": [
+    "2"
+   ],
+   "real_right": {
+    "k": 22,
+    "n": 40,
+    "p": 0.55,
+    "lo": 0.3983,
+    "hi": 0.6929
+   },
+   "decoy_accuracy": {
+    "k": 5,
+    "n": 5,
+    "p": 1.0,
+    "lo": 0.5655,
+    "hi": 1.0
+   },
+   "unsure": 0,
+   "low_confidence": 0
+  }
+ },
+ "agreement": {
+  "items_read_twice": 90,
+  "agree_right": {
+   "k": 89,
+   "n": 90,
+   "p": 0.9889,
+   "lo": 0.9397,
+   "hi": 0.998
+  },
+  "agree_disposition": {
+   "k": 89,
+   "n": 90,
+   "p": 0.9889,
+   "lo": 0.9397,
+   "hi": 0.998
+  },
+  "rule": "a measure holds only if it holds for every reader"
+ },
+ "problems": [],
+ "unknown_items": [],
+ "threshold": 0.9,
+ "definitions": {
+  "right": "link and the disposition agrees with the kind",
+  "right_extent": "right and (scope all => whole yes)",
+  "interval": "Wilson 95%; weighted: Wilson at the Kish effective sample size, finite-population corrected, strata weighted by population",
+  "decoy_accuracy": "known wrong: not confirmed (A: not right; B: not link); known right: right"
+ }
+}

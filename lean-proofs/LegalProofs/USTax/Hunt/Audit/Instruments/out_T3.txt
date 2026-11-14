@@ -1,0 +1,89 @@
+T3 all rules: positions 2570, finals 144, plain $42806, best $41038, saves $1768
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 131: buy GainFund
+     day 131: sell GainFund (bought day 129)
+     day 162: buy DivStock
+     day 162: sell GainFund (bought day 131)
+T3 no §1091(a): positions 1617, finals 67, plain $42806, best $42275, saves $531
+     day 129: buy DivStock
+     day 129: sell FundA (bought day 5)
+     day 330: buy DivStock
+     day 330: sell DivStock (bought day 129)
+T3 no §1091(a): PLAN: tax $(some 42806)
+T3 no §1091(d) basis: positions 1889, finals 85, plain $42806, best $42275, saves $531
+     day 129: buy DivStock
+     day 129: sell FundA (bought day 5)
+     day 330: buy FundA
+     day 330: sell DivStock (bought day 129)
+T3 no §1091(d) basis: PLAN: tax $(some 45281)
+T3 no §1223(3) tacking: positions 2301, finals 120, plain $42806, best $41038, saves $1768
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 130: sell GainFund (bought day 129)
+     day 130: buy GainFund
+     day 162: sell GainFund (bought day 130)
+     day 162: buy FundA
+T3 no §1223(3) tacking: PLAN: tax $(some 41038)
+T3 no §852(b)(3)(B): positions 2570, finals 144, plain $42806, best $42275, saves $531
+     day 129: buy DivStock
+     day 129: sell FundA (bought day 5)
+     day 330: buy FundA
+     day 330: sell DivStock (bought day 129)
+T3 no §852(b)(3)(B): PLAN: tax $(some 42806)
+T3 no §852(b)(3)(B): hold FundA: tax $(some 42806)
+T3 no §852(b)(4)(A): positions 2570, finals 144, plain $42806, best $41038, saves $1768
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 130: buy FundA
+     day 130: sell GainFund (bought day 129)
+T3 no §852(b)(4)(A): sold day 130, nothing else: tax $(some 41038)
+T3 ban buy GainFund: positions 1286, finals 94, plain $42806, best $42275, saves $531
+     day 129: buy DivStock
+     day 129: sell FundA (bought day 5)
+     day 330: buy FundA
+     day 330: sell DivStock (bought day 129)
+T3 ban sell GainFund: positions 1553, finals 94, plain $42806, best $42275, saves $531
+     day 129: buy DivStock
+     day 129: sell FundA (bought day 5)
+     day 330: buy FundA
+     day 330: sell DivStock (bought day 129)
+T3 ban sell FundA: positions 42, finals 1, plain $42806, best $42806, saves $0
+T3 ban buy FundA: positions 1207, finals 53, plain $42806, best $41038, saves $1768
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 131: sell GainFund (bought day 129)
+     day 131: buy GainFund
+     day 162: buy DivStock
+     day 162: sell GainFund (bought day 131)
+T3 ban buy FundA + buy DivStock + shorts: positions 61, finals 1, plain $42806, best $42806, saves $0
+T3 no second lot of a held instrument: positions 2372, finals 144, plain $42806, best $41038, saves $1768
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 131: sell GainFund (bought day 129)
+     day 131: buy GainFund
+     day 162: buy DivStock
+     day 162: sell GainFund (bought day 131)
+T3 no second lot: PLAN: tax $none
+T3 one lot at a time (maxLots 1): positions 1044, finals 144, plain $42806, best $41038, saves $1768
+     day 129: sell FundA (bought day 5)
+     day 129: buy GainFund
+     day 131: sell GainFund (bought day 129)
+     day 131: buy GainFund
+     day 162: sell GainFund (bought day 131)
+     day 162: buy DivStock
+T3 only the plan's four kinds of trade: positions 320, finals 32, plain $42806, best $41038, saves $1768
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 131: sell GainFund (bought day 129)
+     day 131: buy GainFund
+     day 162: sell GainFund (bought day 131)
+     day 162: buy FundA
+T3 only the plan's four kinds, world without DivStock: positions 320, finals 32, plain $42806, best $41038, saves $1768
+     day 129: buy GainFund
+     day 129: sell FundA (bought day 5)
+     day 131: sell GainFund (bought day 129)
+     day 131: buy GainFund
+     day 162: sell GainFund (bought day 131)
+     day 162: buy FundA
+T3 GainFund pays nothing: positions 637, finals 13, plain $42806, best $42806, saves $0

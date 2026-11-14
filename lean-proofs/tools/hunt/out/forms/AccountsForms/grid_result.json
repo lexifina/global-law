@@ -1,0 +1,173 @@
+{
+ "A_hsa_limit_2025": {
+  "n_diff": 704,
+  "max": {
+   "months": "SSSSSSSSSSSF",
+   "age55": false,
+   "married": false,
+   "statute": 4654.17,
+   "form": 8550.0,
+   "form_minus_statute": 3895.83
+  },
+  "min": {
+   "months": "SFFFFFFFFFFF",
+   "age55": false,
+   "married": false,
+   "statute": 8195.83,
+   "form": 8550.0,
+   "form_minus_statute": 354.17
+  },
+  "signs": [
+   true
+  ],
+  "sample": [
+   {
+    "months": "SFFFFFFFFFFF",
+    "age55": false,
+    "married": false,
+    "statute": 8195.83,
+    "form": 8550.0,
+    "form_minus_statute": 354.17
+   },
+   {
+    "months": "SFFFFFFFFFFF",
+    "age55": false,
+    "married": true,
+    "statute": 8195.83,
+    "form": 8550.0,
+    "form_minus_statute": 354.17
+   },
+   {
+    "months": "SFFFFFFFFFFF",
+    "age55": true,
+    "married": false,
+    "statute": 9195.83,
+    "form": 9550.0,
+    "form_minus_statute": 354.17
+   },
+   {
+    "months": "SFFFFFFFFFFF",
+    "age55": true,
+    "married": true,
+    "statute": 9195.83,
+    "form": 9550.0,
+    "form_minus_statute": 354.17
+   },
+   {
+    "months": "SSFFFFFFFFFF",
+    "age55": false,
+    "married": false,
+    "statute": 7841.67,
+    "form": 8550.0,
+    "form_minus_statute": 708.33
+   },
+   {
+    "months": "SSFFFFFFFFFF",
+    "age55": false,
+    "married": true,
+    "statute": 7841.67,
+    "form": 8550.0,
+    "form_minus_statute": 708.33
+   }
+  ]
+ },
+ "B_value_ceiling": {
+  "n_diff": 8,
+  "max": {
+   "value_dec31": 0,
+   "excess": 7000,
+   "made_next_year_for_this_year": 7000,
+   "statute": 0.0,
+   "form": 420.0
+  },
+  "sample": [
+   {
+    "value_dec31": 0,
+    "excess": 1000,
+    "made_next_year_for_this_year": 1000,
+    "statute": 0.0,
+    "form": 60.0
+   },
+   {
+    "value_dec31": 0,
+    "excess": 7000,
+    "made_next_year_for_this_year": 1000,
+    "statute": 0.0,
+    "form": 60.0
+   },
+   {
+    "value_dec31": 0,
+    "excess": 7000,
+    "made_next_year_for_this_year": 7000,
+    "statute": 0.0,
+    "form": 420.0
+   },
+   {
+    "value_dec31": 500,
+    "excess": 1000,
+    "made_next_year_for_this_year": 1000,
+    "statute": 30.0,
+    "form": 60.0
+   },
+   {
+    "value_dec31": 500,
+    "excess": 7000,
+    "made_next_year_for_this_year": 1000,
+    "statute": 30.0,
+    "form": 90.0
+   }
+  ]
+ },
+ "C_trump_excess": {
+  "n_diff": 24,
+  "max": {
+   "nonexempt": 7500,
+   "exempt": 0,
+   "excess_returned": 0.0,
+   "value_dec31": 0,
+   "statute": 0.0,
+   "form": 150.0
+  },
+  "all_have_value_below_excess": true
+ },
+ "D_hsa_funding_4973g": {
+  "n_diff": 30,
+  "max": {
+   "coverage": "F",
+   "own": 0,
+   "employer": 0,
+   "funding_distribution": 8550,
+   "statute_literal_tax": 513.0,
+   "form_tax": 0.0
+  },
+  "every_diff_has_funding_distribution": true
+ },
+ "E_8606_trump_prorata": {
+  "n_diff": 0,
+  "if_it_had_aggregated_range": [
+   -12000.0,
+   10000.0
+  ]
+ },
+ "F_age_gates": {
+  "n_diff": 0
+ },
+ "F_pilot_qualifying_child": {
+  "n_diff": 2,
+  "cases": [
+   {
+    "anticipated": true,
+    "qualifying_child_in_fact": false,
+    "statute": 0,
+    "form": 1000
+   },
+   {
+    "anticipated": false,
+    "qualifying_child_in_fact": true,
+    "statute": 1000,
+    "form": 0
+   }
+  ]
+ },
+ "grid_points": 5306
+}

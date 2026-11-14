@@ -1,0 +1,136 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\stage\\v8e",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round8\\out\\v8e",
+  "status_sha1": "da6f3c30f9b5a71536c253fc26744e565a71d89e"
+ },
+ "court": "federal",
+ "dataset": "fedcir_dataset",
+ "generated": "2026-11-14T05:06:17+00:00",
+ "label": "round8",
+ "link": {
+  "fail_reasons": {
+   "below_not_found": 4775,
+   "below_several_cited": 6,
+   "below_several_uncited": 313,
+   "cafc_ambiguous": 150,
+   "cafc_not_in_corpus": 106
+  },
+  "linked": 1811,
+  "n_items": 7161
+ },
+ "metrics": {
+  "clean": {
+   "hi": 0.9954228221957824,
+   "k": 735,
+   "lo": 0.9806559293018122,
+   "n": 742,
+   "p": 0.9905660377358491
+  },
+  "clean_all": {
+   "hi": 0.9962137758679156,
+   "k": 1064,
+   "lo": 0.9853434891756457,
+   "n": 1072,
+   "p": 0.9925373134328358
+  },
+  "link_rate": {
+   "hi": 0.2630958454038726,
+   "k": 1811,
+   "lo": 0.24296440445508635,
+   "n": 7161,
+   "p": 0.25289763999441417
+  },
+  "link_rate_cited": {
+   "hi": 0.19262785551915207,
+   "k": 1314,
+   "lo": 0.17469938737733298,
+   "n": 7161,
+   "p": 0.1834939254294093
+  },
+  "link_rate_pre2019": {
+   "hi": 0.34242893185587187,
+   "k": 1684,
+   "lo": 0.3166691824978579,
+   "n": 5112,
+   "p": 0.32942097026604067
+  },
+  "part": {
+   "hi": 0.5376375995291675,
+   "k": 122,
+   "lo": 0.4161803937515663,
+   "n": 256,
+   "p": 0.4765625
+  },
+  "part_all": {
+   "hi": 0.46845155698394425,
+   "k": 128,
+   "lo": 0.35948704554331334,
+   "n": 310,
+   "p": 0.4129032258064516
+  },
+  "precision": {
+   "hi": 0.9343241077855956,
+   "k": 158,
+   "lo": 0.8441393281255126,
+   "n": 176,
+   "p": 0.8977272727272727
+  },
+  "precision_all": {
+   "hi": 0.919254395176247,
+   "k": 161,
+   "lo": 0.8246918404839519,
+   "n": 183,
+   "p": 0.8797814207650273
+  },
+  "precision_lenient": {
+   "hi": 0.9911271424837935,
+   "k": 172,
+   "lo": 0.9430289806095364,
+   "n": 176,
+   "p": 0.9772727272727273
+  },
+  "precision_lenient_all": {
+   "hi": 0.9882742533938074,
+   "k": 178,
+   "lo": 0.9376444427875914,
+   "n": 183,
+   "p": 0.9726775956284153
+  },
+  "recall": {
+   "hi": 0.5824710024425311,
+   "k": 158,
+   "lo": 0.4701880390816568,
+   "n": 300,
+   "p": 0.5266666666666666
+  },
+  "recall_all": {
+   "hi": 0.5236920684691759,
+   "k": 161,
+   "lo": 0.4184779649770899,
+   "n": 342,
+   "p": 0.47076023391812866
+  },
+  "recall_lenient": {
+   "hi": 0.657049168465373,
+   "k": 181,
+   "lo": 0.5470046174408554,
+   "n": 300,
+   "p": 0.6033333333333334
+  },
+  "recall_lenient_all": {
+   "hi": 0.5930022717697642,
+   "k": 185,
+   "lo": 0.48795968140546375,
+   "n": 342,
+   "p": 0.5409356725146199
+  }
+ },
+ "notes": "Primary population: linked decisions below (district court, Court of Federal Claims, Court of International Trade, Court of Appeals for Veterans Claims) cited by the linked Federal Circuit decision (MAPPING.md). recall/precision/clean/part on that population; *_all = every linked decision below (cited or caption-only). recall_lenient counts UNK_HIST as negative; precision_lenient counts PART as source-negative. link_rate: key items linked to one Federal Circuit and one decision-below node; link_rate_pre2019: items dated before 2019 (lower-court corpus ends 2017-2019). Cited units by tribunal: {'DCT': 'recall 55/94, clean 191/195', 'CFC': 'recall 63/113, clean 351/353', 'CIT': 'recall 29/65, clean 150/151', 'CAVC': 'recall 11/28, clean 43/43'}. Units by class/cited: {'CLEAN/0': 330, 'CLEAN/1': 742, 'NEG/0': 42, 'NEG/1': 300, 'PART/0': 54, 'PART/1': 256}. Cited units class>model: {'CLEAN>GOOD': 735, 'CLEAN>NEG_HIST': 4, 'CLEAN>UNK_HIST': 3, 'NEG>GOOD': 117, 'NEG>NEG_HIST': 158, 'NEG>NEG_OTHER': 1, 'NEG>UNK_HIST': 23, 'NEG>UNK_OTHER': 1, 'PART>GOOD': 134, 'PART>NEG_HIST': 14, 'PART>UNK_HIST': 108}.",
+ "primary": "recall",
+ "row_label": "Federal Circuit: decision below reversed/vacated (Fed. Cir. Dataset Project)",
+ "split": "all",
+ "tests": "same-case"
+}

@@ -1,0 +1,3 @@
+
+def c9 : Params := { base with grid := coarse }
+#eval report "T1 fine grid plan1 strict (noSeg0Exit), moves present/absent/relocate/sell/abandon true" { base with noSeg0Exit := true } greenCard9 [.present, .absent, .relocate, .sell, .abandon true]

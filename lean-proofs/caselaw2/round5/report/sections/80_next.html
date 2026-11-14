@@ -1,0 +1,119 @@
+<h2 id="next">What next: more tests, and how close to 100% we can get</h2>
+<p>After round 5 we ran three searches: for more Supreme Court answer keys, for answer keys covering every other
+court, and for the causes of the misses that remain. This section is the combined result. The three full reports are
+at the bottom of the page.</p>
+
+<h3>The short version</h3>
+<ul>
+<li><b>100% is not reachable on overrulings, for anyone.</b> About one list entry in nine is doubtful, and the
+commercial citators disagree with each other on about a third of negative treatments.</li>
+<li><b>The biggest gap is somewhere else.</b> Most of the model’s negative statuses are not overrulings. They are
+decisions reversed or vacated on appeal in the same case, and there we agree with later courts’ notes only about 12% of
+the time. Good open answer keys exist for exactly this, and we have never used them.</li>
+<li><b>On overrulings, plain engineering gets the lenient score from about 66% to about 72%.</b> Going further means
+admitting weaker kinds of evidence, one step at a time.</li>
+</ul>
+
+<h3>Why the score cannot be 100%</h3>
+<p>On the open half of the fresh key (165 pairs):</p>
+<div class="tw"><table><thead><tr><th>Reason</th><th>Pairs</th><th>Share</th></tr></thead><tbody>
+<tr><td>The list entry itself is doubtful (the same case on rehearing, a later Court credits a different decision, or nothing was overruled)</td><td>18</td><td>11%</td></tr>
+<tr><td>Nothing quotable anywhere: no court ever says it in words</td><td>12</td><td>7%</td></tr>
+<tr><td>The court acts only on a doctrine or a field, never on the named case</td><td>10</td><td>6%</td></tr>
+</tbody></table></div>
+<p>Where two or more lists agree on a pair, the model already scores 79% (open half) and 80% (sealed half). Where only
+one list has the pair it scores 56% and 47%. Much of the remaining gap is noise in the lists.</p>
+<p>The outside evidence says the same. In a 2018 study of 357 citing relationships, Shepard’s failed to identify 33% of
+true negative treatments, KeyCite 38% and Bloomberg’s citator 72%, and all three agreed that a relationship was
+negative in only 15% of cases.</p>
+
+<h3>What each step would buy</h3>
+<p>Open half of the fresh key, lenient score (the model marks the case overruled or partly negative).</p>
+<div class="tw"><table><thead><tr><th>Step</th><th>Score</th><th>What it takes</th></tr></thead><tbody>
+<tr><td>Now</td><td>65.5%</td><td></td></tr>
+<tr><td>Fix the reader: follow “that case” back to its name, tolerate misprinted names, split sentences that overrule several cases</td><td>71.5%</td><td>Engineering only</td></tr>
+<tr><td>Admit other words for overruling (“rejected”, “repudiated”), if they can pass the audit they failed this round</td><td>77.6%</td><td>Same principle, better precision</td></tr>
+<tr><td>Doctrine targets (explained below)</td><td>83.6%</td><td>A change of principle</td></tr>
+<tr><td>Infer overruling from inconsistency, with no words at all</td><td>90.9%</td><td>Abandons the principle; we would keep this as an “at risk” flag only</td></tr>
+<tr><td>Never reachable</td><td>9.1% short</td><td>Doubtful list entries</td></tr>
+</tbody></table></div>
+<p class="muted">These are ceilings if each step were done perfectly. For the Supreme Court Database the realistic
+ceiling under the current principle is 72–76%, against 63% now with recognised rows.</p>
+
+<h3 id="doctrine">Doctrine targets, explained</h3>
+<p>Today the model can only change the status of a <b>case</b>, and only when a court names that case. A “doctrine
+target” is when the court strikes at a <b>rule</b> instead, and leaves the reader to work out which cases that rule
+came from.</p>
+<p><i>Brown</i> is the example. Its key sentence is:</p>
+<blockquote><p>“We conclude that in the field of public education the doctrine of ‘separate but equal’ has no
+place.”</p></blockquote>
+<p>The thing being struck down is “the doctrine of separate but equal”. <i>Plessy</i> is not named in that sentence. A
+lawyer knows the doctrine is <i>Plessy</i>’s, but the model does not, so the sentence changes nothing.</p>
+<p>To use sentences like this, the model would need two quoted facts instead of one:</p>
+<ol>
+<li><b>A court rejects the doctrine.</b> <i>Brown</i>: the doctrine of “separate but equal” has no place in public
+education.</li>
+<li><b>A court says whose doctrine it is.</b> <i>Brown</i> itself, earlier in the opinion, speaks of “the so-called
+‘separate but equal’ doctrine announced by this Court in <i>Plessy v. Ferguson</i>”.</li>
+</ol>
+<p>Put together: the doctrine is rejected, the doctrine is <i>Plessy</i>’s, so <i>Plessy</i> is marked partly negative,
+limited to the field the court named (public education).</p>
+<p><b>Why this is a change of principle.</b> Until now every status change rests on one sentence that names the case
+and says what happens to it. Here no single sentence does that. The model would be joining two sentences, and the join
+is where it can go wrong: a doctrine can come from several cases, a case can stand for several doctrines, and courts
+often reject a doctrine in one field while keeping it in another. That is why it sits after the two safer steps, and
+why any result from it should be marked “partly negative”, never “overruled”.</p>
+<p><b>How much it matters.</b> 10 pairs on the open half of the fresh key, and up to 19 of the 66 wordless misses on the
+Supreme Court Database.</p>
+
+<h3>More answer keys: reversed and vacated on appeal</h3>
+<p>This is the largest untested part of the model, and its answer keys are court records, not editors’ opinions.</p>
+<div class="tw"><table><thead><tr><th>Source</th><th>What it tests</th><th>Rough size</th><th>Access</th></tr></thead><tbody>
+<tr><td>Federal Judicial Center appeals database, with an open table linking it to the case-law corpus</td><td>Reversed, vacated, affirmed; en banc</td><td>About 285,000 appellate cases</td><td>Open</td></tr>
+<tr><td>Songer courts of appeals database and its “Shepardized” companion</td><td>The same, plus withdrawn opinions, en banc results and Supreme Court reversal</td><td>20,355 cases, hand-coded</td><td>Open</td></tr>
+<tr><td>Shadow Docket Database: every Supreme Court order, 1993–2024</td><td>Vacated-and-remanded orders, summary reversals</td><td>Several thousand</td><td>Open</td></tr>
+<tr><td>Supreme Court Database disposition fields, joined through the “Reported below” line in our own text</td><td>Reversed, vacated, affirmed, including state high courts</td><td>About 3,500–4,500 negative</td><td>Open</td></tr>
+</tbody></table></div>
+<p class="muted">Sizes are estimates from the search, not counts.</p>
+
+<h3>More answer keys: Supreme Court overrulings</h3>
+<p>Nearly every list descends from one of three families, and we have used two of them.</p>
+<div class="tw"><table><thead><tr><th>Family</th><th>Members</th><th>Used so far</th></tr></thead><tbody>
+<tr><td>Spaeth</td><td>Supreme Court Database, Brenner &amp; Spaeth, Fowler &amp; Jeon</td><td>Yes</td></tr>
+<tr><td>Congressional Research Service</td><td>Every edition of the Constitution Annotated, CRS report R45319, most machine-learning benchmarks</td><td>Yes</td></tr>
+<tr><td>Shepard’s</td><td>Hansford &amp; Spriggs’s treatment data (about 6,363 precedents from 1946)</td><td><b>No.</b> Not deposited; needs a request to the authors</td></tr>
+<tr><td>The Justices’ own lists</td><td><i>Dobbs</i> footnote 48, <i>Smith v. Allwright</i> footnote 10, Brandeis in <i>Burnet</i>, the <i>Ramos</i> concurrence</td><td>Only <i>Payne</i></td></tr>
+</tbody></table></div>
+<p>Two open sources are worth having for what they say about scope and implied overrulings, even though they are in a
+family we have used: <b>CRS report R45319</b>, which quotes the operative overruling words for 141 rows, and the
+<b>Constitution Annotated editions from 1973 to 2017</b>, whose differences give about 50 labelled implied overrulings
+and the rows later withdrawn.</p>
+
+<h3>More answer keys: overrulings outside the Supreme Court</h3>
+<p>Almost nothing modern and open exists. What there is: scanned tables of overruled cases from before 1930 on the
+Internet Archive (Greenleaf, and state tables for New York, California and others); one academic deposit on state
+supreme courts whose contents sit behind a click-through agreement; and an expert-labelled citator benchmark from Free
+Law Project that is announced but not released.</p>
+
+<h3>Proposed order of work</h3>
+<ol>
+<li><b>Score reversed and vacated against the court-record keys</b>, with the model as it stands, before changing
+anything.</li>
+<li><b>Build an adjudicated Supreme Court key:</b> three blind readers and an adjudicator per pair, scored with scope.
+About 31 of the 115 open-half strict misses are not model errors.</li>
+<li><b>Fix the reader</b> and read what is already queued: only 1,807 of 89,542 usable later-court statements have been
+read.</li>
+<li><b>Print two timelines:</b> the model’s own, and “as attributed today”. Strict rises from 30% to as much as 48.5%
+on that convention alone, so both should be shown.</li>
+<li><b>Repair the other-words class</b>, after re-auditing the 2,315 older rows that rest on such wording.</li>
+<li><b>Doctrine targets</b>, last, and only as partly negative.</li>
+</ol>
+
+<h3>Guards against overfitting</h3>
+<ul>
+<li>Write rules, never rows, and freeze the word lists by hash before any score.</li>
+<li>Add two new held-out tests: overrulings decided after a cutoff date no rule was written against, and state high
+courts no reader has touched.</li>
+<li>Require the open and sealed halves to move alike, as they did in round 5 (+13.3 and +14.1 points).</li>
+<li>Never let a court without power feed a status. Those courts are the only independent test we have.</li>
+</ul>

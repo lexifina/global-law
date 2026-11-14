@@ -1,0 +1,43 @@
+{
+  "name": "Instruments",
+  "positions": 167502,
+  "baseline": 195920,
+  "best": {
+    "moves": ["day 1: buy 1000 shares at $100", "day 10: capital gain dividend $10,000 received (long-term gain, s.852(b)(3)(B))", "day 185: sell the lot at $90 (loss $10,000, short-term: held more than 6 months so s.852(b)(4)(A) does not apply; s.1222(2))"],
+    "value": 197620,
+    "gain": 1700,
+    "tax": 2380,
+    "character": {"dividend": "long-term gain 10000", "loss": "short-term loss 10000", "other_sales": "short-term gain 10000, fully offset"}
+  },
+  "runners_up": [
+    {"family": "wash sale into new shares", "moves": ["day 1: buy 1000", "day 10: sell (loss 10000 disallowed, s.1091(a))", "day 10: buy 1000 (basis 100000, s.1091(d))", "day 39: sell (loss 10000 short-term; no capital gain dividend on these shares)"], "value": 197620, "gain": 1700, "depends_on": "judgment call 1"},
+    {"family": "two lots, one sold into the other", "moves": ["day 1: buy 1000", "day 1: buy 1000", "day 10: sell lot 1 (loss disallowed, basis to lot 2)", "day 39: sell lot 2 (loss 20000: 10000 long-term under s.852(b)(4)(A), 10000 short-term)"], "value": 197620, "gain": 1700, "depends_on": "judgment call 1"},
+    {"family": "sell within 6 months, no repurchase", "moves": ["day 1: buy 1000", "day 10: sell"], "value": 195920, "gain": 0, "character": {"dividend": "long-term gain 10000", "loss": "long-term loss 10000 (s.852(b)(4)(A))"}},
+    {"family": "loss disallowed with no shares left to carry the basis", "values": [195240, 193540, 191160], "gains": [-680, -2380, -4760]}
+  ],
+  "variants": [
+    {"config": "soldCounts=false", "positions": 175537, "best_value": 197620},
+    {"config": "selfCounts=true", "positions": 139936, "best_value": 197620},
+    {"config": "carryRci=true", "positions": 169501, "best_value": 197620, "note": "only the hold-past-6-months family reaches it"},
+    {"config": "sixMonths=125, oneYear=250", "positions": 164104, "best_value": 197620}
+  ],
+  "judgment_calls": [
+    "s.852(b)(4)(A) applied share by share: a s.1091-disallowed loss carried into the basis of new shares that received no capital gain dividend is short-term when those shares are sold (variant carryRci tested)",
+    "6 months = 183 model days, 1 year = 365 (variant 125/250 tested)",
+    "s.1091(a): the lot sold is not its own disqualifying acquisition (variant tested)",
+    "s.1091(a): an acquisition in the prior 30 days of shares already resold still disallows the loss, and the basis is then lost (variant tested)",
+    "each acquisition disallows one loss; equal lots matched earliest first",
+    "the $200,000 is all the cash, tax on the $10,000 is paid from it, cash earns nothing",
+    "net capital loss valued at 37% on up to $3,000, carryover at zero (never reached)",
+    "a sale on day 10 is at $90 and the seller has received the dividend",
+    "search limited to 21 natural days, 6 moves, 4 purchases"
+  ],
+  "silences": [
+    "s.852(b)(4) is silent on whether its long-term recharacterisation follows a loss disallowed under s.1091 into the replacement shares",
+    "s.1091(a) is silent on whether the shares sold, or shares bought and already resold, count as the acquisition",
+    "s.1091(d) is silent on where the basis goes when the acquired shares are no longer held",
+    "s.1091(b),(c) and s.246(c)(4) leave matching and holding-period reductions to regulations",
+    "no provision read says how 6 months is counted in days",
+    "s.852(b)(3)(D): no designation of undistributed gains in the position, so not exercised"
+  ]
+}

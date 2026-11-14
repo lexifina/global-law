@@ -1,0 +1,23 @@
+fresh gold, split=dev, label=it2, pairs=165, result_sha1=97a7c95c0c17d1c006f350ecf3c32b87fe750e6c
+dimension     key                          n       a a_date a_kind      b      c      d      e   strict (95% CI)            lenient (95% CI)
+all           all                        165      50     30      0      6     24      0     55   0.303 [0.238,0.377]      0.667 [0.592,0.734]
+burned_crs    inCRS                      146      49     29      0      6     21      0     41   0.336 [0.264,0.416]      0.719 [0.641,0.786]
+burned_crs    notInCRS                    19       1      1      0      0      3      0     14   0.053 [0.009,0.246]      0.263 [0.118,0.488]
+era           1946-1991                   78      16     21      0      4     14      0     23   0.205 [0.130,0.307]      0.705 [0.596,0.795]
+era           1992on                      29      16      2      0      0      3      0      8   0.552 [0.376,0.716]      0.724 [0.543,0.853]
+era           to1945                      58      18      7      0      2      7      0     24   0.310 [0.206,0.438]      0.586 [0.458,0.704]
+express       express                    145      50     28      0      4     23      0     40   0.345 [0.272,0.425]      0.724 [0.646,0.790]
+express       implied                     20       0      2      0      2      1      0     15   0.000 [0.000,0.161]      0.250 [0.112,0.469]
+n_sources     1                           95      26     11      0      3     14      0     41   0.274 [0.194,0.371]      0.568 [0.468,0.663]
+n_sources     2+                          70      24     19      0      3     10      0     14   0.343 [0.242,0.460]      0.800 [0.692,0.877]
+scope         full                       152      50     28      0      3     18      0     53   0.329 [0.259,0.407]      0.651 [0.573,0.723]
+scope         partial                     13       0      2      0      3      6      0      2   0.000 [0.000,0.228]      0.846 [0.578,0.957]
+scope_express full+express               132      50     26      0      1     17      0     38   0.379 [0.301,0.464]      0.712 [0.630,0.782]
+scope_express full+implied                20       0      2      0      2      1      0     15   0.000 [0.000,0.161]      0.250 [0.112,0.469]
+scope_express partial+express             13       0      2      0      3      6      0      2   0.000 [0.000,0.228]      0.846 [0.578,0.957]
+source        blaustein_field_1958        72      19      8      0      3      9      0     33   0.264 [0.176,0.376]      0.542 [0.427,0.652]
+source        gerhardt_1991               84      28     21      0      5     11      0     19   0.333 [0.242,0.440]      0.774 [0.673,0.850]
+source        payne_n1_1991               18       0     12      0      1      4      0      1   0.000 [0.000,0.176]      0.944 [0.742,0.990]
+source        wikipedia                   80      31     18      0      1     13      0     17   0.388 [0.288,0.497]      0.787 [0.686,0.863]
+precision side (this half of the model's Supreme Court overrulings): {"listed": 80, "unlisted": 12, "targetListedOtherOverruler": 2} of 94; all halves: 171
+written: ~\Documents\us-caselaw-lean-work\caselaw-lean-2\round5\gold_fresh\dev\results\it2.json

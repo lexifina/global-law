@@ -1,0 +1,8 @@
+    # ---- allocation and draw
+    avail, pairs = {}, set()
+    for r in sorted(pop, key=lambda r: r["id"]):
+        pair = (r["speaker"], r["target"])
+        if r["id"] in excluded or (r.get("row2") and r["row2"]["id"] in excluded) or pair in pairs:
+            continue
+        if xhit(r, excluded, excluded_keys, excluded_pairs):
+            continue

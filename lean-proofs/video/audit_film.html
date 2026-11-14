@@ -1,0 +1,184 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=block">
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#04070d}
+canvas{position:absolute;inset:0}
+#ov{position:absolute;inset:0;pointer-events:none;color:#eef1f5;font-family:'IBM Plex Sans',sans-serif}
+.k{position:absolute;left:110px;top:84px;font:600 22px 'IBM Plex Sans';letter-spacing:.22em;text-transform:uppercase;color:#f2b24a}
+.t{position:absolute;left:110px;top:120px;font:600 56px/1.1 'Source Serif 4',serif;max-width:760px;text-shadow:0 2px 30px rgba(0,0,0,.8)}
+.s{position:absolute;left:112px;top:258px;font:400 25px/1.4 'IBM Plex Sans';color:#a6b5cc;max-width:640px;text-shadow:0 2px 20px rgba(0,0,0,.9)}
+#hud{position:absolute;right:110px;top:88px;text-align:right;font:500 21px 'JetBrains Mono',monospace;color:#a6b5cc;line-height:1.6;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+#hud b{font:700 60px 'Source Serif 4',serif;color:#eef1f5;display:block;line-height:1.05}
+.lab{position:absolute;transform:translate(-100%,-50%);white-space:nowrap;font:600 18px 'IBM Plex Sans';color:#d8e2f2;text-shadow:0 2px 14px #000;text-align:right}
+.lab small{display:block;font:500 14px 'JetBrains Mono';color:#8fa2bd}
+.col{position:absolute;transform:translate(-50%,-100%) rotate(-32deg);transform-origin:50% 100%;white-space:nowrap;font:600 16px 'JetBrains Mono';color:#a6b5cc;text-shadow:0 2px 14px #000}
+.mv{position:absolute;transform:translate(-50%,-170%);white-space:nowrap;font:600 18px 'JetBrains Mono',monospace;padding:4px 10px;border-radius:8px;background:rgba(6,12,22,.7);border:1px solid rgba(140,170,210,.28)}
+#code{position:absolute;left:110px;bottom:90px;max-width:880px;padding:20px 26px;border-radius:16px;background:rgba(8,14,26,.8);border:1px solid rgba(120,160,220,.25);font:400 20px/1.55 'JetBrains Mono',monospace;color:#d8e2f2;white-space:pre-wrap}
+#code .kw{color:#c792ea}#code .n{color:#f78c6c}#code .c{color:#7b8aa3}#code .ok{color:#5fd3a0;font-weight:600}#code .bad{color:#ff6a56;font-weight:600}#code .add{color:#5fd3a0;background:rgba(95,211,160,.12);padding:0 4px;border-radius:4px}#code .q{font-family:'Source Serif 4',serif;font-size:23px;color:#eef1f5}
+#big,#end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#big .bk{font:600 26px 'IBM Plex Sans';letter-spacing:.3em;color:#f2b24a;text-transform:uppercase}
+#big .bt{font:700 112px/1.05 'Source Serif 4',serif;margin:22px 0 18px;text-shadow:0 0 70px rgba(255,90,70,.25)}
+#big .bs{font:400 32px 'IBM Plex Sans';color:#a8b8d0;max-width:1300px}
+#end .row{font:600 36px/1.6 'Source Serif 4',serif;max-width:1500px}
+#end .row span{font-family:'JetBrains Mono',monospace;font-size:30px;margin-right:16px}
+#end .foot{margin-top:34px;font:500 24px 'JetBrains Mono',monospace;color:#8fa2bd}
+.vd{position:absolute;transform:translate(0,-50%);white-space:nowrap;font:600 19px 'IBM Plex Sans';padding:5px 12px;border-radius:9px;background:rgba(6,12,22,.75);border:1px solid}
+#fade{position:absolute;inset:0;background:#000}
+</style></head><body>
+<div id="ov">
+  <div id="big"></div><div class="k" id="k"></div><div class="t" id="tt"></div><div class="s" id="ss"></div>
+  <div id="hud"></div><div id="code"></div><div id="labels"></div><div id="end"></div><div id="fade"></div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const D = window.AUD, C = D.candidates, TESTS = D.tests, SC = D.scenes;
+const W = 1920, H = 1080;
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const fadeIO = (t, a, b, d = .6) => seg(t, a, a + d) * (1 - seg(t, b - d, b));
+function rng(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rng(2519);
+const COL = { pass: '#3fdc9a', partial: '#f2b24a', fail: '#ff5a46', na: '#3a4860', found: '#3fdc9a', different: '#f2b24a', nothing: '#ff5a46' };
+
+// timeline: intro, charge, one scene per test, verdicts, end
+const T_INTRO = 6, T_CHARGE = 9, T_SCENE = 8.5, T_VERD = 12, T_END = 7;
+const sceneStart = i => T_INTRO + T_CHARGE + i * T_SCENE;
+const T_V0 = sceneStart(SC.length), T_E0 = T_V0 + T_VERD, DUR = T_E0 + T_END;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1); renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#04070d'); scene.fog = new THREE.FogExp2('#04070d', .0016);
+const camera = new THREE.PerspectiveCamera(38, W / H, 0.1, 8000);
+const composer = new EffectComposer(renderer); composer.addPass(new RenderPass(scene, camera));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), .6, .55, .52)); composer.addPass(new OutputPass());
+scene.add(new THREE.HemisphereLight('#9fc3ff', '#120a06', .8));
+const sun = new THREE.DirectionalLight('#ffe6c4', 1.1); sun.position.set(-80, 140, 160); scene.add(sun);
+const spriteTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.3, 'rgba(255,255,255,.7)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+const glow = (r, c) => new THREE.Mesh(new THREE.IcosahedronGeometry(r, 3), new THREE.MeshBasicMaterial({ color: c, transparent: true }));
+{ const n = 4000, p = new Float32Array(n * 3), c = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { const th = R() * 6.283, ph = Math.acos(2 * R() - 1), r = 1500 + R() * 2000; p.set([r * Math.sin(ph) * Math.cos(th), r * Math.cos(ph), r * Math.sin(ph) * Math.sin(th)], i * 3);
+    const b = .2 + R() * .4; c.set([b * .8, b * .9, b], i * 3); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(p, 3)); g.setAttribute('color', new THREE.BufferAttribute(c, 3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ size: 5, map: spriteTex, vertexColors: true, transparent: true, opacity: .7, depthWrite: false, blending: THREE.AdditiveBlending }))); }
+
+// ============ the wall: one row per claim, one column per test ============
+const NR = C.length, NC = TESTS.length, TW = 15, TH = 9, GX = 4, GY = 5;
+const tileX = c => (c - (NC - 1) / 2) * (TW + GX) + 46, tileY = r => ((NR - 1) / 2 - r) * (TH + GY);
+const WALL = new THREE.Group(); scene.add(WALL);
+const tiles = C.map((cand, r) => TESTS.map((tst, c) => {
+  const res = (cand.tests[tst.id] || { r: 'na' }).r;
+  const m = new THREE.Mesh(new THREE.BoxGeometry(TW, TH, 1.6), new THREE.MeshBasicMaterial({ color: '#141c2b' }));
+  m.position.set(tileX(c), tileY(r), 0); WALL.add(m); return { m, res, c1: new THREE.Color(COL[res] || COL.na) }; }));
+const DARK = new THREE.Color('#141c2b');
+const frame = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(NC * (TW + GX) + 6, NR * (TH + GY) + 6, 3)), new THREE.LineBasicMaterial({ color: '#2a3a55', transparent: true }));
+frame.position.set(46, 0, 0); WALL.add(frame);
+const scan = new THREE.Mesh(new THREE.PlaneGeometry(TW + 3, NR * (TH + GY) + 4), new THREE.MeshBasicMaterial({ color: '#7cc7ff', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+scan.position.z = 2; WALL.add(scan);
+
+// ============ the plan under attack: a line through its moves, in front of the wall ============
+const PLAN = new THREE.Group(); scene.add(PLAN);
+const MAXM = 6, planPts = [...Array(MAXM)].map((_, i) => V(-158 + i * 15.5, 10 * Math.sin(i * 1.3) - 12, 60 + 9 * Math.cos(i * 1.7)));
+const planDots = planPts.map(() => { const g = glow(2.1, '#ffd27a'); PLAN.add(g); return g; });
+const twinDots = planPts.map(() => { const g = glow(1.5, '#7cc7ff'); PLAN.add(g); return g; });
+const mkLine = col => { const g = new THREE.BufferGeometry().setFromPoints(planPts); const l = new THREE.Line(g, new THREE.LineBasicMaterial({ color: col, transparent: true })); PLAN.add(l); return l; };
+const planLine = mkLine('#ffd27a'), twinLine = mkLine('#7cc7ff');
+// debris for a broken plan
+const NDEB = 600, dpos = new Float32Array(NDEB * 3), dvel = [...Array(NDEB)].map(() => V((R() - .5) * 30, -10 - R() * 40, (R() - .5) * 30)), dsrc = [...Array(NDEB)].map(() => Math.floor(R() * (MAXM - 1)) + R());
+const dgeo = new THREE.BufferGeometry(); dgeo.setAttribute('position', new THREE.BufferAttribute(dpos, 3));
+const debris = new THREE.Points(dgeo, new THREE.PointsMaterial({ size: 2.2, map: spriteTex, color: '#ff7a4a', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending })); PLAN.add(debris);
+// search cloud behind the plan (positions examined)
+const NCL = 9000, cpos = new Float32Array(NCL * 3), ccol = new Float32Array(NCL * 3);
+for (let i = 0; i < NCL; i++) { const a = R() * 6.283, rr = 20 + 70 * Math.sqrt(R()); cpos.set([-118 + rr * Math.cos(a) * .9, rr * Math.sin(a) * .62, 30 + (R() - .5) * 50], i * 3);
+  const b = .15 + R() * .5; ccol.set([b * .45, b * .65, b], i * 3); }
+const cgeo = new THREE.BufferGeometry(); cgeo.setAttribute('position', new THREE.BufferAttribute(cpos, 3)); cgeo.setAttribute('color', new THREE.BufferAttribute(ccol, 3));
+const cloud = new THREE.Points(cgeo, new THREE.PointsMaterial({ size: 1.3, map: spriteTex, vertexColors: true, transparent: true, opacity: 0, depthWrite: false })); PLAN.add(cloud);
+
+// ============ overlay ============
+const $ = id => document.getElementById(id), LAB = $('labels');
+const el = (cls, html) => { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; LAB.appendChild(d); return d; };
+const rowLab = C.map(c => el('lab', `${c.short}<small>${c.sec}</small>`)), colLab = TESTS.map(t => el('col', t.name));
+const mvLab = [...Array(MAXM)].map(() => el('mv', '')), vdLab = C.map(c => el('vd', c.verdict));
+const tmp = V(0, 0, 0);
+function place(e, p, op) { tmp.copy(p).project(camera); e.style.left = ((tmp.x + 1) / 2 * W) + 'px'; e.style.top = ((1 - tmp.y) / 2 * H) + 'px'; e.style.opacity = tmp.z < 1 ? op : 0; }
+const vcol = v => /holds/.test(v) ? COL.pass : /closed|artifact|circular/.test(v) ? COL.fail : COL.partial;
+const camP = V(0, 0, 0), camL = V(0, 0, 0);
+function cam(p, l) { camera.position.copy(p); camera.lookAt(l); camera.updateMatrixWorld(true); }
+const lerpV = (a, b, x) => a.clone().lerp(b, ease(x));
+const colCam = c => [V(-44 + c * 1.6, 4, 318), V(-40 + c * .8, 0, 0)], WIDE = colCam(0);
+
+window.DUR = DUR;
+window.render = function (t) {
+  const iScene = Math.floor((t - sceneStart(0)) / T_SCENE), inScenes = t >= sceneStart(0) && t < T_V0;
+  const sc = inScenes ? SC[iScene] : null, lt = inScenes ? t - sceneStart(iScene) : 0;
+  // --- camera
+  let a = WIDE, b = WIDE, x = 1;
+  if (t < T_INTRO) { a = [V(-44, 40, 560), V(-40, 0, 0)]; b = WIDE; x = t / T_INTRO * .6; }
+  else if (!inScenes && t < T_V0) { a = [V(-44, 40, 560), V(-40, 0, 0)]; b = WIDE; x = .6 + .4 * seg(t, T_INTRO, T_INTRO + 3); }
+  else if (inScenes) { const ci = TESTS.findIndex(q => q.id === sc.test); a = iScene ? colCam(TESTS.findIndex(q => q.id === SC[iScene - 1].test)) : WIDE; b = colCam(ci); x = seg(lt, 0, 1.6); }
+  else { a = colCam(TESTS.findIndex(q => q.id === SC[SC.length - 1].test)); b = [V(58, 10, 262), V(58, 10, 0)]; x = seg(t, T_V0, T_V0 + 2); }
+  cam(lerpV(a[0], b[0], x).add(V(Math.sin(t * .23) * 3, Math.cos(t * .19) * 2, 0)), lerpV(a[1], b[1], x));
+  // --- tiles
+  const wallIn = seg(t, T_INTRO, T_INTRO + 2.5);
+  frame.material.opacity = wallIn;
+  tiles.forEach((row, r) => row.forEach((tl, c) => {
+    const si = SC.findIndex(q => q.test === TESTS[c].id), on = si < 0 ? 0 : seg(t, sceneStart(si) + 1.4 + r * .28, sceneStart(si) + 1.9 + r * .28);
+    const pulse = inScenes && si === iScene && sc.focus === r ? .35 * (1 + Math.sin(t * 5)) * on : 0;
+    tl.m.material.color.copy(DARK).lerp(tl.c1, clamp(on * (tl.res === 'na' ? .5 : .78) + pulse * .3)); tl.m.scale.set(wallIn, wallIn, 1 + on * 1.5); tl.m.visible = wallIn > 0;
+    tl.m.position.z = on * 1.2; }));
+  if (inScenes) { const ci = TESTS.findIndex(q => q.id === sc.test); scan.position.x = tileX(ci); scan.material.opacity = .1 * fadeIO(lt, .8, T_SCENE - .5, .8); } else scan.material.opacity = 0;
+  // --- the plan under attack
+  const P = inScenes ? C[sc.focus] : null, nm = P ? Math.min(MAXM, P.moves.length) : 0, vis = inScenes ? fadeIO(lt, .9, T_SCENE - .3, .7) : 0;
+  
+  const mode = sc ? sc.anim : '', res = sc ? (P.tests[sc.test] || {}).r : '';
+  const breakAt = 4.2, broke = (mode === 'break' || mode === 'ablate' || mode === 'past') ? seg(lt, breakAt, breakAt + 2.2) : 0;
+  planDots.forEach((d, i) => { let v = i < nm ? vis * seg(lt, 1 + i * .35, 1.4 + i * .35) : 0;
+    if (mode === 'ablate') v *= 1 - fadeIO(lt, 2.4 + i * .6, 3.2 + i * .6, .2) * .9;
+    if (mode === 'break' || mode === 'past') v *= 1 - broke * (i >= nm - 2 ? 1 : .0);
+    d.material.opacity = v; d.position.copy(planPts[i]); d.scale.setScalar(1 + (mode === 'kernel' ? .5 * seg(lt, 3 + i * .4, 3.3 + i * .4) : 0));
+    d.material.color.set(mode === 'kernel' && lt > 3 + i * .4 ? '#3fdc9a' : '#ffd27a');
+    mvLab[i].innerHTML = i < nm ? P.moves[i] : ''; place(mvLab[i], planPts[i].clone().add(PLAN.position), i < nm ? v : 0); });
+  planLine.geometry.setDrawRange(0, Math.max(0, Math.round((nm) * seg(lt, 1, 1 + nm * .35))) - (broke > .2 ? 2 : 0));
+  planLine.material.opacity = vis * (mode === 'ablate' ? .55 : 1);
+  const tw = mode === 'twin' ? seg(lt, 3, 6) : 0, same = res === 'found';
+  twinDots.forEach((d, i) => { d.material.opacity = i < nm ? vis * tw : 0; d.position.copy(planPts[i]).add(V(0, (same ? 0 : 8) + 22 * (1 - ease(tw)), (same ? 2 : 10))); });
+  twinLine.geometry.setFromPoints(twinDots.slice(0, Math.max(2, nm)).map(d => d.position)); twinLine.material.opacity = vis * tw * .9;
+  debris.material.opacity = broke > 0 ? vis * (1 - seg(lt, breakAt + 1.6, breakAt + 3)) : 0;
+  if (broke > 0) { const e = (lt - breakAt); for (let i = 0; i < NDEB; i++) { const k = Math.min(nm - 1.001, Math.max(nm - 2, dsrc[i] % nm)); const p0 = planPts[Math.floor(k)].clone().lerp(planPts[Math.min(MAXM - 1, Math.floor(k) + 1)], k % 1);
+      dpos.set([p0.x + dvel[i].x * e * .4, p0.y + dvel[i].y * e * .5 - 6 * e * e, p0.z + dvel[i].z * e * .4], i * 3); } dgeo.attributes.position.needsUpdate = true; }
+  cloud.material.opacity = (mode === 'twin' || mode === 'lunch') ? vis * .55 : vis * .12; cloud.rotation.z = t * .02;
+  // --- labels
+  rowLab.forEach((e, r) => { const cx = tileX(0); place(e, V(cx - TW / 2 - 7, tileY(r), 0), wallIn * (inScenes ? (sc.focus === r ? 1 : .5) * fadeIO(lt, 1.2, T_SCENE - .2, .5) : 1)); });
+  colLab.forEach((e, c) => place(e, V(tileX(c) - 3, tileY(0) + TH / 2 + 5, 0), wallIn * (inScenes ? (TESTS[c].id === sc.test ? 1 : .35) : .9)));
+  const vOn = seg(t, T_V0 + 1.5, T_V0 + 2.5);
+  vdLab.forEach((e, r) => { const o = seg(t, T_V0 + 2 + r * .7, T_V0 + 2.6 + r * .7) * (1 - seg(t, T_E0 - .5, T_E0)); place(e, V(tileX(NC - 1) + TW / 2 + 5, tileY(r), 0), o); e.style.borderColor = e.style.color = vcol(C[r].verdict); });
+  if (t >= T_V0) rowLab.forEach((e, r) => place(e, V(tileX(0) - TW / 2 - 7, tileY(r), 0), 1 - seg(t, T_E0 - .5, T_E0)));
+  // --- text
+  const big = $('big'), o1 = fadeIO(t, .3, T_INTRO - .2, .8), o2 = fadeIO(t, T_INTRO + 2.6, T_INTRO + T_CHARGE - .3, .7);
+  big.style.opacity = Math.max(o1, 0); big.innerHTML = t < T_INTRO ? D.title : '';
+  $('k').textContent = inScenes ? sc.kicker : (o2 > 0 ? D.charge.kicker : t >= T_V0 && t < T_E0 ? D.verdictCard.kicker : '');
+  $('tt').innerHTML = inScenes ? sc.title : (o2 > 0 ? D.charge.title : t >= T_V0 && t < T_E0 ? D.verdictCard.title : '');
+  $('ss').innerHTML = inScenes ? sc.sub : (o2 > 0 ? D.charge.sub : t >= T_V0 && t < T_E0 ? D.verdictCard.sub : '');
+  $('ss').style.top = (120 + $('tt').offsetHeight + 16) + 'px';
+  const topOp = inScenes ? fadeIO(lt, .2, T_SCENE - .2, .5) : (t >= T_V0 ? fadeIO(t, T_V0 + .3, T_E0 - .3, .6) : o2);
+  for (const id of ['k', 'tt', 'ss']) $(id).style.opacity = topOp;
+  const code = $('code'); code.innerHTML = inScenes ? sc.card : ''; code.style.opacity = inScenes ? fadeIO(lt, 2.2, T_SCENE - .3, .6) : 0; code.style.display = inScenes && sc.card ? '' : 'none';
+  const hud = $('hud'); hud.innerHTML = inScenes ? `<b style="color:${COL[res] || '#eef1f5'}">${sc.count}</b>${sc.countLabel}` : ''; hud.style.opacity = inScenes ? fadeIO(lt, 4.6, T_SCENE - .3, .6) : 0;
+  const end = $('end'); end.innerHTML = t >= T_E0 ? D.end : ''; end.style.opacity = fadeIO(t, T_E0 + .3, DUR - .2, .8);
+  WALL.visible = t < T_E0 + .8; LAB.style.opacity = t < T_E0 ? 1 : 1 - seg(t, T_E0, T_E0 + .6);
+  $('fade').style.opacity = Math.max(1 - seg(t, 0, .8), seg(t, DUR - .8, DUR));
+  composer.render();
+};
+document.fonts.ready.then(() => { window.render(0); window.READY = true; });
+</script></body></html>

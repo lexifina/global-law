@@ -1,0 +1,46 @@
+<h2 id="round11">Round 11 (done)</h2>
+<p>14 November 2026, 05:06 to 06:56. The base is the round-10 frozen build <code>v10d</code>. Frozen build:
+<code>v11d</code>. Report: <code>round11/ROUND11.md</code>; contract <code>round11/DESIGN11.md</code>; log
+<code>round11/LOG.md</code>; sealed runs <code>round11/SEALED_LOG.md</code>.</p>
+
+<h3>What round 11 did</h3>
+<ul>
+<li>Supreme Court orders: 1,045 orders missing from the corpus (2006 to 2009 and 2020 to 2026) were taken from the
+Journal of the Supreme Court on supremecourt.gov and added as staged data. The existing order rules then linked 459 of
+them to the decision below (blind audits 80/80, 35/36 and 27/28).</li>
+<li>State courts: a decision below that the state's highest court never cites is accepted when both decisions print the
+parties' full names and a second tie (its docket number, citation or date) appears in the reviewing opinion
+(692 rows; audits 77/80 and 77/80).</li>
+<li>Federal Circuit: reviews of the Court of Federal Claims, the Court of International Trade and the Customs Court,
+where the opinion names the tribunal rather than citing it (359 rows; audit 73/80). The Lean checker gained a rule for
+these tribunal names.</li>
+<li>SCDB disposition: where the Supreme Court's text cites a rehearing denial, the row moves to the judgment the Court
+actually reviewed (46 rows added, 50 removed; audits 40/41, 44/44, 4/4 and 5/5).</li>
+<li>Lean: 305 theorems (13 new, none changed), 89 mutants, all killed; the Lean checker and the independent reference
+agree on every row (0 differences).</li>
+<li>Not installed: eleven further rules that scored below 90% in their blind audits.</li>
+<li>A new held-out key, built blind and scored once after the freeze: courts-of-appeals panel decisions later reheard
+en banc.</li>
+</ul>
+
+<h3>Round-8 keys: tuning half h0, and half h1 scored a fourth time after the freeze (Wilson 95%)</h3>
+<table>
+<tr><th>key</th><th>h0: v10d to v11d</th><th>h1 (fourth use): v10d to v11d</th></tr>
+<tr><td>Shadow Docket, recall</td><td>48.5% to 65.0% [62.0, 67.8]</td><td>48.5% to 65.5% [62.6, 68.3]</td></tr>
+<tr><td>SCDB disposition, recall</td><td>75.9% to 76.4% [74.6, 78.0]</td><td>76.1% to 76.5% [74.8, 78.2]</td></tr>
+<tr><td>FJC appeals, recall</td><td>56.3% to 56.3%</td><td>57.0% to 57.0%</td></tr>
+<tr><td>State tables, recall</td><td>13.6% to 13.6%</td><td>7.7% to 7.7%</td></tr>
+</table>
+
+<h3>Other held-out keys (scored once after the freeze)</h3>
+<table>
+<tr><th>key</th><th>v10d</th><th>v11d</th></tr>
+<tr><td>Brace &amp; Hall, state reversals, recall (third use)</td><td>55.3%</td><td>56.4% [54.0, 58.8]</td></tr>
+<tr><td>Federal Circuit dispositions, recall (second use)</td><td>52.7%</td><td>56.0% [50.3, 61.5]</td></tr>
+<tr><td>Songer, recall (third use)</td><td>44.3%</td><td>44.3%</td></tr>
+<tr><td>En banc rehearings, recall (new key, first use)</td><td>47.1%</td><td>47.1%</td></tr>
+</table>
+
+<p>Plateau: SCDB and the state overruled tables have stopped moving and need no further rounds. FJC appeals is at a
+plateau for the current approach. The Shadow Docket, Brace &amp; Hall, the Federal Circuit and en banc rehearing still
+have room.</p>

@@ -1,0 +1,130 @@
+# round-7 held-out time split; label fixture-selftest; key key.tsv (9 pairs, 8 orders, 7 complete)
+# history rows read 11; admitted history ids 9
+
+## recall by expected kind
+group	value	measure	k/n	share	lo95	hi95
+kind	reversed	link: admitted row O->L	2/2	100.0%	34.2%	100.0%
+kind	reversed	kind: right kind	1/2	50.0%	9.5%	90.5%
+kind	reversed	effect (row): strict	2/2	100.0%	34.2%	100.0%
+kind	reversed	effect (row): lenient	2/2	100.0%	34.2%	100.0%
+kind	reversed	effect (status at d): strict	2/2	100.0%	34.2%	100.0%
+kind	reversed	effect (status at d): lenient	2/2	100.0%	34.2%	100.0%
+kind	vacated	link: admitted row O->L	0/3	0.0%	0.0%	56.1%
+kind	vacated	kind: right kind	0/3	0.0%	0.0%	56.1%
+kind	vacated	effect (row): strict	0/3	0.0%	0.0%	56.1%
+kind	vacated	effect (row): lenient	0/3	0.0%	0.0%	56.1%
+kind	vacated	effect (status at d): strict	0/3	0.0%	0.0%	56.1%
+kind	vacated	effect (status at d): lenient	1/3	33.3%	6.1%	79.2%
+kind	mixed	link: admitted row O->L	1/1	100.0%	20.7%	100.0%
+kind	mixed	kind: right kind	1/1	100.0%	20.7%	100.0%
+kind	mixed	effect (row): strict	1/1	100.0%	20.7%	100.0%
+kind	mixed	effect (row): lenient	1/1	100.0%	20.7%	100.0%
+kind	mixed	effect (status at d): strict	1/1	100.0%	20.7%	100.0%
+kind	mixed	effect (status at d): lenient	1/1	100.0%	20.7%	100.0%
+kind	affirmed	link: admitted row O->L	1/1	100.0%	20.7%	100.0%
+kind	affirmed	kind: right kind	1/1	100.0%	20.7%	100.0%
+kind	affirmed	effect (row): strict	1/1	100.0%	20.7%	100.0%
+kind	affirmed	effect (row): lenient	1/1	100.0%	20.7%	100.0%
+kind	affirmed	effect (status at d): strict	1/1	100.0%	20.7%	100.0%
+kind	affirmed	effect (status at d): lenient	1/1	100.0%	20.7%	100.0%
+kind	reviewDismissed	link: admitted row O->L	1/1	100.0%	20.7%	100.0%
+kind	reviewDismissed	kind: right kind	0/1	0.0%	0.0%	79.3%
+kind	reviewDismissed	effect (row): strict	0/1	0.0%	0.0%	79.3%
+kind	reviewDismissed	effect (row): lenient	0/1	0.0%	0.0%	79.3%
+kind	reviewDismissed	effect (status at d): strict	0/1	0.0%	0.0%	79.3%
+kind	reviewDismissed	effect (status at d): lenient	0/1	0.0%	0.0%	79.3%
+kind	certDenied	link: admitted row O->L	1/1	100.0%	20.7%	100.0%
+kind	certDenied	kind: right kind	1/1	100.0%	20.7%	100.0%
+kind	certDenied	effect (row): strict	1/1	100.0%	20.7%	100.0%
+kind	certDenied	effect (row): lenient	1/1	100.0%	20.7%	100.0%
+kind	certDenied	effect (status at d): strict	1/1	100.0%	20.7%	100.0%
+kind	certDenied	effect (status at d): lenient	1/1	100.0%	20.7%	100.0%
+kind	negative (reversed+vacated)	link: admitted row O->L	2/5	40.0%	11.8%	76.9%
+kind	negative (reversed+vacated)	kind: right kind	1/5	20.0%	3.6%	62.4%
+kind	negative (reversed+vacated)	effect (row): strict	2/5	40.0%	11.8%	76.9%
+kind	negative (reversed+vacated)	effect (row): lenient	2/5	40.0%	11.8%	76.9%
+kind	negative (reversed+vacated)	effect (status at d): strict	2/5	40.0%	11.8%	76.9%
+kind	negative (reversed+vacated)	effect (status at d): lenient	3/5	60.0%	23.1%	88.2%
+kind	all	link: admitted row O->L	6/9	66.7%	35.4%	87.9%
+kind	all	kind: right kind	4/9	44.4%	18.9%	73.3%
+kind	all	effect (row): strict	5/9	55.6%	26.7%	81.1%
+kind	all	effect (row): lenient	5/9	55.6%	26.7%	81.1%
+kind	all	effect (status at d): strict	5/9	55.6%	26.7%	81.1%
+kind	all	effect (status at d): lenient	6/9	66.7%	35.4%	87.9%
+
+## recall by lower-court system (negative kinds: reversed+vacated)
+group	value	measure	k/n	share	lo95	hi95
+system	federal	link: admitted row O->L	2/3	66.7%	20.8%	93.9%
+system	federal	kind: right kind	1/3	33.3%	6.1%	79.2%
+system	federal	effect (row): strict	2/3	66.7%	20.8%	93.9%
+system	federal	effect (row): lenient	2/3	66.7%	20.8%	93.9%
+system	federal	effect (status at d): strict	2/3	66.7%	20.8%	93.9%
+system	federal	effect (status at d): lenient	3/3	100.0%	43.9%	100.0%
+system	state	link: admitted row O->L	0/2	0.0%	0.0%	65.8%
+system	state	kind: right kind	0/2	0.0%	0.0%	65.8%
+system	state	effect (row): strict	0/2	0.0%	0.0%	65.8%
+system	state	effect (row): lenient	0/2	0.0%	0.0%	65.8%
+system	state	effect (status at d): strict	0/2	0.0%	0.0%	65.8%
+system	state	effect (status at d): lenient	0/2	0.0%	0.0%	65.8%
+
+## recall by order year (negative kinds: reversed+vacated)
+group	value	measure	k/n	share	lo95	hi95
+year	2021	link: admitted row O->L	1/3	33.3%	6.1%	79.2%
+year	2021	kind: right kind	1/3	33.3%	6.1%	79.2%
+year	2021	effect (row): strict	1/3	33.3%	6.1%	79.2%
+year	2021	effect (row): lenient	1/3	33.3%	6.1%	79.2%
+year	2021	effect (status at d): strict	1/3	33.3%	6.1%	79.2%
+year	2021	effect (status at d): lenient	2/3	66.7%	20.8%	93.9%
+year	2022	link: admitted row O->L	1/1	100.0%	20.7%	100.0%
+year	2022	kind: right kind	0/1	0.0%	0.0%	79.3%
+year	2022	effect (row): strict	1/1	100.0%	20.7%	100.0%
+year	2022	effect (row): lenient	1/1	100.0%	20.7%	100.0%
+year	2022	effect (status at d): strict	1/1	100.0%	20.7%	100.0%
+year	2022	effect (status at d): lenient	1/1	100.0%	20.7%	100.0%
+year	2024	link: admitted row O->L	0/1	0.0%	0.0%	79.3%
+year	2024	kind: right kind	0/1	0.0%	0.0%	79.3%
+year	2024	effect (row): strict	0/1	0.0%	0.0%	79.3%
+year	2024	effect (row): lenient	0/1	0.0%	0.0%	79.3%
+year	2024	effect (status at d): strict	0/1	0.0%	0.0%	79.3%
+year	2024	effect (status at d): lenient	0/1	0.0%	0.0%	79.3%
+
+## recall by lower link method (all kinds)
+group	value	measure	k/n	share	lo95	hi95
+link	exactDate	link: admitted row O->L	6/9	66.7%	35.4%	87.9%
+link	exactDate	kind: right kind	4/9	44.4%	18.9%	73.3%
+link	exactDate	effect (row): strict	5/9	55.6%	26.7%	81.1%
+link	exactDate	effect (row): lenient	5/9	55.6%	26.7%	81.1%
+link	exactDate	effect (status at d): strict	5/9	55.6%	26.7%	81.1%
+link	exactDate	effect (status at d): lenient	6/9	66.7%	35.4%	87.9%
+
+## status of the lower decision at the order date, by expected kind (counts)
+kind	neg-history-O	unknown-history-O	neg-history-other	unknown-history-other	neg-other-path	unknown-other-path	good	total
+reversed	2	0	0	0	0	0	0	2
+vacated	0	0	1	0	1	0	1	3
+mixed	0	1	0	0	0	0	0	1
+affirmed	0	0	0	0	0	0	1	1
+reviewDismissed	1	0	0	0	0	0	0	1
+certDenied	0	0	0	0	0	0	1	1
+
+## row effect by expected kind (counts of NEG / PART / NONE from admitted rows O->L)
+kind	NEG	PART	NONE	total
+reversed	2	0	0	2
+vacated	0	0	3	3
+mixed	0	1	0	1
+affirmed	0	0	1	1
+reviewDismissed	1	0	0	1
+certDenied	0	0	1	1
+
+## precision: admitted history rows by a complete key order
+group	value	measure	k/n	share	lo95	hi95
+target	all rows	row points to a key lower decision of O	6/7	85.7%	48.7%	97.4%
+target	row kind affirmed	row points to a key lower decision of O	1/1	100.0%	20.7%	100.0%
+target	row kind certDenied	row points to a key lower decision of O	1/2	50.0%	9.5%	90.5%
+target	row kind reversed	row points to a key lower decision of O	3/3	100.0%	43.9%	100.0%
+target	row kind vacated	row points to a key lower decision of O	1/1	100.0%	20.7%	100.0%
+target	rule family r6:below	row points to a key lower decision of O	5/5	100.0%	56.6%	100.0%
+target	rule family r6:memo	row points to a key lower decision of O	0/1	0.0%	0.0%	79.3%
+target	rule family r7:memo	row points to a key lower decision of O	1/1	100.0%	20.7%	100.0%
+kind	rows on a key pair	row kind is right for the pair	4/6	66.7%	30.0%	90.3%
+kind	rows on an affirmed/dismissed/denied pair	row of a negative kind (false negative effect)	1
+orders	complete key orders with no admitted history row at all		1 of 7

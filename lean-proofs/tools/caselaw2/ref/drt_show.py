@@ -42,9 +42,19 @@ def main():
     for r in D('system_rules.tsv'):
         print('  ', '\t'.join(r[:5]), r[6])
     print('== treatments')
+    # round 4 / round 5: a witness row also shows when the node is its witness W; with its witness and class lines
+    wit = {r[0]: r for r in D('treatment_witness.tsv') if len(r) >= 3}
+    cls = {}
+    for r in D('treatment_class.tsv'):
+        cls.setdefault(r[0], []).append(r)
     for r in D('treatments.tsv'):
-        if r[1] in nodes or r[2] in nodes:
-            print('  ', '\t'.join(r[:8]), '| part', r[13], '| q', r[11][:70], '| ev', r[12])
+        w = wit.get(r[0])
+        if r[1] in nodes or r[2] in nodes or (w and w[1] in nodes):
+            print('  ', '\t'.join(r[:8]), '| part', r[13], '| q', r[11][:90], '| ev', r[12])
+            if w:
+                print('       witness W', w[1], '| by-ev', w[2])
+            for c in cls.get(r[0], ()):
+                print('       class row', '\t'.join(c))
     print('== history')
     for r in D('history.tsv'):
         if r[1] in nodes or r[2] in nodes:
@@ -66,9 +76,15 @@ def main():
                 print('  ', '\t'.join(r))
         print('== %s certs (rows on these nodes)' % side)
         ids = {r[0] for r in D('treatments.tsv') + D('history.tsv') if r[1] in nodes or r[2] in nodes}
+        ids |= {k for k, w in wit.items() if w[1] in nodes}
         for r in rows(os.path.join(d, side, 'certs.tsv')):
             if r[1] in ids:
                 print('  ', '\t'.join(r))
+        if os.path.exists(os.path.join(d, side, 'classes.tsv')):
+            print('== %s classes (rows on these nodes)' % side)
+            for r in rows(os.path.join(d, side, 'classes.tsv')):
+                if r[0] in ids:
+                    print('  ', '\t'.join(r))
         print('== %s findings' % side)
         for r in rows(os.path.join(d, side, 'findings.tsv')):
             if r[1] in nodes or r[2] in nodes:

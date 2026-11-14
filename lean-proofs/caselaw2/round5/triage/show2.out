@@ -1,0 +1,481 @@
+################ 73028 201 202
+== decisions
+   201	201	0	0	panel	published	full | United States District Court for the District of Maine T
+   202	2906	20030724	0	enBanc	published	full | Supreme Court of the United States L
+== system_rules
+   0	horizontal	soft	0	19630322 U
+   0	horizontal	soft	19630323	99999999 U
+   5	horizontal	soft	0	19640602 S
+   5	horizontal	none	19640603	99999999 S
+   5	trialScope	ownUnitOnly	0	99999999 S
+   17	horizontal	soft	0	99999999 L
+   17	trialScope	ownUnitThenAny	0	99999999 S
+   20	horizontal	soft	0	99999999 U
+   20	trialScope	ownUnitOnly	0	99999999 U
+   44	horizontal	none	0	19810812 L
+   44	horizontal	soft	19810813	99999999 S
+   44	trialScope	ownUnitOnly	0	99999999 L
+   -101	enBancGrantVacatesPanel	0	0	99999999 L
+   -102	unpubForce	persuasive	0	20030308 S
+   -102	unpubForce	citableNoWeight	20030309	99999999 U
+   -102	circulationCountsAsEnBanc	1	0	99999999 S
+   -102	firstInTimeControls	0	0	99999999 L
+   -113	unpubForce	binding	0	19850900 U
+   -113	unpubForce	persuasive	19850901	99999999 L
+   -113	circulationCountsAsEnBanc	1	0	99999999 S
+   -502	unpubForce	persuasive	0	20090209 S
+   -502	unpubForce	citableNoWeight	20090210	99999999 S
+   -502	circulationCountsAsEnBanc	1	0	99999999 L
+   -703	unpubForce	notCitable	0	20070726 S
+   -703	unpubForce	persuasive	20070727	99999999 S
+   -703	enBancGrantVacatesPanel	1	0	99999999 S
+   -703	firstInTimeControls	0	0	99999999 L
+   -704	unpubForce	persuasive	0	19820309 S
+   -704	unpubForce	persuasive	19820310	99999999 L
+   -704	enBancGrantVacatesPanel	0	0	99999999 L
+   -704	circulationCountsAsEnBanc	0	0	99999999 S
+   -704	firstInTimeControls	1	0	99999999 S
+   20	stateFollowsCircuit	binding	19610513	99999999 U
+   10	horizontal	withinUnitOnly	0	99999999 S
+   10	trialScope	ownUnitOnly	0	99999999 S
+   25	horizontal	soft	0	99999999 S
+   25	trialScope	statewide	0	99999999 L
+   36	horizontal	strong	19680421	20101114 S
+   36	horizontal	strong	20101115	99999999 U
+   -1002	circulationCountsAsEnBanc	0	0	99999999 U
+   61	horizontal	strong	0	99999999 S
+== treatments
+   tr0	202	201	20030724	abrogated	all	retroactive	0 | part majority | q the abrogating of that decision by Irwin v. Jensen, 204 Rep. 492 | ev name:Carter Vance
+       witness W 203 | by-ev name:Irwin Jensen
+== history
+== supersessions / lawchanges
+   lc0	Pub. L. 106-215	42:2000e-5(e)	19920813	19920813	19900813	gen
+   lc1	Pub. L. 90-85	42:1983	19750219	19750219	1	gen
+== holdings
+   h201feda	201	fed.a	The answer to fed.a is yes.	yes	majority
+   h201fedb	201	fed.b	The answer to fed.b is no.	no	majority
+== lean status
+   201	-	-	0	20261112	good	noneAdmitted	1	-	-	-
+   201	fed.a	h201feda	0	20261112	good	noneAdmitted	1	-	-	-
+   201	fed.b	h201fedb	0	20261112	good	noneAdmitted	1	-	-	-
+== lean certs (rows on these nodes)
+   treatment	tr0	ok	ok
+== lean findings
+   atRisk	201	202	-	inferredRejection	1	assumeHomeDomain>F13>F1abrogate
+== ref status
+== ref certs (rows on these nodes)
+   treatments.tsv	tr0	witnessNoStanding
+== ref findings
+== succession
+601	602	19810727	replace	gen	S
+== witness
+tr0	203	name:Irwin Jensen	gen
+tr1	210	cite:636 Rep. 1277	gen
+tr2	218	name:Zeller Baker	gen
+tr3	226	cite:1 Rep. 1	gen
+tr4	231	cite:579 Rep. 145	gen
+tr5	238	cite:112 Rep. 1478	gen
+tr6	245	name:Keller Abel	gen
+tr7	251	name:Ortiz Ellis	gen
+tr8	259	cite:565 Rep. 593	gen
+== class
+################ 73048 177 178
+== decisions
+   177	201	0	0	panel	published	full | United States District Court for the District of Maine T
+   178	2906	19841120	0	panel	published	full | Supreme Court of the United States L
+== system_rules
+   0	horizontal	none	0	99999999 L
+   5	horizontal	soft	0	99999999 S
+   17	horizontal	strong	0	20061024 S
+   17	horizontal	soft	20061025	99999999 L
+   17	trialScope	statewide	0	99999999 L
+   20	horizontal	none	0	19501124 S
+   20	horizontal	soft	19501125	99999999 S
+   20	trialScope	ownUnitThenAny	0	99999999 L
+   44	horizontal	strong	0	99999999 L
+   44	trialScope	ownUnitOnly	0	99999999 S
+   -101	unpubForce	persuasive	0	19941220 S
+   -101	unpubForce	binding	19941221	99999999 S
+   -101	enBancGrantVacatesPanel	1	0	99999999 L
+   -101	circulationCountsAsEnBanc	0	0	99999999 U
+   -102	unpubForce	persuasive	0	19850203 L
+   -102	unpubForce	citableNoWeight	19850204	99999999 S
+   -102	firstInTimeControls	0	0	99999999 S
+   -113	unpubForce	citableNoWeight	0	20030214 S
+   -113	unpubForce	citableNoWeight	20030215	99999999 S
+   -113	enBancGrantVacatesPanel	1	0	99999999 S
+   -502	unpubForce	binding	0	19911225 L
+   -502	unpubForce	persuasive	19911226	99999999 L
+   -502	enBancGrantVacatesPanel	1	0	99999999 U
+   -502	circulationCountsAsEnBanc	0	0	99999999 S
+   -502	firstInTimeControls	0	0	99999999 S
+   -703	unpubForce	citableNoWeight	0	19850608 L
+   -703	unpubForce	persuasive	19850609	99999999 U
+   -703	circulationCountsAsEnBanc	1	0	99999999 S
+   -703	firstInTimeControls	1	0	99999999 L
+   -704	circulationCountsAsEnBanc	1	0	99999999 L
+   -704	firstInTimeControls	0	0	99999999 L
+   20	stateFollowsCircuit	binding	19880512	99999999 U
+   10	horizontal	withinUnitOnly	0	99999999 S
+   10	trialScope	ownUnitOnly	0	99999999 S
+   25	horizontal	soft	0	99999999 S
+   25	trialScope	statewide	0	99999999 L
+   36	horizontal	strong	19640615	20060306 U
+   -1101	horizontal	strong	19951209	99999999 S
+   -1102	horizontal	strong	19751111	99999999 L
+   61	horizontal	strong	0	99999999 S
+== treatments
+   tr2	178	177	19841120	overruled	all	unknown	0 | part majority | q the overruling of Reyes v. Zeller, 138 Rep. 729 occurred | ev name:Reyes Zeller
+       witness W 179 | by-ev name:Hughes Quinn
+       class row tr2	recognised	as respects interstate carriers	separate but equal	gen
+== history
+== supersessions / lawchanges
+   lc0	Pub. L. 93-18	42:1983	19730306	19730306	1	gen
+   lc1	Pub. L. 84-95	42:1983	19700702	19710702	19680702	gen
+== holdings
+   h177unka	177	unk.a	The answer to unk.a is no.	no	majority
+== lean status
+   177	-	-	0	20261112	good	noneAdmitted	1	-	-	-	-
+   177	unk.a	h177unka	0	20261112	good	noneAdmitted	1	-	-	-	-
+== lean certs (rows on these nodes)
+   treatment	tr2	ok	ok
+== lean classes (rows on these nodes)
+   tr2	atRiskWitness	recognised	ok	as respects interstate carriers	separate but equal	179
+== lean findings
+   atRisk	177	178	-	inferredRejection	1	assumeHomeDomain>F13>F1abrogate	atRiskWitness
+== ref status
+== ref certs (rows on these nodes)
+   treatments.tsv	tr2	witnessNoStanding
+== ref classes (rows on these nodes)
+   tr2	atRiskWitness	recognised	witnessNoStanding	as respects interstate carriers	separate but equal	179
+== ref findings
+== succession
+601	602	19690313	replace	gen	S
+1201	1205	19671102	split	gen	L
+1221	1222	19800721	split	gen	S
+1221	1225	19800721	split	gen	S
+== witness
+tr0	168	cite:245 Rep. 103	gen
+tr1	174	name:Tate Young	gen
+tr2	179	name:Hughes Quinn	gen
+tr3	185	cite:692 Rep. 913	gen
+tr4	192	name:Quinn Young	gen
+tr5	199	name:Tate Lowry	gen
+tr6	206	name:Zeller Foster	gen
+tr7	212	name:Lowry Keller	gen
+== class
+tr0	recognised	-	-	gen
+tn1	operativeWords	-	separate but equal	gen
+t20	operativeWords	as respects interstate carriers	-	gen
+t28	recognised	as respects interstate carriers	-	gen
+tr6	recognised	-	-	gen
+to0	operativeWords	-	separate but equal	gen
+tr2	recognised	as respects interstate carriers	separate but equal	gen
+to2	operativeWords	-	-	gen
+tr5	recognised	-	the rule of the earlier case	gen
+tr1	recognised	as respects interstate carriers	-	gen
+to4	operativeWords	-	-	gen
+################ 73124 240 239
+== decisions
+   239	1002	0	0	panel	published	full | Court of Appeals of Ohio A
+   240	1002	19971202	0	panel	unknown	full | Court of Appeals of Ohio A
+== system_rules
+   0	horizontal	withinUnitOnly	0	99999999 S
+   5	horizontal	strong	0	99999999 U
+   17	horizontal	withinUnitOnly	0	19880207 L
+   17	horizontal	strong	19880208	99999999 S
+   17	trialScope	ownUnitOnly	0	99999999 S
+   20	horizontal	none	0	99999999 S
+   20	trialScope	statewide	0	99999999 S
+   44	horizontal	none	0	99999999 L
+   44	trialScope	statewideChooseOnConflict	0	99999999 S
+   -101	circulationCountsAsEnBanc	1	0	99999999 S
+   -101	firstInTimeControls	0	0	99999999 S
+   -102	unpubForce	notCitable	0	19970902 U
+   -102	unpubForce	citableNoWeight	19970903	99999999 U
+   -102	enBancGrantVacatesPanel	0	0	99999999 L
+   -102	firstInTimeControls	1	0	99999999 S
+   -113	unpubForce	binding	0	20020321 S
+   -113	unpubForce	persuasive	20020322	99999999 L
+   -113	enBancGrantVacatesPanel	0	0	99999999 S
+   -502	unpubForce	notCitable	0	19800821 S
+   -502	unpubForce	persuasive	19800822	99999999 S
+   -502	enBancGrantVacatesPanel	0	0	99999999 S
+   -502	firstInTimeControls	1	0	99999999 L
+   -703	unpubForce	persuasive	0	19830419 S
+   -703	unpubForce	citableNoWeight	19830420	99999999 L
+   -703	firstInTimeControls	0	0	99999999 L
+   -704	unpubForce	citableNoWeight	0	20080806 S
+   -704	unpubForce	binding	20080807	99999999 L
+   -704	firstInTimeControls	1	0	99999999 L
+   20	stateFollowsCircuit	binding	19541010	99999999 U
+   -701	horizontal	soft	0	99999999 L
+   10	horizontal	withinUnitOnly	0	99999999 S
+   10	trialScope	ownUnitThenAny	0	99999999 S
+   25	horizontal	soft	0	99999999 S
+   25	trialScope	statewide	0	99999999 L
+   -902	firstInTimeControls	1	0	99999999 L
+   -502	trialScope	ownUnitThenAny	0	99999999 L
+   -703	trialScope	ownUnitOnly	0	99999999 L
+   -704	trialScope	ownUnitOnly	0	99999999 L
+   36	horizontal	withinUnitOnly	19731014	20080317 S
+   36	horizontal	withinUnitOnly	20080318	99999999 U
+   -1002	circulationCountsAsEnBanc	1	0	99999999 S
+   -1101	horizontal	soft	19661127	99999999 L
+   61	horizontal	strong	0	99999999 L
+== treatments
+   tr4	240	239	19971202	disapproved	all	retroactive	0 | part majority | q on contend the disapproving of Morgan v. Vance, 694 Rep. 1196 by Pruitt v. Ortiz, 866 Rep. | ev cite:694 Rep. 1196
+       witness W 241 | by-ev name:Pruitt Ortiz
+       class row tr4	recognised	in the field of public education	the rule of the earlier case	gen
+       class row tr4	operativeWords	-	-	gen dup
+== history
+   yr0y	240	-1	20050416	withdrawn	all | q The opinion is withdrawn | ev name:Pruitt
+== supersessions / lawchanges
+   lc0	Pub. L. 118-186	42:1983	19710828	19720828	19680828	gen
+   lc1	Pub. L. 81-43	42:1983	19960302	19960302	1	gen
+== holdings
+== lean status
+   240	-	-	0	20050415	good	noneAdmitted	1	-	-	-	-
+   240	-	-	20050416	20261112	neg:withdrawn	negativeAdmitted	1	yr0y	-	history	-
+== lean certs (rows on these nodes)
+   history	yr0y	okUnverifiedBy	okUnverifiedBy
+   treatment	tr4	noAuthority	noAuthority
+== lean classes (rows on these nodes)
+   tr4	atRiskWitness	recognised	noAuthority	in the field of public education	the rule of the earlier case	241
+== lean findings
+== ref status
+   240	-	-	20050416	99999999	negative	withdrawn	-1	0	1	-
+== ref certs (rows on these nodes)
+   history.tsv	yr0y	ok
+   treatments.tsv	tr4	witnessNoStanding
+== ref classes (rows on these nodes)
+   tr4	atRiskWitness	recognised	witnessNoStanding	in the field of public education	the rule of the earlier case	241
+== ref findings
+== succession
+601	602	19711206	replace	gen	S
+1221	1222	19831204	split	gen	S
+1221	1225	19831204	split	gen	S
+== witness
+tr0	214	name:Foster Abel	gen
+tr1	221	name:Foster Walsh	gen
+tr2	227	name:Keller Abel	gen
+tr3	234	name:Sutton Jensen	gen
+tr4	241	name:Pruitt Ortiz	gen
+== class
+to2	operativeWords	in the field of public education	-	gen
+	recognised	-	-	gen
+to3	operativeWords	-	the rule of the earlier case	gen
+to4	operativeWords	-	-	gen
+to4	recognised	-	separate but equal	gen dup
+tr1	operativeWords	-	the rule of the earlier case	gen
+tr3	recognised	as respects interstate carriers	separate but equal	gen
+tr4	recognised	in the field of public education	the rule of the earlier case	gen
+tq9	recognised	in the field of public education	-	gen
+tr4	operativeWords	-	-	gen dup
+to1	recognised	as respects interstate carriers	the rule of the earlier case	gen
+nosuch58	operativeWords	-	-	gen
+tr2	recognised	-	-	gen
+tr0	recognised	-	-	gen
+to0	operativeWords	as respects interstate carriers	-	gen
+################ 73060 185 186
+== decisions
+   185	201	0	0	panel	published	full | United States District Court for the District of Maine T
+   186	201	19700910	0	panel	published	full | United States District Court for the District of Maine T
+== system_rules
+   0	horizontal	none	0	99999999 S
+   5	horizontal	strong	0	20070803 S
+   5	horizontal	strong	20070804	99999999 L
+   5	trialScope	statewide	0	99999999 U
+   17	horizontal	strong	0	99999999 L
+   17	trialScope	statewide	0	99999999 L
+   20	horizontal	strong	0	20010117 S
+   20	horizontal	withinUnitOnly	20010118	99999999 S
+   20	trialScope	ownUnitOnly	0	99999999 S
+   44	horizontal	withinUnitOnly	0	19520612 S
+   44	horizontal	none	19520613	99999999 U
+   44	trialScope	ownUnitOnly	0	99999999 S
+   -101	unpubForce	persuasive	0	20030109 L
+   -101	unpubForce	citableNoWeight	20030110	99999999 S
+   -101	enBancGrantVacatesPanel	1	0	99999999 S
+   -101	circulationCountsAsEnBanc	0	0	99999999 S
+   -101	firstInTimeControls	0	0	99999999 S
+   -102	unpubForce	notCitable	0	19840923 S
+   -102	unpubForce	persuasive	19840924	99999999 S
+   -102	enBancGrantVacatesPanel	1	0	99999999 L
+   -102	circulationCountsAsEnBanc	0	0	99999999 S
+   -502	firstInTimeControls	0	0	99999999 L
+   -703	unpubForce	persuasive	0	19881024 L
+   -703	unpubForce	citableNoWeight	19881025	99999999 U
+   -703	enBancGrantVacatesPanel	0	0	99999999 S
+   -703	firstInTimeControls	0	0	99999999 S
+   -704	enBancGrantVacatesPanel	1	0	99999999 S
+   5	reviewGrantedForce	notCitable	0	20050421 U
+   -502	reviewGrantedForce	persuasive	20050422	99999999 S
+   20	stateFollowsCircuit	binding	19501004	99999999 U
+   -701	horizontal	soft	0	99999999 L
+   10	horizontal	withinUnitOnly	0	99999999 S
+   10	trialScope	ownUnitOnly	0	99999999 S
+   25	horizontal	soft	0	99999999 S
+   25	trialScope	statewide	0	99999999 L
+   -902	firstInTimeControls	1	0	99999999 S
+   -703	trialScope	ownUnitOnly	0	99999999 L
+   -704	trialScope	ownUnitOnly	0	99999999 L
+   36	horizontal	withinUnitOnly	19530625	20020520 S
+   36	horizontal	strong	20020521	99999999 U
+   -1002	circulationCountsAsEnBanc	1	0	99999999 L
+   -1101	horizontal	strong	19770301	99999999 S
+== treatments
+   tr5	186	185	19700910	recededFrom	issues:unk.a	pureProspective	0 | part perCuriam | q Abel v. Garcia, 505 Rep. 1269 was receded in Keller v. Reyes, 472 Rep. 1423 | ev cite:505 Rep. 1269
+       witness W 187 | by-ev name:Keller Reyes
+       class row tr5	recognised	-	-	gen
+== history
+== supersessions / lawchanges
+   lc0	Pub. L. 111-90	42:1983	19940726	19950726	0	gen
+   lc1	Pub. L. 92-10	42:2000e-5(e)	19960623	19960623	0	gen
+== holdings
+   h185unka	185	unk.a	The answer to unk.a is yes.	yes	majority
+== lean status
+   185	-	-	0	20261112	good	noneAdmitted	1	-	-	-	-
+   185	unk.a	h185unka	0	20261112	good	noneAdmitted	1	-	-	-	-
+== lean certs (rows on these nodes)
+   treatment	tr5	noAuthority	noAuthority
+== lean classes (rows on these nodes)
+   tr5	atRiskWitness	recognised	noAuthority	-	-	187
+== lean findings
+== ref status
+== ref certs (rows on these nodes)
+   treatments.tsv	tr5	ok
+== ref classes (rows on these nodes)
+   tr5	atRiskWitness	recognised	ok	-	-	187
+== ref findings
+   atRisk	186	185	inferred:recededFrom	1	atRiskWitness
+== succession
+601	602	19720627	replace	gen	S
+1201	1205	19860919	replace	gen	S
+== witness
+tr0	158	cite:722 Rep. 1265	gen
+tr1	163	name:Abel Baker	gen
+tr2	169	cite:607 Rep. 410	gen
+tr3	174	name:Reyes Carter	gen
+tr4	182	name:Ortiz	gen
+tr5	187	name:Keller Reyes	gen
+tr6	195	name:Tate Foster	gen
+== class
+tr1	recognised	-	-	gen	a sixth field
+to3	operativeWords	-	separate but equal	gen
+tr5	recognised	-	-	gen
+tr2	recognised	as respects interstate carriers	-	gen
+tr3	recognised	-	-	gen
+to2	operativeWords	-	the rule of the earlier case	gen
+tr1	operativeWords	as respects interstate carriers	separate but equal	gen
+to0	operativeWords	-	-	gen
+tr4	operativeWords	-	the rule of the earlier case	gen
+tr6	recognised	-	-	gen
+################ 73158 187 189
+== decisions
+   187	902	19871006	3	panel	published	full | Florida District Court of Appeal A
+   188	901	19920903	0	division	published	full | Supreme Court of Florida L
+   189	903	0	1	unknown	published	full | Florida Circuit Court T
+== system_rules
+   0	horizontal	strong	0	99999999 S
+   17	horizontal	withinUnitOnly	0	99999999 S
+   17	trialScope	statewideChooseOnConflict	0	99999999 S
+   20	trialScope	statewideChooseOnConflict	0	99999999 L
+   44	horizontal	none	0	99999999 S
+   44	trialScope	ownUnitThenAny	0	99999999 S
+   -101	unpubForce	citableNoWeight	0	19990921 S
+   -101	unpubForce	citableNoWeight	19990922	99999999 S
+   -101	enBancGrantVacatesPanel	0	0	99999999 U
+   -101	firstInTimeControls	1	0	99999999 L
+   -102	unpubForce	citableNoWeight	0	20030124 S
+   -102	unpubForce	notCitable	20030125	99999999 S
+   -102	enBancGrantVacatesPanel	0	0	99999999 S
+   -102	firstInTimeControls	1	0	99999999 S
+   -113	unpubForce	binding	0	20100324 L
+   -113	unpubForce	citableNoWeight	20100325	99999999 S
+   -113	enBancGrantVacatesPanel	0	0	99999999 S
+   -113	circulationCountsAsEnBanc	1	0	99999999 L
+   -502	unpubForce	notCitable	0	19960205 L
+   -502	unpubForce	binding	19960206	99999999 S
+   -502	enBancGrantVacatesPanel	0	0	99999999 S
+   -502	circulationCountsAsEnBanc	1	0	99999999 S
+   -703	unpubForce	citableNoWeight	0	19880124 S
+   -703	unpubForce	citableNoWeight	19880125	99999999 S
+   -703	enBancGrantVacatesPanel	1	0	99999999 S
+   -704	unpubForce	binding	0	19871006 S
+   -704	unpubForce	persuasive	19871007	99999999 S
+   -704	enBancGrantVacatesPanel	0	0	99999999 S
+   -704	circulationCountsAsEnBanc	1	0	99999999 S
+   20	stateFollowsCircuit	binding	19850122	99999999 U
+   10	horizontal	withinUnitOnly	0	99999999 S
+   10	trialScope	ownUnitThenAny	0	99999999 L
+   25	horizontal	soft	0	99999999 S
+   25	trialScope	statewide	0	99999999 L
+   -902	firstInTimeControls	1	0	99999999 U
+   -502	trialScope	ownUnitThenAny	0	99999999 L
+   36	horizontal	strong	19771220	20040604 L
+   36	horizontal	soft	20040605	99999999 U
+   -1002	circulationCountsAsEnBanc	0	0	99999999 L
+   -1101	horizontal	strong	19940923	99999999 S
+== treatments
+   tr2	188	187	19920903	recededFrom	all	retroactive	0 | part majority | q Upton v. Zeller, 836 Rep. 1493 has been receded by Keller v. Ellis, 77 Rep. 872 | ev name:Upton Zeller
+       witness W 189 | by-ev name:Keller Ellis
+       class row tr2	recognised	-	the rule of the earlier case	gen
+   tx2	188	187	19920903	overruled	all	retroactive	1 | part majority | q Upton v. Zeller, 836 Rep. 1493, is overruled | ev cite:836 Rep. 1493
+== history
+== supersessions / lawchanges
+   lc0	Pub. L. 109-390	42:2000e-5(e)	20060916	20070916	0	gen
+   lc1	Pub. L. 116-233	42:1983	19550211	19550211	1	gen
+== holdings
+   h187fla	187	fl.a	The answer to fl.a is no.	no	majority
+== lean status
+   187	-	-	0	19920902	good	noneAdmitted	1	-	-	-	-
+   187	-	-	19920903	20261112	neg:overruled	negativeAdmitted	1	tx2	188	treatment	selfAnnounced
+== lean certs (rows on these nodes)
+   treatment	tr2	witnessNoStanding	witnessNoStanding
+   treatment	tx2	ok	ok
+== lean classes (rows on these nodes)
+   tr2	atRiskWitness	recognised	witnessNoStanding	-	the rule of the earlier case	189
+   tx2	selfAnnounced	-	ok	-	-	-
+== lean findings
+   atRisk	189	187	-	citesLaterNegated:neg:overruled	1	-	selfAnnounced
+   atRisk	190	187	-	citesLaterNegated:neg:overruled	1	-	selfAnnounced
+   citesOverruled	191	187	-	neg:overruled	1	assumeHomeDomain>lowerToHigher	selfAnnounced
+   citesOverruled	192	187	-	neg:overruled	1	assumeHomeDomain>VotherUnit	selfAnnounced
+== ref status
+   187	-	-	19920903	99999999	negative	overruled	188	0	1	selfAnnounced
+== ref certs (rows on these nodes)
+   treatments.tsv	tr2	witnessNoStanding
+   treatments.tsv	tx2	ok
+== ref classes (rows on these nodes)
+   tr2	atRiskWitness	recognised	witnessNoStanding	-	the rule of the earlier case	189
+   tx2	selfAnnounced	-	ok	-	-	-
+== ref findings
+   atRisk	190	187	citesLaterNegated:overruled	1	selfAnnounced
+   citesOverruled	191	187	overruled:188	1	selfAnnounced
+   citesOverruled	192	187	overruled:188	1	selfAnnounced
+== succession
+601	602	19700717	replace	gen	S
+1201	1205	19640609	split	gen	S
+== witness
+tr0	176	name:Reyes Upton	gen
+tr1	184	name:Young Baker	gen
+tr2	189	name:Keller Ellis	gen
+tr3	195	name:Hughes Young	gen
+tr4	201	name:Tate Baker	gen
+tr5	208	cite:202 Rep. 1222	gen
+tr6	213	name:Sutton Nolan	gen
+tr7	218	cite:138 Rep. 348	gen
+== class
+tr3	recognised	-	-	gen
+tr0	recognised	-	-	gen
+tr2	recognised	-	the rule of the earlier case	gen
+t30	recognised	in the field of public education	-	gen
+to0	operativeWords	as respects interstate carriers	separate but equal	gen
+tr1	recognised	-	-
+t29	recognised	in the field of public education	separate but equal	gen
+th1	operativeWords	-	-	gen
+tr7	recognised	-	-	gen
+tr5	recognised	in the field of public education	-	gen
+to2	operativeWords	as respects interstate carriers	-	gen
+tr4	recognised	-	-	gen

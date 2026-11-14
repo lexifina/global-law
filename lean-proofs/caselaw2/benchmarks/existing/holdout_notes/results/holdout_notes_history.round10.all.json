@@ -1,0 +1,35 @@
+{
+ "asof": null,
+ "blind": true,
+ "build": {
+  "source": "round10/results/v10d/summary.txt (HOLDOUT NOTES: history)"
+ },
+ "court": "mixed",
+ "dataset": "holdout_notes_history",
+ "generated": "2026-11-14T05:07:03+00:00",
+ "label": "round10",
+ "link": {
+  "fail_reasons": {},
+  "linked": 20843,
+  "n_items": 20843,
+  "note": "items are (X, Y) pairs of the frozen split (round5/tests/split); targets and Y are corpus nodes by construction (regex 'nearest citation', not audited)"
+ },
+ "metrics": {
+  "precision": {
+   "hi": 0.8345487358493184,
+   "k": 5204,
+   "lo": 0.8158083902160362,
+   "n": 6305,
+   "p": 0.8253766851704996
+  }
+ },
+ "notes": "Precision only: the recall needs the holdout scorer's decisions cache (~100 MB) for v9c, not built because disk is tight.",
+ "plot": [
+  "recall",
+  "precision"
+ ],
+ "primary": "precision",
+ "row_label": "Later-court notes 'X, rev'd/vacated by Y' from courts with no power over X (held out)",
+ "split": "all",
+ "tests": "same-case"
+}

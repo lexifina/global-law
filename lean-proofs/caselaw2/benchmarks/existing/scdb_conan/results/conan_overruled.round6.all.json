@@ -1,0 +1,62 @@
+{
+ "asof": null,
+ "blind": false,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round6\\history\\stage\\final2",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\round6\\history\\out\\final2",
+  "status_sha1": "96888c8b4381d3230e83d90c5d6f2fa45dfeeb8e"
+ },
+ "court": "supreme",
+ "dataset": "conan_overruled",
+ "generated": "2026-11-13T23:15:52+00:00",
+ "label": "round6",
+ "link": {
+  "fail_reasons": {
+   "unresolved": 2
+  },
+  "linked": 292,
+  "n_items": 294
+ },
+ "metrics": {
+  "link_rate": {
+   "hi": 0.9981324618729214,
+   "k": 292,
+   "lo": 0.9755399109701716,
+   "n": 294,
+   "p": 0.9931972789115646
+  },
+  "precision": {
+   "hi": 0.9122163594111339,
+   "k": 163,
+   "lo": 0.8161369072994213,
+   "n": 187,
+   "p": 0.8716577540106952
+  },
+  "recall": {
+   "hi": 0.6107198832564104,
+   "k": 162,
+   "lo": 0.49744615987022167,
+   "n": 292,
+   "p": 0.5547945205479452
+  },
+  "recall_2016_all": {
+   "hi": 0.5025143160887087,
+   "k": 139,
+   "lo": 0.39267102539313875,
+   "n": 311,
+   "p": 0.44694533762057875
+  },
+  "recall_2016_express": {
+   "hi": 0.6166855613622251,
+   "k": 135,
+   "lo": 0.49269638817885303,
+   "n": 243,
+   "p": 0.5555555555555556
+  }
+ },
+ "notes": "Scorer tools/caselaw2/eval/score.py (existing/scdb_conan/runs/round6/results.json); it counts admitted explicit treatment rows (certificate ok, explicit = 1, kinds overruled/disapproved/recededFrom/abrogated/supersededByEnactment); the implicit tier and round-5 'recognised' status rows are not counted (ROUND5.md reports 175/278 SCDB and 195/292 CRS with recognised rows, from another scorer). NOT blind: these keys were used to evaluate and tune rounds 1-4 (eval/score_round*.txt). Unit: (overruling, overruled) pair. recall = current table (2022 + 2026 supp.) pairs the model admits; recall_2016_express / recall_2016_all = the 2016 edition; precision = of the model's admitted Supreme-Court-on-Supreme-Court pairs, the share in any CRS edition (an incomplete list: a lower bound).",
+ "primary": "recall",
+ "row_label": "Constitution Annotated (CRS) table of overruled Supreme Court decisions",
+ "split": "all",
+ "tests": "overruling"
+}

@@ -1,0 +1,74 @@
+{
+ "asof": 20261112,
+ "blind": true,
+ "build": {
+  "data": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\data",
+  "out": "~\\Documents\\us-caselaw-lean-work\\caselaw-lean-2\\out",
+  "status_sha1": "ece2365efc536dfcb39425e8c95efe842c57e3a6"
+ },
+ "court": "state",
+ "dataset": "state_overruled_tables",
+ "generated": "2026-11-13T23:35:39+00:00",
+ "label": "round4",
+ "link": {
+  "fail_reasons": {
+   "after_publication": 2,
+   "date_order": 6,
+   "federal_court": 33,
+   "other_system": 11,
+   "same_decision": 1,
+   "x_bad_citation": 20,
+   "x_name_mismatch": 23,
+   "x_no_citation": 10,
+   "x_not_in_corpus": 10,
+   "x_reporter_not_in_corpus": 36,
+   "x_several_on_page": 20,
+   "x_volume_not_in_corpus": 29,
+   "y_bad_citation": 7,
+   "y_name_mismatch": 9,
+   "y_no_citation": 15,
+   "y_not_in_corpus": 8,
+   "y_reporter_not_in_corpus": 13,
+   "y_several_on_page": 15,
+   "y_text_does_not_cite_x": 71,
+   "y_volume_not_in_corpus": 9
+  },
+  "linked": 348,
+  "n_items": 696
+ },
+ "metrics": {
+  "actor_agreement": {
+   "hi": 0.9911185512976646,
+   "k": 19,
+   "lo": 0.7638688045357189,
+   "n": 20,
+   "p": 0.95
+  },
+  "link_rate": {
+   "hi": 0.5370440332581756,
+   "k": 348,
+   "lo": 0.4629559667418244,
+   "n": 696,
+   "p": 0.5
+  },
+  "recall": {
+   "hi": 0.10575576878968751,
+   "k": 19,
+   "lo": 0.044838959044549036,
+   "n": 274,
+   "p": 0.06934306569343066
+  },
+  "recall_any": {
+   "hi": 0.1143188217966859,
+   "k": 21,
+   "lo": 0.050672605565783964,
+   "n": 274,
+   "p": 0.07664233576642336
+  }
+ },
+ "notes": "Unit = overruled decision X (linked); recall = model negative/unknown via treatment/prospective path with actor among the listed overruling decisions, or an admitted overruled/abrogated/disapproved/recededFrom treatment by one of them; recall_any = same by any actor; actor_agreement = of X with a model overruling actor dated by the end of the table's publication year, share where such an actor is listed. link_rate counts primary table rows ((treated, treating) citation pairs); h0/h1 link counts exclude rows whose treated side did not link (no split key). No precision metric (positives-only key; see MAPPING.md).",
+ "primary": "recall",
+ "row_label": "State tables of overruled cases (GA 1922, CA 1860/1874, NY 1893, Greenleaf 1838)",
+ "split": "all",
+ "tests": "overruling"
+}

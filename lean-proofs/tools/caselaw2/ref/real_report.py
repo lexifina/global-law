@@ -30,9 +30,11 @@ def main():
     classes = defaultdict(list)
     for r in D.rows:
         classes[(r[0], r[1], r[2])].append(r)
+    # round 5: classes.tsv and the summary counters are listed too when diff.py compared them
+    files = ('status', 'findings', 'certs', 'splits') + tuple(fn for fn in dmod.FILES5 if D.compared[fn])
     with open(os.path.join(a.run, 'rates.tsv'), 'w', encoding='utf-8', newline='\n') as f:
         f.write('file\tbucket\trule\tdisagreeing_keys\tcompared_keys\trate\n')
-        for fn in ('status', 'findings', 'certs', 'splits'):
+        for fn in files:
             n = D.compared[fn]
             f.write('%s\tALL\tALL\t%d\t%d\t%.6f\n' % (fn, D.bad_keys[fn], n, D.bad_keys[fn] / n if n else 0))
         for (fn, b, rule), rs in sorted(classes.items(), key=lambda kv: -len(kv[1])):
@@ -51,7 +53,7 @@ def main():
             f.write('\t'.join(str(x) for x in r) + '\t\t\n')
     print('%d disagreement rows in %d classes; %d sampled; missing: %s' % (total, len(classes), len(sample),
                                                                          ','.join(missing) or '-'))
-    for fn in ('status', 'findings', 'certs', 'splits'):
+    for fn in files:
         print('  %-9s %d of %d keys disagree' % (fn, D.bad_keys[fn], D.compared[fn]))
 
 

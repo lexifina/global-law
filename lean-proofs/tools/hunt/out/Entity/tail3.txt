@@ -1,0 +1,33 @@
+/-- Replay one plan. -/
+def run (sc : Scn) (p : List Move) : String :=
+  match p.foldl (fun o m => o.bind (fun s => step sc s m)) (some start) with
+  | some s => s!"tax {s.tax}, deferred {s.defer}, cost {cost sc s}"
+  | none => "not allowed"
+
+-- First pass: the long-standing provisions only (no §128, no §45F).
+#eval search (scn 400000 false) (fun m => oneYear m && old m) 1 6 "A1 one year, pre-2025 moves"
+#eval search (scn 150000 false) (fun m => oneYear m && old m) 1 4 "A2 one year, pre-2025 moves"
+#eval search (scn 1000000 true) (fun m => oneYear m && old m && noRetire m) 1 4 "A3 one year, pre-2025 moves, no retirement"
+-- The Code's text alone: no salary floor, and "limited partner" read literally.
+#eval search { scn 400000 false with rcFloor := false, lpLiteral := true } (fun m => oneYear m && noRetire m && old m) 1 6 "B1 statute text only"
+#eval search { scn 1000000 true with rcFloor := false, lpLiteral := true } (fun m => oneYear m && noRetire m && old m) 1 6 "B2 statute text only, service field"
+-- Several years: entity changes, retention, sale.
+#eval search { scn 400000 false with years := 5, gYear := 200000 } fringeFree 10000 8 "C1 five years, entity/salary/retain/sell only"
+#eval search { scn 400000 true with years := 5, gYear := 200000 } fringeFree 10000 4 "C2 five years, service field"
+-- Widened: §128 (Trump accounts) and §45F as amended by Pub. L. 119-21.
+#eval search (scn 400000 false) (fun m => oneYear m && (noRetire m || m == .trumpAcct)) 1 8 "D1 one year, with §45F and §128"
+#eval search (scn 150000 false) (fun m => oneYear m && (noRetire m || m == .trumpAcct)) 1 6 "D2 one year, with §45F and §128"
+
+-- Twins for the judged plans (same plan with and without the one move).
+#eval run (scn 400000 false) [.hireChild 12000, .endYear .out, .sell]
+#eval run (scn 400000 false) [.hireChild 12000, .trumpAcct, .endYear .out, .sell]
+#eval run { scn 400000 false with deferRate := 10 } [.hireChild 12000, .endYear .out, .sell]
+#eval run { scn 400000 false with deferRate := 10 } [.hireChild 12000, .trumpAcct, .endYear .out, .sell]
+#eval run (scn 400000 false) [.choose .s, .salary 120000, .healthPlan, .endYear .out, .sell]
+#eval run (scn 400000 false) [.choose .s, .salary 120000, .healthPlan, .childCare, .endYear .out, .sell]
+#eval run (scn 400000 false) [.endYear .out, .sell]
+#eval run (scn 400000 false) [.hireSpouse 10000, .endYear .out, .sell]
+#eval run (scn 400000 false) [.hireSpouse 10000, .childCare, .endYear .out, .sell]
+#eval run (scn 400000 false) [.hireSpouse 10000, .healthPlan, .childCare, .endYear .out, .sell]
+
+end Legal.USTax.Hunt.Entity
