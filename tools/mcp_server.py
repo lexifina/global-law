@@ -2080,11 +2080,17 @@ def folder_titles(corpus: str, sha: str) -> dict[str, dict]:
 
 @lru_cache(maxsize=2048)  # every corpus served: a query with no jurisdiction asks all of them (see folded_titles)
 def _folder_titles(corpus: str, sha: str) -> dict[str, dict]:
-    done = git_run(['git', 'show', f'{sha}:data/acts.json'], cwd=ROOT / corpus, capture_output=True, timeout=GIT_TIMEOUT)
-    try:
-        rows = json.loads(done.stdout.decode('utf-8')).get('acts', []) if done.returncode == 0 else []
-    except (ValueError, AttributeError):
-        rows = []
+    # (a corpus built with its register beside it keeps the same list at registry/data/acts.json: Croatia, Slovenia,
+    # Albania, Kosovo. Their acts were known only by their folders' README headings, and Kosovo's laws by none.)
+    rows, listed_in = [], ''
+    for listed_in in ('data/acts.json', 'registry/data/acts.json'):
+        done = git_run(['git', 'show', f'{sha}:{listed_in}'], cwd=ROOT / corpus, capture_output=True, timeout=GIT_TIMEOUT)
+        try:
+            rows = json.loads(done.stdout.decode('utf-8')).get('acts', []) if done.returncode == 0 else []
+        except (ValueError, AttributeError):
+            rows = []
+        if rows:
+            break
     out: dict[str, dict] = {}
     for r in rows if isinstance(rows, list) else []:
         if not isinstance(r, dict) or not isinstance(r.get('path'), str) or not r.get('title'):
@@ -2093,10 +2099,13 @@ def _folder_titles(corpus: str, sha: str) -> dict[str, dict]:
         shown = title if not code or fold(str(code)) in fold(title) else f'{code}: {title}'  # "Codul fiscal (Legea nr. 227/2015)"
         out[r['path'].strip('/')] = {'title': shown, 'names': [str(x) for x in (code, title, short) if x],
                                      'status': str(r.get('status') or ''), 'latest': str(r.get('latest') or '')}
-    if out:
+    if out and listed_in == 'data/acts.json':
         return out
     heads = readme_titles(corpus, sha)
-    return {f: {'title': h, 'names': [h], 'status': '', 'latest': ''} for f, h in heads.items() if h}
+    for f, h in heads.items():  # (beside a register's list: the folders it does not list)
+        if h and f not in out:
+            out[f] = {'title': h, 'names': [h], 'status': '', 'latest': ''}
+    return out
 
 
 def readme_titles(corpus: str, sha: str) -> dict[str, str]:
@@ -3269,10 +3278,11 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     # An act by its number alone, as a register files it ("Ν. 4624/2019" is nomos-4624-2019; "Zakon 24/2005"): the
     # act's folder, where the numbers in the query are one folder's numbers (acts_by_name) in the one body of law
     # the scope reaches.
-    if not DOCKET_QUERY.fullmatch(query) and not offset and scope and len(re.findall(r'\d+', query)) >= 2 and len(query) <= 60:
+    if not offset and len(re.findall(r'\d+', query)) >= 2 and len(query) <= 60:  # (also where the form is a docket's: "Ν. 4624/2019")
         try:
-            reach = [c['path'] for c in law.manifest()['corpora'] if not law.is_caselaw(c)
-                     and (c['path'] == scope or c['path'].startswith(scope.rstrip('/') + '/') or scope.startswith(c['path'] + '/'))]
+            served = set(_look()[1])  # (a host may have narrowed the call to one country: then that is the reach)
+            reach = [c['path'] for c in law.manifest()['corpora'] if not law.is_caselaw(c) and c['path'] in served
+                     and (not scope or c['path'] == scope or c['path'].startswith(scope.rstrip('/') + '/') or scope.startswith(c['path'] + '/'))]
             by_number = [(c, f, label) for c in reach[:4] for score, f, label in acts_by_name(re.findall(r'[^\s,;()]+', query), c, corpus_head(c))
                          if score == 0.9 and f] if len(reach) <= 4 else []
         except SystemExit:
