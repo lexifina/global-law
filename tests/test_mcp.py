@@ -4749,14 +4749,17 @@ class ProvisionByActAndNumber(unittest.TestCase):
     @needs(IE_C, PW_C)
     def test_what_is_left_to_the_other_look_ups(self):
         # an act's own name (the year is no section), a name that names no act, words, a number the act lacks
-        for query, scope in (('Data Protection Act 2018', 'ireland'), ('Zzzqqq Act section 2', 'ireland'),
+        for query, scope in (('Zzzqqq Act section 2', 'ireland'),
                              ('personal data breach', 'ireland'), ('Australian Consumer Law section 2', 'ireland')):
             self.assertNotIn('read_as', self.find(query, scope), query)
         # the act is named and has no file of that number: the act itself, not a search of every heading
         got = self.find('Data Protection Act 2018 section 99999', 'ireland')
         self.assertEqual((got['read_as'], [r['path'] for r in got['results']]), ('act', [IE_C + '/data-protection-act-2018']))
         self.assertIn('no file of it is 99999', got['results'][0]['heading'])
-        self.assertEqual(self.find('Data Protection Act 2018', 'ireland')['results'][0]['path'], IE_C + '/data-protection-act-2018')
+        # the act's own name: its folder, found through the table of act names
+        got = self.find('Data Protection Act 2018', 'ireland')
+        self.assertEqual((got['read_as'], [r['path'] for r in got['results']], got['results'][0]['kind']), ('act name', [IE_C + '/data-protection-act-2018'], 'act'))
+        self.assertNotIn('read_as', self.find('acts', 'ireland'))  # (a folder of acts is no act)
         # a later part of the list is the heading search's
         self.assertNotIn('read_as', self.find('Data Protection Act 2018 section 2', 'ireland', offset=1))
 

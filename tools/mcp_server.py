@@ -2105,6 +2105,38 @@ def _folder_titles(corpus: str, sha: str) -> dict[str, dict]:
     for f, h in heads.items():  # (beside a register's list: the folders it does not list)
         if h and f not in out:
             out[f] = {'title': h, 'names': [h], 'status': '', 'latest': ''}
+    if not out:
+        # Neither: an act's opening file begins with its title (Turkey's law/2003/4857/baslangic.md: "İŞ KANUNU").
+        out = {f: {'title': h, 'names': [h], 'status': '', 'latest': ''} for f, h in opening_titles(corpus, sha).items()}
+    return out
+
+
+OPENING_FILES = ('baslangic.md',)  # the file an act opens with, where its first line is the act's title
+
+
+def opening_titles(corpus: str, sha: str) -> dict[str, str]:
+    """folder -> the first line of the file its act opens with (OPENING_FILES), without footnote marks: one git grep,
+    kept on disk per corpus commit as readme_titles keeps its own."""
+    cache = law._store() / f"openings-{re.sub(r'[^A-Za-z0-9]+', '-', corpus)}-{sha[:12]}.json"
+    try:
+        return json.loads(cache.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        pass
+    done = git_run(['git', '-c', 'core.quotePath=false', 'grep', '-m1', '-I', '--no-color', '-e', '[^[:space:]]', sha, '--',
+                    *[f'*/{name}' for name in OPENING_FILES]], cwd=ROOT / corpus, capture_output=True, timeout=GIT_TIMEOUT)
+    out: dict[str, str] = {}
+    for line in done.stdout.decode('utf-8', 'replace').splitlines():
+        _, _, rest = line.partition(':')
+        path, _, first = rest.partition(':')
+        title = re.sub(r'(?:\s*\[\d+\])+', '', first.lstrip('#')).strip()
+        if '/' in path and 3 <= len(title) <= 200 and not NOT_LAW.search(path):
+            out.setdefault(path.rsplit('/', 1)[0], title)
+    if done.returncode in (0, 1):
+        try:
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            cache.write_text(json.dumps(out, ensure_ascii=False), encoding='utf-8')
+        except OSError:
+            pass
     return out
 
 
@@ -2835,9 +2867,11 @@ def named_unit_parts(query: str) -> tuple[list[str], str, str] | None:
 
 
 def _label_words(text: str) -> list[str]:
-    return re.findall(r'\w+', fold(text))
+    return re.findall(r'\w+', fold(text).replace('ı', 'i'))  # (Turkish: "ANAYASASI" and "Anayasası" are one word)
 
 
+LONE_ACT = re.compile(r'(?:1[5-9]|20)\d\d/\d+[a-z]?\.md')  # an act that is one file, in its year's folder: 2006/262.md
+LONE_ACT_KINDS = frozenset(('zakon', 'ustavni', 'vyhlaska', 'narizeni'))  # the kind a heading begins with, before the act's own name
 ACT_NAMES_WARMED = 20000  # files from which a body of law's table of act names is made while warming
 ACT_NAMES_HEADED = 300  # folders with no title whose first file's heading is read for the act's name
 
@@ -2903,6 +2937,19 @@ def act_name_index(corpus: str, sha: str) -> tuple[list, dict, dict, dict]:
             numbers.setdefault(key, []).append((folder, frozenset(w for w in path_words if not w.isdigit())))
         if last.startswith('law-') and last[4:].isalpha() and len(last) >= 7:
             codes[last[4:]] = folder
+    lone = [n for n in names if n.endswith('.md') and 1 <= n.count('/') <= 2 and LONE_ACT.fullmatch(n.rsplit('/', 2)[-2] + '/' + n.rsplit('/', 1)[-1])]
+    if len(lone) >= 50:
+        heads = heading_index_if_built(corpus, sha) or {}
+        for n in lone:
+            words = _label_words(n[:-3].replace('/', ' '))
+            key = tuple(sorted(w.lstrip('0') or '0' for w in words if w.isdigit()))
+            numbers.setdefault(key, []).append((n, frozenset(w for w in words if not w.isdigit())))
+            head = str(heads.get(n) or '').split('\n')[0].strip()
+            if head:
+                labels(n, head)
+                first, _, after = head.partition(' ')
+                if fold(first) in LONE_ACT_KINDS and len(after.split()) >= 2:  # "Zákon zákoník práce" is the zákoník práce
+                    add(n, after)
     top = [d for d in dirs if '/' not in d and d not in titled]
     if 0 < len(top) <= ACT_NAMES_HEADED:
         firsts = {}
@@ -3114,9 +3161,19 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
         # (Serbia's Кривични законик is one tekst.md). Its own files answer, where the heading search read every
         # heading of the country for the words (40 s) and gave other acts' articles.
         exact = [o for o in offers if o[0] >= 0.9 and o[3]]
+        lone = [o for o in exact if o[3].endswith('.md')]
+        if lone and len(lone) == len(exact) and len(lone) <= ACTS_OF_ONE_NAME_MOST:
+            # Acts held as one file each (Czechia): the newest of that name first; the article is in its text.
+            lone = sorted(lone, key=lambda o: act_year(o[3]), reverse=True)[:3]
+            heads = {}
+            for _score, corpus, sha, folder, label in lone:
+                heads[f'{corpus}/{folder}'] = read_headings(corpus, sha, (folder,)).get(folder, '') or label.strip()
+            return [{'path': path, 'heading': f"{head}  (the act, held as one text: read it for {mark + ' ' if mark else ''}{unit})", 'score': 90, 'whole_act': True}
+                    for path, head in heads.items()]
         if len(exact) == 1:
             _score, corpus, sha, folder, label = exact[0]
-            files = [n for n in sorted(names_under(corpus, sha, folder), key=natural) if n.endswith('.md') and n.rsplit('/', 1)[-1] != 'README.md']
+            files = [folder] if folder.endswith('.md') else [
+                n for n in sorted(names_under(corpus, sha, folder), key=natural) if n.endswith('.md') and n.rsplit('/', 1)[-1] != 'README.md']
             if 0 < len(files) <= 3:  # (held whole: the text itself)
                 heads = read_headings(corpus, sha, tuple(files))
                 how = 'the record holds this act as one text' if len(files) == 1 else f'the record holds this act in {len(files)} files'
@@ -3134,6 +3191,63 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
         rows += [{'path': f'{corpus}/{f}', 'heading': f"{heads.get(f, '')}  (read as {unit} of {shown})".lstrip(), 'score': 100}
                  for f in files[:NAMED_UNIT_SHOWN]]
     return rows[:max(limit, NAMED_UNIT_SHOWN)]
+
+
+def acts_named(query: str, scope: str) -> list[dict]:
+    """The act or acts (three at most) whose name is exactly the query, in the bodies of law the scope reaches, as
+    find_provision's rows; [] when none is, the scope reaches too many bodies of law, or the name is a folder of
+    acts and not an act (zakon/, law/)."""
+    served = set(_look()[1])
+    reach = [c['path'] for c in law.manifest()['corpora'] if not law.is_caselaw(c) and c['path'] in served
+             and (not scope or c['path'] == scope or c['path'].startswith(scope.rstrip('/') + '/') or scope.startswith(c['path'] + '/'))]
+    if not reach or len(reach) > NAMED_UNIT_CORPORA:
+        return []
+    tokens = re.findall(r'[^\s,;()\[\]"„“”«»]+', query)
+    rows, close = [], []
+    for corpus in reach:
+        sha = corpus_head(corpus)
+        if not sha:
+            continue
+        inner = scope[len(corpus) + 1:] if scope.startswith(corpus + '/') else ''
+        for score, folder, label in acts_by_name(tokens, corpus, sha):
+            if not folder or (inner and not (folder == inner or folder.startswith(inner + '/'))):
+                continue
+            if score < 1.0:
+                if score >= 0.8:
+                    close.append((corpus, sha, folder, label))
+                continue
+            if folder.endswith('.md'):
+                rows.append({'path': f'{corpus}/{folder}', 'score': 100, 'heading': f'{label.strip()}  (the act, held as one text)'})
+                continue
+            under = names_under(corpus, sha, folder)
+            if not any('/' not in n[len(folder) + 1:] for n in under[:200]):
+                continue  # (a folder of acts, not an act)
+            title = (folder_titles(corpus, sha).get(folder) or {}).get('title') or act_titles(corpus, sha).get(folder) or label.strip()
+            rows.append({'path': f'{corpus}/{folder}', 'kind': 'act', 'title': str(title), 'files': len(under), 'score': 100,
+                         'heading': f'{title}  (the act: list_provisions lists its provisions)'})
+        if len(rows) > ACTS_OF_ONE_NAME_MOST:
+            return []
+    if not rows and len(close) == 1 and len(_label_words(' '.join(tokens))) >= 2:
+        # One act whose title only ends or begins with the name ("Kodeks pracy" of "Ustawa z dnia 26 czerwca 1974 r.
+        # Kodeks pracy."); one word alone is no such name ("Anayasa" begins the Constitutional Court's rules).
+        corpus, sha, folder, label = close[0]
+        under = names_under(corpus, sha, folder) if not folder.endswith('.md') else ()
+        if folder.endswith('.md') or any('/' not in n[len(folder) + 1:] for n in under[:200]):
+            rows.append({'path': f'{corpus}/{folder}', 'score': 100, **({} if folder.endswith('.md') else {'kind': 'act', 'title': label.strip(), 'files': len(under)}),
+                         'heading': f"{label.strip()}  ({'the act, held as one text' if folder.endswith('.md') else 'the act: list_provisions lists its provisions'})"})
+    # (of acts that share a name, the newest first: Turkey's İş Kanunu of 2003 before the one of 1971 it replaced; of
+    # a code and its republications, the newest few)
+    return sorted(rows, key=lambda r: act_year(r['path']), reverse=True)[:ACTS_OF_ONE_NAME]
+
+
+ACTS_OF_ONE_NAME = 5  # acts of one exact name that are shown, the newest
+ACTS_OF_ONE_NAME_MOST = 20  # acts that share one exact name, past which the name is taken to name none of them
+
+
+def act_year(path: str) -> int:
+    """The year in an act's path (law/2003/4857, sb/2006/262.md), 0 when it has none."""
+    years = re.findall(r'(?<!\d)((?:1[5-9]|20)\d\d)(?!\d)', path)
+    return int(years[-1]) if years else 0
 
 
 CASE_NAME = re.compile(r'(?i)(?<=[^\W\d_])\s+(?:v|vs|versus)\.?\s+(?=[^\W\d_])|^\s*(?:in\s+re|ex\s+parte|in\s+the\s+matter\s+of|re)\s+\w')
@@ -3275,6 +3389,16 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                    'or search_law for the name within the jurisdiction of its court.')
             return (f"No decision named {query.strip()!r} in the case law this {'server holds' if HOSTED else 'clone serves'}"
                     + (f' under {scope}' if scope else '') + f' ({len(served)} case-law corpora). ' + how),                 {'results': [], 'case_law_served': served, 'hint': how, 'read_as': 'case name'}
+    # An act by its name alone, where the table of act names holds it exactly ("Bürgerliches Gesetzbuch", "İş Kanunu",
+    # "Zákoník práce"): the search by titles below reads folder_titles alone, which Germany's federal law, an act held
+    # as one file, or an abbreviation in a title's brackets are not in.
+    if not offset and len(query) <= 120 and not re.search(r'\d{5,}', query):
+        try:
+            by_name = acts_named(query, scope)
+        except SystemExit:
+            by_name = []
+        if by_name:
+            return listed(by_name, read_as='act name')
     # An act by its number alone, as a register files it ("Ν. 4624/2019" is nomos-4624-2019; "Zakon 24/2005"): the
     # act's folder, where the numbers in the query are one folder's numbers (acts_by_name) in the one body of law
     # the scope reaches.
@@ -3290,6 +3414,9 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         if len(by_number) == 1:
             c, f, label = by_number[0]
             title = (folder_titles(c, corpus_head(c)).get(f) or {}).get('title') or ''
+            if f.endswith('.md'):  # (an act held as one file: its text)
+                head = read_headings(c, corpus_head(c), (f,)).get(f, '')
+                return listed([{'path': f'{c}/{f}', 'score': 100, 'heading': f'{head}  (the act of that number, held as one text)'.lstrip()}], read_as='act number')
             return listed([{'path': f'{c}/{f}', 'kind': 'act', 'title': str(title), 'score': 100,
                             'heading': f"{title or 'an act'}  (the act of that number: list_provisions lists its provisions)"}], read_as='act number')
     # A docket number alone ("1170253", "77-440", "No. 1389", "Docket No. 2:19-cv-01234"), or a US reporter citation of
