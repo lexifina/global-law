@@ -4740,9 +4740,12 @@ class ProvisionByActAndNumber(unittest.TestCase):
     def test_what_is_left_to_the_other_look_ups(self):
         # an act's own name (the year is no section), a name that names no act, words, a number the act lacks
         for query, scope in (('Data Protection Act 2018', 'ireland'), ('Zzzqqq Act section 2', 'ireland'),
-                             ('personal data breach', 'ireland'), ('Data Protection Act 2018 section 99999', 'ireland'),
-                             ('Australian Consumer Law section 2', 'ireland')):
+                             ('personal data breach', 'ireland'), ('Australian Consumer Law section 2', 'ireland')):
             self.assertNotIn('read_as', self.find(query, scope), query)
+        # the act is named and has no file of that number: the act itself, not a search of every heading
+        got = self.find('Data Protection Act 2018 section 99999', 'ireland')
+        self.assertEqual((got['read_as'], [r['path'] for r in got['results']]), ('act', [IE_C + '/data-protection-act-2018']))
+        self.assertIn('no file of it is 99999', got['results'][0]['heading'])
         self.assertEqual(self.find('Data Protection Act 2018', 'ireland')['results'][0]['path'], IE_C + '/data-protection-act-2018')
         # a later part of the list is the heading search's
         self.assertNotIn('read_as', self.find('Data Protection Act 2018 section 2', 'ireland', offset=1))
@@ -4761,6 +4764,72 @@ class ProvisionByActAndNumber(unittest.TestCase):
             got = self.find('Data Protection Act 2018 section 2', 'ireland')
             self.assertEqual(got['results'][0]['path'], IE_C + '/data-protection-act-2018/section-2.md')
             self.assertTrue(self.find('DPA section 2', 'ireland')['results'])  # (the heading search, not an empty folder)
+
+
+class SerbianInLatinLetters(unittest.TestCase):
+    """A query in Serbian Latin is asked in Cyrillic where every body of law reached is Serbia's (in_cyrillic,
+    2026-11-14): "godišnji odmor" found nothing in a record printed in Cyrillic."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def test_the_letters(self):
+        m = self.m
+        for latin, cyrillic in (('godišnji odmor', 'годишњи одмор'), ('Zakon o radu član 73', 'Закон о раду члан 73'),
+                                ('Ljubljana Njegoš džep Đorđe', 'Љубљана Његош џеп Ђорђе'), ('GODIŠNJI', 'ГОДИШЊИ'),
+                                ('zaštita podataka o ličnosti', 'заштита података о личности'), ('djak', 'ђак')):
+            self.assertEqual(m.serbian_cyrillic(latin), cyrillic)
+        for other in ('годишњи одмор', 'tax law', 'why', '2005', '', 'Zakon о раду'):
+            self.assertIsNone(m.serbian_cyrillic(other), other)
+        self.assertEqual(m.named_unit_parts('Закон о раду члан 73'), (['Закон', 'о', 'раду'], '73', 'члан'))
+        self.assertEqual(m.named_unit_parts('Zakon o radu čl. 179'), (['Zakon', 'o', 'radu'], '179', 'čl'))
+        self.assertEqual(m.file_groups('clan-073.md'), ['73'])
+        self.assertEqual(m.regex_fragments('годишњ(и|ег) одмор'), [['годишњ', 'одмор']])
+        self.assertIsNone(m.regex_fragments('第九条'))
+
+    def test_cyrillic_first_then_as_typed(self):
+        from unittest import mock
+        m = self.m
+        asked = []
+
+        def handler(args):
+            asked.append(args['query'])
+            held = {'годишњи одмор': ['a.md'], 'annual leave': ['b.md']}.get(args['query'], [])
+            return f'{len(held)} found', {'results': held}
+        run = m.in_cyrillic('search_law', handler)
+        with mock.patch.object(m, 'cyrillic_first', lambda args: True):
+            text, data = run({'query': 'godišnji odmor', 'jurisdiction': 'serbia'})
+            self.assertEqual((data['results'], data['query_as'], asked), (['a.md'], 'годишњи одмор', ['годишњи одмор']))
+            self.assertTrue(text.startswith("Searched as 'годишњи одмор'") and data['script_note'] in text)
+            del asked[:]  # words that are not Serbian: asked in Cyrillic, nothing found, then as typed
+            text, data = run({'query': 'annual leave'})
+            self.assertEqual((data, asked), ({'results': ['b.md']}, ['аннуал леаве', 'annual leave']))
+            del asked[:]  # Cyrillic, a pattern, a letter Serbian does not use: as typed
+            for args in ({'query': 'годишњи одмор'}, {'query': 'godišnji', 'regex': True}, {'query': 'query'}):
+                run(dict(args))
+            self.assertEqual(asked, ['годишњи одмор', 'godišnji', 'query'])
+        del asked[:]  # elsewhere: as typed
+        with mock.patch.object(m, 'cyrillic_first', lambda args: False):
+            run({'query': 'godišnji odmor', 'jurisdiction': 'croatia'})
+        self.assertEqual(asked, ['godišnji odmor'])
+
+    def test_only_where_every_body_of_law_reached_is_serbias(self):
+        from unittest import mock
+        m = self.m
+        served = ('croatia/national/acts', 'serbia/national/acts', 'serbia/supreme-court/caselaw')
+        with mock.patch.object(m, '_look', lambda: ('x', served)), mock.patch.object(m, 'here', lambda s: s):
+            self.assertTrue(m.cyrillic_first({'jurisdiction': 'serbia'}))
+            self.assertTrue(m.cyrillic_first({'jurisdiction': 'serbia/national/acts/zakon/2005/24-3'}))
+            self.assertFalse(m.cyrillic_first({'jurisdiction': 'croatia'}))
+            self.assertFalse(m.cyrillic_first({}))  # (every country)
+            self.assertFalse(m.cyrillic_first({'jurisdiction': 'nowhere'}))
+        with mock.patch.object(m, '_look', lambda: ('x', served[1:])), mock.patch.object(m, 'here', lambda s: s):
+            self.assertTrue(m.cyrillic_first({}))  # (a call a host has scoped to Serbia)
+        self.assertTrue(all(getattr(m.HANDLERS[n], '__wrapped__', None) for n in ('find_provision', 'search_law', 'search_changes', 'phrase_history')))
 
 
 class CasesIndex:

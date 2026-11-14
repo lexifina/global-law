@@ -328,12 +328,12 @@ def _alternatives(pattern: str) -> list[str]:
 
 
 def _run_letter(ch: str) -> bool:
-    """Whether a character of a pattern can be part of a run: an ASCII letter or digit, or a Latin letter with a mark
-    (one a word index folds to ASCII letters: "é", "ț", "ß"). Not a letter of a script whose words an index may cut
-    otherwise."""
+    """Whether a character of a pattern can be part of a run: an ASCII letter or digit, a Latin letter with a mark
+    (one a word index folds to ASCII letters: "é", "ț", "ß"), or a Cyrillic letter (kept as it is: a pattern over
+    Serbia's law read every file of it, 13 s). Not a letter of a script whose words an index may cut otherwise."""
     if ch.isascii():
         return ch.isalnum()
-    return ch.isalpha() and len(ch.lower()) == 1 and unicodedata.name(ch, '').startswith('LATIN')
+    return ch.isalpha() and len(ch.lower()) == 1 and unicodedata.name(ch, '').startswith(('LATIN', 'CYRILLIC'))
 
 
 def _runs(branch: str) -> list[list[str]] | None:
@@ -2737,13 +2737,17 @@ def cited_provisions(query: str, scope: str, limit: int = MAX_ITEMS) -> list[tup
 # its number), and the file in that folder by the number.
 UNIT_MARKS = frozenset(('§', '§§', 'section', 'sections', 'sec', 'sect', 's', 'ss', 'art', 'article', 'articles', 'artikel', 'articolo',
                         'articolul', 'artículo', 'articulo', 'artykuł', 'artykul', 'artigo', 'reg', 'regulation', 'rule', 'clause', 'cl',
+                        'члан', 'члана', 'чл', 'član', 'člana', 'clan', 'čl', 'член', 'чл', 'статья', 'статьи', 'стаття', 'статті',
                         'par', 'para', 'paragraph', 'paragraf', 'schedule', 'sch', 'annex', 'anexa', 'annexe', 'anlage', 'bijlage'))
 # Words of a file's path that say what kind of unit it is, not which one ("sec-0092-103", "title-45-part-0164").
 UNIT_WORDS = frozenset(('sec', 'section', 's', 'art', 'article', 'artikel', 'cl', 'clause', 'rule', 'r', 'reg', 'regulation', 'par',
+                        'clan', 'clen', 'chlen', 'statya', 'stattia',
                         'para', 'paragraph', 'unit', 'title', 'part', 'chapter', 'ch', 'sch', 'schedule', 'book', 'div', 'pt'))
 KANJI_DIGITS = {'〇': 0, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9}
 UNIT_KINDS = (('section', 'sections', 'sec', 'sect', 's', 'ss'),
-              ('art', 'article', 'articles', 'artikel', 'articolo', 'articolul', 'artículo', 'articulo', 'artykuł', 'artykul', 'artigo'),
+              ('art', 'article', 'articles', 'artikel', 'articolo', 'articolul', 'artículo', 'articulo', 'artykuł', 'artykul', 'artigo',
+               'члан', 'члана', 'чл', 'član', 'člana', 'clan', 'čl', 'член', 'статья', 'статьи', 'стаття', 'статті', 'clen', 'chlen',
+               'statya', 'stattia'),
               ('reg', 'regulation'), ('rule', 'r'), ('clause', 'cl'), ('par', 'para', 'paragraph', 'paragraf'),
               ('schedule', 'schedules', 'sch'), ('annex', 'anexa', 'annexe', 'anlage', 'bijlage'))
 UNIT_AFTER = frozenset(('sch', 'schedule', 'schedules', 'annex', 'anexa', 'annexe', 'anlage', 'bijlage', 'appendix'))
@@ -3057,6 +3061,21 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
         if found and min(f[0] for f in found) <= 1:
             break
     if not found:
+        # One act named exactly, and no file of it is the number: the record holds it whole, or in other units
+        # (Serbia's Кривични законик is one tekst.md). Its own files answer, where the heading search read every
+        # heading of the country for the words (40 s) and gave other acts' articles.
+        exact = [o for o in offers if o[0] >= 0.9 and o[3]]
+        if len(exact) == 1:
+            _score, corpus, sha, folder, label = exact[0]
+            files = [n for n in sorted(names_under(corpus, sha, folder), key=natural) if n.endswith('.md') and n.rsplit('/', 1)[-1] != 'README.md']
+            if 0 < len(files) <= 3:  # (held whole: the text itself)
+                heads = read_headings(corpus, sha, tuple(files))
+                how = 'the record holds this act as one text' if len(files) == 1 else f'the record holds this act in {len(files)} files'
+                return [{'path': f'{corpus}/{f}', 'heading': f"{heads.get(f, '')}  ({label}: no file of it is {unit}; {how}, read it for {mark + ' ' if mark else ''}{unit})".lstrip(),
+                         'score': 90, 'whole_act': True} for f in files]
+            if files:  # (held in other units: the act, as a search by its name gives it)
+                return [{'path': f'{corpus}/{folder}', 'kind': 'act', 'title': label, 'files': len(files), 'score': 90, 'whole_act': True,
+                         'heading': f'{label}  (the act: no file of it is {unit}; list_provisions lists its {len(files)} provisions)'}]
         return []
     best = min(f[0] for f in found)
     rows = []
@@ -3190,7 +3209,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         except SystemExit:  # (law.py's refusal of a corpus it cannot read: the heading search answers)
             named_rows = []
         if named_rows:
-            return listed(named_rows, read_as='act and number')
+            return listed(named_rows, read_as='act' if named_rows[0].get('whole_act') else 'act and number')
     # A case's name ("Miranda v. Arizona", or any words where the scope is case law): the decisions that name it at
     # their head, by a host's index (decisions_by_name); without one, or with none found, the look-ups below run.
     if not DOCKET_QUERY.fullmatch(query) and not US_CITE_SHAPE.fullmatch(query.strip()):
@@ -10675,6 +10694,73 @@ ALIASES = {'law_details': {'corpus': 'jurisdiction'}}
 PAGED = {'find_provision': ('results',), 'search_law': ('results',), 'laws_between': ('changes',), 'search_changes': ('changes',),
          'phrase_history': ('changes',), 'list_provisions': ('provisions', 'folders')}
 HANDLERS = {name: fn for name, _, _, _, fn in TOOLS}
+
+# --- Serbian in Latin letters -----------------------------------------------------------------------------------------
+# Serbia's record is in Cyrillic, as the official register prints it, and Serbian is written in both scripts: a query
+# typed in Latin letters ("godišnji odmor", "Zakon o radu član 73") found nothing, or the few acts printed in Latin.
+# Where every body of law a call reaches is Serbia's, such a query is asked in Cyrillic first, and as typed only when
+# that finds nothing; the answer says how it was read.
+CYRILLIC_FIRST = ('serbia/',)
+_SR_PAIRS = (('dž', 'џ'), ('lj', 'љ'), ('nj', 'њ'), ('dj', 'ђ'))
+_SR_ONE = dict(zip('abvgdđežzijklmnoprstćufhcčš', 'абвгдђежзијклмнопрстћуфхцчш'))
+_LATIN_LETTER = re.compile(r'[A-Za-zĐđŽžĆćČčŠš]')
+_CYRILLIC_LETTER = re.compile(r'[\u0400-\u04FF]')
+
+
+def serbian_cyrillic(text: str) -> str | None:
+    """Serbian in Latin letters as Cyrillic ("godišnji odmor" -> "годишњи одмор"); None when the text has a letter
+    Serbian Latin does not use (q, w, x, y: another language), has Cyrillic already, or has no Latin letter."""
+    if not _LATIN_LETTER.search(text) or _CYRILLIC_LETTER.search(text) or re.search(r'[qwxyQWXY]', text):
+        return None
+    out, i = [], 0
+    while i < len(text):
+        two, ch = text[i:i + 2], text[i]
+        pair = next((c for l, c in _SR_PAIRS if two.lower() == l), None)
+        if pair is not None:
+            out.append(pair.upper() if two[0].isupper() else pair)
+            i += 2
+            continue
+        c = _SR_ONE.get(ch.lower())
+        out.append(ch if c is None else c.upper() if ch.isupper() else c)
+        i += 1
+    return ''.join(out)
+
+
+def cyrillic_first(args: dict) -> bool:
+    """Whether every body of law this call reaches is one whose record is in Cyrillic and whose language is also
+    written in Latin letters (CYRILLIC_FIRST)."""
+    try:
+        scope = here(str(args.get('jurisdiction') or '').strip().strip('/'))
+        served = _look()[1]
+    except (SystemExit, Exception):  # noqa: BLE001
+        return False
+    reach = [c for c in served if not scope or c == scope or c.startswith(scope + '/') or scope.startswith(c + '/')]
+    return bool(reach) and all(c.startswith(CYRILLIC_FIRST) for c in reach)
+
+
+def in_cyrillic(name: str, handler):
+    found = {'search_law': ('results',), 'find_provision': ('results',), 'search_changes': ('changes', 'results'),
+             'phrase_history': ('changes', 'results')}[name]
+
+    def run(args: dict) -> tuple[str, dict]:
+        query = args.get('query')
+        if isinstance(query, str) and not args.get('regex') and cyrillic_first(args):
+            turned = serbian_cyrillic(query)
+            if turned and turned != query:
+                try:
+                    text, data = handler({**args, 'query': turned})
+                except UserError:
+                    text, data = '', {}
+                if any(data.get(k) for k in found):
+                    note = f'Searched as {turned!r}: this record is in Cyrillic, and {query!r} was read in that script.'
+                    return f'{note}\n{text}', {**data, 'query_as': turned, 'script_note': note}
+        return handler(args)
+    run.__wrapped__ = handler
+    return run
+
+
+for _name in ('find_provision', 'search_law', 'search_changes', 'phrase_history'):
+    HANDLERS[_name] = in_cyrillic(_name, HANDLERS[_name])
 # Tools that read one file named by `path`: run under law.focus() so a case-law decision needs no corpus-wide index.
 FOCUSED_TOOLS = ('read_law', 'who_wrote', 'compare_dates', 'provision_history', 'applies_to_case')
 PROPERTIES = {name: list(props) for name, _, props, _, _ in TOOLS}
