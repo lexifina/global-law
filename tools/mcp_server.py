@@ -11152,8 +11152,16 @@ def serbian_plain_by_words(text: str, known) -> str | None:
     return got if got != (serbian_cyrillic(text) or '').lower() else None
 
 
+@lru_cache(maxsize=64)
+def title_words(corpus: str, sha: str) -> frozenset:
+    """The words of a corpus's act titles, folded (titles_text): what serbian_plain_by_words compares readings with.
+    From the list of titles alone: the table of act names (act_name_index) reads every folder and took 10 s for
+    Serbia, on the first search of each worker."""
+    return frozenset(re.findall(r'[^\W\d_]+', titles_text(corpus, sha)))
+
+
 def _sr_known(args: dict):
-    """known(word) for serbian_plain_by_words: a word of an act's name in the bodies of law the call reaches, or a
+    """known(word) for serbian_plain_by_words: a word of an act's title in the bodies of law the call reaches, or a
     word for a provision (члан)."""
     tables = []
     try:
@@ -11162,7 +11170,7 @@ def _sr_known(args: dict):
             if not scope or c == scope or c.startswith(scope + '/') or scope.startswith(c + '/'):
                 sha = corpus_head(c)
                 if sha:
-                    tables.append(act_name_index(c, sha)[1])
+                    tables.append(title_words(c, sha))
     except (SystemExit, Exception):  # noqa: BLE001
         pass
     return lambda w: w in UNIT_MARKS or any(w in t for t in tables)
