@@ -2056,6 +2056,12 @@ def warm_index() -> None:
                 if s and (ROOT / c['path'] / '.git').exists():
                     folder_titles(c['path'], s)
                     heading_index(c['path'], s)
+            # What the acts of the large bodies of law are called (act_name_index): the first "Codul muncii art. 145"
+            # of each process made Romania's table while the caller waited (4 s, once in every worker after a switch).
+            for c in law.manifest()['corpora']:
+                s = corpus_head(c['path'])
+                if s and not law.is_caselaw(c) and (ROOT / c['path'] / '.git').exists() and len(names_of(c['path'], s)) >= ACT_NAMES_WARMED:
+                    act_name_index(c['path'], s)
     except Exception:  # noqa: BLE001 (find_provision greps when there is no index)
         pass
 
@@ -2818,6 +2824,7 @@ def _label_words(text: str) -> list[str]:
     return re.findall(r'\w+', fold(text))
 
 
+ACT_NAMES_WARMED = 20000  # files from which a body of law's table of act names is made while warming
 ACT_NAMES_HEADED = 300  # folders with no title whose first file's heading is read for the act's name
 
 
@@ -3012,13 +3019,28 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
         return []
     if re.search(r'\b\d+[a-z]?\s*U\.?\s?S\.?\s?C\b', query, re.I) or (MALTA_ACT.search(query) and (not scope or scope.startswith('malta'))):
         return []
+    marked = bool(mark) or '§' in query
+    # An act a popular name names ("Codul rutier art. 100", aliases.json): that act's folder, when the name is all
+    # that stands beside the number; a name inside other words is left to the look-ups after this one ("Art. 16a GG").
+    said = fold(' '.join(name)).strip(' .,')
     for entry in aliases():
-        if (entry.get('scope') and any(re.search(rf'(?<![\w.]){re.escape(n)}(?![\w])', query, re.I) for n in entry.get('names', []))
-                and scope_holds(entry['scope'])):
+        if not entry.get('scope') or not any(re.search(rf'(?<![\w.]){re.escape(n)}(?![\w])', query, re.I) for n in entry.get('names', [])):
+            continue
+        if not scope_holds(entry['scope']):
+            continue
+        known = next((n for n in entry['names'] if fold(n) == said), None)
+        home = next((c for c in corpora if entry['scope'].startswith(c + '/')), None)
+        if known is None or home is None or not marked:
             return []
+        folder = entry['scope'][len(home) + 1:]
+        how, files = unit_files(home, corpus_head(home), folder, groups, above, mark)
+        if not files:
+            return []
+        heads = read_headings(home, corpus_head(home), tuple(files[:NAMED_UNIT_SHOWN]))
+        return [{'path': f'{home}/{f}', 'heading': f"{heads.get(f, '')}  (read as {unit} of {known})".lstrip(), 'score': 100}
+                for f in files[:NAMED_UNIT_SHOWN]]
     if act_folders(query, corpora)[0]:
         return []
-    marked = bool(mark) or '§' in query
     lead = [w.lstrip('0') or '0' for t in name for w in _label_words(t) if w.isdigit()]
     offers = []
     for corpus in corpora:
@@ -3303,7 +3325,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 + how), {'results': [], 'case_law_served': served, 'hint': how}
     # Citation forms narrow the search: "11 U.S.C. 1101" means title 11; "Art. 16a GG", "s. 42 CFA" name their Act
     # through a scoped entry in aliases.json. The words that named the scope are then left out of the matching.
-    hint, rest = '', query
+    hint, rest, aliased = '', query, ''
     m = re.search(r'\b(\d+[a-z]?)\s*U\.?\s?S\.?\s?C\.?(?:\s*A\.?)?', rest, re.I)
     if m:
         hint, rest = here(f'us/federal/usc/title-{m.group(1)}'), rest[:m.start()] + ' ' + rest[m.end():]
@@ -3315,7 +3337,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         for n in entry.get('names', []) if entry.get('scope') else []:
             mm = re.search(rf'(?<![\w.]){re.escape(n)}(?![\w])', rest, re.I)
             if mm and scope_holds(entry['scope']):
-                hint, rest = entry['scope'], rest[:mm.start()] + ' ' + rest[mm.end():]
+                hint, rest, aliased = entry['scope'], rest[:mm.start()] + ' ' + rest[mm.end():], n
                 break
     noise = {'s', 's.', 'ss.', 'sec', 'sec.', 'section', 'art', 'art.', 'artikel', 'article', 'articolul', 'articolului', 'artículo', 'articulo',
              'artículos', 'articulos', 'reg', 'reg.', 'regulation',
@@ -3362,6 +3384,20 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     if hint and (not scope or hint.startswith(scope)):
         scope = hint
     spoken = [w for w in re.split(r'[\s,§]+', rest.lower()) if w and w not in noise]
+    if aliased and not spoken and scope == hint and not offset:
+        # Only the popular name ("Codul rutier", "Legea telemuncii"): the act it names, as a search by its title
+        # gives an act. (It found nothing: no word was left to look for in the act.)
+        try:
+            corpus, inner = law.corpus_of(hint + '/x.md')
+            inner = inner.rsplit('/', 1)[0]
+            sha = corpus_head(corpus)
+            title = (folder_titles(corpus, sha).get(inner) or {}).get('title') or act_titles(corpus, sha).get(inner) or ''
+            files = len(names_under(corpus, sha, inner))
+        except (SystemExit, OSError, subprocess.SubprocessError):
+            title, files = '', 0
+        if files:
+            return listed([{'path': hint, 'kind': 'act', 'title': str(title), 'files': files, 'score': 100,
+                            'heading': f'{title or aliased}  (the act known as "{aliased}": list_provisions lists its provisions)'}], read_as='popular name')
     # The small words of an English phrase score nothing: each is part of some word in nearly every name and heading
     # ("to" in "storage", "be" in "member"), so "right to be forgotten" with no jurisdiction scored 1.5 million files
     # of every country, 23,640 of them matches, and ran out of time (2026-11-12). They stay in an act's title

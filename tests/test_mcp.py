@@ -4751,6 +4751,25 @@ class ProvisionByActAndNumber(unittest.TestCase):
         self.assertNotIn('read_as', self.find('Data Protection Act 2018 section 2', 'ireland', offset=1))
 
     @needs(IE_C)
+    def test_a_popular_name_alone_and_with_a_number(self):
+        from unittest import mock
+        m = self.m
+        act = IE_C + '/data-protection-act-2018'
+        known = [{'names': ['DPA', 'Legea datelor'], 'scope': act}]
+        with mock.patch.object(m, 'aliases', lambda: known):
+            for query in ('DPA', 'Legea datelor', 'the DPA'):  # the act itself (it found nothing: no word was left)
+                got = self.find(query, 'ireland')
+                self.assertEqual((got['read_as'], [r['path'] for r in got['results']], got['results'][0]['kind']), ('popular name', [act], 'act'), query)
+                self.assertIn('Data Protection Act 2018', got['results'][0]['heading'])
+            for query in ('DPA section 2', 'section 2 DPA', 'Legea datelor s. 2'):  # the section before the schedule
+                got = self.find(query, 'ireland')
+                self.assertEqual((got['read_as'], got['results'][0]['path']), ('act and number', act + '/section-2.md'), query)
+            # a name among other words, or a number the act lacks: the look-ups after this one
+            self.assertNotIn('read_as', self.find('the new DPA section 2', 'ireland'))
+            self.assertNotIn('read_as', self.find('DPA section 99999', 'ireland'))
+        self.assertGreater(m.ACT_NAMES_WARMED, 0)
+
+    @needs(IE_C)
     def test_an_alias_whose_folder_is_gone_narrows_nothing(self):
         m = self.m
         self.assertTrue(m.scope_holds(IE_C))
