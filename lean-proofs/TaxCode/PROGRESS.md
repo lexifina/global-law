@@ -1,6 +1,6 @@
 # Formalizing the US tax code: progress
 
-Resumable tracker. Data (not in git): `C:\Users\alany\Documents\tax-formalization-data` (OLRC release point 119-138,
+Resumable tracker. Data (not in git): `~\Documents\tax-formalization-data` (OLRC release point 119-138,
 all titles; `out/t26.json`, `out/ids.tsv`). Run heavy steps at below-normal priority (`cmd //c "start "" /belownormal /b /wait ..."`);
 keep C: above 50 GB free (resources-used session).
 

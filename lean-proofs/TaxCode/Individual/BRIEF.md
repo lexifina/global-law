@@ -6,10 +6,10 @@ and recording findings. The "source" here is the statute as amended through Pub.
 119-138), for tax year 2025, including the changes made by Pub. L. 119-21 (4 July 2025, the "2025 Act").
 
 ## Where things are
-- Lean project: `C:\Users\alany\Documents\global-law-lean\lean-proofs` (Lean 4.35, core only, NO Mathlib; elan is at
+- Lean project: `~\Documents\global-law-lean\lean-proofs` (Lean 4.35, core only, NO Mathlib; elan is at
   `$HOME/.elan/bin`). Shared interface: `TaxCode/Individual/Household.lean` (read it first; do not edit it; if you need
   a field it lacks, say so in your report instead).
-- Official statute text, one file per title (USLM XML): `C:\Users\alany\Documents\tax-formalization-data\xml\usc26.xml`.
+- Official statute text, one file per title (USLM XML): `~\Documents\tax-formalization-data\xml\usc26.xml`.
   Search it with Grep for `identifier="/us/usc/t26/s32"` etc. This is the primary source: read the actual text of every
   provision you copy, including definitions it points to.
 - Earlier, smaller Lean tax work you can read for style (do not import it): `LegalProofs/USTax/Model.lean`,

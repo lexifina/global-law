@@ -2,7 +2,7 @@
 
 You did not write the group you are reviewing. Your job is to try to break it. Read `TaxCode/Individual/BRIEF.md`
 (the authors' brief), the group's Lean files and its `FINDINGS.md`, and the statute text in
-`C:\Users\alany\Documents\tax-formalization-data\xml\usc26.xml` (Grep for `identifier="/us/usc/t26/s<N>"`).
+`~\Documents\tax-formalization-data\xml\usc26.xml` (Grep for `identifier="/us/usc/t26/s<N>"`).
 
 Check, provision by provision:
 1. **Fidelity.** Does each definition say what the statute says, for tax year 2025, including the version in force in
