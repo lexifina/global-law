@@ -30,9 +30,20 @@ global-law/
 └── …
 ```
 
-## Use it
+## Questions as commands
 
-We host this record publicly, for free:
+| Question | Command |
+| --- | --- |
+| Every change to 11 U.S.C. §1182, with the law that made each | `python3 tools/law.py log united-states/federal/usc/title-11/1182.md` |
+| Which law wrote each line of it today? | `python3 tools/law.py blame 2026-01-01 united-states/federal/usc/title-11/1182.md` |
+| §1182 as in force on 1 May 2022 | `python3 tools/law.py show 2022-05-01 united-states/federal/usc/title-11/1182.md` |
+| What changed between two dates | `python3 tools/law.py diff 2022-05-01 2022-07-01 united-states/federal/usc/title-11/1182.md` |
+| The last law in force in every country on a day | `python3 tools/law.py world 1990-10-03` |
+
+Each corpus is also a plain git repository (`git -C united-states/federal/usc log -- title-11/1182.md`); the tools order
+versions by their `In-force` date, which matters where a record was not committed in that order.
+
+**Outside git**, we also host this record publicly, for free:
 
 - **[Ask Claude about the law](https://global-law.lexifina.com/v1/try_claude)**: opens Claude with a first question ready.
 - **[Ask ChatGPT](https://global-law.lexifina.com/v1/try_chatgpt)**: the same question in ChatGPT.
@@ -59,24 +70,11 @@ Opened in Claude Code, Cursor, VS Code or Codex, the clone also starts a local M
 
 ## Case law
 
-Court decisions sit beside the law in `<country>/<court>/caselaw`, one file and one commit per published decision,
-dated the day it was decided. `manifest.json` gives each corpus's court, coverage and gaps; where a source's licence
-asks for credit, the tools show it as a `Credit:` line.
-
-A decision is a ruling, not a law (`Kind: court`), so the tools leave case law out of everything about law (`laws`,
-searches, change lists) unless you name it. Each corpus also files, under the law's own paths, the decisions that cite
-each article, with the version of the law in force on the day decided.
-
-```
-python tools/countries.py add netherlands/caselaw                   a country's case law (not added with the country)
-python tools/law.py laws 2024-01-01 2024-01-31 netherlands/caselaw   decisions given in a window
-python tools/law.py caselaw-index                                   after a pull: index the case law checked out
-```
-
-From an assistant, `check_precedent` lists the decisions that applied a provision and says whether the text each one
-applied is still in force, and `what_else_changes` counts them. `find_provision` and `law_details` take a court's own
-references (an ECLI, a docket or case number, a reporter citation), and `resolve_citations` reads citations of law in
-each country's usual form (`Art. 336 OR`, `§ 823 Abs. 1 BGB`, `article 1240 du code civil`).
+Court decisions sit beside the law, one commit per decision on the day it was decided (`switzerland/bund/caselaw`), and
+are added on their own: `python3 tools/countries.py add switzerland/caselaw`. A decision is a ruling, not a law
+(`Kind: court`), so the tools leave it out of everything about law unless you name it. `check_precedent` says whether
+the text a decision applied is still in force, and `resolve_citations` reads citations in each country's usual form
+(`§ 823 Abs. 1 BGB`, `article 1240 du code civil`). `manifest.json` gives each court's coverage.
 
 ## More
 
