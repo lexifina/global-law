@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Law Time Machine</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="app.css">
+<script type="module" src="js/main.js"></script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#/"><span data-i18n="app.name">Law Time Machine</span><small data-i18n="app.tagline">Git for Global Law</small></a>
+  <div class="search" role="search">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <input id="q" type="search" autocomplete="off" data-i18n-attr="placeholder:search.placeholder,aria-label:search.label"
+           aria-controls="sugg" aria-expanded="false">
+    <div class="sugg" id="sugg" role="listbox" hidden></div>
+  </div>
+  <div class="hdr-tools">
+    <button class="btn" id="cbtn" aria-haspopup="dialog"><span id="cbtn-label" data-i18n="picker.choose">Choose country</span> ▾</button>
+    <label class="lang"><span class="sr" data-i18n="lang.label">Language</span>
+      <select id="lang"></select>
+    </label>
+  </div>
+</div></header>
+
+<main class="wrap" id="view" tabindex="-1"></main>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="picker" id="picker" role="dialog" aria-modal="true" aria-labelledby="pk-title">
+    <div class="pk-head">
+      <div class="pk-title">
+        <button class="btn sm pk-back" id="pk-back" data-i18n="picker.back">◀ Countries</button>
+        <div><h2 id="pk-title" data-i18n="picker.title">Choose a country</h2><div class="muted" id="pk-meta"></div></div>
+      </div>
+      <button class="btn" id="pk-close" data-i18n="common.close">Close</button>
+    </div>
+    <div class="pk-body">
+      <div class="pk-list">
+        <div class="pk-find">
+          <input id="pk-q" type="search" autocomplete="off" data-i18n-attr="placeholder:picker.search,aria-label:picker.search">
+          <div class="pk-sort" role="group"><span data-i18n="picker.sort">Sort:</span>
+            <button data-s="name" aria-pressed="true" data-i18n="picker.sort_name">Name</button>
+            <button data-s="held" aria-pressed="false" data-i18n="picker.sort_held">On this computer</button>
+            <button data-s="count" aria-pressed="false" data-i18n="picker.sort_count">Most corpora</button>
+            <button data-s="old" aria-pressed="false" data-i18n="picker.sort_old">Longest history</button>
+          </div>
+        </div>
+        <div class="pk-scroll" id="pk-countries" role="listbox" data-i18n-attr="aria-label:picker.countries"></div>
+      </div>
+      <div class="pk-detail" id="pk-detail"></div>
+    </div>
+  </div>
+</div>
+
+<div class="tip" id="tip" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>
