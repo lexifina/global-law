@@ -4220,8 +4220,9 @@ def official_url(value: str) -> tuple[str, str | None] | None:
 
 
 # Trailers that name an official source, by what they point at. Reader: is Lexifina's own reader, never a source.
-VERSION_KEYS = ('Consolidated',)  # the publisher's text of the act as in force from this change (romania-law)
-SOURCE_KEYS = ('Source', 'Quelle', 'In-Kraft-Quelle', 'Affecting')  # where the change was read: the law, or a dated text
+VERSION_KEYS = ('Consolidated', 'Consolidated-text')  # the publisher's text of the act as in force from this change (romania-law; Thailand)
+# where the change was read: the law, or a dated text (Text: France's law in the Journal officiel, Monaco's dated version on Legimonaco)
+SOURCE_KEYS = ('Source', 'Quelle', 'In-Kraft-Quelle', 'Affecting', 'Text')
 
 
 def links_of(corpus: str, sha: str) -> list[dict]:
@@ -4373,8 +4374,8 @@ def citation_for(path: str, date: str, version: dict | None, text: str | None, c
     version_link = next((l['url'] for l in links if l['key'] in VERSION_KEYS), None)
     # A link to a site's front page ("https://www.gesetze-im-internet.de") names the publisher, not a text.
     law_link = next((l['url'] for l in links if l['key'] in SOURCE_KEYS and re.search(r'//[^/]+/.', l['url'])), None)
-    if not version_link and law_link and re.search(r'fedlex\.admin\.ch/eli/cc/', law_link):
-        version_link, law_link = law_link, None  # a dated Fedlex version is the act as in force from that day
+    if not version_link and law_link and re.search(r'fedlex\.admin\.ch/eli/cc/|legimonaco\.mc/[^@]+@\d{4}\.\d\d\.\d\d', law_link):
+        version_link, law_link = law_link, None  # a dated Fedlex or Legimonaco version is the act as in force from that day
     since = f" from {version['in_force']}" if version else ''
     cite.update({'version_url': version_link, 'law_url': law_link})
     # Still the current wording: the act's own page (its current consolidated text) is what to cite, not the text as
