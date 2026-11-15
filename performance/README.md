@@ -1,54 +1,55 @@
-# Performance and test record
+# Local performance and checks
 
-How fast and how right the tools are, run by run, what each deep test of the repository found, and what was tried to
-make the slow paths faster.
+A one-time, general indicator of how fast the tools answer on your own clone, and what they were checked for. It is
+not a record to compare over time: timings depend on the machine, its load and the corpora checked out. The hosted
+service ([global-law.lexifina.com](https://lexifina.com/api/global-law)) keeps warm caches and text snapshots, so it
+answers faster than a fresh clone, text searches especially.
 
-- `index.html`: the record. Open it in a browser; it needs no network. It starts with what needs attention in the
-  latest run: a failed check, a timing slower than the last comparable run, a command over its budget.
-- `bench.py`: measures this clone and adds a run.
-  - It times reading each corpus, and `show`, `log`, `blame`, `words`, `diff`, `world` and `laws`. Each command is
-    run three times on fixed provisions and the median kept.
-  - It checks the fixture tests, that today's text equals the pinned file, that blame covers the text, `verify.py`
-    and `describe.py --check`.
-  - It records each corpus's commit, the version of `law.py`, and each index cache's size, so a slower run can be
-    traced to the code or to the data.
-- `runs.jsonl`: every run, one JSON object a line.
-- `findings.json`: the before-and-after speeds, each experiment's conclusion, and what each deep test found and what
-  became of it (fixed, open, or handed to a corpus's builder).
-- `report.py`: writes `index.html` from the two files above.
-- `experiments/`: one script and one write-up per experiment, with the script's raw results beside them.
+## What to expect on your own machine
+
+From a light run on 15 November 2026 (three small corpora, Antigua and Barbuda, Lazio and New Zealand, one try of
+each command on a busy Windows machine) and a fuller run on 4 November 2026 (16 corpora, Romania, Czechia and the US
+Code among them):
+
+| What | Typical time |
+|---|---|
+| A provision on a date, its history, a diff (`show`, `log`, `diff`) | under 1 s |
+| The law behind each line (`blame`) | under 1 s |
+| The law behind each word (`words`) | under 1 s; 2 to 3 s on long Czech acts |
+| The first read of a corpus (its index is built once) | under 1 s for small corpora; 3 to 9 s for the largest |
+| `world` and `laws` over every corpus checked out | about 1 s for 3 corpora, 4 s for 16 |
+
+Times include starting Python and git. A text search across a large corpus is the slow path on a clone (it can take
+minutes on Romania) and is where the hosted service helps most.
+
+## Files
+
+- `index.html`: the full record of the runs, the checks and what each deep test found. Download it and open it in a
+  browser; it needs no network.
+- `bench.py`: measures this clone. It times reading each corpus and `show`, `log`, `blame`, `words`, `diff`, `world`
+  and `laws` on fixed provisions, and checks that today's text equals the pinned file, that blame covers the text,
+  `verify.py`, and (in a full run) the fixture tests and `describe.py --check`.
+- `findings.json`: what each speed experiment and deep test found, and what became of it (fixed, open, or handed to a
+  corpus's builder). `experiments/` holds each experiment's script, results and write-up.
+- `runs.jsonl` and `report.py`: the runs so far, and the script that writes `index.html` from them.
 
 ```sh
-python tools/countries.py add --no-files czechia romania united-states/federal/usc   # the corpora to measure
-python performance/bench.py            # run, record, rewrite index.html (then commit runs.jsonl and index.html)
-python performance/bench.py --quick    # one try a command, no fixture tests or describe --check
-python performance/bench.py --no-record
+python tools/countries.py add antigua-and-barbuda/national/acts new-zealand/national/acts   # small corpora to measure
+python performance/bench.py --quick --no-record    # one try of each command, nothing written
+python performance/bench.py --no-record            # three tries, the fixture tests and describe --check
 ```
-
-`bench.py` exits 1 when a check fails or a timing is more than 1.5 times and 1 second slower than the last run on the
-same corpora, so a scheduled job can watch it; the run is still recorded.
 
 ## Budgets
 
-What a reader should wait at most for one command, as the median of three tries:
+What a reader should wait at most for one command:
 
 | Command | Budget |
 |---|---|
 | `show`, `log`, `diff` | 3 s |
 | `blame` | 5 s |
 | `words` | 10 s |
-| loading a corpus's index | 3 s |
+| Loading a corpus's index | 3 s |
 | `world`, `laws` over every corpus checked out | 60 s |
-
-A command over its budget is outlined on the page and listed at the top. Change a budget in `bench.py` (`BUDGET`) and
-`report.py`, and say why in `CHANGELOG.md`.
-
-## Comparing runs
-
-A run measures only the corpora checked out in its clone, so compare runs of the same corpora: regressions are counted
-only against the last run that measured exactly the same set. The fixed provisions (`BENCH` in `bench.py`) keep the
-same corpora giving comparable numbers. Times include starting Python and git, which on some machines varies by
-seconds from one try to the next; that is why each command is tried three times.
 
 ## Adding a deep test or an experiment
 

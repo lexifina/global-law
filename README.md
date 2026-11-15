@@ -83,7 +83,7 @@ whether the text a decision applied is still in force, and
 - [FEATURES.md](FEATURES.md): every feature, and what every corpus here must support (`git blame`, `law.py`, the MCP tools)
 - [FAQ.md](FAQ.md): questions and answers · [CONTRIBUTING.md](CONTRIBUTING.md): proposing changes · [MCP.md](MCP.md): the MCP server · [REPRODUCE.md](REPRODUCE.md): how it was built · [CHANGELOG.md](CHANGELOG.md)
 - [FRESHNESS.md](FRESHNESS.md): how current each corpus is · [Monitoring](monitoring/): whether updates are running · [WATCHING.md](WATCHING.md): how each official source is watched for changes
-- [Performance](performance/): how fast the tools are, measured · [Tests](tests/): what is checked, run with `python -m unittest discover -s tests`
+- [Performance](performance/): how fast the tools answer on your own clone, a one-time indicator · [Tests](tests/): what is checked, run with `python -m unittest discover -s tests`
 - [Visualisations](visualisations/): charts and bridges across the world's law
 - [Vulnerabilities](vulnerabilities/): mistakes in legislation as published
 - [Videos](videos/): every video demonstrating what global-law does, from its features and one country's law to the archive on one date and how updates are checked
