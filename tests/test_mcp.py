@@ -4826,6 +4826,14 @@ class SerbianInLatinLetters(unittest.TestCase):
         import mcp_server
         cls.m = mcp_server
 
+    def test_a_word_in_another_case(self):
+        import mcp_server as m
+        for a, b in (('kodeksu', 'kodeks'), ('трудового', 'трудовой'), ('tyosopimuslain', 'tyosopimuslaki'), ('kanununun', 'kanunu'),
+                     ('karnego', 'karny'), ('bundesurlaubsgesetzes', 'bundesurlaubsgesetz'), ('pracy', 'pracy')):
+            self.assertTrue(m.near_word(a, b), (a, b))
+        for a, b in (('radu', 'rada'), ('employment', 'employers'), ('2018', '2019'), ('zakon', 'zakonik'[:3]), ('sudu', 'sudovima')):
+            self.assertFalse(m.near_word(a, b), (a, b))
+
     def test_greek_typed_without_accents(self):
         import mcp_server as m
         self.assertEqual(m.greek_plain_pattern('ετησια αδεια'), '[εέ]τ[ηή]σ[ιίϊΐ][αά] [αά]δ[εέ][ιίϊΐ][αά]')

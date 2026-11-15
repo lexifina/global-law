@@ -3002,10 +3002,80 @@ def act_name_index(corpus: str, sha: str) -> tuple[list, dict, dict, dict]:
     return entries, by_word, numbers, codes
 
 
+INFLECTED_MOST = 20000  # titles looked at for a name in another case, past which none is
+
+
+def near_word(a: str, b: str) -> bool:
+    """Two words that are one word in two cases: alike in their first four letters or more, and neither has more
+    than three letters after what they share (kodeksu/kodeks, трудового/трудовой, työsopimuslain/työsopimuslaki,
+    օրենսգրքի/օրենսգիրք). A number is only itself."""
+    if a == b:
+        return True
+    if a.isdigit() or b.isdigit():
+        return False
+    p = 0
+    for x, y in zip(a, b):
+        if x != y:
+            break
+        p += 1
+    return p >= 4 and max(len(a), len(b)) - p <= 3
+
+
+@lru_cache(maxsize=64)
+def name_words_by_start(corpus: str, sha: str) -> dict:
+    """The words of a corpus's act names by their first four letters (for near_word)."""
+    out: dict[str, list[str]] = {}
+    for w in act_name_index(corpus, sha)[1]:
+        if len(w) >= 4 and not w.isdigit():
+            out.setdefault(w[:4], []).append(w)
+    return out
+
+
+def acts_by_inflected_name(words: tuple, corpus: str, sha: str) -> list[tuple[float, str, str]]:
+    """(how well, folder, label) for the acts a name names in another case than their title's ("art. 152 Kodeksu
+    pracy" is the Kodeks pracy, "§ 3 des Bundesurlaubsgesetzes" the Bundesurlaubsgesetz, "статья 115 Трудового
+    кодекса" the Трудовой кодекс): 0.85 every word is a word of the title in its place, 0.75 the title ends or
+    begins so. A short first word (des, од, the) is left out when the name with it names nothing."""
+    entries, by_word, _numbers, _codes = act_name_index(corpus, sha)
+    starts = name_words_by_start(corpus, sha)
+    out: list[tuple[float, str, str]] = []
+    cuts = [words] + ([words[1:]] if len(words) >= 2 and len(words[0]) <= 3 and not words[0].isdigit() else [])
+    for cut in cuts:
+        near = []
+        for w in cut:
+            cand = [t for t in starts.get(w[:4], ()) if near_word(w, t)] if len(w) >= 4 and not w.isdigit() else []
+            if w in by_word and w not in cand:
+                cand.append(w)
+            near.append(cand)
+        if not all(near) or (cut is words and all(c == [w] for c, w in zip(near, cut))):
+            continue  # (a word no title has; or nothing is in another case, and the titles were asked as written)
+        sizes = [sum(len(by_word[t]) for t in c) for c in near]
+        k = sizes.index(min(sizes))
+        if sizes[k] > INFLECTED_MOST:
+            continue
+        n, seen = len(cut), set()
+        for t in near[k]:
+            for i in by_word[t]:
+                if i in seen:
+                    continue
+                seen.add(i)
+                got, folder, label = entries[i]
+                if len(got) == n:
+                    if all(near_word(a, b) for a, b in zip(cut, got)):
+                        out.append((0.85, folder, label))
+                elif len(got) > n and (all(near_word(a, b) for a, b in zip(cut, got[-n:])) or all(near_word(a, b) for a, b in zip(cut, got[:n]))):
+                    out.append((0.75, folder, label))
+        if out:
+            break
+    return out
+
+
 def acts_by_name(name: list[str], corpus: str, sha: str) -> list[tuple[float, str, str]]:
     """[(how well, folder, what it is called)] for the folders of a corpus that the words name, best first:
     1.0 the words are an act's title, an abbreviation its title gives in brackets, its code, or its folder's name;
     0.9 the numbers in the words are the folder's ("(1977:480)" is 1977/480; "Cap. 486" is cap-486);
+    0.85 the words are an act's title in another case ("Kodeksu pracy", acts_by_inflected_name; 0.75 where the title
+        only ends or begins so);
     0.8 the title ends or begins with the words ("Kodeks pracy" of "Ustawa z dnia 26 czerwca 1974 r. Kodeks
         pracy"), or the words name the corpus itself ("CFR": the folder is then '', the whole corpus);
     0.7 a folder that is an abbreviation the word begins with (New York's law-rpa for "RPAPL").
@@ -3044,6 +3114,9 @@ def acts_by_name(name: list[str], corpus: str, sha: str) -> list[tuple[float, st
     parts = corpus.split('/')
     if any(w == parts[-1] or w == parts[-2] + parts[-1] for w in alpha):
         offer('', 0.8, corpus)
+    if not mine and not any(score >= 0.9 for score, _ in found.values()):
+        for score, folder, label in acts_by_inflected_name(words, corpus, sha):
+            offer(folder, score, label)
     if not found and len(words) > 1 and not mine:
         # A folder at the top that holds its provisions itself and is named by the first word ("ustav/clanak-001.md"
         # for "Ustav Republike Hrvatske", where the folder has no title): the one act of its kind, a constitution.
@@ -3213,6 +3286,23 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
         heads = read_headings(home, corpus_head(home), tuple(files[:NAMED_UNIT_SHOWN]))
         return [{'path': f'{home}/{f}', 'heading': f"{heads.get(f, '')}  (read as {unit} of {known})".lstrip(), 'score': 100}
                 for f in files[:NAMED_UNIT_SHOWN]]
+    # A popular name in another case than the one it is listed in ("Türk Ceza Kanununun 81. maddesi", "§ 3 des
+    # Bundesurlaubsgesetzes", "§ 63 Zákonníka práce"): that act, when it has a file of the number.
+    said_words = tuple(_label_words(' '.join(name)))
+    for cut in ((said_words, said_words[1:]) if len(said_words) >= 2 and len(said_words[0]) <= 3 else (said_words,)) if marked else ():
+        for entry in aliases():
+            if not entry.get('scope') or not alias_applies(entry, scope):
+                continue
+            home = next((c for c in corpora if entry['scope'].startswith(c + '/')), None)
+            known = next((n for n in entry['names'] for w in [tuple(_label_words(n))]
+                          if len(w) == len(cut) and any(len(x) >= 4 for x in w) and all(near_word(a, b) for a, b in zip(cut, w))), None)
+            if known is None or home is None:
+                continue
+            how, files = unit_files(home, corpus_head(home), entry['scope'][len(home) + 1:], groups, above, mark, bool(above))
+            if files:
+                heads = read_headings(home, corpus_head(home), tuple(files[:NAMED_UNIT_SHOWN]))
+                return [{'path': f'{home}/{f}', 'heading': f"{heads.get(f, '')}  (read as {unit} of {known})".lstrip(), 'score': 100}
+                        for f in files[:NAMED_UNIT_SHOWN]]
     if act_folders(query, corpora)[0]:
         return []
     lead = [t.strip('.,').lstrip('0') or '0' for t in name if t.strip('.,').isdigit()]  # ("45 CFR 164.502"; not the 1 of "ZDR-1")
@@ -3240,7 +3330,9 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
     # The acts the words name exactly (or by their number) before the titles that only begin or end with the words:
     # "Criminal Code" is Canada's C-46, not the eleven orders whose titles end with "of the Criminal Code".
     found = []
-    for near in ([o for o in offers if o[0] >= 0.9], [o for o in offers if o[0] < 0.9], whole):
+    # (and the act whose title is the words in another case before the amending acts whose titles end with them:
+    # "članak 77. Zakona o radu" is the Zakon o radu, not each Zakon o izmjenama Zakona o radu)
+    for near in ([o for o in offers if o[0] >= 0.9], [o for o in offers if 0.85 <= o[0] < 0.9], [o for o in offers if o[0] < 0.85], whole):
         if not near or len(near) > NAMED_UNIT_ACTS:
             continue
         # Of the acts the words may name, the one in which a file IS the number before one in which a file's path
@@ -3260,8 +3352,8 @@ def unit_of_named_act(query: str, scope: str, limit: int) -> list[dict]:
         # One act named exactly, and no file of it is the number: the record holds it whole, or in other units
         # (Serbia's Кривични законик is one tekst.md). Its own files answer, where the heading search read every
         # heading of the country for the words (40 s) and gave other acts' articles.
-        exact = [o for o in offers if o[0] >= 0.9 and o[3]]
-        lone = [o for o in exact if o[3].endswith('.md')]
+        exact = [o for o in offers if o[0] >= 0.9 and o[3]] or [o for o in offers if o[0] >= 0.85 and o[3]]
+        lone =[o for o in exact if o[3].endswith('.md')]
         if lone and len(lone) == len(exact) and len(lone) <= ACTS_OF_ONE_NAME_MOST:
             # Acts held as one file each (Czechia): the newest of that name first; the article is in its text.
             lone = sorted(lone, key=lambda o: act_year(o[3]), reverse=True)[:3]
@@ -3317,7 +3409,7 @@ def acts_named(query: str, scope: str) -> list[dict]:
                 continue
             if score < 1.0:
                 if score >= 0.8:
-                    close.append((corpus, sha, folder, label))
+                    close.append((corpus, sha, folder, label, score))
                 continue
             if folder.endswith('.md'):
                 rows.append({'path': f'{corpus}/{folder}', 'score': 100, 'heading': f'{label.strip()}  (the act, held as one text)'})
@@ -3330,7 +3422,9 @@ def acts_named(query: str, scope: str) -> list[dict]:
                          'heading': f'{title}  (the act: list_provisions lists its provisions)'})
         if len(rows) > ACTS_OF_ONE_NAME_MOST:
             return []
-    if not rows and len(close) == 1 and len(_label_words(' '.join(tokens))) >= 2:
+    inflected = any(c[4] > 0.8 for c in close)  # (the act named in another case before the titles that end with the words)
+    close = [c[:4] for c in close if c[4] > 0.8 or not inflected]
+    if not rows and len(close) == 1 and (inflected or len(_label_words(' '.join(tokens))) >= 2):
         # One act whose title only ends or begins with the name ("Kodeks pracy" of "Ustawa z dnia 26 czerwca 1974 r.
         # Kodeks pracy."); one word alone is no such name ("Anayasa" begins the Constitutional Court's rules).
         corpus, sha, folder, label = close[0]
