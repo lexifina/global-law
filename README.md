@@ -83,17 +83,15 @@ each country's usual form (`Art. 336 OR`, `§ 823 Abs. 1 BGB`, `article 1240 du 
 - [FEATURES.md](FEATURES.md): every feature, and what every corpus here must support (`git blame`, `law.py`, the MCP tools)
 - [FAQ.md](FAQ.md): questions and answers · [CONTRIBUTING.md](CONTRIBUTING.md): proposing changes · [MCP.md](MCP.md): the MCP server · [REPRODUCE.md](REPRODUCE.md): how it was built · [CHANGELOG.md](CHANGELOG.md)
 - [FRESHNESS.md](FRESHNESS.md): how current each corpus is · [Monitoring](monitoring/): whether updates are running · [WATCHING.md](WATCHING.md): how each official source is watched for changes
-- [performance/](performance/): how fast the tools are, measured
-- [visualisations/](visualisations/): charts and bridges across the world's law
-- [Vulnerabilities](vulnerabilities/): Mistakes in legislation as published
-- [videos/](videos/): every video
+- [Performance](performance/): how fast the tools are, measured
+- [Visualisations](visualisations/): charts and bridges across the world's law
+- [Vulnerabilities](vulnerabilities/): mistakes in legislation as published
+- [Videos](videos/): every video demonstrating what global-law does, from its features and one country's law to the archive on one date and how updates are checked
 - Tests: `python -m unittest discover -s tests`
 
 ## Videos
 
 https://github.com/user-attachments/assets/6020acb1-53f3-4b65-94a4-fe132b867358
-
-https://github.com/user-attachments/assets/3e3076d7-cfb4-4e0a-8552-2926a630fc8e
 
 https://github.com/user-attachments/assets/6119b018-5f5b-4bab-a2da-0aad30ef585f
 
