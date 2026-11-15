@@ -40,6 +40,17 @@ history, so they work the same. To have it without its file contents, clone with
 every country, add `--recurse-submodules`. Don't clone a country's repository with `--depth`: its dates are read from
 its whole history, and `countries.py add` fetches all of it.
 
+## In a browser
+
+```sh
+python3 tools/web.py
+```
+
+opens a page for reading the corpora checked out: a provision on any date along a timeline of its changes, the law that
+wrote each word, what changed, two dates side by side, and each record's limits. It asks the MCP server's tools, needs
+only Python and git, and runs offline on 127.0.0.1. Its interface is in English and Swedish, and a language is one file
+to add: [web/README.md](web/README.md).
+
 ## From an AI model (MCP)
 
 `tools/mcp_server.py` is a Model Context Protocol server with <!-- fig:tools -->18<!-- /fig --> read-only tools: find a provision, read it on a date,
