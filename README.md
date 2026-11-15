@@ -10,18 +10,23 @@ https://github.com/user-attachments/assets/f24f3411-24d9-416a-8c45-9cebc817c64e
 **Free to use: [CC0](LICENSE.md).** Fork it, build on it, ship it in a product: no permission or credit needed. The law text
 sits in each country's repository, under that repository's own terms.
 
-Each jurisdiction's law is its own repository, `lexifina/<country>-law`, where every commit is one law taking effect,
-written by that law. This repository holds them all as submodules, arranged by jurisdiction, and moves each one forward
-to its latest commit. The tools read the `In-force` date of every commit, so they give the law of any country on any
-date.
+Each body of law is its own repository: a country's law (`lexifina/germany-law`), a state's or a city's
+(`lexifina/germany-brandenburg-law`), or a court's decisions (`lexifina/germany-bgh-caselaw`). In a dated history every
+commit is one law taking effect, written by that law; in case law, one decision on the day it was decided. Where the
+publisher keeps only today's text, or each law as first enacted, the corpus says so (`history` in `manifest.json`).
+This repository holds them all as submodules, arranged by jurisdiction, and moves each one forward to its latest
+commit. The tools read the `In-force` date of every commit, so they give the law of any country on any date that its
+record covers.
 
 ```
 global-law/
-├── manifest.json              every corpus: path, repository, coverage and dates
-├── jurisdiction.json          the world, and the jurisdictions in it
-├── germany/bund/acts/         a country's law (submodule)
-├── brazil/bahia/acts/         a state's
-├── brazil/bahia/salvador/acts/  a city's
+├── manifest.json                     every corpus: path, repository, history, coverage and dates
+├── jurisdiction.json                 the world, and the jurisdictions in it
+├── germany/bund/acts/                a country's law (submodule: lexifina/germany-law)
+├── germany/brandenburg/acts/         a state's
+├── argentina/buenos-aires/salto/acts/  a city's
+├── germany/bgh/caselaw/              a court's decisions
+├── tools/                            law.py, the MCP server, countries.py
 └── …
 ```
 
