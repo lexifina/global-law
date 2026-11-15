@@ -36,9 +36,11 @@ We host this record publicly, for free:
 
 - **[Ask Claude about the law](https://global-law.lexifina.com/v1/try_claude)**: opens Claude with a first question ready.
 - **[Ask ChatGPT](https://global-law.lexifina.com/v1/try_chatgpt)**: the same question in ChatGPT.
-- **[Call the API in your browser](https://global-law.lexifina.com/v1/search_law?query=small+business+debtor&jurisdictions=united-states/federal/usc)**:
-  a search of the US Code for "small business debtor", returned as JSON. See the
-  [documentation here](https://lexifina.com/api/global-law).
+- **[Search the law on our site](https://lexifina.com/law?country=united-states&q=small+business+debtor)**: a search of US
+  law for "small business debtor", with each provision's text and its versions, no account needed; choose any country
+  there.
+- **[Developer REST API](https://global-law.lexifina.com/v1/search_law?query=small+business+debtor&jurisdiction=united-states)**:
+  the same search as JSON, with no key. See the [documentation here](https://lexifina.com/api/global-law).
 
 Both assistants read the record through the free Global law connector (MCP, `https://global-law.lexifina.com/mcp`);
 the first time, the chat gives you the link that adds it. Ask in any language. For one country's law, add its name to
