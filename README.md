@@ -30,7 +30,23 @@ global-law/
 └── …
 ```
 
-## Start
+## From an AI model (MCP)
+
+We host this record publicly, for free:
+
+- **[Ask Claude about the law](https://global-law.lexifina.com/v1/try_claude)**: opens Claude with a first question ready.
+- **[Ask ChatGPT](https://global-law.lexifina.com/v1/try_chatgpt)**: the same question in ChatGPT.
+- **[Call the API in your browser](https://global-law.lexifina.com/v1/search_law?query=small+business+debtor&jurisdictions=united-states/federal/usc)**:
+  a search of the US Code for "small business debtor", returned as JSON. See the
+  [documentation here](https://lexifina.com/api/global-law).
+
+Both assistants read the record through the free Global law connector (MCP, `https://global-law.lexifina.com/mcp`);
+the first time, the chat gives you the link that adds it. Ask in any language. For one country's law, add its name to
+either link: `?country=romania`.
+
+## Host it on your own machine
+
+All it takes is git and Python 3.9+, and the tools run on your machine with no network calls.
 
 ```sh
 git clone --depth 1 https://github.com/lexifina/global-law && cd global-law
@@ -45,41 +61,15 @@ history, so they work the same. To have it without its file contents, clone with
 every country, add `--recurse-submodules`. Don't clone a country's repository with `--depth`: its dates are read from
 its whole history, and `countries.py add` fetches all of it.
 
-## From an AI model (MCP)
-
-We also host this record publicly, for free:
-
-- **[Ask Claude about the law](https://global-law.lexifina.com/v1/try_claude)**: opens Claude with a first question ready.
-- **[Ask ChatGPT](https://global-law.lexifina.com/v1/try_chatgpt)**: the same question in ChatGPT.
-- **[Call the API in your browser](https://global-law.lexifina.com/v1/search_law?query=small+business+debtor&jurisdictions=united-states/federal/usc)**:
-  a search of the US Code for "small business debtor", returned as JSON. See the
-  [documentation here](https://lexifina.com/api/global-law).
-
-Both assistants read the record through the free Global law connector (MCP, `https://global-law.lexifina.com/mcp`);
-the first time, the chat gives you the link that adds it. Ask in any language. For one country's law, add its name to
-either link: `?country=romania`.
-
-**Run it on your machine.** `tools/mcp_server.py` is the same server, with <!-- fig:tools -->18<!-- /fig --> read-only tools: find a provision,
-read it on a date, who wrote each word, compare dates, a provision's history, search the text and the changes, and
-check a case or a brief against the law in force. All it takes is Python 3.9+ and git, and it makes no network calls.
-Opened in Claude Code, Cursor, VS Code or Codex, the clone starts it by itself. For another client:
-
-```json
-{ "mcpServers": { "global-law": { "command": "git", "args": ["-C", "/path/to/global-law", "-c", "alias.global-law-mcp=!sh tools/mcp.sh", "global-law-mcp"] } } }
-```
-
-Then ask, for example, "What did 11 U.S.C. §1182(1) say on 1 May 2022, and which law last changed it?" [MCP.md](MCP.md)
-has every tool and the details.
-
-## Command line
+**From the command line:**
 
 ```
-python tools/law.py world 2022-05-01                       every corpus on that day
-python tools/law.py show 2022-05-01 <path>                 a provision on a date
-python tools/law.py blame 2022-07-01 <path>                the law behind each line
-python tools/law.py words 2022-07-01 <path>                the law behind each word
-python tools/law.py diff 2022-05-01 2022-07-01 <path>      what changed between two dates
-python tools/law.py laws 1990-01-01 1990-12-31 germany     the laws that took effect
+python3 tools/law.py world 2022-05-01                       every corpus on that day
+python3 tools/law.py show 2022-05-01 <path>                 a provision on a date
+python3 tools/law.py blame 2022-07-01 <path>                the law behind each line
+python3 tools/law.py words 2022-07-01 <path>                the law behind each word
+python3 tools/law.py diff 2022-05-01 2022-07-01 <path>      what changed between two dates
+python3 tools/law.py laws 1990-01-01 1990-12-31 germany     the laws that took effect
 ```
 
 Dates are YYYY-MM-DD. The first read of a corpus indexes its history once and keeps the index in
@@ -88,6 +78,18 @@ Dates are YYYY-MM-DD. The first read of a corpus indexes its history once and ke
 - A corpus moved to a new folder still answers under its old path (`data/moved-paths.tsv`). After a pull that moves
   corpora, run `git submodule sync` and `git submodule update --init`.
 - `manifest.json` and the `jurisdiction.json` files are written by `tools/describe.py`.
+
+**From an AI model:** `tools/mcp_server.py` is the same MCP server as the hosted one, with <!-- fig:tools -->18<!-- /fig --> read-only tools: find a
+provision, read it on a date, who wrote each word, compare dates, a provision's history, search the text and the
+changes, and check a case or a brief against the law in force. Opened in Claude Code, Cursor, VS Code or Codex, the
+clone starts it by itself. For another client:
+
+```json
+{ "mcpServers": { "global-law": { "command": "git", "args": ["-C", "/path/to/global-law", "-c", "alias.global-law-mcp=!sh tools/mcp.sh", "global-law-mcp"] } } }
+```
+
+Then ask, for example, "What did 11 U.S.C. §1182(1) say on 1 May 2022, and which law last changed it?" [MCP.md](MCP.md)
+has every tool and the details.
 
 ## Case law
 
@@ -118,17 +120,14 @@ each country's usual form (`Art. 336 OR`, `§ 823 Abs. 1 BGB`, `article 1240 du 
 - [performance/](performance/): how fast the tools are, measured
 - [visualisations/](visualisations/): charts and bridges across the world's law
 - [Vulnerabilities](vulnerabilities/): Mistakes in legislation as published
+- [videos/](videos/): every video
 - Tests: `python -m unittest discover -s tests`
 
 ## Videos
 
-[See all videos](videos/)
-
 https://github.com/user-attachments/assets/6020acb1-53f3-4b65-94a4-fe132b867358
 
 https://github.com/user-attachments/assets/3e3076d7-cfb4-4e0a-8552-2926a630fc8e
-
-How updates are checked and pinned every 15 minutes ([Monitoring](monitoring/)); [how each figure in the film was counted](monitoring/film/):
 
 https://github.com/user-attachments/assets/ebfea880-c7f7-4310-b8fb-b64849811fe3
 
