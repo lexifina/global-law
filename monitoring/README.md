@@ -1,6 +1,6 @@
 # Monitoring: does it keep up?
 
-https://github.com/user-attachments/assets/ebfea880-c7f7-4310-b8fb-b64849811fe3
+https://github.com/user-attachments/assets/6119b018-5f5b-4bab-a2da-0aad30ef585f
 
 [How each figure in the film was counted](film/).
 
