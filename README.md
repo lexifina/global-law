@@ -30,7 +30,7 @@ global-law/
 └── …
 ```
 
-## From an AI model (MCP)
+## Use it
 
 We host this record publicly, for free:
 
@@ -43,55 +43,19 @@ We host this record publicly, for free:
   the same search as JSON, with no key. See the [documentation here](https://lexifina.com/api/global-law).
 
 Both assistants read the record through the free Global law connector (MCP, `https://global-law.lexifina.com/mcp`);
-the first time, the chat gives you the link that adds it. Ask in any language. For one country's law, add its name to
-either link: `?country=romania`.
+the first time, the chat gives you the link that adds it. Ask in any language; for one country, add `?country=romania`
+to either link.
 
-## Host it on your own machine
-
-All it takes is git and Python 3.9+, and the tools run on your machine with no network calls.
+**Host it yourself easily.** All it takes is git and Python, and the tools run on your machine:
 
 ```sh
 git clone --depth 1 https://github.com/lexifina/global-law && cd global-law
-python3 tools/countries.py add united-states/federal/usc   # one corpus; every country is several GB
+python3 tools/countries.py add united-states/federal/usc
 python3 tools/law.py show 2022-05-01 united-states/federal/usc/title-11/1182.md
 ```
 
-On Windows, type `py` or `python` where these say `python3`.
-
-`--depth 1` downloads the index without its whole history, a fraction of the size. The tools never read that
-history, so they work the same. To have it without its file contents, clone with `--filter=blob:none` instead. For
-every country, add `--recurse-submodules`. Don't clone a country's repository with `--depth`: its dates are read from
-its whole history, and `countries.py add` fetches all of it.
-
-**From the command line:**
-
-```
-python3 tools/law.py world 2022-05-01                       every corpus on that day
-python3 tools/law.py show 2022-05-01 <path>                 a provision on a date
-python3 tools/law.py blame 2022-07-01 <path>                the law behind each line
-python3 tools/law.py words 2022-07-01 <path>                the law behind each word
-python3 tools/law.py diff 2022-05-01 2022-07-01 <path>      what changed between two dates
-python3 tools/law.py laws 1990-01-01 1990-12-31 germany     the laws that took effect
-```
-
-Dates are YYYY-MM-DD. The first read of a corpus indexes its history once and keeps the index in
-`.git/global-law-cache`.
-
-- A corpus moved to a new folder still answers under its old path (`data/moved-paths.tsv`). After a pull that moves
-  corpora, run `git submodule sync` and `git submodule update --init`.
-- `manifest.json` and the `jurisdiction.json` files are written by `tools/describe.py`.
-
-**From an AI model:** `tools/mcp_server.py` is the same MCP server as the hosted one, with <!-- fig:tools -->18<!-- /fig --> read-only tools: find a
-provision, read it on a date, who wrote each word, compare dates, a provision's history, search the text and the
-changes, and check a case or a brief against the law in force. Opened in Claude Code, Cursor, VS Code or Codex, the
-clone starts it by itself. For another client:
-
-```json
-{ "mcpServers": { "global-law": { "command": "git", "args": ["-C", "/path/to/global-law", "-c", "alias.global-law-mcp=!sh tools/mcp.sh", "global-law-mcp"] } } }
-```
-
-Then ask, for example, "What did 11 U.S.C. §1182(1) say on 1 May 2022, and which law last changed it?" [MCP.md](MCP.md)
-has every tool and the details.
+Opened in Claude Code, Cursor, VS Code or Codex, the clone also starts a local MCP server with the same tools
+([MCP.md](MCP.md)). [FEATURES.md](FEATURES.md) lists every command and [FAQ.md](FAQ.md) how to clone.
 
 ## Case law
 
