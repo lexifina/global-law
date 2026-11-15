@@ -262,7 +262,7 @@ class McpServer(unittest.TestCase):
         # (read_law reads a folder since 2026-11-10: its provisions in order; a folder that holds none is refused)
         self.assertIn('not a provision file', refused('read_law', path=P('us/federal/usc/title-11/no-such-folder')))
         # arguments the schema does not name, and values of the wrong shape
-        self.assertEqual(self.s.send('tools/call', {'name': 'read_law', 'arguments': {'path': USC, 'pth': 'x'}})['error']['code'], -32602)
+        self.assertIn('pth', refused('read_law', path=USC, pth='x'))  # a tool error the model reads, not a protocol error
         refused('who_wrote', path=USC, granularity=5)
         self.assertIn('whole number', refused('laws_between', start='2022-01-01', end='2022-12-31', max_results=float('inf')))  # 1e400 in JSON
         refused('search_law', query='a' * 301)

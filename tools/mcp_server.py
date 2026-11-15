@@ -46,7 +46,7 @@ ROOT = law.ROOT
 # handshake; legacy clients open with initialize and are served under the version they negotiate.
 MODERN_VERSIONS = ('2026-07-28',)
 PROTOCOL_VERSIONS = ('2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05')  # legacy, initialize-based
-SERVER = {'name': 'global-law', 'title': 'Global law: every jurisdiction, one history', 'version': '1.1.0'}
+SERVER = {'name': 'global-law', 'title': 'Global law: every jurisdiction, one history', 'version': '1.1.1'}  # as the MCP Registry lists it
 CAPABILITIES = {'tools': {'listChanged': False}, 'resources': {}, 'prompts': {'listChanged': False}}
 META = 'io.modelcontextprotocol/'
 CACHEABLE = {'tools/list', 'prompts/list', 'resources/list', 'resources/read', 'resources/templates/list', 'server/discover'}
@@ -11582,9 +11582,12 @@ def _handle(method, mid, params: dict) -> dict:
                 if old in args:
                     args = {**{k: v for k, v in args.items() if k != old}, new: args[new] if args.get(new) not in (None, '') else args[old]}
             unknown = sorted(set(args) - set(PROPERTIES[name]))
-            if unknown:  # the schema says additionalProperties: false; a misspelt argument should not pass silently
-                return error(mid, -32602, f"Unknown argument(s) for {name}: {', '.join(map(str, unknown))[:300]}. "
-                             f"It takes: {', '.join(PROPERTIES[name]) or 'no arguments'}.")
+            if unknown:  # the schema says additionalProperties: false; a misspelt argument should not pass silently.
+                # An input mistake is a tool error the model reads and corrects (MCP: input validation errors are tool
+                # execution errors), not a protocol error, which some clients never show the model.
+                return {'jsonrpc': '2.0', 'id': mid, 'result': {'content': [{'type': 'text', 'text':
+                        f"Unknown argument(s) for {name}: {', '.join(map(str, unknown))[:300]}. "
+                        f"It takes: {', '.join(PROPERTIES[name]) or 'no arguments'}."}], 'isError': True}}
             broken = sorted(k for k, v in args.items() if _lone_surrogate(v))
             if broken:  # JSON may carry "\ud800", which is no character: git's arguments cannot hold it (an internal error)
                 return {'jsonrpc': '2.0', 'id': mid, 'result': {'content': [{'type': 'text', 'text':
