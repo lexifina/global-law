@@ -1,5 +1,10 @@
 # Local performance and checks
 
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="chart-dark.svg">
+<img alt="How long each command took on a local clone across 16 corpora on 4 November 2026: most commands answer in under a second, well inside their budgets" src="chart-light.svg" width="880">
+</picture>
+
 A one-time, general indicator of how fast the tools answer on your own clone, and what they were checked for. It is
 not a record to compare over time: timings depend on the machine, its load and the corpora checked out. The hosted
 service ([global-law.lexifina.com](https://lexifina.com/api/global-law)) keeps warm caches and text snapshots, so it
@@ -41,7 +46,7 @@ python performance/bench.py --no-record            # three tries, the fixture te
 
 ## Budgets
 
-What a reader should wait at most for one command:
+What a reader should wait at most for one command (the marks on the chart; `python performance/charts.py` redraws it):
 
 | Command | Budget |
 |---|---|
