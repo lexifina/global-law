@@ -42,12 +42,22 @@ its whole history, and `countries.py add` fetches all of it.
 
 ## From an AI model (MCP)
 
-`tools/mcp_server.py` is a Model Context Protocol server with <!-- fig:tools -->18<!-- /fig --> read-only tools: find a provision, read it on a date,
-who wrote each word, compare dates, a provision's history, search the text and the changes, and check a case or a
-brief against the law in force. It needs only Python 3.9+ and git, runs on your machine and makes no network calls.
+We also host this record publicly, for free:
 
-The clone carries the setup for Claude Code, Cursor, VS Code and Codex, so the server starts when you open the folder.
-For another client:
+- **[Ask Claude about the law](https://global-law.lexifina.com/v1/try_claude)**: opens Claude with a first question ready.
+- **[Ask ChatGPT](https://global-law.lexifina.com/v1/try_chatgpt)**: the same question in ChatGPT.
+- **[Call the API in your browser](https://global-law.lexifina.com/v1/search_law?query=small+business+debtor&jurisdictions=united-states/federal/usc)**:
+  a search of the US Code for "small business debtor", returned as JSON. See the
+  [documentation here](https://lexifina.com/api/global-law).
+
+Both assistants read the record through the free Global law connector (MCP, `https://global-law.lexifina.com/mcp`);
+the first time, the chat gives you the link that adds it. Ask in any language. For one country's law, add its name to
+either link: `?country=romania`.
+
+**Run it on your machine.** `tools/mcp_server.py` is the same server, with <!-- fig:tools -->18<!-- /fig --> read-only tools: find a provision,
+read it on a date, who wrote each word, compare dates, a provision's history, search the text and the changes, and
+check a case or a brief against the law in force. All it takes is Python 3.9+ and git, and it makes no network calls.
+Opened in Claude Code, Cursor, VS Code or Codex, the clone starts it by itself. For another client:
 
 ```json
 { "mcpServers": { "global-law": { "command": "git", "args": ["-C", "/path/to/global-law", "-c", "alias.global-law-mcp=!sh tools/mcp.sh", "global-law-mcp"] } } }
