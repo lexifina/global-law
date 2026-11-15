@@ -20,13 +20,13 @@ record covers.
 
 ```
 global-law/
-├── manifest.json                     every corpus: path, repository, history, coverage and dates
-├── jurisdiction.json                 the world, and the jurisdictions in it
-├── germany/bund/acts/                a country's law (submodule: lexifina/germany-law)
-├── germany/brandenburg/acts/         a state's
+├── manifest.json                       every corpus: path, repository, history, coverage and dates
+├── jurisdiction.json                   the world, and the jurisdictions in it
+├── germany/bund/acts/                  a country's law (submodule: lexifina/germany-law)
+├── germany/brandenburg/acts/           a state's
 ├── argentina/buenos-aires/salto/acts/  a city's
-├── germany/bgh/caselaw/              a court's decisions
-├── tools/                            law.py, the MCP server, countries.py
+├── germany/bgh/caselaw/                a court's decisions
+├── tools/                              law.py, the MCP server, countries.py
 └── …
 ```
 
