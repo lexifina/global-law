@@ -26,6 +26,7 @@ https://github.com/user-attachments/assets/6f43621b-a186-4e16-9144-6946de279a03
 
 <ul>
 <li><a href="EXAMPLES.md">5 in-depth examples</a>: the five mistakes walked through step by step, further confirmed mistakes, and empty periods</li>
+<li><a href="COUNTRIES.md">Country by country</a>: the detectors run on 50 country repositories one at a time, what each found and what running them taught us, with charts and data</li>
 <li><a href="data/confirmed.csv">Confirmed cases</a> (<a href="data/confirmed.json">JSON</a>): every case checked against official sources, with links</li>
 <li><a href="data/">Full list of flags</a>: all of them as CSV, JSON Lines and Parquet, with counts <a href="data/by_category.csv">by category</a> and <a href="data/by_jurisdiction.csv">by jurisdiction</a>, the <a href="data/reviewed.csv">model-reviewed subset</a>, and <a href="data/html/index.html">browsable HTML pages</a></li>
 <li><a href="../lean-proofs/">Formal proofs (Lean)</a>: the mistakes stated as theorems and checked by the Lean prover, with a certificate for every flag, plus a worked study of cliffs in the US tax code</li>
