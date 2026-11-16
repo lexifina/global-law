@@ -49,6 +49,9 @@ rest goes.
 
 ## Rounds 5 to 13 (13–14 November 2026)
 
+To continue this work, start with [NEXT.md](NEXT.md): the open questions, the round-14 plan and how a round runs.
+[PUBLISHING.md](PUBLISHING.md) gives the checks for publishing a round.
+
 Each round adds rules to the model and the reader, under one protocol (`benchmarks/CONTRACT.md`):
 - rules are built on the development half of every answer key only;
 - a rule enters the certified tier only after a blind audit at 0.90 or better;
