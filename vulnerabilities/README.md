@@ -2,6 +2,8 @@ https://github.com/user-attachments/assets/6f43621b-a186-4e16-9144-6946de279a03
 
 <p>Each case is a logical mistake in the law itself, ranging from mechanical mistakes to <a href="https://arxiv.org/html/2508.10050v1">legal zero-days</a> (essentially loopholes). We present errors by category and frequency, provide five in-depth examples, and lay out an overall <a href="TAXONOMY.md">taxonomy</a> for finding legislative errors.</p>
 
+<p><b><a href="COUNTRIES.md">Countries</a></b>: every country repository's own <code>vulnerabilities/</code> folder, which hold results and which are placeholders, and what running the detectors on 50 countries one at a time taught us.</p>
+
 <table>
 <tr><th>Category</th><th>What it is</th><th>Flagged</th></tr>
 <tr><td>Lapsed time limits</td><td>Text still applying a rule &quot;until&quot; a date that has passed</td><td>20,770</td></tr>
