@@ -2,8 +2,8 @@
 //
 //   node src/stills.mjs            (from visualisations/)
 //
-// Each visible <figure> with a drawing becomes stills/<page>-NN-<title>.png, and the README's gallery between the
-// "stills" markers is rewritten to show them in page order. Uses Playwright from the Lexifina repo's saas-webpage.
+// Each visible <figure> with a drawing in src/pages/ becomes stills/<page>-NN-<title>.png, and src/figures.json lists
+// each page's charts (id, title, still) for categories.py, which writes the category pages and their galleries. Uses Playwright from the Lexifina repo's saas-webpage.
 import { createRequire } from 'node:module'
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -22,6 +22,9 @@ const PAGES = [
   ['romanian-law-drawn.html', 'Romanian Law, Drawn'],
   ['the-romanian-record.html', 'The Romanian Record'],
   ['seventeen-countries-one-at-a-time.html', 'Seventeen Countries, One at a Time'],
+  ['law-roses.html', 'Roses of the Law'],
+  ['law-rewrites-and-ages.html', 'Rewrites and Ages'],
+  ['legal-year-variants.html', 'The Legal Year, Five Ways'],
 ]
 const out = join(viz, 'stills')
 rmSync(out, { recursive: true, force: true })
@@ -32,7 +35,7 @@ const browser = await chromium.launch()
 const page = await browser.newPage({ viewport: { width: 1100, height: 900 }, deviceScaleFactor: 1.5, colorScheme: 'light' })
 const sections = []
 for (const [file, label] of PAGES) {
-  await page.goto(pathToFileURL(join(viz, file)).href, { waitUntil: 'networkidle', timeout: 120000 })
+  await page.goto(pathToFileURL(join(viz, 'src', 'pages', file)).href, { waitUntil: 'networkidle', timeout: 120000 })
   await page.waitForTimeout(3000)
   const figs = await page.$$('figure')
   const items = []
@@ -42,7 +45,7 @@ for (const [file, label] of PAGES) {
     const info = await fig.evaluate((f) => {
       const h = f.querySelector('h2, h3, figcaption')
       const drawn = f.querySelector('svg *, canvas, img')
-      return { title: (h?.textContent || '').trim().replace(/\s+/g, ' '), drawn: !!drawn }
+      return { id: f.id || '', title: (h?.textContent || '').trim().replace(/\s+/g, ' '), drawn: !!drawn }
     })
     if (!info.drawn) continue
     await fig.scrollIntoViewIfNeeded()
@@ -50,26 +53,14 @@ for (const [file, label] of PAGES) {
     n += 1
     const name = `${file.replace('.html', '')}-${String(n).padStart(2, '0')}-${slug(info.title || 'chart')}.png`
     await fig.screenshot({ path: join(out, name) })
-    items.push([info.title || `Chart ${n}`, name])
+    items.push({ id: info.id, title: info.title || `Chart ${n}`, still: name })
   }
   sections.push([label, file, items])
   console.log(`${file}: ${items.length} charts`)
 }
 await browser.close()
 
-const readme = join(viz, 'README.md')
-const BEGIN = '<!-- stills:begin -->'
-const END = '<!-- stills:end -->'
-const lines = [BEGIN, '', '## The charts', '',
-  'Still images of every chart, rendered from the pages by `src/stills.mjs`. Open the HTML pages for the interactive versions and the full text.', '']
-for (const [label, file, items] of sections) {
-  lines.push(`### ${label} (\`${file}\`)`, '')
-  for (const [title, name] of items) lines.push(`![${title.replace(/[[\]]/g, '')}](stills/${name})`, '')
-}
-lines.push(END)
-let text = readFileSync(readme, 'utf8')
-const block = lines.join('\n')
-if (text.includes(BEGIN)) text = text.slice(0, text.indexOf(BEGIN)) + block + text.slice(text.indexOf(END) + END.length)
-else text = text.replace('\n## Rebuilding', '\n' + block + '\n\n## Rebuilding')
-writeFileSync(readme, text)
-console.log(`${readdirSync(out).length} stills; README gallery written`)
+const figures = {}
+for (const [, file, items] of sections) figures[file] = items
+writeFileSync(join(here, 'figures.json'), JSON.stringify(figures, null, 1))
+console.log(`${readdirSync(out).length} stills; src/figures.json written (run categories.py next)`)

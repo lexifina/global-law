@@ -166,7 +166,7 @@ print("episodes", len(S["episodes"]), "const", K7)
 data = json.dumps(S, ensure_ascii=False).replace("</", "<" + "\\" + "/")
 html = T.replace("__DATA__", data)
 Path(".build/law-in-motion.html").write_text(html, encoding="utf-8")
-OUT = Path.home() / "Documents" / "lexifina" / "scripts" / "global-law" / "repo" / "visualisations"; OUT.mkdir(exist_ok=True)
+OUT = Path.home() / "Documents" / "lexifina" / "scripts" / "global-law" / "repo" / "visualisations" / "src" / "pages"; OUT.mkdir(parents=True, exist_ok=True)
 STANDALONE = ('<!doctype html>\n<html lang="en">\n<meta charset="utf-8">\n'
               '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
               '<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>\n' + html + "\n</html>\n")

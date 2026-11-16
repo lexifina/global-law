@@ -18,7 +18,7 @@ const [mode, outDir, scheme, width] = process.argv.slice(2);
   const errs = [];
   p.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') errs.push(`${m.type()}: ${m.text()}`); });
   p.on('pageerror', e => errs.push('pageerror: ' + e.message));
-  await p.goto('file:///' + path.join(viz, FILE).split(path.sep).join('/'), { waitUntil: 'networkidle', timeout: 120000 });
+  await p.goto('file:///' + path.join(viz, 'src', 'pages', FILE).split(path.sep).join('/'), { waitUntil: 'networkidle', timeout: 120000 });
   await p.waitForTimeout(3000);
   const figs = await p.$$('figure.chart');
   if (check) {

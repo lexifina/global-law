@@ -26,6 +26,6 @@ const DATA = {data};
 (HERE / "the-romanian-record.html").write_text(page, encoding="utf-8", newline="\n")
 wrap = ('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>\n'
         + page + "\n</body></html>\n")
-dst = HERE.parents[2] / "the-romanian-record.html"  # visualisations/
+dst = HERE.parents[1] / "pages" / "the-romanian-record.html"  # visualisations/src/pages/
 dst.write_text(wrap, encoding="utf-8", newline="\n")
 print(HERE / "the-romanian-record.html", len(page), "|", dst, len(wrap))
