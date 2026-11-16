@@ -13,11 +13,13 @@ Graphs drawn from the corpora in this repository, rebuilt every half hour while 
 - `law-roses.html` (Roses of the Law) has twenty rose charts, one rose per country and a typical country's beside them: the weekday and month law is adopted, published and applied, the delay from adoption to force, the size of new acts, how long a provision rests between changes, how many versions it has had, and more. Questions 1–10 are drawn from `src/analysis11.json`; questions 11–20 from a read of every local law repository's commits (Romania left out).
 - `law-rewrites-and-ages.html` (Rewrites and Ages) has ten charts on 145 countries: five on how often each country amends the provisions in force (a world map, stacked bars, breadth against depth, a beeswarm and cumulative curves) and five on how old its law in force is (a map of the median year, decade bars, ranges on a timeline, a heatmap and small multiples). Both measures start where each country's record starts, so a record of current text only looks young and unamended.
 - `legal-year-variants.html` (The Legal Year, Five Ways) draws the month law takes effect in five ways for the 30 jurisdictions with enough dated acts: a heatmap of every jurisdiction's year, a rose for each, the January wave and the July echo, the days of the year law starts on, and how far each month swings between jurisdictions.
+- `seventeen-countries-one-at-a-time.html` (Seventeen Countries, One at a Time) has 22 charts that set side by side what the seventeen “law in 20 charts” pages found, one page per country, each drawn from that country’s repository alone: the days law takes effect and the day each country’s rule fixes, the week and the year of lawmaking, the time from signature to gazette, government acts with the force of law, amending and omnibus laws, the most-amended act of each record, constitutions and codes still as first written, how old the law in force is, late budgets, money, the death penalty, EU law and treaty partners; and what each record could and could not show, how far back it reaches and the errors the work found in its data.
 - `the-shape-of-waiting.png` is a still of one chart from `law-in-motion.html`: how long each jurisdiction's law waits between adoption and entry into force. The main README shows it.
 - `src/` holds the scripts that produce it, the JSON each analysis writes, and `geo/` (Natural Earth country shapes from world-atlas). The scripts read the corpus checkouts in `~/Documents` and never write to them. The Basic Law is read from a separate clone at `~/Documents/law-in-motion/corpora/grundgesetz`, because the German repositories are rebuilt in place. Scratch output, such as screenshots and logs, goes to `src/.build/`.
 - `src/law-roses/` holds the scripts and data behind Roses of the Law: `roses_prep.py` turns `analysis11.json` into `roses-data.json`; `roses2_scan.py` reads the law repositories in `~/Documents` (about three minutes) and `roses2_prep.py` turns its output into `roses2-data.json`; `build.py` fills `roses.tpl.html` with both and writes `law-roses.html`.
 - `src/law-rewrites/` holds the page behind Rewrites and Ages: `rw_prep.py` turns `../law-roses/roses2-data.json` into `rw-data.json`, and `build.py` fills `rw.tpl.html` with it and the shapes in `geo/countries-50m.json`.
 - `src/legal-year/` holds the page behind The Legal Year, Five Ways: `ly_prep.py` turns `analysis11.json` into `legal-year-data.json`, and `build.py` fills `legal-year.tpl.html` with it.
+- `src/seventeen/` holds the page behind Seventeen Countries, One at a Time: `prep.py` reads, from local clones of the seventeen country repositories, each page’s `visualisations/README.en.md` and `visualisations/src/.build/data.json` and writes `seventeen-data.json`; `build.py` fills `seventeen.tpl.html` with it; `stills.cjs` renders the page’s stills.
 - `src/law-drawn/` holds the scripts and data behind the Law, Drawn and Life of a Provision pages (`pass.py`, `analyse*.py`, then `build*.py` and `patch*.py`), and `src/law-drawn/romania/` those behind the two Romania pages (`part*_data.py` and `page2_data.py` write the JSON; `build_ro.py` and `build_page2.py` assemble the pages). The Romania scripts read a checkout of `romania-law` in `tip/` beside them. Intermediate files over 1 MB (such as `lives.json`) are not kept; rerun the analysis scripts to recreate them.
 
 <!-- stills:begin -->
@@ -273,6 +275,52 @@ Still images of every chart, rendered from the pages by `src/stills.mjs`. Open t
 ![When a government decision names a ministry, it is usually handing over land or buildings](stills/the-romanian-record-03-when-a-government-decision-names-a-ministry-it-is-.png)
 
 ![Romania kept its 19th-century codes into the 2010s, and each code that replaced one changes faster than its predecessor did](stills/the-romanian-record-04-romania-kept-its-19th-century-codes-into-the-2010s.png)
+
+### Seventeen Countries, One at a Time (`seventeen-countries-one-at-a-time.html`)
+
+![Seventeen jurisdictions, fifteen in Europe and around the Mediterranean, two in East Asia](stills/seventeen-countries-one-at-a-time-01-seventeen-jurisdictions-fifteen-in-europe-and-arou.png)
+
+![What the 340 charts were drawn from: 21.4 million records, 16.7 million of them Czech MPs’ votes](stills/seventeen-countries-one-at-a-time-02-what-the-340-charts-were-drawn-from-21-4-million-r.png)
+
+![Fixed days: 1 April carries 29.2% of Japan’s new versions, 1 January 11.6% of France’s and 9.9% of Spain’s](stills/seventeen-countries-one-at-a-time-03-fixed-days-1-april-carries-29-2-of-japan-s-new-ver.png)
+
+![The rule’s day: 95% of Bosnia and Herzegovina’s laws take effect on the eighth day after publication; Spain’s now rarely wait the Civil Code’s twenty](stills/seventeen-countries-one-at-a-time-04-the-rule-s-day-95-of-bosnia-and-herzegovina-s-laws.png)
+
+![The week: 72% of Albania’s laws adopted on a Thursday, 95% of Bulgaria’s State Gazette issues on a Tuesday or a Friday](stills/seventeen-countries-one-at-a-time-05-the-week-72-of-albania-s-laws-adopted-on-a-thursda.png)
+
+![August, the month without laws: 2 of Albania’s 3,098 laws, and at most 3% of any parliament’s; Algeria is the exception](stills/seventeen-countries-one-at-a-time-06-august-the-month-without-laws-2-of-albania-s-3-098.png)
+
+![From signature to the gazette: Spain’s royal decrees from a median of 31 days in 1979 to 1, Albania’s government decisions from 36 in 2009 to 2 in 2025](stills/seventeen-countries-one-at-a-time-07-from-signature-to-the-gazette-spain-s-royal-decree.png)
+
+![Lawmaking by the government: in 2020, 125 ordinances in France, 39 royal decree-laws in Spain, 38 normative acts in Albania](stills/seventeen-countries-one-at-a-time-08-lawmaking-by-the-government-in-2020-125-ordinances.png)
+
+![Amending laws: 60% of the laws in Croatia, 59% in Bulgaria and 58% of Montenegro’s laws in force amend another law; in Serbia, Andorra and Türkiye, 37% or fewer](stills/seventeen-countries-one-at-a-time-09-amending-laws-60-of-the-laws-in-croatia-59-in-bulg.png)
+
+![One act, many laws: Türkiye’s decree-law 703 changed 144 laws and decree-laws, Czechia’s Act 281/2009 changed 133 acts](stills/seventeen-countries-one-at-a-time-10-one-act-many-laws-tu-rkiye-s-decree-law-703-change.png)
+
+![The most-amended act in each record: Belgium’s Judicial Code, 613 new versions since 1985; Japan’s Local Tax Act, the provisions of 940 amending laws](stills/seventeen-countries-one-at-a-time-11-the-most-amended-act-in-each-record-belgium-s-judi.png)
+
+![Constitutions: Japan’s has kept one text since 1947 and Andorra’s since 1993; Belgium’s has been revised 82 times since 1994, France’s 25 times since 1958](stills/seventeen-countries-one-at-a-time-12-constitutions-japan-s-has-kept-one-text-since-1947.png)
+
+![Still as first written: all 103 articles of Japan’s Constitution, 64% of Spain’s 1889 Civil Code, 21% of France’s of 1804](stills/seventeen-countries-one-at-a-time-13-still-as-first-written-all-103-articles-of-japan-s.png)
+
+![How old the law in force is: 46% of Türkiye’s laws in force and 41% of Japan’s date from before 1990; 87% of Montenegro’s acts from 2010 or later](stills/seventeen-countries-one-at-a-time-14-how-old-the-law-in-force-is-46-of-tu-rkiye-s-laws-.png)
+
+![Late budgets: Bosnia and Herzegovina’s budget law came out after its year had begun in 22 of 27 years; Spain had no budget law for 6 years](stills/seventeen-countries-one-at-a-time-15-late-budgets-bosnia-and-herzegovina-s-budget-law-c.png)
+
+![Money in the law: Czechia’s minimum wage rose from CSK 2,000 to CZK 22,400, Albania’s from 7,018 to 50,000 lek; dinars, marks and pesetas gave way to the euro](stills/seventeen-countries-one-at-a-time-16-money-in-the-law-czechia-s-minimum-wage-rose-from-.png)
+
+![The death penalty: Vietnam cut it from 18 crimes to 10 on 1 July 2025; Algeria’s Penal Code from 33 articles to 23 in 2006, and back to 27 in October 2026](stills/seventeen-countries-one-at-a-time-17-the-death-penalty-vietnam-cut-it-from-18-crimes-to.png)
+
+![EU law in the text: 48% of Bulgaria’s laws of 2023 name an EU directive or regulation, 58% of Croatia’s in its accession year; Andorra’s mention the EU in 31%](stills/seventeen-countries-one-at-a-time-18-eu-law-in-the-text-48-of-bulgaria-s-laws-of-2023-n.png)
+
+![Treaty partners: a neighbour comes first for Czechia (Slovakia), Croatia (Bosnia and Herzegovina) and Serbia (Montenegro); the United States for Türkiye and Bulgaria; Germany for Albania](stills/seventeen-countries-one-at-a-time-19-treaty-partners-a-neighbour-comes-first-for-czechi.png)
+
+![What each record could show: 17 of 17 dated their law and 15 the day it took effect; only one, Czechia’s, held the votes](stills/seventeen-countries-one-at-a-time-20-what-each-record-could-show-17-of-17-dated-their-l.png)
+
+![How far back each record reaches: France’s to 1539, Spain’s to 1835; 10 of the 17 start in 1989 or later](stills/seventeen-countries-one-at-a-time-21-how-far-back-each-record-reaches-france-s-to-1539-.png)
+
+![What the work found wrong in the data: 13 errors in 7 repositories, each noted on its page and left as it is](stills/seventeen-countries-one-at-a-time-22-what-the-work-found-wrong-in-the-data-13-errors-in.png)
 
 <!-- stills:end -->
 

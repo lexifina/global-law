@@ -21,6 +21,7 @@ const PAGES = [
   ['life-of-a-provision.html', 'The Life of a Provision'],
   ['romanian-law-drawn.html', 'Romanian Law, Drawn'],
   ['the-romanian-record.html', 'The Romanian Record'],
+  ['seventeen-countries-one-at-a-time.html', 'Seventeen Countries, One at a Time'],
 ]
 const out = join(viz, 'stills')
 rmSync(out, { recursive: true, force: true })
