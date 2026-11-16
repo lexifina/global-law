@@ -1002,6 +1002,15 @@ def widen() -> str:
     return f'`{COUNTRIES} only --all` serves every one checked out.'
 
 
+@lru_cache(maxsize=4096)
+def _reached(_head: str, where: str) -> tuple[int, ...]:
+    """The corpora of the tree that a name a caller gives takes in (law.matches), as places in the full manifest, once
+    per name and commit of the tree. Every call that names a jurisdiction asked it of all 988 corpora again
+    (law.matches each, and the moved paths gone through for each: 130 ms of a find_provision that took 330,
+    profiled 2026-11-16)."""
+    return tuple(i for i, c in enumerate(_full_manifest(_head)['corpora']) if law.matches(c, where))
+
+
 def unserved_answer(where: str) -> str | None:
     """For a path or scope that reaches only corpora this server leaves out, what to tell the user; else None."""
     served = set(_look()[1])
@@ -1013,7 +1022,7 @@ def unserved_answer(where: str) -> str | None:
         if any('/'.join(parts[:k]) in served for k in range(2, len(parts) + 1)):
             return None
     full = _full_manifest(head())['corpora']
-    reach = [c for c in full if law.matches(c, where)]
+    reach = [full[i] for i in _reached(head(), where)] if isinstance(where, str) else [c for c in full if law.matches(c, where)]
     if not reach or any(c['path'] in served for c in reach):
         return None
     shut = [(c['path'], serving(c)) for c in reach]
@@ -2918,8 +2927,59 @@ def act_dirs(corpus: str, sha: str) -> tuple[str, ...]:
     return tuple(sorted(out))
 
 
+STORED_FILES = 50_000  # files from which a body of law's table of act names is kept in the tree's cache
+STORED_KEPT = 3  # stored tables kept per corpus, the newest (two servers may share the folder at different commits)
+
+
+def _stored(kind: str, corpus: str, sha: str, make):
+    """make() -> (a table of plain data, whether it is firm), kept in the tree's cache folder by corpus and commit
+    (<kind>-v1-py<version>-<corpus with ~ for />-<commit>.pickle) once it is firm, and read from there by every
+    process after: a table that takes seconds to work out (act_name_index: 12 s for Romania) was worked out by each
+    process that came to need it, in the first call that did (a server's every worker, one after another: calls
+    of 8 to 17 s among calls of 0.3, measured 2026-11-16). Written to a temporary name and renamed, so a reader
+    never sees half a file; a file that cannot be read is made again."""
+    import pickle
+    name = f"{kind}-v1-py{sys.version_info[0]}{sys.version_info[1]}-{corpus.replace('/', '~')}-"
+    try:
+        f = law._store() / f'{name}{sha}.pickle'
+    except (SystemExit, OSError):
+        return make()[0]
+    try:
+        with f.open('rb') as fh:
+            return pickle.load(fh)
+    except (OSError, ValueError, EOFError, AttributeError, ImportError, IndexError, pickle.UnpicklingError):
+        pass
+    made, firm = make()
+    if firm:
+        try:
+            f.parent.mkdir(parents=True, exist_ok=True)
+            tmp = f.with_name(f'{f.name}.{os.getpid()}.part')
+            with tmp.open('wb') as fh:
+                pickle.dump(made, fh, protocol=4)
+            os.replace(tmp, f)
+            old = sorted(f.parent.glob(glob_escape(name) + '*.pickle'), key=lambda p: p.stat().st_mtime, reverse=True)
+            for gone in old[STORED_KEPT:]:
+                gone.unlink(missing_ok=True)
+        except OSError:
+            pass
+    return made
+
+
+def glob_escape(text: str) -> str:
+    import glob
+    return glob.escape(text)
+
+
 @lru_cache(maxsize=512)
 def act_name_index(corpus: str, sha: str) -> tuple[list, dict, dict, dict]:
+    """What the acts of a corpus are called, once per commit (_act_names), read from the tree's cache where a large
+    corpus's table is kept there (_stored)."""
+    if len(names_of(corpus, sha)) < STORED_FILES:
+        return _act_names(corpus, sha)[0]
+    return _stored('act-names', corpus, sha, lambda: _act_names(corpus, sha))
+
+
+def _act_names(corpus: str, sha: str) -> tuple[tuple[list, dict, dict, dict], bool]:
     """What the acts of a corpus are called, once per commit: (entries, by word, by numbers, by code).
     entries: (words, folder, label) for an act's title, the abbreviation its title gives in brackets, its code and
     short name (folder_titles, act_titles), its folder's own name down to three levels, and, for a folder with no
@@ -2972,6 +3032,7 @@ def act_name_index(corpus: str, sha: str) -> tuple[list, dict, dict, dict]:
         if last.startswith('law-') and last[4:].isalpha() and len(last) >= 7:
             codes[last[4:]] = folder
     lone = [n for n in names if n.endswith('.md') and 1 <= n.count('/') <= 2 and LONE_ACT.fullmatch(n.rsplit('/', 2)[-2] + '/' + n.rsplit('/', 1)[-1])]
+    heads: dict = {}
     if len(lone) >= 50:
         heads = heading_index_if_built(corpus, sha) or {}
         for n in lone:
@@ -2999,7 +3060,8 @@ def act_name_index(corpus: str, sha: str) -> tuple[list, dict, dict, dict]:
     for i, (words, _folder, _label) in enumerate(entries):
         for w in set(words):
             by_word.setdefault(w, []).append(i)
-    return entries, by_word, numbers, codes
+    # (firm: nothing here waited on a heading index that was not built yet, so the table is the commit's own)
+    return (entries, by_word, numbers, codes), len(lone) < 50 or bool(heads)
 
 
 INFLECTED_MOST = 20000  # titles looked at for a name in another case, past which none is
@@ -3889,13 +3951,19 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         # A name scores by a heading's article number, by a number of the query in it, or by a word of the query in
         # it: where no heading gives a number, only the names that hold one of those (names_index: a search of
         # the corpus's names as one text) can score, and only they are gone through.
-        scored = names
+        # Whatever the number of names that hold one: a word most names hold ("na", "de", "o") sent the call through
+        # every name, each folded again and tested for each word (882,000 folds for "porez na dohodak" in Croatia,
+        # 5 s of a call, profiled 2026-11-16). The names that hold one are gone through, with the folded form the
+        # index already holds (its line), not folded again.
+        scored, prefolded = names, None
         if not by_heading and every:
             text, starts = names_index(c['path'], sha)
-            held = lines_holding(text, starts, [n_bare for _, n_bare, _ in number_rx] + plain_folded, max(2000, len(starts) // 3))
+            held = lines_holding(text, starts, [n_bare for _, n_bare, _ in number_rx] + plain_folded, len(starts))
             if held is not None:  # (in the names' own order, as they were gone through)
                 scored = [names[i] for i in held]
-        for name in scored:
+                last = len(starts) - 1
+                prefolded = [text[starts[i]:starts[i + 1] - 1] if i < last else text[starts[i]:] for i in held]
+        for at, name in enumerate(scored):
             stem = None  # worked out (stem_of) only for a name that holds a number of the query
             score = 0
             headed = by_heading.get(name)
@@ -3913,7 +3981,8 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 elif n_rx.search(low):
                     score += 2
             if plain_folded:
-                folded = fold(name)  # "Constituția" names constitutia/: folders are spelt without diacritics
+                # "Constituția" names constitutia/: folders are spelt without diacritics
+                folded = prefolded[at] if prefolded is not None else fold(name)
                 score += sum(1 for w in plain_folded if w in folded)
             # "Art. 16a" names an article: files numbered as articles (artikel/016a.md, art-016a.md) come before a
             # § 16a of some other act (all of German federal law sits beside the Grundgesetz).
@@ -3959,7 +4028,8 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             plain_here = [fold(w) for w in plain] if index is not None else plain
             for name, text in lines:
                 if name in scores or (in_scope(f"{c['path']}/{name}") and not NOT_LAW.search(name)):
-                    low = fold(text) if index is not None else text.lower()
+                    # (the heading as the index holds it folded, where it does: not folded again for each call)
+                    low = (folded_heads.get(name) or fold(text)) if index is not None else text.lower()
                     # Every word on the line, or the words as a phrase, outranks one word of several ("automatic
                     # stay" is §362's heading, not "Automatic exchange of information").
                     said_whole = phrase_folded if index is not None else phrase
