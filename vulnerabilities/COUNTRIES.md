@@ -32,12 +32,69 @@ Global-law's [vulnerability detectors](scripts/) were also run on **50 country r
 <img alt="How the hand check sorted the flags that survived the model review" src="data/countries/survivors.svg" width="900">
 </picture>
 
-**2. A run on one country finds far more than one run over everything.** Global-law's own list (9 November 2026) read 107 corpora together and covered 27 of these 50 jurisdictions; for every one of them, the run on that country alone raised more flags, by a median factor of 24 (the largest factors partly because the global list read older, smaller copies of some repositories). Most of the difference is language: the global run reads dates and references well in a few languages, and each country run taught the readers that country's forms (Japanese era dates, Turkish "tarihine kadar" with the date first, Mongolian "…-ний өдрийг хүртэл", Catalan "fins al", Vietnamese "đến hết ngày"). The rest is layout: one file per act, articles numbered § 14-9 or 3º-A, folders renamed in the middle of a history.
+**2. Every jurisdiction needed something no other did.** Going deep into one legal system at a time is what made the findings possible: each had its own way of writing a date, numbering an article, naming a currency or recording a change, and the detectors had to learn it before they could see anything. Japan writes deadlines as era years in kanji; Mongolia puts the year first and "until" after the date; Norway numbers sections by chapter (§ 14-9); Poland has superscript articles (art. 4¹); Liechtenstein's "Franken" is the Swiss franc, still legal tender; Slovakia's records hold whole histories twice. Each of these, once taught, also sharpened the detectors for every other country.
 
 <picture>
-<source media="(prefers-color-scheme: dark)" srcset="data/countries/global-vs-country-dark.svg">
-<img alt="Flags per jurisdiction: global-law&#x27;s list against the run on that country alone" src="data/countries/global-vs-country.svg" width="900">
+<source media="(prefers-color-scheme: dark)" srcset="data/countries/needs-dark.svg">
+<img alt="Which parts of the detectors each jurisdiction&#x27;s run had to teach or fix" src="data/countries/needs.svg" width="900">
 </picture>
+
+<details><summary><b>What each jurisdiction needed</b></summary>
+
+| Jurisdiction | What only it needed |
+| --- | --- |
+| Albania | Dates written with spaces or Roman-numeral months; decrees and court rulings counted as changes to the law. |
+| Algeria | The Algerian dinar is current, so it is not a dead currency; the French noun "abrogation" is not a repeal mark. |
+| Andorra | Every law held as enacted, with later changes only listed; Catalan dates ("fins al", "d'agost") and the Catalan peseta. |
+| Austria | The months "Jänner" and "Feber"; sections cited with another act's abbreviation after them ("§ 221 Abs. 1 Z 2 UGB"); the schilling. |
+| Azerbaijan | "Until" written as a suffix on the date ("31-dək", "tarixinədək"); 1,041 changes credited to several amending acts at once. |
+| Belgium | Article numbers such as 259bis-9; the Belgian franc. |
+| Bhutan | Acts held as enacted, in English; "null and void" and "vacate" are not repeal marks. |
+| Bosnia and Herzegovina | The months "januara" and "jula", dates written with spaces, "do dana"; 3,633 decrees counted as law. |
+| Brazil | Ordinal days ("1º de janeiro"), articles such as 3º-A, § 2º as a paragraph; cruzeiros written Cr$, Cz$ and NCz$. |
+| Bulgaria | Bulgarian months and "до края на"; about 350,000 files, more than one detector could hold in memory at once. |
+| Colombia | Days and years written in words with the figure in brackets; Constitutional Court rulings that strike out text count as changes to the law. |
+| Croatia | "Listopada" is October here but November in Polish; "studenog"; articles in clanak-N files. |
+| Czechia | One file per act; "a" between section numbers means "and", not a range; dates written "31. 12. 2020". |
+| El Salvador | Dates written wholly in words; the colón, dead in El Salvador but current in Costa Rica. |
+| Ethiopia | Proclamations held as first published; a proclamation that "is hereby repealed" is not a placeholder. |
+| France | 187,161 commits; notices and circulars alongside law; CFP francs still in use; the verb "lire" is not the lira. |
+| Germany | Changes dated by In-Kraft trailers; Germany-only checks for fines and missing paragraphs; an "S" after an amount is not a schilling. |
+| Greece | «έως» and «μέχρι» with an article before the date; ordinal days such as «31η.12.2020». |
+| Japan | Era-year dates in kanji (令和二年三月三十一日まで) and fiscal years; earlier versions appended out of order, so the history was rebuilt in date order. |
+| Kosovo | Scanning errors in "deri" ("deri m€"); 179 international agreements counted as law. |
+| Kyrgyzstan | Russian legal text with statya-N files and numbers such as 131-1; "за исключением" is not "excluded". |
+| Liechtenstein | "Franken" is the Swiss franc, legal tender there (2,192 false flags before the fix); "Bst." cited like Austria's "lit.". |
+| Luxembourg | Francs written "fr.", "frs" or "LUF"; 486 file names with accents. |
+| Macau | European Portuguese "até ao dia"; the Portuguese "do" (of) is not the Slavic "do" (until); the Basic Law in Chinese. |
+| Maldives | Dhivehi in Thaana, right to left, with several spellings of each month; charts drawn mirrored. |
+| Malta | The Maltese lira as "Lm" before an amount (but not Lm as a length); "Cabernet Franc" is a grape. |
+| Mexico | The Chamber of Deputies' "(sic DOF ...)" notes; Supreme Court invalidations counted as changes to the law. |
+| Moldova | The older Romanian spelling "pînă la"; Constitutional Court changes counted as law. |
+| Mongolia | Dates written year first with "хүртэл" after; zuil-N files; "хүчингүй болсонд тооцсон" (deemed repealed). |
+| Montenegro | Latin and Cyrillic month names; clan-N files; "brisan" in a deletion clause is not a repeal mark. |
+| Nauru | RONLAW history notes ("formerly section 15"); dates such as "1st January 1978". |
+| Nepal | Bikram Sambat dates (15 "until" phrases left unread); "date expired" is not a repeal mark. |
+| Netherlands | Hyphenated dates read day first ("t/m 31-12-2025"); "terugwerkende kracht tot" is not a time limit; Antillean guilders are current. |
+| New Zealand | Section letters such as 312O; schedules of consequential amendments; "$10 million". |
+| North Macedonia | The months јануари, мај, јуни and јули; "по" means "after", not "until"; dinars and marks in Cyrillic. |
+| Norway | Sections numbered by chapter (§ 14-9, § 1a-1); "til utgangen av 2027". |
+| Oman | Arabic "حتى" and "لغاية", Arabic-Indic digits, rials and baisas; charts drawn right to left. |
+| Panama | Dates with the figure in brackets ("treinta (30) de junio"); treaty lines that open with a reference. |
+| Paraguay | "Marco penal" (sentencing range) is not the Deutsche Mark; a constitutional amendment adopted by referendum. |
+| Peru | "Sin efecto suspensivo" is not a repeal; the sol de oro; references at the end of a line. |
+| Philippines | 18,417 commits of acts held as made; 1986 executive orders in force on approval; amending Acts that "hereby delete" sections. |
+| Poland | Superscript articles (art. 4¹) and art. 47o; § as a paragraph inside a code's article; "do końca 2035 r.". |
+| Qatar | Periods "ending on" a date (تنتهي في); rupees written after amounts in words. |
+| Russia | 1,785 of 1,790 acts kept as one file; inserted articles (статья 12¹, 12.1). |
+| San Marino | Italian "entro il" and "prorogato al"; lire written "L.5.000.000" or in words. |
+| Slovakia | "Do konca roka"; Slovak and Czechoslovak korunas; the histories of 1,432 acts written twice. |
+| Slovenia | "(črtan)" and "(prenehal veljati)" as repeal marks; "463.a člena"; articles lettered č, š and ž. |
+| Spain | "Hasta el día"; restatement commits credited to the act they restate; a Spain-only check of citations of acts no longer in force. |
+| Turkey | Dates written before "kadar" ("31/12/2020 tarihine kadar"); the lira with Turkish endings; folders renamed mid-history. |
+| Vietnam | Dates and references (Điều, khoản, điểm) taught from scratch; amounts in đồng; folders renamed mid-history. |
+
+</details>
 
 **3. Real mistakes come in a few shapes.** Read by hand, the likely real mistakes are mostly the same mechanical slips, whatever the legal system (counts are approximate, sorted from each case's one-line description):
 
@@ -326,7 +383,7 @@ Detector work: pins.json names the corpus language as pt so the detectors use Po
 
 <details><summary><b>Bulgaria</b>: 6,475 flags, 1 likely real</summary>
 
-Of 6,475 flags only 13 survived the model review, and all were explained by hand: 8 decrees that reach back by their own terms and 5 spent rules; the one likely drafting mistake (an 81-day gap for 2016 hologram stickers on Interior Ministry service cards) survived an earlier review only and is not among the 13 survivors, so it is listed with likely_real but not counted in survivor_groups. The 30 retroactive dates the model called dating errors were not borne out: in 1,542 of the 1,582 flagged acts the act itself names the earlier day.
+The 30 retroactive dates the model called dating errors were not borne out: in 1,542 of the 1,582 flagged acts the act itself names the earlier day.
 
 Likely real mistakes:
 
@@ -393,7 +450,7 @@ Detector work: add_root.py had to count as law the kinds decree, as-enacted, Zak
 
 <details><summary><b>Czechia</b>: 33,557 flags, 4 likely real</summary>
 
-Four likely real mistakes survived, three of them extensions that came days or weeks after the period they extended had ended; a re-read turned the feed-additive rows, first put down to unrelated dates, into one real gap. The README gives no flag count for global-law's 9 November list, only that it covered an earlier, smaller copy, so global_list_flags is null.
+Four likely real mistakes survived, three of them extensions that came days or weeks after the period they extended had ended; a re-read turned the feed-additive rows, first put down to unrelated dates, into one real gap.
 
 Likely real mistakes:
 
@@ -532,7 +589,7 @@ In the repository:
 - The README describes an earlier repository: it says the Penal Code, the Code of Criminal Procedure, case law and other municipalities' acts are not here, but the commit holds both codes, 8,849 Areios Pagos decisions, the acts of 26 other municipalities and 2 regions, and ministerial regulatory acts.
 - Each act's folder has a README.md beside its articles, so tools that scan the text read it too (5 references to repealed placeholders and one lapsed time limit in ACTS.md).
 
-Detector work: Lapsed time limits had to read «έως» and «μέχρι» with «και» and an article before the date and an ordinal day before a month name, taking flags from 49 to 385. A further round reads an ordinal day before a month in figures («31η.12.2020», 323) and the ending «-ή» before a month name (67), so all 774 such phrases in law texts are read (775 flags). «το αργότερο» (at the latest) now ranks a time limit as a deadline. The reference scan split acts between workers by Python's hash(), and the first run left out ν. 4735/2020 (71 references where there are 82); it now splits by a CRC32 checksum. add_root.py counts decree, as-enacted and publisher commits as law; without them the history detectors would read 208 of the 920 commits that change law. The repository's own notes (README.md, ACTS.md, REPRODUCE.md) are counted as other, not law.
+Detector work: Lapsed time limits had to read «έως» and «μέχρι» with «και» and an article before the date and an ordinal day before a month name, taking flags from 49 to 385. A further round reads an ordinal day before a month in figures («31η.12.2020», 323) and the ending «-ή» before a month name (67), so all 774 such phrases in law texts are read (775 flags). «το αργότερο» (at the latest) now ranks a time limit as a deadline. The reference scan split acts between workers by Python's hash(), and the first run left out ν. 4735/2020 (71 references where there are 82); it now splits by a CRC32 checksum. add_root.py counts decree, as-enacted and publisher commits as law; without them the history detectors would read 208 of the 920 commits that change law.
 
 [Full results](https://github.com/lexifina/greece-law/tree/main/vulnerabilities)
 
@@ -540,7 +597,7 @@ Detector work: Lapsed time limits had to read «έως» and «μέχρι» with
 
 <details><summary><b>Japan</b>: 17,940 flags, 3 likely real</summary>
 
-Global-law's own list could not read Japanese dates and found only 32 same-day conflicts; once the detectors were taught era-year kanji dates, Japan's run found two likely drafting mistakes and eight empty periods where an extension took effect after the time limit had run out. The 14 survivors that were the same amount appearing by coincidence in another act have no matching key and are counted in other.
+The 14 survivors that were the same amount appearing by coincidence in another act have no matching key and are counted in other.
 
 Likely real mistakes:
 
@@ -667,7 +724,7 @@ In the repository:
 - Three laws run on into the next law where the Boletim Oficial prints them back to back: Law 10/2018 ends with the heading, title and Article 1 of Law 11/2018, Law 9/2022 with the title and enacting formula of Law 10/2022, and Law 9/2024 with the title and enacting formula of Law 10/2024.
 - Two repealed articles of the Commercial Code, Articles 67 and 68 (repealed by Law 6/2000), are held with their full text and the note "*Revogado: Lei n.º 6/2000" as their last line, although REPRODUCE.md says a number the site marks as revoked keeps only its number.
 
-Detector work: patch_mo.py taught the time-limit search "até ao dia 30 de Junho de 2027" (European Portuguese puts "ao" between "até" and "dia"). patch_mo.py stopped the time-limit search reading the Portuguese "do" (of the) as the Slavic "do" (until), so "a partir do dia 1 de Janeiro de 2021" is no longer read as a rule ending that day; lapsed time limits went from 7 to 4 (4 gone, 1 new). patch_mo.py stopped the duplicate-numbering search taking a wrapped line that begins with a reference ("artigo 71.º da Lei Básica ...") for an article heading; duplicate numbering went from 8 flags to 0. patch_mo.py made the reference scan read "artigo 5.º" with the ordinal sign after a full stop, so "artigos 7.º a 9.º" and "artigo 3.º-A" are read whole; no count changed. pins.json names the corpus language as Portuguese, since global-law's list of corpora gave none.
+Detector work: patch_mo.py taught the time-limit search "até ao dia 30 de Junho de 2027" (European Portuguese puts "ao" between "até" and "dia"). patch_mo.py stopped the time-limit search reading the Portuguese "do" (of the) as the Slavic "do" (until), so "a partir do dia 1 de Janeiro de 2021" is no longer read as a rule ending that day; lapsed time limits went from 7 to 4 (4 gone, 1 new). patch_mo.py stopped the duplicate-numbering search taking a wrapped line that begins with a reference ("artigo 71.º da Lei Básica ...") for an article heading; duplicate numbering went from 8 flags to 0. patch_mo.py made the reference scan read "artigo 5.º" with the ordinal sign after a full stop, so "artigos 7.º a 9.º" and "artigo 3.º-A" are read whole; no count changed.
 
 [Full results](https://github.com/lexifina/macau-law/tree/main/vulnerabilities)
 
@@ -675,14 +732,14 @@ Detector work: patch_mo.py taught the time-limit search "até ao dia 30 de Junho
 
 <details><summary><b>Maldives</b>: 11 flags, 0 likely real</summary>
 
-Both survivors are spent periods in Law No. 29/2016 (an airport service charge and the first period of the airport development fee, both ending 31 December 2021 and followed by later rules), flagged because the Act is held in one 2024 version; none of the 11 flags, all found only after Dhivehi dates were taught to the detectors, is a mistake. Global-law's 9 November list had no flags for the Maldives, recorded here as 0.
+Both survivors are spent periods in Law No. 29/2016 (an airport service charge and the first period of the airport development fee, both ending 31 December 2021 and followed by later rules), flagged because the Act is held in one 2024 version; none of the 11 flags, all found only after Dhivehi dates were taught to the detectors, is a mistake.
 
 In the repository:
 
 - In Law No. 29/2016 (law-131/text.md), Article 3(a) gives the airport development fee in three periods, but the first period, 1 May 2017 to 31 December 2021, has no table of rates, so the text does not say what the fee was in those years (not compared with mvlaw.gov.mv).
 - The Penal Code's Article 10 (unnumbered item 1) version dated 5 May 2015 and credited to Law No. 6/2015 already holds text referring to Law No. 6/2015 as passed, the unexplained version of 16 July 2015 drops it, and the version of 3 September 2015 credited to Law No. 12/2015 brings it back, while Law No. 12/2015 is also credited with a change on 5 May 2015.
 
-Detector work: patch_dv.py taught the time-limit search Dhivehi dates in Thaana, a day, a Dhivehi month in its several spellings and a year followed by "until" ("ނިޔަލަށް"); lapsed time limits went from 0 to 11. patch_dv.py taught the amount scan amounts in rufiyaa and US dollars written with the amount in words in brackets and a case ending on the currency; it found no stale amounts. pins.json names the corpus language as Dhivehi, since global-law's list of corpora gave none. flags_chart.py draws the Dhivehi chart right to left and measures Thaana vowel signs as taking no width.
+Detector work: patch_dv.py taught the time-limit search Dhivehi dates in Thaana, a day, a Dhivehi month in its several spellings and a year followed by "until" ("ނިޔަލަށް"); lapsed time limits went from 0 to 11. patch_dv.py taught the amount scan amounts in rufiyaa and US dollars written with the amount in words in brackets and a case ending on the currency; it found no stale amounts. flags_chart.py draws the Dhivehi chart right to left and measures Thaana vowel signs as taking no width.
 
 [Full results](https://github.com/lexifina/maldives-law/tree/main/vulnerabilities)
 
@@ -756,7 +813,7 @@ Detector work: add_root.py had to count as law an act's first text (as-enacted, 
 
 <details><summary><b>Mongolia</b>: 140 flags, 0 likely real</summary>
 
-Both survivors are tax and customs exemption laws whose own last article makes them apply from a day before they were adopted, which the hand check judged lawful; all 7 retroactive-date flags match global-law's 9 November list. The run's real findings were a repealing law dated a year before its adoption and four Criminal Code articles of 2002 filed under the next article's number.
+The run's real findings were a repealing law dated a year before its adoption and four Criminal Code articles of 2002 filed under the next article's number.
 
 Left open:
 
@@ -767,7 +824,7 @@ In the repository:
 - The Law of 29 May 2015 repealing the Law on the procedure for drafting and submitting laws is dated 10 February 2015, the in-force day legalinfo.mn gives, which is before it was adopted, although its Article 2 makes it apply from the day the revised Law on Legislation takes effect; the site's day looks a year off.
 - In the Criminal Code of 3 January 2002, 4 articles (190, 220, 250 and 260) are headed "191", "221", "251" and "261", so article 190 is filed as zuil-191.md and there is no zuil-190.md, zuil-220.md, zuil-250.md or zuil-260.md.
 
-Detector work: patch_mn.py taught the time-limit search Mongolian dates, written year first with "хүртэл" or "дуустал" after the date; it now reads all 191 such dates in the law texts and "2000 он дуустал" twice, and lapsed time limits went from 1 (in the English README) to 132. patch_mn.py gave the reference scan keys for the article files (zuil-21.md, zuil-19-1.md), made it read "энэ хуулийн 7 дугаар зүйл", and counts only "энэ хуулийн", "энэ журмын" and "энэ дүрмийн" as the act's own. patch_mn.py made "хүчингүй болсонд тооцсон" (deemed repealed) a repeal marker, so references to repealed placeholders went from 0 to 1. add_root.py tells acts of the same title apart by the commit author, which adds the day of adoption, so retroactive dates went from 4 mixed flags to 7, one per act, as in global-law's own list. add_root.py counts the 544 texts as adopted (Kind: original) as law and leaves out the 435 current texts (Kind: consolidated), which are dated by the day they were read, not by any change.
+Detector work: patch_mn.py gave the reference scan keys for the article files (zuil-21.md, zuil-19-1.md), made it read "энэ хуулийн 7 дугаар зүйл", and counts only "энэ хуулийн", "энэ журмын" and "энэ дүрмийн" as the act's own. patch_mn.py made "хүчингүй болсонд тооцсон" (deemed repealed) a repeal marker, so references to repealed placeholders went from 0 to 1. add_root.py counts the 544 texts as adopted (Kind: original) as law and leaves out the 435 current texts (Kind: consolidated), which are dated by the day they were read, not by any change.
 
 [Full results](https://github.com/lexifina/mongolia-law/tree/main/vulnerabilities)
 
@@ -860,7 +917,7 @@ Detector work: A date written with hyphens is read day first for Dutch ("t/m 31-
 
 <details><summary><b>New Zealand</b>: 312 flags, 15 likely real</summary>
 
-None of the 11 survivors is a mistake, but reading the 172 placeholder references and 5 dead fines by hand found 24 flags in 15 sections of 7 Acts that look like cross-references left behind when the cited section was repealed, six of them by the same Act that amended the citing section that day. The 7 stale-amount survivors, headed "The same figure for a different measure", fit no listed group and are counted as other.
+None of the 11 survivors is a mistake, but reading the 172 placeholder references and 5 dead fines by hand found 24 flags in 15 sections of 7 Acts that look like cross-references left behind when the cited section was repealed, six of them by the same Act that amended the citing section that day.
 
 Likely real mistakes:
 
@@ -1020,7 +1077,7 @@ Detector work: An amending Act's own section that deletes a section of the Act i
 
 <details><summary><b>Poland</b>: 1,028 flags, 1 likely real</summary>
 
-None of the 18 survivors is a mistake in Polish law (10 of the 13 lawful ones are acts that state their own retroactive commencement); the one likely drafting mistake, a fine in the Commercial Companies Code still tied to the repealed share register book of art. 341, came from reading by hand the references to repealed placeholders the model does not review. The one survivor that is the same amount in an unrelated act is counted as other, and global_list_flags is null because global-law's 9 November 2026 list had no flags for Poland.
+None of the 18 survivors is a mistake in Polish law (10 of the 13 lawful ones are acts that state their own retroactive commencement); the one likely drafting mistake, a fine in the Commercial Companies Code still tied to the repealed share register book of art. 341, came from reading by hand the references to repealed placeholders the model does not review.
 
 Likely real mistakes:
 
@@ -1042,8 +1099,6 @@ Detector work: patch_pl.py reads "nie później niż" as a deadline and "do koń
 </details>
 
 <details><summary><b>Qatar</b>: 809 flags, 0 likely real</summary>
-
-None of the 809 flags is a drafting mistake in Qatari law: most retroactive dates (666 of 793) are acts that take effect on their day of issue, which Constitution Article 142 allows, and reading the flags turned up repository problems instead, chiefly 22 acts dated in force too early, among them Law No. 13 of 2026 shown as in force before 1 January 2027. global_list_flags is null because global-law's 9 November 2026 list had no flags for Qatar.
 
 In the repository:
 
@@ -1108,7 +1163,7 @@ Detector work: The time-limit search now reads Italian deadlines and extensions 
 
 <details><summary><b>Slovakia</b>: 38,744 flags, 7 likely real</summary>
 
-Slovakia's run found seven likely real mistakes: two references to sections deleted while the citing provisions were left alone (Allotment Gardens Act, Securities Act) and five time limits moved only after they had passed, which the empty-period detector caught. The 12 survivors that are the same figure in another act are counted as other.
+Slovakia's run found seven likely real mistakes: two references to sections deleted while the citing provisions were left alone (Allotment Gardens Act, Securities Act) and five time limits moved only after they had passed, which the empty-period detector caught.
 
 Likely real mistakes:
 
@@ -1155,7 +1210,6 @@ In the repository:
 
 - 364 articles lettered č, š or ž in 220 acts have no heading line of their own and sit in the file of the article lettered c, s or z (for example Articles 52.c and 52.č of the Zakon o brezplačni pravni pomoči in one file).
 - 502 headings in 91 acts written with no space before the bracket ("31. člen(črtan)"), 486 of them for articles that are gone, sit at the end of the previous article's file; the 3 references to deleted provisions are these headings.
-- Articles replaced by an amendment went missing from the history for years: Article 22 of the Zakon o detektivski dejavnosti sat in Article 21's file from 29 November 2002 to 24 April 2010, and Article 7 of the Zakon o preprečevanju dela in zaposlovanja na črno in Article 6's file from 2 December 2006 to 12 April 2013, so git log and git blame show them as deleted.
 - Official consolidated texts (UPB) are held as their own acts dated by the last amendment they consolidate, so 28 of the 37 retroactive dates are such texts, and all 48 repeal gaps are article text held for a time in another file.
 
 Detector work: The detectors were taught that PIS marks a gone article "(črtan)" or "(prenehal veljati)", besides "(razveljavljen)", and that an article where only some paragraphs are "(črtan)" is not gone. "drugi odstavek 3. člena" now cites Article 3, as the word "odstavek" had been taken for a Turkish series marker. "463.a člena" is now read as Article 463.a and "18.o člen" as Article 18.o, not 18. "14. členu Zakona o delovnih razmerjih" is now read as naming another act, and "4. člani" (members) is no longer read as an article.
