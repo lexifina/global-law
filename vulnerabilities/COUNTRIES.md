@@ -2,11 +2,6 @@
 
 Global-law's [vulnerability detectors](scripts/) were also run on **50 country repositories one at a time**: each country's own commits as the history, its own language taught to the date and reference readers, a language model's review with a rebuttal pass, and every surviving flag read by hand in the repository's texts and, where it mattered, against the official gazette. Each country's results are in its own `vulnerabilities/` folder, in its language and in English, linked in the table below. This page puts together what those 50 runs found and what running them taught us. Counts are as of 16 November 2026.
 
-<picture>
-<source media="(prefers-color-scheme: dark)" srcset="data/countries/funnel-dark.svg">
-<img alt="From 285,589 flags to 113 likely real mistakes across 50 jurisdictions" src="data/countries/funnel.svg" width="900">
-</picture>
-
 ## In numbers
 
 | | |
@@ -25,21 +20,33 @@ Global-law's [vulnerability detectors](scripts/) were also run on **50 country r
 
 ## What we learned
 
-**1. Most of what survives a model review is still not a mistake.** Of the 1,304 flags that survived the model's rebuttal, the hand check found 54 likely real mistakes. The rest were lawful (295: a deliberate cut-off date, a gap the legislature itself cured), spent rules that ran out as planned (243), artefacts of how the repository is built or dated (400), detector misreadings (102), texts that are not law (7) and others, most of them the same amount appearing in an unrelated rule (126). The model is a filter, not a judge: the hand check is where a flag becomes a finding, and many of the real mistakes came from the categories the model does not review at all (fines and references to repealed articles), read by hand.
+### 1. A flag is not a finding
+
+The detectors raised 285,589 flags. A language model reviewed 6,535 of them, argued for each and then against it, and 1,304 survived its rebuttal. Every one of those was then read by hand in the repository's text and history, and only 54 held up as likely real mistakes; 77 more need the official gazette to decide.
+
+What the other 1,173 were matters as much as the 54. The largest group, 400, came from how a repository is built or dated, not from the law (see point 7). Then 295 were lawful: a cut-off date the legislature meant, a gap it cured with retroactive wording. 243 were spent rules that ran out as planned, such as transitional periods and one-off programmes. 102 were detector misreadings, and 126 were mostly the same amount turning up in an unrelated rule. A model can argue its way past a mistake as easily as into one, so it filters the flags and the hand check decides.
+
+The model also does not see everything. Another 59 likely real mistakes came from the categories it does not review: fines that punish breaches of repealed articles, and references to provisions that no longer exist. These were found by reading the flags by hand, which brings the total to 113.
 
 <picture>
-<source media="(prefers-color-scheme: dark)" srcset="data/countries/survivors-dark.svg">
-<img alt="How the hand check sorted the flags that survived the model review" src="data/countries/survivors.svg" width="900">
+<source media="(prefers-color-scheme: dark)" srcset="data/countries/funnel-dark.svg">
+<img alt="1,304 survivors of the model review as squares: 54 likely real, 77 open, the rest not mistakes" src="data/countries/funnel.svg" width="900">
 </picture>
 
-**2. Every jurisdiction needed something no other did.** Going deep into one legal system at a time is what made the findings possible: each had its own way of writing a date, numbering an article, naming a currency or recording a change, and the detectors had to learn it before they could see anything. Japan writes deadlines as era years in kanji; Mongolia puts the year first and "until" after the date; Norway numbers sections by chapter (§ 14-9); Poland has superscript articles (art. 4¹); Liechtenstein's "Franken" is the Swiss franc, still legal tender; Slovakia's records hold whole histories twice. Each of these, once taught, also sharpened the detectors for every other country.
+### 2. Each country's forms had to be taught before anything could be seen
+
+A detector reads text through patterns: how a date is written, what a deadline sounds like, how a currency is named. Out of the box, they read the forms of the languages they were written for. Run on one country at a time, they first found almost nothing in many places. That was not because those countries' law had no lapsed time limits or dead currencies. The detectors could not yet read the way those were written.
+
+The chart shows 27 such cases, each the count in one category before and after the detectors learned that country's forms. Together they added 35,866 flags that had been invisible. Slovakia's dead currencies went from none to 9,697 once "Sk" and "slovenských korún" were read; Turkey's lapsed time limits went from 1 to 4,091 once the date before "kadar" was. Vietnam and the Maldives went from none to their first, in Vietnamese and in Thaana.
 
 <picture>
-<source media="(prefers-color-scheme: dark)" srcset="data/countries/needs-dark.svg">
-<img alt="Which parts of the detectors each jurisdiction&#x27;s run had to teach or fix" src="data/countries/needs.svg" width="900">
+<source media="(prefers-color-scheme: dark)" srcset="data/countries/depth-dark.svg">
+<img alt="Flags per country and category before and after the detectors learned that country&#x27;s forms" src="data/countries/depth.svg" width="900">
 </picture>
 
-<details><summary><b>What each jurisdiction needed</b></summary>
+Each country needed at least one thing no other did:
+
+<details><summary><b>What only each jurisdiction needed</b></summary>
 
 | Jurisdiction | What only it needed |
 | --- | --- |
@@ -96,44 +103,92 @@ Global-law's [vulnerability detectors](scripts/) were also run on **50 country r
 
 </details>
 
-**3. Real mistakes come in a few shapes.** Read by hand, the likely real mistakes are mostly the same mechanical slips, whatever the legal system (counts are approximate, sorted from each case's one-line description):
+### 3. Real mistakes come in a few shapes
 
-- A reference left pointing at a repealed or moved provision: 51
-- A time limit extended only after it had run out: 35
-- A fine or penalty pointing at a repealed or missing provision: 16
-- A gap left by a political choice (a decree-law not validated, a veto): 6
-- Other slips (a placeholder never filled in, a provision printed twice): 4
-- A rule in force before it was published: 1
+The 113 likely real mistakes are spread over 27 jurisdictions. Read by hand, almost all of them are one of a few mechanical slips (sorted from each case's one-line description, so the counts are approximate):
 
-The commonest are the late extension, where a deadline is moved by an act that takes effect only after the deadline has passed, with no retroactive wording, leaving days or months in which the rule did not apply; and the leftover reference, where an amending act repeals an article and edits the provisions around it but leaves one that still cites it.
+- **A reference left pointing at a repealed or moved provision**: 51
+- **A time limit extended only after it had run out**: 35
+- **A fine or penalty pointing at a repealed or missing provision**: 16
+- **A gap left by a political choice (a decree-law not validated, a veto)**: 6
+- **Other slips (a placeholder never filled in, a provision printed twice)**: 4
+- **A rule in force before it was published**: 1
 
 <picture>
-<source media="(prefers-color-scheme: dark)" srcset="data/countries/likely-mistakes-dark.svg">
-<img alt="Likely real mistakes by jurisdiction" src="data/countries/likely-mistakes.svg" width="900">
+<source media="(prefers-color-scheme: dark)" srcset="data/countries/shapes-dark.svg">
+<img alt="Likely real mistakes per jurisdiction, by shape" src="data/countries/shapes.svg" width="900">
 </picture>
 
-**4. Each legal system leaves its own fingerprint.** The same detectors raise very different mixes. Lapsed time limits dominate where acts are consolidated with every dated version; retroactive dates dominate where acts are held as published and dated by the day they were made; dead currencies follow currency changes (the Slovak koruna, the French franc, the Brazilian cruzeiros). Some of the differences are not in the law at all but in how each repository records it.
+One example of each:
+
+- **Leftover reference.** Brazil's Law 4,595/1964 still makes controllers subject to Article 44(8), but Law 13,506/2017 repealed all of Article 44 from 14 November 2017, and nothing redirects the reference.
+- **Late extension.** Spain's 21% corporate withholding rate ran until 31 December 2013. Royal Decree-law 1/2014 extended it only from 26 January 2014, with no retroactive wording, so from 1 to 25 January the rate was back at 19%.
+- **Fine without a basis.** Turkey's Law 1219 on medical practice, Article 68, was rewritten in 2008 and still fines nurses who go beyond the scope of practice in Article 64, which was repealed in 1954.
+- **Political gap.** After Spain's Congress declined to validate Royal Decree-laws 9/2024 and 16/2025, no new suspension of evictions could be ordered from 23 to 29 January 2025 or from 28 January to 4 February 2026. This gap was chosen, not overlooked.
+- **In force before publication.** A Dutch order in council raised the maximum fines in art. 23(4) of the Penal Code from 1 January 2022. It was published on 5 January 2022, and the Constitution does not let it take effect before publication.
+- **Other slips.** Austria's Green Electricity Act, § 57g, still cites the amending act as "BGBl. I Nr. x/y", a drafting placeholder that was never filled in, four times in two paragraphs.
+
+The late extension is the easiest to miss. Each act is correct when read alone. Only the dates side by side show that the old deadline had passed before the new one was made. Albania's has the usual timeline:
+
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="data/countries/late-extension-dark.svg">
+<img alt="Timeline of Albania&#x27;s VKM 98/2009 deadline: 127 days with no rule between the old deadline and the extension" src="data/countries/late-extension.svg" width="900">
+</picture>
+
+### 4. Each legal system leaves its own fingerprint
+
+The same detectors produce a different mix of flags in every country. Lapsed time limits are the largest category in 32 of the 50, because every legal system sets deadlines and extends them. The other 18 each lead with something that says where their law comes from:
+
+- **Retroactive or pre-publication dates** (Ethiopia, Montenegro, Philippines, Qatar): repositories that hold acts as published, where an act dated by the day it was signed seems to take effect before it was published.
+- **Dead currencies** (Andorra, El Salvador, Luxembourg): El Salvador's colón, replaced by the dollar in 2001, and the francs and pesetas still named in acts that were never amended.
+- **References to repealed placeholders** (Belgium, Malta, New Zealand, Spain): systems that keep a repealed article as a numbered placeholder ("[Repealed]", "derogado") rather than deleting it, so later text can still point at it.
+- **Duplicate numbering** (Bhutan, Brazil, Panama): the same number used twice, often where articles were inserted between others (art. 4-A, 4¹) or a provision was printed twice.
+- **References to deleted provisions** (Algeria, Paraguay), **repeal gaps** (France) and **same-day conflicts** (Vietnam): where the history itself is the main source of flags.
+
+Some of these differences come from the repository, not the law. A repository that dates acts by signature produces retroactive flags, and one that keeps a whole act in one file produces reference flags. Point 7 covers those.
 
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="data/countries/mix-dark.svg">
-<img alt="Each jurisdiction&#x27;s mix of flags by category" src="data/countries/mix.svg" width="900">
+<img alt="Each jurisdiction&#x27;s flags by category, grouped by its largest category" src="data/countries/mix.svg" width="900">
 </picture>
 
-**5. Every new language broke something.** Running the detectors country by country turned up 179 bugs; 143 are fixed and 36 are still open (listed in the bug file below; the ones that affect a country's numbers are stated in its README). Most were blind spots for a language (dates and amounts written in words, superscript article numbers like art. 4¹, Bikram Sambat dates) or false matches ("lira" inside "liraglutid", the French verb "lire", "Franken" the wine region, "pallati" read as the Latvian lats, the Algerian dinar, which is still in use). Each fix is a small patch to the detectors; there are now 39, applied in order.
+### 5. Every new language broke something, and every fix helped the next
+
+Running the detectors country by country turned up 179 bugs; 143 are fixed and 36 are still open (each country's README states the ones that affect its numbers). Read one by one, they split almost evenly: 57 blind spots, where real text was not read; 57 false matches, where text was read as something it is not; and 65 in the machinery of running, building and re-running.
 
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="data/countries/bugs-dark.svg">
-<img alt="Bugs found while running the detectors country by country, by part of the pipeline" src="data/countries/bugs.svg" width="900">
+<img alt="Bugs by part of the pipeline: blind spots, false matches and plumbing" src="data/countries/bugs.svg" width="900">
 </picture>
 
-**6. History decides what can be found.** Of the 50 repositories, 16 hold dated versions of their acts, 22 hold some, and 12 hold each act once. Without a history, the detectors that compare versions (repeal gaps, same-day conflicts, empty periods, references to deleted provisions) have nothing to compare and only the text detectors work; those READMEs say so.
+The false matches matter as much as the blind spots. Unfixed, they filled the results with noise. In 15 cases, teaching the detectors what a country's words do *not* mean removed 7,818 false flags. Liechtenstein's "Franken" is the Swiss franc, still legal tender, and that one fix took its dead-currency count from 2,259 to 12. Every Belgian "dead currency" was the word "intitulé" read as the Peruvian inti. "Lira" matched inside "liraglutid", and Poland's "§ 2¹" looked like a second "§ 2".
 
 <picture>
-<source media="(prefers-color-scheme: dark)" srcset="data/countries/flags-by-jurisdiction-dark.svg">
-<img alt="Flags by jurisdiction" src="data/countries/flags-by-jurisdiction.svg" width="900">
+<source media="(prefers-color-scheme: dark)" srcset="data/countries/false-matches-dark.svg">
+<img alt="Flags per country and category before and after the detectors learned what that country&#x27;s words do not mean" src="data/countries/false-matches.svg" width="900">
 </picture>
 
-**7. The repositories need checking as much as the law.** The hand check found 144 problems in the repositories themselves: acts dated by the day they were signed instead of the day they took effect, histories split in two when act folders were renamed, articles filed inside the previous article's file, page headers left inside the text, quotation marks turned into letters, whole histories written twice. Several explain flags that looked like mistakes in the law.
+Each fix is a small patch to the detectors, and there are now 39, applied in order. Each one also applies to every country run after it.
+
+### 6. History decides what can be found
+
+Five of the detector categories compare versions rather than read one text: an article repealed while others still cite it, two changes on the same day, an amount left behind by an update. Those need a history. Of the 50 repositories, 16 hold every act with its dated versions, 22 hold versions for some acts, and 12 hold each act once, as enacted.
+
+Where the history is full, the version-comparing detectors raise a median of 32% of a run's flags (and 93% in Paraguay). Where it is partial, they raise none at all in 12 of the 22. Where each act is held once, they have nothing to compare and none raise anything. Those runs can only find what is visible in a single text. Their READMEs say so, and a country with few flags may simply have a short record.
+
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="data/countries/history-dark.svg">
+<img alt="Share of flags from the version-comparing detectors, by how much history each repository holds" src="data/countries/history.svg" width="900">
+</picture>
+
+### 7. The repositories need checking as much as the law
+
+The hand check found 144 problems in the repositories themselves. They explain a large share of the flags that looked like mistakes: 400 of the survivors in point 1. By kind: 60 are files and layout (text in the wrong file, a whole act in one article's file, stray files read as law), 49 are dating (acts dated by signature instead of entry into force, changes credited to the wrong amending act), 19 are text missing or held twice, and 16 are damaged text (HTML entities, replacement characters, quotation marks turned into letters).
+
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="data/countries/repositories-dark.svg">
+<img alt="Problems found in the repositories, by kind, each with an example" src="data/countries/repositories.svg" width="900">
+</picture>
 
 How these are being handled:
 
