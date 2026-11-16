@@ -1,6 +1,6 @@
 # Country by country
 
-Global-law's [vulnerability detectors](scripts/) were also run on **50 country repositories one at a time**: each country's own commits as the history, its own language taught to the date and reference readers, a language model's review with a rebuttal pass, and every surviving flag read by hand in the repository's texts and, where it mattered, against the official gazette. Each country's results are in its own `vulnerabilities/` folder, in its language and in English, linked in the table below. This page puts together what those 50 runs found and what running them taught us. Counts are as of 16 November 2026.
+Global-law's [vulnerability detectors](scripts/) were also run on **50 country repositories one at a time**: each country's own commits as the history, its own language taught to the date and reference readers, a language model's review with a rebuttal pass, and every surviving flag read by hand in the repository's texts and, where it mattered, against the official gazette. Each country's results are in its own `vulnerabilities/` folder, in its language and in English, linked from the list of jurisdictions below. This page puts together what those 50 runs found and what running them taught us. Counts are as of 16 November 2026.
 
 ## In numbers
 
@@ -244,62 +244,9 @@ The shared schemas stay in one place, so a theorem proved once covers every coun
 
 ## The 50 jurisdictions
 
-| Jurisdiction | Flags | Reviewed | Survived | Likely real | Open | Folder |
-| --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Albania | 2,953 | 267 | 31 | 3 | 4 | [albania-law](https://github.com/lexifina/albania-law/tree/main/vulnerabilities) |
-| Algeria | 20 | 16 | 1 | 0 | 3 | [algeria-law](https://github.com/lexifina/algeria-law/tree/main/vulnerabilities) |
-| Andorra | 588 | 47 | 3 | 0 | 0 | [andorra-law](https://github.com/lexifina/andorra-law/tree/main/vulnerabilities) |
-| Austria | 2,181 | 200 | 32 | 5 | 0 | [austria-law](https://github.com/lexifina/austria-law/tree/main/vulnerabilities) |
-| Azerbaijan | 934 | 165 | 25 | 0 | 0 | [azerbaijan-law](https://github.com/lexifina/azerbaijan-law/tree/main/vulnerabilities) |
-| Belgium | 994 | 57 | 6 | 1 | 0 | [belgium-law](https://github.com/lexifina/belgium-law/tree/main/vulnerabilities) |
-| Bhutan | 1 | 0 | 0 | 0 | 0 | [bhutan-law](https://github.com/lexifina/bhutan-law/tree/main/vulnerabilities) |
-| Bosnia and Herzegovina | 2,766 | 180 | 14 | 0 | 1 | [bosnia-and-herzegovina-law](https://github.com/lexifina/bosnia-and-herzegovina-law/tree/main/vulnerabilities) |
-| Brazil | 4,900 | 238 | 44 | 5 | 0 | [brazil-law](https://github.com/lexifina/brazil-law/tree/main/vulnerabilities) |
-| Bulgaria | 6,475 | 196 | 13 | 1 | 0 | [bulgaria-law](https://github.com/lexifina/bulgaria-law/tree/main/vulnerabilities) |
-| Colombia | 1,811 | 226 | 44 | 2 | 0 | [colombia-law](https://github.com/lexifina/colombia-law/tree/main/vulnerabilities) |
-| Croatia | 31,047 | 184 | 7 | 1 | 2 | [croatia-law](https://github.com/lexifina/croatia-law/tree/main/vulnerabilities) |
-| Czechia | 33,557 | 212 | 61 | 4 | 0 | [czechia-law](https://github.com/lexifina/czechia-law/tree/main/vulnerabilities) |
-| El Salvador | 450 | 40 | 0 | 3 | 7 | [el-salvador-law](https://github.com/lexifina/el-salvador-law/tree/main/vulnerabilities) |
-| Ethiopia | 6 | 5 | 1 | 0 | 0 | [ethiopia-law](https://github.com/lexifina/ethiopia-law/tree/main/vulnerabilities) |
-| France | 35,971 | 612 | 254 | 6 | 0 | [france-law](https://github.com/lexifina/france-law/tree/main/vulnerabilities) |
-| Germany | 15,737 | 391 | 160 | 12 | 3 | [germany-law](https://github.com/lexifina/germany-law/tree/main/vulnerabilities) |
-| Greece | 933 | 129 | 29 | 0 | 0 | [greece-law](https://github.com/lexifina/greece-law/tree/main/vulnerabilities) |
-| Japan | 17,940 | 358 | 126 | 3 | 10 | [japan-law](https://github.com/lexifina/japan-law/tree/main/vulnerabilities) |
-| Kosovo | 3,359 | 111 | 22 | 0 | 0 | [kosovo-law](https://github.com/lexifina/kosovo-law/tree/main/vulnerabilities) |
-| Kyrgyzstan | 362 | 80 | 5 | 0 | 0 | [kyrgyzstan-law](https://github.com/lexifina/kyrgyzstan-law/tree/main/vulnerabilities) |
-| Liechtenstein | 1,313 | 43 | 2 | 9 | 0 | [liechtenstein-law](https://github.com/lexifina/liechtenstein-law/tree/main/vulnerabilities) |
-| Luxembourg | 4,389 | 104 | 14 | 1 | 0 | [luxembourg-law](https://github.com/lexifina/luxembourg-law/tree/main/vulnerabilities) |
-| Macau | 4 | 4 | 0 | 0 | 0 | [macau-law](https://github.com/lexifina/macau-law/tree/main/vulnerabilities) |
-| Maldives | 11 | 11 | 2 | 0 | 0 | [maldives-law](https://github.com/lexifina/maldives-law/tree/main/vulnerabilities) |
-| Malta | 1,309 | 223 | 76 | 3 | 2 | [malta-law](https://github.com/lexifina/malta-law/tree/main/vulnerabilities) |
-| Mexico | 1,177 | 132 | 13 | 2 | 0 | [mexico-law](https://github.com/lexifina/mexico-law/tree/main/vulnerabilities) |
-| Moldova | 222 | 52 | 0 | 0 | 0 | [moldova-law](https://github.com/lexifina/moldova-law/tree/main/vulnerabilities) |
-| Mongolia | 140 | 56 | 2 | 0 | 1 | [mongolia-law](https://github.com/lexifina/mongolia-law/tree/main/vulnerabilities) |
-| Montenegro | 9,956 | 187 | 7 | 0 | 3 | [montenegro-law](https://github.com/lexifina/montenegro-law/tree/main/vulnerabilities) |
-| Nauru | 11 | 10 | 0 | 0 | 1 | [nauru-law](https://github.com/lexifina/nauru-law/tree/main/vulnerabilities) |
-| Nepal | 6 | 6 | 1 | 0 | 0 | [nepal-law](https://github.com/lexifina/nepal-law/tree/main/vulnerabilities) |
-| Netherlands | 16,772 | 265 | 46 | 3 | 2 | [netherlands-law](https://github.com/lexifina/netherlands-law/tree/main/vulnerabilities) |
-| New Zealand | 312 | 111 | 11 | 15 | 1 | [new-zealand-law](https://github.com/lexifina/new-zealand-law/tree/main/vulnerabilities) |
-| North Macedonia | 2,476 | 80 | 15 | 0 | 5 | [north-macedonia-law](https://github.com/lexifina/north-macedonia-law/tree/main/vulnerabilities) |
-| Norway | 945 | 101 | 5 | 0 | 0 | [norway-law](https://github.com/lexifina/norway-law/tree/main/vulnerabilities) |
-| Oman | 4 | 4 | 0 | 1 | 0 | [oman-law](https://github.com/lexifina/oman-law/tree/main/vulnerabilities) |
-| Panama | 168 | 40 | 4 | 0 | 0 | [panama-law](https://github.com/lexifina/panama-law/tree/main/vulnerabilities) |
-| Paraguay | 14 | 14 | 0 | 4 | 0 | [paraguay-law](https://github.com/lexifina/paraguay-law/tree/main/vulnerabilities) |
-| Peru | 66 | 49 | 1 | 4 | 0 | [peru-law](https://github.com/lexifina/peru-law/tree/main/vulnerabilities) |
-| Philippines | 5,734 | 80 | 13 | 0 | 0 | [philippines-law](https://github.com/lexifina/philippines-law/tree/main/vulnerabilities) |
-| Poland | 1,028 | 116 | 18 | 1 | 1 | [poland-law](https://github.com/lexifina/poland-law/tree/main/vulnerabilities) |
-| Qatar | 809 | 52 | 7 | 0 | 0 | [qatar-law](https://github.com/lexifina/qatar-law/tree/main/vulnerabilities) |
-| Russia | 2,437 | 46 | 2 | 1 | 2 | [russia-law](https://github.com/lexifina/russia-law/tree/main/vulnerabilities) |
-| San Marino | 461 | 40 | 6 | 1 | 1 | [san-marino-law](https://github.com/lexifina/san-marino-law/tree/main/vulnerabilities) |
-| Slovakia | 38,744 | 203 | 63 | 7 | 3 | [slovakia-law](https://github.com/lexifina/slovakia-law/tree/main/vulnerabilities) |
-| Slovenia | 4,774 | 132 | 13 | 0 | 4 | [slovenia-law](https://github.com/lexifina/slovenia-law/tree/main/vulnerabilities) |
-| Spain | 19,957 | 249 | 71 | 7 | 0 | [spain-law](https://github.com/lexifina/spain-law/tree/main/vulnerabilities) |
-| Turkey | 8,998 | 319 | 28 | 8 | 1 | [turkey-law](https://github.com/lexifina/turkey-law/tree/main/vulnerabilities) |
-| Vietnam | 367 | 92 | 6 | 0 | 3 | [vietnam-law](https://github.com/lexifina/vietnam-law/tree/main/vulnerabilities) |
+Each line opens to what that run found, with a link to its full results. The same counts are in [data/countries/countries.csv](data/countries/countries.csv).
 
-## What each run found
-
-<details><summary><b>Albania</b>: 2,953 flags, 3 likely real</summary>
+<details><summary><b>Albania</b>: 2,953 flags, 267 reviewed, 31 survived, <b>3 likely real</b>, 4 open</summary>
 
 Albania's run found real lapses where the Council of Ministers or the Assembly extended a deadline only after it had run out, twice for the electricity state of emergency of VKM 584/2021; many other open cases turn on whether an act takes effect on adoption or on publication in the Fletorja Zyrtare.
 
@@ -329,7 +276,7 @@ Detector work: add_root.py built Albania's history rows from the repository's ow
 
 </details>
 
-<details><summary><b>Algeria</b>: 20 flags, 0 likely real</summary>
+<details><summary><b>Algeria</b>: 20 flags, 16 reviewed, 1 survived, <b>0 likely real</b>, 3 open</summary>
 
 The one survivor, Article 23 of the Code pénal, is an article number used again in 2024 for a new rule, its old rule having moved to Article 16 bis in 2006; the more telling finds are four Code pénal articles that still cite articles removed in 2006 or reading only as repealed, which only the official text in force can settle.
 
@@ -350,7 +297,7 @@ Detector work: The dead-currency detector no longer counts the dinar as a dead c
 
 </details>
 
-<details><summary><b>Andorra</b>: 588 flags, 0 likely real</summary>
+<details><summary><b>Andorra</b>: 588 flags, 47 reviewed, 3 survived, <b>0 likely real</b>, 0 open</summary>
 
 None of the 3 survivors is a mistake (two lawful, one spent); the real findings were in how the repository splits laws into files, with articles missing from their own files in at least 17 laws and closing provisions stuffed into the last article's file in at least 19.
 
@@ -365,7 +312,7 @@ Detector work: add_root.py now counts Kind: enacted, which this repository gives
 
 </details>
 
-<details><summary><b>Austria</b>: 2,181 flags, 5 likely real</summary>
+<details><summary><b>Austria</b>: 2,181 flags, 200 reviewed, 32 survived, <b>5 likely real</b>, 0 open</summary>
 
 Two COVID-19 time limits (§ 37 Abs. 4a AWG 2002 and § 323c Abs. 4 BAO) were extended only after they had run out, and reading around the flags found three drafting mistakes, including BGBl. placeholders "x/y" and "xx/2019" never filled in. The 14 stale amounts that are the same figure in an unrelated provision were put in other; the EDGE-CASES heading for the two gaps says "Open" but the README calls them real gaps, so they are counted as likely_real.
 
@@ -387,7 +334,7 @@ Detector work: The time-limit search was taught the Austrian month names "Jänne
 
 </details>
 
-<details><summary><b>Azerbaijan</b>: 934 flags, 0 likely real</summary>
+<details><summary><b>Azerbaijan</b>: 934 flags, 165 reviewed, 25 survived, <b>0 likely real</b>, 0 open</summary>
 
 Of 934 flags, 25 survived the model review and none is a drafting mistake; the most notable survivor is an empty period that is no gap, because Law No. 348-VIIQD extending the inspections moratorium says itself it applies from 1 January 2026. The three flags 'dated by the source' (e-qanun's in-force date for 1994-1995 laws that name no day) were put under repository as dating, although the README says the record cannot tell whether those laws took effect on signing or on publication.
 
@@ -405,7 +352,7 @@ Detector work: The time-limit search learned Azerbaijani date-first forms with "
 
 </details>
 
-<details><summary><b>Belgium</b>: 994 flags, 1 likely real</summary>
+<details><summary><b>Belgium</b>: 994 flags, 57 reviewed, 6 survived, <b>1 likely real</b>, 0 open</summary>
 
 None of Belgium's 6 survivors is a confirmed defect: four are caps on directors' liability in art. 2:57 of the Code des sociétés et des associations that keep their own figures after the 2024 size criteria changed. The only real leftover came from reading by hand a category the model does not review: art. 1362 of the Code judiciaire still cites art. 738, repealed since 1993.
 
@@ -424,7 +371,7 @@ Detector work: add_root.py built Belgium's history rows from the repository's ow
 
 </details>
 
-<details><summary><b>Bhutan</b>: 1 flags, 0 likely real</summary>
+<details><summary><b>Bhutan</b>: 1 flags, 0 reviewed, 0 survived, <b>0 likely real</b>, 0 open</summary>
 
 The detectors found no mistake in Bhutanese law: the only flag was four references to Article 45 in the penalty lines of Article 46 of the Mines and Minerals Management Act of Bhutan 1995, and 24 earlier flags were English words like "vacate" and "null and void" read as repeal marks. The real finds were in how the repository splits some Acts into sections.
 
@@ -440,7 +387,7 @@ Detector work: The placeholder detector no longer reads "vacation", "vacate" or 
 
 </details>
 
-<details><summary><b>Bosnia and Herzegovina</b>: 2,766 flags, 0 likely real</summary>
+<details><summary><b>Bosnia and Herzegovina</b>: 2,766 flags, 180 reviewed, 14 survived, <b>0 likely real</b>, 1 open</summary>
 
 None of Bosnia and Herzegovina's 14 survivors is a confirmed drafting mistake; the one open case is a compensatory-interest decision that enters into force months before it was made, and the run mostly exposed how the repository dates acts and keeps annual decisions as enacted after the next one ended them.
 
@@ -463,7 +410,7 @@ Detector work: add_root.py counts as law the commits of kind decree (3,633 commi
 
 </details>
 
-<details><summary><b>Brazil</b>: 4,900 flags, 5 likely real</summary>
+<details><summary><b>Brazil</b>: 4,900 flags, 238 reviewed, 44 survived, <b>5 likely real</b>, 0 open</summary>
 
 Two survivors look like real mistakes: a reference to a repealed sanctions article in the National Financial System law and a Proinfa deadline extended only after it ran out; three more are real gaps chosen by veto, lapsed provisional measures or the constitutional ninety-day rule, which have no exact key and are counted under other.
 
@@ -488,7 +435,7 @@ Detector work: pins.json names the corpus language as pt so the detectors use Po
 
 </details>
 
-<details><summary><b>Bulgaria</b>: 6,475 flags, 1 likely real</summary>
+<details><summary><b>Bulgaria</b>: 6,475 flags, 196 reviewed, 13 survived, <b>1 likely real</b>, 0 open</summary>
 
 The 30 retroactive dates the model called dating errors were not borne out: in 1,542 of the 1,582 flagged acts the act itself names the earlier day.
 
@@ -507,7 +454,7 @@ Detector work: add_root.py had to count as law the commit kinds decree, as-enact
 
 </details>
 
-<details><summary><b>Colombia</b>: 1,811 flags, 2 likely real</summary>
+<details><summary><b>Colombia</b>: 1,811 flags, 226 reviewed, 44 survived, <b>2 likely real</b>, 0 open</summary>
 
 Of 44 survivors, only one is a likely slip (Article 74-1 of the Tax Statute citing the repealed Article 158-1) and one a real gap the extending law itself acknowledged; half the survivors come from how the repository builds and dates its record, including whole articles removed where the Court struck out only part. The Law 1438 gap is counted as likely_real although the text also calls it known and cured, and the one reference that the repealing act itself replaces (Law 789 of 2002, Article 6) was put in other.
 
@@ -528,7 +475,7 @@ Detector work: patch_co.py taught the time-limit search days as ordinals ("1o de
 
 </details>
 
-<details><summary><b>Croatia</b>: 31,047 flags, 1 likely real</summary>
+<details><summary><b>Croatia</b>: 31,047 flags, 184 reviewed, 7 survived, <b>1 likely real</b>, 2 open</summary>
 
 Of 31,047 flags, 7 survived the model review and none is a confirmed drafting mistake in national law: the two open cases are local acts (Tribunj municipality, Hvarski vodovod) that took effect before they were printed in Narodne novine. The one leftover found was by reading the unreviewed references to repealed placeholders: Article 79 of the 2005 Zakon o sudovima cited the deleted Article 102 from 2010 until the act was replaced in 2013.
 
@@ -555,7 +502,7 @@ Detector work: add_root.py had to count as law the kinds decree, as-enacted, Zak
 
 </details>
 
-<details><summary><b>Czechia</b>: 33,557 flags, 4 likely real</summary>
+<details><summary><b>Czechia</b>: 33,557 flags, 212 reviewed, 61 survived, <b>4 likely real</b>, 0 open</summary>
 
 Four likely real mistakes survived, three of them extensions that came days or weeks after the period they extended had ended; a re-read turned the feed-additive rows, first put down to unrelated dates, into one real gap.
 
@@ -578,7 +525,7 @@ Detector work: Lapsed time limits had to read numeric dates written with spaces 
 
 </details>
 
-<details><summary><b>El Salvador</b>: 450 flags, 3 likely real</summary>
+<details><summary><b>El Salvador</b>: 450 flags, 40 reviewed, 0 survived, <b>3 likely real</b>, 7 open</summary>
 
 None of the 40 reviewed flags survived the model, yet the hand check found four, in three extension decrees, that are real gaps: extensions that took effect after the time limit had run out with no retroactive wording, unlike Decree No. 771 of 1994, which made its effects run back. Reading the categories the model does not review also turned up 31 references to repealed articles, among them Art. 78(e) of the Medicines Act.
 
@@ -609,7 +556,7 @@ Detector work: The time-limit search now reads dates written wholly in words, as
 
 </details>
 
-<details><summary><b>Ethiopia</b>: 6 flags, 0 likely real</summary>
+<details><summary><b>Ethiopia</b>: 6 flags, 5 reviewed, 1 survived, <b>0 likely real</b>, 0 open</summary>
 
 Only 6 flags and none is a mistake: the five pre-publication dates are proclamations that take effect, by their own terms, on the day the House adopted them or on a stated income date; the run's real finding was 16 article headings cut at the PDF's line break.
 
@@ -623,7 +570,7 @@ Detector work: pins.json names the corpus language as en so the detectors read E
 
 </details>
 
-<details><summary><b>France</b>: 35,971 flags, 6 likely real</summary>
+<details><summary><b>France</b>: 35,971 flags, 612 reviewed, 254 survived, <b>6 likely real</b>, 0 open</summary>
 
 Empty periods dominated: 220 of the 254 survivors, of which 154 are real gaps where an extension took effect after the old date had passed, eight of them in five rules still in force (titres-restaurant, regional press aid, energy products, Paris gaming clubs, two State guarantees). The 146 real gaps that have long since closed were put in spent, and the 9 "other texts and other subjects" survivors were split as 1 misread and 8 other (2 citing another text's articles, 6 the same figure in an unrelated text).
 
@@ -649,7 +596,7 @@ Detector work: The detectors already carried the fixes in patch_detectors.py whe
 
 </details>
 
-<details><summary><b>Germany</b>: 15,737 flags, 12 likely real</summary>
+<details><summary><b>Germany</b>: 15,737 flags, 391 reviewed, 160 survived, <b>12 likely real</b>, 3 open</summary>
 
 Of 160 survivors, 93 were artefacts of dating commits by the day Gesetze im Internet showed a change, and 43 more cannot be judged without the Bundesgesetzblatt; the richest finds were eight penalty provisions, in categories the model does not review, that point to a repealed or wrong provision. The 3 stale amounts that turned out to be the same figure in a separate rule are put in other.
 
@@ -687,7 +634,7 @@ Detector work: add_root.py found no history rows at first because germany-law da
 
 </details>
 
-<details><summary><b>Greece</b>: 933 flags, 0 likely real</summary>
+<details><summary><b>Greece</b>: 933 flags, 129 reviewed, 29 survived, <b>0 likely real</b>, 0 open</summary>
 
 None of the 29 survivors is a defect in Greek law: 23 are another act's articles cited inside omnibus amending laws, and the three late extensions each reach back to the old date.
 
@@ -702,7 +649,7 @@ Detector work: Lapsed time limits had to read «έως» and «μέχρι» with
 
 </details>
 
-<details><summary><b>Japan</b>: 17,940 flags, 3 likely real</summary>
+<details><summary><b>Japan</b>: 17,940 flags, 358 reviewed, 126 survived, <b>3 likely real</b>, 10 open</summary>
 
 The 14 survivors that were the same amount appearing by coincidence in another act have no matching key and are counted in other.
 
@@ -739,7 +686,7 @@ Detector work: linearize_jp.py rebuilds the history table in In-force date order
 
 </details>
 
-<details><summary><b>Kosovo</b>: 3,359 flags, 0 likely real</summary>
+<details><summary><b>Kosovo</b>: 3,359 flags, 111 reviewed, 22 survived, <b>0 likely real</b>, 0 open</summary>
 
 None of the 22 survivors looks like a mistake in Kosovo law: most are sub-legal acts that set their own day and reached the Official Gazette 60 days to almost nine years later, or acts this repository dates by another date in their text.
 
@@ -755,7 +702,7 @@ Detector work: The time-limit search was taught the forms of "deri" the texts us
 
 </details>
 
-<details><summary><b>Kyrgyzstan</b>: 362 flags, 0 likely real</summary>
+<details><summary><b>Kyrgyzstan</b>: 362 flags, 80 reviewed, 5 survived, <b>0 likely real</b>, 0 open</summary>
 
 None of the 5 survivors is a drafting mistake (three spent schedule steps and deadlines, two dating artefacts); the hand check instead found that the repository misdates hundreds of acts because commencement days were not read or set periods after publication were ignored.
 
@@ -772,7 +719,7 @@ Detector work: add_root.py counts the kinds Закон and Конституци�
 
 </details>
 
-<details><summary><b>Liechtenstein</b>: 1,313 flags, 9 likely real</summary>
+<details><summary><b>Liechtenstein</b>: 1,313 flags, 43 reviewed, 2 survived, <b>9 likely real</b>, 0 open</summary>
 
 Both survivors of the model review were long-spent EEA deadlines; all nine likely mistakes came from reading a category the model does not review, references to repealed placeholders, where an amendment repealed an article and left another article of the same act citing it.
 
@@ -802,7 +749,7 @@ Detector work: "Franken" in German is the Swiss franc, legal tender in Liechtens
 
 </details>
 
-<details><summary><b>Luxembourg</b>: 4,389 flags, 1 likely real</summary>
+<details><summary><b>Luxembourg</b>: 4,389 flags, 104 reviewed, 14 survived, <b>1 likely real</b>, 0 open</summary>
 
 Of 4,389 flags, none of the 14 that survived review is a mistake: they are laws the law itself backdates and an article number reused in the Covid-19 law; the one likely mistake, a reference in Article 563 of the Code de commerce to a repealed Article 480, was found among the flags the model does not review.
 
@@ -822,7 +769,7 @@ Detector work: The dead-currency search was taught the Luxembourg franc written 
 
 </details>
 
-<details><summary><b>Macau</b>: 4 flags, 0 likely real</summary>
+<details><summary><b>Macau</b>: 4 flags, 4 reviewed, 0 survived, <b>0 likely real</b>, 0 open</summary>
 
 Only 4 flags were raised, all lapsed time limits in two laws, and none survived the model review: two are a hawker-licence transitional rule that ran out as planned and two are Typhoon Hato dates that fix who a tax benefit covers. Before the Macau Portuguese fixes the detectors raised 15 flags, 12 of them misreadings, and the real findings were three laws that run on into the next law and two repealed Commercial Code articles kept with their text.
 
@@ -837,7 +784,7 @@ Detector work: patch_mo.py taught the time-limit search "até ao dia 30 de Junho
 
 </details>
 
-<details><summary><b>Maldives</b>: 11 flags, 0 likely real</summary>
+<details><summary><b>Maldives</b>: 11 flags, 11 reviewed, 2 survived, <b>0 likely real</b>, 0 open</summary>
 
 Both survivors are spent periods in Law No. 29/2016 (an airport service charge and the first period of the airport development fee, both ending 31 December 2021 and followed by later rules), flagged because the Act is held in one 2024 version; none of the 11 flags, all found only after Dhivehi dates were taught to the detectors, is a mistake.
 
@@ -852,7 +799,7 @@ Detector work: patch_dv.py taught the time-limit search Dhivehi dates in Thaana,
 
 </details>
 
-<details><summary><b>Malta</b>: 1,309 flags, 3 likely real</summary>
+<details><summary><b>Malta</b>: 1,309 flags, 223 reviewed, 76 survived, <b>3 likely real</b>, 2 open</summary>
 
 None of the 76 survivors is a drafting mistake: 34 are each year's national minimum wage still standing in that year's own order, and 15 empty periods were the detector pairing dates from different entries of an exemption table; the three likely mistakes were references left behind when an amending Act deleted a provision. The 34 same-figure stale amounts are put in other, and the 3 flags explained by legislation.mt's versions and margin notes are counted under repository.
 
@@ -881,7 +828,7 @@ Detector work: patch_mt.py reads the Maltese lira as Maltese law writes it, "Lm"
 
 </details>
 
-<details><summary><b>Mexico</b>: 1,177 flags, 2 likely real</summary>
+<details><summary><b>Mexico</b>: 1,177 flags, 132 reviewed, 13 survived, <b>2 likely real</b>, 0 open</summary>
 
 One of the 13 survivors is a real but harmless lapse: a cooperatives deadline extended four days after it had run out; another likely mistake, a reference to an article the Supreme Court invalidated, was found among the flags the model judged lawful.
 
@@ -901,7 +848,7 @@ Detector work: add_root.py counts as law the Supreme Court rulings that struck o
 
 </details>
 
-<details><summary><b>Moldova</b>: 222 flags, 0 likely real</summary>
+<details><summary><b>Moldova</b>: 222 flags, 52 reviewed, 0 survived, <b>0 likely real</b>, 0 open</summary>
 
 Of 222 flags only two were in law texts and none of the 52 reviewed survived: a spent transitional rule of the Constitution and Constitutional Court judgment HCC7/2016 taking effect on adoption as Article 140 provides. With only the Constitution in three versions and four National Bank regulations, the detectors had little to compare; most flags were dates in Competition Council decisions.
 
@@ -918,7 +865,7 @@ Detector work: add_root.py had to count as law an act's first text (as-enacted, 
 
 </details>
 
-<details><summary><b>Mongolia</b>: 140 flags, 0 likely real</summary>
+<details><summary><b>Mongolia</b>: 140 flags, 56 reviewed, 2 survived, <b>0 likely real</b>, 1 open</summary>
 
 The run's real findings were a repealing law dated a year before its adoption and four Criminal Code articles of 2002 filed under the next article's number.
 
@@ -937,7 +884,7 @@ Detector work: patch_mn.py gave the reference scan keys for the article files (z
 
 </details>
 
-<details><summary><b>Montenegro</b>: 9,956 flags, 0 likely real</summary>
+<details><summary><b>Montenegro</b>: 9,956 flags, 187 reviewed, 7 survived, <b>0 likely real</b>, 3 open</summary>
 
 No confirmed drafting mistake, but the open Rožaje decision stands for a question that reaches thousands of acts: 6,764 acts here take effect on their adoption day by their own words, before they were published. The run also noticed amendments setting "31. septembra", a day that does not exist.
 
@@ -962,7 +909,7 @@ Detector work: Lapsed time limits had to read the Montenegrin month names "janua
 
 </details>
 
-<details><summary><b>Nauru</b>: 11 flags, 0 likely real</summary>
+<details><summary><b>Nauru</b>: 11 flags, 10 reviewed, 0 survived, <b>0 likely real</b>, 1 open</summary>
 
 All 11 flags are spent or explained wording, mostly treaty signature dates and transitional rules in single current texts dated to the 2026 "Naoero" renaming; reading that renaming found the reprinted Constitution's Article 102 now renames "Naoero" to "Naoero".
 
@@ -981,7 +928,7 @@ Detector work: add_root.py counts Kind: consolidated (334 commits), several-acts
 
 </details>
 
-<details><summary><b>Nepal</b>: 6 flags, 0 likely real</summary>
+<details><summary><b>Nepal</b>: 6 flags, 6 reviewed, 1 survived, <b>0 likely real</b>, 0 open</summary>
 
 Only 6 flags were raised and none is a mistake in Nepali law; the one survivor, section 9 of the Birta Abolition Act, 2016 (1959), is not a time limit (put under misread), and the run's real finding was one amending Act spread across eleven author names and two dates. Each Act is held once in its current consolidated text, not as enacted, which is the closest history value.
 
@@ -996,7 +943,7 @@ Detector work: detectors/placeholder_ref.py (patch_np.py) no longer reads "expir
 
 </details>
 
-<details><summary><b>Netherlands</b>: 16,772 flags, 3 likely real</summary>
+<details><summary><b>Netherlands</b>: 16,772 flags, 265 reviewed, 46 survived, <b>3 likely real</b>, 2 open</summary>
 
 Two of 46 survivors are likely drafting mistakes, and a third, the Criminal Code's fine categories in force four days before their publication, was found among flags the model never reviewed. The 4 withdrawals published after the date they give and the 19 cases of the same figure in a separate rule have no exact key and were put in other.
 
@@ -1022,7 +969,7 @@ Detector work: A date written with hyphens is read day first for Dutch ("t/m 31-
 
 </details>
 
-<details><summary><b>New Zealand</b>: 312 flags, 15 likely real</summary>
+<details><summary><b>New Zealand</b>: 312 flags, 111 reviewed, 11 survived, <b>15 likely real</b>, 1 open</summary>
 
 None of the 11 survivors is a mistake, but reading the 172 placeholder references and 5 dead fines by hand found 24 flags in 15 sections of 7 Acts that look like cross-references left behind when the cited section was repealed, six of them by the same Act that amended the citing section that day.
 
@@ -1059,7 +1006,7 @@ Detector work: patch_en_nz.py made the reference scan keep a trailing "o" as par
 
 </details>
 
-<details><summary><b>North Macedonia</b>: 2,476 flags, 0 likely real</summary>
+<details><summary><b>North Macedonia</b>: 2,476 flags, 80 reviewed, 15 survived, <b>0 likely real</b>, 5 open</summary>
 
 No surviving flag is a confirmed drafting mistake, but five decisions setting general rules took effect on their adoption day and were published 19 to 38 days later against Article 52 of the Constitution, a question that reaches the 695 acts in this repository that take effect on their adoption day.
 
@@ -1082,7 +1029,7 @@ Detector work: The date scan was taught the Macedonian month names "јануар
 
 </details>
 
-<details><summary><b>Norway</b>: 945 flags, 0 likely real</summary>
+<details><summary><b>Norway</b>: 945 flags, 101 reviewed, 5 survived, <b>0 likely real</b>, 0 open</summary>
 
 Of 945 flags, 5 survived and none is a mistake in Norwegian law: four spent transitional or temporary rules and one Penal Code paragraph that looks as if it took effect and lapsed on 1 October 2015 because the 2005 Code's pre-commencement amendments are all dated that day. The real find was a repository text error in § 5 of the Penal Code.
 
@@ -1096,7 +1043,7 @@ Detector work: The time-limit search reads "til", "inntil", "fram til" and the e
 
 </details>
 
-<details><summary><b>Oman</b>: 4 flags, 1 likely real</summary>
+<details><summary><b>Oman</b>: 4 flags, 4 reviewed, 0 survived, <b>1 likely real</b>, 0 open</summary>
 
 The detectors had to be taught Arabic dates before they found anything, and none of the 4 flags is a mistake; the one likely drafting mistake, a reference to a repealed Income Tax Law article, was found only by reading references by hand, since the scan does not read "bis" numbers.
 
@@ -1114,7 +1061,7 @@ Detector work: patch_ar.py taught the time-limit search Arabic "until" ("حتى"
 
 </details>
 
-<details><summary><b>Panama</b>: 168 flags, 0 likely real</summary>
+<details><summary><b>Panama</b>: 168 flags, 40 reviewed, 4 survived, <b>0 likely real</b>, 0 open</summary>
 
 None of the 4 survivors is a mistake: 3 are spent rules and 1 is an amnesty whose dates mark past acts; the run's real findings are in the repository, where Gaceta page headers and footers still cut through article texts and some commencement articles sit in the wrong file.
 
@@ -1129,7 +1076,7 @@ Detector work: Duplicate numbering: a treaty line that opens with a reference ("
 
 </details>
 
-<details><summary><b>Paraguay</b>: 14 flags, 4 likely real</summary>
+<details><summary><b>Paraguay</b>: 14 flags, 14 reviewed, 0 survived, <b>4 likely real</b>, 0 open</summary>
 
 None of the 14 flags survived the model review, yet reading seven of them by hand led to four likely legislative oversights, among them a Criminal Code rule on trafficking abroad that still points to two articles repealed ten years before it was rewritten.
 
@@ -1150,7 +1097,7 @@ Detector work: The history builder now counts the `Kind: referendum` commit of C
 
 </details>
 
-<details><summary><b>Peru</b>: 66 flags, 4 likely real</summary>
+<details><summary><b>Peru</b>: 66 flags, 49 reviewed, 1 survived, <b>4 likely real</b>, 0 open</summary>
 
 The one flag that survived review (Article 417-A of the Criminal Code citing articles Ley 31146 moved) is lawful because that law orders every reference read with the new numbers, while four references the model found lawful turned out to be likely oversights left by Decreto Legislativo 1384's repeals in the Civil Code. The README's EDGE-CASES heads these four "Open: likely drafting oversights"; they are listed under likely_real only.
 
@@ -1167,7 +1114,7 @@ Detector work: patch_pe.py stops reading "sin efecto" followed by "suspensivo" a
 
 </details>
 
-<details><summary><b>Philippines</b>: 5,734 flags, 0 likely real</summary>
+<details><summary><b>Philippines</b>: 5,734 flags, 80 reviewed, 13 survived, <b>0 likely real</b>, 0 open</summary>
 
 None of the 13 survivors is a mistake: 7 are 1986 executive orders dated by approval under the repository's dating rule and 2 are spent temporary rules; the 4 orders that fix their own date before the publication on record were counted as lawful (deliberate dates), the closest key, since the README leaves whether they could bind before publication unjudged.
 
@@ -1182,7 +1129,7 @@ Detector work: An amending Act's own section that deletes a section of the Act i
 
 </details>
 
-<details><summary><b>Poland</b>: 1,028 flags, 1 likely real</summary>
+<details><summary><b>Poland</b>: 1,028 flags, 116 reviewed, 18 survived, <b>1 likely real</b>, 1 open</summary>
 
 None of the 18 survivors is a mistake in Polish law (10 of the 13 lawful ones are acts that state their own retroactive commencement); the one likely drafting mistake, a fine in the Commercial Companies Code still tied to the repealed share register book of art. 341, came from reading by hand the references to repealed placeholders the model does not review.
 
@@ -1205,7 +1152,7 @@ Detector work: patch_pl.py reads "nie później niż" as a deadline and "do koń
 
 </details>
 
-<details><summary><b>Qatar</b>: 809 flags, 0 likely real</summary>
+<details><summary><b>Qatar</b>: 809 flags, 52 reviewed, 7 survived, <b>0 likely real</b>, 0 open</summary>
 
 In the repository:
 
@@ -1221,7 +1168,7 @@ Detector work: patch_qa.py taught the time-limit search a period "ending on" a d
 
 </details>
 
-<details><summary><b>Russia</b>: 2,437 flags, 1 likely real</summary>
+<details><summary><b>Russia</b>: 2,437 flags, 46 reviewed, 2 survived, <b>1 likely real</b>, 2 open</summary>
 
 Both survivors of the model review turned out not to be mistakes, but reading by hand all 102 references to repealed articles, a category the model does not review, found three provisions in force that cite articles that are gone, one of them likely an oversight in a 2021 amendment.
 
@@ -1245,7 +1192,7 @@ Detector work: 1,785 of the 1,790 acts are kept as one file (`text.md`), so the 
 
 </details>
 
-<details><summary><b>San Marino</b>: 461 flags, 1 likely real</summary>
+<details><summary><b>San Marino</b>: 461 flags, 40 reviewed, 6 survived, <b>1 likely real</b>, 1 open</summary>
 
 The one likely real gap was found not by a survivor but by reading the notes behind one: the building amnesty's payment date lapsed for 61 days while applications stayed open. The CTA's regulation deadline (2 flags) was counted as lawful, the closest key, since the README calls it a deadline for the administration rather than the end of the rule.
 
@@ -1268,7 +1215,7 @@ Detector work: The time-limit search now reads Italian deadlines and extensions 
 
 </details>
 
-<details><summary><b>Slovakia</b>: 38,744 flags, 7 likely real</summary>
+<details><summary><b>Slovakia</b>: 38,744 flags, 203 reviewed, 63 survived, <b>7 likely real</b>, 3 open</summary>
 
 Slovakia's run found seven likely real mistakes: two references to sections deleted while the citing provisions were left alone (Allotment Gardens Act, Securities Act) and five time limits moved only after they had passed, which the empty-period detector caught.
 
@@ -1302,7 +1249,7 @@ Detector work: patch_sk.py reads "do konca roka 2012" and "do konca roku 2012" (
 
 </details>
 
-<details><summary><b>Slovenia</b>: 4,774 flags, 0 likely real</summary>
+<details><summary><b>Slovenia</b>: 4,774 flags, 132 reviewed, 13 survived, <b>0 likely real</b>, 4 open</summary>
 
 None of the 13 survivors is a drafting mistake (10 are how the repository holds consolidated texts and moved articles), but two flags the model set aside are open on reading the text: ZTP-C fixes its entry into force four weeks before its own adoption, and the 2001 census postponement took effect after the census period had ended.
 
@@ -1325,7 +1272,7 @@ Detector work: The detectors were taught that PIS marks a gone article "(črtan)
 
 </details>
 
-<details><summary><b>Spain</b>: 19,957 flags, 7 likely real</summary>
+<details><summary><b>Spain</b>: 19,957 flags, 249 reviewed, 71 survived, <b>7 likely real</b>, 0 open</summary>
 
 Five surviving flags in three provisions look like real mistakes, all time limits extended only after they had run out, plus a dead fine in Law 20/1991; five more are real gaps the Congress chose by refusing to validate royal decree-laws, which have no exact key and are counted under other.
 
@@ -1350,7 +1297,7 @@ Detector work: The time-limit search was taught "hasta el día 31 de diciembre d
 
 </details>
 
-<details><summary><b>Turkey</b>: 8,998 flags, 8 likely real</summary>
+<details><summary><b>Turkey</b>: 8,998 flags, 319 reviewed, 28 survived, <b>8 likely real</b>, 1 open</summary>
 
 Turkish dates come before "kadar", so the lapsed-limit search went from 1 flag to over 4,000 once it read them; the hand reading of categories the model does not review turned up four dead fines that still punish breaches of repealed articles. The three references left behind found among the repealed placeholders, read by hand outside the model review, are listed as likely real too.
 
@@ -1383,7 +1330,7 @@ Detector work: Lapsed time limits and empty periods had to read Turkish dates wr
 
 </details>
 
-<details><summary><b>Vietnam</b>: 367 flags, 0 likely real</summary>
+<details><summary><b>Vietnam</b>: 367 flags, 92 reviewed, 6 survived, <b>0 likely real</b>, 3 open</summary>
 
 None of the six survivors is a mistake in the law, but reading the eight references to deleted articles the model set aside turned up three possible slips left by the 2025 amending laws, and the hand check found two acts holding another document's text. The one survivor that compares a procurement threshold with an unrelated amount in other laws was put in other.
 
