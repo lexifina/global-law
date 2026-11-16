@@ -119,21 +119,28 @@ The commonest are the late extension, where a deadline is moved by an act that t
 <img alt="Each jurisdiction&#x27;s mix of flags by category" src="data/countries/mix.svg" width="900">
 </picture>
 
-**5. The repositories need checking as much as the law.** The hand check found 144 problems in the repositories themselves: acts dated by the day they were signed instead of the day they took effect, histories split in two when act folders were renamed, articles filed inside the previous article's file, page headers left inside the text, quotation marks turned into letters, whole histories written twice. Each is listed in that country's README; each is a fix for the repository, and several explain flags that looked like mistakes in the law.
-
-**6. Every new language broke something.** Running the detectors country by country turned up 179 bugs; 143 are fixed and 36 are still open (listed in the bug file below; the ones that affect a country's numbers are stated in its README). Most were blind spots for a language (dates and amounts written in words, superscript article numbers like art. 4¹, Bikram Sambat dates) or false matches ("lira" inside "liraglutid", the French verb "lire", "Franken" the wine region, "pallati" read as the Latvian lats, the Algerian dinar, which is still in use). Each fix is a small patch to the detectors; there are now 39, applied in order.
+**5. Every new language broke something.** Running the detectors country by country turned up 179 bugs; 143 are fixed and 36 are still open (listed in the bug file below; the ones that affect a country's numbers are stated in its README). Most were blind spots for a language (dates and amounts written in words, superscript article numbers like art. 4¹, Bikram Sambat dates) or false matches ("lira" inside "liraglutid", the French verb "lire", "Franken" the wine region, "pallati" read as the Latvian lats, the Algerian dinar, which is still in use). Each fix is a small patch to the detectors; there are now 39, applied in order.
 
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="data/countries/bugs-dark.svg">
 <img alt="Bugs found while running the detectors country by country, by part of the pipeline" src="data/countries/bugs.svg" width="900">
 </picture>
 
-**7. History decides what can be found.** Of the 50 repositories, 16 hold dated versions of their acts, 22 hold some, and 12 hold each act once. Without a history, the detectors that compare versions (repeal gaps, same-day conflicts, empty periods, references to deleted provisions) have nothing to compare and only the text detectors work; those READMEs say so.
+**6. History decides what can be found.** Of the 50 repositories, 16 hold dated versions of their acts, 22 hold some, and 12 hold each act once. Without a history, the detectors that compare versions (repeal gaps, same-day conflicts, empty periods, references to deleted provisions) have nothing to compare and only the text detectors work; those READMEs say so.
 
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="data/countries/flags-by-jurisdiction-dark.svg">
 <img alt="Flags by jurisdiction" src="data/countries/flags-by-jurisdiction.svg" width="900">
 </picture>
+
+**7. The repositories need checking as much as the law.** The hand check found 144 problems in the repositories themselves: acts dated by the day they were signed instead of the day they took effect, histories split in two when act folders were renamed, articles filed inside the previous article's file, page headers left inside the text, quotation marks turned into letters, whole histories written twice. Several explain flags that looked like mistakes in the law.
+
+How these are being handled:
+
+- **Listed where they were found.** Each problem is in that country's README, under the problems found in the repository, with the files and dates it affects.
+- **Gathered into one worklist.** All 144 are in [data/countries/repository_problems.csv](data/countries/repository_problems.csv), one row per problem with its jurisdiction and a status; each is a fix for that repository's builder, and its status changes to fixed once the corrected history is published.
+- **Worked around in the detectors meanwhile**, where a fix on the reading side was safe, so the findings are not distorted while the repositories wait: act folders renamed in the middle of a history are mapped back to one folder per act; identical rows from histories written twice are counted once; file names with accents are read as written; Japan's versions, appended out of order, are put back in date order before the detectors read them.
+- **Re-run after each fix.** When a repository's builder publishes a corrected history, that country's detectors are run again with the same scripts (`redo.py`, which keeps the reviews already made) and its README is updated.
 
 ## The 50 jurisdictions
 
@@ -1301,6 +1308,7 @@ Detector work: The detectors did not read Vietnamese before this run; they were 
 
 - [data/countries/countries.csv](data/countries/countries.csv): one row per jurisdiction, with the counts above and the link to its folder
 - [data/countries/likely_mistakes.csv](data/countries/likely_mistakes.csv): every likely real mistake, where it is and what it is
+- [data/countries/repository_problems.csv](data/countries/repository_problems.csv): every problem found in the repositories themselves, with its status
 - [data/countries/bugs.csv](data/countries/bugs.csv): every bug found in the detectors and the pipeline while running them country by country, and its fix
 
 None of this is legal advice. A likely mistake is a reading of the text and its history; each needs the official text to confirm. Corrections are welcome as issues in the country's repository or in this one.
