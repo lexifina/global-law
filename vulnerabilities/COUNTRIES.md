@@ -197,6 +197,51 @@ How these are being handled:
 - **Worked around in the detectors meanwhile**, where a fix on the reading side was safe, so the findings are not distorted while the repositories wait: act folders renamed in the middle of a history are mapped back to one folder per act; identical rows from histories written twice are counted once; file names with accents are read as written; Japan's versions, appended out of order, are put back in date order before the detectors read them.
 - **Re-run after each fix.** When a repository's builder publishes a corrected history, that country's detectors are run again with the same scripts (`redo.py`, which keeps the reviews already made) and its README is updated.
 
+## From findings to proofs: a formal model of each country
+
+Everything above is empirical. Detectors find candidates by matching patterns, a model argues about them, and a person decides by reading the text. The next step is a formal model of each country in [Lean 4](../lean-proofs/README.md). It would state the legal rules a finding rests on and prove that the mistake follows from the dated record. Global-law already has the start of this for the global run, in [lean-proofs/](../lean-proofs/), and the Dutch fine ceilings in point 3 are already one of its cases ([NLFines.lean](../lean-proofs/LegalProofs/Cases/NLFines.lean)). This section sets out what the country runs give that model, what the model adds, and how each country's findings would be encoded.
+
+### What each approach can and cannot do
+
+| | Country runs (this page) | A Lean model per country |
+| --- | --- | --- |
+| Finds candidates | Yes, in any of 30 languages, once its forms are taught (point 2) | No: it checks facts it is given and finds none itself |
+| Decides whether a flag is a mistake | By hand, one flag at a time; the reasons are written in prose | By proof, once for every flag of a kind, under rules written out as definitions |
+| Shows its reasoning | In each README's notes | As a theorem anyone can re-check with `lake build` |
+| Handles legal judgment (was the gap chosen? does analogy apply?) | By reading, with the reason written down | Only as an explicit premise, with the counterargument proved too |
+| Depends on the repository being right | Yes; point 7 lists where it was not | Yes, just as much: a certificate is about the record, not the law |
+
+Neither replaces the other. The runs supply the facts and the judgment calls. The model turns them into statements that can be checked, and keeps them checked as the repositories change. In the global run, Lean already certifies 14,689 of the 14,900 flags it is given; its [README](../lean-proofs/README.md) lists them by kind.
+
+### How each finding would be encoded
+
+Each of the seven points above becomes a distinct part of a country's model:
+
+| What the country runs learned | Where it goes in the model | There today |
+| --- | --- | --- |
+| **The shapes of real mistakes** (point 3) | A schema theorem for each shape, instantiated once per likely mistake with the official text quoted in the file: a leftover reference or a fine without a basis is `dead_reference`; a late extension or a political gap is `empty_period`; a rule in force before publication is `prepublication_window`; a placeholder never filled in ("BGBl. I Nr. x/y") is `phantom_reference` | All four schemas, in [Basic.lean](../lean-proofs/LegalProofs/Basic.lean); six worked cases in [Cases/](../lean-proofs/LegalProofs/Cases/) |
+| **Why a survivor is not a mistake** (point 1) | Each reason for rejecting a flag becomes a hypothesis the theorem has to rule out, with the reason proved as well. A retroactive extension closes the gap; a gap the legislature chose is still a gap, but the case is labelled as chosen, not overlooked | `GMOGap.retroactive_closes_gap` and `AWaffV.analogy_would_rescue` in [Cases/](../lean-proofs/LegalProofs/Cases/) |
+| **Each country's forms** (point 2): dates, currencies, numbering | Data that the fact generator reads: the date forms and calendars (Japanese era years, Bikram Sambat), each currency with the day it stopped being legal tender, and the numbering scheme (art. 4¹, § 3-1). A calendar conversion comes with a proof that it keeps dates in order | Real calendar dates in [Calendar.lean](../lean-proofs/LegalProofs/Calendar.lean); the forms are in the detectors' patches, not yet in Lean |
+| **Each legal system's fingerprint** (point 4) | The country's own rules, each one a definition citing its source: when a rule binds (publication, or a set number of days after it), whether an extension can reach back, and how a repeal is recorded (a numbered placeholder or deletion) | One shared rule set for all countries, in Basic.lean |
+| **What the history allows** (point 6) | Which certificates a country can have at all. Reference and repeal certificates need dated versions; a repository that holds each act once can only certify facts visible in a single text (pre-publication dates, references to provisions that never existed) | Certificates for references in [History.lean](../lean-proofs/LegalProofs/History.lean); for empty periods, pre-publication dates and missing paragraphs in [Certificates.lean](../lean-proofs/LegalProofs/Certificates.lean) |
+| **How the record is built** (points 5 and 7) | A model of amending acts: a day's instructions, applied in order. It says when two changes on one day conflict and when an instruction aimed at a missing provision does nothing. Each repository problem becomes a record excluded or corrected before facts are generated; its row in repository_problems.csv is the switch | [Amendments.lean](../lean-proofs/LegalProofs/Amendments.lean) (`same_key_conflict`, `replace_missing_noop`); exclusions not yet |
+| **What the detectors got wrong** (point 5) | Not provable: Lean checks that the facts imply the mistake, not that a detector read the facts correctly. The bug log stays the record of that, and a certificate rebuilt from the history (rather than from the flag) catches part of it | Reference certificates already rebuild each provision's history instead of trusting the flag |
+
+### A folder for each country
+
+The plan is one folder per country beside the shared model, built from that country's repository and the data published here:
+
+```
+lean-proofs/LegalProofs/Countries/<Country>/
+  Forms.lean       date forms, calendars, currencies and their end dates, numbering (point 2)
+  Rules.lean       the country's own rules of commencement, publication, retroactivity and repeal, each with its source (point 4)
+  Cases/           one file per likely real mistake, quoting the official text, with its counterargument where there is one (points 1 and 3)
+  Generated/       certificates for the country's flags, written from its history and checked on every build (point 6)
+  Exclusions.lean  records left out until the repository is fixed, one per row of repository_problems.csv (point 7)
+```
+
+The shared schemas stay in one place, so a theorem proved once covers every country. What differs between countries is data and rules, and each of those carries its source. A natural order is to start with the 16 countries whose repositories hold full histories, where the most can be certified. The data files below ([likely_mistakes.csv](data/countries/likely_mistakes.csv), [repository_problems.csv](data/countries/repository_problems.csv)) are the inputs they start from.
+
 ## The 50 jurisdictions
 
 | Jurisdiction | Flags | Reviewed | Survived | Likely real | Open | Folder |
