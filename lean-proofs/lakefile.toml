@@ -24,3 +24,11 @@ name = "FrTax"
 [[lean_exe]]
 name = "frtax"
 root = "FrTax.Main"
+
+# IRS guidance checked against the statute (irs-audit/README.md). The generated run files in irs-audit/lean are run
+# with `lake env lean --run`; these are the library modules.
+[[lean_lib]]
+name = "IrsAudit"
+srcDir = "irs-audit/lean"
+roots = ["Audit.Flags2", "flags.AfrFlags"]
+globs = ["Audit.Formula", "Audit.CPI", "Audit.Alfred", "Audit.Flags2", "flags.AfrFlags"]

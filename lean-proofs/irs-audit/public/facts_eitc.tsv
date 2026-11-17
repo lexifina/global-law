@@ -1,0 +1,233 @@
+adjustments.xml	/hsaContributionAmount	Dollar:0	
+adjustments.xml	/deductionForTraditionalIRAContribution	Dollar:0	Deduction for contributions to traditional IRAs (excluding payroll deductions)
+adjustments.xml	/movingExpensesForArmedServicesMembers	Dollar:0	Moving expenses for members of armed services
+adjustments.xml	/alimonyPaid	Dollar:0	Alimony paid (pre 2019 divorce)
+adjustments.xml	/penaltyForEarlySavingsWithdrawal	Dollar:0	Penalty for early withdrawal of savings
+adjustments.xml	/otherAdjustments	Dollar:0	Other Adjustments
+adjustments.xml	/selfEmploymentHealthInsuranceContributions	Dollar:0 Dollar:0	Self-employed health insurance contributions for both self and spouse. Implements Form 7206
+adjustments.xml	/businessCreditsForEligible	Dollar:0	Business credits for reservists, performing artists, and fee-based government         officials
+adjustments.xml	/selfEmploymentRetirementPlanContributions	Dollar:0 Dollar:0	Self-employed contributions to eligible retirement plans.
+adjustments.xml	/adjustmentsToIncome	Dollar:0	Adjustments to income to report on line 10 of Form 1040 and line 26 of Schedule 1.         The following simplifying assumption was made for user conv
+constants.xml	/taxYear	Int:2026 Int:2025 Int:2024	Chosen tax year
+constants.xml	/nextTaxYear	Int:1	Next tax year
+constants.xml	/lastTaxYear	Int:1	
+constants.xml	/taxYearMinusTwo	Int:2	Tax year minus two years
+constants.xml	/isTaxYear2024	Int:2024	
+constants.xml	/isTaxYear2025	Int:2025	
+constants.xml	/isTaxYear2026	Int:2026	
+constants.xml	/maxNumberOfEitcQcs	Int:3	
+constants.xml	/seIncomeThreshold	Dollar:400	
+constants.xml	/socialSecuritySelfEmploymentTaxPortion	Rational:31/250	
+constants.xml	/medicareSelfEmploymentTaxPortion	Rational:29/1000	
+constants.xml	/selfEmploymentTaxDeductionMultiplier	Rational:1/2	
+constants.xml	/percentageOfSEIncomeSubjectToTax	Rational:1847/2000	
+constants.xml	/maxStudentLoanDeduction	Dollar:2500	The maximum amount one is allowed to deduct because of student loan interest payments
+constants2023.xml	/maxEducatorExpensesMFJ2023	Dollar:600	The maximum deduction an individual can take for educator expense and is MFJ
+constants2023.xml	/maxEducatorExpensesNonMFJ2023	Dollar:300	The maximum deduction an individual can take for educator expense and is not MFJ
+constants2023.xml	/maxIncomeSubjectToSocialSecurityTax2023	Dollar:160200	Schedule SE Line 7. Maximum amount of combined wages and self-employment earnings subject to social security tax or                 the 6.2% portion o
+constants2023.xml	/deductionForTraditionalIRAContributionMax2023	Dollar:15000	Max contribution for traditional IRAs (excluding payroll deductions) is $8000 per year. $7000 is the limit for those under 50, but we only know if som
+constants2023.xml	/hsaTotalDeductibleAmountMax2023	Dollar:15000	Maximum annual deductible and other out-of-pocket expenses for family. We are agnostic to filing status so double to 17000 and do not take MAGI into a
+constants2023.xml	/maxIncomeForStudentLoanInterestDeduction2023	Dollar:185000 Dollar:90000	The maximum MAGI that a taxpayer can have and still receive the Student Loan Interest Deduction
+constants2023.xml	/studentLoanPhaseOutStart2023	Dollar:155000 Dollar:75000	The MAGI at which the student loan interest deduction begins to phase out for MFJ filers.                 Rev Proc 30 Interest on Education Loans &#xA
+constants2023.xml	/eitcGrossIncomeLimitForQualifyingRelative2023	Dollar:4700	
+constants2023.xml	/eitcMfjLimitWithThreeOrMoreChildren2023	Dollar:63398	EITC limit with 3 or more children when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2023.xml	/eitcSelfLimitWithThreeOrMoreChildren2023	Dollar:56838	EITC limit with 3 or more children when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2023.xml	/eitcMfjLimitWithTwoChildren2023	Dollar:59478	EITC limit with 2 children when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2023.xml	/eitcSelfLimitWithTwoChildren2023	Dollar:52918	EITC limit with 2 children when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2023.xml	/eitcMfjLimitWithOneChild2023	Dollar:53120	EITC limit with 1 child when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2023.xml	/eitcSelfLimitWithOneChild2023	Dollar:46560	EITC limit with 1 child when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2023.xml	/eitcMfjLimitWithZeroChildren2023	Dollar:24210	EITC limit with 0 children when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2023.xml	/eitcSelfLimitWithZeroChildren2023	Dollar:17640	EITC limit with 0 children when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2023.xml	/phaseInEndsFor0QualifyingChildren2023	Dollar:7840	The earned income amount which provides the max EITC with 0 qualifying children                 Rev Proc .06 Earned                 Income Credit &#xA
+constants2023.xml	/phaseInEndsFor1QualifyingChild2023	Dollar:11750	The earned income amount which provides the max EITC with 1 qualifying child                 Rev Proc .06 Earned                 Income Credit &#xA7;3
+constants2023.xml	/phaseInEndsFor2OrMoreQualifyingChildren2023	Dollar:16510	The earned income amount which provides the max EITC with 2 or more qualifying children                 Rev Proc .06                 Earned Income Cre
+constants2023.xml	/phaseInRatesFor0Qc2023	Rational:765/10000	
+constants2023.xml	/phaseInRatesFor1Qc2023	Rational:34/100	
+constants2023.xml	/phaseInRatesFor2Qc2023	Rational:40/100	
+constants2023.xml	/phaseInRatesFor3OrMoreQc2023	Rational:45/100	
+constants2023.xml	/eitcInvestmentIncomeLimit2023	Dollar:11000	Whether the TP's Investment Income is low enough for the EITC                 Rev Proc .06 Earned Income Credit &#xA7;32(i)
+constants2023.xml	/eitcPhaseOutRate0QC2023	Rational:765/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2023.xml	/eitcPhaseOutRate1QC2023	Rational:1598/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2023.xml	/eitcPhaseOutRate2OrMoreQC2023	Rational:2106/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2023.xml	/eitcPhaseOutThreshold2023	Int:0 Int:1 Int:0 Int:1	The amount of income above which the amount of EITC begins to be reduced.                 rp-22-38
+constants2023.xml	/eitcPhaseOutThreshold0QCNonMFJ2023	Dollar:9800	The amount of income above which the amount of EITC begins to be reduced.                 https://www.irs.gov/irb/2023-48_IRB
+constants2023.xml	/eitcPhaseOutThreshold1OrMoreQCNonMFJ2023	Dollar:21560	The amount of income above which the amount of EITC begins to be reduced.                 https://www.irs.gov/irb/2023-48_IRB
+constants2023.xml	/eitcPhaseOutThreshold0QCMFJ2023	Dollar:16370	The amount of income above which the amount of EITC begins to be reduced.                 https://www.irs.gov/irb/2023-48_IRB
+constants2023.xml	/eitcPhaseOutThreshold1OrMoreQCMFJ2023	Dollar:28120	The amount of income above which the amount of EITC begins to be reduced.                 https://www.irs.gov/irb/2023-48_IRB
+constants2024.xml	/maxEducatorExpensesMFJ2024	Dollar:600	The maximum deduction an individual can take for educator expense and is MFJ
+constants2024.xml	/maxEducatorExpensesNonMFJ2024	Dollar:300	The maximum deduction an individual can take for educator expense and is not MFJ
+constants2024.xml	/maxIncomeSubjectToSocialSecurityTax2024	Dollar:168600	Schedule SE Line 7. Maximum amount of combined wages and self-employment earnings subject to social security tax or                 the 6.2% portion o
+constants2024.xml	/deductionForTraditionalIRAContributionMax2024	Dollar:16000	Max contribution for traditional IRAs (excluding payroll deductions) is $8000 per year. $7000 is the limit for those under 50, but we only know if som
+constants2024.xml	/hsaTotalDeductibleAmountMax2024	Dollar:16100	Maximum annual deductible and other out-of-pocket expenses for family. We are agnostic to filing status so double to 17000 and do not take MAGI into a
+constants2024.xml	/seIncomeThreshold2024	Dollar:400	
+constants2024.xml	/socialSecuritySelfEmploymentTaxPortion2024	Rational:31/250	
+constants2024.xml	/medicareSelfEmploymentTaxPortion2024	Rational:29/1000	
+constants2024.xml	/selfEmploymentTaxDeductionMultiplier2024	Rational:1/2	
+constants2024.xml	/percentageOfSEIncomeSubjectToTax2024	Rational:1847/2000	
+constants2024.xml	/maxStudentLoanDeduction2024	Dollar:2500	The maximum amount one is allowed to deduct because of student loan interest payments
+constants2024.xml	/maxIncomeForStudentLoanInterestDeduction2024	Dollar:195000 Dollar:95000	The maximum MAGI that a taxpayer can have and still receive the Student Loan Interest Deduction
+constants2024.xml	/studentLoanPhaseOutStart2024	Dollar:165000 Dollar:80000	The MAGI at which the student loan interest deduction begins to phase out for MFJ filers.                 Rev Proc 30 Interest on Education Loans &#xA
+constants2024.xml	/eitcGrossIncomeLimitForQualifyingRelative2024	Dollar:5050	
+constants2024.xml	/eitcMfjLimitWithThreeOrMoreChildren2024	Dollar:66819	EITC limit with 3 or more children when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2024.xml	/eitcSelfLimitWithThreeOrMoreChildren2024	Dollar:59899	EITC limit with 3 or more children when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2024.xml	/eitcMfjLimitWithTwoChildren2024	Dollar:62688	EITC limit with 2 children when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2024.xml	/eitcSelfLimitWithTwoChildren2024	Dollar:55768	EITC limit with 2 children when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2024.xml	/eitcMfjLimitWithOneChild2024	Dollar:56004	EITC limit with 1 child when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2024.xml	/eitcSelfLimitWithOneChild2024	Dollar:49084	EITC limit with 1 child when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2024.xml	/eitcMfjLimitWithZeroChildren2024	Dollar:25511	EITC limit with 0 children when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2024.xml	/eitcSelfLimitWithZeroChildren2024	Dollar:18591	EITC limit with 0 children when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2024.xml	/phaseInEndsFor0QualifyingChildren2024	Dollar:8260	The earned income amount which provides the max EITC with 0 qualifying children                 Rev Proc .06 Earned                 Income Credit &#xA
+constants2024.xml	/phaseInEndsFor1QualifyingChild2024	Dollar:12390	The earned income amount which provides the max EITC with 1 qualifying child                 Rev Proc .06 Earned                 Income Credit &#xA7;3
+constants2024.xml	/phaseInEndsFor2OrMoreQualifyingChildren2024	Dollar:17400	The earned income amount which provides the max EITC with 2 or more qualifying children                 Rev Proc .06                 Earned Income Cre
+constants2024.xml	/phaseInRatesFor0Qc2024	Rational:765/10000	
+constants2024.xml	/phaseInRatesFor1Qc2024	Rational:34/100	
+constants2024.xml	/phaseInRatesFor2Qc2024	Rational:40/100	
+constants2024.xml	/phaseInRatesFor3OrMoreQc2024	Rational:45/100	
+constants2024.xml	/eitcInvestmentIncomeLimit2024	Dollar:11600	Whether the TP's Investment Income is low enough for the EITC                 Rev Proc .06 Earned Income Credit &#xA7;32(i)
+constants2024.xml	/eitcPhaseOutRate0QC2024	Rational:765/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2024.xml	/eitcPhaseOutRate1QC2024	Rational:1598/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2024.xml	/eitcPhaseOutRate2OrMoreQC2024	Rational:2106/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2024.xml	/eitcPhaseOutThreshold2024	Int:0 Int:1 Int:0 Int:1	The amount of income above which the amount of EITC begins to be reduced.                 Rev Proc .06 Earned Income                 Credit &#xA7;32(b
+constants2024.xml	/eitcPhaseOutThreshold0QCNonMFJ2024	Dollar:10330	The amount of income above which the amount of EITC begins to be reduced.                 https://www.irs.gov/irb/2023-48_IRB
+constants2024.xml	/eitcPhaseOutThreshold1OrMoreQCNonMFJ2024	Dollar:22720	The amount of income above which the amount of EITC begins to be reduced.                 https://www.irs.gov/irb/2023-48_IRB
+constants2024.xml	/eitcPhaseOutThreshold0QCMFJ2024	Dollar:17250	The amount of income above which the amount of EITC begins to be reduced.                 https://www.irs.gov/irb/2023-48_IRB
+constants2024.xml	/eitcPhaseOutThreshold1OrMoreQCMFJ2024	Dollar:29640	The amount of income above which the amount of EITC begins to be reduced.                 https://www.irs.gov/irb/2023-48_IRB
+constants2025.xml	/maxEducatorExpensesMFJ2025	Dollar:600	The maximum deduction an individual can take for educator expense and is MFJ
+constants2025.xml	/maxEducatorExpensesNonMFJ2025	Dollar:300	The maximum deduction an individual can take for educator expense and is not MFJ
+constants2025.xml	/maxIncomeSubjectToSocialSecurityTax2025	Dollar:176100	Schedule SE Line 7. Maximum amount of combined wages and self-employment earnings subject to social security tax or                 the 6.2% portion o
+constants2025.xml	/deductionForTraditionalIRAContributionMax2025	Dollar:16000	Max contribution for traditional IRAs (excluding payroll deductions) is $8000 per year. $7000 is the limit for those under 50, but we only know if som
+constants2025.xml	/hsaTotalDeductibleAmountMax2025	Dollar:16600	Maximum annual deductible and other out-of-pocket expenses for family. We are agnostic to filing status so double to 17000 and do not take MAGI into a
+constants2025.xml	/seIncomeThreshold2025	Dollar:400	
+constants2025.xml	/socialSecuritySelfEmploymentTaxPortion2025	Rational:31/250	
+constants2025.xml	/medicareSelfEmploymentTaxPortion2025	Rational:29/1000	
+constants2025.xml	/selfEmploymentTaxDeductionMultiplier2025	Rational:1/2	
+constants2025.xml	/percentageOfSEIncomeSubjectToTax2025	Rational:1847/2000	
+constants2025.xml	/maxStudentLoanDeduction2025	Dollar:2500	The maximum amount one is allowed to deduct because of student loan interest payments
+constants2025.xml	/maxIncomeForStudentLoanInterestDeduction2025	Dollar:200000 Dollar:100000	The maximum MAGI that a taxpayer can have and still receive the Student Loan Interest Deduction
+constants2025.xml	/studentLoanPhaseOutStart2025	Dollar:170000 Dollar:85000	The MAGI at which the student loan interest deduction begins to phase out for MFJ filers.                 Rev Proc 30 Interest on Education Loans &#xA
+constants2025.xml	/eitcGrossIncomeLimitForQualifyingRelative2025	Dollar:5200	
+constants2025.xml	/eitcMfjLimitWithThreeOrMoreChildren2025	Dollar:68675	EITC limit with 3 or more children when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2025.xml	/eitcSelfLimitWithThreeOrMoreChildren2025	Dollar:61555	EITC limit with 3 or more children when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2025.xml	/eitcMfjLimitWithTwoChildren2025	Dollar:64430	EITC limit with 2 children when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2025.xml	/eitcSelfLimitWithTwoChildren2025	Dollar:57310	EITC limit with 2 children when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2025.xml	/eitcMfjLimitWithOneChild2025	Dollar:57554	EITC limit with 1 child when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2025.xml	/eitcSelfLimitWithOneChild2025	Dollar:50434	EITC limit with 1 child when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2025.xml	/eitcMfjLimitWithZeroChildren2025	Dollar:26214	EITC limit with 0 children when filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2025.xml	/eitcSelfLimitWithZeroChildren2025	Dollar:19104	EITC limit with 0 children when not filing as MFJ                 Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2025.xml	/phaseInEndsFor0QualifyingChildren2025	Dollar:8490	The earned income amount which provides the max EITC with 0 qualifying children                 Rev Proc .06 Earned                 Income Credit &#xA
+constants2025.xml	/phaseInEndsFor1QualifyingChild2025	Dollar:12730	The earned income amount which provides the max EITC with 1 qualifying child                 Rev Proc .06 Earned                 Income Credit &#xA7;3
+constants2025.xml	/phaseInEndsFor2OrMoreQualifyingChildren2025	Dollar:17880	The earned income amount which provides the max EITC with 2 or more qualifying children                 Rev Proc .06                 Earned Income Cre
+constants2025.xml	/phaseInRatesFor0Qc2025	Rational:765/10000	
+constants2025.xml	/phaseInRatesFor1Qc2025	Rational:34/100	
+constants2025.xml	/phaseInRatesFor2Qc2025	Rational:40/100	
+constants2025.xml	/phaseInRatesFor3OrMoreQc2025	Rational:45/100	
+constants2025.xml	/eitcInvestmentIncomeLimit2025	Dollar:11950	Whether the TP's Investment Income is low enough for the EITC                 Rev Proc .06 Earned Income Credit &#xA7;32(i)
+constants2025.xml	/eitcPhaseOutRate0QC2025	Rational:765/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2025.xml	/eitcPhaseOutRate1QC2025	Rational:1598/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2025.xml	/eitcPhaseOutRate2OrMoreQC2025	Rational:2106/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2025.xml	/eitcPhaseOutThreshold2025	Int:0 Int:1 Int:0 Int:1	The amount of income above which the amount of EITC begins to be reduced.           Rev Proc .06 Earned Income           Credit &#xA7;32(b)
+constants2025.xml	/eitcPhaseOutThreshold0QCNonMFJ2025	Dollar:10620	The amount of income above which the amount of EITC begins to be reduced.                 rp-24-40
+constants2025.xml	/eitcPhaseOutThreshold1OrMoreQCNonMFJ2025	Dollar:23350	The amount of income above which the amount of EITC begins to be reduced.
+constants2025.xml	/eitcPhaseOutThreshold0QCMFJ2025	Dollar:17730	The amount of income above which the amount of EITC begins to be reduced.
+constants2025.xml	/eitcPhaseOutThreshold1OrMoreQCMFJ2025	Dollar:30470	The amount of income above which the amount of EITC begins to be reduced.
+constants2026.xml	/maxEducatorExpensesMFJ2026	Dollar:700	The maximum deduction an individual can take for educator expense and is MFJ
+constants2026.xml	/maxEducatorExpensesNonMFJ2026	Dollar:350	The maximum deduction an individual can take for educator expense and is not MFJ
+constants2026.xml	/maxIncomeSubjectToSocialSecurityTax2026	Dollar:184500	Schedule SE Line 7. Maximum amount of combined wages and self-employment earnings subject to social security tax or               the 6.2% portion of 
+constants2026.xml	/deductionForTraditionalIRAContributionMax2026	Dollar:17200	Max contribution for traditional IRAs (excluding payroll deductions) is $8000 per year. $7000 is the limit for those under 50, but we only know if som
+constants2026.xml	/hsaTotalDeductibleAmountMax2026	Dollar:17000	Maximum annual deductible and other out-of-pocket expenses for family. We are agnostic to filing status so double to 17000 and do not take MAGI into a
+constants2026.xml	/seIncomeThreshold2026	Dollar:400	
+constants2026.xml	/socialSecuritySelfEmploymentTaxPortion2026	Rational:31/250	
+constants2026.xml	/medicareSelfEmploymentTaxPortion2026	Rational:29/1000	
+constants2026.xml	/selfEmploymentTaxDeductionMultiplier2026	Rational:1/2	
+constants2026.xml	/percentageOfSEIncomeSubjectToTax2026	Rational:1847/2000	
+constants2026.xml	/maxStudentLoanDeduction2026	Dollar:2500	The maximum amount one is allowed to deduct because of student loan interest payments
+constants2026.xml	/maxIncomeForStudentLoanInterestDeduction2026	Dollar:205000 Dollar:100000	The maximum MAGI that a taxpayer can have and still receive the Student Loan Interest Deduction
+constants2026.xml	/studentLoanPhaseOutStart2026	Dollar:175000 Dollar:85000	The MAGI at which the student loan interest deduction begins to phase out for MFJ filers.               Rev Proc 30 Interest on Education Loans &#xA7;
+constants2026.xml	/eitcGrossIncomeLimitForQualifyingRelative2026	Dollar:5300	
+constants2026.xml	/eitcMfjLimitWithThreeOrMoreChildren2026	Dollar:70244	EITC limit with 3 or more children when filing as MFJ               Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2026.xml	/eitcSelfLimitWithThreeOrMoreChildren2026	Dollar:62974	EITC limit with 3 or more children when not filing as MFJ               Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2026.xml	/eitcMfjLimitWithTwoChildren2026	Dollar:65899	EITC limit with 2 children when filing as MFJ               Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2026.xml	/eitcSelfLimitWithTwoChildren2026	Dollar:58629	EITC limit with 2 children when not filing as MFJ               Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2026.xml	/eitcMfjLimitWithOneChild2026	Dollar:58863	EITC limit with 1 child when filing as MFJ               Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2026.xml	/eitcSelfLimitWithOneChild2026	Dollar:51593	EITC limit with 1 child when not filing as MFJ               Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2026.xml	/eitcMfjLimitWithZeroChildren2026	Dollar:26820	EITC limit with 0 children when filing as MFJ               Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2026.xml	/eitcSelfLimitWithZeroChildren2026	Dollar:19540	EITC limit with 0 children when not filing as MFJ               Rev Proc .06 Earned Income Credit &#xA7;32(b)
+constants2026.xml	/phaseInEndsFor0QualifyingChildren2026	Dollar:8680	The earned income amount which provides the max EITC with 0 qualifying children               Rev Proc .06 Earned               Income Credit &#xA7;32
+constants2026.xml	/phaseInEndsFor1QualifyingChild2026	Dollar:13020	The earned income amount which provides the max EITC with 1 qualifying child               Rev Proc .06 Earned               Income Credit &#xA7;32(b)
+constants2026.xml	/phaseInEndsFor2OrMoreQualifyingChildren2026	Dollar:18290	The earned income amount which provides the max EITC with 2 or more qualifying children               Rev Proc .06               Earned Income Credit 
+constants2026.xml	/phaseInRatesFor0Qc2026	Rational:765/10000	
+constants2026.xml	/phaseInRatesFor1Qc2026	Rational:34/100	
+constants2026.xml	/phaseInRatesFor2Qc2026	Rational:40/100	
+constants2026.xml	/phaseInRatesFor3OrMoreQc2026	Rational:45/100	
+constants2026.xml	/eitcInvestmentIncomeLimit2026	Dollar:12200	Whether the TP's Investment Income is low enough for the EITC           Rev Proc .06 Earned Income Credit &#xA7;32(i)
+constants2026.xml	/eitcPhaseOutThreshold2026	Int:0 Int:1 Int:0 Int:1	The amount of income above which the amount of EITC begins to be reduced.               Rev Proc .06 Earned Income               Credit &#xA7;32(b)
+constants2026.xml	/eitcPhaseOutRate0QC2026	Rational:765/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2026.xml	/eitcPhaseOutRate1QC2026	Rational:1598/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2026.xml	/eitcPhaseOutRate2OrMoreQC2026	Rational:2106/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+constants2026.xml	/eitcPhaseOutThreshold0QCNonMFJ2026	Dollar:10860	The amount of income above which the amount of EITC begins to be reduced.               Rev Proc .06 Earned Income               Credit &#xA7;32(b)
+constants2026.xml	/eitcPhaseOutThreshold1OrMoreQCNonMFJ2026	Dollar:23890	The amount of income above which the amount of EITC begins to be reduced.               Rev Proc .06 Earned Income               Credit &#xA7;32(b)
+constants2026.xml	/eitcPhaseOutThreshold0QCMFJ2026	Dollar:18140	The amount of income above which the amount of EITC begins to be reduced.               Rev Proc .06 Earned Income               Credit &#xA7;32(b)
+constants2026.xml	/eitcPhaseOutThreshold1OrMoreQCMFJ2026	Dollar:31160	The amount of income above which the amount of EITC begins to be reduced.               Rev Proc .06 Earned Income               Credit &#xA7;32(b)
+educatorExpenseAdjustment.xml	/educatorExpenses	Dollar:0	If you're a K-12 educator, you can deduct a certain amount of unreimbursed expenses. If you're filing a joint tax return and both of you are educators
+eitcCalculations.xml	/eitcQualifyingChildren	Int:0	
+eitcCalculations.xml	/eitcRoundedAGI	Rational:50/50 Dollar:25	In order to match the EITC table from Publication 596, we must round the income         to match the rows,         which use increments of $50, calcul
+eitcCalculations.xml	/hasEarnedIncome	Dollar:0	Whether the TP had earned income
+eitcCalculations.xml	/eitcMaxCredit	Int:0 Int:1 Int:2 Int:3	The maximum amount of EITC a taxpayer can receive, depending on the number of         qualifying children.
+eitcCalculations.xml	/eitcPhaseInRate	Int:0 Int:1 Int:2 Int:3	The rate at which EITC phases in with income.
+eitcCalculations.xml	/eitcPhaseOutRate	Int:0 Rational:765/10000 Int:1 Rational:1598/10000 Int:2 Rational:2106/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+eitcCalculations.xml	/eitcCompletedPhaseoutAmount	Int:3 Int:2 Int:1 Int:0 Int:3 Int:2 Int:1 Int:0	The amount of income at which EITC is completely phased out.
+eitcCalculations.xml	/eitcPhaseoutAmountLowerBound	Rational:50/50	The lower bound of the midpoint range that is associated with the complete         phase-out amount
+eitcCalculations.xml	/maxEitcFromAGI	Dollar:25 Dollar:0 Int:2	The maximum amount of EITC that can be received based on the taxpayer's AGI.
+eitcCalculations.xml	/eitcRoundedEarnedIncome	Rational:50/50 Dollar:25	In order to match the EITC table from Publication 596, we must round the income         to match the rows,         which use increments of $50, calcul
+eitcCalculations.xml	/eitcUpperBandPhaseInProjection	Dollar:24	Projects the phase-in amount for the upper edge of the $50 income bracket (midpoint + $24) to see if it triggers the max credit limit.
+eitcCalculations.xml	/eitcPhaseOutThresholdUpperBound	Dollar:25	The threshold plus $25 to represent the upper bound of the phase-out trigger bracket.
+eitcCalculations.xml	/eitcCompletedPhaseoutMidpoint	Int:2	The midpoint between the lower bound of the row and the absolute completed phase-out amount.
+eitcCalculations.xml	/eitcPhaseOutAmount	Dollar:0	The final dollar amount the EITC is reduced based on earned income exceeding the phase-out threshold.
+eitcCalculations.xml	/earnedIncomeCredit	Dollar:0	The amount of EITC, if the taxpayer is eligible. Excludes specific combat pay recommendation logic.
+eitcEligibility.xml	/isDisqualifiedForEitcAgeWithQualifyingChildren	Int:0	True when the taxpayer has QCs and they should see the age comparison Test but there are no tentatively eligible QCs for EITC. Used in Testing eligibi
+eitcEligibility.xml	/flowDisqualifiedEitcZeroEitcChildrenWhenQcEntryRequired	Int:0	True when /flowCohortEitcRequiresQualifyingChildEntry applies (user must enter at least one EITC QC story),                 /familyAndHousehold is com
+familyAndHousehold.xml	/hasQcAndShouldSeeAgeComparisonTest	Int: 0 	
+familyAndHousehold.xml	/hasEitcQualifyingChildren	Int:0	
+familyAndHousehold.xml	/flowFamilyAndHouseholdEmptyForQcGating	Int:0	True when /familyAndHousehold is not yet complete in the graph, or is complete with zero UUIDs. Used so         Qualifying Children knockouts do not r
+income.xml	/jobsIncomeTotal	Dollar:0	Total income for all jobs for both self and spouse
+income.xml	/inmatePay	Dollar:0	Pay received for work while an inmate in a penal institution
+income.xml	/taxableScholarship	Dollar:0	A scholarship or grant that must be counted as income
+income.xml	/disabilityRetirementBenefits	Dollar:0	Disability retirement benefits before minimum retirement age
+income.xml	/non2555ForeignIncome	Dollar:0	Foreign income that is earned income and is not reported on Form 2555
+income.xml	/pensionsIncomeTotal	Dollar:0	Total income for all pensions
+income.xml	/nonTaxableCombatPay	Dollar:0	You can also choose to include your nontaxable combat pay in earned income for the EITC. Your employer reported your nontaxable combat pay in box 12 w
+income.xml	/selfEmploymentGrossIncome	Dollar:0 Dollar:0	Gross self-employment income for this source
+income.xml	/selfEmploymentGrossIncomeWorkRelatedExpenses	Dollar:0 Dollar:0	Work-related business expenses for this self-employment source
+income.xml	/unemploymentIncome	Dollar:0	Unemployment income
+income.xml	/socialSecurityIncome	Dollar:0	Social Security income
+income.xml	/preTaxRetirementAccountIncome	Dollar:0	Total distributions from pre-tax retirement accounts
+income.xml	/taxExemptInterestIncome	Dollar:0	Form 1040 Line 2a. Non-taxable interest
+income.xml	/taxableInterestIncome	Dollar:0	Form 1040 Line 2b. Interest income excluding non-taxable interest
+income.xml	/investmentIncomeTotal	Dollar:0 Dollar:0	Investment income, including Short and long term capital and dividends gains income
+income.xml	/nonSpecificOtherIncome	Dollar:0	Non-specific other income
+income.xml	/nonJobsIncomeTotal	Dollar:0	
+selfEmployment.xml	/hasSelfEmploymentIncome	Dollar:0	
+selfEmployment.xml	/scheduleSELine4a	Dollar:0	Specific calculation on line 4a of Schedule SE (Form 1040) to multiply net self         employment income by 92.35%.
+selfEmployment.xml	/scheduleSELine4b	Dollar:0	
+selfEmployment.xml	/scheduleSELine4c	Dollar:0	Combine lines 4a and 4b. If less than $400, 0 and no self-employment tax.
+selfEmployment.xml	/scheduleSELine5a	Dollar:0	5a) Enter your church employee income from Form W-2. See instructions for definition of church employee income.
+selfEmployment.xml	/scheduleSELine9	Dollar:0	Greater of zero or Line 7 - Line 8d
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeductionForm7206Line2	Dollar:0	Qualified long-term care insurance contract payments or premiums. Included in Line 1 per content
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeductionForm7206Line4	Dollar:0	Net profit and any other earned income from the trade or business under which the insurance plan is established. Don&#x2019;t include Conservation Res
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeductionForm7206Line5	Dollar:0	Schedule C line 31, Schedule SE line 2. Total net profit of self-employment income combined for both self and spouse
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeductionForm7206Line11	Dollar:0	Medicare wages from an S corp in which you are &gt;2% shareholder in which the insurance plan is established
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeductionForm7206Line12	Dollar:0	Form 2555, line 45
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeduction	Dollar:0	Form 7206 line 14. Self-employed health insurance deduction.
+socialSecurity.xml	/totalTaxesPaidOnSocialSecurityIncome	Dollar:0	
+socialSecurity.xml	/pub915Worksheet1Line2	Rational:50/100	Pub 915 Worksheet 1, Line 2.
+socialSecurity.xml	/pub915Worksheet1Line5	Dollar:0	Pub 915 Worksheet 1, Line 5. Enter the total of any exclusions/adjustments for: &#x2022; Adoption benefits (Form 8839, line 30), &#x2022; Foreign earn
+socialSecurity.xml	/pub915MAGIForBenefitsTaxableAmountLine8	Dollar:0	Modifed AGI used to determine taxable amount of SSA benefits. IRS Pub 915         Worksheet 1, Line 8.
+socialSecurity.xml	/pub915BracketZeroLine9	Dollar:32000 Dollar:0 Dollar:25000	Threshold when taxable portion of SSA Benefits changes from 0% to 50%. Pub 915         Worksheet 1, Line 9.         If SSA MAGI (Line 8) is less than 
+socialSecurity.xml	/pub915IncomeExceedingBracketZeroLine10	Dollar:0	MAGI which exceeds zero threshold. Pub 915 Worksheet 1, Line 10
+socialSecurity.xml	/pub915Bracket50Line11	Dollar:12000 Dollar:0 Dollar:9000	Income bracket where taxable portion is 50%. Pub 915 Worksheet 1, Line 11
+socialSecurity.xml	/pub915TaxablePortionFor50Line15	Rational:50/100 Rational:50/100	Taxable amount for 50% bracket. Should not exceed 50% of total SSA Benefits. Pub         915 Worksheet 1, Line 15
+socialSecurity.xml	/line16Pub915TaxablePortionFor85	Dollar:0 Rational:85/100	Taxable amount for 85% bracket. Pub 915 Worksheet 1, Line 16
+socialSecurity.xml	/ssaBenefitsTaxableAmount	Rational:85/100	Taxable amount of Social Security benefits to enter in Form 1040 line 6b. Ranges         from 0% to up to 50% to up to 85% of total SSA benefits
+studentLoanInterestDeduction.xml	/studentLoanInterestAmount	Dollar:0	The amount of interest that the TP affirms that they or their spouse paid on qualify student loans
+studentLoanInterestDeduction.xml	/studentLoanAmountPhaseOutAmount	Dollar:0 Dollar:10 Dollar:10	Phaseout amount for the student loan deduction. Described in instructions for 1040, schedule         1, line 21. Corresponds with Line 8 of the Studen
+studentLoanInterestDeduction.xml	/studentLoanInterestDeduction	Dollar:0	The amount of the student loan interest deduction. Line 21 of Form 1040 Schedule 1, Line 33         Calculated per requirements on Student Loan Intere

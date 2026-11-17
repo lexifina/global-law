@@ -1,0 +1,522 @@
+additionalMedicareTax.xml	/additionalMedicareTaxThresholdForMFJ	Dollar:250000	
+additionalMedicareTax.xml	/additionalMedicareTaxThresholdForAllOtherTPs	Dollar:200000	
+additionalMedicareTax.xml	/additionalMedicareTaxThresholdForMFS	Dollar:125000	
+additionalMedicareTax.xml	/additionalMedicareTaxMultiplier	Rational:9/1000	
+additionalMedicareTax.xml	/unreportedTipsForm8959Line2	Dollar:0	Form 8959 Part I Line 2
+additionalMedicareTax.xml	/uncollectedSSWagesForm8959Line3	Dollar:0	Form 8959 Part I Line 3
+additionalMedicareTax.xml	/excessAdditionalMedicareTaxForm5969Line6	Dollar:0	Form 8959 Part I Line 6
+additionalMedicareTax.xml	/selfEmploymentIncomeForm8959Line8	Dollar:0	Form 8959 Part I Line 8. Per the Form instructions, this should include the total Medicare wages and tips plus your self-employment income, if any (in
+additionalMedicareTax.xml	/excessMedicareTaxForm5969Line11	Dollar:0	
+additionalMedicareTax.xml	/excessSelfEmploymentIncomeOfExcessMedicareTaxForm5969Line12	Dollar:0	
+additionalMedicareTax.xml	/additionalMedicareTaxOnRRTAForm8959Line17	Dollar:0	
+adjustments.xml	/hsaContributionAmount	Dollar:0	
+adjustments.xml	/hsaTotalDeductibleAmountMax	Dollar:17000	Maximum annual deductible and other out-of-pocket expenses for family. We are agnostic to filing status so double to 17000 and do not take MAGI into a
+adjustments.xml	/deductionForTraditionalIRAContribution	Dollar:0	Deduction for contributions to traditional IRAs (excluding payroll deductions)
+adjustments.xml	/deductionForTraditionalIRAContributionMax	Dollar:17200	Max contribution for traditional IRAs (excluding payroll deductions) is $8600 per year. $7500 is the limit for those under 50, but we only know if som
+adjustments.xml	/movingExpensesForArmedServicesMembers	Dollar:0	Moving expenses for members of armed services
+adjustments.xml	/alimonyPaid	Dollar:0	Alimony paid (pre 2019 divorce)
+adjustments.xml	/penaltyForEarlySavingsWithdrawal	Dollar:0	Penalty for early withdrawal of savings
+adjustments.xml	/selfEmploymentHealthInsuranceContributions	Dollar:0 Dollar:0	Self-employed health insurance contributions for both self and spouse. Implements Form 7206
+adjustments.xml	/businessCreditsForEligible	Dollar:0	Business credits for reservists, performing artists, and fee-based government         officials
+adjustments.xml	/selfEmploymentRetirementPlanContributions	Dollar:0 Dollar:0	Self-employed contributions to eligible retirement plans.
+adjustments.xml	/adjustmentsToIncome	Dollar:0	Adjustments to income to report on line 10 of Form 1040 and line 26 of Schedule 1.         The following simplifying assumption was made for user conv
+adoptionCredit.xml	/estimatedTotalQualifiedAdoptionExpenses	Dollar:0	https://www.irs.gov/credits-deductions/individuals/adoption-credit#qualifiedexpenses         Qualified adoption expenses for the credit and exclusion 
+adoptionCredit.xml	/adoptionEligibleChildren	Int:0 Int:0	
+adoptionCredit.xml	/adoptionMagiPhaseoutThreshold	Dollar:265080	Phaseout threshold start for MAGI
+adoptionCredit.xml	/adoptionMagiPhaseoutThresholdEnd	Dollar:305080	Phaseout threshold end for MAGI
+adoptionCredit.xml	/maxRefundableAdoptionCreditAmount	Dollar:5120	
+adoptionCredit.xml	/maxAdoptionCreditPerChild	Dollar:17670	
+adoptionCredit.xml	/adoptionCreditMagiBuffer	Dollar:0	Form 8839 Line 8
+adoptionCredit.xml	/adoptionCreditMultiplier	Dollar:1000.00 Dollar:1000 Dollar:40000	Form 8839 Line 9 (multiplied by 1000)
+adoptionCredit.xml	/tentativeAdoptionCreditAmount	Dollar:1000	Form 8839 Line 10
+adoptionCredit.xml	/tentativeNonRefundableAdoptionCreditAmountWithoutCarryforward	Dollar:0	Form 8839 Line 14
+adoptionCredit.xml	/adoptionCreditCarryforward	Dollar:0	Form 8839 Line 15
+cdcc.xml	/cdccQualifyingPersons	Int:0 Int:0	The number of people who are eligible for the CDCC. Form 2441 Line 2a, aggregated
+cdcc.xml	/cdccQualifyingExpenses	Dollar:0	Child and Dependent Care qualifying expenses. Form 2441 Line 2d, aggregated
+cdcc.xml	/cdccMaxClaimableExpenseWithOneQP	Dollar:3000	
+cdcc.xml	/cdccMaxClaimableExpenseWithTwoQP	Dollar:6000	
+cdcc.xml	/cdccMaxAllowedCreditWithOneQP	Dollar:1500	
+cdcc.xml	/cdccMaxAllowedCreditWithTwoQP	Dollar:3000	
+cdcc.xml	/cdccCareExpensesInitialPhaseOutRate	Rational:1/2000	
+cdcc.xml	/cdccCareExpensesAdditionalPhaseOutRate	Rational:1/4000 Rational:1/2000	
+cdcc.xml	/cdccCareExpensesInitialPhaseInStart	Dollar:15000	The threshold at which the care expenses decimal amount begins reducing
+cdcc.xml	/cdccCareExpensesInitialPhaseOutThreshold	Dollar:45000	The threshold at which the care expenses decimal amount stops reducing past 35% (until the additional phase out starts at a higher AGI)
+cdcc.xml	/cdccCareExpensesAdditionalPhaseInStart	Dollar:150000 Dollar:75000	The threshold at which care expenses begin a second phase out, different depending on MFJ and non-MFJ AGI and rates
+cdcc.xml	/cdccCareExpensesAdditionalPhaseOutThreshold	Dollar:210000 Dollar:105000	The threshold at which the care expenses decimal amount stops reducing
+cdcc.xml	/cdccQualifyingExpenseCap	Int:1 Int:1 Int:0 Dollar:0	The maximum claimable qualifying expenses. Also called the Allowed Cared For Amount.          Form 2441, Line         27
+cdcc.xml	/hasCdccEarnedIncome	Dollar:0	
+cdcc.xml	/cdccCareExpensesDecimalAmount	Dollar:0 Dollar:0.00 Dollar:
+                0.50
+               Dollar:0.49 Dollar:0.01 Int:100 Dollar:
+                0.35
+               Dollar:0.34 Dollar:0.01 Int:100 Dollar:0.20	Care Expenses Decimal Amount. Form 2441, Line 8. Line 7 is AGI.
+cdcc.xml	/cdccCreditForPriorYearExpenses	Dollar:0	Credit for any expenses incurred in the prior tax year. Not currently supported, so this is set as  zero.         Form 2441, Line 9b
+constants.xml	/taxYear	Int:2026	The tax year of the return.
+constants.xml	/nextTaxYear	Int:1	Next tax year
+constants.xml	/lastTaxYear	Int:1	Previous tax year
+constants.xml	/taxYearMinusTwo	Int:2	Tax year minus two years
+constants.xml	/daysInYear	Int:365	The number of days in the tax year: 365 or 366.
+constants.xml	/daysInPriorYear	Int:365	The number of days in the prior tax year: 365 or 366.
+constants.xml	/isLeapYear	Int:366	Whether or not the current tax year is a leap year.
+ctcOdc.xml	/ctcEligibleDependents	Int:0 Int:0	The number of dependents who are eligible for the Child Tax Credit.         Reported on line 4 of Schedule 8812.
+ctcOdc.xml	/odcEligibleDependents	Int:0 Int:0	The number of dependents who are eligible for the Credit for Other         Dependents. Reported on line 6 of Schedule 8812.
+ctcOdc.xml	/maybeEligibleForCtc	Int:0	Whether there are dependents who are eligible for the Child Tax Credit.
+ctcOdc.xml	/maybeEligibleForOdc	Int:0	Whether there are dependents who are eligible for the Credit for Other         Dependents.
+ctcOdc.xml	/maxCtcAmount	Dollar:2200	The maximum child tax credit per child
+ctcOdc.xml	/totalPotentialCtc	Dollar:0	The maximum amount of the Child Tax Credit that could be claimed. Reported         on line 5 of Schedule 8812.
+ctcOdc.xml	/exactlyOneOdcEligibleDependent	Int:1	Whether the taxpayer has exactly one ODC-eligible dependent.
+ctcOdc.xml	/moreThanOneOdcEligibleDependent	Int:1	Whether the taxpayer has more than one ODC-eligible dependent.
+ctcOdc.xml	/odcDependentGrossIncomeThreshold	Dollar:5200	Dependent income threshold to for odc qualification
+ctcOdc.xml	/maxOdcAmount	Dollar:500	The maximum credit for other dependents, per dependent
+ctcOdc.xml	/totalPotentialOdc	Dollar:0	The maximum amount of the Credit for Other Dependents that could be         claimed. Reported on line 7 of Schedule 8812.
+ctcOdc.xml	/dependentCreditPhaseoutThreshold	Dollar:400000 Dollar:200000	The MAGI threshold at which the dependent credits begin to phaseout.         Reported on line 9 of Schedule 8812.
+ctcOdc.xml	/dependentCreditMagiAboveThreshold	Dollar:0	The amount of excess income above the threshold.
+ctcOdc.xml	/roundedDependentCreditMagiAboveThreshold	Dollar:999.99 Rational:1000/1000	In whole $1,000s, the amount of excess income above the threshold. Per         &#xA7;24(b)(2), any fraction of $1,000 is rounded to $1,000. Reported o
+ctcOdc.xml	/dependentCreditPhaseout	Rational:5/100	The amount to reduce the dependent credit amount by. Reported on line 11 of         Form         8812.
+ctcOdc.xml	/dependentCreditLessPhaseout	Dollar:0	The amount of dependent credits left to claim after applying the phaseout.         Reported on line 12 of Schedule 8812.
+ctcOdc.xml	/dependentCreditNotFullyPhasedOut	Dollar:0	Whether there is any amount of dependent credits left to claim after         applying the         phaseout. Reported         on a checkbox on line 12 
+ctcOdc.xml	/maxPotentialOdcAfterPhaseOut	Dollar:0	The max potential odc amount accounting for phase out if applicable
+ctcOdc.xml	/creditLimitWorksheetALine4	Dollar:0	
+ctcOdc.xml	/schedule8812CreditLimit	Dollar:0	The credit limit per Credit Limit Worksheet A Line 5 from Schedule 8812. Reported             on line 13.
+ctcOdc.xml	/remainingCtcAndOdc	Dollar:0	The amount of dependent credits left to claim after crediting the total tentative tax. Reported on line 16a of Form 8812.
+ctcOdc.xml	/totalPotentialActc	Dollar:0	The maximum amount of the Additional Child Tax Credit that could be claimed. Reported on line 16b of Schedule 8812.
+ctcOdc.xml	/maxActcAmount	Dollar:1700	The maximum additional tax credit per child             Rev Proc .05 Child Tax Credit &#xA7;24(d)(1)(A)
+ctcOdc.xml	/actcRefundabilityThreshold	Dollar:2500	The amount of earned income that must be exceeded in order to receive the             refundable additional child             tax credit.
+ctcOdc.xml	/earnedIncomeAboveActcRefundabilityThreshold	Dollar:0	The amount of earned income that can be used to calculate the refundable amount of the additional child tax credit.       Schedule 8812 Line 19
+ctcOdc.xml	/actcLine20Multiplier	Rational:15/100	
+ctcOdc.xml	/threeOrMoreCtcEligibleDependents	Int:3	Whether the taxpayer has three or more CTC-eligible dependents.
+ctcOdc.xml	/ficaAndSETaxDeductionExcessOverEITC	Dollar:0	Schedule 8812 Line 25
+ctcOdc.xml	/totalCtc	Dollar:0 Dollar:0	Total amount of CTC the TP will receive after the phaseout. It is derived and used for us to help the taxpayer make sense of how much of their credit 
+ctcOdc.xml	/totalOdc	Dollar:0 Dollar:0	Total amount of ODC the TP will receive after the phaseout. It is derived and used for us to help the taxpayer make sense of how much of their credit 
+deductions.xml	/oB3Deductions	Dollar:0	Sum of all OB3 below the line deductions
+educationCredits.xml	/qualifyingStudents	Int:0 Int:0	
+educationCredits.xml	/aotcQualifiedEducationExpenses	Dollar:0	Qualified education expenses are amounts paid in TaxYear for tuition and fees required for the student&#x2019;s enrollment or attendance at an eligibl
+educationCredits.xml	/llcQualifiedEducationExpenses	Dollar:0	Tuition and required enrollment fees (including amounts required to be paid to the institution for course-related books, supplies, and equipment)
+educationCredits.xml	/maxAotcAdjustedQualifiedExpenseCap	Dollar:4000	
+educationCredits.xml	/form8863Line28	Dollar:0 Dollar:2000	Form 8863 Line 28
+educationCredits.xml	/form8863Line29	Rational:25/100	Form 8863 Line 29
+educationCredits.xml	/form8863Line30	Dollar:0 Dollar:2000	Form 8863 Line 30
+educationCredits.xml	/maxAotcPerQualifyingStudent	Dollar:2500	Form 8863 Line 1, for all qualifying students
+educationCredits.xml	/maxLlcAmountForTaxYear	Dollar:2000	
+educationCredits.xml	/educationCreditPhaseoutThreshold	Dollar:180000 Dollar:0 Dollar:90000	Form 8863 Line 2 and line 13, thresholds by filing status
+educationCredits.xml	/educationCreditPhaseoutBuffer	Dollar:0	Form 8863 Line 4 and Line 15
+educationCredits.xml	/educationCreditPhaseoutRange	Dollar:20000 Dollar:0 Dollar:10000	Form 8863 Line 5 and 16, by filing status
+educationCredits.xml	/educationCreditApplicableRatiox10	Dollar:10 Dollar:1.000	Form 8863 Line 6 and Line 17 (multiplied by 10)
+educationCredits.xml	/reducedAotcAfterPhaseout	Dollar:10	Form 8863 Line 7
+educationCredits.xml	/americanOpportunityCredit	Dollar:0 Rational:40/100	Form 8863 Line 8. Input on Form 1040 Line 29
+educationCredits.xml	/llcCappedExpenses	Dollar:10000	Form 8863 Line 11. Lesser of total LLC expenses for all students and $10,000
+educationCredits.xml	/llcTentativeMaxCredit	Rational:20/100	Form 8863 Line 12
+educationCredits.xml	/reducedLlcAfterPhaseout	Dollar:10	Form 8863 Line 18
+educationCredits.xml	/educationCreditLimitWorksheetLine6	Dollar:0	
+educationCredits.xml	/lifetimeLearningCredit	Dollar:0	
+educatorExpenseAdjustment.xml	/educatorExpenses	Dollar:0	If you're a K-12 educator, you can deduct up to $300 of unreimbursed expenses. If you're filing a joint tax return and both of you are educators, you 
+educatorExpenseAdjustment.xml	/maxEducatorExpensesMFJ	Dollar:700	The maximum deduction an individual can take for educator expense and is MFJ
+educatorExpenseAdjustment.xml	/maxEducatorExpensesNotMFJ	Dollar:350	The maximum deduction an individual can take for educator expense and is not MFJ
+eitc.xml	/eitcQualifyingChildren	Int:0 Int:0	
+eitc.xml	/hasNoEitcQualifyingChildren	Int:0	
+eitc.xml	/maxEitcFromAGI	Dollar:25 Dollar:0	The maximum amount of EITC that can be received based on the taxpayer's AGI.
+eitc.xml	/roundedEarnedIncome	Rational:50/50 Dollar:25	In order to match the EITC table from Publication 596, we must round the income to match the rows,         which use increments of $50, calculating th
+eitc.xml	/eitcRoundedAGI	Rational:50/50 Dollar:25	In order to match the EITC table from Publication 596, we must round the income to match the rows,         which use increments of $50, calculating th
+eitc.xml	/eitcMaxCredit	Int:0 Int:1 Int:2 Int:3	The maximum amount of EITC a taxpayer can recieve, depending on the number of qualifying children.
+eitc.xml	/phaseInEndsFor0QualifyingChildren	Dollar:8680	The earned income amount which provides the max EITC with 0 qualifying children         Rev Proc .06 Earned         Income Credit &#xA7;32(b)
+eitc.xml	/phaseInEndsFor1QualifyingChild	Dollar:13020	The earned income amount which provides the max EITC with 1 qualifying child         Rev Proc .06 Earned         Income Credit &#xA7;32(b)
+eitc.xml	/phaseInEndsFor2OrMoreQualifyingChildren	Dollar:18290	The earned income amount which provides the max EITC with 2 or more qualifying children         Rev Proc .06         Earned Income Credit &#xA7;32(b)
+eitc.xml	/phaseInRatesFor0Qc	Rational:765/10000	
+eitc.xml	/phaseInRatesFor1Qc	Rational:34/100	
+eitc.xml	/phaseInRatesFor2Qc	Rational:40/100	
+eitc.xml	/phaseInRatesFor3OrMoreQc	Rational:45/100	
+eitc.xml	/eitcPhaseInRate	Int:0 Int:1 Int:2 Int:3	The rate at which EITC phases in with income.
+eitc.xml	/eitcPhaseOutRate	Int:0 Rational:765/10000 Int:1 Rational:1598/10000 Int:2 Rational:2106/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+eitc.xml	/eitcPhaseOutThreshold	Int:0 Dollar:10860 Int:1 Dollar:23890 Int:0 Dollar:18140 Int:1 Dollar:31160	The amount of income above which the amount of EITC begins to be reduced.         Rev Proc .06 Earned Income         Credit &#xA7;32(b)
+eitc.xml	/eitcMfjLimitWithThreeOrMoreChildren	Dollar:70244	EITC limit with 3 or more children when filing as MFJ         Rev Proc .06 Earned Income Credit &#xA7;32(b)
+eitc.xml	/eitcSelfLimitWithThreeOrMoreChildren	Dollar:62974	EITC limit with 3 or more children when not filing as MFJ         Rev Proc .06 Earned Income Credit &#xA7;32(b)
+eitc.xml	/eitcMfjLimitWithTwoChildren	Dollar:65899	EITC limit with 2 children when filing as MFJ         Rev Proc .06 Earned Income Credit &#xA7;32(b)
+eitc.xml	/eitcSelfLimitWithTwoChildren	Dollar:58629	EITC limit with 2 children when not filing as MFJ         Rev Proc .06 Earned Income Credit &#xA7;32(b)
+eitc.xml	/eitcMfjLimitWithOneChild	Dollar:58863	EITC limit with 1 child when filing as MFJ         Rev Proc .06 Earned Income Credit &#xA7;32(b)
+eitc.xml	/eitcSelfLimitWithOneChild	Dollar:51593	EITC limit with 1 child when not filing as MFJ         Rev Proc .06 Earned Income Credit &#xA7;32(b)
+eitc.xml	/eitcMfjLimitWithZeroChildren	Dollar:26820	EITC limit with 0 children when filing as MFJ         Rev Proc .06 Earned Income Credit &#xA7;32(b)
+eitc.xml	/eitcSelfLimitWithZeroChildren	Dollar:19540	EITC limit with 0 children when not filing as MFJ         Rev Proc .06 Earned Income Credit &#xA7;32(b)
+eitc.xml	/eitcCompletedPhaseoutAmount	Int:3 Int:2 Int:1 Int:0 Int:3 Int:2 Int:1 Int:0	The amount of income at which EITC is completely phased out.
+eitc.xml	/eitcPhaseoutAmountLowerBound	Rational:50/50	The lower bound of the midpoint range that is associated with the complete phase-out amount
+eitc.xml	/specialTransitionEitcAmounts	Int:3 Dollar:5 Int:2 Dollar:3 Int:1 Dollar:2 Int:0 Dollar:0 Int:3 Dollar:4 Int:2 Dollar:2 Int:1 Dollar:1 Int:0 Dollar:2	The amount EITC given when the user is close to the phaseout amount for their filing status and         number of QC
+eitc.xml	/maybeEligibleForEitcWithQc	Int:0	
+eitc.xml	/maybeEligibleForEitcWithoutQcWithoutOver25AgeTest	Int:0	Whether the TP passes various tests to be eligible for the Earned Income Tax Credit (EITC)
+eitc.xml	/hasEarnedIncome	Dollar:0	Whether the TP had earned income
+eitc.xml	/eitcInvestmentIncomeLimit	Dollar:12200	Whether the TP's Investment Income is low enough for the EITC         Rev Proc .06 Earned Income Credit &#xA7;32(i)
+eitc.xml	/belowEitcInvestmentIncomeLimit	Dollar:0 Dollar:0	Whether the TP's Investment Income is low enough for the EITC         Rev Proc .06 Earned Income Credit &#xA7;32(i)
+eitc.xml	/earnedIncomeCredit	Dollar:0 Dollar:0 Dollar:24 Dollar:25 Dollar:0 Int:2	The amount of EITC, if the taxpayer is eligible. Magic numbers come from applicable Rev Procs, updated annually. Roughly matches /eitcAmountWithoutCom
+elderlyAndDisabled.xml	/elderlyAndDisabledTaxCreditAmount	Dollar:0	
+elderlyAndDisabled.xml	/maxAGIForElderlyAndDisabledTaxCredit	Dollar:25000 Dollar:12500 Dollar:0 Dollar:17500	
+elderlyAndDisabled.xml	/maxElderlyAndDisabledTaxCredit	Dollar:7500 Dollar:3750 Dollar:0 Dollar:5000	
+excessBusinessLossAdjustment.xml	/excessBusinessLossThreshold	Dollar:512000 Dollar:256000	Form 461 line 15
+excessBusinessLossAdjustment.xml	/form461Line4	Dollar:0	
+excessBusinessLossAdjustment.xml	/form461Line6	Dollar:0	
+excessBusinessLossAdjustment.xml	/form461Line8	Dollar:0	
+excessBusinessLossAdjustment.xml	/form461Line11	Dollar:0	
+excessBusinessLossAdjustment.xml	/form461Line13	Dollar:-1	If line 12 is a negative number, enter it here as a positive number. If line 12 is a positive number, enter it         here as a negative number
+excessBusinessLossAdjustment.xml	/excessBusinessLossAdjustment	Dollar:0 Dollar:-1 Dollar:0	Form 461 Line 16. Form 1040 Schedule 1 line 8p
+income.xml	/capitalLossLimit	Dollar:1500.00 Dollar:3000.00	
+income.xml	/ordinaryDividendsIncome	Dollar:0	Form 1040 Line 3b. Ordinary dividends income
+income.xml	/unemploymentIncome	Dollar:0	Unemployment income
+income.xml	/preTaxRetirementAccountIncome	Dollar:0	Form 1040 line 4b. Total taxable distributions from pre-tax retirement accounts.
+income.xml	/taxExemptInterestIncome	Dollar:0	Form 1040 Line 2a. Non-taxable interest
+income.xml	/taxableInterestIncome	Dollar:0	Form 1040 Line 2b. Interest income excluding non-taxable interest
+income.xml	/shortTermCapitalGainsIncome	Dollar:0 Dollar:0	Short term capital gains income
+income.xml	/longTermCapitalGainsIncome	Dollar:0 Dollar:0	Long term capital gains income
+income.xml	/shortTermCapitalLoss	Dollar:0 Dollar:0	Short term capital losses. Losses are captured as positive amounts
+income.xml	/longTermCapitalLoss	Dollar:0 Dollar:0	Long term capital losses. Losses are captured as positive amounts
+income.xml	/qualifiedDividendsIncome	Dollar:0	Form 1040 Line 3a. Amount of qualified dividends estimated by tax payer.
+income.xml	/netCapitalGainOrLoss	Dollar:-1.00	Form 1040 Line 7
+income.xml	/netCapitalGainsWithoutQualifiedDividends	Dollar:0 Dollar:0 Dollar:0	
+income.xml	/sCorpPassiveIncome	Dollar:0	Passive income from S-corporations or partnerships
+income.xml	/sCorpNonPassiveIncome	Dollar:0	Non-passive income from S-corporations or partnerships
+income.xml	/nonRentalRoyaltyScheduleEIncome	Dollar:0	Net Schedule E income. Input is not accessible in the Flow and not accessible for taxpayers to provide values.Used for backwards compatibility with ce
+income.xml	/nonSpecificOtherIncome	Dollar:0	Non-specific other income
+income.xml	/otherIncomeWithholding	Dollar:0	Federal taxes withheld from other income so far in the tax year
+income.xml	/rentalIncome	Dollar:0	Schedule E Line 21
+income.xml	/royaltyIncome	Dollar:0	Schedule E Line 23b
+income.xml	/foreignEarnedIncome	Dollar:0	
+income.xml	/overseasTerritoryIncome	Dollar:0	
+income.xml	/puertoRicoEarnedIncome	Dollar:0	
+income.xml	/nonTaxableCombatPay	Dollar:0	
+income.xml	/pensionsIncomeSpouse	Dollar:0	Total income for all pensions for spouse
+income.xml	/jobsIncomeSpouse	Dollar:0	Total income for all jobs for spouse
+income.xml	/nonJobsIncomeTotal	Dollar:0	
+income.xml	/earnedIncomeSpouse	Dollar:0	
+income.xml	/hasFutureJob	Int:0	
+income.xml	/hasCurrentJob	Int:0 Int:0	
+itemizedDeduction.xml	/amountOfItemizedDeductionsToSubtract	Dollar:0 Rational:2/37	If the taxpayer is not in the tax bracket, /excessTaxableIncomeOverTopTaxBracket will be negative or zero so this fact will always be zero.
+itemizedDeduction.xml	/qualifiedMortgageInterestAndInvestmentInterestExpenses	Dollar:0	Qualified mortgage interest including points (if you're the buyer) and Investment interest (limited to your net investment income)
+itemizedDeduction.xml	/qualifiedMortgageInsurancePremiums	Dollar:0	
+itemizedDeduction.xml	/stateAndLocalTaxPayments	Dollar:0	There are four types of deductible nonbusiness SALT taxes: 1)         State, local, and foreign income taxes; 2) State and local general sales taxes; 
+itemizedDeduction.xml	/cashCharitableContributions	Dollar:0	Schedule A Line 11
+itemizedDeduction.xml	/nonCashCharitableContributions	Dollar:0	Schedule A Line 12. Both this fact and /cashCharitableContributions are simple writables, so they are functionally equivalent. The reason we split the
+itemizedDeduction.xml	/medicalAndDentalExpensesRate	Rational:75/1000	
+itemizedDeduction.xml	/medicalAndDentalExpensesTotal	Dollar:0	Total expenses that exceed 7.5% of your adjusted gross income. Can include the         total estimated amount paid for health insurance premiums, not 
+itemizedDeduction.xml	/medicalAndDentalExpenses	Dollar:0	Total expenses that exceed 7.5% of your adjusted gross income. Can include the         total estimated amount paid for health insurance premiums, not 
+itemizedDeduction.xml	/charitableContributionsTotal	Rational:5/1000 Dollar:0 Rational:60/100 Dollar:0	Only allow this itemized deduction for individuals whose aggregate charitable contributions are in excess of %0.5 of their AGI         Floor the chari
+itemizedDeduction.xml	/casualtyLossesAgiLimit	Int:10	10% of the taxpayer's AGI. This is not used to calculate the Casualty Losses deduction,         only to better inform the taxpayer how the deduction i
+itemizedDeduction.xml	/casualtyLossesTotal	Dollar:0	Casualty and theft losses relating to your home, household items, and vehicles if the loss         is attributable to a federally-declared disaster or
+itemizedDeduction.xml	/otherDeductionsTotal	Dollar:0	
+jobs.xml	/jobs/*/deductibleOvertimeCompensation	Rational:1/3 Rational:1/4	This fraction is based on the /overtimeCompensationTotal fact, which is the amount of overtime compensation with         the FLSA Overtime Premium NOT
+jobs.xml	/jobs/*/overtimeCompensationTotal	Dollar:0	Total amount of overtime paid to the taxpayer, with no regard to the excess over normal wages. That is to say,         the FLSA Overtime Premium is no
+jobs.xml	/jobs/*/qualifiedTipIncome	Dollar:0	IRC &#xA7;224. Qualified tip income
+jobs.xml	/jobs/*/amountLastPaycheck	Dollar:0	
+jobs.xml	/jobs/*/averagePayPerPayPeriodForWithholding	Dollar:0	Average pay per pay period used for withholding, consistent pay uses         amountLastPaycheck minus most recent pay period bonus, while inconsistent
+jobs.xml	/jobs/*/inconsistentPayAverage	Int:3 Int:2	
+jobs.xml	/jobs/*/inconsistentPayAverageExcludingBonus	Dollar:0 Int:3 Int:2	Average pay per pay period for inconsistent pay with most recent pay period(s)         bonus subtracted from the sum before dividing by n.
+jobs.xml	/jobs/*/pastPaycheckIncome3	Dollar:0	
+jobs.xml	/jobs/*/restOfYearIncome	Dollar:0	This amount this job will pay for the rest of the year. Uses the same         per-period basis as withholding (averagePayPerPayPeriodForWithholding) s
+jobs.xml	/jobs/*/yearToDateIncome	Dollar:0	
+jobs.xml	/jobs/*/yearToDateWithholding	Dollar:0	The year-to-date withholding from a specific job
+jobs.xml	/jobs/*/averageWithholdingPerPayPeriod	Dollar:0	The average withholding from a specific job per pay period
+jobs.xml	/jobs/*/amountWithheldLastPaycheck	Dollar:0	
+jobs.xml	/jobs/*/hoursPerPayPeriod	Int:0	The number of hours the user is paid for in each pay period. This is only asked for future jobs, as it's used to calculate future income and withholdi
+jobs.xml	/jobs/*/expectedFutureAnnualSalary	Dollar:0	The amount the user expects to be paid annually from this job. This is only asked for future jobs, as it's used to calculate future income and withhol
+jobs.xml	/jobs/*/expectedFuturePayPerHour	Dollar:0	The amount the user expects to be paid per hour
+jobs.xml	/jobs/*/mostRecentPayPeriodBonusAmount	Dollar:0	Bonus pay amount in the most recent pay period
+jobs.xml	/jobs/*/totalFutureBonus	Dollar:0	The total amount of bonus per year you expect to recieve in the future
+jobs.xml	/jobs/*/retirementPlanContributionsToDate	Dollar:0	
+jobs.xml	/jobs/*/healthInsuranceContributionsToDate	Dollar:0	
+jobs.xml	/jobs/*/hsaOrFsaContributionsToDate	Dollar:0	
+jobs.xml	/jobs/*/otherPreTaxContributionsToDate	Dollar:0	
+jobs.xml	/jobs/*/retirementPlanContributionsPerPayPeriod	Dollar:0	
+jobs.xml	/jobs/*/healthInsuranceContributionsPerPayPeriod	Dollar:0	
+jobs.xml	/jobs/*/hsaOrFsaContributionsPerPayPeriod	Dollar:0	
+jobs.xml	/jobs/*/otherPreTaxContributionsPerPayPeriod	Dollar:0	
+jobs.xml	/jobs/*/zeroIndexedStartDay	Int:1	
+jobs.xml	/totalBonusReceivedThreshold	Dollar:1000000	Threshold for changing bonus withholdings from 22% to 37%
+jobs.xml	/jobs/*/payPeriodsPerYear	Int:52 Int:26 Int:24 Int:12	Also Pub 15-T Worksheet 1A Line 1b
+jobs.xml	/hasJobsAvailableForExtraWithholding	Int:0	
+jobs.xml	/primaryFilerHasJobsAvailableForExtraWithholding	Int:0	
+jobs.xml	/spouseHasJobsAvailableForExtraWithholding	Int:0	
+mortgageInsurancePremiumDeduction.xml	/qualifiedMortgageInsurancePremiumPhaseInLimit	Dollar:100000	
+mortgageInsurancePremiumDeduction.xml	/qualifiedMortgageInsurancePremiumPhaseOutRate	Dollar:500 Dollar:1000	
+mortgageInsurancePremiumDeduction.xml	/qualifiedMortgageInsurancePremiumPhaseInThreshold	Int:2	
+mortgageInsurancePremiumDeduction.xml	/qualifiedMortgageInsurancePremiumExcessOverThreshold	Dollar:0	
+mortgageInsurancePremiumDeduction.xml	/qualifiedMortgageInsurancePremiumReductionRate	Dollar:10	
+mortgageInsurancePremiumDeduction.xml	/qualifiedMortgageInsurancePremiumPhaseOut	Dollar:0 Dollar:1	
+mortgageInsurancePremiumDeduction.xml	/qualifiedMortgageInsurancePremiumDeductionTotal	Dollar:0 Dollar:1.00	Calculates the final deductible PMI after applying the phaseout percentage to the total premiums paid.
+netInvestmentIncomeTax.xml	/netInvestmentIncomeTaxRate	Rational:38/1000	
+netInvestmentIncomeTax.xml	/form8960Line12	Dollar:0	
+netInvestmentIncomeTax.xml	/form8960Line14	Dollar:200000 Dollar:250000 Dollar:125000	NIIT Filing Status Income Threshold
+netInvestmentIncomeTax.xml	/form8960Line15	Dollar:0	
+nonItemizerCharitableDeduction.xml	/nonItemizerCharitableContributionDeductionAmount	Dollar:0	
+nonItemizerCharitableDeduction.xml	/nonItemizerCharitableContributionDeductionMFJMax	Dollar:
+          2000
+        	
+nonItemizerCharitableDeduction.xml	/nonItemizerCharitableContributionDeductionNonMFJMax	Dollar:
+          1000
+        	
+nonItemizerCharitableDeduction.xml	/contributionsForNonItemizerCharitableContributionDeduction	Dollar:0	
+nonItemizerCharitableDeduction.xml	/nonItemizerCharitableContributionDeduction	Dollar:0	We only expect this deduction to be taken if the filer's standard deduction is greater than         their itemized deduction, keeping in line with the
+overtimeCompensationDeduction.xml	/maxOvertimeCompensationDeductionAmountNonMFJ	Dollar:12500	
+overtimeCompensationDeduction.xml	/maxOvertimeCompensationDeductionAmountMFJ	Dollar:25000	
+overtimeCompensationDeduction.xml	/isEligibleForOvertimeCompensationDeduction	Dollar:0	Per Notice 2025-69, Taxpayers are ineligible for the qualified tip deduction if they are         working a FLSA-exempt job or are Married Filing Separ
+overtimeCompensationDeduction.xml	/overtimeCompensationDeductionExcessOverThreshold	Dollar:0	
+overtimeCompensationDeduction.xml	/overtimeCompensationDeductionPhaseOutThreshold	Dollar:300000 Dollar:150000	
+overtimeCompensationDeduction.xml	/overtimeCompensationDeductionPhaseOut	Rational:100/1000	The amount allowable as a deduction under shall be reduced (but not below zero) by $100 for each         $1,000 by which the taxpayer&#x2019;s MAGI ex
+overtimeCompensationDeduction.xml	/overtimeCompensationDeduction	Dollar:0 Dollar:0	Example: Single filer with 160k MAGI and 10k deductible overtime compensations.         150k applicable overtime compensation threshold (20,000 excess
+payPeriodCalculations.xml	/jobs/*/payPeriodLength	Int:7 Int:14 Int:15 Int:30	Length of pay periods matching the Floor of Publication 15-T values.
+payPeriodCalculations.xml	/jobs/*/semimonthlyEarlierPeriodEnd	Int:15	For semimonthly pay periods, determines the earlier pay period ending date
+payPeriodCalculations.xml	/jobs/*/semimonthlyLaterPeriodEnd	Int:15 Int:2 Int:14 Int:15	For semimonthly pay periods, determines the later pay period ending date
+payPeriodCalculations.xml	/jobs/*/semimonthlyEarlierPayDate	Int:15	For semimonthly pay periods, determines the earlier pay date, we assume pay dates of the 16 correspond to pay dates on the 1st
+payPeriodCalculations.xml	/jobs/*/semimonthlyLaterPayDate	Int:15 Int:2 Int:14 Int:15	For semimonthly pay periods, determines the later pay date
+payPeriodCalculations.xml	/jobs/*/nextPayDay	Int:1	
+payPeriodCalculations.xml	/jobs/*/effectiveEndDate	Int:2 Int:0 Int:2 Int:2 Int:0 Int:2	The month in which the user last worked as far as income counting towards this         year is concerned, used for semi-monthly and monthly
+payPeriodCalculations.xml	/jobs/*/lastFullPaymentEffectiveEndDate	Int:2 Int:0 Int:2 Int:2 Int:0 Int:2	similar to jobs/*/effectiveEndDate but only up to the last full pay period
+payPeriodCalculations.xml	/jobs/*/currentPartialPayPeriods	Rational:0/1	Rationale representing the fractional pay period that is paid
+payPeriodCalculations.xml	/jobs/*/futurePartialPayPeriods	Int:12 Rational:0/1 Int:1 Int:0 Int:12 Rational:0/1 Int:0 Int:2 Int:0 Int:1 Int:0	Calculated as a combined number/decimal value.
+payPeriodCalculations.xml	/jobs/*/partialPayPeriods	Rational:0/1	The fractional amount of remaining pay periods, for use in calculating resulting         eoy total income.
+payPeriodCalculations.xml	/jobs/*/remainingPayPeriodsInteger	Int:0 Int:12 Int:0 Int:12 Int:1 Int:0 Int:12 Int:0 Int:2 Int:12 Int:15 Int:0 Int:2 Int:0 Int:1 Int:1 Int:2 Int:0 Int:12 Int:12 Int:2 Int:0	The number of pay periods remaining in the year. If the taxpayer is only working for part of         their final pay period, that pay period is includ
+pensionForms.xml	/pensions/*/payPeriodsPerYear	Int:52 Int:26 Int:24 Int:12	Also Pub 15-T Worksheet 1B Line 1b
+pensionForms.xml	/pensions/*/w4pLine4a	Dollar:0 Dollar:0	Total non-job or pension/annuity income. Also line 1d of Pub 15-T Worksheet 1B
+pensionForms.xml	/pensions/*/shouldLeaveW4pLine4aBlank	Dollar:0	
+pensionForms.xml	/pensions/*/w4pLine4b	Dollar:0 Dollar:-1 Dollar:0	Other deductions to income. Also line 1f of Pub 15-T Worksheet 1B
+pensionForms.xml	/pensions/*/shouldLeaveW4pLine4bBlank	Dollar:0	
+pensionForms.xml	/pensions/*/pub15TWorksheet1bLine1g	Dollar:12900 Dollar:8600	
+pensionForms.xml	/pensions/*/pub15TWorksheet1bLine2d	Dollar:0	Adjusted annual payment amount (2d).
+pensionForms.xml	/pensions/*/creditsNeededToFullyBridgeTaxGap	Dollar:0 Int:-1 Dollar:0	
+pensionForms.xml	/pensions/*/tentativeAnnualWithholdingAmount	Dollar:7500 Dollar:0 Dollar:19900 Rational:10/100 Dollar:7500 Dollar:57900 Dollar:1240 Rational:12/100 Dollar:19900 Dollar:113200 Dollar:5800.00 Rational:22/100 Dollar:57900 Dollar:209275 Dollar:17966.00 Rational:24/100 Dollar:113200 Dollar:263725 Dollar:41024.00 Rational:32/100 Dollar:209275.00 Dollar:648100 Dollar:58448.00 Rational:35/100 Dollar:263725 Dollar:192979.25 Rational:37/100 Dollar:648100 Dollar:19300 Dollar:0 Dollar:44100 Rational:10/100 Dollar:19300 Dollar:120100 Dollar:2480.00 Rational:12/100 Dollar:44100 Dollar:230700 Dollar:11600.00 Rational:22/100 Dollar:120100 Dollar:422850 Dollar:35932 Rational:24/100 Dollar:230700 Dollar:531750 Dollar:82048 Rational:32/100 Dollar:422850 Dollar:788000 Dollar:116896 Rational:35/100 Dollar:531750 Dollar:206583.50 Rational:37/100 Dollar:788000 Dollar:15550 Dollar:0 Dollar:33250 Rational:10/100 Dollar:15550 Dollar:83000 Dollar:1770 Rational:12/100 Dollar:33250 Dollar:121250 Dollar:7740 Rational:22/100 Dollar:83000 Dollar:217300 Dollar:16155 Rational:24/100 Dollar:121250 Dollar:271750 Dollar:39207 Rational:32/100 Dollar:217300 Dollar:656150 Dollar:56631 Rational:35/100 Dollar:271750 Dollar:191171.00 Rational:37/100 Dollar:656150	Standard withholding rate schedules for the form W-4P. Line 2j of Pub. 15-T Worksheet 1B.         These amounts are generally a base withholding amoun
+pensionForms.xml	/pensions/*/w4pLine3	Dollar:0 Dollar:0	Line 3 of the W-4P, also used on pub 15-T worksheet 1B, Line 3a
+pensionForms.xml	/pensions/*/shouldLeaveW4pLine3Blank	Dollar:0	
+pensionForms.xml	/pensions/*/pub15TWorksheet1bLine3b	Dollar:0	Pub. 15-T Worksheet 1B Line 3b         Subtract line 3a from line 2u. If zero or less, enter -0-
+pensionForms.xml	/pensions/*/w4pLine4c	Dollar:0 Dollar:0	
+pensionForms.xml	/pensions/*/shouldLeaveW4pLine4cBlank	Dollar:0	
+pensionPayPeriodCalculations.xml	/pensions/*/payPeriodLength	Int:7 Int:14 Int:15 Int:30	Length of pay periods matching the average period length.
+pensionPayPeriodCalculations.xml	/pensions/*/semimonthlyEarlierPeriodEnd	Int:15	For semimonthly pay periods, determines the earlier pay period ending date
+pensionPayPeriodCalculations.xml	/pensions/*/semimonthlyLaterPeriodEnd	Int:15 Int:2 Int:14 Int:15	For semimonthly pay periods, determines the later pay period ending date
+pensionPayPeriodCalculations.xml	/pensions/*/payrollMonthsBetweenStartAndEndMinus1	Int:1	Helper fact to reduce duplication
+pensionPayPeriodCalculations.xml	/pensions/*/remainingPayPeriodsInteger	Int:0 Int:2 Int:12 Int:12 Int:1 Int:0 Int:2 Int:12 Int:15 Int:0 Int:2 Int:1 Int:1 Int:2 Int:0 Int:12	The number of pay periods remaining in the year. If the taxpayer is only working for part of         their final pay period, that pay period is includ
+pensionPayPeriodCalculations.xml	/pensions/*/effectiveEndDate	Int:2 Int:0 Int:2 Int:2 Int:0 Int:2	The month in which the user last worked as far as income counting towards this         year is concerned, used for semi-monthly and monthly
+pensionPayPeriodCalculations.xml	/pensions/*/hasPartialPayPeriod	Int:0	Is paid for a partial partial period
+pensionPayPeriodCalculations.xml	/pensions/*/lastFullPaymentEffectiveEndDate	Int:2 Int:0 Int:2 Int:2 Int:0 Int:2	similar to jobs/*/effectiveEndDate but only up to the last full pay period
+pensionPayPeriodCalculations.xml	/pensions/*/currentPartialPayPeriods	Rational:0/1	Rationale representing the fractional pay period that is paid
+pensionPayPeriodCalculations.xml	/pensions/*/partialPayPeriods	Rational:0/1	The fractional amount of remaining pay periods, for use in calculating resulting         eoy total income.
+pensions.xml	/pensions/*/yearToDateIncome	Dollar:0	
+pensions.xml	/pensions/*/healthInsuranceContributionsPerPayPeriod	Dollar:0	
+pensions.xml	/pensions/*/healthInsuranceContributionsToDate	Dollar:0	
+pensions.xml	/pensions/*/otherPreTaxContributionsPerPayPeriod	Dollar:0	
+pensions.xml	/pensions/*/otherPreTaxContributionsToDate	Dollar:0	
+pensions.xml	/pensions/*/hsaOrFsaContributionsPerPayPeriod	Dollar:0	
+pensions.xml	/pensions/*/hsaOrFsaContributionsToDate	Dollar:0	
+pensions.xml	/pensions/*/yearToDateWithholding	Dollar:0	
+pensions.xml	/pensions/*/semimonthlyEarlierPayDate	Int:15	For semimonthly pay periods, determines the earlier pay date, we assume pay dates of the 16 correspond to pay dates on the 1st
+pensions.xml	/pensions/*/semimonthlyLaterPayDate	Int:15 Int:2 Int:14 Int:15	For semimonthly pay periods, determines the later pay date
+pensions.xml	/pensions/*/nextPayDay	Int:1	
+pensions.xml	/pensions/*/payPeriodsBeforeW4ChangesAppear	Int:0 Int:2 Int:1 Int:1 Int:2 Int:1 Int:0 Int:1	
+pensions.xml	/pensions/*/restOfYearIncome	Dollar:0	
+pensions.xml	/pensions/*/lagWithholding	Dollar:0 Rational:1/1	The amount that will be withheld in the time between today and when the W-4 is expected to         be processed.
+pensions.xml	/pensions/*/futureTentativeWithholding	Dollar:0 Rational:0/1 Rational:1/1	Future tentative withholding: result from Pub 15-T Worksheet 1A         For now, we treat this as a "given" that won't change. Probably will need to r
+pensions.xml	/pensions/*/restOfYearWithholding	Dollar:0	
+pensions.xml	/highestPayingPension	Int:0	Highest "paying" pension or annuity available for extra withholding
+pensions.xml	/hasPensionsAvailableForExtraWithholding	Int:0	
+pensions.xml	/primaryFilerHasPensionsAvailableForExtraWithholding	Int:0	
+pensions.xml	/spouseHasPensionsAvailableForExtraWithholding	Int:0	
+qualifiedBusinessIncomeDeduction.xml	/qBIDeductionOverrideAmount	Dollar:0	
+qualifiedBusinessIncomeDeduction.xml	/qbiComponentMultiplier	Rational:2/10	
+qualifiedBusinessIncomeDeduction.xml	/qbiPhaseInThreshold	Dollar:403500 Dollar:201775 Dollar:201750	
+qualifiedBusinessIncomeDeduction.xml	/qbiPhaseOutThreshold	Dollar:553500 Dollar:276775 Dollar:276750	
+qualifiedBusinessIncomeDeduction.xml	/minimumDeductionForActiveQBIAmount	Dollar:400	
+qualifiedBusinessIncomeDeduction.xml	/minimumQBIThresholdForApplicableTaxpayer	Dollar:1000	
+qualifiedBusinessIncomeDeduction.xml	/qualifiedBusinessIncome	Dollar:0	
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine4	Dollar:0	
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine5	Rational:5/10	
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine6	Rational:25/100	
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine7	Dollar:0	
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine8	Rational:25/1000	
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine13	Dollar:0	The following simplifying assumption was made for user convenience: if there is no phase in, use the tentative QBI Component. If there is any phase in
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine14	Dollar:0	
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine24	Dollar:100	QBI Phase In Percentage. We multiply this by 100 and then divide by 100 at the end of the QBI Deduction calculation to ensure a high level of precisio
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine26	Dollar:0 Dollar:100 Dollar:100	Form 8895-A Line 26, flows into Line 12. The following simplifying assumption was made for user convenience: we always calculate the phase in reductio
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine28	Dollar:0	
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine29	Dollar:0	
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine30	Dollar:0	
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine35	Dollar:0	
+qualifiedBusinessIncomeDeduction.xml	/form8995aLine38	Dollar:0	
+qualifiedDividendsCapitalGainsWorksheet.xml	/fifteenPercentTaxRate	Rational:15/100	
+qualifiedDividendsCapitalGainsWorksheet.xml	/twentyPercentTaxRate	Rational:20/100	
+qualifiedDividendsCapitalGainsWorksheet.xml	/qdcgTier1UpperLimit	Dollar:49450.00 Dollar:98900.00 Dollar:66200.00	Choose correct upper income limit for 0% calculations based on filing         status. Line 6 - Qualified Dividends and Capital Gain Worksheet
+qualifiedDividendsCapitalGainsWorksheet.xml	/qdcgTier2UpperLimit	Dollar:545500.00 Dollar:613700.00 Dollar:579600.00 Dollar:306850.00	Choose correct upper income limit for 15% calculations based on filing status.         Line 13 - Qualified Dividends and Capital Gain Worksheet
+qualifiedDividendsCapitalGainsWorksheet.xml	/remainingTaxableFor15	Dollar:0	Subtract Line 15 from Line 14 to calculate remaining amount eligible to be taxed at 15%.         Line 16 - Qualified Dividends and Capital Gain Worksh
+qualifiedPersonalVehicleLoanInterestDeduction.xml	/personalVehicleLoanInterestAmount	Dollar:0	
+qualifiedPersonalVehicleLoanInterestDeduction.xml	/isEligibleForQualifiedPassengerVehicleLoanInterestDeduction	Dollar:0	
+qualifiedPersonalVehicleLoanInterestDeduction.xml	/maxQPVLIDAmount	Dollar:10000	
+qualifiedPersonalVehicleLoanInterestDeduction.xml	/excessAmountQPVLIDForMFJFiler	Dollar:200000 Dollar:0	
+qualifiedPersonalVehicleLoanInterestDeduction.xml	/excessAmountQpvlidForNonMFJFiler	Dollar:100000 Dollar:0	
+qualifiedPersonalVehicleLoanInterestDeduction.xml	/phaseOutAmountQPVLID	Dollar:1000 Dollar:200	Phaseout amount for the QPVLID
+qualifiedPersonalVehicleLoanInterestDeduction.xml	/tentativeQualifiedPersonalVehicleLoanInterestDeduction	Dollar:0	
+qualifiedPersonalVehicleLoanInterestDeduction.xml	/qualifiedPersonalVehicleLoanInterestDeduction	Dollar:0	Defaults to 0 if QPVLID section is not complete
+qualifiedTipDeduction.xml	/maxQualifiedTipDeductionAmount	Dollar:25000	
+qualifiedTipDeduction.xml	/isEligibleForQualifiedTipDeduction	Dollar:0	Per Notice 2025-69, Taxpayers are ineligible for the qualified tip deduction if they are         Married Filing Separately.         https://www.irs.go
+qualifiedTipDeduction.xml	/qualifiedTipDeductionExcessOverThreshold	Dollar:0	
+qualifiedTipDeduction.xml	/qualifiedTipDeductionPhaseOut	Rational:100/1000	The amount allowable as a deduction under shall be reduced (but not         below zero) by $100 for each $1,000 by which the         taxpayer&#x2019;s
+qualifiedTipDeduction.xml	/qualifiedTipDeduction	Dollar:0 Dollar:0	Qualified tip deductions         Example:         Single filer with 160k MAGI and 20k qualified tips. 150k applicable tip deduction threshold         
+qualifiedTipDeduction.xml	/qualifiedTipDeductionPhaseOutThreshold	Dollar:300000 Dollar:150000	
+retirementSavingsContributionsTaxCredit.xml	/retirementSavingsContributionsTaxCreditAmount	Dollar:0	
+retirementSavingsContributionsTaxCredit.xml	/retirementSavingsMaximumAmountMFJ	Dollar:2000	
+retirementSavingsContributionsTaxCredit.xml	/retirementSavingsMaximumAmountNonMFJ	Dollar:1000	
+retirementSavingsContributionsTaxCredit.xml	/retirementSavingsContributionsTaxCreditIncomeThresholdSingle	Dollar:40250	
+retirementSavingsContributionsTaxCredit.xml	/retirementSavingsContributionsTaxCreditIncomeThresholdHOH	Dollar:60375	
+retirementSavingsContributionsTaxCredit.xml	/retirementSavingsContributionsTaxCreditIncomeThresholdMFJ	Dollar:80500	
+retirementSavingsContributionsTaxCredit.xml	/retirementSavingsAgiLimitForFiftyPercent	Dollar:48500 Dollar:36375 Dollar:24250	Maximum income at which the applicable percentage is 50%
+retirementSavingsContributionsTaxCredit.xml	/retirementSavingsAgiLimitForTwentyPercent	Dollar:52500 Dollar:39375 Dollar:26250	Maximum income at which the applicable percentage is 20%
+retirementSavingsContributionsTaxCredit.xml	/retirementSavingsMultiplier	Int:50 Int:20 Int:10 Int:0	Content representation of the mulitiplier used on Form 8880, line 9
+schedule3.xml	/schedule3Line1	Dollar:0	Foreign tax credit. Form 1116
+schedule3.xml	/schedule3Line5a	Dollar:0	Residential clean energy credit from Form 5695, line 15
+schedule3.xml	/schedule3Line5b	Dollar:0	Energy efficient home improvement credit from Form 5695, line 32
+schedule3.xml	/schedule3Line6a	Dollar:0	General business credit. Form 3800
+schedule3.xml	/schedule3Line6b	Dollar:0	Credit for prior year minimum tax. Form 8801
+schedule3.xml	/schedule3Line6e	Dollar:0	Reserved for future use
+schedule3.xml	/schedule3Line6f	Dollar:0	Clean vehicle credit. Form 8936
+schedule3.xml	/tentativeSchedule3Line6g	Dollar:0	Mortgage interest credit. Form 8396
+schedule3.xml	/maxSchedule3Line6g	Dollar:2000	
+schedule3.xml	/schedule3Line6h	Dollar:0	District of Columbia first-time homebuyer credit. Form 8859
+schedule3.xml	/schedule3Line6i	Dollar:0	Qualified electric vehicle credit. Form 8834
+schedule3.xml	/schedule3Line6j	Dollar:0	Alternative fuel vehicle refueling property credit. Form 8911
+schedule3.xml	/schedule3Line6k	Dollar:0	Credit to holders of tax credit bonds. Form 8912
+schedule3.xml	/schedule3Line6l	Dollar:0	Form 8978, line 14.
+schedule3.xml	/schedule3Line6m	Dollar:0	Credit for previously owned clean vehicles. Form 8936
+schedule3.xml	/alternativeMinimumTaxCreditAmount	Dollar:0	AMT Credit
+schedule3.xml	/schedule3Line9	Dollar:0	Net premium tax credit. Form 8962
+schedule3.xml	/schedule3Line10	Dollar:0	Amount paid with request for extension to file
+schedule3.xml	/schedule3Line11	Dollar:0	Excess social security and tier 1 RRTA tax withheld
+schedule3.xml	/schedule3Line12	Dollar:0	Credit for federal tax on fuels. Form 4136
+schedule3.xml	/schedule3Line13	Dollar:0	Other payments or refundable credits
+selfEmployment.xml	/selfEmploymentSources/*/grossIncome	Dollar:0 Dollar:0	Gross self-employment income for this source
+selfEmployment.xml	/selfEmploymentSources/*/workRelatedExpenses	Dollar:0 Dollar:0	Work-related business expenses for this self-employment source
+selfEmployment.xml	/netSelfEmploymentIncomeSpouse	Dollar:0	Net profit loss, reported as Line 31 on Schedule C and line 2 of Schedule SE for spouse.
+selfEmployment.xml	/seIncomeThreshold	Dollar:400	
+selfEmployment.xml	/socialSecuritySelfEmploymentTaxPortion	Rational:31/250	
+selfEmployment.xml	/medicareSelfEmploymentTaxPortion	Rational:29/1000	
+selfEmployment.xml	/selfEmploymentTaxDeductionMultiplier	Rational:1/2	
+selfEmployment.xml	/percentageOfSEIncomeSubjectToTax	Rational:1847/2000	
+selfEmployment.xml	/primaryHasSelfEmploymentIncome	Dollar:0	
+selfEmployment.xml	/spouseHasSelfEmploymentIncome	Dollar:0	
+selfEmployment.xml	/scheduleSELine4aSelf	Dollar:0	Specific calculation on line 4a of Schedule SE (Form 1040) to multiply net self         employment income by 92.35%.
+selfEmployment.xml	/scheduleSELine4bSelf	Dollar:0	
+selfEmployment.xml	/scheduleSELine4cSelf	Dollar:0	Combine lines 4a and 4b. If less than $400, 0 and no self-employment tax.
+selfEmployment.xml	/scheduleSELine5aSelf	Dollar:0	5a) Enter your church employee income from Form W-2. See instructions for definition of church employee income.
+selfEmployment.xml	/scheduleSELine9Self	Dollar:0	Greater of zero or Line 7 - Line 8d
+selfEmployment.xml	/scheduleSELine4aSpouse	Dollar:0	Specific calculation on line 4a of Schedule SE (Form 1040) to multiply net self         employment income by 92.35%.
+selfEmployment.xml	/scheduleSELine4bSpouse	Dollar:0	
+selfEmployment.xml	/scheduleSELine4cSpouse	Dollar:0	Combine lines 4a and 4b. If less than $400, 0 and no self-employment tax.
+selfEmployment.xml	/scheduleSELine5aSpouse	Dollar:0	5a) Enter your church employee income from Form W-2. See instructions for definition of church employee income.
+selfEmployment.xml	/scheduleSELine9Spouse	Dollar:0	Greater of zero or Line 7 - Line 8d
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeductionForm7206Line2	Dollar:0	Qualified long-term care insurance contract payments or premiums. Included in Line 1 per content
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeductionForm7206Line4	Dollar:0	Net profit and any other earned income from the trade or business under which the insurance plan is established. Don&#x2019;t include Conservation Res
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeductionForm7206Line5	Dollar:0	Schedule C line 31, Schedule SE line 2. Total net profit of self-employment income combined for both self and spouse
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeductionForm7206Line11	Dollar:0	Medicare wages from an S corp in which you are &gt;2% shareholder in which the insurance plan is established
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeductionForm7206Line12	Dollar:0	Form 2555, line 45
+selfEmployment.xml	/selfEmploymentHealthInsuranceDeduction	Dollar:0	Form 7206 line 14. Self-employed health insurance deduction.
+seniorDeduction.xml	/eligibleTaxpayersForSeniorDeduction	Int:2 Int:1 Int:0 Int:1 Int:1 Int:0	
+seniorDeduction.xml	/phaseOutAmountSeniorDeduction	Dollar:0.06	Phaseout amount for the senior deduction. phaseOutAmount = excess * 0.06.
+seniorDeduction.xml	/seniorDeductionPhaseOutStartThresholdMFJ	Dollar:150000	
+seniorDeduction.xml	/seniorDeductionPhaseOutStartThresholdNonMFJ	Dollar:75000	
+seniorDeduction.xml	/seniorDeductionAdditionalIncomeCap	Dollar:100000	The amount of income above the phaseout amount that leads to being completely phased out
+seniorDeduction.xml	/excessOverThresholdSeniorDeduction	Dollar:0	
+seniorDeduction.xml	/maxSeniorDeductionAmountPerEligibleTaxpayer	Dollar:6000	The maximum amount a single taxpayer can deduct. Doubled for MFJ if both         taxpayers are eligible
+seniorDeduction.xml	/seniorDeduction	Dollar:0	Actual amount of senior deduction that can be applied against MAGI. amount = (max         amount based on eligibility)- (excess * 0.06)
+socialSecurity.xml	/socialSecuritySources/*/withheldRateAsRationale	Rational:0/1 Rational:7/100 Rational:1/10 Rational:3/25 Rational:11/50	The rate at which taxes are withheld as a rationale
+socialSecurity.xml	/totalTaxesPaidOnSocialSecurityIncome	Dollar:0	
+socialSecurity.xml	/pub915Worksheet1Line2	Rational:50/100	Pub 915 Worksheet 1, Line 2.
+socialSecurity.xml	/pub915Worksheet1Line5	Dollar:0	Pub 915 Worksheet 1, Line 5. Enter the total of any exclusions/adjustments for: &#x2022; Adoption benefits (Form 8839, line 30), &#x2022; Foreign earn
+socialSecurity.xml	/pub915MAGIForBenefitsTaxableAmountLine8	Dollar:0	Modifed AGI used to determine taxable amount of SSA benefits. IRS Pub 915         Worksheet 1, Line 8.
+socialSecurity.xml	/pub915BracketZeroLine9	Dollar:32000 Dollar:0 Dollar:25000	Threshold when taxable portion of SSA Benefits changes from 0% to 50%. Pub 915         Worksheet 1, Line 9.         If SSA MAGI (Line 8) is less than 
+socialSecurity.xml	/pub915IncomeExceedingBracketZeroLine10	Dollar:0	MAGI which exceeds zero threshold. Pub 915 Worksheet 1, Line 10
+socialSecurity.xml	/pub915Bracket50Line11	Dollar:12000 Dollar:0 Dollar:9000	Income bracket where taxable portion is 50%. Pub 915 Worksheet 1, Line 11
+socialSecurity.xml	/pub915TaxablePortionFor50Line15	Rational:50/100 Rational:50/100	Taxable amount for 50% bracket. Should not exceed 50% of total SSA Benefits. Pub         915 Worksheet 1, Line 15
+socialSecurity.xml	/line16Pub915TaxablePortionFor85	Dollar:0 Rational:85/100	Taxable amount for 85% bracket. Pub 915 Worksheet 1, Line 16
+socialSecurity.xml	/ssaBenefitsTaxableAmount	Rational:85/100	Taxable amount of Social Security benefits to enter in Form 1040 line 6b. Ranges         from 0% to up to 50% to up to 85% of total SSA benefits
+splitWithholdingCalculations.xml	/continuingPensionsExist	Int:0	
+splitWithholdingCalculations.xml	/continuingJobsExist	Int:0	Has at least one job that continues to December 31.
+splitWithholdingCalculations.xml	/net4aOr4bIsIncomeIncrease	Dollar:0	
+splitWithholdingCalculations.xml	/net4aOr4bNetAmount	Int:-1	The absolute value of the net W-4 4a/4b adjustment. Uses /w4Line4NetChange directly,         consistent with the original per-job facts.
+splitWithholdingCalculations.xml	/jobs/*/w4Line4aWithSplitWithholdingStrategy	Dollar:0 Dollar:0	1. Consider jobs/pensions that go to December 31. If all jobs/pensions end before December 31, jump to step (2).            1. Add annualized income a
+splitWithholdingCalculations.xml	/jobs/*/w4Line4bWithSplitWithholdingStrategy	Dollar:0 Dollar:-1 Dollar:-1	1. Consider jobs/pensions that go to December 31. If all jobs/pensions end before December 31, jump to step (2).            1. Add annualized income a
+splitWithholdingCalculations.xml	/jobs/*/w4Line4cWithSplitWithholdingStrategy	Dollar:0 Dollar:0	W-4 Line 4(c) under split withholding strategy. Distributed proportionally across         total job income, divided by each job's own effective pay pe
+splitWithholdingCalculations.xml	/jobs/*/w4Line3WithSplitWithholdingStrategy	Dollar:0 Dollar:0	
+splitWithholdingCalculations.xml	/pensions/*/w4pLine4aWithSplitWithholdingStrategy	Dollar:0 Dollar:0	1. Consider jobs/pensions that go to December 31. If all jobs/pensions end before December 31, jump to step (2).            1. Add annualized income a
+splitWithholdingCalculations.xml	/pensions/*/w4pLine4bWithSplitWithholdingStrategy	Dollar:0 Dollar:-1 Dollar:-1	1. Consider jobs/pensions that go to December 31. If all jobs/pensions end before December 31, jump to step (2).           1. Add annualized income an
+splitWithholdingCalculations.xml	/pensions/*/w4pLine4cWithSplitWithholdingStrategy	Dollar:0 Dollar:0	W-4P Line 4(c) under split withholding strategy. Distributed proportionally across all         eligible jobs and pensions by each pension's income sha
+splitWithholdingCalculations.xml	/pensions/*/w4pLine3WithSplitWithholdingStrategy	Dollar:0 Dollar:0	W-4P Line 3 under split withholding strategy.
+splitWithholdingCalculations.xml	/jobWithHighestAnnualizedIncomeShare	Int:0	
+splitWithholdingCalculations.xml	/pensionWithHighestAnnualizedIncomeShare	Int:0	
+splitWithholdingCalculations.xml	/jobs/*/continuingAnnualizedIncomeShare	Dollar:0	Note: Only precise to two decimal places, resulting in slight differences in 4b Scenario values
+splitWithholdingCalculations.xml	/pensions/*/continuingAnnualizedIncomeShare	Dollar:0	Note: Only precise to two decimal places, resulting in slight differences in 4b Scenario values
+splitWithholdingCalculations.xml	/jobWithHighestFutureIncomeShare	Int:0	
+splitWithholdingCalculations.xml	/pensionWithHighestFutureIncomeShare	Int:0	
+splitWithholdingCalculations.xml	/totalFutureIncomeAllSourcesForSplitWithholding	Dollar:1	
+splitWithholdingCalculations.xml	/jobs/*/payPeriodsWithW4Changes	Rational:1/1	
+splitWithholdingCalculations.xml	/pensions/*/payPeriodsWithW4pChanges	Rational:1/1	
+splitWithholdingCalculations.xml	/jobs/*/fullPayPeriodsWithW4Changes	Int:0	
+splitWithholdingCalculations.xml	/jobs/*/payPeriodsWithW4ChangesRational	Rational:0/1 Rational:1/1	
+splitWithholdingCalculations.xml	/pensions/*/fullPayPeriodsWithW4pChanges	Int:0	
+splitWithholdingCalculations.xml	/pensions/*/payPeriodsWithW4pChangesRational	Rational:0/1 Rational:1/1	
+standardDeduction.xml	/secondaryFilerAdditionalStandardDeductionItems	Int:0	Additional Standard Deduction Items from the secondary filer
+standardDeduction.xml	/additionalStandardDeductionMultiplier	Dollar:2050 Dollar:1650	The amount to add to the standard deduction for each additional item. Rev Proc         .14 Standard Deduction &#xA7;63(f)
+standardDeduction.xml	/MFJStandardDeduction	Dollar:32200	Standard Deduction for filers who are married filing jointly. Rev Proc .15         Standard Deduction &#xA7;1(j)(2)(A)
+standardDeduction.xml	/singleOrMFSStandardDeduction	Dollar:16100	Standard Deduction for filers who are married filing separately or single. Rev         Proc .15 Standard Deduction &#xA7;1(j)(2)(C) &#xA7;1(j)(2)(D)
+standardDeduction.xml	/HoHStandardDeduction	Dollar:24150	Standard Deduction for filers who are filing HoH. Rev Proc .15 Standard Deduction         &#xA7;1(j)(2)(B)
+standardDeduction.xml	/earnedIncomeBump	Dollar:450	The alternative amount to use as the standard deduction if a filer can be claimed         as a dependent. This amount is not used if it exceeds the no
+standardDeduction.xml	/tentativeMinimumStandardDeduction	Dollar:1350	
+stateAndLocalTaxDeduction.xml	/stateAndLocalTaxDeductionLimit	Int:2	This fact is purely informational for the user interface.
+stateAndLocalTaxDeduction.xml	/saltWorksheetLine1	Dollar:40400	Instructions for Schedule A (Form 1040) SALT Worksheet Line 1.
+stateAndLocalTaxDeduction.xml	/saltWorksheetLine3e	Dollar:0	SALT Worksheet Line 3e. Add lines 3a through 3d (Excluded Income)
+stateAndLocalTaxDeduction.xml	/saltWorksheetLine5	Dollar:252500 Dollar:505000	SALT Worksheet Line 5.
+stateAndLocalTaxDeduction.xml	/saltWorksheetLine6	Dollar:0	SALT Worksheet Line 6. Subtract line 5 from line 4. If zero or less, enter         0.
+stateAndLocalTaxDeduction.xml	/saltWorksheetLine7	Rational:3/10	SALT Worksheet Line 7. Multiply line 6 by 30% (0.30)
+stateAndLocalTaxDeduction.xml	/stateAndLocalTaxPaymentsDeductionLowerThreshold	Dollar:5000 Dollar:10000	Boundary under the SALT deduction is not limited and the worksheet is not needed and over which the worksheet line 1 is set to $40,000
+stateAndLocalTaxDeduction.xml	/stateAndLocalTaxApplicableLimitationAmount	Rational:1/2	Line 10 Comparator. The amount on line 9 (half the amount on line 9 if         married filing separately)
+studentLoanInterestDeduction.xml	/studentLoanInterestAmount	Dollar:0	The amount of interest that the TP affirms that they or their spouse paid on qualify student loans
+studentLoanInterestDeduction.xml	/maxStudentLoanDeduction	Dollar:2500	The maximum amount one is allowed to deduct because of student loan interest payments
+studentLoanInterestDeduction.xml	/maxIncomeForStudentLoanInterestDeduction	Dollar:205000 Dollar:100000	The maximum MAGI that a taxpayer can have and still receive the Student Loan Interest Deduction
+studentLoanInterestDeduction.xml	/studentLoanPhaseOutStart	Dollar:175000 Dollar:85000	The MAGI at which the student loan interest deduction begins to phase out for MFJ filers.         Rev Proc 30 Interest on Education Loans &#xA7;221(b)
+studentLoanInterestDeduction.xml	/studentLoanAmountPhaseOutAmount	Dollar:0 Dollar:10 Dollar:10	Phaseout amount for the student loan deduction. Described in instructions for 1040, schedule         1, line 21. Corresponds with Line 8 of the Studen
+studentLoanInterestDeduction.xml	/studentLoanInterestDeduction	Dollar:0	The amount of the student loan interest deduction. Line 21 of Form 1040 Schedule 1, Line 33         Calculated per requirements on Student Loan Intere
+taxCalculations.xml	/totalEstimatedTaxesPaid	Dollar:0	Form 1040 Line 26. The taxpayer's estimated taxes paid for the entire tax year.
+taxCalculations.xml	/taxableIncome	Dollar:0	Taxable income as reported on line 15 of Form 1040. Should not be negative.
+taxCalculations.xml	/taxableIncomeForQBIDeduction	Dollar:0	Taxable income without the QBI Deduction, with coordination with limitation on itemized deduction
+taxCalculations.xml	/roundedTaxableIncome	Dollar:0 Dollar:0 Dollar:5 Dollar:2.50 Dollar:15 Dollar:10 Dollar:25 Dollar:20 Dollar:3000 Rational:25/25 Dollar:12.50 Dollar:100000 Rational:50/50 Dollar:25 Dollar:100000	Income less than $100,000 uses the tax tables from the Instructions for         Form 1040. This fact selects the "midpoint" that corresponds to each e
+taxCalculations.xml	/tentativeTaxFromTaxableIncomeWithoutNetGains	Dollar:24800 Rational:10/100 Dollar:100800 Dollar:2480 Rational:12/100 Dollar:24800 Dollar:211400 Dollar:11600 Rational:22/100 Dollar:100800 Dollar:403550 Dollar:35932 Rational:24/100 Dollar:211400 Dollar:512450 Dollar:82048 Rational:32/100 Dollar:403550 Dollar:768700 Dollar:116896 Rational:35/100 Dollar:512450 Dollar:768700 Dollar:206583.50 Rational:37/100 Dollar:768700 Dollar:17700 Rational:10/100 Dollar:67450 Dollar:1770 Rational:12/100 Dollar:17700 Dollar:105700 Dollar:7740 Rational:22/100 Dollar:67450 Dollar:201750 Dollar:16155 Rational:24/100 Dollar:105700 Dollar:256200 Dollar:39207 Rational:32/100 Dollar:201750 Dollar:640600 Dollar:56631 Rational:35/100 Dollar:256200 Dollar:640600 Dollar:191171 Rational:37/100 Dollar:640600 Dollar:12400 Rational:10/100 Dollar:50400 Dollar:1240 Rational:12/100 Dollar:12400 Dollar:105700 Dollar:5800 Rational:22/100 Dollar:50400 Dollar:201775 Dollar:17966 Rational:24/100 Dollar:105700 Dollar:256225 Dollar:41024 Rational:32/100 Dollar:201775 Dollar:640600 Dollar:58448 Rational:35/100 Dollar:256225 Dollar:640600 Dollar:192979.25  Rational:37/100 Dollar:640600 Dollar:12400 Rational:10/100 Dollar:50400 Dollar:1240 Rational:12/100 Dollar:12400 Dollar:105700 Dollar:5800  Rational:22/100 Dollar:50400 Dollar:201775 Dollar:17966 Rational:24/100 Dollar:105700 Dollar:256225 Dollar:41024 Rational:32/100 Dollar:201775 Dollar:384350 Dollar:58448 Rational:35/100 Dollar:256225 Dollar:384350 Dollar:103291.75 Rational:37/100 Dollar:384350	Tentative tax as reported on line 16 of Form 1040, excluding any qualified dividends or capital gains. Rev Proc .01 Tax Rate Tables         &#xA7;1(j)
+taxCalculations.xml	/taxableIncomeMinusQDAndNetGainsQDCGWorkSheetLine5	Dollar:0	Line 5 - Qualified Dividends and Capital Gain Worksheet
+taxCalculations.xml	/roundedTaxableIncomeMinusQDAndNetGains	Dollar:0 Dollar:0 Dollar:5 Dollar:2.50 Dollar:15 Dollar:10 Dollar:25 Dollar:20 Dollar:3000 Rational:25/25 Dollar:12.50 Dollar:100000 Rational:50/50 Dollar:25 Dollar:100000	
+taxCalculations.xml	/tentativeTaxFromTaxableIncomeMinusNetGains	Dollar:24800 Rational:10/100 Dollar:100800 Dollar:2480 Rational:12/100 Dollar:24800 Dollar:211400 Dollar:11600 Rational:22/100 Dollar:100800 Dollar:403550 Dollar:35932 Rational:24/100 Dollar:211400 Dollar:512450 Dollar:82048 Rational:32/100 Dollar:403550 Dollar:768700 Dollar:116896 Rational:35/100 Dollar:512450 Dollar:768700 Dollar:206583.50 Rational:37/100 Dollar:768700 Dollar:17700 Rational:10/100 Dollar:67450 Dollar:1770 Rational:12/100 Dollar:17700 Dollar:105700 Dollar:7740 Rational:22/100 Dollar:67450 Dollar:201750 Dollar:16155 Rational:24/100 Dollar:105700 Dollar:256200 Dollar:39207 Rational:32/100 Dollar:201750 Dollar:640600 Dollar:56631 Rational:35/100 Dollar:256200 Dollar:640600 Dollar:191171 Rational:37/100 Dollar:640600 Dollar:12400 Rational:10/100 Dollar:50400 Dollar:1240 Rational:12/100 Dollar:12400 Dollar:105700 Dollar:5800 Rational:22/100 Dollar:50400 Dollar:201775 Dollar:17966 Rational:24/100 Dollar:105700 Dollar:256225 Dollar:41024 Rational:32/100 Dollar:201775 Dollar:640600 Dollar:58448 Rational:35/100 Dollar:256225 Dollar:640600 Dollar:192979.25  Rational:37/100 Dollar:640600 Dollar:12400 Rational:10/100 Dollar:50400 Dollar:1240 Rational:12/100 Dollar:12400 Dollar:105700 Dollar:5800  Rational:22/100 Dollar:50400 Dollar:201775 Dollar:17966 Rational:24/100 Dollar:105700 Dollar:256225 Dollar:41024 Rational:32/100 Dollar:201775 Dollar:384350 Dollar:58448 Rational:35/100 Dollar:256225 Dollar:384350 Dollar:103291.75 Rational:37/100 Dollar:384350	Line 22 Qualified Dividends Capital Gains Worksheet. Required to calculate Form 1040 line 16 when qualified dividends and capital gains are present
+taxCalculations.xml	/totalAdditionalTaxesOwed	Dollar:0	Schedule 2 Line 3. Form 1040 line 17. Summation of Lines 1a-z and 2, all of which are not supported in TWE today
+taxCalculations.xml	/tentativeTaxNetNonRefundableCredits	Dollar:0	Form 1040 Line 22.
+taxCalculations.xml	/totalRefund	Dollar:-1	The inverse of "/totalOwed" when you need the refund amount to be positive.         Positive value = overpayment = refund         Negative value = und
+taxCalculations.xml	/topTaxRateBracketThresholdByFilingStatus	Dollar:768700 Dollar:640600 Dollar:384350	Threshold at which the top tax bracket (37%) applies by filing status. https://www.irs.gov/pub/irs-drop/rp-25-32.pdf
+taxCalculations.xml	/excessTaxableIncomeOverTopTaxBracket	Dollar:0	Excess taxable income over the 37% tax rate. Different brackets apply depending         on filing status
+taxCalculations.xml	/maxIncomeSubjectToSocialSecurityTax	Dollar:184500	Schedule SE Line 7. Maximum amount of combined wages and self-employment earnings subject to social security tax or         the 6.2% portion of the 7.
+taxCalculations.xml	/socialSecurityEmployeeTaxRate	Rational:62/1000	
+taxCalculations.xml	/medicareEmployeeTaxRate	Rational:145/10000	
+utils.xml	/today	Int:-5	Overwritable today fact
+w4.xml	/jobs/*/w4Line4a	Dollar:0 Dollar:0	Form W-4 Line 4(a); also Pub 15-T Worksheet 1A Line 1d.
+w4.xml	/jobs/*/shouldLeaveW4Line4aBlank	Dollar:0	
+w4.xml	/jobs/*/w4Line4b	Dollar:0 Dollar:-1 Dollar:0	Form W-4 Line 4(b); also Pub 15-T Worksheet 1A Line 1f.
+w4.xml	/jobs/*/shouldLeaveW4Line4bBlank	Dollar:0	
+w4.xml	/jobs/*/w4Line3	Dollar:0 Dollar:0	W-4 Line 3. Pub. 15-T Worksheet 1A Line 3a
+w4.xml	/jobs/*/shouldLeaveW4Line3Blank	Dollar:0	
+w4.xml	/jobs/*/w4Line4c	Dollar:0 Dollar:0	
+w4.xml	/jobs/*/shouldLeaveW4Line4cBlank	Dollar:0	
+withholdingCalculations.xml	/jobs/*/restOfYearWithholding	Dollar:0	
+withholdingCalculations.xml	/bonusWithholdingPrimaryRate	Rational:22/100	Bonus withholdings are 22% if less than 1,000,000 and 37% on the sum exceeding         1,000,000. Ref: Pub 15, Section 7.
+withholdingCalculations.xml	/bonusWithholdingExcessRate	Rational:37/100	Bonus withholdings are 22% if less than 1,000,000 and 37% on the sum exceeding         1,000,000. Ref: Pub 15, Section 7.
+withholdingCalculations.xml	/jobs/*/withholdingsFromTotalBonusReceived	Dollar:0	Bonus withholdings are 22% if less than 1,000,000 and 37% on the sum exceeding         1,000,000. Ref: Pub 15, Section 7.
+withholdingCalculations.xml	/jobs/*/creditsNeededToFullyBridgeTaxGap	Dollar:0 Int:-1 Dollar:0	
+withholdingCalculations.xml	/jobs/*/lagWithholding	Dollar:0 Rational:1/1	The amount that will be withheld in the time between today and when the W-4 is expected to         be processed.
+withholdingCalculations.xml	/jobs/*/futureTentativeWithholding	Dollar:0 Rational:0/1 Rational:1/1	Result from Pub 15-T Worksheet 1A
+withholdingCalculations.xml	/jobs/*/payPeriodsBeforeW4ChangesAppear	Int:0 Int:2 Int:1 Int:1 Int:2 Int:1 Int:0 Int:1	
+withholdingCalculations.xml	/highestPayingJob	Int:0	Highest "paying" job available for extra withholding
+withholdingCalculations.xml	/withholdingSurplus	Dollar:-1	The rest-of-year withholding surplus: refund gained if nothing is changed.          Positive value = overpayment = refund         Negative value = und
+withholdingCalculations.xml	/isOverwithheld	Dollar:0	
+withholdingCalculations.xml	/isZeroRefund	Dollar:0	
+withholdingCalculations.xml	/isUnderwithheld	Dollar:0	
+withholdingCalculations.xml	/owesAtleast1000Dollars	Dollar:1000	
+withholdingCalculations.xml	/10PercentOfTotalTax	Rational:1/10	
+withholdingCalculations.xml	/jobs/*/pub15Worksheet1aLine1g	Dollar:12900 Dollar:8600	Line 1g of Pub 15-T Worksheet 1A
+withholdingCalculations.xml	/jobs/*/averageTaxablePayPerPayPeriod	Dollar:0	Line 1a of Pub 15-T Worksheet 1A
+withholdingCalculations.xml	/jobs/*/adjustedAnnualWageAmount	Dollar:0	Line 1i of Pub 15-T Worksheet 1A
+withholdingCalculations.xml	/jobs/*/standardAnnualWithholdingAmount	Dollar:7500 Dollar:0 Dollar:19900 Rational:10/100 Dollar:7500 Dollar:57900 Dollar:1240 Rational:12/100 Dollar:19900 Dollar:113200 Dollar:5800.00 Rational:22/100 Dollar:57900 Dollar:209275 Dollar:17966.00 Rational:24/100 Dollar:113200 Dollar:263725 Dollar:41024.00 Rational:32/100 Dollar:209275.00 Dollar:648100 Dollar:58448.00 Rational:35/100 Dollar:263725 Dollar:192979.25 Rational:37/100 Dollar:648100 Dollar:19300 Dollar:0 Dollar:44100 Rational:10/100 Dollar:19300 Dollar:120100 Dollar:2480.00 Rational:12/100 Dollar:44100 Dollar:230700 Dollar:11600.00 Rational:22/100 Dollar:120100 Dollar:422850 Dollar:35932 Rational:24/100 Dollar:230700 Dollar:531750 Dollar:82048 Rational:32/100 Dollar:422850 Dollar:788000 Dollar:116896 Rational:35/100 Dollar:531750 Dollar:206583.50 Rational:37/100 Dollar:788000 Dollar:15550 Dollar:0 Dollar:33250 Rational:10/100 Dollar:15550 Dollar:83000 Dollar:1770 Rational:12/100 Dollar:33250 Dollar:121250 Dollar:7740 Rational:22/100 Dollar:83000 Dollar:217300 Dollar:16155 Rational:24/100 Dollar:121250 Dollar:271750 Dollar:39207 Rational:32/100 Dollar:217300 Dollar:656150 Dollar:56631 Rational:35/100 Dollar:271750 Dollar:191171.00 Rational:37/100 Dollar:656150	Standard withholding rate schedules for use when Form W-4 Step 2 box is not         checked. Line 2g of Pub. 15-T Worksheet 1A. These amounts are gene
+withholdingCalculations.xml	/jobs/*/pub15TWorksheet1aLine3c	Dollar:0	Pub. 15-T Worksheet 1A Line 3c         Subtract line 3b from line 2h. If zero or less, enter -0-
+withholdingCalculations.xml	/mayNeedToMakeEstimatedPayments	Dollar:0	Whether the taxpayer needs to make estimated payments to make up the balance.          In short, if the amount that needs to be withheld per pay perio

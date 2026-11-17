@@ -1,0 +1,1014 @@
+cdcc.xml	/isReceivingCdccCredit	Dollar:0	The TP is receiving CDCC so must submit Form 2441
+cdcc.xml	/cdccHasExcludedBenefits	Dollar:0	Whether the TP has excluded benefits amount greater than 0
+cdcc.xml	/maybeEligibleForCdccBase	Dollar: 0  Dollar: 0  Dollar: 0 	Whether the filer could potentially have qualifying earned income that can be used to qualify for the         CDCC
+cdcc.xml	/flowShowCdccQualifyingPersonsLoop	Dollar:0 Dollar:
+                    0
+                  	Whether to show the qualifying persons loop. Used after combat pay election is determined
+cdcc.xml	/cdccHasQualifyingNonFilers	Int:0	Whether the filer has at least one Qualifying Family and Household Member for the Child and Dependent         Care Credit
+cdcc.xml	/cdccHasQualifyingFilers	Int:0	One or more filers is a Qualifying Person for CDCC
+cdcc.xml	/cdccMoreThanOneQualifyingPerson	Int:1	
+cdcc.xml	/hasExactlyOneCompleteCareProvider	Int:1	Whether the filer has exactly one care provider
+cdcc.xml	/hasAtLeastOneCareProvider	Int:0	Whether the filer has one or more completed care providers
+cdcc.xml	/hasIncompleteCareProviders	Int:0	
+cdcc.xml	/cdccHasQualifyingExpenses	Dollar:0	Whether the filer is eligible for CDCC and we have collected qualifying expenses greater than 0.
+cdcc.xml	/cdccShouldIncludeMoreThanThreeCareProviders	Int:3	Whether there are more than three care providers, and care providers should be included.         Used in pdf         Form 2441 - Part 1 Header checkbo
+cdcc.xml	/hasNoCareProviders	Int:0	Whether the filer had no care providers
+cdcc.xml	/cdccCareProviders/*/writableOrganizationName	Int:75	The name of the organization providing the service.
+cdcc.xml	/cdccCareProviders/*/writableFirstName	Int:20	The first name of the provider. Must match the name as known to the Social         Security Administration.
+cdcc.xml	/cdccCareProviders/*/writableLastName	Int:20	The last name of the provider. Must match the name as known to the Social         Security Administration.
+cdcc.xml	/showCdccNondependentQpTinPin	Int:0	Whether we should show the TIN and ID Pin screens in Credits CDCC due to nondependent qualifying         people.
+cdcc.xml	/cdccCareProviders/*/amountPaidForCare	Dollar:0	The amount paid for care. Set to 0 if the care was employer provided and they have a w2.
+cdcc.xml	/pdfNeedDueDiligenceStatement	Int:0	Whether the filer needs an additional due diligence statement
+cdcc.xml	/hasCdccImmediateChildQpUnder13	Int:13 Int:0	TP has a qualifying person who is a qualifying child (biological, adopted, stepchild, or foster         child)
+cdcc.xml	/hasQpWhoTurned13AndWasNotUnableToCareForSelf	Int:0	The TP has a cdcc qualifying person who turned 13 in the tax year and was not unable to care for         themselves. Used to gate content for expense 
+cdcc.xml	/hasMoreThanOneQpWhoTurned13AndWasNotUnableToCareForSelf	Int:1	The TP has a cdcc qualifying person who turned 13 in the tax year and was not unable to care for         themselves. Used to gate content for expense 
+cdcc.xml	/hasQualifyingPersonsWithExpenseRestrictions	Int:0 Int:0 Int:0 Int:0	Whether there are qualifying persons who have restrictions on what expenses can be included. Used for         conditional content.
+cdcc.xml	/cdccHasMoreThanThreeQualifyingPersons	Int:3	Whether there are more than three qualifying persons listed         Form 2441 - Part 1 Header
+cdcc.xml	/cdccHasExactlyOneQualifyingPerson	Int:1	Whether there is exactly one qualifying person listed         Form 2441 - Part 1 Header
+cdcc.xml	/specialMonthlyIncomeForStudentOrDisabled	Int:1 Int:1	Monthly special income amount when student or disabled, based on the number of qualifying         people
+cdcc.xml	/cdccQualifyingDependentsPassResidencyTest	Int:0	At least one CDCC qualifying dependent passes the residency test
+cdcc.xml	/cdccQualifyingDependentsPassTpPaidMostOfHomeUpkeep	Int:0	Whether the taxpayer paid for more than half the cost of keeping up the home for         at least one CDCC         qualifying dependent
+cdcc.xml	/cdccQualifyingExpenseCap	Int:1 Int:1 Int:0 Dollar:0	The maximum claimable qualifying expenses. Also called the Allowed Cared For Amount.          Form 2441, Line         27
+cdcc.xml	/hasEarnedIncomeForCdcc	Dollar:0	Whether earned income as applicable for CDCC is greater than zero
+cdcc.xml	/cdccCareExpensesFallOffThreshold	Dollar:15000	The threshold at which the care expenses decimal amount begins reducing
+cdcc.xml	/cdccCareExpensesPlateauThreshold	Dollar:43000	The threshold at which the care expenses decimal amount stops reducing
+cdcc.xml	/cdccCareExpensesDecimalAmount	Dollar:0 Dollar:0.00 Dollar:0.20 Dollar:
+                0.35
+               Dollar:0.34 Dollar:0.01 Rational:1/2000 Int:100	Care Expenses Decimal Amount         Form 2441, Line 8
+cdcc.xml	/cdccCreditForPriorYearExpenses	Dollar:0	Credit for any expenses incurred in the prior tax year. Not currently supported, so this is         set as         zero.          Form 2441, Line 9b
+cdcc.xml	/cdccTotalCredit	Dollar:0	The final amount of credit received for child and dependent care.          Form 2441, Line 11
+cdcc.xml	/cdccHasDepCareBenefitsBox10	Dollar:0	Whether the primary or secondary filer entered benefits in box 10 of formW2s
+cdcc.xml	/writableCdccCarryoverAmountFromPriorTaxYear	Dollar:0.01	The amount carried over from the prior tax year and used during the grace period of the         current year.         This is the writable optional fa
+cdcc.xml	/cdccCarryoverAmountFromPriorTaxYear	Dollar:0	The amount carried over from the prior tax year and used during the grace period of the         current year.          Form 2441, Line 13
+cdcc.xml	/cdccTotalQualifiedDependentCareExpenses	Dollar:0	Total qualified dependent care expenses incurred, including those that were         covered by employer. This         is for the exclusion.         Th
+cdcc.xml	/cdccHasQualifyingExpensesForBenefit	Dollar:0	Whether TP has qualified dependent care expenses incurred, including those that were         covered by         employer.         This is not the same
+cdcc.xml	/cdccForfeitedCredits	Dollar:0	The amount carried over from the prior tax year and used during the grace period of the         current year.          Form 2441, Line 13
+cdcc.xml	/hasReportedPrimaryFilerDependentCareBenefits	Dollar:0	
+cdcc.xml	/hasReportedSecondaryFilerDependentCareBenefits	Dollar:0	
+cdcc.xml	/hasReportedCarryOverAmountFromPriorTaxYear	Dollar:0	Reported dependent care benefits in box 10 or said they carried over benefits from TY-1
+cdcc.xml	/cdccTentativeExclusionAmount	Dollar:0 Dollar:0	Tentative Exclusion Amount for CDCC          Form 2441, Line 20
+cdcc.xml	/cdccMaximumExclusionForMFS	Dollar:2500	Maximum Allowed CDCC Exclusion for MFS
+cdcc.xml	/cdccMaximumExclusionForNonMFS	Dollar:5000	Maximum Allowed CDCC Exclusion for MFS
+cdcc.xml	/cdccPrimaryFilerDependentCarePlanMaximum	Dollar:0	The maximum amount the primary filer's employer's dependent care exclusion benefits plan         allows.          This         value is treated as zer
+cdcc.xml	/cdccSecondaryFilerDependentCarePlanMaximum	Dollar:0	The maximum amount the secondary filer's employer's dependent care exclusion benefits plan         allows          This         value is treated as ze
+cdcc.xml	/cdccSpecifiedExclusionAmount	Dollar:0	Specified Exclusion Amount          Form 2441, Line 21
+cdcc.xml	/cdccSoleProprietorshipOrPartnershipExclusionAmount	Dollar:0 Dollar:0	Exclusion amount coming from Sole Proprietorship or Partnership          Form 2441, Line 22
+cdcc.xml	/cdccTaxableBenefits	Dollar:0 Dollar:0	The amount of benefits that are subject to tax.          Form 2441, Line 26
+cdcc.xml	/hasCdccNonZeroSumOfDeductibleAndExcludedBenefitsAmount	Dollar:0	Line 28 (Sum of deductible and excluded benefits amount) is more than zero
+cdcc.xml	/cdccPotentialCdccIsZeroOrLessDueToExclusionBenefits	Dollar:0	The potential CDCC amount is zero, because of dependent care benefits
+cdcc.xml	/cdccMaxClaimableExpenseWithOneQP	Dollar:3000	
+cdcc.xml	/cdccMaxClaimableExpenseWithTwoQP	Dollar:6000	
+cdcc.xml	/cdccMaxAllowedCreditWithOneQP	Dollar:1050	
+cdcc.xml	/cdccMaxAllowedCreditWithTwoQP	Dollar:2100	
+cdcc.xml	/cdccMinAllowedPercentageTY2024	Int:20	
+cdcc.xml	/cdccMaxAllowedPercentageTY2024	Int:35	
+cdcc.xml	/monthlyIncomeForStudentOrDisabledWithOneQualifyingPerson	Dollar:250	Amount per month designated as income for a tp who was a student or disabled with         one CDCC qualifying         person
+cdcc.xml	/monthlyIncomeForStudentOrDisabledWithMoreThanOneQualifyingPerson	Dollar:500	Amount per month as a student or disabled designated as income for a tp who was a         student or disabled         with more than one CDCC qualifyi
+cdcc.xml	/flowKnockoutBenefitsDistribution	Dollar:0	Knockout for when taxable dependent care benefits need to be distributed between filers to get the         max possible credit
+cdcc.xml	/hasTaxableDependentCareBenefits	Dollar:0	
+cdcc.xml	/cdccQpExpensesRemain	Int: 0 	
+constants.xml	/taxYear	Int:2024	The tax year of the return.
+constants.xml	/isTaxYearLeapYear	Int:2024 Int:2028	Whether the tax year is a leap year
+constants.xml	/lastTaxYear	Int:1	The previous tax year.
+constants.xml	/taxYearMinusTwo	Int:2	The tax year before last.
+constants.xml	/taxYearMinusThree	Int:3	Three tax years ago.
+constants.xml	/taxYearPlusTwo	Int:2	The tax year after next. Used for third-party designee authority duration.
+constants.xml	/nextTaxYear	Int:1	The next tax year.
+constants.xml	/majorityOfDaysInYear	Int:184 Int:183	More than 6 months. This should be changed to 184 in a leap year
+constants.xml	/minorityOfDaysInYear	Int:1	Less than 6 months. This may need to manually change in a leap year.
+constants.xml	/saversCreditOctDateForSameYearContribution	Int:16	The day in October after which a distribution no longer affects the Saver's Credit.
+constants.xml	/hsaSelfOnlyCoverageLimit	Dollar:4150	Self-only coverage limit for HSA contributions. Changes         each year, amount can be found in Form 8889         and instructions.         Rev Proc
+constants.xml	/hsaFamilyCoverageLimit	Dollar:8300	Family coverage limit for HSA contributions. Changes         each year, amount can be found in Form 8889 and         instructions.         Rev Proc .0
+constants.xml	/hsaOver55AdditionalCoverageLimit	Dollar:1000	Additional coverage limit for HSA contributions when TP is over 55. See instructions for form 8889         for details.
+constants.xml	/alaskaPfdAmountDividendPortion	Dollar:1403.83	Portion of the Alaska Permanent Fund that was the normal dividend distribution
+constants.xml	/alaskaPfdAmountEnergyReliefPaymentPortion	Dollar:298.17	Portion of the Alaska Permanent Fund that was a one-time engergy relief payment
+constants.xml	/hdhpMinAnnualDeductibleSelf	Dollar:1600	High Deductible Health Plan (HDHP) minimum annual deductible for self-only coverage (source         https://www.irs.gov/pub/irs-drop/rp-23-23.pdf)
+constants.xml	/hdhpMinAnnualDeductibleFamily	Dollar:3200	High Deductible Health Plan (HDHP) minimum annual deductible for family coverage (source         https://www.irs.gov/pub/irs-drop/rp-23-23.pdf)
+constants.xml	/hdhpMaxOOPExpensesSelf	Dollar:8050	High Deductible Health Plan (HDHP) maximum out-of-pocket expenses for self-only coverage (source         https://www.irs.gov/pub/irs-drop/rp-23-23.pdf
+constants.xml	/hdhpMaxOOPExpensesFamily	Dollar:16100	High Deductible Health Plan (HDHP) maximum out-of-pocket expenses for family coverage (source         https://www.irs.gov/pub/irs-drop/rp-23-23.pdf)
+ctcOdc.xml	/maybeEligibleForCtc	Int:0	Whether there are dependents who are eligible for the Child Tax Credit.
+ctcOdc.xml	/maybeEligibleForOdc	Int:0	Whether there are dependents who are eligible for the Credit for Other         Dependents.
+ctcOdc.xml	/pdf8812ContinueFromLine16a	Dollar:0	Whether to continue in sequence from Line 16a.
+ctcOdc.xml	/totalPotentialCtc	Dollar:0	The maximum amount of the Child Tax Credit that could be claimed. Reported on         line 5 of Schedule         8812.
+ctcOdc.xml	/pdf8812ContinueFromLine16b	Dollar:0	Whether to continue in sequence from Line 16b.
+ctcOdc.xml	/maxCtcAmount	Dollar:2000	The maximum child tax credit per child
+ctcOdc.xml	/exactlyOneOdcEligibleDependent	Int:1	Whether the taxpayer has exactly one ODC-eligible dependent.
+ctcOdc.xml	/moreThanOneOdcEligibleDependent	Int:1	Whether the taxpayer has more than one ODC-eligible dependent.
+ctcOdc.xml	/totalPotentialOdc	Dollar:0	The maximum amount of the Credit for Other Dependents that could be claimed.         Reported on line 7 of         Schedule 8812.
+ctcOdc.xml	/maxOdcAmount	Dollar:500	The maximum credit for other dependents, per dependent
+ctcOdc.xml	/dependentCreditPhaseoutThreshold	Dollar:400000 Dollar:200000	The MAGI threshold at which the dependent credits begin to phaseout. Reported on         line 9 of Schedule         8812.
+ctcOdc.xml	/dependentCreditMagiAboveThreshold	Dollar:0	The amount of excess income above the threshold.
+ctcOdc.xml	/roundedDependentCreditMagiAboveThreshold	Dollar:999.99 Rational:1000/1000	In whole $1,000s, the amount of excess income above the threshold. Per §24(b)(2),         any fraction of         $1,000 is rounded to $1,000. Reporte
+ctcOdc.xml	/dependentCreditPhaseout	Rational:5/100	The amount to reduce the dependent credit amount by. Reported on line 11 of Form         8812.
+ctcOdc.xml	/dependentCreditLessPhaseout	Dollar:0	The amount of dependent credits left to claim after applying the phaseout.         Reported on line 12 of         Form         8812.
+ctcOdc.xml	/dependentCreditNotFullyPhasedOut	Dollar:0	Whether there is any amount of dependent credits left to claim after applying the         phaseout. Reported         on a checkbox on line 12 of Form 
+ctcOdc.xml	/maxPotentialOdcAfterPhaseOut	Dollar:0	The max potential odc amount accounting for phase out if applicable
+ctcOdc.xml	/xmlHasRemainingCtcAndOdc	Dollar:0	Whether there is any CTC or ODC remaining to be processed, meaning that the         dependent credit         hasn't         phased out and there is st
+ctcOdc.xml	/xmlHasPotentialActc	Dollar:0	Whether there is any CTC or ODC that can be processed and there is some potential         ACTC         representing         Encountered on line 16b of
+ctcOdc.xml	/totalCtc	Dollar:0 Dollar:0	Total amount of CTC the TP will receive after the phaseout. It is derived and used for us to help the         taxpayer make sense of how much of their
+ctcOdc.xml	/isReceivingCtc	Dollar:0	Whether the TP is receiving the child tax credit
+ctcOdc.xml	/totalOdc	Dollar:0 Dollar:0	Total amount of ODC the TP will receive after the phaseout. It is derived and used for us to help the         taxpayer make sense of how much of their
+ctcOdc.xml	/isReceivingOdc	Dollar:0	Whether the TP is receiving the credit for other dependents
+ctcOdc.xml	/isReceivingCtcOrOdc	Dollar:0	Whether the TP is receiving the child tax credit or credit for other dependents
+ctcOdc.xml	/sched8812CreditLimit	Dollar:0	The credit limit per Credit Limit Worksheet A from Schedule 8812. Reported on line 13.
+ctcOdc.xml	/remainingCtcAndOdc	Dollar:0	The amount of dependent credits left to claim after crediting the total tentative         tax. Reported on         line 16a of Form 8812.
+ctcOdc.xml	/totalPotentialActc	Dollar:0	The maximum amount of the Additional Child Tax Credit that could be claimed.         Reported on line 16b of         Schedule 8812.
+ctcOdc.xml	/maxActcAmount	Dollar:1700	The maximum additional tax credit per child         Rev Proc .05 Child Tax Credit §24(d)(1)(A)
+ctcOdc.xml	/actcRefundabilityThreshold	Dollar:2500	The amount of earned income that must be exceeded in order to receive the         refundable additional child         tax credit.
+ctcOdc.xml	/earnedIncomeAboveActcRefundabilityThreshold	Dollar:0	The amount of earned income that can be used to calculate the refundable amount         of the additional         child tax credit.
+ctcOdc.xml	/earnedIncomeExceedsActcRefundabilityThreshold	Dollar:0	Whether the taxpayer has enough earned income to qualify for the additional Child         Tax Credit.         Addition         12/22/23 - Also checkin
+ctcOdc.xml	/regularMaximumActc	Rational:15/100	The maximum amount of the additional child tax credit that could be refunded to         you, absent         provisions         for taxpayers with thre
+ctcOdc.xml	/threeOrMoreCtcEligibleDependents	Int:3	Whether the taxpayer has three or more CTC-eligible dependents.
+ctcOdc.xml	/exactlyOneCtcEligibleDependent	Int:1	Whether the taxpayer has exactly one CTC-eligible dependent.
+ctcOdc.xml	/moreThanOneCtcEligibleDependent	Int:1	Whether the taxpayer has more than one CTC-eligible dependent.
+ctcOdc.xml	/pdf8812ContinueFromLine20	Int:3	Whether to continue in sequence from Line 20.
+ctcOdc.xml	/socialSecurityOverEitc	Dollar:0	Social Security taxes in excess of EITC claimed.
+ctcOdc.xml	/isReceivingActc	Dollar:0	Whether the TP is receiving ACTC
+ctcOdc.xml	/pdfIncludeSchedule8812	Dollar:0 Dollar:0	Whether the tax return PDF should include Schedule 8812.
+dependentsBenefitSplit.xml	/familyAndHousehold/*/childMayQualifyForBenefitSplit	Int:18	Whether or not to show the benefit split screens for the dependent.         We have to test for the special         benefit split if the person is sub
+dependentsBenefitSplit.xml	/contradictory8832TPIsCustodialParentTriggeredKnockout	Int:0	/knockedOutByContradictory8832 was triggered by a filer claiming to be a custodial parent but not         answering in a way that supports that claim
+dependentsBenefitSplit.xml	/contradictory8832TPNotCustodialParentTriggeredKnockout	Int:0	/knockedOutByContradictory8832 was triggered by a filer claiming to be not be a custodial parent but         not answering in a way that supports that
+dependentsBenefitSplit.xml	/knockedOutByContradictory8832	Int:0	The user was knocked out by having a contradictory 8832 and being a custodial parent.
+dependentsBenefitSplit.xml	/dependentWhoCausedContradictory8832Knockout	Int:0	The family/household member who caused the knockedOutByContradictory8832
+dependentsBenefitSplit.xml	/knockedOutByNonCustodialParentBenefitSplit	Int:0	We should knockout the user because one they are are the noncustodial parent         in a special benefit         split
+dependentsBenefitSplit.xml	/dependentWhoCausedNonCustodialKnockoutSplit	Int:0	The family/household member who caused the knockedOutByNonCustodialParentBenefitSplit
+educatorAdjustment.xml	/maxIndividualEducatorExpensesLimit	Dollar:300	The maximum deduction an individual can take for educator expense
+educatorAdjustment.xml	/primaryEducatorExpensesWritable	Dollar:300	Expenses the TP spent as a k12 educator. May deduct up to the maxIndividualEducatorExpensesLimit.
+educatorAdjustment.xml	/primaryEducatorExpenses	Dollar:0	Expenses the TP spent as a k12 educator. May deduct up to the maxIndividualEducatorExpensesLimit.         Handles the maximum conditions and eligibili
+educatorAdjustment.xml	/secondaryEducatorExpensesWritable	Dollar:300	Expenses the TP spent as a k12 educator. May deduct up to the maxIndividualEducatorExpensesLimit.
+educatorAdjustment.xml	/secondaryEducatorExpenses	Dollar:0	Expenses the secondaryFiler spent as a k12 educator. May deduct up to the         maxIndividualEducatorExpensesLimit. Handles the maximum conditions a
+educatorAdjustment.xml	/educatorExpensesAdjustment	Dollar:0	The combined primary and secondary educator adjustments. Line 11 of Form 1040, schedule 1.
+educatorAdjustment.xml	/isReceivingEducatorExpensesAdjustment	Dollar:0	Whether the TP or SP received the educator expenses adjustment
+eitc.xml	/earnedIncomeCredit	Dollar:0	Earned income credit (EITC) (line 27 1040)          We calculate the EITC up to four times -- EITC may be         calculated with:         1. No comba
+eitc.xml	/isReceivingEitc	Dollar:0	Whether the TP is receiving EITC
+eitc.xml	/maxEitcFromAGI	Dollar:25 Dollar:0 Int:2	The maximum amount of EITC that can be receieved based on the taxpayer's AGI.
+eitc.xml	/eitcAmountWithoutCombatPay	Dollar:0 Dollar:24 Dollar:25 Dollar:0 Int:2	The amount of EITC, if the taxpayer is eligible. Magic numbers come from         https://www.irs.gov/pub/irs-drop/rp-21-45.pdf and will need to be upd
+eitc.xml	/eitcRoundedEarnedIncomeWithoutCombatPay	Rational:50/50 Dollar:25	In order to match the EITC table from Publication 596, we must round the income to match the rows,         which use increments of $50, calculating th
+eitc.xml	/eitcAmountWithPrimaryCombatPay	Dollar:0 Dollar:24 Dollar:25 Dollar:0 Int:2	The amount of EITC, if the taxpayer is eligible. Magic numbers come from         https://www.irs.gov/pub/irs-drop/rp-21-45.pdf and will need to be upd
+eitc.xml	/eitcRoundedEarnedIncomeWithPrimaryCombatPay	Rational:50/50 Dollar:25	In order to match the EITC table from Publication 596, we must round the income to match the rows,         which use increments of $50, calculating th
+eitc.xml	/eitcAmountWithSecondaryCombatPay	Dollar:0 Dollar:24 Dollar:25 Dollar:0 Int:2	The amount of EITC, if the taxpayer is eligible. Magic numbers come from         https://www.irs.gov/pub/irs-drop/rp-21-45.pdf and will need to be upd
+eitc.xml	/eitcRoundedEarnedIncomeWithSecondaryCombatPay	Rational:50/50 Dollar:25	In order to match the EITC table from Publication 596, we must round the income to match the rows,         which use increments of $50, calculating th
+eitc.xml	/eitcAmountWithBothTPCombatPay	Dollar:0 Dollar:24 Dollar:25 Dollar:0 Int:2	The amount of EITC, if the taxpayer is eligible. Magic numbers come from         https://www.irs.gov/pub/irs-drop/rp-21-45.pdf and will need to be upd
+eitc.xml	/eitcRoundedEarnedIncomeWithBothTPCombatPay	Rational:50/50 Dollar:25	In order to match the EITC table from Publication 596, we must round the income to match the rows,         which use increments of $50, calculating th
+eitc.xml	/eitcRoundedAGI	Rational:50/50 Dollar:25	In order to match the EITC table from Publication 596, we must round the income to match the rows,         which use increments of $50, calculating th
+eitc.xml	/eitcMaxCredit	Int:0 Int:1 Int:2 Int:3	The maximum amount of EITC a taxpayer can recieve, depending on the number of qualifying children.
+eitc.xml	/phaseInEndsFor0QualifyingChildren	Dollar:8260	The earned income amount which provides the max EITC with 0 qualifying children         Rev Proc .06 Earned         Income Credit §32(b)
+eitc.xml	/phaseInEndsFor1QualifyingChild	Dollar:12390	The earned income amount which provides the max EITC with 1 qualifying child         Rev Proc .06 Earned         Income Credit §32(b)
+eitc.xml	/phaseInEndsFor2OrMoreQualifyingChildren	Dollar:17400	The earned income amount which provides the max EITC with 2 or more qualifying children         Rev Proc .06         Earned Income Credit §32(b)
+eitc.xml	/phaseInRatesFor0Qc	Rational:765/10000	
+eitc.xml	/phaseInRatesFor1Qc	Rational:34/100	
+eitc.xml	/phaseInRatesFor2Qc	Rational:40/100	
+eitc.xml	/phaseInRatesFor3OrMoreQc	Rational:45/100	
+eitc.xml	/eitcPhaseInRate	Int:0 Int:1 Int:2 Int:3	The rate at which EITC phases in with income.
+eitc.xml	/eitcPhaseOutRate	Int:0 Rational:765/10000 Int:1 Rational:1598/10000 Int:2 Rational:2106/10000	The rate at which EITC phases out as income exceeds the threshold amount.
+eitc.xml	/eitcPhaseOutThreshold	Int:0 Dollar:10330 Int:1 Dollar:22720 Int:0 Dollar:17250 Int:1 Dollar:29640	The amount of income above which the amount of EITC begins to be reduced.         Rev Proc .06 Earned Income         Credit §32(b)
+eitc.xml	/belowEitcInvestmentIncomeLimit	Dollar:0 Dollar:11600	Whether the TP's Investment Income is low enough for the EITC         Rev Proc .06 Earned Income Credit §32(i)
+eitc.xml	/form8862RequiredAndHasNoQualifyingChildren	Int:0	Form 8862 is required and TP does not have EITC qualifying children
+eitc.xml	/maybeEligibleForEitcWithQc	Int:0	Whether the TP passes various tests to be eligible for the Earned Income Tax Credit (EITC)
+eitc.xml	/noEitcDueToSeparateFilingFromSpouse	Int:0	Used for display in the flow. The TP doesn't have EITC because they are filing separately from their         spouse (either MFS or HOH) and have no qu
+eitc.xml	/maybeEligibleForEitcWithoutQc	Int:0	Whether the TP passes various tests to be eligible for the Earned Income Tax Credit (EITC)
+eitc.xml	/hasZeroEitcQualifyingChildren	Int:0	Whether the TP(s) has zero EITC qualifying children
+eitc.xml	/eitcQCsNeedAdditionalInfo	Int:0	Whether the TP has unclaimed and/or deceased EITC QCs.
+eitc.xml	/hasMoreThanZeroEitcQualifyingChildren	Int:0	The number of dependents who qualify as QCs for EITC is greater than zero.
+eitc.xml	/hasEarnedIncome	Dollar:0	Whether the TP had earned income
+eitc.xml	/eitcMfjLimitWithThreeOrMoreChildren	Dollar:66819	EITC limit with 3 or more children when filing as MFJ         Rev Proc .06 Earned Income Credit §32(b)
+eitc.xml	/eitcSelfLimitWithThreeOrMoreChildren	Dollar:59899	EITC limit with 3 or more children when not filing as MFJ         Rev Proc .06 Earned Income Credit §32(b)
+eitc.xml	/eitcMfjLimitWithTwoChildren	Dollar:62688	EITC limit with 2 children when filing as MFJ         Rev Proc .06 Earned Income Credit §32(b)
+eitc.xml	/eitcSelfLimitWithTwoChildren	Dollar:55768	EITC limit with 2 children when not filing as MFJ         Rev Proc .06 Earned Income Credit §32(b)
+eitc.xml	/eitcMfjLimitWithOneChild	Dollar:56004	EITC limit with 1 child when filing as MFJ         Rev Proc .06 Earned Income Credit §32(b)
+eitc.xml	/eitcSelfLimitWithOneChild	Dollar:49084	EITC limit with 1 child when not filing as MFJ         Rev Proc .06 Earned Income Credit §32(b)
+eitc.xml	/eitcMfjLimitWithZeroChildren	Dollar:25511	EITC limit with 0 children when filing as MFJ         Rev Proc .06 Earned Income Credit §32(b)
+eitc.xml	/eitcSelfLimitWithZeroChildren	Dollar:18591	EITC limit with 0 children when not filing as MFJ         Rev Proc .06 Earned Income Credit §32(b)
+eitc.xml	/eitcCompletedPhaseoutAmount	Int:3 Int:2 Int:1 Int:0 Int:3 Int:2 Int:1 Int:0	The amount of income at which EITC is completely phased out.
+eitc.xml	/eitcPhaseoutAmountLowerBound	Rational:50/50	The lower bound of the midpoint range that is associated with the complete phase-out amount
+eitc.xml	/pdfIncludeScheduleEic	Dollar:0 Int:0	Whether the tax return PDF should include Schedule EIC.
+elderlyAndDisabled.xml	/edcMaxSingleHohQssAgiLimit	Dollar:17500	Max AGI Limit to be qualified for EDC (elderly or disabled credit) as single, HoH, QSS filing         statuses
+elderlyAndDisabled.xml	/edcMaxMfsAgiLimit	Dollar:12500	Max AGI Limit to be qualified for EDC as MFS filing status
+elderlyAndDisabled.xml	/edcMaxMfjBothAgiLimit	Dollar:25000	Max AGI Limit to be qualified for EDC as MFJ filing status when both filers qualify
+elderlyAndDisabled.xml	/edcMaxMfjOnlyOneAgiLimit	Dollar:20000	Max AGI Limit to be qualified for EDC as MFJ filing status when only one filer qualifies
+elderlyAndDisabled.xml	/filers/*/writableTotalTaxableDisabilityAmount	Dollar:0	(Writable)The total amount of taxable disability income from accident or health plan or pension plan         paid by an employer
+elderlyAndDisabled.xml	/filers/*/totalTaxableDisabilityAmount	Dollar:0	The total amount of taxable disability income from accident or health plan or pension plan paid by an         employer.
+elderlyAndDisabled.xml	/filers/*/isMaybeQualifiedforEdcThroughDisability	Dollar:0	Whether the TP is qualified based on disability
+elderlyAndDisabled.xml	/mfjAndOnlyOneQualfiedForEdc	Int:1	If the TP is MFJ and only one qualifies for EDC
+elderlyAndDisabled.xml	/edcMaxSingleHohQssNontaxableLimit	Dollar:5000	Max nontaxable social security or other nontaxable pensions, annuities, or disability         income to be         qualified for EDC as single, HoH, Q
+elderlyAndDisabled.xml	/edcMaxMfsNontaxableLimit	Dollar:3750	Max nontaxable social security or other nontaxable pensions, annuities, or disability         income to be         qualified for EDC as MFS filing sta
+elderlyAndDisabled.xml	/edcMaxMfjBothNontaxableLimit	Dollar:7500	Max nontaxable social security or other nontaxable pensions, annuities, or disability         income to be         qualified for EDC as MFJ filing sta
+elderlyAndDisabled.xml	/edcMaxMfjOnlyOneNontaxableLimit	Dollar:5000	Max nontaxable social security or other nontaxable pensions, annuities, or disability         income to be         qualified for EDC as MFJ filing sta
+elderlyAndDisabled.xml	/atLeastOneFilerQualifiedForEdcThroughDisability	Int:0	If at least one filer is qualified for EDC based on disability rather than age
+elderlyAndDisabled.xml	/isMaybeEligibleForEdcBasedOnTaxableDisabilityIncome	Dollar:0	Whether the taxpayer might initially be eligible for receiving EDC based on if they have received any         income reported on a W-2
+elderlyAndDisabled.xml	/edcLine4	Int:1	Elderly or Disabled Credit (Schedule R) Line 4
+elderlyAndDisabled.xml	/edcLine5	Int:2	Elderly or Disabled Credit (Schedule R) Line 5
+elderlyAndDisabled.xml	/edcFilingStatusAmt	Dollar:0	Elderly or Disabled Credit (Schedule R) Line 10, which is the filing status amount
+elderlyAndDisabled.xml	/statusBasedDisabilityIncome	Dollar:5000 Dollar:5000 Dollar:0	The modified taxable disability income for Schedule R, Line 11
+elderlyAndDisabled.xml	/edcSelfReportedNonTaxablePaymentAmount	Dollar:0	Additional self reported nontaxable payment not collected elsewhere, used as part of Schedule R Line         13b
+elderlyAndDisabled.xml	/edcTotalNonTaxableAmount	Dollar:0 Dollar:0	The total nontaxable contributions, used for Schedule R Line 13c
+elderlyAndDisabled.xml	/edcExemptionAmount	Dollar:5000 Dollar:7500 Dollar:10000	1040 Schedule R Line 15: The EDC exemption amount used to calculate the AGI modified for the EDC
+elderlyAndDisabled.xml	/edcMagi	Dollar:0 Dollar:0	1040 Schedule R line 16: The modified AGI for the EDC
+elderlyAndDisabled.xml	/edcHalfMagi	Rational:1/2	1040 Schedule R line 17: Half of the EDC modified AGI
+elderlyAndDisabled.xml	/edcNetCreditAmount	Dollar:0	1040 Schedule R line 19: The net credit amount. The taxpayer is disqualified from taking EDC if the         amount is 0 or less.
+elderlyAndDisabled.xml	/hasEdcNetCreditAmount	Dollar:0	Whether the taxpayer has a valid (positive non-zero) EDC net credit amount.
+elderlyAndDisabled.xml	/netEdcAmount	Rational:15/100	1040 Schedule R line 20: calculated amount of the net EDC amount.
+elderlyAndDisabled.xml	/hasTaxLiabilityForEdc	Dollar:0	Whether the taxpayer has any taxes that are owed. Note: EDC is a non-refundable credit so the TP must         have a tax liability to claim it.
+elderlyAndDisabled.xml	/totalEdc	Dollar:0	1040 Schedule R line 22: The total amount for the credit for the elderly or the disabled.
+elderlyAndDisabled.xml	/isReceivingEdc	Dollar:0	Whether the TP is receiving a non-zero value for the Elderly or disabled credit
+elderlyAndDisabled.xml	/filers/*/isDisqualifiedFromEdcBasedOnTaxableDisabilityIncome	Dollar:0	Whether the filer has been disqualified from EDC based on their taxable disability income and not         other disquals.
+estimatedPayments.xml	/estimatedAndFromLastYear	Dollar:0	2023 estimated tax payments and amount applied from 2022 return (line 26 1040)
+familyAndHousehold.xml	/hasIncompleteDependents	Int:0	One or more of the dependents entered is incomplete
+familyAndHousehold.xml	/familyAndHousehold/*/firstName	Int:20	The first name of the dependent. Must match the name as known to the Social Security Administration.
+familyAndHousehold.xml	/familyAndHousehold/*/writableMiddleInitial	Int:1	The middle initial of the dependent. Must match the name as known to the Social Security         Administration. This is the optional writable fact. P
+familyAndHousehold.xml	/familyAndHousehold/*/lastName	Int:20	The last name of the dependent. Must match the name as known to the Social Security Administration.
+familyAndHousehold.xml	/familyAndHousehold/*/isTinUnique	Int:1 Int:0	Is this dependent's TIN unique among dependents and filers?
+familyAndHousehold.xml	/familyAndHouseholdHasInvalidTIN	Int:0	Whether at least one dependent's TIN does not match the format for the type of TIN they were declared         to have
+familyAndHousehold.xml	/dependentWhoWasBornAndDiedInTaxYearWithoutTin	Int:0	The family/household member who caused the born and died in TY knockout
+familyAndHousehold.xml	/knockoutPersonBornAndDiedInTaxYearWithoutTin	Int:0	We should knockout the user because one of their family and household was born and died in the tax         year without a TIN.
+familyAndHousehold.xml	/familyAndHousehold/*/studentStatusMayAffectBenefits	Int:18 Int:24	Whether the dependent is older than 18 and under 24 at the end of the year. In the future, when we         support more tax credits, we may want to as
+familyAndHousehold.xml	/familyAndHousehold/*/disabilityStatusMayAffectBenefits	Int:18 Int:18	Disability status is used to qualify someone as a dependent, passing the age test. E.g. Even if a         person is 99 years old, they can still pass 
+familyAndHousehold.xml	/familyAndHousehold/*/cdccNonDependentQualifyingPerson	Int:13	A non-dependent who qualifies for CDCC
+familyAndHousehold.xml	/familyAndHousehold/*/cdccCannotHaveParentAsCareProvider	Int:13	A child for whom the parent cannot be listed as care provider. If a child is biological, adopted, or         a foster child, and under 13 years old, t
+familyAndHousehold.xml	/cdccNonDepQpTinsSavedNotZero	Int:0	There is at least one CDCC nondependent qualifying person for whom we have collected a TIN (or PIN if         provided).         Used for conditionall
+familyAndHousehold.xml	/cdccNonDepQpTinsNoneToCollect	Int:0	Whether there are no TINs (or IP PINs if needed) to collect for non-dependent people who qualify for         the Child and         Dependent Care Cred
+familyAndHousehold.xml	/hasExactlyOneCdccNonDepQpTinNeeded	Int:1	TP has only one CDCC non-dependent qualifying person who was assigned a tin.
+familyAndHousehold.xml	/familyAndHousehold/*/personCouldQualifyTPForCdcc	Int:13	Whether or not this person could qualify the taxpayer for the CDCC. Pending the taxpayer electing to         claim then as a         dependent.
+familyAndHousehold.xml	/familyAndHousehold/*/cdccQualifyingPerson	Int:13	This person qualifies the taxpayer for CDCC
+familyAndHousehold.xml	/familyAndHousehold/*/unableToCareForSelfAndOverAge12	Int:13	Household member is over age 12 and unable to care for themselves. Used for CDCC qualification, pdf,         and mef.
+familyAndHousehold.xml	/familyAndHousehold/*/cdccQualifyingExpenseAmount	Dollar:0	Amount of qualifying expenses paid for this qualifying person.         Only applies if the person is a CDCC QP
+familyAndHousehold.xml	/familyAndHousehold/*/ageUnderNineteen	Int:19	Whether or not the dependent is under the age of 19
+familyAndHousehold.xml	/familyAndHousehold/*/isBornOnJanFirst	Int:1 Int:1	Whether the dependent was born on January 1st of the tax year.
+familyAndHousehold.xml	/familyAndHousehold/*/ageOnJanFirst	Int:1	The age of the dependent on January 1st of the tax year, assuming if born on that day their age is         incremented on that day
+familyAndHousehold.xml	/familyAndHousehold/*/cdccTurnedThirteenAfterJanFirst	Int:13	Whether the dependent turned 13 after Jan 1st in the tax year as required for CDCC conditions
+familyAndHousehold.xml	/familyAndHousehold/*/unableToCareForSelfAndNotQcUnderAge13	Int:13	The HH member was unable to care for themselves and was not         qualifying child under age 13. Used to         determine conditional content for w
+familyAndHousehold.xml	/familyAndHousehold/*/ageAtFirstHalfOfYear	Int:7 Int:7 Int:2 Int:1	The age of the dependent for the majority of the year, i.e. their age on July 2. Note that July 2         works regardless of whether it is a leap yea
+familyAndHousehold.xml	/familyAndHousehold/*/youngerThanEighteenAtEndOfYear	Int:18	Whether the dependent is younger than 18 at the end of the year.
+familyAndHousehold.xml	/familyAndHousehold/*/ageTest	Int:19	Does the dependent pass the Age test to be a qualifying child?
+familyAndHousehold.xml	/atLeastOneChildCanBeQCOfAnother	Int:1	At least one child can be the qualifying child of another
+familyAndHousehold.xml	/atLeastOneChildFailsEitcRelAgeResJointTest	Int:1	Whether at least one child is disqualified because of relationship, age, residency, or joint return         test for EITC
+familyAndHousehold.xml	/potentialScheduleEicDependents	Int:0 Int:0 Int:1	The people to list on Schedule EIC
+familyAndHousehold.xml	/grossIncomeLimit	Dollar:5050	The gross income limit for purposes of the qualifying relative gross income test referenced in         §152(d)(1)(B).         Rev Proc .24 Gross Incom
+familyAndHousehold.xml	/hasClaimedDependentsWhoAreNotCurrentlyEligible	Int:0	At some point, we gave the TP the chance to claim this dependent, but currently at least one of those         dependents is no longer eligible to be c
+familyAndHousehold.xml	/hasClaimedEligibleDependentsButDependentIsNotCurrentlyComplete	Int:0	At some point, we gave the TP the chance to claim a dependent, but currently at least one of those         dependents has become incomplete
+familyAndHousehold.xml	/familyAndHousehold/*/daysLivedWithTPInUS	Int:183 Int:212 Int:242 Int:273 Int:303 Int:334 Int:365	How many days did the person live with the TP in the US?
+familyAndHousehold.xml	/familyAndHousehold/*/eligibleCtc	Int:17	The dependent is eligible for the Child Tax Credit (CTC).
+familyAndHousehold.xml	/hasAnyUnclaimedEITCQCs	Int:0	Does the filer have more than zero EITC QC?
+familyAndHousehold.xml	/hasMoreThanOneUnclaimedEITCQC	Int:1	Does the filer have more than one EITC QC?
+familyAndHousehold.xml	/hasAtLeastOneDependentWhoDoesntQualifyForAnyBenefits	Int:1	Checks whether there is at least one dependent that doesn't qualify for any benefits
+familyAndHousehold.xml	/hasCtcDependentsCollectionCountGreaterThanOne	Int:1	The count of subset of claimed dependents who qualify for CTC is greater than one
+familyAndHousehold.xml	/hasOdcDependentsCollectionCountGreaterThanOne	Int:0	The subset of claimed dependents who qualify for ODC
+familyAndHousehold.xml	/hasClaimedDependents	Int:1	Are you claiming more than 1 dependents
+familyAndHousehold.xml	/hasUnclaimedEITCQcsWithTINs	Int:0	The filer has unclaimed EITC QCs for whom we still need to collect TINs
+familyAndHousehold.xml	/hasUnclaimedEITCQcsAndQualifiesForEITC	Int:0	The filer has unclaimed EITC QCs and qualifies for EITC overall
+familyAndHousehold.xml	/hasNoUnclaimedEITCQcsCollectionWhoNeedTINs	Int:0	
+familyAndHousehold.xml	/hasUnclaimedPeople	Int:1	Are there family or household members who have not been claimed as dependents?
+familyAndHousehold.xml	/firstQualifyingDependent	Int:0	The first qualifying dependent
+familyAndHousehold.xml	/claimingMoreThan4Dependents	Int:4	Are you claiming more than 4 dependents
+familyAndHousehold.xml	/form8862ClaimingMoreThan4CtcDependents	Int:4	Are you claiming more than 4 dependents for CTC/RCTC/ACTC; for gating additional ctc dependents page         for pdf form 8862
+familyAndHousehold.xml	/form8862ClaimingMoreThan4OdcDependents	Int:4	Are you claiming more than 4 dependents for ODC; for gating additional ODC dependents page for pdf         form 8862
+familyAndHousehold.xml	/oneOrMoreDependentsAreMissingIpPin	Int:0	
+familyAndHousehold.xml	/flowDidNotEnterPeople	Int:0	The taxpayer has not entered people in their family and HH section
+familyAndHousehold.xml	/qssHasQualifyingUnclaimedDependent	Int:0 Int:0	Boolean check for whether there are any unclaimed QSS qualifying dependents
+familyAndHousehold.xml	/xmlFirstQssQualifyingUnclaimedDependent	Int:0	We need a name for the QualifyingPersonName field, and this is the intermediate         step
+familyAndHousehold.xml	/hasHohQualifyingParent	Int:0	This determines whether the filer's hoh qualifying person is a parent
+familyAndHousehold.xml	/hasHohQualifyingChild	Int:0	If the filer has a qualifying child type as hoh qualifying person
+familyAndHousehold.xml	/hasExactlyOneHohQP	Int:1	
+familyAndHousehold.xml	/firstHohQP	Int:0	
+filers.xml	/filers/*/firstName	Int:20	The first name of the filer. Must match the name as known to the Social Security         Administration.
+filers.xml	/filers/*/writableMiddleInitial	Int:1	The middle initial of the filer. Must match the name as known to the Social         Security Administration.         This is the writable optional fac
+filers.xml	/filers/*/lastName	Int:20	The last name of the filer. Must match the name as known to the Social Security         Administration.
+filers.xml	/filers/*/youngerThan16	Int:16	Whether the age of the filer is less than 16
+filers.xml	/flowKnockoutFilerAgeYoungerThan16	Int:16 Int:16	Whether either filer is younger than 16.
+filers.xml	/filers/*/age65OrOlder	Int:65	Whether the filer is 65 or older. Pub 554 states "You are considered age 65 at the end of         the year if         your 65th birthday is         on
+filers.xml	/filers/*/age55OrOlder	Int:55	Whether the filer is 55 or older at the end of their tax year.
+filers.xml	/filers/*/age25OrOlderForEitc	Int:25	Whether the filer is 25 or older for EITC.         A person is considered 25 if they turned 25 during the tax         year, or on January 1 of the nex
+filers.xml	/filers/*/ageForSelfOnlyEitcLimits	Int:25 Int:25	The fact that should be listed as someone's age on Form 8862 for EITC. Uses convoluted logic         because         the age for the 25 year old minim
+filers.xml	/filers/*/age64OrYoungerForEitc	Int:64	Whether the filer is 64 or younger for EITC.
+filers.xml	/filers/*/occupation	Int:35	The occupation of the filer.
+filers.xml	/filers/*/isTinUnique	Int:1	Is this filer's TIN unique among filers with TINs?
+filers.xml	/64yearsBeforeTaxYear	Int:64	64 years before the current tax year.
+filers.xml	/secondaryFilerAgeDayBeforeDeath	Int:1 Int:1	The age at death of the filer when counting the day before their birthday as their birthday.         This         birthday definition is used for at l
+filers.xml	/secondaryFilerAgeDayOfDeath	Int:1 Int:1	The age of the secondary filer on their date of death, counting         their actual date of birth as their         birthday. This is used for        
+filers.xml	/MFJDeceasedSpouseReachedAge65ForStandardD	Int:65	The spouse died and turned 65 in the tax year. Calculated using their day of birth         as the day before         their birthday. Cannot be used fo
+filers.xml	/MFSFilingThresholdAmount	Dollar:
+          5
+        	Filing threshold amount for filers who are married filing separately. (Equal to         the amount of the         personal exemption, but due to suspe
+filers.xml	/mefEmail	Int:75	The email address of the taxpayer(s) sent to MeF.         If the address is over 75 characters, we do not send         an email.         This is allow
+filers.xml	/mfsButEligibleForCdcc	Int:0	The TP is considered unmarried for the purposes of claiming CDCC credit. At this point we should be         able to fully determine whether they are e
+filers.xml	/filers/*/isUnder18	Int:18	Whether the filer is under 18 for purposes of the Saver's Credit
+filers.xml	/filers/*/cdccQualifyingExpenseAmount	Dollar:0	Amount of qualifying expenses paid for this qualifying person.         Only applies if the person is a CDCC QP         and a filer
+filingStatus.xml	/eligibleForHoh	Int:0	Whether the taxpayer is eligible for Head of Household filing status.
+filingStatus.xml	/eligibleForQss	Int:0	Whether the taxpayer is eligible for Qualified Surviving Spouse filing status.
+filingStatus.xml	/hasMultipleEligibleFilingStatuses	Int:1	The TP is eligible for multiple filing statuses
+filingStatus.xml	/mfsSpouseOrQSSAndHOHNotDependentChild	Int:0	This is used to fill in the very specific box on the PDF under the filing status. It requires a name         in the specific contexts laid out in the 
+flow.xml	/hasNeededDeceasedInfo	Int:0	Determines whether the TP has the needed deceased info for EITC, for form 8862
+form1099Misc.xml	/form1099Miscs/*/federalWithholding	Dollar:0	Box 4 of Form 1099-MISC: Federal income tax withheld.
+form1099Misc.xml	/form1099MiscFederalIncomeTaxWithheld	Dollar:0	Total federal income tax withheld from Form 1099-MISCs.
+form1099Misc.xml	/alaskaPfdIncome	Dollar:0	Total income from Alaska Permanent Fund Dividends, reported on Schedule 1 line 8g.
+form1099Misc.xml	/hasAlaskaPfdIncome	Dollar:0	Alaska PFD income is greater than 0
+form1099Misc.xml	/has1099Misc	Int:0	Whether the TP has any 1099-MISC listed
+form1099Misc.xml	/form1099Miscs/secondaryFilerUsedWithoutMFJ	Int:0	Whether secondary filer has forms when primary filer is not filing jointly
+form1099Misc.xml	/hasAtLeastOneCompletedApfIncomeItem	Int:0	Whether the tax return has at least one completed APF income
+form1099Rs.xml	/has1099R	Int:0	Whether the TP has any 1099-R listed
+form1099Rs.xml	/form1099Rs/secondaryFilerUsedWithoutMFJ	Int:0	Whether there are any form 1099Rs that use the secondary filer when the status is not MFJ
+form1099Rs.xml	/form1099Rs/*/payer	Int:75	The payer of the 1099-R.
+form1099Rs.xml	/form1099Rs/*/writablePayerNameLine2	Int:75	Line 2 of the payer's name on the 1099-R
+form1099Rs.xml	/form1099Rs/*/hasUnsupportedDistributionCode	Int:2 Int:0	Whether the 1099R has a distribution that Direct file does not support yet. Note: if you change this         fact, review that the newly supported cod
+form1099Rs.xml	/form1099Rs/*/hasPensionRollover	Int:0	Whether this 1099R has a rollover distribution code.
+form1099Rs.xml	/form1099Rs/*/isDirectRollover	Int:0	Whether this 1099R has a rollover distribution code.
+form1099Rs.xml	/has1099RWithDirectRollover	Int:0	Whether any 1099R has a rollover distribution code.
+form1099Rs.xml	/form1099Rs/*/flowAskAboutIndirectRollover	Int:0	Used in the flow to determine whether to show 1099-r-box-7-indirect-rollover
+form1099Rs.xml	/flowKnockoutForRollover	Int:0	Whether the user is knocked out for their 1099R distribution rolled into another retirement account
+form1099Rs.xml	/knockoutForForm1099RDistributionCode	Int:0	Whether the user is knocked out for their 1099R distribution code (box 7)
+form1099Rs.xml	/form1099Rs/*/causesPreTaxToPostTaxRolloverKO	Dollar:0	At least one 1099-R has a direct rollover pre-to-pre-tax (ie non-ROTH) account or direct rollover         after-to-after tax (ie ROTH) account. Any ch
+form1099Rs.xml	/flowKnockoutForPreTaxToPostTaxRollover	Int:0	Flow knockout for when the user is knocked out for having direct rollover pre-to-pre-tax (ie         non-ROTH) account or direct rollover after-to-aft
+form1099Rs.xml	/form1099Rs/*/writableGrossDistribution	Dollar:0	Box 1 of form 1099-R: Gross Distribution
+form1099Rs.xml	/form1099Rs/*/grossDistribution	Dollar:0	Box 1 of form 1099-R: Gross Distribution (rounded)
+form1099Rs.xml	/form1099Rs/*/writableTaxableAmount	Dollar:0	Box 2a of form 1099-R: Taxable Amount
+form1099Rs.xml	/form1099Rs/*/taxableAmount	Dollar:0	Box 2a of form 1099-R: Taxable Amount (rounded)
+form1099Rs.xml	/primaryFilerHas1099RTaxableAmountsGreaterThan0	Dollar:0	Whether primary filer has taxable amounts greater than 0
+form1099Rs.xml	/secondaryFilerHas1099RTaxableAmountsGreaterThan0	Dollar:0	Whether secondary filer has taxable amounts greater than 0
+form1099Rs.xml	/flowKnockoutRetirementTaxableAmountNotDetermined	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/flowKnockoutRetirementTaxableAmountNotDeterminedNotCheckedTaxableAmountBlank	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/form1099Rs/*/writableCapitalGain	Dollar:0	Box 3 of form 1099-R: Capital Gain
+form1099Rs.xml	/flowKnockoutRetirementCapitalGain	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/form1099Rs/*/causesRetirementCapitalGainKO	Dollar:0	Capital gain info in this 1099-R knocks the filer out of scope.
+form1099Rs.xml	/flowKnockoutRetirementTotalDistribution	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/form1099Rs/*/writableDistributionCode	Int:2	Box 7 of form 1099-R: Distribution Code(s)
+form1099Rs.xml	/form1099Rs/*/hasDisabilityAndAnotherCode	Int:2 Int:1	Whether this form is not for an IRA and Box 7 contains the Distribution Code for Disability along         with another code
+form1099Rs.xml	/form1099Rs/*/isTaxFreePensionRollover	Dollar:0	Whether this form is not for an IRA and is for a tax free pension rollover
+form1099Rs.xml	/form1099Rs/*/isTaxablePensionRollover	Dollar:0	Whether this form is not for an IRA but is for a taxable pension rollover
+form1099Rs.xml	/knockoutIraSepSimple	Int:0	At least one 1099R causes a knockout due to IRA/SEP/SIMPLE. Any changes to this KO should check that         ../primaryFiler1099RsReportedOnSaversCred
+form1099Rs.xml	/knockoutDisabilityAndAnotherCode	Int:0	At least one 1099R causes a knockout due to disability plus another distribution code
+form1099Rs.xml	/knockoutTaxablePensionRollover	Int:0	At least one 1099R causes a knockout due to taxable pension rollover
+form1099Rs.xml	/knockoutIndirectRollover	Int:0	At least one 1099R causes a knockout due to indirect rollover
+form1099Rs.xml	/knockoutTaxableAmountNotDetermined	Int:0	At least one 1099R causes a knockout due to taxable amount not determined
+form1099Rs.xml	/taxFreePensionRollovers	Int:0 Dollar:0	The sum of gross distributions for this collection of forms
+form1099Rs.xml	/partlyTaxablePensions	Int:0 Dollar:0	The sum of gross distributions for this collection of forms
+form1099Rs.xml	/fullyTaxablePensions	Int:0 Dollar:0	The sum of gross distributions for this collection of forms
+form1099Rs.xml	/taxableAmountsOfPartiallyTaxablePensions	Int:0 Dollar:0	The sum of taxable amounts for this collection of forms
+form1099Rs.xml	/form1099Rs/*/writableOtherDollar	Dollar:0	Box 8 of form 1099-R: Other
+form1099Rs.xml	/form1099Rs/*/causesRetirementBox8ValueKO	Dollar:0	Box 8 value entry info in this 1099-R knocks the filer out of scope.
+form1099Rs.xml	/knockoutForForm1099RBox8Value	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/form1099Rs/*/writableOtherPercentage	Int:7	Percentage
+form1099Rs.xml	/knockoutForForm1099RBox8Percentage	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/form1099Rs/*/writablePercentageTotalDistribution	Int:7	Percentage total distribution
+form1099Rs.xml	/knockoutForForm1099RBox9aPercentage	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/form1099Rs/*/writableTotalEmployeeContributions	Dollar:0	Box 9b of form 1099-R: Total employee contributions
+form1099Rs.xml	/form1099Rs/*/writableAmountAllocableToIRR	Dollar:0	Box 10 of form 1099-R: Amount allocable to IRR within 5 years
+form1099Rs.xml	/form1099Rs/*/causesRetirementAmountAllocableToIRRKO	Dollar:0	The filer is knocked out of scope if amount allocable to IRR within 5 years is greater than zero.
+form1099Rs.xml	/flowKnockoutRetirementAmountAllocableToIRR	Int:0	The filer is knocked out of scope if amount allocable to IRR within 5 years is greater than zero
+form1099Rs.xml	/form1099Rs/*/writableFirstYearDesignatedRothContributions	Int:4 Int:4	Box 11 of form 1099-R: 1st year of designated Roth contributions
+form1099Rs.xml	/form1099Rs/*/writableStateTaxWithheld	Dollar:0	Box 14 of form 1099-R: State tax withheld
+form1099Rs.xml	/form1099Rs/*/missingStateTaxWithheld	Dollar:0	Whether the TP is in an income state and didn't report any state tax on their 1099R
+form1099Rs.xml	/hasMoreTaxThanDistributionsOn1099Rs	Int:0	Whether any 1099Rs had less gross distributions reported than the amount of tax withheld. Used for         alerts and to block submission
+form1099Rs.xml	/form1099Rs/*/hasMoreTaxWithheldThanDistributions	Dollar:0 Dollar:0	The gross distributions reported were less than the local and state tax withheld. This isn't a real         situation and indicates an input error
+form1099Rs.xml	/form1099Rs/*/writablePayerStateNumber	Int:16	Box 15 of form 1099-R: payer's state code
+form1099Rs.xml	/form1099Rs/*/causesBox15Knockout	Dollar:0	If a taxpayer's state on their 1099-R doesn't match the state in their About You section, we may not         be able to give the right information for
+form1099Rs.xml	/flowKnockoutBox15	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/form1099Rs/*/writableStateDistribution	Dollar:0	Box 16 of form 1099-R: State distribution
+form1099Rs.xml	/form1099Rs/*/writableLocalTaxWithheld	Dollar:0	Box 17 of form 1099-R: Local tax withheld
+form1099Rs.xml	/form1099Rs/*/writableLocality	Int:20	Form 1099-R box 18: Locality name.         This is the writable optional fact. Can be left incomplete. Please         use the derived fact in downstre
+form1099Rs.xml	/form1099Rs/*/writableLocalDistribution	Dollar:0	Box 19 of form 1099-R: Local distribution
+form1099Rs.xml	/flowKnockoutRetirementFactaFilingRequirement	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/flowKnockoutRetirementPublicSafetyOfficer	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/form1099Rs/*/federalWithholding	Dollar:0	Box 4 of Form 1099-R: Federal income tax withheld (rounded).
+form1099Rs.xml	/form1099RsFederalIncomeTaxWithheld	Dollar:0	Total federal income tax withheld from all complete Form 1099-Rs.
+form1099Rs.xml	/form1099Rs/*/writableNetAppreciation	Dollar:0	Box 6 of form 1099-R: net unrealized appreciation in employer’s securities
+form1099Rs.xml	/flowKnockoutRetirementNetUnrealizedAppreciation	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/form1099Rs/*/causesRetirementNetUnrealizedAppreciation	Dollar:0	Net appreciation info in this 1099-R knocks the filer out of scope
+form1099Rs.xml	/form1099Rs/*/flowAskAboutPublicSafetyOfficer	Int:0 Int:0	Used in the flow to determine whether to show 1099-r-pso
+form1099Rs.xml	/flowKnockoutRetirementQualifiedDisasterDistribution	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/flowKnockoutRetirementQualifiedEarlyDistribution	Int:0	At least one 1099R has a set of facts that cause a knockout
+form1099Rs.xml	/flowKnockoutForDeathBenefitPaymentDate	Int:0	The user is knocked out for having a reportable death benefit payment
+form1099Rs.xml	/form1099Rs/*/writableAccountNumber	Int:30	1099-R: account number
+formW2s.xml	/formW2s/*/BOX14_MD_STPICKUPNeeded	Dollar:0	Box 14 code BOX14_MD_STPICKUP, used by Maryland
+formW2s.xml	/formW2s/*/BOX14_NJ_FLINeeded	Dollar:0	Box 14 code BOX14_NJ_FLI, used by New Jersey
+formW2s.xml	/formW2s/*/BOX14_NJ_UIHCWDNeeded	Dollar:0	Box 14 code BOX14_NJ_UIHCWD, used by New Jersey
+formW2s.xml	/formW2s/*/BOX14_NJ_UIWFSWFNeeded	Dollar:0	Box 14 code BOX14_NJ_UIWFSWF, used by New Jersey
+formW2s.xml	/w2MinAmount	Dollar:600	The minimum amount of pay before an employer needs to issue a W2
+formW2s.xml	/maxMFSMedicareWages	Dollar:125000	The maximum medicare wages (W-2 Box 5) a MFS filer might have without possibly         needing to pay         Additional Medicare Tax
+formW2s.xml	/maxMFJMedicareWages	Dollar:250000	The maximum medicare wages (W-2 Box 5) a MFS filer might have without possibly         needing to pay         Additional Medicare Tax
+formW2s.xml	/maxNonMFSorMFJMedicareWages	Dollar:200000	The maximum medicare wages (W-2 Box 5) filers with a status other than MFS might         have without         possibly         needing to pay Addition
+formW2s.xml	/maxIndividualMedicareWages	Dollar:200000	The maximum medicare wages (W-2 Box 5) any individual on a return could have         before needing to pay         Additonal Medicare Tax
+formW2s.xml	/maxOasdiWagesOnMultipleW2sForOnePerson	Dollar:168600	The limit of Social Security Wages that one filer can have across multiple W2s         before they might be         entitely to a refund on social sec
+formW2s.xml	/primaryFilerHasIncompleteFormW2s	Int:0	Whether at least one of Primary Filer's Form W2s are incomplete
+formW2s.xml	/secondaryFilerHasIncompleteFormW2s	Int:0	Whether at least one of Secondary Filer's Form W2s are incomplete
+formW2s.xml	/hasW2s	Int:0	Whether the TP has any W2s listed
+formW2s.xml	/flowKnockoutAllocatedTips	Int:0	At least one W2 has a set of facts that cause a knockout
+formW2s.xml	/flowKnockoutStatutoryEmployee	Int:0	The TP requires statutory employee forms that we don't support
+formW2s.xml	/flowKnockoutThirdPartySickPay	Int:0	The TP requires third party sick pay forms that we don't support
+formW2s.xml	/formW2s/*/hasRRTACodesInBox14	Int:0	
+formW2s.xml	/flowKnockoutHasRRTACodesInBox14NotInNY	Int:0	Knockout Due to having RRTA codes in Box 14
+formW2s.xml	/primaryFilerExceedsMaxOasdiWages	Int:1	Does the primary filer have Great Than 1 W-2 and social security wages over the         limit that might         entitle them to a socail security ref
+formW2s.xml	/secondaryFilerExceedsMaxOasdiWages	Int:1	Does the primary filer have Greater Than 1 W-2 and social security wages over the         limit that might         entitle them to a socail security r
+formW2s.xml	/flowKnockoutNonQualifiedPlans	Int:0	At least one W2 has non-qualified plan values
+formW2s.xml	/hasW2ValidationErrors	Int:0	Any W-2 has a validation error that should block submission until fixed
+formW2s.xml	/oneAndOnlyW2	Int:0	The w2 when there's only one
+formW2s.xml	/filersHaveExactlyOneW2	Int:1	The taxpayer (and spouse) has only one W2. Used for logic in Care provider         screens.
+formW2s.xml	/formW2s/*/employerName	Int:75	The employer's name as appears in box c of Form W-2.
+formW2s.xml	/formW2s/*/writableEmployerNameLine2	Int:75	The employer's name as appears in line 2 box c of Form W-2. This is the writable         optional fact. Can         be         left incomplete.Please 
+formW2s.xml	/formW2s/*/wages	Dollar:0	Box 1 of Form W-2, wages, tips, and other compensation.
+formW2s.xml	/formW2s/*/federalWithholding	Dollar:0	Box 2 of Form W-2, Federal income tax withheld.
+formW2s.xml	/formW2s/*/oasdiWages	Dollar:0	Box 3 of Form W-2, social security wages. Includes non-taxable income, and         excludes income that         exceeds the wage cap.
+formW2s.xml	/formW2s/*/oasdiWithholding	Dollar:0	Box 4 of Form W-2, social security tax withheld.
+formW2s.xml	/formW2s/*/medicareWages	Dollar:0	Box 5 of Form W-2, Medicare wages and tips. Includes non-taxable income.
+formW2s.xml	/formW2s/*/medicareWithholding	Dollar:0	Box 6 of Form W-2, Medicare tax withheld.
+formW2s.xml	/formW2s/*/oasdiTips	Dollar:0	Box 7 of Form W-2, social security tips.
+formW2s.xml	/formW2s/*/allocatedTips	Dollar:0	Box 8 of Form W-2, allocated tips. You may have an amount here if you receive         tips at your job, but         the amount of tips you reported fa
+formW2s.xml	/formW2s/*/causesAllocatedTipsKO	Dollar:0	Information on this W2 knocks the filer out of scope
+formW2s.xml	/formW2WithAllocatedTips	Int:0	
+formW2s.xml	/formW2s/*/causesDependentCareBenefitsKO	Dollar:0	Information on this W2 knocks the filer out of scope
+formW2s.xml	/formW2s/*/causesNonQualifiedPlansKO	Dollar:0	W2 Scope Knockout for Box 11 (nonqualified plans)
+formW2s.xml	/formW2s/*/dependentCareBenefits	Dollar:0	Box 10 of Form W-2, dependent care benefits. Amounts over $5,000 are included in         box 1. Requires Form         2441, Child and Dependent Care E
+formW2s.xml	/formW2s/*/nonQualifiedPlans	Dollar:0	Box 11 of Form W-2, non-qualified plans. These are retirement plans not covered         by the Employee         Retirement Income Security Act (ERISA)
+formW2s.xml	/formW2s/*/normalizedRounded401kDeferrals	Dollar:0	Rounded 401k deferrals values if they exist or 0, used so that we can easily sum
+formW2s.xml	/formW2s/*/normalizedRounded403bDeferrals	Dollar:0	Rounded 403b deferrals values if they exist or 0, used so that we can easily sum
+formW2s.xml	/formW2s/*/normalizedRoundedSarsepDeferrals	Dollar:0	Rounded SARSEP deferrals values if they exist or 0, used so that we can easily         sum
+formW2s.xml	/formW2s/*/normalizedRounded457bDeferrals	Dollar:0	Rounded 457b deferrals values if they exist or 0, used so that we can easily sum
+formW2s.xml	/formW2s/*/normalizedRounded501c18Deferrals	Dollar:0	Rounded 501(c)(18)(D) deferrals values if they exist or 0, used so that we can         easily sum
+formW2s.xml	/formW2s/*/normalizedRoundedSimpleContributions	Dollar:0	Rounded SIMPLE contribution values if they exist or 0, used so that we can easily         sum
+formW2s.xml	/formW2s/*/normalizedRoundedRoth401kContributions	Dollar:0	Rounded Roth 401k contribution values if they exist or 0, used so that we can         easily sum
+formW2s.xml	/formW2s/*/normalizedRoundedRoth403bContributions	Dollar:0	Rounded Roth 403b contribution values if they exist or 0, used so that we can         easily sum
+formW2s.xml	/formW2s/*/normalizedRoundedRoth457bContributions	Dollar:0	Rounded Roth 457b contribution values if they exist or 0, used so that we can         easily sum
+formW2s.xml	/formW2s/*/totalDeferralsAndContributions	Dollar:0	Summation of all deferrals and contributions, used as part of the calculation for         Form 8880 Line 2
+formW2s.xml	/formW2s/*/uncollectedOasdiTaxOnTips	Dollar:0	Box 12, code A.
+formW2s.xml	/formW2s/*/uncollectedOasdiTaxOnTipsNeeded	Dollar:0	Box 12, code A.
+formW2s.xml	/formW2s/*/uncollectedMedicareTaxOnTips	Dollar:0	Box 12, code B.
+formW2s.xml	/formW2s/*/uncollectedMedicareTaxOnTipsNeeded	Dollar:0	Box 12, code B.
+formW2s.xml	/formW2s/*/taxableLifeInsuranceOver50k	Dollar:0	Box 12, code C.
+formW2s.xml	/formW2s/*/taxableLifeInsuranceOver50kNeeded	Dollar:0	Box 12, code C.
+formW2s.xml	/formW2s/*/401kDeferrals	Dollar:0	Box 12, code D.
+formW2s.xml	/formW2s/*/401kDeferralsNeeded	Dollar:0	Box 12, code D.
+formW2s.xml	/formW2s/*/403bDeferrals	Dollar:0	Box 12, code E.
+formW2s.xml	/formW2s/*/403bDeferralsNeeded	Dollar:0	Box 12, code D.
+formW2s.xml	/formW2s/*/sarsepDeferrals	Dollar:0	Box 12, code F.
+formW2s.xml	/formW2s/*/sarsepDeferralsNeeded	Dollar:0	Box 12, code F.
+formW2s.xml	/formW2s/*/457bDeferrals	Dollar:0	Box 12, code G.
+formW2s.xml	/formW2s/*/457bDeferralsNeeded	Dollar:0	Box 12, code G.
+formW2s.xml	/formW2s/*/501c18Deferrals	Dollar:0	Box 12, code H. (Only 6% of employers who use this code actually contributed to a         501(c)(18) plan.)
+formW2s.xml	/formW2s/*/501c18DeferralsNeeded	Dollar:0	Box 12, code H. (Only 6% of employers who use this code actually contributed to a         501(c)(18) plan.)
+formW2s.xml	/formW2s/*/nontaxableSickPay	Dollar:0	Box 12, code J.
+formW2s.xml	/formW2s/*/nontaxableSickPayNeeded	Dollar:0	Box 12, code J.
+formW2s.xml	/formW2s/*/goldenParachuteExciseTax	Dollar:0	Box 12, code K.
+formW2s.xml	/formW2s/*/goldenParachuteExciseTaxNeeded	Dollar:0	Box 12, code K.
+formW2s.xml	/formW2s/*/expenseReimbursements	Dollar:0	Box 12, code L.
+formW2s.xml	/formW2s/*/expenseReimbursementsNeeded	Dollar:0	Box 12, code L.
+formW2s.xml	/formW2s/*/uncollectedOasdiTaxOnLifeInsuranceOver50k	Dollar:0	Box 12, code M.
+formW2s.xml	/formW2s/*/uncollectedOasdiTaxOnLifeInsuranceOver50kNeeded	Dollar:0	Box 12, code M.
+formW2s.xml	/formW2s/*/uncollectedMedicareTaxOnLifeInsuranceOver50k	Dollar:0	Box 12, code N.
+formW2s.xml	/formW2s/*/uncollectedMedicareTaxOnLifeInsuranceOver50kNeeded	Dollar:0	Box 12, code N.
+formW2s.xml	/formW2s/*/armedForcesMovingExpenses	Dollar:0	Box 12, code P.
+formW2s.xml	/formW2s/*/armedForcesMovingExpensesNeeded	Dollar:0	Box 12, code P.
+formW2s.xml	/formW2s/*/knockoutBox12Code	Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0	Which of the box 12 codes that can knock a filer out have a positive value. Used         to give the filer         information which code knocked them
+formW2s.xml	/formW2WithBox12Knockout	Int:0	The "first" W2 that has a Box 12 code that knocks you out
+formW2s.xml	/knockoutForBox12Value	Int:0	Has the filer entered a W2 with any of the Box 12 codes we knockout
+formW2s.xml	/formW2s/*/hasBox12HsaContributionsAndDependent	Dollar:0	The W2 belongs to filer which can be claimed ad dependent and code W is entered         in Box 12
+formW2s.xml	/knockoutForBox12Dependency	Int:0	Filer has entered W2 contributions for HSA in Box 12 and has dependency status
+formW2s.xml	/formW2s/*/knockoutBox14NYRRTACode	Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0	Which of the box 14 codes that can knock a filer for NY RRTA out have a positive         value. Used to give         the filer information which code 
+formW2s.xml	/hasABox14NYRRTAValueWeKnockout	Int:0	Has the filer entered a W2 with any of the Box 14 codes we knockout
+formW2s.xml	/formW2WithBox14NYRRTAKnockout	Int:0	The "first" W2 that has a Box 14 Yonkers Knockout Code
+formW2s.xml	/formW2s/*/414_HNeeded	Dollar:0	Box 14 code 414_H, used by New York State or City
+formW2s.xml	/formW2s/*/414_H_CUNeeded	Dollar:0	Box 14 code 414_H_CU, used by New York State or City
+formW2s.xml	/formW2s/*/414HNeeded	Dollar:0	Box 14 code 414H, used by New York State or City
+formW2s.xml	/formW2s/*/414HCUNeeded	Dollar:0	Box 14 code 414HCU, used by New York State or City
+formW2s.xml	/formW2s/*/414HSUBNeeded	Dollar:0	Box 14 code 414HSUB, used by New York State or City
+formW2s.xml	/formW2s/*/ADDITIONAL_MEDICARE_TAXNeeded	Dollar:0	Box 14 code ADDITIONAL_MEDICARE_TAX, used by New York State or City
+formW2s.xml	/formW2s/*/ERSNeeded	Dollar:0	Box 14 code ERS, used by New York State or City
+formW2s.xml	/formW2s/*/ERSNYSRENeeded	Dollar:0	Box 14 code ERSNYSRE, used by New York State or City
+formW2s.xml	/formW2s/*/ERSRETCONeeded	Dollar:0	Box 14 code ERSRETCO, used by New York State or City
+formW2s.xml	/formW2s/*/IRC125SNeeded	Dollar:0	Box 14 code IRC125S, used by New York State or City
+formW2s.xml	/formW2s/*/MEDICARE_TAXNeeded	Dollar:0	Box 14 code MEDICARE_TAX, used by New York State or City
+formW2s.xml	/formW2s/*/NYRETNeeded	Dollar:0	Box 14 code NYRET, used by New York State or City
+formW2s.xml	/formW2s/*/NYSERSNeeded	Dollar:0	Box 14 code NYSERS, used by New York State or City
+formW2s.xml	/formW2s/*/NYSRETCONeeded	Dollar:0	Box 14 code NYSRETCO, used by New York State or City
+formW2s.xml	/formW2s/*/PUBRETNeeded	Dollar:0	Box 14 code PUBRET, used by New York State or City
+formW2s.xml	/formW2s/*/RETNeeded	Dollar:0	Box 14 code RET, used by New York State or City
+formW2s.xml	/formW2s/*/RETDEFNeeded	Dollar:0	Box 14 code RETDEF, used by New York State or City
+formW2s.xml	/formW2s/*/RETMTNeeded	Dollar:0	Box 14 code RETMT, used by New York State or City
+formW2s.xml	/formW2s/*/RETSHNeeded	Dollar:0	Box 14 code RETSH, used by New York State or City
+formW2s.xml	/formW2s/*/RETSMNeeded	Dollar:0	Box 14 code RETSM, used by New York State or City
+formW2s.xml	/formW2s/*/RETSUMNeeded	Dollar:0	Box 14 code RETSUM, used by New York State or City
+formW2s.xml	/formW2s/*/RRTA_COMPENSATIONNeeded	Dollar:0	Box 14 code RRTA_COMPENSATION, used by New York State or City
+formW2s.xml	/formW2s/*/TIER_1_TAXNeeded	Dollar:0	Box 14 code TIER_1_TAX, used by New York State or City
+formW2s.xml	/formW2s/*/TIER_2_TAXNeeded	Dollar:0	Box 14 code TIER_2_TAX, used by New York State or City
+formW2s.xml	/formW2s/*/TIER3RETNeeded	Dollar:0	Box 14 code TIER3RET, used by New York State or City
+formW2s.xml	/formW2s/*/TIER4Needed	Dollar:0	Box 14 code TIER4, used by New York State or City
+formW2s.xml	/formW2s/*/TIER4RETNeeded	Dollar:0	Box 14 code TIER4RET, used by New York State or City
+formW2s.xml	/formW2s/*/writableCombatPay	Dollar:0	The user transcribes this value as seen on box 12, code Q of a W-2. Represents         combat pay. If left         empty, the W-2 XML that we send to 
+formW2s.xml	/formW2s/*/combatPayNeeded	Dollar:0	Combat pay needed
+formW2s.xml	/formW2s/*/combatPay	Dollar:0	Box 12, code Q. Takes what the user said, but if they have not entered combat         pay, assumes zero.
+formW2s.xml	/formW2s/*/archerMsaContributions	Dollar:0	Box 12, code R.
+formW2s.xml	/formW2s/*/archerMsaContributionsNeeded	Dollar:0	Box 12, code R.
+formW2s.xml	/formW2s/*/simpleContributions	Dollar:0	Box 12, code S.
+formW2s.xml	/formW2s/*/simpleContributionsNeeded	Dollar:0	Box 12, code S.
+formW2s.xml	/formW2s/*/adoptionBenefits	Dollar:0	Box 12, code T.
+formW2s.xml	/formW2s/*/adoptionBenefitsNeeded	Dollar:0	Box 12, code T.
+formW2s.xml	/formW2s/*/nsoIncome	Dollar:0	Box 12, code V.
+formW2s.xml	/formW2s/*/nsoIncomeNeeded	Dollar:0	Box 12, code V.
+formW2s.xml	/formW2s/*/employerHsaContributions	Dollar:0	Box 12, code W.
+formW2s.xml	/formW2s/*/employerHsaContributionsNeeded	Dollar:0	Box 12, code W.
+formW2s.xml	/formW2s/*/employerHsaContributionsRounded	Dollar:0	Box 12, code W.
+formW2s.xml	/formW2s/*/409aDeferrals	Dollar:0	Box 12, code Y.
+formW2s.xml	/formW2s/*/409aDeferralsNeeded	Dollar:0	Box 12, code Y.
+formW2s.xml	/formW2s/*/nqdcDeferrals	Dollar:0	Box 12, code Z.
+formW2s.xml	/formW2s/*/nqdcDeferralsNeeded	Dollar:0	Box 12, code Z.
+formW2s.xml	/formW2s/*/roth401kContributions	Dollar:0	Box 12, code AA.
+formW2s.xml	/formW2s/*/roth401kContributionsNeeded	Dollar:0	Box 12, code AA.
+formW2s.xml	/formW2s/*/roth403bContributions	Dollar:0	Box 12, code BB.
+formW2s.xml	/formW2s/*/roth403bContributionsNeeded	Dollar:0	Box 12, code BB.
+formW2s.xml	/formW2s/*/healthCoverageCost	Dollar:0	Box 12, code DD.
+formW2s.xml	/formW2s/*/healthCoverageCostNeeded	Dollar:0	Box 12, code DD.
+formW2s.xml	/formW2s/*/roth457bContributions	Dollar:0	Box 12, code EE.
+formW2s.xml	/formW2s/*/roth457bContributionsNeeded	Dollar:0	Box 12, code EE.
+formW2s.xml	/formW2s/*/qsehraBenefits	Dollar:0	Box 12, code FF.
+formW2s.xml	/formW2s/*/qsehraBenefitsNeeded	Dollar:0	Box 12, code FF.
+formW2s.xml	/formW2s/*/83iIncome	Dollar:0	Box 12, code GG.
+formW2s.xml	/formW2s/*/83iIncomeNeeded	Dollar:0	Box 12, code GG.
+formW2s.xml	/formW2s/*/83iDeferrals	Dollar:0	Box 12, code HH.
+formW2s.xml	/formW2s/*/83iDeferralsNeeded	Dollar:0	Box 12, code HH.
+formW2s.xml	/formW2s/*/nonTaxableMedicaidWaiverPayments	Dollar:0	Nontaxable Medicaid waiver payments reported on Form(s) W-2. If you received         nontaxable Medicaid         waiver payments, those amounts should
+formW2s.xml	/formW2s/*/nonTaxableMedicaidWaiverPaymentsNeeded	Dollar:0	Nontaxable Medicaid waiver payments reported on Form(s) W-2. If you received         nontaxable Medicaid         waiver payments, those amounts should
+formW2s.xml	/flowKnockoutBox15IncomeFromDifferentState	Int:0	Used to control a knockout for if the filer recieved income from an unsupported         state.
+formW2s.xml	/formW2s/*/writableStateEmployerId	Int:16	Part of form W-2 box 15: The employer's state ID number. This is the writable         optional fact. Can be         left incomplete, and will likely b
+formW2s.xml	/formW2s/*/hasStateWagesWithoutStateCode	Dollar:0	Whether the form lists state wages but is missing the associated state code. Corresponds with a         validation alert since the TP should always ha
+formW2s.xml	/formW2s/*/stateWages	Dollar:0	Form W-2 box 16: Wages, tips, and other compensation allocated to the state.
+formW2s.xml	/formW2s/*/missingStateIncome	Dollar:0	Form W-2 box 16: Wages, tips, and other compensation allocated to the state.
+formW2s.xml	/formW2s/*/stateWithholding	Dollar:0	Form W-2 box 17: State income tax withheld.
+formW2s.xml	/formW2s/*/localWages	Dollar:0	Form W-2 box 18: Wages, tips, and other compensation allocated to the locality.
+formW2s.xml	/formW2s/*/localWithholding	Dollar:0	Form W-2 box 19: Local income tax withheld.
+formW2s.xml	/formW2s/*/writableLocality	Int:20	Form W-2 box 20: Locality name.          This is the writable optional fact. Can be left incomplete. Please use         the derived fact in downstream
+formW2s.xml	/formW2s/*/paidYonkersTaxes	Int:0	Does the W2 show Yonkers taxes?
+formW2s.xml	/knockoutYonkersPartYear	Int:0	The taxpayer paid taxes in Yonkers and said that they are a part-year         resident of Yonkers
+formW2s.xml	/formW2s/secondaryFilerUsedWithoutMFJ	Int:0	Whether secondary filer has W2s when primary filer is not filing jointly
+formW2s.xml	/primaryFilerHasW2WagesGreaterThan0	Dollar:0	Whether primary filer has wages greater than 0
+formW2s.xml	/hasPrimaryFilerHsaContributionsFromW2s	Dollar:0	Whether the primary filer has HSA contributions reported on their W-2s
+formW2s.xml	/secondaryFilerHasW2WagesGreaterThan0	Dollar:0	Whether secondary filer has wages greater than 0
+formW2s.xml	/hasSecondaryFilerHsaContributionsFromW2s	Dollar:0	Whether the secondary filer has HSA contributions reported on their W-2s
+formW2s.xml	/hasHsaContributionsOnW2	Dollar:0	Whether we already know the TP has HSA contributions reported on their W2
+formW2s.xml	/MFJSpouseHasCombatPay	Dollar:0	Whether a TP has an MFJ spouse and that MFJ spouse has combat pay on at least one         of their W2s
+formW2s.xml	/MFJSpouseCombatPay	Dollar:0	The amount of combat pay an MFJ spouse has on all of their W2s combined. Returns         zero if filing         status         is not MFJ
+formW2s.xml	/primaryFilerHasCombatPay	Dollar:0	Whether a TP has combat pay on at least one of their W2s
+formW2s.xml	/combatPayAmount	Dollar:0	The combat pay for line 1i, taking into account whether the user wants to declare         it or not.
+hsa.xml	/filers/*/hasHsaContributionsNotExceedLimits	Dollar:0 Dollar:0	The TP has HSA contributions which do not exceed limits.
+hsa.xml	/someFilersHaveHsaContributionsNotExceedLimits	Int:0	The TP has HSA contributions which do not exceed limits.
+hsa.xml	/requiresForm8889	Int:0	Whether the TP is required to file one or more form 8889s reporting on their HSAs
+hsa.xml	/hasHsaDistributions	Int:0	Whether there are any HSA distributions listed
+hsa.xml	/filers/*/hsaFundingDistributionsTotal	Dollar:0	Total qualified HSA funding distribution. This is reported on the primary filer's Form 8889 line 10
+hsa.xml	/bothFilersHaveHsa	Int:2	Whether the filing status is MFJ and both filers have separate HSAs
+hsa.xml	/hsaDistributions/*/writableDistributionsRolloverAmount	Dollar:0	The total amount of distributions that were a rollover to another HSA
+hsa.xml	/hsaDistributions/*/distributionsRolloverAmount	Dollar:0	The total amount of distributions that were a rollover to another HSA
+hsa.xml	/someFilerHasSomeHsaActivity	Int:0	Whether at least one filer has HSA activity. If         true, we will need to         learn about the HSA account type,         coverage, contribution
+hsa.xml	/hsaDistributions/*/causesEarningsOnExcessContributionsKO	Dollar:0	Filer has entered more than $0 on Box 2 for HSA distributions, knocking them out
+hsa.xml	/flowKnockoutEarningsOnExcessContributions	Int:0	Flow knockout form when a filer has entered more than $0 on Box 2 for HSA distributions, knocking         them out
+hsa.xml	/filers/*/hasHsaDistributions	Dollar:0	Whether the filer has HSA distributions.
+hsa.xml	/flowKnockoutHsaDistributionsNotNormal	Int:0	Knockout due to any of filers having HSA distribution code other than 1
+hsa.xml	/hsaDistributions/*/writableGrossDistribution	Dollar:0	Box 1 of form 1099-SA: Gross Distribution
+hsa.xml	/hsaDistributions/*/grossDistribution	Dollar:0	Box 1 of form 1099-SA: Gross Distribution
+hsa.xml	/hsaDistributions/*/writableTrusteeName	Int:75	The entity that paid the hsa distribution
+hsa.xml	/hsaDistributions/*/writableWithdrawnExcessContributionsAmount	Dollar:0	Amount of excess contributions and earnings on them withdrawn before the end of the tax year.
+hsa.xml	/hsaDistributions/*/withdrawnExcessContributionsAmount	Dollar:0	Amount of excess contributions and earnings on them withdrawn before the end of the tax year.
+hsa.xml	/hsaDistributions/*/writableEarningsOnExcessContributions	Dollar:0	Box 2 of form 1099-SA: Earnings on excess contributions
+hsa.xml	/hsaDistributions/*/writableFmvOnDateOfDeath	Dollar:0	Box 4 of form 1099-SA: fair market value on date of death
+hsa.xml	/hsaDistributions/*/writableQualifiedMedExpenses	Dollar:0	Total amount of qualified medical expenses paid for in tax year using         distributions from this HSA         account. Informs form 8889, line 15
+hsa.xml	/hasHsaDistributionsWithoutActivity	Int:0	Whether the TP has any distributions that must be removed because they reported not having HSA         activity in the TY
+hsa.xml	/hsaDistributions/secondaryFilerUsedWithoutMFJ	Int:0	Whether secondary filer has HSA distribution records when primary filer is not filing jointly
+hsa.xml	/filers/*/hsaContributionLimitLessLine11	Dollar:0	Form 8889 Line 12: the total contribution limit less sum of the employer contributions and their         qualified HSA funding         distributions.
+hsa.xml	/filers/*/hasHsaDeduction	Dollar:0	Whether the filer has a deductible amount
+hsa.xml	/filers/*/additionToHsaContributionLimit	Dollar:0	Form 8889 Line 7: Addition to the contribution limit
+hsa.xml	/filers/*/hsaPdfFilerName	Int:1	The name displayed on the HSA form 8889 used for PDF to combine MFJ names when applicable
+hsa.xml	/flowKnockoutHsaUnqualifiedDistributions	Int:0	Knockout due to filer entering a value for Box 4 of form 1099-SA
+hsa.xml	/hsaDistributions/*/causesFmvKnockout	Dollar:0	Whether the filer is knocked out due to their FMV
+hsa.xml	/flowKnockoutHsaDistributionFMV	Int:0	Knockout due to filer entering a value for Box 4 of form 1099-SA
+hsa.xml	/filers/*/hsaRolloverTotal	Dollar:0	Amount of distributions rolled over into other HSAs
+hsa.xml	/filers/*/totalHsaDistributions	Dollar:0	Appears on Form 8889 line 14a.
+hsa.xml	/flowKnockoutOtherCoveragePartOfYear	Int:0	Knockout due to not having HDHP coverage all year
+hsa.xml	/flowKnockoutOtherCoverageWholeYear	Int:0	Knockout due to not having HDHP coverage all year
+hsa.xml	/filers/*/hsaBaseContributionLimit	Dollar:0	The filer's HSA base contribution limit, regardless of age.
+hsa.xml	/hsaPrimaryFilerAllocatedContributionLimit	Dollar:0 Dollar:0	The calculated contribution limit for the primary filer. This should only be used when the filer has         met the family contribution limit rule.
+hsa.xml	/hsaSecondaryFilerAllocatedContributionLimit	Dollar:0 Dollar:0	The calculated contribution limit for the secondary filer. This should only be used when the filer         has met the family contribution limit rule.
+hsa.xml	/filers/*/taxableHsaDistributionTotal	Dollar:0	Sets the value for line 16 of form 8889.
+hsa.xml	/filers/*/hsaCalculatedTaxableHsaDistributionTotal	Dollar:0 Dollar:0 Dollar:0 Dollar:0	Reported on line 16 of form 8889.
+hsa.xml	/filers/*/hsaTotalExcessContributionsWithdrawnInTime	Dollar:0	Amount of HSA excess contributions withdrawn in time
+hsa.xml	/filers/*/hsaQualifiedMedExpenses	Dollar:0	Reported on line 15 of form 8889.
+hsa.xml	/filers/*/hsaNetDistributionAmount	Dollar:0 Dollar:0	Determines the net amount of HSA distributions.
+hsa.xml	/filers/*/hsaCalculatedDistributionAmount	Dollar:0 Dollar:0 Dollar:0 Dollar:0	Reported on line 14c of form 8889.
+hsa.xml	/filers/*/flowShouldAskIfChangeInMaritalStatusAffectsContributionLimit	Int:0	Whether to show the screen asking if a change in marital status affects a filer's contribution limit.
+hsa.xml	/flowKnockoutMaritalChangeAffectsContributionLimit	Int:0	At least one Form 8889 has a set of facts that cause a knockout
+hsa.xml	/bothFilersHaveToShowTestingPeriodCheck	Int:2	Whether the filing status is MFJ and both filers have separate HSAs
+hsa.xml	/knockoutNoPaymentsHsaDistribution	Dollar:0 Dollar:0 Dollar:0	Filer is knocked out if they have no taxable income and no credits, but have HSA distributions.
+hsa.xml	/someFilerCanHaveDistribution	Int:0	Whether at least one filer has HSA and can have distributions.
+hsa.xml	/flowKnockoutHsaCoverageChanging	Int:0	Knockout due to Medicare coverage changing during the year
+hsa.xml	/flowKnockoutNotEnrolledInHdhp	Int:0	Knockout due to not being enrolled in HDHP
+hsa.xml	/flowKnockoutEnrolledInMedicareAllYear	Int:0	Knockout due to Medicare coverage during the whole year
+hsa.xml	/flowKnockoutHsaSelfAndFamilyCoverage	Int:0	Knockout due to having both self and family HDHP coverage
+hsa.xml	/flowKnockoutHdhpCoverageNotAllYear	Int:0	Knockout due to not having HDHP coverage all year
+hsa.xml	/filers/*/writableHsaNonemployerContributionsTaxYear	Dollar:0	Filer's nonemployer HSA contributions this tax year
+hsa.xml	/filers/*/hsaNonemployerContributionsTaxYear	Dollar:0.00	Filer's nonemployer HSA contributions this tax year
+hsa.xml	/filers/*/writableHsaNonemployerContributionsTaxYearPlusOne	Dollar:0	Filer's nonemployer HSA contributions tax year plus one
+hsa.xml	/filers/*/hsaNonemployerContributionsTaxYearPlusOne	Dollar:0.00	Filer's nonemployer HSA contributions tax year plus one
+imported.xml	/importedPrimaryFilerFirstName	Int:20	The first name of the filer
+imported.xml	/importedPrimaryFilerMiddleInitial	Int:1	The middle initial of the filer
+imported.xml	/importedPrimaryFilerLastName	Int:20	The last name of the filer imported from the Data Imported Service
+imported.xml	/formW2s/*/importedEmployerName	Int:75	
+imported.xml	/formW2s/*/importedWritableEmployerNameLine2	Int:75	The employer's name as appears in line 2 box c of Form W-2. This is the writable         optional fact. Can         be         left incomplete.Please 
+imported.xml	/hasOneImportedW2	Int:1	
+imported.xml	/hasMultipleImportedW2s	Int:1	
+imported.xml	/interestReports/*/importedPayer	Int:75	The entity that paid the interest income, used on Form 1040 Schedule B, Part 1,         Line 1
+imported.xml	/interestReports/*/importedBox1	Dollar:0	
+income.xml	/primaryFilerUnreportedHouseholdWages	Dollar:0	Primary Filer's Household employee wages not reported on Form(s) W-2          OUT OF SCOPE
+income.xml	/secondaryFilerUnreportedHouseholdWages	Dollar:0	Primary Filer's household employee wages not reported on Form(s) W-2          OUT OF SCOPE
+income.xml	/primaryFilerUnreportedTipIncome	Dollar:0	Primary Filer's tip income not reported on line 1a          OUT OF SCOPE
+income.xml	/secondaryFilerUnreportedTipIncome	Dollar:0	Secondary Filer's tip income not reported on line 1a          OUT OF SCOPE
+income.xml	/primaryFilerMedicareWaiverPayments	Dollar:0	Primary filer's Medicaid waiver payments not reported on Form(s) W-2          OUT OF SCOPE
+income.xml	/secondaryFilerMedicareWaiverPayments	Dollar:0	Secondary filer's Medicaid waiver payments not reported on Form(s) W-2          OUT OF SCOPE
+income.xml	/primaryFilerEmployerProvidedAdoptionBenefits	Dollar:0	Primary filer's Employer-provided adoption benefits from Form 8839 (line 1f)
+income.xml	/secondaryFilerEmployerProvidedAdoptionBenefits	Dollar:0	Secondary filer's employer-provided adoption benefits from Form 8839 (line 1f)
+income.xml	/primaryFilerWagesFrom8919	Dollar:0	Primary filer's wages from Form 8919 (line 1g)
+income.xml	/secondaryFilerWagesFrom8919	Dollar:0	Secondary filer's wages from Form 8919 (line 1g)
+income.xml	/primaryFilerOtherEarnedIncome	Dollar:0	Other earned income (line 1h) OUT OF SCOPE.
+income.xml	/secondaryFilerOtherEarnedIncome	Dollar:0	Other earned income (line 1h) OUT OF SCOPE.
+income.xml	/qualifiedDividends	Dollar:0	Qualified dividend income to report on line 3a of Form 1040.          OUT OF SCOPE
+income.xml	/ordinaryDividends	Dollar:0	Ordinary dividend income to report on line 3b of Form 1040.         OUT OF SCOPE
+income.xml	/iraDistributions	Dollar:0	IRA distributions to report on line 4a of Form 1040.         OUT OF SCOPE
+income.xml	/taxableIraDistributions	Dollar:0	Taxable IRA distributions to report on line 4b of Form 1040.         OUT OF SCOPE
+income.xml	/pensionsAndAnnuities	Dollar:0	Pensions and annuities to report on line 5a of Form 1040.
+income.xml	/taxablePensionsAndAnnuities	Dollar:0	Taxable pensions and annuities to report on line 5b of Form 1040.
+income.xml	/hasTaxablePensionsAndAnnuities	Dollar:0	Taxable pensions and annuities are greater than 0
+income.xml	/taxablePensionsAndAnnuitiesDisplay	Dollar:0 Int:0 Dollar:0	A display value for line 5b for the MeF XML and PDF
+income.xml	/capitalGainsOrLosses	Dollar:0	Total capital gains or losses for line 7 of the 1040          OUT OF SCOPE
+income.xml	/hasOtherIncome	Dollar:0	Does the taxpayer have other income?
+income.xml	/hasAdjustmentsToIncome	Dollar:0	Does the taxpayer have adjustments to income reported in Schedule 1 Part 2?
+income.xml	/cdccPrimaryFilerCombatPayForCredits	Dollar:0 Dollar:0	Amount of combat pay to include in a primary filer's earned income for Child and Dependent Care         Credit
+income.xml	/cdccSecondaryFilerCombatPayForCredits	Dollar:0 Dollar:0	Amount of combat pay to include in a secondary filer's earned income for Child and Dependent Care         Credit
+income.xml	/cdccPrimaryFilerCombatPayForBenefits	Dollar:0 Dollar:0	Amount of combat pay to include in a primary filer's earned income for Child and Dependent Care         Credit
+income.xml	/cdccSecondaryFilerCombatPayForBenefits	Dollar:0 Dollar:0	Amount of combat pay to include in a secondary filer's earned income for Child and Dependent Care         Credit
+income.xml	/cdccPrimaryFilerTaxableBenefits	Dollar:0	Taxable Dependent Care Benefits for the purposes of determining Primary Filer's Earned Income for         CDCC
+income.xml	/cdccSecondaryFilerTaxableBenefits	Dollar:0	Taxable Dependent Care Benefits for the purposes of determining Secondary Filer's Earned Income for         CDCC
+income.xml	/writableMfsSpouseEarnedIncome	Dollar: 0.00 	MFS spouse's earned income as reported by the TP for the sake of determining whether they can exclude         any dependent care benefits
+income.xml	/mfsSpouseEarnedIncome	Dollar:0	MFS spouse's earned income as reported by the TP for the sake of determining whether they can exclude         any dependent care benefits
+income.xml	/cdccDisabledOrInSchoolIncomePerMonthWithMultipleQps	Dollar:500	Amount per month considered income for a taxpayer who was disabled or a student. Used for the purpose         of determining earned income for CDCC
+income.xml	/cdccDisabledOrInSchoolIncomePerMonthWithOneQp	Dollar:250	Amount per month considered income for a taxpayer who was disabled or a student. Used for the purpose         of determining earned income for CDCC
+income.xml	/monthlyIncomeIfDisabledOrInSchool	Int:1 Int:1	The rate to use per month as income for a taxpayer or spouse who was disabled or a student. This is         dependent on if they have one or more than
+interest.xml	/netInvestmentIncomeThresholdForMfs	Dollar:125000	The max income before someone is eligible to pay net investment income tax
+interest.xml	/netInvestmentIncomeThresholdForMfjOrQss	Dollar:250000	The max income before someone is eligible to pay net investment income tax
+interest.xml	/netInvestmentIncomeThresholdForSingleOrHoh	Dollar:200000	The max income before someone is eligible to pay net investment income tax
+interest.xml	/hasInterestIncomeAndAgiAboveThresholdForMfs	Dollar:0	Checks to see if you may need to file for net investment income taxes and thus disqualifies you for         Direct File
+interest.xml	/hasInterestIncomeAndAgiAboveThresholdForMfjOrQss	Dollar:0	Checks to see if you may need to file for net investment income taxes and thus disqualifies you for         Direct File
+interest.xml	/hasInterestIncomeAndAgiAboveThresholdForSingleOrHoh	Dollar:0	Checks to see if you may need to file for net investment income taxes and thus disqualifies you for         Direct File
+interest.xml	/minimumInterestIncome	Dollar:10	Miniumum dollar amount needed where someone will get a 1099-INT form
+interest.xml	/maximumTaxableInterestIncomeBeforeScheduleB	Dollar:1500	The maximum interest income allowed before Schedule B is required.
+interest.xml	/primaryFilerHasIncompleteInterestReports	Int:0	Whether at least one of Primary Filer's interest reports are incomplete
+interest.xml	/secondaryFilerHasIncompleteInterestReports	Int:0	Whether at least one of Secondary Filer's interest reports are incomplete
+interest.xml	/hasInterestReports	Int:0	Whether the TP has any interest reports
+interest.xml	/interestReports/*/isComplete	Dollar:0	Whether the interest report is complete.
+interest.xml	/interestReports/hasRequiredFactaFilings	Int:0	Whether any of the 1099-INT forms have a required FACTA filing box checked
+interest.xml	/interestReports/secondaryFilerUsedWithoutMFJ	Int:0	Whether secondary filer has interest reports when primary filer is not filing jointly
+interest.xml	/interestReports/*/payer	Int:75	The entity that paid the interest income, used on Form 1040 Schedule B, Part 1, Line 1
+interest.xml	/interestReports/*/writablePayerNameLine2	Int:75	The entity that paid the interest income, used on Form 1040 Schedule B, Part 1, Line 2
+interest.xml	/interestReports/*/writable1099Amount	Dollar:0	Box 1 on the 1099-INT.          This is the writable optional fact. Can be left incomplete. Please use the         derived fact in downstream calculat
+interest.xml	/interestReports/*/1099Amount	Dollar:0	Box 1 on the 1099-INT.
+interest.xml	/interestReports/*/earlyWithdrawlPenaltyAmount	Dollar:0	Box 2 on the 1099-INT.
+interest.xml	/flowKnockoutHasEarlyWithdrawlPenalty	Dollar:0	Whether user is knocked out for having a early withdrawl penalty. Happens if the user has more than         $0 in early withdrawl penalty (box 2) acro
+interest.xml	/interestReports/*/specifiedPrivateActivityBondInterest	Dollar:0	Box 9 on the 1099-INT.
+interest.xml	/interestReports/*/marketDiscount	Dollar:0	Box 10 on the 1099-INT.
+interest.xml	/interestReports/*/bondPremium	Dollar:0	Box 11 on the 1099-INT.
+interest.xml	/interestReports/*/bondPremiumOnTreasuryObligations	Dollar:0	Box 12 on the 1099-INT.
+interest.xml	/interestReports/*/bondPremiumOnTaxExemptBond	Dollar:0	Box 13 on the 1099-INT.
+interest.xml	/flowKnockoutHasBonds	Dollar:0	Whether user is knocked out for having a bonds. Happens if the user has more than         $0 in bonds (boxes 9         - 13) across all their 1099-INT
+interest.xml	/hasInterestIncome	Dollar:0	Interest income is greater than 0
+interest.xml	/interestReports/*/interestOnGovernmentBonds	Dollar:0	Box 3 on the 1099-INT.
+interest.xml	/interestReports/*/taxWithheld	Dollar:0 Dollar:0	Comes from box 4 on a 1099-INT. Set to 0 if there is no 1099-INT. We may be able to replace this with         a default value in the future. Entities 
+interest.xml	/interestReports/*/hasFederalWithholding	Dollar:0	Controls whether to ask the filer for the payer's TIN if they have a value inside of Box 4 - Federal         income tax withheld.
+interest.xml	/interestReports/*/foreignTaxPaid	Dollar:0 Dollar:0	Comes from box 6 on a 1099-INT. Set to 0 if there is no 1099-INT. We may be able to replace this with         a default value in the future. Entities 
+interest.xml	/flowKnockoutHasForeignTaxPaid	Dollar:0 Int:0	Knocks out the filer if they have value in Box 6 - Foreign Tax Paid.
+interest.xml	/interestReports/*/writableTaxExemptInterest	Dollar:0	Box 8 on the 1099-INT.          This is the writable optional fact. Can be left incomplete. Please use the         derived fact in downstream calculat
+interest.xml	/interestReports/*/taxExemptInterest	Dollar:0 Dollar:0	Comes from box 8 on a 1099-INT. Set to 0 if there is no 1099 int. We may be able to replace this with         a default value in the future.
+interest.xml	/flowKnockoutTaxExemptInterest	Dollar:0 Int:0	Knocks out the filer if they have value in Box 8 - Tax Exempt Interest.
+interest.xml	/flowKnockoutStateTaxWithheld	Int:0	Used when the amount entered in box 17 of 1099-INT is greater than zero
+interest.xml	/interestReports/*/hasStateTaxWithheld	Dollar:0	If the user has entered a value of more than zero in box 17 of 1099-INT
+interest.xml	/flowKnockoutWithholdingUnsupportedState	Int:0	Used to control a knockout for if the filer received withholding of state taxes from a different         state for any of their 1099Gs.
+interest.xml	/interestReports/*/writableStateTaxWithheld	Dollar:0	Box 17 on the 1099-INT.          This is the writable optional fact. Can be left incomplete. Please use the         derived fact in downstream calcula
+interest.xml	/interestReports/*/stateTaxWithheld	Dollar:0	Box 17 on the 1099-INT.
+interest.xml	/interestReports/*/no1099Amount	Dollar:0	Amount of taxable interest (no Form 1099-INT present).
+paymentMethod.xml	/xmlRefundDisbursementCd	Int:0 Int:2 Int:3	MeF Variable: Refund Disbursement Code.         Acceptable values:         0 – Balance Due/Zero Balance         1 – Reloadable         Prepaid Card   
+paymentMethod.xml	/xmlHasUltimateBankAccount	Int:0 Int:3 Int:4	When an ultimate bank account exists, MeF requires us to add information about that bank account to         the return headers.         If /xmlRefundD
+ptc.xml	/mayNeedToFileForm8962	Int:1	Whether TP may potentially need to file Form 8962
+ptc.xml	/dependentsRequiredToFile	Int:1	At least one dependent is required to file
+ptc.xml	/qualifiedForPtcNoAptcAndPtcTotalGreaterThanZero	Dollar:0	TP qualifies for PTC and has no APTC, and they get a positive credit amount
+ptc.xml	/qualifiedForPtcNoAptcAndPtcTotalIsZero	Dollar:0	TP qualifies for PTC and has no APTC, and they get a credit of zero
+ptc.xml	/qualifiedForPtcHasAptcAndNetCreditIsZero	Dollar:0	TP qualifies for PTC and has APTC, and they get a credit of zero
+ptc.xml	/qualifiedForPtcHasAptcAndNetCreditIsPositive	Dollar:0	TP qualifies for PTC and has APTC, and they get a positive credit
+ptc.xml	/hasAtLeastOneComplete1095A	Int:0	Whether the filer has at least one complete 1095-A.         This is distinct from has1095A because it being         complete means the filer can mark 
+ptc.xml	/taxFamilySizeNegationBasedOnWhetherSomeoneCouldBeClaimed	Int:-1	The number to reduce the taxFamily size based on who can be claimed on the 1040
+ptc.xml	/taxFamilySize	Int:2 Int:1	Tax family size (Filers + dependents)
+ptc.xml	/federalPovertyLineMagicNumberStartingNumber	Dollar:18210 Dollar:16770 Dollar:14580	Magic number for the federal poverty line starting number based on residence, this form uses the         previous year's number
+ptc.xml	/federalPovertyLineMagicNumberIncrement	Dollar:6430 Dollar:5910 Dollar:5140	Magic number for the federal poverty line increment based on residence, this form uses the previous         year's number
+ptc.xml	/taxFamilySizeIsZero	Int:0	Tax family size is zero
+ptc.xml	/federalPovertyLevelThreshold	Dollar:0 Int:1	below 100% federal poverty level threshold, used on Form 8962 Line 4
+ptc.xml	/ptcMagi	Dollar:0	MAGI based on worksheet for PTC
+ptc.xml	/householdIncome	Dollar:0	The household income for PTC (magi + dependents magi), used on Form 8962 Line 3
+ptc.xml	/householdIncomeAsARational	Rational:1/1	householdIncome as a Rational
+ptc.xml	/federalPovertyLevelThresholdAsARational	Rational:1/1	federalPovertyLevelThreshold as a rational
+ptc.xml	/householdIncomeAsPercent	Int:0 Int:4 Int:401 Int:100 Dollar:1 Rational:1/1	The household income as a percent of the federal poverty line, used on Form 8962 Line 5
+ptc.xml	/isHouseholdIncome401PercentOfPovertyLine	Int:401	Whether line 5 on Form 8962 has the value 401
+ptc.xml	/applicableFigure	Int:150 Rational:0/10000 Int:300 Int:150 Rational:4/10000 Int:399 Int:300 Dollar:25 Rational:1/10 Int:300 Dollar:25 Dollar:5 Rational:1/10 Rational:25/100000 Int:300 Rational:5/100000 Rational:600/10000 Rational:600/10000 Rational:25/100000 Int:300 Int:400 Rational:850/10000	Applicable figure based on table 2 for Form 8962 instructions
+ptc.xml	/ptcAnnualContributionAmount	Dollar:1	The annual contribution amount, used on Form 8962 Line 8a
+ptc.xml	/ptcMontlyContributionAmount	Int:12	monthly contriibution amount, used on Form 8962 Line 8b
+ptc.xml	/isBelow100PercentFederalPovertyLevel	Int:100	Is below 100% federal poverty level
+ptc.xml	/has1095A	Int:1	Whether the TP has started entering in a form 1095-A
+ptc.xml	/hasMultiple1095As	Int:2	If the TP has added multiple 1095-As
+ptc.xml	/1095As/*/policyNumber	Int:50	Policy number associated with the 1095
+ptc.xml	/1095As/*/maybeHasPolicyDateException	Int:1	Whether we need to ask the TP more questions to determine if they have a policy date exception
+ptc.xml	/1095As/*/policyStartsInJan	Int:1	Whether the starting date begins in Jan
+ptc.xml	/1095As/*/policyStartsInFeb	Int:2	Whether the starting date begins in Feb
+ptc.xml	/1095As/*/policyStartsInMar	Int:3	Whether the starting date begins in Mar
+ptc.xml	/1095As/*/policyStartsInApr	Int:4	Whether the starting date begins in Apr
+ptc.xml	/1095As/*/policyStartsInMay	Int:5	Whether the starting date begins in May
+ptc.xml	/1095As/*/policyStartsInJun	Int:6	Whether the starting date begins in Jun
+ptc.xml	/1095As/*/policyStartsInJul	Int:7	Whether the starting date begins in Jul
+ptc.xml	/1095As/*/policyStartsInAug	Int:8	Whether the starting date begins in Aug
+ptc.xml	/1095As/*/policyStartsInSep	Int:9	Whether the starting date begins in Sep
+ptc.xml	/1095As/*/policyStartsInOct	Int:10	Whether the starting date begins in Oct
+ptc.xml	/1095As/*/policyStartsInNov	Int:11	Whether the starting date begins in Nov
+ptc.xml	/1095As/*/policyStartsInDec	Int:12	Whether the starting date begins in Dec
+ptc.xml	/1095As/*/policyContainsOrEndsInFeb	Int:2 Int:2	Whether the policy contains or ends in Feb
+ptc.xml	/1095As/*/policyContainsOrEndsInMar	Int:3 Int:3	Whether the policy contains or ends in Mar
+ptc.xml	/1095As/*/policyContainsOrEndsInApr	Int:4 Int:4	Whether the policy contains or ends in Apr
+ptc.xml	/1095As/*/policyContainsOrEndsInMay	Int:5 Int:5	Whether the policy contains or ends in May
+ptc.xml	/1095As/*/policyContainsOrEndsInJun	Int:6 Int:6	Whether the policy contains or ends in Jun
+ptc.xml	/1095As/*/policyContainsOrEndsInJul	Int:7 Int:7	Whether the policy contains or ends in Jul
+ptc.xml	/1095As/*/policyContainsOrEndsInAug	Int:8 Int:8	Whether the policy contains or ends in Aug
+ptc.xml	/1095As/*/policyContainsOrEndsInSep	Int:9 Int:9	Whether the policy contains or ends in Sep
+ptc.xml	/1095As/*/policyContainsOrEndsInOct	Int:10 Int:10	Whether the policy contains or ends in Oct
+ptc.xml	/1095As/*/policyContainsOrEndsInNov	Int:11 Int:11	Whether the policy contains or ends in Nov
+ptc.xml	/1095As/*/monthOptions	Int:1 Int:1 Int:1 Int:1 Int:1 Int:1 Int:1 Int:1 Int:1 Int:1 Int:1 Int:12	Possible month options for a given 1095-A (policy)
+ptc.xml	/1095As/*/hasNoPotentialCoverageMonths	Int:0	Whether there are no month options available (ie. there are no potential coverage months)
+ptc.xml	/1095As/*/hasPolicyForAllMonths	Int:12	Whether the policy lasts all 12 months
+ptc.xml	/1095As/*/policyIsActiveInDec	Int:12	Whether the policy is active in Dec
+ptc.xml	/1095As/*/writablePtcAnnualPremium	Dollar:0.50	(Writable) annual PTC premiums
+ptc.xml	/1095As/*/writableSlcspAnnualPremium	Dollar:0	(Writable) annual SLCSP premium
+ptc.xml	/1095As/*/ptcMonthlyPremiumJan	Int:12 Dollar:0	Premium in Jan
+ptc.xml	/1095As/*/ptcMonthlyPremiumFeb	Int:12 Dollar:0	Premium in Feb
+ptc.xml	/1095As/*/ptcMonthlyPremiumMar	Int:12 Dollar:0	Premium in Mar
+ptc.xml	/1095As/*/ptcMonthlyPremiumApr	Int:12 Dollar:0	Premium in Apr
+ptc.xml	/1095As/*/ptcMonthlyPremiumMay	Int:12 Dollar:0	Premium in May
+ptc.xml	/1095As/*/ptcMonthlyPremiumJun	Int:12 Dollar:0	Premium in Jun
+ptc.xml	/1095As/*/ptcMonthlyPremiumJul	Int:12 Dollar:0	Premium in Jul
+ptc.xml	/1095As/*/ptcMonthlyPremiumAug	Int:12 Dollar:0	Premium in Aug
+ptc.xml	/1095As/*/ptcMonthlyPremiumSep	Int:12 Dollar:0	Premium in Sep
+ptc.xml	/1095As/*/ptcMonthlyPremiumOct	Int:12 Dollar:0	Premium in Oct
+ptc.xml	/1095As/*/ptcMonthlyPremiumNov	Int:12 Dollar:0	Premium in Nov
+ptc.xml	/1095As/*/ptcMonthlyPremiumDec	Int:12 Dollar:0	Premium in Dec
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumJan	Dollar:0.50	(writable)Premium in Jan
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumFeb	Dollar:0.50	(writable)Premium in Feb
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumMar	Dollar:0.50	(writable)Premium in Mar
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumApr	Dollar:0.50	(writable)Premium in Apr
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumMay	Dollar:0.50	(writable)Premium in May
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumJun	Dollar:0.50	(writable)Premium in Jun
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumJul	Dollar:0.50	(writable)Premium in Jul
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumAug	Dollar:0.50	(writable)Premium in Aug
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumSep	Dollar:0.50	(writable)Premium in Sep
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumOct	Dollar:0.50	(writable)Premium in Oct
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumNov	Dollar:0.50	(writable)Premium in Nov
+ptc.xml	/1095As/*/writablePtcMonthlyPremiumDec	Dollar:0.50	(writable)Premium in Dec
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumJan	Int:12 Dollar:0	SLCSP Premium in Jan
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumFeb	Int:12 Dollar:0	SLCSP Premium in Feb
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumMar	Int:12 Dollar:0	SLCSP Premium in Mar
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumApr	Int:12 Dollar:0	SLCSP Premium in Apr
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumMay	Int:12 Dollar:0	SLCSP Premium in May
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumJun	Int:12 Dollar:0	SLCSP Premium in Jun
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumJul	Int:12 Dollar:0	SLCSP Premium in Jul
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumAug	Int:12 Dollar:0	SLCSP Premium in Aug
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumSep	Int:12 Dollar:0	SLCSP Premium in Sep
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumOct	Int:12 Dollar:0	SLCSP Premium in Oct
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumNov	Int:12 Dollar:0	SLCSP Premium in Nov
+ptc.xml	/1095As/*/ptcMonthlySlcspPremiumDec	Int:12 Dollar:0	SLCSP Premium in Dec
+ptc.xml	/1095As/*/slcspPremiumPlaceholderJan	Dollar:0	SLCSP placeholder for Jan when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/slcspPremiumPlaceholderFeb	Dollar:0	SLCSP placeholder for Feb when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/slcspPremiumPlaceholderMar	Dollar:0	SLCSP placeholder for Mar when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/slcspPremiumPlaceholderApr	Dollar:0	SLCSP placeholder for Apr when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/slcspPremiumPlaceholderMay	Dollar:0	SLCSP placeholder for May when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/slcspPremiumPlaceholderJun	Dollar:0	SLCSP placeholder for Jun when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/slcspPremiumPlaceholderJul	Dollar:0	SLCSP placeholder for Jul when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/slcspPremiumPlaceholderAug	Dollar:0	SLCSP placeholder for Aug when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/slcspPremiumPlaceholderSep	Dollar:0	SLCSP placeholder for Sep when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/slcspPremiumPlaceholderOct	Dollar:0	SLCSP placeholder for Oct when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/slcspPremiumPlaceholderNov	Dollar:0	SLCSP placeholder for Nov when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/slcspPremiumPlaceholderDec	Dollar:0	SLCSP placeholder for Dec when month is not a coverage month and the amount should be 0
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumJan	Dollar:0	(writable)SLCSP Premium in Jan
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumFeb	Dollar:0	(writable)SLCSP Premium in Feb
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumMar	Dollar:0	(writable)SLCSP Premium in Mar
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumApr	Dollar:0	(writable)SLCSP Premium in Apr
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumMay	Dollar:0	(writable)SLCSP Premium in May
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumJun	Dollar:0	(writable)SLCSP Premium in Jun
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumJul	Dollar:0	(writable)SLCSP Premium in Jul
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumAug	Dollar:0	(writable)SLCSP Premium in Aug
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumSep	Dollar:0	(writable)SLCSP Premium in Sep
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumOct	Dollar:0	(writable)SLCSP Premium in Oct
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumNov	Dollar:0	(writable)SLCSP Premium in Nov
+ptc.xml	/1095As/*/writablePtcMonthlySlcspPremiumDec	Dollar:0	(writable)SLCSP Premium in Dec
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumJan	Int:12 Dollar:0	APTC Premium in Jan
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumFeb	Int:12 Dollar:0	APTC Premium in Feb
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumMar	Int:12 Dollar:0	APTC Premium in Mar
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumApr	Int:12 Dollar:0	APTC Premium in Apr
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumMay	Int:12 Dollar:0	APTC Premium in May
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumJun	Int:12 Dollar:0	APTC Premium in Jun
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumJul	Int:12 Dollar:0	APTC Premium in Jul
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumAug	Int:12 Dollar:0	APTC Premium in Aug
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumSep	Int:12 Dollar:0	APTC Premium in Sep
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumOct	Int:12 Dollar:0	APTC Premium in Oct
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumNov	Int:12 Dollar:0	APTC Premium in Nov
+ptc.xml	/1095As/*/ptcMonthlyAptcPremiumDec	Int:12 Dollar:0	APTC Premium in Dec
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumJan	Dollar:0	(writable)APTC Premium in Jan
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumFeb	Dollar:0	(writable)APTC Premium in Feb
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumMar	Dollar:0	(writable)APTC Premium in Mar
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumApr	Dollar:0	(writable)APTC Premium in Apr
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumMay	Dollar:0	(writable)APTC Premium in May
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumJun	Dollar:0	(writable)APTC Premium in Jun
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumJul	Dollar:0	(writable)APTC Premium in Jul
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumAug	Dollar:0	(writable)APTC Premium in Aug
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumSep	Dollar:0	(writable)APTC Premium in Sep
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumOct	Dollar:0	(writable)APTC Premium in Oct
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumNov	Dollar:0	(writable)APTC Premium in Nov
+ptc.xml	/1095As/*/writablePtcMonthlyAptcPremiumDec	Dollar:0	(writable)APTC Premium in Dec
+ptc.xml	/1095As/*/writableAptcAnnualAmount	Dollar:0.50	(Writable) annual APTC premium
+ptc.xml	/1095As/*/aptcAnnualAmount	Dollar:0	Annual APTC amount
+ptc.xml	/1095As/*/hasZeroCoverageMonths	Int:0	The number of coverage months is zero
+ptc.xml	/1095As/*/hasAtLeastOneCoverageMonth	Int:1	The number of coverage months is zero
+ptc.xml	/ptcCanReportAnnualTotals	Int:1	Whether the TP can report annual totals
+ptc.xml	/annualMaxPremiumAssitance	Dollar:0 Dollar:0	Annual max premium assitance, Form 8962 Line 11d
+ptc.xml	/annualPtcAllowed	Dollar:0	Max PTC allowed
+ptc.xml	/hasActive1095APolicyInJan	Int:1	Has at least one active policy in Jan
+ptc.xml	/hasActive1095APolicyInFeb	Int:1	Has at least one active policy in Feb
+ptc.xml	/hasActive1095APolicyInMar	Int:1	Has at least one active policy in Mar
+ptc.xml	/hasActive1095APolicyInApr	Int:1	Has at least one active policy in Apr
+ptc.xml	/hasActive1095APolicyInMay	Int:1	Has at least one active policy in May
+ptc.xml	/hasActive1095APolicyInJun	Int:1	Has at least one active policy in Jun
+ptc.xml	/hasActive1095APolicyInJul	Int:1	Has at least one active policy in Jul
+ptc.xml	/hasActive1095APolicyInAug	Int:1	Has at least one active policy in Aug
+ptc.xml	/hasActive1095APolicyInSep	Int:1	Has at least one active policy in Sep
+ptc.xml	/hasActive1095APolicyInOct	Int:1	Has at least one active policy in Oct
+ptc.xml	/hasActive1095APolicyInNov	Int:1	Has at least one active policy in Nov
+ptc.xml	/hasActive1095APolicyInDec	Int:1	Has at least one active policy in Dec
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForJan	Dollar:0	The monthly PTC max premium assitance for Jan
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForFeb	Dollar:0	The monthly PTC max premium assitance for Feb
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForMar	Dollar:0	The monthly PTC max premium assitance for Mar
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForApr	Dollar:0	The monthly PTC max premium assitance for Apr
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForMay	Dollar:0	The monthly PTC max premium assitance for May
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForJun	Dollar:0	The monthly PTC max premium assitance for Jun
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForJul	Dollar:0	The monthly PTC max premium assitance for Jul
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForAug	Dollar:0	The monthly PTC max premium assitance for Aug
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForSep	Dollar:0	The monthly PTC max premium assitance for Sep
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForOct	Dollar:0	The monthly PTC max premium assitance for Oct
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForNov	Dollar:0	The monthly PTC max premium assitance for Nov
+ptc.xml	/monthlyPtcMaxPremiumAssitanceForDec	Dollar:0	The monthly PTC max premium assitance for Dec
+ptc.xml	/totalPtcAmountAllowed	Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0	Total PTC amount allowed, used on Form 8962, Line 24
+ptc.xml	/totalAptcAmountTaken	Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0	Total APTC amount taken, used on Form 8962, Line 25
+ptc.xml	/netPtcAmountIsZeroOrPositive	Dollar:0	Helper fact to determine if PTC amount is zero or positive
+ptc.xml	/netPtcAmountIsNegative	Dollar:0	Helper fact to determine if PTC amount is negative
+ptc.xml	/isReceivingPtc	Dollar:0	The credit being received is positive
+ptc.xml	/owesPtc	Dollar:0	The TP owes PTC
+ptc.xml	/netPtcAmountWhenNegative	Int:-1	net PTC amount when amount is negative, used on Form 8962 Line 27
+ptc.xml	/ptcRepaymentLimitationLessThan200PercentFplSingle	Dollar:375	Repayment limitation based on lt 200% FPL (federal poverty limit) and single Rev Proc .07 Refundable         Credit for Coverage Under a Qualified Hea
+ptc.xml	/ptcRepaymentLimitationLessThan200PercentFplOther	Dollar:750	Repayment limitation lt 200% FPL and not signle Rev Proc .07 Refundable Credit for Coverage Under a         Qualified Health Plan § 36B(f)(2)(B)
+ptc.xml	/ptcRepaymentLimitationLessThan300PercentFplSingle	Dollar:950	Repayment limitation based on lt 300% FPL and single Rev Proc .07 Refundable Credit for Coverage         Under a Qualified Health Plan § 36B(f)(2)(B)
+ptc.xml	/ptcRepaymentLimitationLessThan300PercentFplOther	Dollar:1900	Repayment limitation lt 300% FPL and not signle Rev Proc .07 Refundable Credit for Coverage Under a         Qualified Health Plan § 36B(f)(2)(B)
+ptc.xml	/ptcRepaymentLimitationLessThan400PercentFplSingle	Dollar:1575	Repayment limitation based on lt 400% FPL and single Rev Proc .07 Refundable Credit for Coverage         Under a Qualified Health Plan § 36B(f)(2)(B)
+ptc.xml	/ptcRepaymentLimitationLessThan400PercentFplOther	Dollar:3150	Repayment limitation lt 400% FPL and not signle Rev Proc .07 Refundable Credit for Coverage Under a         Qualified Health Plan § 36B(f)(2)(B)
+ptc.xml	/ptcRepaymentLimitation	Dollar:0 Int:200 Int:300 Int:400 Int:400 Dollar:0	PTC repayment limitation, Line 28
+ptc.xml	/ptcAmountOwedDisplayedAsZero	Dollar:0	/lesserOfNetPtcAmountAndRepaymentLimitation represents a PTC amount owed. Instead of displaying this         amount as a negative number in the summar
+ptc.xml	/lesserOfNetPtcAmountAndRepaymentLimitation	Dollar:0 Dollar:0	The lesser of the net PTC amount and the repayment limitation, used on Form 1040 Schedule 2, Line 1a         and on Form 8962 Line 29
+ptc.xml	/ptcHasZeroCoverageMonths	Int:0	TP has zero coverage months across all 1095As, you should check if this is complete when using
+refundPrefs.xml	/thirdPartyDesigneeFullName	Int:35	The designee's full name
+refundPrefs.xml	/presidentalCampaignDesignationAmount	Dollar:3	How much money the Presidental Campaign Designation is
+refundPrefs.xml	/filers/*/potusElectionAmount	Dollar:0	The dollar amount the filer has designated for the Presidential campaign fund
+refundPrefs.xml	/presidentialCampaignSelectedAmount	Dollar:0	The derived dollar amount designated for the presidential campaign fund, based on the filer's tax         amount and stated preferences
+refundPrefs.xml	/hasPresidentialCampaignAmount	Dollar:0	Whether the filer has designated a dollar amount for the presidential campaign fund
+saversCredits.xml	/maxIncomeLimitForMFJ	Dollar:76500	max income before becoming ineligible as MFJ         IRS notice 2023-75, adjusted limitation under         25B(b)(1)(C) and 25B(b)(1)(D)
+saversCredits.xml	/maxIncomeLimitForHOH	Dollar:57375	max income before becoming ineligible as HoH         IRS notice 2023-75, adjusted limitation under         25B(b)(1)(C) and 25B(b)(1)(D)
+saversCredits.xml	/maxIncomeLimitForOther	Dollar:38250	max income before becoming ineligible as other filing statuses (non HoH or MFJ)         IRS notice 2023-75,         adjusted limitation under 25B(b)(1
+saversCredits.xml	/saversCreditAgiLimitForFiftyPercent	Dollar:46000 Dollar:34500 Dollar:23000	Maximum income at which the applicable percentage is 50%         IRS notice 2023-75, adjusted limitation under         25B(b)(1)(A)
+saversCredits.xml	/saversCreditAgiLimitForTwentyPercent	Dollar:50000 Dollar:37500 Dollar:25000	Maximum income at which the applicable percentage is 20%         IRS notice 2023-75, adjusted limitation under         25B(b)(1)(B)
+saversCredits.xml	/pdfSaversCreditMultiplierAsInt	Int:5 Int:2 Int:1 Int:0	The savers credit multiplier as an int, used for the PDF output for Form 8880, line 9
+saversCredits.xml	/saversCreditMultiplierAsRational	Rational:5/10 Rational:2/10 Rational:1/10 Rational:0/10	The savers credit multiplier as a rational number so that we can multiply it for Form 8880 line 10         calculations
+saversCredits.xml	/unfilteredPrimaryFilerIraAndAbleContributions	Dollar:0	Total IRA and ABLE account contributions for the primary filer, not filtered by eligibility
+saversCredits.xml	/primaryFilerIraAndAbleContributions	Dollar:0	Total IRA and ABLE account contributions for the primary filer, used in Form 8880 Line 1a
+saversCredits.xml	/unfilteredSecondaryFilerIraAndAbleContributions	Dollar:0	Total IRA and ABLE account contributions for the secondary filer, not filtered by eligibility
+saversCredits.xml	/secondaryFilerIraAndAbleContributions	Dollar:0	Total IRA and ABLE account contributions for the secondary filer, used in Form 8880 Line 1b
+saversCredits.xml	/primaryFilersDeferralsAndContributions	Dollar:0	The total sum of deferrals and contributions for the Primary TP, used on Line 2a of Form 8880
+saversCredits.xml	/secondaryFilersDeferralsAndContributions	Dollar:0	The total sum of deferrals and contributions for the secondary TP, used on Line 2b of Form 8880
+saversCredits.xml	/primaryFilerTotalContributionsLessDistributions	Dollar:0	The total contributions by the primary filer minus the distributions, used on Form 8880 Line 5a
+saversCredits.xml	/submittedPrimaryFilerTotalContributionsLessDistributions	Dollar:0	Copy of /primaryFilerTotalContributionsLessDistributions but modified to be used specifically for         MeF/PDF to provide the incomplete value when
+saversCredits.xml	/secondaryFilerTotalContributionsLessDistributions	Dollar:0	The total contributions by the secondary filer minus the distributions, used on Form 8880 Line 5b
+saversCredits.xml	/submittedSecondaryFilerTotalContributionsLessDistributions	Dollar:0	Copy of /secondaryFilerTotalContributionsLessDistributions but modified to be used specifically for         MeF/PDF to provide the incomplete value wh
+saversCredits.xml	/primaryFilerSaversEligibleGrossDistributions	Dollar:0	The primary filers distributions that are eligible to be included in the savers credit (before         accounting for filing status additions).
+saversCredits.xml	/secondaryFilerSaversEligibleGrossDistributions	Dollar:0	The secondary filers distributions that are eligible to be included in the savers credit (before         accounting for filing status additions).
+saversCredits.xml	/saversMaxCreditAmountNotMFJ	Dollar:1000	Max credit possible if not filing MFJ (50% of the max contribution)
+saversCredits.xml	/saversMaxCreditLimit	Dollar:2000	Max credit limit for line 6 on Form 8880
+saversCredits.xml	/submittedPrimaryFilerMaxCreditCalc	Dollar:0	Modification of /primaryFilerMaxCreditCalc, used for MeF/PDF to prevent value when the primary filer         is not eligible or doesn't have eligible 
+saversCredits.xml	/submittedSecondaryFilerMaxCreditCalc	Dollar:0	Modification of /secondaryFilerMaxCreditCalc, used for MeF/PDF to prevent value when the spouse is         not eligible or doesn't have eligible contr
+saversCredits.xml	/meetsOneDollarCombinedCreditLimit	Dollar:1 Dollar:0	The combined credit limit is $1 and ratioed limit is $0
+saversCredits.xml	/limitationBasedOnTaxLiability	Dollar:0	Limitation based on tax liability (Credit Limit Worksheet) Form 8880 Line 11
+saversCredits.xml	/qualifiedSaverCreditAmount	Dollar:0	The amount the TP qualifies for, Form 8880 Line 12 and propagates to Form 1040 Schedule 3, Line 4
+saversCredits.xml	/isReceivingSaversCredit	Dollar:0	Whether the amount of the credit is greater than $0
+saversCredits.xml	/qualifiedForSaverCreditWoTaxLiability	Dollar:0	Eligible and qualified for savers credit
+saversCredits.xml	/qualifiedForSaverCredit	Dollar:0	Eligible and qualified for savers credit
+saversCredits.xml	/onlyPrimaryFilerQualifiedForSaversCredit	Dollar:0	Is the primary taxpayer the only taxpayer qualified?
+saversCredits.xml	/onlySecondaryFilerQualifiedForSaversCredit	Dollar:0	Is the secondary taxpayer the only taxpayer qualified?
+saversCredits.xml	/didPrimaryMakeEligibleContributions	Dollar:0	Did the primary TP make eligible contributions
+saversCredits.xml	/didSecondaryMakeEligibleContributions	Dollar:0	Did the secondary TP make eligible contributions
+saversCredits.xml	/nameOfOnlyQualifier	Dollar:0 Dollar:0 Dollar:0 Dollar:0	Name of person when only one person qualifies for the credit, may be undefined
+saversCredits.xml	/isSingleFilerFailsDistributionsTest	Dollar:0	Is the primary filer (of a non-MFJ return) the only filer that has distributions exceeding         contributions?
+saversCredits.xml	/isOnlyPrimaryFilerFailsDistributionsTest	Dollar:0 Dollar:0	Is the primary filer (of an MFJ return) the only filer that has distributions exceeding         contributions?
+saversCredits.xml	/isOnlySecondaryFilerFailsDistributionsTest	Dollar:0 Dollar:0	Is the secondary filer (of an MFJ return) the only filer that that has distributions exceeding         contributions?
+saversCredits.xml	/areBothFilersFailDistributionsTest	Dollar:0 Dollar:0	Are both filers have distributions exceeding contributions?
+schedule2.xml	/totalAdditionalTaxesOwed	Dollar:0	Line 3 of schedule 2 for line 17 of form 1040
+schedule3.xml	/hasSchedule3	Dollar:0	Some actual logic for when sched 3 is required goes here
+schedule3.xml	/sched3Line1	Dollar:0	Schedule 3 Line 1: PLACEHOLDER
+schedule3.xml	/sched3Line3	Dollar:0	Schedule 3 Line 3: PLACEHOLDER
+schedule3.xml	/sched3Line5b	Dollar:0	Schedule 3 Line 5b: PLACEHOLDER
+schedule3.xml	/sched3Line6f	Dollar:0	Schedule 3 Line 6f: PLACEHOLDER
+schedule3.xml	/sched3Line6l	Dollar:0	Schedule 3 Line 6l: PLACEHOLDER
+schedule3.xml	/sched3Line6m	Dollar:0	Schedule 3 Line 6m: PLACEHOLDER
+schedule3.xml	/hasTaxLiabilityBeforeNrCredits	Dollar:0	Whether the taxpayer has tax liability before credits are applied.
+schedule3.xml	/hasTaxLiabilityAfterCdcc	Dollar:0	Whether the taxpayer still has tax liability after CDCC is subtracted.
+schedule3.xml	/hasTaxLiabilityAfterEdc	Dollar:0	Whether the taxpayer still has tax liability after EDC is subtracted.
+schedule3.xml	/hasTaxLiabilityAfterSavers	Dollar:0	Whether the taxpayer still has tax liability after Saver's is subtracted.
+schedule3.xml	/otherPaymentsAndRefundableCreditsTotal	Dollar:0	Amount from Schedule 3, line 15 (line 31 1040)
+signing.xml	/offset	Int:-4 Int:-5 Int:-6 Int:-7 Int:-8 Int:-9 Int:-10 Int:-12	
+signing.xml	/primaryPriorYearAGIAmount	Dollar:0	Primary filer's prior year AGI amount.
+signing.xml	/spousePriorYearAGIAmount	Dollar:0	Spouse's prior year AGI amount.
+socialSecurity.xml	/hasSocialSecurityBenefits	Dollar:0	Has social security benefits to report on line 6a of Form 1040 (should we mark it as D)
+socialSecurity.xml	/hasSocialSecurityReports	Int:0	Whether the TP has any social security benefits listed
+socialSecurity.xml	/socialSecurityBenefitsAreLossUpto3k	Dollar:-3000 Dollar:0	The TP repaid social security benefits to the point where benefits are a net loss of up to 3k         (between -3000 and 0)
+socialSecurity.xml	/socialSecurityBenefitsAreLossGreaterThan3k	Dollar:-3000	The TP repaid social security benefits to the point where benefits are a net loss of over 3k.         Knocks         the user out for TY2023, due to e
+socialSecurity.xml	/primaryFilerHasIncompleteSocialSecurityReports	Int:0	Whether at least one of Primary Filer's social security reports are incomplete
+socialSecurity.xml	/secondaryFilerHasIncompleteSocialSecurityReports	Int:0	Whether at least one of Secondary Filer's social security reports are incomplete
+socialSecurity.xml	/maximumSocialSecurityBenefitsRepaidSupported	Dollar:3000	The maximum dollar amount of social security benefits repaid that is supported.
+socialSecurity.xml	/hasAtLeastOneSocialSecurityReport	Int:0	Has at least one social security report
+socialSecurity.xml	/socialSecurityReports/secondaryFilerUsedWithoutMFJ	Int:0	Whether secondary filer has Social Securityinterest reports when primary filer is not filing jointly
+socialSecurity.xml	/socialSecurityReports/*/ssaNetBenefits	Dollar:0	Box 5 of the SSA-1099
+socialSecurity.xml	/socialSecurityReports/*/rrbNetBenefits	Dollar:0	Box 5 of the RRB-1099
+socialSecurity.xml	/socialSecurityReports/*/ssaFederalTaxWithheld	Dollar:0	Box 6 of the SSA-1099
+socialSecurity.xml	/socialSecurityReports/*/rrbFederalTaxWithheld	Dollar:0	Box 10 of the RRB-1099
+socialSecurity.xml	/taxableSocialSecurityBenefits	Dollar:0 Dollar:0 Dollar:0.85	Taxable Social security benefits to report on line 6b of Form 1040. This is also line 18 of the         Social Security Benefits Worksheet. We use the
+socialSecurity.xml	/socialSecurityBenefitsWkshtLine7	Dollar:0.50 Dollar:0	Used for calculating taxable social security benefits. We use the SSBW from instructions for 1040.         There is a similar worksheet in Pub 915 whe
+socialSecurity.xml	/socialSecurityBenefitsWkshtLine16	Dollar:0.85 Dollar:0 Dollar:0.85 Dollar:0.50 Dollar:0.50	Per filing status ceilings on when social security benefits will start being taxed. We use the SSBW         from instructions for 1040. There is a sim
+socialSecurity.xml	/socialSecurityBenefitsWkshtLine8	Dollar:32000 Dollar:25000	Per filing status ceilings on when social security benefits will start being taxed. We use the SSBW         from instructions for 1040. There is a sim
+socialSecurity.xml	/socialSecurityBenefitsWkshtLine10	Dollar:12000 Dollar:9000	Social Security Benefits Worksheet Line 10          Values are equal to the difference between the base amount         specified in §86(c)(1) and the 
+socialSecurity.xml	/socialSecurityBenefitsWkshtLine11	Dollar:0	Social Security Benefits Worksheet Line 11. We use the SSBW from instructions for 1040. There is a         similar worksheet in Pub 915 where the line
+standardDeduction.xml	/secondaryFilerAdditionalStandardDeductionItems	Int:0	Additional Standard Deduction Items from the secondary filer
+standardDeduction.xml	/additionalStandardDeductionMultiplier	Dollar:1950 Dollar:1550	The amount to add to the standard deduction for each additional item.         Rev Proc .15 Standard Deduction         §63(f)          TODO: Replace An
+standardDeduction.xml	/MFJStandardDeduction	Dollar:
+          29200
+        	Standard Deduction for filers who are married filing jointly.         Rev Proc .15 Standard Deduction         §1(j)(2)(A)
+standardDeduction.xml	/singleOrMFSStandardDeduction	Dollar:
+          14600
+        	Standard Deduction for filers who are married filing separately or single.         Rev Proc .15 Standard         Deduction §1(j)(2)(C) §1(j)(2)(D)
+standardDeduction.xml	/HoHStandardDeduction	Dollar:
+          21900
+        	Standard Deduction for filers who are filing HoH.         Rev Proc .15 Standard Deduction §1(j)(2)(B)
+standardDeduction.xml	/minimumStandardDeduction	Dollar:1300 Dollar:450	The alternative amount to use as the standard deduction if a filer can be claimed as a dependent.         This amount is not used if it exceeds the no
+studentLoanAdjustment.xml	/maxIncomeForNonMFJStudentLoanInterestDeduction	Dollar:95000	The maximum magi that a non-MFJ filer can have and still receive the Student Loan Interest Deduction
+studentLoanAdjustment.xml	/maxIncomeForMFJStudentLoanInterestDeduction	Dollar:195000	The maximum magi that an MFJ filer can have and still receive the Student Loan Interest Deduction
+studentLoanAdjustment.xml	/maxStudentLoadDeduction	Dollar:2500	The maximum amount one is allowed to deduct because of student loan interest payments
+studentLoanAdjustment.xml	/studentLoanInterestAdjustmentAmount	Dollar:0	The amount of the student loan interest deduction. Line 21 of Form 1040 Schedule 1, Line 33         Calculated per requirements on Student Loan Intere
+studentLoanAdjustment.xml	/isReceivingStudentLoanInterestAdjustment	Dollar:0	Whether the TP or SP received the student loan deduction
+studentLoanAdjustment.xml	/studentLoanPhaseOutStart	Dollar:80000	The income at which the student loan interest deduction begins to phase out for non-MFJ filers         Rev         Proc 30 Interest on Education Loans
+studentLoanAdjustment.xml	/studentLoanPhaseOutStartMfj	Dollar:165000	The income at which the student loan interest deduction begins to phase out for MFJ filers         Rev Proc         .30 Interest on Education Loans §2
+studentLoanAdjustment.xml	/studentLoanPhaseOutComplete	Dollar:95000	Whether the student loan interest deduction is completely phased out for non-MFJ filers         Rev Proc .30         Interest on Education Loans §221(
+studentLoanAdjustment.xml	/studentLoanPhaseOutCompleteMfj	Dollar:195000	Whether the student loan interest deduction is completely phased out for MFJ filers         Rev Proc .30         Interest on Education Loans §221(b)(2
+studentLoanAdjustment.xml	/studentLoanAmountPhaseOutAmount	Dollar:0 Dollar:10 Dollar:10	Phaseout amount for the student loan deduction. Described in instructions for 1040, schedule 1, line         21. Corresponds with Line 8 of the Studen
+taxCalculations.xml	/totalExemptPrimaryAndSpouseCount	Int:2 Int:1	Total Exempt Primary And Spouse Count
+taxCalculations.xml	/adjustmentsToIncomeExcludingStudentLoanInterest	Dollar:0	The adjustments to income used in the calculatation of non-IRA deduction MAGIs to determine deducible         amounts. Used in the Student Loan Intere
+taxCalculations.xml	/taxableIncome	Dollar:0	Taxable income as reported on line 15 of Form 1040.
+taxCalculations.xml	/qualifiedBusinessIncomeDeduction	Dollar:0	Qualified business income deductions for line 13 of Form 1040
+taxCalculations.xml	/hasAdjustments	Dollar:0	Whether there are adjustments such as educator expenses and student loan interest greater than zero
+taxCalculations.xml	/roundedTaxableIncome	Dollar:0 Dollar:0 Dollar:5 Dollar:2.50 Dollar:15 Dollar:10 Dollar:25 Dollar:20 Dollar:3000 Rational:25/25 Dollar:12.50 Dollar:100000 Rational:50/50 Dollar:25 Dollar:100000	Income less than $100,000 uses the tax tables from the Instructions for Form         1040. This fact selects         the "midpoint" that corresponds t
+taxCalculations.xml	/tentativeTaxFromTaxableIncome	Dollar:23200 Rational:10/100 Dollar:94300 Dollar:2320 Rational:12/100 Dollar:23200 Dollar:201050 Dollar:10852 Rational:22/100 Dollar:94300 Dollar:383900 Dollar:34337 Rational:24/100 Dollar:201050 Dollar:487450 Dollar:78221 Rational:32/100 Dollar:383900 Dollar:731200 Dollar:111357 Rational:35/100 Dollar:487450 Dollar:731200 Dollar:196669.50 Rational:37/100 Dollar:731200 Dollar:16550 Rational:10/100 Dollar:63100 Dollar:1655 Rational:12/100 Dollar:16550 Dollar:100500 Dollar:7241 Rational:22/100 Dollar:63100 Dollar:191950 Dollar:15469 Rational:24/100 Dollar:100500 Dollar:243700 Dollar:37417 Rational:32/100 Dollar:191950 Dollar:609350 Dollar:53977 Rational:35/100 Dollar:243700 Dollar:609350 Dollar:181954.50 Rational:37/100 Dollar:609350 Dollar:11600 Rational:10/100 Dollar:47150 Dollar:1160 Rational:12/100 Dollar:11600 Dollar:100525 Dollar:5426 Rational:22/100 Dollar:47150 Dollar:191950 Dollar:17168.50 Rational:24/100 Dollar:100525 Dollar:243725 Dollar:39110.50 Rational:32/100 Dollar:191950 Dollar:609350 Dollar:55678.50 Rational:35/100 Dollar:243725 Dollar:609350 Dollar:183647.25 Rational:37/100 Dollar:609350 Dollar:11600 Rational:10/100 Dollar:47150 Dollar:1160 Rational:12/100 Dollar:11600 Dollar:100525 Dollar:5426 Rational:22/100 Dollar:47150 Dollar:191950 Dollar:17168.50 Rational:24/100 Dollar:100525 Dollar:243725 Dollar:39110.50 Rational:32/100 Dollar:191950 Dollar:365600 Dollar:55678.50 Rational:35/100 Dollar:243725 Dollar:365600 Dollar:98334.75 Rational:37/100 Dollar:365600	Tentative tax as reported on line 16 of Form 1040.         Rev Proc .01 Tax Rate Tables §1(j)(2)(A|B|C|D)         TODO: Replace Any/Equal with Include
+taxCalculations.xml	/hasNonRefundableCredits	Dollar:0	Whether the taxpayer has non-refundable credits greater than zero
+taxCalculations.xml	/taxLessNonRefundableCredits	Dollar:0	Tentative tax minus non-refundable tax credits as reported on line 22 of Form         1040.
+taxCalculations.xml	/line21OfSchedule2	Dollar:0	Other taxes, including self-employment Line 21 of schedule 2 for line 23 of form         1040
+taxCalculations.xml	/otherFormWithholding	Dollar:0	Federal income tax withheld from wages, as reported on line 25c of Form 1040.
+taxCalculations.xml	/americanOpportunityCredit	Dollar:0	American opportunity credit from Form 8863, line 8 (line 29 1040)
+taxCalculations.xml	/hasRefundableCredits	Dollar:0	Whether the taxpayer has refundable credits is greater than zero
+taxCalculations.xml	/overpayment	Dollar:0	The amount that total payments exceed total taxes. Report on line 34 of Form         1040.
+taxCalculations.xml	/appliedToNextYearEstimated	Dollar:0	Amount of line 34 you want applied to your 2023 estimated tax (line 36 1040)
+taxCalculations.xml	/dueRefund	Dollar:0	Is the taxpayer due a refund?
+taxCalculations.xml	/balanceDue	Dollar:0	The amount that total taxes exceed total payments. Reported on line 37 of Form         1040.
+taxCalculations.xml	/owesBalance	Dollar:0	Does the taxpayer owe taxes?
+taxCalculations.xml	/zeroBalance	Dollar:0	Does the taxpayer have a zero balance due?
+taxCalculations.xml	/knockoutHasNoPaymentsOrCredits	Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0 Dollar:0	TP is knocked out because they have no payments or credits
+unemployment.xml	/xmlHasRepaidUnemploymentCompensation	Dollar:0	Whether unemployment compensation has been received along with any repaid benefits amount.
+unemployment.xml	/receivedUnemploymentCompensation	Dollar:0 Int:0	Whether unemployment compensation has been received.
+unemployment.xml	/hasForm1099Gs	Int:0	Whether the TP has any Form 1099Gs listed
+unemployment.xml	/form1099Gs/secondaryFilerUsedWithoutMFJ	Int:0	Whether secondary filer has Social Securityinterest reports when primary filer is not filing jointly
+unemployment.xml	/primaryFilerHasIncompleteForm1099Gs	Int:0	Whether at least one of Primary Filer's Form 1099Gs are incomplete
+unemployment.xml	/secondaryFilerHasIncompleteForm1099Gs	Int:0	Whether at least one of Secondary Filer's Form 1099Gs are incomplete
+unemployment.xml	/form1099Gs/*/isComplete	Dollar:0	Whether this unemployment form is complete
+unemployment.xml	/form1099Gs/*/amount	Dollar:0	The amount of unemployment compensation.
+unemployment.xml	/form1099Gs/*/amountPaidBackForBenefitsInTaxYear	Dollar:0	The amount of money paid back in the tax year for the benefits received in the tax year. Takes a         written value, but defaults to zero if it has
+unemployment.xml	/form1099Gs/*/amountPaidBackForBenefitsBeforeTaxYear	Dollar:0	The amount of money paid back in the tax year for the benefits received before the tax year. Takes a         written value, but defaults to zero if it
+unemployment.xml	/form1099Gs/*/federalTaxWithheld	Dollar:0	The federal income tax withheld from this unemployment compensation. Takes a written value, but         defaults to zero if it hasn't been written. We
+unemployment.xml	/form1099Gs/*/flowHasFederalTaxWithheld	Dollar:0	If there has been feder tax withheld. Controls the flow for shwoing the payer tin.
+unemployment.xml	/flowKnockoutUnemploymentCompensationUnsupportedState	Int:0	Used to control a knockout for if the filer received the unemployment compensation from a different         state for any of their 1099Gs.
+unemployment.xml	/form1099Gs/*/stateTaxWithheld	Dollar:0	The amount of state tax that has been withheld.
+unemployment.xml	/maximumRepaymentUnemploymentCompensation	Dollar:3000	Maximum dollar amount of repayment of prior year unemployment compensation that direct file can         handle.
+unemployment.xml	/minimumUnemploymentCompensation	Dollar:10	Miniumum dollar amount needed where someone will get a 1099-G form
