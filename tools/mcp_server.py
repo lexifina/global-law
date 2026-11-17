@@ -31,7 +31,7 @@ import types
 import unicodedata
 import warnings
 from array import array
-from collections import ChainMap, OrderedDict
+from collections import ChainMap, Counter, OrderedDict
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 from pathlib import Path
@@ -1624,24 +1624,85 @@ def _lines_text(lines) -> tuple[str, array]:
     return '\n'.join(lines), starts
 
 
-def lines_holding(text: str, starts: array, needles: list[str], most: int) -> list[int] | None:
-    """The lines of a text (_lines_text) that hold any of the needles, as line numbers in order; None when a needle
-    is empty or more than `most` lines hold one (the caller then goes through every line, as it did before). Each
-    needle is looked for by str.find, from the line after its last hit: the time is that of reading the text once
-    for each needle, whatever the number of lines."""
-    hits: set[int] = set()
-    lines, size = len(starts), len(text)
+def lines_holding_each(text: str, starts: array, needles: list[str]) -> list[list[int]] | None:
+    """For each needle, the lines of a text (_lines_text) that hold it, as line numbers in order; None when a needle is
+    empty. A needle few lines hold is looked for by str.find, from the line after its last hit (the time is that of
+    reading the text once). One that an eighth of the lines hold or more ("de", "na", "o") is looked for in each
+    line of the text cut into its lines, once for all such needles: a find and a bisect for every hit took ten times
+    as long as that (0.35 s a needle for Croatia's 568,000 names, 2026-11-17)."""
+    lines, cut, out = len(starts), None, []
     for needle in needles:
         if not needle:
             return None
+        mine: list[int] | None = []
         pos = text.find(needle)
         while pos >= 0:
             i = bisect.bisect_right(starts, pos) - 1
-            hits.add(i)
-            if len(hits) > most:
-                return None
+            mine.append(i)
+            if len(mine) > (lines >> 3) + 64:
+                mine = None
+                break
             pos = text.find(needle, starts[i + 1]) if i + 1 < lines else -1
+        if mine is None:
+            if cut is None:
+                cut = text.split('\n')
+            if len(cut) == lines:  # (a line with a line break in it: the lines cut are not the lines; found one by one)
+                mine = [i for i, line in enumerate(cut) if needle in line]
+            else:
+                mine, pos = [], text.find(needle)
+                while pos >= 0:
+                    i = bisect.bisect_right(starts, pos) - 1
+                    mine.append(i)
+                    pos = text.find(needle, starts[i + 1]) if i + 1 < lines else -1
+        out.append(mine)
+    return out
+
+
+def lines_holding(text: str, starts: array, needles: list[str], most: int) -> list[int] | None:
+    """The lines of a text (_lines_text) that hold any of the needles, as line numbers in order; None when a needle
+    is empty or more than `most` lines hold one (the caller then goes through every line, as it did before)."""
+    each = lines_holding_each(text, starts, needles)
+    if each is None:
+        return None
+    hits: set[int] = set()
+    for mine in each:
+        hits.update(mine)
+        if len(hits) > most:
+            return None
     return sorted(hits)
+
+
+class _HeadingLines:
+    """What find_provision keeps of the heading lines that matched in one corpus (name -> the line, as shown), where
+    they are the corpus's indexed headings: read from the index for the rows shown, not cut for every match."""
+    __slots__ = ('index', 'held')
+
+    def __init__(self, index, held):
+        self.index, self.held = index, held
+
+    def __contains__(self, name):
+        return name in self.held
+
+    def __getitem__(self, name):
+        return self.index[name].strip().lstrip('#').strip()[:160]
+
+
+def top_scored(live: list[str], scores: dict[str, int], most: int, key=None) -> list[str]:
+    """sorted(live, key=lambda n: (-scores[n], key(n)))[:most], without putting every name in order: the names by
+    score, the highest scores first, and only the scores that reach the first `most` put in order (half a million
+    names score 1 when a word of the query is in most names, and fifteen rows are shown)."""
+    import heapq
+    by: dict[int, list[str]] = {}
+    for n in live:
+        by.setdefault(scores[n], []).append(n)
+    out: list[str] = []
+    for score in sorted(by, reverse=True):
+        left = most - len(out)
+        if left <= 0:
+            break
+        names = by[score]
+        out.extend(sorted(names, key=key) if len(names) <= left else heapq.nsmallest(left, names, key=key))
+    return out[:most]
 
 
 @lru_cache(maxsize=2048)  # (about 30 bytes a name: Romania's 1.2 million are 48 MB; 12 million names in all)
@@ -1690,7 +1751,16 @@ _NAMES_SEEN: set = set()
 def provisions(corpus: str, sha: str, inner: str = '') -> list[str]:
     """The law files under `inner` in a corpus at one commit, by name only. Headings are read (read_headings) for the
     rows an answer shows: reading them for every file read the whole text of every file, and Spain alone has 326,000."""
-    return [n for n in names_of(corpus, sha) if not inner or n == inner or n.startswith(inner + '/')]
+    names = names_of(corpus, sha)
+    if not inner:
+        return list(names)
+    if _names_sorted(corpus, sha):
+        # git lists a tree sorted: the file of that name, if there is one, then the names under the folder (a
+        # bisect each; every name of the corpus was tested, 1.2 million for a folder of Romania's acts).
+        at = bisect.bisect_left(names, inner)
+        own = [inner] if at < len(names) and names[at] == inner else []
+        return own + list(names_under(corpus, sha, inner))
+    return [n for n in names if n == inner or n.startswith(inner + '/')]
 
 
 @lru_cache(maxsize=256)
@@ -2698,7 +2768,7 @@ NATURAL_MOST = 50_000  # names find_provision and list_provisions put in natural
 ACT_TIE = 3  # files of one folder that match only by the folder's name before find_provision shows the folder instead
 
 
-def act_ties(scores: dict[str, int], headed: set[str], words: list[str]) -> dict[str, tuple[int, list[str]]]:
+def act_ties(scores: dict[str, int], headed, words: list[str]) -> dict[str, tuple[int, list[str]]]:
     """folder -> (score, files) for each folder of a corpus whose files score alike only because the folder's name
     holds every word of the query (an act named by its title): ACT_TIE files or more with one score, none of them
     matched by a heading. `scores` is name -> score for one corpus; `words` are the query's words, folded."""
@@ -2711,13 +2781,11 @@ def act_ties(scores: dict[str, int], headed: set[str], words: list[str]) -> dict
     for (score, _), names in buckets.items():
         if len(names) < ACT_TIE:
             continue
-        common = names[0].split('/')[:-1]  # the folder they share: the first level, or deeper when all sit deeper
-        for name in names[1:]:
-            parts, k = name.split('/')[:-1], 0
-            while k < min(len(common), len(parts)) and common[k] == parts[k]:
-                k += 1
-            common = common[:k]
-        folder = '/'.join(common)
+        # The folder they share: the first level, or deeper when all sit deeper. What every name begins with is
+        # what the least and the greatest of them begin with, cut back to a whole folder (each name was split and
+        # compared folder by folder: half a million of them when a word of the query is in most names).
+        shared = os.path.commonprefix([min(names), max(names)])
+        folder = shared[:shared.rfind('/')] if '/' in shared else ''
         if folder and all(w in fold(folder) for w in words) and (folder not in out or len(names) > len(out[folder][1])):
             out[folder] = (score, sorted(names, key=natural))
     return out
@@ -3956,10 +4024,21 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         # 5 s of a call, profiled 2026-11-16). The names that hold one are gone through, with the folded form the
         # index already holds (its line), not folded again.
         scored, prefolded = names, None
+        tally = None  # the names' lines -> how many of the query's words each holds, where that is all of a name's score
         if not by_heading and every:
             text, starts = names_index(c['path'], sha)
-            held = lines_holding(text, starts, [n_bare for _, n_bare, _ in number_rx] + plain_folded, len(starts))
-            if held is not None:  # (in the names' own order, as they were gone through)
+            each = lines_holding_each(text, starts, [n_bare for _, n_bare, _ in number_rx] + plain_folded)
+            if each is not None and plain_folded and not number_rx and not article_query:
+                # Words only (no number, no "art."): a name's score is the number of the words it holds, which is
+                # how many of the words' lists its line is in. Nothing is asked of a name one by one.
+                tally = Counter()
+                for mine in each:
+                    tally.update(mine)
+                for i in sorted(tally):  # (in the names' own order, as they were gone through)
+                    scores[names[i]] = tally[i]
+                scored = ()
+            elif each is not None:  # (in the names' own order, as they were gone through)
+                held = sorted(set().union(*each))
                 scored = [names[i] for i in held]
                 last = len(starts) - 1
                 prefolded = [text[starts[i]:starts[i + 1] - 1] if i < last else text[starts[i]:] for i in held]
@@ -3983,7 +4062,9 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             if plain_folded:
                 # "Constituția" names constitutia/: folders are spelt without diacritics
                 folded = prefolded[at] if prefolded is not None else fold(name)
-                score += sum(1 for w in plain_folded if w in folded)
+                for w in plain_folded:
+                    if w in folded:
+                        score += 1
             # "Art. 16a" names an article: files numbered as articles (artikel/016a.md, art-016a.md) come before a
             # § 16a of some other act (all of German federal law sits beside the Grundgesetz).
             if score and article_query and ARTICLE_FILE.search(low or name.lower()):
@@ -3993,6 +4074,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 score += next((len(acts) - i for i, a in enumerate(acts) if full.startswith(a + '/')), 0)
             if score:
                 scores[name] = score
+        best_here: dict[str, int] = {}  # this corpus's files -> the gain of their best heading line
         if plain:
             # The heading index (in memory, built once per pinned commit) when the corpora served are few enough; else
             # the index where one is stored on disk for this commit, else git grep over the commit's headings.
@@ -4006,10 +4088,31 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 held = None
                 if every and _names_sorted(c['path'], sha):
                     text, starts, headed = headings_index(c['path'], sha, index)
-                    held = lines_holding(text, starts, folded_words, max(2000, len(starts) // 3))
+                    # (whatever their number, as for the names above: with a word most headings hold, every name
+                    # was looked up and tested for each word, 1.6 million tests for "impôt sur le revenu" in France)
+                    held = lines_holding_each(text, starts, folded_words)
                 if held is not None:
-                    at = [headed[i] for i in held]
-                    lines = [(n, index[n]) for n in sorted(at) if (j := bisect.bisect_left(names, n)) < len(names) and names[j] == n]
+                    # A heading's gain is by how many of the words it holds, which is how many of the words' lists
+                    # its line is in, and by whether it holds the words as a phrase, which is whether its line is
+                    # in the phrase's list. No heading is read one by one. In the names' order, as the lines were
+                    # gone through.
+                    in_line = Counter()
+                    for mine in held:
+                        in_line.update(mine)
+                    all_of, as_phrase = len(folded_words), set()
+                    for said_so in ((' '.join(folded_words) if len(folded_words) > 1 else ''), phrase_folded):
+                        if said_so:
+                            as_phrase.update(lines_holding_each(text, starts, [said_so])[0])
+                    for n, hit, i in sorted((headed[i], k, i) for i, k in in_line.items()):
+                        j = bisect.bisect_left(names, n)
+                        if j >= len(names) or names[j] != n:
+                            continue
+                        gain = 3 * hit + (4 if hit == all_of else 0) + (6 if i in as_phrase else 0)
+                        if gain > best_here.get(n, 0):
+                            best_here[n] = gain
+                    if best_here:
+                        matched_line[c['path']] = _HeadingLines(index, best_here)
+                    lines = []
                 else:
                     lines = [(n, index[n]) for n in names if (f := folded_heads.get(n)) and any(w in f for w in folded_words)]
             else:
@@ -4026,24 +4129,35 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             # With the index, words are matched without diacritics or case, so "raspundere" finds "Răspunderea" and
             # either Romanian s/t (comma or cedilla) matches the other.
             plain_here = [fold(w) for w in plain] if index is not None else plain
+            # Every word on the line, or the words as a phrase, outranks one word of several ("automatic stay" is
+            # §362's heading, not "Automatic exchange of information").
+            said_whole = phrase_folded if index is not None else phrase
+            joined, whole = (' '.join(plain_here) if len(plain_here) > 1 else ''), len(plain_here)
+            # A line read from the index is of a name in `names`: a law file of this corpus, in the scope asked.
+            # Asking that of each line again was a scope test and a pattern search for each of 734,000 headings
+            # (1.9 s of a French query's 6, profiled 2026-11-17). A line git grep printed is still asked.
+            sure = index is not None
             for name, text in lines:
-                if name in scores or (in_scope(f"{c['path']}/{name}") and not NOT_LAW.search(name)):
+                if sure or name in scores or (in_scope(f"{c['path']}/{name}") and not NOT_LAW.search(name)):
                     # (the heading as the index holds it folded, where it does: not folded again for each call)
                     low = (folded_heads.get(name) or fold(text)) if index is not None else text.lower()
-                    # Every word on the line, or the words as a phrase, outranks one word of several ("automatic
-                    # stay" is §362's heading, not "Automatic exchange of information").
-                    said_whole = phrase_folded if index is not None else phrase
-                    gain = 3 * sum(1 for w in plain_here if w in low) + (4 if all(w in low for w in plain_here) else 0) \
-                        + (6 if len(plain_here) > 1 and ' '.join(plain_here) in low or said_whole and said_whole in low else 0)
+                    hit = 0
+                    for w in plain_here:
+                        if w in low:
+                            hit += 1
+                    gain = 3 * hit + (4 if hit == whole else 0) \
+                        + (6 if joined and joined in low or said_whole and said_whole in low else 0)
                     # A file scores by its best heading line, not the sum of its lines: one word on each of two
                     # headings is not the phrase.
-                    if gain > head_best.get((c['path'], name), 0):
-                        head_best[(c['path'], name)] = gain
+                    if gain > best_here.get(name, 0):
+                        best_here[name] = gain
                         matched_line.setdefault(c['path'], {})[name] = text.strip().lstrip('#').strip()[:160]
-            for (cp, name), gain in head_best.items():
-                if cp == c['path']:
-                    scores[name] = scores.get(name, 0) + gain
-        exact = headed_hits | {n for n in scores if n not in by_heading and any(stem_of(n) in (x, x.lstrip('0')) for x in numbers)}
+            for name, gain in best_here.items():  # (kept per corpus: every corpus went through all the others' too)
+                if index is None:  # (asked below only of a body of case law cut short, which has no index here)
+                    head_best[(c['path'], name)] = gain
+                scores[name] = scores.get(name, 0) + gain
+        exact = headed_hits | ({n for n in scores if n not in by_heading and any(stem_of(n) in (x, x.lstrip('0')) for x in numbers)}
+                               if numbers else set())
         if exact and not plain:  # "art. 1" is art-001.md, not every art-NNN-1.md beside it
             scores = {n: v for n, v in scores.items() if n in exact}
         if c['path'] in cut_short:
@@ -4054,7 +4168,11 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         # folder's name (a number, a heading) keep their own rows, above it.
         # (The year in an act's name is a number to the scoring, so the words here are the query's words and numbers.)
         if plain_folded or numbers:
-            for folder, (score, tied) in act_ties(scores, {n for cp, n in head_best if cp == c['path']},
+            # (Words only, scored by tally: an act's folder can hold every word only where its files' names do, so
+            # only the names that hold them all, and no heading, are asked. Every name was: half a million.)
+            tied_from = scores if tally is None else {
+                names[i]: k for i, k in sorted(tally.items()) if k == len(plain_folded) and names[i] not in best_here}
+            for folder, (score, tied) in act_ties(tied_from, best_here,
                                                   plain_folded + [n.lower() for n in numbers]).items():
                 full = f"{c['path']}/{folder}"
                 if asked and (asked == full or asked.startswith(full + '/')):
@@ -4066,8 +4184,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         live = [n for n in scores if scores[n]]
         capped = capped or len(live) > (offset + limit) * 3
         # Files in the order a reader counts them (section-2 before section-10); past NATURAL_MOST names, by name.
-        best = sorted(live, key=(lambda n: (-scores[n], natural(n))) if len(live) <= NATURAL_MOST else
-                      (lambda n: (-scores[n], n)))[:(offset + limit) * 3]
+        best = top_scored(live, scores, (offset + limit) * 3, natural if len(live) <= NATURAL_MOST else None)
         # With the title under the heading. (A server that does not index reads a stored index only for rows to show.)
         index = heading_index(c['path'], sha, wait=False) if indexed else heading_index_if_built(c['path'], sha) if best else None
         heads = {n: index.get(n, '') for n in best} if index else read_headings(c['path'], sha, tuple(best)) if best else {}
@@ -6289,12 +6406,17 @@ def t_list_provisions(args: dict) -> tuple[str, dict]:
         matched = sorted({n[len(base):].strip('/').split('/')[0] for n in names_of(corpus, sha) if n.startswith(head) and '/' in n[len(base):].strip('/')})
         items = [it for f in matched for it in provisions(corpus, sha, f'{base}/{f}'.strip('/'))]
         partial = True
-    folders = sorted({p[len(base):].strip('/').split('/')[0] for p in items if '/' in p[len(base):].strip('/')},
+    # The folders at the top of what is listed. Where the list is the corpus's own names under one folder, in git's
+    # sorted order, they are read off that order (_first_folders); each name was cut up for it on every call: 2.4
+    # million splits for a list of Romania's acts, most of the 1.8 s it took.
+    whole = not partial and _names_sorted(corpus, sha)
+    folders = sorted(_first_folders(corpus, sha, base) if whole else
+                     {p[len(base):].strip('/').split('/')[0] for p in items if '/' in p[len(base):].strip('/')},
                      key=lambda f: [int(x) if x.isdigit() else x for x in re.split(r'(\d+)', f)])
     offset = offset_arg(args)
     if folders and (args.get('by_folder') or partial or len(items) > limit) and args.get('by_folder') is not False:
         past_end(offset, len(folders))
-        text, data = list_folders(corpus, sha, base, items, folders, date, prefix, limit, offset)
+        text, data = list_folders(corpus, sha, base, items, folders, date, prefix, limit, offset, whole)
         place = page_of(len(folders), len(data['folders']), offset)
         more = more_note(place, 'folders')
         return text + (f'\n{more}' if more else ''), {
@@ -6324,7 +6446,7 @@ def t_list_provisions(args: dict) -> tuple[str, dict]:
 
 
 def folder_span(corpus: str, date: str, inner: str) -> dict | None:
-    by_commit = {e.corpus_commit: e for e in law.corpus_timeline(corpus)}
+    by_commit = _by_commit(corpus)
     # Newest first by in-force date: a corpus can append an older act after its tip.
     dated = sorted((by_commit[c] for c in folder_commits(corpus, inner)
                     if c in by_commit and by_commit[c].kind != 'documentation' and by_commit[c].in_force <= date),
@@ -6643,28 +6765,76 @@ def folder_title(cwd: Path, sha: str, where: str, body: str | None = None) -> st
     return ' '.join(words).title() if words else (lines[0] if lines else '')
 
 
+def _holds(names, name: str) -> bool:
+    """Whether a sorted run of names holds one."""
+    at = bisect.bisect_left(names, name)
+    return at < len(names) and names[at] == name
+
+
+_BY_COMMIT: dict[str, tuple] = {}  # corpus -> (the tree's commit it was made at; commit -> event)
+
+
+def _by_commit(corpus: str) -> dict:
+    """commit -> event of a corpus's timeline (law.corpus_timeline), made once per commit of the tree: a list of
+    folders made it anew on every call, from a copy of Romania's 631,000 events."""
+    at, kept = law._head(), _BY_COMMIT.get(corpus)
+    if kept is None or kept[0] != at:
+        if len(_BY_COMMIT) > 64:
+            _BY_COMMIT.clear()
+        kept = _BY_COMMIT[corpus] = (at, {e.corpus_commit: e for e in law.corpus_timeline(corpus)})
+    return kept[1]
+
+
+@lru_cache(maxsize=512)
+def _first_folders(corpus: str, sha: str, base: str) -> frozenset:
+    """The folders directly under `base` ('' for the corpus) that hold a file, from the corpus's names in git's sorted
+    order (the caller has checked _names_sorted): from the first name under a folder, a bisect goes to the first
+    name past it."""
+    names, pre = names_of(corpus, sha), (base + '/' if base else '')
+    i = bisect.bisect_left(names, pre) if base else 0
+    end = bisect.bisect_left(names, base + '0') if base else len(names)
+    out = set()
+    while i < end:
+        rest = names[i][len(pre):]
+        cut = rest.find('/')
+        if cut < 0:  # a file of the folder itself
+            i += 1
+            continue
+        out.add(rest[:cut])
+        i = bisect.bisect_left(names, pre + rest[:cut] + '0', i, end)  # ('0' follows '/': past every name under it)
+    return frozenset(out)
+
+
 def list_folders(corpus: str, sha: str, base: str, items: list, folders: list[str], date: str, prefix: str, limit: int,
-                 offset: int = 0) -> tuple[str, dict]:
+                 offset: int = 0, whole: bool = False) -> tuple[str, dict]:
     """A folder of acts (Malta's sl/, a US title's chapters): one row per act with its title, its number of provision
-    files and the last change to any of them, so "list the regulations under Cap. 586 and when each changed" is one call."""
+    files and the last change to any of them, so "list the regulations under Cap. 586 and when each changed" is one call.
+    `whole`: `items` is the corpus's own names under `base`, in git's sorted order (see t_list_provisions)."""
     cwd = law.corpus_dir(corpus)
-    by_commit = {e.corpus_commit: e for e in law.corpus_timeline(corpus)}
+    by_commit = _by_commit(corpus)
     rows = []
     shown = [(f, f'{base}/{f}'.strip('/')) for f in folders[offset:offset + min(limit, FOLDER_ROWS)]]
-    # Each file under its folder in one pass (a folder per row scanned all items: 33 million prefix tests, 8 s, for the
-    # 221 year folders of 328,000 US Supreme Court decisions).
-    groups: dict[str, list] = {}
-    for p in items:
-        rest = p[len(base):].strip('/')
-        if '/' in rest:
-            groups.setdefault(rest.split('/')[0], []).append(p)
-    mine_of = {where: groups.get(f, []) for f, where in shown}
+    if whole:
+        # The files of the folders shown, each read off the sorted names (every name listed was cut up to find them:
+        # 1.2 million for a list of Romania's acts, of which a hundred folders are shown).
+        mine_of = {where: names_under(corpus, sha, where) for _, where in shown}
+    else:
+        # Each file under its folder in one pass (a folder per row scanned all items: 33 million prefix tests, 8 s,
+        # for the 221 year folders of 328,000 US Supreme Court decisions).
+        groups: dict[str, list] = {}
+        for p in items:
+            rest = p[len(base):].strip('/')
+            if '/' in rest:
+                groups.setdefault(rest.split('/')[0], []).append(p)
+        mine_of = {where: groups.get(f, []) for f, where in shown}
     # A folder's title: its title.md, else its own heading file, else its first file's heading, read in one git call.
     firsts = {where: next((p for p in mine if p.endswith('/title.md')), mine[0] if mine else None) for where, mine in mine_of.items()}
     heads = read_headings(corpus, sha, tuple(p for p in firsts.values() if p))
     # A folder's own title.md with no heading line is read whole (folder_title): the few that need it, in one git
     # process. A folder without one has no such title: `git show` of a file not there, for each of 100 rows, said so.
-    own_title = {p for p in items if p.endswith('/title.md')}
+    # (asked only of the folders shown: `<folder>/title.md`, which is among that folder's own files if it exists)
+    own_title = ({f'{where}/title.md' for where, mine in mine_of.items() if _holds(mine, f'{where}/title.md')} if whole
+                 else {p for p in items if p.endswith('/title.md')})
 
     def headed(where):
         first = firsts[where]
