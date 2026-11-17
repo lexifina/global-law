@@ -1,0 +1,11 @@
+name = "Penalties"
+version = "0.1.0"
+defaultTargets = ["run"]
+
+[[lean_lib]]
+name = "Penalties"
+roots = ["Penalties", "Verified", "Verified2"]
+
+[[lean_exe]]
+name = "run"
+root = "Run"

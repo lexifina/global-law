@@ -32,3 +32,9 @@ name = "IrsAudit"
 srcDir = "irs-audit/lean"
 roots = ["Audit.Flags2", "flags.AfrFlags"]
 globs = ["Audit.Formula", "Audit.CPI", "Audit.Alfred", "Audit.Flags2", "flags.AfrFlags"]
+
+# Tax Court penalties and additions to tax against the statute (irs-audit/penalties/README.md)
+[[lean_lib]]
+name = "TaxCourtPenalties"
+srcDir = "irs-audit/penalties/lean"
+roots = ["Penalties", "Verified", "Verified2"]

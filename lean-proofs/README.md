@@ -264,6 +264,36 @@ mind, and lets a blind search find the plans that beat the obvious one. Each dom
 `lake env lean LegalProofs/USTax/Hunt/<Name>.lean`. Some figures are marked in their findings as not re-checked
 against the source document.
 
+[LegalProofs/USTax/Hunt/Hunt2/](LegalProofs/USTax/Hunt/Hunt2/FINDINGS.md) looks for circular rules and state
+interactions: the premium tax credit and the self-employed health insurance deduction, which each depend on the other
+(`Circular.lean`), state conformity loops (`StateLoop.lean`) and community property (`Community.lean`); search output in
+`tools/hunt/out/Hunt2/`.
+
+## The IRS's forms, figures and guidance against the statute
+
+Three models check what the IRS prints against the Code:
+
+- [TaxCode/Forms/](TaxCode/Forms/FINDINGS.md): the 2025 form lines and worksheets (Schedule 8812, Schedule D, Schedule SE,
+  Forms 6251, 8960 and 8995, the Social Security benefits worksheet, the Tax Table and the EIC Table), proved equal to
+  the statute for all inputs or shown to differ, with the bound; `Reported/` checks two worksheet errors reported in
+  public (Pub. 525 for 2020-2023, the 2018 Schedule D Tax Worksheet).
+- [TaxCode/Indexing/](TaxCode/Indexing/FINDINGS.md): the inflation adjustments of Rev. Procs. 2022-38 to 2025-32, the
+  retirement and HSA limits, the Social Security figures, the premium tax credit table and the 2026 withholding tables,
+  recomputed from the CPI series and each provision's rounding rule (`ITEMS.tsv` lists every item).
+- [TaxCode/Big/](TaxCode/Big): six form lines where the IRS's instructions depart from the statute (Form 6251 and §68,
+  Schedule 1-A tips, Form 8839, Form 8889, Pubs. 523 and 936), each with the amount at stake.
+
+```sh
+lake build TaxCode.Forms.All TaxCode.Indexing.All TaxCode.Big.All
+```
+
+[irs-audit/](irs-audit/README.md) widens this to everything the IRS publishes that can be checked: about 906,000
+figures in revenue rulings, revenue procedures, notices, Bulletins back to 1986, regulations, the Internal Revenue
+Manual, letter rulings, tables and the IRS's own tax software, recomputed in Lean (`lake build IrsAudit`) or exact
+Python, with 14 verified departures, one of them material, and the 29 candidates rejected.
+[irs-audit/penalties/](irs-audit/penalties/README.md) checks the penalties and additions to tax in 8,605 Tax Court
+opinions and their entered decisions against a model of §§6651, 6662, 6663 and 6665 (`lake build TaxCourtPenalties`).
+
 ## US case law: the doctrine of precedent
 
 [LegalProofs/USCaseLaw/](LegalProofs/USCaseLaw) states the rules of precedent (which court binds which, who may
