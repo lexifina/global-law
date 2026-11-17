@@ -1826,6 +1826,7 @@ def _file_index_write(path: Path, value) -> None:
         pass
 
 
+NAMED_PART = 20_000  # names one git cat-file --batch-check is asked for (_named_at)
 NAMED_TREE_MIN = 200  # a correction naming this many unchanged paths is read with one recursive ls-tree (_named_at)
 
 
@@ -1858,9 +1859,20 @@ def _named_at(ix: dict, cwd: Path, wanted: dict[int, list[str]]) -> dict[int, di
     queries = [(order, f) for order, named in wanted.items() for f in named]
     if not queries:
         return out
-    raw = subprocess.run(['git', 'cat-file', '--batch-check=%(objectname) %(objecttype)'], cwd=cwd, capture_output=True,
-                         input=''.join(f'{rows[o][0]}:{f}\n' for o, f in queries).encode('utf-8'))
-    answers = raw.stdout.decode('utf-8', 'replace').splitlines() if not raw.returncode else []
+    def looked_up(part):
+        raw = subprocess.run(['git', 'cat-file', '--batch-check=%(objectname) %(objecttype)'], cwd=cwd, capture_output=True,
+                             input=''.join(f'{rows[o][0]}:{f}\n' for o, f in part).encode('utf-8'))
+        return None if raw.returncode else raw.stdout.decode('utf-8', 'replace').splitlines()
+    # In parts, side by side: git finds each name by walking its commit's trees (0.1 ms a name), and Japan's
+    # corrections name 1.8 million: 183 s as one command, past the time a reader gives a call.
+    parts = [queries[i:i + NAMED_PART] for i in range(0, len(queries), NAMED_PART)]
+    if len(parts) == 1:
+        got = [looked_up(parts[0])]
+    else:
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(min(8, len(parts))) as pool:
+            got = list(pool.map(carry(looked_up), parts))
+    answers = [line for part in got for line in part] if all(part is not None for part in got) else []
     slow: dict[int, list[str]] = {}
     for n, (order, f) in enumerate(queries):
         answer = answers[n] if len(answers) == len(queries) else ''
@@ -1874,8 +1886,16 @@ def _named_at(ix: dict, cwd: Path, wanted: dict[int, list[str]]) -> dict[int, di
             out.setdefault(order, {})[f] = (sha, last[2])
         else:
             slow.setdefault(order, []).append(f)
-    for order, named in slow.items():
-        for line in git('ls-tree', rows[order][0], '--', *named, cwd=cwd).splitlines():
+    def listed(item):
+        return item[0], git('ls-tree', rows[item[0]][0], '--', *item[1], cwd=cwd).splitlines()
+    if len(slow) > 1:  # (side by side, laid in below in the same order: one git each, thousands for Japan's moved files)
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(min(8, len(slow))) as pool:
+            lists = list(pool.map(carry(listed), list(slow.items())))
+    else:
+        lists = [listed(item) for item in slow.items()]
+    for order, lines in lists:
+        for line in lines:
             meta, path = line.split('\t', 1)
             mode, _, blob = meta.split()
             out.setdefault(order, {})[_unquote(path)] = (blob, mode)
@@ -2135,15 +2155,55 @@ def moved_paths() -> dict[str, str]:
 
 def moved(path: str) -> str:
     """A path with a moved corpus folder at its start given its new place; any other path as it is."""
-    for old, new in moved_paths().items():
+    all_moved = moved_paths()
+    key = ('moved-by-first', id(all_moved))
+    by_first = _CACHE.get(key)
+    if by_first is None or by_first[0] is not all_moved:
+        # The moved folders by the first name of their path, in the file's order: a path can only match a folder
+        # that starts with its own first name (each call walked every moved folder, thousands of times a search).
+        groups: dict = {}
+        for old, new in all_moved.items():
+            groups.setdefault(old.split('/', 1)[0], []).append((old, new))
+        by_first = _CACHE[key] = (all_moved, groups)
+    for old, new in by_first[1].get(path.split('/', 1)[0], ()):
         if path == old or path.startswith(old + '/'):
             return new + path[len(old):]
     return path
 
 
+_CORPUS_PATHS: list = [None, 0, None]
+
+
+def _corpus_paths(corpora: list):
+    """The paths of these corpora as a set, kept for as long as the same list is given; None where a path is empty
+    (corpus_of then looks through them one by one, as it always did)."""
+    if _CORPUS_PATHS[0] is not corpora or _CORPUS_PATHS[1] != len(corpora):
+        paths = {c['path'] for c in corpora}
+        _CORPUS_PATHS[:] = [corpora, len(corpora), None if '' in paths else paths]
+    return _CORPUS_PATHS[2]
+
+
 def corpus_of(path: str) -> tuple[str, str]:
     path = moved(path)
-    for corpus in sorted(manifest()['corpora'], key=lambda c: -len(c['path'])):
+    corpora = manifest()['corpora']
+    paths = _corpus_paths(corpora)
+    if paths is not None:
+        # The longest corpus path that is the path itself or stands before one of its slashes decides, as the loop
+        # below finds it (which sorted every corpus by length and tried each, on every call).
+        if path in paths:
+            cut = len(path)
+        else:
+            cut = path.rfind('/')
+            while cut > 0 and path[:cut] not in paths:
+                cut = path.rfind('/', 0, cut)
+        if cut <= 0:
+            raise SystemExit(f'{path} is not inside a corpus; see manifest.json')
+        name = path[:cut]
+        if path[cut + 1:]:
+            return name, path[cut + 1:]
+        raise SystemExit(f"{name} is a whole corpus, not one provision: give a file inside it, for example "
+                         f"{name}/<act>/<provision>.md (git -C {name} ls-files lists them)")
+    for corpus in sorted(corpora, key=lambda c: -len(c['path'])):
         prefix = corpus['path'] + '/'
         if path.startswith(prefix) and path[len(prefix):]:
             return corpus['path'], path[len(prefix):]
@@ -3285,9 +3345,13 @@ def _history(corpus: str, rel: str) -> list[dict]:
         out.append(row)
     seen = {r['commit'] for r in out}
     names = _earlier_names(corpus, rel)  # Files: names the path of its own day, before any layout move
-    for order, r in enumerate(rows):
+    key = ('fix-rows', f"{corpus}@{_at(ix)}")
+    kept = _CACHE.get(key)
+    if kept is None or kept[0] is not rows:  # the corpus's corrections with their rows, in order (every row was walked for every file)
+        kept = _CACHE[key] = (rows, [(order, r) for order, r in enumerate(rows) if r[9]])  # type: ignore[assignment]
+    for order, r in kept[1]:  # type: ignore[index]
         fix = r[9]
-        if fix and r[0] not in seen and any(n in fix['files'] for n in names):
+        if r[0] not in seen and any(n in fix['files'] for n in names):
             out.append({'commit': r[0], 'law': r[1], 'in_force': fix['from'], 'kind': 'correction', 'enacted': None,
                         'published': None, 'order': order, 'corrects': fix['corrects'], 'until': fix['to'],
                         'supersedes': fix['supersedes'], 'reason': fix['reason']})

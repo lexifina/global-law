@@ -707,8 +707,17 @@ def git_run(cmd: list, **kw):
     data = kw.pop('input', None)
     if kw.pop('capture_output', False):
         kw['stdout'] = kw['stderr'] = subprocess.PIPE
+    fed = None
     if data is not None:
-        kw['stdin'] = subprocess.PIPE
+        # The input as a file the command reads, not a pipe communicate() writes: after a wait that timed out
+        # (every half second here) communicate neither takes the input again nor goes on writing it, so a command
+        # that had not read all of a long input by then (a list of names for git cat-file) waited for the rest
+        # until its time was up. Bytes as given; text in the call's encoding, lines ending as written.
+        import tempfile
+        fed = tempfile.TemporaryFile()
+        fed.write(data.encode(kw.get('encoding') or 'utf-8', kw.get('errors') or 'strict') if isinstance(data, str) else data)
+        fed.seek(0)
+        kw['stdin'] = fed
     elif 'stdin' not in kw:
         # Never the server's own stdin: that carries the client's messages. On Windows, starting a process that
         # inherits it also waits while the main thread is reading it, which stalled warm() until the first request.
@@ -723,10 +732,9 @@ def git_run(cmd: list, **kw):
         with subprocess.Popen(cmd, **kw) as proc:
             while True:
                 try:
-                    out, err = proc.communicate(data, timeout=max(0.05, min(0.5, stop - time.monotonic())))
+                    out, err = proc.communicate(timeout=max(0.05, min(0.5, stop - time.monotonic())))
                     break
                 except subprocess.TimeoutExpired:
-                    data = None  # sent on the first try; a retry reads on without losing output
                     cancel = getattr(_call, 'cancel', None)
                     if time.monotonic() >= stop or (cancel is not None and cancel.is_set()):
                         proc.kill()
@@ -734,6 +742,8 @@ def git_run(cmd: list, **kw):
                         checkpoint()  # Cancelled, or the call's time is up
                         raise subprocess.TimeoutExpired(cmd, timeout) from None
     finally:
+        if fed is not None:
+            fed.close()
         if slot:
             _GREP_SEM.release()
     return subprocess.CompletedProcess(cmd, proc.returncode, out, err)
