@@ -218,7 +218,16 @@ def with_unlisted(m: dict) -> dict:
                  'in_force_trailer': 'In-force', 'url': url_of.get(path, ''), 'unlisted': True}
         entry.update(described(path))
         extra.append(entry)
-    return {**m, 'corpora': m.get('corpora', []) + extra}
+    # A listed corpus with no name or language (manifest.json as tools/describe.py wrote it on 17 November 2026 gave
+    # Belarus and Singapore neither) has what a corpus the manifest does not list is given above: every reader
+    # takes c['name'], and world_on_date and any call that named those two stopped with KeyError.
+    listed_rows = []
+    for c in m.get('corpora', []):
+        if not c.get('name') or 'language' not in c:
+            c = {**c, 'name': c.get('name') or ', '.join(f.replace('-', ' ').title() for f in c['path'].split('/')[:2]),
+                 'language': c.get('language', '')}
+        listed_rows.append(c)
+    return {**m, 'corpora': listed_rows + extra}
 
 
 def described(path: str) -> dict:
