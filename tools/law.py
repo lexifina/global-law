@@ -1730,7 +1730,7 @@ def file_index(corpus: str) -> tuple[dict, list]:
     began = time.monotonic()
     kept = None if ix.get('focused') else _file_index_kept(corpus, ix)
     if kept is not None:
-        got = _file_index_read(kept)
+        got = _file_index_read(kept, ix)
         if got is not None:
             _CACHE[key] = got
             return got
@@ -1773,7 +1773,7 @@ def file_index(corpus: str) -> tuple[dict, list]:
         overlays.append((_moved_fix(corpus, fix), order, files))
     _CACHE[key] = (index, overlays)
     if kept is not None and time.monotonic() - began >= FILE_INDEX_KEEP_S:
-        _file_index_write(kept, (index, overlays))
+        _file_index_write(kept, ix, (index, overlays))
     return index, overlays
 
 
@@ -1793,31 +1793,100 @@ def _file_index_kept(corpus: str, ix: dict) -> Path | None:
             _SOURCE_ID.append(hashlib.sha1(Path(__file__).read_bytes()).hexdigest()[:10])
         made_from = hashlib.sha1(repr((sorted(moves(corpus).items()), sorted(str(b) for b in notice_blobs(corpus)),
                                        bool(act_ends(corpus)))).encode('utf-8', 'replace')).hexdigest()[:10]
-        return _store() / f"file-index-v1-{corpus.replace('/', '~')}-{_at(ix)[:12]}-{_SOURCE_ID[0]}-{made_from}.pickle"
+        return _store() / f"file-index-v2-{corpus.replace('/', '~')}-{_at(ix)[:12]}-{_SOURCE_ID[0]}-{made_from}.pickle"
     except (OSError, ValueError, SystemExit):
         return None
 
 
-def _file_index_read(path: Path):
+# The kept file index names things by their place in the corpus index it was worked out from, and is read back
+# with that index's own strings: a path by its place among the index's files, a version by its row (twice the row,
+# plus one where the version ends the file), a correction's file by its place among that file's versions. Kept as
+# the value itself (v1), reading it made a second copy of every path and blob id the corpus index already holds:
+# 6.15 GB of a server's memory for the six largest corpora, 2.7 GB with the strings shared (17 November 2026).
+# Whatever does not fit the pattern (an act's end row, a blob only git named) is kept as it is.
+
+def _file_index_pack(ix: dict, value) -> tuple:
+    index, overlays = value
+    files, rows = ix['files'], ix['rows']
+    place = {p: i for i, p in enumerate(files)}
+    packed = []
+    for path, versions in index.items():
+        own = files.get(path, ())
+        codes: list = []
+        for entry in versions:
+            d, o, b, m = entry
+            v = next((x for x in reversed(own) if x[0] == o), None) if type(o) is int else None
+            if v is not None and 0 <= o < len(rows) and rows[o][5] == d and v[2] == m and (b is None or b == v[1]):
+                codes.append(o * 2 + (1 if b is None else 0))
+            else:
+                codes.append(tuple(entry))
+        packed.append((place.get(path, path), codes))
+    laid = []
+    for fix, order, named in overlays:
+        out = []
+        for path, (blob, mode) in named.items():
+            where = place.get(path, path)
+            j = None
+            if type(where) is int and blob is not None:
+                j = next((n for n, x in enumerate(files[path]) if x[1] == blob and x[2] == mode), None)
+            out.append((where, j if j is not None else (blob, mode)))
+        laid.append((fix, order, out))
+    return ('file-index-v2', packed, laid)
+
+
+def _file_index_unpack(ix: dict, got):
+    if not (isinstance(got, tuple) and len(got) == 3 and got[0] == 'file-index-v2'):
+        return None
+    files, rows = ix['files'], ix['rows']
+    keys = list(files)
+    index: dict[str, list] = {}
+    for where, codes in got[1]:
+        path = keys[where] if type(where) is int else where
+        own = files.get(path, ())
+        versions = []
+        for code in codes:
+            if type(code) is int:
+                o = code >> 1
+                v = next(x for x in reversed(own) if x[0] == o)
+                versions.append((rows[o][5], o, None if code & 1 else v[1], v[2]))
+            else:
+                versions.append(code)
+        index[path] = versions
+    overlays = []
+    for fix, order, named in got[2]:
+        out = {}
+        for where, what in named:
+            path = keys[where] if type(where) is int else where
+            if type(what) is int:
+                v = files[path][what]
+                out[path] = (v[1], v[2])
+            else:
+                out[path] = what
+        overlays.append((fix, order, out))
+    return index, overlays
+
+
+def _file_index_read(path: Path, ix: dict):
     import pickle
     try:
         with open(path, 'rb') as f:
             got = pickle.load(f)
-    except (OSError, ValueError, EOFError, pickle.UnpicklingError, AttributeError, ImportError, IndexError):
+        return _file_index_unpack(ix, got)
+    except (OSError, ValueError, EOFError, pickle.UnpicklingError, AttributeError, ImportError, IndexError, KeyError,
+            TypeError, StopIteration):
         return None
-    return got if isinstance(got, tuple) and len(got) == 2 and isinstance(got[0], dict) and isinstance(got[1], list) else None
 
 
-def _file_index_write(path: Path, value) -> None:
+def _file_index_write(path: Path, ix: dict, value) -> None:
     import os
     import pickle
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         tmp = path.with_name(f'{path.name}.{os.getpid()}.{threading.get_ident()}.tmp')
         with open(tmp, 'wb') as f:
-            pickle.dump(value, f, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(_file_index_pack(ix, value), f, protocol=pickle.HIGHEST_PROTOCOL)
         os.replace(tmp, path)
-        stem = path.name.split('-')  # file-index-v1-<corpus>-<at>-<source>-<made from>.pickle
+        stem = path.name.split('-')  # file-index-v2-<corpus>-<at>-<source>-<made from>.pickle
         same = sorted(path.parent.glob('-'.join(stem[:-3]) + '-*.pickle'), key=lambda p: p.stat().st_mtime, reverse=True)
         for old in same[FILE_INDEX_KEPT:]:
             if old != path:
@@ -3315,6 +3384,9 @@ def log_rows(path: str) -> list[dict]:
 CORRECTS = re.compile(r'(\d{4}-\d{2}-\d{2})(?:\s*\.\.\s*(\d{4}-\d{2}-\d{2})?)?')
 
 
+FIX_ROWS_BY_NAME = 200  # a corpus with more corrections than this keeps which of them name each file (_history)
+
+
 def _history(corpus: str, rel: str) -> list[dict]:
     ix = _index(corpus)
     rows = ix['rows']
@@ -3349,7 +3421,26 @@ def _history(corpus: str, rel: str) -> list[dict]:
     kept = _CACHE.get(key)
     if kept is None or kept[0] is not rows:  # the corpus's corrections with their rows, in order (every row was walked for every file)
         kept = _CACHE[key] = (rows, [(order, r) for order, r in enumerate(rows) if r[9]])  # type: ignore[assignment]
-    for order, r in kept[1]:  # type: ignore[index]
+    fixes = kept[1]  # type: ignore[index]
+    if len(fixes) > FIX_ROWS_BY_NAME:
+        # Many corrections (Japan: 41,177, naming 6.2 million files between them): which of them name a file is looked
+        # up, not found by reading every correction's list for every file (half a second a provision, which was most
+        # of the time a search of Japanese law took to describe its ten matches). The same rows, in the same order.
+        by_name = kept[2] if len(kept) > 2 else None  # type: ignore[arg-type]
+        if by_name is None:
+            from array import array
+            by_name = {}
+            for i, (_, r) in enumerate(fixes):
+                for name in r[9]['files']:
+                    got = by_name.get(name)
+                    if got is None:
+                        got = by_name[name] = array('I')
+                    if not got or got[-1] != i:
+                        got.append(i)
+            _CACHE[key] = (rows, fixes, by_name)  # type: ignore[assignment]
+        places = sorted({i for n in names for i in by_name.get(n, ())})
+        fixes = [fixes[i] for i in places]
+    for order, r in fixes:
         fix = r[9]
         if r[0] not in seen and any(n in fix['files'] for n in names):
             out.append({'commit': r[0], 'law': r[1], 'in_force': fix['from'], 'kind': 'correction', 'enacted': None,
