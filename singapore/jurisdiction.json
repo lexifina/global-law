@@ -6,9 +6,19 @@
   "build": "scrape",
   "iso_path": "sg",
   "path": "singapore",
-  "jurisdictions": [],
+  "jurisdictions": [
+    "singapore/national"
+  ],
   "corpora": [],
-  "histories": [],
+  "histories": [
+    "metadata-only"
+  ],
   "page": "https://github.com/lexifina/global-law/tree/main/singapore",
-  "repos": []
+  "repos": [
+    {
+      "path": "singapore/national/acts",
+      "kind": "legislation, whole country",
+      "repo": "https://github.com/lexifina/singapore-law"
+    }
+  ]
 }
