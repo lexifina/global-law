@@ -1,0 +1,9 @@
+2026-11-17 16:57:27 step 1/5: starting; catala-examples already in refs/ (9e251b9, 2026-10-28); opam 2.1.5 has catala 1.3.0/1.3.2; ETA toolchain 30-60 min
+2026-11-17 17:00:27 step 1/5: catala 1.3.2 in local opam switch ~/fr/catala/sw (OCaml 4.14.2 53 s, catala+48 deps 35 s, ninja from pip); impot_revenu tests: interpreter 54/54, OCaml 27/27; next: OCaml driver; ETA step 2 ~1 h
+2026-11-17 17:11:26 step 2/5: driver built (OCaml backend, 36 us/household); mapping 2042 boxes -> Catala inputs; step 3a: 17 of 27 Catala tests mapped to boxes; running
+2026-11-17 17:13:46 step 3/5 (a) done: 17 mapped Catala tests: Catala 17/17, M 17/17, Lean 10/10 in scope, OpenFisca 10/12 (5JJ non-pro BNC deficit unused); (b) running 10,067 random 2022-2023 households; ETA 20 min
+2026-11-17 17:17:52 step 3/5 (b): first pass done; fixed driver number format (%g lost digits above 1e6), rerunning 10,067 households; parts Catala=M 9500/9906, RBG 9980/10045 before fix
+2026-11-17 17:21:49 step 3/5 (b) done: parts Catala=M 9500/9906, Catala=Lean 9646/10067, Lean=M 9906/9906; RBG (projected) Catala=M 9982/10045 (63: per-item pension allowance), Lean=M 10045/10045; saved simulator answers 2022-23: Catala parts 183/190, RBG 66/66. (c) running fam + targets; ETA 15 min
+2026-11-17 17:25:47 step 3/5 (c) done: fam 10,072 (2022-23) + targets 101 classified into P1-P7, R1, refusals; (d) sending 24 returns to the production simulator (flock, 1.2 s)
+2026-11-17 17:34:03 step 3/5 (d) done: 24 production answers + 211 saved: production = M/Lean on every class; Catala parts 191/209, RBG 83/86. step 4/5: measurements done (LOC, speed, builds); writing CATALA.md; ETA 30 min
+2026-11-17 17:36:21 step 5/5: no Lean error found (Lean = production on every class). CATALA.md written; harness and driver mirrored to the build server-work. DONE

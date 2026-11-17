@@ -1,0 +1,10 @@
+2026-11-17 14:26:41 step 1/5: started; read RESULTS/FINDINGS/AUTHORITY/model; writing harness/loop_lib.py; counts: 0 findings; ETA all steps ~5 h
+2026-11-17 14:34:13 step 1/5: known-item grids k1-k14 done with Lean (~250k returns), M samples agree 4,204/4,204 comparable; step 2/5 started: EMTR scan (loop_scan.py) detached; ETA scan ~20 min
+2026-11-17 14:38:27 step 2/5: scan at done 1100 of 3528 templates; found CDHR (2025) claws back gift reductions and home-help credit 100% (Lean=M); loop_inter.py written (cdhr, f2, divorce, choices); ETA scan 40 min
+2026-11-17 14:42:07 step 2/5: scan done 2000/3528; tested proof styles: decide +kernel ~5 ms/household-eval (2000-wide range 10 s), native_decide for Decl-level (HashMap/String.hash opaque to the kernel); ETA scan 20 min
+2026-11-17 14:43:44 step 2/5: scan done 2400/3528; partial: 61 € IR + PS notches (+61..63 €/€), 157 bis cliffs (≤220 €/€, also via flat-levy income on the total), a −62 € notch (+1 € flat-levy turnover → tax 62 → uncollected); ETA scan 15 min
+2026-11-17 14:50:55 step 2/5: scan done (3528 templates x 34430 points = 121M Lean evaluations); inter (cdhr, f2, divorce, choices) started; proved cdhr_neutral (omega, std axioms); ETA 2b-2d 20 min
+2026-11-17 14:52:48 step 4/5: 2b-2d done (CDHR clawback, 2OP-CDHR, F2, divorce, 60k random choice toggles); production simulator: 24 returns queued under flock (cap 40); step 3 Lean file next; ETA 1.5 h
+2026-11-17 14:59:26 step 3/5: lean/FrTax/Loopholes.lean written (18 theorems: 5 decide/omega kernel-only, 13 native_decide); simulator 24/24 = Lean on amounts paid; building with lake under lock
+2026-11-17 15:02:45 step 3/5: lake build FrTax.Loopholes OK (186 s), no sorry; 4 kernel-only theorems (decide/decide +kernel) + cdhr_neutral (omega, std axioms) + 13 native_decide; step 5/5 writing LOOPHOLES.md; ETA 40 min
+2026-11-17 15:07:03 step 5/5: LOOPHOLES.md written (18 ranked findings, 14 known items recreated, proofs table, verification 24/24 production); copying to local mirror; done

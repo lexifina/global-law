@@ -1,0 +1,9 @@
+2026-11-17T13:49:44+01:00 step 1/5: started; reading FINDINGS/PAS done; locating bulk datasets (BOFiP, JADE, AN/Sénat questions). ETA step1 ~40 min
+2026-11-17T13:51:19+01:00 step 1/5: BOFiP vigueur JSON done (221 MB, 9173 docs); downloading JADE global 1.2 GB, justice-administrative CE/CAA/TA zips (176 files ~4.5 GB), AN questions L14-17, Sénat questions SQL. ETA 30 min
+2026-11-17T13:53:01+01:00 step 2/5: BOFiP indexed (9173 docs as text); W3 and W4 and W5 hits found in BOI-IR-PAS-20-20-10/-20; searching W1/F5/F1/F2
+2026-11-17T13:58:53+01:00 step 2/5: W3 settled by BOFiP history (9 versions of BOI-IR-PAS-20-20-10: thresholds = M every year); W4 BOFiP example uses single décote; W5 BOFiP example rounds cap separately; now courts/questions
+2026-11-17T13:59:58+01:00 step 1/5 done: all downloads complete (AN L14 refetching); step 2/5: filtering ~177 court archives (JADE + CE/CAA/TA) for terms, 6 procs. ETA 20 min
+2026-11-17T14:04:10+01:00 step 2/5: AN L15-17 (84 170 q, 10 375 tax) and Sénat (294 455 q, 9 597 tax) indexed; no question on F1/F2/W1-W6 specifically; courts filter 176/177 archives, 4609 decisions kept. ETA step2 15 min
+2026-11-17T14:08:03+01:00 step 3/5: verdicts drafted for W3 (Lean wrong, BOFiP 2020-2026 thresholds = M), W4 (BOFiP examples single décote), W5 (BOFiP example = Lean), W6 (BOFiP 2026 = statute), F2 (CE 412624 + TA Paris 2316179: proration is a treaty device); JADE filter still running (2980 kept)
+2026-11-17T14:12:58+01:00 step 4/5: all searches done (BOFiP 9 164 docs + 13 archived versions, 6 072 court decisions kept of 1 748 519 scanned, AN 10 375 + Sénat 9 597 tax questions); writing AUTHORITY.md. ETA 20 min
+2026-11-17T14:15:50+01:00 step 5/5: AUTHORITY.md written (sources, 9 points + R + F3, authorities against Lean: W3, W4) and copied with harness/auth_*.py to the local mirror. DONE

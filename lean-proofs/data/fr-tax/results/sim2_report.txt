@@ -1,0 +1,19 @@
+cases answered by the simulator: 700
+  production computed; M refused: 9
+every figure equal to production (cases each program computed):
+  M          equal 691  differs 0  refused 9  n/a 0
+  Lean       equal 699  differs 1  refused 0  n/a 0
+  OpenFisca  equal 0  differs 0  refused 0  n/a 700
+by figure (equal / compared):
+  parts            M 691/691  Lean 699/699
+  RFR              M 676/676  Lean 682/682
+  taxable income   M 691/691  Lean 699/699
+  gross tax        M 691/691  Lean 698/699
+  décote           M 691/691  Lean 700/700
+  reductions       M 691/691  Lean 700/700
+  flat taxes       M 691/691  Lean 700/700
+  net income tax   M 691/691  Lean 699/699
+  amount payable   M 691/691  Lean 699/699
+  CEHR             M 21/21  Lean 21/21
+by case family (verdicts):
+                                     M: equal 691, refused 9 | Lean: differs 1, equal 699 | OpenFisca: n/a 700

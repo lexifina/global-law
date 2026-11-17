@@ -1,0 +1,89 @@
+{
+ "_doc": "Reviewer's edits applied on top of the reader agents' cases (harness/court_run.py merge). Each edit says why. 'net income -> 4BA': where a court states only a net income (revenu brut global, revenu net imposable), it is entered in box 4BA (net property income under the real regime), which enters the taxable income one for one; this changes the RFR and social levies but not the income-tax figures scored.",
+ "b2_2200177_20231107": {
+  "add_boxes": {"4BA": 24935},
+  "drop_figures": {"RBG": "entered as the input (4BA), so not a test"},
+  "assumptions_add": ["reviewer: revenu brut global 24 935 entered as net income in 4BA (enters RBG one for one); the court's own figures start from it"],
+  "completeness": "full", "sim": true
+ },
+ "b2_2303364_20251218": {
+  "set_boxes": {"0AC": 1, "4BA": 168870, "RAJ": 1426887, "NAJ": 4},
+  "alt_boxes": {"administration": {"0AC": 1, "4BA": 168870, "1AJ": 1426887}},
+  "assumptions_add": ["reviewer: ordinary net income 168 870 entered in 4BA; the stock-option gain (taxed as salary) entered as salary under the quotient (M aliases RAJ amount, NAJ = 4 years; M's 0XX box is a control-only field that the computation ignores); the administration's version taxes it at once as salary (1AJ); TAX_DELTA = tax without quotient - tax with quotient. Lean has no quotient input: out of its scope"],
+  "completeness": "full", "sim": true
+ },
+ "b2_2303612_20260615_2021": {
+  "set_boxes": {"0AM": 1, "0DA": 1950, "0DB": 1950, "4BA": 62412},
+  "drop_figures": {"OTHER_RNG": "entered as the input (4BA)"},
+  "assumptions_add": ["reviewer: revenu net global 62 412 entered in 4BA; both spouses taken as over 65 (they claimed the elderly allowance; ages not stated) so that the test is the income ceiling"]
+ },
+ "b2_2303612_20260615_2022": {
+  "set_boxes": {"0AM": 1, "0DA": 1950, "0DB": 1950, "4BA": 90444},
+  "drop_figures": {"OTHER_RNG": "entered as the input (4BA)"},
+  "assumptions_add": ["reviewer: revenu net global 90 444 entered in 4BA; both spouses taken as over 65 (see 2021)"]
+ },
+ "b2_2202631_20240918": {
+  "rename_figures": {"CRED_EMPLOI_SYND": "CRED_TOTAL"},
+  "assumptions_add": ["reviewer: the court's 4 465 is the home-employment credit plus the union-dues credit, i.e. all the credits of the return: scored against the programs' total credits"]
+ },
+ "b2_2302787_20260605": {
+  "add_boxes": {"1AJ": 200000},
+  "assumptions_add": ["reviewer: household and income not stated; a probe salary of 200 000 added so that the tax exceeds the reduction"]
+ },
+ "b2_2400580_20260507": {
+  "add_boxes": {"0AC": 1, "1AJ": 50000},
+  "alt_boxes": {"administration": {"0AC": 1, "1AJ": 50000}},
+  "assumptions_add": ["reviewer: household and income not stated; a probe salary of 50 000 (single) added to both versions so that the tax exceeds the reduction and the 20 % limit does not bind"]
+ },
+ "b4a_2110118_20230608_2017": {
+  "drop_figures": {"OTHER_PENSION_ABAT": "year-dependent (2017 cap), no 2017 program", "RNI": "2017: no program for that year", "OTHER_QUOTIENT_BASE": "internal step, no program output", "OTHER_IDRS_SCALE": "2017", "OTHER_QUOTIENT_TAX": "2017", "IDRS": "2017", "ITRED": "2017", "IR_NET": "2017"},
+  "year_independent": true,
+  "assumptions_add": ["reviewer: only the 10 % deduction on the salary (between floor and cap, hence year-independent) is scored, on proxy years"]
+ },
+ "b4a_2110118_20230608_2018": {
+  "set_boxes": {"0AC": 1, "4BA": 68774},
+  "drop_figures": {"ITRED": "Pinel reduction given as an amount; investment not stated", "IR_NET": "depends on the Pinel reduction", "OTHER_CIMR": "2018 transition credit: no program output", "RNI": "entered as the input (4BA)"},
+  "assumptions_add": ["reviewer: taxable income 68 774 entered as net income in 4BA; only RNI -> IDRS is scored"]
+ },
+ "b4a_2110118_20230608_2019": {
+  "set_boxes": {"0AC": 1, "4BA": 83354},
+  "drop_figures": {"ITRED": "Pinel reduction given as an amount", "IR_NET": "depends on the Pinel reduction", "RNI": "entered as the input (4BA)"},
+  "assumptions_add": ["reviewer: taxable income 83 354 entered as net income in 4BA; only RNI -> IDRS is scored"]
+ },
+ "b4b_2302039_20251124": {
+  "set_boxes": {"0AM": 1, "4BA": 208339},
+  "alt_boxes": {"before_deficits": {"0AM": 1, "4BA": 218230}},
+  "add_figures": {"TAX_DELTA": {"value": 4055, "who": "court", "note": "reviewer: 61 647 on 218 230 (before the deficits) - 57 592 on 208 339 (after), both stated in the same sentence"}},
+  "drop_figures": {"OTHER_CIMR": "2018 transition credit", "OTHER_IR_AFTER_CREDITS": "credits not stated", "RNI": "entered as the input (4BA)"},
+  "assumptions_add": ["reviewer: taxable incomes entered as net income in 4BA; 2 parts (couple, no child mentioned) as the reader assumed"]
+ },
+ "b4a_22DA01853_20230517": {"drop_figures": {"PV_NET": "outside the programs: the holding-period/retirement allowances are computed on form 2074 and entered as amounts"}, "excluded": "pv"},
+ "b4a_23LY03190_20250605": {"drop_figures": {"PV_NET": "outside the programs (form 2074)"}, "excluded": "pv"},
+ "b4b_2025439_20230130": {"drop_figures": {"PV_NET": "outside the programs (form 2074)", "OTHER_AVG_INCOME_3Y": "no program output"}, "excluded": "pv"},
+ "b4b_23LY01245_20251106": {"drop_figures": {"PV_NET": "outside the programs (form 2074)"}, "excluded": "pv"},
+ "b4b_23VE00322_20250626_2015": {"drop_figures": {"PV_NET": "outside the programs (form 2074)", "OTHER_AVG_INCOME_3Y": "no program output"}, "excluded": "pv"},
+ "b4b_23VE00322_20250626_2017": {"drop_figures": {"PV_NET": "outside the programs (form 2074)", "OTHER_AVG_INCOME_3Y": "no program output"}, "excluded": "pv"},
+ "b4a_2202736_20240523": {"drop_figures": {"PFU": "not stated by the court (reader's computation from the holding)"}, "excluded": "no stated figure"},
+ "b4a_2109227_20231208": {"drop_figures": {"CEHR": "income 2017 rule (art. 244 bis A gains outside the RFR) changed for 2018: no program for 2017, a proxy year would apply a different law"}, "excluded": "year-dependent rule, no 2017 program"},
+ "b4a_22VE02688_20250109_2017": {"drop_figures": {"IDRS": "incomes not stated", "RED_FRAISCOMPTA": "", "RED_PINEL": "", "RED_PME": "", "OTHER_PLAF_CUT": "", "IR_NET": ""}, "excluded": "the gross tax is given, not the incomes; the reductions' bases are pseudonymised"},
+ "b4a_22VE02688_20250109_2018": {"drop_figures": {"IDRS": "", "RED_PINEL": "", "RED_PME": "", "ITRED": "", "TAX_DELTA": ""}, "excluded": "as 2017"},
+ "b4b_2206205_20261016": {"drop_figures": {"OTHER_SAL_NET": "same information as ABAT10"}},
+ "b4b_2004003_20230526_2015": {
+  "set_boxes": {"0AM": 1, "4BA": 64575, "7UF": 14773},
+  "rename_figures": {"OTHER_DONS_RETAINED": "DONS_BASE", "OTHER_DONS_CARRY": "DONS_CARRY"},
+  "year_independent": true,
+  "assumptions_add": ["reviewer: the 'revenu imposable' 64 575 (base of the 20 % limit) entered as net income in 4BA; 66 % rate and 20 % limit unchanged 2015-2025, so run on proxy years; the retained base and the carry-forward are M variables (BON, REPDON); Lean outputs only the reduction imputed, which the tax caps here"]
+ },
+ "b4b_2306747_20260305_2016": {"drop_figures": {"OTHER_MICRO_BNC_NET": "same information as MICRO_ABAT", "OTHER_MICRO_BIC_NET": "same information as MICRO_ABAT"}},
+ "b4b_21NC00601_20230406": {"drop_figures": {"OTHER_ORDINARY_RNG": "internal quotient step", "OTHER_QUOTIENT_BASE": "internal quotient step"}, "excluded": "the court's figures are internal steps of the quotient method with no program output; the parts are not stated"},
+ "b4b_2100638_20221129": {"drop_figures": {"OTHER_MICRO_BIC_NET": "same as MICRO_ABAT", "OTHER_CRED_TREATY": "treaty credit: inputs not stated"}},
+ "b4b_23PA02321_20240926": {"drop_figures": {"OTHER_MICRO_BIC_NET": "same as MICRO_ABAT"}},
+ "b3_2100463_20230414": {
+  "add_boxes": {"0DA": 1940},
+  "assumptions_add": ["reviewer: the half-part of art. 195, 1 f requires the declarant to be over 74; birth year not stated, 1940 entered (first run used the runner's default 1980 and gave 1 part: a mapping error, not a program error)"]
+ },
+ "b3_2400289_20260408": {
+  "set_boxes": {"0AM": 1, "0DA": 1936, "0AS": 1},
+  "assumptions_add": ["reviewer: for a married couple the veteran half-part is box S (0AS: spouse or declarant veteran over 74), not W (0AW, the box for a person filing alone); first run with 0AW gave 2 parts: a mapping error"]
+ }
+}

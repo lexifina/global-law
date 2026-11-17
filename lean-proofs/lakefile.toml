@@ -16,3 +16,11 @@ root = "TaxCode.Main"
 [[lean_lib]]
 name = "TaxCodeCerts"
 roots = ["TaxCode.Certs.All"]
+
+# the French income tax, 2020-2025 (FrTax/README.md)
+[[lean_lib]]
+name = "FrTax"
+
+[[lean_exe]]
+name = "frtax"
+root = "FrTax.Main"

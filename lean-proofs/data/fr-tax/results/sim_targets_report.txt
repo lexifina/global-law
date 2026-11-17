@@ -1,0 +1,33 @@
+cases answered by the simulator: 371
+  production refused; M refused: 18
+  production computed; M refused: 61
+every figure equal to production (cases each program computed):
+  M          equal 285  differs 7  refused 61  n/a 0
+  Lean       equal 301  differs 52  refused 0  n/a 0
+  OpenFisca  equal 51  differs 171  refused 0  n/a 131
+by figure (equal / compared):
+  parts            M 292/292  Lean 353/353  OpenFisca 222/222
+  RFR              M 291/291  Lean 342/342  OpenFisca 118/214
+  taxable income   M 292/292  Lean 350/353  OpenFisca 161/222
+  gross tax        M 292/292  Lean 327/353
+  décote           M 292/292  Lean 350/353  OpenFisca 109/222
+  reductions       M 292/292  Lean 353/353
+  flat taxes       M 292/292  Lean 353/353
+  net income tax   M 292/292  Lean 308/353  OpenFisca 159/222
+  amount payable   M 285/292  Lean 308/353
+  CEHR             M 35/35  Lean 20/42  OpenFisca 11/13
+by case family (verdicts):
+  F1 union credit                    M: equal 5 | Lean: differs 3, equal 2 | OpenFisca: differs 5
+  F2 CEHR flat levy                  M: equal 3 | Lean: differs 3 | OpenFisca: n/a 3
+  M                                  M: refused 59 | Lean: differs 3, equal 56 | OpenFisca: differs 34, equal 2, n/a 23
+  M≠Lean CHRAPRES                    M: equal 15 | Lean: differs 15 | OpenFisca: n/a 15
+  M≠Lean CHRAPRES+CDHR               M: equal 4 | Lean: differs 4 | OpenFisca: n/a 4
+  M≠Lean IMPNET                      M: differs 7 | Lean: equal 7 | OpenFisca: differs 1, equal 4, n/a 2
+  OpenFisca≠M IRN                    M: equal 24 | Lean: equal 24 | OpenFisca: differs 24
+  OpenFisca≠M REVKIRE                M: equal 24 | Lean: equal 24 | OpenFisca: differs 24
+  OpenFisca≠M RNG                    M: equal 24 | Lean: equal 24 | OpenFisca: differs 24
+  OpenFisca≠M RNI                    M: equal 24 | Lean: equal 24 | OpenFisca: differs 24
+  brochure T7                        M: equal 4 | Lean: equal 4 | OpenFisca: differs 3, equal 1
+  edge                               M: equal 36 | Lean: equal 36 | OpenFisca: differs 8, equal 10, n/a 18
+  random                             M: equal 98, refused 2 | Lean: equal 100 | OpenFisca: differs 24, equal 34, n/a 42
+  rounding margin                    M: equal 24 | Lean: differs 24 | OpenFisca: n/a 24

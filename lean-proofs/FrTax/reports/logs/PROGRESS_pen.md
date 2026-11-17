@@ -1,0 +1,6 @@
+2026-11-17T19:42:28+01:00 step 1/4: started; reading project files, data layout; ETA ~4h
+2026-11-17T19:49:23+01:00 step 1/4: rules read (CGI 1727/1728/1729/1729 A/1729 G/1730/1731/1732/1758/1758 A, LPF L62); BOFiP 9 IR majoration examples + 2 interest examples found; M has penalties (chap-inr/majo, correctif mode runs in interpreter); court filter 176/177 archives done; ETA 4h
+2026-11-17T19:57:39+01:00 step 2/4: Penalties.lean builds (theorems + 5 BOFiP checks by decide); M correctif batch of 49 cases launched (10 procs); ETA 3h
+2026-11-17T20:05:31+01:00 step 3/4: M vs Lean batch 1 (50 cases): 33/50 equal before mapping fixes; diffs = code mapping, per-layer interest stop, tolerance, code-01 ordering; batch 2 (73 cases) launched; court extraction: 20000 IR decisions, 1061 figure sentences; ETA 2h
+2026-11-17T20:13:13+01:00 step 3/4: M vs Lean 59/70 equal (5 codes M ignores on salaries, 3 exempt-layer ordering, 3 1758 A within tolerance); court candidates reviewed by hand (~30 figures); outcome stats running; ETA 1h
+2026-11-17T20:18:11+01:00 step 4/4: PENALTIES.md written; BOFiP 22/23, Lean vs M 59/70, courts 33/47 exact (38 within 2 EUR), 676 penalty-only discharges; copying to local mirror; done

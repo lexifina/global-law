@@ -1,0 +1,61 @@
+scoreboard: tests per program (a test is equal when every comparable stated figure is reproduced)
+  2019 (supplement)  Lean       n/a (year) 82  tests 82
+  2019 (supplement)  M          differs 5  equal 77  tests 82
+  2019 (supplement)  OpenFisca  equal 82  tests 82
+  2020-2025          Lean       differs 5  equal 126  no comparable figure 3  out of scope 21  tests 155
+  2020-2025          M          differs 6  equal 148  refused 1  tests 155
+  2020-2025          OpenFisca  equal 155  tests 155
+
+figures by output variable (equal/compared): 
+  iai                                        OpenFisca 18/18  M 18/18  Lean 8/8
+  impot_revenu_restant_a_payer               OpenFisca 60/60  M 60/60  Lean 47/47
+  nbptr                                      OpenFisca 96/96  M 96/96  Lean 90/90
+  rbg                                        OpenFisca 20/20  M 19/19  Lean 0/0
+  rfr                                        OpenFisca 127/127  M 121/126  Lean 104/109
+  rni                                        OpenFisca 87/87  M 81/86  Lean 72/77
+  reductions                                 OpenFisca 19/19  M 17/18  Lean 4/4
+  ir_taux_marginal                           OpenFisca 3/3  M 3/3  Lean 0/0
+  prelevement_forfaitaire_unique_ir          OpenFisca 6/6  M 0/0  Lean 0/0
+  decote_gain_fiscal                         OpenFisca 37/37  M 35/37  Lean 35/37
+  iaidrdi                                    OpenFisca 49/49  M 49/49  Lean 49/49
+  ip_net                                     OpenFisca 49/49  M 49/49  Lean 49/49
+  ir_plaf_qf                                 OpenFisca 63/63  M 61/63  Lean 61/63
+  contribution_exceptionnelle_hauts_revenus  OpenFisca 2/2  M 2/2  Lean 2/2
+
+tests where a program differs from the stated value or M differs from Lean (2020-2025, then 2019):
+  calculateur_impots/yaml/reduc_cappme.yaml#3 2022 box {'OpenFisca': 'equal', 'M': 'refused', 'Lean': 'out of scope'} DD27
+      boxes {'7BS': 1000, '7BT': 1000, '7CA': 1000, '7CH': 500, '7CI': 1000, '7CR': 1000, '7CS': 500, '7CT': 500, '7CV': 500, '7CX': 1000, '7CY': 100, '7DC': 500, '7DY': 55, '7EY': 100, '7FY': 50, '7GW': 1000, '7GY': 100, '5KC': 200000, '0AC': 1, '0DA': 1970}
+      {}
+  calculateur_impots/yaml/reduc_cappme.yaml#5 2024 box {'OpenFisca': 'equal', 'M': 'differs', 'Lean': 'out of scope'} 
+      boxes {'7BS': 50, '7BT': 1000, '7BU': 500, '7CA': 500, '7CH': 500, '7CI': 1000, '7CO': 1000, '7CP': 500, '7CQ': 1000, '7CR': 1000, '7CS': 500, '7CT': 1000, '7CU': 1000, '7CW': 500, '7CX': 1000, '7CY': 1000, '7DC': 1000, '7DY': 500, '7DZ': 500, '7EY': 1000, '7FY': 500, '7GW': 1000, '7GY': 1000, '5KC': 200000, '0AC': 1, '0DA': 1970}
+      {'reductions': {'stated': 6662.0, 'OpenFisca': 6662.0, 'M': 7213.0, 'Lean': None}}
+  leximpact/2024/02_couple_retraites_pension_1.33_SMIC_d2.yml#0 2024 derived {'OpenFisca': 'equal', 'M': 'differs', 'Lean': 'differs'} 
+      boxes {'1AS': 13598, '1BS': 13598, '0AM': 1, '0DA': 1946, '0DB': 1944}
+      {'decote_gain_fiscal': {'stated': 9.0, 'OpenFisca': 9.0, 'M': 0.0, 'Lean': 0.0}, 'ir_plaf_qf': {'stated': 9.22, 'OpenFisca': 9.220019340515137, 'M': 0.0, 'Lean': 0.0}, 'rfr': {'stated': 23077.82, 'OpenFisca': 23077.818359375, 'M': 21680.0, 'Lean': 21680.0}, 'rni': {'stated': 23077.82, 'OpenFisca': 23077.818359375, 'M': 21680.0, 'Lean': 21680.0}}
+  leximpact/2024/Z_couple_marie_salaries_secteur_prive_1.3_smic_chacun_2_enfants_d4.yml#0 2024 derived {'OpenFisca': 'equal', 'M': 'differs', 'Lean': 'differs'} 
+      boxes {'1AJ': 22605, '1BJ': 22605, '0AM': 1, '0CF': 2, '0DA': 1973, '0DB': 1974, '0F0': 2013, '0F1': 2013}
+      {'rfr': {'stated': 40689.95, 'OpenFisca': 40689.94921875, 'M': 40688.0, 'Lean': 40688.0}, 'rni': {'stated': 40689.95, 'OpenFisca': 40689.94921875, 'M': 40688.0, 'Lean': 40688.0}}
+  leximpact/2024/Z_couple_marie_salaries_secteur_prive_3.2_smic_2_enfants_d5.yml#0 2024 derived {'OpenFisca': 'equal', 'M': 'differs', 'Lean': 'differs'} 
+      boxes {'1AJ': 33038, '1BJ': 22605, '0AM': 1, '0CF': 2, '0DA': 1973, '0DB': 1974, '0F0': 2013, '0F1': 2013}
+      {'rfr': {'stated': 50079.23, 'OpenFisca': 50079.2265625, 'M': 50078.0, 'Lean': 50078.0}, 'rni': {'stated': 50079.23, 'OpenFisca': 50079.2265625, 'M': 50078.0, 'Lean': 50078.0}}
+  leximpact/2024/Z_couple_retraites_pension_1.5_SMIC_d3.yml#0 2024 derived {'OpenFisca': 'equal', 'M': 'differs', 'Lean': 'differs'} 
+      boxes {'1AS': 15234, '1BS': 15234, '0AM': 1, '0DA': 1946, '0DB': 1944}
+      {'decote_gain_fiscal': {'stated': 333.0, 'OpenFisca': 333.0, 'M': 180.0, 'Lean': 180.0}, 'ir_plaf_qf': {'stated': 333.33, 'OpenFisca': 333.333740234375, 'M': 180.0, 'Lean': 180.0}, 'rfr': {'stated': 26024.31, 'OpenFisca': 26024.306640625, 'M': 24626.0, 'Lean': 24626.0}, 'rni': {'stated': 26024.31, 'OpenFisca': 26024.306640625, 'M': 24626.0, 'Lean': 24626.0}}
+  leximpact/2024/aspa_02_couple_retraites_1pension_moyenne_1_sans_pension.yml#0 2024 derived {'OpenFisca': 'equal', 'M': 'differs', 'Lean': 'differs'} 
+      boxes {'1AS': 18739, '0AM': 1, '0DA': 1946, '0DB': 1944}
+      {'rfr': {'stated': 14068.96, 'OpenFisca': 14068.958984375, 'M': 11273.0, 'Lean': 11273.0}, 'rni': {'stated': 14068.96, 'OpenFisca': 14068.958984375, 'M': 11273.0, 'Lean': 11273.0}}
+  calculateur_impots/yaml/credit_invest_forestier.yaml#4 2019 box {'OpenFisca': 'equal', 'M': 'differs', 'Lean': 'n/a (year)'} 
+      boxes {'1AJ': 50000, '7TJ': 100, '7TK': 600, '7TM': 200, '7TO': 300, '7TP': 400, '7TQ': 250, '7TR': 430, '7TS': 200, '7TT': 150, '7TU': 200, '7UA': 1500, '7UB': 300, '7UI': 150, '7UP': 200, '7UQ': 2500, '7UT': 200, '7VJ': 100, '7VK': 50, '7VL': 520, '7VM': 300, '7VN': 150, '7VQ': 200, '7VR': 100, '7VS': 300, '0AC': 1, '0DA': 1970}
+      {'impot_revenu_restant_a_payer': {'stated': -5857.0, 'OpenFisca': -5857.0, 'M': 5864.0, 'Lean': None}}
+  calculateur_impots/yaml/reduc_credit_2042pro.yaml#4 2019 box {'OpenFisca': 'equal', 'M': 'differs', 'Lean': 'n/a (year)'} 
+      boxes {'1AJ': 50000, '8TB': 500, '8TC': 400, '8TF': 500, '8TG': 500, '8TL': 500, '8TO': 300, '8TP': 200, '8TS': 500, '8UW': 500, '8UZ': 500, '8WA': 500, '8WC': 100, '8WD': 200, '8WR': 300, '8WT': 400, '8WU': 500, '5KC': 50000, '5HC': 50000, '0AC': 1, '0DA': 1970}
+      {'iai': {'stated': 45397.0, 'OpenFisca': 45397.0, 'M': 44897.0, 'Lean': None}}
+  impot_revenu/nombre_de_parts/celibataire_ou_divorce.yaml#2 2019 box {'OpenFisca': 'equal', 'M': 'differs', 'Lean': 'n/a (year)'} 
+      boxes {'0AV': 1, '0AW': 1, '0DA': 1970}
+      {'nbptr': {'stated': 1.5, 'OpenFisca': 1.5, 'M': 1.0, 'Lean': None}}
+  impot_revenu/nombre_de_parts/maries_ou_pacses.yaml#3 2019 box {'OpenFisca': 'equal', 'M': 'differs', 'Lean': 'n/a (year)'} 
+      boxes {'0AO': 1, '0AS': 1, '0DA': 1970, '0DB': 1970}
+      {'nbptr': {'stated': 2.5, 'OpenFisca': 2.5, 'M': 2.0, 'Lean': None}}
+  impot_revenu/nombre_de_parts/veufs.yaml#2 2019 box {'OpenFisca': 'equal', 'M': 'differs', 'Lean': 'n/a (year)'} 
+      boxes {'0AV': 1, '0AW': 1, '0DA': 1970}
+      {'nbptr': {'stated': 1.5, 'OpenFisca': 1.5, 'M': 1.0, 'Lean': None}}

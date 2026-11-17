@@ -1,0 +1,6245 @@
+{
+ "lean": "~/fr/lean/.lake/build/bin/frtax",
+ "production": {
+  "stats": {
+   "hh": 323,
+   "hh Lean = prod": 269,
+   "hh M computed": 318,
+   "hh M = prod": 318,
+   "class: M rounding margin (rate fraction .49995-.49999)": 30,
+   "ind": 53,
+   "ind Lean computes": 53,
+   "ind Lean = prod": 30,
+   "ind Lean S = prod": 43,
+   "ind M = prod": 53,
+   "class: 61-euro rule (M: IRTOTAL=0 under 61 EUR)": 24,
+   "hh M refused": 5,
+   "hh M refused, Lean = prod": 5
+  },
+  "families": {
+   "rate rounding: exact .x5": {
+    "n": 23,
+    "Lean = prod": 23
+   },
+   "rate rounding: fraction .49995-.49999": {
+    "n": 36,
+    "Lean = prod": 6
+   },
+   "small tax (1-60 EUR) household": {
+    "n": 24,
+    "Lean = prod": 18
+   },
+   "204 H II threshold (8OT, nil tax via home-help credit)": {
+    "n": 30,
+    "Lean = prod": 30
+   },
+   "204 H II without 8OT (control)": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "couple: lower earner in decote zone": {
+    "n": 48,
+    "Lean = prod": 48
+   },
+   "couple: equal salaries": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "couple: one euro apart": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "couple: equal pensions, one euro apart (allowance cap)": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "couple: very unequal (1 to 50)": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "couple: PACS, child (quarter part), unequal": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "couple: shared-residence child (eighth parts)": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "couple: lower earner pensions only": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "outside base: dividends at the scale": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "outside base: gains at the scale": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "outside base: flat-levy micro (197 C)": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "in base: property and annuities": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "in base: alimony with a pension": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "deficit: actual expenses above salary, with a pension": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "deficit: property deficit on global income (4BC)": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "dependant's salary (common income for 204 M)": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "charges halved for 204 M (alimony paid)": {
+    "n": 6,
+    "Lean = prod": 6
+   },
+   "61-euro household (random set)": {
+    "n": 18,
+    "Lean = prod": 0
+   },
+   "61-euro individual (random set)": {
+    "n": 12,
+    "Lean = prod": 12
+   },
+   "decote reading for 204 M (random set)": {
+    "n": 24,
+    "Lean = prod": 24
+   },
+   "quarter-part cap rounding 204 M (random set)": {
+    "n": 6,
+    "Lean = prod": 6
+   }
+  },
+  "rows": [
+   {
+    "id": "p0",
+    "year": 2020,
+    "family": "rate rounding: exact .x5",
+    "prod": 4.2,
+    "lean": 4.2,
+    "lean61": 4.2,
+    "m": 4.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p1",
+    "year": 2020,
+    "family": "rate rounding: exact .x5",
+    "prod": 16.3,
+    "lean": 16.3,
+    "lean61": 16.3,
+    "m": 16.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p2",
+    "year": 2020,
+    "family": "rate rounding: exact .x5",
+    "prod": 10.4,
+    "lean": 10.4,
+    "lean61": 10.4,
+    "m": 10.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p3",
+    "year": 2020,
+    "family": "rate rounding: exact .x5",
+    "prod": 18.8,
+    "lean": 18.8,
+    "lean61": 18.8,
+    "m": 18.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p4",
+    "year": 2020,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 25.5,
+    "lean": 25.4,
+    "lean61": 25.4,
+    "m": 25.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p5",
+    "year": 2020,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 23.3,
+    "lean": 23.2,
+    "lean61": 23.2,
+    "m": 23.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p6",
+    "year": 2020,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 16.2,
+    "lean": 16.1,
+    "lean61": 16.1,
+    "m": 16.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p7",
+    "year": 2020,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 28.4,
+    "lean": 28.3,
+    "lean61": 28.3,
+    "m": 28.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p8",
+    "year": 2020,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 23.3,
+    "lean": 23.2,
+    "lean61": 23.2,
+    "m": 23.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p9",
+    "year": 2020,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 3.7,
+    "lean": 3.6,
+    "lean61": 3.6,
+    "m": 3.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p10",
+    "year": 2021,
+    "family": "rate rounding: exact .x5",
+    "prod": 6.3,
+    "lean": 6.3,
+    "lean61": 6.3,
+    "m": 6.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p11",
+    "year": 2021,
+    "family": "rate rounding: exact .x5",
+    "prod": 18.8,
+    "lean": 18.8,
+    "lean61": 18.8,
+    "m": 18.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p12",
+    "year": 2021,
+    "family": "rate rounding: exact .x5",
+    "prod": 18.8,
+    "lean": 18.8,
+    "lean61": 18.8,
+    "m": 18.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p13",
+    "year": 2021,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 22.8,
+    "lean": 22.7,
+    "lean61": 22.7,
+    "m": 22.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p14",
+    "year": 2021,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 22.0,
+    "lean": 21.9,
+    "lean61": 21.9,
+    "m": 22.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p15",
+    "year": 2021,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 3.9,
+    "lean": 3.8,
+    "lean61": 3.8,
+    "m": 3.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p16",
+    "year": 2021,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 11.6,
+    "lean": 11.5,
+    "lean61": 11.5,
+    "m": 11.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p17",
+    "year": 2021,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 26.9,
+    "lean": 26.8,
+    "lean61": 26.8,
+    "m": 26.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p18",
+    "year": 2021,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 17.7,
+    "lean": 17.6,
+    "lean61": 17.6,
+    "m": 17.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p19",
+    "year": 2022,
+    "family": "rate rounding: exact .x5",
+    "prod": 21.3,
+    "lean": 21.3,
+    "lean61": 21.3,
+    "m": 21.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p20",
+    "year": 2022,
+    "family": "rate rounding: exact .x5",
+    "prod": 25.1,
+    "lean": 25.1,
+    "lean61": 25.1,
+    "m": 25.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p21",
+    "year": 2022,
+    "family": "rate rounding: exact .x5",
+    "prod": 5.8,
+    "lean": 5.8,
+    "lean61": 5.8,
+    "m": 5.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p22",
+    "year": 2022,
+    "family": "rate rounding: exact .x5",
+    "prod": 18.8,
+    "lean": 18.8,
+    "lean61": 18.8,
+    "m": 18.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p23",
+    "year": 2022,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 20.9,
+    "lean": 20.8,
+    "lean61": 20.8,
+    "m": 20.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p24",
+    "year": 2022,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 24.2,
+    "lean": 24.1,
+    "lean61": 24.1,
+    "m": 24.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p25",
+    "year": 2022,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 25.7,
+    "lean": 25.6,
+    "lean61": 25.6,
+    "m": 25.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p26",
+    "year": 2022,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 21.7,
+    "lean": 21.6,
+    "lean61": 21.6,
+    "m": 21.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p27",
+    "year": 2022,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 27.8,
+    "lean": 27.7,
+    "lean61": 27.7,
+    "m": 27.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p28",
+    "year": 2022,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 18.7,
+    "lean": 18.6,
+    "lean61": 18.6,
+    "m": 18.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p29",
+    "year": 2023,
+    "family": "rate rounding: exact .x5",
+    "prod": 8.4,
+    "lean": 8.4,
+    "lean61": 8.4,
+    "m": 8.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p30",
+    "year": 2023,
+    "family": "rate rounding: exact .x5",
+    "prod": 18.8,
+    "lean": 18.8,
+    "lean61": 18.8,
+    "m": 18.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p31",
+    "year": 2023,
+    "family": "rate rounding: exact .x5",
+    "prod": 18.8,
+    "lean": 18.8,
+    "lean61": 18.8,
+    "m": 18.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p32",
+    "year": 2023,
+    "family": "rate rounding: exact .x5",
+    "prod": 18.8,
+    "lean": 18.8,
+    "lean61": 18.8,
+    "m": 18.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p33",
+    "year": 2023,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 23.1,
+    "lean": 23.0,
+    "lean61": 23.0,
+    "m": 23.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p34",
+    "year": 2023,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 15.3,
+    "lean": 15.2,
+    "lean61": 15.2,
+    "m": 15.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p35",
+    "year": 2023,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 26.7,
+    "lean": 26.6,
+    "lean61": 26.6,
+    "m": 26.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p36",
+    "year": 2023,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 21.6,
+    "lean": 21.5,
+    "lean61": 21.5,
+    "m": 21.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p37",
+    "year": 2023,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 22.2,
+    "lean": 22.1,
+    "lean61": 22.1,
+    "m": 22.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p38",
+    "year": 2023,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 17.5,
+    "lean": 17.4,
+    "lean61": 17.4,
+    "m": 17.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p39",
+    "year": 2024,
+    "family": "rate rounding: exact .x5",
+    "prod": 18.8,
+    "lean": 18.8,
+    "lean61": 18.8,
+    "m": 18.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p40",
+    "year": 2024,
+    "family": "rate rounding: exact .x5",
+    "prod": 14.6,
+    "lean": 14.6,
+    "lean61": 14.6,
+    "m": 14.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p41",
+    "year": 2024,
+    "family": "rate rounding: exact .x5",
+    "prod": 25.3,
+    "lean": 25.3,
+    "lean61": 25.3,
+    "m": 25.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p42",
+    "year": 2024,
+    "family": "rate rounding: exact .x5",
+    "prod": 14.3,
+    "lean": 14.3,
+    "lean61": 14.3,
+    "m": 14.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p43",
+    "year": 2024,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 15.5,
+    "lean": 15.4,
+    "lean61": 15.4,
+    "m": 15.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p44",
+    "year": 2024,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 11.7,
+    "lean": 11.6,
+    "lean61": 11.6,
+    "m": 11.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p45",
+    "year": 2024,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 17.3,
+    "lean": 17.2,
+    "lean61": 17.2,
+    "m": 17.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p46",
+    "year": 2024,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 27.3,
+    "lean": 27.2,
+    "lean61": 27.2,
+    "m": 27.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p47",
+    "year": 2024,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 13.6,
+    "lean": 13.5,
+    "lean61": 13.5,
+    "m": 13.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)",
+    "prod_ind": [
+     16.7,
+     0.5
+    ],
+    "lean_ind": [
+     16.8,
+     0.0
+    ],
+    "leanS_ind": [
+     16.7,
+     0.5
+    ]
+   },
+   {
+    "id": "p48",
+    "year": 2024,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 13.5,
+    "lean": 13.4,
+    "lean61": 13.4,
+    "m": 13.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "M rounding margin (rate fraction .49995-.49999)"
+   },
+   {
+    "id": "p49",
+    "year": 2025,
+    "family": "rate rounding: exact .x5",
+    "prod": 11.3,
+    "lean": 11.3,
+    "lean61": 11.3,
+    "m": 11.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p50",
+    "year": 2025,
+    "family": "rate rounding: exact .x5",
+    "prod": 23.8,
+    "lean": 23.8,
+    "lean61": 23.8,
+    "m": 23.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p51",
+    "year": 2025,
+    "family": "rate rounding: exact .x5",
+    "prod": 7.0,
+    "lean": 7.0,
+    "lean61": 7.0,
+    "m": 7.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p52",
+    "year": 2025,
+    "family": "rate rounding: exact .x5",
+    "prod": 13.8,
+    "lean": 13.8,
+    "lean61": 13.8,
+    "m": 13.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p53",
+    "year": 2025,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 23.0,
+    "lean": 23.0,
+    "lean61": 23.0,
+    "m": 23.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p54",
+    "year": 2025,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 11.8,
+    "lean": 11.8,
+    "lean61": 11.8,
+    "m": 11.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p55",
+    "year": 2025,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 15.6,
+    "lean": 15.6,
+    "lean61": 15.6,
+    "m": 15.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p56",
+    "year": 2025,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 18.1,
+    "lean": 18.1,
+    "lean61": 18.1,
+    "m": 18.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p57",
+    "year": 2025,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 11.8,
+    "lean": 11.8,
+    "lean61": 11.8,
+    "m": 11.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p58",
+    "year": 2025,
+    "family": "rate rounding: fraction .49995-.49999",
+    "prod": 26.1,
+    "lean": 26.1,
+    "lean61": 26.1,
+    "m": 26.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p59",
+    "year": 2020,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p60",
+    "year": 2020,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p61",
+    "year": 2020,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p62",
+    "year": 2020,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "p63",
+    "year": 2021,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p64",
+    "year": 2021,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p65",
+    "year": 2021,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p66",
+    "year": 2021,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "p67",
+    "year": 2022,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p68",
+    "year": 2022,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p69",
+    "year": 2022,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "p70",
+    "year": 2022,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "p71",
+    "year": 2023,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p72",
+    "year": 2023,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p73",
+    "year": 2023,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p74",
+    "year": 2023,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "p75",
+    "year": 2024,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p76",
+    "year": 2024,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p77",
+    "year": 2024,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p78",
+    "year": 2024,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "p79",
+    "year": 2025,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p80",
+    "year": 2025,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p81",
+    "year": 2025,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p82",
+    "year": 2025,
+    "family": "small tax (1-60 EUR) household",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p83",
+    "year": 2020,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p84",
+    "year": 2020,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p85",
+    "year": 2020,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p86",
+    "year": 2020,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p87",
+    "year": 2020,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 6.0,
+    "lean": 6.0,
+    "lean61": 6.0,
+    "m": 6.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p88",
+    "year": 2020,
+    "family": "204 H II without 8OT (control)",
+    "prod": 6.0,
+    "lean": 6.0,
+    "lean61": 6.0,
+    "m": 6.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p89",
+    "year": 2021,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p90",
+    "year": 2021,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p91",
+    "year": 2021,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p92",
+    "year": 2021,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p93",
+    "year": 2021,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 6.0,
+    "lean": 6.0,
+    "lean61": 6.0,
+    "m": 6.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p94",
+    "year": 2021,
+    "family": "204 H II without 8OT (control)",
+    "prod": 5.9,
+    "lean": 5.9,
+    "lean61": 5.9,
+    "m": 5.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p95",
+    "year": 2022,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p96",
+    "year": 2022,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p97",
+    "year": 2022,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p98",
+    "year": 2022,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p99",
+    "year": 2022,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p100",
+    "year": 2022,
+    "family": "204 H II without 8OT (control)",
+    "prod": 5.5,
+    "lean": 5.5,
+    "lean61": 5.5,
+    "m": 5.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p101",
+    "year": 2023,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p102",
+    "year": 2023,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p103",
+    "year": 2023,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p104",
+    "year": 2023,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p105",
+    "year": 2023,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 6.0,
+    "lean": 6.0,
+    "lean61": 6.0,
+    "m": 6.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p106",
+    "year": 2023,
+    "family": "204 H II without 8OT (control)",
+    "prod": 5.6,
+    "lean": 5.6,
+    "lean61": 5.6,
+    "m": 5.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p107",
+    "year": 2024,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p108",
+    "year": 2024,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p109",
+    "year": 2024,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p110",
+    "year": 2024,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p111",
+    "year": 2024,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 6.0,
+    "lean": 6.0,
+    "lean61": 6.0,
+    "m": 6.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p112",
+    "year": 2024,
+    "family": "204 H II without 8OT (control)",
+    "prod": 5.8,
+    "lean": 5.8,
+    "lean61": 5.8,
+    "m": 5.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p113",
+    "year": 2025,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p114",
+    "year": 2025,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p115",
+    "year": 2025,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p116",
+    "year": 2025,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 1.0,
+    "INDTAZ": 1.0
+   },
+   {
+    "id": "p117",
+    "year": 2025,
+    "family": "204 H II threshold (8OT, nil tax via home-help credit)",
+    "prod": 6.0,
+    "lean": 6.0,
+    "lean61": 6.0,
+    "m": 6.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p118",
+    "year": 2025,
+    "family": "204 H II without 8OT (control)",
+    "prod": 5.9,
+    "lean": 5.9,
+    "lean61": 5.9,
+    "m": 5.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p119",
+    "year": 2020,
+    "family": "couple: lower earner in decote zone",
+    "prod": 7.0,
+    "lean": 7.0,
+    "lean61": 7.0,
+    "m": 7.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p120",
+    "year": 2020,
+    "family": "couple: lower earner in decote zone",
+    "prod": 7.9,
+    "lean": 7.9,
+    "lean61": 7.9,
+    "m": 7.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p121",
+    "year": 2020,
+    "family": "couple: lower earner in decote zone",
+    "prod": 9.6,
+    "lean": 9.6,
+    "lean61": 9.6,
+    "m": 9.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p122",
+    "year": 2020,
+    "family": "couple: lower earner in decote zone",
+    "prod": 10.4,
+    "lean": 10.4,
+    "lean61": 10.4,
+    "m": 10.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p123",
+    "year": 2020,
+    "family": "couple: lower earner in decote zone",
+    "prod": 11.0,
+    "lean": 11.0,
+    "lean61": 11.0,
+    "m": 11.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p124",
+    "year": 2020,
+    "family": "couple: lower earner in decote zone",
+    "prod": 11.6,
+    "lean": 11.6,
+    "lean61": 11.6,
+    "m": 11.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p125",
+    "year": 2020,
+    "family": "couple: lower earner in decote zone",
+    "prod": 12.2,
+    "lean": 12.2,
+    "lean61": 12.2,
+    "m": 12.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p126",
+    "year": 2020,
+    "family": "couple: lower earner in decote zone",
+    "prod": 12.9,
+    "lean": 12.9,
+    "lean61": 12.9,
+    "m": 12.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p127",
+    "year": 2020,
+    "family": "couple: equal salaries",
+    "prod": 12.0,
+    "lean": 12.0,
+    "lean61": 12.0,
+    "m": 12.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p128",
+    "year": 2020,
+    "family": "couple: one euro apart",
+    "prod": 12.0,
+    "lean": 12.0,
+    "lean61": 12.0,
+    "m": 12.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p129",
+    "year": 2020,
+    "family": "couple: equal pensions, one euro apart (allowance cap)",
+    "prod": 15.4,
+    "lean": 15.4,
+    "lean61": 15.4,
+    "m": 15.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p130",
+    "year": 2020,
+    "family": "couple: very unequal (1 to 50)",
+    "prod": 27.8,
+    "lean": 27.8,
+    "lean61": 27.8,
+    "m": 27.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p131",
+    "year": 2020,
+    "family": "couple: PACS, child (quarter part), unequal",
+    "prod": 15.1,
+    "lean": 15.1,
+    "lean61": 15.1,
+    "m": 15.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p132",
+    "year": 2020,
+    "family": "couple: shared-residence child (eighth parts)",
+    "prod": 11.6,
+    "lean": 11.6,
+    "lean61": 11.6,
+    "m": 11.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p133",
+    "year": 2020,
+    "family": "couple: lower earner pensions only",
+    "prod": 12.7,
+    "lean": 12.7,
+    "lean61": 12.7,
+    "m": 12.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p134",
+    "year": 2021,
+    "family": "couple: lower earner in decote zone",
+    "prod": 6.7,
+    "lean": 6.7,
+    "lean61": 6.7,
+    "m": 6.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p135",
+    "year": 2021,
+    "family": "couple: lower earner in decote zone",
+    "prod": 7.6,
+    "lean": 7.6,
+    "lean61": 7.6,
+    "m": 7.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p136",
+    "year": 2021,
+    "family": "couple: lower earner in decote zone",
+    "prod": 9.4,
+    "lean": 9.4,
+    "lean61": 9.4,
+    "m": 9.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p137",
+    "year": 2021,
+    "family": "couple: lower earner in decote zone",
+    "prod": 10.1,
+    "lean": 10.1,
+    "lean61": 10.1,
+    "m": 10.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p138",
+    "year": 2021,
+    "family": "couple: lower earner in decote zone",
+    "prod": 10.8,
+    "lean": 10.8,
+    "lean61": 10.8,
+    "m": 10.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p139",
+    "year": 2021,
+    "family": "couple: lower earner in decote zone",
+    "prod": 11.4,
+    "lean": 11.4,
+    "lean61": 11.4,
+    "m": 11.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p140",
+    "year": 2021,
+    "family": "couple: lower earner in decote zone",
+    "prod": 12.0,
+    "lean": 12.0,
+    "lean61": 12.0,
+    "m": 12.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p141",
+    "year": 2021,
+    "family": "couple: lower earner in decote zone",
+    "prod": 12.7,
+    "lean": 12.7,
+    "lean61": 12.7,
+    "m": 12.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p142",
+    "year": 2021,
+    "family": "couple: equal salaries",
+    "prod": 11.8,
+    "lean": 11.8,
+    "lean61": 11.8,
+    "m": 11.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p143",
+    "year": 2021,
+    "family": "couple: one euro apart",
+    "prod": 11.8,
+    "lean": 11.8,
+    "lean61": 11.8,
+    "m": 11.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p144",
+    "year": 2021,
+    "family": "couple: equal pensions, one euro apart (allowance cap)",
+    "prod": 15.2,
+    "lean": 15.2,
+    "lean61": 15.2,
+    "m": 15.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p145",
+    "year": 2021,
+    "family": "couple: very unequal (1 to 50)",
+    "prod": 27.7,
+    "lean": 27.7,
+    "lean61": 27.7,
+    "m": 27.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p146",
+    "year": 2021,
+    "family": "couple: PACS, child (quarter part), unequal",
+    "prod": 14.9,
+    "lean": 14.9,
+    "lean61": 14.9,
+    "m": 14.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p147",
+    "year": 2021,
+    "family": "couple: shared-residence child (eighth parts)",
+    "prod": 11.4,
+    "lean": 11.4,
+    "lean61": 11.4,
+    "m": 11.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p148",
+    "year": 2021,
+    "family": "couple: lower earner pensions only",
+    "prod": 12.5,
+    "lean": 12.5,
+    "lean61": 12.5,
+    "m": 12.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p149",
+    "year": 2022,
+    "family": "couple: lower earner in decote zone",
+    "prod": 5.9,
+    "lean": 5.9,
+    "lean61": 5.9,
+    "m": null,
+    "PASII": 0.0,
+    "INDTAZ": null
+   },
+   {
+    "id": "p150",
+    "year": 2022,
+    "family": "couple: lower earner in decote zone",
+    "prod": 6.6,
+    "lean": 6.6,
+    "lean61": 6.6,
+    "m": 6.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p151",
+    "year": 2022,
+    "family": "couple: lower earner in decote zone",
+    "prod": 8.4,
+    "lean": 8.4,
+    "lean61": 8.4,
+    "m": 8.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p152",
+    "year": 2022,
+    "family": "couple: lower earner in decote zone",
+    "prod": 9.2,
+    "lean": 9.2,
+    "lean61": 9.2,
+    "m": 9.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p153",
+    "year": 2022,
+    "family": "couple: lower earner in decote zone",
+    "prod": 9.9,
+    "lean": 9.9,
+    "lean61": 9.9,
+    "m": 9.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p154",
+    "year": 2022,
+    "family": "couple: lower earner in decote zone",
+    "prod": 10.6,
+    "lean": 10.6,
+    "lean61": 10.6,
+    "m": 10.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p155",
+    "year": 2022,
+    "family": "couple: lower earner in decote zone",
+    "prod": 11.2,
+    "lean": 11.2,
+    "lean61": 11.2,
+    "m": 11.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p156",
+    "year": 2022,
+    "family": "couple: lower earner in decote zone",
+    "prod": 11.9,
+    "lean": 11.9,
+    "lean61": 11.9,
+    "m": 11.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p157",
+    "year": 2022,
+    "family": "couple: equal salaries",
+    "prod": 11.0,
+    "lean": 11.0,
+    "lean61": 11.0,
+    "m": 11.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p158",
+    "year": 2022,
+    "family": "couple: one euro apart",
+    "prod": 11.0,
+    "lean": 11.0,
+    "lean61": 11.0,
+    "m": 11.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p159",
+    "year": 2022,
+    "family": "couple: equal pensions, one euro apart (allowance cap)",
+    "prod": 14.4,
+    "lean": 14.4,
+    "lean61": 14.4,
+    "m": 14.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p160",
+    "year": 2022,
+    "family": "couple: very unequal (1 to 50)",
+    "prod": 26.9,
+    "lean": 26.9,
+    "lean61": 26.9,
+    "m": 26.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p161",
+    "year": 2022,
+    "family": "couple: PACS, child (quarter part), unequal",
+    "prod": 14.3,
+    "lean": 14.3,
+    "lean61": 14.3,
+    "m": 14.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p162",
+    "year": 2022,
+    "family": "couple: shared-residence child (eighth parts)",
+    "prod": 10.6,
+    "lean": 10.6,
+    "lean61": 10.6,
+    "m": 10.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p163",
+    "year": 2022,
+    "family": "couple: lower earner pensions only",
+    "prod": 11.7,
+    "lean": 11.7,
+    "lean61": 11.7,
+    "m": 11.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p164",
+    "year": 2023,
+    "family": "couple: lower earner in decote zone",
+    "prod": 5.8,
+    "lean": 5.8,
+    "lean61": 5.8,
+    "m": 5.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p165",
+    "year": 2023,
+    "family": "couple: lower earner in decote zone",
+    "prod": 5.9,
+    "lean": 5.9,
+    "lean61": 5.9,
+    "m": 5.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p166",
+    "year": 2023,
+    "family": "couple: lower earner in decote zone",
+    "prod": 7.5,
+    "lean": 7.5,
+    "lean61": 7.5,
+    "m": 7.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p167",
+    "year": 2023,
+    "family": "couple: lower earner in decote zone",
+    "prod": 8.4,
+    "lean": 8.4,
+    "lean61": 8.4,
+    "m": 8.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p168",
+    "year": 2023,
+    "family": "couple: lower earner in decote zone",
+    "prod": 9.1,
+    "lean": 9.1,
+    "lean61": 9.1,
+    "m": 9.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p169",
+    "year": 2023,
+    "family": "couple: lower earner in decote zone",
+    "prod": 9.8,
+    "lean": 9.8,
+    "lean61": 9.8,
+    "m": 9.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p170",
+    "year": 2023,
+    "family": "couple: lower earner in decote zone",
+    "prod": 10.4,
+    "lean": 10.4,
+    "lean61": 10.4,
+    "m": 10.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p171",
+    "year": 2023,
+    "family": "couple: lower earner in decote zone",
+    "prod": 11.2,
+    "lean": 11.2,
+    "lean61": 11.2,
+    "m": 11.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p172",
+    "year": 2023,
+    "family": "couple: equal salaries",
+    "prod": 10.2,
+    "lean": 10.2,
+    "lean61": 10.2,
+    "m": 10.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p173",
+    "year": 2023,
+    "family": "couple: one euro apart",
+    "prod": 10.2,
+    "lean": 10.2,
+    "lean61": 10.2,
+    "m": 10.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p174",
+    "year": 2023,
+    "family": "couple: equal pensions, one euro apart (allowance cap)",
+    "prod": 13.6,
+    "lean": 13.6,
+    "lean61": 13.6,
+    "m": 13.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p175",
+    "year": 2023,
+    "family": "couple: very unequal (1 to 50)",
+    "prod": 26.3,
+    "lean": 26.3,
+    "lean61": 26.3,
+    "m": 26.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p176",
+    "year": 2023,
+    "family": "couple: PACS, child (quarter part), unequal",
+    "prod": 13.7,
+    "lean": 13.7,
+    "lean61": 13.7,
+    "m": 13.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p177",
+    "year": 2023,
+    "family": "couple: shared-residence child (eighth parts)",
+    "prod": 9.8,
+    "lean": 9.8,
+    "lean61": 9.8,
+    "m": 9.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p178",
+    "year": 2023,
+    "family": "couple: lower earner pensions only",
+    "prod": 11.0,
+    "lean": 11.0,
+    "lean61": 11.0,
+    "m": 11.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p179",
+    "year": 2024,
+    "family": "couple: lower earner in decote zone",
+    "prod": 5.7,
+    "lean": 5.7,
+    "lean61": 5.7,
+    "m": 5.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     5.7,
+     0.0
+    ],
+    "lean_ind": [
+     5.7,
+     0.0
+    ],
+    "leanS_ind": [
+     5.7,
+     0.0
+    ]
+   },
+   {
+    "id": "p180",
+    "year": 2024,
+    "family": "couple: lower earner in decote zone",
+    "prod": 5.8,
+    "lean": 5.8,
+    "lean61": 5.8,
+    "m": 5.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     6.1,
+     0.0
+    ],
+    "lean_ind": [
+     6.1,
+     0.0
+    ],
+    "leanS_ind": [
+     6.1,
+     0.0
+    ]
+   },
+   {
+    "id": "p181",
+    "year": 2024,
+    "family": "couple: lower earner in decote zone",
+    "prod": 7.2,
+    "lean": 7.2,
+    "lean61": 7.2,
+    "m": 7.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     8.3,
+     0.0
+    ],
+    "lean_ind": [
+     8.3,
+     0.0
+    ],
+    "leanS_ind": [
+     8.3,
+     0.0
+    ]
+   },
+   {
+    "id": "p182",
+    "year": 2024,
+    "family": "couple: lower earner in decote zone",
+    "prod": 8.0,
+    "lean": 8.0,
+    "lean61": 8.0,
+    "m": 8.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     9.6,
+     0.0
+    ],
+    "lean_ind": [
+     9.6,
+     0.0
+    ],
+    "leanS_ind": [
+     9.6,
+     0.0
+    ]
+   },
+   {
+    "id": "p183",
+    "year": 2024,
+    "family": "couple: lower earner in decote zone",
+    "prod": 8.8,
+    "lean": 8.8,
+    "lean61": 8.8,
+    "m": 8.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     11.0,
+     0.0
+    ],
+    "lean_ind": [
+     11.0,
+     0.0
+    ],
+    "leanS_ind": [
+     11.0,
+     0.0
+    ]
+   },
+   {
+    "id": "p184",
+    "year": 2024,
+    "family": "couple: lower earner in decote zone",
+    "prod": 9.5,
+    "lean": 9.5,
+    "lean61": 9.5,
+    "m": 9.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     12.3,
+     0.0
+    ],
+    "lean_ind": [
+     12.3,
+     0.0
+    ],
+    "leanS_ind": [
+     12.3,
+     0.0
+    ]
+   },
+   {
+    "id": "p185",
+    "year": 2024,
+    "family": "couple: lower earner in decote zone",
+    "prod": 10.1,
+    "lean": 10.1,
+    "lean61": 10.1,
+    "m": 10.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     13.2,
+     1.4
+    ],
+    "lean_ind": [
+     13.7,
+     0.0
+    ],
+    "leanS_ind": [
+     13.2,
+     1.4
+    ]
+   },
+   {
+    "id": "p186",
+    "year": 2024,
+    "family": "couple: lower earner in decote zone",
+    "prod": 10.9,
+    "lean": 10.9,
+    "lean61": 10.9,
+    "m": 10.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     14.0,
+     3.5
+    ],
+    "lean_ind": [
+     15.0,
+     1.2
+    ],
+    "leanS_ind": [
+     14.0,
+     3.5
+    ]
+   },
+   {
+    "id": "p187",
+    "year": 2024,
+    "family": "couple: equal salaries",
+    "prod": 9.9,
+    "lean": 9.9,
+    "lean61": 9.9,
+    "m": 9.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     9.9,
+     9.9
+    ],
+    "lean_ind": [
+     9.9,
+     9.9
+    ],
+    "leanS_ind": [
+     9.9,
+     9.9
+    ]
+   },
+   {
+    "id": "p188",
+    "year": 2024,
+    "family": "couple: one euro apart",
+    "prod": 9.9,
+    "lean": 9.9,
+    "lean61": 9.9,
+    "m": 9.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     9.9,
+     9.9
+    ],
+    "lean_ind": [
+     9.9,
+     9.9
+    ],
+    "leanS_ind": [
+     9.9,
+     9.9
+    ]
+   },
+   {
+    "id": "p189",
+    "year": 2024,
+    "family": "couple: equal pensions, one euro apart (allowance cap)",
+    "prod": 13.3,
+    "lean": 13.3,
+    "lean61": 13.3,
+    "m": 13.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     13.3,
+     13.3
+    ],
+    "lean_ind": [
+     13.3,
+     13.3
+    ],
+    "leanS_ind": [
+     13.3,
+     13.3
+    ]
+   },
+   {
+    "id": "p190",
+    "year": 2024,
+    "family": "couple: very unequal (1 to 50)",
+    "prod": 26.0,
+    "lean": 26.0,
+    "lean61": 26.0,
+    "m": 26.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     26.5,
+     0.0
+    ],
+    "lean_ind": [
+     26.5,
+     0.0
+    ],
+    "leanS_ind": [
+     26.5,
+     0.0
+    ]
+   },
+   {
+    "id": "p191",
+    "year": 2024,
+    "family": "couple: PACS, child (quarter part), unequal",
+    "prod": 13.4,
+    "lean": 13.4,
+    "lean61": 13.4,
+    "m": 13.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     15.1,
+     11.1
+    ],
+    "lean_ind": [
+     15.1,
+     11.1
+    ],
+    "leanS_ind": [
+     15.1,
+     11.1
+    ]
+   },
+   {
+    "id": "p192",
+    "year": 2024,
+    "family": "couple: shared-residence child (eighth parts)",
+    "prod": 9.5,
+    "lean": 9.5,
+    "lean61": 9.5,
+    "m": 9.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     12.2,
+     4.8
+    ],
+    "lean_ind": [
+     13.3,
+     3.0
+    ],
+    "leanS_ind": [
+     12.2,
+     4.8
+    ]
+   },
+   {
+    "id": "p193",
+    "year": 2024,
+    "family": "couple: lower earner pensions only",
+    "prod": 10.7,
+    "lean": 10.7,
+    "lean61": 10.7,
+    "m": 10.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     12.9,
+     0.0
+    ],
+    "lean_ind": [
+     12.9,
+     0.0
+    ],
+    "leanS_ind": [
+     12.9,
+     0.0
+    ]
+   },
+   {
+    "id": "p194",
+    "year": 2025,
+    "family": "couple: lower earner in decote zone",
+    "prod": 5.6,
+    "lean": 5.6,
+    "lean61": 5.6,
+    "m": 5.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     5.6,
+     0.0
+    ],
+    "lean_ind": [
+     5.6,
+     0.0
+    ],
+    "leanS_ind": [
+     5.6,
+     0.0
+    ]
+   },
+   {
+    "id": "p195",
+    "year": 2025,
+    "family": "couple: lower earner in decote zone",
+    "prod": 5.8,
+    "lean": 5.8,
+    "lean61": 5.8,
+    "m": 5.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     6.1,
+     0.0
+    ],
+    "lean_ind": [
+     6.1,
+     0.0
+    ],
+    "leanS_ind": [
+     6.1,
+     0.0
+    ]
+   },
+   {
+    "id": "p196",
+    "year": 2025,
+    "family": "couple: lower earner in decote zone",
+    "prod": 7.0,
+    "lean": 7.0,
+    "lean61": 7.0,
+    "m": 7.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     8.1,
+     0.0
+    ],
+    "lean_ind": [
+     8.1,
+     0.0
+    ],
+    "leanS_ind": [
+     8.1,
+     0.0
+    ]
+   },
+   {
+    "id": "p197",
+    "year": 2025,
+    "family": "couple: lower earner in decote zone",
+    "prod": 7.8,
+    "lean": 7.8,
+    "lean61": 7.8,
+    "m": 7.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     9.4,
+     0.0
+    ],
+    "lean_ind": [
+     9.4,
+     0.0
+    ],
+    "leanS_ind": [
+     9.4,
+     0.0
+    ]
+   },
+   {
+    "id": "p198",
+    "year": 2025,
+    "family": "couple: lower earner in decote zone",
+    "prod": 8.6,
+    "lean": 8.6,
+    "lean61": 8.6,
+    "m": 8.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     10.8,
+     0.0
+    ],
+    "lean_ind": [
+     10.8,
+     0.0
+    ],
+    "leanS_ind": [
+     10.8,
+     0.0
+    ]
+   },
+   {
+    "id": "p199",
+    "year": 2025,
+    "family": "couple: lower earner in decote zone",
+    "prod": 9.3,
+    "lean": 9.3,
+    "lean61": 9.3,
+    "m": 9.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     12.1,
+     0.0
+    ],
+    "lean_ind": [
+     12.1,
+     0.0
+    ],
+    "leanS_ind": [
+     12.1,
+     0.0
+    ]
+   },
+   {
+    "id": "p200",
+    "year": 2025,
+    "family": "couple: lower earner in decote zone",
+    "prod": 10.0,
+    "lean": 10.0,
+    "lean61": 10.0,
+    "m": 10.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     13.0,
+     1.3
+    ],
+    "lean_ind": [
+     13.5,
+     0.0
+    ],
+    "leanS_ind": [
+     13.0,
+     1.3
+    ]
+   },
+   {
+    "id": "p201",
+    "year": 2025,
+    "family": "couple: lower earner in decote zone",
+    "prod": 10.8,
+    "lean": 10.8,
+    "lean61": 10.8,
+    "m": 10.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     13.8,
+     3.4
+    ],
+    "lean_ind": [
+     14.8,
+     1.0
+    ],
+    "leanS_ind": [
+     13.8,
+     3.4
+    ]
+   },
+   {
+    "id": "p202",
+    "year": 2025,
+    "family": "couple: equal salaries",
+    "prod": 9.8,
+    "lean": 9.8,
+    "lean61": 9.8,
+    "m": 9.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     9.8,
+     9.8
+    ],
+    "lean_ind": [
+     9.8,
+     9.8
+    ],
+    "leanS_ind": [
+     9.8,
+     9.8
+    ]
+   },
+   {
+    "id": "p203",
+    "year": 2025,
+    "family": "couple: one euro apart",
+    "prod": 9.8,
+    "lean": 9.8,
+    "lean61": 9.8,
+    "m": 9.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     9.7,
+     9.8
+    ],
+    "lean_ind": [
+     9.7,
+     9.8
+    ],
+    "leanS_ind": [
+     9.7,
+     9.8
+    ]
+   },
+   {
+    "id": "p204",
+    "year": 2025,
+    "family": "couple: equal pensions, one euro apart (allowance cap)",
+    "prod": 13.2,
+    "lean": 13.2,
+    "lean61": 13.2,
+    "m": 13.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     13.2,
+     13.2
+    ],
+    "lean_ind": [
+     13.2,
+     13.2
+    ],
+    "leanS_ind": [
+     13.2,
+     13.2
+    ]
+   },
+   {
+    "id": "p205",
+    "year": 2025,
+    "family": "couple: very unequal (1 to 50)",
+    "prod": 25.9,
+    "lean": 25.9,
+    "lean61": 25.9,
+    "m": 25.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     26.4,
+     0.0
+    ],
+    "lean_ind": [
+     26.4,
+     0.0
+    ],
+    "leanS_ind": [
+     26.4,
+     0.0
+    ]
+   },
+   {
+    "id": "p206",
+    "year": 2025,
+    "family": "couple: PACS, child (quarter part), unequal",
+    "prod": 13.3,
+    "lean": 13.3,
+    "lean61": 13.3,
+    "m": 13.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     15.1,
+     10.9
+    ],
+    "lean_ind": [
+     15.1,
+     10.9
+    ],
+    "leanS_ind": [
+     15.1,
+     10.9
+    ]
+   },
+   {
+    "id": "p207",
+    "year": 2025,
+    "family": "couple: shared-residence child (eighth parts)",
+    "prod": 9.3,
+    "lean": 9.3,
+    "lean61": 9.3,
+    "m": 9.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     12.0,
+     4.8
+    ],
+    "lean_ind": [
+     13.1,
+     2.9
+    ],
+    "leanS_ind": [
+     12.0,
+     4.8
+    ]
+   },
+   {
+    "id": "p208",
+    "year": 2025,
+    "family": "couple: lower earner pensions only",
+    "prod": 10.6,
+    "lean": 10.6,
+    "lean61": 10.6,
+    "m": 10.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     12.7,
+     0.0
+    ],
+    "lean_ind": [
+     12.7,
+     0.0
+    ],
+    "leanS_ind": [
+     12.7,
+     0.0
+    ]
+   },
+   {
+    "id": "p209",
+    "year": 2020,
+    "family": "outside base: dividends at the scale",
+    "prod": 16.1,
+    "lean": 16.1,
+    "lean61": 16.1,
+    "m": 16.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p210",
+    "year": 2020,
+    "family": "outside base: gains at the scale",
+    "prod": 16.5,
+    "lean": 16.5,
+    "lean61": 16.5,
+    "m": 16.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p211",
+    "year": 2020,
+    "family": "outside base: flat-levy micro (197 C)",
+    "prod": 15.4,
+    "lean": 15.4,
+    "lean61": 15.4,
+    "m": 15.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p212",
+    "year": 2020,
+    "family": "in base: property and annuities",
+    "prod": 14.8,
+    "lean": 14.8,
+    "lean61": 14.8,
+    "m": 14.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p213",
+    "year": 2020,
+    "family": "in base: alimony with a pension",
+    "prod": 10.5,
+    "lean": 10.5,
+    "lean61": 10.5,
+    "m": 10.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p214",
+    "year": 2020,
+    "family": "deficit: actual expenses above salary, with a pension",
+    "prod": 3.2,
+    "lean": 3.2,
+    "lean61": 3.2,
+    "m": 3.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p215",
+    "year": 2020,
+    "family": "deficit: property deficit on global income (4BC)",
+    "prod": 8.3,
+    "lean": 8.3,
+    "lean61": 8.3,
+    "m": 8.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p216",
+    "year": 2020,
+    "family": "dependant's salary (common income for 204 M)",
+    "prod": 9.2,
+    "lean": 9.2,
+    "lean61": 9.2,
+    "m": 9.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p217",
+    "year": 2020,
+    "family": "charges halved for 204 M (alimony paid)",
+    "prod": 8.2,
+    "lean": 8.2,
+    "lean61": 8.2,
+    "m": 8.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p218",
+    "year": 2021,
+    "family": "outside base: dividends at the scale",
+    "prod": 15.9,
+    "lean": 15.9,
+    "lean61": 15.9,
+    "m": 15.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p219",
+    "year": 2021,
+    "family": "outside base: gains at the scale",
+    "prod": 16.4,
+    "lean": 16.4,
+    "lean61": 16.4,
+    "m": 16.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p220",
+    "year": 2021,
+    "family": "outside base: flat-levy micro (197 C)",
+    "prod": 15.2,
+    "lean": 15.2,
+    "lean61": 15.2,
+    "m": 15.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p221",
+    "year": 2021,
+    "family": "in base: property and annuities",
+    "prod": 14.7,
+    "lean": 14.7,
+    "lean61": 14.7,
+    "m": 14.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p222",
+    "year": 2021,
+    "family": "in base: alimony with a pension",
+    "prod": 10.3,
+    "lean": 10.3,
+    "lean61": 10.3,
+    "m": 10.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p223",
+    "year": 2021,
+    "family": "deficit: actual expenses above salary, with a pension",
+    "prod": 3.1,
+    "lean": 3.1,
+    "lean61": 3.1,
+    "m": 3.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p224",
+    "year": 2021,
+    "family": "deficit: property deficit on global income (4BC)",
+    "prod": 8.1,
+    "lean": 8.1,
+    "lean61": 8.1,
+    "m": 8.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p225",
+    "year": 2021,
+    "family": "dependant's salary (common income for 204 M)",
+    "prod": 8.9,
+    "lean": 8.9,
+    "lean61": 8.9,
+    "m": 8.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p226",
+    "year": 2021,
+    "family": "charges halved for 204 M (alimony paid)",
+    "prod": 7.9,
+    "lean": 7.9,
+    "lean61": 7.9,
+    "m": 7.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p227",
+    "year": 2022,
+    "family": "outside base: dividends at the scale",
+    "prod": 15.4,
+    "lean": 15.4,
+    "lean61": 15.4,
+    "m": 15.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p228",
+    "year": 2022,
+    "family": "outside base: gains at the scale",
+    "prod": 15.8,
+    "lean": 15.8,
+    "lean61": 15.8,
+    "m": 15.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p229",
+    "year": 2022,
+    "family": "outside base: flat-levy micro (197 C)",
+    "prod": 14.6,
+    "lean": 14.6,
+    "lean61": 14.6,
+    "m": 14.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p230",
+    "year": 2022,
+    "family": "in base: property and annuities",
+    "prod": 13.9,
+    "lean": 13.9,
+    "lean61": 13.9,
+    "m": 13.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p231",
+    "year": 2022,
+    "family": "in base: alimony with a pension",
+    "prod": 9.4,
+    "lean": 9.4,
+    "lean61": 9.4,
+    "m": 9.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p232",
+    "year": 2022,
+    "family": "deficit: actual expenses above salary, with a pension",
+    "prod": 2.8,
+    "lean": 2.8,
+    "lean61": 2.8,
+    "m": null,
+    "PASII": 0.0,
+    "INDTAZ": null
+   },
+   {
+    "id": "p233",
+    "year": 2022,
+    "family": "deficit: property deficit on global income (4BC)",
+    "prod": 7.2,
+    "lean": 7.2,
+    "lean61": 7.2,
+    "m": 7.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p234",
+    "year": 2022,
+    "family": "dependant's salary (common income for 204 M)",
+    "prod": 7.9,
+    "lean": 7.9,
+    "lean61": 7.9,
+    "m": 7.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p235",
+    "year": 2022,
+    "family": "charges halved for 204 M (alimony paid)",
+    "prod": 7.0,
+    "lean": 7.0,
+    "lean61": 7.0,
+    "m": 7.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p236",
+    "year": 2023,
+    "family": "outside base: dividends at the scale",
+    "prod": 14.8,
+    "lean": 14.8,
+    "lean61": 14.8,
+    "m": 14.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p237",
+    "year": 2023,
+    "family": "outside base: gains at the scale",
+    "prod": 15.3,
+    "lean": 15.3,
+    "lean61": 15.3,
+    "m": 15.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p238",
+    "year": 2023,
+    "family": "outside base: flat-levy micro (197 C)",
+    "prod": 14.0,
+    "lean": 14.0,
+    "lean61": 14.0,
+    "m": 14.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p239",
+    "year": 2023,
+    "family": "in base: property and annuities",
+    "prod": 13.3,
+    "lean": 13.3,
+    "lean61": 13.3,
+    "m": 13.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p240",
+    "year": 2023,
+    "family": "in base: alimony with a pension",
+    "prod": 8.5,
+    "lean": 8.5,
+    "lean61": 8.5,
+    "m": 8.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p241",
+    "year": 2023,
+    "family": "deficit: actual expenses above salary, with a pension",
+    "prod": 2.5,
+    "lean": 2.5,
+    "lean61": 2.5,
+    "m": null,
+    "PASII": 0.0,
+    "INDTAZ": null
+   },
+   {
+    "id": "p242",
+    "year": 2023,
+    "family": "deficit: property deficit on global income (4BC)",
+    "prod": 6.5,
+    "lean": 6.5,
+    "lean61": 6.5,
+    "m": 6.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p243",
+    "year": 2023,
+    "family": "dependant's salary (common income for 204 M)",
+    "prod": 7.0,
+    "lean": 7.0,
+    "lean61": 7.0,
+    "m": 7.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p244",
+    "year": 2023,
+    "family": "charges halved for 204 M (alimony paid)",
+    "prod": 6.1,
+    "lean": 6.1,
+    "lean61": 6.1,
+    "m": 6.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p245",
+    "year": 2024,
+    "family": "outside base: dividends at the scale",
+    "prod": 14.6,
+    "lean": 14.6,
+    "lean61": 14.6,
+    "m": 14.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p246",
+    "year": 2024,
+    "family": "outside base: gains at the scale",
+    "prod": 15.1,
+    "lean": 15.1,
+    "lean61": 15.1,
+    "m": 15.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p247",
+    "year": 2024,
+    "family": "outside base: flat-levy micro (197 C)",
+    "prod": 13.8,
+    "lean": 13.8,
+    "lean61": 13.8,
+    "m": 13.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p248",
+    "year": 2024,
+    "family": "in base: property and annuities",
+    "prod": 13.0,
+    "lean": 13.0,
+    "lean61": 13.0,
+    "m": 13.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p249",
+    "year": 2024,
+    "family": "in base: alimony with a pension",
+    "prod": 8.1,
+    "lean": 8.1,
+    "lean61": 8.1,
+    "m": 8.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p250",
+    "year": 2024,
+    "family": "deficit: actual expenses above salary, with a pension",
+    "prod": 2.4,
+    "lean": 2.4,
+    "lean61": 2.4,
+    "m": null,
+    "PASII": 0.0,
+    "INDTAZ": null
+   },
+   {
+    "id": "p251",
+    "year": 2024,
+    "family": "deficit: property deficit on global income (4BC)",
+    "prod": 6.2,
+    "lean": 6.2,
+    "lean61": 6.2,
+    "m": 6.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p252",
+    "year": 2024,
+    "family": "dependant's salary (common income for 204 M)",
+    "prod": 6.7,
+    "lean": 6.7,
+    "lean61": 6.7,
+    "m": 6.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     9.1,
+     0.5
+    ],
+    "lean_ind": [
+     9.3,
+     0.0
+    ],
+    "leanS_ind": [
+     9.1,
+     0.5
+    ]
+   },
+   {
+    "id": "p253",
+    "year": 2024,
+    "family": "charges halved for 204 M (alimony paid)",
+    "prod": 5.8,
+    "lean": 5.8,
+    "lean61": 5.8,
+    "m": 5.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     8.1,
+     0.0
+    ],
+    "lean_ind": [
+     8.1,
+     0.0
+    ],
+    "leanS_ind": [
+     8.1,
+     0.0
+    ]
+   },
+   {
+    "id": "p254",
+    "year": 2025,
+    "family": "outside base: dividends at the scale",
+    "prod": 14.5,
+    "lean": 14.5,
+    "lean61": 14.5,
+    "m": 14.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p255",
+    "year": 2025,
+    "family": "outside base: gains at the scale",
+    "prod": 14.9,
+    "lean": 14.9,
+    "lean61": 14.9,
+    "m": 14.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p256",
+    "year": 2025,
+    "family": "outside base: flat-levy micro (197 C)",
+    "prod": 13.7,
+    "lean": 13.7,
+    "lean61": 13.7,
+    "m": 13.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p257",
+    "year": 2025,
+    "family": "in base: property and annuities",
+    "prod": 12.9,
+    "lean": 12.9,
+    "lean61": 12.9,
+    "m": 12.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p258",
+    "year": 2025,
+    "family": "in base: alimony with a pension",
+    "prod": 8.0,
+    "lean": 8.0,
+    "lean61": 8.0,
+    "m": 8.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p259",
+    "year": 2025,
+    "family": "deficit: actual expenses above salary, with a pension",
+    "prod": 2.3,
+    "lean": 2.3,
+    "lean61": 2.3,
+    "m": null,
+    "PASII": 0.0,
+    "INDTAZ": null
+   },
+   {
+    "id": "p260",
+    "year": 2025,
+    "family": "deficit: property deficit on global income (4BC)",
+    "prod": 6.0,
+    "lean": 6.0,
+    "lean61": 6.0,
+    "m": 6.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "p261",
+    "year": 2025,
+    "family": "dependant's salary (common income for 204 M)",
+    "prod": 6.5,
+    "lean": 6.5,
+    "lean61": 6.5,
+    "m": 6.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     8.9,
+     0.4
+    ],
+    "lean_ind": [
+     9.1,
+     0.0
+    ],
+    "leanS_ind": [
+     8.9,
+     0.4
+    ]
+   },
+   {
+    "id": "p262",
+    "year": 2025,
+    "family": "charges halved for 204 M (alimony paid)",
+    "prod": 5.6,
+    "lean": 5.6,
+    "lean61": 5.6,
+    "m": 5.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     7.9,
+     0.0
+    ],
+    "lean_ind": [
+     7.9,
+     0.0
+    ],
+    "leanS_ind": [
+     7.9,
+     0.0
+    ]
+   },
+   {
+    "id": "r_h1601_2020",
+    "year": 2020,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h19814_2020",
+    "year": 2020,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.2,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h13226_2020",
+    "year": 2020,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h12325_2021",
+    "year": 2021,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h9414_2021",
+    "year": 2021,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.2,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h3307_2021",
+    "year": 2021,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.3,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h8102_2022",
+    "year": 2022,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.2,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h15622_2022",
+    "year": 2022,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h9229_2022",
+    "year": 2022,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h7563_2023",
+    "year": 2023,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h13720_2023",
+    "year": 2023,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.3,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h15763_2023",
+    "year": 2023,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h50533_2024",
+    "year": 2024,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)",
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.1,
+     0.0
+    ],
+    "leanS_ind": [
+     0.1,
+     0.0
+    ]
+   },
+   {
+    "id": "r_h48504_2024",
+    "year": 2024,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h92362_2024",
+    "year": 2024,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h41351_2025",
+    "year": 2025,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.2,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h28830_2025",
+    "year": 2025,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h59633_2025",
+    "year": 2025,
+    "family": "61-euro household (random set)",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "r_h1113_2020",
+    "year": 2020,
+    "family": "61-euro individual (random set)",
+    "prod": 14.9,
+    "lean": 14.9,
+    "lean61": 14.9,
+    "m": 14.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h1519_2020",
+    "year": 2020,
+    "family": "61-euro individual (random set)",
+    "prod": 8.1,
+    "lean": 8.1,
+    "lean61": 8.1,
+    "m": 8.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h1210_2021",
+    "year": 2021,
+    "family": "61-euro individual (random set)",
+    "prod": 3.5,
+    "lean": 3.5,
+    "lean61": 3.5,
+    "m": 3.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h4864_2021",
+    "year": 2021,
+    "family": "61-euro individual (random set)",
+    "prod": 9.1,
+    "lean": 9.1,
+    "lean61": 9.1,
+    "m": 9.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h4355_2022",
+    "year": 2022,
+    "family": "61-euro individual (random set)",
+    "prod": 3.9,
+    "lean": 3.9,
+    "lean61": 3.9,
+    "m": 3.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h2330_2022",
+    "year": 2022,
+    "family": "61-euro individual (random set)",
+    "prod": 2.5,
+    "lean": 2.5,
+    "lean61": 2.5,
+    "m": 2.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h17691_2023",
+    "year": 2023,
+    "family": "61-euro individual (random set)",
+    "prod": 11.0,
+    "lean": 11.0,
+    "lean61": 11.0,
+    "m": 11.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h1807_2023",
+    "year": 2023,
+    "family": "61-euro individual (random set)",
+    "prod": 1.6,
+    "lean": 1.6,
+    "lean61": 1.6,
+    "m": 1.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h88697_2024",
+    "year": 2024,
+    "family": "61-euro individual (random set)",
+    "prod": 2.6,
+    "lean": 2.6,
+    "lean61": 2.6,
+    "m": 2.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     4.5,
+     0.0
+    ],
+    "lean_ind": [
+     4.5,
+     0.0
+    ],
+    "leanS_ind": [
+     4.4,
+     0.1
+    ]
+   },
+   {
+    "id": "r_h11028_2024",
+    "year": 2024,
+    "family": "61-euro individual (random set)",
+    "prod": 3.7,
+    "lean": 3.7,
+    "lean61": 3.7,
+    "m": 3.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     6.1
+    ],
+    "lean_ind": [
+     0.0,
+     6.1
+    ],
+    "leanS_ind": [
+     0.1,
+     6.0
+    ]
+   },
+   {
+    "id": "r_h64049_2025",
+    "year": 2025,
+    "family": "61-euro individual (random set)",
+    "prod": 5.7,
+    "lean": 5.7,
+    "lean61": 5.7,
+    "m": 5.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     8.5
+    ],
+    "lean_ind": [
+     0.0,
+     8.5
+    ],
+    "leanS_ind": [
+     0.1,
+     8.5
+    ]
+   },
+   {
+    "id": "r_h4615_2025",
+    "year": 2025,
+    "family": "61-euro individual (random set)",
+    "prod": 3.2,
+    "lean": 3.2,
+    "lean61": 3.2,
+    "m": 3.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     5.6
+    ],
+    "lean_ind": [
+     0.0,
+     5.6
+    ],
+    "leanS_ind": [
+     0.2,
+     5.5
+    ]
+   },
+   {
+    "id": "r_h10787_2020",
+    "year": 2020,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 4.5,
+    "lean": 4.5,
+    "lean61": 4.5,
+    "m": 4.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h524_2020",
+    "year": 2020,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 1.2,
+    "lean": 1.2,
+    "lean61": 1.2,
+    "m": 1.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h8915_2020",
+    "year": 2020,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 11.6,
+    "lean": 11.6,
+    "lean61": 11.6,
+    "m": 11.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h8017_2020",
+    "year": 2020,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 3.4,
+    "lean": 3.4,
+    "lean61": 3.4,
+    "m": 3.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h19547_2021",
+    "year": 2021,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 3.0,
+    "lean": 3.0,
+    "lean61": 3.0,
+    "m": 3.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h365_2021",
+    "year": 2021,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 6.3,
+    "lean": 6.3,
+    "lean61": 6.3,
+    "m": 6.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h19484_2021",
+    "year": 2021,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 5.9,
+    "lean": 5.9,
+    "lean61": 5.9,
+    "m": 5.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h6_2021",
+    "year": 2021,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 15.3,
+    "lean": 15.3,
+    "lean61": 15.3,
+    "m": 15.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h4077_2022",
+    "year": 2022,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 10.3,
+    "lean": 10.3,
+    "lean61": 10.3,
+    "m": 10.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h16792_2022",
+    "year": 2022,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 12.6,
+    "lean": 12.6,
+    "lean61": 12.6,
+    "m": 12.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h17307_2022",
+    "year": 2022,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 5.5,
+    "lean": 5.5,
+    "lean61": 5.5,
+    "m": 5.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h11223_2022",
+    "year": 2022,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 6.2,
+    "lean": 6.2,
+    "lean61": 6.2,
+    "m": 6.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h17848_2023",
+    "year": 2023,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 14.0,
+    "lean": 14.0,
+    "lean61": 14.0,
+    "m": 14.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h8754_2023",
+    "year": 2023,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 11.5,
+    "lean": 11.5,
+    "lean61": 11.5,
+    "m": 11.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h10994_2023",
+    "year": 2023,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 6.1,
+    "lean": 6.1,
+    "lean61": 6.1,
+    "m": 6.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h3432_2023",
+    "year": 2023,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 5.2,
+    "lean": 5.2,
+    "lean61": 5.2,
+    "m": 5.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h32117_2024",
+    "year": 2024,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 7.4,
+    "lean": 7.4,
+    "lean61": 7.4,
+    "m": 7.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     5.7,
+     8.7
+    ],
+    "lean_ind": [
+     3.8,
+     10.0
+    ],
+    "leanS_ind": [
+     5.7,
+     8.7
+    ]
+   },
+   {
+    "id": "r_h34032_2024",
+    "year": 2024,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 6.9,
+    "lean": 6.9,
+    "lean61": 6.9,
+    "m": 6.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     2.2,
+     9.5
+    ],
+    "lean_ind": [
+     0.3,
+     10.5
+    ],
+    "leanS_ind": [
+     2.2,
+     9.5
+    ]
+   },
+   {
+    "id": "r_h50544_2024",
+    "year": 2024,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 6.9,
+    "lean": 6.9,
+    "lean61": 6.9,
+    "m": 6.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     3.6,
+     9.0
+    ],
+    "lean_ind": [
+     1.4,
+     10.3
+    ],
+    "leanS_ind": [
+     3.6,
+     9.0
+    ]
+   },
+   {
+    "id": "r_h5790_2024",
+    "year": 2024,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 7.8,
+    "lean": 7.8,
+    "lean61": 7.8,
+    "m": 7.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     5.4,
+     9.7
+    ],
+    "lean_ind": [
+     5.2,
+     9.9
+    ],
+    "leanS_ind": [
+     5.4,
+     9.7
+    ]
+   },
+   {
+    "id": "r_h97167_2025",
+    "year": 2025,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 19.1,
+    "lean": 19.1,
+    "lean61": 19.1,
+    "m": 19.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     5.2,
+     21.9
+    ],
+    "lean_ind": [
+     3.2,
+     22.3
+    ],
+    "leanS_ind": [
+     5.2,
+     21.9
+    ]
+   },
+   {
+    "id": "r_h23204_2025",
+    "year": 2025,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 5.4,
+    "lean": 5.4,
+    "lean61": 5.4,
+    "m": 5.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     7.5,
+     2.4
+    ],
+    "lean_ind": [
+     9.1,
+     0.0
+    ],
+    "leanS_ind": [
+     7.5,
+     2.4
+    ]
+   },
+   {
+    "id": "r_h5009_2025",
+    "year": 2025,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 6.0,
+    "lean": 6.0,
+    "lean61": 6.0,
+    "m": 6.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     2.3,
+     7.9
+    ],
+    "lean_ind": [
+     0.0,
+     9.0
+    ],
+    "leanS_ind": [
+     2.3,
+     7.9
+    ]
+   },
+   {
+    "id": "r_h71140_2025",
+    "year": 2025,
+    "family": "decote reading for 204 M (random set)",
+    "prod": 9.8,
+    "lean": 9.8,
+    "lean61": 9.8,
+    "m": 9.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     12.0,
+     6.8
+    ],
+    "lean_ind": [
+     12.9,
+     5.5
+    ],
+    "leanS_ind": [
+     12.0,
+     6.8
+    ]
+   },
+   {
+    "id": "r_h9950_2023",
+    "year": 2023,
+    "family": "quarter-part cap rounding 204 M (random set)",
+    "prod": 13.7,
+    "lean": 13.7,
+    "lean61": 13.7,
+    "m": 13.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "r_h29398_2024",
+    "year": 2024,
+    "family": "quarter-part cap rounding 204 M (random set)",
+    "prod": 5.9,
+    "lean": 5.9,
+    "lean61": 5.9,
+    "m": 5.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     6.9,
+     4.9
+    ],
+    "lean_ind": [
+     7.3,
+     4.4
+    ],
+    "leanS_ind": [
+     7.0,
+     4.8
+    ]
+   },
+   {
+    "id": "r_h96221_2024",
+    "year": 2024,
+    "family": "quarter-part cap rounding 204 M (random set)",
+    "prod": 11.2,
+    "lean": 11.2,
+    "lean61": 11.2,
+    "m": 11.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     10.8,
+     11.5
+    ],
+    "lean_ind": [
+     10.7,
+     11.6
+    ],
+    "leanS_ind": [
+     10.7,
+     11.6
+    ]
+   },
+   {
+    "id": "r_h3624_2024",
+    "year": 2024,
+    "family": "quarter-part cap rounding 204 M (random set)",
+    "prod": 10.4,
+    "lean": 10.4,
+    "lean61": 10.4,
+    "m": 10.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     7.3,
+     12.7
+    ],
+    "lean_ind": [
+     6.9,
+     13.0
+    ],
+    "leanS_ind": [
+     7.2,
+     12.7
+    ]
+   },
+   {
+    "id": "r_h62894_2024",
+    "year": 2024,
+    "family": "quarter-part cap rounding 204 M (random set)",
+    "prod": 7.3,
+    "lean": 7.3,
+    "lean61": 7.3,
+    "m": 7.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     7.9,
+     6.7
+    ],
+    "lean_ind": [
+     8.7,
+     5.8
+    ],
+    "leanS_ind": [
+     8.0,
+     6.6
+    ]
+   },
+   {
+    "id": "r_h77942_2024",
+    "year": 2024,
+    "family": "quarter-part cap rounding 204 M (random set)",
+    "prod": 10.0,
+    "lean": 10.0,
+    "lean61": 10.0,
+    "m": 10.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     10.1,
+     9.8
+    ],
+    "lean_ind": [
+     10.2,
+     9.7
+    ],
+    "leanS_ind": [
+     10.2,
+     9.7
+    ]
+   }
+  ]
+ },
+ "saved_pages": {
+  "stats": {
+   "hh": 131,
+   "hh Lean = prod": 130,
+   "hh M computed": 128,
+   "hh M = prod": 128,
+   "ind": 34,
+   "ind Lean computes": 29,
+   "ind Lean = prod": 21,
+   "ind Lean S = prod": 29,
+   "ind M = prod": 33,
+   "class: 61-euro rule (M: IRTOTAL=0 under 61 EUR)": 1,
+   "hh M refused": 3,
+   "hh M refused, Lean = prod": 3
+  },
+  "families": {
+   "-": {
+    "n": 131,
+    "Lean = prod": 130
+   }
+  },
+  "rows": [
+   {
+    "id": "h37466",
+    "year": 2025,
+    "family": "-",
+    "prod": 10.9,
+    "lean": 10.9,
+    "lean61": 10.9,
+    "m": 10.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h490",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h19056",
+    "year": 2025,
+    "family": "-",
+    "prod": 21.8,
+    "lean": 21.8,
+    "lean61": 21.8,
+    "m": 21.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h19813",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.0,
+     0.0
+    ],
+    "leanS_ind": [
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "id": "h20521",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h30726",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.0,
+     0.0
+    ],
+    "leanS_ind": [
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "id": "h69749",
+    "year": 2025,
+    "family": "-",
+    "prod": 7.4,
+    "lean": 7.4,
+    "lean61": 7.4,
+    "m": 7.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h34827",
+    "year": 2025,
+    "family": "-",
+    "prod": 1.7,
+    "lean": 1.7,
+    "lean61": 1.7,
+    "m": 1.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h7249",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h86408",
+    "year": 2025,
+    "family": "-",
+    "prod": 11.2,
+    "lean": 11.2,
+    "lean61": 11.2,
+    "m": 11.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h84627",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h58864",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.5,
+    "lean": 0.5,
+    "lean61": 0.5,
+    "m": 0.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.8
+    ],
+    "lean_ind": [
+     0.0,
+     0.8
+    ],
+    "leanS_ind": [
+     0.0,
+     0.8
+    ]
+   },
+   {
+    "id": "h46991",
+    "year": 2025,
+    "family": "-",
+    "prod": 1.3,
+    "lean": 1.3,
+    "lean61": 1.3,
+    "m": 1.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     1.7,
+     0.0
+    ],
+    "lean_ind": [
+     1.7,
+     0.0
+    ],
+    "leanS_ind": [
+     1.7,
+     0.0
+    ]
+   },
+   {
+    "id": "h3000",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h97551",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.9,
+    "lean": 0.9,
+    "lean61": 0.9,
+    "m": 0.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h28777",
+    "year": 2025,
+    "family": "-",
+    "prod": 13.1,
+    "lean": 13.1,
+    "lean61": 13.1,
+    "m": 13.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h31971",
+    "year": 2025,
+    "family": "-",
+    "prod": 2.6,
+    "lean": 2.6,
+    "lean61": 2.6,
+    "m": 2.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h65130",
+    "year": 2025,
+    "family": "-",
+    "prod": 2.9,
+    "lean": 2.9,
+    "lean61": 2.9,
+    "m": 2.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h35482",
+    "year": 2025,
+    "family": "-",
+    "prod": 6.0,
+    "lean": 6.0,
+    "lean61": 6.0,
+    "m": 6.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     7.7,
+     3.0
+    ],
+    "lean_ind": [
+     9.1,
+     0.6
+    ],
+    "leanS_ind": [
+     7.7,
+     3.0
+    ]
+   },
+   {
+    "id": "h90631",
+    "year": 2025,
+    "family": "-",
+    "prod": 12.2,
+    "lean": 12.2,
+    "lean61": 12.2,
+    "m": 12.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     2.6,
+     14.8
+    ],
+    "lean_ind": [
+     null,
+     null
+    ],
+    "leanS_ind": [
+     null,
+     null
+    ]
+   },
+   {
+    "id": "h30305",
+    "year": 2025,
+    "family": "-",
+    "prod": 5.6,
+    "lean": 5.6,
+    "lean61": 5.6,
+    "m": 5.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h5472",
+    "year": 2025,
+    "family": "-",
+    "prod": 7.3,
+    "lean": 7.3,
+    "lean61": 7.3,
+    "m": 7.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h66802",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h11095",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h9219",
+    "year": 2025,
+    "family": "-",
+    "prod": 3.2,
+    "lean": 3.2,
+    "lean61": 3.2,
+    "m": 3.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h83714",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h11776",
+    "year": 2025,
+    "family": "-",
+    "prod": 6.8,
+    "lean": 6.8,
+    "lean61": 6.8,
+    "m": 6.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     1.1,
+     9.4
+    ],
+    "lean_ind": [
+     0.0,
+     9.8
+    ],
+    "leanS_ind": [
+     1.1,
+     9.4
+    ]
+   },
+   {
+    "id": "h95011",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.0,
+     0.0
+    ],
+    "leanS_ind": [
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "id": "h81493",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.0,
+     0.0
+    ],
+    "leanS_ind": [
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "id": "h691",
+    "year": 2025,
+    "family": "-",
+    "prod": 10.7,
+    "lean": 10.7,
+    "lean61": 10.7,
+    "m": 10.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     12.7
+    ],
+    "lean_ind": [
+     0.0,
+     12.7
+    ],
+    "leanS_ind": [
+     0.0,
+     12.7
+    ]
+   },
+   {
+    "id": "h87648",
+    "year": 2025,
+    "family": "-",
+    "prod": 2.3,
+    "lean": 2.3,
+    "lean61": 2.3,
+    "m": 2.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     3.2,
+     1.5
+    ],
+    "lean_ind": [
+     4.6,
+     0.0
+    ],
+    "leanS_ind": [
+     3.2,
+     1.5
+    ]
+   },
+   {
+    "id": "h51907",
+    "year": 2025,
+    "family": "-",
+    "prod": 3.2,
+    "lean": 3.2,
+    "lean61": 3.2,
+    "m": 3.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     1.9,
+     4.2
+    ],
+    "lean_ind": [
+     0.0,
+     5.9
+    ],
+    "leanS_ind": [
+     1.9,
+     4.2
+    ]
+   },
+   {
+    "id": "h66717",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h36743",
+    "year": 2025,
+    "family": "-",
+    "prod": 9.7,
+    "lean": 9.7,
+    "lean61": 9.7,
+    "m": 9.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h11012",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h38608",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h77269",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.0,
+     0.0
+    ],
+    "leanS_ind": [
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "id": "h94372",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h56800",
+    "year": 2025,
+    "family": "-",
+    "prod": 3.7,
+    "lean": 3.7,
+    "lean61": 3.7,
+    "m": 3.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     4.9,
+     2.4
+    ],
+    "lean_ind": [
+     7.0,
+     0.0
+    ],
+    "leanS_ind": [
+     4.9,
+     2.4
+    ]
+   },
+   {
+    "id": "h34691",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h86717",
+    "year": 2025,
+    "family": "-",
+    "prod": 17.0,
+    "lean": 17.0,
+    "lean61": 17.0,
+    "m": 17.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h21577",
+    "year": 2025,
+    "family": "-",
+    "prod": 5.1,
+    "lean": 5.1,
+    "lean61": 5.1,
+    "m": 5.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h5754",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h43381",
+    "year": 2025,
+    "family": "-",
+    "prod": 5.6,
+    "lean": 5.6,
+    "lean61": 5.6,
+    "m": 5.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     3.5,
+     7.1
+    ],
+    "lean_ind": [
+     1.1,
+     8.9
+    ],
+    "leanS_ind": [
+     3.5,
+     7.1
+    ]
+   },
+   {
+    "id": "h40856",
+    "year": 2025,
+    "family": "-",
+    "prod": 10.5,
+    "lean": 10.5,
+    "lean61": 10.5,
+    "m": 10.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     11.5
+    ],
+    "lean_ind": [
+     0.0,
+     11.5
+    ],
+    "leanS_ind": [
+     0.0,
+     11.5
+    ]
+   },
+   {
+    "id": "h50215",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h40158",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h60621",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h82895",
+    "year": 2025,
+    "family": "-",
+    "prod": 9.5,
+    "lean": 9.5,
+    "lean61": 9.5,
+    "m": 9.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     11.6
+    ],
+    "lean_ind": [
+     0.0,
+     11.6
+    ],
+    "leanS_ind": [
+     0.0,
+     11.6
+    ]
+   },
+   {
+    "id": "h86484",
+    "year": 2025,
+    "family": "-",
+    "prod": 2.3,
+    "lean": 2.3,
+    "lean61": 2.3,
+    "m": 2.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     4.0
+    ],
+    "lean_ind": [
+     0.0,
+     4.0
+    ],
+    "leanS_ind": [
+     0.0,
+     4.0
+    ]
+   },
+   {
+    "id": "h78937",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h51811",
+    "year": 2025,
+    "family": "-",
+    "prod": 13.7,
+    "lean": 13.7,
+    "lean61": 13.7,
+    "m": 13.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h1923",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.0,
+     0.0
+    ],
+    "leanS_ind": [
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "id": "h47965",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h77431",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.0,
+     0.0
+    ],
+    "leanS_ind": [
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "id": "h4516",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h17230",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h32772",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.5,
+    "lean": 0.5,
+    "lean61": 0.5,
+    "m": 0.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.6,
+     0.0
+    ],
+    "lean_ind": [
+     0.6,
+     0.0
+    ],
+    "leanS_ind": [
+     0.6,
+     0.0
+    ]
+   },
+   {
+    "id": "h19177",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h98851",
+    "year": 2025,
+    "family": "-",
+    "prod": 15.2,
+    "lean": 15.2,
+    "lean61": 15.2,
+    "m": 15.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h50326",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.0,
+     0.0
+    ],
+    "leanS_ind": [
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "id": "h39502",
+    "year": 2025,
+    "family": "-",
+    "prod": 2.1,
+    "lean": 2.1,
+    "lean61": 2.1,
+    "m": 2.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     3.2,
+     0.0
+    ],
+    "lean_ind": [
+     3.2,
+     0.0
+    ],
+    "leanS_ind": [
+     3.2,
+     0.0
+    ]
+   },
+   {
+    "id": "h5925",
+    "year": 2025,
+    "family": "-",
+    "prod": 7.1,
+    "lean": 7.1,
+    "lean61": 7.1,
+    "m": 7.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     8.4,
+     0.0
+    ],
+    "lean_ind": [
+     8.4,
+     0.0
+    ],
+    "leanS_ind": [
+     8.4,
+     0.0
+    ]
+   },
+   {
+    "id": "h95426",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.0,
+     0.0
+    ],
+    "leanS_ind": [
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "id": "h57005",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h28412",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.5,
+    "lean": 0.5,
+    "lean61": 0.5,
+    "m": 0.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h78669",
+    "year": 2025,
+    "family": "-",
+    "prod": 10.7,
+    "lean": 10.7,
+    "lean61": 10.7,
+    "m": 10.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h24154",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h59007",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h86621",
+    "year": 2025,
+    "family": "-",
+    "prod": 3.7,
+    "lean": 3.7,
+    "lean61": 3.7,
+    "m": 3.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h14027",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h43013",
+    "year": 2025,
+    "family": "-",
+    "prod": 5.2,
+    "lean": 5.2,
+    "lean61": 5.2,
+    "m": 5.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h40606",
+    "year": 2025,
+    "family": "-",
+    "prod": 9.3,
+    "lean": 9.3,
+    "lean61": 9.3,
+    "m": 9.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h52645",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h91256",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h88328",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.0,
+     0.0
+    ],
+    "leanS_ind": [
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "id": "h93083",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h20824",
+    "year": 2025,
+    "family": "-",
+    "prod": 12.1,
+    "lean": 12.1,
+    "lean61": 12.1,
+    "m": 12.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h62621",
+    "year": 2025,
+    "family": "-",
+    "prod": 17.5,
+    "lean": 17.5,
+    "lean61": 17.5,
+    "m": 17.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h7125",
+    "year": 2025,
+    "family": "-",
+    "prod": 8.3,
+    "lean": 8.3,
+    "lean61": 8.3,
+    "m": 8.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h82350",
+    "year": 2025,
+    "family": "-",
+    "prod": 1.6,
+    "lean": 1.6,
+    "lean61": 1.6,
+    "m": 1.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     2.5,
+     0.0
+    ],
+    "lean_ind": [
+     null,
+     null
+    ],
+    "leanS_ind": [
+     null,
+     null
+    ]
+   },
+   {
+    "id": "h53313",
+    "year": 2025,
+    "family": "-",
+    "prod": 4.3,
+    "lean": 4.3,
+    "lean61": 4.3,
+    "m": 4.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h32440",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h37149",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h94247",
+    "year": 2025,
+    "family": "-",
+    "prod": 7.5,
+    "lean": 7.5,
+    "lean61": 7.5,
+    "m": 7.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h42677",
+    "year": 2025,
+    "family": "-",
+    "prod": 19.8,
+    "lean": 19.8,
+    "lean61": 19.8,
+    "m": 19.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h26249",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h71929",
+    "year": 2025,
+    "family": "-",
+    "prod": 26.3,
+    "lean": 26.3,
+    "lean61": 26.3,
+    "m": 26.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h45194",
+    "year": 2025,
+    "family": "-",
+    "prod": 12.5,
+    "lean": 12.5,
+    "lean61": 12.5,
+    "m": 12.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h72080",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     0.0,
+     0.0
+    ],
+    "lean_ind": [
+     0.0,
+     0.0
+    ],
+    "leanS_ind": [
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "id": "h66575",
+    "year": 2025,
+    "family": "-",
+    "prod": 3.6,
+    "lean": 3.6,
+    "lean61": 3.6,
+    "m": 3.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     1.2,
+     5.4
+    ],
+    "lean_ind": [
+     0.0,
+     6.3
+    ],
+    "leanS_ind": [
+     1.2,
+     5.4
+    ]
+   },
+   {
+    "id": "h51348",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h65245",
+    "year": 2025,
+    "family": "-",
+    "prod": 4.7,
+    "lean": 4.7,
+    "lean61": 4.7,
+    "m": 4.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h26559",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h18509",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h96019",
+    "year": 2025,
+    "family": "-",
+    "prod": 13.1,
+    "lean": 13.1,
+    "lean61": 13.1,
+    "m": 13.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     2.1,
+     16.5
+    ],
+    "lean_ind": [
+     0.0,
+     17.1
+    ],
+    "leanS_ind": [
+     2.1,
+     16.5
+    ]
+   },
+   {
+    "id": "h24450",
+    "year": 2025,
+    "family": "-",
+    "prod": 9.8,
+    "lean": 9.8,
+    "lean61": 9.8,
+    "m": 9.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h33701",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h32282",
+    "year": 2025,
+    "family": "-",
+    "prod": 5.8,
+    "lean": 5.8,
+    "lean61": 5.8,
+    "m": 5.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "h66320",
+    "year": 2025,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h59259",
+    "year": 2024,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.1,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "class": "61-euro rule (M: IRTOTAL=0 under 61 EUR)"
+   },
+   {
+    "id": "f_h4618",
+    "year": 2024,
+    "family": "-",
+    "prod": 34.8,
+    "lean": 34.8,
+    "lean61": 34.8,
+    "m": 34.8,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     36.0,
+     0.0
+    ],
+    "lean_ind": [
+     null,
+     null
+    ],
+    "leanS_ind": [
+     null,
+     null
+    ]
+   },
+   {
+    "id": "o_h8392",
+    "year": 2020,
+    "family": "-",
+    "prod": 5.0,
+    "lean": 5.0,
+    "lean61": 5.0,
+    "m": 5.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h88476",
+    "year": 2024,
+    "family": "-",
+    "prod": 16.2,
+    "lean": 16.2,
+    "lean61": 16.2,
+    "m": null,
+    "PASII": 0.0,
+    "INDTAZ": null
+   },
+   {
+    "id": "o_h15092",
+    "year": 2020,
+    "family": "-",
+    "prod": 37.4,
+    "lean": 37.4,
+    "lean61": 37.4,
+    "m": 37.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "o_h6798",
+    "year": 2021,
+    "family": "-",
+    "prod": 4.0,
+    "lean": 4.0,
+    "lean61": 4.0,
+    "m": 4.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h58993",
+    "year": 2024,
+    "family": "-",
+    "prod": 0.5,
+    "lean": 0.5,
+    "lean61": 0.5,
+    "m": 0.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "t_f2_2",
+    "year": 2024,
+    "family": "-",
+    "prod": 35.3,
+    "lean": 35.3,
+    "lean61": 35.3,
+    "m": 35.3,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h21269",
+    "year": 2024,
+    "family": "-",
+    "prod": 34.7,
+    "lean": 34.7,
+    "lean61": 34.7,
+    "m": 34.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h58731",
+    "year": 2024,
+    "family": "-",
+    "prod": 42.6,
+    "lean": 42.6,
+    "lean61": 42.6,
+    "m": null,
+    "PASII": 0.0,
+    "INDTAZ": null,
+    "prod_ind": [
+     42.9,
+     0.0
+    ],
+    "lean_ind": [
+     42.9,
+     0.0
+    ],
+    "leanS_ind": [
+     42.9,
+     0.0
+    ]
+   },
+   {
+    "id": "f_h4614",
+    "year": 2024,
+    "family": "-",
+    "prod": 39.5,
+    "lean": 39.5,
+    "lean61": 39.5,
+    "m": null,
+    "PASII": 0.0,
+    "INDTAZ": null
+   },
+   {
+    "id": "o_h11519",
+    "year": 2023,
+    "family": "-",
+    "prod": 36.1,
+    "lean": 36.1,
+    "lean61": 36.1,
+    "m": 36.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h94325",
+    "year": 2024,
+    "family": "-",
+    "prod": 37.0,
+    "lean": 37.0,
+    "lean61": 37.0,
+    "m": 37.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h40922",
+    "year": 2024,
+    "family": "-",
+    "prod": 41.5,
+    "lean": 41.5,
+    "lean61": 41.5,
+    "m": 41.5,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "o_h2738",
+    "year": 2021,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "o_h9305",
+    "year": 2022,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h60844",
+    "year": 2024,
+    "family": "-",
+    "prod": 7.9,
+    "lean": 7.9,
+    "lean61": 7.9,
+    "m": 7.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     11.7,
+     0.0
+    ],
+    "lean_ind": [
+     null,
+     null
+    ],
+    "leanS_ind": [
+     null,
+     null
+    ]
+   },
+   {
+    "id": "o_h10337",
+    "year": 2021,
+    "family": "-",
+    "prod": 40.7,
+    "lean": 40.7,
+    "lean61": 40.7,
+    "m": 40.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "o_h1054",
+    "year": 2022,
+    "family": "-",
+    "prod": 40.4,
+    "lean": 40.4,
+    "lean61": 40.4,
+    "m": 40.4,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h56951",
+    "year": 2024,
+    "family": "-",
+    "prod": 35.1,
+    "lean": 35.1,
+    "lean61": 35.1,
+    "m": 35.1,
+    "PASII": 0.0,
+    "INDTAZ": 0.0,
+    "prod_ind": [
+     35.5,
+     0.0
+    ],
+    "lean_ind": [
+     null,
+     null
+    ],
+    "leanS_ind": [
+     null,
+     null
+    ]
+   },
+   {
+    "id": "f_h31359",
+    "year": 2024,
+    "family": "-",
+    "prod": 13.0,
+    "lean": 13.0,
+    "lean61": 13.0,
+    "m": 13.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "o_h4594",
+    "year": 2021,
+    "family": "-",
+    "prod": 3.0,
+    "lean": 3.0,
+    "lean61": 3.0,
+    "m": 3.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h7231",
+    "year": 2024,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "o_h2890",
+    "year": 2020,
+    "family": "-",
+    "prod": 3.9,
+    "lean": 3.9,
+    "lean61": 3.9,
+    "m": 3.9,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "o_h12582",
+    "year": 2023,
+    "family": "-",
+    "prod": 16.6,
+    "lean": 16.6,
+    "lean61": 16.6,
+    "m": 16.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "o_h16930",
+    "year": 2023,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "o_h8274",
+    "year": 2021,
+    "family": "-",
+    "prod": 0.0,
+    "lean": 0.0,
+    "lean61": 0.0,
+    "m": 0.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h52323",
+    "year": 2024,
+    "family": "-",
+    "prod": 43.0,
+    "lean": 43.0,
+    "lean61": 43.0,
+    "m": 43.0,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h85427",
+    "year": 2024,
+    "family": "-",
+    "prod": 9.2,
+    "lean": 9.2,
+    "lean61": 9.2,
+    "m": 9.2,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "t_f2_0",
+    "year": 2024,
+    "family": "-",
+    "prod": 41.7,
+    "lean": 41.7,
+    "lean61": 41.7,
+    "m": 41.7,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   },
+   {
+    "id": "f_h78623",
+    "year": 2024,
+    "family": "-",
+    "prod": 36.6,
+    "lean": 36.6,
+    "lean61": 36.6,
+    "m": 36.6,
+    "PASII": 0.0,
+    "INDTAZ": 0.0
+   }
+  ]
+ }
+}

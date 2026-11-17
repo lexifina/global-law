@@ -1,0 +1,47 @@
+lean {'match': 72, 'out_of_scope': 4, 'mismatch': 1, 'no_equivalent': 3, 'not_run': 6}
+m {'match': 82, 'mismatch': 3, 'not_run': 1}
+prod {'match': 22, 'mismatch': 1, 'no_equivalent': 1}
+  lean  A157BIS      3/3
+  lean  ABAT10       2/2
+  lean  CEHR         1/1
+  lean  CRED_TOTAL   1/1
+  lean  IDEC         1/1
+  lean  IDRS         1/1
+  lean  IR_NET       1/2
+  lean  MICRO_ABAT   3/3
+  lean  NBPT         53/53
+  lean  PA_DED       2/2
+  lean  RED_DONS     1/1
+  lean  RNI          1/1
+  lean  TAX_DELTA    2/2
+  m     A157BIS      3/3
+  m     ABAT10       4/4
+  m     CEHR         1/1
+  m     CRED_TOTAL   1/1
+  m     DONS_BASE    0/1
+  m     DONS_CARRY   0/1
+  m     IDEC         1/1
+  m     IDRS         4/4
+  m     IR_NET       1/2
+  m     MICRO_ABAT   3/3
+  m     NBPT         53/53
+  m     PA_DED       2/2
+  m     RBG          1/1
+  m     RED_DONS     1/1
+  m     RED_PRESTCOMP 1/1
+  m     RNI          2/2
+  m     TAX_DELTA    4/4
+  prod  A157BIS      3/3
+  prod  CEHR         1/1
+  prod  IDEC         1/1
+  prod  IDRS         1/1
+  prod  IR_NET       1/2
+  prod  NBPT         9/9
+  prod  PA_DED       2/2
+  prod  RBG          1/1
+  prod  RNI          1/1
+  prod  TAX_DELTA    2/2
+mismatches:
+  b2_2300633_20251222 IR_NET court 3453 {'lean': (3010.0, [3010.0]), 'm': (3010.0, [3010.0]), 'prod': (3010.0, [])}
+  b4b_2004003_20230526_2015 DONS_BASE court 13376 {'m': (12915.0, [])}
+  b4b_2004003_20230526_2015 DONS_CARRY court 1397 {'m': (1858.0, [])}

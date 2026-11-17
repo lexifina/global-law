@@ -1,0 +1,27 @@
+cases answered by the simulator: 126
+  production refused; M computed: 60
+  production refused; M refused: 27
+  production computed; M refused: 9
+every figure equal to production (cases each program computed):
+  M          equal 30  differs 0  refused 9  n/a 0
+  Lean       equal 39  differs 0  refused 0  n/a 0
+  OpenFisca  equal 5  differs 7  refused 0  n/a 27
+by figure (equal / compared):
+  parts            M 30/30  Lean 39/39  OpenFisca 8/12
+  RFR              M 30/30  Lean 39/39  OpenFisca 11/12
+  taxable income   M 30/30  Lean 39/39  OpenFisca 11/12
+  gross tax        M 30/30  Lean 39/39
+  décote           M 30/30  Lean 39/39  OpenFisca 9/12
+  reductions       M 30/30  Lean 39/39
+  flat taxes       M 30/30  Lean 39/39
+  net income tax   M 30/30  Lean 39/39  OpenFisca 9/12
+  amount payable   M 30/30  Lean 39/39
+by case family (verdicts):
+  fam M refuses I011                 M: refused 3 | Lean: equal 3 | OpenFisca: n/a 3
+  fam M refuses I012                 M: refused 3 | Lean: equal 3 | OpenFisca: n/a 3
+  fam M refuses IM26                 M: refused 3 | Lean: equal 3 | OpenFisca: differs 2, n/a 1
+  fam fixed L alone                  M: equal 6 | Lean: equal 6 | OpenFisca: differs 1, equal 5
+  fam fixed L with N                 M: equal 6 | Lean: equal 6 | OpenFisca: n/a 6
+  fam fixed S under 74               M: equal 6 | Lean: equal 6 | OpenFisca: n/a 6
+  fam fixed T widowed                M: equal 6 | Lean: equal 6 | OpenFisca: differs 4, n/a 2
+  fam fixed W under 74               M: equal 6 | Lean: equal 6 | OpenFisca: n/a 6

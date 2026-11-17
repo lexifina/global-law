@@ -279,6 +279,17 @@ independent reference and scored on twelve blind answer keys. Results, how to bu
 
     lake build LegalProofs.USCaseLaw LegalProofs.CaseLaw2
 
+## French income tax: a model checked against the DGFiP
+
+[FrTax/](FrTax) writes the French income tax for income 2020 to 2025 from the Code général des impôts, with the
+withholding rates, penalties and interest, and tests it against the DGFiP's own program (the M code, run with Mlang),
+its online simulator, OpenFisca-France, the DGFiP and Inria's Catala model, Publicodes, INES, EUROMOD, court decisions
+and the national statistics. Every disagreement is settled by the simulator and checked against the BOFiP, case law and
+ministers' answers. Results: [FrTax/reports/RESULTS.md](FrTax/reports/RESULTS.md); findings:
+[FrTax/reports/FINDINGS.md](FrTax/reports/FINDINGS.md); how to build and run it: [FrTax/README.md](FrTax/README.md).
+
+    lake build FrTax frtax
+
 ## What a proof here does and does not show
 
 Lean checks that each conclusion follows from the dated facts and the rule as defined. It does not check the facts or
