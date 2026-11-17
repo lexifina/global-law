@@ -1461,6 +1461,39 @@ def corrections(corpus: str) -> list[dict]:
     return list(got)  # type: ignore[arg-type]
 
 
+def _corrections_for(corpus: str, rel: str, mine) -> list[dict]:
+    """corrections(corpus) that can touch one file: those that name it and, of those that name no file, the ones among
+    `mine` (the file's own commits). The same rows as going through every correction, in the same order; a corpus
+    with many (Japan: 41,177) keeps which of them name each file, since reading every correction's list for every
+    read of a provision took 64 ms each time (twice for every match a search describes)."""
+    every = corrections(corpus)
+    if len(every) <= FIX_ROWS_BY_NAME:
+        return [c for c in every if rel in c['files'] or (not c['files'] and c['commit'] in mine)]
+    ix = _index(corpus)
+    kept_all = None if ix.get('focused') else _CACHE.get(('corrections', f"{corpus}@{_at(ix)}"))
+    if kept_all is None:
+        return [c for c in every if rel in c['files'] or (not c['files'] and c['commit'] in mine)]
+    key = ('corrections-by-name', f"{corpus}@{_at(ix)}")
+    kept = _CACHE.get(key)
+    if kept is None or kept[0] is not kept_all:
+        from array import array
+        by_name: dict = {}
+        bare = []
+        for i, c in enumerate(kept_all):  # type: ignore[arg-type]
+            if not c['files']:
+                bare.append(i)
+            for name in c['files']:
+                got = by_name.get(name)
+                if got is None:
+                    got = by_name[name] = array('I')
+                if not got or got[-1] != i:
+                    got.append(i)
+        kept = _CACHE[key] = (kept_all, by_name, bare)  # type: ignore[assignment]
+    places = set(kept[1].get(rel, ()))  # type: ignore[index]
+    places.update(i for i in kept[2] if kept_all[i]['commit'] in mine)  # type: ignore[index]
+    return [kept_all[i] for i in sorted(places)]  # type: ignore[index]
+
+
 def _earlier_names(corpus: str, rel: str) -> set[str]:
     """A file's path now and every path a documentation commit moved it from (moves() inverted)."""
     mv = moves(corpus)
@@ -2509,7 +2542,7 @@ def file_commit(date: str, path: str) -> str | None:
             base = h
     mine = {h['commit'] for h in hist}
     fix = None
-    for c in corrections(corpus):
+    for c in _corrections_for(corpus, rel, mine):
         if not (rel in c['files'] or (not c['files'] and c['commit'] in mine)):
             continue
         if c['from'] <= date <= correction_end(corpus, c, rel) and (fix is None or c['from'] >= fix['from']):
@@ -5573,7 +5606,7 @@ def versions_in_force(date: str, path: str) -> list[tuple[str, str]]:
     hist = history(path)
     days = {h['in_force'] for h in hist if h['in_force'] <= date}
     mine = {h['commit'] for h in hist}
-    for c in corrections(corpus):
+    for c in _corrections_for(corpus, rel, mine):
         if not (rel in c['files'] or (not c['files'] and c['commit'] in mine)):
             continue
         if c['from'] <= date:
