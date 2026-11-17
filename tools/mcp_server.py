@@ -4496,6 +4496,9 @@ def act_titles(corpus: str, sha: str) -> dict[str, str]:
     return out
 
 
+_readme_headings: dict = {}  # (corpus, commit, folder) -> the first heading of its README.md, None when it has none
+
+
 def act_title(corpus: str, rel: str) -> str:
     """The title of the act a provision belongs to: from the corpus's index (act_titles), else the README of its
     folder or the folder above (Switzerland's 101/README.md is "# Bundesverfassung …"); '' when none says."""
@@ -4510,8 +4513,18 @@ def act_title(corpus: str, rel: str) -> str:
             # 2026-10-28 rebuild it is not in the index at all (its own record), and the pincite read "Artikel 1,
             # germany-law" (found 2026-11-10 by the global-law skill's tests)
             return titles.get('gg') or 'Grundgesetz für die Bundesrepublik Deutschland (GG)'
+    # The two folders' READMEs in one git process, and kept for the commit (a file at a commit never changes): each
+    # was asked for in a process of its own, every time, and most acts have neither (Romania: 27 processes, 0.35 s
+    # of a new search's 0.86 s, for the titles of the acts among its results).
+    wanted = [f for f in folders[:2] if (corpus, sha, f) not in _readme_headings]
+    if wanted:
+        got = read_headings(corpus, sha, tuple(f'{f}/README.md' for f in wanted))
+        if len(_readme_headings) > 50000:
+            _readme_headings.clear()
+        for f in wanted:
+            _readme_headings[corpus, sha, f] = got.get(f'{f}/README.md')
     for f in folders[:2]:
-        heading = read_headings(corpus, sha, (f'{f}/README.md',)).get(f'{f}/README.md')
+        heading = _readme_headings.get((corpus, sha, f))
         if heading and heading.strip().lower() != f.rsplit('/', 1)[-1].lower():  # not "# Artikel" over artikel/
             return heading
         if f.startswith(('cap/', 'sl/')) and f.count('/') == 1:  # Malta: CHAPTER 16 / CIVIL CODE in title.md
