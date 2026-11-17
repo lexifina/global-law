@@ -4256,8 +4256,22 @@ def _credits_for(corpus: str, pin: str, folder: str) -> dict:
         return {}
     fkey = ('credits', f'{corpus}@{pin}@{folder}')
     if fkey not in _CACHE:
-        names = {folder} | {act for act, now in raw['folders'].items() if now == folder}
-        lines = raw['lines'] if raw['quoted'] else [l for l in raw['lines'] if l.split(',', 1)[0] in names]
+        if raw['quoted']:
+            lines = raw['lines']
+        else:
+            # The table's lines by the act they begin with, and the acts by the folder they are in now, made once:
+            # every folder asked went through every line (86,000 in romania-law, 18 ms a folder, for each act a
+            # search's matches are in). The same lines, in the table's order.
+            by_act = raw.get('by_act')
+            if by_act is None:
+                by_act, here = {}, {}
+                for n, l in enumerate(raw['lines']):
+                    by_act.setdefault(l.split(',', 1)[0], []).append(n)
+                for act, now in raw['folders'].items():
+                    here.setdefault(now, []).append(act)
+                raw['here'], raw['by_act'] = here, by_act
+            names = {folder, *raw['here'].get(folder, ())}
+            lines = [raw['lines'][n] for n in sorted({n for name in names for n in by_act.get(name, ())})]
         table: dict[tuple[str, str, str], list] = {}
         if lines and raw['labels'] is None:
             laws = csv.DictReader(io.StringIO(read_object(corpus, f'{pin}:data/laws.csv') or ''))
