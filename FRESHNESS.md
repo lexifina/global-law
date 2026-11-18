@@ -8,13 +8,13 @@ so an answer about today's law can say how current it is.
 
 | | Corpora | Current | Pending a change | Stale | Unverified | Checked in 7 days |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| All | 991 | 620 | 9 | 346 | 16 | 5.1% |
-| National | 383 | 17 | 9 | 346 | 11 | 5.0% |
+| All | 991 | 620 | 8 | 346 | 17 | 5.1% |
+| National | 383 | 17 | 8 | 346 | 12 | 5.0% |
 | Subnational | 608 | 603 | 0 | 0 | 5 | 5.3% |
 
 National law longest since a check: `aland/national/acts` (2026-10-28), `angola/national/acts` (2026-10-28), `armenia/national/acts` (2026-10-28), `azerbaijan/national/acts` (2026-10-28), `bermuda/national/acts` (2026-10-28), `china/national/acts` (2026-10-28).
 
-Never checked: `andorra/national/acts`, `bangladesh/national/acts`, `belarus/national/acts`, `costa-rica/national/acts`, `hungary/national/acts`, `pakistan/national/acts`, `san-marino/national/acts`, `singapore/national/acts` and 8 more.
+Never checked: `andorra/national/acts`, `bangladesh/national/acts`, `belarus/national/acts`, `costa-rica/national/acts`, `germany/bund/acts`, `hungary/national/acts`, `pakistan/national/acts`, `san-marino/national/acts` and 9 more.
 <!-- /freshness-summary -->
 
 ## Check one
