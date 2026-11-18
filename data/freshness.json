@@ -1,7 +1,7 @@
 {
  "note": "Freshness of every corpus here: when it was last checked against its official source, how, and whether global-law holds its newest commit. One row per corpus in data/freshness.tsv; `python tools/freshness.py <corpus or provision path>` reads them. A status is as of `as_of`; a corpus checked longer ago than its threshold has since become stale.",
  "schema": "global-law-freshness/1",
- "as_of": "2026-11-17",
+ "as_of": "2026-11-18",
  "statuses": {
   "current": "checked against the official source within its threshold, and global-law holds the newest commit",
   "pending-change": "the corpus has a newer commit than the one pinned here: a check held it, or the next pass will pin it",
@@ -42,30 +42,30 @@
  "totals": {
   "corpora": 991,
   "by_status": {
-   "current": 629,
+   "current": 620,
    "pending-change": 8,
-   "stale": 337,
+   "stale": 346,
    "unverified": 17,
    "source-unavailable": 0
   },
   "verified_30d": 974,
-  "verified_7d": 76,
-  "pct_verified_7d": 7.7,
+  "verified_7d": 51,
+  "pct_verified_7d": 5.1,
   "pct_verified_30d": 98.3
  },
  "by_level": {
   "national": {
    "corpora": 383,
    "by_status": {
-    "current": 26,
+    "current": 17,
     "pending-change": 8,
-    "stale": 337,
+    "stale": 346,
     "unverified": 12,
     "source-unavailable": 0
    },
    "verified_30d": 371,
-   "verified_7d": 28,
-   "pct_verified_7d": 7.3,
+   "verified_7d": 19,
+   "pct_verified_7d": 5.0,
    "pct_verified_30d": 96.9
   },
   "subnational": {
@@ -78,8 +78,8 @@
     "source-unavailable": 0
    },
    "verified_30d": 603,
-   "verified_7d": 48,
-   "pct_verified_7d": 7.9,
+   "verified_7d": 32,
+   "pct_verified_7d": 5.3,
    "pct_verified_30d": 99.2
   }
  },
