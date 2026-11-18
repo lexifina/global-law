@@ -1,0 +1,10 @@
+name = "uk_hmrc_cmp"
+defaultTargets = ["payegrid"]
+
+# UkTax/Basic.lean and UkTax/PAYE.lean are read-only copies of ~/cmp/uk/lean/UkTax (HMRC's PAYE tax table routine).
+[[lean_lib]]
+name = "UkTax"
+
+[[lean_exe]]
+name = "payegrid"
+root = "PayeGrid"

@@ -1,0 +1,156 @@
+cases (statute grid): 20490; code cases vs PAYE: 1755
+A-Tcode: (c) other=200, equal=200, kalc-error=2, ni-equal=400
+A-default: (c) PAYE free pay £9 (code x 10 + 9)=7154, (c) PAYE free pay £9 (code x 10 + 9) + unrounded taper=2066, equal=7028, kalc-error=2, ni-equal=16248
+A-pensionage: (c) PAYE free pay £9 (code x 10 + 9)=176, (c) PAYE free pay £9 (code x 10 + 9) + unrounded taper=50, equal=174, kalc-error=2, ni-equal=400
+A-supplied: (c) PAYE free pay £9 (code x 10 + 9)=176, (c) no taper for a user-supplied code (README) + £9=200, equal=24, kalc-error=2, ni-equal=400
+B-monthly: (c) PAYE free pay £9 (code x 10 + 9)=292, (c) PAYE free pay £9 (code x 10 + 9) + unrounded taper=84, equal=292, kalc-error=1, ni-equal=668
+B-weekly: (c) PAYE free pay £9 (code x 10 + 9)=336, (c) PAYE free pay £9 (code x 10 + 9) + unrounded taper=97, equal=337, kalc-error=1, ni-equal=770
+C-pension200pm: (c) PAYE free pay £9 (code x 10 + 9)=350, (c) PAYE free pay £9 (code x 10 + 9) + unrounded taper=102, equal=340, ni-equal=792
+C-pension5pc: (c) PAYE free pay £9 (code x 10 + 9)=368, (c) PAYE free pay £9 (code x 10 + 9) + unrounded taper=106, equal=326, kalc-error=2, ni-equal=800
+D-codes:0T: equal (1p)=64, kalc-error=1
+D-codes:1131N: <= £1 (PAYE period rounding)=61, equal (1p)=3, kalc-error=1
+D-codes:1257L: <= £1 (PAYE period rounding)=60, equal (1p)=4, kalc-error=1
+D-codes:1257L M1: <= £1 (PAYE period rounding)=60, equal (1p)=4, kalc-error=1
+D-codes:1257T: diff > £1=60, equal (1p)=4, kalc-error=1
+D-codes:1383M: <= £1 (PAYE period rounding)=60, equal (1p)=4, kalc-error=1
+D-codes:BR: equal (1p)=64, kalc-error=1
+D-codes:C1257L: <= £1 (PAYE period rounding)=60, equal (1p)=4, kalc-error=1
+D-codes:CBR: equal (1p)=64, kalc-error=1
+D-codes:CD0: equal (1p)=64, kalc-error=1
+D-codes:CD1: equal (1p)=64, kalc-error=1
+D-codes:CK475: diff > £1=63, equal (1p)=1, kalc-error=1
+D-codes:D0: equal (1p)=64, kalc-error=1
+D-codes:D1: equal (1p)=64, kalc-error=1
+D-codes:K100: diff > £1=64, kalc-error=1
+D-codes:K2000: diff > £1=60, equal (1p)=4, kalc-error=1
+D-codes:K475: diff > £1=63, equal (1p)=1, kalc-error=1
+D-codes:NT: equal (1p)=64, kalc-error=1
+D-codes:S0T: equal (1p)=64, kalc-error=1
+D-codes:S1257L: <= £1 (PAYE period rounding)=60, equal (1p)=4, kalc-error=1
+D-codes:S1257T: diff > £1=60, equal (1p)=4, kalc-error=1
+D-codes:SBR: equal (1p)=64, kalc-error=1
+D-codes:SD0: equal (1p)=64, kalc-error=1
+D-codes:SD1: equal (1p)=64, kalc-error=1
+D-codes:SD2: equal (1p)=64, kalc-error=1
+D-codes:SD3: equal (1p)=64, kalc-error=1
+D-codes:SK475: diff > £1=63, equal (1p)=1, kalc-error=1
+
+max |difference| by set/class:
+  ('A-Tcode', '(c) other'): 6033.60
+  ('A-Tcode', 'equal'): 0.00
+  ('A-default', '(c) PAYE free pay £9 (code x 10 + 9) + unrounded taper'): 4.05
+  ('A-default', '(c) PAYE free pay £9 (code x 10 + 9)'): 4.05
+  ('A-default', 'equal'): 0.00
+  ('A-pensionage', '(c) PAYE free pay £9 (code x 10 + 9) + unrounded taper'): 4.05
+  ('A-pensionage', '(c) PAYE free pay £9 (code x 10 + 9)'): 4.05
+  ('A-pensionage', 'equal'): 0.00
+  ('A-supplied', '(c) PAYE free pay £9 (code x 10 + 9)'): 4.05
+  ('A-supplied', '(c) no taper for a user-supplied code (README) + £9'): 6037.92
+  ('A-supplied', 'equal'): 0.00
+  ('B-monthly', '(c) PAYE free pay £9 (code x 10 + 9) + unrounded taper'): 3.60
+  ('B-monthly', '(c) PAYE free pay £9 (code x 10 + 9)'): 3.60
+  ('B-monthly', 'equal'): 0.00
+  ('B-weekly', '(c) PAYE free pay £9 (code x 10 + 9) + unrounded taper'): 3.60
+  ('B-weekly', '(c) PAYE free pay £9 (code x 10 + 9)'): 3.60
+  ('B-weekly', 'equal'): 0.00
+  ('C-pension200pm', '(c) PAYE free pay £9 (code x 10 + 9) + unrounded taper'): 4.05
+  ('C-pension200pm', '(c) PAYE free pay £9 (code x 10 + 9)'): 4.05
+  ('C-pension200pm', 'equal'): 0.00
+  ('C-pension5pc', '(c) PAYE free pay £9 (code x 10 + 9) + unrounded taper'): 4.05
+  ('C-pension5pc', '(c) PAYE free pay £9 (code x 10 + 9)'): 4.05
+  ('C-pension5pc', 'equal'): 0.00
+  ('D-codes:0T', 'd'): 0.00
+  ('D-codes:0T', 'signed_max'): 0.00
+  ('D-codes:0T', 'signed_min'): 0.00
+  ('D-codes:1131N', 'd'): 0.45
+  ('D-codes:1131N', 'signed_max'): 0.45
+  ('D-codes:1131N', 'signed_min'): 0.00
+  ('D-codes:1257L M1', 'd'): 0.45
+  ('D-codes:1257L M1', 'signed_max'): 0.45
+  ('D-codes:1257L M1', 'signed_min'): 0.00
+  ('D-codes:1257L', 'd'): 0.45
+  ('D-codes:1257L', 'signed_max'): 0.45
+  ('D-codes:1257L', 'signed_min'): 0.00
+  ('D-codes:1257T', 'd'): 4.50
+  ('D-codes:1257T', 'signed_max'): 4.50
+  ('D-codes:1257T', 'signed_min'): 0.00
+  ('D-codes:1383M', 'd'): 0.45
+  ('D-codes:1383M', 'signed_max'): 0.45
+  ('D-codes:1383M', 'signed_min'): 0.00
+  ('D-codes:BR', 'd'): 0.00
+  ('D-codes:BR', 'signed_max'): 0.00
+  ('D-codes:BR', 'signed_min'): 0.00
+  ('D-codes:C1257L', 'd'): 0.45
+  ('D-codes:C1257L', 'signed_max'): 0.45
+  ('D-codes:C1257L', 'signed_min'): 0.00
+  ('D-codes:CBR', 'd'): 0.00
+  ('D-codes:CBR', 'signed_max'): 0.00
+  ('D-codes:CBR', 'signed_min'): 0.00
+  ('D-codes:CD0', 'd'): 0.00
+  ('D-codes:CD0', 'signed_max'): 0.00
+  ('D-codes:CD0', 'signed_min'): 0.00
+  ('D-codes:CD1', 'd'): 0.00
+  ('D-codes:CD1', 'signed_max'): 0.00
+  ('D-codes:CD1', 'signed_min'): 0.00
+  ('D-codes:CK475', 'd'): 4.05
+  ('D-codes:CK475', 'signed_max'): 0.00
+  ('D-codes:CK475', 'signed_min'): -4.05
+  ('D-codes:D0', 'd'): 0.00
+  ('D-codes:D0', 'signed_max'): 0.00
+  ('D-codes:D0', 'signed_min'): 0.00
+  ('D-codes:D1', 'd'): 0.00
+  ('D-codes:D1', 'signed_max'): 0.00
+  ('D-codes:D1', 'signed_min'): 0.00
+  ('D-codes:K100', 'd'): 4.05
+  ('D-codes:K100', 'signed_max'): 0.00
+  ('D-codes:K100', 'signed_min'): -4.05
+  ('D-codes:K2000', 'd'): 4.05
+  ('D-codes:K2000', 'signed_max'): 0.00
+  ('D-codes:K2000', 'signed_min'): -4.05
+  ('D-codes:K475', 'd'): 4.05
+  ('D-codes:K475', 'signed_max'): 0.00
+  ('D-codes:K475', 'signed_min'): -4.05
+  ('D-codes:NT', 'd'): 0.00
+  ('D-codes:NT', 'signed_max'): 0.00
+  ('D-codes:NT', 'signed_min'): 0.00
+  ('D-codes:S0T', 'd'): 0.00
+  ('D-codes:S0T', 'signed_max'): 0.00
+  ('D-codes:S0T', 'signed_min'): 0.00
+  ('D-codes:S1257L', 'd'): 0.48
+  ('D-codes:S1257L', 'signed_max'): 0.48
+  ('D-codes:S1257L', 'signed_min'): 0.00
+  ('D-codes:S1257T', 'd'): 4.80
+  ('D-codes:S1257T', 'signed_max'): 4.80
+  ('D-codes:S1257T', 'signed_min'): 0.00
+  ('D-codes:SBR', 'd'): 0.00
+  ('D-codes:SBR', 'signed_max'): 0.00
+  ('D-codes:SBR', 'signed_min'): 0.00
+  ('D-codes:SD0', 'd'): 0.00
+  ('D-codes:SD0', 'signed_max'): 0.00
+  ('D-codes:SD0', 'signed_min'): 0.00
+  ('D-codes:SD1', 'd'): 0.00
+  ('D-codes:SD1', 'signed_max'): 0.00
+  ('D-codes:SD1', 'signed_min'): 0.00
+  ('D-codes:SD2', 'd'): 0.00
+  ('D-codes:SD2', 'signed_max'): 0.00
+  ('D-codes:SD2', 'signed_min'): 0.00
+  ('D-codes:SD3', 'd'): 0.00
+  ('D-codes:SD3', 'signed_max'): 0.00
+  ('D-codes:SD3', 'signed_min'): 0.00
+  ('D-codes:SK475', 'd'): 4.32
+  ('D-codes:SK475', 'signed_max'): 0.00
+  ('D-codes:SK475', 'signed_min'): -4.32
+
+unexplained (12):
+  ('A-default-0', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')
+  ('A-pensionage-8125', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')
+  ('A-supplied-8126', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')
+  ('A-Tcode-8127', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')
+  ('A-default-8728', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')
+  ('A-pensionage-16853', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')
+  ('A-supplied-16854', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')
+  ('A-Tcode-16855', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')
+  ('B-monthly-17456', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')
+  ('B-weekly-18125', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')
+  ('C-pension5pc-18896', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')
+  ('C-pension5pc-19693', 'kalc error', 'InvalidWagesException: Wages must be between 0 and 9999999.99')

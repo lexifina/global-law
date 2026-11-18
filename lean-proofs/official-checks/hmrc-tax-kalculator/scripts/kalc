@@ -1,0 +1,4 @@
+#!/bin/bash
+# Run the tax-kalculator driver: stdin lines -> JSON lines (see kalc-build/src/jvmMain/kotlin/driver/Driver.kt)
+D=$HOME/cmp/official/uk-hmrc
+exec $D/opt/jdk17/bin/java -cp "$(cat $D/kalc-build/runtime.cp):$D/kalc-build/build/classes/kotlin/jvm/main" driver.DriverKt
