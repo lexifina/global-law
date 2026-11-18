@@ -2434,11 +2434,17 @@ def alias_applies(entry: dict, scope: str) -> bool:
     another's). An entry marked "local" names different acts in different countries ("Code du travail",
     "Strafgesetzbuch", "Ferieloven"): it is read only where everything the call reaches is its own country's."""
     home = str(entry.get('scope') or '')
-    if not home or not scope_holds(home):
+    if not home:
         return False
+    # Whether the call reaches the alias's body of law is asked before whether its folder is in the tree: the
+    # second lists every file of that corpus (names_of), and asked first it listed the corpora of every country
+    # that has an alias, whatever the call was about. A process that had not listed them yet (a slot in its first
+    # minutes) did so under a caller's look-up: "Companies Act 2006 section 13" in the United Kingdom, 56 s.
     served = _look()[1]
     reach = [c for c in served if not scope or c == scope or c.startswith(scope.rstrip('/') + '/') or scope.startswith(c + '/')]
     if not any(home == c or home.startswith(c + '/') for c in reach):
+        return False
+    if not scope_holds(home):
         return False
     if entry.get('local'):
         country = home.split('/')[0] + '/'
