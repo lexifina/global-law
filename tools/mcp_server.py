@@ -7044,7 +7044,40 @@ def events_by_commit() -> dict:
     every corpus served, most of a second and some hundred megabytes on a server of every country, whatever the
     jurisdiction asked; with an index, that was the second a search that found nothing in one country spent."""
     events = law.timeline()
-    return law._kept(events, 'by-commit', lambda: {(e.corpus, e.corpus_commit): e for e in events})
+    return law._kept(events, 'by-commit', lambda: _EventsByCommit(events))
+
+
+class _EventsByCommit:
+    """(corpus, commit) -> event, as the one table of every event was, with a corpus's part of it made when a commit
+    of that corpus is first asked for. The one table held a key and a slot for every event of every corpus served:
+    on a server of the world the first search_changes or phrase_history of a process spent 7 s making it (the
+    serving slot's trace, 18 November 2026) and it stayed in memory, whatever country was asked. Here the events
+    are only put in a list per corpus (one pass, a reference each); where two events of a corpus share a commit
+    the later one is the commit's, as in the one table."""
+
+    def __init__(self, events):
+        groups: dict[str, list] = {}
+        for e in events:
+            rows = groups.get(e.corpus)
+            if rows is None:
+                rows = groups[e.corpus] = []
+            rows.append(e)
+        self._groups, self._made = groups, {}
+
+    def _of(self, corpus) -> dict:
+        got = self._made.get(corpus)
+        if got is None:  # (two threads at once make the same table; one is kept)
+            got = self._made[corpus] = {e.corpus_commit: e for e in self._groups.get(corpus, ())}
+        return got
+
+    def get(self, key, default=None):
+        return self._of(key[0]).get(key[1], default)
+
+    def __getitem__(self, key):
+        return self._of(key[0])[key[1]]
+
+    def __contains__(self, key) -> bool:
+        return key[1] in self._of(key[0])
 
 
 def t_search_changes(args: dict) -> tuple[str, dict]:
