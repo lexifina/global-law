@@ -1,0 +1,77 @@
+{
+ "title": "One more unit of pay, a single person near the average wage: how often and how much net income falls (rounding and table steps)",
+ "source": "~/cmp/compare/runs/unit_scan/20261118T032945/results.jsonl",
+ "window": {
+  "default": [
+   0.9,
+   1.1
+  ],
+  "JP": [
+   0.99,
+   1.01
+  ]
+ },
+ "countries": {
+  "US": {
+   "points": 14705,
+   "falls": 324,
+   "worst": {
+    "wages": 66250,
+    "net_change": -11,
+    "changes": {
+     "incomeTax": 11,
+     "employeeSocial": 1
+    }
+   },
+   "falls_over_one_unit": 294
+  },
+  "FR": {
+   "points": 9194,
+   "falls": 268,
+   "worst": {
+    "wages": 47101,
+    "net_change": -47,
+    "changes": {
+     "incomeTax": -18,
+     "employeeSocial": 66
+    }
+   },
+   "falls_over_one_unit": 1
+  },
+  "UK": {
+   "points": 11197,
+   "falls": 0,
+   "worst": null,
+   "falls_over_one_unit": 0
+  },
+  "DE": {
+   "points": 13341,
+   "falls": 4164,
+   "worst": {
+    "wages": 60252,
+    "net_change": -0.24,
+    "changes": {
+     "incomeTax": 1,
+     "employeeSocial": 0.24
+    }
+   },
+   "falls_over_one_unit": 0
+  },
+  "JP": {
+   "points": 114061,
+   "falls": 138,
+   "worst": {
+    "wages": 5676000,
+    "net_change": -807,
+    "changes": {
+     "incomeTax": 400,
+     "surtaxes": 9,
+     "localIncomeTax": 400,
+     "employeeSocial": -1
+    }
+   },
+   "falls_over_one_unit": 134
+  }
+ },
+ "generated": "2026-11-18T03:30:10"
+}

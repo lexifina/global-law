@@ -1,0 +1,19 @@
+name = "FrLoop"
+version = "0.1.0"
+defaultTargets = ["frloop", "FrLoop"]
+
+# The French model, read unchanged from lean-proofs/FrTax (four folders up)
+[[lean_lib]]
+name = "FrTax"
+srcDir = "../../../.."
+globs = ["FrTax.+"]
+
+# The statute-faithful additions, the batch exe and the proofs
+[[lean_lib]]
+name = "FrLoop"
+roots = ["FrLoop.Main", "FrLoop.Proofs"]
+globs = ["FrLoop.+"]
+
+[[lean_exe]]
+name = "frloop"
+root = "FrLoop.Main"

@@ -1,0 +1,19 @@
+name = "UsLoop"
+version = "0.1.0"
+defaultTargets = ["usloop", "UsLoop"]
+
+# The US model, read unchanged from lean-proofs/TaxCode/Individual (four folders up); hashes in ../TAXCODE_COPY.sha256
+[[lean_lib]]
+name = "TaxCode"
+srcDir = "../../../.."
+globs = ["TaxCode.Individual.+"]
+
+# This folder's own code: the batch runner with facts, small statute-faithful additions, theorems
+[[lean_lib]]
+name = "UsLoop"
+roots = ["UsLoop.Main", "UsLoop.Theorems"]
+globs = ["UsLoop.+"]
+
+[[lean_exe]]
+name = "usloop"
+root = "UsLoop.Main"

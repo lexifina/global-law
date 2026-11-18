@@ -1,0 +1,10 @@
+name = "DeTax"
+version = "0.1.0"
+defaultTargets = ["DeTax", "detax"]
+
+[[lean_lib]]
+name = "DeTax"
+
+[[lean_exe]]
+name = "detax"
+root = "DeTax.Main"

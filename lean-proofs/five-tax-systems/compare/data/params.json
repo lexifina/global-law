@@ -1,0 +1,67 @@
+{
+ "_sources": {
+  "aw": "OECD (2026), Taxing Wages 2026 (published 22 April 2026), data for 2025: SDMX dataflow OECD.CTP.TPS:DSD_TAX_WAGES_COU@DF_TW_COU(2.1), measure GEBT, household S_C0, AW100, unit XDC; https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_WAGES_COU@DF_TW_COU,/USA+FRA+GBR+DEU+JPN......A?startPeriod=2022 (retrieved 2026-11-18)",
+  "ppp_oecd": "Implied by the same publication: GEBT in national currency / GEBT in USD PPP (DSD_TAX_WAGES_COMP@DF_TW_COMP, unit USD_PPP), 2025; the OECD converts with its GDP PPPs",
+  "ppp_wb_consumption": "World Bank WDI PA.NUS.PRVT.PP (PPP conversion factor, households and NPISHs final consumption expenditure, LCU per international $), 2025, last updated 2026-11-11; https://api.worldbank.org/v2/country/USA;FRA;GBR;DEU;JPN/indicator/PA.NUS.PRVT.PP",
+  "ppp_wb_gdp": "World Bank WDI PA.NUS.PPP (GDP), 2025",
+  "fx": "World Bank WDI PA.NUS.FCRF (official exchange rate, LCU per US$, period average), 2025"
+ },
+ "year": 2025,
+ "countries": {
+  "US": {
+   "iso3": "USA",
+   "currency": "USD",
+   "aw": 73520.082531,
+   "aw_round": 73520,
+   "aw_usd_ppp": 73520.082531,
+   "ppp_oecd": 1.0,
+   "ppp_wb_consumption": 1,
+   "ppp_wb_gdp": 1,
+   "fx_usd": 1
+  },
+  "FR": {
+   "iso3": "FRA",
+   "currency": "EUR",
+   "aw": 45964.378978,
+   "aw_round": 45964,
+   "aw_usd_ppp": 67272.649205,
+   "ppp_oecd": 0.6832550749998371,
+   "ppp_wb_consumption": 0.732501,
+   "ppp_wb_gdp": 0.677618,
+   "fx_usd": 0.88496895841236
+  },
+  "UK": {
+   "iso3": "GBR",
+   "currency": "GBP",
+   "aw": 55982.587454,
+   "aw_round": 55983,
+   "aw_usd_ppp": 82329.10372,
+   "ppp_oecd": 0.6799853869950523,
+   "ppp_wb_consumption": 0.701529,
+   "ppp_wb_gdp": 0.677133,
+   "fx_usd": 0.759473957338607
+  },
+  "DE": {
+   "iso3": "DEU",
+   "currency": "EUR",
+   "aw": 66700.043591,
+   "aw_round": 66700,
+   "aw_usd_ppp": 93985.110174,
+   "ppp_oecd": 0.7096873480013418,
+   "ppp_wb_consumption": 0.718883,
+   "ppp_wb_gdp": 0.709983,
+   "fx_usd": 0.88496895841236
+  },
+  "JP": {
+   "iso3": "JPN",
+   "currency": "JPY",
+   "aw": 5703038.490627,
+   "aw_round": 5703038,
+   "aw_usd_ppp": 59729.258975,
+   "ppp_oecd": 95.48148744008422,
+   "ppp_wb_consumption": 103.33658,
+   "ppp_wb_gdp": 97.08005,
+   "fx_usd": 149.657926890951
+  }
+ }
+}

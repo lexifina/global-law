@@ -1,0 +1,21 @@
+name = "JpLoop"
+version = "0.1.0"
+defaultTargets = ["jptax", "JpLoop", "JpTaxBase"]
+
+# The Japanese model of ../../../jp/lean, extended for the loophole search (scripts/patch.py). Only the files the
+# extension changes (Person, Household, Local, Main) and the new Extras.lean and Loop.lean are here; the others are read,
+# unchanged, from the base model.
+[[lean_lib]]
+name = "JpTaxBase"
+srcDir = "../../../jp/lean"
+roots = ["JpTax", "JpTax.Basic", "JpTax.Benefit", "JpTax.Beppyo5", "JpTax.Beppyo5Data", "JpTax.Deductions",
+         "JpTax.GessakuData", "JpTax.Income", "JpTax.Oecd", "JpTax.Social", "JpTax.Tax", "JpTax.Tests",
+         "JpTax.Theorems", "JpTax.Walls", "JpTax.Withholding"]
+
+[[lean_lib]]
+name = "JpLoop"
+roots = ["JpTax.Person", "JpTax.Household", "JpTax.Local", "JpTax.Main", "JpTax.Extras", "JpTax.Loop"]
+
+[[lean_exe]]
+name = "jptax"
+root = "JpTax.Main"

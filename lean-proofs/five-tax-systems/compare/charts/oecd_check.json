@@ -1,0 +1,1890 @@
+{
+ "source": "OECD Taxing Wages 2026, country tables 2025 (DSD_TAX_WAGES_COU@DF_TW_COU 2.1); Lean models via harness/oecd_check.py",
+ "run": "~/cmp/compare/runs/oecd/20261118T033056",
+ "exes": {
+  "US": {
+   "exe_sha256": "097f0f49b9a574b0919863cc1c06864bd104f02fe2833c1905db7ad66edd1329",
+   "cmd": [
+    "~/cmp/compare/runs/oecd/20261118T033056/bin/us_us_cmptax",
+    "us"
+   ],
+   "n": 8,
+   "seconds": 0.064
+  },
+  "FR": {
+   "exe_sha256": "097f0f49b9a574b0919863cc1c06864bd104f02fe2833c1905db7ad66edd1329",
+   "cmd": [
+    "~/cmp/compare/runs/oecd/20261118T033056/bin/fr_fr_cmptax",
+    "fr"
+   ],
+   "n": 8,
+   "seconds": 0.064
+  },
+  "UK": {
+   "exe_sha256": "25d0c0e57b2e693a501f968b3019839c1b118cae5637222389e3948ad2fe88d1",
+   "cmd": [
+    "~/cmp/compare/runs/oecd/20261118T033056/bin/uk_uk_uktax"
+   ],
+   "n": 8,
+   "seconds": 0.061
+  },
+  "DE": {
+   "exe_sha256": "4cae6f8c9997f0df3353f8db71ca8382f65e79aa658a7ea7eb6f2f497b2716fd",
+   "cmd": [
+    "~/cmp/compare/runs/oecd/20261118T033056/bin/de_de_detax"
+   ],
+   "n": 8,
+   "seconds": 0.061
+  },
+  "JP": {
+   "exe_sha256": "dc7b68182b38b997ad6b44e3d048356cbd548fe08bbb4bb876a9b3eb16dcf317",
+   "cmd": [
+    "~/cmp/compare/runs/oecd/20261118T033056/bin/jp_jp_jptax"
+   ],
+   "n": 8,
+   "seconds": 0.059
+  }
+ },
+ "rows": [
+  {
+   "country": "US",
+   "type": "S67",
+   "gross": 49258,
+   "oecd_gross": 49258.46,
+   "lines": {
+    "CGTC": {
+     "ours": 33508,
+     "oecd": 33508.46,
+     "diff": -0.46
+    },
+    "CGITLETC": {
+     "ours": 3785,
+     "oecd": 3782.51,
+     "diff": 2.49
+    },
+    "CGITFP": {
+     "ours": 3785,
+     "oecd": 3782.51,
+     "diff": 2.49
+    },
+    "SLT": {
+     "ours": null,
+     "oecd": 3014.79,
+     "diff": null
+    },
+    "EECSSC": {
+     "ours": 3768,
+     "oecd": 3768.27,
+     "diff": -0.27
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 41705,
+     "oecd": 41707.67,
+     "diff": -2.67,
+     "note": "OECD THP plus its state and local tax"
+    }
+   },
+   "unsupported": [
+    "state and local income taxes (not modelled; the federal return only)"
+   ]
+  },
+  {
+   "country": "US",
+   "type": "S100",
+   "gross": 73520,
+   "oecd_gross": 73520.08,
+   "lines": {
+    "CGTC": {
+     "ours": 57770,
+     "oecd": 57770.08,
+     "diff": -0.08
+    },
+    "CGITLETC": {
+     "ours": 7625,
+     "oecd": 7623.42,
+     "diff": 1.58
+    },
+    "CGITFP": {
+     "ours": 7625,
+     "oecd": 7623.42,
+     "diff": 1.58
+    },
+    "SLT": {
+     "ours": null,
+     "oecd": 4628.19,
+     "diff": null
+    },
+    "EECSSC": {
+     "ours": 5624,
+     "oecd": 5624.29,
+     "diff": -0.29
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 60271,
+     "oecd": 60272.38,
+     "diff": -1.38,
+     "note": "OECD THP plus its state and local tax"
+    }
+   },
+   "unsupported": [
+    "state and local income taxes (not modelled; the federal return only)"
+   ]
+  },
+  {
+   "country": "US",
+   "type": "S167",
+   "gross": 122779,
+   "oecd_gross": 122778.54,
+   "lines": {
+    "CGTC": {
+     "ours": 107029,
+     "oecd": 107028.54,
+     "diff": 0.46
+    },
+    "CGITLETC": {
+     "ours": 18534,
+     "oecd": 18533.85,
+     "diff": 0.15
+    },
+    "CGITFP": {
+     "ours": 18534,
+     "oecd": 18533.85,
+     "diff": 0.15
+    },
+    "SLT": {
+     "ours": null,
+     "oecd": 7903.87,
+     "diff": null
+    },
+    "EECSSC": {
+     "ours": 9392,
+     "oecd": 9392.56,
+     "diff": -0.56
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 94853,
+     "oecd": 94852.13,
+     "diff": 0.87,
+     "note": "OECD THP plus its state and local tax"
+    }
+   },
+   "unsupported": [
+    "state and local income taxes (not modelled; the federal return only)"
+   ]
+  },
+  {
+   "country": "US",
+   "type": "SP67",
+   "gross": 49258,
+   "oecd_gross": 49258.46,
+   "lines": {
+    "CGTC": {
+     "ours": 25633,
+     "oecd": 25658.46,
+     "diff": -25.46
+    },
+    "CGITLETC": {
+     "ours": 2735,
+     "oecd": 2739.01,
+     "diff": -4.01
+    },
+    "CGITFP": {
+     "ours": -3357,
+     "oecd": -3356.66,
+     "diff": -0.34
+    },
+    "SLT": {
+     "ours": null,
+     "oecd": 1984.28,
+     "diff": null
+    },
+    "EECSSC": {
+     "ours": 3768,
+     "oecd": 3768.27,
+     "diff": -0.27
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 48847,
+     "oecd": 48846.85,
+     "diff": 0.15,
+     "note": "OECD THP plus its state and local tax"
+    }
+   },
+   "unsupported": [
+    "state and local income taxes (not modelled; the federal return only)"
+   ]
+  },
+  {
+   "country": "US",
+   "type": "M100_0",
+   "gross": 73520,
+   "oecd_gross": 73520.08,
+   "lines": {
+    "CGTC": {
+     "ours": 42020,
+     "oecd": 42020.08,
+     "diff": -0.08
+    },
+    "CGITLETC": {
+     "ours": 4566,
+     "oecd": 4565.41,
+     "diff": 0.59
+    },
+    "CGITFP": {
+     "ours": 166,
+     "oecd": 165.41,
+     "diff": 0.59
+    },
+    "SLT": {
+     "ours": null,
+     "oecd": 3845.49,
+     "diff": null
+    },
+    "EECSSC": {
+     "ours": 5624,
+     "oecd": 5624.29,
+     "diff": -0.29
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 67730,
+     "oecd": 67730.39,
+     "diff": -0.39,
+     "note": "OECD THP plus its state and local tax"
+    }
+   },
+   "unsupported": [
+    "state and local income taxes (not modelled; the federal return only)"
+   ]
+  },
+  {
+   "country": "US",
+   "type": "M100_100",
+   "gross": 147040,
+   "oecd_gross": 147040.17,
+   "lines": {
+    "CGTC": {
+     "ours": 115540,
+     "oecd": 115540.17,
+     "diff": -0.17
+    },
+    "CGITLETC": {
+     "ours": 15247,
+     "oecd": 15246.84,
+     "diff": 0.16
+    },
+    "CGITFP": {
+     "ours": 10847,
+     "oecd": 10846.84,
+     "diff": 0.16
+    },
+    "SLT": {
+     "ours": null,
+     "oecd": 8734.57,
+     "diff": null
+    },
+    "EECSSC": {
+     "ours": 11248,
+     "oecd": 11248.57,
+     "diff": -0.57
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 124945,
+     "oecd": 124944.76,
+     "diff": 0.24,
+     "note": "OECD THP plus its state and local tax"
+    }
+   },
+   "unsupported": [
+    "state and local income taxes (not modelled; the federal return only)"
+   ]
+  },
+  {
+   "country": "US",
+   "type": "M100_67",
+   "gross": 122778,
+   "oecd_gross": 122778.54,
+   "lines": {
+    "CGTC": {
+     "ours": 91278,
+     "oecd": 91278.54,
+     "diff": -0.54
+    },
+    "CGITLETC": {
+     "ours": 10476,
+     "oecd": 10476.42,
+     "diff": -0.42
+    },
+    "CGITFP": {
+     "ours": 6076,
+     "oecd": 6076.42,
+     "diff": -0.42
+    },
+    "SLT": {
+     "ours": null,
+     "oecd": 7121.17,
+     "diff": null
+    },
+    "EECSSC": {
+     "ours": 9392,
+     "oecd": 9392.56,
+     "diff": -0.56
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 107310,
+     "oecd": 107309.56,
+     "diff": 0.44,
+     "note": "OECD THP plus its state and local tax"
+    }
+   },
+   "unsupported": [
+    "state and local income taxes (not modelled; the federal return only)"
+   ]
+  },
+  {
+   "country": "US",
+   "type": "M100_67nc",
+   "gross": 122778,
+   "oecd_gross": 122778.54,
+   "lines": {
+    "CGTC": {
+     "ours": 91278,
+     "oecd": 91278.54,
+     "diff": -0.54
+    },
+    "CGITLETC": {
+     "ours": 10476,
+     "oecd": 10476.42,
+     "diff": -0.42
+    },
+    "CGITFP": {
+     "ours": 10476,
+     "oecd": 10476.42,
+     "diff": -0.42
+    },
+    "SLT": {
+     "ours": null,
+     "oecd": 7642.97,
+     "diff": null
+    },
+    "EECSSC": {
+     "ours": 9392,
+     "oecd": 9392.56,
+     "diff": -0.56
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 102910,
+     "oecd": 102909.56,
+     "diff": 0.44,
+     "note": "OECD THP plus its state and local tax"
+    }
+   },
+   "unsupported": [
+    "state and local income taxes (not modelled; the federal return only)"
+   ]
+  },
+  {
+   "country": "FR",
+   "type": "S67",
+   "gross": 30796,
+   "oecd_gross": 30796.13,
+   "lines": {
+    "CGTC": {
+     "ours": 22730,
+     "oecd": 22730.15,
+     "diff": -0.15
+    },
+    "CGITLETC": {
+     "ours": null,
+     "oecd": 3816.48,
+     "diff": null
+    },
+    "CGITFP": {
+     "ours": 3816,
+     "oecd": 3816.48,
+     "diff": -0.48
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 3483,
+     "oecd": 3482.92,
+     "diff": 0.08
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 23497,
+     "oecd": 23496.73,
+     "diff": 0.27,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "FR",
+   "type": "S100",
+   "gross": 45964,
+   "oecd_gross": 45964.38,
+   "lines": {
+    "CGTC": {
+     "ours": 33925,
+     "oecd": 33925.6,
+     "diff": -0.6
+    },
+    "CGITLETC": {
+     "ours": null,
+     "oecd": 7662.17,
+     "diff": null
+    },
+    "CGITFP": {
+     "ours": 7661,
+     "oecd": 7662.17,
+     "diff": -1.17
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 5199,
+     "oecd": 5198.39,
+     "diff": 0.61
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 33104,
+     "oecd": 33103.82,
+     "diff": 0.18,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "FR",
+   "type": "S167",
+   "gross": 76761,
+   "oecd_gross": 76760.51,
+   "lines": {
+    "CGTC": {
+     "ours": 56877,
+     "oecd": 56877.66,
+     "diff": -0.66
+    },
+    "CGITLETC": {
+     "ours": null,
+     "oecd": 17482.74,
+     "diff": null
+    },
+    "CGITFP": {
+     "ours": 17483,
+     "oecd": 17482.74,
+     "diff": 0.26
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 8436,
+     "oecd": 8434.74,
+     "diff": 1.26
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 50842,
+     "oecd": 50843.03,
+     "diff": -1.03,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "FR",
+   "type": "SP67",
+   "gross": 30796,
+   "oecd_gross": 30796.13,
+   "lines": {
+    "CGTC": {
+     "ours": 22730,
+     "oecd": 22730.15,
+     "diff": -0.15
+    },
+    "CGITLETC": {
+     "ours": null,
+     "oecd": 2934.95,
+     "diff": null
+    },
+    "CGITFP": {
+     "ours": 2935,
+     "oecd": 2934.95,
+     "diff": 0.05
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 3483,
+     "oecd": 3482.92,
+     "diff": 0.08
+    },
+    "CTGG": {
+     "ours": 1805,
+     "oecd": 8551.7,
+     "diff": -6746.7
+    },
+    "THP": {
+     "ours": 26183,
+     "oecd": 32929.96,
+     "diff": -6746.96,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "FR",
+   "type": "M100_0",
+   "gross": 45964,
+   "oecd_gross": 45964.38,
+   "lines": {
+    "CGTC": {
+     "ours": 33925,
+     "oecd": 33925.6,
+     "diff": -0.6
+    },
+    "CGITLETC": {
+     "ours": null,
+     "oecd": 4380.52,
+     "diff": null
+    },
+    "CGITFP": {
+     "ours": 4380,
+     "oecd": 4380.52,
+     "diff": -0.52
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 5199,
+     "oecd": 5198.39,
+     "diff": 0.61
+    },
+    "CTGG": {
+     "ours": 1805,
+     "oecd": 1804.9,
+     "diff": 0.1
+    },
+    "THP": {
+     "ours": 38190,
+     "oecd": 38190.37,
+     "diff": -0.37,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "FR",
+   "type": "M100_100",
+   "gross": 91928,
+   "oecd_gross": 91928.76,
+   "lines": {
+    "CGTC": {
+     "ours": 67850,
+     "oecd": 67851.2,
+     "diff": -1.2
+    },
+    "CGITLETC": {
+     "ours": null,
+     "oecd": 13517.22,
+     "diff": null
+    },
+    "CGITFP": {
+     "ours": 12396,
+     "oecd": 13517.22,
+     "diff": -1121.22
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 10398,
+     "oecd": 10396.77,
+     "diff": 1.23
+    },
+    "CTGG": {
+     "ours": 1805,
+     "oecd": 1804.9,
+     "diff": 0.1
+    },
+    "THP": {
+     "ours": 70939,
+     "oecd": 69819.66,
+     "diff": 1119.34,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "FR",
+   "type": "M100_67",
+   "gross": 76760,
+   "oecd_gross": 76760.51,
+   "lines": {
+    "CGTC": {
+     "ours": 56655,
+     "oecd": 56655.75,
+     "diff": -0.75
+    },
+    "CGITLETC": {
+     "ours": null,
+     "oecd": 9324.3,
+     "diff": null
+    },
+    "CGITFP": {
+     "ours": 9324,
+     "oecd": 9324.3,
+     "diff": -0.3
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 8682,
+     "oecd": 8681.31,
+     "diff": 0.69
+    },
+    "CTGG": {
+     "ours": 1805,
+     "oecd": 1804.9,
+     "diff": 0.1
+    },
+    "THP": {
+     "ours": 60559,
+     "oecd": 60559.81,
+     "diff": -0.81,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "FR",
+   "type": "M100_67nc",
+   "gross": 76760,
+   "oecd_gross": 76760.51,
+   "lines": {
+    "CGTC": {
+     "ours": 56655,
+     "oecd": 56655.75,
+     "diff": -0.75
+    },
+    "CGITLETC": {
+     "ours": null,
+     "oecd": 10995.5,
+     "diff": null
+    },
+    "CGITFP": {
+     "ours": 10995,
+     "oecd": 10995.5,
+     "diff": -0.5
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 8682,
+     "oecd": 8681.31,
+     "diff": 0.69
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 57083,
+     "oecd": 57083.71,
+     "diff": -0.71,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "UK",
+   "type": "S67",
+   "gross": 37508,
+   "oecd_gross": 37508.33,
+   "lines": {
+    "CGTC": {
+     "ours": 24938,
+     "oecd": 24938.33,
+     "diff": -0.33
+    },
+    "CGITLETC": {
+     "ours": 4987.6,
+     "oecd": 4987.67,
+     "diff": -0.07
+    },
+    "CGITFP": {
+     "ours": 4987.6,
+     "oecd": 4987.67,
+     "diff": -0.07
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 1995.04,
+     "oecd": 1995.07,
+     "diff": -0.03
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 30525.36,
+     "oecd": 30525.6,
+     "diff": -0.24,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "UK",
+   "type": "S100",
+   "gross": 55983,
+   "oecd_gross": 55982.59,
+   "lines": {
+    "CGTC": {
+     "ours": 43413,
+     "oecd": 43412.59,
+     "diff": 0.41
+    },
+    "CGITLETC": {
+     "ours": 9825.2,
+     "oecd": 9825.03,
+     "diff": 0.17
+    },
+    "CGITFP": {
+     "ours": 9825.2,
+     "oecd": 9825.03,
+     "diff": 0.17
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 3130.26,
+     "oecd": 3130.25,
+     "diff": 0.01
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 43027.54,
+     "oecd": 43027.3,
+     "diff": 0.24,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "UK",
+   "type": "S167",
+   "gross": 93491,
+   "oecd_gross": 93490.92,
+   "lines": {
+    "CGTC": {
+     "ours": 80921,
+     "oecd": 80920.92,
+     "diff": 0.08
+    },
+    "CGITLETC": {
+     "ours": 24828.4,
+     "oecd": 24828.37,
+     "diff": 0.03
+    },
+    "CGITFP": {
+     "ours": 24828.4,
+     "oecd": 24828.37,
+     "diff": 0.03
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 3880.42,
+     "oecd": 3880.42,
+     "diff": 0.0
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 64782.18000000001,
+     "oecd": 64782.13,
+     "diff": 0.05,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "UK",
+   "type": "SP67",
+   "gross": 37508,
+   "oecd_gross": 37508.33,
+   "lines": {
+    "CGTC": {
+     "ours": 24938,
+     "oecd": 24938.33,
+     "diff": -0.33
+    },
+    "CGITLETC": {
+     "ours": 4987.6,
+     "oecd": 4987.67,
+     "diff": -0.07
+    },
+    "CGITFP": {
+     "ours": 4987.6,
+     "oecd": 4987.67,
+     "diff": -0.07
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 1995.04,
+     "oecd": 1995.07,
+     "diff": -0.03
+    },
+    "CTGG": {
+     "ours": 2251.6,
+     "oecd": 2366.51,
+     "diff": -114.91
+    },
+    "THP": {
+     "ours": 32776.96,
+     "oecd": 32892.11,
+     "diff": -115.15,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "UK",
+   "type": "M100_0",
+   "gross": 55983,
+   "oecd_gross": 55982.59,
+   "lines": {
+    "CGTC": {
+     "ours": 43413,
+     "oecd": 43412.59,
+     "diff": 0.41
+    },
+    "CGITLETC": {
+     "ours": 9825.2,
+     "oecd": 9825.03,
+     "diff": 0.17
+    },
+    "CGITFP": {
+     "ours": 9825.2,
+     "oecd": 9825.03,
+     "diff": 0.17
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 3130.26,
+     "oecd": 3130.25,
+     "diff": 0.01
+    },
+    "CTGG": {
+     "ours": 2251.6,
+     "oecd": 2257.79,
+     "diff": -6.19
+    },
+    "THP": {
+     "ours": 45279.14,
+     "oecd": 45285.09,
+     "diff": -5.95,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "UK",
+   "type": "M100_100",
+   "gross": 111966,
+   "oecd_gross": 111965.17,
+   "lines": {
+    "CGTC": {
+     "ours": 86826,
+     "oecd": 86825.17,
+     "diff": 0.83
+    },
+    "CGITLETC": {
+     "ours": 19650.4,
+     "oecd": 19650.07,
+     "diff": 0.33
+    },
+    "CGITFP": {
+     "ours": 19650.4,
+     "oecd": 19650.07,
+     "diff": 0.33
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 6260.52,
+     "oecd": 6260.5,
+     "diff": 0.02
+    },
+    "CTGG": {
+     "ours": 2251.6,
+     "oecd": 2257.79,
+     "diff": -6.19
+    },
+    "THP": {
+     "ours": 88306.68000000001,
+     "oecd": 88312.39,
+     "diff": -5.71,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "UK",
+   "type": "M100_67",
+   "gross": 93491,
+   "oecd_gross": 93490.92,
+   "lines": {
+    "CGTC": {
+     "ours": 68351,
+     "oecd": 68350.92,
+     "diff": 0.08
+    },
+    "CGITLETC": {
+     "ours": 14812.8,
+     "oecd": 14812.7,
+     "diff": 0.1
+    },
+    "CGITFP": {
+     "ours": 14812.8,
+     "oecd": 14812.7,
+     "diff": 0.1
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 5125.3,
+     "oecd": 5125.32,
+     "diff": -0.02
+    },
+    "CTGG": {
+     "ours": 2251.6,
+     "oecd": 2257.79,
+     "diff": -6.19
+    },
+    "THP": {
+     "ours": 75804.5,
+     "oecd": 75810.69,
+     "diff": -6.19,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "UK",
+   "type": "M100_67nc",
+   "gross": 93491,
+   "oecd_gross": 93490.92,
+   "lines": {
+    "CGTC": {
+     "ours": 68351,
+     "oecd": 68350.92,
+     "diff": 0.08
+    },
+    "CGITLETC": {
+     "ours": 14812.8,
+     "oecd": 14812.7,
+     "diff": 0.1
+    },
+    "CGITFP": {
+     "ours": 14812.8,
+     "oecd": 14812.7,
+     "diff": 0.1
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 5125.3,
+     "oecd": 5125.32,
+     "diff": -0.02
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 73552.9,
+     "oecd": 73552.9,
+     "diff": -0.0,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "DE",
+   "type": "S67",
+   "gross": 44689,
+   "oecd_gross": 44689.03,
+   "lines": {
+    "CGTC": {
+     "ours": 34526,
+     "oecd": 34526.03,
+     "diff": -0.03
+    },
+    "CGITLETC": {
+     "ours": 5625,
+     "oecd": 5625.0,
+     "diff": 0.0
+    },
+    "CGITFP": {
+     "ours": 5625,
+     "oecd": 5625.0,
+     "diff": 0.0
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 9630.49,
+     "oecd": 9630.49,
+     "diff": 0.0
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 29433.510000000002,
+     "oecd": 29433.54,
+     "diff": -0.03,
+     "note": ""
+    }
+   },
+   "unsupported": [
+    "Kirchensteuer not applied (pass --kist=800|900)",
+    "Kirchensteuer as Sonderausgabe (§ 10 (1) Nr. 4) not modelled"
+   ]
+  },
+  {
+   "country": "DE",
+   "type": "S100",
+   "gross": 66700,
+   "oecd_gross": 66700.04,
+   "lines": {
+    "CGTC": {
+     "ours": 52213,
+     "oecd": 52213.04,
+     "diff": -0.04
+    },
+    "CGITLETC": {
+     "ours": 11484,
+     "oecd": 11484.0,
+     "diff": 0.0
+    },
+    "CGITFP": {
+     "ours": 11484,
+     "oecd": 11484.0,
+     "diff": 0.0
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 14313.63,
+     "oecd": 14313.63,
+     "diff": 0.0
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 40902.37,
+     "oecd": 40902.41,
+     "diff": -0.04,
+     "note": ""
+    }
+   },
+   "unsupported": [
+    "Kirchensteuer not applied (pass --kist=800|900)",
+    "Kirchensteuer as Sonderausgabe (§ 10 (1) Nr. 4) not modelled"
+   ]
+  },
+  {
+   "country": "DE",
+   "type": "S167",
+   "gross": 111389,
+   "oecd_gross": 111389.07,
+   "lines": {
+    "CGTC": {
+     "ours": 94122,
+     "oecd": 94122.07,
+     "diff": -0.07
+    },
+    "CGITLETC": {
+     "ours": 29650.61,
+     "oecd": 29650.61,
+     "diff": -0.0
+    },
+    "CGITFP": {
+     "ours": 29650.61,
+     "oecd": 29650.61,
+     "diff": -0.0
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 17483.03,
+     "oecd": 17483.03,
+     "diff": 0.0
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 64255.36,
+     "oecd": 64255.44,
+     "diff": -0.08,
+     "note": ""
+    }
+   },
+   "unsupported": [
+    "Kirchensteuer not applied (pass --kist=800|900)",
+    "Kirchensteuer as Sonderausgabe (§ 10 (1) Nr. 4) not modelled"
+   ]
+  },
+  {
+   "country": "DE",
+   "type": "SP67",
+   "gross": 44689,
+   "oecd_gross": 44689.03,
+   "lines": {
+    "CGTC": {
+     "ours": 30406,
+     "oecd": 30406.03,
+     "diff": -0.03
+    },
+    "CGITLETC": {
+     "ours": 4419,
+     "oecd": 4419.0,
+     "diff": 0.0
+    },
+    "CGITFP": {
+     "ours": -1701,
+     "oecd": -1701.0,
+     "diff": 0.0
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 9250.63,
+     "oecd": 9250.63,
+     "diff": 0.0
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 37139.37,
+     "oecd": 37139.4,
+     "diff": -0.03,
+     "note": ""
+    }
+   },
+   "unsupported": [
+    "Kirchensteuer not applied (pass --kist=800|900)",
+    "Kirchensteuer as Sonderausgabe (§ 10 (1) Nr. 4) not modelled"
+   ]
+  },
+  {
+   "country": "DE",
+   "type": "M100_0",
+   "gross": 66700,
+   "oecd_gross": 66700.04,
+   "lines": {
+    "CGTC": {
+     "ours": 52739,
+     "oecd": 52739.04,
+     "diff": -0.04
+    },
+    "CGITLETC": {
+     "ours": 6590,
+     "oecd": 6590.0,
+     "diff": 0.0
+    },
+    "CGITFP": {
+     "ours": 470,
+     "oecd": 470.0,
+     "diff": 0.0
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 13751.36,
+     "oecd": 13751.35,
+     "diff": 0.01
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 52478.64,
+     "oecd": 52478.69,
+     "diff": -0.05,
+     "note": ""
+    }
+   },
+   "unsupported": [
+    "Kirchensteuer not applied (pass --kist=800|900)",
+    "Kirchensteuer as Sonderausgabe (§ 10 (1) Nr. 4) not modelled"
+   ]
+  },
+  {
+   "country": "DE",
+   "type": "M100_100",
+   "gross": 133400,
+   "oecd_gross": 133400.09,
+   "lines": {
+    "CGTC": {
+     "ours": 86351,
+     "oecd": 86351.09,
+     "diff": -0.09
+    },
+    "CGITLETC": {
+     "ours": 16704,
+     "oecd": 16704.0,
+     "diff": 0.0
+    },
+    "CGITFP": {
+     "ours": 16704,
+     "oecd": 16704.0,
+     "diff": 0.0
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 27502.72,
+     "oecd": 27502.71,
+     "diff": 0.01
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 89193.28,
+     "oecd": 89193.38,
+     "diff": -0.1,
+     "note": ""
+    }
+   },
+   "unsupported": [
+    "Kirchensteuer not applied (pass --kist=800|900)",
+    "Kirchensteuer as Sonderausgabe (§ 10 (1) Nr. 4) not modelled"
+   ]
+  },
+  {
+   "country": "DE",
+   "type": "M100_67",
+   "gross": 111389,
+   "oecd_gross": 111389.07,
+   "lines": {
+    "CGTC": {
+     "ours": 78082,
+     "oecd": 87682.07,
+     "diff": -9600.07
+    },
+    "CGITLETC": {
+     "ours": 14032,
+     "oecd": 17146.0,
+     "diff": -3114.0
+    },
+    "CGITFP": {
+     "ours": 10972,
+     "oecd": 11026.0,
+     "diff": -54.0
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 23001.99,
+     "oecd": 23001.98,
+     "diff": 0.01
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 77415.01,
+     "oecd": 77361.09,
+     "diff": 53.92,
+     "note": ""
+    }
+   },
+   "unsupported": [
+    "Kirchensteuer not applied (pass --kist=800|900)",
+    "Kirchensteuer as Sonderausgabe (§ 10 (1) Nr. 4) not modelled"
+   ]
+  },
+  {
+   "country": "DE",
+   "type": "M100_67nc",
+   "gross": 111389,
+   "oecd_gross": 111389.07,
+   "lines": {
+    "CGTC": {
+     "ours": 86740,
+     "oecd": 86740.07,
+     "diff": -0.07
+    },
+    "CGITLETC": {
+     "ours": 16834,
+     "oecd": 16834.0,
+     "diff": 0.0
+    },
+    "CGITFP": {
+     "ours": 16834,
+     "oecd": 16834.0,
+     "diff": 0.0
+    },
+    "SLT": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "EECSSC": {
+     "ours": 23944.12,
+     "oecd": 23944.12,
+     "diff": 0.0
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 70610.88,
+     "oecd": 70610.96,
+     "diff": -0.08,
+     "note": ""
+    }
+   },
+   "unsupported": [
+    "Kirchensteuer not applied (pass --kist=800|900)",
+    "Kirchensteuer as Sonderausgabe (§ 10 (1) Nr. 4) not modelled"
+   ]
+  },
+  {
+   "country": "JP",
+   "type": "S67",
+   "gross": 3821036,
+   "oecd_gross": 3821035.79,
+   "lines": {
+    "CGTC": {
+     "ours": 1142000,
+     "oecd": 1175000.0,
+     "diff": -33000.0
+    },
+    "CGITLETC": {
+     "ours": 57100,
+     "oecd": 58750.0,
+     "diff": -1650.0
+    },
+    "CGITFP": {
+     "ours": 58200,
+     "oecd": 59900.0,
+     "diff": -1700.0
+    },
+    "SLT": {
+     "ours": 161600,
+     "oecd": 164000.0,
+     "diff": -2400.0
+    },
+    "EECSSC": {
+     "ours": 593908,
+     "oecd": 561692.26,
+     "diff": 32215.74
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 3007229,
+     "oecd": 3035443.53,
+     "diff": -28214.53,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "JP",
+   "type": "S100",
+   "gross": 5703038,
+   "oecd_gross": 5703038.49,
+   "lines": {
+    "CGTC": {
+     "ours": 2567000,
+     "oecd": 2604000.0,
+     "diff": -37000.0
+    },
+    "CGITLETC": {
+     "ours": 159200,
+     "oecd": 162900.0,
+     "diff": -3700.0
+    },
+    "CGITFP": {
+     "ours": 162500,
+     "oecd": 166300.0,
+     "diff": -3800.0
+    },
+    "SLT": {
+     "ours": 284100,
+     "oecd": 286900.0,
+     "diff": -2800.0
+    },
+    "EECSSC": {
+     "ours": 872818,
+     "oecd": 838346.66,
+     "diff": 34471.34
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 4383577,
+     "oecd": 4411491.83,
+     "diff": -27914.83,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "JP",
+   "type": "S167",
+   "gross": 9524074,
+   "oecd_gross": 9524074.28,
+   "lines": {
+    "CGTC": {
+     "ours": 5681000,
+     "oecd": 5751000.0,
+     "diff": -70000.0
+    },
+    "CGITLETC": {
+     "ours": 708700,
+     "oecd": 722700.0,
+     "diff": -14000.0
+    },
+    "CGITFP": {
+     "ours": 723500,
+     "oecd": 737800.0,
+     "diff": -14300.0
+    },
+    "SLT": {
+     "ours": 585500,
+     "oecd": 591600.0,
+     "diff": -6100.0
+    },
+    "EECSSC": {
+     "ours": 1313003,
+     "oecd": 1242286.12,
+     "diff": 70716.88
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 6901989,
+     "oecd": 6952388.16,
+     "diff": -50399.16,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "JP",
+   "type": "SP67",
+   "gross": 3821036,
+   "oecd_gross": 3821035.79,
+   "lines": {
+    "CGTC": {
+     "ours": 792000,
+     "oecd": 1175000.0,
+     "diff": -383000.0
+    },
+    "CGITLETC": {
+     "ours": 39600,
+     "oecd": 58750.0,
+     "diff": -19150.0
+    },
+    "CGITFP": {
+     "ours": 40400,
+     "oecd": 59900.0,
+     "diff": -19500.0
+    },
+    "SLT": {
+     "ours": 129100,
+     "oecd": 164000.0,
+     "diff": -34900.0
+    },
+    "EECSSC": {
+     "ours": 593908,
+     "oecd": 561692.26,
+     "diff": 32215.74
+    },
+    "CTGG": {
+     "ours": 240000,
+     "oecd": 538420.37,
+     "diff": -298420.37
+    },
+    "THP": {
+     "ours": 3297597,
+     "oecd": 3573863.9,
+     "diff": -276266.9,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "JP",
+   "type": "M100_0",
+   "gross": 5703038,
+   "oecd_gross": 5703038.49,
+   "lines": {
+    "CGTC": {
+     "ours": 2187000,
+     "oecd": 2224000.0,
+     "diff": -37000.0
+    },
+    "CGITLETC": {
+     "ours": 121200,
+     "oecd": 124900.0,
+     "diff": -3700.0
+    },
+    "CGITFP": {
+     "ours": 123700,
+     "oecd": 127500.0,
+     "diff": -3800.0
+    },
+    "SLT": {
+     "ours": 251100,
+     "oecd": 253900.0,
+     "diff": -2800.0
+    },
+    "EECSSC": {
+     "ours": 872818,
+     "oecd": 838346.66,
+     "diff": 34471.34
+    },
+    "CTGG": {
+     "ours": 240000,
+     "oecd": 240000.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 4695375,
+     "oecd": 4723291.83,
+     "diff": -27916.83,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "JP",
+   "type": "M100_100",
+   "gross": 11406076,
+   "oecd_gross": 11406076.98,
+   "lines": {
+    "CGTC": {
+     "ours": 5134000,
+     "oecd": 5208000.0,
+     "diff": -74000.0
+    },
+    "CGITLETC": {
+     "ours": 318400,
+     "oecd": 325800.0,
+     "diff": -7400.0
+    },
+    "CGITFP": {
+     "ours": 325000,
+     "oecd": 332600.0,
+     "diff": -7600.0
+    },
+    "SLT": {
+     "ours": 568200,
+     "oecd": 573800.0,
+     "diff": -5600.0
+    },
+    "EECSSC": {
+     "ours": 1745636,
+     "oecd": 1676693.32,
+     "diff": 68942.68
+    },
+    "CTGG": {
+     "ours": 240000,
+     "oecd": 240000.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 9007154,
+     "oecd": 9062983.67,
+     "diff": -55829.67,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "JP",
+   "type": "M100_67",
+   "gross": 9524074,
+   "oecd_gross": 9524074.28,
+   "lines": {
+    "CGTC": {
+     "ours": 3709000,
+     "oecd": 3779000.0,
+     "diff": -70000.0
+    },
+    "CGITLETC": {
+     "ours": 216300,
+     "oecd": 221650.0,
+     "diff": -5350.0
+    },
+    "CGITFP": {
+     "ours": 220700,
+     "oecd": 226200.0,
+     "diff": -5500.0
+    },
+    "SLT": {
+     "ours": 445700,
+     "oecd": 450900.0,
+     "diff": -5200.0
+    },
+    "EECSSC": {
+     "ours": 1466726,
+     "oecd": 1400038.92,
+     "diff": 66687.08
+    },
+    "CTGG": {
+     "ours": 240000,
+     "oecd": 240000.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 7630806,
+     "oecd": 7686935.36,
+     "diff": -56129.36,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  },
+  {
+   "country": "JP",
+   "type": "M100_67nc",
+   "gross": 9524074,
+   "oecd_gross": 9524074.28,
+   "lines": {
+    "CGTC": {
+     "ours": 3709000,
+     "oecd": 3779000.0,
+     "diff": -70000.0
+    },
+    "CGITLETC": {
+     "ours": 216300,
+     "oecd": 221650.0,
+     "diff": -5350.0
+    },
+    "CGITFP": {
+     "ours": 220700,
+     "oecd": 226200.0,
+     "diff": -5500.0
+    },
+    "SLT": {
+     "ours": 445700,
+     "oecd": 450900.0,
+     "diff": -5200.0
+    },
+    "EECSSC": {
+     "ours": 1466726,
+     "oecd": 1400038.92,
+     "diff": 66687.08
+    },
+    "CTGG": {
+     "ours": 0,
+     "oecd": 0.0,
+     "diff": 0.0
+    },
+    "THP": {
+     "ours": 7390806,
+     "oecd": 7446935.36,
+     "diff": -56129.36,
+     "note": ""
+    }
+   },
+   "unsupported": []
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "definition": "Effect of the three OECD errors on the OECD's own average tax wedge (Taxing Wages 2026, 2025).\n\n    python3 oecd_error_effects.py  -> charts/oecd_error_effects.json\n\nwedge = (income tax + state/local tax + employee SSC + employer SSC - cash transfers) / labour costs, the OECD's\ndefinition; reproduces the OECD's published AV_TW (France M100_100: 44.296 %). The corrected wedge replaces the line in\nerror by the statute's figure: France from the Lean model (charts/oecd_check.json); Japan from the Japan model's theorem\noecd_single_parent_aw67 (income tax 41,200 yen with the OECD's own premiums) and 10 % of the 300,000-yen resident-tax\ndeduction (approximate); US: $25 of deduction at 12 %.\n",
+ "rows": [
+  {
+   "country": "FR",
+   "type": "M100_100",
+   "error": "quotient familial capped at one half-part",
+   "oecd_income_tax": 13517.22,
+   "statute_income_tax": 12396,
+   "oecd_wedge_pct": 44.296,
+   "corrected_wedge_pct": 43.402,
+   "difference_points": 0.895,
+   "oecd_published_AV_TW": 44.296313
+  },
+  {
+   "country": "US",
+   "type": "SP67",
+   "error": "head-of-household standard deduction $23,600, statute $23,625",
+   "oecd_wedge_pct": 12.157,
+   "corrected_wedge_pct": 12.151,
+   "difference_points": 0.0056
+  },
+  {
+   "country": "JP",
+   "type": "SP67",
+   "error": "ひとり親控除 left out (所得税法 第81条)",
+   "oecd_income_tax_with_surtax": 59900.0,
+   "statute_income_tax_with_surtax": 42100,
+   "oecd_local_tax": 164000.0,
+   "statute_local_tax_approx": 134000.0,
+   "oecd_wedge_pct": 19.133,
+   "corrected_wedge_pct": 18.051,
+   "difference_points": 1.082
+  }
+ ]
+}

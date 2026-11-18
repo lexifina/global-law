@@ -1,0 +1,27 @@
+import JpTax
+open Lean Elab Command
+
+elab "#audit_jptax" : command => do
+  let env : Lean.Environment ← Lean.getEnv
+  let mut n : Nat := 0
+  let mut withChoice : Nat := 0
+  let mut onlyPropext : Nat := 0
+  let mut noAxioms : Nat := 0
+  let mut bad : Array Lean.Name := #[]
+  for p in (env.constants.toList : List (Lean.Name × Lean.ConstantInfo)) do
+    let name := p.1
+    if Lean.Name.getRoot name == `JpTax then
+      match p.2 with
+      | Lean.ConstantInfo.thmInfo _ =>
+        n := n + 1
+        let axs : Array Lean.Name ← liftCoreM (Lean.collectAxioms name)
+        let strs : List String := axs.toList.map (fun a => toString a)
+        if strs.contains "sorryAx" || strs.any (fun s => s.startsWith "Lean.ofReduceBool" || s.startsWith "Lean.trustCompiler") then
+          bad := bad.push name
+        if strs.isEmpty then noAxioms := noAxioms + 1
+        if strs == ["propext"] then onlyPropext := onlyPropext + 1
+        if strs.contains "Classical.choice" then withChoice := withChoice + 1
+      | _ => pure ()
+  logInfo m!"theorems in JpTax: {n}; no axioms: {noAxioms}; only propext: {onlyPropext}; using Classical.choice: {withChoice}; with sorry or native_decide: {bad}"
+
+#audit_jptax

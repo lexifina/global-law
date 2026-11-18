@@ -1,0 +1,10 @@
+name = "JpTax"
+version = "0.1.0"
+defaultTargets = ["JpTax", "jptax"]
+
+[[lean_lib]]
+name = "JpTax"
+
+[[lean_exe]]
+name = "jptax"
+root = "JpTax.Main"

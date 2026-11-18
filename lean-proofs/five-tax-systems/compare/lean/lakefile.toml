@@ -1,0 +1,25 @@
+name = "Compare"
+version = "0.1.0"
+defaultTargets = ["cmptax", "Compare"]
+
+# The US and French models are read, unchanged, from lean-proofs/TaxCode and lean-proofs/FrTax of this repository
+# (three folders up); hashes of the files the comparison was run with are in ../refs/*.sha256.
+[[lean_lib]]
+name = "TaxCode"
+srcDir = "../../.."
+globs = ["TaxCode.Individual.+"]
+
+[[lean_lib]]
+name = "FrTax"
+srcDir = "../../.."
+globs = ["FrTax.+"]
+
+# The comparison's own code: canonical household, US and French adapters, social contributions, proofs
+[[lean_lib]]
+name = "Compare"
+roots = ["Compare.Main", "Compare.Proofs"]
+globs = ["Compare.+"]
+
+[[lean_exe]]
+name = "cmptax"
+root = "Compare.Main"

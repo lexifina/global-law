@@ -320,6 +320,12 @@ ministers' answers. Results: [FrTax/reports/RESULTS.md](FrTax/reports/RESULTS.md
 
     lake build FrTax frtax
 
+## Five tax systems compared
+
+[five-tax-systems/](five-tax-systems/README.md) adds Lean models of the German and Japanese income taxes for 2025 and
+runs them with the US, French and UK models on the same households: checked against OECD Taxing Wages 2026, compared,
+and searched for loopholes in each country.
+
 ## What a proof here does and does not show
 
 Lean checks that each conclusion follows from the dated facts and the rule as defined. It does not check the facts or

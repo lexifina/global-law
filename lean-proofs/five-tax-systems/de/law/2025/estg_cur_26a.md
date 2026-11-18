@@ -1,0 +1,5 @@
+===== § 26a | Einzelveranlagung von Ehegatten
+(1) 1Bei der Einzelveranlagung von Ehegatten sind jedem Ehegatten die von ihm bezogenen Einkünfte zuzurechnen. 2Einkünfte eines Ehegatten sind nicht allein deshalb zum Teil dem anderen Ehegatten zuzurechnen, weil dieser bei der Erzielung der Einkünfte mitgewirkt hat.
+(2) 1Sonderausgaben, außergewöhnliche Belastungen und die Steuerermäßigungen nach den §§ 35a und 35c werden demjenigen Ehegatten zugerechnet, der die Aufwendungen wirtschaftlich getragen hat. 2Auf übereinstimmenden Antrag der Ehegatten werden sie jeweils zur Hälfte abgezogen. 3Der Antrag des Ehegatten, der die Aufwendungen wirtschaftlich getragen hat, ist in begründeten Einzelfällen ausreichend. 4§ 26 Absatz 2 Satz 3 gilt entsprechend.
+(3) Die Anwendung des § 10d für den Fall des Übergangs von der Einzelveranlagung zur Zusammenveranlagung und von der Zusammenveranlagung zur Einzelveranlagung zwischen zwei Veranlagungszeiträumen, wenn bei beiden Ehegatten nicht ausgeglichene Verluste vorliegen, wird durch Rechtsverordnung der Bundesregierung mit Zustimmung des Bundesrates geregelt.
+--- Fußnoten: (+++ § 26a: Zur Anwendung vgl. § 52 +++)

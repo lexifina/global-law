@@ -1,0 +1,1647 @@
+{
+ "title": "Notches and >100 % bands by cause",
+ "sources": [
+  "~/cmp/compare/charts/cliffs.json",
+  "~/cmp/compare/charts/walls_second_earner.json"
+ ],
+ "causes": {
+  "DE_minijob": {
+   "country": "DE",
+   "cause": "Minijob boundary (6,672 euros a year, 556 a month): below it the pay is taxed flat by the employer and stays out of the joint assessment, and the employee pays no contributions in the model; one euro more puts the whole pay into the couple's splitting tariff (married: -1,509 euros) and, for the childless, starts the care-insurance surcharge (0.6 points), charged on the transition zone's whole contribution base (about 372 euros a month at the boundary) where the employee's own share starts from nothing (childless single: -26 euros for 1 euro; with a child the step is 0.30 euros a year)",
+   "law": "EStG § 40a (2), § 40 (3); SGB IV § 8 (1a), § 20 (2a); SGB XI § 55 (3), § 58 (1)",
+   "notches": 4,
+   "families": [
+    "second earner (2children, married), principal at 1 x AW",
+    "second earner (nochildren, married), principal at 1 x AW",
+    "second earner (nochildren, unmarried), principal at 1 x AW",
+    "single"
+   ],
+   "first_gross": 6673,
+   "last_gross": 6680,
+   "worst": {
+    "family": "second earner (nochildren, married), principal at 1 x AW",
+    "gross": 6680,
+    "gross_aw": 0.1001,
+    "net_change": -1509.13,
+    "changes": {
+     "incomeTax": 1490,
+     "employeeSocial": 29.13000000000102
+    },
+    "resolution": "10 units"
+   },
+   "examples": [
+    {
+     "family": "single",
+     "gross": 6673,
+     "gross_aw": 0.1,
+     "net_change": -26.06,
+     "changes": {
+      "employeeSocial": 27.06
+     }
+    },
+    {
+     "family": "second earner (2children, married), principal at 1 x AW",
+     "gross": 6680,
+     "gross_aw": 0.1001,
+     "net_change": -1496.29,
+     "changes": {
+      "incomeTax": 1504,
+      "employeeSocial": 2.289999999999054
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (nochildren, unmarried), principal at 1 x AW",
+     "gross": 6680,
+     "gross_aw": 0.1001,
+     "net_change": -19.13,
+     "changes": {
+      "employeeSocial": 29.13000000000102
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (nochildren, married), principal at 1 x AW",
+     "gross": 6680,
+     "gross_aw": 0.1001,
+     "net_change": -1509.13,
+     "changes": {
+      "incomeTax": 1490,
+      "employeeSocial": 29.13000000000102
+     },
+     "resolution": "10 units"
+    }
+   ]
+  },
+  "FR_cet": {
+   "country": "FR",
+   "cause": "AGIRC-ARRCO contribution d'équilibre technique (0.14 % employee share) is due on the whole pay once pay exceeds the social security ceiling (PASS, 47,100 euros in 2025): +66 euros at the ceiling",
+   "law": "ANI du 17 novembre 2017 (AGIRC-ARRCO), CET; PASS: arrêté du 19 décembre 2024",
+   "notches": 5,
+   "families": [
+    "couple_1earner_2",
+    "couple_2earner_2",
+    "single",
+    "single_parent_2"
+   ],
+   "first_gross": 47101,
+   "last_gross": 117752,
+   "worst": {
+    "family": "couple_1earner_2",
+    "gross": 47101,
+    "gross_aw": 1.0247,
+    "net_change": -65,
+    "changes": {
+     "employeeSocial": 66
+    }
+   },
+   "examples": [
+    {
+     "family": "couple_1earner_2",
+     "gross": 47101,
+     "gross_aw": 1.0247,
+     "net_change": -65,
+     "changes": {
+      "employeeSocial": 66
+     }
+    },
+    {
+     "family": "single",
+     "gross": 47101,
+     "gross_aw": 1.0247,
+     "net_change": -47,
+     "changes": {
+      "incomeTax": -18,
+      "employeeSocial": 66
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 47101,
+     "gross_aw": 1.0247,
+     "net_change": -65,
+     "changes": {
+      "employeeSocial": 66
+     }
+    },
+    {
+     "family": "couple_2earner_2",
+     "gross": 78501,
+     "gross_aw": 1.7079,
+     "net_change": -56,
+     "changes": {
+      "incomeTax": -9,
+      "employeeSocial": 66
+     }
+    },
+    {
+     "family": "couple_2earner_2",
+     "gross": 117752,
+     "gross_aw": 2.5618,
+     "net_change": -47,
+     "changes": {
+      "incomeTax": -18,
+      "employeeSocial": 66
+     }
+    }
+   ]
+  },
+  "FR_61": {
+   "country": "FR",
+   "cause": "Income tax under 61 euros is not collected, so the first euro that lifts it to 61 costs 61 euros",
+   "law": "CGI art. 1657, 1 bis",
+   "notches": 7,
+   "families": [
+    "couple_1earner_2",
+    "couple_2earner_2",
+    "second earner (2children, married), principal at 1 x AW",
+    "second earner (2children, unmarried), principal at 1 x AW",
+    "second earner (nochildren, unmarried), principal at 1 x AW",
+    "single",
+    "single_parent_2"
+   ],
+   "first_gross": 14280,
+   "last_gross": 60238,
+   "worst": {
+    "family": "couple_1earner_2",
+    "gross": 60151,
+    "gross_aw": 1.3086,
+    "net_change": -61,
+    "changes": {
+     "incomeTax": 61,
+     "employeeSocial": 1
+    }
+   },
+   "examples": [
+    {
+     "family": "second earner (2children, married), principal at 1 x AW",
+     "gross": 14280,
+     "gross_aw": 0.3107,
+     "net_change": -53,
+     "changes": {
+      "incomeTax": 61,
+      "employeeSocial": 2
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "single",
+     "gross": 23840,
+     "gross_aw": 0.5187,
+     "net_change": -61,
+     "changes": {
+      "incomeTax": 62
+     }
+    },
+    {
+     "family": "second earner (2children, unmarried), principal at 1 x AW",
+     "gross": 23840,
+     "gross_aw": 0.5187,
+     "net_change": -54,
+     "changes": {
+      "incomeTax": 62,
+      "employeeSocial": 2
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (nochildren, unmarried), principal at 1 x AW",
+     "gross": 23840,
+     "gross_aw": 0.5187,
+     "net_change": -54,
+     "changes": {
+      "incomeTax": 62,
+      "employeeSocial": 2
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 47490,
+     "gross_aw": 1.0332,
+     "net_change": -61,
+     "changes": {
+      "incomeTax": 62
+     }
+    }
+   ]
+  },
+  "FR_af_band": {
+   "country": "FR",
+   "cause": "Allocations familiales: above each income ceiling the amount halves, smoothed by a 'complément dégressif' that withdraws one euro of benefit per euro of resources, so in that band the marginal rate (with tax and contributions) exceeds 100 %",
+   "law": "CSS art. D521-1, II; D521-3",
+   "notches": 1321,
+   "families": [
+    "couple_1earner_2",
+    "couple_2earner_2",
+    "single_parent_2"
+   ],
+   "first_gross": 47486,
+   "last_gross": 135617,
+   "worst": {
+    "family": "couple_1earner_2",
+    "gross": 100968,
+    "gross_aw": 2.1967,
+    "net_change": -2,
+    "changes": {
+     "incomeTax": 1,
+     "employeeSocial": 1,
+     "benefits": -1
+    }
+   },
+   "examples": [
+    {
+     "family": "single_parent_2",
+     "gross": 47486,
+     "gross_aw": 1.0331,
+     "net_change": -1,
+     "changes": {
+      "employeeSocial": 2
+     }
+    },
+    {
+     "family": "couple_1earner_2",
+     "gross": 100963,
+     "gross_aw": 2.1965,
+     "net_change": -1,
+     "changes": {
+      "incomeTax": 1,
+      "benefits": -1
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 100963,
+     "gross_aw": 2.1965,
+     "net_change": -1,
+     "changes": {
+      "incomeTax": 1,
+      "benefits": -1
+     }
+    },
+    {
+     "family": "couple_1earner_2",
+     "gross": 100968,
+     "gross_aw": 2.1967,
+     "net_change": -2,
+     "changes": {
+      "incomeTax": 1,
+      "employeeSocial": 1,
+      "benefits": -1
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 100968,
+     "gross_aw": 2.1967,
+     "net_change": -2,
+     "changes": {
+      "incomeTax": 1,
+      "employeeSocial": 1,
+      "benefits": -1
+     }
+    }
+   ]
+  },
+  "JP_insured_artifact": {
+   "country": "JP",
+   "cause": "Model boundary, not a law: below 88,000 yen a month a worker who is nobody's dependent would pay national pension and national health insurance, which the JP model leaves out (listed in its unsupported field); the jump at 1,056,000 yen for a lone earner is the model's",
+   "law": "JP model EXAMPLE.md (not modelled: 国民年金, 国民健康保険)",
+   "notches": 5,
+   "families": [
+    "couple_1earner_2",
+    "couple_2earner_2",
+    "single",
+    "single_parent_2"
+   ],
+   "first_gross": 1056000,
+   "last_gross": 2639999,
+   "worst": {
+    "family": "couple_1earner_2",
+    "gross": 1056000,
+    "gross_aw": 0.1852,
+    "net_change": -163353,
+    "changes": {
+     "employeeSocial": 163354
+    }
+   },
+   "examples": [
+    {
+     "family": "couple_1earner_2",
+     "gross": 1056000,
+     "gross_aw": 0.1852,
+     "net_change": -163353,
+     "changes": {
+      "employeeSocial": 163354
+     }
+    },
+    {
+     "family": "single",
+     "gross": 1056000,
+     "gross_aw": 0.1852,
+     "net_change": -163353,
+     "changes": {
+      "employeeSocial": 163354
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 1056000,
+     "gross_aw": 0.1852,
+     "net_change": -163353,
+     "changes": {
+      "employeeSocial": 163354
+     }
+    },
+    {
+     "family": "couple_2earner_2",
+     "gross": 1760000,
+     "gross_aw": 0.3086,
+     "net_change": -163353,
+     "changes": {
+      "employeeSocial": 163354
+     }
+    },
+    {
+     "family": "couple_2earner_2",
+     "gross": 2639999,
+     "gross_aw": 0.4629,
+     "net_change": -163353,
+     "changes": {
+      "employeeSocial": 163354
+     }
+    }
+   ]
+  },
+  "JP_premium_rounding": {
+   "country": "JP",
+   "cause": "Premiums rounded to the yen each month (fractions of 50 sen and under dropped): one yen of pay can add up to 12 yen of premiums a year",
+   "law": "通貨の単位及び貨幣の発行等に関する法律 第3条; 健康保険法施行令",
+   "notches": 334,
+   "families": [
+    "couple_1earner_2",
+    "couple_2earner_2",
+    "single",
+    "single_parent_2"
+   ],
+   "first_gross": 1100736,
+   "last_gross": 26950920,
+   "worst": {
+    "family": "couple_1earner_2",
+    "gross": 2715276,
+    "gross_aw": 0.4761,
+    "net_change": -7,
+    "changes": {
+     "employeeSocial": 8
+    }
+   },
+   "examples": [
+    {
+     "family": "single",
+     "gross": 1100736,
+     "gross_aw": 0.193,
+     "net_change": -7,
+     "changes": {
+      "employeeSocial": 8
+     }
+    },
+    {
+     "family": "couple_1earner_2",
+     "gross": 1115004,
+     "gross_aw": 0.1955,
+     "net_change": -2,
+     "changes": {
+      "employeeSocial": 3
+     }
+    },
+    {
+     "family": "single",
+     "gross": 1115004,
+     "gross_aw": 0.1955,
+     "net_change": -2,
+     "changes": {
+      "employeeSocial": 3
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 1115004,
+     "gross_aw": 0.1955,
+     "net_change": -2,
+     "changes": {
+      "employeeSocial": 3
+     }
+    },
+    {
+     "family": "couple_1earner_2",
+     "gross": 1211004,
+     "gross_aw": 0.2123,
+     "net_change": -2,
+     "changes": {
+      "employeeSocial": 3
+     }
+    }
+   ]
+  },
+  "JP_grade": {
+   "country": "JP",
+   "cause": "Premiums are charged on standard monthly remuneration grades: one yen of monthly pay across a grade boundary raises the year's health and pension premiums by the grade step (10,731 to 35,776 yen a year in this scan), less the tax saved on the deduction",
+   "law": "健康保険法 第40条; 厚生年金保険法 第20条 (標準報酬月額)",
+   "notches": 322,
+   "families": [
+    "couple_1earner_2",
+    "couple_2earner_2",
+    "second earner (2children, married), principal at 1 x AW",
+    "second earner (2children, unmarried), principal at 1 x AW",
+    "second earner (nochildren, married), principal at 1 x AW",
+    "second earner (nochildren, unmarried), principal at 1 x AW",
+    "single",
+    "single_parent_2"
+   ],
+   "first_gross": 1116000,
+   "last_gross": 27149999,
+   "worst": {
+    "family": "couple_1earner_2",
+    "gross": 5100000,
+    "gross_aw": 0.8943,
+    "net_change": -46110,
+    "changes": {
+     "incomeTax": -2500,
+     "surtaxes": -52,
+     "localIncomeTax": -5000,
+     "employeeSocial": 53663
+    }
+   },
+   "examples": [
+    {
+     "family": "couple_1earner_2",
+     "gross": 1116000,
+     "gross_aw": 0.1957,
+     "net_change": -17886,
+     "changes": {
+      "employeeSocial": 17887
+     }
+    },
+    {
+     "family": "single",
+     "gross": 1116000,
+     "gross_aw": 0.1957,
+     "net_change": -17886,
+     "changes": {
+      "employeeSocial": 17887
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 1116000,
+     "gross_aw": 0.1957,
+     "net_change": -17886,
+     "changes": {
+      "employeeSocial": 17887
+     }
+    },
+    {
+     "family": "second earner (2children, unmarried), principal at 1 x AW",
+     "gross": 1116000,
+     "gross_aw": 0.1957,
+     "net_change": -16891,
+     "changes": {
+      "employeeSocial": 17891
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (2children, married), principal at 1 x AW",
+     "gross": 1116000,
+     "gross_aw": 0.1957,
+     "net_change": -16891,
+     "changes": {
+      "employeeSocial": 17891
+     },
+     "resolution": "10 units"
+    }
+   ]
+  },
+  "JP_shotokuwari_relief": {
+   "country": "JP",
+   "cause": "Resident income levy just above the non-taxable limit for a family: the levy may not leave income below the limit, so it rises one yen per yen of income until the full levy is due (a 100 % band); the salary-income table's 4,000-yen steps turn it into notches",
+   "law": "地方税法 附則第3条の3 第2項, 第5項 (所得割の非課税限度額); 所得税法 別表第五",
+   "notches": 49,
+   "families": [
+    "couple_1earner_2",
+    "couple_2earner_2",
+    "single_parent_2"
+   ],
+   "first_gross": 2216000,
+   "last_gross": 3780000,
+   "worst": {
+    "family": "couple_1earner_2",
+    "gross": 2560000,
+    "gross_aw": 0.4489,
+    "net_change": -5152,
+    "changes": {
+     "incomeTax": 150,
+     "surtaxes": 3,
+     "localIncomeTax": 5000
+    }
+   },
+   "examples": [
+    {
+     "family": "single_parent_2",
+     "gross": 2216000,
+     "gross_aw": 0.3886,
+     "net_change": -1099,
+     "changes": {
+      "localIncomeTax": 1100
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 2224000,
+     "gross_aw": 0.39,
+     "net_change": -2699,
+     "changes": {
+      "localIncomeTax": 2700
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 2228000,
+     "gross_aw": 0.3907,
+     "net_change": -2799,
+     "changes": {
+      "localIncomeTax": 2800
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 2232000,
+     "gross_aw": 0.3914,
+     "net_change": -2799,
+     "changes": {
+      "localIncomeTax": 2800
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 2236000,
+     "gross_aw": 0.3921,
+     "net_change": -2799,
+     "changes": {
+      "localIncomeTax": 2800
+     }
+    }
+   ]
+  },
+  "JP_basic_deduction_steps": {
+   "country": "JP",
+   "cause": "The 2025 basic deduction falls in steps with total income (950,000 / 880,000 / 680,000 / 630,000 / 580,000 yen at 1.32 / 3.36 / 4.89 / 6.55 million yen of income): one yen across a step costs 5,000 to 10,150 yen of income tax",
+   "law": "所得税法 第86条; 租税特別措置法 第41条の16の2 (令和7年度改正)",
+   "notches": 29,
+   "families": [
+    "couple_1earner_2",
+    "second earner (2children, unmarried), principal at 1 x AW",
+    "second earner (nochildren, unmarried), principal at 1 x AW",
+    "single",
+    "single_parent_2"
+   ],
+   "first_gross": 2004000,
+   "last_gross": 27100001,
+   "worst": {
+    "family": "couple_1earner_2",
+    "gross": 27100001,
+    "gross_aw": 4.7519,
+    "net_change": -82843,
+    "changes": {
+     "incomeTax": 64000,
+     "surtaxes": 1344,
+     "localIncomeTax": 17500
+    }
+   },
+   "examples": [
+    {
+     "family": "single",
+     "gross": 2004000,
+     "gross_aw": 0.3514,
+     "net_change": -4025,
+     "changes": {
+      "incomeTax": 3650,
+      "surtaxes": 77,
+      "localIncomeTax": 300,
+      "employeeSocial": -1
+     }
+    },
+    {
+     "family": "second earner (2children, unmarried), principal at 1 x AW",
+     "gross": 2004000,
+     "gross_aw": 0.3514,
+     "net_change": -3030,
+     "changes": {
+      "incomeTax": 3650,
+      "surtaxes": 77,
+      "localIncomeTax": 300,
+      "employeeSocial": 3
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (nochildren, unmarried), principal at 1 x AW",
+     "gross": 2004000,
+     "gross_aw": 0.3514,
+     "net_change": -3030,
+     "changes": {
+      "incomeTax": 3650,
+      "surtaxes": 77,
+      "localIncomeTax": 300,
+      "employeeSocial": 3
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "couple_1earner_2",
+     "gross": 4752000,
+     "gross_aw": 0.8332,
+     "net_change": -10663,
+     "changes": {
+      "incomeTax": 10150,
+      "surtaxes": 214,
+      "localIncomeTax": 300
+     }
+    },
+    {
+     "family": "single",
+     "gross": 4752000,
+     "gross_aw": 0.8332,
+     "net_change": -10663,
+     "changes": {
+      "incomeTax": 10150,
+      "surtaxes": 214,
+      "localIncomeTax": 300
+     }
+    }
+   ]
+  },
+  "JP_rounding": {
+   "country": "JP",
+   "cause": "Taxable income is cut to 1,000 yen and the tax to 100 yen, and below 6.6 million yen salary income is read from a table in 4,000-yen steps: one yen can cost 100-900 yen of income and resident tax",
+   "law": "国税通則法 第118条, 第119条; 地方税法 第20条の4の2; 所得税法 第28条 第4項, 別表第五",
+   "notches": 677,
+   "families": [
+    "couple_1earner_2",
+    "couple_2earner_2",
+    "single",
+    "single_parent_2"
+   ],
+   "first_gross": 1283254,
+   "last_gross": 27149235,
+   "worst": {
+    "family": "couple_2earner_2",
+    "gross": 9160000,
+    "gross_aw": 1.6062,
+    "net_change": -908,
+    "changes": {
+     "incomeTax": 400,
+     "surtaxes": 9,
+     "localIncomeTax": 500
+    }
+   },
+   "examples": [
+    {
+     "family": "single",
+     "gross": 1283254,
+     "gross_aw": 0.225,
+     "net_change": -199,
+     "changes": {
+      "localIncomeTax": 200
+     }
+    },
+    {
+     "family": "single",
+     "gross": 1367463,
+     "gross_aw": 0.2398,
+     "net_change": -99,
+     "changes": {
+      "localIncomeTax": 100
+     }
+    },
+    {
+     "family": "single",
+     "gross": 1463313,
+     "gross_aw": 0.2566,
+     "net_change": -99,
+     "changes": {
+      "localIncomeTax": 100
+     }
+    },
+    {
+     "family": "single",
+     "gross": 1559163,
+     "gross_aw": 0.2734,
+     "net_change": -199,
+     "changes": {
+      "localIncomeTax": 200
+     }
+    },
+    {
+     "family": "single",
+     "gross": 1751865,
+     "gross_aw": 0.3072,
+     "net_change": -99,
+     "changes": {
+      "localIncomeTax": 100
+     }
+    }
+   ]
+  },
+  "JP_per_capita_levy": {
+   "country": "JP",
+   "cause": "Resident tax per-capita levy (4,000 yen) and forest environment tax (1,000 yen) start in full once income exceeds the non-taxable limit (450,000 yen of income for a single person in the Tokyo wards; higher for single parents)",
+   "law": "地方税法 第24条の5 第3項, 第295条 第3項; 森林環境税及び森林環境譲与税に関する法律 第4条",
+   "notches": 8,
+   "families": [
+    "couple_2earner_2",
+    "second earner (2children, married), principal at 1 x AW",
+    "second earner (2children, unmarried), principal at 1 x AW",
+    "second earner (nochildren, married), principal at 1 x AW",
+    "second earner (nochildren, unmarried), principal at 1 x AW",
+    "single",
+    "single_parent_2"
+   ],
+   "first_gross": 1100001,
+   "last_gross": 3433333,
+   "worst": {
+    "family": "couple_2earner_2",
+    "gross": 2750002,
+    "gross_aw": 0.4822,
+    "net_change": -4999,
+    "changes": {
+     "localIncomeTax": 5000
+    }
+   },
+   "examples": [
+    {
+     "family": "single",
+     "gross": 1100001,
+     "gross_aw": 0.1929,
+     "net_change": -4999,
+     "changes": {
+      "localIncomeTax": 5000
+     }
+    },
+    {
+     "family": "second earner (2children, unmarried), principal at 1 x AW",
+     "gross": 1101000,
+     "gross_aw": 0.1931,
+     "net_change": -4009,
+     "changes": {
+      "localIncomeTax": 5000,
+      "employeeSocial": 9
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (2children, married), principal at 1 x AW",
+     "gross": 1101000,
+     "gross_aw": 0.1931,
+     "net_change": -4009,
+     "changes": {
+      "localIncomeTax": 5000,
+      "employeeSocial": 9
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (nochildren, unmarried), principal at 1 x AW",
+     "gross": 1101000,
+     "gross_aw": 0.1931,
+     "net_change": -4009,
+     "changes": {
+      "localIncomeTax": 5000,
+      "employeeSocial": 9
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (nochildren, married), principal at 1 x AW",
+     "gross": 1101000,
+     "gross_aw": 0.1931,
+     "net_change": -4009,
+     "changes": {
+      "localIncomeTax": 5000,
+      "employeeSocial": 9
+     },
+     "resolution": "10 units"
+    }
+   ]
+  },
+  "JP_spouse_deduction_steps": {
+   "country": "JP",
+   "cause": "The principal's spouse special deduction falls in steps as the spouse's income rises: one yen across a step raises the household's income tax (and resident tax)",
+   "law": "所得税法 第83条の2; 地方税法 第314条の2",
+   "notches": 37,
+   "families": [
+    "couple_2earner_2",
+    "second earner (2children, married), principal at 1 x AW",
+    "second earner (nochildren, married), principal at 1 x AW"
+   ],
+   "first_gross": 1601000,
+   "last_gross": 21250004,
+   "worst": {
+    "family": "couple_2earner_2",
+    "gross": 7920000,
+    "gross_aw": 1.3887,
+    "net_change": -10663,
+    "changes": {
+     "incomeTax": 10150,
+     "surtaxes": 214,
+     "localIncomeTax": 300
+    }
+   },
+   "examples": [
+    {
+     "family": "second earner (2children, married), principal at 1 x AW",
+     "gross": 1601000,
+     "gross_aw": 0.2807,
+     "net_change": -1151,
+     "changes": {
+      "incomeTax": 2000,
+      "surtaxes": 42,
+      "localIncomeTax": 100,
+      "employeeSocial": 9
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (nochildren, married), principal at 1 x AW",
+     "gross": 1601000,
+     "gross_aw": 0.2807,
+     "net_change": -1151,
+     "changes": {
+      "incomeTax": 2000,
+      "surtaxes": 42,
+      "localIncomeTax": 100,
+      "employeeSocial": 9
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (2children, married), principal at 1 x AW",
+     "gross": 1651000,
+     "gross_aw": 0.2895,
+     "net_change": -6214,
+     "changes": {
+      "incomeTax": 5000,
+      "surtaxes": 105,
+      "localIncomeTax": 2100,
+      "employeeSocial": 9
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (nochildren, married), principal at 1 x AW",
+     "gross": 1651000,
+     "gross_aw": 0.2895,
+     "net_change": -6214,
+     "changes": {
+      "incomeTax": 5000,
+      "surtaxes": 105,
+      "localIncomeTax": 2100,
+      "employeeSocial": 9
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (2children, married), principal at 1 x AW",
+     "gross": 1701000,
+     "gross_aw": 0.2983,
+     "net_change": -9214,
+     "changes": {
+      "incomeTax": 5000,
+      "surtaxes": 105,
+      "localIncomeTax": 5100,
+      "employeeSocial": 9
+     },
+     "resolution": "10 units"
+    }
+   ]
+  },
+  "JP_single_parent_cliff": {
+   "country": "JP",
+   "cause": "Single-parent deduction (350,000 yen; 300,000 for resident tax) lost in full once total income exceeds 5 million yen: one yen more costs 68,797 yen here",
+   "law": "所得税法 第2条 第1項 第31号 ハ, 第81条; 地方税法 第292条 第1項 第12号の2, 第314条の2",
+   "notches": 1,
+   "families": [
+    "single_parent_2"
+   ],
+   "first_gross": 6777779,
+   "last_gross": 6777779,
+   "worst": {
+    "family": "single_parent_2",
+    "gross": 6777779,
+    "gross_aw": 1.1885,
+    "net_change": -68797,
+    "changes": {
+     "incomeTax": 38000,
+     "surtaxes": 798,
+     "localIncomeTax": 30000
+    }
+   },
+   "examples": [
+    {
+     "family": "single_parent_2",
+     "gross": 6777779,
+     "gross_aw": 1.1885,
+     "net_change": -68797,
+     "changes": {
+      "incomeTax": 38000,
+      "surtaxes": 798,
+      "localIncomeTax": 30000
+     }
+    }
+   ]
+  },
+  "UK_marriage_allowance": {
+   "country": "UK",
+   "cause": "Marriage allowance (a £1,260 transfer of personal allowance, worth £252) is lost when the recipient's income exceeds the basic rate limit: £1 more costs £252",
+   "law": "ITA 2007 ss. 55A-55E (s. 55B condition on the recipient's rate)",
+   "notches": 1,
+   "families": [
+    "couple_1earner_2"
+   ],
+   "first_gross": 50271,
+   "last_gross": 50271,
+   "worst": {
+    "family": "couple_1earner_2",
+    "gross": 50271,
+    "gross_aw": 0.898,
+    "net_change": -251.42,
+    "changes": {
+     "incomeTax": 252.39999999999964,
+     "employeeSocial": 0.01999999999998181
+    }
+   },
+   "examples": [
+    {
+     "family": "couple_1earner_2",
+     "gross": 50271,
+     "gross_aw": 0.898,
+     "net_change": -251.42,
+     "changes": {
+      "incomeTax": 252.39999999999964,
+      "employeeSocial": 0.01999999999998181
+     }
+    }
+   ]
+  },
+  "UK_hicbc_steps": {
+   "country": "UK",
+   "cause": "High income child benefit charge: 1 % of the child benefit for every £200 of adjusted net income above £60,000, so each £200 step costs 1 % of the benefit at once (£22.52 for two children)",
+   "law": "ITEPA 2003 s. 681C",
+   "notches": 300,
+   "families": [
+    "couple_1earner_2",
+    "couple_2earner_2",
+    "single_parent_2"
+   ],
+   "first_gross": 60200,
+   "last_gross": 133333,
+   "worst": {
+    "family": "couple_1earner_2",
+    "gross": 60400,
+    "gross_aw": 1.0789,
+    "net_change": -22.42,
+    "changes": {
+     "incomeTax": 0.3999999999996362,
+     "employeeSocial": 0.01999999999998181,
+     "benefits": -23.0
+    }
+   },
+   "examples": [
+    {
+     "family": "couple_1earner_2",
+     "gross": 60200,
+     "gross_aw": 1.0753,
+     "net_change": -21.42,
+     "changes": {
+      "incomeTax": 0.3999999999996362,
+      "employeeSocial": 0.01999999999998181,
+      "benefits": -22.0
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 60200,
+     "gross_aw": 1.0753,
+     "net_change": -21.42,
+     "changes": {
+      "incomeTax": 0.3999999999996362,
+      "employeeSocial": 0.01999999999998181,
+      "benefits": -22.0
+     }
+    },
+    {
+     "family": "couple_1earner_2",
+     "gross": 60400,
+     "gross_aw": 1.0789,
+     "net_change": -22.42,
+     "changes": {
+      "incomeTax": 0.3999999999996362,
+      "employeeSocial": 0.01999999999998181,
+      "benefits": -23.0
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 60400,
+     "gross_aw": 1.0789,
+     "net_change": -22.42,
+     "changes": {
+      "incomeTax": 0.3999999999996362,
+      "employeeSocial": 0.01999999999998181,
+      "benefits": -23.0
+     }
+    },
+    {
+     "family": "couple_1earner_2",
+     "gross": 60600,
+     "gross_aw": 1.0825,
+     "net_change": -21.42,
+     "changes": {
+      "incomeTax": 0.3999999999996362,
+      "employeeSocial": 0.01999999999998181,
+      "benefits": -22.0
+     }
+    }
+   ]
+  },
+  "US_table": {
+   "country": "US",
+   "cause": "Tax Table and EIC table read in $50 bands: the tax (and the EIC) is the amount at the band's midpoint (IRC §3; §32(f)), so crossing a band edge by $1 costs up to $12 of tax, and up to about $17 where a tax band and an EIC band edge coincide",
+   "law": "26 U.S.C. §3(a); §32(f); 2025 Form 1040 instructions, Tax Table",
+   "notches": 4254,
+   "families": [
+    "couple_1earner_2",
+    "couple_2earner_2",
+    "second earner (2children, married), principal at 1 x AW",
+    "second earner (2children, unmarried), principal at 1 x AW",
+    "second earner (nochildren, married), principal at 1 x AW",
+    "second earner (nochildren, unmarried), principal at 1 x AW",
+    "single",
+    "single_parent_2"
+   ],
+   "first_gross": 18800,
+   "last_gross": 131450,
+   "worst": {
+    "family": "couple_2earner_2",
+    "gross": 57300,
+    "gross_aw": 0.7794,
+    "net_change": -18,
+    "changes": {
+     "incomeTax": 17,
+     "employeeSocial": 2
+    }
+   },
+   "examples": [
+    {
+     "family": "single",
+     "gross": 18800,
+     "gross_aw": 0.2557,
+     "net_change": -8,
+     "changes": {
+      "incomeTax": 9
+     }
+    },
+    {
+     "family": "second earner (2children, unmarried), principal at 1 x AW",
+     "gross": 18800,
+     "gross_aw": 0.2557,
+     "net_change": -1,
+     "changes": {
+      "incomeTax": 9,
+      "employeeSocial": 2
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (nochildren, unmarried), principal at 1 x AW",
+     "gross": 18800,
+     "gross_aw": 0.2557,
+     "net_change": -1,
+     "changes": {
+      "incomeTax": 9,
+      "employeeSocial": 2
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "single",
+     "gross": 19000,
+     "gross_aw": 0.2584,
+     "net_change": -9,
+     "changes": {
+      "incomeTax": 9,
+      "employeeSocial": 1
+     }
+    },
+    {
+     "family": "second earner (2children, unmarried), principal at 1 x AW",
+     "gross": 19000,
+     "gross_aw": 0.2584,
+     "net_change": -1,
+     "changes": {
+      "incomeTax": 9,
+      "employeeSocial": 2
+     },
+     "resolution": "10 units"
+    }
+   ]
+  },
+  "US_ctc_step": {
+   "country": "US",
+   "cause": "Child tax credit phase-out: reduced by $50 'for each $1,000 (or fraction thereof)' of modified AGI over $200,000 ($400,000 joint), so the first dollar of each $1,000 costs $50",
+   "law": "26 U.S.C. §24(b)(1)-(2)",
+   "notches": 88,
+   "families": [
+    "single_parent_2"
+   ],
+   "first_gross": 200001,
+   "last_gross": 287001,
+   "worst": {
+    "family": "single_parent_2",
+    "gross": 275001,
+    "gross_aw": 3.7405,
+    "net_change": -50,
+    "changes": {
+     "incomeTax": 51
+    }
+   },
+   "examples": [
+    {
+     "family": "single_parent_2",
+     "gross": 200001,
+     "gross_aw": 2.7204,
+     "net_change": -49,
+     "changes": {
+      "incomeTax": 50
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 201001,
+     "gross_aw": 2.734,
+     "net_change": -49,
+     "changes": {
+      "incomeTax": 50
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 202001,
+     "gross_aw": 2.7476,
+     "net_change": -49,
+     "changes": {
+      "incomeTax": 50
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 203001,
+     "gross_aw": 2.7612,
+     "net_change": -49,
+     "changes": {
+      "incomeTax": 50
+     }
+    },
+    {
+     "family": "single_parent_2",
+     "gross": 204001,
+     "gross_aw": 2.7748,
+     "net_change": -49,
+     "changes": {
+      "incomeTax": 50
+     }
+    }
+   ]
+  },
+  "JP_insured_second_earner": {
+   "country": "JP",
+   "cause": "The '1.06 million yen wall': a dependent spouse who earns 88,000 yen a month or more (large employer) becomes an insured employee and pays health, care and pension premiums on the whole wage at once (+163,354 yen a year)",
+   "law": "健康保険法 第3条 第1項 第9号; 厚生年金保険法 第12条 第5号 (短時間労働者); 被扶養者: 健康保険法 第3条 第7項",
+   "notches": 4,
+   "families": [
+    "second earner (2children, married), principal at 1 x AW",
+    "second earner (2children, unmarried), principal at 1 x AW",
+    "second earner (nochildren, married), principal at 1 x AW",
+    "second earner (nochildren, unmarried), principal at 1 x AW"
+   ],
+   "first_gross": 1056000,
+   "last_gross": 1056000,
+   "worst": {
+    "family": "second earner (2children, unmarried), principal at 1 x AW",
+    "gross": 1056000,
+    "gross_aw": 0.1852,
+    "net_change": -162354,
+    "changes": {
+     "employeeSocial": 163354
+    },
+    "resolution": "10 units"
+   },
+   "examples": [
+    {
+     "family": "second earner (2children, unmarried), principal at 1 x AW",
+     "gross": 1056000,
+     "gross_aw": 0.1852,
+     "net_change": -162354,
+     "changes": {
+      "employeeSocial": 163354
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (2children, married), principal at 1 x AW",
+     "gross": 1056000,
+     "gross_aw": 0.1852,
+     "net_change": -162354,
+     "changes": {
+      "employeeSocial": 163354
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (nochildren, unmarried), principal at 1 x AW",
+     "gross": 1056000,
+     "gross_aw": 0.1852,
+     "net_change": -162354,
+     "changes": {
+      "employeeSocial": 163354
+     },
+     "resolution": "10 units"
+    },
+    {
+     "family": "second earner (nochildren, married), principal at 1 x AW",
+     "gross": 1056000,
+     "gross_aw": 0.1852,
+     "net_change": -162354,
+     "changes": {
+      "employeeSocial": 163354
+     },
+     "resolution": "10 units"
+    }
+   ]
+  }
+ },
+ "bands_mtr_above_100": [
+  {
+   "kind": "mtr_above_100",
+   "g0": 100860,
+   "g1": 102270,
+   "country": "FR",
+   "family": "couple_1earner_2",
+   "g0_aw": 2.1943,
+   "g1_aw": 2.225
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 134250,
+   "g1": 135050,
+   "country": "FR",
+   "family": "couple_1earner_2",
+   "g0_aw": 2.9207,
+   "g1_aw": 2.9381
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 101370,
+   "g1": 102790,
+   "country": "FR",
+   "family": "couple_2earner_2",
+   "g0_aw": 2.2054,
+   "g1_aw": 2.2363
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 134920,
+   "g1": 135720,
+   "country": "FR",
+   "family": "couple_2earner_2",
+   "g0_aw": 2.9353,
+   "g1_aw": 2.9527
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 100860,
+   "g1": 102270,
+   "country": "FR",
+   "family": "single_parent_2",
+   "g0_aw": 2.1943,
+   "g1_aw": 2.225
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 134200,
+   "g1": 135100,
+   "country": "FR",
+   "family": "single_parent_2",
+   "g0_aw": 2.9197,
+   "g1_aw": 2.9392
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 999000,
+   "g1": 1112000,
+   "country": "JP",
+   "family": "couple_1earner_2",
+   "g0_aw": 0.1752,
+   "g1_aw": 0.195
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 2703000,
+   "g1": 2816000,
+   "country": "JP",
+   "family": "couple_1earner_2",
+   "g0_aw": 0.474,
+   "g1_aw": 0.4938
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 4695000,
+   "g1": 4796000,
+   "country": "JP",
+   "family": "couple_1earner_2",
+   "g0_aw": 0.8232,
+   "g1_aw": 0.841
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 11544000,
+   "g1": 11657000,
+   "country": "JP",
+   "family": "couple_1earner_2",
+   "g0_aw": 2.0242,
+   "g1_aw": 2.044
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 12044000,
+   "g1": 12157000,
+   "country": "JP",
+   "family": "couple_1earner_2",
+   "g0_aw": 2.1119,
+   "g1_aw": 2.1317
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 25544000,
+   "g1": 25657000,
+   "country": "JP",
+   "family": "couple_1earner_2",
+   "g0_aw": 4.479,
+   "g1_aw": 4.4988
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 26044000,
+   "g1": 26157000,
+   "country": "JP",
+   "family": "couple_1earner_2",
+   "g0_aw": 4.5667,
+   "g1_aw": 4.5865
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 26544000,
+   "g1": 26657000,
+   "country": "JP",
+   "family": "couple_1earner_2",
+   "g0_aw": 4.6544,
+   "g1_aw": 4.6742
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 27044000,
+   "g1": 27157000,
+   "country": "JP",
+   "family": "couple_1earner_2",
+   "g0_aw": 4.742,
+   "g1_aw": 4.7618
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 1703000,
+   "g1": 1816000,
+   "country": "JP",
+   "family": "couple_2earner_2",
+   "g0_aw": 0.2986,
+   "g1_aw": 0.3184
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 2583000,
+   "g1": 2696000,
+   "country": "JP",
+   "family": "couple_2earner_2",
+   "g0_aw": 0.4529,
+   "g1_aw": 0.4727
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 4593000,
+   "g1": 4656000,
+   "country": "JP",
+   "family": "couple_2earner_2",
+   "g0_aw": 0.8054,
+   "g1_aw": 0.8164
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 7863000,
+   "g1": 7956000,
+   "country": "JP",
+   "family": "couple_2earner_2",
+   "g0_aw": 1.3787,
+   "g1_aw": 1.395
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 11793000,
+   "g1": 11906000,
+   "country": "JP",
+   "family": "couple_2earner_2",
+   "g0_aw": 2.0678,
+   "g1_aw": 2.0877
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 12693000,
+   "g1": 12756000,
+   "country": "JP",
+   "family": "couple_2earner_2",
+   "g0_aw": 2.2257,
+   "g1_aw": 2.2367
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 14543000,
+   "g1": 14606000,
+   "country": "JP",
+   "family": "couple_2earner_2",
+   "g0_aw": 2.55,
+   "g1_aw": 2.5611
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 15393000,
+   "g1": 15456000,
+   "country": "JP",
+   "family": "couple_2earner_2",
+   "g0_aw": 2.6991,
+   "g1_aw": 2.7101
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 18093000,
+   "g1": 18156000,
+   "country": "JP",
+   "family": "couple_2earner_2",
+   "g0_aw": 3.1725,
+   "g1_aw": 3.1836
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 19043000,
+   "g1": 19106000,
+   "country": "JP",
+   "family": "couple_2earner_2",
+   "g0_aw": 3.3391,
+   "g1_aw": 3.3501
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 27093000,
+   "g1": 27156000,
+   "country": "JP",
+   "family": "couple_2earner_2",
+   "g0_aw": 4.7506,
+   "g1_aw": 4.7617
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 999000,
+   "g1": 1112000,
+   "country": "JP",
+   "family": "single",
+   "g0_aw": 0.1752,
+   "g1_aw": 0.195
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 4695000,
+   "g1": 4796000,
+   "country": "JP",
+   "family": "single",
+   "g0_aw": 0.8232,
+   "g1_aw": 0.841
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 25394000,
+   "g1": 25507000,
+   "country": "JP",
+   "family": "single",
+   "g0_aw": 4.4527,
+   "g1_aw": 4.4725
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 25894000,
+   "g1": 26007000,
+   "country": "JP",
+   "family": "single",
+   "g0_aw": 4.5404,
+   "g1_aw": 4.5602
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 26394000,
+   "g1": 26507000,
+   "country": "JP",
+   "family": "single",
+   "g0_aw": 4.6281,
+   "g1_aw": 4.6479
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 26894000,
+   "g1": 27007000,
+   "country": "JP",
+   "family": "single",
+   "g0_aw": 4.7157,
+   "g1_aw": 4.7355
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 999000,
+   "g1": 1112000,
+   "country": "JP",
+   "family": "single_parent_2",
+   "g0_aw": 0.1752,
+   "g1_aw": 0.195
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 4695000,
+   "g1": 4796000,
+   "country": "JP",
+   "family": "single_parent_2",
+   "g0_aw": 0.8232,
+   "g1_aw": 0.841
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 6721000,
+   "g1": 6834000,
+   "country": "JP",
+   "family": "single_parent_2",
+   "g0_aw": 1.1785,
+   "g1_aw": 1.1983
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 25544000,
+   "g1": 25657000,
+   "country": "JP",
+   "family": "single_parent_2",
+   "g0_aw": 4.479,
+   "g1_aw": 4.4988
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 26044000,
+   "g1": 26157000,
+   "country": "JP",
+   "family": "single_parent_2",
+   "g0_aw": 4.5667,
+   "g1_aw": 4.5865
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 26544000,
+   "g1": 26657000,
+   "country": "JP",
+   "family": "single_parent_2",
+   "g0_aw": 4.6544,
+   "g1_aw": 4.6742
+  },
+  {
+   "kind": "mtr_above_100",
+   "g0": 27044000,
+   "g1": 27157000,
+   "country": "JP",
+   "family": "single_parent_2",
+   "g0_aw": 4.742,
+   "g1_aw": 4.7618
+  }
+ ],
+ "unexplained": []
+}

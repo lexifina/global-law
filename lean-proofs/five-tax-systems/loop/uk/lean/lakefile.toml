@@ -1,0 +1,22 @@
+name = "UkLoop"
+version = "0.1.0"
+defaultTargets = ["uktax", "UkLoop", "UkTaxBase"]
+
+# The UK model of lean-proofs/official-checks/uk-model, extended for the loophole search. Only the files the extension
+# changes (Person, Household, Main, marked LOOP EXTENSION) and the new Loop/Theorems.lean are here; the others are read,
+# unchanged, from the base model (four folders up). The base model's UkTax/Theorems.lean is not built here: one of its
+# proofs (line 164) does not close over the extended Person record; it is checked against the unextended model in
+# official-checks/uk-model.
+[[lean_lib]]
+name = "UkTaxBase"
+srcDir = "../../../../official-checks/uk-model/lean"
+roots = ["UkTax.Basic", "UkTax.Checks", "UkTax.NIPeriod", "UkTax.NITestData", "UkTax.PAYE", "UkTax.PAYETestData",
+         "UkTax.Params", "UkTax.Rates"]
+
+[[lean_lib]]
+name = "UkLoop"
+roots = ["UkTax.Person", "UkTax.Household", "UkTax.Main", "UkTax.Loop.Theorems"]
+
+[[lean_exe]]
+name = "uktax"
+root = "UkTax.Main"
