@@ -4983,7 +4983,16 @@ def t_applies_to_case(args: dict) -> tuple[str, dict]:
 @lru_cache(maxsize=2048)
 def modifies_in(corpus: str, sha: str) -> list[dict]:
     """Every `Modifies:` effect in a corpus's history: a change to how a provision applies that leaves its words alone
-    (proposed shape: Modifies: <provision> | <kind> | <from>..<until> | <effect> | set-by <source>)."""
+    (proposed shape: Modifies: <provision> | <kind> | <from>..<until> | <effect> | set-by <source>). Kept in the
+    tree's cache by commit (_stored): the read of the whole history took 33 s for Greece's decrees, in the first
+    read_law of the corpus in each process, past the time a hosted read is given, so no Greek provision could be
+    read by a server whose start had not got to that corpus (2026-11-18)."""
+    if not re.fullmatch(r'[0-9a-f]{40}', sha):
+        return _modifies_read(corpus, sha)
+    return _stored('modifies', corpus, sha, lambda: (_modifies_read(corpus, sha), True))
+
+
+def _modifies_read(corpus: str, sha: str) -> list[dict]:
     out = law.git('log', sha, '--format=%x1e%an%x1f%B', '--grep=^Modifies: ', cwd=law.corpus_dir(corpus))
     effects = []
     for record in out.split('\x1e'):
