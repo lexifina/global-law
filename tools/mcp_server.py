@@ -1615,7 +1615,8 @@ def names_of(corpus: str, sha: str) -> tuple[str, ...]:
     """Every law file in a corpus at one commit (names only: cheap even for a large corpus)."""
     out = law.git('ls-tree', '-r', '--name-only', sha, cwd=ROOT / corpus).splitlines()
     _NAMES_SEEN.add((corpus, sha))
-    return tuple(n for n in out if n.endswith('.md') and not NOT_LAW.search(n))
+    # (one string object per path, shared with the headings table's keys: _shared_index)
+    return tuple(sys.intern(n) for n in out if n.endswith('.md') and not NOT_LAW.search(n))
 
 
 @lru_cache(maxsize=8)  # a few large corpora: France's acts are 812,000 names, about 130 MB as a dict
@@ -1869,7 +1870,9 @@ def folded_headings(corpus: str, sha: str, index: dict[str, str]) -> dict[str, s
         kept = _index_folded.get(key)
     if kept is not None and kept[0] is index:
         return kept[1]
-    folded = {n: fold(h) for n, h in index.items() if h}
+    seen: dict[str, str] = {}
+    keep = seen.setdefault  # (a folded heading many files share is kept once, as the headings are: _shared_index)
+    folded = {n: keep(f, f) for n, f in ((n, fold(h)) for n, h in index.items() if h)}
     with _index_lock:
         if _index_done.get(key) is index:  # kept only beside the index it was made from, and dropped with it
             kept = _index_folded.get(key)
@@ -1915,7 +1918,21 @@ def _index_read(disk: Path) -> dict[str, str] | None:
             out = json.load(f)
     except (OSError, ValueError):
         return None
-    return out if isinstance(out, dict) else None
+    return _shared_index(out) if isinstance(out, dict) else None
+
+
+def _shared_index(index: dict) -> dict:
+    """The same table holding each string once: its paths are the objects names_of holds for the corpus, and a heading
+    many files have ("Articolul 1", "Dispoziții finale") is one string, not one per file. Read from its file every
+    key and value was a string of its own: for Romania's 1.24 million headings, 95 MB of paths the listing of names
+    held too and 38 MB of repeated headings; over a server of the world's 24 million headings, some gigabytes that the
+    machine's file cache did not have (18 November 2026)."""
+    seen: dict[str, str] = {}
+    keep = seen.setdefault
+    try:
+        return {sys.intern(k): (keep(v, v) if v else v) for k, v in index.items()}
+    except TypeError:  # (a value that is no string: the table as it was read)
+        return index
 
 
 def _index_write(disk: Path, out: dict[str, str]) -> bool:
