@@ -795,6 +795,17 @@ def not_searched(missing: list[str]) -> str:
 
 # kind, as every tool reads it: "laws" (also written "law"), "judgments" (and law.py's other words for case law), "all".
 KINDS = {'law': 'laws', 'laws': 'laws', 'all': 'all', **{k: 'judgments' for k in law.CASELAW_KINDS}}
+# The words clients send for the two kinds, in English and in the languages of the record (the hosted server's refusals,
+# 12-19 Nov 2026: "zakon" for North Macedonia, "decision" and "jurisprudenc…" for Portugal), compared folded.
+KINDS.update({k: 'laws' for k in (
+    'act', 'acts', 'statute', 'statutes', 'legislation', 'legislative', 'regulation', 'regulations', 'code', 'codes',
+    'zakon', 'zakoni', 'zakona', 'закон', 'закони', 'закона', 'loi', 'lois', 'legislacion', 'legislacao', 'ley', 'leyes',
+    'lei', 'leis', 'legge', 'leggi', 'gesetz', 'gesetze', 'wet', 'wetten', 'lege', 'legi', 'ustawa', 'ustawy', 'törvény',
+    'torveny', 'nomos', 'νόμος', 'νομοσ', 'laki', 'lag', 'lov', 'zakony', 'akt', 'akty')})
+KINDS.update({k: 'judgments' for k in (
+    'judgment', 'decision', 'case', 'cases', 'ruling', 'rulings', 'jurisprudence', 'jurisprudencia', 'judgement',
+    'judgements', 'urteil', 'urteile', 'rechtsprechung', 'sentenza', 'sentenze', 'sentencia', 'sentencias', 'acordao',
+    'acordaos', 'arret', 'arrets', 'presuda', 'presude', 'пресуда', 'пресуде', 'odluka', 'odluke', 'одлука', 'одлуке')})
 
 
 def kind_arg(args: dict, default: str = 'laws') -> str:
@@ -803,6 +814,8 @@ def kind_arg(args: dict, default: str = 'laws') -> str:
     value = text_arg(args, 'kind').lower()
     if not value:
         return default
+    if value not in KINDS:
+        value = fold(value)
     if value not in KINDS:
         raise UserError(f'kind is "laws" (or "law"), "judgments" or "all", not {value[:40]!r}.')
     return KINDS[value]
@@ -1462,7 +1475,64 @@ def safe_regex(pattern: str) -> str:
             re.compile(pattern)
     except re.error as e:
         raise UserError(f'Not a valid regular expression: {e}') from None
-    return pattern
+    return spell_ranges(pattern)
+
+
+SPELLED_RANGE_MOST = 1024
+
+
+def spell_ranges(pattern: str) -> str:
+    """The pattern with each range in a bracket expression that reaches past ASCII written out letter by letter:
+    "[а-я]" becomes "[абв…я]". git grep reads ranges by the locale's collation, and in a UTF-8 locale it refuses any
+    range of letters outside ASCII ("порез[а-ш]": "Invalid collation character"); in the C locale it compares bytes and
+    matches other text. A list of letters means the same everywhere. ASCII ranges stay as they are; an ASCII start
+    keeps its ASCII part as a range. Brackets are read as git reads them: a backslash inside one is a literal
+    character, a ] first in it is literal, and [:class:], [=x=] and [.x.] are kept whole."""
+    if not any(ord(ch) > 127 for ch in pattern):
+        return pattern
+    out, i, n = [], 0, len(pattern)
+    while i < n:
+        ch = pattern[i]
+        if ch == '\\':
+            out.append(pattern[i:i + 2])
+            i += 2
+            continue
+        if ch != '[':
+            out.append(ch)
+            i += 1
+            continue
+        j = i + 1
+        if j < n and pattern[j] == '^':
+            j += 1
+        items, k = [], j
+        while k < n and (pattern[k] != ']' or k == j):
+            if pattern[k] == '[' and k + 1 < n and pattern[k + 1] in ':=.':
+                end = pattern.find(pattern[k + 1] + ']', k + 2)
+                if end != -1:
+                    items.append(pattern[k:end + 2])
+                    k = end + 2
+                    continue
+            if k + 2 < n and pattern[k + 1] == '-' and pattern[k + 2] != ']':
+                lo, hi = pattern[k], pattern[k + 2]
+                if ord(hi) > 127 and ord(lo) <= ord(hi):
+                    if ord(hi) - max(ord(lo), 128) >= SPELLED_RANGE_MOST:
+                        raise UserError(f'A range of characters outside ASCII ({lo}-{hi}) may hold at most '
+                                        f'{SPELLED_RANGE_MOST} characters; name the letters, or use a smaller range.')
+                    if ord(lo) < 128:
+                        items.append(f'{lo}-\x7f')
+                    items.append(''.join(chr(c) for c in range(max(ord(lo), 128), ord(hi) + 1)))
+                else:
+                    items.append(pattern[k:k + 3])
+                k += 3
+                continue
+            items.append(pattern[k])
+            k += 1
+        if k >= n:  # no closing ]: re.compile has refused it already; leave it to git as it was
+            out.append(pattern[i:])
+            break
+        out.append(pattern[i:j] + ''.join(items) + ']')
+        i = k + 1
+    return ''.join(out)
 
 
 # Every combining mark, for str.translate: find_provision folds each heading in scope (812,000 for France's acts), and
@@ -1667,6 +1737,51 @@ def lines_holding_each(text: str, starts: array, needles: list[str]) -> list[lis
                     pos = text.find(needle, starts[i + 1]) if i + 1 < lines else -1
         out.append(mine)
     return out
+
+
+def _lines_if_few(text: str, starts: array, needle: str, most: int) -> list[int] | None:
+    """The lines that hold a needle, in order, or None as soon as more than `most` do."""
+    lines, mine, pos = len(starts), [], text.find(needle)
+    while pos >= 0:
+        i = bisect.bisect_right(starts, pos) - 1
+        mine.append(i)
+        if len(mine) > most:
+            return None
+        pos = text.find(needle, starts[i + 1]) if i + 1 < lines else -1
+    return mine
+
+
+def hits_per_line(text: str, starts: array, needles: list[str]) -> Counter | None:
+    """line -> how many of the needles it holds (a word of a query in a corpus's names or headings: lines_holding_each),
+    for the lines that hold one; None when a needle is empty. Where some needle is held by few lines (a 32nd or
+    fewer), only the lines that hold such a needle count, and the common needles ("du", "le", "de") are looked for in
+    those lines alone: a line holding nothing but common words is no answer to "code du travail", and counting them
+    sent several hundred thousand lines of France's headings through the scoring (8 to 18 s a call, 19 Nov 2026).
+    Where every needle is common, every line that holds one counts, as before."""
+    if not needles or any(not n for n in needles):
+        return None
+    most = (len(starts) >> 5) + 64
+    rare, common = [], []
+    for needle in dict.fromkeys(needles):
+        mine = _lines_if_few(text, starts, needle, most)
+        (common if mine is None else rare).append((needle, mine))
+    tally = Counter()
+    if not rare:
+        for mine in lines_holding_each(text, starts, needles):
+            tally.update(mine)
+        return tally
+    weight = Counter(needles)  # (a word said twice counts twice, as it did)
+    for needle, mine in rare:
+        for i in mine:
+            tally[i] += weight[needle]
+    if common:
+        last, end = len(starts) - 1, len(text)
+        for i in list(tally):
+            line = text[starts[i]:(starts[i + 1] - 1 if i < last else end)]
+            for needle, _ in common:
+                if needle in line:
+                    tally[i] += weight[needle]
+    return tally
 
 
 def lines_holding(text: str, starts: array, needles: list[str], most: int) -> list[int] | None:
@@ -4059,13 +4174,12 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         tally = None  # the names' lines -> how many of the query's words each holds, where that is all of a name's score
         if not by_heading and every:
             text, starts = names_index(c['path'], sha)
-            each = lines_holding_each(text, starts, [n_bare for _, n_bare, _ in number_rx] + plain_folded)
-            if each is not None and plain_folded and not number_rx and not article_query:
-                # Words only (no number, no "art."): a name's score is the number of the words it holds, which is
-                # how many of the words' lists its line is in. Nothing is asked of a name one by one.
-                tally = Counter()
-                for mine in each:
-                    tally.update(mine)
+            words_only = bool(plain_folded) and not number_rx and not article_query
+            # Words only (no number, no "art."): a name's score is the number of the words it holds (hits_per_line).
+            # Nothing is asked of a name one by one.
+            tally = hits_per_line(text, starts, plain_folded) if words_only else None
+            each = None if words_only else lines_holding_each(text, starts, [n_bare for _, n_bare, _ in number_rx] + plain_folded)
+            if tally is not None:
                 for i in sorted(tally):  # (in the names' own order, as they were gone through)
                     scores[names[i]] = tally[i]
                 scored = ()
@@ -4122,15 +4236,13 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                     text, starts, headed = headings_index(c['path'], sha, index)
                     # (whatever their number, as for the names above: with a word most headings hold, every name
                     # was looked up and tested for each word, 1.6 million tests for "impôt sur le revenu" in France)
-                    held = lines_holding_each(text, starts, folded_words)
+                    held = hits_per_line(text, starts, folded_words)
                 if held is not None:
-                    # A heading's gain is by how many of the words it holds, which is how many of the words' lists
-                    # its line is in, and by whether it holds the words as a phrase, which is whether its line is
-                    # in the phrase's list. No heading is read one by one. In the names' order, as the lines were
-                    # gone through.
-                    in_line = Counter()
-                    for mine in held:
-                        in_line.update(mine)
+                    # A heading's gain is by how many of the words it holds (hits_per_line: a heading holding only
+                    # common words does not count where the query has a rarer one), and by whether it holds the
+                    # words as a phrase, which is whether its line is in the phrase's list. No heading is read one
+                    # by one. In the names' order, as the lines were gone through.
+                    in_line = held
                     all_of, as_phrase = len(folded_words), set()
                     for said_so in ((' '.join(folded_words) if len(folded_words) > 1 else ''), phrase_folded):
                         if said_so:
@@ -9200,8 +9312,11 @@ def nl_article_paths(m) -> list[str]:
     if hit:
         return [f'{corpus}/{hit}']
     parts = nl_article_key(art).split(':')
-    guess = f"art-{int(re.match(r'\d+', parts[0]).group()):02d}-{parts[1].zfill(3)}" if len(parts) == 2 and parts[0][:1].isdigit() \
-        else f"art-{art.zfill(3) if art.isdigit() else art}"
+    if len(parts) == 2 and parts[0][:1].isdigit():
+        num = int(re.match(r'\d+', parts[0]).group())  # outside the f-string: a backslash in one needs Python 3.12
+        guess = f"art-{num:02d}-{parts[1].zfill(3)}"
+    else:
+        guess = f"art-{art.zfill(3) if art.isdigit() else art}"
     return [f'{corpus}/{folder}/{guess}.md']
 
 
@@ -11745,6 +11860,17 @@ HANDLERS['search_law'] = greek_plain(HANDLERS['search_law'])
 # Tools that read one file named by `path`: run under law.focus() so a case-law decision needs no corpus-wide index.
 FOCUSED_TOOLS = ('read_law', 'who_wrote', 'compare_dates', 'provision_history', 'applies_to_case')
 PROPERTIES = {name: list(props) for name, _, props, _, _ in TOOLS}
+# Names AI clients give arguments that a tool takes under another name, read as the tool's own (the hosted server's
+# refusals, 12-19 Nov 2026: q, country, limit, from and to, a path prefix given to search_law as path). Each is read
+# only by a tool that takes the argument it stands for and has none of its own by that name; a value given under the
+# tool's own name wins.
+_COMMON_ALIASES = (('q', 'query'), ('country', 'jurisdiction'), ('limit', 'max_results'),
+                   ('from', 'start'), ('to', 'end'), ('from', 'date_a'), ('to', 'date_b'))
+for _name, _props in PROPERTIES.items():
+    for _old, _new in _COMMON_ALIASES:
+        if _new in _props and _old not in _props:
+            ALIASES.setdefault(_name, {}).setdefault(_old, _new)
+ALIASES['search_law'].setdefault('path', 'jurisdiction')  # (a jurisdiction may be any path prefix)
 
 # Ready-made research tasks a client can offer its user (prompts/list); each names the tools to use, in order.
 PROMPTS = {

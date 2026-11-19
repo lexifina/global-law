@@ -23,7 +23,9 @@ today's § 110 on petition preparers). Sections added after the recodification (
 version in the US Code record is after the record starts) are not cited by a decision older than them."""
 from __future__ import annotations
 
+import itertools
 import re
+import sys
 
 # The day each held title's present numbering took effect. Title 11: the Bankruptcy Reform Act of 1978 (Pub. L. 95-598),
 # effective 1979-10-01; before it "11 U.S.C." numbered the Bankruptcy Act of 1898. Title 17: the Copyright Act of 1976
@@ -60,28 +62,58 @@ _ADDED = [
 ADDED = {(t, str(s)): d for t, r, d in _ADDED for s in r}
 
 _SIGN = r'(?:§\s?§?|�{1,2}|[Ss]ections?(?![a-z])|[Ss]ecs?\.?(?![a-z]))'
-_NUM = r'(?>\d{1,5}(?!\d)[a-z]{0,3}(?:-\d{1,4}[a-z]{0,2})?)'
-_SUB = r'(?:\s?\((?!(?:19|20)\d\d\))[a-zA-Z0-9]{1,6}\))*+'  # never a year: "(1976)" is an edition
+_ATOMIC = sys.version_info >= (3, 11)  # re has atomic groups and possessive quantifiers from Python 3.11
+_names = itertools.count()
+
+
+def _atomic(body: str) -> str:
+    """`body` as an atomic group: once matched it is never backtracked into. "(?>body)" where re has it; before Python
+    3.11 a lookahead that captures body and a back-reference to that capture, which matches the same text the same way
+    (a lookahead is atomic in re). Each call names its own group, so a part may appear twice in one pattern."""
+    if _ATOMIC:
+        return f'(?>{body})'
+    name = f'_atomic{next(_names)}'
+    return f'(?=(?P<{name}>{body}))(?P={name})'
+
+
+def _num() -> str:
+    return _atomic(r'\d{1,5}(?!\d)[a-z]{0,3}(?:-\d{1,4}[a-z]{0,2})?')
+
+
+def _sub() -> str:  # never a year: "(1976)" is an edition
+    return _atomic(r'(?:\s?\((?!(?:19|20)\d\d\))[a-zA-Z0-9]{1,6}\))*')
+
+
 # A list's later number is not a section when a reporter, a Westlaw cite or another title follows it.
 _NOT_SECTION = r'(?!\s{0,2}U\s?\.?\s?S\s?\.?\s?C|\s+WL\b|\s+[A-Z][A-Za-z]{0,7}\.|\s+(?:Stat|Cong|Fed|Pub)\b)'
-_JOIN = r'(?>\s*,\s*(?:and\s+|or\s+|&\s*)?|\s+(?:and|or)\s+|\s*&\s*|\s+(?:through|thru|to)\s+|\s?[-–—]\s?)'
-_ITEM = _SIGN + r'?\s*' + _NUM + _NOT_SECTION + _SUB
-_REST = r'(?:' + _JOIN + _ITEM + r'){0,40}+'  # possessive: a long list that is no citation fails at once, not by every split of its spaces
+
+
+def _join() -> str:
+    return _atomic(r'\s*,\s*(?:and\s+|or\s+|&\s*)?|\s+(?:and|or)\s+|\s*&\s*|\s+(?:through|thru|to)\s+|\s?[-–—]\s?')
+
+
+def _list() -> str:
+    """A section, its subsections, and up to 40 further ones joined to it. The further ones are matched atomically
+    (a possessive {0,40}+): a long list that is no citation fails at once, not by every split of its spaces."""
+    item = _SIGN + r'?\s*' + _num() + _NOT_SECTION + _sub()
+    return _num() + _sub() + _atomic(r'(?:' + _join() + item + r'){0,40}')
+
+
 _EDITION = r'\((?:(?:19|20)\d{2}|Supp\.?)[^()]{0,30}\)'
 USC = re.compile(
     r'(?<![\w.§])(?P<title>\d{1,2})\s{0,2}U\s?\.?\s?S\s?\.?\s?C\s?\.?(?:\s?[AS]\.?)?(?![A-Za-z0-9])'
     r'(?P<ed>\s*,?\s*' + _EDITION + r')?\s*,?'
     r'(?:\s*(?P<sign>' + _SIGN + r')\s*\.?\s*|\s+)'
-    r'(?P<list>' + _NUM + _SUB + _REST + r')'
+    r'(?P<list>' + _list() + r')'
     r'(?P<etseq>\s*,?\s*et\.?\s?seq\.?)?')
 # "Title 11, United States Code, section 541"; "section 1334 of title 28"; "§ 541 of Title 11 of the United States Code".
 LONG_TITLE_FIRST = re.compile(
     r'\b[Tt]itle\s+(?P<title>\d{1,2})\s*,?\s+(?:of\s+the\s+)?United\s+States\s+Code(?:\s+Annotated)?\s*,?\s*'
-    r'(?P<sign>' + _SIGN + r')\s*(?P<list>' + _NUM + _SUB + _REST + r')(?P<etseq>\s*,?\s*et\.?\s?seq\.?)?')
+    r'(?P<sign>' + _SIGN + r')\s*(?P<list>' + _list() + r')(?P<etseq>\s*,?\s*et\.?\s?seq\.?)?')
 LONG_SECTION_FIRST = re.compile(
-    r'(?<![\w.])(?P<sign>' + _SIGN + r')\s*(?P<list>' + _NUM + _SUB + _REST + r')\s+of\s+[Tt]itle\s+(?P<title>\d{1,2})'
+    r'(?<![\w.])(?P<sign>' + _SIGN + r')\s*(?P<list>' + _list() + r')\s+of\s+[Tt]itle\s+(?P<title>\d{1,2})'
     r'(?=\s*(?:,?\s*(?:of\s+the\s+)?United\s+States\s+Code|\s*U\s?\.?\s?S\s?\.?\s?C|\s*\(|[\s,.;)]|$))')
-_ITEM_RX = re.compile(r'(?P<join>' + _JOIN + r')?(?P<sign>' + _SIGN + r')?\s*(?P<num>' + _NUM + r')' + _SUB)
+_ITEM_RX = re.compile(r'(?P<join>' + _join() + r')?(?P<sign>' + _SIGN + r')?\s*(?P<num>' + _num() + r')' + _sub())
 AFTER = re.compile(r'\s*,?\s*\((?:[A-Z][A-Za-z.]*\s+)*(?:Supp\.?\s*[IVX]*,?\s*)?(?P<year>(?:19|20)\d{2})(?:\s*(?:ed\.?|edition|Supp\.?[^()]{0,20}|&[^()]{0,25}|,[^()]{0,25}))?\)')
 FORMER = re.compile(r'\b(?:former(?:ly)?|old|repealed)\s*$', re.I)
 

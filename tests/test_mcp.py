@@ -2953,8 +2953,46 @@ class TestToolSurface(unittest.TestCase):
         self.assertEqual([m.kind_arg({'kind': k}) for k in ('law', 'laws', 'Judgments', 'caselaw', 'all', '')],
                          ['laws', 'laws', 'judgments', 'judgments', 'all', 'laws'])
         self.assertEqual(m.kind_arg({}, 'all'), 'all')
+        # the words clients send for a kind, in English and in the record's languages (19 Nov 2026)
+        self.assertEqual([m.kind_arg({'kind': k}) for k in ('cases', 'decision', 'Jurisprudência', 'zakon', 'Gesetz', 'statutes')],
+                         ['judgments', 'judgments', 'judgments', 'laws', 'laws', 'laws'])
         with self.assertRaises(m.UserError):
-            m.kind_arg({'kind': 'cases'})
+            m.kind_arg({'kind': 'x'})
+
+    def test_argument_aliases(self):
+        m = self.m
+        self.assertEqual(m.ALIASES['search_law'], {'q': 'query', 'country': 'jurisdiction', 'limit': 'max_results', 'path': 'jurisdiction'})
+        self.assertEqual(m.ALIASES['laws_between']['from'], 'start')
+        self.assertEqual(m.ALIASES['compare_dates'], {'from': 'date_a', 'to': 'date_b'})
+        self.assertNotIn('read_law', m.ALIASES)  # (read_law takes no jurisdiction: its path names one)
+        for name, renames in m.ALIASES.items():
+            for old, new in renames.items():
+                self.assertNotIn(old, m.PROPERTIES[name], name)
+                self.assertIn(new, m.PROPERTIES[name], name)
+
+    def test_spelled_ranges(self):
+        m = self.m
+        self.assertEqual(m.safe_regex('porez[a-s]'), 'porez[a-s]')
+        self.assertEqual(m.safe_regex('порез[а-г]'), 'порез[абвг]')
+        self.assertEqual(m.safe_regex('[^а-в]x'), '[^абв]x')
+        self.assertEqual(m.safe_regex('[[:alpha:]а-в]+'), '[[:alpha:]абв]+')
+        self.assertEqual(m.safe_regex(r'\[а-в]'), r'\[а-в]')  # (an escaped bracket opens no class)
+        with self.assertRaises(m.UserError):
+            m.safe_regex('[a-\U0001F600]')
+
+    def test_hits_per_line(self):
+        m = self.m
+        lines = ['code du travail', 'code de la route', 'du le de', 'travail de nuit', 'du du du'] + ['du la'] * 200
+        text, starts = m._lines_text(lines)
+        old = {}
+        for mine in m.lines_holding_each(text, starts, ['code', 'du', 'travail']):
+            for i in mine:
+                old[i] = old.get(i, 0) + 1
+        got = m.hits_per_line(text, starts, ['code', 'du', 'travail'])
+        # the lines holding a rarer word, counted as before; a line with only "du" (a common word) is no candidate
+        self.assertEqual(dict(got), {i: n for i, n in old.items() if i in (0, 1, 3)})
+        self.assertEqual(dict(m.hits_per_line(text, starts, ['du'])), {i: 1 for i, line in enumerate(lines) if 'du' in line})
+        self.assertIsNone(m.hits_per_line(text, starts, ['code', '']))
 
     def test_short_caveats(self):
         m = self.m
@@ -2988,7 +3026,7 @@ class TestToolSurface(unittest.TestCase):
                     self.assertEqual(set(prop['enum']), {'laws', 'law', 'judgments', 'all'})
         self.assertIn('jurisdiction', tools['law_details']['inputSchema']['properties'])
         self.assertNotIn('corpus', tools['law_details']['inputSchema']['properties'])
-        self.assertEqual(self.m.ALIASES['law_details'], {'corpus': 'jurisdiction'})
+        self.assertEqual(self.m.ALIASES['law_details']['corpus'], 'jurisdiction')
         self.assertIn('both days included', tools['laws_between']['description'])
         self.assertIn('both days included', tools['search_changes']['description'])
         self.assertIn('after date_a, up to and including date_b', tools['compare_dates']['description'])

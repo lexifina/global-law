@@ -36,7 +36,7 @@ and git, reads the repository and changes nothing.
 ## Hosted: nothing to download
 
 Lexifina runs this server at **https://global-law.lexifina.com/mcp** with every public country loaded, refreshed from these
-repositories about every 40 minutes. Add it to any MCP client that speaks Streamable HTTP. No account or key is needed.
+repositories twice a day (03:00 and 15:00 UTC). Add it to any MCP client that speaks Streamable HTTP. No account or key is needed.
 Its first address, `mcp.lexifina.com`, is now the Lexifina app's own MCP server: clients set up with it should switch to the address above.
 
 ### Install on each client

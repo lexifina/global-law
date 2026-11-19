@@ -43,7 +43,7 @@ class Tree:
         self.pins.update(pins)
         entries = self.pins if gitmodules is None else gitmodules
         text = ''.join(f'[submodule "{p}"]\n\tpath = {p}\n\turl = {self.url(p)}\n' for p in sorted(entries))
-        (self.path / '.gitmodules').write_text(text, encoding='utf-8', newline='\n')
+        (self.path / '.gitmodules').write_bytes(text.encode('utf-8'))  # (write_text takes newline from Python 3.10)
         git('add', '.gitmodules', cwd=self.path)
         for p, sha in pins.items():
             git('update-index', '--add', '--cacheinfo', f'160000,{sha},{p}', cwd=self.path)
@@ -248,7 +248,7 @@ class KnownUnheld(unittest.TestCase):
         tools = self.tree.path / 'tools'
         tools.mkdir(exist_ok=True)
         text = '# test\n' + ''.join(f'{c}\tk/acts\t{s}\t{why}\n' for c, s, why in rows)
-        (tools / 'verify-known.tsv').write_text(text, encoding='utf-8', newline='\n')
+        (tools / 'verify-known.tsv').write_bytes(text.encode('utf-8'))  # (write_text takes newline from Python 3.10)
 
     def run_remote(self) -> tuple[int, str]:
         return verify(self.tree.path, '--full', '--remote', '--no-checkpoint')
