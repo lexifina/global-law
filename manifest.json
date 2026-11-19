@@ -17965,11 +17965,11 @@
       "history": "in-force",
       "tool": "tools/on_date.py",
       "citation": {
-        "file": "([a-z]+)/art-0*([0-9]+(?:-[0-9]+)?)\\.md",
+        "file": "(宪法|法律/[^/]+)/第0*([0-9]+)条(?:之([一二三四五六七八九十]))?\\.md",
         "cites": "第{n}",
         "numerals": "zh",
         "not_followed_by": "之[一二三四五六七八九十]",
-        "n_format": "zh: {n} is the article in Chinese numerals with 条 and any 之 branch, as the law writes it: 103 -> 一百零三条, 1010 -> 一千零一十条, 263-1 (art-263-1.md) -> 二百六十三条之一; not_followed_by keeps 第二百六十三条之一 from counting as a citation of art. 263"
+        "n_format": "zh: {n} is the article in Chinese numerals with 条 and any 之 branch, as the law writes it: 103 -> 一百零三条, 1010 -> 一千零一十条; group 3 of file is the 之 branch (法律/刑法/第263条之一.md -> 二百六十三条之一); not_followed_by keeps 第二百六十三条之一 from counting as a citation of art. 263"
       },
       "scope": {
         "trailer": "Applies",
