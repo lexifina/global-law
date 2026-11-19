@@ -4522,6 +4522,38 @@ def act_titles(corpus: str, sha: str) -> dict[str, str]:
 _readme_headings: dict = {}  # (corpus, commit, folder) -> the first heading of its README.md, None when it has none
 
 
+def prime_act_titles(acts) -> None:
+    """For (corpus, act folder) pairs, the READMEs act_title would read for them one act at a time, read in one git
+    process per corpus and kept as act_title keeps them: a search names up to SEARCH_ACTS acts and a page of matches
+    as many provisions, and each act not in the corpus's index was a git process of its own, one after another (on
+    a host short of memory for files, most of what a search waited for after its index: its trace of 18 November
+    2026). What is kept is what act_title would have read; it never raises."""
+    try:
+        wanted: dict = {}
+        for corpus, act in acts:
+            if not act:
+                continue
+            sha = corpus_head(corpus)
+            titles = act_titles(corpus, sha)
+            parts = act.split('/')
+            folders = ['/'.join(parts[:i]) for i in range(len(parts), 0, -1)]
+            if any(f in titles or f == 'grundgesetz' for f in folders):
+                continue
+            for f in folders[:2]:
+                if (corpus, sha, f) not in _readme_headings:
+                    wanted.setdefault((corpus, sha), {})[f] = None
+        for (corpus, sha), folders in wanted.items():
+            if len(folders) < 3:  # (one act's two folders: act_title reads them in one process itself)
+                continue
+            got = read_headings(corpus, sha, tuple(f'{f}/README.md' for f in folders))
+            if len(_readme_headings) > 50000:
+                _readme_headings.clear()
+            for f in folders:
+                _readme_headings[corpus, sha, f] = got.get(f'{f}/README.md')
+    except BaseException:  # noqa: BLE001  (act_title reads what is not kept)
+        pass
+
+
 def act_title(corpus: str, rel: str) -> str:
     """The title of the act a provision belongs to: from the corpus's index (act_titles), else the README of its
     folder or the folder above (Switzerland's 101/README.md is "# Bundesverfassung …"); '' when none says."""
@@ -6305,6 +6337,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                    + ' (pass regex true for a pattern, or fewer words for the phrase).')
     acts_rows = []
     if acts_found and acts_found['acts'] and not offset:
+        prime_act_titles([(corpus, act) for corpus, act, *_ in acts_found['acts'][:SEARCH_ACTS]])
         for corpus, act, n, best in acts_found['acts'][:SEARCH_ACTS]:
             try:
                 title = act_title(corpus, f'{act}/x.md') if act else ''
