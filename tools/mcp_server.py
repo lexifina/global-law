@@ -2622,10 +2622,9 @@ def t_list_jurisdictions(args: dict) -> tuple[str, dict]:
     latest = law.latest_decisions('9999-12-31', cl)
     cl_set, short = set(cl), []
     # the events grouped once: with 241 case-law corpora listed, scanning every event for each corpus took 2.3 s
-    by_corpus: dict[str, list] = {}
-    for e in events:
-        if e.kind != 'documentation':
-            by_corpus.setdefault(e.corpus, []).append(e)
+    # (and kept with the timeline, law.by_corpus: the grouping went through every event of every corpus served on each
+    # call, 3.4 s of the list_jurisdictions calls a host's trace saw in ten minutes, 19 November 2026)
+    by_corpus = law.by_corpus(events)
     for c in m['corpora']:
         own = by_corpus.get(c['path'], [])
         first, last = (own[0].in_force, own[-1].in_force) if own else (None, None)
