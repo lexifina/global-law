@@ -3,12 +3,12 @@
 This page moved to [monitoring/](monitoring/), with a short film of how it works.
 
 <!-- status-summary -->
-**Updates: running**: last published 2026-11-20 15:45 UTC; status refreshed 2026-11-20 15:45 UTC.
+**Updates: running**: last published 2026-11-20 16:39 UTC; status refreshed 2026-11-20 16:39 UTC.
 
 | | |
 | --- | --- |
 | Last 24 hours | 94 commits: 0 corpus updates, 0 corpora added |
-| Last successful pass | 2026-11-20 15:45 UTC |
+| Last successful pass | 2026-11-20 16:39 UTC |
 | Held back by a check | `china-law` |
 | Official sources not answering | none |
 | Freshness | 603 of 991 corpora current, 362 stale, 16 unverified ([FRESHNESS.md](FRESHNESS.md)) |
