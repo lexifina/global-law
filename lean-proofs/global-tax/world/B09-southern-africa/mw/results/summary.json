@@ -1,0 +1,79 @@
+{
+ "country": "MW",
+ "name": "Malawi",
+ "year": "rates in force from 30 December 2025 (earlier 2025 rates not reached)",
+ "status": "built",
+ "access": "B",
+ "batch": "B09-southern-africa",
+ "lean": {
+  "lines": 78,
+  "definitions": 8,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon/Out",
+  "World.worldMain",
+  "Theorems (Schedule)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 1,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean #guard / decide)",
+   "cases": 8,
+   "exact": 8,
+   "within_1pct": 8,
+   "notes": "build phase: no referee values used"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 1,
+  "not_modelled": 4
+ },
+ "new_loopholes": 1,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "UK/IE PAYE"
+ ],
+ "sources": [
+  "MRA public notice 'NEW TAX MEASURES UNDER AMENDED TAXATION AND VALUE ADDED TAX LAWS' (March 2026) on the Taxation (Amendment) (No. 2) Act 36 of 2025 (official secondary), via the MRA site's public downloads API",
+  "MalawiLII search API excerpts (Act 36 of 2025 published 30 December 2025, Eleventh Schedule amended); MalawiLII documents behind a Cloudflare challenge"
+ ],
+ "scale": "18840000 MWK (threshold of the 35 % PAYE band (K2 040 000 + K16 800 000))",
+ "scanner": {
+  "single": {
+   "maxMETR": 0.35,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.35,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.33,
+   "netIncomeFalls": 0
+  }
+ },
+ "unsupported": [
+  "rates before 30 December 2025",
+  "combination of PAYE and personal schedules",
+  "WHT on interest and dividends",
+  "income-tax treatment of the Pension Act 2023 employee contribution (Taxation Act Cap. 41:01 not reached)"
+ ],
+ "registry_correction": "MW: Taxation Act Cap. 41:01, rates in the Eleventh Schedule (Appendix); from 30 Dec 2025 PAYE 0/30/35/40 % with a K2 040 000 annual zero band and a separate personal schedule 0/30 %.",
+ "headline": "Malawi modelled only for the rates in force from 30 December 2025 (MRA notice on Act 36/2025): employment income 0/30/35/40 %, other income 0/30 %, so K120 m of self-employment income pays 35 388 000 against 40 446 000 as wages.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "Pension Act 2023 employee minimum 5 % of pensionable emoluments (no ceiling); not deducted (Taxation Act not reached)",
+  "provision": "Pension Act No. 6 of 2023 s. 12 (1) (b), s. 2 \"pensionable emoluments\"",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

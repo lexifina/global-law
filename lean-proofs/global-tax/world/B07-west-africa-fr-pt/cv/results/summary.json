@@ -1,0 +1,63 @@
+{
+ "country": "CV",
+ "name": "Cabo Verde (IRPS)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B07-west-africa-fr-pt",
+ "lean": {
+  "lines": 131,
+  "definitions": 13,
+  "theorems": 7,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (art. 46.º)",
+  "Unit (splitting for married couples, art. 45.º 2.)",
+  "Credit (dependants, art. 54.º)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 17,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean decide)",
+   "cases": 7,
+   "exact": 7,
+   "within_1pct": 7,
+   "notes": "build phase: no referee values used; cases = Lean theorems (kernel instances and checks of the statute's printed tables and stated amounts, all proved)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 2,
+  "not_modelled": 3
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "PT (IRS structure: categories, englobamento, quociente conjugal)",
+  "kernel Unit.splitting"
+ ],
+ "sources": [
+  "Código do IRPS, Lei n.º 78/VIII/2014 (B.O. I Série n.º 81, 31.12.2014) and its republication by Lei n.º 116/IX/2021 de 2 de fevereiro (B.O. I Série n.º 10), DNRE library https://www.mf.gov.cv/web/dnre/legislacao",
+  "Orçamento do Estado 2025 (B.O. I Série n.º 125 Sup., 30.12.2024), DNRE library: no IRPS amendment"
+ ],
+ "scale": "1800000 CVE (threshold of the top (27,5 %) IRPS rate)",
+ "unsupported": [
+  "category A withholding tables",
+  "OE 2022-2024 not read"
+ ],
+ "registry_correction": "CV: IRPS (Lei 78/VIII/2014, republished by Lei 116/IX/2021) confirmed; access B.",
+ "headline": "Cabo Verde built from the IRPS code as republished in 2021 (OE 2025 checked): englobamento at 16,5/23,1/27,5 % after a 220 000 CVE mínimo per taxpayer, married splitting (quociente conjugal), 5 000 CVE per dependant; liberatory 20 % on capital income and 10 % on property income. The rate article can also be read as a whole-income step tariff with a 63 360 CVE notch.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "INPS quotização 8,5 % of gross remuneration, deducted from category A (art. 28.º 2. a))",
+  "provision": "Portaria Conjunta nº 28/2024 (B.O. I Série nº 66, 16/07/2024) art. 2.º 1. a)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

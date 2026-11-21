@@ -1,0 +1,80 @@
+{
+ "country": "LY",
+ "name": "Libya",
+ "year": "2025",
+ "status": "built",
+ "batch": "B06-mena",
+ "access": "B",
+ "reused_from": [
+  "UK"
+ ],
+ "lean": {
+  "lines": 93,
+  "definitions": 10,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "rate of the whole income chosen by the monthly amount (Jihad tax): local"
+ ],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own tables/formulas, #guard",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "#guard art. 58 band ends; Jihad tax notches at 50 and 100 a month"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 2,
+  "not_modelled": 2
+ },
+ "new_loopholes": 1,
+ "gov_errors": 1,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "trade, craft, professional income",
+  "post-2016 amendments",
+  "Jihad tax status in 2025",
+  "pension income tax"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.5,
+   "bandsOver100": 0,
+   "largestNotch": "11.00 at 1,211 (0.10092 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.5,
+   "bandsOver100": 0,
+   "largestNotch": "11.00 at 1,211 (0.10092 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.5,
+   "bandsOver100": 0,
+   "largestNotch": "11.00 at 2,019 (0.16825 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 0.5,
+   "bandsOver100": 0,
+   "largestNotch": "11.00 at 1,211 (0.10092 AW)"
+  }
+ },
+ "headline": "A 5 %/10 % work-income tax on 2010 exemptions plus a 1970 Jihad tax of 3 % of the whole salary",
+ "updated": "2026-11-20T05:30Z"
+}

@@ -1,0 +1,14 @@
+name = "AgTax"
+version = "0.1.0"
+defaultTargets = ["AgTax", "agtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AgTax"
+
+[[lean_exe]]
+name = "agtax"
+root = "AgTax.Main"

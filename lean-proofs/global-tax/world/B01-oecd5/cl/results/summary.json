@@ -1,0 +1,54 @@
+{
+ "country": "CL",
+ "name": "Chile (impuesto único de segunda categoría + global complementario; AFP, salud, seguro de cesantía)",
+ "year": "2025 (año comercial 2025, año tributario 2026)",
+ "status": "built",
+ "access": "B",
+ "batch": "B01-oecd5",
+ "lean": {
+  "lines": 274,
+  "definitions": 38,
+  "theorems": 10,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "World.Schedule.ofUnits (UTM / UTA thresholds)",
+  "World.overlayTax with credit (global complementario over the impuesto único)",
+  "Schedule",
+  "Unit (individual)",
+  "Rounding (divR)"
+ ],
+ "kernel_gaps": [
+  "Monthly unit values and month-end UF values (12 per year) and IPC adjustment factors: written locally as lists"
+ ],
+ "provisions_cited": 24,
+ "validation": [
+  {
+   "referee": "statutory derivation of the 2025 topes (DL 3.500 art. 16, Ley 19.728 art. 6) from the 2024 values",
+   "cases": 4,
+   "exact": 4,
+   "within_1pct": 4,
+   "notes": "Lean tope_check / tope_check_feb"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "MX (monthly wage tax, indexed units)",
+  "kernel overlayTax / Schedule.ofUnits"
+ ],
+ "sources_official_secondary": [
+  "SII (official secondary): UTM/UTA and IPC 2025 (utm2025.htm, utm2024.htm), UF daily values (uf2024.htm, uf2025.htm), correccion2025.htm"
+ ],
+ "headline": "Chile 2025 built from the LIR (Global law, 2025-07-01) with SII unit values: monthly impuesto único with month-specific UTM, global complementario overlay with the IPC-adjusted credit; the cesantía ceiling moved from 131,8 to 131,9 UF on 1 February 2025; the art. 57 interest exemption is a 1-peso notch."
+}

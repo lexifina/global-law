@@ -1,0 +1,14 @@
+name = "CoTax"
+version = "0.1.0"
+defaultTargets = ["CoTax", "cotax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CoTax"
+
+[[lean_exe]]
+name = "cotax"
+root = "CoTax.Main"

@@ -1,0 +1,14 @@
+name = "NgTax"
+version = "0.1.0"
+defaultTargets = ["NgTax", "ngtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "NgTax"
+
+[[lean_exe]]
+name = "ngtax"
+root = "NgTax.Main"

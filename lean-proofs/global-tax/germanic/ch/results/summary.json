@@ -1,0 +1,34 @@
+{
+ "country": "CH",
+ "name": "Switzerland (federal + canton and City of Zürich)",
+ "year": "2025",
+ "status": "done",
+ "lean": {"lines": 807, "definitions": 109, "theorems": 40, "sorry": 0},
+ "kernel_parts_used": ["Schedule", "Rounding", "Multiplier", "Social (rates in bp)", "Canon/Out/Country", "Theorems.Schedule", "Theorems.Parts38 (Multiplier.amount_mono)", "Unit (splitting_le_separate, for comparison)"],
+ "kernel_gaps": [
+  "DBG Art. 36 is a printed cumulative table (amount per row + increment per complete 100 francs), rounded to 5 Rappen: written locally as TRow/tariffRp; the kernel Schedule is the band sum (OECD) and differs by up to 7 Rappen",
+  "federal tariff not progressive (13.2 % then 11.5 % of the whole income): Schedule.ticks_convex and splitting_le_separate do not apply (fedSingle_not_convex)",
+  "two tariffs chosen by household type (married / single parent use the Verheiratetentarif) rather than splitting: local",
+  "all-or-nothing deduction increase conditioned on other deductions being zero (DBG Art. 33 Abs. 1bis): local",
+  "family allowances with two entitlement routes (employee minimum income vs non-employed income test): local famzgEntitled",
+  "capital benefits taxed separately at a fraction of the tariff (1/5 federal, rate of 1/20 with a 2 % floor in Zürich): local",
+  "Out writes whole units: taxes kept in Rappen in detail (fedTaxRp, cantonTaxRp, ...)"
+ ],
+ "provisions_cited": 37,
+ "validation": [
+  {"referee": "OECD TW 2025 (Taxing Wages 2026, year 2025), --oecd conventions", "cases": 56, "exact": 55, "within_1pct": 56,
+   "notes": "8 types x CGTC, CGITLETC, CGITFP, SLT, EECSSC, CTGG, THP; --oecd = BVG 7.83 % above 26 460, Berufskosten before BVG, 268 per child, federal band sum; the miss is EECSSC/THP rounding (+1)"},
+  {"referee": "OECD TW 2025, statutory defaults", "cases": 56, "exact": 14, "within_1pct": 19,
+   "notes": "differences explained: statutory BVG minimum vs OECD 7.83 % convention (F5), Zürich 215 per child under 12 vs OECD 268 (F3)"},
+  {"referee": "ESTV Steuerrechner 2025 (swisstaxcalculator API), Zürich 8001, grid", "cases": 1494, "exact": 1494, "within_1pct": 1494,
+   "notes": "166 households (singles 30/45/60, reformed church, married one/two earners with 0/2 children, single parents, pensioners; 15 000-1 500 000) x 9 lines (federal and cantonal taxable income, federal tax, simple tax, canton 98 %, City 119 %, church, Personalsteuer, total); ESTV conventions fed in (its BVG per person, NBU 0.4 %, allowances outside taxable income); exact = |diff| <= 1 CHF"},
+  {"referee": "ESTV tariff tables 2025 (API_exportManyTaxScales) vs statute rows", "cases": 24, "exact": 24, "within_1pct": 24,
+   "notes": "federal Grundtarif 10/10 and Verheiratetentarif 14/14 rows identical to the DBG text as printed (not the band sum)"}
+ ],
+ "known_loopholes": {"catalogued": 22, "recreated": 12, "not_modelled": 10},
+ "new_loopholes": 3,
+ "gov_errors": 2,
+ "statute_faults": 3,
+ "headline": "Reproduces the ESTV calculator on 1,494 of 1,494 lines and the OECD on 55 of 56; one franc paid into Säule 3a costs a saver without a pension fund 236 francs of tax (couple 498), the BVG threshold is a +84.63 notch, a 7,560 wage unlocks 5,160 of family allowances for a family living on capital income, and two-earner couples pay up to 71 % (135 % with children) more federal tax married.",
+ "notes": "Family decision: default output = federal (incomeTax) + Zürich Staatssteuer 98 % + City of Zürich 119 % + Personalsteuer 24/adult (localIncomeTax), church tax off; --canton-only = literal CONTRACT38 reading (no Gemeindesteuer, no Personalsteuer); --church reformed|catholic adds 10 %. OECD SLT = canton + City + Personalsteuer, no church. Employee social = AHV/IV/EO 5.3 % + ALV 1.1 % (NBU optional --nbu, BVG deducted for tax but not in employeeSocial, as the OECD). Web searches used: 3 of 3."
+}

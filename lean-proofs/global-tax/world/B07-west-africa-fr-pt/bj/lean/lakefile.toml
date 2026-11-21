@@ -1,0 +1,14 @@
+name = "BjTax"
+version = "0.1.0"
+defaultTargets = ["BjTax", "bjtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "BjTax"
+
+[[lean_exe]]
+name = "bjtax"
+root = "BjTax.Main"

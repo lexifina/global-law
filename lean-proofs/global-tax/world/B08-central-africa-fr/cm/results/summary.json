@@ -1,0 +1,103 @@
+{
+ "country": "CM",
+ "name": "Cameroon",
+ "year": "2025",
+ "status": "built",
+ "batch": "B08-central-africa-fr",
+ "access": "A",
+ "reused_from": [
+  "FR (individual IRPP with centimes)",
+  "kernel Multiplier pattern (CAC)"
+ ],
+ "lean": {
+  "lines": 152,
+  "definitions": 19,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 6,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR, toMultiple)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Table (RAV, TDL)",
+  "Table.perPeriod (monthly levies)"
+ ],
+ "kernel_gaps": [
+  "flat amounts by wage band (TDL, RAV): kernel Table, no new part"
+ ],
+ "provisions_cited": 14,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 8,
+   "exact": 8,
+   "within_1pct": 8,
+   "notes": "IRPP at 3.6 M and 20 M gross, the art. 81 threshold (62 000 a month: tax 0), RAV and TDL band edges"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 8,
+  "recreated": 4,
+  "not_modelled": 4
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "self-employment (art. 17 rate + 2 % turnover minimum)",
+  "rental income",
+  "capital gains",
+  "TDL at the CGI's maximum rates (communes may set lower)"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 1.471,
+   "atAW": 2.0,
+   "bandsOver100": 9,
+   "largestNotch": "5,999 at 3,000,005 (1.0 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 1.471,
+   "atAW": 2.0,
+   "bandsOver100": 9,
+   "largestNotch": "5,999 at 3,000,005 (1.0 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 1.471,
+   "atAW": 2.0,
+   "bandsOver100": 9,
+   "largestNotch": "5,999 at 3,000,005 (1.0 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 2.595,
+   "atAW": 2.0,
+   "bandsOver100": 7,
+   "largestNotch": "5,999 at 5,000,009 (1.66667 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 1.471,
+   "atAW": 2.0,
+   "bandsOver100": 9,
+   "largestNotch": "5,999 at 3,000,005 (1.0 AW)"
+  }
+ },
+ "headline": "F1 The communal development tax (TDL) is a step function of the monthly base salary: one franc more than 250 000 a month costs 6 000 a year",
+ "scale": {
+  "wage": 3000000,
+  "currency": "XAF",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "CGI art. 69 (1): start of the third band 'De 3 000 001 à 5 000 000 ... 25 %' (taxable wage income; CGI 2024 and 2026 editions, impots.cm)",
+  "by": "B08-central-africa-fr",
+  "basis": "CGI art. 69 (1): start of the third band 'De 3 000 001 à 5 000 000 ... 25 %' (taxable wage income; CGI 2024 and 2026 editions, impots.cm). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'progressive, individual, IRPP + CAC multiplier' confirmed and extended: IRPP 10/15/25/35 % on (gross - 30 % frais capped at 4.8 M - CNPS pension) - 500 000 (arts. 29, 34, 69); CAC 10 % of the tax (art. 71); plus wage levies outside the IRPP: TDL (communal, flat by monthly base salary), CFC 1 %, RAV (monthly flat by gross); CNPS pension 4.2 % capped at 750 000 a month. No family quotient."
+}

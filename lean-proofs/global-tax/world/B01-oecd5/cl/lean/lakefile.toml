@@ -1,0 +1,14 @@
+name = "ClTax"
+version = "0.1.0"
+defaultTargets = ["ClTax", "cltax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "ClTax"
+
+[[lean_exe]]
+name = "cltax"
+root = "ClTax.Main"

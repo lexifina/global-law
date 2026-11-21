@@ -1,0 +1,14 @@
+name = "VaTax"
+version = "0.1.0"
+defaultTargets = ["VaTax", "vatax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "VaTax"
+
+[[lean_exe]]
+name = "vatax"
+root = "VaTax.Main"

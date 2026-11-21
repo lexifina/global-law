@@ -1,0 +1,73 @@
+{
+ "country": "ML",
+ "name": "Mali (ITS, IRF, IRVM)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B07-west-africa-fr-pt",
+ "lean": {
+  "lines": 126,
+  "definitions": 15,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (art. 10 annual barème)",
+  "percentage family reduction and two-point reduction (local)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 16,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean decide)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "build phase: no referee values used; cases = Lean theorems (kernel instances and checks of the statute's printed tables and stated amounts, all proved)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 2,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Schedule"
+ ],
+ "sources": [
+  "Code général des impôts du Mali, DGI online code https://www.dgi.gouv.ml/CGI/ (fetched 2026-11-20; document metadata 2017-08-23; latest notes Loi n° 2016-10, LF 2012/2013)",
+  "DGI annual activity reports 2024 and 2025 (dgi.gouv.ml, scanned; OCR): no ITS change mentioned"
+ ],
+ "scale": "3494130 XOF (threshold of the top (37 %) annual ITS band)",
+ "unsupported": [
+  "LF 2018-2025 not reached",
+  "IBIC/IBNC",
+  "INPS / AMO rates from the INPS guide of 2013 (official secondary; later changes not checked)"
+ ],
+ "registry_correction": "ML: ITS confirmed (CGI, Loi 2016-10 barème); access B.",
+ "headline": "Mali built from the DGI's online CGI, a 2017 consolidation (LF 2018-2025 not reached): annual ITS 0-37 % on wages and pensions, a family reduction of 10 % (married) + 2,5 % per child of the tax, and a two-point cut of the average rate (art. 12-A).",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "INPS assurance vieillesse 3,6 % and AMO 3,06 % of all remuneration, reported; the 3,6 % pension retention deducted (CGI art. 7 a), limit 4 %)",
+  "provision": "INPS \"Guide du cotisant\" (PDF of 10 August 2013, Internet Archive capture 2021-09-23): AMO salarié 3,06 %, vieillesse salarié 3,6 %; Code de prévoyance sociale art. 187 (base); official secondary; CGI art. 7 a)",
+  "source": "official secondary",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ },
+ "d9_review": [
+  {
+   "date": "2026-11-20",
+   "item": "D9S-1",
+   "category": "referee error",
+   "dataset": "world_ml_taxdev_eitd_2020",
+   "cause": "EITD MLI 2020 = art. 10 barème on gross pay; omits CGI art. 7 a) (INPS 3,6 % deducted) and arts. 12-A/12-B (two-point reduction)",
+   "model_change": "none"
+  }
+ ]
+}

@@ -1,0 +1,57 @@
+{
+ "country": "AL",
+ "name": "Albania (tatimi mbi të ardhurat personale on employment and investment income; social and health contributions)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "A",
+ "batch": "B04-europe-rest",
+ "lean": {
+  "lines": 163,
+  "definitions": 21,
+  "theorems": 10,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (13 %/23 % employment, 15 %/23 % business)",
+  "Rounding (divR half-up)",
+  "Unit (individual)",
+  "Contribution-style monthly floor/ceiling (local)"
+ ],
+ "kernel_gaps": [
+  "Allowance chosen by income bracket with no taper (neni 22) written locally: a step function, not a Taper"
+ ],
+ "provisions_cited": 14,
+ "validation": [
+  {
+   "referee": "statute's own printed amounts and tables (Lean decide)",
+   "cases": 10,
+   "exact": 10,
+   "within_1pct": 10,
+   "notes": "build phase: no referee values"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "HR/SI (Balkan flat-band pattern)",
+  "kernel Schedule, Rounding"
+ ],
+ "sources": [
+  "Global law albania/national/acts/ligj/2023/29 (Ligj 29/2023 për tatimin mbi të ardhurat) as in force 2025-07-01; https://qbz.gov.al/eli/ligj/2023/03/30/29",
+  "Ligj 7703/1993 për sigurimet shoqërore neni 10 (consolidated text of 2023-07-21)",
+  "Ligj 126/2013 amending Ligj 10383/2011 (health contribution 3,4 % split equally)",
+  "VKM 434/2023 pika 4 (minimum wage 40 000 per VKM 113/2023; maximum wage 176 416); VKM 776/2025 pika 5 (repeals VKM 113/2023 from 2026-01-01)"
+ ],
+ "scale": "960 000 ALL = 2 × 12 × minimum wage 40 000",
+ "headline": "Albania 2025 built from Ligj 29/2023: 13 %/23 % on pay with a deduction of 600 000/420 000/360 000 by income bracket, which makes two proved notches (METR 512 % at 600 000 lekë); contributions 11,2 % up to 176 416 a month."
+}

@@ -1,0 +1,74 @@
+{
+ "country": "SG",
+ "name": "Singapore",
+ "year": "2025 (Year of Assessment 2026)",
+ "status": "built",
+ "batch": "B03-asia-east-se",
+ "access": "B",
+ "reused_from": [
+  "AU",
+  "NZ",
+  "UK"
+ ],
+ "lean": {
+  "lines": 120,
+  "definitions": 13,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Table.perPeriod",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 0,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "#guard: IRAS cumulative 'Gross Tax Payable' column = band sums (11 points); CPF phase-in 0 / 150 / 1,480"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "CPF rates above age 55 in 2025",
+  "WMCR",
+  "pensions",
+  "gains of a trading nature",
+  "self-employed MediSave"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.6486,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.6486,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.4595,
+   "netIncomeFalls": 0
+  }
+ },
+ "sources": "IRAS published tables (resident rates from YA 2024; reliefs: EIR, CPF relief, spouse, QCR, relief cap $80,000; no YA 2026 rebate listed) and the CPF Board's 2026 contribution-rate table (method, ages 55 and below); the Income Tax Act 1947 and CPF Act on Singapore Statutes Online answer 403 to scripts and the archived copies were offline during the build",
+ "headline": "Spouse relief cliff at $8,000 of the spouse's income"
+}

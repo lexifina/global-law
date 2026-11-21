@@ -1,0 +1,107 @@
+{
+ "country": "CD",
+ "name": "DR Congo",
+ "year": "2025",
+ "status": "built",
+ "batch": "B08-central-africa-fr",
+ "access": "B",
+ "reused_from": [
+  "kernel Schedule + cap"
+ ],
+ "lean": {
+  "lines": 97,
+  "definitions": 11,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR, toMultiple)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [
+  "tax capped at a % of income (art. 84 §2): local min"
+ ],
+ "provisions_cited": 10,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "12 M (1 566 720; 3 dependants 1 472 717), 100 M (30 % cap), the 2 000 FC monthly minimum"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 2,
+  "not_modelled": 4
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "impôt mobilier, rents, gains",
+  "immune housing/transport allowances",
+  "finance laws 2024 and 2025",
+  "CNSS base floor at the SMIG (Loi 16/009 art. 13, Décret 18/041 art. 8) not applied"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.4,
+   "atAW": 2.0,
+   "bandsOver100": 0,
+   "largestNotch": "23,999 at 0 (0.0 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 0.384,
+   "atAW": 2.0,
+   "bandsOver100": 0,
+   "largestNotch": "23,999 at 0 (0.0 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.376,
+   "atAW": 2.0,
+   "bandsOver100": 0,
+   "largestNotch": "23,999 at 0 (0.0 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.444,
+   "atAW": 0.0,
+   "bandsOver100": 0,
+   "largestNotch": "23,999 at 0 (0.0 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 0.4,
+   "atAW": 2.0,
+   "bandsOver100": 0,
+   "largestNotch": "23,999 at 0 (0.0 AW)"
+  }
+ },
+ "headline": "F1 The 40 % band is cancelled by the 30 % cap above 77.9 M: the marginal rate falls from 40 % to 30 %",
+ "scale": {
+  "wage": 21600000,
+  "currency": "CDF",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Ordonnance-loi 69/009 art. 84 §1 (Code des impôts mis à jour au 10 juillet 2023, dgi.gouv.cd): start of the 30 % band '21.600.001,00 FC'",
+  "by": "B08-central-africa-fr",
+  "basis": "Ordonnance-loi 69/009 art. 84 §1 (Code des impôts mis à jour au 10 juillet 2023, dgi.gouv.cd): start of the 30 % band '21.600.001,00 FC'. A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'schedular, IPR on remunerations' confirmed for 2025: IPR 3/15/30/40 % (1.944 M / 21.6 M / 43.2 M), total capped at 30 % of the income, less 2 % per dependant (max 9), minimum 2 000 FC a month; the IRPP of Loi 23/053 applies from 2026.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "CNSS worker 5 % of remuneration (pensions branch, no ceiling), deducted (CGI art. 50); input cnssEmployee still overrides",
+  "provision": "Décret n° 18/041 du 24 novembre 2018 fixant les taux de cotisations dues à la CNSS, art. 3 (10 % = 5 % + 5 %), art. 10 (transitional 3,5 % only to 1 January 2019); Loi 16/009 du 15 juillet 2016 arts. 13, 16, 18 (Leganet copies via the Internet Archive)",
+  "source": "statute (private reproduction)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

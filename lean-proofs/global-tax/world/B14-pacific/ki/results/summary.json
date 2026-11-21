@@ -1,0 +1,68 @@
+{
+ "country": "KI",
+ "name": "Kiribati",
+ "year": "2025",
+ "status": "unsupported",
+ "batch": "B14-pacific",
+ "access": "C",
+ "reused_from": [],
+ "lean": {
+  "lines": 28,
+  "definitions": 3,
+  "theorems": 0,
+  "sorry": 0
+ },
+ "guards": 0,
+ "kernel_parts_used": [
+  "Canon",
+  "Country",
+  "World.worldMain"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 0,
+ "validation": [],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "no accessible statute"
+ ],
+ "scan": {},
+ "headline": "",
+ "registry_correction": "Registry 'Income Tax Act': no 2025 text reached (Global law holds only the 1979 Independence Order).",
+ "rescue": {
+  "agent": "rescue",
+  "date": "2026-11-20T11:52Z",
+  "outcome": "still C",
+  "routes": [
+   "tax.gov.ki (Kiribati Tax Office, found via mfed.gov.ki 'TAXATION'): WordPress media library (all pages) holds forms, the VAT Act 2013 and VAT regulations, return instructions and pamphlets; no Income Tax Act; an 'Income Tax' page exists (official secondary, not a statute)",
+   "kiribatilaws.gov.ki: no answer"
+  ],
+  "unlock": "a current consolidation of the Income Tax Act (only the 1977 Cap. 44 is on hand)"
+ },
+ "rescue2": {
+  "agent": "rescue2",
+  "date": "2026-11-20T13:11Z",
+  "outcome": "still unsupported (access C)",
+  "routes": [
+   "kiribatilaws.gov.ki: no answer from the laptop; tax.gov.ki WordPress media search 'income tax': return forms and instructions only",
+   "parliament.gov.ki (laptop): 'Acts' page embeds phocadownload categories 19-22 (Acts passed 2022-2025) whose plugin tag is not rendered; the category URLs answer 404 live; Wayback copies of the 2024 and 2025 category pages list five acts per page (none on income tax on the first page)",
+   "Wayback CDX of parliament.gov.ki: Income Tax (Amendment) Acts 1994, 1996, 1997 (x2), 2009 and an 'Income Tax Act (No 9) amendment of s7' (2021 upload); acts of 2013-2025 incompletely archived, so the 2025 law cannot be shown complete",
+   "legis-palop.org (PALOP+TL legal database): full texts need a paid subscription and login (free registration gives listings only); its search form posts redirect to the home page without a session: not used (login)",
+   "natlex.ilo.org, www.fao.org/faolex, www.refworld.org: Cloudflare 'Sorry, you have been blocked' (403) from the laptop and WebFetch: not bypassed",
+   "droit-afrique.com: live site 403 ('Server unable to read htaccess file'); its tax codes are sold in a shop (Wayback: only the free 'sommaire')",
+   "Global law list_jurisdictions (rescue2/tools/gl.py, 2026-11-20): no tax law in this country's corpus",
+   "WIPO Lex country profile (www.wipo.int/wipolex/en/members/profile/<CC>): no tax law listed (except SY, GM: see below)"
+  ],
+  "unlock": "a consolidated Income Tax Act (Cap. 44) as amended to 2025, or the complete list of income tax amendments since 2009"
+ }
+}

@@ -1,0 +1,101 @@
+{
+ "country": "GA",
+ "name": "Gabon",
+ "year": "2025",
+ "status": "built",
+ "batch": "B08-central-africa-fr",
+ "access": "A",
+ "reused_from": [
+  "FR (family quotient)",
+  "kernel quotient, Tariff.SubRow"
+ ],
+ "lean": {
+  "lines": 141,
+  "definitions": 18,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 4,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR, toMultiple)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Unit.quotient",
+  "Tariff (SubRow, subAgrees)",
+  "Table.perPeriod (TCS, CNAMGS)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 16,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "art. 174 printed 'x Q - subtraction' column = band tariff at 17 points (subAgrees); single and married at 6 M; half-parts"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 8,
+  "recreated": 2,
+  "not_modelled": 6
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "employee CNSS pension contribution (rate not reached; input cnssEmployee)",
+  "self-employment, rents, gains",
+  "children aged 18-28 in studies"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.341,
+   "atAW": 2.845,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.263,
+   "atAW": 3.405,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.224,
+   "atAW": 2.845,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.253,
+   "atAW": 3.995,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.263,
+   "atAW": 3.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Marriage can cost tax: an unmarried parent's first child counts a full part, so a cohabiting couple with children has more parts than a married one",
+ "scale": {
+  "wage": 5160000,
+  "currency": "XAF",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "CGI 2025 art. 174: start of the 25 % band 'De 5.160.001 à 7.500.000 FCFA' (per part; dgi.ga)",
+  "by": "B08-central-africa-fr",
+  "basis": "CGI 2025 art. 174: start of the 25 % band 'De 5.160.001 à 7.500.000 FCFA' (per part; dgi.ga). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'progressive, family quotient' confirmed: joint return of the 'chef de famille' (art. 75), parts 1 / 2 / + 1/2 per child up to six children (art. 170), no cap on the quotient's advantage, tariff per part 0-35 % (art. 174); base after social contributions, the TCS and 20 % frais capped at 10 M; TCS 5 % above 150 000 a month; RCM 20 % final."
+}

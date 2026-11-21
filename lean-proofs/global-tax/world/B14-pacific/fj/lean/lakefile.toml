@@ -1,0 +1,14 @@
+name = "FjTax"
+version = "0.1.0"
+defaultTargets = ["FjTax", "fjtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "FjTax"
+
+[[lean_exe]]
+name = "fjtax"
+root = "FjTax.Main"

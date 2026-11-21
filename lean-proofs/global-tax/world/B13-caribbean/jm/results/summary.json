@@ -1,0 +1,98 @@
+{
+ "country": "JM",
+ "name": "Jamaica",
+ "year": "2025 (year of assessment)",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "B",
+ "reused_from": [
+  "UK/IE PAYE"
+ ],
+ "lean": {
+  "lines": 100,
+  "definitions": 9,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 4,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 6,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "TAJ Table #2 effective threshold 1,774,554 = 1,700,088 x 3/12 + 1,799,376 x 9/12; tax at 6,000,000; zero at the threshold"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 1,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "Act's current wording not reached (TAJ tables)",
+  "age limits for NIS/NHT/Education Tax",
+  "approved pension contributions",
+  "investment income"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.342,
+   "atAW": 1.025,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.342,
+   "atAW": 1.025,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.342,
+   "atAW": 1.025,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.342,
+   "atAW": 2.565,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.342,
+   "atAW": 1.025,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The tax authority's 2025 payroll guide misprints the 2026 and 2027 threshold computations",
+ "scale": {
+  "wage": 6000000,
+  "currency": "JMD",
+  "kind": "official-secondary-threshold",
+  "year": "2025",
+  "source": "Tax Administration Jamaica, Payroll Taxes and Statutory Contributions (2025-04-29) Table #5: '$6M - 30%' (start of the 30 % band of statutory income)",
+  "by": "B13-caribbean",
+  "basis": "Tax Administration Jamaica, Payroll Taxes and Statutory Contributions (2025-04-29) Table #5: '$6M - 30%' (start of the 30 % band of statutory income). A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act; NIS, NHT, education tax' confirmed (from TAJ tables): YA 2025 effective threshold 1,774,554 (1,700,088 Jan-Mar, 1,799,376 Apr-Dec); 25 % to 6 M of statutory income, 30 % above; NIS 3 % to 5 M; NHT 2 %; Education Tax 2.25 % of statutory income."
+}

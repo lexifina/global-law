@@ -1,0 +1,98 @@
+{
+ "country": "FM",
+ "name": "Micronesia (Federated States of)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "batch": "B14-pacific",
+ "access": "A",
+ "reused_from": [
+  "US-style wage tax + social security (Compact states)"
+ ],
+ "lean": {
+  "lines": 116,
+  "definitions": 16,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 7,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (quarterly ceiling per employer)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 10,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 7,
+   "exact": 7,
+   "within_1pct": 7,
+   "notes": "s 121 band at 11,000; s 122 deduction cliff at 4,999/5,000; social security ceiling with one and two employers; s 141 gross revenue tax edges"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 3,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 3,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "self-employed social security",
+  "state taxes",
+  "investment income (no national tax on an individual's interest or dividends)"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 1.218,
+   "atAW": 0.45,
+   "bandsOver100": 1,
+   "largestNotch": "61.00 at 4,999 (0.45445 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 1.218,
+   "atAW": 0.45,
+   "bandsOver100": 1,
+   "largestNotch": "61.00 at 4,999 (0.45445 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 1.218,
+   "atAW": 0.45,
+   "bandsOver100": 1,
+   "largestNotch": "61.00 at 4,999 (0.45445 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 1.236,
+   "atAW": 1.135,
+   "bandsOver100": 2,
+   "largestNotch": "61.00 at 8,332 (0.75745 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 1.218,
+   "atAW": 0.45,
+   "bandsOver100": 1,
+   "largestNotch": "61.00 at 4,999 (0.45445 AW)"
+  }
+ },
+ "headline": "F1 The $1,000 deduction of 54 F.S.M.C. 122 is withdrawn in full at $5,000 of wages: $1 more wage costs $61 (METR 6,100 % on that dollar; scanner 121.8 % on its grid)",
+ "scale": {
+  "wage": 11000,
+  "currency": "USD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "54 F.S.M.C. 121 (FSM Code Annotated 2014): end of the 6 % band (\"six percent upon the first $11,000\")",
+  "by": "B14-pacific",
+  "basis": "54 F.S.M.C. 121 (FSM Code Annotated 2014): end of the 6 % band (\"six percent upon the first $11,000\"). A statutory threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'FSM Code title 54 (wage and salary tax)' confirmed: national tax of 6 % on the first $11,000 and 10 % above on all wages and salaries (no allowance), a $1,000 deduction only below $5,000 of annual wages; social security 7.5 % employee to $9,000 a quarter per employer (2023-2027); businesses pay a gross revenue tax ($80 + 3 % above $10,000) instead."
+}

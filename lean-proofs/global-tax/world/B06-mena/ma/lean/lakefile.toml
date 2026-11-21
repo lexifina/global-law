@@ -1,0 +1,14 @@
+name = "MaTax"
+version = "0.1.0"
+defaultTargets = ["MaTax", "matax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "MaTax"
+
+[[lean_exe]]
+name = "matax"
+root = "MaTax.Main"

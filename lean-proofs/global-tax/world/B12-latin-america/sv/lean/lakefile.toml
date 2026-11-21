@@ -1,0 +1,14 @@
+name = "SvTax"
+version = "0.1.0"
+defaultTargets = ["SvTax", "svtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SvTax"
+
+[[lean_exe]]
+name = "svtax"
+root = "SvTax.Main"

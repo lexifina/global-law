@@ -1,0 +1,57 @@
+{
+ "country": "OM",
+ "name": "Oman (Omani employee)",
+ "year": "2025",
+ "status": "built",
+ "access": "A",
+ "batch": "B15-no-pit",
+ "lean": {
+  "lines": 74,
+  "definitions": 7,
+  "theorems": 3,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Social (Contribution.flatCapped, flat)"
+ ],
+ "kernel_gaps": [
+  "none (the World recipe for no income tax: incomeTax := 0 with a detail note)"
+ ],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute arithmetic only (#guard / decide in Theorems.lean)",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "build-only phase: no referee values looked at (CONTRACTWORLD testing order)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Social (Contribution)",
+  "World no-income-tax recipe"
+ ],
+ "sources": [
+  "qanoon.om: Royal Decree 56/2025 (Individuals' Income Tax Law) art. 4 of the decree: in force 1 January 2028",
+  "qanoon.om amended text of Royal Decree 52/2023 (Social Protection Law): decree art. 6 (as amended by RD 60/2025), law art. 1(15)-(16), 52, 70, 71, 115, 116, 139",
+  "Global law oman/national/acts/rd/2009/28 (Income Tax Law, companies)"
+ ],
+ "unsupported": [
+  "Ministry of Finance subsidy of the insured's share (art. 71, decision not read)",
+  "GCC nationals"
+ ],
+ "headline": "Oman 2025: no income tax yet (the Individuals' Income Tax Law of June 2025 applies from 2028); Omani employees pay 7.5 % up to OMR 3,000 a month plus an uncapped 0.5 %.",
+ "registry_correction": "PIT N in 2025, verified: RD 56/2025 Individuals' Income Tax Law in force 1 January 2028. Contributions: Social Protection Law RD 52/2023 (in force 1 Jan 2024): 7.5 % up to OMR 3,000 a month + 0.5 % job security (Omanis)."
+}

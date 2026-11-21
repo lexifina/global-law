@@ -1,0 +1,14 @@
+name = "McTax"
+version = "0.1.0"
+defaultTargets = ["McTax", "mctax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "McTax"
+
+[[lean_exe]]
+name = "mctax"
+root = "McTax.Main"

@@ -1,0 +1,14 @@
+name = "SkTax"
+version = "0.1.0"
+defaultTargets = ["SkTax", "sktax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "SkTax"
+
+[[lean_exe]]
+name = "sktax"
+root = "SkTax.Main"

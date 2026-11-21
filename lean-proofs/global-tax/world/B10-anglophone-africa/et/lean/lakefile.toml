@@ -1,0 +1,14 @@
+name = "EtTax"
+version = "0.1.0"
+defaultTargets = ["EtTax", "ettax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "EtTax"
+
+[[lean_exe]]
+name = "ettax"
+root = "EtTax.Main"

@@ -1,0 +1,14 @@
+name = "NzTax"
+version = "0.1.0"
+defaultTargets = ["NzTax", "nztax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "NzTax"
+
+[[lean_exe]]
+name = "nztax"
+root = "NzTax.Main"

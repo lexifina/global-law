@@ -1,0 +1,67 @@
+{
+ "country": "NL",
+ "name": "Netherlands",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 902,
+  "definitions": 113,
+  "theorems": 27,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon",
+  "Unit (splitting_le_separate for box 2)",
+  "Theorems.Schedule"
+ ],
+ "kernel_gaps": [
+  "Out writes whole units: NL exe writes euros with cents itself",
+  "statute tariff tables with a rounded cumulative column III (art. 2.10, 2.10a, 2.12) are not band sums and not monotone: local Table3",
+  "rates with three decimals (8,053 %, 6,337 %, 30,030 %) need pcm, finer than bp: kortingen written locally",
+  "split of kortingen between tax and premie (art. 8.3-8.7) and cross set-off (art. 2.7 lid 3, Wfsv art. 9 lid 2): no kernel part",
+  "partner allocation of joint items (art. 2.17) as an optimisation: local",
+  "box 3 deemed return on 1 January wealth: contract has no wealth fields (NL extensions nlBank, nlOtherAssets, nlDebts)",
+  "owner-manager scanner skipped (no NL company parameters); done locally (Vpb art. 22)"
+ ],
+ "provisions_cited": 50,
+ "validation": [
+  {
+   "referee": "OECD TW 2025, unrounded wages, --oecd conventions",
+   "cases": 40,
+   "exact": 32,
+   "within_1pct": 40,
+   "notes": "exact = to the cent; rest: kinderbijslag -5.12 OECD error (F2), kgb drempel 0.02 (F3), S167 0.05-0.13 (F4)"
+  },
+  {
+   "referee": "OECD TW 2025, unrounded wages, statute table + OECD pension",
+   "cases": 40,
+   "exact": 17,
+   "within_1pct": 40,
+   "notes": "OECD sums bands; statute kolom III rounded: OECD +0.63/+0.95 per taxpayer (F5)"
+  },
+  {
+   "referee": "OECD TW 2025 family harness (wages rounded to euro), --oecd",
+   "cases": 56,
+   "exact": 48,
+   "within_1pct": 56,
+   "notes": "exact = |diff| <= 1 EUR incl. take-home pay"
+  },
+  {
+   "referee": "Belastingdienst loonbelastingtabellen 2025 (rekenvoorschriften, witte tabel, maand) vs statute",
+   "cases": 2396,
+   "exact": 1106,
+   "within_1pct": 2394,
+   "notes": "single employee, table wages 0-129 330; table - statute in [-2.64, +0.06]; Lean lb_vs_statute bounds [-3.05, +0.30] (F13)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 21,
+  "recreated": 13,
+  "not_modelled": 7
+ },
+ "new_loopholes": 2,
+ "gov_errors": 7,
+ "statute_faults": 5,
+ "headline": "The Dutch statutory tariff itself falls by cents at EUR 38,441 and 76,817 (rounded column III), the arbeidskorting never reaches its stated maximum, parents of young children pay no levy up to EUR 30,000, and bunching pay across the end of the arbeidskorting afbouw (EUR 129,077) saves up to EUR 3,540 (single) / 8,234 (single parent) over two years."
+}

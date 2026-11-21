@@ -1,0 +1,101 @@
+{
+ "country": "AM",
+ "name": "Armenia",
+ "year": "2025",
+ "status": "built",
+ "batch": "B05-former-ussr",
+ "access": "A",
+ "reused_from": [
+  "EE",
+  "LV",
+  "LT"
+ ],
+ "lean": {
+  "lines": 124,
+  "definitions": 20,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 6,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Schedule (social payment as bands)"
+ ],
+ "kernel_gaps": [
+  "all-or-nothing banded levy (stamp duty): local step function"
+ ],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed sums and hand-computed statutory cases (#guard)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "social payment 'less 25 000 / 300 000' = band sums; 4.8 m salary case"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 1,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "voluntary social payment of pre-1974 cohorts",
+  "turnover/micro regimes",
+  "combined salary + business social payment cap"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 2.9,
+   "atAW": 2.0,
+   "bandsOver100": 3,
+   "largestNotch": "77,999 at 12,000,005 (2.0 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 2.9,
+   "atAW": 2.0,
+   "bandsOver100": 3,
+   "largestNotch": "77,999 at 12,000,005 (2.0 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 2.9,
+   "atAW": 2.0,
+   "bandsOver100": 3,
+   "largestNotch": "77,999 at 12,000,005 (2.0 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 2.9,
+   "atAW": 3.33,
+   "bandsOver100": 6,
+   "largestNotch": "77,999 at 20,000,009 (3.33333 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 2.9,
+   "atAW": 2.0,
+   "bandsOver100": 3,
+   "largestNotch": "77,999 at 12,000,005 (2.0 AW)"
+  }
+ },
+ "headline": "F1 The stamp duty is a step function: one dram more than 1 000 000 a month costs 78 000 dram a year",
+ "scale": {
+  "wage": 6000000,
+  "currency": "AMD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Law HO-244-N on Funded Pensions art. 6(2)(1): 12 x the 500 000 dram monthly salary at which the social payment rate changes (Global law, in force 2025-07-01)",
+  "by": "B05-former-ussr",
+  "basis": "Law HO-244-N on Funded Pensions art. 6(2)(1): 12 x the 500 000 dram monthly salary at which the social payment rate changes (Global law, in force 2025-07-01)"
+ }
+}

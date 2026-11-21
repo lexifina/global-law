@@ -1,0 +1,77 @@
+{
+ "country": "EG",
+ "name": "Egypt",
+ "year": "2025",
+ "status": "built",
+ "batch": "B02-g20",
+ "access": "A",
+ "reused_from": [
+  "FR"
+ ],
+ "lean": {
+  "lines": 81,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (down to 10)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "tariff whose bands depend on the total (column chosen by income): local `column`; kernel Extra38.rateOfBase is close (rate by size of base) but not band sets"
+ ],
+ "provisions_cited": 3,
+ "validation": [
+  {
+   "referee": "statute table, own computation at thresholds",
+   "cases": 4,
+   "exact": 4,
+   "within_1pct": 4,
+   "notes": "#guard 600,000 → 124,750; 600,010 → 128,752; 1,200,000 → 290,000; 1,200,010 → 300,002"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "rent, dividends, interest",
+  "pensions",
+  "Universal Health Insurance Law 2/2018 employee contribution not reached"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 6.9333,
+   "netIncomeFalls": 5
+  },
+  "couple1earner2kids": {
+   "maxMETR": 6.9333,
+   "netIncomeFalls": 5
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 6.9233,
+   "netIncomeFalls": 9
+  }
+ },
+ "headline": "F1 Five notches: crossing 600k/700k/800k/900k/1.2m of net income by 10 pounds costs 2,752-10,002 pounds",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "Law 148/2019 employee 9 % + 1 % on the monthly contribution wage 2,300-14,500; deducted (ITL art. 13 item 5)",
+  "provision": "Law 148/2019 arts. 19 (1) (b), 36 (1); NOSI notice 30/11/2025 (2025 limits, official secondary); ITL 91/2005 art. 13 (ETA circular 1/2005)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

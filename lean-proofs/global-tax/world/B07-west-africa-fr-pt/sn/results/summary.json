@@ -1,0 +1,60 @@
+{
+ "country": "SN",
+ "name": "Senegal (impôt sur le revenu, TRIMF; family reduction by parts)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "A",
+ "batch": "B07-west-africa-fr-pt",
+ "lean": {
+  "lines": 302,
+  "definitions": 31,
+  "theorems": 25,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (art. 173 barème)",
+  "Rounding (income to 1 000 F down)",
+  "Unit (individual; parts select a reduction row)",
+  "Table-style lookups (art. 174 reduction, art. 282 TRIMF) written locally"
+ ],
+ "kernel_gaps": [
+  "Family reduction 'rate × tax bounded by a minimum and a maximum per number of parts' (art. 174) written locally; a kernel 'bounded proportional credit' part would serve SN and the francophone codes with similar tables"
+ ],
+ "provisions_cited": 37,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean decide)",
+   "cases": 25,
+   "exact": 25,
+   "within_1pct": 25,
+   "notes": "build phase: no referee values used; cases = Lean theorems (kernel instances and checks of the statute's printed tables and stated amounts, all proved)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 9,
+  "recreated": 6,
+  "not_modelled": 3
+ },
+ "new_loopholes": 2,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "FR (parts/quotient vocabulary; not a quotient)",
+  "kernel Schedule"
+ ],
+ "sources": [
+  "Code général des impôts, Loi n° 2012-31 du 31 décembre 2012, DGID edition 'mis à jour janvier 2025' (lists LFI 2025, Loi 2025-02 du 06 janvier 2025): https://www.dgid.sn/storage/docs/CGI-2025.pdf (fetched 2026-11-20)"
+ ],
+ "scale": "3000000 XOF (gross annual wage at which the 30 % wage deduction reaches its 900 000 F cap (900 000 / 30 %))",
+ "unsupported": [
+  "IPRES/IPM employee contributions (no accessible rate text: ipres.sn, secusociale.sn unreachable)",
+  "self-employment regimes (CGU, réel simplifié), capital gains",
+  "children 18-24 in education"
+ ],
+ "registry_correction": "SN: unit is the individual with a family reduction by parts (not a family quotient); main statute confirmed (Loi 2012-31, DGID edition Jan. 2025 incl. LF 2025).",
+ "headline": "Senegal 2025 built from the DGID's January 2025 CGI: barème 0-43 % on wages less 30 % (cap 900 000 F), a family reduction by parts that is a bounded share of the tax (not a quotient), final 10 %/8 % on dividends/bank interest, and a TRIMF step levy whose 12 M F step makes net pay fall by 18 000 F."
+}

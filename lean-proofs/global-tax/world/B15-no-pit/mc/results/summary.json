@@ -1,0 +1,57 @@
+{
+ "country": "MC",
+ "name": "Monaco (private-sector employee)",
+ "year": "2025",
+ "status": "built",
+ "access": "B",
+ "batch": "B15-no-pit",
+ "lean": {
+  "lines": 103,
+  "definitions": 19,
+  "theorems": 7,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "plain Int (period-weighted capped contributions)"
+ ],
+ "kernel_gaps": [
+  "none (the World recipe for no income tax: incomeTax := 0 with a detail note)"
+ ],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute arithmetic only (#guard / decide in Theorems.lean)",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "build-only phase: no referee values looked at (CONTRACTWORLD testing order)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Social (Contribution)",
+  "World no-income-tax recipe"
+ ],
+ "sources": [
+  "Caisses Sociales de Monaco, page 'Cotisations' (employer) in Internet Archive copies of 2025-04-21, 2025-09-10, 2025-12-15 (official secondary): C.A.R., assurance chômage, CMRC rates and ceilings",
+  "Live page 2026-11-20 (for comparison only)"
+ ],
+ "unsupported": [
+  "French nationals (French income tax under the 1963 convention)",
+  "self-employed",
+  "the ordonnances / arrêtés fixing the rates were not read"
+ ],
+ "headline": "Monaco 2025: no tax on residents' wages (French nationals excepted); employees pay C.A.R. 6.85 %, unemployment 2.40 % and CMRC complementary pension shares, from the funds' published tables.",
+ "registry_correction": "PIT N (French nationals: French tax). Contributions (official secondary, CSM tables): C.A.R. 6.85 %, unemployment 2.40 %, CMRC 40 % of 10.02 % / 24.29 %."
+}

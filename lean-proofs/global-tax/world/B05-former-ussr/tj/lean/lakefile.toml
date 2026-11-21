@@ -1,0 +1,14 @@
+name = "TjTax"
+version = "0.1.0"
+defaultTargets = ["TjTax", "tjtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "TjTax"
+
+[[lean_exe]]
+name = "tjtax"
+root = "TjTax.Main"

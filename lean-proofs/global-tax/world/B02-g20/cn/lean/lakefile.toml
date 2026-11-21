@@ -1,0 +1,14 @@
+name = "CnTax"
+version = "0.1.0"
+defaultTargets = ["CnTax", "cntax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CnTax"
+
+[[lean_exe]]
+name = "cntax"
+root = "CnTax.Main"

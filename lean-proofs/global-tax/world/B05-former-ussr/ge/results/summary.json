@@ -1,0 +1,101 @@
+{
+ "country": "GE",
+ "name": "Georgia",
+ "year": "2025",
+ "status": "built",
+ "batch": "B05-former-ussr",
+ "access": "A",
+ "reused_from": [
+  "EE",
+  "LV",
+  "LT",
+  "RU"
+ ],
+ "lean": {
+  "lines": 107,
+  "definitions": 13,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (pct)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own printed sums and hand-computed statutory cases (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "1 000 lari: contribution 20, tax 196"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 1,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "participation at ages 62-66 depends on sex",
+  "capital gains: 5 % dwellings/cars and holding-period exemptions",
+  "private pensions",
+  "rounding rule (art. 37) not read"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.225,
+   "atAW": 0.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.225,
+   "atAW": 0.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.225,
+   "atAW": 0.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.225,
+   "atAW": 0.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.225,
+   "atAW": 0.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 A flat 20 % on salary net of the 2 % pension contribution: effective 19.6 % + 2 %",
+ "scale": {
+  "wage": 24000,
+  "currency": "GEL",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Law on Funded Pensions No. 3303 art. 3(6)(e.a): the first 24 000 lari of annual salary on which the state adds 2 % (Global law georgia/national/acts/law/2018/3303, in force 2025-07-01)",
+  "by": "B05-former-ussr",
+  "basis": "Law on Funded Pensions No. 3303 art. 3(6)(e.a): the first 24 000 lari of annual salary on which the state adds 2 % (Global law georgia/national/acts/law/2018/3303, in force 2025-07-01)"
+ }
+}

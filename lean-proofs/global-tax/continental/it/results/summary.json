@@ -1,0 +1,68 @@
+{
+ "country": "IT",
+ "name": "Italy (IRPEF + Lazio + Roma Capitale)",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 852,
+  "definitions": 115,
+  "theorems": 37,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Surcharge",
+  "Social",
+  "Canon",
+  "Country",
+  "Theorems.Schedule"
+ ],
+ "kernel_gaps": [
+  "Out in whole units (Italy reports cents; own JSON writer, kernel Country rounds to euros)",
+  "ratio truncated to four decimals (TUIR art. 13 c. 6)",
+  "one percentage of the whole income chosen by income band (L. 207/2024 c. 4): not a Schedule",
+  "local surtax due only if the central net tax is positive (D.Lgs. 446/1997 art. 50 c. 2)",
+  "benefit set by an equivalence-scale income test (ISEE, assegno unico)"
+ ],
+ "provisions_cited": 45,
+ "validation": [
+  {
+   "referee": "OECD TW 2025",
+   "cases": 56,
+   "exact": 42,
+   "within_1pct": 49,
+   "notes": "IRPEF, INPS and assegno unico within 0.13 EUR on the OECD's wages rounded to the euro; all 14 misses are SLT and take-home pay: the OECD omits Lazio's 2025 reliefs (L.R. 22/2024 art. 2 cc. 2-3), F1"
+  },
+  {
+   "referee": "AdE circolare 4/E 2025 worked examples (cuneo sum, examples 1-3)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "proved in Lean (Tests.lean)"
+  },
+  {
+   "referee": "OECD TW 2025 component lines at the OECD's own wages (CGITLETC S100, S67; spouse credit M100_0; BTC S100, S67)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "lorda and spouse credit to the cent; BTC 4 cents lower by the statute's four-decimal rule (F2)"
+  },
+  {
+   "referee": "open models / official calculators",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "OpenFisca-Italy archived 2018 (unusable); no official IRPEF calculator usable without login found within the search budget"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 18,
+  "recreated": 10,
+  "not_modelled": 8
+ },
+ "new_loopholes": 4,
+ "gov_errors": 4,
+ "statute_faults": 3,
+ "headline": "Italy's 2025 income tax in Lean matches the OECD to the cent except for Lazio's 2025 surtax reliefs, which the OECD omits; a 1-euro raise near 8,500 costs 300 euro, and a 99-euro pension contribution can save 171."
+}

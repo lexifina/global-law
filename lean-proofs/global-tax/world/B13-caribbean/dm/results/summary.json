@@ -1,0 +1,100 @@
+{
+ "country": "DM",
+ "name": "Dominica",
+ "year": "2025 (year of assessment)",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "B",
+ "reused_from": [
+  "UK/IE PAYE",
+  "LC/GD (this batch)"
+ ],
+ "lean": {
+  "lines": 86,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (monthly via Table.perPeriod)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "Fifth Schedule at 20,000 and 50,000; Social Security at the 6,000 ceiling"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 0,
+  "not_modelled": 4
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "Social Security 2018/2019 regulations (links 404)",
+  "mortgage/student-loan deductions",
+  "investment income",
+  "pension exemptions"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.36,
+   "atAW": 1.6,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.36,
+   "atAW": 1.6,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.36,
+   "atAW": 1.6,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.368,
+   "atAW": 2.68,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.36,
+   "atAW": 1.6,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The 2018 and 2019 Social Security contribution regulations are listed on the Government's law site but their files are missing (HTTP 404)",
+ "scale": {
+  "wage": 50000,
+  "currency": "XCD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act Chap. 67:01 Fifth Schedule para. 1 as replaced by Act 9 of 2008: '(c) for every dollar over 50,000 ... 36%'",
+  "by": "B13-caribbean",
+  "basis": "Income Tax Act Chap. 67:01 Fifth Schedule para. 1 as replaced by Act 9 of 2008: '(c) for every dollar over 50,000 ... 36%'. A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act (Chap. 67:01)' confirmed: personal allowance 30,000 from 2018 (s. 47, Act 6 of 2018); 16 % to 20,000, 26 % to 50,000, 36 % above (Fifth Schedule, Act 9 of 2008); Social Security 4 % to 6,000 a month as of S.R.O. 8 of 2008 (later regulations unreachable)."
+}

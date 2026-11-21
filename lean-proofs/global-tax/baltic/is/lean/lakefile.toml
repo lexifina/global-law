@@ -1,0 +1,14 @@
+name = "IsTax"
+version = "0.1.0"
+defaultTargets = ["IsTax", "istax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "IsTax"
+
+[[lean_exe]]
+name = "istax"
+root = "IsTax.Main"

@@ -1,0 +1,65 @@
+{
+ "country": "NE",
+ "name": "Niger (ITS, IRCM)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B07-west-africa-fr-pt",
+ "lean": {
+  "lines": 132,
+  "definitions": 17,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (art. 66 monthly barème)",
+  "Rounding (monthly net to 1 000 F down)",
+  "percentage family abatement (local)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 19,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean decide)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "build phase: no referee values used; cases = Lean theorems (kernel instances and checks of the statute's printed tables and stated amounts, all proved)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 3,
+  "not_modelled": 2
+ },
+ "new_loopholes": 3,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Schedule",
+  "UEMOA monthly withholding pattern"
+ ],
+ "sources": [
+  "Code général des impôts (Loi n° 2012-37 du 20 juin 2012), DGI edition 'CGI 2013 MAJ LF 2022', archived official copy https://web.archive.org/web/20230727151430id_/https://www.impots.gouv.ne/media/telech/CGI%202013%20MAJ%20LF%20%202022.pdf",
+  "Ordonnance n° 2024-59 portant loi de finances 2025 (archived https://web.archive.org/web/20250709034954id_/https://impots.gouv.ne/media/loi/ORDONNANCE%20N%202024-59%20LOI%20DE%20FINANCES%202025..pdf): art. 11 (CGI art. 52), art. 12 (arts. 73-75 IRVM)"
+ ],
+ "scale": "3600000 XOF (12 x 300 000 F, the upper limit of the 25 % monthly ITS band)",
+ "unsupported": [
+  "LF 2023-2024 not reached",
+  "IRF, BIC/BNC, capital gains",
+  "CNSS SMIG floor (30 047 F a month) not applied; the rate décret not reached"
+ ],
+ "registry_correction": "NE: ITS confirmed (CGI Loi 2012-37 as amended; LF 2025 Ord. 2024-59); access B.",
+ "headline": "Niger built from the 2022 consolidated CGI and the 2025 finance ordinance (LF 2023-2024 not reached): monthly ITS 1-35 % from the first franc after a 13 % abattement and a family abatement of 5-30 % of income, income rounded to 1 000 F; the 7th dependant doubles the family abatement.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "CNSS worker 5,25 % (retraite) of pay up to 6 000 000 F a year, deducted first under CGI art. 60 1) (6 % limit) before the 13 % abatement",
+  "provision": "CNSS \"Guide de l'employeur\" (Décembre 2019, cnss.ne): retraite 11,50 % = 5,25 % worker + 6,25 % employer, plafond annuel 6 000 000 F; official secondary (rate décret not reached); CGI arts. 60 1), 4)",
+  "source": "official secondary",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

@@ -1,0 +1,14 @@
+name = "IeTax"
+version = "0.1.0"
+defaultTargets = ["IeTax", "ietax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "IeTax"
+
+[[lean_exe]]
+name = "ietax"
+root = "IeTax.Main"

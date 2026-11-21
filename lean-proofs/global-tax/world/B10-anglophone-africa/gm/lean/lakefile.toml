@@ -1,0 +1,14 @@
+name = "GmTax"
+version = "0.1.0"
+defaultTargets = ["GmTax", "gmtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "GmTax"
+
+[[lean_exe]]
+name = "gmtax"
+root = "GmTax.Main"

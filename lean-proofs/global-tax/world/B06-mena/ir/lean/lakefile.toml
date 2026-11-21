@@ -1,0 +1,14 @@
+name = "IrTax"
+version = "0.1.0"
+defaultTargets = ["IrTax", "irtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "IrTax"
+
+[[lean_exe]]
+name = "irtax"
+root = "IrTax.Main"

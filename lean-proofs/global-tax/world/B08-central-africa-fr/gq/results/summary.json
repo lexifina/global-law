@@ -1,0 +1,102 @@
+{
+ "country": "GQ",
+ "name": "Equatorial Guinea",
+ "year": "2025",
+ "status": "built",
+ "batch": "B08-central-africa-fr",
+ "access": "B",
+ "reused_from": [
+  "TG"
+ ],
+ "lean": {
+  "lines": 105,
+  "definitions": 8,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 10,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (Rule.downTo 1)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 10,
+   "exact": 10,
+   "within_1pct": 10,
+   "notes": "#guard: art. 130(1) 'Impuesto' column = cumulative band tax (1.400.000 -> 0; 5.000.000 -> 360.000; 12.500.000 -> 1.485.000; 20.000.000 -> 2.985.000); 25 % above 20 M; repealed Ley 4/2004 art. 252(1) column (200.000; 500.000; 1.500.000; 2.750.000; 4.250.000); 2004-vs-2024 comparison at 3.6 M, 5 M, 12.5 M, 20 M."
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 2,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "INSESO and Fondo de protección al trabajador employee contributions: rates not reached (employeeSocial = 0; not deducted from the ISS base)",
+  "optional Declaración Global de Rentas Anuales (art. 29): needs the annual Salario Mínimo Interprofesional (not reached)",
+  "self-employment (Impuesto sobre Beneficios de Negocios 25 %, art. 87, or REAM, arts. 90-94), rental income (IRCI) and capital gains: not modelled",
+  "2025 budget law not reached; the law text is a secondary host's scan of the BOE print"
+ ],
+ "scan": {
+  "summary": "results/search/SUMMARY.md"
+ },
+ "sources": "Ley núm. 1/2024, de fecha 19 de noviembre, General Tributaria de la República de Guinea Ecuatorial, Boletín Oficial del Estado print ('Imprime: Dirección General del BOE, Presidencia del Gobierno'; 268 pp.; signed 19 Nov 2024; in force on publication; repeals Ley 4/2004), reached only as a watermarked scan on a Malabo law firm's site (https://jonesandsacristan.es/assets/uploads/leytributaria.pdf, via the site's public search buscar_ley.php; Last-Modified 2026-04-10; sha256 442b86ac45004267dccc187db57c95492b197ea5cb559391a8026c52e5416b27; gq/law/rescue3/): arts. 29, 105, 122-133 (art. 130 read on the page image, BOE p. 92). Cross-checks: the Ministry of Finance's current site minhacienda-gob.com ('Ley Tributaria' = Ley 4/2004 BOE print, media/stream/8234 and 8243; its 2025 forms cite 'Ley Nº 1/2024, de fecha 19 de noviembre, General Tributaria' art. 360.1); Ley 9/2025 de PGE 2026 (minhacienda-gob.com/uploads/2026/05/libro-lpge-2026-...pdf) cites Ley 1/2024 art. 94 only.",
+ "headline": "Equatorial Guinea's 2024 tax code (in force 2025) cut the top rate on wages from 35 % to 25 % and raised the exempt band to 1.4 M FCFA, but moved the 20 % expense deduction into an optional return: without it a 3.6 M FCFA wage pays 220.000 instead of 188.000",
+ "tried": "",
+ "unlock": "",
+ "rescue": {
+  "agent": "rescue3pt",
+  "date": "2026-11-20T14:21Z",
+  "routes": [
+   "Internet Archive (answering intermittently this pass): minhacienda.gob.gq CDX (359 URLs, 2018-2020 WordPress: budget laws 2015-2018, no tax law); guineaecuatorialpress.com CDX (503 PDFs: Boletín Oficial issues 1-3 = Leyes 1/2014, 2/2015, 2/2014 and Ley de Tasas Fiscales; no tax code)",
+   "minhacienda.gob.gq live: now a betting spam page (domain lost); the ministry's current site is minhacienda-gob.com (same page slugs as the archived official site; ministers listed): /ley-tributaria and /ley-tributaria-2 = Ley 4/2004 BOE print; /formularios-de-declaraciones-fiscales = 2025 forms citing Ley 1/2024; /media/stream ids 7800-8800 swept for file names (763 files: Ley 4/2004 three times, Ley de Tasas, PGE laws 2019-2022, the 2025 forms; no Ley 1/2024)",
+   "faolex.fao.org/docs/pdf/eqg*.pdf answer (unlike www.fao.org/faolex): BOE scans of investment, fisheries, local-administration laws; no tax law",
+   "WebSearch (5 calls): identified Ley 1/2024 de 19 de noviembre General Tributaria (in force from publication, Dec 2024) and the law firm's copy; commercial summaries not used for any value",
+   "jonesandsacristan.es (law firm, Malabo): public law search returns 'Ley General Tributaria ... del 19 de noviembre de 2024' -> 268-page scan of the BOE print with the firm's watermark: SOURCE USED (secondary host; text and page images read)"
+  ],
+  "pass1_routes": [
+   "build pass: no answer from the finance ministry; Global law has the labour law only",
+   "rescue pass 2: minhacienda.gob.gq no answer; droit-afrique (Wayback) has no GQ tax code; WIPO Lex none"
+  ]
+ },
+ "earlier_rescue": {
+  "agent": "rescue",
+  "date": "2026-11-20T11:52Z",
+  "outcome": "still C",
+  "routes": [
+   "Global law search 'Impuesto sobre la Renta' (equatorial-guinea): only the Ley General de Trabajo 4/2021",
+   "minhacienda.gob.gq, gq-hacienda.org: no answer"
+  ],
+  "unlock": "an official copy of the tax law (IRPF) and the 2025 budget law"
+ },
+ "earlier_rescue2": {
+  "agent": "rescue2",
+  "date": "2026-11-20T13:11Z",
+  "outcome": "still unsupported (access C)",
+  "routes": [
+   "minhacienda.gob.gq: no answer from the laptop; droit-afrique Wayback: only the 2003 public-finance law and the investment/hydrocarbons codes for GQ (no tax code)",
+   "WIPO Lex GQ profile: 3 items, none on tax",
+   "legis-palop.org (PALOP+TL legal database): full texts need a paid subscription and login (free registration gives listings only); its search form posts redirect to the home page without a session: not used (login)",
+   "natlex.ilo.org, www.fao.org/faolex, www.refworld.org: Cloudflare 'Sorry, you have been blocked' (403) from the laptop and WebFetch: not bypassed",
+   "droit-afrique.com: live site 403 ('Server unable to read htaccess file'); its tax codes are sold in a shop (Wayback: only the free 'sommaire')",
+   "Global law list_jurisdictions (rescue2/tools/gl.py, 2026-11-20): no tax law in this country's corpus",
+   "WIPO Lex country profile (www.wipo.int/wipolex/en/members/profile/<CC>): no tax law listed (except SY, GM: see below)"
+  ],
+  "unlock": "the Ley Tributaria / income tax law and its 2025 rates"
+ }
+}

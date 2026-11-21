@@ -1,0 +1,73 @@
+{
+ "country": "NG",
+ "name": "Nigeria",
+ "year": "2025 (year of assessment 2025; Nigeria Tax Act 2025 applies from 2026)",
+ "status": "built",
+ "batch": "B02-g20",
+ "access": "A",
+ "reused_from": [
+  "UK",
+  "IE"
+ ],
+ "lean": {
+  "lines": 87,
+  "definitions": 11,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Schedule",
+  "Social (Contribution)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "minimum tax (max of the table and 1 % of gross income): local"
+ ],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "Sixth Schedule cumulative band",
+   "cases": 1,
+   "exact": 1,
+   "within_1pct": 1,
+   "notes": "#guard tax at 3.2 m"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "NHF/NHIS",
+  "minimum-wage proviso",
+  "investment income",
+  "pensions"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.2567,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.2567,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.248,
+   "netIncomeFalls": 0
+  }
+ },
+ "headline": "F1 'Gross income' defined twice"
+}

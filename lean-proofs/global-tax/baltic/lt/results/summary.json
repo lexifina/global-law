@@ -1,0 +1,68 @@
+{
+ "country": "LT",
+ "name": "Lithuania",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 586,
+  "definitions": 55,
+  "theorems": 44,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Allowance (Taper)",
+  "Social (Contribution)",
+  "Rounding",
+  "Unit (theorems)",
+  "Canon/Country"
+ ],
+ "kernel_gaps": [
+  "NPD = two tapers switching where they meet (GPMĮ 20 str.): proved equal to max of two kernel Tapers (mnpd2025_max); a Taper.maxOf part would express it",
+  "allowance tested on all taxable income (GMP, 20 str. 7 d.) but deducted only from employment income (local min)",
+  "quadratic self-employed credit I x (0.1 - 2/300000 x (I - 20000)) (18-2 str.): no kernel Credit fits",
+  "all-or-nothing income-tested cash benefit (additional child benefit, per-member net income test): no kernel benefit part or notch theorem",
+  "monthly allowance on uneven months vs the annual true-up (perPeriod covers equal months only): local npdMonth + monthlyWages input",
+  "versioned parameters in one exe (input year 2022-2026)"
+ ],
+ "provisions_cited": 35,
+ "validation": [
+  {
+   "referee": "OECD TW 2026 (year 2025) country table",
+   "cases": 56,
+   "exact": 55,
+   "within_1pct": 56,
+   "notes": "the 1 miss is CGTC M100_100 +1 EUR (whole-euro input, F18)"
+  },
+  {
+   "referee": "OECD Taxing Wages LTU 2022-2025 by year (versioned NPD, child benefits)",
+   "cases": 128,
+   "exact": 122,
+   "within_1pct": 126,
+   "notes": "8 family types x 4 years x CGITFP/EECSSC/CTGG/CGTC; misses: 2022 CTGG SP67 and M100_0 -433 EUR (OECD gives the additional child benefit for the whole of 2022, F13) and 4 CGTC lines +1 EUR (input rounding, F18). 2024 confirms the 0.5 coefficient (EUROMOD), 2022 the 0.34 (not EUROMOD's table 0.26, F9)"
+  },
+  {
+   "referee": "worked examples: VMI written answer RM-5567 (2024) + OECD annual NPD lines 2022-2025",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "Lean theorems vmi_rm5567 (83,56 EUR), oecd_2025_S67_npd, oecd_2025_S100_npd, oecd_2024_S100_npd, oecd_2023_S100_npd, oecd_2022_S67_npd; all to the cent except 2022 S67 (+0,01: the reduction is rounded down to the cent)"
+  },
+  {
+   "referee": "official calculator (VMI / Sodra)",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "not usable: vmi.lt and sodra.lt answer 403 (Cloudflare challenge) to scripts; not bypassed"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 16,
+  "recreated": 10,
+  "not_modelled": 6
+ },
+ "new_loopholes": 6,
+ "gov_errors": 4,
+ "statute_faults": 3,
+ "headline": "Lithuania 2025 in Lean to the cent (OECD TW 2025 55/56 lines exact; 2022-2025 122/128 with the versioned NPD): the NPD, tested on all income, makes the statutory 15 % on dividends 24.8 % for most employees, puts the highest marginal rate on wages (49.3 %) between 12,456 and 28,647 EUR while the top band pays 38.98 %, and lets one more euro cost a two-child family 1,730 EUR of child benefit."
+}

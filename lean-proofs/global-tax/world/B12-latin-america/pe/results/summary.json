@@ -1,0 +1,83 @@
+{
+ "country": "PE",
+ "name": "Peru",
+ "year": "2025 (ejercicio gravable 2025)",
+ "status": "built",
+ "access": "A",
+ "batch": "B12-latin-america",
+ "reused_from": [
+  "MX (indexed units)",
+  "CO (UVT-style unit tariff)"
+ ],
+ "lean": {
+  "lines": 132,
+  "definitions": 16,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "World.Schedule.ofUnits (UIT)",
+  "Schedule",
+  "Rounding",
+  "Unit (individual)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 10,
+ "provisions": [
+  "LIR art. 19 i",
+  "art. 34",
+  "art. 36",
+  "art. 45",
+  "art. 46 (7 UIT; 3 UIT)",
+  "art. 52-A",
+  "art. 53",
+  "D.S. 260-2024-EF art. 1",
+  "Ley 26504 2a DT",
+  "D.Leg. 1549 art. 2"
+ ],
+ "sources": [
+  "SUNAT TUO LIR chapters (capiv.pdf, capv.pdf, capvi.pdf 2025-11-03, capvii.pdf)",
+  "El Peruano 17-12-2024 p. 19 (D.S. 260-2024-EF, gob.pe cdn)",
+  "Ley 26504 (gob.pe)"
+ ],
+ "sources_official_secondary": [
+  "SUNAT 'Indices y tasas: UIT' table (agrees with D.S. 260-2024-EF)"
+ ],
+ "validation": [
+  {
+   "referee": "statute's own printed tables and thresholds (#guard / decide)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "no referee values seen (build phase)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 3,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "SNP 13 % applied to all wages: Ley 30334 (gratificaciones not subject to contributions) and the SNP floor/AFP premium and commission not reached",
+  "capitalGains: LIR arts. 2, 21, 52-A (6,25 %) and the 5 UIT exemption for listed securities not modelled; ignored",
+  "art. 46 additional deduction (30 % of rent, medical and professional fees; 3 UIT cap) taken as 0: pass peDeductibleExpenses (the qualifying amount) to use it"
+ ],
+ "scale": {
+  "wage": 107000,
+  "currency": "PEN",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "LIR art. 53: the 20 UIT threshold of the progressive scale at the 2025 UIT of S/ 5 350 (D.S. 260-2024-EF art. 1)",
+  "by": "B12-latin-america",
+  "basis": "LIR art. 53: the 20 UIT threshold of the progressive scale at the 2025 UIT of S/ 5 350 (D.S. 260-2024-EF art. 1)"
+ },
+ "headline": "Peru 2025 from SUNAT's consolidated LIR: 7 UIT allowance, 8-30 % UIT tariff at S/ 5 350, flat 6,25 % capital tax, exempt deposit interest; SNP 13 %."
+}

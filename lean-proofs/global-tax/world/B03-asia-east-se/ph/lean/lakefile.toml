@@ -1,0 +1,14 @@
+name = "PhTax"
+version = "0.1.0"
+defaultTargets = ["PhTax", "phtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "PhTax"
+
+[[lean_exe]]
+name = "phtax"
+root = "PhTax.Main"

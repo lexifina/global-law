@@ -1,0 +1,109 @@
+{
+ "country": "TO",
+ "name": "Tonga",
+ "year": "2025/26 (fiscal year 1 July 2025 - 30 June 2026)",
+ "status": "built",
+ "batch": "B14-pacific",
+ "access": "B",
+ "reused_from": [
+  "AU/NZ PAYE (annual bands)"
+ ],
+ "lean": {
+  "lines": 99,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "Order 2017 bands at 10,000/30,000/60,000/100,000; NRBF 5 %"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 2,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "interest withholding",
+  "small business tax",
+  "public-service Retirement Fund contributions",
+  "later rate Orders (none listed by the Ministry)"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.307,
+   "atAW": 2.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.307,
+   "atAW": 2.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.307,
+   "atAW": 2.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.287,
+   "atAW": 3.335,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.307,
+   "atAW": 2.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Tonga's income tax rates are not in the published revised edition: they sit in a Ministerial Order that the Attorney-General's site does not carry",
+ "scale": {
+  "wage": 30000,
+  "currency": "TOP",
+  "kind": "statutory-threshold",
+  "year": "2025/26",
+  "source": "Income Tax (Amendment) Order 2017 para 2 (in force 1 July 2017): start of the 20 % band (\"$30,001-$60,000 20%\")",
+  "by": "B14-pacific",
+  "basis": "Income Tax (Amendment) Order 2017 para 2 (in force 1 July 2017): start of the 20 % band (\"$30,001-$60,000 20%\"). A statutory threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act 2007' confirmed (Cap. 11.05); the rates are not in the Act but in a Ministerial Order under s 5(1): Income Tax (Amendment) Order 2017, 0 % to 10,000, 10 % to 30,000, 20 % to 60,000, 25 % above; fiscal year ending 30 June; NRBF employee 5 % (not deductible); dividends exempt.",
+ "d9_review": [
+  {
+   "date": "2026-11-20",
+   "item": "D9M-1",
+   "category": "model gap (open)",
+   "dataset": "to_official_paye_worksheet_2021_grid",
+   "cause": "rates changed from 1 July 2021 (Ministry PAYE notice: 0 % to 12,000, 10 % to 30,000, 15 % to 50,000, 20 % to 70,000, 25 % above); model has the 2017 Order",
+   "instrument": "not reached; the gazetted Income Tax (Amendment) Order 2021 (Supp. Extra. No. 21, 30 June 2021) is a World Bank employees exemption, not the rates",
+   "model_change": "none (needs the rate Order's text)"
+  }
+ ]
+}

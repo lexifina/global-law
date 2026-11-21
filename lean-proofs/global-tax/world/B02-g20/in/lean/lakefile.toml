@@ -1,0 +1,14 @@
+name = "InTax"
+version = "0.1.0"
+defaultTargets = ["InTax", "intax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "InTax"
+
+[[lean_exe]]
+name = "intax"
+root = "InTax.Main"

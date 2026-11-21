@@ -1,0 +1,84 @@
+{
+ "country": "AT",
+ "name": "Austria",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 833,
+  "definitions": 99,
+  "theorems": 42,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR halfUp)",
+  "Allowance (Taper: VAB-Zuschlag, Pensionistenabsetzbetrag)",
+  "Canon",
+  "Country",
+  "Unit (theorems: separate_le_joint, splitting_le_separate)",
+  "Theorems.Schedule",
+  "Theorems.Parts (Taper.amount_step, amount_antitone)"
+ ],
+ "kernel_gaps": [
+  "contribution rate chosen by the size of the whole base (AMPFG § 2a) and all-or-nothing Geringfügigkeitsgrenze: local avRate/svMonth",
+  "13th/14th salary: second schedule on sonstige Bezüge with a Freigrenze and a 30 % glide (EStG § 67, § 41 Abs. 4): local szTax",
+  "Absetzbeträge refundable only up to a cap made of other credits (§ 33 Abs. 8): local",
+  "Kindermehrbetrag depends on the partner's tax (§ 33 Abs. 7 lit. b): local kmbRecipient",
+  "Out writes whole euros: cents in detail (taxCents, socialCents, benefitsCents)",
+  "Familienbonus allocation between partners as an optimisation: local"
+ ],
+ "provisions_cited": 77,
+ "validation": [
+  {
+   "referee": "OECD TW 2025 (family check.py, wages rounded to the euro)",
+   "cases": 56,
+   "exact": 48,
+   "within_1pct": 52,
+   "notes": "exact = |diff| <= 1 EUR; all 8 misses are CTGG/THP: OECD pays the 6-year-old the 10+ Familienbeihilfe (+285.60, F2)"
+  },
+  {
+   "referee": "OECD TW 2025, --oecd (OECD age-band convention)",
+   "cases": 56,
+   "exact": 55,
+   "within_1pct": 56,
+   "notes": "one THP line 1.x EUR (rounding)"
+  },
+  {
+   "referee": "BMF Brutto-Netto-Rechner 2025 (official calculator, JSON endpoint), employees",
+   "cases": 90,
+   "exact": 90,
+   "within_1pct": 90,
+   "notes": "SV to the cent and Lohnsteuer within 0.12 EUR vs attax --withholding; single, AVAB+2 children, single parent; 300-30000 EUR/month"
+  },
+  {
+   "referee": "BMF Brutto-Netto-Rechner 2025, pensioners",
+   "cases": 30,
+   "exact": 0,
+   "within_1pct": 24,
+   "notes": "all differences = calculator charges 6 % KV on the April 2025 pension SZ (statute 5.1 %, F5); 30/30 to the cent with --bmf-pension-april"
+  },
+  {
+   "referee": "BMF Familienbonus page / Steuerbuch 2026: Kindermehrbetrag income limits",
+   "cases": 4,
+   "exact": 2,
+   "within_1pct": 4,
+   "notes": "16 803 / 20 303 EUR published vs 16 808 / 20 308 statute (F6)"
+  },
+  {
+   "referee": "Eurostat earn_nt_net 2025 (OECD-EC tax-benefit model), sanity bound only",
+   "cases": 52,
+   "exact": 41,
+   "within_1pct": 46,
+   "notes": "13 types x 4 lines; net within 1 %: 13/13; CTGG 5581.40 not reproduced"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 24,
+  "recreated": 16,
+  "not_modelled": 8
+ },
+ "new_loopholes": 1,
+ "gov_errors": 5,
+ "statute_faults": 3,
+ "headline": "Austria's model matches the OECD and the BMF calculator to the cent for employees; the official calculator overcharges pensioners' April 2025 Sonderzahlung KV (6 % vs 5,1 %), § 33 Abs. 7 EStG's wording differs from how the BMF pays the Kindermehrbetrag, and that credit's partner condition is an all-or-nothing cliff worth up to 1 400 EUR for one euro of a partner's pay."
+}

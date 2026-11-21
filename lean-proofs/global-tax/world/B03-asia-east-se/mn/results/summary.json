@@ -1,0 +1,74 @@
+{
+ "country": "MN",
+ "name": "Mongolia",
+ "year": "2025",
+ "status": "built",
+ "batch": "B03-asia-east-se",
+ "access": "A",
+ "reused_from": [
+  "KR",
+  "JP"
+ ],
+ "lean": {
+  "lines": 116,
+  "definitions": 12,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Social (per-period)",
+  "Table.perPeriod",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "stepped credit by income bracket (art. 23.1): local function; a kernel 'step table credit' with a notch theorem would generalise it"
+ ],
+ "provisions_cited": 20,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "#guard: art. 21.1 printed sums 12,000,000 / 21,000,000; credit notches 24,000 at 6m..30m and 120,000 at 36m"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "capital gains (art. 17 needs asset type/price)",
+  "Jan-Mar 2025 SI ceiling (earlier minimum wage not reached; flagged above 3,960,000 a month)",
+  "voluntary social insurance of the self-employed"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 5.2537,
+   "netIncomeFalls": 6
+  },
+  "couple1earner2kids": {
+   "maxMETR": 5.2537,
+   "netIncomeFalls": 6
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 2.2239,
+   "netIncomeFalls": 5
+  }
+ },
+ "sources": "Law on Personal Income Tax (revised 2019, lawId 14410): art. 21.1 as reworded 2022-11-11 and art. 23.1 credit table, read from the archived official page (legalinfo.mn, Wayback 2025-06-25) because Global law holds only the 2026-10-28 consolidated text (art. 21.1/23.1 replaced from 2027); Social Insurance General Law 2023 arts. 18.1, 19.4 (archived 2025-08-09); Health Insurance Law art. 8 + Government resolution 02/2025 (2 %); minimum wage 792,000 from 2025-04-01 (General Authority for Social Insurance)",
+ "headline": "Stepped wage-tax credit makes take-home pay fall at six thresholds"
+}

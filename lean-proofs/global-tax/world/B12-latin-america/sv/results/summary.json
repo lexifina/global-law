@@ -1,0 +1,77 @@
+{
+ "country": "SV",
+ "name": "El Salvador",
+ "year": "2025 (D.L. 293/2025 reform applied to the whole year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B12-latin-america",
+ "reused_from": [
+  "MX/CO bracket tables"
+ ],
+ "lean": {
+  "lines": 108,
+  "definitions": 9,
+  "theorems": 4,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Tariff (CumRow, cumJumps)",
+  "Unit (individual)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 3,
+ "provisions": [
+  "LISR art. 37 (as reformed by D.L. 293/2025)",
+  "LISR art. 29 num. 7",
+  "Decreto Ejecutivo No. 10/2025 art. 1"
+ ],
+ "sources": [
+  "Decreto Ejecutivo No. 10 of 30-04-2025 (transparenciafiscal.gob.sv, Internet Archive 2025-05-22; OCR)",
+  "MH LISR consolidation DC5101 (Internet Archive 2024-07-24)"
+ ],
+ "sources_official_secondary": [
+  "2025 art. 37 table taken from the executive decree's annual recalculation table",
+  "US$ 1.600 / US$ 9.100 of art. 29 num. 7 as quoted by the decree"
+ ],
+ "validation": [
+  {
+   "referee": "statute's own printed tables and thresholds (#guard / decide)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "no referee values seen (build phase)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 3,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "employee ISSS and AFP contributions (not taxable, D.E. 10 art. 1 d) not reached: pass svEmployeeContrib (annual household total) or the base is overstated; employeeSocial = that input",
+  "2025 art. 37 amounts from the executive withholding decree's annual table (official secondary); D.L. 293/2025 not reached; whether the 1991 cap of 25 % of renta imponible (art. 37 last paragraph in the 2007 consolidation) survives was not verified: not applied",
+  "D.E. 10 applies from May 2025; the model applies the reformed table to the whole year",
+  "medical and school-fee deductions (LISR art. 33) for incomes above US$ 9.100 not modelled",
+  "selfEmployment: not modelled; ignored",
+  "capital income: final withholdings not read; ignored",
+  "pensions: not modelled"
+ ],
+ "scale": {
+  "wage": 10742,
+  "currency": "USD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "LISR art. 37 as reformed by D.L. 293/2025 (Decreto Ejecutivo No. 10/2025 annual table, official secondary): the US$ 10.742,86 limit of tramo II",
+  "by": "B12-latin-america",
+  "basis": "LISR art. 37 as reformed by D.L. 293/2025 (Decreto Ejecutivo No. 10/2025 annual table, official secondary): the US$ 10.742,86 limit of tramo II"
+ },
+ "headline": "El Salvador 2025 from the archived Decreto Ejecutivo 10/2025 (art. 37 as reformed by D.L. 293/2025): exempt to US$ 6.600, with notches of US$ 212, US$ 160 and US$ 94."
+}

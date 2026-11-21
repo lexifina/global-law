@@ -1,0 +1,14 @@
+name = "AfTax"
+version = "0.1.0"
+defaultTargets = ["AfTax", "aftax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AfTax"
+
+[[lean_exe]]
+name = "aftax"
+root = "AfTax.Main"

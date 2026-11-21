@@ -1,0 +1,81 @@
+{
+ "country": "MU",
+ "name": "Mauritius",
+ "year": "2025-26 (income year 1 July 2025 - 30 June 2026)",
+ "status": "built",
+ "access": "A",
+ "batch": "B09-southern-africa",
+ "lean": {
+  "lines": 100,
+  "definitions": 10,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Social (whole-wage rate switch)",
+  "Canon/Out",
+  "World.worldMain",
+  "Theorems (Schedule)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 6,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean #guard / decide)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "build phase: no referee values used"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 4,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "UK/IE (bands, deductions for dependants)"
+ ],
+ "sources": [
+  "Income Tax Act 1995 consolidated up to Finance Act 2026 with endnotes (mra.mu): s. 4, 16B, 16C, 27, First Schedule Part I (endnote 1052), Second Schedule Part II Sub-Part B, Third Schedule",
+  "Finance (Miscellaneous Provisions) Act 2025 (Act 18 of 2025) s. 26 (y), s. 66",
+  "Social Contribution and Social Benefits Act 2021 s. 4, First Schedule (as amended to 14/26)"
+ ],
+ "scale": "1000000 MUR (threshold of the top (20 %) band)",
+ "scanner": {
+  "single": {
+   "maxMETR": 7.3288,
+   "netIncomeFalls": 1
+  },
+  "couple1earner2kids": {
+   "maxMETR": 7.2288,
+   "netIncomeFalls": 1
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 7.3192,
+   "netIncomeFalls": 2
+  }
+ },
+ "unsupported": [
+  "tertiary-education dependant deduction",
+  "s. 27 (6) deeming of a dependant's income",
+  "NSF \"basic wage\" (allowances excluded) taken as the whole wage"
+ ],
+ "registry_correction": "MU: Income Tax Act 1995; 2025-26: 0 % to Rs 500 000, 10 % to Rs 1 m, 20 % above (FA 2025), plus a 15 % Fair Share Contribution above Rs 12 m (s. 16C); CSG 1.5 % / 3 % of remuneration.",
+ "headline": "Mauritius built from the ITA 1995 and FA 2025: 0/10/20 % with dependant deductions and a 15 % Fair Share Contribution above Rs 12 m; the CSG switches from 1.5 % to 3 % of the whole wage above Rs 50 000 a month (+Rs 9 001 a year for Rs 12 more), and a spouse earning one rupee above Rs 110 000 costs the family Rs 22 000.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "NSF employee 1 % of the basic wage up to Rs 18,740 a month, nil at or below Rs 3,000 (Government pays), not deducted",
+  "provision": "National Savings Fund Act 1995 s. 5 (2)-(3), First Schedule item 2 (c), s. 2 \"basic wage or salary\"; National Pensions Act 1976 Fifth Schedule (a) (18,740; GN 268 of 2021 w.e.f. 1 July 2019); ITA ss. 27D, 27DC (MRA consolidations)",
+  "source": "statute",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

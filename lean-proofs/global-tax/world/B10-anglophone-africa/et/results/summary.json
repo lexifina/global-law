@@ -1,0 +1,99 @@
+{
+ "country": "ET",
+ "name": "Ethiopia",
+ "year": "2025/26 (Ethiopian fiscal year 2018 E.C., from 8 July 2025)",
+ "status": "built",
+ "batch": "B10-anglophone-africa",
+ "access": "A",
+ "reused_from": [
+  "DJ (B08: monthly final tax)",
+  "UK/IE PAYE"
+ ],
+ "lean": {
+  "lines": 86,
+  "definitions": 8,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Table.perPeriod (monthly)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "new art. 11 at 2,000 / 4,000 / 10,000 / 14,000 / 20,000 birr a month; old art. 11 at 10,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 1,
+  "not_modelled": 2
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "regional employment tax",
+  "public servants' pension",
+  "Schedules B-D"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.429,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.429,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.429,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.429,
+   "atAW": 2.505,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.429,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Proclamation 1395/2025 was published on 1 September 2025 but applies to income derived from 8 July 2025",
+ "scale": {
+  "wage": 168000,
+  "currency": "ETB",
+  "kind": "statutory-threshold",
+  "year": "2025/26 (EFY 2018)",
+  "source": "Federal Income Tax Proclamation 979/2016 art. 11 as replaced by Proclamation 1395/2025: 'Over 14,000 | 35%' a month, x 12",
+  "by": "B10-anglophone-africa",
+  "basis": "Federal Income Tax Proclamation 979/2016 art. 11 as replaced by Proclamation 1395/2025: 'Over 14,000 | 35%' a month, x 12. A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Proclamation 979/2016; schedule A' updated: Proclamation 1395/2025 replaced art. 11 from 8 July 2025 (0 % to 2,000 birr a month, 15/20/25/30/35 %, top from 14,000); employee pension 7 % (not deductible), employer 11 % (exempt up to 15 %)."
+}

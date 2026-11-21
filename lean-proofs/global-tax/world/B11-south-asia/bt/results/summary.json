@@ -1,0 +1,78 @@
+{
+ "country": "BT",
+ "name": "Bhutan",
+ "year": "2025 (calendar income year)",
+ "status": "built",
+ "batch": "B11-south-asia",
+ "access": "A",
+ "reused_from": [
+  "IN",
+  "UK"
+ ],
+ "lean": {
+  "lines": 106,
+  "definitions": 9,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Tariff (printed column vs bands)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "#guard: printed amounts 10,000 / 47,500 / 117,500 = band sums; 242,499 printed vs 242,500 band sum; literal table falls at 1,500,001; surcharge cliff +100,001 at 4,024,999"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 2,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "NPPF/GPF and GIS contributions (rates outside the tax law; optional btPF1/btPF2)",
+  "interest (not a PIT source after the 2016 repeal)",
+  "education deduction only via btEducation"
+ ],
+ "scan": {
+  "fineGrid": {
+   "single": {
+    "maxMETR": 0.3003,
+    "netIncomeFalls": 0
+   },
+   "couple1earner2kids": {
+    "maxMETR": 0.3003,
+    "netIncomeFalls": 0
+   },
+   "couple60_40_2kids": {
+    "maxMETR": 0.2805,
+    "netIncomeFalls": 0
+   }
+  },
+  "scan_world": {
+   "summary": "results/search/SUMMARY.md",
+   "topRateSingle10AW": 33.0
+  }
+ },
+ "sources": "Income Tax Act of the Kingdom of Bhutan 2001, Fourth Edition (DRC, drc.gov.bt/acts-policy; amendments of the Income Tax (Amendment) Act of Bhutan 2020 with footnotes): Part III ss. 2, 4.1, 5.3, 6.3, 8.3, 12, 13, 14, 14A; Rules on the Income Tax Act, Fifth Edition (r. 35, 36); Income Tax Act of Bhutan 2025 ss. 2, 4 (in force 1 January 2026: income year 2025 stays under the 2001 Act)",
+ "registry_correction": "Registry: 'Income Tax Act' -> ITA 2001 (4th edition, as amended 2020) governs income year 2025; the new ITA 2025 applies from 1 January 2026. Rates: nil 300,000; 10 % to 400,000; 15 % to 650,000; 20 % to 1 m; 25 % to 1.5 m; 30 % above; 10 % surcharge when PIT >= 1 m; each spouse taxed separately; pensions exempt.",
+ "headline": "The top row of the tax table prints Nu 242,499 where the bands give 242,500"
+}

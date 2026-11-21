@@ -1,0 +1,14 @@
+name = "DoTax"
+version = "0.1.0"
+defaultTargets = ["DoTax", "dotax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "DoTax"
+
+[[lean_exe]]
+name = "dotax"
+root = "DoTax.Main"

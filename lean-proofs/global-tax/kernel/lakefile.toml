@@ -1,0 +1,16 @@
+name = "TaxKernel"
+version = "1.0.0"
+defaultTargets = ["TaxKernel"]
+
+# The shared kernel of the 20-country comparison (~/cmp20/CONTRACT20.md). Lean 4.35 core only.
+[[lean_lib]]
+name = "TaxKernel"
+
+# Fidelity check (not needed by country projects): UK and German rules re-expressed with kernel parts; `lake build kfid`
+[[lean_lib]]
+name = "Fidelity"
+globs = ["Fidelity.+"]
+
+[[lean_exe]]
+name = "kfid"
+root = "Fidelity.Main"

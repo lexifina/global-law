@@ -1,0 +1,14 @@
+name = "MyTax"
+version = "0.1.0"
+defaultTargets = ["MyTax", "mytax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "MyTax"
+
+[[lean_exe]]
+name = "mytax"
+root = "MyTax.Main"

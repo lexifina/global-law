@@ -1,0 +1,55 @@
+{
+ "country": "SI",
+ "name": "Slovenia",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 660,
+  "definitions": 86,
+  "theorems": 38,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (čl. 122, progressive/convex/no-jump instantiated)",
+  "Rounding (cents, half up)",
+  "Allowance/Taper (čl. 111(3) additional general allowance; amount_step instantiated)",
+  "Social/Contribution (employee 22.6 %; ticks_mono instantiated)",
+  "Table (child-benefit income classes; contiguous/mono proved)",
+  "Unit (splitting_le_separate instantiated; individual assessment)",
+  "Canon/Out/Country (countryMain)"
+ ],
+ "kernel_gaps": [
+  "means-tested benefit by income class per family member with rank-based amounts (local cbMonthlyOf on Table)",
+  "flat-rate (deemed) expenses with tiered caps and a final flat tax (ZDoh-2 čl. 59, 135.a)",
+  "dependants' allowance passed between parents: the other gets only the unused rest (čl. 114(10)); local claimFirst/bestSplit",
+  "parameters changing mid-year (OZP from March, long-term care from July): annualised locally",
+  "separate final taxes on capital and rent kept in incomeTax (no Dual part needed: flat 25 %)"
+ ],
+ "provisions_cited": 67,
+ "validation": [
+  {
+   "referee": "OECD TW 2025",
+   "cases": 56,
+   "exact": 56,
+   "within_1pct": 56,
+   "notes": "8 household types x 6 lines + THP 8/8; identical with central/oecd/check.py and harness/oecd_check20.py; conventions in FINDINGS F1"
+  },
+  {
+   "referee": "FURS Lestvica 2025 and guide (official tables)",
+   "cases": 27,
+   "exact": 26,
+   "within_1pct": 27,
+   "notes": "annual table 4 fixed amounts + 5 rates, monthly table 4 thresholds + 4 fixed amounts, 11 indexed allowance amounts (= 2024 x 1.052), monthly child amounts 6: all equal, proved in Theorems.lean; 1 FURS guide figure (2.060,97) wrong by 0,10 € (F5)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 24,
+  "recreated": 17,
+  "not_modelled": 7,
+  "found_blind": 8
+ },
+ "new_loopholes": 4,
+ "gov_errors": 2,
+ "statute_faults": 2,
+ "headline": "Slovene 2025 PIT, contributions and child benefit in Lean (OECD 56/56 lines exact); child-benefit class notches cost up to 942 € for 1 € more income, families can gain up to 878 € by claiming less child allowance, flat-rate s.p. families keeping 50.000 € get the maximum child benefit, and the dependent-spouse rule taxes a spouse's first euro of wages at up to 1.420 €."
+}

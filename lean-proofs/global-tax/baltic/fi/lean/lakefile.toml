@@ -1,0 +1,15 @@
+name = "FiTax"
+version = "0.1.0"
+defaultTargets = ["FiTax", "fitax"]
+
+# Finland (Helsinki), tax year 2025. Depends on the shared kernel by path (~/cmp20/kernel).
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "FiTax"
+
+[[lean_exe]]
+name = "fitax"
+root = "FiTax.Main"

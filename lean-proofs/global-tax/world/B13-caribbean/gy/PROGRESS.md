@@ -1,0 +1,42 @@
+# Guyana (GY) progress
+
+**Status (2026-11-20T07:27Z): built (step 1 of the world testing order). Next: open-source software (coordinator, TESTING.md), then datasets.**
+
+- Year: 2025 (year of income); access tier B; reused patterns: UK/IE PAYE, IN (B02: one-third standard deduction pattern).
+- Statute read: Income Tax Act Cap. 81:01 L.R.O. 1/2012 (mola.gov.gy) ss. 8, 20, 34, 36; amended by Income Tax (Amendment) Acts 2015 (No. 8: s. 16(1)(k)), 2016, 2017 (No. 12: ss. 36, 36A), 2018, 2019 (No. 8), 2020, 2023 (No. 3), 2025 (No. 2: ss. 8, 20, 36, 36A, 60; commencement checked on the page image) and Fiscal Enactments (Amendment) Acts 2022 (two) and 2024 (No. 2) (parliament.gov.gy scans, OCR); National Insurance and Social Security Act Cap. 36:01 L.R.O. 1/2012, Collection of Contributions Regulations reg. 17; NIS 'Information on Contributions' page (official secondary)
+- Registry correction: Registry 'Income Tax Act (Cap. 81:01)' confirmed: 2025 deduction the greater of 1,560,000 and one third of total income (s. 20(1)(a)), 120,000 per child under 18 to one parent, second-job and overtime deductions up to 600,000 each; 25 % on chargeable income to 3,120,000 and 35 % above (ss. 36, 36A); NIS employee contributions deductible (s. 16(1)(k)); NIS 5.6 % to 280,000 a month (Board rate, official secondary).
+- Lean: 108 lines, 7 defs, 5 theorems, 6 #guard checks, 0 sorry; exe `lean/.lake/build/bin/gytax` (worldMain).
+- Unsupported (listed in the outputs): NIS rate and ceiling are NIS Board figures (official secondary); insurance premium deduction (s. 16(1)(l)); interest/dividends (withholding s. 39), rents, gains; self-employed NIS and minimum tax.
+- Steps: 1 model done; 2 validation: statute's own printed figures and hand-computed statutory cases only (#guard); referees wait for the testing phase; 3 proofs: kernel one-liners (Theorems.lean: monotone, convex, no jump, splitting <= separate); 4-5 loopholes: FINDINGS.md (catalogue + generic scanners, scan_world.py with the cited scale.json); 6 statute faults / government errors: FINDINGS.md; 7 USEFUL.md.
+- Tried / sources:
+  - Global law guyana corpus: no tax law
+  - mola.gov.gy Laws of Guyana volumes (L.R.O. 1/2012 Cap. 81:01 and 36:01)
+  - parliament.gov.gy acts listing (P0-P250) and document links
+  - nis.org.gy (406 from lean1; read from the laptop)
+  - not opened (referee values): GRA PAYE calculator and rates pages
+- Files on disk:
+  - `law/ITA_cap81-01_mola.pdf` (11,969,505 B, sha256 a3dd49fce4af1d0f…)
+  - `law/a.html` (67,054 B, sha256 3fd99eb0df93c3e1…)
+  - `law/acts/fiscalenactmentsamendment-no2act2022.pdf` (828,820 B, sha256 c9cd3af007aed8fd…)
+  - `law/acts/fiscalenactmentsamendment2of2024.pdf` (820,267 B, sha256 2146dda68958aa68…)
+  - `law/acts/fiscalenactmentsamendmentact2022.pdf` (1,126,337 B, sha256 9005ab453ba52082…)
+  - `law/acts/fiscalenactmentsamendmentact3of2026.pdf` (573,640 B, sha256 842c6c6a7ef8afc8…)
+  - `law/acts/income-tax-amendment-act-2012.pdf` (171,570 B, sha256 281d819d3532f6b3…)
+  - `law/acts/income-tax-amendment-act-2015.pdf` (52,942 B, sha256 80d9d81af9242b17…)
+  - `law/acts/income-tax-amendment-act-20151.pdf` (52,951 B, sha256 ee0ef05acc17978f…)
+  - `law/acts/income-tax-amendment-act-2016.pdf` (168,784 B, sha256 65ec4cf81edc495a…)
+  - `law/acts/income-tax-amendment-act-2018.pdf` (502,835 B, sha256 6b18f645ae32c1ce…)
+  - `law/acts/income-tax-amendment-act-2019.pdf` (624,341 B, sha256 a81a572de37f0b71…)
+  - `law/acts/income-tax-amendment-act-2020.pdf` (279,163 B, sha256 957a6ea3cd2ffbd3…)
+  - `law/acts/income-tax-amendment-act-2025-2-of-2025.pdf` (826,286 B, sha256 46ab579c00794718…)
+  - `law/acts/income-tax-amendmentact-2017.pdf` (554,058 B, sha256 305862f6602cdb4d…)
+  - `law/acts/incometaxamendmentact2023.pdf` (321,138 B, sha256 4132ef53839b8fd0…)
+  - `law/acts/tax-amendment-act-2017.pdf` (148,907 B, sha256 d887d36ec2244b3d…)
+  - `law/acts/tax-amendment-act-2018.pdf` (213,101 B, sha256 87fe73ec16503963…)
+  - `law/acts_p1.html` (73,662 B, sha256 b258ed8e6c854747…)
+  - `law/gra_home.html` (359,310 B, sha256 7b788764aa2d1b74…)
+  - `law/mola_home.html` (47,273 B, sha256 2ede0614346b0e6f…)
+  - `law/mola_laws.html` (40,399 B, sha256 d74e13f6da940707…)
+  - `law/nis_cap36-01_mola.pdf` (12,288,365 B, sha256 f3db7f99305d1500…)
+  - `law/nis_org_gy_information_on_contributions_2026-11-20.html` (22,149 B, sha256 4772789d38429d80…)
+  - `law/parl.html` (105,312 B, sha256 c85d3f33be094d2c…)

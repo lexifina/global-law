@@ -1,0 +1,14 @@
+name = "BoTax"
+version = "0.1.0"
+defaultTargets = ["BoTax", "botax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "BoTax"
+
+[[lean_exe]]
+name = "botax"
+root = "BoTax.Main"

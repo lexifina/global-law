@@ -1,0 +1,14 @@
+name = "RsTax"
+version = "0.1.0"
+defaultTargets = ["RsTax", "rstax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "RsTax"
+
+[[lean_exe]]
+name = "rstax"
+root = "RsTax.Main"

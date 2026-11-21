@@ -1,0 +1,41 @@
+{
+ "country": "CR",
+ "name": "Costa Rica (impuesto al salario, impuesto sobre las utilidades de personas físicas, rentas de capital; CCSS)",
+ "year": "2025 (calendar year; período fiscal enero-diciembre)",
+ "status": "built",
+ "access": "A",
+ "batch": "B01-oecd5",
+ "lean": {
+  "lines": 188,
+  "definitions": 21,
+  "theorems": 7,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "World.Cedula / cedularTotal (no overlay)",
+  "World.sourceBase (territorial)",
+  "Schedule (monthly salary scale, annual profits scale)",
+  "Unit (individual, credits to one spouse)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 19,
+ "validation": [],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "MX/ES (Latin layout)",
+  "kernel Cedula (schedular), sourceBase (territorial)"
+ ],
+ "sources_official_secondary": [],
+ "headline": "Costa Rica 2025 built from Ley 7092 and Decreto 44772-H (SINALEVI): schedular salary/profits/capital taxes with the aguinaldo exemption, CCSS 10,67 %; employees are exempt up to 11,06 M CRC a year against 4,09 M for the self-employed; art. 35 still cites repealed subsections."
+}

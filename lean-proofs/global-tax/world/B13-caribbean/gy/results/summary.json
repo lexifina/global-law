@@ -1,0 +1,100 @@
+{
+ "country": "GY",
+ "name": "Guyana",
+ "year": "2025 (year of income)",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "B",
+ "reused_from": [
+  "UK/IE PAYE",
+  "IN (B02: one-third standard deduction pattern)"
+ ],
+ "lean": {
+  "lines": 108,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 6,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (monthly via Table.perPeriod)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "s. 36 tax at 3,120,000 and 4,120,000; s. 20(1)(a) deduction at 4,680,000 and 6,000,000; NIS at and above the ceiling"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 3,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "NIS rate and ceiling are NIS Board figures (official secondary)",
+  "insurance premium deduction (s. 16(1)(l))",
+  "interest/dividends (withholding s. 39), rents, gains",
+  "self-employed NIS and minimum tax"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.292,
+   "atAW": 0.53,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.292,
+   "atAW": 0.615,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.292,
+   "atAW": 0.615,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.293,
+   "atAW": 1.33,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.292,
+   "atAW": 0.53,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Above GY$4.68 million the marginal income-tax rate falls from 25 % to 23.3 %: the one-third deduction outruns the 35 % band",
+ "scale": {
+  "wage": 3120000,
+  "currency": "GYD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act Cap. 81:01 ss. 36, 36A as amended by Act 2 of 2025: 'three million one hundred and twenty thousand dollars' (start of the 35 % band)",
+  "by": "B13-caribbean",
+  "basis": "Income Tax Act Cap. 81:01 ss. 36, 36A as amended by Act 2 of 2025: 'three million one hundred and twenty thousand dollars' (start of the 35 % band). A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act (Cap. 81:01)' confirmed: 2025 deduction the greater of 1,560,000 and one third of total income (s. 20(1)(a)), 120,000 per child under 18 to one parent, second-job and overtime deductions up to 600,000 each; 25 % on chargeable income to 3,120,000 and 35 % above (ss. 36, 36A); NIS employee contributions deductible (s. 16(1)(k)); NIS 5.6 % to 280,000 a month (Board rate, official secondary)."
+}

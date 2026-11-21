@@ -1,0 +1,101 @@
+{
+ "country": "MH",
+ "name": "Marshall Islands",
+ "year": "2025 (calendar year; two schedules)",
+ "status": "built",
+ "batch": "B14-pacific",
+ "access": "A",
+ "reused_from": [
+  "US-style wage tax + social security (Compact states)",
+  "B05 mid-year change pattern (month-weighted schedules)"
+ ],
+ "lean": {
+  "lines": 126,
+  "definitions": 14,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 7,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "per-month schedule choice"
+ ],
+ "kernel_gaps": [
+  "a schedule that changes inside the year by pay period: local (is2024Month)"
+ ],
+ "provisions_cited": 11,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 7,
+   "exact": 7,
+   "within_1pct": 7,
+   "notes": "exemption edge at $693.33 a month; both schedules at $2,000 a month; both readings at $24,000 a year; social security ceiling"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 3,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "gross revenue tax and Net Profit Act 2025 for self-employment",
+  "tax on income from immovable property (s 116)",
+  "wages paid monthly and evenly"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 12.942,
+   "atAW": 0.8,
+   "bandsOver100": 1,
+   "largestNotch": "664 at 8,320 (0.8 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 12.942,
+   "atAW": 0.8,
+   "bandsOver100": 1,
+   "largestNotch": "664 at 8,320 (0.8 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 12.942,
+   "atAW": 0.8,
+   "bandsOver100": 1,
+   "largestNotch": "664 at 8,320 (0.8 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 12.942,
+   "atAW": 2.0,
+   "bandsOver100": 2,
+   "largestNotch": "664 at 13,867 (1.33337 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 12.942,
+   "atAW": 0.8,
+   "bandsOver100": 1,
+   "largestNotch": "664 at 8,320 (0.8 AW)"
+  }
+ },
+ "headline": "F1 2025 has two wage-tax schedules and the dates are ambiguous: P.L. 2024-14 (8/12/16 %) took effect on certification (8 October 2024) with 'a seven (7) months period for the implementation process', and P.L. 2025-34 restored 8/12 % from 1 October 2025",
+ "scale": {
+  "wage": 10400,
+  "currency": "USD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act 1989 (48 MIRC Ch. 1) s 103(1) as restored by P.L. 2025-34: end of the 8 % band (\"eight percent (8%) upon the first $10,400\")",
+  "by": "B14-pacific",
+  "basis": "Income Tax Act 1989 (48 MIRC Ch. 1) s 103(1) as restored by P.L. 2025-34: end of the 8 % band (\"eight percent (8%) upon the first $10,400\"). A statutory threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act 1989 (wages and salary tax)' confirmed and dated: in 2025 the wage tax changed twice: 8 %/12 %/16 % ($15,600/$26,000 a year, prorated per pay period) from P.L. 2024-14, back to 8 % on the first $10,400 and 12 % above from 1 October 2025 (P.L. 2025-34); all-or-nothing exemption at $8,320 a year ($693.33 a month); 5 % for US contractor personnel; social security 8 % employee on covered earnings."
+}

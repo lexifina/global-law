@@ -1,0 +1,14 @@
+name = "NiTax"
+version = "0.1.0"
+defaultTargets = ["NiTax", "nitax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "NiTax"
+
+[[lean_exe]]
+name = "nitax"
+root = "NiTax.Main"

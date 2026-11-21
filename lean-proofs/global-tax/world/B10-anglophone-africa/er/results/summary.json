@@ -1,0 +1,66 @@
+{
+ "country": "ER",
+ "name": "Eritrea",
+ "year": "2025",
+ "status": "unsupported",
+ "batch": "B10-anglophone-africa",
+ "access": "C",
+ "reused_from": [],
+ "lean": {
+  "lines": 25,
+  "definitions": 3,
+  "theorems": 0,
+  "sorry": 0
+ },
+ "guards": 0,
+ "kernel_parts_used": [
+  "Canon",
+  "Country",
+  "World.worldMain"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 0,
+ "validation": [],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "no accessible statute"
+ ],
+ "scan": {},
+ "headline": "No accessible statute: Eritrea's income tax proclamation is not published online (Global law holds no tax law; mof.gov.er unreachable)",
+ "registry_correction": "Registry 'Income Tax Proclamation 62/1994; little accessible law' unverified: no text of the proclamation or of later amendments was reached.",
+ "rescue": {
+  "agent": "rescue",
+  "date": "2026-11-20T11:52Z",
+  "outcome": "still C",
+  "routes": [
+   "Global law eritrea corpus (6 acts: WIPO Lex constitution, civil procedure code...): no tax law; search 'income tax' 0",
+   "mof.gov.er: no answer; shabait.com answers (news site, no legislation database)"
+  ],
+  "unlock": "the Income Tax Proclamation and its amendments as published in the Gazette of Eritrean Laws"
+ },
+ "rescue2": {
+  "agent": "rescue2",
+  "date": "2026-11-20T13:11Z",
+  "outcome": "still unsupported (access C)",
+  "routes": [
+   "mof.gov.er: no answer from the laptop; WIPO Lex ER profile: 3 items, none on tax",
+   "legis-palop.org (PALOP+TL legal database): full texts need a paid subscription and login (free registration gives listings only); its search form posts redirect to the home page without a session: not used (login)",
+   "natlex.ilo.org, www.fao.org/faolex, www.refworld.org: Cloudflare 'Sorry, you have been blocked' (403) from the laptop and WebFetch: not bypassed",
+   "droit-afrique.com: live site 403 ('Server unable to read htaccess file'); its tax codes are sold in a shop (Wayback: only the free 'sommaire')",
+   "Global law list_jurisdictions (rescue2/tools/gl.py, 2026-11-20): no tax law in this country's corpus",
+   "WIPO Lex country profile (www.wipo.int/wipolex/en/members/profile/<CC>): no tax law listed (except SY, GM: see below)"
+  ],
+  "unlock": "the income tax proclamation (No. 62/1994 as amended) and its rate schedule"
+ }
+}

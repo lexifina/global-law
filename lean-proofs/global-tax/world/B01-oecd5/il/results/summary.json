@@ -1,0 +1,45 @@
+{
+ "country": "IL",
+ "name": "Israel (income tax with credit points and surtax; national insurance and health insurance)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B01-oecd5",
+ "lean": {
+  "lines": 203,
+  "definitions": 26,
+  "theorems": 8,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (s. 121 personal-exertion and other scales)",
+  "Credit (non-refundable points)",
+  "Surcharge pattern (s. 121ב, written locally)",
+  "Unit (separate computation)"
+ ],
+ "kernel_gaps": [
+  "Credit points depending on the parent's sex and the child's age (written locally; the canonical household has no sex)"
+ ],
+ "provisions_cited": 16,
+ "validation": [],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "UK/IE (credits)",
+  "kernel Credit pattern (points × value)"
+ ],
+ "sources_official_secondary": [
+  "National Insurance Institute page 'שיעורי דמי ביטוח לעובדים שכירים' (btl.gov.il; official secondary): employee rates with start dates"
+ ],
+ "headline": "Israel 2025 built from the Income Tax Ordinance, NI and Health Insurance Laws (Hebrew Wikisource mid-2025 revisions + NII rates): 2024 brackets frozen by s. 120ב(ה), 2,25 credit points, 3 % + new 2 % capital surtax; NI ceiling not reached (tier B)."
+}

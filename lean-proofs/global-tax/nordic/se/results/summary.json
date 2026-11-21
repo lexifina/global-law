@@ -1,0 +1,22 @@
+{"country": "SE", "name": "Sweden (Stockholm municipality)", "year": "2025 (inkomstår 2025, calendar year)", "status": "done",
+ "lean": {"lines": 948, "definitions": 60, "theorems": 56, "sorry": 0},
+ "kernel_parts_used": ["Schedule", "Rounding", "Dual", "Social", "Canon", "Country"],
+ "kernel_gaps": [
+  "piecewise-linear allowance in multiples of an index amount, rising then falling, exact rational coefficients, one rounding up to 100 (grundavdrag 63 kap. 3, 3 a §§)",
+  "credit defined through another part: (formula(arbetsinkomst) - grundavdrag) x municipal rate (jobbskatteavdrag 67 kap. 7 §)",
+  "credits limited to one of several taxes (municipal only vs municipal + state) applied in a statutory order across two tax pots (67 kap. 2 §)",
+  "fees on taxable income with their own caps (public service-avgift 1 % up to 1,55 ibb; begravningsavgift)",
+  "withholding-table function (whole-percent table number, assumed fee share, band top) to compare published tables with the statute"],
+ "provisions_cited": 48,
+ "validation": [
+  {"referee": "OECD Taxing Wages 2025 (SWE, 8 family types x 7 lines: CGTC, CGITLETC, CGITFP, SLT, EECSSC, CTGG, THP)", "cases": 56, "exact": 56, "within_1pct": 56,
+   "notes": "model run with the OECD's national average municipal rate 32,41 % and no begravningsavgift; THP differs only by the OECD gross's öre (<1 kr); the OECD books all credits as central tax and leaves the public service-avgift out (F7)"},
+  {"referee": "Skatteverket, Teknisk beskrivning SKV 433 2025: worked examples", "cases": 22, "exact": 22, "within_1pct": 22,
+   "notes": "grundavdrag, förhöjt grundavdrag, state tax, pensionsavgift (incl. the 50-kr tie and the maximum), jobbskatteavdrag, förvärvsinkomst credit, public service, two full low-income computations; Lean theorems by decide (SETax/Tests.lean)"},
+  {"referee": "Skatteverket allmänna skattetabeller 2025 (open data, monthly, tables 29-42, columns 1, 2, 3, 6)", "cases": 26936, "exact": 26936, "within_1pct": 26936,
+   "notes": "table cell = statute model at the band top with municipal rate T - 1,16 % and fees 1,16 %, /12 rounded down (harness/table_check.py); percent rows above 80 000 kr/month: 360 919 of 360 928 200-kr steps equal the half-up percentage, 9 exact x,5 ties kept low (F6)"}],
+ "known_loopholes": {"catalogued": 29, "recreated": 17, "not_modelled": 12},
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 3,
+ "headline": "Sweden 2025 reproduces the OECD, 22 of Skatteverket's worked examples and all 26 936 withholding-table cells exactly; the statute's credit order leaves working pensioners earning up to 213 000 kr paying the 7 % pension fee uncompensated, and IL 67 kap. 2 § does not say which tax a two-tax credit uses first (up to 3 520 kr)."}

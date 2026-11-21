@@ -1,0 +1,99 @@
+{
+ "country": "LC",
+ "name": "Saint Lucia",
+ "year": "2025 (income year)",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE",
+  "ECCU pattern (personal allowance + three bands)"
+ ],
+ "lean": {
+  "lines": 95,
+  "definitions": 6,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "Schedule 5 at 15,000 and 30,000; NIC at the 60,000 ceiling"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 1,
+  "not_modelled": 3
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "Acts after the 2023 revision not reached",
+  "child, education, mortgage deductions (inputs)",
+  "investment income",
+  "self-employed NIC"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.337,
+   "atAW": 0.965,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.337,
+   "atAW": 0.965,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.337,
+   "atAW": 0.995,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.317,
+   "atAW": 2.42,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.35,
+   "atAW": 0.025,
+   "bandsOver100": 0,
+   "largestNotch": "1.00 at 1,519 (0.02532 AW)"
+  }
+ },
+ "headline": "F1 The NIC ceiling of EC$60,000 a year is still the statute's own figure",
+ "scale": {
+  "wage": 60000,
+  "currency": "XCD",
+  "kind": "statutory-ceiling",
+  "year": "2025",
+  "source": "National Insurance Corporation Act Cap. 16.01 Schedule 3 para. 1: remuneration 'in excess of $60,000 per annum' exempted from contributions (the contribution ceiling)",
+  "by": "B13-caribbean",
+  "basis": "National Insurance Corporation Act Cap. 16.01 Schedule 3 para. 1: remuneration 'in excess of $60,000 per annum' exempted from contributions (the contribution ceiling). A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act (Cap. 15.02)' confirmed: personal allowance 25,000 from 1 January 2023 (Schedule 6); 15 % to 15,000, 20 % to 30,000, 30 % above (Schedule 5, 2023 row); NIC 5 % to 60,000 a year, deductible with life premiums up to the lower of 10 % of assessable income or 8,000."
+}

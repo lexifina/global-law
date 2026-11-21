@@ -1,0 +1,14 @@
+name = "RuTax"
+version = "0.1.0"
+defaultTargets = ["RuTax", "rutax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "RuTax"
+
+[[lean_exe]]
+name = "rutax"
+root = "RuTax.Main"

@@ -1,0 +1,14 @@
+name = "SaTax"
+version = "0.1.0"
+defaultTargets = ["SaTax", "satax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SaTax"
+
+[[lean_exe]]
+name = "satax"
+root = "SaTax.Main"

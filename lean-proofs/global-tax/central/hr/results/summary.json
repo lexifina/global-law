@@ -1,0 +1,40 @@
+{
+ "country": "HR",
+ "name": "Croatia (Zagreb)",
+ "year": "2025",
+ "status": "done",
+ "lean": {"lines": 756, "definitions": 98, "theorems": 41, "sorry": 0},
+ "kernel_parts_used": [
+  "Schedule (ZPD čl. 19 two local rates; kernel theorems ticks_mono_of_progressive, ticks_convex, ticks_lipschitz_of_progressive, ticks_le_maxRate_mul, splitting_le_separate instantiated; every rate pair allowed by čl. 19.a st. 2 proved progressive for all rates)",
+  "Allowance.Taper + Family.reducedBase (ZD čl. 21.a pension-base reduction; Taper.amount_step, amount_le_full)",
+  "Family.perChildByRank (ZPD čl. 14 st. 3 child coefficients)",
+  "Table (paušal classes, Pravilnik čl. 3) and Table.perPeriod (monthly contributions)",
+  "Rounding.divR halfUp (cents)",
+  "Canon / Out / Country (countryMain)"
+ ],
+ "kernel_gaps": [
+  "Young workers' relief: a credit equal to a share of the tax on the lower band, prorated by the share of wages in the dohodak (ZPD čl. 46 st. 2): local",
+  "Means-tested benefit with five all-or-nothing brackets on income per household member (doplatak za djecu čl. 16-18): local list lookup",
+  "Allowance split between parents as an internal cheapest-of election (ZPD čl. 17 st. 5); the harness elections file is not used",
+  "Monthly rules without annual equalisation (ZD čl. 21.a, 204): perPeriod covers even pay only; uneven pay needs an explicit month list (eeContribMonths)",
+  "Owner-manager company side for HR in harness company.json is the OECD placeholder (CIT 18 %, no 10 % small-company rate, no director's minimum base): statute-cited side in tools/owner_hr.py, sent to kernel INBOX"
+ ],
+ "provisions_cited": 58,
+ "validation": [
+  {"referee": "Porezna uprava annual-assessment calculator (official; its published JS formula and podaci.json 2025 transcribed in tools/pu_calc.py, run offline)", "cases": 4176, "exact": 4176, "within_1pct": 4176,
+   "notes": "employees, Zagreb and Samobor rates from the calculator's own list, ages 24/28/40, 0-3 children, pay 0-160.000 €; exact = within 1 € (the model rounds to whole euros); calculator errors in its rate list and number parsing: F4, F9"},
+  {"referee": "Porezna uprava, Primjeri izračuna za mlade (2025 tables, Samobor)", "cases": 8, "exact": 6, "within_1pct": 6,
+   "notes": "the 2 differences are errors in the official examples (F3): 9.000 € ignores the ZD čl. 21.a reduction (44,55 € due, not 0); 50 % of 2.160 € printed as 1.008 €; Tests.lean D"},
+  {"referee": "Porezna uprava published amounts: personal-allowance table (27) and paušal table (23)", "cases": 50, "exact": 50, "within_1pct": 50,
+   "notes": "Tests.lean A-B, kernel-checked (decide)"},
+  {"referee": "Naredba NN 137/24 bases (5), Zakon o doplatku za djecu / EUROMOD Y16 Table 2.11 amounts and limits (10), EUROMOD Table 2.17 (1)", "cases": 16, "exact": 16, "within_1pct": 16,
+   "notes": "Tests.lean C, E"},
+  {"referee": "Eurostat earn_nt_net 2025 (OECD-EC tax-benefit model), sanity bound only", "cases": 39, "exact": 35, "within_1pct": 37,
+   "notes": "13 types x TAX/EECSSC/CTGG run with Eurostat's own 22,4 % lower rate (F1): TAX 13/13 exact; EECSSC 11/13 exact, 13/13 within 1 %; CTGG 11/13 (lone-parent supplement and previous-year income, F2). With Zagreb's statutory 23 %: TAX 1/13 exact, NET 12/13 within 1 % (results/eurostat_check_HR.md)"}
+ ],
+ "known_loopholes": {"catalogued": 17, "recreated": 12, "not_modelled": 5, "found_blind": 5},
+ "new_loopholes": 2,
+ "gov_errors": 3,
+ "statute_faults": 4,
+ "headline": "Croatian 2025 model (Zagreb) in Lean, agreeing with Porezna uprava's own calculator on 4,176 of 4,176 cases; it finds three errors in the tax administration's worked examples for young workers, a wrong rate in its calculator, a statute gap on out-of-range city rates (Knin), and two new loopholes: one euro of income can cost a family 742 € of child benefit, and paying a year's wages unevenly across months escapes 781 € of pension contributions because the 2024 low-pay base reduction and the monthly cap are never settled over the year."
+}

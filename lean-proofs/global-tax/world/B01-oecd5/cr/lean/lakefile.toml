@@ -1,0 +1,14 @@
+name = "CrTax"
+version = "0.1.0"
+defaultTargets = ["CrTax", "crtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CrTax"
+
+[[lean_exe]]
+name = "crtax"
+root = "CrTax.Main"

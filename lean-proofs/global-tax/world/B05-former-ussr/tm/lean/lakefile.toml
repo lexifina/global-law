@@ -1,0 +1,14 @@
+name = "TmTax"
+version = "0.1.0"
+defaultTargets = ["TmTax", "tmtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "TmTax"
+
+[[lean_exe]]
+name = "tmtax"
+root = "TmTax.Main"

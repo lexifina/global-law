@@ -1,0 +1,14 @@
+name = "DzTax"
+version = "0.1.0"
+defaultTargets = ["DzTax", "dztax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "DzTax"
+
+[[lean_exe]]
+name = "dztax"
+root = "DzTax.Main"

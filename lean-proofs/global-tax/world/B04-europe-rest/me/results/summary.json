@@ -1,0 +1,56 @@
+{
+ "country": "ME",
+ "name": "Montenegro (porez na dohodak fizičkih lica, prirez — default Opština Žabljak, doprinosi zaposlenog)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B04-europe-rest",
+ "lean": {
+  "lines": 128,
+  "definitions": 18,
+  "theorems": 7,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (monthly 0/9/15 %, annual self-employment)",
+  "Tariff (CumRow: the instruction's 27 € proved)",
+  "Surcharge/Multiplier pattern (13 % prirez)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed amounts and tables (Lean decide)",
+   "cases": 7,
+   "exact": 7,
+   "within_1pct": 7,
+   "notes": "build phase: no referee values"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "HR (municipal surtax as % of tax)",
+  "kernel Schedule, Tariff, Multiplier pattern"
+ ],
+ "sources": [
+  "Global law montenegro/national/acts/zakon/2001/348771 (Zakon o porezu na dohodak fizičkih lica 65/2001, as enacted) + amending acts zakon/2019/338016, 2021/293530, 2021/334044, 2022/334487, 2025/386428",
+  "sluzbenilist.me/propisi/373333 (Zakon 88/2024, in force 2025-01-01; NOT in Global law; page images OCR'd, me/src/sl88/)",
+  "Global law zakon/2007/334167 (Zakon o doprinosima 13/07) + zakon/2021/334055 (145/2021), zakon/2024/373700 (94/2024)",
+  "Global law uputstvo/2022/336447, uputstvo/2024/374308 (Ministry instruction on payroll tax and contributions)",
+  "Global law odluka/2018/310754 (Odluka o prirezu, Opština Žabljak, 13 %)"
+ ],
+ "scale": "18 000 EUR = 12 × 1 500",
+ "headline": "Montenegro 2025 built from the PIT law and its amendments to 133/2025 (88/2024 read from the gazette images): monthly 0 %/9 %/15 % on gross pay, 13 % surtax (Žabljak), employee contributions 10,5 %; monthly taxation has no reconciliation.",
+ "subnational_default": "Opština Žabljak (prirez 13 %)"
+}

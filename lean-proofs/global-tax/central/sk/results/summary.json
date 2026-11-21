@@ -1,0 +1,34 @@
+{
+ "country": "SK",
+ "name": "Slovakia",
+ "year": "2025",
+ "status": "done",
+ "lean": {"lines": 924, "definitions": 107, "theorems": 76, "sorry": 0},
+ "kernel_parts_used": [
+  "Schedule (§ 15 19 %/25 %; kernel theorems ticks_mono_of_progressive, ticks_convex, ticks_lipschitz_of_progressive, separate_le_joint instantiated)",
+  "Rounding (divR halfUp for ZDP § 47)",
+  "Credit (sumInts)",
+  "Canon / Out / Country (countryMain)"
+ ],
+ "kernel_gaps": [
+  "Taper.WellFormed requires Round.down; ZDP § 47 rounds the NČZD withdrawal (44,2 × ŽM − ¼ base) half-up, so § 11 is local (ncz_step proved locally)",
+  "Monthly employee contributions rounded down per insurance with a monthly ceiling shared with self-employment (ZSP § 129, § 138 ods. 10): local",
+  "Child bonus with monthly amounts by age, a monthly percentage cap by number of children and a per-child withdrawal prorated by months (ZDP § 33): local",
+  "Two tax bases per person (§ 4 ods. 1), each with its own threshold and rate rule: the kernel Schedule composed twice",
+  "SZČO contribution base lagged one year (ZSP § 138 ods. 2, § 21): steady state only"
+ ],
+ "provisions_cited": 99,
+ "validation": [
+  {"referee": "OECD TW 2025", "cases": 56, "exact": 56, "within_1pct": 56,
+   "notes": "8 household types x 7 lines (CGTC, CGITLETC, CGITFP, SLT, EECSSC, CTGG, THP); identical with ~/cmp20/harness/oecd_check20.py; cent-level differences of 0,21-0,30 € are the statutory monthly rounding of contributions (F1); with the OECD's convention the CGTC/CGITLETC/BTA/HFTA cents are reproduced (Tests.lean D)"},
+  {"referee": "Finančná správa 2025 worked examples (daňový bonus: podpora 790897, 272586, 476621)", "cases": 18, "exact": 18, "within_1pct": 18,
+   "notes": "annual bonus (cap, withdrawal, part-year children, age limits) and monthly withholding bonus, kernel-checked in Tests.lean A-C"},
+  {"referee": "podnikajte.sk 2025 bonus examples (third party, not official)", "cases": 2, "exact": 2, "within_1pct": 2,
+   "notes": "Tests.lean E"}
+ ],
+ "known_loopholes": {"catalogued": 15, "recreated": 13, "not_modelled": 2, "found_blind": 4},
+ "new_loopholes": 5,
+ "gov_errors": 0,
+ "statute_faults": 3,
+ "headline": "Slovak 2025 tax-benefit model in Lean (OECD 56/56 lines exact, 18/18 Finančná správa bonus examples); the new 2025 child-bonus withdrawal is avoided by letting the lower earner claim and stacks with the § 11 withdrawal into 51-55 % marginal rates (above 100 % with eight children); the 1 Jan 2025 text let pooled couples escape it until a 15 March 2025 fix, and § 32a's employee premium is provably dead law."
+}

@@ -1,0 +1,12 @@
+{"country": "BG", "name": "Bulgaria", "year": "2025", "status": "done",
+ "lean": {"lines": 701, "definitions": 73, "theorems": 36, "sorry": 0},
+ "kernel_parts_used": ["Schedule", "Rounding", "Social", "Unit", "Canon", "Country"],
+ "kernel_gaps": ["monthly parameters that change within the year (ceiling 3 750 BGN Jan-Mar, 4 130 BGN Apr-Dec): Table.perPeriod has no period index, so the model has its own monthlyParts with the same split",
+                 "all-or-nothing income-tested family allowance with a per-member test and month-dependent limits (no kernel part)",
+                 "money in stotinki: own leva-with-cents writer (as PT)"],
+ "provisions_cited": 58,
+ "validation": [{"referee": "Eurostat earn_nt_net 2025 (EU-OECD tax-benefit model), BG", "cases": 52, "exact": 44, "within_1pct": 50,
+   "notes": "13 household types x (SOC, TAX, FAM, NET); Eurostat values in EUR (its BG 'NAC' series = EUR) x 1.95583; exact = within 1 BGN. The 8 others: Eurostat applies the April ceiling 4 130 BGN (AW125, AW167) and the April allowance limit 760 BGN (one-earner couple, 2 children) to January-March; the 2025 budget acts set 3 750 BGN and 710 BGN (FINDINGS F1, F2)."}],
+ "known_loopholes": {"catalogued": 8, "recreated": 6, "not_modelled": 2},
+ "new_loopholes": 4, "gov_errors": 2, "statute_faults": 1,
+ "headline": "Bulgaria's 10 % flat tax hides two cliffs and a disappearing relief: the child allowance's all-or-nothing income limits cost up to 1 180 BGN for 10 BGN of pay, and the child relief printed in the tax code (200 BGN) is a thirtieth of the real one (6 000 BGN), which has lived only in each year's late budget act since 2022."}

@@ -1,0 +1,79 @@
+{
+ "country": "SC",
+ "name": "Seychelles",
+ "year": "2025",
+ "status": "built",
+ "access": "A",
+ "batch": "B09-southern-africa",
+ "lean": {
+  "lines": 81,
+  "definitions": 8,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (monthly, cents)",
+  "Rounding",
+  "Canon/Out",
+  "World.worldMain",
+  "Theorems (Schedule)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 3,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean #guard / decide)",
+   "cases": 9,
+   "exact": 9,
+   "within_1pct": 9,
+   "notes": "build phase: no referee values used"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 2,
+  "not_modelled": 3
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "UK/IE PAYE (monthly)"
+ ],
+ "sources": [
+  "Income and Non-Monetary Benefits Tax (Amendment) Act 2017 (Act 27 of 2017) First Schedule (src.gov.sc; scanned, table checked on the image)",
+  "S.I. 79 of 2018, S.I. 28 of 2019, S.I. 26 of 2024, Act 32 of 2022 (src.gov.sc)"
+ ],
+ "scale": "120000 SCR (12 x the SR10 000 monthly threshold of the 20 % band (citizens))",
+ "scanner": {
+  "single": {
+   "maxMETR": 0.2,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.2,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.18,
+   "netIncomeFalls": 0
+  }
+ },
+ "unsupported": [
+  "bonuses / 13th-month pay",
+  "business tax on self-employment",
+  "investment income"
+ ],
+ "registry_correction": "SC: Income and Non-Monetary Benefits Tax Act 2010 (Cap 273): monthly per-source emoluments tax, citizens nil to SR8 555.50, 15 % to SR10 000, 20 % to SR83 333, 30 % above; non-citizens 15 % from the first rupee.",
+ "headline": "Seychelles built from the emoluments tax schedule (Act 27 of 2017): monthly and per source of employment, so two employers each give a nil band; a non-citizen on SR20 000 a month pays SR15 400 a year more than a citizen.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "SPF employee 5 % of emoluments for citizens (no ceiling); not deducted",
+  "provision": "SPF Act 2005 ss. 17-18 (consolidated 01/01/2023); rate from the Fund notice of 08/12/2022 (4 % -> 5 % from 1 Jan 2023), official secondary",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

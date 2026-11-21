@@ -1,0 +1,14 @@
+name = "GeTax"
+version = "0.1.0"
+defaultTargets = ["GeTax", "getax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "GeTax"
+
+[[lean_exe]]
+name = "getax"
+root = "GeTax.Main"

@@ -1,0 +1,104 @@
+{
+ "country": "RW",
+ "name": "Rwanda",
+ "year": "2025 (calendar tax period)",
+ "status": "built",
+ "batch": "B10-anglophone-africa",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE",
+  "DJ (B08: monthly final withholding)"
+ ],
+ "lean": {
+  "lines": 78,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Table.perPeriod (monthly)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "art. 56 Table 2 at 60,000 / 100,000 / 200,000 / 300,000 a month; bunching cost"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 2,
+  "not_modelled": 2
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "annual declaration rules",
+  "investment, rental and business income"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.36,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.36,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.36,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.36,
+   "atAW": 2.5,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.36,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Monthly withholding is the final tax on wages: 3.6 M paid in one month costs 1,044,000 against 648,000 paid evenly",
+ "scale": {
+  "wage": 2400000,
+  "currency": "RWF",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Law n° 027/2022 art. 56 Table 2: start of the 30 % band '200,001 More 30%' a month, x 12",
+  "by": "B10-anglophone-africa",
+  "basis": "Law n° 027/2022 art. 56 Table 2: start of the 30 % band '200,001 More 30%' a month, x 12. A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Law 027/2022 on income tax' confirmed: employment income taxed monthly at 0/10/20/30 % (60,000 / 100,000 / 200,000 a month; Table 2, from the second year after 28/10/2022); employee pension 6 % from 1 Jan 2025 (12 % shared equally), not deductible.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "maternity leave 0.3 % of gross salary and CBHI 0.5 % of net salary (gross - PAYE - pension - maternity); not deductible",
+  "provision": "Law 003/2016 art. 7; P.M.O. 105/03 of 30/09/2020 art. 5 (replaced only from 23/02/2026 by P.M.O. 001/03 of 2026, same rate)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

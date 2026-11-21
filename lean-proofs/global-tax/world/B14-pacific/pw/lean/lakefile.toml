@@ -1,0 +1,14 @@
+name = "PwTax"
+version = "0.1.0"
+defaultTargets = ["PwTax", "pwtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "PwTax"
+
+[[lean_exe]]
+name = "pwtax"
+root = "PwTax.Main"

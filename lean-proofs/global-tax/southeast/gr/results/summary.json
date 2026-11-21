@@ -1,0 +1,65 @@
+{
+ "country": "GR",
+ "name": "Greece",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 595,
+  "definitions": 52,
+  "theorems": 30,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Allowance/Taper",
+  "Social/Contribution",
+  "Unit (separate_le_joint)",
+  "Canon/Country"
+ ],
+ "kernel_gaps": [
+  "euros-with-cents writer (kernel Out writes whole units; copied from PT)",
+  "art. 16 reduction = a Taper on a tax reduction capped by the wage share of the scale tax (art. 29 par. 1), not kernel Credit",
+  "child benefit: categories of equivalised family income (lookup with notches), written in the country"
+ ],
+ "provisions_cited": 17,
+ "validation": [
+  {
+   "referee": "OECD TW 2025 at the OECD's own gross (oecd/check_gr.py)",
+   "cases": 56,
+   "exact": 56,
+   "within_1pct": 56,
+   "notes": "8 types x 7 lines (CGTC CGITLETC CGITFP SLT EECSSC CTGG THP); largest diff 0.47 EUR from whole-euro wages"
+  },
+  {
+   "referee": "OECD TW 2024 at OECD gross",
+   "cases": 56,
+   "exact": 56,
+   "within_1pct": 56,
+   "notes": "versioned: 2024 art. 16 table, EFKA 13.87 %"
+  },
+  {
+   "referee": "OECD TW 2023 at OECD gross",
+   "cases": 56,
+   "exact": 56,
+   "within_1pct": 56,
+   "notes": "versioned: 2020-2023 art. 16 table (810/900/1,120/1,340)"
+  },
+  {
+   "referee": "OECD TW 2025, shared checker / harness oecd_check20 (single wage fed to married types)",
+   "cases": 56,
+   "exact": 36,
+   "within_1pct": 36,
+   "notes": "all 20 misses are the OECD's 10 % marriage allowance in married gross (FINDINGS M1), not tax"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 12,
+  "recreated": 6,
+  "not_modelled": 2
+ },
+ "new_loopholes": 2,
+ "gov_errors": 1,
+ "statute_faults": 5,
+ "headline": "Greece's 44 % top rate is really 46 % up to 91,000 EUR (the art. 16 reduction is withdrawn above it), child benefit drops 671 EUR at a 2 EUR raise, and art. 16 gives two amounts for five children; the model matches OECD Taxing Wages 168/168 lines (2023-2025) at the OECD's own gross."
+}

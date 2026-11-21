@@ -1,0 +1,69 @@
+{
+ "country": "KP",
+ "name": "Democratic People's Republic of Korea",
+ "year": "2025",
+ "status": "built",
+ "batch": "B15-no-pit",
+ "access": "B",
+ "reused_from": [
+  "B15 no-PIT pattern"
+ ],
+ "lean": {
+  "lines": 44,
+  "definitions": 3,
+  "theorems": 1,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Canon",
+  "Country",
+  "World.worldMain"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 1,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 1,
+   "exact": 1,
+   "within_1pct": 1,
+   "notes": "#guard: income tax 0 on a sample household; theorem no_income_tax for every household"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "employee social-insurance contributions (if withheld): no text reached"
+ ],
+ "scan": {
+  "summary": "results/search/SUMMARY.md"
+ },
+ "sources": "Constitution of the DPRK (1972, rev. 2016), English text on constituteproject.org ('Korea (Democratic People's Republic of) 1972 (rev. 2016)', marked 'Subsequently amended'; kp/law/rescue2/cp_kp2016.html), art. 25: '... in our country, where taxes have been abolished ...'.",
+ "headline": "No tax on income: the DPRK Constitution (rev. 2016) art. 25 says taxes have been abolished; the text is a secondary host's translation",
+ "tried": "",
+ "unlock": "",
+ "rescue": {
+  "agent": "rescue2",
+  "date": "2026-11-20T13:10Z",
+  "routes": [
+   "constituteproject.org (laptop): DPRK constitution 1972 (rev. 2016), English; art. 25 quoted; the page says the text was amended later (2019 and later revisions not reached)",
+   "naenara.com.kp/index.php/Main/load_view/constitution1 from the laptop: no answer (as from lean1 in pass 1)",
+   "Global law north-korea: catalogue entries only (pass 1); WIPO Lex profile KP not tax-related"
+  ],
+  "pass1_routes": [
+   "Global law north-korea: 4 acts, catalogue entries only; '세금' / '세금제도': 0",
+   "naenara.com.kp answers lean1; its 'politics' page loads the Constitution by an AJAX view (index.php/Main/load_view/constitution1), which did not answer (two tries, 40 s and 90 s)"
+  ]
+ }
+}

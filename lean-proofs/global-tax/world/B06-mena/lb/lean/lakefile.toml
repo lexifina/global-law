@@ -1,0 +1,14 @@
+name = "LbTax"
+version = "0.1.0"
+defaultTargets = ["LbTax", "lbtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "LbTax"
+
+[[lean_exe]]
+name = "lbtax"
+root = "LbTax.Main"

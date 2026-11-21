@@ -1,0 +1,54 @@
+{
+ "country": "BA",
+ "name": "Bosnia and Herzegovina: Federation of BiH (porez na dohodak; doprinosi zaposlenika)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "A",
+ "batch": "B04-europe-rest",
+ "lean": {
+  "lines": 150,
+  "definitions": 17,
+  "theorems": 7,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (flat 10 %)",
+  "Family.perChildByRank (child factors 0,5/0,7/0,9)",
+  "Unit (individual; child deductions shared by election)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 10,
+ "validation": [
+  {
+   "referee": "statute's own printed amounts and tables (Lean decide)",
+   "cases": 7,
+   "exact": 7,
+   "within_1pct": 7,
+   "notes": "build phase: no referee values"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "HR (personal deduction factors by rank)",
+  "kernel Family.perChildByRank"
+ ],
+ "sources": [
+  "Global law bosnia-and-herzegovina/federation/acts/zakon/2008/sn010-d2c23a (Zakon o porezu na dohodak, SN FBiH 10/08) and amendments 9/10, 44/11, 7/13, 65/13",
+  "Global law .../zakon/2008/sn014-e1da71 (Zakon o izmjenama i dopunama Zakona o doprinosima 14/08: član 10 rates)",
+  "Global law .../zakon/2025/sn033-dc3da3 (Zakon o doprinosima 33/25: employer rates from 1 July 2025)"
+ ],
+ "scale": "36 000 BAM = 10 × the basic personal deduction",
+ "headline": "Federation of BiH 2025 built from the 2008 income tax law and the contributions law: 10 % on pay after 31 % employee contributions and a 3 600 KM deduction with family factors; the dependent-spouse deduction is a cliff at 3 600 KM (130,6 % METR band).",
+ "subnational_default": "Federation of Bosnia and Herzegovina (Republika Srpska and Brčko District not modelled)"
+}

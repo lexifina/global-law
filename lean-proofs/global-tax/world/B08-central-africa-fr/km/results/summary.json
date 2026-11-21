@@ -1,0 +1,98 @@
+{
+ "country": "KM",
+ "name": "Comoros",
+ "year": "2025",
+ "status": "built",
+ "batch": "B08-central-africa-fr",
+ "access": "B",
+ "reused_from": [
+  "CM (30 % frais)",
+  "kernel Schedule"
+ ],
+ "lean": {
+  "lines": 80,
+  "definitions": 8,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR, toMultiple)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 5,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 1,
+   "exact": 1,
+   "within_1pct": 1,
+   "notes": "3 M gross: taxable 2.1 M, tax 262 500"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 2,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "employee social contributions (input socialEmployee)",
+  "revenus de valeurs mobilières, rents, gains",
+  "LF 2023, LF 2025"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.21,
+   "atAW": 1.43,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.21,
+   "atAW": 1.43,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.21,
+   "atAW": 1.43,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.21,
+   "atAW": 3.575,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.21,
+   "atAW": 1.43,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Art. 97 puts 3 500 000 in two bands",
+ "scale": {
+  "wage": 3500000,
+  "currency": "KMF",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "CGI 2022 art. 97: start of the top 30 % band '3.500.000 FC et plus' (archived finances.gouv.km)",
+  "by": "B08-central-africa-fr",
+  "basis": "CGI 2022 art. 97: start of the top 30 % band '3.500.000 FC et plus' (archived finances.gouv.km). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'progressive, IRPP' confirmed: individual, 0 % to 150 000, 5/10/15/20/25/30 % (art. 97) on gross less social deductions (cap 6 %) less 30 % (art. 59)."
+}

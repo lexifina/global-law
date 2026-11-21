@@ -1,0 +1,99 @@
+{
+ "country": "GD",
+ "name": "Grenada",
+ "year": "2025 (year of assessment)",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE",
+  "LC (this batch)"
+ ],
+ "lean": {
+  "lines": 87,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 4,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (monthly via Table.perPeriod)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 4,
+   "exact": 4,
+   "within_1pct": 4,
+   "notes": "Fifth Schedule at 24,000 and 34,000; NI at and above 5,200 a month"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 2,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "investment income",
+  "exempt pension income (Act 1 of 2017)",
+  "self-employed NI"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.359,
+   "atAW": 0.97,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.359,
+   "atAW": 0.97,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.359,
+   "atAW": 0.97,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.32,
+   "atAW": 2.425,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.359,
+   "atAW": 0.97,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Grenada's income-tax rates and personal deduction are set by ministerial order, not by Act",
+ "scale": {
+  "wage": 62400,
+  "currency": "XCD",
+  "kind": "statutory-ceiling",
+  "year": "2025",
+  "source": "National Insurance (Collection of Contributions) (Amendment) (No. 2) Regulations 2023 (S.R.O. 43 of 2023) Part III: maximum insurable earnings '$5,200 per month', x 12",
+  "by": "B13-caribbean",
+  "basis": "National Insurance (Collection of Contributions) (Amendment) (No. 2) Regulations 2023 (S.R.O. 43 of 2023) Part III: maximum insurable earnings '$5,200 per month', x 12. A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act' identified as Cap. 149: deduction 36,000 (s. 42A as amended by S.R.O. 1 of 2014); 10 % on the first 24,000 of chargeable income and 28 % above (S.R.O.s 1/2014, 2/2017, 25/2018); NI employee 6 % in 2025 to 5,200 a month (S.R.O. 43 of 2023), nil from age 60."
+}

@@ -1,0 +1,14 @@
+name = "MlTax"
+version = "0.1.0"
+defaultTargets = ["MlTax", "mltax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "MlTax"
+
+[[lean_exe]]
+name = "mltax"
+root = "MlTax.Main"

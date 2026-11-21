@@ -1,0 +1,87 @@
+{
+ "country": "TN",
+ "name": "Tunisia",
+ "year": "2025",
+ "status": "built",
+ "batch": "B06-mena",
+ "access": "B",
+ "reused_from": [
+  "FR"
+ ],
+ "lean": {
+  "lines": 128,
+  "definitions": 13,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 4,
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "surcharge written as 'barème + half a point' (CSS): two schedules, local"
+ ],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own tables/formulas, #guard",
+   "cases": 4,
+   "exact": 4,
+   "within_1pct": 4,
+   "notes": "#guard: LF 2025's printed 'taux effectif à la limite supérieure' column (7.50 ... 29.64 %) reproduced exactly; CSS exemption edge"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 3,
+  "not_modelled": 2
+ },
+ "new_loopholes": 1,
+ "gov_errors": 1,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "interest and dividends",
+  "art. 39 deductions",
+  "students/disabled children deductions",
+  "CNSS 9,18 % from the CNSS page (official secondary; the décrets under loi 60-30 not reached)"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.625,
+   "bandsOver100": 0,
+   "largestNotch": "24.00 at 5,555 (0.27775 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.65,
+   "bandsOver100": 0,
+   "largestNotch": "24.00 at 6,111 (0.30555 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.75,
+   "bandsOver100": 0,
+   "largestNotch": "24.00 at 10,185 (0.50925 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 0.625,
+   "bandsOver100": 0,
+   "largestNotch": "24.00 at 5,555 (0.27775 AW)"
+  }
+ },
+ "headline": "LF 2025's eight-band barème (0-40 %) plus a 0.5 % solidarity contribution with a 25-dinar notch at 5,000 of net income",
+ "updated": "2026-11-20T05:30Z",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "CNSS employee 9,18 % of all remuneration, deducted under Code IRPP art. 26 I before the 10 % frais",
+  "provision": "CNSS page for non-agricultural employers, contributions tab (cnss.tn, fetched 2026-11-20): 25,75 % = 16,57 % employer + 9,18 % employee, base all remuneration (loi 60-30 arts. 40-47, 105); official secondary (décrets not reached); Code IRPP art. 26 I",
+  "source": "official secondary",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

@@ -1,0 +1,41 @@
+# Dominica (DM) progress
+
+**Status (2026-11-20T07:27Z): built (step 1 of the world testing order). Next: open-source software (coordinator, TESTING.md), then datasets.**
+
+- Year: 2025 (year of assessment); access tier B; reused patterns: UK/IE PAYE, LC/GD (this batch).
+- Statute read: Income Tax Act Chap. 67:01 (1990 revision, dominica.gov.dm scan, OCR) ss. 47, 61, Fifth Schedule; Acts 15/2007, 9/2008, 7/2014, 13/2015, 6/2018, 3/2020, 13/2021, 18/2023; S.R.O.s 8/2006, 4/2009; Social Security Act Chap. 31:01 (OCR) and S.R.O. 8 of 2008
+- Registry correction: Registry 'Income Tax Act (Chap. 67:01)' confirmed: personal allowance 30,000 from 2018 (s. 47, Act 6 of 2018); 16 % to 20,000, 26 % to 50,000, 36 % above (Fifth Schedule, Act 9 of 2008); Social Security 4 % to 6,000 a month as of S.R.O. 8 of 2008 (later regulations unreachable).
+- Lean: 86 lines, 7 defs, 5 theorems, 3 #guard checks, 0 sorry; exe `lean/.lake/build/bin/dmtax` (worldMain).
+- Unsupported (listed in the outputs): Social Security 2018/2019 regulations (links 404); mortgage/student-loan deductions; investment income; pension exemptions.
+- Steps: 1 model done; 2 validation: statute's own printed figures and hand-computed statutory cases only (#guard); referees wait for the testing phase; 3 proofs: kernel one-liners (Theorems.lean: monotone, convex, no jump, splitting <= separate); 4-5 loopholes: FINDINGS.md (catalogue + generic scanners, scan_world.py with the cited scale.json); 6 statute faults / government errors: FINDINGS.md; 7 USEFUL.md.
+- Tried / sources:
+  - Global law dominica corpus (3 acts as enacted)
+  - ird.gov.dm (links to Chap. 67:01; rates page empty)
+  - dominica.gov.dm laws search POST (searchname)
+  - dss.dm (ages only, no rates)
+  - not opened (referee values): IRD 2018 tax tables, PIT calculator
+- Files on disk:
+  - `law/acts/_Income_Tax_Amendment_Act_2007_Act_15_of_2007.pdf` (6,527 B, sha256 00be618812d86f17…)
+  - `law/acts/_Income_Tax_Amendment_Act_2008_Act_9_of_2008.pdf` (6,069 B, sha256 3b719a6a9368c3c8…)
+  - `law/acts/_Income_Tax_Amendment_Act_2014_ACT_7_of_2014.pdf` (24,427 B, sha256 11df0df30ab38721…)
+  - `law/acts/_Income_Tax_Amendment_Act_2015_ACT_13_of_2015.pdf` (19,861 B, sha256 926693e9e8135ec6…)
+  - `law/acts/_Income_Tax_Amendment_Act_2018_ACT_6_of_2018.pdf` (26,641 B, sha256 77fa6fd1c16f0102…)
+  - `law/acts/_Income_Tax_Amendment_Act_2020_ACT_3_of_2020.pdf` (98,430 B, sha256 de9837aed6004385…)
+  - `law/acts/_Income_Tax_Amendment_Act_2023_18_of_2023.pdf` (7,908 B, sha256 6a5e4042c8ce21b2…)
+  - `law/acts/_Income_Tax_Amendment_Bill_2021_ACT_13_of_2021.pdf` (88,869 B, sha256 95696fa2883c256b…)
+  - `law/acts/_Income_Tax_Amendment_Order_2006_SRO_8_of_2006.pdf` (41,754 B, sha256 8c377ef09fb12b1b…)
+  - `law/acts/_Income_Tax_Amendment_Order_2009_SRO_4_of_2009.pdf` (6,569 B, sha256 9c53af4dccd30bcc…)
+  - `law/acts/_Income_Tax_Approved_Charities_Order_2007_SRO_47_of_2007.pdf` (5,841 B, sha256 446fc97a2757d75e…)
+  - `law/acts/_Social_Security_Act_Chapter_31_01.pdf` (5,931,237 B, sha256 453f28ada784600d…)
+  - `law/acts/_Social_Security_Amendment_Act_2012_Act_2_of_2012.pdf` (29,057 B, sha256 59753c79466acc48…)
+  - `law/acts/_Social_Security_Collection_of_Contributions_Amendments_Regulations_2008_SRO_8_o.pdf` (47,816 B, sha256 a067d34e02a48829…)
+  - `law/acts/zz_chap67-01.pdf` (5,174,662 B, sha256 30d6ddc2bafdc13c…)
+  - `law/chap67-01.pdf` (5,174,662 B, sha256 30d6ddc2bafdc13c…)
+  - `law/customer-service_current-income-tax-rates.html` (40,598 B, sha256 6c4a0edeeb246dc9…)
+  - `law/ird.html` (41,625 B, sha256 9cdb5f8c1cadbccb…)
+  - `law/laws.html` (27,939 B, sha256 bfc946cfa7e2c0cd…)
+  - `law/s.html` (34,054 B, sha256 bd2beeaf9bab9dca…)
+  - `law/s_it.html` (32,708 B, sha256 60e33db1b150721e…)
+  - `law/tax-laws.html` (41,077 B, sha256 9a84252ee73ad217…)
+  - `law/tax-laws_pay-as-you-earn-p-a-y-e.html` (43,286 B, sha256 cd04a8b6182cbe26…)
+  - `law/tax-laws_personal-income-tax.html` (44,800 B, sha256 abfbe98d2ab5eefd…)

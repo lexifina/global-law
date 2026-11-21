@@ -1,0 +1,14 @@
+name = "KiTax"
+version = "0.1.0"
+defaultTargets = ["KiTax", "kitax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "KiTax"
+
+[[lean_exe]]
+name = "kitax"
+root = "KiTax.Main"

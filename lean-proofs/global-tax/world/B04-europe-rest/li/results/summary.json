@@ -1,0 +1,57 @@
+{
+ "country": "LI",
+ "name": "Liechtenstein (Landessteuer on the Erwerb, Gemeindezuschlag, AHV/IV/ALV)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B04-europe-rest",
+ "lean": {
+  "lines": 153,
+  "definitions": 21,
+  "theorems": 3,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Tariff rows rate·x−subtract (SubRow pattern, local)",
+  "Multiplier (Gemeindezuschlag 150 % of the Landessteuer)",
+  "Unit (joint tariff c for spouses)"
+ ],
+ "kernel_gaps": [
+  "The kernel SubRow uses ticks; Art. 19 prints rates to 0,5 % and subtractions in francs, computed locally in Rappen"
+ ],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed amounts and tables (Lean decide)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "build phase: no referee values"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "CH (Gemeindezuschlag as a multiplier on the state tax)",
+  "kernel Tariff idea (rate · x − subtract rows, local)"
+ ],
+ "sources": [
+  "gesetze.li konso/pdf/2010340000?version=33: Steuergesetz (SteG, LGBl. 2010 Nr. 340), 'Fassung: 01.01.2025' (includes LGBl. 2025 Nr. 541, applied to the 2025 assessment); version list on konso/2010340000/meta (01.01.2025 - 31.12.2025)",
+  "gesetze.li konso 1952029000 version 58: AHVG 'Fassung: 01.01.2025', Art. 38 (4.025 %)",
+  "gesetze.li konso 1960005000 version 42: IVG 'Fassung: 01.01.2024' (0.675 % each), next version not before 2026",
+  "gesetze.li konso 2010452000 version 19: ALVG 'Fassung: 01.01.2023' (1 % shared, ceiling 126 000), next version 01.01.2026",
+  "Global law liechtenstein/national/acts (current texts only) used to find the acts and their official links"
+ ],
+ "scale": "79 300 CHF of pay (start of the 5 % row of Art. 19 Bst. a after expenses and contributions)",
+ "headline": "Liechtenstein 2025 built from the SteG Fassung 01.01.2025 and the 2025 versions of AHVG/IVG/ALVG: Art. 19 tariffs a/b/c (proved small non-monotone steps at the thresholds, joint tariff = splitting), AHV/IV/ALV 5,2 %; the Vaduz Gemeindezuschlag was not reached (150 % minimum used)."
+}

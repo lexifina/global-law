@@ -1,0 +1,100 @@
+{
+ "country": "WS",
+ "name": "Samoa",
+ "year": "2025 (calendar tax year)",
+ "status": "built",
+ "batch": "B14-pacific",
+ "access": "A",
+ "reused_from": [
+  "AU/NZ PAYE",
+  "B08/B10 final per-period withholding"
+ ],
+ "lean": {
+  "lines": 120,
+  "definitions": 12,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Table.perPeriod (fortnightly final tax)",
+  "Schedule.mapLo"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "annual scale at 25,000 and 26,000; fortnightly tax at 1,000 a fortnight; 26 fortnights; band mismatch"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 2,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 3,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "interest withholding",
+  "capital gains tax (holding period)",
+  "26-fortnight assumption"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.384,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.384,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.384,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.384,
+   "atAW": 2.505,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.384,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The fortnightly wage-tax bands are not the annual bands: 576 x 26 = 14,976 and 962 x 26 = 25,012, so wage earners and other taxpayers face different thresholds",
+ "scale": {
+  "wage": 25000,
+  "currency": "WST",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act 2012 Schedule 1 clause (1) (official version as at 31 December 2024): start of the 27 % band (\"25,001 + 27%\")",
+  "by": "B14-pacific",
+  "basis": "Income Tax Act 2012 Schedule 1 clause (1) (official version as at 31 December 2024): start of the 27 % band (\"25,001 + 27%\"). A statutory threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act 2012' confirmed: wages bear a final fortnightly salary and wage income tax (0 % to 576, 20 % to 962, 27 % above, per fortnight); other income at the annual 0/20/27 % (15,000/25,000) scale stacked on wages (s 9(6)); NPF employee 10 %, ACC levy 1 %; dividends from resident companies exempt."
+}

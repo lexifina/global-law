@@ -1,0 +1,14 @@
+name = "NOTax"
+version = "0.1.0"
+defaultTargets = ["NOTax", "notax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "NOTax"
+
+[[lean_exe]]
+name = "notax"
+root = "NOTax.Main"

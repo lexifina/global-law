@@ -1,0 +1,14 @@
+name = "PeTax"
+version = "0.1.0"
+defaultTargets = ["PeTax", "petax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "PeTax"
+
+[[lean_exe]]
+name = "petax"
+root = "PeTax.Main"

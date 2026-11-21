@@ -1,0 +1,14 @@
+name = "PlTax"
+version = "0.1.0"
+defaultTargets = ["PlTax", "pltax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "PlTax"
+
+[[lean_exe]]
+name = "pltax"
+root = "PlTax.Main"

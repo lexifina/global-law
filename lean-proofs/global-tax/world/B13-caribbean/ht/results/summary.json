@@ -1,0 +1,99 @@
+{
+ "country": "HT",
+ "name": "Haiti",
+ "year": "2026-27 (fiscal year from 1 October 2026; the 2024-25 law was not reached)",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "B",
+ "reused_from": [
+  "FR (francophone code, barème par fractions)"
+ ],
+ "lean": {
+  "lines": 84,
+  "definitions": 6,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (monthly via Table.perPeriod)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "art. 132 at 540,000, 1,080,000 and 2,160,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 1,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "model is for FY 2026-27, not 2025",
+  "ONA contribution",
+  "art. 126 deductions needing inputs",
+  "categorical capital income"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.308,
+   "atAW": 2.025,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.308,
+   "atAW": 2.025,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.308,
+   "atAW": 2.025,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.288,
+   "atAW": 3.385,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.308,
+   "atAW": 2.025,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The tax authority publishes only the 2026 Code: the law that governed 2025 is not on its site",
+ "scale": {
+  "wage": 1080000,
+  "currency": "HTG",
+  "kind": "statutory-threshold",
+  "year": "2026-27",
+  "source": "Code Fiscal (Le Moniteur Special 48-A, 30 Sep 2026) art. 132 d.: 'de 1 080 001 Gourdes a 2 160 000 Gourdes: 25%' (start of the 25 % band)",
+  "by": "B13-caribbean",
+  "basis": "Code Fiscal (Le Moniteur Special 48-A, 30 Sep 2026) art. 132 d.: 'de 1 080 001 Gourdes a 2 160 000 Gourdes: 25%' (start of the 25 % band). A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Decret sur l'impot sur le revenu; little accessible law' updated: a Code Fiscal (Décret of 19 December 2022) governed FY 2024-25 but was not reached; its replacement in force 1 October 2026 taxes global income 0/12/18/25/30 % (360,000 / 540,000 / 1,080,000 / 2,160,000) with a 1 % CAS levy on salaries; couples declare separately."
+}

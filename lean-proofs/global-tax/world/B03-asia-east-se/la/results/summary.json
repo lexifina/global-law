@@ -1,0 +1,74 @@
+{
+ "country": "LA",
+ "name": "Laos",
+ "year": "2025",
+ "status": "built",
+ "batch": "B03-asia-east-se",
+ "access": "A",
+ "reused_from": [
+  "KH",
+  "MN"
+ ],
+ "lean": {
+  "lines": 99,
+  "definitions": 10,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 4,
+ "kernel_parts_used": [
+  "Schedule",
+  "Extra38.perPeriodIdx",
+  "Table.perPeriod",
+  "Rounding",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 4,
+   "exact": 4,
+   "within_1pct": 4,
+   "notes": "#guard: both laws' printed cumulative columns (185,000/1,185,000/2,685,000/10,685,000 and 125,000/1,125,000/2,625,000/10,625,000); the 2025 law never taxes more (200-point grid) and saves exactly 60,000 a month above 5,000,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "social security insured-wage ceiling (SSL art. 77; government decision) not reached: 5.5 % applied without a ceiling",
+  "self-employment (gross-receipt rates by activity) not mapped from net income",
+  "capital gains (2 % of sale price) needs the price",
+  "a government change of the minimum wage in Sep-Dec 2025 (2025 law art. 34(1), note to art. 38(1)) not checked"
+ ],
+ "scan": {
+  "summary": "results/search/SUMMARY.md"
+ },
+ "sources": "Lao Official Gazette (laoofficialgazette.gov.la): Law on Income Tax No. 67/NA of 18 June 2019 (gazette id 1581) arts. 35(1), 36(2), 39(1) table (page image), 39(5); Law No. 01/NA of 7 August 2021 amending tax laws (id 1828: replaced only arts. 14, 16, 18, 73 of the income-tax law); Law on Income Tax (amended), adopted by NA resolution 164/NA of 25 June 2025, promulgated August 2025 (id 2597, gazetted 19 June 2026) arts. 34(1), 38(1) table (page image), 74 'in force from 1 September 2025'; Law on Social Security No. 54/NA of 27 June 2018 (id 1442) art. 74 (employee 5.5 %), art. 77 (ceiling set by the government).",
+ "headline": "Laos changed its salary tax mid-2025: the zero band doubles from 1.3m to 2.5m kip from 1 September (Law 67/NA to August, amended law after)",
+ "tried": "",
+ "unlock": "",
+ "rescue": {
+  "agent": "rescue",
+  "date": "2026-11-20T11:11Z",
+  "routes": [
+   "laoofficialgazette.gov.la answered from lean1 this time (the batch pass had timeouts); law lists scanned politely (la/law/rescue/laws_list.txt, decrees_list.txt)",
+   "Lao OCR: tessdata_best lao.traineddata in user space; four scans OCR'd (pit2019, taxamend2021, pit2025, ssl2018) and the rate tables read on page images",
+   "tax.gov.la: no answer (timeout) from lean1"
+  ]
+ }
+}

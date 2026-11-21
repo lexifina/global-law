@@ -1,0 +1,54 @@
+{
+ "country": "RS",
+ "name": "Serbia (porez na zarade, porez na prihode od kapitala, doprinosi; godišnji porez na dohodak građana)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B04-europe-rest",
+ "lean": {
+  "lines": 142,
+  "definitions": 21,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (flatAbove: salary tax)",
+  "World overlay pattern (annual tax without credit, written locally)",
+  "Rounding"
+ ],
+ "kernel_gaps": [
+  "overlayTax would fit the annual tax but needs per-category bases the canon cannot separate; written locally"
+ ],
+ "provisions_cited": 13,
+ "validation": [
+  {
+   "referee": "statute's own printed amounts and tables (Lean decide)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "build phase: no referee values"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "SI/HR (monthly withholding)",
+  "kernel World schedular + overlay pattern"
+ ],
+ "sources": [
+  "Global law serbia/national/acts/zakon/2001/24-1 (Zakon o porezu na dohodak građana) as in force 2025-07-01; provision_history of čl. 15a",
+  "Global law serbia/national/acts/zakon/2004/84-37 (Zakon o doprinosima za obavezno socijalno osiguranje) čl. 37-44"
+ ],
+ "scale": "1 364 304 RSD = 12 × 4 × the monthly non-taxable amount 28 423",
+ "headline": "Serbia 2025 built from the dated Personal Income Tax Act: 10 % salary tax above 28 423 RSD a month, 19,9 % employee contributions, capital income 15 %, rent 20 % of 75 %; the annual tax is modelled as an overlay but needs the 2025 average salary (not reached)."
+}

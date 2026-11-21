@@ -1,0 +1,88 @@
+{
+ "country": "TG",
+ "name": "Togo",
+ "year": "2025",
+ "status": "built",
+ "batch": "B07-west-africa-fr-pt",
+ "access": "B",
+ "reused_from": [
+  "CI",
+  "SN"
+ ],
+ "lean": {
+  "lines": 157,
+  "definitions": 21,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 8,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (Rule.downTo 1000 base, 10 tax)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 8,
+   "exact": 8,
+   "within_1pct": 8,
+   "notes": "#guard: barème at its 20,000,000 edge = sum of band widths x rates; 900,000/900,999 exempt; 28 % deduction cap 2,800,000; six-dependant cap 720,000; pension notch 3,600,000 -> 3,600,001 (0 -> 27,000); spouse-dependant step at 6,000,000 gross (183,000 vs 195,000)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 1,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "rental income (arts. 14-16, 77) and capital gains: not modelled",
+  "children 21-24 in studies: not counted as dependants",
+  "AMU base floor at the SMIG (Décret 2023-096 art. 10) not applied; CNSS rate decree itself not reached"
+ ],
+ "scan": {
+  "summary": "results/search/SUMMARY.md"
+ },
+ "sources": "Code général des impôts & Livre des procédures fiscales 2025, 'mis à jour par la Direction de la Législation Fiscale et du Contentieux' (Office Togolais des Recettes, otr.tg document 600; Internet Archive capture 20251211205452 of otr.tg/index.php/fr/impots/reglementations-fiscales/code-general-des-impots/600-code-general-des-impots-livre-des-procedures-fiscales-mis-a-jour-2025/file.html; 361 pages, text layer; sha256 7d0df3af53833e47266f4b77cf134ac3acb14bb3e8049d1bf92ac2438be4f4c3; tg/law/rescue2/otr_cgi_lpf_2025.pdf): arts. 5-6 (family unit, separate taxation), 23-3 and 27 (pensions), 26 (net employment income, 28 % flat deduction on the fraction up to 10,000,000), 72-73 (dependants, 10,000 FCFA a month each, max 6), 74 (barème 0/3/10/15/20/25/30/35 %, base rounded down to 1,000, tax to 10; read on the page image p. 40), 78 (business income 30 %), 79-80 (13 % final withholding). Cross-checks: PLF 2024 art. 16 (tg/src/PLF-2024.pdf p. 17: same art. 74 wording), PLF 2025 art. 17 and LF 2026 art. 21 article lists (no change to arts. 5-6, 23, 26-27, 72-80).",
+ "headline": "IRPP rebuilt from the tax office's 2025 code: a spouse's first franc of income costs up to 42,000 FCFA (the 'conjoint sans ressource' dependant), and a pension one franc above 3.6 M doubles its taxable half",
+ "tried": "",
+ "unlock": "",
+ "rescue": {
+  "agent": "rescue2",
+  "date": "2026-11-20T13:10Z",
+  "routes": [
+   "otr.tg live (laptop): the CGI document page answers 404 (site reorganised); Internet Archive CDX of otr.tg/index.php/ from 2025 lists document 600 'code-general-des-impots-livre-des-procedures-fiscales-mis-a-jour-2025/file.html' (captures 20251211205452, 20260118144945, 20260413105509): the 20251211205452 capture is the complete 361-page PDF (downloaded on the laptop, pushed to tg/law/rescue2/)",
+   "OTR document 599 'cahier fiscal 2025' (capture 20260218202834): truncated at 5,242,880 bytes (known Wayback truncation; not needed)",
+   "art. 74 barème compared on the page images with PLF 2024 art. 16 p. 17 (identical table and the stray 'Abrogé.' line); the enacted LF 2024 was not reached (reason for grade B)",
+   "droit-afrique.com: live site 403 ('unable to read htaccess'); Wayback: the Togo CGI is sold in its shop (only the 'sommaire' is free); Togo social security code 2011 (Wayback copy) leaves rates to decree",
+   "legis-palop.org, NATLEX, FAOLEX, Refworld: see RESCUE.md Pass 2 (login or Cloudflare block)",
+   "one WebSearch found the OTR document link"
+  ],
+  "pass1_routes": [
+   "build pass: OTR site (otr.tg/documentation): only the 2026 'cahier fiscal' (a summary of the LF 2026, scanned; OCR'd: no IRPP rates).",
+   "build pass: Ministry of finance WordPress media API (finances.gouv.tg/wp-json/wp/v2/media): LF 2023 (enacted), projets de LF 2024 and 2025, LF 2026 — all scanned; OCR'd: they amend CGI articles (e.g. art. 25 on employment income) but none restates the IRPP barème or family relief.",
+   "build pass: Wayback CDX of otr.tg (2018-2026): the 2018 CGI reform notes but no CGI text; legitogo.gouv.tg unreachable; new.jo.gouv.tg is a script app whose search API was not found.",
+   "build pass: Global law: Togo corpus holds the Code du travail, constitution, data-protection law; no tax law.",
+   "Internet Archive CDX of otr.tg (30,829 URLs): only the 2019 note de service on the new CGI and a reform summary; no CGI text, no finance law",
+   "otr.tg and new.jo.gouv.tg answer lean1; no CGI 2025 edition found by navigation"
+  ]
+ },
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "CNSS 4 % and AMU 5 % of gross remuneration, both deducted under CGI art. 26 (1)-(2) before the 28 % forfait",
+  "provision": "CNSS page \"Cotisations sociales\" (official secondary; rate decree under Code 2011 art. 13 not reached); Décret 2023-096/PR arts. 12, 29",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

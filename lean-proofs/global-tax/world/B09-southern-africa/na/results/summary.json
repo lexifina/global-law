@@ -1,0 +1,79 @@
+{
+ "country": "NA",
+ "name": "Namibia",
+ "year": "2025/26 (year of assessment 1 March 2025 - 28 February 2026)",
+ "status": "built",
+ "access": "A",
+ "batch": "B09-southern-africa",
+ "lean": {
+  "lines": 98,
+  "definitions": 9,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Canon/Out",
+  "World.worldMain",
+  "Theorems (Schedule)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean #guard / decide)",
+   "cases": 7,
+   "exact": 7,
+   "within_1pct": 7,
+   "notes": "build phase: no referee values used"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 4,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "ZA (B02: SACU structure)"
+ ],
+ "sources": [
+  "Income Tax Act 24 of 1981, Global law namibia/national/acts/income-tax (NamibLII consolidation eng@2024-09-16 = Act 4 of 2024; archived official page web.archive.org/web/20260212092155id_/https://namiblii.org/akn/na/act/1981/24/eng@2024-09-16): s. 1, 5 (1) (a), 6, 16 (1) (n), 17 (1) (n), (q), 17 (2), 34A, 58, Sch. 4",
+  "NamibLII 2025 acts 1-5 (archived pages): none amends the Income Tax Act",
+  "Social Security Act 34 of 1994 s. 21 (ssc.org.na PDF) and the Social Security Commission MSD contribution table served on ssc.org.na/msd (official secondary)"
+ ],
+ "scale": "350000 NAD (threshold of the 28 % band)",
+ "scanner": {
+  "single": {
+   "maxMETR": 0.3219,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.3219,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.2694,
+   "netIncomeFalls": 0
+  }
+ },
+ "unsupported": [
+  "foreign-source income (source basis)",
+  "non-bank interest at Schedule 4 rates"
+ ],
+ "registry_correction": "NA: Income Tax Act 24 of 1981 confirmed; rates in Schedule 4 (Act 4 of 2024: 0 % to N$100 000, then 18/25/28/30/32/37 %), no rebate; spouses separate; year ending last day of February.",
+ "headline": "Namibia built from the Income Tax Act (Global law, Act 4 of 2024 schedule): N$100 000 zero band, 18-37 %; bank interest bears a final 10 % (s. 34A) and dividends are exempt, so N$100 000 of interest instead of wages saves N$27 000 and of dividends N$37 000 at the top rate.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "MSD employee 0.9 % of monthly remuneration in the N$500-11,000 band; not deductible",
+  "provision": "Regulations under SSA 1994 s. 47, GN 198 of 1995 (GG 1181) reg. 8 (a)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

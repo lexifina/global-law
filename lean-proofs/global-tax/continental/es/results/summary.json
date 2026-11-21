@@ -1,0 +1,60 @@
+{
+ "country": "ES",
+ "name": "Spain (state + Comunidad de Madrid)",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 997,
+  "definitions": 142,
+  "theorems": 31,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Basic",
+  "Canon",
+  "Theorems.Schedule"
+ ],
+ "kernel_gaps": [
+  "Out/countryMain write whole units; Spain liquidates in cents (own JSON writer)",
+  "Canon rounds input amounts to whole euros (cents read from raw JSON)",
+  "statutory tables with a printed cumulative cuota column (Row/tableTax; proved equal to the kernel band sum, rounded)",
+  "the 'minimo at the bottom of the scale' construction tax(base) - tax(minimo) (cuotaMinusMin)",
+  "all-or-nothing deductions with income limits (notches) are not a kernel part",
+  "withholding procedure (RIRPF arts. 81-86) with a 43 % cap"
+ ],
+ "provisions_cited": 52,
+ "validation": [
+  {
+   "referee": "OECD TW 2025",
+   "cases": 48,
+   "exact": 32,
+   "within_1pct": 36,
+   "notes": "8 types x 6 lines. State side (CGTC, CGITFP incl. refundable art. 81 bis, EECSSC, CTGG): 32/32 within 0,76 EUR (OECD wages rounded to the euro). SLT 0/8 and THP 0/8: the OECD uses a weighted combination of regional schedules, not Madrid (F1)."
+  },
+  {
+   "referee": "AEAT withholding algorithm (ALGORITMO_2026.pdf)",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "Implemented clause by clause from RIRPF arts. 81-86; agrees with the regulation except two conventions (truncation of the tipo; top withholding rate 47 %). No published numeric cases."
+  },
+  {
+   "referee": "AEAT IRPF 2025 guide + bulletin on Ley 5/2025",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "Parameter check only (DA 61.a thresholds, SMI 16.576); no official worked example found."
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 16,
+  "recreated": 10,
+  "not_modelled": 6
+ },
+ "new_loopholes": 4,
+ "gov_errors": 1,
+ "statute_faults": 3,
+ "headline": "State income tax matches the OECD to the cent on all 8 households; the withholding rules were not updated for the 2025 minimum wage, so a minimum-wage worker who owes nothing is withheld 300 EUR, and all-or-nothing limits (6.500 EUR other income; Madrid family deductions) cost up to 1.650 EUR for one more euro."
+}

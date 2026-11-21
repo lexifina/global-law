@@ -1,0 +1,75 @@
+{
+ "country": "PY",
+ "name": "Paraguay",
+ "year": "2025",
+ "status": "built",
+ "access": "A",
+ "batch": "B12-latin-america",
+ "reused_from": [
+  "flat-band pattern (EE/LT)",
+  "kernel Schedule"
+ ],
+ "lean": {
+  "lines": 112,
+  "definitions": 10,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Unit (individual)",
+  "Rounding"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 1,
+ "provisions": [
+  "Ley 6380/2019 arts. 43, 60, 62, 63, 64, 65, 69, 139"
+ ],
+ "sources": [
+  "DNIT page of Ley 6380/2019 (w/d-ley-n-6380-19)",
+  "DNIT decree and law lists (no art. 139 update decree)"
+ ],
+ "sources_official_secondary": [
+  "IPS employee rate 9 % from IPS table headed Res. MTESS 670/2026 (2025 rate assumed equal)"
+ ],
+ "validation": [
+  {
+   "referee": "statute's own printed tables and thresholds (#guard / decide)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "no referee values seen (build phase)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 3,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "art. 64 deductible personal and family expenses taken as 0 (pass pyDeductibleExpenses, household total, split equally): with documented spending the IRP falls towards a tax on saving",
+  "IPS 9 % applied to all wages (the IPS base excludes the aguinaldo; minimum base 'base minima imponible' not applied); rate from the 2026 IPS table (official secondary)",
+  "first year of liability (art. 62: expenses only from the day after the threshold is passed) not modelled: steady state",
+  "interest: arts. 57-60 exemptions not checked; not taxed",
+  "rent and capital gains: 8 % (art. 60) on the gross amount; art. 58-59 net-income rules not modelled",
+  "pensions: not modelled"
+ ],
+ "scale": {
+  "wage": 80000000,
+  "currency": "PYG",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Ley 6380/2019 arts. 62 and 69: G. 80.000.000, the gross income above which the IRP is due",
+  "by": "B12-latin-america",
+  "basis": "Ley 6380/2019 arts. 62 and 69: G. 80.000.000, the gross income above which the IRP is due"
+ },
+ "headline": "Paraguay 2025 IRP from Ley 6380 (DNIT text): 8/9/10 % on net income once gross passes G 80 m (a G 6,05 m notch), unlimited documented personal-expense deduction, IPS 9 %."
+}

@@ -1,0 +1,71 @@
+{
+ "country": "KH",
+ "name": "Cambodia",
+ "year": "2025",
+ "status": "built",
+ "batch": "B03-asia-east-se",
+ "access": "A",
+ "reused_from": [
+  "MN"
+ ],
+ "lean": {
+  "lines": 111,
+  "definitions": 11,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Table.perPeriod",
+  "Rounding",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "#guard: monthly tax at the 12,500,000 band edge = 1,275,000; sole-proprietor tax at 150,000,000 = 15,300,000 (bands of Sub-Decree 48/2024)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "NSSF employee pension contribution (deductible under Law on Taxation 2023 art. 45(1)): not read; employeeSocial = 0",
+  "investment income (withholding taxes of the 2023 law) not modelled",
+  "pensions: treatment not read"
+ ],
+ "scan": {
+  "summary": "results/search/SUMMARY.md"
+ },
+ "sources": "Law on Taxation 2023 (Royal Kram NS/RKM/0523/004 of 16 May 2023; GDT scan, OCR'd with tesseract Khmer and checked on the page images) arts. 41-49 (salary tax: rates 0/5/10/15/20 % art. 47, bands and family reliefs by sub-decree art. 46(2)/47, fringe benefits 20 % art. 48, non-residents 20 % art. 49); Sub-Decree No. 48 ANKr.BK of 11 March 2024 on the monthly taxable salary and annual taxable income bands (GDT sub-decree list, 'Valid'; page image read): monthly bands 0-1.5m 0 %, to 2m 5 %, to 8.5m 10 %, to 12.5m 15 %, above 20 %; reliefs 150,000 riel per child and for a homemaker spouse per month; sole-proprietorship annual bands 0-18m/24m/102m/150m.",
+ "headline": "Tax on salary rebuilt from a Khmer scan: 0-20 % monthly bands (Sub-Decree 48/2024); a spouse's first riel of earnings costs the household the 150,000-riel homemaker relief",
+ "tried": "",
+ "unlock": "",
+ "rescue": {
+  "agent": "rescue",
+  "date": "2026-11-20T11:11Z",
+  "routes": [
+   "Khmer OCR: tessdata_best khm.traineddata installed in user space (~/cmp20/world/rescue/tools/tessdata, sha256 3d2d975e...), Law on Taxation 2023 (84 pages) OCR'd: kh/law/law_taxation_2023_khm_ocr.txt; arts. 45-49 checked on the page-22 image",
+   "tax.gov.kh/en/sub-decree list: Sub-Decree 48 ANKr.BK (11 March 2024) downloaded (gdtstream/1f25fa42-...; kh/law/rescue/sd48.pdf), table read on the page image (the OCR of the table digits was unreliable; the image was read and the OCR'd row edges agree)",
+   "NSSF contribution rules: not looked for on the GDT site (outside its scope); left unsupported"
+  ]
+ }
+}

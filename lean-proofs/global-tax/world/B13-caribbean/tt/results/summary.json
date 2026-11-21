@@ -1,0 +1,102 @@
+{
+ "country": "TT",
+ "name": "Trinidad and Tobago",
+ "year": "2025 (calendar year of income)",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE (annual personal allowance, two rates)",
+  "B15 AG/KN (weekly social-security classes)"
+ ],
+ "lean": {
+  "lines": 152,
+  "definitions": 11,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 16,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (weekly class table, local)"
+ ],
+ "kernel_gaps": [
+  "weekly earnings-class contribution tables (TT NIS Table A9, BZ Table 2): local lookup"
+ ],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 16,
+   "exact": 16,
+   "within_1pct": 16,
+   "notes": "Third Schedule para. 1 at 1,000,000; para. 2 relief at chargeable 5,000/5,500/5,501/6,000/6,001/7,000/7,001/8,000/8,001/8,500/8,501; NIS Table A9 classes I and XVI"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 2,
+  "not_modelled": 4
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 3,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "investment, rental and business income (withholding Third Schedule Part II)",
+  "approved pension contributions (s. 28)",
+  "self-employed NIS",
+  "wages assumed paid evenly over 52 weeks"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 1.286,
+   "atAW": 0.61,
+   "bandsOver100": 2,
+   "largestNotch": "1,089 at 101,743 (0.62343 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 1.286,
+   "atAW": 0.61,
+   "bandsOver100": 2,
+   "largestNotch": "1,089 at 101,743 (0.62343 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 1.286,
+   "atAW": 0.61,
+   "bandsOver100": 2,
+   "largestNotch": "1,089 at 101,743 (0.62343 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 2.178,
+   "atAW": 1.035,
+   "bandsOver100": 6,
+   "largestNotch": "1,089 at 169,572 (1.03904 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 1.286,
+   "atAW": 0.61,
+   "bandsOver100": 2,
+   "largestNotch": "1,089 at 101,743 (0.62343 AW)"
+  }
+ },
+ "headline": "F1 The Third Schedule's low-income relief (para. 2) no longer fits the rates: tax falls when income rises and jumps by up to TT$1,090 for one dollar",
+ "scale": {
+  "wage": 163200,
+  "currency": "TTD",
+  "kind": "statutory-ceiling",
+  "year": "2025",
+  "source": "National Insurance Act Chap. 32:01 Second Schedule Table A9 (from 5 Sep 2016): class XVI '13,600.00 and over' monthly earnings, x 12 (the maximum insurable earnings)",
+  "by": "B13-caribbean",
+  "basis": "National Insurance Act Chap. 32:01 Second Schedule Table A9 (from 5 Sep 2016): class XVI '13,600.00 and over' monthly earnings, x 12 (the maximum insurable earnings). A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act (Chap. 75:01); NIS, health surcharge' confirmed: personal allowance 90,000 (s. 18); 25 % to 1,000,000 of chargeable income, 30 % above; 70 % of NIS contributions deductible within a 60,000 cap (ss. 28(15), 31(1)(c)); health surcharge 8.25/4.80 a week; NIS employee one third of 13.2 % by weekly class (Table A9, unchanged since 5 Sep 2016 in the 2025 consolidation)."
+}

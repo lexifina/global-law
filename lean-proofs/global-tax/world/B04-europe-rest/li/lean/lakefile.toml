@@ -1,0 +1,14 @@
+name = "LiTax"
+version = "0.1.0"
+defaultTargets = ["LiTax", "litax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "LiTax"
+
+[[lean_exe]]
+name = "litax"
+root = "LiTax.Main"

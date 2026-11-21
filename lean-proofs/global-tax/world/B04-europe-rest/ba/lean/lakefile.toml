@@ -1,0 +1,14 @@
+name = "BaTax"
+version = "0.1.0"
+defaultTargets = ["BaTax", "batax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "BaTax"
+
+[[lean_exe]]
+name = "batax"
+root = "BaTax.Main"

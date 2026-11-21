@@ -1,0 +1,87 @@
+{
+ "country": "JO",
+ "name": "Jordan",
+ "year": "2025",
+ "status": "built",
+ "batch": "B06-mena",
+ "access": "B",
+ "reused_from": [
+  "UK",
+  "IE"
+ ],
+ "lean": {
+  "lines": 128,
+  "definitions": 13,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Social (Contribution.flatCapped)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "couple exemption cap shared between two returns (art. 9 (ب), (ج)): local code"
+ ],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own tables/formulas, #guard",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "#guard art. 11 band ends (5,000 -> 250 ... 1,000,000 -> 247,500) and the 1 % national contribution"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 2,
+  "not_modelled": 3
+ },
+ "new_loopholes": 1,
+ "gov_errors": 2,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "art. 9 (أ) (3) expense exemptions (invoices)",
+  "rental expenses, excepted-sector dividends",
+  "self-employed social security"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.33299999999999996,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.306,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.361,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.33299999999999996,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "Six bands 5-30 % after a flat 9,000 + 9,000 family exemption; the 30 % band's wording can be read as a 52,500 notch; interest is taxed 5 % final",
+ "updated": "2026-11-20T05:30Z",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "SSC 7.5 % on wages up to the 2025 indexed ceiling 3,668 JOD / month (was the statutory 3,000)",
+  "provision": "SSL art. 20 (أ)-(ب); SSC press release on the 2026 ceiling (3,733; \"كان العام الماضي (3668)\"), official secondary",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

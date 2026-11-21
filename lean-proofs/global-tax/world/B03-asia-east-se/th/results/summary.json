@@ -1,0 +1,80 @@
+{
+ "country": "TH",
+ "name": "Thailand",
+ "year": "2025 (B.E. 2568)",
+ "status": "built",
+ "batch": "B03-asia-east-se",
+ "access": "A",
+ "reused_from": [
+  "JP",
+  "KR"
+ ],
+ "lean": {
+  "lines": 108,
+  "definitions": 10,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 22,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "#guard: 150,000 exempt, 7,500 at 300,000, 27,500 at 500,000 net; s. 42 bis cap at 200,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "dividends (10 % final or credit)",
+  "rent",
+  "capital gains",
+  "pensions",
+  "RD 480 exemption of small s. 48 (2) amounts",
+  "social security: the 2012 rate regulation (พ.ศ. 2555) not read; a positive wage below 1,650 a month assessed on 1,650"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.2512,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.2,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.1008,
+   "netIncomeFalls": 0
+  }
+ },
+ "sources": "Revenue Code as published by the Revenue Department (rd.go.th): s. 42 bis (50 % expense deduction max 100,000), s. 47 (allowances 60,000 / 60,000 / 30,000 per child + 30,000 for 2nd+ child born 2018+), s. 47 (2), s. 48 (1)-(3), rate schedule (Act No. 44, B.E. 2560); Royal Decree No. 470 s. 4 (first 150,000 of net income exempt)",
+ "headline": "Minimum tax of 0.5 % of non-salary income from 120,000 baht is a notch",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "social security 5 % of the monthly wage within 1,650-15,000 (max 750 a month), rounded to the baht; deducted under s. 47 (1) (ฌ)",
+  "provision": "กฎกระทรวงกำหนดอัตราเงินสมทบ พ.ศ. 2545 ข้อ 2-3, บัญชี ข-ค (1.5 % + 3 %); กฎกระทรวง ... ว่างงาน พ.ศ. 2546 ข้อ 1 (3) (0.5 %); กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2538) ข้อ 1 (1,650-15,000); SSA s. 33, s. 46; Revenue Code s. 47 (1) (ฌ) (SSO copies via the Wayback Machine)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)",
+  "agent": "W5 pattern A contributions agent 2 (Asia, Americas, Europe, Pacific)"
+ }
+}

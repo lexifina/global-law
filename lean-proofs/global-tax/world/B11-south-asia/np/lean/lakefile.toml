@@ -1,0 +1,14 @@
+name = "NpTax"
+version = "0.1.0"
+defaultTargets = ["NpTax", "nptax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "NpTax"
+
+[[lean_exe]]
+name = "nptax"
+root = "NpTax.Main"

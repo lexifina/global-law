@@ -1,0 +1,80 @@
+{
+ "country": "YE",
+ "name": "Yemen",
+ "year": "2025",
+ "status": "built",
+ "batch": "B06-mena",
+ "access": "B",
+ "reused_from": [
+  "UK"
+ ],
+ "lean": {
+  "lines": 73,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Table.perPeriod",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "one scale applied per category (schedular), local"
+ ],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute's own tables/formulas, #guard",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "#guard art. 62 band ends and art. 67 monthly = annual for even pay"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 1,
+  "not_modelled": 3
+ },
+ "new_loopholes": 1,
+ "gov_errors": 1,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "pension contributions (art. 49 (a))",
+  "Law 8/2020 small-enterprise exemption",
+  "real-estate revenue tax, interest, dividends"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.2,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.2,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.207,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.2,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "Payroll tax 10/15/20 % above 10,000 rials a month (Law 17/2010, Sana'a authority text); each income category has its own exemption",
+ "updated": "2026-11-20T05:30Z"
+}

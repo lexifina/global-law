@@ -1,0 +1,14 @@
+name = "UaTax"
+version = "0.1.0"
+defaultTargets = ["UaTax", "uatax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "UaTax"
+
+[[lean_exe]]
+name = "uatax"
+root = "UaTax.Main"

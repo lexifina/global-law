@@ -1,0 +1,14 @@
+name = "VuTax"
+version = "0.1.0"
+defaultTargets = ["VuTax", "vutax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "VuTax"
+
+[[lean_exe]]
+name = "vutax"
+root = "VuTax.Main"

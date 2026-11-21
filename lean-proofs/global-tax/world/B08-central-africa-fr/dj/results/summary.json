@@ -1,0 +1,105 @@
+{
+ "country": "DJ",
+ "name": "Djibouti",
+ "year": "2025",
+ "status": "built",
+ "batch": "B08-central-africa-fr",
+ "access": "B",
+ "reused_from": [
+  "kernel monthly perPeriod pattern"
+ ],
+ "lean": {
+  "lines": 82,
+  "definitions": 6,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR, toMultiple)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Table.perPeriod (monthly ITS)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 4,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "200 000 a month (29 000), the 2021 50 000 threshold reading, bunching 2.4 M in one month (776 000 vs 348 000)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 2,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "CGI arts. 1-14 (base, deductions, exemptions) not reached",
+  "business, capital income",
+  "CNSS soins 2 % worker share: the CNSS page is internally inconsistent (also \"à la charge exclusive de l'employeur\"); CGI deductibility not reached; 20 000 FD plancher not applied"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.45,
+   "atAW": 3.335,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.45,
+   "atAW": 3.335,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.45,
+   "atAW": 3.335,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.33,
+   "atAW": 2.78,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.45,
+   "atAW": 3.335,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Monthly tax with no annual reconciliation: paying the year's salary unevenly can more than double the tax",
+ "scale": {
+  "wage": 7200000,
+  "currency": "DJF",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "CGI art. 15 as rewritten by LF 2022 (Loi 142/AN/21) art. 7: start of the 30 % band '600 001' a month, x 12 (journalofficiel.dj)",
+  "by": "B08-central-africa-fr",
+  "basis": "CGI art. 15 as rewritten by LF 2022 (Loi 142/AN/21) art. 7: start of the 30 % band '600 001' a month, x 12 (journalofficiel.dj). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'progressive, ITS' confirmed: monthly ITS 2/12/15/22/25/30/35/45 % (30 000 / 50 000 / 150 000 / 300 000 / 600 000 / 1 M / 2 M) since 2022; the CGI's base articles (1-14) were not reached.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "CNSS salarié 4 % retraite + 2 % soins = 6 % of all remuneration, reported, not deducted (CGI arts. 1-14 not reached); input cnssEmployee still overrides",
+  "provision": "CNSS page \"Déclaration et versement des cotisations\" (cnss.dj, published 04/12/2016, Internet Archive capture 2024-07-13); official secondary. The same page also calls the soins contributions employer-only; the specific 5 % / 2 % sentence is followed",
+  "source": "official secondary",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

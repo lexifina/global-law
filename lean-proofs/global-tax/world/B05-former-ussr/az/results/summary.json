@@ -1,0 +1,101 @@
+{
+ "country": "AZ",
+ "name": "Azerbaijan",
+ "year": "2025",
+ "status": "built",
+ "batch": "B05-former-ussr",
+ "access": "A",
+ "reused_from": [
+  "RU",
+  "KZ"
+ ],
+ "lean": {
+  "lines": 124,
+  "definitions": 20,
+  "theorems": 7,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Schedule (monthly tables, premiums)"
+ ],
+ "kernel_gaps": [
+  "sector-dependent tables (an input field selects them)"
+ ],
+ "provisions_cited": 11,
+ "validation": [
+  {
+   "referee": "statute's own printed sums and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "table 1 printed '350 manat'; 14.4 printed '6 manat'; private 1 000 a month; the 2 500 notch"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 1,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "self-employed social premium (minimum wage not read)",
+  "18-month deposits",
+  "50 % gain exemption on shares held 3+ years",
+  "multiple workplaces"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.4,
+   "atAW": 3.235,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.4,
+   "atAW": 3.235,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.4,
+   "atAW": 3.235,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.24,
+   "atAW": 0.145,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.4,
+   "atAW": 3.235,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 State-sector notch at 2 500 manat a month: the 200-manat exemption stops all at once",
+ "scale": {
+  "wage": 30000,
+  "currency": "AZN",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Tax Code art. 102.1.6: annual income limit of 30 000 manat for the 2 400 manat exemption (12 x 2 500 a month) (Global law, in force 2025-07-01)",
+  "by": "B05-former-ussr",
+  "basis": "Tax Code art. 102.1.6: annual income limit of 30 000 manat for the 2 400 manat exemption (12 x 2 500 a month) (Global law, in force 2025-07-01)"
+ }
+}

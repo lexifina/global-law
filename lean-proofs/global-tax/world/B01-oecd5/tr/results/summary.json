@@ -1,0 +1,55 @@
+{
+ "country": "TR",
+ "name": "Türkiye (gelir vergisi on wages, minimum-wage exemption, damga vergisi, SGK employee premiums)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "A",
+ "batch": "B01-oecd5",
+ "lean": {
+  "lines": 285,
+  "definitions": 38,
+  "theorems": 16,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (two tariffs, wage and general)",
+  "Tariff (CumRow: printed columns proved equal to the bands)",
+  "World.exemptTaxOf (GVK art. 23 (18))",
+  "World.cumWithholdings (cumulative monthly method)",
+  "Unit (individual)",
+  "Rounding (divR)"
+ ],
+ "kernel_gaps": [
+  "Contribution with a monthly minimum-wage-indexed ceiling computed in kuruş (written locally)"
+ ],
+ "provisions_cited": 22,
+ "validation": [
+  {
+   "referee": "statute printed table (Tebliğ 41166 m. 3 (3)) vs its bands",
+   "cases": 18,
+   "exact": 18,
+   "within_1pct": 18,
+   "notes": "Lean printed_eq_bands / printedWage_eq_bands (both tariffs, 18 probes each)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "DE (monthly cumulative wage tax pattern)",
+  "kernel exemptTaxOf / cumWithholdings"
+ ],
+ "sources_official_secondary": [
+  "Tebliğ 42582 = Gelir Vergisi Genel Tebliği (Seri No: 331): gross minimum wage 26.005,50 TL and the 2025 SGK ceiling 195.041,40 TL (official secondary)"
+ ],
+ "headline": "Türkiye 2025 built from GVK 193 and the 2025 Tebliğ: cumulative monthly wage tax with the minimum-wage exemption (45.151 TRY a year), SGK 15 % up to 7,5 × minimum wage, stamp duty; the printed tariff is proved exact; mid-income METR 45,5 % exceeds the top 40,8 %."
+}

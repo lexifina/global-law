@@ -1,0 +1,99 @@
+{
+ "country": "CU",
+ "name": "Cuba",
+ "year": "2025",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "B",
+ "reused_from": [
+  "ES (Spanish-language schedule)",
+  "B12 Latin America patterns"
+ ],
+ "lean": {
+  "lines": 85,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (monthly via Table.perPeriod)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "art. 26 scale at 50,000; CESS at 15,000 and 20,000 a month"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 0,
+  "not_modelled": 3
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "the monthly salary withholding scale (MFP resolution) not reached: reading switch cuWageTax",
+  "self-employed regimes",
+  "other income"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.553,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.553,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.553,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.553,
+   "atAW": 2.505,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.553,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The law that taxes wages in 2025 does not print the wage scale",
+ "scale": {
+  "wage": 180000,
+  "currency": "CUP",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Ley 174 (Presupuesto del Estado 2025) art. 20.2: Contribucion Especial a la Seguridad Social 10 % 'por el exceso de quince mil pesos mensuales', x 12",
+  "by": "B13-caribbean",
+  "basis": "Ley 174 (Presupuesto del Estado 2025) art. 20.2: Contribucion Especial a la Seguridad Social 10 % 'por el exceso de quince mil pesos mensuales', x 12. A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Ley 113 del Sistema Tributario; state-sector wages treated specially' updated: Ley 174 art. 67.1 applies the personal income tax to salaries of all sectors in 2025; Ley 113 art. 22 mínimo exento 39,120 CUP and art. 26 scale 15-50 %; Contribución Especial a la Seguridad Social 5 % to 15,000 a month and 10 % above (Ley 174 art. 20.2). The monthly withholding scale for salaries was not reached."
+}

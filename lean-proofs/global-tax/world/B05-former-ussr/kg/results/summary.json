@@ -1,0 +1,57 @@
+{
+ "country": "KG",
+ "name": "Kyrgyzstan",
+ "year": "2025",
+ "status": "built",
+ "batch": "B05-former-ussr",
+ "access": "B",
+ "reused_from": [
+  "KZ",
+  "RU"
+ ],
+ "lean": {
+  "lines": 95,
+  "definitions": 9,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed sums and hand-computed statutory cases (#guard)",
+   "cases": 1,
+   "exact": 1,
+   "within_1pct": 1,
+   "notes": "360 000 salary without RP deductions"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 2,
+  "recreated": 2,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "personal and dependant deductions (RP value not reached)",
+  "art. 187(2) district average wage (not reached)",
+  "special regimes"
+ ],
+ "scan": {},
+ "headline": "F1 Wages below the district average are taxed as if they were the average (art. 187(2))"
+}

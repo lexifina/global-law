@@ -1,0 +1,14 @@
+name = "AlTax"
+version = "0.1.0"
+defaultTargets = ["AlTax", "altax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AlTax"
+
+[[lean_exe]]
+name = "altax"
+root = "AlTax.Main"

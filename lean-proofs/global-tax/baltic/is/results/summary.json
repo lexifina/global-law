@@ -1,0 +1,76 @@
+{
+ "country": "IS",
+ "name": "Iceland (Reykjavík)",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 685,
+  "definitions": 72,
+  "theorems": 38,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Allowance (Taper)",
+  "Credit (usedCredit)",
+  "Unit (Convex, splitting_le_separate)",
+  "Canon",
+  "Country"
+ ],
+ "kernel_gaps": [
+  "Credit spent across several taxes and two spouses in a statutory order with a 22/31 conversion at the last step (67. gr. A; useCredit, coupleCredits)",
+  "Partial transfer of tax-band room between spouses with a cap (66. gr. 1. mgr. 4. tölul.; bandShift): not splitting, not transferAllowance",
+  "Flat-amount levies with an all-or-nothing income floor and an age window (útvarpsgjald, Framkvæmdasjóður aldraðra; levyDue); Contribution is rate-based",
+  "Taper.WellFormed requires round = .down; RSK rounds barnabætur reductions half up, so the taper theorems were proved locally",
+  "Benefit minimum per recipient that lapses (5.000 kr. per parent) and halving between parents (shared residence)",
+  "Withholding with decimals rounded once (staðgreiðsla), not Table.perPeriod"
+ ],
+ "provisions_cited": 31,
+ "validation": [
+  {
+   "referee": "OECD TW 2025 (ISL, OECD conventions via oecd_map.py: average útsvar 14.94 %, levies of the 2025 assessment)",
+   "cases": 48,
+   "exact": 48,
+   "within_1pct": 48,
+   "notes": "8 family types x CGTC, CGITLETC, CGITFP, SLT, EECSSC, CTGG; take-home pay from mapped lines 8/8 within 1 % (7 exact, 1 off by 2 kr); kernel harness run results/oecd_check.*"
+  },
+  {
+   "referee": "OECD TW 2025 take-home pay vs statute default (Reykjavík 14.97 %, levies of income year 2025)",
+   "cases": 8,
+   "exact": 0,
+   "within_1pct": 8,
+   "notes": "gaps -3,720 to -9,804 ISK each decomposed into útsvar 0.03 % and levy amounts (1,321 ISK per adult), residual <= 1 ISK (F5, F6)"
+  },
+  {
+   "referee": "RSK barnabætur calculator (reiknivelarws.rsk.is, tekjuár 2025)",
+   "cases": 26,
+   "exact": 26,
+   "within_1pct": 26,
+   "notes": "compared before the 5,000 ISK per-carer lapse, which the calculator does not apply (3 cases, F8)"
+  },
+  {
+   "referee": "RSK staðgreiðsla calculator (2025, monthly withholding)",
+   "cases": 14,
+   "exact": 13,
+   "within_1pct": 14,
+   "notes": "one 4 % séreign case 1 ISK apart in the calculator's tax before credit"
+  },
+  {
+   "referee": "Published figures (Stjórnarráðið 20.12.2024 skattleysismörk; Skatturinn levy table álagning 2026; útvarpsgjald; barnabætur table)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "validation/published_and_oecd.json"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 20,
+  "recreated": 11,
+  "not_modelled": 9
+ },
+ "new_loopholes": 5,
+ "gov_errors": 5,
+ "statute_faults": 4,
+ "headline": "Iceland's 2025 income tax in Lean reproduces all 48 OECD Taxing Wages lines and RSK's own barnabætur (26/26) and withholding (13/14) calculators; one króna above 2,617,618 ISK triggers 36,814 ISK of flat levies, barnabætur withdrawal stacks to 54 % marginal rates for families with young children, parents living apart with shared residence get up to 566,040 ISK a year more barnabætur than a couple, and two cross-references in the tax laws point to the wrong paragraph."
+}

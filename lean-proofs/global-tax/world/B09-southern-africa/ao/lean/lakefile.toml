@@ -1,0 +1,14 @@
+name = "AoTax"
+version = "0.1.0"
+defaultTargets = ["AoTax", "aotax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AoTax"
+
+[[lean_exe]]
+name = "aotax"
+root = "AoTax.Main"

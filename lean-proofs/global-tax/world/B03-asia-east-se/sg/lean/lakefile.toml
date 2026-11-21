@@ -1,0 +1,14 @@
+name = "SgTax"
+version = "0.1.0"
+defaultTargets = ["SgTax", "sgtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SgTax"
+
+[[lean_exe]]
+name = "sgtax"
+root = "SgTax.Main"

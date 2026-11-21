@@ -1,0 +1,87 @@
+{
+ "country": "HN",
+ "name": "Honduras",
+ "year": "2025",
+ "status": "built",
+ "access": "A",
+ "batch": "B12-latin-america",
+ "reused_from": [
+  "MX/CO bracket tables"
+ ],
+ "lean": {
+  "lines": 81,
+  "definitions": 8,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule (centavos)",
+  "Unit (individual)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 3,
+ "provisions": [
+  "LISR art. 13 a)",
+  "LISR art. 22 b)",
+  "Acuerdo SAR-07-2025 PRIMERO"
+ ],
+ "sources": [
+  "SAR Acuerdo SAR-07-2025 (La Gaceta 36,735, 9-1-2025)",
+  "SAR consolidated LISR to SAR-07-2025"
+ ],
+ "sources_official_secondary": [],
+ "validation": [
+  {
+   "referee": "statute's own printed tables and thresholds (#guard / decide)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "no referee values seen (build phase)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 1,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "employee contributions (IHSS, RAP): the laws were not reached; employeeSocial = 0",
+  "the 13th and 14th month salaries are taxed with the rest of the wage (their exemptions, Codigo del Trabajo / LISR art. 10, not modelled)",
+  "interest, dividends and capital gains: final withholding regimes (10 %) not read; ignored",
+  "rent: taxed in the global base; the cedular tax on residential rent (Codigo 106) not modelled",
+  "selfEmployment: gross taxed; art. 13 b) expenses not modelled",
+  "pensions: not modelled"
+ ],
+ "scale": {
+  "wage": 331638,
+  "currency": "HNL",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "LISR art. 22 b) / Acuerdo SAR-07-2025: the L 331,638.50 upper limit of the 15 % band",
+  "by": "B12-latin-america",
+  "basis": "LISR art. 22 b) / Acuerdo SAR-07-2025: the L 331,638.50 upper limit of the 15 % band"
+ },
+ "headline": "Honduras 2025 from SAR's Acuerdo SAR-07-2025 and consolidated LISR: exempt to L 217,493.16, 15/20/25 % bands, L 40,000 deduction; IHSS/RAP not reached.",
+ "d9_review": [
+  {
+   "date": "2026-11-20",
+   "item": "D9M-1",
+   "category": "model gap (open)",
+   "dataset": "hn_official_sar_plantilla_2025_grid",
+   "cause": "plantilla deducts 70,000 at 60-64 and 110,000 at 65+ (cites Decreto 199-2006 art. 30); LISR art. 13 a) / Decreto 59-2020 art. 1 give 40,000 / 80,000 (65+)",
+   "open": [
+    "Decreto 199-2006 art. 30 text",
+    "Decreto 59-2020 art. 2 exemption (65+, gross up to L350,000) not modelled"
+   ],
+   "model_change": "none"
+  }
+ ]
+}

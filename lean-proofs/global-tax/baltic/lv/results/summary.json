@@ -1,0 +1,71 @@
+{
+ "country": "LV",
+ "name": "Latvia",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 635,
+  "definitions": 68,
+  "theorems": 40,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (25,5/33 % in cents; progressive, mono, convex, Lipschitz, le_maxRate, splitting instantiated)",
+  "Family.taxAfterLowBand / lowBandReduction (deductions at the lowest rate; lowBand_le_zeroBand instantiated)",
+  "Family.familyTotal (gimenes valsts pabalsts)",
+  "Social.Contribution.flatCapped (employee VSAOI; ticks_above_ceiling)",
+  "Surcharge.above (3 % additional rate; ticks_mono)",
+  "Rounding.divR halfUp (cents)",
+  "Unit (separate assessment; splitting_le_separate)"
+ ],
+ "kernel_gaps": [
+  "deductions credited at a fixed 25,5 % even when they offset 33 % income (IIN 15(15)): schedule minus rate x deductions beyond taxAfterLowBand",
+  "a contribution ceiling that binds only the employer: employee pays 10,5 % above 105 300 as solidarity tax, employer refunded (Solidaritates nodokla likums 6.2(3)); deductible part cut by IIN 10(1.10)",
+  "self-employed contribution base with a monthly all-or-nothing minimum (31,07 % on the minimum wage) and a 10 % top-up rate above it (VSAOI 14.1); monthly test",
+  "final-withholding alternative regimes for the same income (author royalties 25 % with an 80/20 VSAOI/IIN split; micro-enterprise tax 25 % of turnover)",
+  "allocation of indivisible per-child reliefs between parents (exe tries every split)",
+  "spouse relief conditioned on marriage, no employment and the children's ages",
+  "monthly withholding at one rate vs annual two-rate tax (perPeriod not needed: closed form withholding_gap)"
+ ],
+ "provisions_cited": 74,
+ "validation": [
+  {
+   "referee": "OECD TW 2025 (Taxing Wages 2026, year 2025) country table",
+   "cases": 56,
+   "exact": 56,
+   "within_1pct": 56,
+   "notes": "8 household types x 7 lines (CGTC, CGITLETC, CGITFP, SLT, EECSSC, CTGG, THP); generic mapping; b38.py oecd LV"
+  },
+  {
+   "referee": "OECD TW 2025 tax-wedge decomposition (DSD_TAX_WAGES_DECOMP), 50-250 % AW x 4 household types",
+   "cases": 3216,
+   "exact": 3200,
+   "within_1pct": 3216,
+   "notes": "804 households; IT_CG, EESSC, CB 2412/2412 exact; NWE 788/804 exact, all within 1.2 EUR (contract rounding of three outputs to whole euro); tools/oecd_decomp.py"
+  },
+  {
+   "referee": "VID 'Algas nodoklis' 2025 worked examples 1-8 and 'Attaisnotie izdevumi' examples 1/5 and 9",
+   "cases": 15,
+   "exact": 15,
+   "within_1pct": 15,
+   "notes": "monthly wage tax incl. non-resident, foreign-insured (33 % above 8 775/month), working pensioner 9,25 % and izdienas 9,76 %; 600-euro cap worth 153; 10 % pension cap; kernel-checked by decide in LvTax/Tests.lean (13 values from the 8 payroll examples, 2 from the deduction examples)"
+  },
+  {
+   "referee": "Monthly withholding vs annual return (own, not a referee)",
+   "cases": 8,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "equal up to 105 300; above it the return adds 10,05 % of the excess (7,5 % proved: withholding_gap; 2,55 % from IIN 10(1.10)); runs/lv_scan.md section 5"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 20,
+  "recreated": 14,
+  "not_modelled": 6,
+  "found_blind": 6
+ },
+ "new_loopholes": 3,
+ "gov_errors": 2,
+ "statute_faults": 3,
+ "headline": "Latvia's 2025 IIN/VSAOI/benefit model in Lean matches the OECD to the euro (56/56 country lines; 3 200/3 216 decomposition lines exact, all within 1 %) and 8 VID payroll examples; new: a self-employed notch at the 740-euro minimum wage (1 393 euro lost for one euro, a 2 080-euro dead band) that monthly bunching avoids (1 277 a year), and a 765-euro spouse-relief notch and marriage bonus; VID's 2025 guide misstates the 33 % base and drops micro income from the 3 % rate without a statutory basis, and IIN 12(1) still prints 570 euro for 2025."
+}

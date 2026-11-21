@@ -1,0 +1,94 @@
+{
+ "country": "NZ",
+ "name": "New Zealand",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 683,
+  "definitions": 50,
+  "theorems": 30,
+  "sorry": 0,
+  "guards": 19
+ },
+ "kernel_parts_used": [
+  "Basic",
+  "Rounding",
+  "Schedule",
+  "Social",
+  "Unit",
+  "Canon",
+  "Country",
+  "Theorems.Schedule (ticks_mono_of_progressive, ticks_convex, ticks_succ)",
+  "Theorems.Parts (splitting_le_separate)"
+ ],
+ "kernel_gaps": [
+  "eligibility-window credit (IETC: nil below $24,000 and above $70,000, abated 13 c above $66,000; Credit has phase-in/withdrawal but no lower eligibility floor)",
+  "shared abatement of two credits (FTC abates first, the remainder off the IWTC; proved equal to one abatement of the sum)",
+  "guaranteed-income top-up (MFTC: threshold minus income after tax, a 100 % withdrawal by construction)",
+  "credit barred by entitlement to another benefit (IETC while WFF > 0)",
+  "day-weighted composite year (2024-25: composite rates and composite IETC/IWTC/MFTC over 121 + 244 days)",
+  "money in cents (NZ computes in cents; Out is whole units, so cents are kept in detail)"
+ ],
+ "provisions_cited": 11,
+ "validation": [
+  {
+   "referee": "OECD TW 2026 (year 2025) country table, harness oecd_check20.py",
+   "cases": 48,
+   "exact": 40,
+   "within_1pct": 40,
+   "notes": "CGTC, CGITLETC, CGITFP, SLT, CTGG 40/40 exact; THP 0/8 because the OECD books no ACC earners' levy (FINDINGS F1)"
+  },
+  {
+   "referee": "OECD TW 2026 (year 2025), own check incl. IETC and THP net of ACC",
+   "cases": 56,
+   "exact": 48,
+   "within_1pct": 48,
+   "notes": "all lines exact except THP incl. ACC (8/8 differ by exactly the levy); THP net of ACC 8/8 exact"
+  },
+  {
+   "referee": "OECD TW (year 2024 = income year 2024-25, composite)",
+   "cases": 56,
+   "exact": 42,
+   "within_1pct": 48,
+   "notes": "THP net of ACC 8/8 exact; tax off by $0.22-$1.17: the OECD day-weights the schedules instead of the Act's rounded composite rates (F2); THP incl. ACC 0/8 (F1)"
+  },
+  {
+   "referee": "IRD Payroll Calculations & Business Rules Specification 2025-26 vs IR340 PAYE tables (April 2025)",
+   "cases": 69228,
+   "exact": 69228,
+   "within_1pct": 69228,
+   "notes": "codes M, ME, SL, SB, S, SH, ST, SA; weekly and fortnightly; spec = statute proved in Lean (spec_eq_statute); weekly PAYE x 52 within 1 c/week of statute"
+  },
+  {
+   "referee": "IR271 WFF weekly charts vs the annual rule",
+   "cases": 1092,
+   "exact": 907,
+   "within_1pct": 907,
+   "notes": "2024-25 charts 456/456 exact (/52); July 2025 chart 451/636 under IRD's /52 rule, 636/636 if the FTC is divided by 365/7 (F3)"
+  },
+  {
+   "referee": "IRD worked examples (MFTC, FTC, IWTC, IETC, ACC maxima) and OECD lines as #guard",
+   "cases": 19,
+   "exact": 19,
+   "within_1pct": 19,
+   "notes": "three printed figures are wrong in the source and are checked against the correct arithmetic (F4, F5, F6)"
+  },
+  {
+   "referee": "OpenFisca-Aotearoa",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "not usable: parameters stop in 2010 (tax) and 2018 (WFF) (F14)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 16,
+  "recreated": 12,
+  "not_modelled": 3
+ },
+ "new_loopholes": 1,
+ "gov_errors": 8,
+ "statute_faults": 3,
+ "headline": "New Zealand's 2025-26 tax and Working for Families match the OECD and IRD's PAYE tables exactly (69,228 cells; table = statute proved for every income), but the minimum family tax credit band has a 101.67 % effective marginal rate (113.67 % with a student loan), WFF's bar on the IETC makes a $1,040 notch, the OECD leaves out the ACC levy, and IRD's 2025-26 guidance has five inconsistent figures or formulas.",
+ "year_note": "2025 (income year 1 April 2025 - 31 March 2026 = the OECD's 2025; 2024-25 composite year also modelled)"
+}

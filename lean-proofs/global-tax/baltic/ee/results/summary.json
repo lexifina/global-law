@@ -1,0 +1,61 @@
+{
+ "country": "EE",
+ "name": "Estonia",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 516,
+  "definitions": 54,
+  "theorems": 31,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Allowance (Taper)",
+  "Social (Contribution)",
+  "Rounding",
+  "Table (perPeriod)",
+  "Unit (theorems)",
+  "Canon/Country"
+ ],
+ "kernel_gaps": [
+  "Distribution tax: company tax only when profit is paid out (22/78), none on retention, none on the shareholder; owner.py has no retention dimension (local tools/retention.py)",
+  "Income test that counts untaxed income: the § 23 hump income includes Estonian dividends taxed at company level and excludes deductions (local PIn.dividendsEE / POut.tulu)",
+  "Self-employed social tax on a circular base (profit/1.33) with a minimum charge (12 x kuumaar) and a ceiling (10 x 12 minimum wages); Contribution has a threshold floor, not a minimum charge (local EeTax.fie)",
+  "Monthly withholding with the exemption claimed at one payer and an annual true-up for uneven streams (perPeriod covers only even streams; local Withholding.lean)",
+  "Versioned parameters in one exe (input year 2026: flat 8,400 exemption)"
+ ],
+ "provisions_cited": 84,
+ "validation": [
+  {
+   "referee": "OECD TW 2025 (Taxing Wages 2026, year 2025) country table",
+   "cases": 56,
+   "exact": 48,
+   "within_1pct": 48,
+   "notes": "48/48 mapped lines (CGTC, CGITLETC, CGITFP, SLT, EECSSC, CTGG) exact (within 1 euro; S100 and S67 within 0.01 euro, Lean oecd_S100/oecd_S67) once the OECD conventions are applied: no II-pillar payment (F1) and the single-parent allowance for SP67 (F2); the 8 raw take-home-pay lines differ by exactly the 2 % II pillar net of its 22 % deduction (e.g. -400 at S100)"
+  },
+  {
+   "referee": "EMTA published 2025/2026 figures (2025 changes page, exemption page)",
+   "cases": 7,
+   "exact": 7,
+   "within_1pct": 7,
+   "notes": "training/gift relief 264, III-pillar relief 1320, exemption 7848 below 14,400 and 0 above 25,200, pension-age 9312, 2026 flat 8400, social-tax minimum 270.60/month (runs/emta_checks.txt); no official EMTA income-tax calculator found (none in the emta.ee sitemap)"
+  },
+  {
+   "referee": "Statute self-consistency: TuMS § 42(1) monthly formula vs § 23(2) annual (proof)",
+   "cases": 1,
+   "exact": 1,
+   "within_1pct": 1,
+   "notes": "Lean monthly_even_bounds: for every monthly wage w, 12 x monthly exemption is within 0-11 cents of the annual exemption at 12w"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 16,
+  "recreated": 12,
+  "not_modelled": 4
+ },
+ "new_loopholes": 3,
+ "gov_errors": 2,
+ "statute_faults": 3,
+ "headline": "Estonia's 2025 flat 22 % with a basic exemption withdrawn between 14,400 and 25,200 euro reproduces all 48 compared OECD lines exactly; the 'tax hump' is a proved 37.99 % income-tax band (40.8 % with contributions) that also bites on tax-free Estonian dividends (up to 1,726.56 euro) and turns uneven monthly pay into refunds or bills of up to 1,727 euro, while an owner-manager pays 22 % through dividends against up to 43.8 % through salary and retained profit earns its return untaxed."
+}

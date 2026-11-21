@@ -1,0 +1,16 @@
+name = "MtTax"
+version = "0.1.0"
+defaultTargets = ["MtTax", "mttax"]
+
+# A country project depends on the shared kernel by path. From ~/cmp20/<owner>/<cc>/lean the path is
+# "../../../kernel"; this example lives inside the kernel, so its path is "../../..".
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "MtTax"
+
+[[lean_exe]]
+name = "mttax"
+root = "MtTax.Main"

@@ -1,0 +1,57 @@
+{
+ "country": "KN",
+ "name": "Saint Kitts and Nevis (employee)",
+ "year": "2025",
+ "status": "built",
+ "access": "A",
+ "batch": "B15-no-pit",
+ "lean": {
+  "lines": 99,
+  "definitions": 12,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Social (Contribution.flatCapped)",
+  "plain Int (HSDL with all-or-nothing threshold, two periods)"
+ ],
+ "kernel_gaps": [
+  "none (the World recipe for no income tax: incomeTax := 0 with a detail note)"
+ ],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute arithmetic only (#guard / decide in Theorems.lean)",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "build-only phase: no referee values looked at (CONTRACTWORLD testing order)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Social (Contribution)",
+  "World no-income-tax recipe"
+ ],
+ "sources": [
+  "Law Commission: Income Tax Act Cap. 20.22 (RE 2017) s. 3(3); Act 12 of 2021 (s. 3A, companies)",
+  "Housing and Social Development Levy Act Cap. 20.21 (RE 2017) s. 2-5; Act 1 of 2024; Act 14 of 2025",
+  "Social Security Act Cap. 22.10 and Regulations (RE 2017): Schedule 1 Part I, Schedule 2"
+ ],
+ "unsupported": [
+  "self-employed contributions"
+ ],
+ "headline": "Saint Kitts and Nevis 2025: no tax on individuals' income since 1980; the Housing and Social Development Levy is 3.5 % of the whole wage once it passes the threshold, a notch of about EC$946.",
+ "registry_correction": "PIT N verified: Income Tax Act Cap. 20.22 s. 3(3). Levies: HSDL Act s. 3(2) (threshold $23,400 from Feb 2024, $27,040 from Jul 2025; 3.5/10/12 %) + Social Security 5 % up to $6,500 a month."
+}

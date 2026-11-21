@@ -1,0 +1,14 @@
+name = "MeTax"
+version = "0.1.0"
+defaultTargets = ["MeTax", "metax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "MeTax"
+
+[[lean_exe]]
+name = "metax"
+root = "MeTax.Main"

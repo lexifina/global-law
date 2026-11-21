@@ -1,0 +1,14 @@
+name = "RoTax"
+version = "0.1.0"
+defaultTargets = ["RoTax", "rotax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "RoTax"
+
+[[lean_exe]]
+name = "rotax"
+root = "RoTax.Main"

@@ -1,0 +1,14 @@
+name = "AzTax"
+version = "0.1.0"
+defaultTargets = ["AzTax", "aztax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AzTax"
+
+[[lean_exe]]
+name = "aztax"
+root = "AzTax.Main"

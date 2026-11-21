@@ -1,0 +1,106 @@
+{
+ "country": "SL",
+ "name": "Sierra Leone",
+ "year": "2025 (calendar year of assessment)",
+ "status": "built",
+ "batch": "B10-anglophone-africa",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE"
+ ],
+ "lean": {
+  "lines": 83,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [
+  "currency redenomination (old -> new leone, / 1,000): local"
+ ],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "tax at 14,400 / 21,600 / 28,800 NLe"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 2,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 3,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "allowance exemptions",
+  "investment income",
+  "NASSIT Act amendments after 2001 not checked"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.306,
+   "atAW": 1.02,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.306,
+   "atAW": 1.02,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.306,
+   "atAW": 1.02,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.306,
+   "atAW": 2.515,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.306,
+   "atAW": 1.02,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The Redenomination Regulations both convert old amounts (/ 1,000) and 'deem' amounts in earlier Acts to be new leones",
+ "scale": {
+  "wage": 28800,
+  "currency": "SLE",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act 2000 First Schedule Part I as replaced by Finance Act 2020 s. 21: '>Above 28,800,000 | 30%' (old leones), / 1,000 by the Redenomination of the Leone Regulations 2024 reg. 3(6)",
+  "by": "B10-anglophone-africa",
+  "basis": "Income Tax Act 2000 First Schedule Part I as replaced by Finance Act 2020 s. 21: '>Above 28,800,000 | 30%' (old leones), / 1,000 by the Redenomination of the Leone Regulations 2024 reg. 3(6). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act 2000' confirmed: resident individuals 0/15/20/25/30 % (Finance Act 2020: 7.2 M / 14.4 M / 21.6 M / 28.8 M old leones = NLe 7,200 / 14,400 / 21,600 / 28,800); currency now SLE (new leone).",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "NASSIT worker 5 % of earnings (no ceiling), deducted (Act s. 20 (2); within ITA s. 38 (2)); input nassitEmployee still overrides",
+  "provision": "National Social Security and Insurance Trust Act 2001 (Act No. 5 of 2001) s. 25 (1)-(2), s. 2 \"earning\", s. 20 (2) (sierra-leone.org scan, OCR)",
+  "source": "statute",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

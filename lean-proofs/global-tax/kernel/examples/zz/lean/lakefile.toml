@@ -1,0 +1,16 @@
+name = "ZzTax"
+version = "0.1.0"
+defaultTargets = ["ZzTax", "zztax"]
+
+# A country project depends on the shared kernel by path. From ~/cmp20/<owner>/<cc>/lean the path is
+# "../../../kernel"; this example lives inside the kernel, so its path is "../../..".
+[[require]]
+name = "TaxKernel"
+path = "../../.."
+
+[[lean_lib]]
+name = "ZzTax"
+
+[[lean_exe]]
+name = "zztax"
+root = "ZzTax.Main"

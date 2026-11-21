@@ -1,0 +1,68 @@
+{
+ "country": "GM",
+ "name": "The Gambia",
+ "year": "2025",
+ "status": "unsupported",
+ "batch": "B10-anglophone-africa",
+ "access": "C",
+ "reused_from": [],
+ "lean": {
+  "lines": 25,
+  "definitions": 3,
+  "theorems": 0,
+  "sorry": 0
+ },
+ "guards": 0,
+ "kernel_parts_used": [
+  "Canon",
+  "Country",
+  "World.worldMain"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 0,
+ "validation": [],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "no accessible statute"
+ ],
+ "scan": {},
+ "headline": "F1 The Gambia Revenue Authority's two 2018 brochures give different zero bands: D36,000 for employment income, D24,000 for personal income tax",
+ "registry_correction": "Registry 'Income and Value Added Tax Act 2012' unverified for 2025: the Act's text and the Finance Acts that set the 2025 rates were not reached.",
+ "rescue": {
+  "agent": "rescue",
+  "date": "2026-11-20T11:52Z",
+  "outcome": "still C",
+  "routes": [
+   "gra.gm downloads list: 'Income Tax Table 2025' (gra.gm/download-file/2a69ec11-...) is a 695-page withholding table, i.e. a referee value: downloaded to gm/law/rescue/gra_income_tax_table_2025_UNOPENED_referee.pdf and NOT opened (reserved for the datasets phase)",
+   "the Income and Value Added Tax Act 2012 text and the Finance Acts setting 2025 rates: not on gra.gm or assembly.gm (arrangement pages only, as before)"
+  ],
+  "unlock": "the IVAT Act 2012 text and the Finance Acts 2018-2025 (rates schedule)"
+ },
+ "rescue2": {
+  "agent": "rescue2",
+  "date": "2026-11-20T13:11Z",
+  "outcome": "still unsupported (access C)",
+  "routes": [
+   "gra.gm downloads page (laptop, 55 files listed with titles): forms, 2023 brochures (PIT, PAYE, capital gains, rental, informal sector, VAT), Stamp Act, Customs & Excise Act and Regulations, strategic plans, 'Income Tax Table 2025' (the referee, not opened); no Income and VAT Act 2012 or Finance Act",
+   "assembly.gm documents/type/acts (pages 1-6): Income and Value Added Tax Act 2012 = document 158 (contents images only, as pass 1); Income and Sales Tax amendment acts 2007/2010; no Finance Act",
+   "one WebSearch: no host of the 2012 Act's text (WIPO Lex holds the 2004 Income and Sales Tax Act only)",
+   "legis-palop.org (PALOP+TL legal database): full texts need a paid subscription and login (free registration gives listings only); its search form posts redirect to the home page without a session: not used (login)",
+   "natlex.ilo.org, www.fao.org/faolex, www.refworld.org: Cloudflare 'Sorry, you have been blocked' (403) from the laptop and WebFetch: not bypassed",
+   "droit-afrique.com: live site 403 ('Server unable to read htaccess file'); its tax codes are sold in a shop (Wayback: only the free 'sommaire')",
+   "Global law list_jurisdictions (rescue2/tools/gl.py, 2026-11-20): no tax law in this country's corpus",
+   "WIPO Lex country profile (www.wipo.int/wipolex/en/members/profile/<CC>): no tax law listed (except SY, GM: see below)"
+  ],
+  "unlock": "the Income and Value Added Tax Act 2012 (First Schedule) and the Finance Acts to 2025"
+ }
+}

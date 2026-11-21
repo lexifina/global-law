@@ -1,0 +1,14 @@
+name = "GqTax"
+version = "0.1.0"
+defaultTargets = ["GqTax", "gqtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "GqTax"
+
+[[lean_exe]]
+name = "gqtax"
+root = "GqTax.Main"

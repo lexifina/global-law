@@ -1,0 +1,97 @@
+{
+ "country": "TV",
+ "name": "Tuvalu",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "batch": "B14-pacific",
+ "access": "A",
+ "reused_from": [
+  "AU/NZ PAYE (tax-free threshold)"
+ ],
+ "lean": {
+  "lines": 105,
+  "definitions": 9,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "Schedule 6 graduated at 14,000 and 20,000; slab-reading notches at 10,000 and 14,000; PF 13 % deducted"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 1,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 3,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "withholding on interest and dividends",
+  "presumptive business tax",
+  "approved-fund status of the Provident Fund assumed"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.4,
+   "atAW": 1.16,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.4,
+   "atAW": 1.16,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.4,
+   "atAW": 1.16,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.414,
+   "atAW": 2.965,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.4,
+   "atAW": 1.16,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Schedule 6 states its rates as '% of taxable income' against bands of the whole taxable income: read literally it is a slab tariff with jumps of $1,500 at $10,000 and $2,100 at $14,000",
+ "scale": {
+  "wage": 14000,
+  "currency": "AUD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act (Cap. 26.16, 2022 Revised Edition) Schedule 6 para 1(c): start of the 30 % band (\"exceeding fourteen thousand dollars 30%\")",
+  "by": "B14-pacific",
+  "basis": "Income Tax Act (Cap. 26.16, 2022 Revised Edition) Schedule 6 para 1(c): start of the 30 % band (\"exceeding fourteen thousand dollars 30%\"). A statutory threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act' confirmed (Cap. 26.16, 2022 Revised Edition, no later version in force in 2025): 0 % to 10,000, 15 % to 14,000, 30 % above; Provident Fund employee 13 % (employer 10 %), deductible as an approved-fund contribution; currency AUD."
+}

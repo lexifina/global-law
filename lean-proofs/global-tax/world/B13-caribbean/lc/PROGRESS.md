@@ -1,0 +1,61 @@
+# Saint Lucia (LC) progress
+
+**Status (2026-11-20T07:27Z): built (step 1 of the world testing order). Next: open-source software (coordinator, TESTING.md), then datasets.**
+
+- Year: 2025 (income year); access tier A; reused patterns: UK/IE PAYE, ECCU pattern (personal allowance + three bands).
+- Statute read: Revised Laws of Saint Lucia (2023), law as at 31 December 2023 (attorneygeneralchambers.com): Income Tax Act Cap. 15.02 ss. 13, 45, 46, 53, 54, 80, Schedules 5 and 6 (Act 21 of 2022); National Insurance Corporation Act Cap. 16.01 ss. 27-30, Schedules 2 and 3
+- Registry correction: Registry 'Income Tax Act (Cap. 15.02)' confirmed: personal allowance 25,000 from 1 January 2023 (Schedule 6); 15 % to 15,000, 20 % to 30,000, 30 % above (Schedule 5, 2023 row); NIC 5 % to 60,000 a year, deductible with life premiums up to the lower of 10 % of assessable income or 8,000.
+- Lean: 95 lines, 6 defs, 5 theorems, 3 #guard checks, 0 sorry; exe `lean/.lake/build/bin/lctax` (worldMain).
+- Unsupported (listed in the outputs): Acts after the 2023 revision not reached; child, education, mortgage deductions (inputs); investment income; self-employed NIC.
+- Steps: 1 model done; 2 validation: statute's own printed figures and hand-computed statutory cases only (#guard); referees wait for the testing phase; 3 proofs: kernel one-liners (Theorems.lean: monotone, convex, no jump, splitting <= separate); 4-5 loopholes: FINDINGS.md (catalogue + generic scanners, scan_world.py with the cited scale.json); 6 statute faults / government errors: FINDINGS.md; 7 USEFUL.md.
+- Tried / sources:
+  - Global law saint-lucia corpus (Constitution only)
+  - attorneygeneralchambers.com Revised Laws 2023 (HTML per section and schedule)
+  - irdstlucia.gov.lc (TLS name mismatch)
+  - not opened (referee values): IRD PAYE tables
+- Files on disk:
+  - `law/ag.html` (39,147 B, sha256 b5a35b6f5d87bc3f…)
+  - `law/i.html` (32,292 B, sha256 8c8cc30996cbb838…)
+  - `law/income-tax-act-cap-15-02.html` (29,084 B, sha256 0fcd578a9c03f3e0…)
+  - `law/income-tax-act.html` (140,968 B, sha256 ace0c151f8645fe8…)
+  - `law/n.html` (29,602 B, sha256 8d7d7dac025d6312…)
+  - `law/national-insurance-act.html` (29,076 B, sha256 25359a58b1f982c7…)
+  - `law/nic.html` (96,095 B, sha256 dba38a348fc11bbf…)
+  - `law/nic/s27.html` (100,082 B, sha256 1e089a50e050fade…)
+  - `law/nic/s28.html` (99,659 B, sha256 7ca1db916b476f97…)
+  - `law/nic/s29.html` (99,386 B, sha256 1b18e559044d266c…)
+  - `law/nic/s30.html` (100,497 B, sha256 9c212981e57f28f1…)
+  - `law/nic/schedule-1-01.html` (200,219 B, sha256 2898f9b22e2551f4…)
+  - `law/nic/schedule-1.html` (103,124 B, sha256 4abcb3b8e94b8cdb…)
+  - `law/nic/schedule-2-01.html` (99,189 B, sha256 c4475c26c9268818…)
+  - `law/nic/schedule-2.html` (110,579 B, sha256 9054b14378903ec0…)
+  - `law/nic/schedule-3-01.html` (100,401 B, sha256 89ad9de24b40a6bd…)
+  - `law/nic/schedule-3.html` (128,081 B, sha256 c102c52be3aea2aa…)
+  - `law/nic/schedule-4.html` (106,117 B, sha256 420c6afbfff05a51…)
+  - `law/nic/schedule-5.html` (104,505 B, sha256 682c16e14796384c…)
+  - `law/part-3-imposition-of-income-tax.html` (149,306 B, sha256 b4ca52ca1ea5724b…)
+  - `law/part-4-exempt-income.html` (149,118 B, sha256 665c3829b0c98bda…)
+  - `law/part-6-ascertainment-of-chargeable-income-deductions-and-allowances.html` (149,738 B, sha256 30756c766b41a9d6…)
+  - `law/part-8-ascertainment-of-tax-payable.html` (149,313 B, sha256 56e49feff8a05d24…)
+  - `law/schedule-05.html` (156,634 B, sha256 3433e6250b724a0c…)
+  - `law/schedule-06.html` (175,838 B, sha256 42a24e2e8fd11c4b…)
+  - `law/schedule-1.html` (187,563 B, sha256 3d6a214b2657943f…)
+  - `law/schedule-5.html` (153,412 B, sha256 e2a6b29d4709c4ed…)
+  - `law/schedule-6.html` (149,705 B, sha256 44c1028cd4d9203a…)
+  - `law/sec/s13.html` (149,178 B, sha256 a32c285056c3dd05…)
+  - `law/sec/s152.html` (150,152 B, sha256 024df18192c15b3e…)
+  - `law/sec/s2.html` (149,719 B, sha256 4aa813341d4bbcdd…)
+  - `law/sec/s25.html` (174,976 B, sha256 74b8d7f859306e4e…)
+  - `law/sec/s44.html` (151,310 B, sha256 8498e96d702c71da…)
+  - `law/sec/s45.html` (149,381 B, sha256 faf37f6404468031…)
+  - `law/sec/s46.html` (149,710 B, sha256 68fb47ed2bcf45c9…)
+  - `law/sec/s47.html` (150,044 B, sha256 da79786e78ae9332…)
+  - `law/sec/s48.html` (151,246 B, sha256 6e6937adf22da022…)
+  - `law/sec/s49.html` (150,640 B, sha256 87cb7935ac872c7a…)
+  - `law/sec/s50.html` (150,775 B, sha256 391565d2c4ca4922…)
+  - `law/sec/s51.html` (150,332 B, sha256 9df5684d015bc2c1…)
+  - `law/sec/s52.html` (150,849 B, sha256 e310ae67ee20bf89…)
+  - `law/sec/s53.html` (153,613 B, sha256 9b3581b63de32f8d…)
+  - `law/sec/s54.html` (152,593 B, sha256 4285fc2894b8adb9…)
+  - `law/sec/s80.html` (149,788 B, sha256 63b3d24be2fa591a…)
+- 2026-11-20 round D7: IRD calculator gap = the IRD tax code's extra 400 (254M = 25,400 vs Schedule 6's 25,000); `--ird-code` per dataset (rule 8, the IRD calculator page); dev convention 272/272.

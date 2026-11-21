@@ -1,0 +1,86 @@
+{
+ "country": "MR",
+ "name": "Mauritania",
+ "year": "2025",
+ "status": "built",
+ "batch": "B06-mena",
+ "access": "B",
+ "reused_from": [
+  "FR"
+ ],
+ "lean": {
+  "lines": 80,
+  "definitions": 8,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 4,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (down to 10)",
+  "Table.perPeriod",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 6,
+ "validation": [
+  {
+   "referee": "statute's own tables/formulas, #guard",
+   "cases": 4,
+   "exact": 4,
+   "within_1pct": 4,
+   "notes": "#guard: the bands reproduce art. 114's printed formulas (R.I. x 0.25 - 900, x 0.40 - 4,050) at 400 points; uneven-pay cost"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 1,
+  "not_modelled": 2
+ },
+ "new_loopholes": 1,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "IBAPP/BIC, IRF, IRCM",
+  "2024 finance laws not verified",
+  "CNAM health-insurance employee contribution not reached; CNSS ceiling printed in old ouguiya (revision after 2016 not found)"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.444,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.444,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.37,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.444,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "Monthly ITS 15/25/40 % after 6,000 MRU exempt; no annual reconciliation, so uneven pay can double the tax; the official CGI 2024 PDF is broken",
+ "updated": "2026-11-20T05:30Z",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "CNSS worker 1 % of pay up to 7 000 MRU a month (70 000 old UM), deducted (CGI art. 113 2) a))",
+  "provision": "CNSS page \"Recouvrement des cotisations\" (cnss.mr, Internet Archive capture 2021-08-12; same text on the 2016 page): plafond 70 000 UM a month, 14 % = 1 % worker + 13 % employer; official secondary; old-to-new ouguiya at 10:1 (reading)",
+  "source": "official secondary",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

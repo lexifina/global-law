@@ -1,0 +1,53 @@
+{
+ "country": "MK",
+ "name": "North Macedonia (данок на личен доход; придонеси од задолжително социјално осигурување)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B04-europe-rest",
+ "lean": {
+  "lines": 113,
+  "definitions": 15,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (flat 10 %)",
+  "Unit (individual)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 11,
+ "validation": [
+  {
+   "referee": "statute's own printed amounts and tables (Lean decide)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "build phase: no referee values"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "HR/SI (flat tax after contributions)",
+  "kernel Schedule"
+ ],
+ "sources": [
+  "Global law north-macedonia/national/acts/zakon/2018/sv241-43203 (ЗДЛД 241/2018, as enacted) + 2019/sv275-51389, 2020/sv290-54430, 2021/sv085-55742, 2022/sv274-61525",
+  "ujp.gov.mk/mk/regulativa/opis/425 ('Ажуриран со ... 274 од 20.12.2022', 'Важи од 01.01.2023')",
+  "Global law zakon/2018/sv247-43202 (ЗПЗСО 247/2018: член 25 rates), 2022/sv251-61235, 2025/sv003-68970, 2025/sv267-72553 (from 2026)",
+  "UJP consolidated ЗПЗСО text 07/2026 (ujp.gov.mk/files/attachment/0000/1616/...; mk/src/zpzso_ujp_2026-07.txt), used to locate articles only"
+ ],
+ "scale": "960 000 MKD = 10 × the tax reduction printed in the act",
+ "headline": "North Macedonia 2025 built from the PIT act and its amendments to 274/2022: flat 10 % on pay after 28 % contributions and the tax reduction (printed 96 000 MKD used; the 2025 indexed amount not reached); combined marginal rate 35,2 % (proved)."
+}

@@ -1,0 +1,102 @@
+{
+ "country": "CG",
+ "name": "Republic of the Congo",
+ "year": "2025",
+ "status": "built",
+ "batch": "B08-central-africa-fr",
+ "access": "B",
+ "reused_from": [
+  "FR (family quotient)",
+  "GA"
+ ],
+ "lean": {
+  "lines": 120,
+  "definitions": 13,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR, toMultiple)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Unit.quotient"
+ ],
+ "kernel_gaps": [
+  "mandatory separate assessment of a wage-earning wife: local rule"
+ ],
+ "provisions_cited": 13,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "single 3 M; the 265 000 threshold (264 999 -> 0, 265 000 -> 11 750)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 2,
+  "not_modelled": 4
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "capital income (IRVM credit, art. 89)",
+  "self-employment, rents, gains",
+  "CNSS ceiling",
+  "TOL"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 1.068,
+   "atAW": 0.14,
+   "bandsOver100": 1,
+   "largestNotch": "11,749 at 355,494 (0.1422 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 0.428,
+   "atAW": 3.36,
+   "bandsOver100": 0,
+   "largestNotch": "2,649 at 355,494 (0.1422 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.309,
+   "atAW": 1.32,
+   "bandsOver100": 0,
+   "largestNotch": "2,648 at 355,494 (0.1422 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.308,
+   "atAW": 2.165,
+   "bandsOver100": 0,
+   "largestNotch": "2,649 at 888,736 (0.35549 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 0.428,
+   "atAW": 2.685,
+   "bandsOver100": 0,
+   "largestNotch": "2,649 at 355,494 (0.1422 AW)"
+  }
+ },
+ "headline": "F1 A wage-earning wife is taxed separately with two parts: two-earner married couples pay far less than unmarried ones",
+ "scale": {
+  "wage": 2500000,
+  "currency": "XAF",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "CGI tome I art. 95 I: start of the 45 % band 'entre 2.500.001 et 8.000.000 de francs' (finances.gouv.cg)",
+  "by": "B08-central-africa-fr",
+  "basis": "CGI tome I art. 95 I: start of the 45 % band 'entre 2.500.001 et 8.000.000 de francs' (finances.gouv.cg). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'progressive, family quotient' confirmed with a twist: the chef de famille's joint return, but a married woman with wage income only is assessed separately as 'mariée sans enfants' (2 parts) (art. 4 1°); parts up to 6.5 (art. 91); tariff per part 1/15/30/45/50 % (art. 95), nothing collected below 265 000; 20 % deduction (art. 41); CNSS 4.55 % + CAMU 2.27 % employee (LF 2025 art. 9)."
+}

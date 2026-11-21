@@ -1,0 +1,63 @@
+{
+ "country": "CO",
+ "name": "Colombia (impuesto sobre la renta de personas naturales residentes; aportes a pensión y salud)",
+ "year": "2025 (año gravable 2025)",
+ "status": "built",
+ "access": "B",
+ "batch": "B01-oecd5",
+ "lean": {
+  "lines": 216,
+  "definitions": 29,
+  "theorems": 7,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Tariff (CumRow: ET art. 241 printed table, literal)",
+  "Schedule (its bands, for the proofs)",
+  "Unit (individual)",
+  "Rounding (divR)"
+ ],
+ "kernel_gaps": [
+  "Tables in UVT with printed fixed amounts rounded to whole UVT: evaluated literally (cumTicks) in pesos after conversion"
+ ],
+ "provisions_cited": 20,
+ "validation": [
+  {
+   "referee": "statute printed table (ET art. 241) vs its bands",
+   "cases": 13,
+   "exact": 7,
+   "within_1pct": 13,
+   "notes": "6 probes (1.700-8.669 and from 31.000 UVT) differ by 0,1 UVT (F1): Lean art241_jumps / art241_close"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "MX/ES (Latin civil-law layout)",
+  "kernel Tariff CumRow"
+ ],
+ "sources_official_secondary": [
+  "DIAN normograma (found through its own search API): Resolución 000193 de 2024 art. 1, UVT 2025 = 49.799 (official secondary)"
+ ],
+ "headline": "Colombia 2025 built from the Estatuto Tributario (Global law + Senate basedoc) with the DIAN UVT 49.799: cédula general with the 25 % / 40 % / 1.340 UVT limits, pensions and dividends; the printed art. 241 table makes the literal tax fall at 8.670 and 31.000 UVT (proved); contributions incomplete (SMMLV not reached).",
+ "unsupported": [
+  "contributions: 1-SMMLV minimum base and PILA rounding not applied; Ley 2381 de 2024 FSP rules not applied"
+ ],
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "pension rate 16 % (employee 4 %), base capped at 25 SMMLV for pension and health, Fondo de Solidaridad Pensional 1 % from 4 SMMLV plus 0.2-1 % from 16 SMMLV (INCR); SMMLV 2025 = 1.423.500",
+  "provision": "Ley 797 de 2003 arts. 5 (Ley 100 art. 18), 7 (art. 20), 8 (art. 27) (Global law repo); Decreto 4982 de 2007 art. 1 (16 %); Decreto 1572 de 2024 art. 1 (SMMLV) (Colpensiones normogram)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)",
+  "agent": "W5 pattern A contributions agent 2 (Asia, Americas, Europe, Pacific)"
+ }
+}

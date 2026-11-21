@@ -1,0 +1,50 @@
+# Barbados (BB) progress
+
+**Status (2026-11-20T07:27Z): built (step 1 of the world testing order). Next: open-source software (coordinator, TESTING.md), then datasets.**
+
+- Year: 2025 (income year); access tier B; reused patterns: UK/IE PAYE.
+- Statute read: Income Tax Act Cap. 73 L.R.O. 2007 (BRA and Supreme Court copies) ss. 30, 38B, 42, 65D; amending Acts on bra.gov.bb (2009-6 ... 2025-30), in particular 2013-17, 2013-18, 2015-16, 2015-23, 2018-37, 2020-10 (ss. 38B, 42, 65D, 65G); NIS rates and ceilings from nis.gov.bb (official secondary)
+- Registry correction: Registry 'Income Tax Act (Cap. 73)' confirmed: basic allowance 25,000 (40,000 for pensioners 60+), 12.5 % to 50,000 of taxable income and 28.5 % above (Act 2020-10); employee NIS not deductible; NIS class R 11.00 % to 5,280 a month in 2025 plus the Catastrophe/Resilience Fund (official secondary).
+- Lean: 114 lines, 7 defs, 5 theorems, 5 #guard checks, 0 sorry; exe `lean/.lake/build/bin/bbtax` (worldMain).
+- Unsupported (listed in the outputs): s. 65D reverse tax credit (no amount enacted after 2016); s. 65G compensatory income credit (prescribed rate not found); NIS at pensionable age; investment income.
+- Steps: 1 model done; 2 validation: statute's own printed figures and hand-computed statutory cases only (#guard); referees wait for the testing phase; 3 proofs: kernel one-liners (Theorems.lean: monotone, convex, no jump, splitting <= separate); 4-5 loopholes: FINDINGS.md (catalogue + generic scanners, scan_world.py with the cited scale.json); 6 statute faults / government errors: FINDINGS.md; 7 USEFUL.md.
+- Tried / sources:
+  - Global law barbados corpus: no Income Tax Act
+  - barbadoslawcourts.gov.bb IncomeTaxCAP073.pdf (L.R.O. 2007), NationalInsuranceandSocialSecurityCAP047.pdf (L.R.O. 2007)
+  - bra.gov.bb Income Tax Act page (consolidation + 26 amending instruments)
+  - nis.gov.bb (403 from lean1; read from the laptop)
+  - not opened (referee values): BRA PAYE tables
+- Files on disk:
+  - `law/ITA_CAP073_lawcourts.pdf` (406,114 B, sha256 089db84880410e6f…)
+  - `law/acts/Amended_by_Act_2009-12__by_Schedule_.pdf` (118,853 B, sha256 b27bdddba33c7ff5…)
+  - `law/acts/Income_Tax_Act_2c_Cap._73.pdf` (353,243 B, sha256 5f7f07532539c4ae…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2009-6.pdf` (247,425 B, sha256 076c4df2d852607e…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2010-11_.pdf` (121,327 B, sha256 25e2f59d976def7a…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2010-13.pdf` (32,946 B, sha256 6f4ea99596f6d4a2…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2010-15_.pdf` (34,174 B, sha256 3adc3b723c470ae7…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2011-11_.pdf` (46,611 B, sha256 aec5642008f9eacf…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2011-26_.pdf` (250,163 B, sha256 2fe2fd4bb2cc183a…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2012-26_.pdf` (46,485 B, sha256 23b6a4ac18709cf6…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2013-17_.pdf` (1,012,883 B, sha256 5dd1839a8f811336…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2013-18.pdf` (35,970 B, sha256 580571e5686c45c0…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2014-15_.pdf` (40,368 B, sha256 e27891fd22efe19c…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2015-16_.pdf` (27,860 B, sha256 c9c62e398b797990…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2015-22_.pdf` (139,837 B, sha256 b69a9fdaa7837251…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2015-23.pdf` (218,779 B, sha256 0c45771122bc21f9…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2016-19.pdf` (68,428 B, sha256 8dd45379960fb732…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2018-13.pdf` (2,384 B, sha256 d43039e89dd017b2…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2018-4.pdf` (119,784 B, sha256 e718591f65472c7b…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2018-54.pdf` (326,981 B, sha256 1def7c12aed701fc…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2020-10.pdf` (552,084 B, sha256 a2a065de824a0e42…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2020-16.pdf` (154,350 B, sha256 d6f16de4e7bf77e9…)
+  - `law/acts/Income_Tax__Amendment__Act_2c_2025-30.pdf` (158,227 B, sha256 ce3613037049b25c…)
+  - `law/acts/Income_Tax__Amendment__Regulations_2c_2010.pdf` (45,824 B, sha256 2bff584c80a883ce…)
+  - `law/acts/Income_Tax__Amendment__Regulations_2c_2017.pdf` (47,684 B, sha256 b2648e0fc0924208…)
+  - `law/acts/Income_Tax__Amendment___Act_2c_2020-10.pdf` (552,084 B, sha256 a2a065de824a0e42…)
+  - `law/acts/Income_Tax__Amendment_and_Validation__Act_2c_2018-37.pdf` (255,431 B, sha256 6d5e5a0c016a3b6f…)
+  - `law/acts/Income_Tax__Amendment_and_Validation__Act_2c_2024-15.pdf` (224,941 B, sha256 2dac6f7b322bdba6…)
+  - `law/bra.html` (65,276 B, sha256 3d9ca1976c540c34…)
+  - `law/bra_ita.html` (37,629 B, sha256 73c263c32908cdda…)
+  - `law/bra_leg.html` (38,452 B, sha256 24ed070430218e57…)
+  - `law/nis_cap47_lawcourts.pdf` (1,367,457 B, sha256 5616e00bed0e378f…)
+  - `law/nis_gov_bb_contribution-rates_2026-11-20.html` (478,175 B, sha256 1abb2ed722dea942…)

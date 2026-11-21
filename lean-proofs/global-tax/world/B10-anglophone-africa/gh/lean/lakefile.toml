@@ -1,0 +1,14 @@
+name = "GhTax"
+version = "0.1.0"
+defaultTargets = ["GhTax", "ghtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "GhTax"
+
+[[lean_exe]]
+name = "ghtax"
+root = "GhTax.Main"

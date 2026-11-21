@@ -1,0 +1,79 @@
+{
+ "country": "NP",
+ "name": "Nepal",
+ "year": "2081/82 (16 July 2024 - 16 July 2025; same provisions in 2082/83)",
+ "status": "built",
+ "batch": "B11-south-asia",
+ "access": "A",
+ "reused_from": [
+  "IN",
+  "UK"
+ ],
+ "lean": {
+  "lines": 156,
+  "definitions": 17,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Unit (election between separate and couple)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 19,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "#guard: printed amounts 25,000 / 85,000 (individual) and 26,000 / 86,000 (couple) = 1 % band + band sums"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 7,
+  "recreated": 3,
+  "not_modelled": 2
+ },
+ "new_loopholes": 1,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "rental income of non-business persons (local house-rent tax)",
+  "gains on non-business assets",
+  "SSF contributions (11 %)",
+  "pension deduction cap 'as prescribed' not located"
+ ],
+ "scan": {
+  "fineGrid": {
+   "single": {
+    "maxMETR": 0.3901,
+    "netIncomeFalls": 0
+   },
+   "couple1earner2kids": {
+    "maxMETR": 0.3901,
+    "netIncomeFalls": 0
+   },
+   "couple60_40_2kids": {
+    "maxMETR": 0.3781,
+    "netIncomeFalls": 0
+   }
+  },
+  "scan_world": {
+   "summary": "results/search/SUMMARY.md",
+   "topRateSingle10AW": 39.0
+  }
+ },
+ "sources": "Income Tax Act 2058 consolidated with the amendments up to the Finance Act 2082 (Government of Nepal CDN, Internet Archive copy 2026-04-20; Schedule 1 para 1 (1), (2), (9क), (11); ss. 12, 50, 63, 88 (2)-(3), 92 (1)); Income Tax Rules 2059 r. 21 (consolidation to 2079, Internet Archive)",
+ "registry_correction": "Registry: Income Tax Act 2058 confirmed; Global law holds only the 2018 Law Commission compilation (outdated). Rates: 1 % (social security tax, employment income only) to 5 lakh, 10 / 20 / 30 % to 7 / 10 / 20 lakh, 36 % to 50 lakh, 39 % above; couple election (s. 50) with 6 / 8 / 11 lakh; women with only remuneration 10 % rebate; interest 6 % and dividends 5 % final.",
+ "headline": "A woman with only remuneration loses her 10 % rebate with one rupee of other income"
+}

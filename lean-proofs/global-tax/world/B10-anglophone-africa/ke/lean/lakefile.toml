@@ -1,0 +1,14 @@
+name = "KeTax"
+version = "0.1.0"
+defaultTargets = ["KeTax", "ketax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "KeTax"
+
+[[lean_exe]]
+name = "ketax"
+root = "KeTax.Main"

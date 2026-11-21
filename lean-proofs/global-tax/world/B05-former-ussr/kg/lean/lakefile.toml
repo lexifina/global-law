@@ -1,0 +1,14 @@
+name = "KgTax"
+version = "0.1.0"
+defaultTargets = ["KgTax", "kgtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "KgTax"
+
+[[lean_exe]]
+name = "kgtax"
+root = "KgTax.Main"

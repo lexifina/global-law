@@ -1,0 +1,44 @@
+# Republic of the Congo (CG) progress
+
+**Status (2026-11-20T04:05Z): built (step 1 of the world testing order). Next: open-source software (coordinator, TESTING.md), then datasets.**
+
+- Year: 2025; access tier B; reused patterns: FR (family quotient), GA.
+- Statute read: CGI tome I (finances.gouv.cg, posted 2021-03-28) arts. 4, 39-41, 89-95; Loi 47-2024 (LF 2025, JO spécial 2024-15, sgg.cg) art. 9 (social-security rates); LF 2022 (Loi 51-2021), LF 2023 (Loi 77-2022, archived JO), LF 2024 (Loi 39-2023): no change to the wage IRPP articles
+- Registry correction: Registry 'progressive, family quotient' confirmed with a twist: the chef de famille's joint return, but a married woman with wage income only is assessed separately as 'mariée sans enfants' (2 parts) (art. 4 1°); parts up to 6.5 (art. 91); tariff per part 1/15/30/45/50 % (art. 95), nothing collected below 265 000; 20 % deduction (art. 41); CNSS 4.55 % + CAMU 2.27 % employee (LF 2025 art. 9).
+- Lean: 120 lines, 13 defs, 5 theorems, 2 #guard checks, 0 sorry; exe `lean/.lake/build/bin/cgtax` (worldMain).
+- Unsupported (listed in the outputs): capital income (IRVM credit, art. 89); self-employment, rents, gains; CNSS ceiling; TOL.
+- Steps: 1 model done; 2 validation: statute's own printed figures and hand-computed statutory cases only (#guard); referees wait for the testing phase; 3 proofs: kernel one-liners (Theorems.lean: monotone, convex, no jump, splitting <= separate); 4-5 loopholes: FINDINGS.md (catalogue + generic scanners, scan_world.py with the cited scale.json); 6 statute faults / government errors: FINDINGS.md; 7 USEFUL.md.
+- Tried / sources:
+  - Global law: congo corpus = constitution + data-protection law
+  - finances.gouv.cg 'Code général des impôts' -> 'CGI Tome I.pdf'
+  - sgg.cg Journal officiel special issues (live and archived): LF 2022 (2022-02-sp), LF 2023 (2022-13-sp, archived), LF 2024 (2023-06-sp, 2024-01-sp), LF 2025 (2024-15-sp)
+  - dgid.cg: no answer
+- Files on disk:
+  - `law/cgi_tome1.pdf` (2,689,790 B, sha256 4e4cb79135782817…)
+  - `law/jo/congo-jo-2022-01-sp.pdf` (65,605 B, sha256 ee73513ba8ae9355…)
+  - `law/jo/congo-jo-2022-02-sp.pdf` (406,084 B, sha256 444dea2692cad5a6…)
+  - `law/jo/congo-jo-2022-03-sp.pdf` (213,730 B, sha256 fb88f39c2738a259…)
+  - `law/jo/congo-jo-2022-04-sp.pdf` (658,846 B, sha256 ceebfcf0302ec8b9…)
+  - `law/jo/congo-jo-2022-05-sp.pdf` (1,883,205 B, sha256 e3ecf1b4b5b21441…)
+  - `law/jo/congo-jo-2022-06-sp.pdf` (1,396,917 B, sha256 4b64e467a6c4c8cc…)
+  - `law/jo/congo-jo-2022-07-sp.pdf` (1,281,274 B, sha256 2146f009ca78bc21…)
+  - `law/jo/congo-jo-2022-08-sp.pdf` (844,606 B, sha256 bccf9caa45f79541…)
+  - `law/jo/congo-jo-2022-09-sp.pdf` (804,282 B, sha256 e738b3a39e089c0c…)
+  - `law/jo/congo-jo-2022-10-sp.pdf` (1,133,203 B, sha256 c9d7058940abfd6e…)
+  - `law/jo/congo-jo-2022-11-sp.pdf` (150,233 B, sha256 c51d2fd576cae197…)
+  - `law/jo/congo-jo-2022-12-sp.pdf` (133,211 B, sha256 c31792a685df8a1a…)
+  - `law/jo/congo-jo-2022-13-sp.pdf` (530,340 B, sha256 b2705799233f20fc…)
+  - `law/jo/congo-jo-2022-14-sp.pdf` (257,621 B, sha256 5a75445340f698a3…)
+  - `law/jo/congo-jo-2023-02-sp.pdf` (464,465 B, sha256 27927ff948b39b6b…)
+  - `law/jo/congo-jo-2023-03-sp.pdf` (835,059 B, sha256 f0f36f5409ff36e7…)
+  - `law/jo/congo-jo-2023-04-sp.pdf` (130,228 B, sha256 016b25386147ae43…)
+  - `law/jo/congo-jo-2023-05-sp.pdf` (210,547 B, sha256 0c422f306a6fb8d1…)
+  - `law/jo/congo-jo-2023-06-sp.pdf` (498,766 B, sha256 7fb393582473bf0f…)
+  - `law/jo/congo-jo-2024-01-sp.pdf` (120,557 B, sha256 39a24c153f6d0f89…)
+  - `law/jo/congo-jo-2024-03-sp.pdf` (961,647 B, sha256 0d679f5ecb19b69e…)
+  - `law/jo/jo-2024-14-sp.pdf` (1,177,570 B, sha256 6a884c4ccbc6dfd3…)
+  - `law/jo/jo-2024-15-sp.pdf` (422,660 B, sha256 63dacfc2e3f0f151…)
+  - `law/jo/jo-2025-01-sp.pdf` (956,483 B, sha256 c999ed08005e24bc…)
+  - `law/jo/jo-2025-02-sp.pdf` (1,103,146 B, sha256 e71f42a135caddd9…)
+  - `law/jo/jo-2025-03-sp.pdf` (297,364 B, sha256 9e0f9c99f91e688a…)
+  - `law/jo/jo-2025-04-sp-3.pdf` (732,454 B, sha256 e2b56c66fae5444e…)

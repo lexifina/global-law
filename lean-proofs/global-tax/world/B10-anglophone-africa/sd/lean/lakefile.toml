@@ -1,0 +1,14 @@
+name = "SdTax"
+version = "0.1.0"
+defaultTargets = ["SdTax", "sdtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SdTax"
+
+[[lean_exe]]
+name = "sdtax"
+root = "SdTax.Main"

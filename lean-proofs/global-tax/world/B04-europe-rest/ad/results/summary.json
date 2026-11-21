@@ -1,0 +1,55 @@
+{
+ "country": "AD",
+ "name": "Andorra (impost sobre la renda de les persones físiques; cotitzacions CASS)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "A",
+ "batch": "B04-europe-rest",
+ "lean": {
+  "lines": 148,
+  "definitions": 23,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (the effective 0/5/10 % tariff, proved equal to the literal rules)",
+  "Credit-like bonus (art. 46, local)",
+  "Unit (individual with spouse transfer)"
+ ],
+ "kernel_gaps": [
+  "A bonus computed on a different base from the quota (art. 46: base less 24 000, not less all reductions) written locally"
+ ],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed amounts and tables (Lean decide)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "build phase: no referee values"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "ES (IRPF structure: general and savings bases)",
+  "kernel Schedule"
+ ],
+ "sources": [
+  "Global law andorra/national/acts/lleis/2014-005 (Llei 5/2014 IRPF, as enacted) and every law modifying it found in the corpus: 2015-008, 2017-017, 2018-006, 2019-018 (DF 8a), 2022-042, 2023-005, 2023-011, 2025-004, 2025-005",
+  "Global law lleis/2008-017 (Llei 17/2008 de la seguretat social) arts. 100, 103 as replaced by lleis/2014-018 arts. 26, 29"
+ ],
+ "scale": "40 000 EUR = the end of the 5 % effective band",
+ "headline": "Andorra 2025 built from the IRPF law and every amending law in the record: effective tariff 0 % to 24 000 €, 5 % to 40 000 €, 10 % above (proved equal to arts. 35/41/46/47), CASS 5,5 %; the art. 46 bonus ignores family reductions.",
+ "w5_review4": "CASS general branch employee 3 % (Llei 2/2016 DF 6a), was 2 % (Llei 18/2014 art. 26); input adCassGeneral2014 restores the old rate; FINDINGS W5R4-1"
+}

@@ -1,0 +1,71 @@
+{
+ "country": "TL",
+ "name": "Timor-Leste",
+ "year": "2025",
+ "status": "built",
+ "batch": "B03-asia-east-se",
+ "access": "A",
+ "reused_from": [
+  "PT"
+ ],
+ "lean": {
+  "lines": 79,
+  "definitions": 9,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule.flatAbove",
+  "Table.perPeriod",
+  "Social",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 14,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "#guard: Anexo V nothing at US$500/month, US$100 at US$1,500/month"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "interest and dividends (withholding regime arts. 53-56)",
+  "capital gains",
+  "pensions"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 1.125,
+   "netIncomeFalls": 30
+  },
+  "couple1earner2kids": {
+   "maxMETR": 1.125,
+   "netIncomeFalls": 30
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.875,
+   "netIncomeFalls": 0
+  }
+ },
+ "sources": "Lei n.º 8/2008 Lei Tributária (Jornal da República Série I N.º 26, 2008), republished by Lei 5/2019; Anexo V (wage tax), Anexo VI (income tax), arts. 20-27; Lei 17/2023 art. 8 (PE definition only); DL 20/2017 art. 10 as republished by DL 30/2021 (4 % employee contribution)",
+ "headline": "Two separate zero bands: wages and other income each get one"
+}

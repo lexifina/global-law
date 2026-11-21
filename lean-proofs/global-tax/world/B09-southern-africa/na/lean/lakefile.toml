@@ -1,0 +1,14 @@
+name = "NaTax"
+version = "0.1.0"
+defaultTargets = ["NaTax", "natax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "NaTax"
+
+[[lean_exe]]
+name = "natax"
+root = "NaTax.Main"

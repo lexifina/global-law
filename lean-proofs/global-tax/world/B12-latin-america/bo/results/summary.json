@@ -1,0 +1,84 @@
+{
+ "country": "BO",
+ "name": "Bolivia",
+ "year": "2025",
+ "status": "built",
+ "access": "B",
+ "batch": "B12-latin-america",
+ "reused_from": [
+  "flat tax with credits (EE/LV patterns)"
+ ],
+ "lean": {
+  "lines": 111,
+  "definitions": 8,
+  "theorems": 2,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Rounding",
+  "Unit (individual)",
+  "local monthly-credit logic"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 5,
+ "provisions": [
+  "Ley 843 arts. 19, 22, 25, 26, 28, 30, 31",
+  "D.S. 21531 art. 8",
+  "D.S. 5383 art. 7, DF 1a",
+  "Ley 065 art. 66",
+  "D.S. 5503 art. 27"
+ ],
+ "sources": [
+  "SIN Ley 843 compilation (sac.impuestos.gob.bo 1.-LEY N 843-09-23.pdf, Internet Archive 2024-08-09)",
+  "SIN D.S. 5383 PDF"
+ ],
+ "sources_official_secondary": [],
+ "validation": [
+  {
+   "referee": "statute's own printed tables and thresholds (#guard / decide)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "no referee values seen (build phase)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 3,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 2,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "invoice credit (D.S. 21531 art. 8 c) 1, plus the 20 % extra for Bolivian-made goods of D.S. 5503 from December 2025) needs boInvoices; taken as 0",
+  "balance in favour at the year end carries to the next year (not refunded); UFV maintenance of value ignored",
+  "interest: art. 19 c) excludes term deposits over 30 days (national currency) and others; not taxed",
+  "selfEmployment: RC-IVA 13 % on gross fees (art. 19 g); IVA and IT on the fees and the invoice credit not modelled",
+  "rent: RC-IVA 13 % on gross rent (art. 19 a), quarterly filing; IVA/IT not modelled",
+  "capitalGains: not modelled",
+  "SIP: ANS thresholds as printed in 2019 (updates not checked)"
+ ],
+ "scale": {
+  "wage": 132000,
+  "currency": "BOB",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Ley 843 art. 26 and D.S. 21531 art. 8: four Salarios Minimos Nacionales a month (4 x Bs 2.750, D.S. 5383 art. 7) x 12, the effective RC-IVA exemption level",
+  "by": "B12-latin-america",
+  "basis": "Ley 843 art. 26 and D.S. 21531 art. 8: four Salarios Minimos Nacionales a month (4 x Bs 2.750, D.S. 5383 art. 7) x 12, the effective RC-IVA exemption level"
+ },
+ "headline": "Bolivia 2025 RC-IVA from the SIN Ley 843 compilation (archived) and D.S. 5383 (SMN Bs 2.750): 13 % above an effective 4 SMN a month, invoice credit; SIN links the wrong 'Ley 843'.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "SIP employee contributions 12.71 % (11 % from 65) of the monthly wage up to 60 SMN (Bs 165.000) plus the Aporte Nacional Solidario 1 / 5 / 10 % over Bs 13.000 / 25.000 / 35.000, when boEmployeeContrib is not given; deducted under Ley 843 art. 25",
+  "provision": "Ley 065 de Pensiones arts. 83 b), 87 b) and f), 88, 151 a), glossary \"Total Ganado\" (60 SMN); D.S. 778 annex table (Riesgo Común 1,71 %, Comisión 0,50 %) (aps.gob.bo)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)",
+  "agent": "W5 pattern A contributions agent 2 (Asia, Americas, Europe, Pacific)"
+ }
+}

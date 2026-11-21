@@ -1,0 +1,14 @@
+name = "PsTax"
+version = "0.1.0"
+defaultTargets = ["PsTax", "pstax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "PsTax"
+
+[[lean_exe]]
+name = "pstax"
+root = "PsTax.Main"

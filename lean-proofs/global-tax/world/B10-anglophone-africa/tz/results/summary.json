@@ -1,0 +1,99 @@
+{
+ "country": "TZ",
+ "name": "Tanzania",
+ "year": "2025 (calendar year of income)",
+ "status": "built",
+ "batch": "B10-anglophone-africa",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE",
+  "KE (this batch)"
+ ],
+ "lean": {
+  "lines": 90,
+  "definitions": 6,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 4,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (Table.perPeriod)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 4,
+   "exact": 4,
+   "within_1pct": 4,
+   "notes": "First Schedule para. 1(1) printed fixed amounts 240,000 / 816,000 / 1,536,000; NSSF 10 %"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 2,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "Zanzibar",
+  "PSSSF (public servants)",
+  "investment, rental, business income and gains"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.37,
+   "atAW": 1.115,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.37,
+   "atAW": 1.115,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.37,
+   "atAW": 1.115,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.37,
+   "atAW": 2.78,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.37,
+   "atAW": 1.115,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The NSSF Act's contribution table heads the employee's 10 % 'Employer's share deductible from wages by Employer'",
+ "scale": {
+  "wage": 12000000,
+  "currency": "TZS",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act Cap. 332 R.E. 2023 First Schedule para. 1(1): start of the 30 % band ('Where the total income exceeds 12,000,000/= | Tshs.1,536,000/= plus 30%')",
+  "by": "B10-anglophone-africa",
+  "basis": "Income Tax Act Cap. 332 R.E. 2023 First Schedule para. 1(1): start of the 30 % band ('Where the total income exceeds 12,000,000/= | Tshs.1,536,000/= plus 30%'). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act (Cap. 332)' confirmed: calendar year; resident 0/8/20/25/30 % (3.24 M / 6.24 M / 9.12 M / 12 M) on total income after retirement contributions (s. 61); NSSF employee 10 % of wages without ceiling; Mainland only (Zanzibar rate set separately, para. 1(7))."
+}

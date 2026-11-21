@@ -1,0 +1,14 @@
+name = "SoTax"
+version = "0.1.0"
+defaultTargets = ["SoTax", "sotax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SoTax"
+
+[[lean_exe]]
+name = "sotax"
+root = "SoTax.Main"

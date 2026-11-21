@@ -1,0 +1,59 @@
+{
+ "country": "BF",
+ "name": "Burkina Faso (IUTS, IRF, IRCM, CNSS)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B07-west-africa-fr-pt",
+ "lean": {
+  "lines": 158,
+  "definitions": 21,
+  "theorems": 7,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (art. 112 monthly barème)",
+  "monthly sum (local months/monthOf)",
+  "percentage family reduction (local)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 17,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean decide)",
+   "cases": 7,
+   "exact": 7,
+   "within_1pct": 7,
+   "notes": "build phase: no referee values used; cases = Lean theorems (kernel instances and checks of the statute's printed tables and stated amounts, all proved)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 4,
+  "not_modelled": 2
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Schedule",
+  "UEMOA monthly withholding pattern (CI, NE)"
+ ],
+ "sources": [
+  "Code général des impôts, édition officielle 2023 (à jour de la LF 2023), DGI; archived official copy https://web.archive.org/web/20240714173657id_/https://dgi.bf/wp-content/uploads/2023/08/Code-general-des-impots-a-jour-avec-la-LF-2023.pdf (dgi.bf unreachable from our hosts)",
+  "Loi de finances 2024 and loi de finances rectificative 2024 (archived dgi.bf copies, scanned; OCR): no amendment of arts. 105-149; DGI booklet on the LF 2024 measures",
+  "Décret n° 2003-252/PRES/PM/MTEJ (LegiBurkina, scanned; OCR checked by eye): employee 5,5 % assurance vieillesse"
+ ],
+ "scale": "3000000 XOF (12 x 250 000 F, the threshold of the top (25 %) monthly IUTS band)",
+ "unsupported": [
+  "LF 2025 not reached",
+  "CNSS ceiling not read",
+  "BIC/BNC, capital gains"
+ ],
+ "registry_correction": "BF: IUTS confirmed (CGI loi 058-2017, édition 2023); access B (LF 2025 not reached).",
+ "headline": "Burkina Faso built from the 2023 official CGI (LF 2024 and LFR 2024 checked, LF 2025 not reached): monthly IUTS 0-25 % after a 25 % (20 % for higher grades) abattement, a family reduction of 8-14 % of the tax, 50 %-abated rents at 18/25 %, IRCM 12,5 %, CNSS 5,5 %."
+}

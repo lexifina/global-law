@@ -1,0 +1,14 @@
+name = "GaTax"
+version = "0.1.0"
+defaultTargets = ["GaTax", "gatax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "GaTax"
+
+[[lean_exe]]
+name = "gatax"
+root = "GaTax.Main"

@@ -1,0 +1,60 @@
+{
+ "country": "CZ",
+ "name": "Czechia",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 1183,
+  "definitions": 127,
+  "theorems": 57,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (TaxKernel v1.0, czSched proved equal to the local § 16 schedule; kernel theorems ticks_mono, ticks_convex, ticks_lipschitz instantiated)",
+  "Rounding (local)",
+  "Credit (local)",
+  "Social (local)"
+ ],
+ "kernel_gaps": [
+  "Rounding/Credit/Social written locally (CzTax/Kernel.lean) before the kernel API existed; not yet switched",
+  "Monthly contributions with per-month rounding up and a yearly cumulative ceiling (kernel Contribution is yearly)",
+  "Minimum assessment base paid by the employee (13,5 % of the shortfall, ZPVZP § 3 odst. 10)",
+  "Owner-manager regime switch (employee / self-employed flat regime with fixed monthly payment / company + dividend)",
+  "Means-tested benefit with an all-or-nothing income test on income after tax (ZSSP § 17) and its interaction with refundable credits",
+  "Withholding vs annual tax with opposite rounding directions"
+ ],
+ "provisions_cited": 99,
+ "validation": [
+  {
+   "referee": "OECD TW 2025",
+   "cases": 56,
+   "exact": 26,
+   "within_1pct": 56,
+   "notes": "8/8 THP within 1 % (max 11 CZK); all line differences explained: § 16(2) base rounding (F1), monthly contribution rounding (F2); identical result with ~/cmp20/harness/oecd_check20.py"
+  },
+  {
+   "referee": "Finanční správa: paušální daň 2025 table and band examples",
+   "cases": 15,
+   "exact": 15,
+   "within_1pct": 15,
+   "notes": "12 monthly amounts (3 bands x total/tax/pension/health) and 3 band decisions, kernel-checked in Tests.lean"
+  },
+  {
+   "referee": "Withholding (§ 38h) vs annual tax, own scan",
+   "cases": 1200000,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "not a referee: settlement >= 0 in all 1.2 M cases, mean 122.5 CZK, max 284 (684 with children); proved bound <= 312 CZK before credits"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 24,
+  "recreated": 16,
+  "not_modelled": 8,
+  "found_blind": 5
+ },
+ "new_loopholes": 3,
+ "gov_errors": 1,
+ "statute_faults": 2,
+ "headline": "Czech 2025 tax-benefit model in Lean (OECD 56/56 lines within 1 %); new: families gain 20-51 thousand CZK of child benefit by assigning or forgoing child tax credits, because the means test counts income after tax and ignores the refundable bonus (proved on named households); dead bonus-cap clause in § 35c(7)."
+}

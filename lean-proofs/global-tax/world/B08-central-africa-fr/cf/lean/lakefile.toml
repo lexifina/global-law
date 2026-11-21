@@ -1,0 +1,14 @@
+name = "CfTax"
+version = "0.1.0"
+defaultTargets = ["CfTax", "cftax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CfTax"
+
+[[lean_exe]]
+name = "cftax"
+root = "CfTax.Main"

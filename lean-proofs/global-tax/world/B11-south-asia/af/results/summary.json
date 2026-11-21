@@ -1,0 +1,76 @@
+{
+ "country": "AF",
+ "name": "Afghanistan",
+ "year": "2025 (last accessible statute; de facto status unverified)",
+ "status": "built",
+ "batch": "B11-south-asia",
+ "access": "B",
+ "reused_from": [
+  "PK"
+ ],
+ "lean": {
+  "lines": 70,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 11,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 1,
+   "exact": 1,
+   "within_1pct": 1,
+   "notes": "#guard: fixed amounts 150 / 8,900 = band sums"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 1,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "2025 status under the de facto authorities",
+  "rent, interest, dividends, pensions",
+  "social contributions"
+ ],
+ "scan": {
+  "fineGrid": {
+   "single": {
+    "maxMETR": 0.2,
+    "netIncomeFalls": 0
+   },
+   "couple1earner2kids": {
+    "maxMETR": 0.2,
+    "netIncomeFalls": 0
+   },
+   "couple60_40_2kids": {
+    "maxMETR": 0.16,
+    "netIncomeFalls": 0
+   }
+  },
+  "scan_world": {
+   "summary": "results/search/SUMMARY.md",
+   "topRateSingle10AW": 20.0
+  }
+ },
+ "sources": "Income Tax Law 2009 (Official Gazette 976) consolidated to OG 1209 (13 April 2016), Afghanistan Revenue Department English translation ('unofficial'), Internet Archive copy (2018-12-22) of ard.gov.af: Art. 4 (3), Art. 17 (2). Authority: the Islamic Republic's statute; the de facto authorities' texts were not reachable (ard.gov.af PHP fatal error, moj.gov.af no connection, mof.gov.af without legislation pages; Global law: only the 2004 Constitution).",
+ "registry_correction": "Registry: 'Income Tax Law 2009; de facto authorities' -> the model states the last accessible statute (2016 consolidation); whether the de facto authorities apply it unchanged in 2025 is not verified. Monthly schedule 0 / 2 / 10 / 20 % at 5,000 / 12,500 / 100,000 Afs.",
+ "headline": "Overlapping band limits: Afs 100,000 falls in two rows"
+}

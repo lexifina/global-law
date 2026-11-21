@@ -1,0 +1,14 @@
+name = "YeTax"
+version = "0.1.0"
+defaultTargets = ["YeTax", "yetax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "YeTax"
+
+[[lean_exe]]
+name = "yetax"
+root = "YeTax.Main"

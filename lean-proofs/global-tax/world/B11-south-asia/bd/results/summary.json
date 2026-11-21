@@ -1,0 +1,82 @@
+{
+ "country": "BD",
+ "name": "Bangladesh",
+ "year": "2025-26 (income year 1 July 2025 - 30 June 2026; assessment year 2026-27)",
+ "status": "built",
+ "batch": "B11-south-asia",
+ "access": "A",
+ "reused_from": [
+  "IN",
+  "PK"
+ ],
+ "lean": {
+  "lines": 140,
+  "definitions": 13,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (s. 331 half-up)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "exempt limit that widens the first band by taxpayer category: local `schedFor z` (a kernel 'schedule with a variable zero band' would serve BD, PK-style tables)"
+ ],
+ "provisions_cited": 19,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "#guard: band sums at 675,000 / 1,075,000 / 1,575,000 / 3,575,000 = 30,000 / 90,000 / 190,000 / 690,000; minimum-tax notch 5,000; minimum tax binds to 425,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 7,
+  "recreated": 4,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 2,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "withholding as minimum tax on interest/dividends (s. 163 (2))",
+  "house-property allowances and capital-gains rates",
+  "s. 78 eligible-investment limits (Sixth Schedule Part 3)",
+  "environmental surcharge",
+  "no employee social contribution located"
+ ],
+ "scan": {
+  "fineGrid": {
+   "single": {
+    "maxMETR": 1.1188,
+    "netIncomeFalls": 1
+   },
+   "couple1earner2kids": {
+    "maxMETR": 1.1188,
+    "netIncomeFalls": 1
+   },
+   "couple60_40_2kids": {
+    "maxMETR": 1.1586,
+    "netIncomeFalls": 2
+   }
+  },
+  "scan_world": {
+   "summary": "results/search/SUMMARY.md",
+   "topRateSingle10AW": 30.0
+  }
+ },
+ "sources": "Finance Ordinance 2025 (Ordinance No. 28 of 2025, Bangladesh Gazette Extraordinary 2 June 2025; bdlaws upload via Internet Archive; Bengali OCR with tessdata_best ben, numbers checked on page images pp. 102, 105) s. 136, Schedule 2 Parts 1-2, s. 130 (7); Income Tax Act 2023 (Act 12 of 2023) ss. 32, 78, 331 (archived bdlaws HTML); NBR Income tax circular (Paripatra) 2025-26 (official secondary, consistent)",
+ "registry_correction": "Registry: Income Tax Act 2023 confirmed (Bengali only; Global law's English corpus does not hold it); the year's rates are in the Finance Ordinance 2025 (no parliament: ordinance), Schedule 2 for AY 2026-27: nil 375,000 / 10 % 300,000 / 15 % 400,000 / 20 % 500,000 / 25 % 2,000,000 / 30 %; higher exempt limits (425,000 women and 65+; 500,000; 525,000); minimum tax 5,000; salary exemption min(1/3, 500,000).",
+ "headline": "Minimum tax of 5,000 taka from the first taka above the exempt limit"
+}

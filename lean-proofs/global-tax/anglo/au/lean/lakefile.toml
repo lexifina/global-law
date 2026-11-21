@@ -1,0 +1,18 @@
+name = "AuTax"
+version = "0.1.0"
+defaultTargets = ["AuTax", "autax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "AuTax"
+
+[[lean_exe]]
+name = "autax"
+root = "AuTax.Main"
+
+[[lean_exe]]
+name = "ausched"
+root = "AuTax.SchedScan"

@@ -1,0 +1,77 @@
+{
+ "country": "MV",
+ "name": "Maldives",
+ "year": "2025 (calendar tax year)",
+ "status": "built",
+ "batch": "B11-south-asia",
+ "access": "A",
+ "reused_from": [
+  "UK"
+ ],
+ "lean": {
+  "lines": 84,
+  "definitions": 10,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Schedule",
+  "Table.perPeriod-style check (monthly = annual/12)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 1,
+   "exact": 1,
+   "within_1pct": 1,
+   "notes": "#guard: monthly withholding table x 12 = annual table at 7 points"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 1,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "capital gains",
+  "donation cap",
+  "expatriate pension coverage"
+ ],
+ "scan": {
+  "fineGrid": {
+   "single": {
+    "maxMETR": 0.2097,
+    "netIncomeFalls": 0
+   },
+   "couple1earner2kids": {
+    "maxMETR": 0.2097,
+    "netIncomeFalls": 0
+   },
+   "couple60_40_2kids": {
+    "maxMETR": 0.1987,
+    "netIncomeFalls": 0
+   }
+  },
+  "scan_world": {
+   "summary": "results/search/SUMMARY.md",
+   "topRateSingle10AW": 20.95
+  }
+ },
+ "sources": "Income Tax Act (Law 25/2019) consolidated with the first amendment (Law 15/2021), in force 20 July 2021 - 31 August 2026 (mvlaw.gov.mv consolidation 1313, page data saved; Dhivehi) ss. 7, 12, 19, 54; Pension Act (Law 8/2009), 7 % paragraph (mvlaw legislation 113; Global law law-113)",
+ "registry_correction": "Registry: Income Tax Act 25/2019 confirmed (Global law holds it as law-294, Dhivehi, only the 2026 consolidation). Rates: 0 % to 720,000; 5.5 % to 1.2 m; 8 % to 1.8 m; 12 % to 2.4 m; 15 % above (unchanged by Law 11/2026); pension 7 % employee.",
+ "headline": "Dividends from resident companies are exempt; salary is taxed at up to 15 % plus 7 % pension"
+}

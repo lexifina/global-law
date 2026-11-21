@@ -1,0 +1,14 @@
+name = "ZaTax"
+version = "0.1.0"
+defaultTargets = ["ZaTax", "zatax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "ZaTax"
+
+[[lean_exe]]
+name = "zatax"
+root = "ZaTax.Main"

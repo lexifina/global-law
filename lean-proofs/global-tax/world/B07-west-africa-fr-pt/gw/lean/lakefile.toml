@@ -1,0 +1,14 @@
+name = "GwTax"
+version = "0.1.0"
+defaultTargets = ["GwTax", "gwtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "GwTax"
+
+[[lean_exe]]
+name = "gwtax"
+root = "GwTax.Main"

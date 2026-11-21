@@ -1,0 +1,60 @@
+{
+ "country": "HU",
+ "name": "Hungary",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 753,
+  "definitions": 73,
+  "theorems": 41,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (Schedule.flat 15 %: ticks_mono, ticks_convex, ticks_lipschitz, ticks_le_maxRate_mul, ticks_succ, splitting_le_separate instantiated)",
+  "Rounding (divR .halfUp for whole forints; divR_mono)",
+  "Family (perChildByCount proved equal to the § 29/A (2) monthly table: famMonth_kernel; spillAllowance proved equal to the family-allowance spill before the TB cap: fam_spill_kernel)",
+  "Allowance (taxableAfter, unusedAllowance via spillAllowance)",
+  "Canon / Out / Country (countryMain)"
+ ],
+ "kernel_gaps": [
+  "spillAllowance has no cap at the receiving levy: Tbj. § 34 (3) caps the contribution allowance at the TB actually due (and § 34 (6) excludes TB paid only because of a minimum base); written locally (fillOrder over the partners' TB)",
+  "a per-child rate table that changes mid-year (Szja § 29/A (2): January-June / July-December 2025): written locally as famMonth2025 / famFrameMonths (Table.perPeriod would need a month-indexed table)",
+  "base-reducing allowances applied in a statutory order to different income subsets (§ 29/H; mothers' / under-25 allowances only on wage-type income) and pooled between partners: local",
+  "a contribution ceiling counted across income types (Szocho tv. § 2 (2): wages first, then dividends/gains, interest outside): local",
+  "self-employed minimum contribution bases (TB on the minimum wage, szocho on 112.5 %) and flat-rate regimes (átalány, KATA): local"
+ ],
+ "provisions_cited": 44,
+ "validation": [
+  {
+   "referee": "OECD TW 2025 (Taxing Wages 2026, year 2025) country table",
+   "cases": 56,
+   "exact": 56,
+   "within_1pct": 56,
+   "notes": "8 household types x 7 lines (CGTC, CGITLETC, CGITFP, SLT, EECSSC, CTGG, THP); all within 1 HUF (the OECD's unrounded wages); same result with ~/cmp20/harness/oecd_check20.py HU (8/8 take-home pay); the OECD sums 6 old + 6 new months of family allowance (F1)"
+  },
+  {
+   "referee": "NAV information booklets 2025 (73 Szja adóalap-kedvezmények, 100 átalányadó, 99 KATA): worked figures",
+   "cases": 45,
+   "exact": 45,
+   "within_1pct": 45,
+   "notes": "kernel-checked in lean/HuTax/Tests.lean (decide): under-25 and personal caps, first-marriage value, the 24-cell family allowance table (both halves of 2025), disabled-child supplement, the Kedves family frame and 667 % reduction, the tutor's advance, the átalány examples, the szocho minimum bases, the KATA 40 % example; one NAV example is inconsistent with the statute (F3)"
+  },
+  {
+   "referee": "NAV family-allowance calculator (csaladiKedvezmenyCalcV3, source read, not queried)",
+   "cases": 9,
+   "exact": 9,
+   "within_1pct": 9,
+   "notes": "monthly amounts per dependants for 2025 H1, 2025 H2 and 2026 agree with the statute and the model; the calculator uses 6.67 and 1/0.15 for the same gross-up (F2, F12)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 14,
+  "recreated": 12,
+  "not_modelled": 2,
+  "found_blind": 5
+ },
+ "new_loopholes": 4,
+ "gov_errors": 1,
+ "statute_faults": 2,
+ "headline": "Hungary 2025 in Lean (OECD 56/56 lines exact, 45 NAV worked figures exact): the family allowance is proved to act as a 15 %-of-frame credit against tax and TB together (burden = max(0, 33.5 % wage - 15 % frame)); new timing levers around dated starts (mothers of three from October 2025: 478 710 HUF; the 25th-birthday month: 300 000; the 2026 allowance rise: 214 553); the statute's '667 %' is not 1/15 % and NAV's own worked example over-allocates the family allowance."
+}

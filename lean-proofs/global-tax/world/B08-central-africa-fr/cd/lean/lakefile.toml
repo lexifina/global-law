@@ -1,0 +1,14 @@
+name = "CdTax"
+version = "0.1.0"
+defaultTargets = ["CdTax", "cdtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CdTax"
+
+[[lean_exe]]
+name = "cdtax"
+root = "CdTax.Main"

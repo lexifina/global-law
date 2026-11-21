@@ -1,0 +1,14 @@
+name = "TwTax"
+version = "0.1.0"
+defaultTargets = ["TwTax", "twtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "TwTax"
+
+[[lean_exe]]
+name = "twtax"
+root = "TwTax.Main"

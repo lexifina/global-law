@@ -1,0 +1,72 @@
+{
+ "country": "NI",
+ "name": "Nicaragua",
+ "year": "2025",
+ "status": "built",
+ "access": "B",
+ "batch": "B12-latin-america",
+ "reused_from": [
+  "MX/CO bracket tables"
+ ],
+ "lean": {
+  "lines": 82,
+  "definitions": 9,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Tariff (CumRow)",
+  "Schedule",
+  "Unit (individual)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 2,
+ "provisions": [
+  "Ley 822 arts. 21, 23",
+  "Ley 891 art. 5 a)"
+ ],
+ "sources": [
+  "DGI copies of La Gaceta 241/2012 (Ley 822) and 240/2014 (Ley 891), Internet Archive"
+ ],
+ "sources_official_secondary": [],
+ "validation": [
+  {
+   "referee": "statute's own printed tables and thresholds (#guard / decide)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "no referee values seen (build phase)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 2,
+  "recreated": 2,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "INSS employee contribution (Ley de Seguridad Social and its regulation, not reached): pass niInss (annual household total; deductible, art. 21 num. 2) or the base is overstated; employeeSocial = niInss",
+  "Ley 822 as of Ley 891 (2014); later reforms (Ley 987/2019 and after) not reached",
+  "art. 21 num. 1 expenses need niExpenses; taken as 0",
+  "selfEmployment: IR de actividades economicas not modelled; ignored",
+  "capital income (rentas de capital y ganancias de capital, arts. 80-89) not modelled; ignored",
+  "pensions: not modelled"
+ ],
+ "scale": {
+  "wage": 350000,
+  "currency": "NIO",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Ley 822 art. 23: the C$ 350.000 limit of the 20 % band",
+  "by": "B12-latin-america",
+  "basis": "Ley 822 art. 23: the C$ 350.000 limit of the 20 % band"
+ },
+ "headline": "Nicaragua 2025 from Ley 822 (2012) and Ley 891 (2014), DGI copies archived: 0-30 % tariff exact; later reforms not reached."
+}

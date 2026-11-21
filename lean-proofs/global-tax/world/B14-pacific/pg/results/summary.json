@@ -1,0 +1,75 @@
+{
+ "country": "PG",
+ "name": "Papua New Guinea",
+ "year": "2025",
+ "status": "built",
+ "batch": "B14-pacific",
+ "access": "A",
+ "reused_from": [
+  "FJ",
+  "SB"
+ ],
+ "lean": {
+  "lines": 72,
+  "definitions": 5,
+  "theorems": 4,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 6,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "#guard: tax at each printed band top (20,000: 0; 33,000: 3,900; 70,000: 16,850; 250,000: 88,850)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "superannuation employee contribution: not read",
+  "non-salary income (resident general rates, Schedule 1 of the Income Tax, Dividend (Withholding) Tax and Interest (Withholding) Tax Rates Act): not read",
+  "pensions: ITA s. 29 exemptions not modelled"
+ ],
+ "scan": {
+  "summary": "results/search/SUMMARY.md"
+ },
+ "sources": "Certified prints on the National Parliament's legislation service (parliament.gov.pg 'Acts and Legislation' -> public REST /wp-json/parliament-pg/v1/get-bills -> pdis.parliament.gov.pg/uploads/<uuid>; pg/law/rescue2/, sha256 in SHA256SUMS; scans OCR'd and checked on page images): Income Tax (Salary or Wages Tax)(Rates)(2024 Budget)(Amendment) Act 2023 (No. 25 of 2023; Sch. 1 Part 7 Table 1, residents, '1 January 2024 and onwards': 0 to K20,000; 30 % to K33,000; 35 % to K70,000; 40 % to K250,000; 42 % above); Income Tax (Salary or Wages Tax)(Rates)(2025 Budget)(Amendment) Act 2024 (No. 18 of 2024; non-residents' Table 2A only, s. 1(2A), 1(5)); Income Tax (2025 Budget)(Amendment) Act 2024 (No. 16) and Income Tax (Amendment) Act 2024 (No. 23) (no rate change); Income Tax Act 2025 (in operation 1 January 2026). Structure: Income Tax (Salary or Wages Tax)(Rates) Act 1979 s. 1 (PacLII consolidation, Wayback 20241027) and ITA 1959 s. 65J (pass-1 file).",
+ "headline": "PNG's 2025 salary or wages tax from the Parliament's certified prints: a K20,000 tax-free band, then 30-42 %; the printed band edges leave one-kina gaps",
+ "tried": "",
+ "unlock": "",
+ "rescue": {
+  "agent": "rescue2",
+  "date": "2026-11-20T13:10Z",
+  "routes": [
+   "parliament.gov.pg (laptop) 'Acts and Legislation' is a React app; its bundle calls the public WordPress route /wp-json/parliament-pg/v1/get-bills (no key; the page's anonymous nonce not used), which proxies pdis.parliament.gov.pg: 550 certified acts with PDF links, all 55 pages listed (pg/law/rescue2/pdis_bills.json)",
+   "PacLII still a Cloudflare challenge (not bypassed); its Rates Act 1979 consolidation read from a Wayback capture (20241027212335 rtf, 20241223021710 html) for s. 1 only",
+   "irc.gov.pg: not used (its calculator is a referee)"
+  ],
+  "pass1_routes": [
+   "irc.gov.pg (answers the laptop) is a Vue app; its route list has a salary-tax calculator (a referee) and CMS pages loaded by lazy chunks that did not load by script (302): not pursued further",
+   "PacLII still behind a challenge (not bypassed)"
+  ]
+ }
+}

@@ -1,0 +1,85 @@
+{
+ "country": "PH",
+ "name": "Philippines",
+ "year": "2025",
+ "status": "built",
+ "batch": "B03-asia-east-se",
+ "access": "A",
+ "reused_from": [
+  "UK",
+  "AU"
+ ],
+ "lean": {
+  "lines": 81,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 1,
+   "exact": 1,
+   "within_1pct": 1,
+   "notes": "#guard: printed cumulative amounts 22,500 / 102,500 / 402,500 / 2,202,500"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "rent",
+  "capital gains",
+  "pensions",
+  "8 % option for the self-employed"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.25,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.25,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.18,
+   "netIncomeFalls": 0
+  }
+ },
+ "sources": "RA 10963 (TRAIN) Sec. 5 (NIRC Sec. 24 (A) (2) schedule from 2023), Sec. 24 (B), Sec. 32 (B) (7) (e): Official Gazette signed scan archived by the Internet Archive (2018-01-08), page images OCR'd and checked by eye; officialgazette.gov.ph, judiciary e-library, Congress and Senate answer 403 to scripts; Global law lacks RA 10963",
+ "headline": "Final taxes on passive income sit beside the graduated rates",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "SSS 5 % (MSC 5,000-35,000), PhilHealth 2.5 % (10,000-100,000), Pag-IBIG 2 % (max 10,000 / month); excluded from gross income (NIRC s. 32 (B) (7) (f))",
+  "provision": "RA 11199 s. 4 (a) (9); RA 11223 s. 10 with PhilHealth Circ. 2020-0005 and Adv. 2025-0002; RA 9679 s. 7 with HDMF Circ. 460 (per DBM CL 2024-2)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)",
+  "followups": [
+   {
+    "date": "2026-11-20",
+    "change": "SSS monthly salary credit = compensation rounded to the nearest P500 (halves up) within 5,000-35,000 (was: compensation clamped), member 5 %",
+    "provision": "SSS Circular No. 2024-006 (19 Dec 2024), Schedule of SSS contributions effective January 2025 (SSS table image, `law/w5/sss_circular_2024-006_schedule_2025.jpg`); RA 11199 Sec. 4 (a) (9)",
+    "agent": "contributions agent 2 (reviewer 3 pass 3)"
+   }
+  ]
+ }
+}

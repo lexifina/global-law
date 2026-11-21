@@ -1,0 +1,14 @@
+name = "ESTax"
+version = "0.1.0"
+defaultTargets = ["ESTax", "estax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "ESTax"
+
+[[lean_exe]]
+name = "estax"
+root = "ESTax.Main"

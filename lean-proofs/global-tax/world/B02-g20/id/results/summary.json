@@ -1,0 +1,75 @@
+{
+ "country": "ID",
+ "name": "Indonesia",
+ "year": "2025",
+ "status": "built",
+ "batch": "B02-g20",
+ "access": "A",
+ "reused_from": [
+  "AU",
+  "NZ"
+ ],
+ "lean": {
+  "lines": 100,
+  "definitions": 13,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (toMultiple 1000)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "UU 7/2021 Penjelasan Pasal 7 (1) worked example",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "#guard PTKP 72,000,000 and 126,000,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 1,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "final taxes on interest, dividends, rent, shares",
+  "BPJS Kesehatan floor at the regional minimum wage not applied"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.3,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.3,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.28,
+   "netIncomeFalls": 0
+  }
+ },
+ "headline": "F1 PTKP frozen since 2016",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "BPJS Kesehatan employee 1 % of wages up to Rp12 million / month (reported; not deductible)",
+  "provision": "Perpres 82/2018 as amended by Perpres 64/2020, Pasal 30 (1) b, Pasal 32 (1)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

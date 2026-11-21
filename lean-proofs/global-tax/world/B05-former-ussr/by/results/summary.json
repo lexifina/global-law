@@ -1,0 +1,98 @@
+{
+ "country": "BY",
+ "name": "Belarus",
+ "year": "2025",
+ "status": "built",
+ "batch": "B05-former-ussr",
+ "access": "A",
+ "reused_from": [
+  "RU",
+  "LT"
+ ],
+ "lean": {
+  "lines": 98,
+  "definitions": 14,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed sums and hand-computed statutory cases (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "1 100 and 1 200 a month cases"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 1,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "employee 1 % pension contribution (Law 138-XIII not reached)",
+  "rent fixed sums",
+  "dividend 6 %/0 % rates",
+  "capital-gain exemptions"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 2.271,
+   "atAW": 0.5,
+   "bandsOver100": 1,
+   "largestNotch": "299 at 13,973 (0.50018 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 2.271,
+   "atAW": 0.5,
+   "bandsOver100": 1,
+   "largestNotch": "299 at 13,973 (0.50018 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 2.271,
+   "atAW": 0.5,
+   "bandsOver100": 1,
+   "largestNotch": "299 at 13,973 (0.50018 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 2.279,
+   "atAW": 0.83,
+   "bandsOver100": 2,
+   "largestNotch": "299 at 23,289 (0.83366 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 2.271,
+   "atAW": 0.5,
+   "bandsOver100": 1,
+   "largestNotch": "299 at 13,973 (0.50018 AW)"
+  }
+ },
+ "headline": "F1 The standard deduction stops at 1 164 rubles a month: 1 ruble more costs 25 rubles of tax",
+ "scale": {
+  "wage": 27936,
+  "currency": "BYN",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "2 x 12 x the 1 164 rubles monthly income limit of the standard deduction, Tax Code (Special Part) art. 209(1)(1.1) as in force 2025 (archived pravo.by copy 2025-06-14)",
+  "by": "B05-former-ussr",
+  "basis": "2 x 12 x the 1 164 rubles monthly income limit of the standard deduction, Tax Code (Special Part) art. 209(1)(1.1) as in force 2025 (archived pravo.by copy 2025-06-14)"
+ }
+}

@@ -1,0 +1,59 @@
+{
+ "country": "AG",
+ "name": "Antigua and Barbuda (private-sector employee)",
+ "year": "2025",
+ "status": "built",
+ "access": "B",
+ "batch": "B15-no-pit",
+ "lean": {
+  "lines": 90,
+  "definitions": 10,
+  "theorems": 3,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Social (Contribution.flatCapped, flat)"
+ ],
+ "kernel_gaps": [
+  "none (the World recipe for no income tax: incomeTax := 0 with a detail note)"
+ ],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute arithmetic only (#guard / decide in Theorems.lean)",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "build-only phase: no referee values looked at (CONTRACTWORLD testing order)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Social (Contribution)",
+  "World no-income-tax recipe"
+ ],
+ "sources": [
+  "laws.gov.ag: Unincorporated Business Tax Act 2016 s. 46-47 (repeal of the Personal Income Tax Act 2005 from 1 July 2016)",
+  "Personal Income Tax Act 2005 s. 8-9; amendments 2014 (No. 5) and 2016 (No. 8)",
+  "Social Security (Collection of Contributions) Regulations 2013 reg. 4; amendment S.I. 60 of 2016 (scanned; OCR) reg. 4(1)(b), Schedule 1, Schedule 2",
+  "Medical Benefits Regulations 2011 (S.I. 27 of 2011) reg. 17"
+ ],
+ "unsupported": [
+  "education levy (no accessible text found)",
+  "social security at and after pensionable age",
+  "Unincorporated Business Tax (self-employment)"
+ ],
+ "headline": "Antigua and Barbuda 2025: the Personal Income Tax Act was repealed in 2016 by the Unincorporated Business Tax Act; employees pay 7 % social security (16 % in total since January 2025) and 3.5 % medical benefits.",
+ "registry_correction": "PIT N verified: Personal Income Tax Act 2005 repealed from 1 July 2016 by the Unincorporated Business Tax Act 2016 s. 47. Contributions: SS 7 % up to $6,500/month (S.I. 60/2016, 2025 row), Medical Benefits 3.5 % (S.I. 27/2011 reg. 17); education levy: no accessible text found."
+}

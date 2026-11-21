@@ -1,0 +1,14 @@
+name = "ArTax"
+version = "0.1.0"
+defaultTargets = ["ArTax", "artax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "ArTax"
+
+[[lean_exe]]
+name = "artax"
+root = "ArTax.Main"

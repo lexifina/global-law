@@ -1,0 +1,74 @@
+{
+ "country": "LS",
+ "name": "Lesotho",
+ "year": "2025/26 (year of assessment 1 April 2025 - 31 March 2026)",
+ "status": "built",
+ "access": "B",
+ "batch": "B09-southern-africa",
+ "lean": {
+  "lines": 77,
+  "definitions": 8,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Credit (non-refundable, applyCredits pattern)",
+  "Canon/Out",
+  "World.worldMain",
+  "Theorems (Schedule)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 6,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean #guard / decide)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "build phase: no referee values used"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 2,
+  "not_modelled": 3
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "ZA (SACU)",
+  "IE (tax credit)"
+ ],
+ "sources": [
+  "Income Tax Act No. 9 of 1993 updated to 1 April 2012 (rsl.org.ls): s. 1, 4, 9, 27, 73, Second Schedule",
+  "RSL 'Guide on Taxation of Employment Income 25-26' s. 3.1-3.3 (official secondary: amounts)"
+ ],
+ "scale": "74040 LSL (threshold of the 30 % band (12 x M6 170))",
+ "scanner": {
+  "single": {
+   "maxMETR": 0.3043,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.3043,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.2717,
+   "netIncomeFalls": 0
+  }
+ },
+ "unsupported": [
+  "the regulation / Finance Act setting the 2025/26 band and credit",
+  "pension contribution cap",
+  "dividends, capital gains"
+ ],
+ "registry_correction": "LS: Income Tax Act 1993 (not an Order); 2025/26: 20 % to M6 170 a month, 30 % above, non-refundable credit M970 a month (RSL guide).",
+ "headline": "Lesotho built from the Income Tax Act 1993 (2012 consolidation) with the RSL's 2025/26 amounts: 20 % / 30 % and a M970-a-month credit (no tax up to M4 850 a month); the official consolidation still prints 2010 amounts."
+}

@@ -1,0 +1,98 @@
+{
+ "country": "TJ",
+ "name": "Tajikistan",
+ "year": "2025",
+ "status": "built",
+ "batch": "B05-former-ussr",
+ "access": "A",
+ "reused_from": [
+  "UZ",
+  "KZ"
+ ],
+ "lean": {
+  "lines": 91,
+  "definitions": 13,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (flat)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own printed sums and hand-computed statutory cases (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "2 x 75 x 12 = 1 800; 2 000 a month case"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 1,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "entrepreneur regimes and social tax",
+  "art. 191(8) non-cash spending deduction",
+  "secondary jobs"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.144,
+   "atAW": 0.105,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.144,
+   "atAW": 0.105,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.144,
+   "atAW": 0.105,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.167,
+   "atAW": 0.905,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.144,
+   "atAW": 0.105,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Two rates by job: 12 % at the main job with a deduction, 15 % without it elsewhere",
+ "scale": {
+  "wage": 18000,
+  "currency": "TJS",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "10 x the annual personal deduction of Tax Code art. 191(1) (2 indicators x 75 TJS x 12 = 1 800; indicator: State Budget Law 2025 art. 23(1)); no minimum wage was read",
+  "by": "B05-former-ussr",
+  "basis": "10 x the annual personal deduction of Tax Code art. 191(1) (2 indicators x 75 TJS x 12 = 1 800; indicator: State Budget Law 2025 art. 23(1)); no minimum wage was read"
+ }
+}

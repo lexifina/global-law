@@ -1,0 +1,107 @@
+{
+ "country": "MG",
+ "name": "Madagascar",
+ "year": "2025",
+ "status": "built",
+ "batch": "B08-central-africa-fr",
+ "access": "A",
+ "reused_from": [
+  "kernel monthly perPeriod pattern"
+ ],
+ "lean": {
+  "lines": 103,
+  "definitions": 11,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 4,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR, toMultiple)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Table.perPeriod (monthly IRSA)"
+ ],
+ "kernel_gaps": [
+  "minimum tax per month: local max"
+ ],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "1 000 000 a month (107 500; 103 500 with two dependants), the Ar 3 000 minimum, the 350 000 reduction threshold"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 1,
+  "not_modelled": 5
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "dividends, rents, gains (IR, IRI)",
+  "students 21-25 and ascendants as dependants",
+  "CNaPS SME floor (CPS art. 37) and the health-organisation (SMIE) worker share not modelled"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 1.0,
+   "atAW": 0.0,
+   "bandsOver100": 0,
+   "largestNotch": "35,999 at 0 (0.0 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 1.0,
+   "atAW": 0.0,
+   "bandsOver100": 0,
+   "largestNotch": "35,999 at 0 (0.0 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 1.0,
+   "atAW": 0.0,
+   "bandsOver100": 0,
+   "largestNotch": "35,999 at 0 (0.0 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 2.0,
+   "atAW": 0.0,
+   "bandsOver100": 1,
+   "largestNotch": "35,999 at 0 (0.0 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 1.0,
+   "atAW": 0.0,
+   "bandsOver100": 0,
+   "largestNotch": "35,999 at 0 (0.0 AW)"
+  }
+ },
+ "headline": "F1 Every salary pays at least Ar 3 000 a month: an entry cost of 36 000 a year and a flat tax up to about 410 000 a month",
+ "scale": {
+  "wage": 7200000,
+  "currency": "MGA",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "CDI LFI 2025 art. 01.03.16: start of the top 20 % band 'supérieure à 600 000' a month, x 12 (impots.mg)",
+  "by": "B08-central-africa-fr",
+  "basis": "CDI LFI 2025 art. 01.03.16: start of the top 20 % band 'supérieure à 600 000' a month, x 12 (impots.mg). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'progressive, individual, IRSA' confirmed: monthly IRSA 0/5/10/15/20 % (350 000 / 400 000 / 500 000 / 600 000), base rounded down to 100 Ar, minimum Ar 3 000 a month, Ar 2 000 a month per dependant above 350 000; pension (10 %) and health (2 %) contributions deductible; IRCM 20 %.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "CNaPS worker 1 % of wages up to 8 x SME (Ar 2 101 440 a month in 2025), deducted within the 10 % pension limit (art. 01.03.09 1°); input cnapsEmployee still overrides",
+  "provision": "Code de prévoyance sociale art. 37 (8 x SME of category M1; CNaPS copy); rate from the CNaPS \"Taux des cotisations\" page (2011 capture: Général 13 % / 1 %), SME 262 680 (1 Mar 2024 - 28 Feb 2026) from the CNaPS SME table: official secondary",
+  "source": "official secondary (ceiling rule: code text)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

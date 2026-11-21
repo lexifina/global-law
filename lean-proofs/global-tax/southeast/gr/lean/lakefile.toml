@@ -1,0 +1,14 @@
+name = "GRTax"
+version = "0.1.0"
+defaultTargets = ["GRTax", "grtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "GRTax"
+
+[[lean_exe]]
+name = "grtax"
+root = "GRTax.Main"

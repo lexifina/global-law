@@ -1,0 +1,14 @@
+name = "PyTax"
+version = "0.1.0"
+defaultTargets = ["PyTax", "pytax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "PyTax"
+
+[[lean_exe]]
+name = "pytax"
+root = "PyTax.Main"

@@ -1,0 +1,14 @@
+name = "UyTax"
+version = "0.1.0"
+defaultTargets = ["UyTax", "uytax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "UyTax"
+
+[[lean_exe]]
+name = "uytax"
+root = "UyTax.Main"

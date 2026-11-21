@@ -1,0 +1,14 @@
+name = "IdTax"
+version = "0.1.0"
+defaultTargets = ["IdTax", "idtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "IdTax"
+
+[[lean_exe]]
+name = "idtax"
+root = "IdTax.Main"

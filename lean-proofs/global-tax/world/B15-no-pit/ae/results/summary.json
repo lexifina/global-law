@@ -1,0 +1,62 @@
+{
+ "country": "AE",
+ "name": "United Arab Emirates (federal; GPSSA private sector)",
+ "year": "2025",
+ "status": "built",
+ "access": "B",
+ "batch": "B15-no-pit",
+ "lean": {
+  "lines": 126,
+  "definitions": 17,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Social (Contribution-style clamped base)",
+  "detail/unsupported (World recipe: no income tax)"
+ ],
+ "kernel_gaps": [
+  "none (the World recipe for no income tax: incomeTax := 0 with a detail note)"
+ ],
+ "provisions_cited": 11,
+ "validation": [
+  {
+   "referee": "statute arithmetic only (#guard / decide in Theorems.lean)",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "build-only phase: no referee values looked at (CONTRACTWORLD testing order)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 2,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Social (Contribution)",
+  "World no-income-tax recipe"
+ ],
+ "sources": [
+  "MoF consolidated English text of Federal Decree-Law No. 47 of 2022 (Corporate Tax) art. 11(3)(c), 11(6), 12(2) (mof.gov.ae, Jan 2026 consolidation)",
+  "FTA page 'Basis of Taxation - Natural Person' (tax.gov.ae, updated 2024-05-06; official secondary): wages are not Business",
+  "GPSSA English text of FDL No. 57 of 2023 and its amendments, art. 1, 2, 3, 4, 5 (pap-web-content.gpssa.gov.ae)",
+  "GPSSA English text of Federal Law No. 7 of 1999 (2022 edition, scanned; OCR), art. 1, 2",
+  "FDL No. 13 of 2022 on unemployment insurance (iloe.ae copy, unofficial translation) art. 3, 4; premiums from iloe.ae (official secondary)"
+ ],
+ "unsupported": [
+  "Abu Dhabi pension scheme",
+  "UAE Corporate Tax on a natural person's business (self-employment)",
+  "GCC nationals (home-state law)",
+  "VAT on the ILOE premium (not a contribution)"
+ ],
+ "headline": "UAE 2025: no tax on wages (Corporate Tax reaches natural persons only for business); Emirati employees pay 11 % (2023 law) or 5 % (1999 law) pension, everyone pays the ILOE premium, which doubles at a basic salary of AED 16,000 a month.",
+ "registry_correction": "PIT N verified. Statute: Federal Decree-Law 57/2023 (insured from 31 Oct 2023: 11 %, AED 3,000-70,000 a month) and Federal Law 7/1999 (earlier insured: 5 %, up to 50,000); add the ILOE premium (FDL 13/2022, AED 5/10 a month, all workers). Absence of PIT: FDL 47/2022 art. 11-12 + FTA natural-person page. Abu Dhabi nationals: own scheme (not modelled)."
+}

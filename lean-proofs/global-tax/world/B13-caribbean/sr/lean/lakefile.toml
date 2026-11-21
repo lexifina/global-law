@@ -1,0 +1,14 @@
+name = "SrTax"
+version = "0.1.0"
+defaultTargets = ["SrTax", "srtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SrTax"
+
+[[lean_exe]]
+name = "srtax"
+root = "SrTax.Main"

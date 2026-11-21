@@ -1,0 +1,74 @@
+{
+ "country": "NO",
+ "name": "Norway (Oslo)",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 637,
+  "definitions": 88,
+  "theorems": 39,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Allowance",
+  "Credit",
+  "Unit",
+  "Canon",
+  "Country"
+ ],
+ "kernel_gaps": [
+  "Social: continuous phase-in cap (contribution <= k x (income - floor)) instead of an all-or-nothing floor (trygdeavgift, ftrl. § 23-3 (4))",
+  "Taper with two steps and a falling rate (pension credit 16.7 % then 6 %, sktl. § 16-1 (3))",
+  "Ceiling on a group of taxes as a share of income above a limit, with a wealth add-on (skattebegrensning, sktl. § 17-1)",
+  "Dual: owner income grossed up (x1.72) inside the one flat base, not a separate capital schedule (sktl. §§ 10-11, 10-31)"
+ ],
+ "provisions_cited": 30,
+ "validation": [
+  {
+   "referee": "OECD TW 2025",
+   "cases": 48,
+   "exact": 24,
+   "within_1pct": 48,
+   "notes": "8 family types x 6 lines; max gap 6.3 NOK (THP), all from rounding each tax down to the krone vs OECD unrounded figures; 45/48 within 5 NOK"
+  },
+  {
+   "referee": "OECD TW 2025 via kernel oecd_check20.py (generic mapping)",
+   "cases": 40,
+   "exact": 16,
+   "within_1pct": 40,
+   "notes": "independent run of the kernel harness; THP 8/8 within 1 %"
+  },
+  {
+   "referee": "Official worked examples and published figures (Skatteetaten satser 2025, trekkrutine test, OECD STA)",
+   "cases": 11,
+   "exact": 11,
+   "within_1pct": 11,
+   "notes": "37.84 % on gains/dividends/losses; max METRs 47.4/44.8/50.6/47.8 %; skjermingsrente 3.6/4.6 %; 144 003; STA 200 550"
+  },
+  {
+   "referee": "Skatteetaten trekkrutine 2025 (open code, Python port) vs Skatteetaten's published 2025 table file",
+   "cases": 909996,
+   "exact": 909996,
+   "within_1pct": 909996,
+   "notes": "port fidelity: every published row of tables 8000-8400 and 9010-9400 reproduced"
+  },
+  {
+   "referee": "Withholding tables (table 8000, monthly) vs statute model",
+   "cases": 2001,
+   "exact": 150,
+   "within_1pct": 1457,
+   "notes": "tables never under-withhold; up to 2 434 NOK/yr over, all from the tables' 88 % minstefradrag (F1)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 18,
+  "recreated": 10,
+  "not_modelled": 8
+ },
+ "new_loopholes": 2,
+ "gov_errors": 5,
+ "statute_faults": 4,
+ "headline": "Norway's 2025 income tax in Lean matches the OECD's Norwegian rows to within rounding and reproduces Skatteetaten's published withholding tables row for row; the tables over-withhold about 2 430 NOK a year by deducting only 88 % of the minstefradrag, sole traders earning 108 550-176 684 NOK face a 47 % marginal rate, and four cross-references in skatteloven are stale."
+}

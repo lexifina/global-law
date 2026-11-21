@@ -1,0 +1,93 @@
+{
+ "country": "UY",
+ "name": "Uruguay",
+ "year": "2025",
+ "status": "built",
+ "access": "B",
+ "batch": "B12-latin-america",
+ "reused_from": [
+  "SE/NO dual pattern (kernel Dual idea, written as Cat. I/II)",
+  "MX indexed units"
+ ],
+ "lean": {
+  "lines": 144,
+  "definitions": 21,
+  "theorems": 7,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "World.Schedule.ofUnits (BPC)",
+  "Schedule",
+  "Social (written locally)",
+  "Unit (individual)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 5,
+ "provisions": [
+  "TO 1996 T7 arts. 26, 27, 33, 34, 35, 36, 37 A, 38",
+  "Ley 16.713 art. 181",
+  "Ley 18.211 art. 61",
+  "Ley 20.130 art. 22",
+  "Decreto 05/025 (via DGI table)"
+ ],
+ "sources": [
+  "IMPO TO 1996 (DGI) Titulo 7 (bases/todgi1996/338-1996)",
+  "Global law uruguay/national/acts (Ley 16.713, 18.211, 20.130)"
+ ],
+ "sources_official_secondary": [
+  "BPC 2025 = $ 6.576 from DGI's 'Base de Prestaciones y Contribuciones (BPC)' table (Decreto 05/025 behind IMPO login)"
+ ],
+ "validation": [
+  {
+   "referee": "statute's own printed tables and thresholds (#guard / decide)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "no referee values seen (build phase)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 3,
+  "not_modelled": 2
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "aguinaldo (SAC) and salario vacacional taxed at a proportional rate (art. 36 inc. 2, 37 last inc.) not separated: all wages enter the scale",
+  "montepio 15 % applied without the cap of Ley 20.130 art. 22 ($ 215.179 at the law's base date, indexed: 2025 value not reached); FRL contribution and FONASA spouse surcharge not modelled",
+  "nucleo familiar elections (art. 37 B/C) not modelled; child deduction shared equally between two parents (art. 38: shared in equal parts when the parents agree)",
+  "pensions: taxed by the IASS (Ley 18.314), not by the IRPF: not modelled",
+  "interest: art. 26 A rates depend on currency and term (0,5 % to 12 %); 12 % ('restantes rentas') applied",
+  "rent: art. 26 B 12 % on gross rent (deductible costs and the art. 27 J exemption below 40 BPC not modelled)",
+  "capitalGains: incrementos patrimoniales (arts. 20-24, 12 %) not modelled",
+  "selfEmployment: art. 34 30 % deduction applied; IRAE option and BPS contributions of non-dependents not modelled"
+ ],
+ "scale": {
+  "wage": 1183680,
+  "currency": "UYU",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "IRPF Titulo 7 arts. 37 A and 38: the 180 BPC threshold at BPC $ 6.576 (Decreto 05/025, DGI table)",
+  "by": "B12-latin-america",
+  "basis": "IRPF Titulo 7 arts. 37 A and 38: the 180 BPC threshold at BPC $ 6.576 (Decreto 05/025, DGI table)"
+ },
+ "headline": "Uruguay 2025 IRPF from IMPO's Titulo 7: BPC 6.576 scale 0-36 %, a statute-visible notch of about $ 13.849 at 180 BPC (credit rate 14 % -> 8 %), FONASA notch at 2,5 BPC a month.",
+ "d9_review": [
+  {
+   "date": "2026-11-20",
+   "item": "D9R-1",
+   "change": "FRL 0,10 % of wages in employeeSocial and IRPF deductions (art. 38 B)",
+   "provision": "Ley 19.689 art. 17 (from 2019-01-01); TO 1996 Título 7 art. 38 B)",
+   "switch": "\"uyFrl\": false restores the old outputs (0 / 300 random households differ)",
+   "found_on": "uy_official_dgi_simulador_irpf_2025_grid (dev 130 -> 475 / 550)",
+   "open": "montepío ceiling Ley 20.130 art. 22 (2025 indexed value)"
+  }
+ ]
+}

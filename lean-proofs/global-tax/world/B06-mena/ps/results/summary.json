@@ -1,0 +1,74 @@
+{
+ "country": "PS",
+ "name": "Palestine",
+ "year": "2025",
+ "status": "built",
+ "batch": "B06-mena",
+ "access": "A",
+ "reused_from": [
+  "JO",
+  "KH"
+ ],
+ "lean": {
+  "lines": 79,
+  "definitions": 6,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 1,
+   "exact": 1,
+   "within_1pct": 1,
+   "notes": "#guard: tax at the band edges 75,000 = 3,750 and 150,000 = 11,250 (art. 16(1) as replaced by Decree-Law 5/2015)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "employee contributions to pension, health or social-security funds (exempt under art. 12(1)(d)) not modelled: employeeSocial = 0",
+  "interest (2014 repeal of the 5 % final tax; current treatment not established)",
+  "capital gains",
+  "pensions",
+  "optional joint assessment of spouses (art. 14(3))",
+  "transport allowance exemptions (art. 12(1)(b)-(c)) need the allowance paid"
+ ],
+ "scan": {
+  "summary": "results/search/SUMMARY.md"
+ },
+ "sources": "Decree-Law No. 8 of 2011 on Income Tax (Al-Waqa'i' al-Filastiniyya special issue 5, 2011-10-24) arts. 12, 14, 16, as amended by Decree-Laws No. 4 of 2014 (issue 106: dividends 10 % at source, art. 16(5); bank-interest final tax art. 31(8) repealed), No. 5 of 2015 (issue 112: exemption 36,000 ILS, art. 12(1)(a); rates 5 % to 75,000, 10 % to 150,000, 15 % above, art. 16(1)) and No. 14 of 2016 (issue 123: agricultural income exempt); texts from Al-Muqtafi (Birzeit University; ids 16266, 16576, 16702, 16814) via Internet Archive captures of 2025-01 (muqtafi does not answer directly). Global law's Waqa'i' catalogue (to 2026-10-29) supplied the gazette issues and muqtafi ids and lists no later income-tax text.",
+ "headline": "Palestine's 2025 income tax rebuilt from the gazette texts (via archived Al-Muqtafi pages): 36,000-shekel exemption, 5/10/15 % at 75,000 and 150,000",
+ "tried": "",
+ "unlock": "",
+ "rescue": {
+  "agent": "rescue",
+  "date": "2026-11-20T11:39Z",
+  "routes": [
+   "Global law catalogue (metadata) read for the gazette issue and the Al-Muqtafi record id of Decree-Law 8/2011 and of each amending decree-law (4/2014, 5/2015, 14/2016)",
+   "muqtafi.birzeit.edu does not answer (lean1, laptop); Internet Archive CDX shows captures of getleg.asp?id=16266/16576/16702/16814 up to 2025-2026; the 2025 captures were read (ps/law/rescue/muq_*.html)",
+   "pmof.ps: no answer from lean1 this time"
+  ]
+ }
+}

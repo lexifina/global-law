@@ -1,0 +1,14 @@
+name = "RwTax"
+version = "0.1.0"
+defaultTargets = ["RwTax", "rwtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "RwTax"
+
+[[lean_exe]]
+name = "rwtax"
+root = "RwTax.Main"

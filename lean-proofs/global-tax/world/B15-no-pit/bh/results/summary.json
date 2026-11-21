@@ -1,0 +1,59 @@
+{
+ "country": "BH",
+ "name": "Bahrain (private-sector employee)",
+ "year": "2025",
+ "status": "built",
+ "access": "B",
+ "batch": "B15-no-pit",
+ "lean": {
+  "lines": 86,
+  "definitions": 10,
+  "theorems": 3,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Social (Contribution.flatCapped)"
+ ],
+ "kernel_gaps": [
+  "none (the World recipe for no income tax: incomeTax := 0 with a detail note)"
+ ],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute arithmetic only (#guard / decide in Theorems.lean)",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "build-only phase: no referee values looked at (CONTRACTWORLD testing order)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Social (Contribution)",
+  "World no-income-tax recipe"
+ ],
+ "sources": [
+  "LLOC consolidated Decree-Law 24/1976 (Social Insurance Law) with amendments (/FullAr/L2476.docx): art. 2, 3, 17, 33",
+  "Law 14/2022 (LLOC K1422) substituting art. 33(1)-(2)",
+  "Decree-Law 44/2026 and Law 19/2026 (amendment list): no change to art. 17/33",
+  "LLOC consolidated Decree-Law 78/2006 (unemployment insurance) art. 1(17), 2, 6"
+ ],
+ "unsupported": [
+  "old-age branch for non-Bahraini workers (phased application by decisions not read)",
+  "GCC nationals",
+  "public servants (Law 13/1975)"
+ ],
+ "headline": "Bahrain 2025: no income tax; Bahraini employees pay 7 % old-age and 1 % unemployment insurance up to BHD 4,000 a month; expatriates 1 %.",
+ "registry_correction": "PIT N (no act found). Contributions: DL 24/1976 art. 33 (7 %, Law 14/2022) up to BHD 4,000 a month (art. 17) + DL 78/2006 art. 6 unemployment 1 % (all nationalities)."
+}

@@ -1,0 +1,14 @@
+name = "TrTax"
+version = "0.1.0"
+defaultTargets = ["TrTax", "trtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "TrTax"
+
+[[lean_exe]]
+name = "trtax"
+root = "TrTax.Main"

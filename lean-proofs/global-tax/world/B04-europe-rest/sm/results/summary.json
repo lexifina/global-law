@@ -1,0 +1,57 @@
+{
+ "country": "SM",
+ "name": "San Marino (imposta generale sui redditi, Titolo II, 2025 wording)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B04-europe-rest",
+ "lean": {
+  "lines": 168,
+  "definitions": 20,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (Allegato C tariff 9-35 %; art. 26 pension abatement as a band schedule)",
+  "Taper-like deduction (C1 c. 3, 4-decimal ratio, local)",
+  "Unit (individual; child credits by election)"
+ ],
+ "kernel_gaps": [
+  "A deduction tapered by a ratio truncated to 4 decimals (C1 c. 3) written locally"
+ ],
+ "provisions_cited": 11,
+ "validation": [
+  {
+   "referee": "statute's own printed amounts and tables (Lean decide)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "build phase: no referee values"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "IT (IRPEF-style bands and detrazioni)",
+  "kernel Schedule, Unit"
+ ],
+ "sources": [
+  "Global law san-marino/national/acts/imposta-generale-sui-redditi/legge-2013-166 (Legge 166/2013 IGR), publisher's current text of 2025-12-22 (current-only record; earlier wording in its footnotes)",
+  "art. 148 c. 8 (2025 wording of arts. 13, 16, 17, 25, 102-104: files art-16--2.md, art-17--2.md, art-25--2.md)",
+  "Allegato C art. C1 c. 1 (2013 text, unchanged), c. 3 (2013 text from footnote 93; abrogated by Legge 141/2025 art. 55)",
+  "art. 24 c. 4 (2013 text), art. 26, art. 14 (pre-141/2025 wording from its footnote)",
+  "Global law san-marino/national/acts/legge-che-istituisce-un-sistema-obbligatorio-di (Legge 42/1955): employer contributions only; the employee pension/ISS rates are not in the record"
+ ],
+ "scale": "40 000 EUR = the end of the Allegato C C1 c. 3 deduction taper",
+ "headline": "San Marino 2025 built from the IGR's 2025 wording (art. 148 c. 8, Allegato C): 9-35 % tariff, 7 % abatement, a 9 000 € deduction tapered to 40 000 € and the art. 16 credits; SMaC spending is an optional input (default none) and employee contributions are not in the record."
+}

@@ -1,0 +1,14 @@
+name = "UgTax"
+version = "0.1.0"
+defaultTargets = ["UgTax", "ugtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "UgTax"
+
+[[lean_exe]]
+name = "ugtax"
+root = "UgTax.Main"

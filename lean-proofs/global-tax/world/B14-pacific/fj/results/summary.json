@@ -1,0 +1,100 @@
+{
+ "country": "FJ",
+ "name": "Fiji",
+ "year": "2025 (calendar tax year)",
+ "status": "built",
+ "batch": "B14-pacific",
+ "access": "A",
+ "reused_from": [
+  "AU/NZ PAYE (annual bands, individual unit)",
+  "B10 KE (per-person PAYE with monthly contributions)"
+ ],
+ "lean": {
+  "lines": 166,
+  "definitions": 16,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 20,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Table.perPeriod (monthly FNPF rounding)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 16,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 20,
+   "exact": 20,
+   "within_1pct": 20,
+   "notes": "Schedule para (1) printed cumulative column (resident and non-resident) reproduced at every row; FNPF 8/18 share; bank-interest exemption edge at gross income 30,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 4,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "presumptive income tax and business deductions",
+  "CGT exemptions of s 67",
+  "pension exemptions beyond FNPF/approved funds",
+  "wages paid evenly over 12 months"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.284,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.284,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.284,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.284,
+   "atAW": 2.505,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.284,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The official Laws of Fiji consolidation is more than two budgets behind: it still prints ss 28A and 125A, which Act 5 of 2024 deleted from 1 August 2024, and its Table of Amendments stops at Act 5 of 2023",
+ "scale": {
+  "wage": 50000,
+  "currency": "FJD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax (Rates of Tax and Levies) Regulations 2016 Schedule para (1) as amended by LN 55 of 2023 (in force 1 January 2024, unchanged in 2025): start of the 20 % band (\"50,001-270,000 | $3,600 + 20% of excess over $50,000\")",
+  "by": "B14-pacific",
+  "basis": "Income Tax (Rates of Tax and Levies) Regulations 2016 Schedule para (1) as amended by LN 55 of 2023 (in force 1 January 2024, unchanged in 2025): start of the 20 % band (\"50,001-270,000 | $3,600 + 20% of excess over $50,000\"). A statutory threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act 2015' confirmed; the rates are in the Income Tax (Rates of Tax and Levies) Regulations 2016 Schedule (resident 0/18/20/33/34/35/36/37/38/39 % with 30,000 tax-free; non-resident 20 % from the first dollar); Social Responsibility Tax abolished from 1 January 2024 (Act 5 of 2023); dividends exempt; bank interest 10 % final; FNPF employee 8 % (s 37(4) 18 % x s 39 8/18), not deductible."
+}

@@ -1,0 +1,14 @@
+name = "ZwTax"
+version = "0.1.0"
+defaultTargets = ["ZwTax", "zwtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "ZwTax"
+
+[[lean_exe]]
+name = "zwtax"
+root = "ZwTax.Main"

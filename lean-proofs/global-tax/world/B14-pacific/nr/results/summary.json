@@ -1,0 +1,100 @@
+{
+ "country": "NR",
+ "name": "Nauru",
+ "year": "2025 (pay periods in calendar 2025)",
+ "status": "built",
+ "batch": "B14-pacific",
+ "access": "A",
+ "reused_from": [
+  "B08 DJ / B10 RW (final per-period withholding)"
+ ],
+ "lean": {
+  "lines": 111,
+  "definitions": 15,
+  "theorems": 2,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Table.perPeriod (per-pay-period final tax)"
+ ],
+ "kernel_gaps": [
+  "per-period final tax with a choice of period length: local (periods, zeroBand)"
+ ],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "monthly tax at $10,000 a month; the three printed period bands annualised; fortnightly vs monthly at $120,000; one-month bunching; superannuation 5 %"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 3,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "services tax on self-employment fees and the Business Tax Act 2016",
+  "investment income (outside the Act)",
+  "wages paid evenly in equal pay periods"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.251,
+   "atAW": 1.01,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.251,
+   "atAW": 1.01,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.251,
+   "atAW": 1.01,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.254,
+   "atAW": 2.725,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.251,
+   "atAW": 1.01,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The employment tax is final for each pay period with no annual reconciliation: $120,000 paid in one month costs $22,152, paid evenly $1,824",
+ "scale": {
+  "wage": 110880,
+  "currency": "AUD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Employment and Services Tax Act 2014 Schedule para (1)(a) (SL 3 of 2021 as amended by SL 3 of 2023): the monthly 0 % band \"$0 - $9,240\" x 12 pay periods",
+  "by": "B14-pacific",
+  "basis": "Employment and Services Tax Act 2014 Schedule para (1)(a) (SL 3 of 2021 as amended by SL 3 of 2023): the monthly 0 % band \"$0 - $9,240\" x 12 pay periods. A statutory threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Employment and Services Tax Act 2014; tax on employment income since 2014' confirmed, but the tax is not progressive: a final tax per pay period of 20 % above $9,240 a month ($4,257 a fortnight, $2,129 a week) for residents (citizens, refugees, spouses of citizens), 20 % flat for other non-residents (30 % Regional Processing Centre; 0 % on the first $20,000 a year for expatriates of the Republic or a State-owned enterprise); no tax on investment income under this Act; superannuation 5 % employee (employer 5 % in 2025, 10 % from 1 February 2026)."
+}

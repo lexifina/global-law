@@ -1,0 +1,76 @@
+{
+ "country": "IN",
+ "name": "India",
+ "year": "FY 2025-26 (AY 2026-27)",
+ "status": "built",
+ "batch": "B02-g20",
+ "access": "B",
+ "reused_from": [
+  "UK",
+  "IE",
+  "AU"
+ ],
+ "lean": {
+  "lines": 157,
+  "definitions": 20,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Canon",
+  "Country (computeWith flag)",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "surcharge with marginal relief at thresholds: local",
+  "s. 87A rebate with marginal relief: local"
+ ],
+ "provisions_cited": 10,
+ "validation": [
+  {
+   "referee": "Department's printed cumulative amounts vs band sums",
+   "cases": 8,
+   "exact": 8,
+   "within_1pct": 8,
+   "notes": "#guard"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 1,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "EPF",
+  "house property",
+  "capital gains",
+  "80TTA/80TTB",
+  "s. 288A/288B rounding"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 1.04,
+   "netIncomeFalls": 76
+  },
+  "couple1earner2kids": {
+   "maxMETR": 1.04,
+   "netIncomeFalls": 76
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.624,
+   "netIncomeFalls": 0
+  }
+ },
+ "headline": "F1 s. 16 (ia)'s 75,000 standard deduction points at the wrong clause for AY 2026-27"
+}

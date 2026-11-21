@@ -1,0 +1,14 @@
+name = "KwTax"
+version = "0.1.0"
+defaultTargets = ["KwTax", "kwtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "KwTax"
+
+[[lean_exe]]
+name = "kwtax"
+root = "KwTax.Main"

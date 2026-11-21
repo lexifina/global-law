@@ -1,0 +1,99 @@
+{
+ "country": "DO",
+ "name": "Dominican Republic",
+ "year": "2025 (fiscal year = calendar year, art. 300)",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "B",
+ "reused_from": [
+  "ES/MX (Spanish-language progressive scale)",
+  "B12 Latin America patterns"
+ ],
+ "lean": {
+  "lines": 99,
+  "definitions": 6,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "DGII printed fixed amounts against the bands at 624,329 and 867,123; printed table continuity at 867,123/867,124"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 1,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "SDSS caps need the 2025 SMN (input doSmn)",
+  "deductibility of SDSS (Ley 87-01) not read",
+  "salario de Navidad exemption",
+  "investment income"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.309,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.309,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.309,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.31,
+   "atAW": 3.12,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.309,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The DGII's printed 2025 table does not match its own bands: RD$79,776 where the bands give RD$79,775.15, and the table jumps RD$2 at its threshold",
+ "scale": {
+  "wage": 867123,
+  "currency": "DOP",
+  "kind": "official-secondary-threshold",
+  "year": "2025",
+  "source": "DGII 'Escala retencion asalariados 2025' (archived 2025-06-22): 'Rentas desde RD$867,123.01 en adelante' 25 % (start of the top band of Codigo Tributario art. 296 as indexed)",
+  "by": "B13-caribbean",
+  "basis": "DGII 'Escala retencion asalariados 2025' (archived 2025-06-22): 'Rentas desde RD$867,123.01 en adelante' 25 % (start of the top band of Codigo Tributario art. 296 as indexed). A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Codigo Tributario (Ley 11-92)' confirmed: art. 296 progressive scale indexed by inflation (art. 327); DGII 2025 table exempt to 416,220, 15 % to 624,329, 20 % to 867,123, 25 % above; SDSS employee 3.04 % (SFS) + 2.87 % (AFP), caps 10 and 20 minimum wages."
+}

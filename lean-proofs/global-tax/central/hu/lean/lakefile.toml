@@ -1,0 +1,14 @@
+name = "HuTax"
+version = "0.1.0"
+defaultTargets = ["HuTax", "hutax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "HuTax"
+
+[[lean_exe]]
+name = "hutax"
+root = "HuTax.Main"

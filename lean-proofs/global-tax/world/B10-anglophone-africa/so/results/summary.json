@@ -1,0 +1,99 @@
+{
+ "country": "SO",
+ "name": "Somalia",
+ "year": "2025 (Federal Government; Income Tax Law No. 37 of 11 May 2025)",
+ "status": "built",
+ "batch": "B10-anglophone-africa",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE",
+  "kernel Tariff (column form)"
+ ],
+ "lean": {
+  "lines": 93,
+  "definitions": 8,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Tariff (CumRow, cumJumps)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 4,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 4,
+   "exact": 4,
+   "within_1pct": 4,
+   "notes": "First Schedule rows 2-4 at 6,000 / 18,000 / 18,001 USD; cumJumps of the printed column"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 1,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "deductions/exemptions of the Law (Somali OCR) not modelled",
+  "Federal Member State and Somaliland taxes",
+  "transitional rules for 2025"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.844,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": "59.00 at 18,000 (1.0 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 0.844,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": "59.00 at 18,000 (1.0 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.844,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": "59.00 at 18,000 (1.0 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.833,
+   "atAW": 2.5,
+   "bandsOver100": 0,
+   "largestNotch": "59.00 at 30,000 (1.66667 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 0.844,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": "59.00 at 18,000 (1.0 AW)"
+  }
+ },
+ "headline": "F1 The new federal income tax table prints $1,788 at $18,000 where its own bands give $1,728: a $60 jump at $18,001",
+ "scale": {
+  "wage": 18000,
+  "currency": "USD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Law No. 37 of 11 May 2025 (Federal Government of Somalia) First Schedule para. 1(1) row 4: 'Dakhliga ka badan $18,000 USD' (income exceeding $18,000: top 18 % band)",
+  "by": "B10-anglophone-africa",
+  "basis": "Income Tax Law No. 37 of 11 May 2025 (Federal Government of Somalia) First Schedule para. 1(1) row 4: 'Dakhliga ka badan $18,000 USD' (income exceeding $18,000: top 18 % band). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income tax law (federal); little accessible law; USD widely used' replaced: the Federal Government enacted a new Income Tax Law (No. 37, 11 May 2025) with a resident scale in US dollars: 0 % to $1,200, 6 % to $6,000, 12 % to $18,000, 18 % above (printed fixed amount $1,788 at $18,000); under-18 residents 20 % flat; non-residents 18 % flat."
+}

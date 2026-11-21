@@ -1,0 +1,15 @@
+name = "SETax"
+version = "0.1.0"
+defaultTargets = ["SETax", "setax"]
+
+# Sweden (Stockholm), inkomstår 2025. Depends on the shared kernel by path (~/cmp20/kernel).
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "SETax"
+
+[[lean_exe]]
+name = "setax"
+root = "SETax.Main"

@@ -1,0 +1,73 @@
+{
+ "country": "BR",
+ "name": "Brazil",
+ "year": "2025 (ano-calendário 2025, Declaração de Ajuste Anual 2026)",
+ "status": "built",
+ "batch": "B02-g20",
+ "access": "A",
+ "reused_from": [
+  "PT"
+ ],
+ "lean": {
+  "lines": 150,
+  "definitions": 20,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 4,
+ "kernel_parts_used": [
+  "Schedule",
+  "Social (Contribution)",
+  "Table.perPeriod",
+  "Rounding",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "annual table = sum of monthly tables with summed parcelas (rate × base − Σ parcelas): local `annualParcela`; differs from the band sum by < 7 centavos (#guard)"
+ ],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's printed parcelas vs band sums",
+   "cases": 8,
+   "exact": 8,
+   "within_1pct": 8,
+   "notes": "#guard within one centavo monthly, 7 centavos annual"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 1,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "interest, capital gains (separate taxation)",
+  "13º salário",
+  "self-employed INSS"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.4286,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.4286,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.3571,
+   "netIncomeFalls": 0
+  }
+ },
+ "headline": "F1 The annual table is a sum of two rounded tables: band form and parcela form differ by up to 7 centavos"
+}

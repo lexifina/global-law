@@ -1,0 +1,14 @@
+name = "KzTax"
+version = "0.1.0"
+defaultTargets = ["KzTax", "kztax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "KzTax"
+
+[[lean_exe]]
+name = "kztax"
+root = "KzTax.Main"

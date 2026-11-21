@@ -1,0 +1,67 @@
+{
+ "country": "RO",
+ "name": "Romania",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 762,
+  "definitions": 77,
+  "theorems": 43,
+  "sorry": 0,
+  "native_decide": 1
+ },
+ "kernel_parts_used": [
+  "Table",
+  "Rounding",
+  "Schedule",
+  "Social",
+  "Unit",
+  "Canon",
+  "Country"
+ ],
+ "kernel_gaps": [
+  "perPeriod with a per-month law (Romania changes rules mid-year: pensions CASS from Aug 2025); written in the country (Wage.lean wageYear/pensionYear)",
+  "contribution on a notional base chosen by income band (CAS on 12/24 and CASS on 6/12/24 minimum wages): not a Contribution shape; written as step functions",
+  "cross-person dependency (a spouse's income decides the other's allowance): household-level code"
+ ],
+ "provisions_cited": 29,
+ "validation": [
+  {
+   "referee": "Eurostat earn_nt_net 2025 (EC-OECD tax-benefit model, RON; RO not in OECD Taxing Wages)",
+   "cases": 13,
+   "exact": 11,
+   "within_1pct": 13,
+   "notes": "net earnings; exact = within 1 leu a month (Eurostat does not round); the 2 others: Eurostat gives the 100-lei child deduction once per earning parent, statute per child (F12); income tax within 1 %: 11/13"
+  },
+  {
+   "referee": "EUROMOD CR RO Y16 Table 2.14 (2025 basic deduction at the minimum wage, 0-4+ dependants)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "Lean theorem euromod_2025_amounts"
+  },
+  {
+   "referee": "Published payroll example July 2026 (Newsweek/ImpozitSalariu.ro; non-official), law parametrised",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "10 figures (CAS, CASS, deduction, tax, net) exact; validates half-up rounding"
+  },
+  {
+   "referee": "danielgp/salariu (open source)",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "last commit 2018-08-26: no 2025 rules; not usable"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 10,
+  "recreated": 7,
+  "not_modelled": 2
+ },
+ "new_loopholes": 5,
+ "gov_errors": 3,
+ "statute_faults": 4,
+ "headline": "Romania's stepped personal deduction makes one more leu of pay cost take-home pay at 40 points between 4.050 and 6.050 lei a month, with a cliff of up to 161 lei a month at 6.051 for parents and under-26s; owner-managers keep ~80 % of profit through a micro-enterprise, but a PFA keeps more above ~760.000 lei (2025) and ~300.000 lei (2026 dividend rate)."
+}

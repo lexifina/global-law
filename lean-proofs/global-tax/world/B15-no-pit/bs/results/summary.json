@@ -1,0 +1,59 @@
+{
+ "country": "BS",
+ "name": "The Bahamas (employed person)",
+ "year": "2025",
+ "status": "built",
+ "access": "B",
+ "batch": "B15-no-pit",
+ "lean": {
+  "lines": 73,
+  "definitions": 6,
+  "theorems": 2,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Social (Contribution.flatCapped)"
+ ],
+ "kernel_gaps": [
+  "none (the World recipe for no income tax: incomeTax := 0 with a detail note)"
+ ],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute arithmetic only (#guard / decide in Theorems.lean)",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "build-only phase: no referee values looked at (CONTRACTWORLD testing order)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Social (Contribution)",
+  "World no-income-tax recipe"
+ ],
+ "sources": [
+  "Bahamas Laws On-line point-in-time index of Acts at 2025-07-01 (letter I): no income tax act",
+  "Department of Inland Revenue site (taxes administered; official secondary)",
+  "NI (Contributions) Regulations S.I. 68/1984 (LRO 1/2017) reg. 2, 52",
+  "NI (Contributions) (Amendment) Regulations 2024, S.I. 37/2024: Fifth Schedule, reg. 23(1A)"
+ ],
+ "unsupported": [
+  "2025 ceiling on insurable wages (administrative, RPI + 2 % biennially)",
+  "employed persons 65+ (rate depends on retirement benefit)",
+  "self-employed"
+ ],
+ "headline": "The Bahamas 2025: no income tax; employees pay 4.65 % National Insurance (3.9 % in the schedule plus half of a 1.5-point increase in another regulation) up to a ceiling the regulations no longer print.",
+ "registry_correction": "PIT N (no income tax act in force; DIR tax list). Contributions: NI (Contributions) Regs Fifth Schedule (S.I. 37/2024) 3.9 % + reg. 23(1A) 0.75 % = 4.65 % on basic wages up to the ceiling (2025 value not in law)."
+}

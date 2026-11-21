@@ -1,0 +1,89 @@
+{
+ "country": "SZ",
+ "name": "Eswatini",
+ "year": "2025/26 (year of assessment 1 July 2025 - 30 June 2026)",
+ "status": "built",
+ "access": "B",
+ "batch": "B09-southern-africa",
+ "lean": {
+  "lines": 83,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Credit (rebate)",
+  "Canon/Out",
+  "World.worldMain",
+  "Theorems (Schedule)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 4,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean #guard / decide)",
+   "cases": 7,
+   "exact": 7,
+   "within_1pct": 7,
+   "notes": "build phase: no referee values used"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 1,
+  "not_modelled": 4
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "ZA (SACU: rebate structure)"
+ ],
+ "sources": [
+  "Income Tax Order 1975 updated to the Amendment Acts 2011 and 2013 (ERS): s. 2 (6), 8, 12 (1) (qq), Third Schedule",
+  "Income Tax (Amendment) Act 2023 (Act 20 of 2023) s. 1 (2), 39 (ERS; scanned, OCR'd, table checked on the image)",
+  "ERS 'Rates and Thresholds' page (official secondary)"
+ ],
+ "scale": "200000 SZL (threshold of the top (33 %) band)",
+ "scanner": {
+  "single": {
+   "maxMETR": 0.332,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.332,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.32,
+   "netIncomeFalls": 0
+  }
+ },
+ "unsupported": [
+  "s. 12 (1) (qq) exemption",
+  "Act 20/2023 commencement notice"
+ ],
+ "registry_correction": "SZ: Income Tax Order 1975 (as amended; Act 20 of 2023 replaced the Third Schedule): 20/25/30/33 %, rebate E8 200 (+E2 700 over 60), dividends and interest 10 %; year ending 30 June.",
+ "headline": "Eswatini built from the Income Tax Order 1975 and Act 20 of 2023: 20-33 % with an E8 200 rebate (tax starts above E41 000); the 2023 rate table stops at E250 000 and is dated to the year ending 30 June 2023.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "ENPF employee 5 % of wages up to E4,000 / month (2025) and E4,300 (2026); deducted (s. 14 (1) (i))",
+  "provision": "ENPF (Statutory Contributions) Regulations 2025 (LN 5/2025) reg. 2 (1) (a)-(b), as reproduced by the Fund; rate 5 % + 5 % (Fund notice); Income Tax Order s. 2 \"pension fund\", s. 14 (1) (i), Fourth Schedule para 2 (4)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ },
+ "d9_review": [
+  {
+   "date": "2026-11-20",
+   "item": "D9R-1",
+   "change": "ENPF caps per calendar month (5 % x (min(w,48000)+min(w,51600))/2); was one annual cap of 49,800",
+   "provision": "LN 5/2025 reg. 2 (1) (a)-(b), (2)",
+   "switch": "\"szEnpfAnnualCap\": true restores the old rule (0 / 300 random households differ)",
+   "found_on": "sz_official_ers_paye_calculator_enpf_grid (dev 274 -> 277 / 277 within 1)"
+  }
+ ]
+}

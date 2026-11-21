@@ -1,0 +1,14 @@
+name = "JmTax"
+version = "0.1.0"
+defaultTargets = ["JmTax", "jmtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "JmTax"
+
+[[lean_exe]]
+name = "jmtax"
+root = "JmTax.Main"

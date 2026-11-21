@@ -1,0 +1,71 @@
+{
+ "country": "CA",
+ "name": "Canada (federal + Ontario)",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 856,
+  "definitions": 128,
+  "theorems": 23,
+  "guards": 18,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Allowance/Taper",
+  "Canon",
+  "Country",
+  "Unit (splitting theorems)",
+  "Theorems.Schedule",
+  "Theorems.Parts"
+ ],
+ "kernel_gaps": [
+  "Credit.phaseIn has no earnings threshold (CWB: 27 % of working income above $3,000): written locally",
+  "family benefits on family income with per-child amounts and two-band reductions (CCB, OCB, GST/HST credit, OSTC): written locally",
+  "stepped premium with capped phase-ins (Ontario Health Premium, OTA s. 24(2)): plain Int function",
+  "tax reduction defined as twice an amount less the tax (OTA s. 20): plain Int function",
+  "money in cents: the kernel Out carries whole units, so cents go in detail (*Cents)",
+  "contributions with an exemption below the base and two ceilings (CPP base + CPP2): composed from Schedule.flatAbove-like logic locally"
+ ],
+ "provisions_cited": 52,
+ "validation": [
+  {
+   "referee": "OECD TW 2026 (year 2025) country table, to the cent (harness/oecd_ca.py)",
+   "cases": 56,
+   "exact": 52,
+   "within_1pct": 52,
+   "notes": "all tax and contribution lines exact for the 8 family types; CTGG differs on 4 (F14)"
+  },
+  {
+   "referee": "OECD TW 2026 (year 2025), kernel oecd_check20.py with oecd_map.py (whole dollars)",
+   "cases": 56,
+   "exact": 47,
+   "within_1pct": 52,
+   "notes": "dollar rounding of wages and outputs; same 4 CTGG misses; unchanged after the cohabiting change (2026-11-19)"
+  },
+  {
+   "referee": "CRA T4127 120th (Jan 2025) + 121st (Jul 2025) editions, Option 1 annualised, Ontario",
+   "cases": 601,
+   "exact": 601,
+   "within_1pct": 601,
+   "notes": "exact = within $1; federal 601/601; Ontario 601/601 with LIFT added (payroll omits LIFT: 540/601 without)"
+  },
+  {
+   "referee": "PolicyEngine-Canada 0.99.2, benefits July 2025-June 2026 (full custody)",
+   "cases": 205,
+   "exact": 79,
+   "within_1pct": 156,
+   "notes": "CCB; OCB 138/205, GST/HST 127/205, OSTC 132/205 within $1; liabilities not comparable (F15)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 16,
+  "recreated": 8,
+  "not_modelled": 7
+ },
+ "new_loopholes": 1,
+ "gov_errors": 2,
+ "statute_faults": 4,
+ "headline": "Canada's 2025 tax lines match the OECD to the cent and CRA payroll within $1; the stacked benefit withdrawals of an Ontario family push METRs to 91 % (two children) and just over 100 % (four) at about $48,500, which also makes bunching income across years worth up to $10,147 for a family with children; the Ontario Health Premium form omits the split income the Act added in 2023."
+}

@@ -1,0 +1,21 @@
+{"country": "PL", "name": "Poland", "year": "2025", "status": "done",
+ "lean": {"lines": 1100, "definitions": 107, "theorems": 54, "sorry": 0},
+ "kernel_parts_used": ["Schedule", "Unit", "Rounding (local)", "Social (local)", "Credit (local)"],
+ "kernel_gaps": [
+   "Rounding: Ordynacja podatkowa art. 63 half-up to whole zloty on grosze amounts (PlTax.Kernel.zl; kernel Rule.halfUp would fit, model predates it)",
+   "Schedule: written locally as PlTax.Kernel.Band/schedRaw before TaxKernel existed; bridged to TaxKernel.Schedule by KernelLink.bridge (all kernel Schedule/Unit theorems apply)",
+   "Social: employee contributions with a ceiling on two of three parts and a health contribution on wages less those contributions (contribution base depends on other contributions)",
+   "Social: self-employed contributions on a declared base independent of income, health by tax regime (9 % / 4.9 % with floor / flat revenue bands) - regime-dependent social rules",
+   "Credit: refundable credit capped by the taxpayer's own contributions (art. 27f ust. 9) with pooling between spouses (ust. 10) and an all-or-nothing income test for one child",
+   "Unit: per-business regime election (skala/liniowy/ryczalt) that disables splitting for both spouses (art. 6 ust. 8)",
+   "Exemption: revenue exemption with a shared cap (art. 21 ust. 44) and pro-rata apportionment of costs and contributions",
+   "Withholding: monthly advance engine (art. 32) for comparison with the annual tax"],
+ "provisions_cited": 45,
+ "validation": [
+   {"referee": "OECD TW 2025 (Taxing Wages 2026, year 2025)", "cases": 56, "exact": 48, "within_1pct": 48,
+    "notes": "48/48 mapped lines (CGTC, CGITLETC, CGITFP, SLT, EECSSC, CTGG) within 1 PLN; the 8 THP lines differ by exactly the employee half of the 7.3 % ZUS subkonto share, which the OECD leaves out as inheritable private-like savings (F1); OECD does not round to whole zloty (F2)"},
+   {"referee": "podatki.gov.pl worked example (ulga na dziecko, three children 4224,12 zl)", "cases": 1, "exact": 1, "within_1pct": 1, "notes": "Lean relief_three_children"},
+   {"referee": "Official 2025 parameters re-derived from their statutory formulas (MP 2024/1051, 1055, 1084; MP 2025/84; DU 2024/1362)", "cases": 7, "exact": 7, "within_1pct": 7, "notes": "F13; no official PIT calculator found on podatki.gov.pl (the 'kalkulator taryfowy' is customs)"}],
+ "known_loopholes": {"catalogued": 19, "recreated": 13, "not_modelled": 5},
+ "new_loopholes": 4, "gov_errors": 0, "statute_faults": 1,
+ "headline": "Poland's 12/32 % scale with a 3 600 zl credit is exactly a 30 000 zl zero band (proved), and the OECD matches to the zloty once its subkonto convention is applied; the one-child relief limit (112 000 zl, frozen since 2013 and blind to ryczalt income) and the ryczalt health bands are notches with effective marginal rates above 100 %, while a sole trader on ryczalt at 500 000 zl pays half the tax and contributions of an employee."}

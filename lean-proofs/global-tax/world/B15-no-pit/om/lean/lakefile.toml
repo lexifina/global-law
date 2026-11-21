@@ -1,0 +1,14 @@
+name = "OmTax"
+version = "0.1.0"
+defaultTargets = ["OmTax", "omtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "OmTax"
+
+[[lean_exe]]
+name = "omtax"
+root = "OmTax.Main"

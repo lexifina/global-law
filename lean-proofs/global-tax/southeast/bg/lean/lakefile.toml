@@ -1,0 +1,14 @@
+name = "BgTax"
+version = "0.1.0"
+defaultTargets = ["BgTax", "bgtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "BgTax"
+
+[[lean_exe]]
+name = "bgtax"
+root = "BgTax.Main"

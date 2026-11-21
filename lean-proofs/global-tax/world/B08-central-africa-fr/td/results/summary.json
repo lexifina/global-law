@@ -1,0 +1,99 @@
+{
+ "country": "TD",
+ "name": "Chad",
+ "year": "2025",
+ "status": "built",
+ "batch": "B08-central-africa-fr",
+ "access": "B",
+ "reused_from": [
+  "CM (wage base)",
+  "kernel flat-capital pattern"
+ ],
+ "lean": {
+  "lines": 95,
+  "definitions": 9,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR, toMultiple)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "6 M and 30 M gross (barème read on the LF 2023 page image)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 3,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "the current CGI's wage base (2016 arts. 47-48 used)",
+  "family quotient (2016) not applied",
+  "employee CNPS (input cnpsEmployee)",
+  "self-employment, rents, gains"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.18,
+   "atAW": 3.335,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.18,
+   "atAW": 3.335,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.18,
+   "atAW": 3.335,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.32,
+   "atAW": 0.0,
+   "bandsOver100": 0,
+   "largestNotch": "4,799 at 0 (0.0 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 0.18,
+   "atAW": 3.335,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Since 2023 work income and capital income are taxed separately: dividends 20 % flat against at most 18 % of gross on salary",
+ "scale": {
+  "wage": 6000000,
+  "currency": "XAF",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "CGI art. 1 IV as rewritten by LF 2023 art. 36: end of the 10.5 % band '800 001 à 6 000 000' (archived dgi.td LF2023)",
+  "by": "B08-central-africa-fr",
+  "basis": "CGI art. 1 IV as rewritten by LF 2023 art. 36: end of the 10.5 % band '800 001 à 6 000 000' (archived dgi.td LF2023). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'progressive, individual, IRPP' corrected: since 2023 the IRPP is split into 'revenus du travail' (barème 0 % to 800 000, 10.5 % to 6 M, 15 %, 20 %, 25 %, 30 % above 12 M) and 'revenus du capital' (flat 20 %); the 2016 quotient (arts. 109-115) is taken as superseded; PSA 400 FCFA a month on every salary (LF 2024)."
+}

@@ -1,0 +1,14 @@
+name = "MzTax"
+version = "0.1.0"
+defaultTargets = ["MzTax", "mztax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "MzTax"
+
+[[lean_exe]]
+name = "mztax"
+root = "MzTax.Main"

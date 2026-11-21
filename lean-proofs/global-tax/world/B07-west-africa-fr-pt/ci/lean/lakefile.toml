@@ -1,0 +1,14 @@
+name = "CiTax"
+version = "0.1.0"
+defaultTargets = ["CiTax", "citax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CiTax"
+
+[[lean_exe]]
+name = "citax"
+root = "CiTax.Main"

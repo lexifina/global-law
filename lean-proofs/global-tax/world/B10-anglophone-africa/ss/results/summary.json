@@ -1,0 +1,99 @@
+{
+ "country": "SS",
+ "name": "South Sudan",
+ "year": "2024/25 (tax year 1 July 2024 - 30 June 2025; national government)",
+ "status": "built",
+ "batch": "B10-anglophone-africa",
+ "access": "A",
+ "reused_from": [
+  "DJ (B08: monthly brackets)",
+  "UK/IE PAYE"
+ ],
+ "lean": {
+  "lines": 99,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Table.perPeriod (monthly)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 6,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 4,
+   "exact": 4,
+   "within_1pct": 4,
+   "notes": "s. 4(2) at 100,000 a month (graduated); slab-reading notches at 40,000 and 90,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 1,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "Financial Act 2025/26 not reached",
+  "state personal income tax",
+  "rental and business income"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.2,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.2,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.2,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.2,
+   "atAW": 2.5,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.2,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 'Taxable incomes ... are charged at the rate of': the brackets can be read as slabs, which would make the tax jump by SSP 2,000 at 40,001 a month",
+ "scale": {
+  "wage": 1080000,
+  "currency": "SSP",
+  "kind": "statutory-threshold",
+  "year": "2024/25",
+  "source": "Financial Act 2024/2025 s. 4(2)(e): 'Taxable income from SSP 90,001 and above ... twenty percent (20%)' a month, x 12",
+  "by": "B10-anglophone-africa",
+  "basis": "Financial Act 2024/2025 s. 4(2)(e): 'Taxable income from SSP 90,001 and above ... twenty percent (20%)' a month, x 12. A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Taxation Act 2009 as amended' confirmed and completed: each year's Financial Act replaces Schedule 1 of the Taxation Act 2009; FY 2024/25 monthly brackets 0/5/10/15/20 % (20,000 / 40,000 / 57,000 / 90,000 SSP); states also levy a personal income tax (Constitution art. 179(d))."
+}

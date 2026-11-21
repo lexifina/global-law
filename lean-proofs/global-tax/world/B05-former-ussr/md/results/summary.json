@@ -1,0 +1,73 @@
+{
+ "country": "MD",
+ "name": "Moldova",
+ "year": "2025",
+ "status": "built",
+ "batch": "B05-former-ussr",
+ "access": "A",
+ "reused_from": [
+  "RO",
+  "KH"
+ ],
+ "lean": {
+  "lines": 97,
+  "definitions": 9,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 10,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "#guard: tax at 359,999 = 39,635 and at 360,000 = 43,200 (art. 33(1) exemption lost); net income below its 359,999 level up to 364,050"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 1,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "employee health-insurance premium and state social-insurance contribution (rates outside the Codul fiscal, not reached): employeeSocial = 0 and their art. 35^2 deduction not applied",
+  "rent (12 % or 7 % by tenant)",
+  "capital gains (cap. 5)",
+  "pensions"
+ ],
+ "scan": {
+  "summary": "results/search/SUMMARY.md"
+ },
+ "sources": "Codul fiscal nr. 1163/1997, consolidated 'act la zi' text with amendment notes, served by weblex.md through the Ministry of Finance's link (mf.gov.md/ro -> 'Codul fiscal al Republicii Moldova'), fetched from the laptop 2026-11-20 (md/law/rescue/weblex_cf_current_20261120.html): art. 12 pct. 4, 11, 12; art. 15 a) 12 % (from 2021); art. 33(1) 29,700 lei if annual taxable income < 360,000 (Law 214/2024 from 01.01.2025); art. 34(2); art. 35(1),(2) 9,900 lei per dependant (from 01.01.2025); art. 35^2(1),(2) contributions deductible; art. 90^1(31),(37) 6 % final on dividends and interest. Global law holds the Codul fiscal only as the 2019 table of contents (metadata).",
+ "headline": "Moldova's 29,700-lei personal exemption vanishes at 360,000 lei: one more leu costs 3,565 lei",
+ "tried": "",
+ "unlock": "",
+ "rescue": {
+  "agent": "rescue",
+  "date": "2026-11-20T11:11Z",
+  "routes": [
+   "Global law find_provision 'Codul fiscal' + search '1163-XIII': moldova/national/acts/law/1997/1163 exists but holds only the 2019 table of contents (commit kind 'metadata')",
+   "Wayback CDX of legis.md getResults (2025): ~2,400 distinct doc_ids, no title index (not scanned: would need thousands of archive fetches)",
+   "mf.gov.md (answers lean1): its menu links the Codul fiscal to demo.weblex.md (ref/mf); the page loads its text by the site's own AJAX call (?ajax=1), which answers the laptop (lean1 gets empty bodies); 1.5 MB consolidated text saved",
+   "legis.md, sfs.md, parlament.md: 403 (not bypassed); monitorul.gov.md: no answer"
+  ]
+ }
+}

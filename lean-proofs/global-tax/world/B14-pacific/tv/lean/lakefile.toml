@@ -1,0 +1,14 @@
+name = "TvTax"
+version = "0.1.0"
+defaultTargets = ["TvTax", "tvtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "TvTax"
+
+[[lean_exe]]
+name = "tvtax"
+root = "TvTax.Main"

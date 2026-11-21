@@ -1,0 +1,14 @@
+name = "CvTax"
+version = "0.1.0"
+defaultTargets = ["CvTax", "cvtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CvTax"
+
+[[lean_exe]]
+name = "cvtax"
+root = "CvTax.Main"

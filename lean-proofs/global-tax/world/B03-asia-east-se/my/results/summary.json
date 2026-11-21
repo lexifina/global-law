@@ -1,0 +1,78 @@
+{
+ "country": "MY",
+ "name": "Malaysia",
+ "year": "2025 (Year of Assessment 2025)",
+ "status": "built",
+ "batch": "B03-asia-east-se",
+ "access": "B",
+ "reused_from": [
+  "UK",
+  "AU"
+ ],
+ "lean": {
+  "lines": 95,
+  "definitions": 10,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 4,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "#guard: LHDN cumulative tax column (8 points); rebate notch RM400"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "interest/dividends (Schedule 6, dividend tax)",
+  "capital gains",
+  "pensions",
+  "EIS schedule items 41-54 (Act A1657 of 2022) not read (same rule applied); EIS counted in the SOCSO relief (reading)"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 6.5,
+   "netIncomeFalls": 1
+  },
+  "couple1earner2kids": {
+   "maxMETR": 9.7258,
+   "netIncomeFalls": 1
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 6.5323,
+   "netIncomeFalls": 2
+  }
+ },
+ "sources": "IRBM (LHDN) published tables: 'Tax Rate' YA 2023-2025 (Schedule 1), 'Tax Relief' YA 2025, 'Rebates' (s. 6A); the Income Tax Act 1967 is not in Global law and the Laws of Malaysia portal serves encrypted JSON behind signed tokens (not bypassed)",
+ "headline": "s. 6A rebate cliff at RM35,000 of chargeable income",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "EPF 11 % (Third Schedule bands, rounded up; nil from 60), SOCSO first category (0.5 % of the band mid-wage, ceiling RM6,000; under 60) and EIS (0.2 %, ceiling RM6,000; 18-59); reliefs EPF up to 4,000 and SOCSO+EIS up to 350",
+  "provision": "EPF Act 1991 Third Schedule Parts A, E (KWSP copy 2022); Employees Social Security Act 1969 Third Schedule para 2 (as at 1 Sep 2022) and Act A1724 (2024) s. 3; EIS Act 2017 Second Schedule and Act A1725 (2024) s. 3; LHDN YA 2025 reliefs 17, 20",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)",
+  "agent": "W5 pattern A contributions agent 2 (Asia, Americas, Europe, Pacific)"
+ }
+}

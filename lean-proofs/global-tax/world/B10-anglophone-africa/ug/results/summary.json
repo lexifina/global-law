@@ -1,0 +1,99 @@
+{
+ "country": "UG",
+ "name": "Uganda",
+ "year": "2024/25 (year of income 1 July 2024 - 30 June 2025)",
+ "status": "built",
+ "batch": "B10-anglophone-africa",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE",
+  "KE (this batch)"
+ ],
+ "lean": {
+  "lines": 92,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (Table.perPeriod)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 6,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 4,
+   "exact": 4,
+   "within_1pct": 4,
+   "notes": "Schedule 4 Part I printed fixed amounts 120,000 at 4,020,000 and 300,000 at 4,920,000; marginal 40 % above 120 M"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 2,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "local service tax (rates not reached)",
+  "Income Tax (Amendment) Act 2025 (if any) not reached: 2024/25 modelled",
+  "investment, rental and business income"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.35,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.35,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.35,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.35,
+   "atAW": 2.505,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.35,
+   "atAW": 1.005,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Rent is taxed on its own scale (12 % above 2.82 M) while wages reach 30-40 %: income-type conversion is visible in the statute",
+ "scale": {
+  "wage": 4920000,
+  "currency": "UGX",
+  "kind": "statutory-threshold",
+  "year": "2024/25",
+  "source": "Income Tax Act Schedule 4 Part I para. 1: start of the 30 % band ('Exceeding Ushs. 4,920,000 | Ushs. 300,000 plus 30%'; ULII version 2024-12-23)",
+  "by": "B10-anglophone-africa",
+  "basis": "Income Tax Act Schedule 4 Part I para. 1: start of the 30 % band ('Exceeding Ushs. 4,920,000 | Ushs. 300,000 plus 30%'; ULII version 2024-12-23). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act (Cap. 340); NSSF' corrected: the Revised Edition in force 2024-12-23 renumbers the rates as Schedule 4 (Part I individuals); year of income ends 30 June; resident rates 0/10/20/30 % (2.82 M / 4.02 M / 4.92 M) plus an additional 10 % above 120 M; NSSF employee 5 % of total wages, no ceiling, not deductible; local service tax under the Local Governments Act (rates not in the consolidated Act)."
+}

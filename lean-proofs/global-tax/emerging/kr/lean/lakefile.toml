@@ -1,0 +1,14 @@
+name = "KrTax"
+version = "0.1.0"
+defaultTargets = ["KrTax", "krtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "KrTax"
+
+[[lean_exe]]
+name = "krtax"
+root = "KrTax.Main"

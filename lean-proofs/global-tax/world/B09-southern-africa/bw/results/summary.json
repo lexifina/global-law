@@ -1,0 +1,72 @@
+{
+ "country": "BW",
+ "name": "Botswana",
+ "year": "2026/27 (Income Tax Act 2026; the 2025/26 schedule was not reached)",
+ "status": "built",
+ "access": "B",
+ "batch": "B09-southern-africa",
+ "lean": {
+  "lines": 85,
+  "definitions": 8,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon/Out",
+  "World.worldMain",
+  "Theorems (Schedule)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 11,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean #guard / decide)",
+   "cases": 8,
+   "exact": 8,
+   "within_1pct": 8,
+   "notes": "build phase: no referee values used"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 3,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "ZA (SACU)"
+ ],
+ "sources": [
+  "Income Tax Act, 2026 (No. 13 of 2026), Supplement A, Botswana Government Extraordinary Gazette 1 July 2026, served by BURS (Tax Laws 2026): s. 1, 2, 9, 28, 140, 144, Schedule 1 Part I",
+  "Income Tax (Amendment) Act No. 1 of 2024 and S.I. 5 of 2024 (scanned, OCR'd)",
+  "BURS pages: PAYE, FAQ, other withholding taxes (official secondary)"
+ ],
+ "scale": "156000 BWP (threshold of the 25 % band)",
+ "scanner": {
+  "single": {
+   "maxMETR": 0.2513,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.2513,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.2308,
+   "netIncomeFalls": 0
+  }
+ },
+ "unsupported": [
+  "the 2025/26 rate schedule under Cap. 52:01",
+  "social contributions (none found)"
+ ],
+ "registry_correction": "BW: Income Tax Act Cap. 52:01 repealed and replaced by the Income Tax Act, 2026 (No. 13 of 2026) from 1 July 2026; Cap. 52:01 continues for earlier tax years (s. 144 (a)). Tax year 1 July - 30 June.",
+ "headline": "Botswana modelled under the Income Tax Act 2026 (tax year 2026/27; the 2025/26 Cap. 52:01 schedule was not reachable): 0 % to P48 000, 5-27.5 %, final 10 % on bank interest and dividends; BURS's own pages still give P30 000 and P36 000 thresholds."
+}

@@ -1,0 +1,57 @@
+{
+ "country": "MT",
+ "name": "Malta",
+ "year": "2025 (income 2025 = year of assessment 2026)",
+ "status": "done",
+ "lean": {
+  "lines": 691,
+  "definitions": 71,
+  "theorems": 46,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Canon/Out/Country",
+  "Theorems (Schedule progressive/mono/convex/lipschitz/le_maxRate/ticks_succ)"
+ ],
+ "kernel_gaps": [
+  "Unit: Malta's married computation is a separate married rate table on the aggregate (not splitting/quotient); joint vs separate = married table on a+b vs single/parent table on a and b (kernel separate_le_joint assumes the same f)",
+  "Social: weekly contributions (cents, nearest cent, 52 weeks, flat minimum category) written in the country, not Contribution",
+  "imputation credit with partial exemption (art. 12(1)(c)(iii)) written in the country",
+  "lone-parent condition (maintenance / cohabitation) chooses the table: no kernel part"
+ ],
+ "provisions_cited": 28,
+ "validation": [
+  {
+   "referee": "Official enacted text: Act IX of 2025 (legislation.mt PDF) vs the Global-law consolidated art. 56 used in Params",
+   "cases": 18,
+   "exact": 18,
+   "within_1pct": 18,
+   "notes": "YA 2026 tables: 3 tables x (3 thresholds + 3 subtractions); also the table = formula identity proved for every income (single/married/parent_eq_formula)."
+  },
+  {
+   "referee": "EUROMOD CR MT 2021-2024 (JRC141187), 2024 system (YA 2025 law + Tenth/Fourteenth Schedules still in force in 2025)",
+   "cases": 21,
+   "exact": 21,
+   "within_1pct": 21,
+   "notes": "12 band thresholds of Table 2.25 vs singleYA2025/marriedYA2025/parentYA2025; Class One min 21.35 / max 42.31 / 53.23 (Table 2.19) and MPI 27,679 (Table 2.18) via class1Weekly; Children's Allowance threshold 27,006, lower limit 7,741, 6.5 %, min 8.66 and max 24.08 a week computed by caWeeklyPerChild (Lean v_ca_max_min, v_class1_max). Described-rule disagreements: FINDINGS F10 (4). No household-level referee: Malta not in OECD TW; CfR/DSS calculators and tables refuse automated access (403); EUROMOD 2022-2025 report not obtainable."
+  },
+  {
+   "referee": "Eurostat earn_nt_net 2025 (EC tax-benefit model, OECD TW method), 13 household types x TAX/SOC/FAM/NET",
+   "cases": 52,
+   "exact": 14,
+   "within_1pct": 22,
+   "notes": "harness/eurostat_check.py, results/eurostat_check_2025.txt; couples = cheaper of joint/separate; lone parent on the parent table (Eurostat's convention). TAX: 2/13 exact (two earners on 2 AW: 9,634 and 9,034, confirming separate computation and the parent table for EACH spouse); the other 11 differ by a constant per return (single EUR 95.5 up to 26,294 and EUR 60 from 32,868; married one-earner EUR 110; separate couples under EUR 60,000 EUR 65; lone parent EUR 105; none where the return exceeds EUR 60,000) = the annual budget 'tax refund', not in Cap. 123 and not modelled. SOC: Eurostat uses the 2025 administrative maximum EUR 2,838.14 (EUR 54.58 a week) vs the Tenth Schedule in force EUR 53.23 (F11), and 10 % without the EUR 21.35 minimum for a second earner below the minimum wage. FAM: Eurostat EUR 3,460 for two children (EUR 2,880 lone parent) vs mttax's Fourteenth-Schedule allowance (EUR 901/934): supplements not in the schedule. NET also includes in-work benefit for singles at 0.5-0.67 AW (EUR 2,085 / EUR 151)."
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 14,
+  "recreated": 5,
+  "not_modelled": 6
+ },
+ "new_loopholes": 1,
+ "gov_errors": 3,
+ "statute_faults": 4,
+ "headline": "Malta's default joint computation costs two-earner couples up to EUR 8,850 a year unless they elect separate computation; the dividend-exemption thresholds still sit at the abolished 2024 band points, a 2027 parent table has a EUR 5 jump, and the contribution schedule in force for 2025 is misprinted."
+}

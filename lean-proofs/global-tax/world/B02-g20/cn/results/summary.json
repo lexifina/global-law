@@ -1,0 +1,71 @@
+{
+ "country": "CN",
+ "name": "China",
+ "year": "2025",
+ "status": "built",
+ "batch": "B02-g20",
+ "access": "A",
+ "reused_from": [
+  "KR",
+  "JP"
+ ],
+ "lean": {
+  "lines": 93,
+  "definitions": 11,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "税率表一 band sums",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "#guard"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 2,
+  "recreated": 2,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "专项附加扣除",
+  "专项扣除 (social insurance, housing fund)",
+  "preferential notices",
+  "interest"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.45,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.45,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.41,
+   "netIncomeFalls": 0
+  }
+ },
+ "headline": "F1 Business income of a person with wages gets no 60,000 deduction"
+}

@@ -1,0 +1,107 @@
+{
+ "country": "IR",
+ "name": "Iran",
+ "year": "1404 (21 March 2025 - 20 March 2026)",
+ "status": "built",
+ "batch": "B06-mena",
+ "access": "B",
+ "reused_from": [
+  "TG"
+ ],
+ "lean": {
+  "lines": 114,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 7,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (Rule.unitDown)",
+  "Canon",
+  "Country",
+  "World2.worldMain14 (kernel 1.4.0)",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 7,
+   "exact": 7,
+   "within_1pct": 7,
+   "notes": "#guard: no tax at the 2,880,000,000-rial exemption; at each printed limit (3.6, 4.56, 6, 8 bn) the tax is the sum of the band widths x 10/15/20/25 % (72 M, 216 M, 504 M, 1,004 M); 10 bn = 1,604 M; marginal rate 25 % below and 30 % above 8 bn"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "the art. 85 groups (faculty, full-time physicians, judges), the 10 % flat tax on overtime and similar extras, art. 92 (less developed regions): not modelled",
+  "business income (DTA art. 131 rates not reached; art. 101 exemption 2,000,000,000 rials), rents, dividends, interest, capital gains: not modelled",
+  "pensions treated as exempt under DTA art. 91(5) as printed before the 1394 amendment (version gap)",
+  "SSO premium: the administrative maximum wage subject to the premium (1404) not reached and not applied; its deductibility (DTA art. 91, 1394 wording) not reached; other exemptions 'مصرح در قوانین' not deducted"
+ ],
+ "scan": {
+  "summary": "results/search/SUMMARY.md"
+ },
+ "sources": "Budget Law 1404 (Part One) (قانون بودجه سال ۱۴۰۴ کل کشور (بخش اول)), approved by the Majlis 8 Bahman 1403, Expediency Council 10 Bahman 1403, Speaker's letter No. 235/75483 of 13 Bahman 1403, promulgated 14 Bahman 1403: Note 1(ز)(1)-(3) (art. 84 exemption 2,880,000,000 rials; 10 % to 3,600,000,000, 15 % to 4,560,000,000, 20 % to 6,000,000,000, 25 % to 8,000,000,000, 30 % above; faculty, full-time physicians and judges under art. 85; 10 % on overtime and similar extras; withholding through the tax organisation's system) and Note 1(ث) (art. 101 business and art. 57 rent exemptions 2,000,000,000 rials). Read on the scan of the promulgated text with the www.dotic.ir watermark and the Speaker's letterhead, pp. 1, 10-11, from the copy at https://www.ekhtebar.ir/wp-content/uploads/2025/02/قانون-بودجه-۱۴۰۴.pdf (live file = Internet Archive capture 20250215212522; 101 pp.; sha256 561363b20facbb499dcf718ae2af8c0994111db757e26cd5bd3f9b827125552f; ir/law/rescue3/budget1404_part1_dotic_scan.pdf); transcription cross-checked: ekhtebar.ir page 'قانون بودجه سال ۱۴۰۴ کل کشور (بخش اول)' (Internet Archive capture 20251115083103). Direct Taxes Act, English translation on the Iran Data Portal (Syracuse University), https://irandataportal.syr.edu/section-3-income-tax (pre-1394 text: art. 85 still prints the 1388 figure): arts. 82-86, 91 (5: pensions exempt), 92; second copy: UN ESCAP Asia Pacific Energy Portal https://policy.asiapacificenergy.org/sites/default/files/directtaxationact.pdf (older text).",
+ "headline": "Iran's 1404 salary tax from the promulgated Budget Law (Note 1(ز)): 2.88 bn rials a year exempt, then 10 % rising to 30 % above 8 bn, on each person's salary from all sources together",
+ "tried": "",
+ "unlock": "",
+ "rescue": {
+  "agent": "rescue1",
+  "routes": [
+   "build pass: Global law: corpus holds the constitution only",
+   "build pass: qavanin.ir (national laws system) and dolat.ir: answer with an ArvanCloud JavaScript challenge page (not bypassed)",
+   "build pass: rc.majlis.ir, intamedia.ir, rrk.ir: no answer from lean1 or the laptop",
+   "build pass: Wayback CDX rc.majlis.ir/fa/law/show (2025-): 3,599 archived pages without titles; not scanned (budget)",
+   "Internet Archive CDX of rc.majlis.ir/fa/law/show/ (150,000 capture rows): the 60 most-captured law pages fetched (latest captures, 3 s apart; titles in ~/cmp20/world/rescue/logs/ir_titles.tsv): most 2025 captures are 4-6 KB challenge shells; readable ones include the 1380 (2001) amendment of the Direct Taxes Act (id 93728: art. 85 then '10 % ... up to 42,000,000 rials ... above at the rates of art. 131'), superseded by the 1394 (2015) amendment and the yearly budget-law brackets",
+   "rc.majlis.ir, tax.gov.ir, intamedia.ir: no answer from lean1; qavanin.ir: challenge page (not bypassed)",
+   "Persian OCR available (tools/tessdata/fas) but no 1404 budget-law scan was found to OCR"
+  ]
+ },
+ "rescue2": {
+  "agent": "rescue2",
+  "routes": [
+   "laptop: intamedia.ir, rc.majlis.ir, mporg.ir, parliran.ir, tax.gov.ir, lawset.ir: no connection; dotic.ir 403; qavanin.ir 6 KB challenge shell (not bypassed)",
+   "Internet Archive CDX of intamedia.ir (domain, from 2023/2024) and rc.majlis.ir/fa/law/show/ (from 2025-02): 504 gateway time-outs (three tries)",
+   "one WebSearch (Persian): news reports and the text of the 1404 budget BILL (لایحه) on ekhtebar.ir (a bill is not law); ekhtebar.ir answers the laptop but its search is a '.wgchallenge' JavaScript challenge: stopped",
+   "Budget Law 1404 (the enacted text with the salary exemption and brackets) not reached",
+   "legis-palop.org (PALOP+TL legal database): full texts need a paid subscription and login (free registration gives listings only); its search form posts redirect to the home page without a session: not used (login)",
+   "natlex.ilo.org, www.fao.org/faolex, www.refworld.org: Cloudflare 'Sorry, you have been blocked' (403) from the laptop and WebFetch: not bypassed",
+   "droit-afrique.com: live site 403 ('Server unable to read htaccess file'); its tax codes are sold in a shop (Wayback: only the free 'sommaire')",
+   "Global law list_jurisdictions (rescue2/tools/gl.py, 2026-11-20): no tax law in this country's corpus",
+   "WIPO Lex country profile (www.wipo.int/wipolex/en/members/profile/<CC>): no tax law listed (except SY, GM: see below)"
+  ]
+ },
+ "rescue3": {
+  "agent": "rescue3sy",
+  "date": "2026-11-20T13:46Z",
+  "routes": [
+   "laptop reachability 2026-11-20: www.irna.ir, en.irna.ir, www.isna.ir, qavanin.ir, dolat.ir answer with ArvanCloud challenge shells (~6 KB; not bypassed); intamedia.ir, rrk.ir, rc.majlis.ir, www.majlis.ir, tax.gov.ir, mporg.ir, tasnimnews no connection; dotic.ir 403; www.mehrnews.com answers (semi-official, not used)",
+   "Internet Archive (answering this pass): CDX intamedia.ir (domain and path queries) 504 again; rc.majlis.ir/fa/law/show from 2025 = 2 KB shells; rrk.ir root pages only; dotic.ir/qavanin.ir captures 403 or shells; tax.gov.ir: residencyvalidation subdomain only",
+   "WebSearch (Persian) found the ekhtebar.ir pages of the enacted Budget Law 1404 Parts One and Two: the live page is a '.wgchallenge' JS challenge (not bypassed); its Internet Archive captures (20250215 ... 20260608) are complete; the page links a PDF (served directly, no challenge) that is the scan of the promulgated law with the dotic.ir watermark (101 pp.); pages 1, 10, 11 rendered and read (tesseract fas + the page image)",
+   "WebSearch (English) for a DTA translation: Iran Data Portal (Syracuse University) chapter 3 'Tax on Salary' (pre-1394), UN ESCAP Asia Pacific Energy Portal PDF; informea/ecolex/FAOLEX summaries not used",
+   "Budget Law 1404 Part Two (expenditure tables) not read; any later amendment of Note 1(ز) in 1404 not searched beyond the ekhtebar page (captures to 2026-06 show the same text)"
+  ]
+ },
+ "version": "enacted Budget Law 1404 (Part One), Note 1(ز), promulgated 14 Bahman 1403 (2 February 2025); Direct Taxes Act structure from an English translation of the text as amended to about 1388 (2009), the 1394 (2015) wording not reached",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "insured person's premium 7 % of wages (Social Security Act 1354 art. 28 (1), تبصره ۱), reported, not deducted",
+  "provision": "قانون تأمین اجتماعی مصوب ۱۳۵۴ art. 28 (1) and تبصره ۱, art. 2 (5), art. 36 (consolidated text on ekhtebar.ir, a private legal publisher's transcription; official hosts refused)",
+  "source": "statute (private reproduction)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

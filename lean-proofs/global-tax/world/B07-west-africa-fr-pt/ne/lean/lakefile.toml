@@ -1,0 +1,14 @@
+name = "NeTax"
+version = "0.1.0"
+defaultTargets = ["NeTax", "netax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "NeTax"
+
+[[lean_exe]]
+name = "netax"
+root = "NeTax.Main"

@@ -1,0 +1,81 @@
+{
+ "country": "PK",
+ "name": "Pakistan",
+ "year": "2026 (tax year 1 July 2025 - 30 June 2026)",
+ "status": "built",
+ "batch": "B11-south-asia",
+ "access": "A",
+ "reused_from": [
+  "IN",
+  "UK"
+ ],
+ "lean": {
+  "lines": 220,
+  "definitions": 27,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 6,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (s. 219 half-up)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "average-rate credits (A/B) x C (ss. 61, 63): local function; a kernel 'credit at the average rate' part would reuse across the Income-tax-Act family (PK, BD s. 78 uses a different form)"
+ ],
+ "provisions_cited": 44,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "#guard: both Div I tables' printed fixed amounts = band sums (8 points); s. 4AB notch 241,290; s. 7B cliff 1,162,000 -> 2,420,000; 75 % test 586,000 -> 970,000; s. 4C notch 1,500,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 10,
+  "recreated": 5,
+  "not_modelled": 3
+ },
+ "new_loopholes": 2,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "capital gains (s. 37/37A)",
+  "EOBI amount needs pkMinWageMonthly (minimum wage notified outside the Ordinance)",
+  "profit on debt read as bank-deposit profit (Div IIIA (a))",
+  "provincial social security / workers' funds (employer-side)"
+ ],
+ "scan": {
+  "fineGrid": {
+   "single": {
+    "maxMETR": 47.4556,
+    "netIncomeFalls": 1
+   },
+   "couple1earner2kids": {
+    "maxMETR": 47.4556,
+    "netIncomeFalls": 1
+   },
+   "couple60_40_2kids": {
+    "maxMETR": 0.3301,
+    "netIncomeFalls": 0
+   }
+  },
+  "scan_world": {
+   "summary": "results/search/SUMMARY.md",
+   "topRateSingle10AW": 38.15
+  }
+ },
+ "sources": "Income Tax Ordinance 2001 as amended up to 31.07.2025 (FBR PDF, download1.fbr.gov.pk, linked from fbr.gov.pk/Categ/Income-Tax-Ordinance/326; law/ito_fbr_20250731.pdf) = the tax-year-2026 text (Finance Act 2025); Pakistan Code consolidated PDF of 2026-10-28 (official link given by Global law; law/ito_pakistancode.pdf) whose footnotes print the substituted tax-year-2026 tables; EOBI Act 1976 ss. 2(p), 9, 9B (Global law, Pakistan Code). Finance Act 2025 (FBR, scanned, 292 pp.) saved but not needed (the FBR consolidation carries its amendments with footnotes).",
+ "registry_correction": "Registry: 'First Schedule, salaried rates' confirmed; tax year 2026 (July 2025-June 2026) is the year beginning in 2025. Salaried table (Div I (2), salary > 75 % of taxable income): 0 / 1 / 11 / 23 / 30 / 35 % at 0.6 / 1.2 / 2.2 / 3.2 / 4.1 m; others Div I (1): 0 / 15 / 20 / 30 / 40 / 45 % at 0.6 / 1.2 / 1.6 / 3.2 / 5.6 m; surcharge s. 4AB 9 % (salaried) / 10 % above 10 m; super tax s. 4C on income > 150 m; pensions from 10 m at 5 % (FA 2025, exemption cl. (8) omitted). Global law's PK file layout is shifted (schedule-1.md holds the Second Schedule's contents; schedule-8.md holds the First Schedule).",
+ "headline": "Surcharge cliff at 10 million: one rupee of taxable income costs 241,290 rupees (salaried) or 359,000 (others)"
+}

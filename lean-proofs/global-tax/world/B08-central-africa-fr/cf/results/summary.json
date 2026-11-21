@@ -1,0 +1,98 @@
+{
+ "country": "CF",
+ "name": "Central African Republic",
+ "year": "2025",
+ "status": "built",
+ "batch": "B08-central-africa-fr",
+ "access": "B",
+ "reused_from": [
+  "CM (individual IRPP, 30 % frais)"
+ ],
+ "lean": {
+  "lines": 92,
+  "definitions": 8,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR, toMultiple)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "taxable 1.68 M (8 % band) and 7 M"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 3,
+  "not_modelled": 3
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "employee CNSS contributions (rate not reached; input cnssEmployee)",
+  "self-employment",
+  "rents and gains",
+  "the 2024 finance law"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.286,
+   "atAW": 2.15,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.286,
+   "atAW": 2.15,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.286,
+   "atAW": 2.15,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.274,
+   "atAW": 3.66,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.286,
+   "atAW": 2.15,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The 30 % deduction has no cap: a third of every salary is untaxed at all levels",
+ "scale": {
+  "wage": 3360000,
+  "currency": "XAF",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "CGI 2017 mise à jour 2023 art. 86: start of the 28 % band '3.360.001-5.040.000' (finances.gouv.cf)",
+  "by": "B08-central-africa-fr",
+  "basis": "CGI 2017 mise à jour 2023 art. 86: start of the 28 % band '3.360.001-5.040.000' (finances.gouv.cf). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'progressive, individual, IRPP' confirmed: wage IRPP 0/8/15/28/40 % on gross less 30 % frais and CNSS (arts. 38, 39, 86), individual; RCM 15 % (art. 84); the CDS 10 % (arts. 237-243) is an employer payroll tax."
+}

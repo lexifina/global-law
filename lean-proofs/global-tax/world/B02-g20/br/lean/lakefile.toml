@@ -1,0 +1,14 @@
+name = "BrTax"
+version = "0.1.0"
+defaultTargets = ["BrTax", "brtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "BrTax"
+
+[[lean_exe]]
+name = "brtax"
+root = "BrTax.Main"

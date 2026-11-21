@@ -1,0 +1,75 @@
+{
+ "country": "LU",
+ "name": "Luxembourg",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 626,
+  "definitions": 111,
+  "theorems": 32,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (tarif art. 118, class-1a schedule art. 120bis)",
+  "Rounding (art. 124, 126)",
+  "Surcharge (fonds pour l'emploi: flatPct 7 % + above 2 % on the cote)",
+  "Unit (splitting, art. 121)",
+  "Canon/Out/Country",
+  "Theorems.Schedule",
+  "Theorems.Parts (Surcharge, Unit)"
+ ],
+ "kernel_gaps": [
+  "credits written locally: CIS/CIP/CII have a phase-in from a base (300 + 2,9 %), a flat part and a phase-out, rounded up to the cent; CISSM is monthly",
+  "social contributions monthly (two SSM levels in 2025, ceiling and dependence abattement per month): local",
+  "class 1a is the tarif on a transformed income with capped marginal rates: written as its own schedule and checked against the statute's formula",
+  "Out is whole euros: cents kept in detail fields",
+  "company side (IRC art. 174 bands + FE + ICC) in harness/scan_lu.py, not in the kernel's company.json entry"
+ ],
+ "provisions_cited": 46,
+ "validation": [
+  {
+   "referee": "OECD TW 2025 (family check.py, --oecd conventions)",
+   "cases": 56,
+   "exact": 48,
+   "within_1pct": 56,
+   "notes": "all tax and SSC lines exact; CTGG/THP -4,48 (OECD allocation familiale, F2)"
+  },
+  {
+   "referee": "ACD Formules du calcul automatisé 2025 (income, classes 1/1a/2)",
+   "cases": 24003,
+   "exact": 24003,
+   "within_1pct": 24003,
+   "notes": "cote and cote+majoration at every multiple of 50, 0-400 000"
+  },
+  {
+   "referee": "ACD online calculator saturn.etat.lu/cobar (revenu annuel 2025)",
+   "cases": 387,
+   "exact": 387,
+   "within_1pct": 387,
+   "notes": "sequential, 1,5 s apart; barème and total incl. fonds pour l'emploi"
+  },
+  {
+   "referee": "ACD circulars 154ter/1 (26.2.2025), 154quater/1 (12.3.2025) worked examples",
+   "cases": 11,
+   "exact": 11,
+   "within_1pct": 11,
+   "notes": "class 1a cotes, CIM, CIS, CI-CO2"
+  },
+  {
+   "referee": "ACD annual salary table (décompte annuel) vs statute assessment",
+   "cases": 122574,
+   "exact": 3901,
+   "within_1pct": 0,
+   "notes": "not agreement statistics: table - statute in [-10, +15] EUR, mean ~0 (F4, convention)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 21,
+  "recreated": 12,
+  "not_modelled": 9
+ },
+ "new_loopholes": 4,
+ "gov_errors": 2,
+ "statute_faults": 4,
+ "headline": "The Luxembourg model matches the ACD's own calculator and formula sheet exactly (24 390 cases) and the OECD on every tax line; class 1a is worth 2 484 euros at any income, married parents pay up to 1 155 more than unmarried ones, a spouse's 936th euro of wage brings 492 euros of refundable credits, and the CISSM taper stacks to 64-74 % between 36 000 and 43 400."
+}

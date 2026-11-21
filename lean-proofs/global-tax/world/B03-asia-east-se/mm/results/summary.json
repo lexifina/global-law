@@ -1,0 +1,68 @@
+{
+ "country": "MM",
+ "name": "Myanmar",
+ "year": "FY 2025-26 (1 April 2025 - 31 March 2026)",
+ "status": "built",
+ "batch": "B03-asia-east-se",
+ "access": "B",
+ "reused_from": [
+  "IN"
+ ],
+ "lean": {
+  "lines": 89,
+  "definitions": 9,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "#guard: no tax at 4,800,000; 92,000 kyat at 4,800,001"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "social security contributions",
+  "rent, capital gains, interest/dividends, self-employment, pensions"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 15.3733,
+   "netIncomeFalls": 1
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.04,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 7.016,
+   "netIncomeFalls": 1
+  }
+ },
+ "sources": "Internal Revenue Department page on individuals (ird.gov.mm), citing the Union Tax Law 2025 ss. 14, 15, 19, 24, 25, 27, 28 and the Income Tax Law s. 6 reliefs; the statutes themselves were not reached (Global law holds 4 Myanmar acts; mlis.gov.mm did not answer)",
+ "headline": "All-or-nothing salary exemption: one kyat over 4,800,000 costs 92,000 kyat"
+}

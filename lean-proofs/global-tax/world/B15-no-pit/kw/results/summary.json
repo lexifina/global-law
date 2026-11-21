@@ -1,0 +1,71 @@
+{
+ "country": "KW",
+ "name": "Kuwait (Kuwaiti private-sector employee)",
+ "year": "2025",
+ "status": "built",
+ "access": "B",
+ "batch": "B15-no-pit",
+ "lean": {
+  "lines": 92,
+  "definitions": 14,
+  "theorems": 4,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "plain Int functions (five stacked contributions)"
+ ],
+ "kernel_gaps": [
+  "none (the World recipe for no income tax: incomeTax := 0 with a detail note)"
+ ],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute arithmetic only (#guard / decide in Theorems.lean)",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "build-only phase: no referee values looked at (CONTRACTWORLD testing order)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Social (Contribution)",
+  "World no-income-tax recipe"
+ ],
+ "sources": [
+  "PIFSS legislative guide book 1 (16-9-2021): SIL 61/1976 art. 2 (ceiling 1,500, Law 9/2011), art. 11 (5 %), issuing decree art. 2 (Kuwaitis)",
+  "Law 25/2001 art. 8 and table (pension increase fund, 2.5 % from the tenth year)",
+  "Law 110/2014 art. 3-4 (2.5 % on salary up to 1,500)",
+  "DL 128/1992 art. 1(3), 4(a) (supplementary insurance 5 %, maximum 1,250; decisions 1/2005, 6/2019)",
+  "DL 101/2013 art. 3 (unemployment 0.5 %)"
+ ],
+ "unsupported": [
+  "amendments and ministerial decisions after September 2021",
+  "minimum salary floor",
+  "GCC nationals",
+  "Kuwait income tax decree (corporate) not read"
+ ],
+ "headline": "Kuwait 2025: no income tax on individuals; a Kuwaiti employee pays five stacked contributions, 10.5 % up to KWD 1,500 a month and 5.5 % up to 2,750 (PIFSS consolidation of 2021).",
+ "registry_correction": "PIT N. Contributions (Kuwaitis only): SIL 61/1976 art. 11 5 % + Law 25/2001 2.5 % + Law 110/2014 2.5 % + unemployment DL 101/2013 0.5 % up to KWD 1,500 a month; supplementary DL 128/1992 5 % (+0.5 %) on 1,500-2,750.",
+ "d9_review": [
+  {
+   "date": "2026-11-20",
+   "item": "D9S-1",
+   "category": "referee error (reading)",
+   "dataset": "world_kw_issa_contribution_rates_2025",
+   "cause": "ISSA insured total 8 % omits one 2.5 % component of the statutory 10.5 % (SIL art. 11, Law 25/2001 art. 8, Law 110/2014 arts. 3-4, DL 101/2013 art. 3)",
+   "model_change": "none"
+  }
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "country": "KR",
+ "name": "South Korea",
+ "year": "2025",
+ "status": "done",
+ "lean": {
+  "lines": 1024,
+  "definitions": 112,
+  "theorems": 51,
+  "sorry": 0,
+  "data_lines": 1216
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Basic",
+  "Canon",
+  "Country",
+  "Theorems (Schedule.ticks_mono_of_progressive, ticks_convex, ticks_lipschitz_of_progressive, ticks_le_maxRate_mul, ticks_succ, ticks_mono)"
+ ],
+ "kernel_gaps": [
+  "Social contribution with a minimum base (the floor raises the base, not all-or-nothing) and two ceilings in one year (July-June periods)",
+  "Banded lookup-table benefits (산정표) with decision rules (nil under 15,000, minimum payments 30,000/100,000) and household (couple) income tests inside an individual tax",
+  "Comparison tax: the larger of two computations (소득세법 §62)",
+  "Health insurance on non-wage income with an all-or-nothing inclusion threshold (1천만원) and an allowance (2천만원)",
+  "Withholding tables as data with a recovered generating rule (table = formula check)"
+ ],
+ "provisions_cited": 67,
+ "validation": [
+  {
+   "referee": "OECD TW 2025",
+   "cases": 56,
+   "exact": 5,
+   "within_1pct": 42,
+   "notes": "harness children 6 and 11; all differences explained: OECD children under 8 at home (F1), OECD social rounding (F6, F7)"
+  },
+  {
+   "referee": "OECD TW 2025 with the OECD's Korean conventions",
+   "cases": 56,
+   "exact": 49,
+   "within_1pct": 56,
+   "notes": "children 6 and 7 at home, no 1,000-won truncation, LTC 12.95 %: max diff 3 won"
+  },
+  {
+   "referee": "소득세법 시행령 별표 2 근로소득 간이세액표 (official table)",
+   "cases": 7106,
+   "exact": 7098,
+   "within_1pct": 7106,
+   "notes": "recovered rule (note 1 + 2014 근로소득세액공제 + 2017 pension ceiling), kernel-checked on every cell; 8 cells 10 won above"
+  },
+  {
+   "referee": "조특법 시행령 별표 11/11의2 장려금 산정표",
+   "cases": 1479,
+   "exact": 1437,
+   "within_1pct": 1437,
+   "notes": "table vs the act's formula under the table's rounding rule; the 42 exceptions are F3"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 18,
+  "recreated": 10,
+  "not_modelled": 5
+ },
+ "new_loopholes": 4,
+ "gov_errors": 5,
+ "statute_faults": 2,
+ "headline": "Korea's 2025 monthly withholding table is computed with the 2014 earned-income credit and the 2017 pension ceiling (7,098 of 7,106 cells reproduced exactly), over-withholding up to 28,040 won a month; and the OECD's Korean families have two children under 8 at home."
+}

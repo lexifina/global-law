@@ -1,0 +1,100 @@
+{
+ "country": "GH",
+ "name": "Ghana",
+ "year": "2025 (calendar year of assessment)",
+ "status": "built",
+ "batch": "B10-anglophone-africa",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE (reliefs)",
+  "NG (B02)"
+ ],
+ "lean": {
+  "lines": 121,
+  "definitions": 13,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (Table.perPeriod)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "Act 1111 bands summed (605,000) vs Act 1094 (600,000); two readings differ by 250 above 605,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 3,
+  "not_modelled": 2
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "disability and dependant-relative reliefs",
+  "education relief needs input childrenInSchool",
+  "investment and rental income",
+  "any later amendment of Act 766 (insurable-earnings ceiling)"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.387,
+   "atAW": 1.075,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.387,
+   "atAW": 1.075,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.387,
+   "atAW": 1.075,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.389,
+   "atAW": 2.695,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.387,
+   "atAW": 1.075,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Act 1111's 'Next' amounts add up to GH¢605,000 while its top row starts at 'Exceeding GH¢600,000'",
+ "scale": {
+  "wage": 600000,
+  "currency": "GHS",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act 2015 (Act 896) First Schedule para. 1(1) as substituted by Act 1111 (2023): 'Exceeding GH¢600,000 | 35 per cent'",
+  "by": "B10-anglophone-africa",
+  "basis": "Income Tax Act 2015 (Act 896) First Schedule para. 1(1) as substituted by Act 1111 (2023): 'Exceeding GH¢600,000 | 35 per cent'. A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act 2015 (Act 896); SSNIT' confirmed: individual taxation; resident bands for 2024-2025 by Act 1111 (0/5/10/17.5/25/30/35 %); Fifth Schedule reliefs in cedis; SSNIT employee 5.5 % exempt (Act 766 s. 89). Act 896 itself is in the GRA's scan, not in Global law's corpus."
+}

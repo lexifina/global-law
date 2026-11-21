@@ -1,0 +1,117 @@
+{
+ "country": "KE",
+ "name": "Kenya",
+ "year": "2025 (calendar year of income)",
+ "status": "built",
+ "batch": "B10-anglophone-africa",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE (annual bands, personal relief)",
+  "NG (B02: per-person PAYE)"
+ ],
+ "lean": {
+  "lines": 132,
+  "definitions": 17,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (monthly contributions via Table.perPeriod)"
+ ],
+ "kernel_gaps": [
+  "minimum monthly contribution (SHIF max(300, 2.75 %)): local"
+ ],
+ "provisions_cited": 14,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "Head B cumulative tax at 388,000 / 6,000,000 / 9,600,000; personal relief = 10 % band; SHIF minimum below 10,909 a month"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 2,
+  "not_modelled": 4
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "NSSF Tier II (UEL = 2 x KNBS National Average Earnings not reached; input nssfUEL)",
+  "insurance relief, mortgage interest, post-retirement medical fund (need inputs)",
+  "investment, rental and business income",
+  "wages assumed paid evenly over 12 months"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.378,
+   "atAW": 1.675,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.378,
+   "atAW": 1.675,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.378,
+   "atAW": 1.675,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.369,
+   "atAW": 2.795,
+   "bandsOver100": 0,
+   "largestNotch": "299 at 0 (0.0 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 0.378,
+   "atAW": 1.675,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The SHIF minimum of KES 300 a month makes the health contribution regressive below KES 10,909 a month: 6 % of pay at KES 5,000 a month",
+ "scale": {
+  "wage": 6000000,
+  "currency": "KES",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act (Cap. 470) Third Schedule Head B para. 1: start of the 32.5 % band ('On the next Ksh. 3,600,000 | 32.5%' after 288,000 + 100,000 + 5,612,000 = 6,000,000; Kenya Law consolidation 2025-07-01)",
+  "by": "B10-anglophone-africa",
+  "basis": "Income Tax Act (Cap. 470) Third Schedule Head B para. 1: start of the 32.5 % band ('On the next Ksh. 3,600,000 | 32.5%' after 288,000 + 100,000 + 5,612,000 = 6,000,000; Kenya Law consolidation 2025-07-01). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act (Cap. 470); personal relief; SHIF, NSSF, housing levy' confirmed: individual taxation (s. 45 repealed by Act 4 of 2023), annual bands 10/25/30/32.5/35 % (288,000 / 388,000 / 6,000,000 / 9,600,000), personal relief 28,800; since 27 Dec 2024 SHIF (2.75 %, min 300 a month) and the Affordable Housing Levy (1.5 %) are deductible (s. 15(2)(ac),(ae)), NSSF (6 % to the UEL) deductible as a registered-fund contribution (s. 22(8), s. 22A cap 360,000).",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "NSSF Tier II: default year-3 Upper Earnings Limit KES 72,000 a month (2 x NAE 36,000) when nssfUEL is not given",
+  "provision": "NSSF Act 2013 s. 20 (1) (b), Third Schedule (year 3 UEL = 2 x NAE); NSSF notices \"Year 2 contribution rates, 2024\" (UEL 36,000 = 1 x NAE) and \"Year 4 (2026)\" (UEL 108,000 = 3 x NAE), official secondary; the year-3 notice itself not found",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)",
+  "agent": "W5 pattern A contributions agent 2 (Asia, Americas, Europe, Pacific)",
+  "followups": [
+   {
+    "date": "2026-11-20",
+    "change": "NSSF contribution period: January 2025 at year-2 limits (LEL 7,000, UEL 36,000), February-December at year 3 (LEL 8,000, UEL 72,000), with the switch on",
+    "provision": "NSSF Act 2013 Third Schedule; NSSF Year 4 notice (18 Feb 2026): \"the implementation of Year 3 contribution rates ended on 31st January, 2026\" (reviewer 3 pass 3 row 127; gaa.go.ke copy `law/w5/nssf_year4_notice_gaa.pdf`); NSSF year-2 notice (UEL 36,000)",
+    "agent": "contributions agent 2 (reviewer 3 pass 3)"
+   }
+  ]
+ }
+}

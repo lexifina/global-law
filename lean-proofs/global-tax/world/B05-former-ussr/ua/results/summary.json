@@ -1,0 +1,102 @@
+{
+ "country": "UA",
+ "name": "Ukraine",
+ "year": "2025",
+ "status": "built",
+ "batch": "B05-former-ussr",
+ "access": "A",
+ "reused_from": [
+  "RU",
+  "EE",
+  "PL"
+ ],
+ "lean": {
+  "lines": 113,
+  "definitions": 14,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Surtax (levy)"
+ ],
+ "kernel_gaps": [
+  "all-or-nothing benefit with a child-multiplied limit: local"
+ ],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed sums and hand-computed statutory cases (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "PSP 1 514 / limit 4 240 from the budget law; 4 000 and 4 241 a month cases"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 1,
+  "recreated": 1,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "pensions",
+  "single-tax groups",
+  "deposit/property-sale rules",
+  "special benefits 150 %/200 %"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 3.636,
+   "atAW": 0.265,
+   "bandsOver100": 1,
+   "largestNotch": "3,269 at 50,885 (0.26503 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 7.044,
+   "atAW": 0.53,
+   "bandsOver100": 1,
+   "largestNotch": "6,540 at 101,765 (0.53003 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 7.044,
+   "atAW": 0.53,
+   "bandsOver100": 1,
+   "largestNotch": "6,540 at 101,765 (0.53003 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 7.044,
+   "atAW": 1.325,
+   "bandsOver100": 2,
+   "largestNotch": "6,540 at 254,413 (1.32507 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 7.044,
+   "atAW": 0.53,
+   "bandsOver100": 1,
+   "largestNotch": "6,540 at 101,765 (0.53003 AW)"
+  }
+ },
+ "headline": "F1 The tax social benefit is all-or-nothing: 1 hryvnia over 4 240 a month costs 272.5 hryvnias of tax",
+ "scale": {
+  "wage": 192000,
+  "currency": "UAH",
+  "kind": "minimum-wage-multiple",
+  "year": "2025",
+  "source": "2 x 12 x the minimum wage of 8 000 hryvnias, Law 4059-IX on the State Budget 2025 art. 8 (archived zakon.rada.gov.ua copy 2025-04-10)",
+  "by": "B05-former-ussr",
+  "basis": "2 x 12 x the minimum wage of 8 000 hryvnias, Law 4059-IX on the State Budget 2025 art. 8 (archived zakon.rada.gov.ua copy 2025-04-10)"
+ }
+}

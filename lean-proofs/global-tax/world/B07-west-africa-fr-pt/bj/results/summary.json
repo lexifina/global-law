@@ -1,0 +1,62 @@
+{
+ "country": "BJ",
+ "name": "Benin (ITS with ORTB levy, IRCM, IRF)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "B",
+ "batch": "B07-west-africa-fr-pt",
+ "lean": {
+  "lines": 116,
+  "definitions": 17,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (art. 125 monthly barème)",
+  "month-specific levy (local)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 9,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean decide)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "build phase: no referee values used; cases = Lean theorems (kernel instances and checks of the statute's printed tables and stated amounts, all proved)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 2,
+  "not_modelled": 3
+ },
+ "new_loopholes": 1,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Schedule"
+ ],
+ "sources": [
+  "Code général des impôts 2023 (Loi n° 2021-15 du 23 décembre 2021, mise à jour LF 2023 loi n° 2022-33), Ministère de l'Economie et des Finances: https://finances.bj/wp-content/uploads/2023/01/63c7b8d3eef3c_Benin-CGI-2023-officiel.pdf"
+ ],
+ "scale": "6000000 XOF (12 x 500 000 F, the threshold of the top (30 %) monthly ITS band)",
+ "unsupported": [
+  "LF 2024-2025 not reached",
+  "IBA",
+  "CNSS rate décret (Code de sécurité sociale 2003 art. 24 2)) not reached: rate from the CNSS page"
+ ],
+ "registry_correction": "BJ: ITS confirmed (CGI Loi 2021-15); no family relief; access B.",
+ "headline": "Benin built from the 2023 official CGI (LF 2024-2025 not reached): monthly ITS 0-30 % on gross pay with no family relief at all, plus an ORTB levy of 1 000 F in March and 3 000 F in June that makes June pay of 60 001 F net 2 999 F less than 60 000 F.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "CNSS salarié 3,6 % of all remuneration (pension branch, no ceiling), reported, not deducted (ITS base is gross pay, CGI art. 122)",
+  "provision": "CNSS page \"Procédure de recouvrement des cotisations\" (cnss.bj, fetched 2026-11-20): \"Pension : 10 % dont : 6.4 % à la charge de l'employeur 3.6 % à la charge du salarié\", base \"l'ensemble des rémunérations\"; official secondary (rate décret under Code SS 2003 art. 24 2) not reached); CGI 2023 arts. 120, 122, 124",
+  "source": "official secondary",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

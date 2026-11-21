@@ -1,0 +1,97 @@
+{
+ "country": "BI",
+ "name": "Burundi",
+ "year": "2025",
+ "status": "built",
+ "batch": "B08-central-africa-fr",
+ "access": "B",
+ "reused_from": [
+  "kernel Schedule (two bands)"
+ ],
+ "lean": {
+  "lines": 94,
+  "definitions": 9,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR, toMultiple)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 4,
+   "exact": 4,
+   "within_1pct": 4,
+   "notes": "6 M (1 080 000), the same pay with 75 % allowances (325 800), rounding to the nearest 1 000 at 1.8 M"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 3,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "employee INSS / health contributions (input inssEmployee)",
+  "business and rental income",
+  "the January-June 2025 finance law (2024/2025)"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.3,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.3,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.3,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.3,
+   "atAW": 2.5,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.3,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 Up to 43 % of pay can be tax-free as transport and housing allowances",
+ "scale": {
+  "wage": 3600000,
+  "currency": "BIF",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Loi 1/14 du 24 décembre 2020 art. 21: start of the 30 % band '3.600.001 et plus' (archived obr.bi)",
+  "by": "B08-central-africa-fr",
+  "basis": "Loi 1/14 du 24 décembre 2020 art. 21: start of the 30 % band '3.600.001 et plus' (archived obr.bi). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'progressive, IPR' corrected: the tax on employment income (cédule 1 with business and rental income, art. 19) is 0 % to 1.8 M, 20 % to 3.6 M, 30 % above (art. 21), on income rounded to the nearest 1 000; employee pension and health contributions and transport (15 %) and housing (60 %) allowances deductible (art. 33); dividends and interest 15 % withholding (art. 122, LF 2025/2026)."
+}

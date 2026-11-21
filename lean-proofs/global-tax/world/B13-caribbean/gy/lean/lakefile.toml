@@ -1,0 +1,14 @@
+name = "GyTax"
+version = "0.1.0"
+defaultTargets = ["GyTax", "gytax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "GyTax"
+
+[[lean_exe]]
+name = "gytax"
+root = "GyTax.Main"

@@ -1,0 +1,14 @@
+name = "ITTax"
+version = "0.1.0"
+defaultTargets = ["ITTax", "ittax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "ITTax"
+
+[[lean_exe]]
+name = "ittax"
+root = "ITTax.Main"

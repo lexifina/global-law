@@ -1,0 +1,14 @@
+name = "CgTax"
+version = "0.1.0"
+defaultTargets = ["CgTax", "cgtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CgTax"
+
+[[lean_exe]]
+name = "cgtax"
+root = "CgTax.Main"

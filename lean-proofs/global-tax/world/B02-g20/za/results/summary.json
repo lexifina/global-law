@@ -1,0 +1,71 @@
+{
+ "country": "ZA",
+ "name": "South Africa",
+ "year": "2026 year of assessment (1 Mar 2025 - 28 Feb 2026)",
+ "status": "built",
+ "batch": "B02-g20",
+ "access": "B",
+ "reused_from": [
+  "UK",
+  "IE",
+  "AU"
+ ],
+ "lean": {
+  "lines": 92,
+  "definitions": 13,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 4,
+ "kernel_parts_used": [
+  "Schedule",
+  "Social (Contribution.flatCapped)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "SARS printed cumulative column and tax thresholds",
+   "cases": 9,
+   "exact": 9,
+   "within_1pct": 9,
+   "notes": "#guard: cumulative column = band sums; thresholds R95,750 / R148,217 / R165,689 give zero tax and +6 rand gives tax"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "capital gains",
+  "retirement-fund deduction s. 11F",
+  "medical credits s. 6A/6B"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.4503,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.4503,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.4346,
+   "netIncomeFalls": 0
+  }
+ },
+ "headline": "F1 Third year without bracket or rebate indexation (2024-2026)"
+}

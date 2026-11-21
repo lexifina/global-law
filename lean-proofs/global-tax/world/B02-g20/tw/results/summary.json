@@ -1,0 +1,81 @@
+{
+ "country": "TW",
+ "name": "Taiwan",
+ "year": "2025 (民國114年度 income year)",
+ "status": "built",
+ "batch": "B02-g20",
+ "access": "A",
+ "reused_from": [
+  "KR",
+  "JP"
+ ],
+ "lean": {
+  "lines": 218,
+  "definitions": 35,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems.Schedule",
+  "Theorems.Parts"
+ ],
+ "kernel_gaps": [
+  "art. 15 (2) options (joint vs salary-separate vs all-separate) × dividend options: local option enumeration (cheapest = the taxpayer's election)",
+  "basic living expense difference (納稅者權利保護法 art. 4): local"
+ ],
+ "provisions_cited": 14,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (MOF 速算公式 vs art. 5 bands)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "#guard quick formula = bracket sum at every threshold"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 2,
+  "recreated": 2,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "AMT (所得基本稅額條例)",
+  "adult-children dependants conditions",
+  "NHI dependent parents and the supplementary premium not modelled; part-time LI grades applied to any monthly wage below 28,590"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.4,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.4,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.36,
+   "netIncomeFalls": 0
+  }
+ },
+ "headline": "F1 Dividend credit refunded in cash to low-income households",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "labour + employment insurance (20 % of 11.5 % + 1 % on the 2025 insured-salary grade, 28,590-45,800, part-time grades below) and NHI (30 % of 5.17 % on the 59-grade table 28,590-313,000, x (1 + dependants up to 3)); NHI and LI premiums added to the itemized deduction (art. 17 (1) 2 (二) 2)",
+  "provision": "勞工保險條例 art. 13 (2) (12.5 % for 2025), 14, 15; 就業保險法 arts. 8, 40, 41 (2) (-1 %); 勞動部令 2024-11-15 勞動保2字第1130087589號 grading table; BLI 114 share table (official secondary); 全民健康保險法 arts. 2, 18, 19, 27; NHIA 114 grading and share tables (5.17 %, official secondary); 所得稅法 art. 17 (1) 2 (二) 2",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)",
+  "agent": "W5 pattern A contributions agent 2 (Asia, Americas, Europe, Pacific)"
+ }
+}

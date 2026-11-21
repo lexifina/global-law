@@ -1,0 +1,14 @@
+name = "CuTax"
+version = "0.1.0"
+defaultTargets = ["CuTax", "cutax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CuTax"
+
+[[lean_exe]]
+name = "cutax"
+root = "CuTax.Main"

@@ -1,0 +1,98 @@
+{
+ "country": "SB",
+ "name": "Solomon Islands",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "batch": "B14-pacific",
+ "access": "A",
+ "reused_from": [
+  "AU/NZ PAYE (personal exemption + bands)"
+ ],
+ "lean": {
+  "lines": 119,
+  "definitions": 13,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 7,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Table.perPeriod (monthly NPF per complete dollar)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 7,
+   "exact": 7,
+   "within_1pct": 7,
+   "notes": "Fifth Schedule graduated at 15,000/30,000/60,000; slab reading notches; NPF per complete dollar and the $20 minimum"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 4,
+  "recreated": 1,
+  "not_modelled": 3
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 3,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "interest and dividend withholding / s 36 credit",
+  "the s 32 $5 proviso",
+  "later amendments after 5 February 2024 (none found)"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.404,
+   "atAW": 3.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.404,
+   "atAW": 3.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.404,
+   "atAW": 3.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.307,
+   "atAW": 3.775,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.404,
+   "atAW": 3.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The Fifth Schedule gives a rate per 'Income Bracket' without saying 'on the excess': read as a slab tariff it jumps $1,800 at 15,000 above the exemption",
+ "scale": {
+  "wage": 30080,
+  "currency": "SBD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act (Cap. 123) s 28(1) (reprint as in force at 5 February 2024): the personal exemption \"$30,080.00\"",
+  "by": "B14-pacific",
+  "basis": "Income Tax Act (Cap. 123) s 28(1) (reprint as in force at 5 February 2024): the personal exemption \"$30,080.00\". A statutory threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act (Cap. 123)' confirmed: personal exemption $30,080 (s 28, since 1 January 2020), then 11/23/35/40 % (Fifth Schedule brackets 15,000/30,000/60,000); SINPF employee 5 cents per complete dollar of monthly wages (employer 12.5)."
+}

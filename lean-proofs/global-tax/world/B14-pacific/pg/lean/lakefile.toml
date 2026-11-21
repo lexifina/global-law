@@ -1,0 +1,14 @@
+name = "PgTax"
+version = "0.1.0"
+defaultTargets = ["PgTax", "pgtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "PgTax"
+
+[[lean_exe]]
+name = "pgtax"
+root = "PgTax.Main"

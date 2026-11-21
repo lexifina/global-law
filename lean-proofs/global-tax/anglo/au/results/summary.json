@@ -1,0 +1,77 @@
+{
+ "country": "AU",
+ "name": "Australia",
+ "year": "2024-25 (income year 1 July 2024 - 30 June 2025 = OECD 2025); 2025-26 also modelled",
+ "status": "done",
+ "lean": {
+  "lines": 1200,
+  "definitions": 83,
+  "theorems": 37,
+  "guards": 22,
+  "sorry": 0,
+  "native_decide": 12
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Surcharge",
+  "Credit",
+  "Taper"
+ ],
+ "kernel_gaps": [
+  "Out / countryMain hold whole units; the AU liability is in cents (tax 'for each $1' at 16 %, levy shade-in 10 %), so autax keeps its own contract writer (2 decimals)",
+  "multi-segment credit taper: LITO (5 % then 1.5 %) written as the larger of two Credits (proved equal to s. 61-115, lito_kernel_eq)",
+  "surcharge whose rate depends on income tiers and is charged on the whole base (MLS tiers 1 / 1.25 / 1.5 %); HELP 2024-25 whole-income bands",
+  "levy with a family-income reduction apportioned between spouses (MLA s. 8(2)-(4))",
+  "means-tested benefit with two methods and an income-support passport (FTB A Method 1/2, Sch 1 cl 38L)",
+  "PAYG withholding formula tables (Schedule 1 coefficients, +99 cents, half-up dollar rounding)"
+ ],
+ "provisions_cited": 72,
+ "validation": [
+  {
+   "referee": "OECD TW 2026 country table, year 2025 (own check, OECD assumptions on: --oecd)",
+   "cases": 40,
+   "exact": 40,
+   "within_1pct": 40,
+   "notes": "8 family types x IT, ML, CGITFP, CTGG, THP; exact = within $1 (OECD gross has cents, the statute taxes whole dollars). Assumptions: grandfathered energy supplement; sole parent claims PP(S) (FA Act Sch 1 cl 38L passport)"
+  },
+  {
+   "referee": "OECD TW 2026 country table, year 2025 (kernel oecd_check20.py, model defaults)",
+   "cases": 40,
+   "exact": 36,
+   "within_1pct": 37,
+   "notes": "defaults = new claimant (no energy supplement), no income support: SP67 CTGG -1,848.11 and M100_0 -124.10, explained (FINDINGS F2, F3)"
+  },
+  {
+   "referee": "PAYG Schedule 1 sample data (F2024L00664, weekly table, scales 1, 2, 3, 5, 6)",
+   "cases": 240,
+   "exact": 240,
+   "within_1pct": 240,
+   "notes": "theorem sched1_sample_all"
+  },
+  {
+   "referee": "ATO / DSS / OECD worked examples and published figures (Checks.lean)",
+   "cases": 16,
+   "exact": 14,
+   "within_1pct": 16,
+   "notes": "ATO rate table closed forms (3), Medicare levy Angie example, HELP examples 1-4, PAYG Medicare adjustment examples (5) and scale 5 example, FTB B maxima (2). The 2 non-exact are the ATO's: HELP example 4 arithmetic (5,485.52 vs 5,485.48) and example 3 rounded to the dollar"
+  },
+  {
+   "referee": "OpenFisca-Australia / PolicyEngine / ATO online calculator",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "not used: ATO and DSS sites refuse automated clients (403); no maintained open AU model with 2024-25 parameters found"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 24,
+  "recreated": 15,
+  "recreated_blind": 7,
+  "not_modelled": 9
+ },
+ "new_loopholes": 2,
+ "gov_errors": 2,
+ "gov_conventions": 2,
+ "statute_faults": 3,
+ "headline": "The PAYG withholding schedule in force from July 2024 into 2026 still uses the 2023-24 Medicare levy thresholds and leaves the low income tax offset to the return (low earners over-withheld by up to $765 a year, never under), and the FTB A supplement's $80,000 limit, never indexed, is a $916-per-child notch that catches more families every year; the OECD's 2025 lines are reproduced 40/40 once its two assumptions (energy supplement, Parenting Payment passport) are stated."
+}

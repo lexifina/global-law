@@ -1,0 +1,14 @@
+name = "ErTax"
+version = "0.1.0"
+defaultTargets = ["ErTax", "ertax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "ErTax"
+
+[[lean_exe]]
+name = "ertax"
+root = "ErTax.Main"

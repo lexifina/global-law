@@ -1,0 +1,86 @@
+{
+ "country": "MA",
+ "name": "Morocco",
+ "year": "2025",
+ "status": "built",
+ "batch": "B06-mena",
+ "access": "B",
+ "reused_from": [
+  "FR"
+ ],
+ "lean": {
+  "lines": 90,
+  "definitions": 8,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "all-or-nothing deduction rate by gross pay (art. 59-I-A): local"
+ ],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute's own tables/formulas, #guard",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "#guard art. 73-I band ends; art. 59-I-A notch at 78,000 (27,300 -> 19,500)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 2,
+  "not_modelled": 3
+ },
+ "new_loopholes": 2,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "pensions, rents, capital income",
+  "self-employment",
+  "CNSS / AMO rates from the CNSS page (official secondary; the décrets not reached)"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 5.071000000000001,
+   "bandsOver100": 1,
+   "largestNotch": "779 at 78,000 (1.0 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 2.314,
+   "bandsOver100": 1,
+   "largestNotch": "349 at 78,000 (1.0 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 5.16,
+   "bandsOver100": 2,
+   "largestNotch": "779 at 195,001 (2.50001 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 5.071000000000001,
+   "bandsOver100": 1,
+   "largestNotch": "779 at 78,000 (1.0 AW)"
+  }
+ },
+ "headline": "A 780-dirham notch at 78,000 of gross pay: the professional-expenses rate drops from 35 % to 25 % on the whole salary",
+ "updated": "2026-11-20T05:30Z",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "CNSS employee 0,52 % + 3,96 % on wages up to 6 000 MAD a month and AMO 2,26 % on the whole wage, all deducted (CGI art. 59-II-A, III)",
+  "provision": "CNSS page \"Paiement de vos cotisations sociales\", section \"Barèmes et taux de cotisation\" (Internet Archive capture 2025-03-25) and notice \"AMO Ajustement des taux de cotisation\" (AMO 2,26 % from 1 January 2016); official secondary (décret 2-01-2723 as amended and the AMO décrets not reached); CGI 2025 art. 59",
+  "source": "official secondary",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

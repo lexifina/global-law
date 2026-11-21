@@ -1,0 +1,99 @@
+{
+ "country": "BB",
+ "name": "Barbados",
+ "year": "2025 (income year)",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "B",
+ "reused_from": [
+  "UK/IE PAYE"
+ ],
+ "lean": {
+  "lines": 114,
+  "definitions": 7,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (monthly via Extra38.perPeriodIdx: two fund rates in 2025)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 10,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "s. 42 at 50,000 and 60,000; s. 42(2) under $1; NIS monthly in January and June"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 3,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "s. 65D reverse tax credit (no amount enacted after 2016)",
+  "s. 65G compensatory income credit (prescribed rate not found)",
+  "NIS at pensionable age",
+  "investment income"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.292,
+   "atAW": 1.515,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.292,
+   "atAW": 1.515,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.292,
+   "atAW": 1.575,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.296,
+   "atAW": 3.785,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 1.612,
+   "atAW": 0.0,
+   "bandsOver100": 1,
+   "largestNotch": "374 at 0 (0.0 AW)"
+  }
+ },
+ "headline": "F1 The reverse tax credit has no amount for any year after 2016",
+ "scale": {
+  "wage": 50000,
+  "currency": "BBD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act Cap. 73 s. 42(1)(j),(k) as amended by Act 2020-10: 28.5 per cent 'of every complete dollar of taxable income above $50 000'",
+  "by": "B13-caribbean",
+  "basis": "Income Tax Act Cap. 73 s. 42(1)(j),(k) as amended by Act 2020-10: 28.5 per cent 'of every complete dollar of taxable income above $50 000'. A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act (Cap. 73)' confirmed: basic allowance 25,000 (40,000 for pensioners 60+), 12.5 % to 50,000 of taxable income and 28.5 % above (Act 2020-10); employee NIS not deductible; NIS class R 11.00 % to 5,280 a month in 2025 plus the Catastrophe/Resilience Fund (official secondary)."
+}

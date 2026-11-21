@@ -1,0 +1,88 @@
+{
+ "country": "DZ",
+ "name": "Algeria",
+ "year": "2025",
+ "status": "built",
+ "batch": "B06-mena",
+ "access": "A",
+ "reused_from": [
+  "FR"
+ ],
+ "lean": {
+  "lines": 96,
+  "definitions": 11,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Table.perPeriod",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [
+  "abatement with floor and cap on the tax, then a linear re-scaling (137/51 - 27,925/8): local"
+ ],
+ "provisions_cited": 8,
+ "validation": [
+  {
+   "referee": "statute's own tables/formulas, #guard",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "#guard: the monthly barème equals the annual / 12 at every threshold; the second-abatement formulas join the ordinary rule at 35,000 (and 42,500 for retirees) within 1 DA"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 6,
+  "recreated": 3,
+  "not_modelled": 3
+ },
+ "new_loopholes": 2,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "rents above 1.8 M credited against the barème (modelled as barème)",
+  "capital income",
+  "disabled workers' formula",
+  "CNAS 9 % deduction from the IRG base: CIDTA article not reached (mfdgi.gov.dz did not answer); later amendments of décret 94-187 not checked"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.633,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.633,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.45,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.633,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "IRG 0-35 % with a 30,000 DA/month salary exemption phased in at 62 %; a 310,800 DA notch at 1.8 M of gross rents",
+ "updated": "2026-11-20T05:30Z",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "CNAS worker 9 % of the contribution base (no ceiling), reported; NOT deducted from the IRG base (CIDTA not reached)",
+  "provision": "Décret exécutif n° 06-339 du 25 septembre 2006 modifiant le décret exécutif n° 94-187 (JO n° 60 of 27 September 2006, p. 16), arts. 1-2 (worker 9 % = 1,5 + 6,75 + 0,5 + 0,25, from 1 October 2006)",
+  "source": "statute (JORADP)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

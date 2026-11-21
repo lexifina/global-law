@@ -1,0 +1,14 @@
+name = "GtTax"
+version = "0.1.0"
+defaultTargets = ["GtTax", "gttax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "GtTax"
+
+[[lean_exe]]
+name = "gttax"
+root = "GtTax.Main"

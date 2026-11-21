@@ -1,0 +1,103 @@
+{
+ "country": "SR",
+ "name": "Suriname",
+ "year": "2025 (belastingjaar)",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "B",
+ "reused_from": [
+  "NL (Dutch-heritage wage/income tax: forfaitaire aftrek, schijven)"
+ ],
+ "lean": {
+  "lines": 81,
+  "definitions": 6,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 7,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "art. 34 at 150,000 and 234,000; costs cap at 4,800"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 0,
+  "not_modelled": 3
+ },
+ "new_loopholes": 0,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "2025 staatsbesluit (if any) not reached",
+  "investment income (dividendbelasting)",
+  "Basiszorgverzekering and Pensioenwet contributions not reached"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.38,
+   "atAW": 1.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.38,
+   "atAW": 1.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.38,
+   "atAW": 1.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.38,
+   "atAW": 2.555,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.38,
+   "atAW": 1.03,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The consolidated Income Tax Act still prints the 2021 solidarity levy that lapsed on 1 January 2022",
+ "scale": {
+  "wage": 234000,
+  "currency": "SRD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Wet Inkomstenbelasting 1922 art. 34 lid 1: 'van het gedeelte van het zuiver inkomen boven SRD 234.000,- 38%' (start of the top band)",
+  "by": "B13-caribbean",
+  "basis": "Wet Inkomstenbelasting 1922 art. 34 lid 1: 'van het gedeelte van het zuiver inkomen boven SRD 234.000,- 38%' (start of the top band). A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Wet Inkomstenbelasting 1922; Wet Loonbelasting' confirmed: zero band 108,000; 8/18/28/38 % to 150,000/192,000/234,000/above (art. 34, S.B. 2024 no. 2); wage costs 4 % up to 4,800; individual assessment with deductions to the higher-income spouse (art. 31).",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "AOV premium 4 % of zuiver loon for residents under 60; not deductible (IB art. 18 (1) (b), art. 8 (2) (a))",
+  "provision": "Wet AOV (S.B. 1981 no. 30 as amended to S.B. 2002 no. 96) arts. 19-20",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)"
+ }
+}

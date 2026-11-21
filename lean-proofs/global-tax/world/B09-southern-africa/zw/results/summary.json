@@ -1,0 +1,75 @@
+{
+ "country": "ZW",
+ "name": "Zimbabwe",
+ "year": "2025 (income earned in ZiG)",
+ "status": "built",
+ "access": "B",
+ "batch": "B09-southern-africa",
+ "lean": {
+  "lines": 89,
+  "definitions": 8,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Surcharge pattern (levy on tax)",
+  "Canon/Out",
+  "World.worldMain",
+  "Theorems (Schedule)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 4,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean #guard / decide)",
+   "cases": 6,
+   "exact": 6,
+   "within_1pct": 6,
+   "notes": "build phase: no referee values used"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 1,
+  "not_modelled": 4
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "UK/IE PAYE",
+  "Surcharge (AIDS levy as % of tax)"
+ ],
+ "sources": [
+  "Finance (No. 2) Act No. 7 of 2024 ss. 4-5 (ZiG bands from 1 January 2025), Finance Act No. 13 of 2023 s. 3, Finance Act No. 7 of 2025 (2026 changes), all from Veritas (veritaszim.net)",
+  "Finance Act Cap. 23:04 s. 14 consolidated to 14 March 2018 (ZimLII search excerpt: AIDS levy 'three per centum of the amount of income tax')"
+ ],
+ "scale": "336000 ZWG (threshold of the 30 % band (income earned in ZiG))",
+ "scanner": {
+  "single": {
+   "maxMETR": 0.3619,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.3619,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.2905,
+   "netIncomeFalls": 0
+  }
+ },
+ "unsupported": [
+  "USD-earned income bands",
+  "Part I credits (elderly, blind, disabled)",
+  "NSSA contributions",
+  "residents' tax on interest and shareholders' tax"
+ ],
+ "registry_correction": "ZW: Income Tax Act Cap. 23:06 with rates in the Finance Act Cap. 23:04 (s. 14 and its Schedule); 2025 ZiG bands 0/20/25/30/35/40 %; trade and investment income of individuals 25 %; AIDS levy 3 % of tax.",
+ "headline": "Zimbabwe built from the 2024 Finance (No. 2) Act: ZiG employment bands 0-40 % plus a 3 % AIDS levy (41.2 % top), while individuals' trade income pays a flat 25 % (ZiG 2 m of trade income costs 515 000 vs 708 063 as wages); the rate table cites a paragraph (vii) that s. 14 (2) (a) does not have."
+}

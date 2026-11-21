@@ -1,0 +1,97 @@
+{
+ "country": "LR",
+ "name": "Liberia",
+ "year": "2025 (calendar tax year)",
+ "status": "built",
+ "batch": "B10-anglophone-africa",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE"
+ ],
+ "lean": {
+  "lines": 73,
+  "definitions": 5,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 3,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "s. 200(a) printed fixed amounts 6,500 and 96,500; zero bracket 70,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 2,
+  "recreated": 1,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "NASSCORP contribution (input, reported only)",
+  "US-dollar wages must be converted by the user",
+  "investment and business income"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.25,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.25,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.25,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.25,
+   "atAW": 2.5,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.25,
+   "atAW": 1.0,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The table is in Liberian dollars while wages are often paid in US dollars",
+ "scale": {
+  "wage": 800000,
+  "currency": "LRD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Liberia Revenue Code s. 200(a)(3)(A): '800,001 and above | 96,500 + 25% of the excess over 800,000' (LRA consolidation 2020)",
+  "by": "B10-anglophone-africa",
+  "basis": "Liberia Revenue Code s. 200(a)(3)(A): '800,001 and above | 96,500 + 25% of the excess over 800,000' (LRA consolidation 2020). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Liberia Revenue Code 2000 as amended' confirmed: resident natural persons 0/5/15/25 % in Liberian dollars (70,000 / 200,000 / 800,000), the standard deduction being the zero bracket (s. 205(a))."
+}

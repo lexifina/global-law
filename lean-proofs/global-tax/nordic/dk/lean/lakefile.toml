@@ -1,0 +1,15 @@
+name = "DKTax"
+version = "0.1.0"
+defaultTargets = ["DKTax", "dktax"]
+
+# Denmark (Copenhagen), indkomståret 2025. Depends on the shared kernel by path.
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "DKTax"
+
+[[lean_exe]]
+name = "dktax"
+root = "DKTax.Main"

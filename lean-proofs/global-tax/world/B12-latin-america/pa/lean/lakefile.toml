@@ -1,0 +1,14 @@
+name = "PaTax"
+version = "0.1.0"
+defaultTargets = ["PaTax", "patax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "PaTax"
+
+[[lean_exe]]
+name = "patax"
+root = "PaTax.Main"

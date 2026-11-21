@@ -1,0 +1,98 @@
+{
+ "country": "SD",
+ "name": "Sudan",
+ "year": "2025 (assessment year; law of the Government of Sudan)",
+ "status": "built",
+ "batch": "B10-anglophone-africa",
+ "access": "B",
+ "reused_from": [
+  "UK/IE PAYE"
+ ],
+ "lean": {
+  "lines": 71,
+  "definitions": 4,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 4,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "Sector (B) at 9,450 and 19,450"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 2,
+  "recreated": 0,
+  "not_modelled": 2
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "finance laws after 2013",
+  "Schedule I exemptions and Schedule II deductions",
+  "social insurance",
+  "Arabic texts (no Arabic OCR)"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.17,
+   "atAW": 1.285,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "single_parent_2": {
+   "maxMETR": 0.17,
+   "atAW": 1.285,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_1earner_2": {
+   "maxMETR": 0.17,
+   "atAW": 1.285,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "couple_2earner_2": {
+   "maxMETR": 0.17,
+   "atAW": 2.52,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  },
+  "second_earner_2": {
+   "maxMETR": 0.17,
+   "atAW": 1.285,
+   "bandsOver100": 0,
+   "largestNotch": ""
+  }
+ },
+ "headline": "F1 The personal income tax thresholds in the published Act (9,090 + 120 + 240 pounds) are tiny: nearly every wage is taxed at 15 %",
+ "scale": {
+  "wage": 9450,
+  "currency": "SDG",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income Tax Act 1986 Schedule III Sector (B): 9,090 + 120 + 240 = start of 'Above that | 15%' (annual reading)",
+  "by": "B10-anglophone-africa",
+  "basis": "Income Tax Act 1986 Schedule III Sector (B): 9,090 + 120 + 240 = start of 'Above that | 15%' (annual reading). A statutory band threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income Tax Act 1986; conflict' confirmed for the Government of Sudan: personal income tax Schedule III Sector (B) 0/5/10/15 % (9,090 / +120 / +240 pounds); the amounts are those of the 2013 amendment as printed; later finance laws not reached."
+}

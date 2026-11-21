@@ -1,0 +1,185 @@
+# Sources: Austria (AT)
+
+The model in `lean/` cites the provision behind each rule in its comments. The law texts, official pages and tables it was built from are not copied into this repository: some were read from secondary hosts, and many publishers do not allow redistribution. Each file used is listed below with its SHA-256, so a copy fetched from the publisher can be checked against the one the model was built from. Paths are as they were in the build folder.
+
+## Files used (173)
+
+| file | SHA-256 | where it came from |
+|---|---|---|
+| `law/akg_2025-07-01.html` | `892207f22a610cc460efa88a110faa8582a8fd2101cb3db4e507c362ad4cc54d` | not recorded |
+| `law/akg_2025-07-01.txt` | `9e42bde1af556a1f43ccb1a8ae88db0f8023fc04a13630f9f8faf2204da98bac` | not recorded |
+| `law/ampfg_2025-07-01.html` | `db15d6db4ff734aba6ba51627e4c676e8b82c92fd212876141b09cd31b98152f` | not recorded |
+| `law/ampfg_2025-07-01.txt` | `6f488f19fdad002fc6a725715b38441359f97120573513d8c7dd6817e8a7cca2` | not recorded |
+| `law/asvg_2025-01-01.html` | `26570cab4659eb27f8afd33ab3ba930f8fd370d9ae19d1373368527adaf0e270` | not recorded |
+| `law/asvg_2025-01-01.txt` | `755ff674f6b903088c8609662a331289480062a8dc3219e9adf351994a2586a6` | not recorded |
+| `law/asvg_2025-07-01.html` | `7580388eda98d323302bbc5e2d2f0779c1cafec4435a4b2bbe3872bb59f6247e` | not recorded |
+| `law/asvg_2025-07-01.txt` | `e58de630a8556c1850a62dcadf03d87d74984fdb6b42082e7785ef9e30b43e52` | not recorded |
+| `law/estg_2005-07-01.html` | `b534eba382cb05d879ad8ac64e30111980281100a682725f9ea36c07053fea94` | not recorded |
+| `law/estg_2005-07-01.txt` | `7cecb2cc8699e3a5532f345a4a51d77dc9cca8ebe1870fc5c94a083075535355` | not recorded |
+| `law/estg_2024-07-01.html` | `27f69e292a042da57a4482c4a1e13af1b6322031dd15066c79d92fedc1be52ba` | not recorded |
+| `law/estg_2024-07-01.txt` | `608e552b987316a237b8e7ec41906ed5e72885c02771cd879a4309a6e73b20c2` | not recorded |
+| `law/estg_2025-01-01.html` | `4d0203e9bc4b5ded38490de15ebe600da9da2a96a7c5678433352aa9903ee009` | not recorded |
+| `law/estg_2025-01-01.txt` | `4ca7d1e56dbe7f6698088412eac9dc415787230a7115c9317661d774e68c476e` | not recorded |
+| `law/estg_2025-07-01.html` | `67ceade9ccfb1ce1be7f34fda922f9abc3ff8afd8d6980afbd99155248628086` | not recorded |
+| `law/estg_2025-07-01.txt` | `1197e9113782175a318a56ed61075f0720e1163dc36135f24872de682231b155` | not recorded |
+| `law/estg_2026-01-01.html` | `a06833c7b9b8f34a77450c2560f4088f32cc26c8a9c39e42056942666198b1b3` | not recorded |
+| `law/estg_2026-01-01.txt` | `b1fdd27fdb9fae3eb08f5e0ced3b460dc6b6cd79dbc670db28acd6144090c87d` | not recorded |
+| `law/flag_2005-07-01.html` | `73c7d812df81fa8f3dfca6d2dceca4471eede5dcde5836546c33575f9e96132b` | not recorded |
+| `law/flag_2005-07-01.txt` | `142f09902102c5bdd823c0b3e90de095512bf09fd83b81dd9b51f146458fe38e` | not recorded |
+| `law/flag_2010-07-01.html` | `789d479cfa4cb56260849c6bfb24cedcedc1a0acaaf92ef446a6c3993a87825c` | not recorded |
+| `law/flag_2010-07-01.txt` | `7735ffde9110929f327e736c7de3194437a2dbcbbfed73a7b5de748a1b0af8b7` | not recorded |
+| `law/flag_2025-07-01.html` | `b35428b47a325afa79acfd0896cb4b515fce0f2937c5cc44a51fa9df6651eed0` | not recorded |
+| `law/flag_2025-07-01.txt` | `7c689cdbe19a70f3544e2b57baaf99edb4d551a17e696a11f2142dae36f31d2a` | not recorded |
+| `law/gsvg_2025-07-01.html` | `3a53fa45641adfed5f85c6d36be4cdc2289dbed42105e615fa19657db9b37beb` | not recorded |
+| `law/gsvg_2025-07-01.txt` | `b2ecd2b26f3210f2c01a7af8cee304b7334773f3a43c13a5a566a8287f8ce6f8` | not recorded |
+| `law/kommstg_2025-07-01.html` | `0db903db4ab718c7b4000707574eb02e49d278843fb917b2c262b8ae571645c2` | not recorded |
+| `law/kommstg_2025-07-01.txt` | `7ac1ae74b2e1ed2f6457e9d8a3bde3ff84ab18526e790a48cb554ed0329f4348` | not recorded |
+| `law/kstg_2025-07-01.html` | `44cd97095790389728771a028035a327760652464f8b1fb680db8deb2142c47f` | not recorded |
+| `law/kstg_2025-07-01.txt` | `a922de1a5fa046c8e8bb4489e2d9bb0ca88fd875c41c5651e22882d1522d8da9` | not recorded |
+| `law/q.json` | `38b5b8a3a5c8f03345fbe36eaef9c8a21d4e5678247047be8fc14408e464c927` | not recorded |
+| `law/wbfbg_2025-07-01.html` | `27a08b19974c83e0da38acd34ab19fb681251be8ce2ad3e007bc53602fb45238` | not recorded |
+| `law/wbfbg_2025-07-01.txt` | `705e4523c69f7a109006fd21577f4a09cb8b15f73103fe1385096fe639eaf8fa` | not recorded |
+| `law/wbfg2018_2025-07-01.html` | `9732f835489b3bf8dea6b9185cfcbc78f40736224032c68062bad8d3c9f99175` | not recorded |
+| `law/wbfg2018_2025-07-01.txt` | `241a351b5c100b50c768eeff3bd7c18b409a2de32fb65226a6499ddf483f163f` | not recorded |
+| `refs/bmf_berechnungsprogramme.html` | `e061fd2bb4813df7467847d6a6e5cf3dc60e298e4b7fefe9acf8a6514bbde868` | https://bmf.gv.at/services/berechnungsprogramme.html |
+| `refs/bmf_familienbonus-plus.html` | `867cb7d297858cdc09ea975be9b4e876a949db21262ea703015c9d5c136d7f16` | https://bmf.gv.at/themen/steuern/arbeitnehmerveranlagung/steuertarif-steuerabsetzbetraege/familienbonus-plus.html |
+| `refs/bmf_familienbonus-plus.txt` | `154a293ff176dbdfbe69e6958424c9480a63012f1c2a5a89e32c9a4cef6a883a` | not recorded |
+| `refs/bmf_steuertarif-steuerabsetzbetraege.html` | `6384df97b85ff408c1a4f0444335a88e502475974e789853f83dfa57cae1f85f` | https://bmf.gv.at/themen/steuern/arbeitnehmerveranlagung/steuertarif-steuerabsetzbetraege.html |
+| `refs/bmf_steuertarif-steuerabsetzbetraege.txt` | `4cca0b47c5adf34ecdffffac5604e57228da955123d8cadc3452ec35ab7acb3f` | not recorded |
+| `refs/cj.txt` | `46b05971e8b9b8f73c819f6c2ba54a5720be27e2f635488c0158b4a628468553` | not recorded |
+| `refs/haude_bnr.html` | `eb9bba2cb2395787e0c2dc9f8f0a188c675cd01e95b955d4e6f27b54ef2c6b4e` | not recorded |
+| `refs/haude_bnr.js` | `6d8cec0111258ffda8acc1e68d4d51ab703e0e6397c376190b8de7b23904f375` | not recorded |
+| `refs/hdr.txt` | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` | not recorded |
+| `refs/steuerbuch.html` | `60c7d72154873f12682251953590ad916377701167c03fcfb75a6aeae5a543a1` | https://bmf.gv.at/services/publikationen/das-steuerbuch.html |
+| `refs/steuerbuch2025_de.pdf` | `26b89baa1565b538afdb7026b0bf9cdc7f64d18ad37e14dcb2d170415c8d1258` | not recorded |
+| `refs/steuerbuch2025_de.txt` | `47f5eda88b9163534cbe6940260483a3868bfd307bcd3b2e7bf32dc9e4f54863` | not recorded |
+| `refs/steuerbuch2026_de.pdf` | `ce97c4f53eef1dc5ed5ea57ceab696d115e6dbc996488c9cde40dba71f5e22df` | not recorded |
+| `refs/steuerbuch2026_de.txt` | `c200a8459cefd503fb9cbd7592d21bb4f64e11c4e99d42183224369935e95885` | not recorded |
+| `refs/t1.json` | `7579ca25712a6a4d9280f64b8076379e1ec55f3b8b84e71d50110c13d2bc65b9` | not recorded |
+| `refs/t2.json` | `8fca6b7e4cbd20ee4dc9f6c2ae52d41d1530c41aa2f8cd5f233884b2fbc58c36` | not recorded |
+| `refs/t3.json` | `bb94915ad8f6e8d3e15ec75a5da051c8357c5c8763a021d5490f064f327bacb9` | not recorded |
+| `refs/tmp.html` | `e9b3d666905f11e82e1a87fd56478f94c9a2c2f039a16d7baf7907c938a3a31e` | https://bmf.gv.at/404.html |
+| `refs/bmf_bnr/aeab2_1000.json` | `6899de8bb7592de07e2cc112a1acf4ffbf831fa04d60080364c512725e2c3898` | not recorded |
+| `refs/bmf_bnr/aeab2_10000.json` | `a42b2c7dfcf862fb0b5f602a004930e4ec4133d5df3d037708b1440d9865619f` | not recorded |
+| `refs/bmf_bnr/aeab2_1285.json` | `4d1ce562b78c67eeb15eee8e1cade204d0833f0cf93ab0b9409c4964f1f4d52e` | not recorded |
+| `refs/bmf_bnr/aeab2_1286.json` | `9c99d6ba7845b770465e867b63373967fcf0dffe208c820ffc7326aa8f2b952c` | not recorded |
+| `refs/bmf_bnr/aeab2_1500.json` | `091d267b8f6942b2f58fd615200a858e89b01a8edfe6bda42158eb2608c92322` | not recorded |
+| `refs/bmf_bnr/aeab2_15000.json` | `85ed2bcd6468c783ec6d50e6be31c584fc2e5bc0407951a139fb0a8dd37a9fd8` | not recorded |
+| `refs/bmf_bnr/aeab2_1800.json` | `e66f2e983db0aad2eab6cf7204d7b4ba0121ca571a91cd8f8fb83299dd4ae5df` | not recorded |
+| `refs/bmf_bnr/aeab2_2074.json` | `32803826c699fa2b59a3311a4dcd56690e1bb53968971264b075ebf80a83636f` | not recorded |
+| `refs/bmf_bnr/aeab2_2075.json` | `012316f9fc906206713fc3e12f600fbcd98d923a1643c028b8b42ce55e9b3bdc` | not recorded |
+| `refs/bmf_bnr/aeab2_2262.json` | `d82205a35f0449181b21ff76241f420432c8ef21f105a1ae12c615118c660603` | not recorded |
+| `refs/bmf_bnr/aeab2_2263.json` | `abb14bac2c3b58738bcab49ae0df1878a137bb515c2b53338fdae66b84cb4373` | not recorded |
+| `refs/bmf_bnr/aeab2_2451.json` | `359995165451e7cf5a3c6202467c7fd951f541cc7a4e962deb458bd3e284b35d` | not recorded |
+| `refs/bmf_bnr/aeab2_2452.json` | `2dcc717a7505c15f826f53cc68639ad07fe819bd9062d60d22ac70fcfdbfa9b9` | not recorded |
+| `refs/bmf_bnr/aeab2_2600.json` | `213c33fcc70754f741a30d0e89bc025c35c100c9d96b5cd1813b3b789e332382` | not recorded |
+| `refs/bmf_bnr/aeab2_300.json` | `c23dc6021a5370341e300f8999ef8128fed23f25b5373609631d219ba8f7f59e` | not recorded |
+| `refs/bmf_bnr/aeab2_3000.json` | `10df0490cb2cb07bdda6d72e3a03ffc2c7618458758378d35d17476fe7a9028c` | not recorded |
+| `refs/bmf_bnr/aeab2_30000.json` | `a06fafb44380a0f2dcfd9a26830a02b252d7f4269b6aacc5d06f56a09736d1ca` | not recorded |
+| `refs/bmf_bnr/aeab2_3500.json` | `edd7b43012947e4313ec2f0b39db113e3827e66a5c7a1ab96fb3c76739cda69d` | not recorded |
+| `refs/bmf_bnr/aeab2_4000.json` | `804f87cfedaa68ae050afab802d103b04775d23aeebf27016e6b41e7dcd9fe31` | not recorded |
+| `refs/bmf_bnr/aeab2_4500.json` | `06d38e3b2fcd3196ed2d360b5723387204cead96e72f14b82e74ae7ac3dc9c77` | not recorded |
+| `refs/bmf_bnr/aeab2_5000.json` | `8ae81f7d9d1b5755e29421b8511040f90b065df4a21a2c16bbb8e9f8b8e34d27` | not recorded |
+| `refs/bmf_bnr/aeab2_5500.json` | `ba304c33c96adf491413009b516dd6c1b69f9de24155e9ca6ed342b7104787e0` | not recorded |
+| `refs/bmf_bnr/aeab2_551.json` | `c14cea461a0cee9587df9143be331144e79ba73bf3e0f8baeec034af88551e7e` | not recorded |
+| `refs/bmf_bnr/aeab2_552.json` | `347bbe05c265434f1195023373fb36d75f3f4bebc1f67a13c822c2717fb594fa` | not recorded |
+| `refs/bmf_bnr/aeab2_6000.json` | `c755c9fce059ec4add5f073298145b849f7604f1a043b27489e870918ea4c9c7` | not recorded |
+| `refs/bmf_bnr/aeab2_6450.json` | `808c4ef54394675da994a0ac9695a47f282a922ccb3ec9c4e1f2fc9be2acaac3` | not recorded |
+| `refs/bmf_bnr/aeab2_6451.json` | `e024f3428f350b6e2258ff3dbfee7102a6f2bbda9337b7f8677b7ca64ea9d156` | not recorded |
+| `refs/bmf_bnr/aeab2_700.json` | `efc6c57bf9a6095a79f54e11905b1921b5284e0f61f15a6fcf2439478a87e0e2` | not recorded |
+| `refs/bmf_bnr/aeab2_7000.json` | `08f0c2b9bf8d265e2d2ae35236c781301eece69bf7aacc9cc824a5d5671d2ba3` | not recorded |
+| `refs/bmf_bnr/aeab2_8000.json` | `2472606d0c4277894652f80a84ab53e89f71eefece31343647d8ddeb975ebca9` | not recorded |
+| `refs/bmf_bnr/avab2_1000.json` | `6899de8bb7592de07e2cc112a1acf4ffbf831fa04d60080364c512725e2c3898` | not recorded |
+| `refs/bmf_bnr/avab2_10000.json` | `a42b2c7dfcf862fb0b5f602a004930e4ec4133d5df3d037708b1440d9865619f` | not recorded |
+| `refs/bmf_bnr/avab2_1285.json` | `4d1ce562b78c67eeb15eee8e1cade204d0833f0cf93ab0b9409c4964f1f4d52e` | not recorded |
+| `refs/bmf_bnr/avab2_1286.json` | `9c99d6ba7845b770465e867b63373967fcf0dffe208c820ffc7326aa8f2b952c` | not recorded |
+| `refs/bmf_bnr/avab2_1500.json` | `091d267b8f6942b2f58fd615200a858e89b01a8edfe6bda42158eb2608c92322` | not recorded |
+| `refs/bmf_bnr/avab2_15000.json` | `85ed2bcd6468c783ec6d50e6be31c584fc2e5bc0407951a139fb0a8dd37a9fd8` | not recorded |
+| `refs/bmf_bnr/avab2_1800.json` | `e66f2e983db0aad2eab6cf7204d7b4ba0121ca571a91cd8f8fb83299dd4ae5df` | not recorded |
+| `refs/bmf_bnr/avab2_2074.json` | `32803826c699fa2b59a3311a4dcd56690e1bb53968971264b075ebf80a83636f` | not recorded |
+| `refs/bmf_bnr/avab2_2075.json` | `012316f9fc906206713fc3e12f600fbcd98d923a1643c028b8b42ce55e9b3bdc` | not recorded |
+| `refs/bmf_bnr/avab2_2262.json` | `d82205a35f0449181b21ff76241f420432c8ef21f105a1ae12c615118c660603` | not recorded |
+| `refs/bmf_bnr/avab2_2263.json` | `abb14bac2c3b58738bcab49ae0df1878a137bb515c2b53338fdae66b84cb4373` | not recorded |
+| `refs/bmf_bnr/avab2_2451.json` | `359995165451e7cf5a3c6202467c7fd951f541cc7a4e962deb458bd3e284b35d` | not recorded |
+| `refs/bmf_bnr/avab2_2452.json` | `2dcc717a7505c15f826f53cc68639ad07fe819bd9062d60d22ac70fcfdbfa9b9` | not recorded |
+| `refs/bmf_bnr/avab2_2600.json` | `213c33fcc70754f741a30d0e89bc025c35c100c9d96b5cd1813b3b789e332382` | not recorded |
+| `refs/bmf_bnr/avab2_300.json` | `c23dc6021a5370341e300f8999ef8128fed23f25b5373609631d219ba8f7f59e` | not recorded |
+| `refs/bmf_bnr/avab2_3000.json` | `10df0490cb2cb07bdda6d72e3a03ffc2c7618458758378d35d17476fe7a9028c` | not recorded |
+| `refs/bmf_bnr/avab2_30000.json` | `a06fafb44380a0f2dcfd9a26830a02b252d7f4269b6aacc5d06f56a09736d1ca` | not recorded |
+| `refs/bmf_bnr/avab2_3500.json` | `edd7b43012947e4313ec2f0b39db113e3827e66a5c7a1ab96fb3c76739cda69d` | not recorded |
+| `refs/bmf_bnr/avab2_4000.json` | `804f87cfedaa68ae050afab802d103b04775d23aeebf27016e6b41e7dcd9fe31` | not recorded |
+| `refs/bmf_bnr/avab2_4500.json` | `06d38e3b2fcd3196ed2d360b5723387204cead96e72f14b82e74ae7ac3dc9c77` | not recorded |
+| `refs/bmf_bnr/avab2_5000.json` | `8ae81f7d9d1b5755e29421b8511040f90b065df4a21a2c16bbb8e9f8b8e34d27` | not recorded |
+| `refs/bmf_bnr/avab2_5500.json` | `ba304c33c96adf491413009b516dd6c1b69f9de24155e9ca6ed342b7104787e0` | not recorded |
+| `refs/bmf_bnr/avab2_551.json` | `c14cea461a0cee9587df9143be331144e79ba73bf3e0f8baeec034af88551e7e` | not recorded |
+| `refs/bmf_bnr/avab2_552.json` | `347bbe05c265434f1195023373fb36d75f3f4bebc1f67a13c822c2717fb594fa` | not recorded |
+| `refs/bmf_bnr/avab2_6000.json` | `c755c9fce059ec4add5f073298145b849f7604f1a043b27489e870918ea4c9c7` | not recorded |
+| `refs/bmf_bnr/avab2_6450.json` | `808c4ef54394675da994a0ac9695a47f282a922ccb3ec9c4e1f2fc9be2acaac3` | not recorded |
+| `refs/bmf_bnr/avab2_6451.json` | `e024f3428f350b6e2258ff3dbfee7102a6f2bbda9337b7f8677b7ca64ea9d156` | not recorded |
+| `refs/bmf_bnr/avab2_700.json` | `efc6c57bf9a6095a79f54e11905b1921b5284e0f61f15a6fcf2439478a87e0e2` | not recorded |
+| `refs/bmf_bnr/avab2_7000.json` | `08f0c2b9bf8d265e2d2ae35236c781301eece69bf7aacc9cc824a5d5671d2ba3` | not recorded |
+| `refs/bmf_bnr/avab2_8000.json` | `2472606d0c4277894652f80a84ab53e89f71eefece31343647d8ddeb975ebca9` | not recorded |
+| `refs/bmf_bnr/pensioner_1000.json` | `df859699ea4ce068973ccf7f8ca9de33ce0ad48079288aec2b4664e8d2b47065` | not recorded |
+| `refs/bmf_bnr/pensioner_10000.json` | `a15c00c4b9bba964644bac498f6bf502f8bdecc75b38e2d0dd5ab6968fd09de4` | not recorded |
+| `refs/bmf_bnr/pensioner_1285.json` | `62eb033cde74d5e56c56880629ecc9f088f1845b8e7926a1d9bf5b299bee3168` | not recorded |
+| `refs/bmf_bnr/pensioner_1286.json` | `12749dfce1e06874dcbe3d45fef6a91259c38c45ac2bba3d11d6c03446b6a04c` | not recorded |
+| `refs/bmf_bnr/pensioner_1500.json` | `180b479e3a119158ce6ecdde71aa048dba7f5f0964eede7165a8408105bf12af` | not recorded |
+| `refs/bmf_bnr/pensioner_15000.json` | `c6b577f6d9036710d5961e1f2dde25ac7fd4b7793237487600425493d5be908a` | not recorded |
+| `refs/bmf_bnr/pensioner_1800.json` | `00f51bf6bee4559e145c546fa0f6712aeed8373a1c94a005d0974ac6e1c94424` | not recorded |
+| `refs/bmf_bnr/pensioner_2074.json` | `1bd80387144e86e427fbcd5ff2efdacdf79e80b24252afb320d06440c143bdda` | not recorded |
+| `refs/bmf_bnr/pensioner_2075.json` | `fdb47f447fc75a5bf08c6957c5ff0babde41396cfd6b43e898a02a47ce1c917e` | not recorded |
+| `refs/bmf_bnr/pensioner_2262.json` | `b953c7526cdf0d2b506cf2c29b8f91c82ac3e65da83bb6cbd8d53f030e77b0a5` | not recorded |
+| `refs/bmf_bnr/pensioner_2263.json` | `969dbb6fbad8fb3fc7c11a65de296ea728934cca5485ab0938c37c78323ebc29` | not recorded |
+| `refs/bmf_bnr/pensioner_2451.json` | `20198c4585b4d5661f0bd2feea82c1129daf384deed0e2d09af9725c609d9278` | not recorded |
+| `refs/bmf_bnr/pensioner_2452.json` | `5d8a59a19d144da6709434a366e515762b5141229c35e717b72851ec95ba882f` | not recorded |
+| `refs/bmf_bnr/pensioner_2600.json` | `0a5596d2d40fdc72bb6ede6250d4d0360c21542e881521b002419352ed8f1b98` | not recorded |
+| `refs/bmf_bnr/pensioner_300.json` | `2805de89885ae5316364e433bb68dc9c65d0b295ae738b899a6b4551695f84e7` | not recorded |
+| `refs/bmf_bnr/pensioner_3000.json` | `3a343167bb02a213b1fc9e304b95c46fd4e83b23de536a35adb663797b1d737f` | not recorded |
+| `refs/bmf_bnr/pensioner_30000.json` | `a567b3c27947d342c65481bb72f6f62768235f97716cbc3c08b9de95d979b144` | not recorded |
+| `refs/bmf_bnr/pensioner_3500.json` | `e625e909aadb605de60bbe45eb30cc0db0218563b22191ce0b9e402a3abc8815` | not recorded |
+| `refs/bmf_bnr/pensioner_4000.json` | `70a8e7272e6edcd65c7eb3a169d1a7672c0e34fbd448e370674f65ca762543a3` | not recorded |
+| `refs/bmf_bnr/pensioner_4500.json` | `54cda6cdfd6b5a63926dcf9f4bc5d9089996e739ebf36f190ea257861e3f7a2a` | not recorded |
+| `refs/bmf_bnr/pensioner_5000.json` | `243f91f16b4df5cbfeba2a2cc677cd4f0e7fab4156891cc2ccfb1bc41682a8d1` | not recorded |
+| `refs/bmf_bnr/pensioner_5500.json` | `fabbe3421cc7f2ce553dc699e87234493dc525b8a15d0856d424f4d3fa202c25` | not recorded |
+| `refs/bmf_bnr/pensioner_551.json` | `dd1af24817b9ec88735e0d9abe6901713c777c135fe5ad4e22fa9a2b04e90382` | not recorded |
+| `refs/bmf_bnr/pensioner_552.json` | `75b484fdbc0f74e83632190e7d96930ce6f4fa807dd1b5a90598b86f78c9fd2b` | not recorded |
+| `refs/bmf_bnr/pensioner_6000.json` | `5d2e5312ec8c972ec51406a774ba5c2105905fa072ddd66cc9fbed786162b3d8` | not recorded |
+| `refs/bmf_bnr/pensioner_6450.json` | `e7825bff4fdfe7a67f8b1978b61e0315f5068da662aa434d6eece659b85a9b2e` | not recorded |
+| `refs/bmf_bnr/pensioner_6451.json` | `8a825cb58a0ca791c0ed49fe047f9331c44865d18ea44585f80a908f8cb80f12` | not recorded |
+| `refs/bmf_bnr/pensioner_700.json` | `e55cb232dc614ed1bf0b2eaa4951852a444bcf907a1dc6269807b9bfe4a136c3` | not recorded |
+| `refs/bmf_bnr/pensioner_7000.json` | `948516ed2b2eb48dc584e4b6cf7d3d2ce6a12a27c1d844990ac50a6411f06bce` | not recorded |
+| `refs/bmf_bnr/pensioner_8000.json` | `f7f300de0ae5f69ede95ef38427b0909b9c6828bf7758fefb5e7abc7426fd04e` | not recorded |
+| `refs/bmf_bnr/single_1000.json` | `74f8577a3e0a43412e64acb64270ce6503ada1f32efbb8255b8d9440ce9db1f2` | not recorded |
+| `refs/bmf_bnr/single_10000.json` | `6648b64e1a2044ef334fb18c9f82fde481990d2d013b119259c4a884d435551e` | not recorded |
+| `refs/bmf_bnr/single_1285.json` | `16f29e52d88939d0c14c0e59beba645aaabec1d72bfb5f169e44e21c3928de6a` | not recorded |
+| `refs/bmf_bnr/single_1286.json` | `921a27b3f421ee8ad06dc2f49646882d31f5f899b518ef947707f2c204281b7c` | not recorded |
+| `refs/bmf_bnr/single_1500.json` | `977a8033377cabe50559328ef19c37f14e9c435e6f4a50ebc80245b992935bfd` | not recorded |
+| `refs/bmf_bnr/single_15000.json` | `20bb28fd914e46c861ca7dc07dbae7648ba4fbd43bca15c775376cd6ae62901c` | not recorded |
+| `refs/bmf_bnr/single_1800.json` | `b00e74834d51ec6f5b8ae9c4d9d148a29dc5996c885c5688fa627c4ce66c1829` | not recorded |
+| `refs/bmf_bnr/single_2074.json` | `40bb47290738594387c92d11f48af87c121215921a770fad009cb10c61d6a79a` | not recorded |
+| `refs/bmf_bnr/single_2075.json` | `8ab4cee4202987aae36f0684719fc89fe30b1e53255c04222929ebd3a415a668` | not recorded |
+| `refs/bmf_bnr/single_2262.json` | `49f74f0f5853c4db4224deebbbd568ff538af725a882102d714c28634892ce18` | not recorded |
+| `refs/bmf_bnr/single_2263.json` | `844191894bc4dbc6769e68fcf9ee85b72a843e5d8e343858b7509d313209b572` | not recorded |
+| `refs/bmf_bnr/single_2451.json` | `e87edd68525f130ce9806ff6e9efd687a167bf684671cc5bc5515d882de5150e` | not recorded |
+| `refs/bmf_bnr/single_2452.json` | `b13f84c3e11e409ad2e306528a0c7911232e9e92eb62ed7c790045ac7bd38dcd` | not recorded |
+| `refs/bmf_bnr/single_2600.json` | `c4790406863102f8754c6d8f3a18e24dd34104665b7181ea01eb50f107fe2edf` | not recorded |
+| `refs/bmf_bnr/single_300.json` | `20bb267e1622762a7ec5488926d468d806a65837477c63a1bea2d2b5b56ba9b0` | not recorded |
+| `refs/bmf_bnr/single_3000.json` | `ccf552b179050b76d8fb4129494a7baeb5900007e1dfb7a0fdce44194f908ae5` | not recorded |
+| `refs/bmf_bnr/single_30000.json` | `fc6f0ee30a7f0b4a1b39ef66d3157d48bb309e86624cd3d9ac64ff72fc62d541` | not recorded |
+| `refs/bmf_bnr/single_3500.json` | `8c5b19448680dd46d1fdcb2eaeb8cb610e2e34c9da0027f8a4255b5a988f4019` | not recorded |
+| `refs/bmf_bnr/single_4000.json` | `6de4e6da7627220fa8e82f2ceef2a768c004f808c044d2df004e4a7b8b195efd` | not recorded |
+| `refs/bmf_bnr/single_4500.json` | `b2e3a7e24cc51f2184abe45911111006b13b42bda923fe1adf94f08b66035261` | not recorded |
+| `refs/bmf_bnr/single_5000.json` | `af1056648a7c8b87f614d8bfd4bf77735cf46b9bd452efd4db9c4dbb81abd717` | not recorded |
+| `refs/bmf_bnr/single_5500.json` | `b69cfad5df1ca927a4178fcff7dcee20d485a93469239bca5ffcfc7dab7ca0d4` | not recorded |
+| `refs/bmf_bnr/single_551.json` | `11a587cc744c7114fa7a47f65e30259a8dee1c58340bf1e3e62bc30c3c2d4437` | not recorded |
+| `refs/bmf_bnr/single_552.json` | `292705a9e33befe9d6d3e8d1f9dff965cc756c423b26f96cb5f73bfebe44d638` | not recorded |
+| `refs/bmf_bnr/single_6000.json` | `2f5125c2bb3646b57aef3895cbda41785f95e9717756ac0571fe6f1896b500ba` | not recorded |
+| `refs/bmf_bnr/single_6450.json` | `524d6d1446a8eed181a6a99f130e842e1fb1b8abe060e498b0593e086192978a` | not recorded |
+| `refs/bmf_bnr/single_6451.json` | `e90c33af8c1ee45ebad81619eacaec7f43c142f484e0587524a27ca307c51224` | not recorded |
+| `refs/bmf_bnr/single_700.json` | `440ec377beb51d7e89a5821188f8ead0dfc5b56487cb9b983cff9b7b627d2eeb` | not recorded |
+| `refs/bmf_bnr/single_7000.json` | `ce49a3c464ca6438e358902a8bb563326e5a8fc22a79217e0b077f76a7e53c96` | not recorded |
+| `refs/bmf_bnr/single_8000.json` | `f39cb477743c084ae4d00a97b84a4c4a2ae1d72ccc7e935c6c1a1ecae9209304` | not recorded |
+
+## Addresses cited in the model and notes (0)
+
+None beyond the files above.

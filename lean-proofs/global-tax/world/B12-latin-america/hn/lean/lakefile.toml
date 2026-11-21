@@ -1,0 +1,14 @@
+name = "HnTax"
+version = "0.1.0"
+defaultTargets = ["HnTax", "hntax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "HnTax"
+
+[[lean_exe]]
+name = "hntax"
+root = "HnTax.Main"

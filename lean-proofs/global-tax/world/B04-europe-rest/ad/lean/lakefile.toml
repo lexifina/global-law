@@ -1,0 +1,14 @@
+name = "AdTax"
+version = "0.1.0"
+defaultTargets = ["AdTax", "adtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AdTax"
+
+[[lean_exe]]
+name = "adtax"
+root = "AdTax.Main"

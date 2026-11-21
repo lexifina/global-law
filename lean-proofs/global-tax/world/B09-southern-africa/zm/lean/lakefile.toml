@@ -1,0 +1,14 @@
+name = "ZmTax"
+version = "0.1.0"
+defaultTargets = ["ZmTax", "zmtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "ZmTax"
+
+[[lean_exe]]
+name = "zmtax"
+root = "ZmTax.Main"

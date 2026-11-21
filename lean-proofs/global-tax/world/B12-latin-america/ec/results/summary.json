@@ -1,0 +1,86 @@
+{
+ "country": "EC",
+ "name": "Ecuador",
+ "year": "2025",
+ "status": "built",
+ "access": "A",
+ "batch": "B12-latin-america",
+ "reused_from": [
+  "CO (printed cumulative table checked with cumJumps)",
+  "MX"
+ ],
+ "lean": {
+  "lines": 116,
+  "definitions": 11,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 3,
+ "kernel_parts_used": [
+  "Tariff (CumRow, cumJumps, cumAgrees)",
+  "Schedule",
+  "Unit (individual)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 3,
+ "provisions": [
+  "LRTI art. 36 a) Tabla No. 1 2025",
+  "LRTI art. (...) rebaja por gastos personales",
+  "LRTI art. 9 (adultos mayores, via SRI page)"
+ ],
+ "sources": [
+  "SRI LRTI codification PDF (2025-10-31)",
+  "SRI 'Tablas de calculo' PDF",
+  "SRI Impuesto a la Renta page"
+ ],
+ "sources_official_secondary": [
+  "SRI page: base = income less personal IESS contributions; adultos mayores one fraccion basica"
+ ],
+ "validation": [
+  {
+   "referee": "statute's own printed tables and thresholds (#guard / decide)",
+   "cases": 3,
+   "exact": 3,
+   "within_1pct": 3,
+   "notes": "no referee values seen (build phase)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 2,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "personal-expenses rebate needs ecPersonalExpenses and ecCanasta (INEC January canasta familiar basica, not reached); the dependants' table (RO Supl. 335, 20-06-2023, p. 19) not reached, so 7 canastas are used for everyone",
+  "dividends: LRTI art. 39.3 / withholding regime not modelled; ignored",
+  "interest: taxed in the global base; the art. 9 exemption for deposits of a year or more not modelled",
+  "capitalGains: not modelled",
+  "selfEmployment: gross income taxed; costs and the RIMPE regime not modelled",
+  "pensions: IESS pensions exempt (LRTI art. 9) not checked; not taxed",
+  "IESS: later C.D. resolutions not checked for the private-sector totals; public-sector table not applied"
+ ],
+ "scale": {
+  "wage": 26422,
+  "currency": "USD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "LRTI art. 36 a) Tabla No. 1 Ano 2025: the 26.422 USD fraccion basica (15 % row)",
+  "by": "B12-latin-america",
+  "basis": "LRTI art. 36 a) Tabla No. 1 Ano 2025: the 26.422 USD fraccion basica (15 % row)"
+ },
+ "headline": "Ecuador 2025 from SRI's LRTI codification: 0-37 % table from 12.081 USD (literal table within 0,72 USD of its bands), 18 % personal-expense rebate; IESS rate not reached.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "personal IESS 9.45 % of wages when ecIessPersonal is not given; deducted (LRTI); now also reported as employeeSocial",
+  "provision": "IESS Resolución C.D. 515 (30 Mar 2016) Anexo Único, Primera (private-sector dependent workers 9,45 / 11,15 / 20,60), replacing C.D. 501; Ley de Seguridad Social (iess.gob.ec)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)",
+  "agent": "W5 pattern A contributions agent 2 (Asia, Americas, Europe, Pacific)"
+ }
+}

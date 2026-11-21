@@ -1,0 +1,79 @@
+{
+ "country": "GT",
+ "name": "Guatemala",
+ "year": "2025",
+ "status": "built",
+ "access": "B",
+ "batch": "B12-latin-america",
+ "reused_from": [
+  "MX/CO bracket tables"
+ ],
+ "lean": {
+  "lines": 87,
+  "definitions": 11,
+  "theorems": 6,
+  "sorry": 0
+ },
+ "guards": 2,
+ "kernel_parts_used": [
+  "Tariff (CumRow)",
+  "Schedule",
+  "Unit (individual)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 1,
+ "provisions": [
+  "Decreto 10-2012 arts. 72, 73, 92, 93"
+ ],
+ "sources": [
+  "SAT annotated Decreto 10-2012 (Internet Archive capture 2022-07-02 of portal.sat.gob.gt)"
+ ],
+ "sources_official_secondary": [],
+ "validation": [
+  {
+   "referee": "statute's own printed tables and thresholds (#guard / decide)",
+   "cases": 2,
+   "exact": 2,
+   "within_1pct": 2,
+   "notes": "no referee values seen (build phase)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 2,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "VAT-paid deduction (art. 72 a, up to Q 12.000) needs gtVatPaid; taken as 0",
+  "aguinaldo and Bono 14 exemptions (art. 70 exempt income) not separated: all wages taxed",
+  "reforms after the 2022 SAT text not checked",
+  "selfEmployment: Regimen sobre utilidades (25 %) or Regimen opcional simplificado (5 % / 7 % of income) not modelled; ignored",
+  "capital income: art. 92 10 % on the gross amount; art. 88-90 base rules (rent 30 % deduction etc.) not modelled",
+  "pensions: not modelled",
+  "IGSS on all fourteen payments with gtFourteenPays (contribution status of aguinaldo / Bono 14 not read)"
+ ],
+ "scale": {
+  "wage": 300000,
+  "currency": "GTQ",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Decreto 10-2012 art. 73: the Q 300.000 limit of the 5 % band",
+  "by": "B12-latin-america",
+  "basis": "Decreto 10-2012 art. 73: the Q 300.000 limit of the 5 % band"
+ },
+ "headline": "Guatemala 2025 from SAT's annotated Decreto 10-2012 (archived): Q 48.000 deduction, 5 %/7 % tariff exact at Q 300.000; capital 10 %, dividends 5 %.",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "IGSS employee 4.83 % of wages (2 % EM + 1 % accidents + 1.83 % IVS) when gtIgss is not given; deducted under art. 72",
+  "provision": "IGSS Junta Directiva Acuerdo 410 art. 62 b) (rev. 2018), Acuerdo 1002 art. 46 b), Acuerdo 1124 art. 40 b) (rev. 2021) (igssgt.org)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)",
+  "agent": "W5 pattern A contributions agent 2 (Asia, Americas, Europe, Pacific)"
+ }
+}

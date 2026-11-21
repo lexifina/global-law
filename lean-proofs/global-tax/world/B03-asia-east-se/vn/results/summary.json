@@ -1,0 +1,78 @@
+{
+ "country": "VN",
+ "name": "Viet Nam",
+ "year": "2025",
+ "status": "built",
+ "batch": "B03-asia-east-se",
+ "access": "B",
+ "reused_from": [
+  "KR",
+  "JP"
+ ],
+ "lean": {
+  "lines": 90,
+  "definitions": 9,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 1,
+ "kernel_parts_used": [
+  "Schedule",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 13,
+ "validation": [
+  {
+   "referee": "statute's own printed tables (#guard)",
+   "cases": 1,
+   "exact": 1,
+   "within_1pct": 1,
+   "notes": "#guard: monthly column = annual / 12"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 0,
+  "recreated": 0,
+  "not_modelled": 0
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "family deductions as adjusted under art. 19 (1) CPI clause (statute's printed 9 / 3.6 million used)",
+  "health and unemployment insurance; SI ceiling",
+  "business, rent, capital gains",
+  "BHYT (Decree 146/2018) and BHTN (Law on Employment 38/2013 art. 57) still not modelled: texts not reached on an official host"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 0.31,
+   "netIncomeFalls": 0
+  },
+  "couple1earner2kids": {
+   "maxMETR": 0.264,
+   "netIncomeFalls": 0
+  },
+  "couple60_40_2kids": {
+   "maxMETR": 0.172,
+   "netIncomeFalls": 0
+  }
+ },
+ "sources": "Consolidated Law on Personal Income Tax 103/VBHN-VPQH (Official Gazette 1283+1284, 11-9-2025): arts. 4, 19, 21, 22, 23; Law on Social Insurance 41/2024/QH15 art. 33 (Global law); vbpl.vn answers 403 to scripts; the Standing Committee resolution adjusting the art. 19 amounts was not found in the Gazette's listings",
+ "headline": "The consolidated Law still prints family deductions that are no longer applied",
+ "w5_pattern_a": {
+  "date": "2026-11-20",
+  "added": "social-insurance ceiling defaulted to 20 x lương cơ sở 2,340,000 = 46.8 million a month (input vnSiBaseCapMonthly still wins)",
+  "provision": "Nghị định 73/2024/NĐ-CP Điều 3 (2) (datafiles.chinhphu.vn); Law 41/2024 art. 31 (1) đ)",
+  "switch": "\"w5Contrib\": false restores the pre-W5 outputs (0 / 300 random households differ)",
+  "agent": "W5 pattern A contributions agent 2 (Asia, Americas, Europe, Pacific)"
+ }
+}

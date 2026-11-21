@@ -1,0 +1,97 @@
+{
+ "country": "PW",
+ "name": "Palau",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "batch": "B14-pacific",
+ "access": "A",
+ "reused_from": [
+  "US-style wage tax (Compact states)"
+ ],
+ "lean": {
+  "lines": 90,
+  "definitions": 6,
+  "theorems": 5,
+  "sorry": 0
+ },
+ "guards": 5,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 6,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 5,
+   "exact": 5,
+   "within_1pct": 5,
+   "notes": "s 1101 bands at 8,000 and 40,000; s 1104 citizen refund edge at 15,000/15,001; non-citizen at 15,000"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 3,
+  "recreated": 2,
+  "not_modelled": 1
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "social security (41 PNC) and Civil Service Pension Plan contributions (not reached)",
+  "Business Profits Tax",
+  "tuition/donation refunds"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 15.827,
+   "atAW": 1.0,
+   "bandsOver100": 1,
+   "largestNotch": "1,179 at 15,000 (1.0 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 15.827,
+   "atAW": 1.0,
+   "bandsOver100": 1,
+   "largestNotch": "1,179 at 15,000 (1.0 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 15.827,
+   "atAW": 1.0,
+   "bandsOver100": 1,
+   "largestNotch": "1,179 at 15,000 (1.0 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 15.827,
+   "atAW": 2.5,
+   "bandsOver100": 2,
+   "largestNotch": "1,179 at 25,000 (1.66667 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 15.827,
+   "atAW": 1.0,
+   "bandsOver100": 1,
+   "largestNotch": "1,179 at 15,000 (1.0 AW)"
+  }
+ },
+ "headline": "F1 Citizens earning $15,000 or less get all wage tax back; at $15,001 they keep none of it: a $1,180 cliff (METR 1,583 % on the scanner grid)",
+ "scale": {
+  "wage": 15000,
+  "currency": "USD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "40 PNC s 1104 as amended by RPPL 11-11 s 5 (in force 1 January 2023): the citizen refund limit (\"earned fifteen thousand dollars ($15,000) or less\")",
+  "by": "B14-pacific",
+  "basis": "40 PNC s 1104 as amended by RPPL 11-11 s 5 (in force 1 January 2023): the citizen refund limit (\"earned fifteen thousand dollars ($15,000) or less\"). A statutory threshold, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Palau National Code title 40 (income tax; 2023 reform)': the 2023 reform kept a wage and salary tax (no general income tax for individuals): 6 % on the first $8,000, 10 % to $40,000, 12 % above, on all wages; citizens earning $15,000 or less get the whole tax refunded (40 PNC 1104); businesses pay the new Business Profits Tax and PGST."
+}

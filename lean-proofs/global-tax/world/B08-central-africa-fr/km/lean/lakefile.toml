@@ -1,0 +1,14 @@
+name = "KmTax"
+version = "0.1.0"
+defaultTargets = ["KmTax", "kmtax"]
+
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "KmTax"
+
+[[lean_exe]]
+name = "kmtax"
+root = "KmTax.Main"

@@ -1,0 +1,100 @@
+{
+ "country": "BZ",
+ "name": "Belize",
+ "year": "2025 (basis year)",
+ "status": "built",
+ "batch": "B13-caribbean",
+ "access": "A",
+ "reused_from": [
+  "UK/IE PAYE (basic deduction)",
+  "TT (this batch: weekly class table)"
+ ],
+ "lean": {
+  "lines": 123,
+  "definitions": 12,
+  "theorems": 4,
+  "sorry": 0
+ },
+ "guards": 9,
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Canon",
+  "Country",
+  "World.worldMain",
+  "Theorems (Schedule, Unit)",
+  "Social (weekly class table, local)"
+ ],
+ "kernel_gaps": [],
+ "provisions_cited": 11,
+ "validation": [
+  {
+   "referee": "statute's own printed figures and hand-computed statutory cases (#guard)",
+   "cases": 9,
+   "exact": 9,
+   "within_1pct": 9,
+   "notes": "s. 16 phase-in at 28,999/29,000/29,001/30,000/32,000/32,001; SS Table 2 rows 1 and 12"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 5,
+  "recreated": 2,
+  "not_modelled": 3
+ },
+ "new_loopholes": 0,
+ "gov_errors": 0,
+ "statute_faults": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "unsupported": [
+  "business tax on receipts (self-employed, Part XI)",
+  "dividends, rents and gains",
+  "Social Security Table 3 (period not declared in any notice found)",
+  "wages assumed paid evenly over 52 weeks"
+ ],
+ "scan": {
+  "single": {
+   "maxMETR": 50.0,
+   "atAW": 0.995,
+   "bandsOver100": 1,
+   "largestNotch": "7,249 at 28,999 (0.99997 AW)"
+  },
+  "single_parent_2": {
+   "maxMETR": 50.0,
+   "atAW": 0.995,
+   "bandsOver100": 1,
+   "largestNotch": "7,249 at 28,999 (0.99997 AW)"
+  },
+  "couple_1earner_2": {
+   "maxMETR": 50.0,
+   "atAW": 0.995,
+   "bandsOver100": 1,
+   "largestNotch": "7,249 at 28,999 (0.99997 AW)"
+  },
+  "couple_2earner_2": {
+   "maxMETR": 50.152,
+   "atAW": 2.495,
+   "bandsOver100": 2,
+   "largestNotch": "7,249 at 72,498 (2.49993 AW)"
+  },
+  "second_earner_2": {
+   "maxMETR": 50.0,
+   "atAW": 0.995,
+   "bandsOver100": 1,
+   "largestNotch": "7,249 at 28,999 (0.99997 AW)"
+  }
+ },
+ "headline": "F1 A total income of exactly BZ$29,000 is chargeable with no basic deduction: tax BZ$7,250, against BZ$0 at 28,999 and BZ$1 at 29,001",
+ "scale": {
+  "wage": 29000,
+  "currency": "BZD",
+  "kind": "statutory-threshold",
+  "year": "2025",
+  "source": "Income and Business Tax Act Cap. 55 s. 16(2) as replaced by Act 40 of 2024: total income 'less than twenty nine thousand dollars shall not be chargeable'",
+  "by": "B13-caribbean",
+  "basis": "Income and Business Tax Act Cap. 55 s. 16(2) as replaced by Act 40 of 2024: total income 'less than twenty nine thousand dollars shall not be chargeable'. A statutory amount, not an average wage: 1 'AW' in scanner output = this amount of annual income."
+ },
+ "registry_correction": "Registry 'Income and Business Tax Act (Cap. 55)' confirmed and updated: from 1 January 2025 (Act 40 of 2024) employed persons pay 25 % on total income less a 20,000 basic deduction once total income exceeds 29,000, with a phase-in credit of 2,250 - 75 % x (income - 29,000) up to 32,000; no income tax on other persons' chargeable income (business tax instead); Social Security Table 2 (from 6 Jan 2020) weekly contributions, insurable earnings capped at $480 a week."
+}

@@ -1,0 +1,85 @@
+{
+ "country": "BE",
+ "name": "Belgium",
+ "year": "2025 (income year 2025 = exercice d'imposition / aanslagjaar 2026)",
+ "status": "done",
+ "jurisdiction": "federal + Brussels-Capital Region (centimes additionnels 32,591 %) + City of Brussels municipal tax 4,9 % (option --commune-bp=, --oecd = 6,0 %)",
+ "lean": {
+  "lines": 660,
+  "definitions": 72,
+  "theorems": 25,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule",
+  "Rounding (divR)",
+  "Family.familyTotal",
+  "Family.attributeIncome/attributedAmount",
+  "Canon/Out/Country",
+  "Theorems.Schedule",
+  "Theorems.Parts38 (attributeIncome_sum, attributedAmount_bounds)",
+  "Unit (splitting_le_separate)"
+ ],
+ "kernel_gaps": [
+  "art. 134: the exempt sum is taxed on its own (pre-2017) tariff, not the income tariff: Family.lowBandReduction (one schedule) does not fit; two Schedules used",
+  "transfer of unused exempt sum between spouses with layer ordering (art. 134 par. 4) and refundable conversion limited to child layers (art. 134 par. 3): local",
+  "household social contribution on the household's taxable income with individual vs joint scales (CSSS, loi 30.03.1994 art. 108): local piecewise function",
+  "monthly work bonus with two volets and ordered capping (loi 20.12.1999): local (Table.perPeriod not needed)",
+  "family allowances: two regimes (Brussels and transitional LGAF), take the higher; per-period barèmes (January vs February-December): local",
+  "Out writes whole euros: Belgian assessment is in cents; cents kept in detail"
+ ],
+ "provisions_cited": 30,
+ "validation": [
+  {
+   "referee": "OECD TW 2025 (family check.py, wages rounded to the euro), betax --oecd (municipal 6,0 %, LGAF age supplements unfrozen)",
+   "cases": 56,
+   "exact": 56,
+   "within_1pct": 56,
+   "notes": "exact = |diff| <= 1 EUR on CGTC, CGITLETC, CGITFP, SLT, EECSSC, CTGG, THP; largest 0,48 (SP67 CTGG)"
+  },
+  {
+   "referee": "OECD TW 2025, betax default (City of Brussels 4,9 %, LGAF age supplements frozen per Famiris barème fn 3)",
+   "cases": 56,
+   "exact": 38,
+   "within_1pct": 46,
+   "notes": "all differences are the municipal rate (F10) and CTGG -640,98 for M100_100/M100_67 (F2)"
+  },
+  {
+   "referee": "SPF Finances worked example 'Taux d'imposition' (Jean, taxable 38.000, AI 2026)",
+   "cases": 1,
+   "exact": 1,
+   "within_1pct": 1,
+   "notes": "Lean theorems jean_basic, jean_exempt, jean_tax (10.484,50 to the cent)"
+  },
+  {
+   "referee": "Withholding key formula 01.01.2025 (SPF, ESS-SR/2024-0015), single and one-earner couple, wages 15.000-150.000 step 500, vs final tax at a 7 % municipal rate",
+   "cases": 542,
+   "exact": 0,
+   "within_1pct": 454,
+   "notes": "withholding is +9 to +1.497 EUR above the final tax: brackets 10 EUR lower, exempt 10.900 vs 10.910, no regional 0,5 % reduction, refundable work bonus only at assessment (F9)"
+  },
+  {
+   "referee": "SPF Tax-Calc",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "not queried (interactive web app; not attempted in this session)"
+  },
+  {
+   "referee": "OpenFisca-Belgium",
+   "cases": 0,
+   "exact": 0,
+   "within_1pct": 0,
+   "notes": "no maintained package located (no web search available)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 21,
+  "recreated": 6,
+  "not_modelled": 10
+ },
+ "new_loopholes": 2,
+ "gov_errors": 2,
+ "statute_faults": 3,
+ "headline": "Belgium 2025 in Lean reproduces all 56 OECD Taxing Wages lines to the euro; the Brussels family-allowance ceilings make one euro of income cost up to 2.954 EUR, the OECD overstates two families' allowances by 641 EUR by unfreezing transitional age supplements, and the exempt sum is still valued on the pre-2017 tariff."
+}

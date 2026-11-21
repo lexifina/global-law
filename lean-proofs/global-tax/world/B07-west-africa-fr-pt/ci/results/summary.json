@@ -1,0 +1,61 @@
+{
+ "country": "CI",
+ "name": "Côte d'Ivoire (ITS 2024 reform, RICF, IRVM, CNPS)",
+ "year": "2025 (calendar year)",
+ "status": "built",
+ "access": "A",
+ "batch": "B07-west-africa-fr-pt",
+ "lean": {
+  "lines": 168,
+  "definitions": 20,
+  "theorems": 9,
+  "sorry": 0
+ },
+ "kernel_parts_used": [
+  "Schedule (art. 119 bis monthly barème)",
+  "perPeriod-style monthly sum (local months/monthOf)",
+  "Contribution with floor and ceiling (local)"
+ ],
+ "kernel_gaps": [
+  "Fixed monthly reduction by parts (RICF) is a lookup; written locally"
+ ],
+ "provisions_cited": 12,
+ "validation": [
+  {
+   "referee": "statute's own printed tables and amounts (Lean decide)",
+   "cases": 9,
+   "exact": 9,
+   "within_1pct": 9,
+   "notes": "build phase: no referee values used; cases = Lean theorems (kernel instances and checks of the statute's printed tables and stated amounts, all proved)"
+  }
+ ],
+ "known_loopholes": {
+  "catalogued": 7,
+  "recreated": 3,
+  "not_modelled": 4
+ },
+ "new_loopholes": 1,
+ "gov_errors": 1,
+ "statute_faults": 0,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "reused_from": [
+  "kernel Schedule",
+  "SN parts table pattern"
+ ],
+ "sources": [
+  "Code général des impôts, DGI online edition (DGI publications API item 'CODE GENERAL DES IMPOTS 2025' → https://cgici.com/, pages V2026/page-23, 24, 326, 25, 26, 28, 49, 50; fetched 2026-11-20); ITS articles in the wording of Ord. n° 2023-719 du 13 septembre 2023",
+  "Annexe fiscale 2025 (Loi n° 2024-1109 du 18 décembre 2024), DGI e-book text https://www.dgi.gouv.ci/assets/documents/EBOOK/ANNEXE_FISCALE_2025/ (art. 120 bis dockers; art. 37 IRVM 17 %)",
+  "CNPS 'Employeur' page https://www.cnps.ci/employeur (6,3 % employee retirement; ceiling 1 647 315 F/month; SMIG floor 60 000 F) — official secondary"
+ ],
+ "scale": "2880000 XOF (12 x 240 000 F, the upper limit of the 16 % monthly band)",
+ "unsupported": [
+  "IRC on interest, IRF on rents, BIC/BNC",
+  "CMU health contribution",
+  "children 18-26 in education"
+ ],
+ "registry_correction": "CI: ITS (single tax since the 2024 reform, Ord. 2023-719) with the RICF; main statute = CGI as amended by Ord. 2023-719 and the LF 2025 annex.",
+ "headline": "Côte d'Ivoire 2025 built from the DGI's online CGI (2024 ITS reform, Ord. 2023-719) and the 2025 fiscal annex: monthly 0-32 % on gross pay less a fixed family reduction (RICF, 5 500 F per half-part a month), 17 % on dividends, CNPS 6,3 %; the CNPS minimum base makes the first franc of pay cost 45 360 F a year, and the CNPS page's ceiling contradicts its own SMIG."
+}

@@ -1,0 +1,11 @@
+# Pakistan (PK) progress
+
+**Status (2026-11-20T06:25Z): built (step 1 of the world testing order). Next: open-source software (coordinator, TESTING.md; SOFTWARE.md lists none for this country unless updated), then datasets.**
+
+- Year: 2026 (tax year 1 July 2025 - 30 June 2026); access tier A; reused patterns: IN, UK.
+- Statute read: Income Tax Ordinance 2001 as amended up to 31.07.2025 (FBR PDF, download1.fbr.gov.pk, linked from fbr.gov.pk/Categ/Income-Tax-Ordinance/326; law/ito_fbr_20250731.pdf) = the tax-year-2026 text (Finance Act 2025); Pakistan Code consolidated PDF of 2026-10-28 (official link given by Global law; law/ito_pakistancode.pdf) whose footnotes print the substituted tax-year-2026 tables; EOBI Act 1976 ss. 2(p), 9, 9B (Global law, Pakistan Code). Finance Act 2025 (FBR, scanned, 292 pp.) saved but not needed (the FBR consolidation carries its amendments with footnotes)..
+- Registry correction: Registry: 'First Schedule, salaried rates' confirmed; tax year 2026 (July 2025-June 2026) is the year beginning in 2025. Salaried table (Div I (2), salary > 75 % of taxable income): 0 / 1 / 11 / 23 / 30 / 35 % at 0.6 / 1.2 / 2.2 / 3.2 / 4.1 m; others Div I (1): 0 / 15 / 20 / 30 / 40 / 45 % at 0.6 / 1.2 / 1.6 / 3.2 / 5.6 m; surcharge s. 4AB 9 % (salaried) / 10 % above 10 m; super tax s. 4C on income > 150 m; pensions from 10 m at 5 % (FA 2025, exemption cl. (8) omitted). Global law's PK file layout is shifted (schedule-1.md holds the Second Schedule's contents; schedule-8.md holds the First Schedule).
+- Lean: 220 lines, 27 defs, 6 theorems, 6 #guard checks, 0 sorry; exe `lean/.lake/build/bin/pktax` (worldMain). Scale: `scale.json`.
+- Sources: `law/` (sha256 in law/SHA256SUMS).
+- Unsupported: capital gains (s. 37/37A); EOBI amount needs pkMinWageMonthly (minimum wage notified outside the Ordinance); profit on debt read as bank-deposit profit (Div IIIA (a)); provincial social security / workers' funds (employer-side).
+- Steps: 1 model done; 2 validation: statute's own tables only (#guard), referees wait for the testing phase; 3 proofs: kernel one-liners (Theorems.lean) + #guard notches; 4-5: FINDINGS.md (catalogue, scanners, search record); 6 government/statute errors: FINDINGS.md; 7 USEFUL.md.
