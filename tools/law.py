@@ -1389,8 +1389,67 @@ def corpus_events(corpus: str) -> list[Event]:
         ix = _light_index(corpus, cwd, ix['pin'])
     key = ('corpus-events', f"{corpus}@{_at(ix)}")
     if key not in _CACHE:
-        _CACHE[key] = _Events(Event(r[0], corpus, r[0], r[1], r[5], r[4], r[3]) for r in ix['rows'] if r[5])
+        rows = ix['rows']
+        if isinstance(rows, _Rows):
+            made = _Events(rows.events(corpus))
+            made.memo['rows'] = rows  # (events_by_commit finds a commit's event through the table)
+        else:
+            made = _Events(Event(r[0], corpus, r[0], r[1], r[5], r[4], r[3]) for r in rows if r[5])
+        _CACHE[key] = made
     return _CACHE[key]  # type: ignore[return-value]
+
+
+class _CommitEvents:
+    """commit -> its event, for the events of a corpus whose rows are read in place: the commit's row is found in
+    the table (`pos`) and the event by its row, so no dict of every commit's 40 letters is held. `void`: rows whose
+    events the corpus's timeline leaves out (ended_rows). Read like the dict: get, [], in."""
+
+    def __init__(self, events, rows, void):
+        from array import array
+        self._events, self._rows, self._void = events, rows, void
+        gone = {rows[n][0] for n in void}
+        # For each row of the table, where its event is among the events (one more than its place; 0 for a row
+        # with none: undated, left out of the timeline, or replaced since the table was made). An event of a
+        # commit added or replaced since has no row there, and is found by its commit.
+        where = array('I', bytes(4 * rows._n))
+        for k, e in enumerate(events):
+            if type(e) is _RowEvent:
+                where[e._i] = k + 1
+        for o in void:
+            if o < rows._n:
+                where[o] = 0
+        self._where, self._find = where, rows.find
+        self._own = {e.corpus_commit: e for e in events if type(e) is not _RowEvent and e.corpus_commit not in gone}
+
+    def get(self, commit, default=None):
+        if self._own:
+            e = self._own.get(commit)
+            if e is not None:
+                return e
+        o = self._find(commit)
+        if o is None:
+            return default
+        k = self._where[o]
+        return self._events[k - 1] if k else default
+
+    def __getitem__(self, commit):
+        e = self.get(commit)
+        if e is None:
+            raise KeyError(commit)
+        return e
+
+    def __contains__(self, commit) -> bool:
+        return self.get(commit) is not None
+
+
+def events_by_commit(corpus: str):
+    """commit -> event for the events of a corpus's timeline (corpus_timeline), where the corpus's commits are read
+    in place: looked up in their table. None where they are not (the caller makes its dict, as before)."""
+    base = corpus_events(corpus)
+    rows = getattr(base, 'memo', {}).get('rows')
+    if rows is None:
+        return None
+    return _kept(base, 'by-commit', lambda: _CommitEvents(base, rows, ended_rows(corpus)))
 
 
 def _light_index(corpus: str, cwd: Path, sha: str) -> dict:
@@ -1448,7 +1507,7 @@ def law_events(corpus: str) -> list[Event]:
         return events
     rows = _index(corpus)['rows']
     gone = {rows[n][0] for n in void}
-    return [e for e in events if e.corpus_commit not in gone]
+    return [e for e in events if (e._i not in void if type(e) is _RowEvent and e._rows is rows else e.corpus_commit not in gone)]
 
 
 def corrections(corpus: str) -> list[dict]:
@@ -1466,7 +1525,7 @@ def corrections(corpus: str) -> list[dict]:
     key = ('corrections', f"{corpus}@{_at(ix)}")
     got = _CACHE.get(key)
     if got is None:
-        got = _CACHE[key] = tuple(_moved_fix(corpus, r[9]) for r in ix['rows'] if r[9])
+        got = _CACHE[key] = tuple(_moved_fix(corpus, r[9]) for _, r in _fix_rows(ix['rows']))
     return list(got)  # type: ignore[arg-type]
 
 
@@ -1575,10 +1634,10 @@ def _act_days(corpus: str, ix: dict) -> dict[str, list[str]]:
     from the index in one pass: act_next looks an act up here instead of walking every file for each act."""
     key = ('act-days', f"{corpus}@{ix['pin']}")
     if key not in _CACHE:
-        rows = ix['rows']
+        day_of, kind_of_row = _row_day(ix['rows']), _row_kind(ix['rows'])
         found: dict[str, set] = {}
         for rel, versions in ix['files'].items():
-            days = {rows[o][5] for o, _, _ in versions if rows[o][5] and rows[o][4] not in ('correction', 'documentation')}
+            days = {d for o, _, _ in versions for d in (day_of(o),) if d and kind_of_row(o) not in ('correction', 'documentation')}
             if days:
                 parts = rel.split('/')
                 for n in range(1, len(parts) + 1):
@@ -1767,12 +1826,11 @@ def _overlays(corpus: str, ix: dict, touched: dict) -> list:
     rows, cwd = ix['rows'], corpus_dir(corpus)
     overlays = []
     mv = moves(corpus)  # Files: names paths as they were that day; the index keys them as they are now
-    wanted = {order: [f for f in r[9]['files'] if mv.get(f, f) not in touched.get(order, {})] for order, r in enumerate(rows) if r[9]}
+    fixes = _fix_rows(rows)
+    wanted = {order: [f for f in r[9]['files'] if mv.get(f, f) not in touched.get(order, {})] for order, r in fixes}
     at = _named_at(ix, cwd, wanted)
-    for order, r in enumerate(rows):
+    for order, r in fixes:
         fix = r[9]
-        if not fix:
-            continue
         files = dict(touched.get(order, {}))
         files.update({mv.get(p, p): v for p, v in at.get(order, {}).items()})  # named but unchanged: their text at the correction commit is the tip's
         if fix['files']:
@@ -1792,7 +1850,7 @@ class _FileIndex:
 
     def __init__(self, corpus: str, ix: dict, notices, ends: bool, days=None):
         self._corpus, self._files, self._rows, self._notices, self._ends = corpus, ix['files'], ix['rows'], notices, ends
-        self._days = days
+        self._days, self._vday = days, _row_vday(ix['rows'])
 
     def days(self) -> set:
         """The in-force day of every version of every path (what _tree_days asks), kept with the overlays."""
@@ -1801,11 +1859,11 @@ class _FileIndex:
         return set(self._days)
 
     def _of(self, path: str, versions) -> list:
-        rows, notices, out = self._rows, self._notices, []
+        vday, notices, out = self._vday, self._notices, []
         for order, blob, mode in versions:
-            r = rows[order]
-            if not r[9] and r[5] and r[4] != 'documentation':
-                out.append((r[5], order, None if blob in notices else blob, mode))
+            day = vday(order)
+            if day:
+                out.append((day, order, None if blob in notices else blob, mode))
         if out and self._ends:
             got = _cut(self._corpus, path)
             if got:
@@ -1831,14 +1889,18 @@ class _FileIndex:
                 if best and best[2]:
                     chosen[path] = (best[2], best[3])
             return chosen
-        t, notices = self._files, self._notices
-        days = [None if r[9] or r[4] == 'documentation' else (r[5] or None) for r in self._rows]  # a commit's day, where it gives a version
+        t, notices, rows = self._files, self._notices, self._rows
+        if isinstance(rows, _Rows) and rows.plain:  # a commit's day, where it gives a version: read from the rows' table
+            days, numbers = rows._vpool, rows._vi
+        else:
+            days = [None if r[9] or r[4] == 'documentation' else (r[5] or None) for r in rows]
+            numbers = range(len(days))
         mm, names_at, name_off, modes, at, off, each = t._mm, t._names_at, t._name_off, t._modes, t._vers_at, t._ver_off, t._each
         for k in range(t._n):
             b_day = b_order = b_blob = None
             b_mode = 0
             for order, blob, mode in each(mm[at + off[k] * _VT_RECORD:at + off[k + 1] * _VT_RECORD]):
-                day = days[order]
+                day = days[numbers[order]]
                 if day is not None and day <= date and (b_day is None or (day, order) >= (b_day, b_order)):
                     b_day, b_order, b_blob, b_mode = day, order, blob, mode
             if b_day is not None and not b_mode & 128:
@@ -1863,7 +1925,7 @@ class _FileIndex:
         return self.get(path) is not None
 
     def items(self):
-        rows, notices, of = self._rows, self._notices, self._of
+        vday, notices, of = self._vday, self._notices, self._of
         if self._ends:
             for path, versions in self._files.items():
                 out = of(path, versions)
@@ -1871,8 +1933,8 @@ class _FileIndex:
                     yield path, out
             return
         for path, versions in self._files.items():
-            out = [(r[5], order, None if blob in notices else blob, mode) for order, blob, mode in versions
-                   for r in (rows[order],) if not r[9] and r[5] and r[4] != 'documentation']
+            out = [(day, order, None if blob in notices else blob, mode) for order, blob, mode in versions
+                   for day in (vday(order),) if day]
             if out:
                 yield path, out
 
@@ -1917,7 +1979,7 @@ def _file_index_in_place(corpus: str, ix: dict) -> tuple:
         except (OSError, ValueError, EOFError, pickle.UnpicklingError, AttributeError, ImportError, IndexError, TypeError):
             overlays = days = None
     if overlays is None:
-        fixes = {order for order, r in enumerate(rows) if r[9]}
+        fixes = {order for order, _ in _fix_rows(rows)}
         touched: dict[int, dict] = {}
         seen, of = set(), index._of
         for path, versions in files.items():  # the one walk of the table: the corrections' files and every version's day
@@ -2403,6 +2465,15 @@ def _built_tree(date: str, corpus: str, key: tuple) -> str | None:
     import os
     env = {**os.environ, 'GIT_INDEX_FILE': str(store / f'index-{abs(hash(key))}'), 'GIT_OBJECT_DIRECTORY': str(store / 'objects'),
            'GIT_ALTERNATE_OBJECT_DIRECTORIES': objects}
+    # A build that was stopped while git wrote this index (a caller's time limit ends the git process) leaves the
+    # index's lock behind, and every later build of the same day then failed ("Unable to create ... index-N.lock:
+    # File exists", seen on 21 November 2026) for as long as the process ran. The store is this process's own and one
+    # build of a key runs at a time (_TREE_LOCKS), so whatever is there under this name is left over.
+    for left in (env['GIT_INDEX_FILE'], env['GIT_INDEX_FILE'] + '.lock'):
+        try:
+            os.unlink(left)
+        except OSError:
+            pass
     # Bytes, NUL-terminated: in text mode Windows writes \r\n, and git reads "act/a.md\r" and ignores it.
     listing = b''.join(f'{mode} blob {blob}\t{path}'.encode('utf-8') + b'\0' for path, (blob, mode) in sorted(chosen.items()))
     run = subprocess.run(['git', 'update-index', '--add', '-z', '--index-info'], cwd=cwd, env=env, input=listing,
@@ -3388,8 +3459,9 @@ def record_floor(path: str) -> dict | None:
     if key not in _CACHE:  # the first in-force day of any file of the act
         rows, pre = ix['rows'], folder + '/'
         under = getattr(ix['files'], 'under', None)  # (a table read in place gives a folder's files without the rest)
-        _CACHE[key] = min((rows[o][5] for f, vs in (under(pre) if under else ix['files'].items()) if f.startswith(pre) for o, *_ in vs
-                           if rows[o][5] and rows[o][4] != 'documentation'), default=None)
+        day_of, kind_of_row = _row_day(rows), _row_kind(rows)
+        _CACHE[key] = min((day_of(o) for f, vs in (under(pre) if under else ix['files'].items()) if f.startswith(pre) for o, *_ in vs
+                           if day_of(o) and kind_of_row(o) != 'documentation'), default=None)
     return dict(first, **extra) if _CACHE[key] == first['in_force'] else None
 
 
@@ -3636,7 +3708,7 @@ def _history(corpus: str, rel: str) -> list[dict]:
     key = ('fix-rows', f"{corpus}@{_at(ix)}")
     kept = _CACHE.get(key)
     if kept is None or kept[0] is not rows:  # the corpus's corrections with their rows, in order (every row was walked for every file)
-        kept = _CACHE[key] = (rows, [(order, r) for order, r in enumerate(rows) if r[9]])  # type: ignore[assignment]
+        kept = _CACHE[key] = (rows, _fix_rows(rows))  # type: ignore[assignment]
     fixes = kept[1]  # type: ignore[index]
     if len(fixes) > FIX_ROWS_BY_NAME:
         # Many corrections (Japan: 41,177, naming 6.2 million files between them): which of them name a file is looked
@@ -3920,11 +3992,12 @@ def notice_blobs(corpus: str) -> frozenset:
     except (OSError, ValueError, TypeError, KeyError):
         checked, found = set(), set()
     rows = ix['rows']
-    todo = {o for o, r in enumerate(rows) if r[0] not in checked}
+    commit_of = _row_commit(rows)
+    todo = {o for o in range(len(rows)) if commit_of(o) not in checked}
     if todo:
         blobs = sorted({b for versions in ix['files'].values() for o, b, _ in versions if b and o in todo})
         found |= _notice_scan(corpus, blobs, extra)
-        checked |= {r[0] for r in rows}
+        checked |= {commit_of(o) for o in range(len(rows))}
         try:  # a cache: a tree that cannot be written to makes the list again next time, nothing more
             tmp = path.with_name(f'{path.name}.{os.getpid()}.tmp')
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -4130,7 +4203,7 @@ def ended_rows(corpus: str) -> frozenset:
     ix = _index(corpus)
     key = ('ended-rows', f"{corpus}@{_at(ix)}")
     if key not in _CACHE:
-        rows = ix['rows']
+        vday = _row_vday(ix['rows'])
         touched: dict[int, int] = {}
         dropped: dict[int, int] = {}
         folders = {f for f, e in ends.items() if e['day']}
@@ -4138,11 +4211,11 @@ def ended_rows(corpus: str) -> frozenset:
             parts = rel.split('/')
             got = _cut(corpus, rel) if any('/'.join(parts[:i]) in folders for i in range(1, len(parts))) else None
             for order, blob, _ in versions:
-                r = rows[order]
-                if r[9] or not r[5] or r[4] == 'documentation':
+                day = vday(order)
+                if not day:
                     continue
                 touched[order] = touched.get(order, 0) + 1
-                if got and after_end(corpus, got[0], got[1], r[5], order, blob, rel):
+                if got and after_end(corpus, got[0], got[1], day, order, blob, rel):
                     dropped[order] = dropped.get(order, 0) + 1
         _CACHE[key] = frozenset(o for o, n in dropped.items() if n == touched[o])
     return _CACHE[key]  # type: ignore[return-value]
@@ -4301,7 +4374,10 @@ def _end_commit(corpus: str, end: dict) -> tuple[str, int]:
     key = ('end-commit', f"{corpus}@{_at(ix)}:{end['act']}")
     if key not in _CACHE:
         rows = ix['rows']
-        that_day = [i for i, r in enumerate(rows) if r[5] == end['day'] and r[4] != 'documentation']
+        if isinstance(rows, _Rows):
+            that_day = [i for i in rows.on_day(end['day']) if rows.kind(i) != 'documentation']
+        else:
+            that_day = [i for i, r in enumerate(rows) if r[5] == end['day'] and r[4] != 'documentation']
         by = end['by'].lower()
         named = [i for i in that_day if by and (by in rows[i][1].lower() or by in rows[i][3].lower()
                                                  or rows[i][1].lower() in by)]
@@ -4319,11 +4395,14 @@ def capture_day(corpus: str) -> tuple[str, int, int] | None:
     if key not in _CACHE:
         days: dict[str, int] = {}
         starting: dict[str, int] = {}
-        for r in ix['rows']:
-            if r[5] and r[4] != 'documentation':
-                days[r[5]] = days.get(r[5], 0) + 1
-                if r[4] == 'baseline':
-                    starting[r[5]] = starting.get(r[5], 0) + 1
+        from collections import Counter
+        rows = ix['rows']
+        pairs = rows.day_kinds() if isinstance(rows, _Rows) else list(Counter((r[5], r[4]) for r in rows).items())
+        for (day, kind), count in pairs:
+            if day and kind != 'documentation':
+                days[day] = days.get(day, 0) + count
+                if kind == 'baseline':
+                    starting[day] = starting.get(day, 0) + count
         total = sum(days.values())
         found = None
         if total >= 20:
@@ -4643,8 +4722,7 @@ def _redate(data: dict, rows: list, block: str) -> None:
     Enacted/Adopted/Made... trailer gives: ENACTED, the row's `enacted`), or says the record gives none."""
     retro = trailer_lines(block).get('Retroactive', '').strip().lower().startswith('yes')
     for target, field, day in REDATES.findall(block):
-        at = data['pos'].get(target) if len(target) == 40 else \
-            next((i for c, i in data['pos'].items() if c.startswith(target)), None)
+        at = data['pos'].get(target) if len(target) == 40 else _pos_prefix(data['pos'], target)
         if at is None:
             continue
         r = rows[at]
@@ -4783,8 +4861,7 @@ def _extend(corpus: str, cwd: Path, data: dict, revs: str, skip: frozenset = fro
             target = (t.get('Corrects') or t.get('Re-asserts') or '').split()
             if target and re.fullmatch(r'[0-9a-f]{7,40}', target[0]) and not CORRECTS.search(target[0]):
                 data['restates'][commit] = (target[0], 'Corrects' if t.get('Corrects') else 'Re-asserts')
-                at = data['pos'].get(target[0]) if len(target[0]) == 40 else \
-                    next((i for c, i in data['pos'].items() if c.startswith(target[0])), None)
+                at = data['pos'].get(target[0]) if len(target[0]) == 40 else _pos_prefix(data['pos'], target[0])
                 if at is not None and not t.get('Law'):
                     row = (row[0], rows[at][1]) + row[2:]
         if author == MAINTAINER and 'Redates:' in block:
@@ -4846,9 +4923,12 @@ def _publisher_changes(info: dict, rows: list) -> None:
     """Audit row 62: a dated commit read as a law whose author is a name the same corpus gives its starting texts or
     its changes no law is named for (or the manifest's publisher) is the publisher's change, not a law: Ireland's
     "Law Reform Commission, Revised Acts" (615 commits), Tasmania, Canada, Sweden, Monaco, Nauru. Read as uncredited."""
-    names = {r[1] for r in rows if r[4] in ('baseline', 'uncredited')}
+    scan = getattr(rows, 'scan', None) or (lambda kinds: [(i, r) for i, r in enumerate(rows) if r[4] in kinds])
+    names = {r[1] for _, r in scan(('baseline', 'uncredited'))}
     publisher = str(info.get('publisher') or '').strip().lower()
-    for i, r in enumerate(rows):
+    if not names and not publisher:
+        return
+    for i, r in scan(('law',)):
         if r[4] == 'law' and r[5] and (r[1] in names or (publisher and r[1].strip().lower() == publisher)):
             rows[i] = r[:4] + ('uncredited',) + r[5:]
 
@@ -4900,9 +4980,12 @@ def _main_index(corpus: str) -> dict:
     data = None
     changed = False
     try:
-        data = _load_index(source)
+        data = _load_index(source, whole=source != path)  # (an index of an earlier pin is read to be extended)
         if data.get('v') != _index_version():
             data = None
+        elif data['pin'] != sha and isinstance(data['rows'], _Rows):
+            data['files'].close()
+            data = _load_index(source, whole=True)
     except Exception:
         data = None
         try:  # an index kept in one piece (until 4 November 2026): read once, and kept in pieces from now on
@@ -5070,7 +5153,7 @@ def _prune_indexes(store: Path, name: str, keep: Path) -> None:
         try:
             age = now - f.stat().st_mtime
             this_version = f.name.startswith(f'{name}.v{INDEX_VERSION}.')
-            if (f.suffix == '.tmp' and age > 3600) or (f.suffix in ('.index', '.pickle', '.light', '.vt') and (
+            if (f.suffix == '.tmp' and age > 3600) or (f.suffix in ('.index', '.pickle', '.light', '.vt', '.rw', '.hd') and (
                     this_version or not f.name.startswith(f'{name}.v') or age > 7 * 86400)):
                 f.unlink()
         except OSError:
@@ -5495,11 +5578,12 @@ def _future_index(corpus: str, cwd: Path, data: dict, branch: str, fut: str) -> 
         return data
     linear, skip = check['linear'], check['skip'] | frozenset(check['unread'])
     over = dict(data)
-    over['rows'] = list(data['rows'])
+    lazy = isinstance(data['rows'], _Rows)  # (read in place: the branch's commits are added in a view of the table)
+    over['rows'] = data['rows'].copy() if lazy else list(data['rows'])
     over['files'] = _FilesOver(data['files'])
     for k in ('unknown', 'moves', 'withdrawn', 'restates', 'pos', 'retroactive', 'redated', 'redated_enacted'):
         if k in data:
-            over[k] = type(data[k])(data[k])
+            over[k] = _Pos(over['rows'], data[k]._own) if k == 'pos' and lazy and isinstance(data[k], _Pos) else type(data[k])(data[k])
     before = len(over['rows'])
     _extend(corpus, cwd, over, f'{pin}..{fut}', skip=skip, keep=True)
     over['at'] = f'{pin}+{fut}'
@@ -5536,8 +5620,14 @@ def _save_index(target: Path, data: dict) -> None:
             f.write(b)
 
 
-def _load_index(path: Path) -> dict:
+def _load_index(path: Path, whole: bool = False) -> dict:
+    """The index of one file. Where its commits and files have their tables beside it they are read in place from
+    those (_load_slim) unless `whole` is asked: an index that is to be extended is read whole, as lists and dicts."""
     import pickle
+    if ROWS_TABLE and not whole:
+        slim = _load_slim(path)
+        if slim is not None:
+            return slim
     with open(path, 'rb') as f:
         if f.read(4) != b'GLX2':
             raise ValueError('not an index')
@@ -5724,12 +5814,7 @@ class _FilesTable:
     def close(self) -> None:
         if self._f in _OPEN_INDEXES:
             _OPEN_INDEXES.remove(self._f)
-        try:
-            self._name_off.release(); self._ver_off.release(); self._in_order.release()
-            self._mm.close()
-        except (BufferError, ValueError):
-            pass  # (still read by another thread: closed when the last view of it goes)
-        self._f.close()
+        self._f.close()  # (the map stays until nothing reads it: a thread may be in the middle of a look-up)
 
     def _name(self, k: int) -> bytes:
         return self._mm[self._names_at + self._name_off[k]:self._names_at + self._name_off[k + 1]]
@@ -5930,10 +6015,20 @@ def files_table_make(corpus: str) -> str:
     else:
         return 'not made'  # (an index with a future branch laid over it, or of a few files only)
     had = target.is_file()
+    held = None
+    if had:
+        try:
+            held = _FilesTable(target)
+        except (OSError, ValueError):  # a table cut short, or of another layout: made again
+            had = False
+            try:
+                target.unlink()
+            except OSError:
+                pass
     if not had and not _files_table_write(target, files):
         return 'not made'
     try:  # this process reads the table from here on (what it works out next is then what a server works out)
-        held = _FilesTable(target)
+        held = held or _FilesTable(target)
     except (OSError, ValueError):
         return 'not made'
     ix['files'] = held
@@ -5942,6 +6037,589 @@ def files_table_make(corpus: str) -> str:
     if isinstance(files, _Files):
         files.close()
     return 'there' if had else 'made'
+
+
+# --- An index's commits read in place from a file -----------------------------------------------------------------------
+# With the files read from their table, what an index still held as objects was its commits: a tuple of ten values and
+# six or seven strings for each (715 bytes a commit; 4.8 GB for the 6.76 million commits of Germany's federal acts, 59%
+# of what that body of law cost on 21 November 2026), and `pos`, a dict from each commit to its row. Here they are one
+# table beside the index (<index>.rw), mapped and read where it lies: the commit ids as 20 bytes each, in history
+# order, and the same ids' rows in id order with where each first byte (or two) begins among them (so a commit is
+# found in a few steps: `pos`, which a search of the record of changes asks for every commit it finds); the values of which a corpus
+# has few (kind, in-force day, Kind as written, enacted, published) as numbers into short lists; the texts (law,
+# date written, subject) as UTF-8 one after another. A row is made when it is asked for and not kept. The corrections
+# (the tenth value, a dict for a few commits) are held as they were. Beside it the rest of the index's head
+# (<index>.hd): an index with table, head and files table is loaded without reading its commits at all. Made from the
+# index itself (rows_table_make), and checked row for row against it before it is given its name.
+ROWS_TABLE = FILES_TABLE
+_RW_MAGIC = b'GLR2'
+_RW_NONE = b'\xff'
+_RW_TEXT = (1, 2, 3)        # law (the author), the date written, the subject: a text of its own for each commit
+_RW_POOL = (4, 5, 6, 7, 8)  # kind, in-force day, Kind as written, enacted, published: few different values
+
+
+def _rows_table_path(index_path: Path) -> Path:
+    return index_path.with_name(index_path.name + '.rw')
+
+
+def _head_path(index_path: Path) -> Path:
+    return index_path.with_name(index_path.name + '.hd')
+
+
+class _Rows:
+    """An index's commits (rows) read in place from their table. Read like the list they were: [], len, going
+    through them all; a future branch's commits are appended and a redated row replaced in this object only (the
+    table is never written), as they were in a copy of the list (copy()). Single values without making the row:
+    commit(i), day(i), kind(i), vday(i), law(i), subject(i); find(commit) is `pos`."""
+
+    def __init__(self, path: Path | None = None, share: '_Rows | None' = None):
+        if share is not None:
+            for k in ('_path', '_mm', '_n', '_fix', '_pools', '_c_at', '_perm', '_fan', '_wide', '_vi', '_cols', '_toff', '_tat', '_vpool'):
+                setattr(self, k, getattr(share, k))
+            self._tail, self._over = list(share._tail), dict(share._over)
+            return
+        import mmap
+        import pickle
+        self._path = path
+        with open(path, 'rb') as f:  # (the map keeps the file; nothing else is held open)
+            self._mm = mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+        if mm[:4] != _RW_MAGIC:
+            raise ValueError('not a rows table')
+        size = int.from_bytes(mm[4:12], 'little')
+        meta = pickle.loads(mm[12:12 + size])
+        self._n = n = meta['n']
+        self._fix = meta['fix']
+        self._pools = {k: tuple(v) for k, v in meta['pools'].items()}
+        self._vpool = (None,) + self._pools[5]  # (vday's numbers: 0 for a commit that gives no version)
+        view, at = memoryview(mm), 12 + size + (-(12 + size) % 8)
+        self._c_at = at
+        at += 20 * n + (-(20 * n) % 8)
+
+        def take(count):
+            nonlocal at
+            part = view[at:at + 4 * count].cast('I')
+            at += 4 * count + (-(4 * count) % 8)
+            return part
+        self._wide = bool(meta['wide'])  # (the ids' first two bytes, not one, say where to look)
+        self._perm, self._fan, self._vi = take(n), take((65536 if self._wide else 256) + 1), take(n)
+        self._cols = {k: take(n) for k in _RW_POOL}
+        self._toff, self._tat = {}, {}
+        for k in _RW_TEXT:
+            self._toff[k] = take(n + 1)
+            self._tat[k] = at
+            at += meta['text'][k] + (-meta['text'][k] % 8)
+        if at != len(mm):
+            raise ValueError('a rows table cut short')
+        self._tail, self._over = [], {}
+
+    def copy(self) -> '_Rows':
+        return _Rows(share=self)
+
+    @property
+    def plain(self) -> bool:
+        return not self._tail and not self._over
+
+    def __len__(self) -> int:
+        return self._n + len(self._tail)
+
+    def _text(self, k: int, i: int):
+        off, at = self._toff[k], self._tat[k]
+        b = self._mm[at + off[i]:at + off[i + 1]]
+        return None if b == _RW_NONE else str(b, 'utf-8')
+
+    def _base(self, i: int) -> tuple:
+        mm, cols, pools, a = self._mm, self._cols, self._pools, self._c_at + 20 * i
+        law = self._text(1, i)
+        return (mm[a:a + 20].hex(), law if law is None else sys.intern(law), self._text(2, i), self._text(3, i),
+                pools[4][cols[4][i]], pools[5][cols[5][i]], pools[6][cols[6][i]], pools[7][cols[7][i]],
+                pools[8][cols[8][i]], self._fix.get(i))
+
+    def __getitem__(self, i):
+        if isinstance(i, slice):
+            return [self[j] for j in range(*i.indices(len(self)))]
+        n = self._n
+        if i < 0:
+            i += n + len(self._tail)
+            if i < 0:
+                raise IndexError('row out of range')
+        if i >= n:
+            return self._tail[i - n]
+        if self._over:
+            r = self._over.get(i)
+            if r is not None:
+                return r
+        return self._base(i)
+
+    def __setitem__(self, i: int, row: tuple) -> None:
+        n = self._n
+        if i < 0:
+            i += n + len(self._tail)
+        if i >= n:
+            self._tail[i - n] = row
+        else:
+            self._over[i] = row
+
+    def append(self, row: tuple) -> None:
+        self._tail.append(row)
+
+    def __iter__(self):
+        base, over = self._base, self._over
+        for i in range(self._n):
+            yield over[i] if i in over else base(i)
+        yield from list(self._tail)
+
+    # One value of a row, without the row.
+    def commit(self, i: int) -> str:
+        if 0 <= i < self._n and i not in self._over:
+            a = self._c_at + 20 * i
+            return self._mm[a:a + 20].hex()
+        return self[i][0]
+
+    def day(self, i: int):
+        if 0 <= i < self._n and i not in self._over:
+            return self._pools[5][self._cols[5][i]]
+        return self[i][5]
+
+    def kind(self, i: int):
+        if 0 <= i < self._n and i not in self._over:
+            return self._pools[4][self._cols[4][i]]
+        return self[i][4]
+
+    def vday(self, i: int):
+        """The in-force day of a commit that gives a version of the files it changes (not a correction laid over
+        the versions, not documentation, and dated), else None."""
+        if 0 <= i < self._n and i not in self._over:
+            return self._vpool[self._vi[i]]
+        r = self[i]
+        return r[5] if (not r[9] and r[5] and r[4] != 'documentation') else None
+
+    def law(self, i: int):
+        if 0 <= i < self._n and i not in self._over:
+            law = self._text(1, i)
+            return law if law is None else sys.intern(law)
+        return self[i][1]
+
+    def subject(self, i: int):
+        if 0 <= i < self._n and i not in self._over:
+            return self._text(3, i)
+        return self[i][3]
+
+    def fixes(self) -> list:
+        """[(row number, row)] of the commits that are corrections laid over the versions, in history order."""
+        orders = set(self._fix) | {i for i, r in self._over.items() if r[9]}
+        out = [(i, r) for i, r in ((i, self[i]) for i in sorted(orders)) if r[9]]
+        return out + [(self._n + j, r) for j, r in enumerate(self._tail) if r[9]]
+
+    def scan(self, kinds) -> list:
+        """[(row number, row)] of the commits of these kinds, in history order (the others are not made)."""
+        col, over, base = self._cols[4], self._over, self._base
+        want = {j for j, k in enumerate(self._pools[4]) if k in kinds}
+        out = []
+        for i in range(self._n):
+            if i in over:
+                if over[i][4] in kinds:
+                    out.append((i, over[i]))
+            elif col[i] in want:
+                out.append((i, base(i)))
+        return out + [(self._n + j, r) for j, r in enumerate(self._tail) if r[4] in kinds]
+
+    def on_day(self, day) -> list:
+        """The row numbers of the commits in force on `day`, in history order."""
+        out = []
+        if day in self._pools[5]:
+            p, over = self._pools[5].index(day), self._over
+            out = [i for i, v in enumerate(self._cols[5]) if v == p and i not in over]
+        if self._over:
+            out = sorted(out + [i for i, r in self._over.items() if r[5] == day])
+        return out + [self._n + j for j, r in enumerate(self._tail) if r[5] == day]
+
+    def day_kinds(self):
+        """((in-force day, kind), how many commits) for every pair there is."""
+        from collections import Counter
+        if self.plain:
+            days, kinds = self._pools[5], self._pools[4]
+            return [((days[d], kinds[k]), c) for (d, k), c in Counter(zip(self._cols[5], self._cols[4])).items()]
+        return list(Counter((r[5], r[4]) for r in self).items())
+
+    def events(self, corpus: str):
+        """corpus_events' events: one for each dated commit, reading its commit, law and subject from the table
+        when they are asked (_RowEvent). A commit added or replaced here gives an Event of its own."""
+        days, kinds, over = self._pools[5], self._pools[4], self._over
+        dated = [bool(d) for d in days]
+        for i, (d, k) in enumerate(zip(self._cols[5], self._cols[4])):
+            if i in over:
+                r = over[i]
+                if r[5]:
+                    yield Event(r[0], corpus, r[0], r[1], r[5], r[4], r[3])
+            elif dated[d]:
+                yield _RowEvent(self, i, corpus, days[d], kinds[k])
+        for r in list(self._tail):
+            if r[5]:
+                yield Event(r[0], corpus, r[0], r[1], r[5], r[4], r[3])
+
+    # `pos`: a commit's row.
+    def _id(self, k: int) -> bytes:
+        a = self._c_at + 20 * self._perm[k]
+        return self._mm[a:a + 20]
+
+    def find(self, commit) -> int | None:
+        """The row of a commit of the table, by its 40 hexadecimal digits; None when it has none."""
+        if not isinstance(commit, str) or len(commit) != 40:
+            return None
+        try:
+            want = bytes.fromhex(commit)
+        except ValueError:
+            return None
+        if len(want) != 20 or commit != commit.lower():
+            return None  # (spaces, or upper case: no key of the dict this stands for)
+        mm, perm, c_at = self._mm, self._perm, self._c_at
+        first = (want[0] << 8 | want[1]) if self._wide else want[0]
+        lo, hi = self._fan[first], self._fan[first + 1]
+        while lo < hi:
+            mid = (lo + hi) >> 1
+            a = c_at + 20 * perm[mid]
+            if mm[a:a + 20] < want:
+                lo = mid + 1
+            else:
+                hi = mid
+        if lo < self._n:
+            o = perm[lo]
+            a = c_at + 20 * o
+            if mm[a:a + 20] == want:
+                return o
+        return None
+
+    def prefix(self, start: str) -> int | None:
+        """The first row, in history order, of a commit of the table whose id begins with `start`."""
+        if not isinstance(start, str) or not start or start.strip('0123456789abcdef'):
+            return None
+        want = bytes.fromhex(start[:len(start) & ~1])
+        lo, hi, n = 0, self._n, self._n
+        while lo < hi:
+            mid = (lo + hi) >> 1
+            if self._id(mid) < want:
+                lo = mid + 1
+            else:
+                hi = mid
+        best = None
+        while lo < n:
+            name = self._id(lo)
+            if not name.startswith(want):
+                break
+            if name.hex().startswith(start):
+                o = self._perm[lo]
+                best = o if best is None or o < best else best
+            lo += 1
+        return best
+
+
+class _RowEvent:
+    """An Event of a commit whose row is read in place (_Rows): the corpus, day and kind are held (values every
+    event of the corpus shares); the commit, the law and the subject are read from the table when asked."""
+    __slots__ = ('_rows', '_i', 'corpus', 'in_force', 'kind')
+    __hash__ = None  # type: ignore[assignment]  (as Event: compared by what it says)
+
+    def __init__(self, rows, i, corpus, in_force, kind):
+        self._rows, self._i, self.corpus, self.in_force, self.kind = rows, i, corpus, in_force, kind
+
+    @property
+    def commit(self) -> str:
+        return self._rows.commit(self._i)
+
+    corpus_commit = commit
+
+    @property
+    def law(self):
+        return self._rows.law(self._i)
+
+    @property
+    def subject(self):
+        return self._rows.subject(self._i)
+
+    def _all(self) -> tuple:
+        return (self.commit, self.corpus, self.corpus_commit, self.law, self.in_force, self.kind, self.subject)
+
+    def __eq__(self, other):
+        if type(other) is _RowEvent:
+            return (self._rows is other._rows and self._i == other._i) or self._all() == other._all()
+        if isinstance(other, Event):
+            return self._all() == (other.commit, other.corpus, other.corpus_commit, other.law, other.in_force, other.kind, other.subject)
+        return NotImplemented
+
+    def __repr__(self) -> str:
+        return ('Event(commit=%r, corpus=%r, corpus_commit=%r, law=%r, in_force=%r, kind=%r, subject=%r)' % self._all())
+
+
+class _Pos:
+    """An index's `pos` (commit -> its row) over a rows table: looked up in the table, with the commits added
+    since (a future branch's) in a dict of its own. Read and written like the dict it was."""
+
+    def __init__(self, rows: _Rows, own: dict | None = None):
+        self._rows, self._own = rows, dict(own or {})
+
+    def get(self, commit, default=None):
+        got = self._own.get(commit)
+        if got is None:
+            got = self._rows.find(commit)
+        return default if got is None else got
+
+    def __getitem__(self, commit):
+        got = self.get(commit)
+        if got is None:
+            raise KeyError(commit)
+        return got
+
+    def __contains__(self, commit) -> bool:
+        return self.get(commit) is not None
+
+    def __setitem__(self, commit, row) -> None:
+        self._own[commit] = row
+
+    def __len__(self) -> int:
+        return self._rows._n + len(self._own)
+
+    def items(self):
+        rows = self._rows
+        for i in range(rows._n):
+            a = rows._c_at + 20 * i
+            yield rows._mm[a:a + 20].hex(), i
+        yield from list(self._own.items())
+
+    def keys(self):
+        return (c for c, _ in self.items())
+
+    def values(self):
+        return (i for _, i in self.items())
+
+    def __iter__(self):
+        return self.keys()
+
+    def prefix(self, start: str):
+        got = self._rows.prefix(start)
+        if got is None:
+            got = next((i for c, i in self._own.items() if c.startswith(start)), None)
+        return got
+
+
+def _pos_prefix(pos, start: str):
+    """The row of the first commit, in the order they were indexed, whose id begins with `start`; None for none."""
+    prefix = getattr(pos, 'prefix', None)
+    return prefix(start) if prefix else next((i for c, i in pos.items() if c.startswith(start)), None)
+
+
+def _fix_rows(rows) -> list:
+    """[(row number, row)] of an index's corrections laid over its versions, in history order."""
+    fixes = getattr(rows, 'fixes', None)
+    return fixes() if fixes else [(order, r) for order, r in enumerate(rows) if r[9]]
+
+
+def _row_day(rows):
+    """fn(row number) -> the commit's in-force day."""
+    return rows.day if isinstance(rows, _Rows) else (lambda o: rows[o][5])
+
+
+def _row_kind(rows):
+    return rows.kind if isinstance(rows, _Rows) else (lambda o: rows[o][4])
+
+
+def _row_commit(rows):
+    return rows.commit if isinstance(rows, _Rows) else (lambda o: rows[o][0])
+
+
+def commit_starting(start: str):
+    """The first event of the timeline whose commit begins with `start` (hexadecimal, lower case), or None. A corpus
+    whose commits are read in place is asked through their table whether it has such a commit at all, and only
+    the events of those that have (and of the others) are gone through: none, for a commit of no corpus."""
+    events = timeline()
+    maybe = set()
+    for c in manifest()['corpora']:
+        if is_caselaw(c):
+            continue
+        rows = getattr(corpus_events(c['path']), 'memo', {}).get('rows')
+        if rows is None or not rows.plain or rows.prefix(start) is not None:
+            maybe.add(c['path'])
+    if not maybe:
+        return None
+    return next((e for e in events if e.corpus in maybe and e.commit.startswith(start)), None)
+
+
+def _row_vday(rows):
+    """fn(row number) -> the in-force day of a commit that gives a version (_Rows.vday), else None."""
+    if isinstance(rows, _Rows):
+        return rows.vday
+
+    def vday(o):
+        r = rows[o]
+        return r[5] if (not r[9] and r[5] and r[4] != 'documentation') else None
+    return vday
+
+
+def _rows_table_write(target: Path, rows: list, pos: dict) -> bool:
+    """Make the table an index's commits are read in place from, from the rows and `pos` themselves; False when it
+    cannot hold them exactly (a value of a kind it has no place for, a `pos` that is not each commit's own row, the
+    disk). Every row is read back from the table and compared before it is given its name."""
+    import os
+    import pickle
+    import struct
+    from array import array
+    try:
+        if target.is_file():
+            return True
+        n = len(rows)
+        if len(pos) != n or n >= 0xFFFFFFF0:
+            return False
+        ids = bytearray()
+        pools: dict = {k: {} for k in _RW_POOL}
+        cols = {k: array('I') for k in _RW_POOL}
+        vi, fix, sizes = array('I'), {}, {k: 0 for k in _RW_TEXT}
+        for i, r in enumerate(rows):
+            if type(r) is not tuple or len(r) != 10 or type(r[0]) is not str or len(r[0]) != 40 or pos.get(r[0]) != i:
+                return False
+            raw = bytes.fromhex(r[0])
+            if raw.hex() != r[0]:
+                return False
+            ids += raw
+            for k in _RW_TEXT:
+                if r[k] is not None and type(r[k]) is not str:
+                    return False
+            for k in _RW_POOL:
+                v = r[k]
+                if v is not None and type(v) is not str:
+                    return False
+                cols[k].append(pools[k].setdefault(v, len(pools[k])))
+            if r[9] is not None:
+                if type(r[9]) is not dict or not r[9]:
+                    return False
+                fix[i] = r[9]
+            vi.append(cols[5][-1] + 1 if (not r[9] and r[5] and r[4] != 'documentation') else 0)
+        view = bytes(ids)
+        del ids
+        perm = array('I', sorted(range(n), key=lambda i: view[20 * i:20 * i + 20]))
+        import bisect
+        wide = n >= 65536
+        firsts = [(view[20 * i] << 8 | view[20 * i + 1]) if wide else view[20 * i] for i in perm]
+        fan = array('I', (bisect.bisect_left(firsts, b) for b in range((65536 if wide else 256) + 1)))
+        del firsts
+
+        def enc(v):
+            return _RW_NONE if v is None else v.encode('utf-8')
+        offs = {}
+        for k in _RW_TEXT:  # (a pass for each text: their sizes and where each commit's begins)
+            off, at = array('I', [0]), 0
+            for r in rows:
+                b = enc(r[k])
+                if b == _RW_NONE and r[k] is not None:
+                    return False
+                at += len(b)
+                off.append(at)
+            if at >= 0xFFFFFFF0:
+                return False
+            offs[k], sizes[k] = off, at
+        meta = pickle.dumps({'v': 2, 'n': n, 'wide': wide, 'fix': fix, 'pools': {k: list(pools[k]) for k in _RW_POOL}, 'text': sizes},
+                            protocol=pickle.HIGHEST_PROTOCOL)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        tmp = target.with_name(f'{target.name}.{os.getpid()}.{threading.get_ident()}.tmp')
+
+        def pad(f, size):
+            f.write(b'%s' % (b'=' * (-size % 8)))
+        with open(tmp, 'wb') as f:
+            f.write(_RW_MAGIC + len(meta).to_bytes(8, 'little') + meta)
+            pad(f, 12 + len(meta))
+            f.write(view)
+            pad(f, len(view))
+            for part in (perm, fan, vi, *(cols[k] for k in _RW_POOL)):
+                f.write(part.tobytes())
+                pad(f, 4 * len(part))
+            for k in _RW_TEXT:
+                f.write(offs[k].tobytes())
+                pad(f, 4 * len(offs[k]))
+                for lo in range(0, n, 65536):
+                    f.write(b''.join(enc(r[k]) for r in rows[lo:lo + 65536]))
+                pad(f, sizes[k])
+        made = _Rows(tmp)
+        same = len(made) == n and all(a == b for a, b in zip(made, rows))
+        del made
+        if not same:
+            tmp.unlink(missing_ok=True)
+            return False
+        os.replace(tmp, target)
+        return True
+    except (OSError, ValueError, OverflowError, struct.error, TypeError, UnicodeError, pickle.PicklingError):
+        return False
+
+
+def rows_table_make(corpus: str) -> str:
+    """Make sure the table a corpus's commits are read in place from, and the rest of its index's head, are beside
+    its index, making them from the index this process holds where they are not; the index then reads its commits
+    from the table. For a process of its own with one thread, after files_table_make (a server's prewarm): an
+    index is loaded without its commits only when its files table is there too. Says what it did: 'there', 'made',
+    'off', or 'not made'."""
+    import os
+    import pickle
+    if not ROWS_TABLE:
+        return 'off'
+    over = _index(corpus)
+    ix = _main_index(corpus) if isinstance(over.get('files'), _FilesOver) else over
+    rows, pos = ix.get('rows'), ix.get('pos')
+    if isinstance(rows, _Rows):
+        return 'there'
+    if ix.get('focused') or not ix.get('pin') or type(rows) is not list or type(pos) is not dict \
+            or ix is not _CACHE.get(('index', f"{corpus}@{ix['pin']}")):
+        return 'not made'
+    index_path = _store() / f"{corpus.replace('/', '~')}.v{INDEX_VERSION}.{ix['pin'][:12]}.index"
+    if not index_path.is_file() or not _files_table_path(index_path).is_file():
+        return 'not made'
+    target, head_path = _rows_table_path(index_path), _head_path(index_path)
+    had = target.is_file() and head_path.is_file()
+    if had:  # a table of an earlier layout, or cut short: made again
+        try:
+            had = len(_Rows(target)) == len(rows)
+        except (OSError, ValueError, KeyError, EOFError, pickle.UnpicklingError, AttributeError, IndexError, TypeError):
+            had = False
+    if not had:
+        for old in (head_path, target):
+            try:
+                old.unlink()
+            except OSError:
+                pass
+        if not _rows_table_write(target, rows, pos):
+            return 'not made'
+        try:  # the head last: it is what says the three are there
+            head = {k: v for k, v in ix.items() if k not in ('rows', 'pos', 'files', 'shards')}
+            tmp = head_path.with_name(f'{head_path.name}.{os.getpid()}.tmp')
+            with open(tmp, 'wb') as f:
+                pickle.dump(head, f, protocol=pickle.HIGHEST_PROTOCOL)
+            os.replace(tmp, head_path)
+        except (OSError, pickle.PicklingError):
+            return 'not made'
+    try:
+        held = _Rows(target)
+    except (OSError, ValueError, KeyError, pickle.UnpicklingError):
+        return 'not made'
+    if len(held) != len(rows):
+        return 'not made'
+    ix['rows'], ix['pos'] = held, _Pos(held)
+    return 'there' if had else 'made'
+
+
+def _load_slim(path: Path) -> dict | None:
+    """An index from its head, rows table and files table, where all three are beside it: none of its commits or
+    files is read. None when one is missing or cannot be read (the index's own file is then read, as before)."""
+    import pickle
+    hd, rw, vt = _head_path(path), _rows_table_path(path), _files_table_path(path)
+    try:
+        if not (hd.is_file() and rw.is_file() and vt.is_file()):
+            return None
+        with open(hd, 'rb') as f:
+            head = _unpickle(f.read())
+        if type(head) is not dict or 'rows' in head or 'pin' not in head:
+            return None
+        rows = _Rows(rw)
+        files = _FilesTable(vt)
+    except (OSError, ValueError, KeyError, EOFError, pickle.UnpicklingError, AttributeError, ImportError, IndexError, TypeError):
+        return None
+    head['rows'], head['pos'], head['files'] = rows, _Pos(rows), files
+    return head
 
 
 _BATCH: dict = {}

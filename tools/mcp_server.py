@@ -7000,11 +7000,11 @@ def _folder_commits(corpus: str, inner: str) -> list[str]:
     if law.is_caselaw({'path': corpus, **(law.corpus_info(corpus) or {})}):
         ix = law._index(corpus)
         if ix.get('files') and not ix.get('focused'):
-            files, rows, inner = _folder_files(corpus, ix), ix['rows'], inner.strip('/')
-            out = [rows[o][0] for o, *_ in ix['files'].get(inner, [])]
+            files, commit_of, inner = _folder_files(corpus, ix), law._row_commit(ix['rows']), inner.strip('/')
+            out = [commit_of(o) for o, *_ in ix['files'].get(inner, [])]
             i = bisect.bisect_left(files, inner + '/')
             while i < len(files) and files[i].startswith(inner + '/'):
-                out += [rows[o][0] for o, *_ in ix['files'][files[i]]]
+                out += [commit_of(o) for o, *_ in ix['files'][files[i]]]
                 i += 1
             return out
     else:
@@ -7026,7 +7026,8 @@ def _folder_commits(corpus: str, inner: str) -> list[str]:
             while i < len(files) and files[i].startswith(inner + '/'):
                 orders.update(o for o, *_ in ix['files'][files[i]])
                 i += 1
-            return [rows[o][0] for o in sorted(orders, reverse=True) if o < main]  # each commit once, newest first
+            commit_of = law._row_commit(rows)
+            return [commit_of(o) for o in sorted(orders, reverse=True) if o < main]  # each commit once, newest first
     return law.git('log', '--format=%H', law.reachable_tip(corpus), '--', inner, cwd=law.corpus_dir(corpus)).split()
 
 
@@ -7281,7 +7282,9 @@ def _by_commit(corpus: str) -> dict:
     if kept is None or kept[0] != at:
         if len(_BY_COMMIT) > 64:
             _BY_COMMIT.clear()
-        kept = _BY_COMMIT[corpus] = (at, {e.corpus_commit: e for e in law.corpus_timeline(corpus)})
+        # (a corpus whose commits are read in place finds a commit's event through their table: no dict of them)
+        table = law.events_by_commit(corpus)
+        kept = _BY_COMMIT[corpus] = (at, table if table is not None else {e.corpus_commit: e for e in law.corpus_timeline(corpus)})
     return kept[1]
 
 
@@ -7512,7 +7515,8 @@ class _EventsByCommit:
     def _of(self, corpus) -> dict:
         got = self._made.get(corpus)
         if got is None:  # (two threads at once make the same table; one is kept)
-            got = self._made[corpus] = {e.corpus_commit: e for e in self._groups.get(corpus, ())}
+            table = law.events_by_commit(corpus) if corpus in self._groups else None
+            got = self._made[corpus] = table if table is not None else {e.corpus_commit: e for e in self._groups.get(corpus, ())}
         return got
 
     def get(self, key, default=None):
@@ -11325,7 +11329,7 @@ def t_law_details(args: dict) -> tuple[str, dict]:
     if commit and not re.fullmatch(r'[0-9a-fA-F]{4,40}', commit):
         raise UserError('commit must be a hexadecimal commit hash (4 to 40 characters).')
     if commit:  # a commit of this tree (a root commit) stands for the corpus commit it moved to
-        world = next((e for e in law.timeline() if e.commit.startswith(commit.lower())), None)
+        world = law.commit_starting(commit.lower())
         if world:
             commit, corpus = world.corpus_commit, world.corpus
     # Case law is read for a decision (a docket or BGE reference, found by its file name), a commit, or a corpus
