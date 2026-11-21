@@ -1822,7 +1822,7 @@ class _FileIndex:
         records: no list of a file's versions is made and only the chosen blob is named. With acts that end, by
         the entries as everywhere else."""
         chosen: dict = {}
-        if self._ends:
+        if self._ends or not isinstance(self._files, _FilesTable):  # (a future branch over the table: by the entries)
             for path, versions in self.items():
                 best = None
                 for day, order, blob, mode in versions:
@@ -1888,7 +1888,7 @@ class _FileIndex:
     def __len__(self) -> int:
         # The files of the index, without going through them: a few more than the paths with a version where
         # some files were only ever changed by corrections or documentation. Read as a size, never as a count.
-        return len(self._files)
+        return len(getattr(self._files, '_base', self._files))
 
 
 def _file_overlays_kept(corpus: str, ix: dict) -> Path | None:
@@ -1911,7 +1911,8 @@ def _file_index_in_place(corpus: str, ix: dict) -> tuple:
         try:
             with open(kept, 'rb') as f:
                 got = pickle.load(f)
-            if isinstance(got, tuple) and len(got) == 3 and got[0] == 'file-overlays-v1':
+            # (made from this very reading of the index: the file's name carries the pin, not a future branch's commit)
+            if isinstance(got, tuple) and len(got) == 4 and got[0] == 'file-overlays-v1' and got[3] == _at(ix):
                 overlays, days = got[1], frozenset(got[2])
         except (OSError, ValueError, EOFError, pickle.UnpicklingError, AttributeError, ImportError, IndexError, TypeError):
             overlays = days = None
@@ -1931,7 +1932,7 @@ def _file_index_in_place(corpus: str, ix: dict) -> tuple:
                 kept.parent.mkdir(parents=True, exist_ok=True)
                 tmp = kept.with_name(f'{kept.name}.{os.getpid()}.{threading.get_ident()}.tmp')
                 with open(tmp, 'wb') as f:
-                    pickle.dump(('file-overlays-v1', overlays, sorted(days)), f, protocol=pickle.HIGHEST_PROTOCOL)
+                    pickle.dump(('file-overlays-v1', overlays, sorted(days), _at(ix)), f, protocol=pickle.HIGHEST_PROTOCOL)
                 os.replace(tmp, kept)
                 stem = kept.name.split('-')
                 same = sorted(kept.parent.glob('-'.join(stem[:-3]) + '-*.pickle'), key=lambda q: q.stat().st_mtime, reverse=True)
@@ -1951,8 +1952,8 @@ def file_index(corpus: str) -> tuple[dict, list]:
     key = ('file-index', f"{corpus}@{_at(ix)}")
     if key in _CACHE:
         return _CACHE[key]  # type: ignore[return-value]
-    if not ix.get('focused') and isinstance(ix['files'], _FilesTable):
-        got = _CACHE[key] = _file_index_in_place(corpus, ix)
+    if not ix.get('focused') and isinstance(getattr(ix['files'], '_base', ix['files']), _FilesTable):
+        got = _CACHE[key] = _file_index_in_place(corpus, ix)  # (the table, or a future branch's files over it)
         return got
     import time
     began = time.monotonic()
@@ -5909,10 +5910,14 @@ def files_table_make(corpus: str) -> str:
     Says what it did: 'there', 'made', 'off' (tables are not used), or 'not made'."""
     if not FILES_TABLE:
         return 'off'
-    ix = _index(corpus)
+    over = _index(corpus)
+    # (the table is the main index's: a future branch laid over it keeps its own few files and reads the rest beneath)
+    ix = _main_index(corpus) if isinstance(over.get('files'), _FilesOver) else over
     files = ix.get('files')
     if isinstance(files, _FilesTable):
         return 'there'
+    if isinstance(files, _FilesOver):
+        return 'not made'  # (an index of a few files with a branch over it)
     if isinstance(files, _Files):
         target = _files_table_path(files._path)
     elif isinstance(files, dict) and not ix.get('focused') and ix.get('pin') and ix is _CACHE.get(('index', f"{corpus}@{ix['pin']}")):
@@ -5932,6 +5937,8 @@ def files_table_make(corpus: str) -> str:
     except (OSError, ValueError):
         return 'not made'
     ix['files'] = held
+    if isinstance(over.get('files'), _FilesOver) and over['files']._base is files:
+        over['files']._base = held
     if isinstance(files, _Files):
         files.close()
     return 'there' if had else 'made'
