@@ -1761,6 +1761,189 @@ def _unquote(path: str) -> str:
     return path[1:-1].encode('latin-1', 'backslashreplace').decode('unicode_escape').encode('latin-1').decode('utf-8')
 
 
+def _overlays(corpus: str, ix: dict, touched: dict) -> list:
+    """file_index's second part: the corrections laid over the versions, as [(fix, order, {path: (blob, mode)})],
+    from the files each correction commit itself changed (`touched`: order -> {path: (blob, mode)})."""
+    rows, cwd = ix['rows'], corpus_dir(corpus)
+    overlays = []
+    mv = moves(corpus)  # Files: names paths as they were that day; the index keys them as they are now
+    wanted = {order: [f for f in r[9]['files'] if mv.get(f, f) not in touched.get(order, {})] for order, r in enumerate(rows) if r[9]}
+    at = _named_at(ix, cwd, wanted)
+    for order, r in enumerate(rows):
+        fix = r[9]
+        if not fix:
+            continue
+        files = dict(touched.get(order, {}))
+        files.update({mv.get(p, p): v for p, v in at.get(order, {}).items()})  # named but unchanged: their text at the correction commit is the tip's
+        if fix['files']:
+            names = {mv.get(f, f) for f in fix['files']}
+            files = {p: v for p, v in files.items() if p in names}
+        overlays.append((_moved_fix(corpus, fix), order, files))
+    return overlays
+
+
+class _FileIndex:
+    """file_index's first part (path -> [(in force, order, blob or None, mode)]) worked out for a path when it is
+    asked, from an index whose files are read in place (_FilesTable): made whole it was a dict of every path and
+    version of the corpus, with a string of its own for each once the files' own strings are no longer in memory
+    (1.5 GB for Germany's federal acts when they were shared). The same entries: a commit that is a correction or
+    documentation, or has no in-force day, gives none; a repeal notice ends the file as a deletion does; an act's
+    end cuts its files as file_index cuts them. Read like the dict: get, [], in, items, keys, values."""
+
+    def __init__(self, corpus: str, ix: dict, notices, ends: bool, days=None):
+        self._corpus, self._files, self._rows, self._notices, self._ends = corpus, ix['files'], ix['rows'], notices, ends
+        self._days = days
+
+    def days(self) -> set:
+        """The in-force day of every version of every path (what _tree_days asks), kept with the overlays."""
+        if self._days is None:
+            self._days = frozenset(v[0] for versions in self.values() for v in versions)
+        return set(self._days)
+
+    def _of(self, path: str, versions) -> list:
+        rows, notices, out = self._rows, self._notices, []
+        for order, blob, mode in versions:
+            r = rows[order]
+            if not r[9] and r[5] and r[4] != 'documentation':
+                out.append((r[5], order, None if blob in notices else blob, mode))
+        if out and self._ends:
+            got = _cut(self._corpus, path)
+            if got:
+                end, cut = got
+                mode = out[-1][3]
+                # After the end, only a version after_end lets re-enact the file (history() applies the same rule).
+                out = [v for v in out if after_end(self._corpus, end, cut, v[0], v[1], v[2], path) is None]
+                out.append((cut[0], cut[1], None, mode))
+        return out
+
+    def chosen_at(self, date: str) -> dict:
+        """corpus_tree's first step, {path: (blob, mode)} of the version of each file in force on `date` (the last by
+        (day, order) with day <= date, where it is not a deletion or a repeal notice), read straight from the table's
+        records: no list of a file's versions is made and only the chosen blob is named. With acts that end, by
+        the entries as everywhere else."""
+        chosen: dict = {}
+        if self._ends:
+            for path, versions in self.items():
+                best = None
+                for day, order, blob, mode in versions:
+                    if day <= date and (best is None or (day, order) >= (best[0], best[1])):
+                        best = (day, order, blob, mode)
+                if best and best[2]:
+                    chosen[path] = (best[2], best[3])
+            return chosen
+        t, notices = self._files, self._notices
+        days = [None if r[9] or r[4] == 'documentation' else (r[5] or None) for r in self._rows]  # a commit's day, where it gives a version
+        mm, names_at, name_off, modes, at, off, each = t._mm, t._names_at, t._name_off, t._modes, t._vers_at, t._ver_off, t._each
+        for k in range(t._n):
+            b_day = b_order = b_blob = None
+            b_mode = 0
+            for order, blob, mode in each(mm[at + off[k] * _VT_RECORD:at + off[k + 1] * _VT_RECORD]):
+                day = days[order]
+                if day is not None and day <= date and (b_day is None or (day, order) >= (b_day, b_order)):
+                    b_day, b_order, b_blob, b_mode = day, order, blob, mode
+            if b_day is not None and not b_mode & 128:
+                blob = b_blob.hex()
+                if blob not in notices:
+                    chosen[str(mm[names_at + name_off[k]:names_at + name_off[k + 1]], 'utf-8')] = (blob, modes[b_mode & 127])
+        return chosen
+
+    def get(self, path, default=None):
+        versions = self._files.get(path)
+        if versions is None:
+            return default
+        return self._of(path, versions) or default
+
+    def __getitem__(self, path):
+        got = self.get(path)
+        if got is None:
+            raise KeyError(path)
+        return got
+
+    def __contains__(self, path) -> bool:
+        return self.get(path) is not None
+
+    def items(self):
+        rows, notices, of = self._rows, self._notices, self._of
+        if self._ends:
+            for path, versions in self._files.items():
+                out = of(path, versions)
+                if out:
+                    yield path, out
+            return
+        for path, versions in self._files.items():
+            out = [(r[5], order, None if blob in notices else blob, mode) for order, blob, mode in versions
+                   for r in (rows[order],) if not r[9] and r[5] and r[4] != 'documentation']
+            if out:
+                yield path, out
+
+    def keys(self):
+        return (path for path, _ in self.items())
+
+    def values(self):
+        return (out for _, out in self.items())
+
+    def __iter__(self):
+        return self.keys()
+
+    def __len__(self) -> int:
+        # The files of the index, without going through them: a few more than the paths with a version where
+        # some files were only ever changed by corrections or documentation. Read as a size, never as a count.
+        return len(self._files)
+
+
+def _file_overlays_kept(corpus: str, ix: dict) -> Path | None:
+    kept = _file_index_kept(corpus, ix)
+    return kept.with_name(kept.name.replace('file-index-v2-', 'file-overlays-v1-', 1)) if kept is not None else None
+
+
+def _file_index_in_place(corpus: str, ix: dict) -> tuple:
+    """file_index for an index whose files are read in place: the versions worked out per path (_FileIndex), and the
+    corrections' overlays made once per pin and kept beside the index (they need every file a correction commit
+    changed, which is one walk of the table: a step for the server's prewarm, read back by the server)."""
+    import os
+    import pickle
+    rows, files = ix['rows'], ix['files']
+    notices = notice_blobs(corpus)
+    kept = _file_overlays_kept(corpus, ix)
+    overlays = days = None
+    index = _FileIndex(corpus, ix, notices, bool(act_ends(corpus)))
+    if kept is not None:
+        try:
+            with open(kept, 'rb') as f:
+                got = pickle.load(f)
+            if isinstance(got, tuple) and len(got) == 3 and got[0] == 'file-overlays-v1':
+                overlays, days = got[1], frozenset(got[2])
+        except (OSError, ValueError, EOFError, pickle.UnpicklingError, AttributeError, ImportError, IndexError, TypeError):
+            overlays = days = None
+    if overlays is None:
+        fixes = {order for order, r in enumerate(rows) if r[9]}
+        touched: dict[int, dict] = {}
+        seen, of = set(), index._of
+        for path, versions in files.items():  # the one walk of the table: the corrections' files and every version's day
+            for order, blob, mode in versions:
+                if order in fixes:
+                    touched.setdefault(order, {})[path] = (None if blob in notices else blob, mode)
+            seen.update(v[0] for v in of(path, versions))
+        days = frozenset(seen)
+        overlays = _overlays(corpus, ix, touched)
+        if kept is not None:
+            try:
+                kept.parent.mkdir(parents=True, exist_ok=True)
+                tmp = kept.with_name(f'{kept.name}.{os.getpid()}.{threading.get_ident()}.tmp')
+                with open(tmp, 'wb') as f:
+                    pickle.dump(('file-overlays-v1', overlays, sorted(days)), f, protocol=pickle.HIGHEST_PROTOCOL)
+                os.replace(tmp, kept)
+                stem = kept.name.split('-')
+                same = sorted(kept.parent.glob('-'.join(stem[:-3]) + '-*.pickle'), key=lambda q: q.stat().st_mtime, reverse=True)
+                for old in same[FILE_INDEX_KEPT:]:
+                    if old != kept:
+                        old.unlink(missing_ok=True)
+            except OSError:
+                pass
+    index._days = days
+    return index, overlays
+
+
 def file_index(corpus: str) -> tuple[dict, list]:
     """Every version of every file of a corpus, from the corpus index: path -> [(in force, order, blob or None for a
     deletion, mode)] for ordinary commits, and the corrections laid over them as [(fix, order, {path: (blob, mode)})]."""
@@ -1768,6 +1951,9 @@ def file_index(corpus: str) -> tuple[dict, list]:
     key = ('file-index', f"{corpus}@{_at(ix)}")
     if key in _CACHE:
         return _CACHE[key]  # type: ignore[return-value]
+    if not ix.get('focused') and isinstance(ix['files'], _FilesTable):
+        got = _CACHE[key] = _file_index_in_place(corpus, ix)
+        return got
     import time
     began = time.monotonic()
     kept = None if ix.get('focused') else _file_index_kept(corpus, ix)
@@ -1798,21 +1984,7 @@ def file_index(corpus: str) -> tuple[dict, list]:
                 # After the end, only a version after_end lets re-enact the file (history() applies the same rule).
                 versions[:] = [v for v in versions if after_end(corpus, end, cut, v[0], v[1], v[2], path) is None]
                 versions.append((cut[0], cut[1], None, mode))
-    cwd = corpus_dir(corpus)
-    overlays = []
-    mv = moves(corpus)  # Files: names paths as they were that day; the index keys them as they are now
-    wanted = {order: [f for f in r[9]['files'] if mv.get(f, f) not in touched.get(order, {})] for order, r in enumerate(rows) if r[9]}
-    at = _named_at(ix, cwd, wanted)
-    for order, r in enumerate(rows):
-        fix = r[9]
-        if not fix:
-            continue
-        files = dict(touched.get(order, {}))
-        files.update({mv.get(p, p): v for p, v in at.get(order, {}).items()})  # named but unchanged: their text at the correction commit is the tip's
-        if fix['files']:
-            names = {mv.get(f, f) for f in fix['files']}
-            files = {p: v for p, v in files.items() if p in names}
-        overlays.append((_moved_fix(corpus, fix), order, files))
+    overlays = _overlays(corpus, ix, touched)
     _CACHE[key] = (index, overlays)
     if kept is not None and time.monotonic() - began >= FILE_INDEX_KEEP_S:
         _file_index_write(kept, ix, (index, overlays))
@@ -2174,7 +2346,7 @@ def _tree_days(corpus: str, ix: dict) -> tuple | None:
     if got is None:
         import datetime as dt
         index, overlays = file_index(corpus)
-        days = {v[0] for versions in index.values() for v in versions}
+        days = index.days() if isinstance(index, _FileIndex) else {v[0] for versions in index.values() for v in versions}
         try:
             ends = set()
             for (fix, _, files), (end, own) in zip(overlays, overlay_ends(corpus)):
@@ -2198,8 +2370,8 @@ def _built_tree(date: str, corpus: str, key: tuple) -> str | None:
     if got is not _MISSING:
         return got  # type: ignore[return-value]
     index, overlays = file_index(corpus)
-    chosen: dict[str, tuple] = {}
-    for path, versions in index.items():
+    chosen: dict[str, tuple] = index.chosen_at(date) if isinstance(index, _FileIndex) else {}
+    for path, versions in () if isinstance(index, _FileIndex) else index.items():
         best = None
         for day, order, blob, mode in versions:
             if day <= date and (best is None or (day, order) >= (best[0], best[1])):
@@ -3214,7 +3386,8 @@ def record_floor(path: str) -> dict | None:
     key = ('act-start', f"{corpus}@{_at(ix)}:{folder}")
     if key not in _CACHE:  # the first in-force day of any file of the act
         rows, pre = ix['rows'], folder + '/'
-        _CACHE[key] = min((rows[o][5] for f, vs in ix['files'].items() if f.startswith(pre) for o, *_ in vs
+        under = getattr(ix['files'], 'under', None)  # (a table read in place gives a folder's files without the rest)
+        _CACHE[key] = min((rows[o][5] for f, vs in (under(pre) if under else ix['files'].items()) if f.startswith(pre) for o, *_ in vs
                            if rows[o][5] and rows[o][4] != 'documentation'), default=None)
     return dict(first, **extra) if _CACHE[key] == first['in_force'] else None
 
@@ -4891,12 +5064,12 @@ def _prune_indexes(store: Path, name: str, keep: Path) -> None:
     import time
     now = time.time()
     for f in store.glob(f'{name}.*'):
-        if f == keep or not f.name.startswith(name + '.'):
+        if f == keep or f.name == keep.name + '.vt' or not f.name.startswith(name + '.'):  # (and the table beside the index kept)
             continue
         try:
             age = now - f.stat().st_mtime
             this_version = f.name.startswith(f'{name}.v{INDEX_VERSION}.')
-            if (f.suffix == '.tmp' and age > 3600) or (f.suffix in ('.index', '.pickle', '.light') and (
+            if (f.suffix == '.tmp' and age > 3600) or (f.suffix in ('.index', '.pickle', '.light', '.vt') and (
                     this_version or not f.name.startswith(f'{name}.v') or age > 7 * 86400)):
                 f.unlink()
         except OSError:
@@ -4910,7 +5083,7 @@ def _forget_other_pins(corpus: str, sha: str) -> None:
     for k in [k for k in list(_CACHE) if len(k) == 2 and isinstance(k[1], str) and k[1].startswith(mine)
               and not k[1].startswith(mine + sha)]:
         v = _CACHE.pop(k, None)
-        if k[0] == 'index' and isinstance(v, dict) and isinstance(v.get('files'), _Files):
+        if k[0] == 'index' and isinstance(v, dict) and isinstance(v.get('files'), (_Files, _FilesTable)):
             v['files'].close()
 
 
@@ -5375,6 +5548,16 @@ def _load_index(path: Path) -> dict:
         offsets.append((at, n))
         at += n
     head['files'] = _Files(path, offsets)
+    if FILES_TABLE:
+        table = _files_table_path(path)
+        if table.is_file():
+            try:
+                held = _FilesTable(table)
+            except (OSError, ValueError):
+                held = None
+            if held is not None:
+                head['files'].close()
+                head['files'] = held
     return head
 
 
@@ -5485,6 +5668,232 @@ class _Files:
 
     def __len__(self) -> int:
         return len(self._all())
+
+
+# --- An index's files read in place from a file ------------------------------------------------------------------------
+# _Files above reads an index's files a piece (a 64th) at a time and keeps every piece it has read: a server that has
+# answered for a while holds them all as Python objects (4.6 GB for Germany's federal acts, a third of what that body
+# of law costs in memory, 21 November 2026). Here they are one table beside the index, mapped into memory and read
+# where it lies: the paths in byte order, found by halving; for each path its versions as records of 25 bytes (the
+# commit's order, the blob's 20 bytes, its mode). Nothing of it is kept in the process: a look-up makes the list it
+# returns. Made from the index's own pieces (files_table_make), never the other way; an index with no table beside it
+# is read as before.
+FILES_TABLE = __import__('os').environ.get('GLOBAL_LAW_FILES_TABLE', '1') != '0' and sys.byteorder == 'little'
+_VT_MAGIC = b'GLV1'
+_VT_RECORD = 25
+
+
+def _files_table_path(index_path: Path) -> Path:
+    return index_path.with_name(index_path.name + '.vt')
+
+
+class _FilesTable:
+    """An index's files (path -> versions) read in place from its table. Read like _Files: get, [], in, len, and
+    going through them all (items, keys, values) in the order they were indexed. Read-only."""
+
+    def __init__(self, path: Path):
+        import mmap
+        import struct
+        self._path = path
+        self._f = open(path, 'rb')
+        _OPEN_INDEXES.append(self._f)
+        self._mm = mm = mmap.mmap(self._f.fileno(), 0, access=mmap.ACCESS_READ)
+        if mm[:4] != _VT_MAGIC:
+            raise ValueError('not a files table')
+        n, versions, names_len, modes_len = struct.unpack_from('<4Q', mm, 4)
+        self._modes = tuple(json.loads(mm[36:36 + modes_len].decode('utf-8')))
+        view, at = memoryview(mm), 36 + modes_len + (-modes_len % 4)
+
+        def take(count):
+            nonlocal at
+            part = view[at:at + 4 * count].cast('I')
+            at += 4 * count
+            return part
+        self._n = n
+        self._name_off, self._ver_off, self._in_order = take(n + 1), take(n + 1), take(n)
+        self._names_at = at
+        self._vers_at = at + names_len
+        if self._vers_at + versions * _VT_RECORD != len(mm):
+            raise ValueError('a files table cut short')
+        self._unpack = struct.Struct('<I20sB').unpack_from
+        self._each = struct.Struct('<I20sB').iter_unpack
+        self._near = threading.local()
+        self._sample = None
+
+    def close(self) -> None:
+        if self._f in _OPEN_INDEXES:
+            _OPEN_INDEXES.remove(self._f)
+        try:
+            self._name_off.release(); self._ver_off.release(); self._in_order.release()
+            self._mm.close()
+        except (BufferError, ValueError):
+            pass  # (still read by another thread: closed when the last view of it goes)
+        self._f.close()
+
+    def _name(self, k: int) -> bytes:
+        return self._mm[self._names_at + self._name_off[k]:self._names_at + self._name_off[k + 1]]
+
+    def _find(self, rel) -> int:
+        if not isinstance(rel, str):
+            return -1
+        want, n = rel.encode('utf-8'), self._n
+        k = getattr(self._near, 'k', -1) + 1  # (the files of a folder asked in their order: each beside the one before)
+        if 0 <= k < n and self._name(k) == want:
+            self._near.k = k
+            return k
+        sample = self._sample
+        if sample is None:  # every 64th name, held: the halving starts within 64 names of the one asked
+            sample = self._sample = [self._name(i) for i in range(0, n, 64)]
+        from bisect import bisect_right
+        lo = max(bisect_right(sample, want) - 1, 0) << 6
+        hi = min(lo + 64, n)
+        mm, names_at, name_off = self._mm, self._names_at, self._name_off
+        while lo < hi:
+            mid = (lo + hi) >> 1
+            if mm[names_at + name_off[mid]:names_at + name_off[mid + 1]] < want:
+                lo = mid + 1
+            else:
+                hi = mid
+        if lo < n and self._name(lo) == want:
+            self._near.k = lo
+            return lo
+        return -1
+
+    def _versions(self, k: int) -> list:
+        modes, at, off = self._modes, self._vers_at, self._ver_off
+        return [(order, None if mode & 128 else blob.hex(), modes[mode & 127])
+                for order, blob, mode in self._each(self._mm[at + off[k] * _VT_RECORD:at + off[k + 1] * _VT_RECORD])]
+
+    def get(self, rel, default=None):
+        k = self._find(rel)
+        return default if k < 0 else self._versions(k)
+
+    def __getitem__(self, rel):
+        k = self._find(rel)
+        if k < 0:
+            raise KeyError(rel)
+        return self._versions(k)
+
+    def __contains__(self, rel) -> bool:
+        return self._find(rel) >= 0
+
+    def __len__(self) -> int:
+        return self._n
+
+    def items(self):
+        """Every (path, versions), in the order they were indexed."""
+        intern = sys.intern  # (one string for a path in the whole process: a listing of names and a table made from a walk share it)
+        mm, names_at, name_off, modes, at, off, each = self._mm, self._names_at, self._name_off, self._modes, self._vers_at, self._ver_off, self._each
+        for k in self._in_order:
+            yield (intern(str(mm[names_at + name_off[k]:names_at + name_off[k + 1]], 'utf-8')),
+                   [(order, None if mode & 128 else blob.hex(), modes[mode & 127])
+                    for order, blob, mode in each(mm[at + off[k] * _VT_RECORD:at + off[k + 1] * _VT_RECORD])])
+
+    def keys(self):
+        intern = sys.intern
+        return (intern(self._name(k).decode('utf-8')) for k in self._in_order)
+
+    def values(self):
+        return (self._versions(k) for k in self._in_order)
+
+    def __iter__(self):
+        return self.keys()
+
+    def under(self, prefix: str):
+        """Every (path, versions) whose path begins with `prefix`, in path order: the files of a folder, found
+        without going through the others."""
+        want, n = prefix.encode('utf-8'), self._n
+        lo, hi = 0, n
+        while lo < hi:
+            mid = (lo + hi) >> 1
+            if self._name(mid) < want:
+                lo = mid + 1
+            else:
+                hi = mid
+        while lo < n:
+            name = self._name(lo)
+            if not name.startswith(want):
+                break
+            yield sys.intern(name.decode('utf-8')), self._versions(lo)
+            lo += 1
+
+
+def _files_table_write(target: Path, files) -> bool:
+    """Make the table an index's files are read in place from, from the files themselves (any mapping read like
+    _Files). False when it cannot be made (a blob id that is not 40 hex digits, over 127 modes, the disk)."""
+    import os
+    import struct
+    from array import array
+    try:
+        if target.is_file():
+            return True
+        entries = [(rel.encode('utf-8'), versions) for rel, versions in files.items()]
+        by_name = sorted(range(len(entries)), key=lambda i: entries[i][0])
+        place = [0] * len(entries)
+        for k, i in enumerate(by_name):
+            place[i] = k
+        modes: dict = {}
+        name_off, ver_off, at_n, count = array('I', [0]), array('I', [0]), 0, 0
+        pack, records = struct.Struct('<I20sB').pack, bytearray()  # (one buffer: a list of them was 58 bytes a version more)
+        for i in by_name:
+            name, versions = entries[i]
+            at_n += len(name)
+            name_off.append(at_n)
+            for order, blob, mode in versions:
+                m = modes.setdefault(mode, len(modes))
+                if m > 126 or not isinstance(order, int) or not 0 <= order < 0xFFFFFFFF or not isinstance(mode, str):
+                    return False
+                if blob is None:
+                    records += pack(order, b'', m | 128)
+                else:
+                    if len(blob) != 40:
+                        return False
+                    records += pack(order, bytes.fromhex(blob), m)
+            count += len(versions)
+            ver_off.append(count)
+        if at_n >= 0xFFFFFFF0 or count >= 0xFFFFFFF0:
+            return False
+        modes_blob = json.dumps(list(modes)).encode('utf-8')
+        target.parent.mkdir(parents=True, exist_ok=True)
+        tmp = target.with_name(f'{target.name}.{os.getpid()}.{threading.get_ident()}.tmp')
+        with open(tmp, 'wb') as f:
+            f.write(_VT_MAGIC + struct.pack('<4Q', len(entries), count, at_n, len(modes_blob)))
+            f.write(modes_blob + b'\0' * (-len(modes_blob) % 4))
+            f.write(name_off.tobytes())
+            f.write(ver_off.tobytes())
+            f.write(array('I', place).tobytes())  # (the k-th file as indexed is at this place among the sorted names)
+            f.write(b''.join(entries[i][0] for i in by_name))
+            f.write(records)
+        os.replace(tmp, target)
+        return True
+    except (OSError, ValueError, OverflowError, struct.error, TypeError):
+        return False
+
+
+def files_table_make(corpus: str) -> str:
+    """Make sure the table a corpus's files are read in place from is beside its index, making it from the index's
+    pieces where it is not (every piece is read here, once, and the index this process holds then reads the table:
+    a step for a process of its own with one thread, as a server's prewarm).
+    Says what it did: 'there', 'made', 'off' (tables are not used), or 'not made'."""
+    if not FILES_TABLE:
+        return 'off'
+    ix = _index(corpus)
+    files = ix.get('files')
+    if isinstance(files, _FilesTable):
+        return 'there'
+    if not isinstance(files, _Files):
+        return 'not made'  # (an index with a future branch laid over it, or one still being extended)
+    target = _files_table_path(files._path)
+    had = target.is_file()
+    if not had and not _files_table_write(target, files):
+        return 'not made'
+    try:  # this process reads the table from here on (what it works out next is then what a server works out)
+        held = _FilesTable(target)
+    except (OSError, ValueError):
+        return 'not made'
+    ix['files'] = held
+    files.close()
+    return 'there' if had else 'made'
 
 
 _BATCH: dict = {}
