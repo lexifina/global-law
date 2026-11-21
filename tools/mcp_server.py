@@ -1705,6 +1705,281 @@ def _lines_text(lines) -> tuple[str, array]:
     return '\n'.join(lines), starts
 
 
+# --- A corpus's headings read in place from a file ---------------------------------------------------------------------
+# The headings of a body of law were held as Python objects three times over: a dict name -> heading, a dict name ->
+# folded heading, and the folded headings as one text with a list of its names (2.6 GB for Germany's federal acts,
+# some 10 GB of a server of the world's 24 million headings, 21 November 2026). Here they are one file beside the
+# JSON the index is stored as, mapped into memory and read where it lies: the names, the headings and the folded
+# text are byte ranges of it, found by position, and nothing of it is kept in the process. It is made from the JSON
+# (never the other way), so the JSON stays what an index is built from and what an earlier server reads.
+HEADINGS_FILE = os.environ.get('GLOBAL_LAW_HEADINGS_FILE', '1') != '0' and sys.byteorder == 'little'
+_HIX_MAGIC = b'GLH3'
+_HIX_ALIGN = 65536  # where the folded text begins in the file: a multiple of every system's mapping granularity
+# The folded text of the corpora being searched, as the str the line searches read: decoded from the file when a
+# search first needs it and kept while there is room (HEADINGS_TEXT_MB in all, the ones used longest ago dropped).
+# Searched where it lies, as bytes, the same searches took half as long again (bytes are tested and matched more
+# slowly than a str: France's 5.5 million headings, 27 s against 39 s for fifteen searches, 21 November 2026).
+HEADINGS_TEXT_MB = int(os.environ.get('GLOBAL_LAW_HEADINGS_TEXT_MB', '1024'))
+_hix_texts: OrderedDict = OrderedDict()  # the file's path -> (its folded text, where each line begins in it)
+_hix_texts_lock = threading.Lock()
+_HIX_PROBE = 'ÀÉÎõü ßŁđ Ωσς Жй İı ﬁ 第一条 ǅ'
+_HIX_NONE = 0xFFFFFFFF
+
+
+def _hix_fold_mark() -> bytes:
+    """Eight bytes that change when fold() does: a file whose folded text was made by another fold is not read."""
+    return hashlib.sha1(fold(_HIX_PROBE).encode('utf-8')).digest()[:8]
+
+
+class _FileNames:
+    """The name of the file each folded line is the heading of (headings_index's third part), read when asked."""
+    __slots__ = ('_file',)
+
+    def __init__(self, file):
+        self._file = file
+
+    def __len__(self):
+        return len(self._file._headed)
+
+    def __getitem__(self, i):
+        return self._file.name_at(self._file._headed[i])
+
+    def __iter__(self):
+        f = self._file
+        return (f.name_at(k) for k in f._headed)
+
+
+class _FileFolded:
+    """name -> folded heading for the files that have a heading (folded_headings), read when asked."""
+    __slots__ = ('_file',)
+
+    def __init__(self, file):
+        self._file = file
+
+    def get(self, name, default=None):
+        f = self._file
+        k = f.find(name)
+        if k < 0:
+            return default
+        line = f._line_of[k]
+        if line == _HIX_NONE:
+            return default
+        end = f._bstarts[line + 1] - 1 if line + 1 < len(f._bstarts) else len(f._fold)
+        return str(f._fold[f._bstarts[line]:end], 'utf-8')
+
+    def __getitem__(self, name):
+        got = self.get(name, None)
+        if got is None:
+            raise KeyError(name)
+        return got
+
+    def __contains__(self, name):
+        return self.get(name, None) is not None
+
+    def __len__(self):
+        return len(self._file._bstarts)
+
+    def keys(self):
+        return iter(self._file.headed)
+
+    __iter__ = keys
+
+    def values(self):
+        f, n, end = self._file, len(self._file._bstarts), len(self._file._fold)
+        return (str(f._fold[f._bstarts[i]:(f._bstarts[i + 1] - 1 if i + 1 < n else end)], 'utf-8') for i in range(n))
+
+    def items(self):
+        return zip(self.keys(), self.values())
+
+
+class _HeadingsFile:
+    """A heading index (name -> heading, in the order of the corpus's names) read in place from its file. Read like
+    the dict it is made from: get, [], in, len, items, keys, values. Never changed."""
+
+    def __init__(self, path):
+        import struct
+        self.path = path
+        self._f = open(path, 'rb')
+        self._mm = mm = mmap.mmap(self._f.fileno(), 0, access=mmap.ACCESS_READ)
+        if mm[:4] != _HIX_MAGIC or mm[4:12] != _hix_fold_mark():
+            raise ValueError('not a headings file of this server')
+        n, lines, ordered, names_len, heads_len, fold_len = struct.unpack_from('<6Q', mm, 12)
+        view, at = memoryview(mm), 60
+
+        def take(count):
+            nonlocal at
+            part = view[at:at + 4 * count].cast('I')
+            at += 4 * count
+            return part
+        self.n = n
+        self._name_off, self._head_off, self._line_of = take(n + 1), take(n + 1), take(n)
+        self._bstarts, self._cstarts, self._headed = take(lines), take(lines), take(lines)
+        self._perm = None if ordered else take(n)
+        self._names_at, self._heads_at = at, at + names_len
+        fold_at = -(-(at + names_len + heads_len) // _HIX_ALIGN) * _HIX_ALIGN
+        if fold_at + fold_len != len(mm):
+            raise ValueError('a headings file cut short')
+        self._fold = view[fold_at:fold_at + fold_len]
+        self.headed, self.folded = _FileNames(self), _FileFolded(self)
+        self._near = threading.local()
+
+    def searchable(self) -> tuple[str, array]:
+        """(the folded headings as one text, where each line begins in it), as _lines_text gives them: from the texts
+        kept (_hix_texts), else decoded from the file now."""
+        key = self.path
+        with _hix_texts_lock:
+            got = _hix_texts.get(key)
+            if got is not None:
+                _hix_texts.move_to_end(key)
+                return got
+        got = (str(self._fold, 'utf-8'), array('I', self._cstarts.tobytes()))
+        with _hix_texts_lock:
+            _hix_texts[key] = got
+            _hix_texts.move_to_end(key)
+            room = HEADINGS_TEXT_MB << 20
+            while len(_hix_texts) > 1 and sum(len(t) + 4 * len(st) for t, st in _hix_texts.values()) > room:
+                _hix_texts.popitem(last=False)
+        return got
+
+    def name_bytes(self, k):
+        return self._mm[self._names_at + self._name_off[k]:self._names_at + self._name_off[k + 1]]
+
+    def name_at(self, k) -> str:
+        return self.name_bytes(k).decode('utf-8')
+
+    def heading_at(self, k) -> str:
+        return self._mm[self._heads_at + self._head_off[k]:self._heads_at + self._head_off[k + 1]].decode('utf-8')
+
+    def find(self, name) -> int:
+        """The place of a name in the index, or -1. Names asked for in the corpus's own order (a folder's files, the
+        names of a listing) are each found beside the one before; else by halving."""
+        if not isinstance(name, str):
+            return -1
+        want, n = name.encode('utf-8'), self.n
+        if self._perm is None:
+            k = getattr(self._near, 'k', -1) + 1
+            if 0 <= k < n and self.name_bytes(k) == want:
+                self._near.k = k
+                return k
+            lo, hi = 0, n
+            while lo < hi:
+                mid = (lo + hi) >> 1
+                if self.name_bytes(mid) < want:
+                    lo = mid + 1
+                else:
+                    hi = mid
+            if lo < n and self.name_bytes(lo) == want:
+                self._near.k = lo
+                return lo
+            return -1
+        perm, lo, hi = self._perm, 0, n
+        while lo < hi:
+            mid = (lo + hi) >> 1
+            if self.name_bytes(perm[mid]) < want:
+                lo = mid + 1
+            else:
+                hi = mid
+        return perm[lo] if lo < n and self.name_bytes(perm[lo]) == want else -1
+
+    def get(self, name, default=None):
+        k = self.find(name)
+        return default if k < 0 else self.heading_at(k)
+
+    def __getitem__(self, name):
+        k = self.find(name)
+        if k < 0:
+            raise KeyError(name)
+        return self.heading_at(k)
+
+    def __contains__(self, name):
+        return self.find(name) >= 0
+
+    def __len__(self):
+        return self.n
+
+    def __bool__(self):
+        return self.n > 0
+
+    def keys(self):
+        return (self.name_at(k) for k in range(self.n))
+
+    __iter__ = keys
+
+    def values(self):
+        return (self.heading_at(k) for k in range(self.n))
+
+    def items(self):
+        return ((self.name_at(k), self.heading_at(k)) for k in range(self.n))
+
+
+def _headings_file_path(disk: Path) -> Path:
+    return disk.with_name(disk.name[:-len('.json')] + '.hix') if disk.name.endswith('.json') else disk.with_name(disk.name + '.hix')
+
+
+def _headings_file_write(target: Path, index) -> bool:
+    """Make the file a heading index is read in place from. False when it cannot be (a part of 4 GB or more, the disk)."""
+    import struct
+    try:
+        if target.is_file():
+            return True
+        names = [n.encode('utf-8') for n in index]
+        ordered = all(names[i] < names[i + 1] for i in range(len(names) - 1))
+        name_off, head_off, line_of, starts, cstarts, headed = array('I', [0]), array('I', [0]), array('I'), array('I'), array('I'), array('I')
+        heads, lines, at_n, at_h, at_f, at_c = [], [], 0, 0, 0, 0
+        for k, (name, heading) in enumerate(zip(names, index.values())):
+            h = (heading or '').encode('utf-8')
+            at_n += len(name)
+            at_h += len(h)
+            name_off.append(at_n)
+            head_off.append(at_h)
+            heads.append(h)
+            if heading:
+                folded = fold(heading)
+                line = folded.encode('utf-8')
+                line_of.append(len(lines))
+                starts.append(at_f)
+                cstarts.append(at_c)
+                headed.append(k)
+                lines.append(line)
+                at_f += len(line) + 1
+                at_c += len(folded) + 1
+            else:
+                line_of.append(_HIX_NONE)
+        fold_len = max(0, at_f - 1)
+        if max(at_n, at_h, at_f) >= 0xFFFFFFF0 or len(names) >= _HIX_NONE:
+            return False
+        perm = array('I') if ordered else array('I', sorted(range(len(names)), key=names.__getitem__))
+        target.parent.mkdir(parents=True, exist_ok=True)
+        tmp = target.with_name(f'{target.name}.{os.getpid()}.{threading.get_ident()}.tmp')
+        with open(tmp, 'wb') as f:
+            f.write(_HIX_MAGIC + _hix_fold_mark() + struct.pack('<6Q', len(names), len(lines), 1 if ordered else 0, at_n, at_h, fold_len))
+            for part in (name_off, head_off, line_of, starts, cstarts, headed, perm):
+                f.write(part.tobytes())
+            f.write(b''.join(names))
+            f.write(b''.join(heads))
+            f.write(b'\0' * (-f.tell() % _HIX_ALIGN))
+            f.write(b'\n'.join(lines))
+        os.replace(tmp, target)
+        return True
+    except (OSError, ValueError, OverflowError, struct.error):
+        return False
+
+
+def _headings_file(disk: Path, index=None):
+    """The heading index stored at `disk` as a _HeadingsFile: opened where its file is there, made first from `index`
+    (the dict read or built) where one is given. None where files are not used, or it cannot be read or made."""
+    if not HEADINGS_FILE:
+        return None
+    target = _headings_file_path(disk)
+    try:
+        if not target.is_file():
+            if index is None or isinstance(index, _HeadingsFile) or not _headings_file_write(target, index):
+                return None
+        return _HeadingsFile(target)
+    except (OSError, ValueError, OverflowError):
+        return None
+
+
 def lines_holding_each(text: str, starts: array, needles: list[str]) -> list[list[int]] | None:
     """For each needle, the lines of a text (_lines_text) that hold it, as line numbers in order; None when a needle is
     empty. A needle few lines hold is looked for by str.find, from the line after its last hit (the time is that of
@@ -1846,6 +2121,8 @@ _index_text: dict[tuple[str, str], tuple] = {}  # (the index, its folded heading
 def headings_index(corpus: str, sha: str, index: dict[str, str]) -> tuple[str, array, list[str]]:
     """An index's folded headings (folded_headings) on a line each, where each line begins, and the file each line is
     the heading of: made on the first search of the index and kept with it (and dropped with it)."""
+    if isinstance(index, _HeadingsFile):
+        return (*index.searchable(), index.headed)
     key = (corpus, sha)
     with _index_lock:
         kept = _index_text.get(key)
@@ -1967,6 +2244,8 @@ def store_heading_index(corpus: str, sha: str) -> bool:
                 held = _index_done.get((corpus, sha))
             if held is not None:  # built in memory by a call, and not written then
                 _index_write(disk, held)
+    if HEADINGS_FILE and disk.is_file() and not _headings_file_path(disk).is_file():
+        _index_read(disk)  # (and the file it is read in place from, made from the JSON: nothing of it is kept here)
     return disk.is_file()
 
 
@@ -1980,6 +2259,8 @@ def folded_headings(corpus: str, sha: str, index: dict[str, str]) -> dict[str, s
     """An index's headings folded (fold), for the files that have one: made on the first search of the index and kept
     with it, so a search by words is substring tests. Folding each heading on every call was 1.84 million folds a
     call for Romania."""
+    if isinstance(index, _HeadingsFile):
+        return index.folded
     key = (corpus, sha)
     with _index_lock:
         kept = _index_folded.get(key)
@@ -1997,15 +2278,20 @@ def folded_headings(corpus: str, sha: str, index: dict[str, str]) -> dict[str, s
     return folded
 
 
+def _headings_held(index) -> int:
+    """The headings an index holds in memory: none when it is read in place from its file."""
+    return 0 if isinstance(index, _HeadingsFile) else len(index)
+
+
 def _index_keep(key: tuple[str, str], out: dict[str, str]) -> None:
     """Keep an index in memory as the one used last, and drop the ones used longest ago while more than
     INDEX_HEADINGS_KEPT headings are held (never the one just kept). Called with _index_lock held."""
     _index_done[key] = out
     _index_done.move_to_end(key)
-    total = sum(len(v) for v in _index_done.values())
+    total = sum(_headings_held(v) for v in _index_done.values())
     while total > INDEX_HEADINGS_KEPT and len(_index_done) > 1:
         oldest = next(iter(_index_done))
-        total -= len(_index_done.pop(oldest))
+        total -= _headings_held(_index_done.pop(oldest))
         _index_folded.pop(oldest, None)
         _index_text.pop(oldest, None)
 
@@ -2027,13 +2313,25 @@ def _index_files(disk: Path, rest: str = r'[0-9a-f]{12}\.json') -> list[Path]:
     return [disk.parent / name for _, name in sorted(found, reverse=True)]
 
 
-def _index_read(disk: Path) -> dict[str, str] | None:
+def _index_read(disk: Path, in_place: bool = True) -> dict[str, str] | None:
+    """The index stored at `disk`: read in place from its file (_HeadingsFile) where files are used and `in_place`,
+    making the file from the JSON the first time; else the JSON as a dict."""
+    if in_place and disk.is_file():
+        held = _headings_file(disk)
+        if held is not None:
+            return held
     try:
         with open(disk, encoding='utf-8') as f:
             out = json.load(f)
     except (OSError, ValueError):
         return None
-    return _shared_index(out) if isinstance(out, dict) else None
+    if not isinstance(out, dict):
+        return None
+    if in_place:
+        held = _headings_file(disk, out)
+        if held is not None:
+            return held
+    return _shared_index(out)
 
 
 def _shared_index(index: dict) -> dict:
@@ -2058,7 +2356,7 @@ def _index_write(disk: Path, out: dict[str, str]) -> bool:
     try:
         if not disk.is_file():
             disk.parent.mkdir(parents=True, exist_ok=True)
-            tmp.write_text(json.dumps(out, ensure_ascii=False), encoding='utf-8')
+            tmp.write_text(json.dumps(out if isinstance(out, dict) else dict(out.items()), ensure_ascii=False), encoding='utf-8')
             os.replace(tmp, disk)
     except (OSError, ValueError):
         try:
@@ -2071,6 +2369,8 @@ def _index_write(disk: Path, out: dict[str, str]) -> bool:
         try:
             if old != disk and (old.suffix == '.json' or old.stat().st_mtime < day_ago):  # a temp file: one left behind
                 old.unlink()
+                if old.suffix == '.json':
+                    _headings_file_path(old).unlink(missing_ok=True)
         except OSError:
             pass
     return True
@@ -2093,7 +2393,7 @@ def _index_from_earlier(corpus: str, sha: str, names: tuple[str, ...], disk: Pat
             changed = set(diff.stdout.decode('utf-8').split('\0'))
         except (OSError, ValueError, subprocess.SubprocessError):
             continue
-        earlier = _index_read(old)
+        earlier = _index_read(old, in_place=_headings_file_path(old).is_file())  # (no file is made for a commit left behind)
         if earlier is None:
             continue
         # A file the earlier index does not hold is read as well, whatever git says of it.
@@ -2169,6 +2469,7 @@ def _heading_index(corpus: str, sha: str, wait: bool = True, build: bool = True,
             out = _index_build(corpus, sha, disk)
             if out is not None:
                 _index_write(disk, out)
+                out = _headings_file(disk, out) or out  # read in place from here on, where files are used
         return out  # None when not built: the caller greps, as when there is no index
     except (OSError, ValueError, subprocess.SubprocessError):
         out = None
