@@ -5818,27 +5818,42 @@ class _FilesTable:
             lo += 1
 
 
+def _files_each(files):
+    """Every (path, versions, its place among the files as indexed) of an index's files. From pieces not read yet
+    (_Files in a process that has only loaded the index) a piece at a time, none of them kept: read whole they are
+    4.6 GB of objects for Germany's federal acts, and the step that makes its table had 10 GB."""
+    if isinstance(files, _Files) and not files._shards and files._ordered is None:
+        for at, n in files._offsets:
+            raw = files._read(at, n)
+            if len(raw) != n:
+                raise OSError(f'{files._path}: index cut short')
+            piece, places = _unpickle(raw)
+            del raw
+            for (rel, versions), place in zip(piece.items(), places):
+                yield rel, versions, place
+            del piece, places
+    else:
+        for place, (rel, versions) in enumerate(files.items()):
+            yield rel, versions, place
+
+
 def _files_table_write(target: Path, files) -> bool:
     """Make the table an index's files are read in place from, from the files themselves (any mapping read like
-    _Files). False when it cannot be made (a blob id that is not 40 hex digits, over 127 modes, the disk)."""
+    _Files). False when it cannot be made (a blob id that is not 40 hex digits, over 127 modes, the disk). The
+    names and records are gathered in three buffers, not as objects: about 100 bytes a file while it is made."""
     import os
     import struct
     from array import array
     try:
         if target.is_file():
             return True
-        entries = [(rel.encode('utf-8'), versions) for rel, versions in files.items()]
-        by_name = sorted(range(len(entries)), key=lambda i: entries[i][0])
-        place = [0] * len(entries)
-        for k, i in enumerate(by_name):
-            place[i] = k
         modes: dict = {}
-        name_off, ver_off, at_n, count = array('I', [0]), array('I', [0]), 0, 0
-        pack, records = struct.Struct('<I20sB').pack, bytearray()  # (one buffer: a list of them was 58 bytes a version more)
-        for i in by_name:
-            name, versions = entries[i]
-            at_n += len(name)
-            name_off.append(at_n)
+        names, records = bytearray(), bytearray()
+        name_at, ver_at, places = array('Q', [0]), array('I', [0]), array('I')
+        pack, count = struct.Struct('<I20sB').pack, 0
+        for rel, versions, place in _files_each(files):
+            names += rel.encode('utf-8')
+            name_at.append(len(names))
             for order, blob, mode in versions:
                 m = modes.setdefault(mode, len(modes))
                 if m > 126 or not isinstance(order, int) or not 0 <= order < 0xFFFFFFFF or not isinstance(mode, str):
@@ -5850,20 +5865,37 @@ def _files_table_write(target: Path, files) -> bool:
                         return False
                     records += pack(order, bytes.fromhex(blob), m)
             count += len(versions)
-            ver_off.append(count)
-        if at_n >= 0xFFFFFFF0 or count >= 0xFFFFFFF0:
+            ver_at.append(count)
+            places.append(place)
+        n = len(places)
+        if len(names) >= 0xFFFFFFF0 or count >= 0xFFFFFFF0 or sorted(places) != list(range(n)):
             return False
+        view = bytes(names)
+        del names
+        by_name = sorted(range(n), key=lambda i: view[name_at[i]:name_at[i + 1]])
+        name_off, ver_off, in_order = array('I', [0]), array('I', [0]), array('I', bytes(4 * n))
+        at_n = at_v = 0
+        for k, i in enumerate(by_name):
+            at_n += name_at[i + 1] - name_at[i]
+            name_off.append(at_n)
+            at_v += ver_at[i + 1] - ver_at[i]
+            ver_off.append(at_v)
+            in_order[places[i]] = k  # (the file indexed at this place is the k-th among the sorted names)
         modes_blob = json.dumps(list(modes)).encode('utf-8')
         target.parent.mkdir(parents=True, exist_ok=True)
         tmp = target.with_name(f'{target.name}.{os.getpid()}.{threading.get_ident()}.tmp')
+        recs = memoryview(records)
         with open(tmp, 'wb') as f:
-            f.write(_VT_MAGIC + struct.pack('<4Q', len(entries), count, at_n, len(modes_blob)))
+            f.write(_VT_MAGIC + struct.pack('<4Q', n, count, at_n, len(modes_blob)))
             f.write(modes_blob + b'\0' * (-len(modes_blob) % 4))
             f.write(name_off.tobytes())
             f.write(ver_off.tobytes())
-            f.write(array('I', place).tobytes())  # (the k-th file as indexed is at this place among the sorted names)
-            f.write(b''.join(entries[i][0] for i in by_name))
-            f.write(records)
+            f.write(in_order.tobytes())
+            for lo in range(0, n, 65536):
+                f.write(b''.join(view[name_at[i]:name_at[i + 1]] for i in by_name[lo:lo + 65536]))
+            for lo in range(0, n, 65536):
+                f.write(b''.join(recs[ver_at[i] * _VT_RECORD:ver_at[i + 1] * _VT_RECORD] for i in by_name[lo:lo + 65536]))
+        recs.release()
         os.replace(tmp, target)
         return True
     except (OSError, ValueError, OverflowError, struct.error, TypeError):
