@@ -5881,9 +5881,17 @@ def files_table_make(corpus: str) -> str:
     files = ix.get('files')
     if isinstance(files, _FilesTable):
         return 'there'
-    if not isinstance(files, _Files):
-        return 'not made'  # (an index with a future branch laid over it, or one still being extended)
-    target = _files_table_path(files._path)
+    if isinstance(files, _Files):
+        target = _files_table_path(files._path)
+    elif isinstance(files, dict) and not ix.get('focused') and ix.get('pin') and ix is _CACHE.get(('index', f"{corpus}@{ix['pin']}")):
+        # An index this process has just made or extended (a pin that moved: every refresh) holds its files as the
+        # dict it wrote to the index's file: the table goes beside that file, as for an index read from it.
+        index_path = _store() / f"{corpus.replace('/', '~')}.v{INDEX_VERSION}.{ix['pin'][:12]}.index"
+        if not index_path.is_file():
+            return 'not made'
+        target = _files_table_path(index_path)
+    else:
+        return 'not made'  # (an index with a future branch laid over it, or of a few files only)
     had = target.is_file()
     if not had and not _files_table_write(target, files):
         return 'not made'
@@ -5892,7 +5900,8 @@ def files_table_make(corpus: str) -> str:
     except (OSError, ValueError):
         return 'not made'
     ix['files'] = held
-    files.close()
+    if isinstance(files, _Files):
+        files.close()
     return 'there' if had else 'made'
 
 
