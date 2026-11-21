@@ -3,12 +3,12 @@
 This page moved to [monitoring/](monitoring/), with a short film of how it works.
 
 <!-- status-summary -->
-**Updates: running**: last published 2026-11-21 02:07 UTC; status refreshed 2026-11-21 02:07 UTC.
+**Updates: running**: last published 2026-11-21 02:58 UTC; status refreshed 2026-11-21 02:58 UTC.
 
 | | |
 | --- | --- |
-| Last 24 hours | 73 commits: 0 corpus updates, 0 corpora added |
-| Last successful pass | 2026-11-21 02:07 UTC |
+| Last 24 hours | 69 commits: 0 corpus updates, 0 corpora added |
+| Last successful pass | 2026-11-21 02:58 UTC |
 | Held back by a check | none |
 | Official sources not answering | none |
 | Freshness | 603 of 991 corpora current, 362 stale, 16 unverified ([FRESHNESS.md](FRESHNESS.md)) |
