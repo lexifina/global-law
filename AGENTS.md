@@ -9,8 +9,8 @@ force on a date, credit each change to the law that made it, and state where eac
   `tools/mcp.sh` through git, which needs only Python 3.9 or newer. If the tools are missing, ask the user to enable
   the `global-law` server (in Claude Code, `/mcp`); `sh tools/mcp.sh` starts it by hand on stdin and stdout.
 - **Using it.** Start with `list_jurisdictions`, then `find_provision` for a path, then `read_law`. Some questions have
-  their own tool: what relies on a provision (`what_else_changes`), which text applies to a case (`applies_to_case`),
-  who wrote the words (`who_wrote`), whether a judgment's text is still in force (`check_precedent`), every citation
+  their own tool: what relies on a provision (`what_else_changes`), which text applies to a case (`case_check`),
+  who wrote the words (`who_wrote`), whether a judgment's text is still in force (`case_check`), every citation
   in a brief (`resolve_citations`). MCP.md lists them all.
 - **Limits.** Each corpus holds only the law and the period its description names, so "nothing found" means nothing in
   the record, not nothing in the law. Pass on the limits each answer states.

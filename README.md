@@ -73,7 +73,7 @@ Opened in Claude Code, Cursor, VS Code or Codex, the clone also starts a local M
 [Court decisions](FAQ.md#is-case-law-included) sit beside the law, one commit per decision on the day it was decided
 ([`switzerland/bund/caselaw`](https://github.com/lexifina/switzerland-caselaw)), and are added on their own: `python3
 tools/countries.py add switzerland/caselaw`. A decision is a ruling, not a law (`Kind: court`), so the tools leave it
-out of everything about law unless you name it. [`check_precedent`](FEATURES.md#check_precedent-mcpcheck_precedent) says
+out of everything about law unless you name it. [`case_check`](FEATURES.md#check_precedent-mcpcheck_precedent) says
 whether the text a decision applied is still in force, and
 [`resolve_citations`](FEATURES.md#resolve_citations-mcpresolve_citations) reads citations in each country's usual form
 (`§ 823 Abs. 1 BGB`, `article 1240 du code civil`). [`manifest.json`](manifest.json) gives each court's coverage.

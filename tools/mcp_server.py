@@ -5246,9 +5246,9 @@ def t_applies_to_case(args: dict) -> tuple[str, dict]:
         raise UserError(f'The case is commenced on {commenced}, after the date asked about ({date}).')
     corpus, _ = law.corpus_of(path)
     if any(law.is_caselaw(c) for c in law.manifest()['corpora'] if c['path'] == corpus):
-        return (f'{path} is a court decision, not a law: no change reaches a case through it, so applies_to_case does not '
-                'apply. For the law it applied, call law_details on it (its Cites: lines name each provision) and then '
-                'applies_to_case or check_precedent on those provisions.', {'path': path, 'commenced': commenced, 'date': date,
+        return (f'{path} is a court decision, not a law: no change reaches a case through it, so there is no text of it '
+                'to apply to a case. For the law it applied, call law_details on it (its Cites: lines name each provision) and then '
+                'case_check on those provisions.', {'path': path, 'commenced': commenced, 'date': date,
                                                                            'court_decision': True, 'periods': []})
     hist = [h for h in history_of(path) if h['in_force'] <= date]
     if not hist and not history_of(path):
@@ -5488,7 +5488,7 @@ def beyond_the_words(date: str, path: str) -> list[str]:
             if starts or any(k == 'any-commencement' for k, _ in conds):
                 notes.append(f"{h['law']}, in force {h['in_force']}, reaches back: it applies to cases commenced "
                              + (f'on or after {starts[0]}' if starts else 'before, on or after its date')
-                             + f', so for some cases pending on {date} a later text may govern (see applies_to_case).')
+                             + f', so for some cases pending on {date} a later text may govern (see case_check with commenced).')
                 break
     # A case-law corpus holds decisions, which no Modifies: effect names; its log --grep read the Cour de cassation's
     # 530,000 commits for 4.6 s on every read_law of a decision (FR speed gate, 2026-11-06).
@@ -8573,7 +8573,7 @@ def t_what_else_changes(args: dict) -> tuple[str, dict]:
     # the decisions on or before the date: counted, and the latest ten read (an article can have 600,000 rows)
     _, n_cited, cited_by = judgments_counted(corpus, law.pinned('HEAD', corpus) or '', rel, date, 10)
     if n_cited:  # case law: decisions are not provisions, but a change to the words changes what they decided on
-        groups.append({'kind': 'court decision(s) cite it (latest first; check_precedent compares the words)', 'term': '',
+        groups.append({'kind': 'court decision(s) cite it (latest first; case_check compares the words)', 'term': '',
                        'provisions': [{'path': j.get('decision') or j.get('url') or j['name'],
                                        'lines': [f"{j['decided']} {j['name']}" + (f" ({j['how']})" if j.get('how') else '')]}
                                       for j in cited_by[::-1][:10]], 'count': n_cited})
@@ -11839,6 +11839,44 @@ def at_most(default: int, most: int, what: str = 'At most this many') -> dict:
     return {'type': 'integer', 'description': f'{what} (default {default}, at most {most}).'}
 
 
+def t_case_check(args: dict) -> tuple[str, dict]:
+    """A provision for one case. `commenced` (the day the case began): which later changes reach it and the text
+    that applies to it (t_applies_to_case). `decided` (the day a decision was made): whether the text the court
+    applied is still the text in force, with the judgments the record holds for the provision (t_check_precedent).
+    Neither: the recorded judgments alone. Both: both answers, the case's first. Until 22 November 2026 these were
+    two tools (applies_to_case, check_precedent), which 7 and 12 clients called in a month of 681: a model asked
+    "does this still apply to my case" did not know which of the two names to pick. Both names still answer."""
+    began = args.get('commenced') not in (None, '')
+    ruled = args.get('decided') not in (None, '')
+    if not began:
+        # A decision's own path (as clients sent check_precedent: "is this case still good law?"): the check
+        # compares a provision's words on two days, and for a decision's file it said "no judgment is recorded" or
+        # "same words", which reads as an answer about the decision and is none.
+        path = path_arg(args.get('path', ''))
+        try:
+            corpus = law.corpus_of(path)[0]
+        except SystemExit:
+            corpus = None
+        if corpus and any(law.is_caselaw(c) for c in law.manifest()['corpora'] if c['path'] == corpus):
+            return (f'{path} is a court decision, not a provision of law: there is no later text of it to compare, so this does '
+                    'not say whether it is still good law. Give the provision the decision applied as path, with decided set to '
+                    'the day of the decision: the answer then says whether the words the court applied are still in force. '
+                    'resolve_citations on the text of the decision finds the provisions it cites.',
+                    {'path': path, 'date': date_arg(args.get('date')), 'court_decision': True, 'checks': []})
+    reach = t_applies_to_case({k: args[k] for k in ('path', 'commenced', 'date', 'include_period_texts') if k in args}) if began else None
+    held = (t_check_precedent({k: args[k] for k in ('path', 'decided', 'date', 'case_name', 'max_results') if k in args})
+            if ruled or not began else None)
+    if reach is None:
+        return held  # type: ignore[return-value]
+    if held is None:
+        return reach
+    (reach_text, reach_data), (held_text, held_data) = reach, held
+    lead = ' '.join(x for x in (reach_data.get('summary') or first_line(reach_text), held_data.get('summary') or first_line(held_text)) if x)
+    return (f'{reach_text}\n\n{held_text}',
+            {'summary': lead, 'path': reach_data.get('path'), 'date': reach_data.get('date'), 'commenced': reach_data.get('commenced'),
+             'case': reach_data, 'decisions': held_data})
+
+
 TOOLS = [
     ('list_jurisdictions', 'List every jurisdiction and body of law in the tree, with how far each record reaches and an example path. Start here.',
      {'jurisdiction': SCOPE}, [], t_list_jurisdictions),
@@ -11886,20 +11924,20 @@ TOOLS = [
     ('resolve_citations', 'Read every citation in a piece of text (a brief, a judgment, an email) and resolve each to its provision, with its state on a date: in force or not, the law that last changed it, and the next change.',
      {'text': {'type': 'string', 'description': f'Up to {MAX_BRIEF} characters.'}, 'date': DATE,
       'max_results': {'type': 'integer', 'description': f'At most this many distinct provisions are looked up (default 50, at most {MAX_CITATIONS}).'}}, ['text'], t_resolve_citations),
-    ('check_precedent', 'The judgments the record holds for a provision, each checked: is the text the court applied still the text in force (today, or on a date), and if not, which laws changed it and how? Also checks any one decision by the day it was decided (decided).',
-     {'path': PATH, 'decided': {'type': 'string', 'description': 'The day a decision was made, YYYY-MM-DD, to check that decision too.'}, 'date': DATE,
-      'case_name': {'type': 'string', 'description': 'Optional, to label the answer.'},
-      'max_results': at_most(50, MAX_ITEMS, 'Recorded judgments to check, latest first')}, ['path'], t_check_precedent),
     ('what_else_changes','Which provisions rely on, cite or use the definitions of this one, on a date: those that cite it, and those that use a term it defines (for example the provisions that use "debtor in possession"), with the definition\'s scope ("In this subchapter"). Use it before a text search when asked what depends on a provision or its definitions; a change to this provision can change what they mean.',
      {'path': PATH, 'date': DATE, 'max_results': at_most(40, MAX_ITEMS, 'Provisions per group'),
       'offset': {'type': 'integer', 'description': 'Rows to skip in each group: the next_offset the answer before gave in "page" (default 0).'}}, ['path'], t_what_else_changes),
     ('phrase_history','When words came into the law and when they left it, at any date and in every jurisdiction: each change whose added or removed text contains them. Use it for things no longer in force (for example "COVID" in the Grundgesetz).',
      {'query': {'type': 'string', 'description': 'Words or a phrase to trace, as plain text (either case, and dashes and quotes in any of their forms, match); a regular expression if regex is true.'},
       'jurisdiction': SCOPE, 'kind': KIND, 'regex': REGEX, 'max_results': at_most(40, 300), 'offset': OFFSET}, ['query'], t_phrase_history),
-    ('applies_to_case','For a case commenced on one date, which later changes to a provision reach it (from any scope the record holds, such as "cases commenced on or after"), and the text that applies to it.',
-     {'path': PATH, 'commenced': {'type': 'string', 'description': 'The day the case (or matter) was commenced, YYYY-MM-DD.'}, 'date': DATE,
-      'include_period_texts': {'type': 'boolean', 'description': 'Also give the full text of every period (long); the changes between periods come anyway.'}},
-     ['path', 'commenced'], t_applies_to_case),
+    ('case_check', 'A provision for one case. With commenced (the day the case began): which later changes to the provision reach that case (from any scope the record holds, such as "cases commenced on or after"), and the text that applies to it, period by period. With decided (the day a court decided): is the text the court applied still the text in force (today, or on a date), and if not, which laws changed it and how. With neither: the judgments the record holds for the provision, each checked that way. Give both for a case that has a decision.',
+     {'path': PATH,
+      'commenced': {'type': 'string', 'description': 'The day the case (or matter) was commenced, YYYY-MM-DD: which changes reach it, and the text that applies.'},
+      'decided': {'type': 'string', 'description': 'The day a decision was made, YYYY-MM-DD: whether the text it applied is still in force.'},
+      'date': DATE, 'case_name': {'type': 'string', 'description': 'Optional, to label a decision in the answer.'},
+      'max_results': at_most(50, MAX_ITEMS, 'Recorded judgments to check, latest first'),
+      'include_period_texts': {'type': 'boolean', 'description': 'With commenced: also give the full text of every period (long); the changes between periods come anyway.'}},
+     ['path'], t_case_check),
     ('law_details', 'The full record of a law\'s change: its commit message with every trailer (enacted, in force, published, sources, scope), the provisions it changed, and what it did to each one\'s words (a word diff, or "layout only", or "text moved between provisions"). One call answers "what did this law change"; no need to compare each provision.',
      {'law': {'type': 'string', 'description': 'The law as it appears as author, for example "Pub. L. 117-151", "36. Änderung", "S.I. 2020/471".'},
       'commit': {'type': 'string', 'description': 'Or a corpus commit hash, for example from provision_history.'}, 'jurisdiction': SCOPE,
@@ -11912,7 +11950,19 @@ ALIASES = {'law_details': {'corpus': 'jurisdiction'}}
 # The list each tool gives in parts (offset, page): if the answer is cut to fit (fit_result), its page says so.
 PAGED = {'find_provision': ('results',), 'search_law': ('results',), 'laws_between': ('changes',), 'search_changes': ('changes',),
          'phrase_history': ('changes',), 'list_provisions': ('provisions', 'folders')}
-HANDLERS = {name: fn for name, _, _, _, fn in TOOLS}
+# Tools under the names they had before they became one (case_check, 22 November 2026): not listed, still answered
+# as they were, argument for argument, for the clients and saved prompts that call them.
+EARLIER_TOOLS = [
+    ('check_precedent', 'The judgments the record holds for a provision, each checked: is the text the court applied still the text in force (today, or on a date), and if not, which laws changed it and how? Also checks any one decision by the day it was decided (decided).',
+     {'path': PATH, 'decided': {'type': 'string', 'description': 'The day a decision was made, YYYY-MM-DD, to check that decision too.'}, 'date': DATE,
+      'case_name': {'type': 'string', 'description': 'Optional, to label the answer.'},
+      'max_results': at_most(50, MAX_ITEMS, 'Recorded judgments to check, latest first')}, ['path'], t_check_precedent),
+    ('applies_to_case','For a case commenced on one date, which later changes to a provision reach it (from any scope the record holds, such as "cases commenced on or after"), and the text that applies to it.',
+     {'path': PATH, 'commenced': {'type': 'string', 'description': 'The day the case (or matter) was commenced, YYYY-MM-DD.'}, 'date': DATE,
+      'include_period_texts': {'type': 'boolean', 'description': 'Also give the full text of every period (long); the changes between periods come anyway.'}},
+     ['path', 'commenced'], t_applies_to_case),
+]
+HANDLERS = {name: fn for name, _, _, _, fn in TOOLS + EARLIER_TOOLS}
 
 # --- Serbian in Latin letters -----------------------------------------------------------------------------------------
 # Serbia's record is in Cyrillic, as the official register prints it, and Serbian is written in both scripts: a query
@@ -12180,7 +12230,7 @@ def greek_plain(handler):
 HANDLERS['search_law'] = greek_plain(HANDLERS['search_law'])
 # Tools that read one file named by `path`: run under law.focus() so a case-law decision needs no corpus-wide index.
 FOCUSED_TOOLS = ('read_law', 'who_wrote', 'compare_dates', 'provision_history', 'applies_to_case')
-PROPERTIES = {name: list(props) for name, _, props, _, _ in TOOLS}
+PROPERTIES = {name: list(props) for name, _, props, _, _ in TOOLS + EARLIER_TOOLS}
 # Names AI clients give arguments that a tool takes under another name, read as the tool's own (the hosted server's
 # refusals, 12-19 Nov 2026: q, country, limit, from and to, a path prefix given to search_law as path). Each is read
 # only by a tool that takes the argument it stands for and has none of its own by that name; a value given under the
@@ -12201,12 +12251,12 @@ PROMPTS = {
          {'name': 'date', 'description': 'YYYY-MM-DD', 'required': True}],
         'Using the global-law tools: find {provision} (find_provision), read it as in force on {date} (read_law), say which law '
         'wrote each part (who_wrote), what has changed since (compare_dates to today), what else relies on it '
-        '(what_else_changes), and which court decisions applied it and whether their words still hold (check_precedent). Cite the official sources the tools give, and pass on every note about the limits of the record.'),
+        '(what_else_changes), and which court decisions applied it and whether their words still hold (case_check). Cite the official sources the tools give, and pass on every note about the limits of the record.'),
     'case_timeline': (
         'The law for a case', 'Which text of a provision governs a case commenced on a date, period by period.',
         [{'name': 'provision', 'description': 'A path, number or name', 'required': True},
          {'name': 'commenced', 'description': 'The day the case was commenced, YYYY-MM-DD', 'required': True}],
-        'Using the global-law tools: find {provision} (find_provision), then call applies_to_case with commenced {commenced}. '
+        'Using the global-law tools: find {provision} (find_provision), then call case_check with commenced {commenced}. '
         'Report the bottom line and each period with its text, say which scope came from data and which from the words of the '
         'record, and state plainly what the record does not decide (such as the default rule for pending cases).'),
     'what_changed': (
@@ -12222,9 +12272,9 @@ INSTRUCTIONS = (
     'Global law: the law of several jurisdictions as one git history, each change dated by the day it took effect and '
     'credited to the law that made it. Start with list_jurisdictions, then find_provision for a path, then read_law. '
     'Questions with their own tool, ahead of a text search: what relies on, cites or uses the definitions of a provision '
-    '(what_else_changes); which text applies to a case filed on a date (applies_to_case); who wrote the words '
-    '(who_wrote); when words entered or left the law (phrase_history); whether a decision\'s text is still in force '
-    '(check_precedent); every citation in a brief (resolve_citations). '
+    '(what_else_changes); which text applies to a case filed on a date, and whether the text a decision applied is '
+    'still in force (case_check); who wrote the words (who_wrote); when words entered or left the law '
+    '(phrase_history); every citation in a brief (resolve_citations). '
     'Coverage is partial: each corpus holds only the law its description names (for example some acts of a country, or '
     'a court\'s decisions from a stated year), over a stated period, so "nothing found" means nothing in the record, not nothing in the '
     'law. Every answer states the limits of its record (where a record starts or ends); pass them on to the user. '

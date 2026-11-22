@@ -132,7 +132,7 @@ Where the publisher gives a date per provision, each provision changes on its ow
 stages is several commits. A change that applies to a period before it was made carries a `Retroactive:` trailer,
 and `tools/check_corpus.py` flags any version dated before its act without one. Transitional rules (which text
 applies to cases begun before a change) are recorded where the source states them, as `Applies:` trailers, and read
-by the `applies_to_case` tool; few corpora have them yet.
+by the `case_check` tool; few corpora have them yet.
 
 ## Who a commit is by
 
@@ -196,7 +196,7 @@ rest are not here yet.
 
 Yes, for the courts of the countries listed under "Case law" in the README, with more being added. Each court's
 decisions are a corpus of their own (`<country>/<court>/caselaw`), one file and one commit per decision, dated the day
-it was decided, and each keeps an overlay of the provisions its decisions cite. `check_precedent` reads that overlay:
+it was decided, and each keeps an overlay of the provisions its decisions cite. `case_check` reads that overlay:
 it lists the decisions that applied a provision and says whether the text they applied is still the law.
 `resolve_citations` and `find_provision` read decisions by their docket number, reporter citation or ECLI. There is no
 "cited by" between decisions yet. Separately, some law corpora record court decisions that change the text itself,
@@ -358,8 +358,8 @@ The server has 18 read-only tools. Besides finding a provision and reading it on
 - what changed between two dates, and which laws did it (`compare_dates`, `changes_between`, `laws_between`);
 - what relies on a provision: what cites it and what uses a term it defines (`what_else_changes`);
 - every citation in a brief or judgment, resolved to its provision on a date (`resolve_citations`);
-- whether a judgment's quotation of a provision is still the text in force (`check_precedent`);
-- which later changes reach a case begun on a date, where the record holds that (`applies_to_case`).
+- whether a judgment's quotation of a provision is still the text in force (`case_check`);
+- which later changes reach a case begun on a date, where the record holds that (`case_check`).
 
 Every answer gives the publisher's own page to cite, not this repository, and states where the record starts and
 ends, so the model can say when the record cannot answer. In blind tests, a model given only these tools answered 26

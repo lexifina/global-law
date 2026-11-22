@@ -43,8 +43,8 @@ Each entry gives the question it answers, how to call it, an example and its lim
 | `mcp.phrase_history` | phrase_history | When did these words enter or leave the law? |
 | `mcp.law_details` | law_details | What did this one law change? |
 | `mcp.resolve_citations` | resolve_citations | Is every citation in my brief still good? |
-| `mcp.check_precedent` | check_precedent | Has the text this court applied changed since? |
-| `mcp.applies_to_case` | applies_to_case | Which text governs a case commenced on a date? |
+| `mcp.check_precedent` | case_check (`decided`) | Has the text this court applied changed since? |
+| `mcp.applies_to_case` | case_check (`commenced`) | Which text governs a case commenced on a date? |
 | `mcp.what_else_changes` | what_else_changes | What relies on this provision? |
 | `mcp.prompts` | 3 prompts | Ready-made research questions for an assistant |
 | `mcp.resources` | 4 resources | The tree's own documents and manifest for an assistant |
@@ -263,6 +263,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *Has the text this court applied changed since?*
 
 - **Does:** Compares a provision's words on the day a court decided with a later date (today by default), and lists the laws that changed it. Also lists the judgments the record holds for that provision.
+- **Tool:** `case_check` (the name `check_precedent` still answers).
 - **Arguments:** `path`, `decided`, `date`
 - **Limits:** Judgments come from the overlay each case-law corpus keeps (`judgments/<law corpus>/<provision>.jsonl`, the decisions that cite a provision), for the case law your clone serves, plus the hand-checked sample in this tree's `judgments/`. The comparison works for any provision given a date. It compares words only.
 
@@ -271,6 +272,7 @@ Eighteen read-only tools an assistant such as Claude, Codex, Cursor or VS Code c
 *Which text governs a case commenced on a date?*
 
 - **Does:** For a case commenced on one date, which later changes reach it, from any scope the record holds (Applies: data, or scope stated in words such as "cases commenced on or after"), and the text that applies.
+- **Tool:** `case_check` (the name `applies_to_case` still answers).
 - **Arguments:** `path`, `commenced`, `date`
 - **Limits:** Structured scope only where the record holds it; a default rule in 71 corpora; a US fallback. It never decides the question.
 

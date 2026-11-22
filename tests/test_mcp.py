@@ -3034,7 +3034,11 @@ class TestToolSurface(unittest.TestCase):
         self.assertNotIn('Defaults to today', tools['search_changes']['inputSchema']['properties']['start']['description'])
         self.assertLess(len(tools['who_wrote']['inputSchema']['properties']['path']['description']), 110)
         self.assertIn('docket', tools['find_provision']['description'])
-        self.assertTrue(tools['check_precedent']['description'].startswith('The judgments the record holds for a provision'))
+        self.assertTrue(tools['case_check']['description'].startswith('A provision for one case'))
+        self.assertIn('judgments the record holds for the provision', tools['case_check']['description'])
+        for earlier in ('check_precedent', 'applies_to_case'):  # (one tool since 22 November 2026; the names still answer)
+            self.assertNotIn(earlier, tools)
+            self.assertIn(earlier, self.m.HANDLERS)
         self.assertIn('paths', tools['read_law']['inputSchema']['properties'])
 
     def test_hosted_instructions(self):

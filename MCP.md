@@ -329,7 +329,7 @@ canton's, or `caselaw` for all).
   decisions is settled by the citation, name, year or court beside it, or named as ambiguous with its first five; a
   state statute is named as not held; the same decision filed twice (`decision-relations.tsv`) resolves once; a
   decision cited on a date before it was decided says so, and a date CAP gives by month or year only is shown as such.
-- `check_precedent` reads every served case-law corpus's overlay, `judgments/<law corpus>/<provision>.jsonl` (for
+- `case_check` reads every served case-law corpus's overlay, `judgments/<law corpus>/<provision>.jsonl` (for
   example `judgments/switzerland/bund/acts/101/art-029.jsonl`), as well as the corpus's and the tree's own. With many
   decisions it checks the latest (`max_results`), comparing the words once per version of the text. Each row names the
   decision's file (`decision`) and the law's commit in force on the decision day (`law_commit`).
@@ -339,7 +339,7 @@ canton's, or `caselaw` for all).
   `data/swiss-aliases.json`; abbreviations cantons use for their own laws (`StG`, `KV`, `LPA`, ...) are left alone.
   A decision is found by its BGE reference (`BGE 142 II 307`, `ATF`, `DTF`) or docket (`4A_123/2024`, `A-1234/2020`,
   `BB.2020.123`), and `law_details` takes either.
-- `applies_to_case` on a decision says it is a court decision, not a law.
+- `case_check` on a decision says it is a court decision, not a law.
 
 ## How a date is read
 
@@ -517,9 +517,8 @@ its title and last change.
 | `search_changes` | Search the record of changes (the commit messages) rather than the text. `start` and `end` are both included; without them, every date, changes not yet in force included. |
 | `what_else_changes` | The provisions that rely on this one: those that cite it, and those that use a multi-word term it defines. It gives a scoped definition's scope ("In this subchapter"), and lists apart uses nearer another definition of the same term. |
 | `resolve_citations` | Every citation in a piece of text (a brief, a judgment), resolved to its provision, with its state on a date. |
-| `check_precedent` | The judgments the record holds for a provision, each checked: is the text the court applied on the day it decided still the text in force? If not, which laws changed it. Also checks any one decision by its day (`decided`). Compares the words of the law only, and names changes that left the words alone. |
+| `case_check` | A provision for one case. With `commenced` (the day the case began): which later changes reach it, from any scope the record holds, and the text that applies, period by period; the reasoning (the gap before a record starts, each period, what the record does not decide) is in the text and in `explanation`. With `decided` (the day a court decided): is the text the court applied still the text in force, and if not, which laws changed it; it compares the words of the law only, and names changes that left the words alone. With neither: the judgments the record holds for the provision, each checked that way. With both: both answers, the case's under `case` and the decisions' under `decisions`. Given a court decision's own path it says so: the check is of a provision the decision applied. Until 22 November 2026 these were two tools, `case_check` and `case_check`; both names still answer as they did, and are no longer listed. |
 | `phrase_history` | When words came into the law and when they left it, at any date: for things no longer in force. Words already in a record's first text are `present_at_start`. |
-| `applies_to_case` | For a case commenced on a date, which later changes reach it, from any scope the record holds. The reasoning (the gap before a record starts, each period, what the record does not decide) is in the text and in `explanation`. |
 | `law_details` | The full record of one law's change: every trailer and every provision it changed. `jurisdiction` narrows it (`corpus`, its name before, is still read). |
 
 Resources: `global-law://README.md`, `REPRODUCE.md`, `CHANGELOG.md` and `manifest.json`.
@@ -535,7 +534,7 @@ Each answer is a text (`content[0].text`) and the same facts as fields (`structu
   where the next part starts. It is not the text answer: the rows, the law's text, the notes on the record and each
   piece of guidance are fields of their own, so nothing is sent twice. A client that reads only the fields has
   `caveats` (the notes on the record), `hints` or `notes` (guidance the text gives in words: which tool answers the
-  question better, how citations were found), `explanation` (`applies_to_case`), `why` (`read_law` with no text),
+  question better, how citations were found), `explanation` (`case_check`), `why` (`read_law` with no text),
   `not_searched_note` (corpora this server did not search) and `case_law_how`.
 - **Arguments are named alike.** `jurisdiction` narrows every tool that takes a scope. `kind` is `laws` (`law` is read
   the same), `judgments` or `all`; any other word is refused. `max_results` states its default and its cap in each
@@ -658,7 +657,7 @@ an option.
 Coverage is partial. Each corpus holds only the law its description names, over a stated period, so "nothing found"
 means nothing in the record. Every answer carries notes where a date falls before a record starts or after it ends;
 pass them on. Dates are the dates each record gives a change: the day it took effect, or for a first version the day it
-was enacted or made. `applies_to_case` uses the scope a record holds, as data (`Applies:`) or in the change notes' words, and says
+was enacted or made. `case_check` uses the scope a record holds, as data (`Applies:`) or in the change notes' words, and says
 which. Where no scope is recorded it says the reach to pending cases is not recorded and names the corpus's default rule
 (for the US, the presumption against retroactivity), without deciding it.
 
@@ -677,14 +676,14 @@ Several of them read a law's text on a date and compare versions (legalize.dev, 
 them offers:
 - authorship by word
 - when words entered or left the law
-- which cases a change reaches (`applies_to_case`)
+- which cases a change reaches (`case_check`)
 - what else relies on a provision
 - separate in-force, enacted and published dates. Choosing a version by date does not say whether it was in force; legalize.dev itself warns of this.
 
 Where others are ahead:
 - **Coverage.** legalize.dev has 32 jurisdictions; the UK servers have all UK legislation.
 - **Freshness.** Change feeds and pending amendments.
-- **Case law.** CourtListener, Open Legal Data and uk-legal-mcp have case law with citation networks and "cited by". This tree holds the decisions of several countries' courts, each with an overlay of the provisions its decisions cite (read by `check_precedent`), but no citations between decisions yet.
+- **Case law.** CourtListener, Open Legal Data and uk-legal-mcp have case law with citation networks and "cited by". This tree holds the decisions of several countries' courts, each with an overlay of the provisions its decisions cite (read by `case_check`), but no citations between decisions yet.
 - **Parliamentary history.**
 - **Hosted access.** Some run as hosted servers with OAuth, while this one runs locally from a clone.
 

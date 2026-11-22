@@ -258,10 +258,23 @@ class CaseLaw(unittest.TestCase):
         for ref in ('BGE 142 II 307', 'ATF 143 I 284', '4A_123/2024', '4C.237/1999', 'A-1234/2020', 'BB.2020.123'):
             self.assertTrue(m.CH_DECISION.fullmatch(ref), ref)
 
-    def test_prompt_names_check_precedent(self):
+    def test_prompt_names_case_check(self):
         sys.path.insert(0, str(ROOT / 'tools'))
         import mcp_server as m
-        self.assertIn('check_precedent', m.PROMPTS['provision_on_a_date'][3])
+        self.assertIn('case_check', m.PROMPTS['provision_on_a_date'][3])
+
+    def test_case_check_is_listed_and_the_names_before_it_still_answer(self):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import mcp_server as m
+        listed = [t[0] for t in m.TOOLS]
+        self.assertIn('case_check', listed)
+        for name in ('check_precedent', 'applies_to_case'):
+            self.assertNotIn(name, listed)
+            self.assertIn(name, m.HANDLERS)
+            self.assertIn(name, m.PROPERTIES)
+        self.assertEqual(m.PROPERTIES['case_check'][0], 'path')
+        for arg in ('commenced', 'decided', 'date', 'case_name', 'max_results', 'include_period_texts'):
+            self.assertIn(arg, m.PROPERTIES['case_check'])
 
     # --- speed: case law stays out of the reads about law ----------------------------------------------------------
 
