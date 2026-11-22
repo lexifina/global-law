@@ -167,6 +167,21 @@ class OnDisk(unittest.TestCase):
         self.assertEqual(late['updates'], 'stalled')
         self.assertTrue((self.root / 'data' / 'status.json').exists())
 
+    def test_status_holds(self):
+        freshness.write(self.root, today=D)
+        now = dt.datetime(2026, 11, 6, 14, 30, tzinfo=dt.timezone.utc)
+        hb = {'at': '2026-11-06T14:20:38Z', 'result': 'pushed', 'last_push_at': '2026-11-06T14:20:38Z',
+              'gate_held': {'b-law': {'reason': 'held-by-maintainers', 'since': '2026-11-04'},
+                            'a-law': {'reason': 'not-fast-forward', 'since': '2026-11-05'},
+                            'c-law': {'reason': 'C:/Users/x leaked', 'since': '2026-11-06'}}}
+        st = freshness.write_status(hb, self.root, now)
+        self.assertEqual(st['held_back'], ['a-law', 'b-law', 'c-law'])
+        self.assertEqual([(h['corpus'], h['reason']) for h in st['holds']],
+                         [('a-law', 'not-fast-forward'), ('b-law', 'held-by-maintainers'), ('c-law', 'check-failed')])
+        cell = freshness._holds(st)
+        self.assertTrue(cell.startswith('`b-law` (held by the maintainers, since 2026-11-04)'), cell)
+        self.assertNotIn('C:/Users', json.dumps(st))
+
     def test_one_failed_pass_is_still_running(self):
         freshness.write(self.root, today=D)
         now = dt.datetime(2026, 11, 6, 15, 20, tzinfo=dt.timezone.utc)

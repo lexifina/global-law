@@ -8,6 +8,14 @@ law or new decisions.
 The detectors are built and tested, but **not switched on yet**. When they are, each poll counts as a check in
 FRESHNESS.md.
 
+## A country that records every check
+
+Czechia reads its official source, e-Sbírka's open data, every day and records each read: the addresses read and when,
+the acts added, changed and removed as a result, and every act at the source not held here with the reason why. See
+[czechia-law monitoring/](https://github.com/lexifina/czechia-law/tree/main/monitoring) and
+[czechia-law WATCHING.md](https://github.com/lexifina/czechia-law/blob/main/WATCHING.en.md). Its freshness here counts
+those reads as checks (`act-checks`). Other countries follow the same record (schema `lexifina-check/1`).
+
 ## How a detector works
 
 1. **One page per source.** Most official publishers have a page that lists what is new, such as a gazette feed, an

@@ -269,7 +269,7 @@ def status_line(status: dict, summary: dict) -> str:
         "corpora added |",
         f"| Last successful pass | {last_ok or '-'} UTC" + ('' if status.get('last_pass_ok', True) else
                                                             ' (the latest pass failed and is retried)') + ' |',
-        f"| Held back by a check | {_names(held)} |",
+        f"| Not pinned yet | {_holds(status)} |",
         f"| Official sources not answering | " + (', '.join(f"{s.get('name')} (`{s.get('corpus')}`, since "
                                                            f"{str(s.get('unavailable_since'))[:10]})" for s in down)
                                                  or 'none') + ' |',
@@ -333,6 +333,27 @@ def health(root: Path = ROOT, now: dt.datetime | None = None, max_age_h: float =
 README_BLOCK = re.compile(r'(<!-- freshness-summary -->\r?\n).*?(\r?\n<!-- /freshness-summary -->)', re.S)
 
 
+# Why a corpus's newest commit is not pinned (data/status.json `holds`), in public words.
+HOLD_REASONS = {
+    'check-running': 'its checks are still running',
+    'check-failed': 'it failed a check',
+    'not-fast-forward': 'its history was rewritten: the new commit does not follow the pinned one',
+    'ancestry-unknown': 'whether it follows the pinned commit is not known yet',
+    'held-by-maintainers': 'held by the maintainers',
+}
+
+
+def _holds(status: dict, most: int = 8) -> str:
+    """The status table's held-back cell: each corpus with its reason and since when, oldest first."""
+    hs = status.get('holds')
+    if not hs:
+        return _names(status.get('held_back') or [])
+    hs = sorted(hs, key=lambda h: (h.get('since') or '9999', h['corpus']))
+    shown = ', '.join(f"`{h['corpus']}` ({HOLD_REASONS.get(h['reason'], h['reason'])}"
+                      + (f", since {h['since']}" if h.get('since') else '') + ')' for h in hs[:most])
+    return shown + (f' and {len(hs) - most} more' if len(hs) > most else '')
+
+
 def _names(paths: list[str], most: int = 8) -> str:
     shown = ', '.join(f'`{p}`' for p in paths[:most])
     return shown + (f' and {len(paths) - most} more' if len(paths) > most else '') if paths else 'none'
@@ -387,6 +408,12 @@ def write_status(heartbeat: dict, root: Path = ROOT, now: dt.datetime | None = N
                                 'last_successful_contact': s.get('last_successful_contact')
                                 or s.get('last_successful_check')})
     held = heartbeat.get('gate_held') or {}
+    holds = []
+    if isinstance(held, dict):
+        for repo in sorted(held):
+            h = held[repo] if isinstance(held[repo], dict) else {}
+            reason = h.get('reason') if h.get('reason') in HOLD_REASONS else 'check-failed'
+            holds.append({'corpus': repo, 'reason': reason, 'since': h.get('since')})
     status = {
         'schema': 'global-law-status/1',
         'generated': now.strftime('%Y-%m-%dT%H:%M:%SZ'),
@@ -397,11 +424,13 @@ def write_status(heartbeat: dict, root: Path = ROOT, now: dt.datetime | None = N
         'last_published': heartbeat.get('last_push_at'),
         'published_last_24h': moved,
         'held_back': sorted(held) if isinstance(held, dict) else [],
+        'holds': holds,
         'freshness': {s: sum(1 for r in rows if r['status'] == s) for s in STATUSES},
         'official_sources_unavailable': sources,
         'note': "As seen from Lexifina's pipeline. `updates` is running while the pointer loop completes a pass at "
-                "least every 45 minutes. `held_back` lists corpora whose newest commit failed a check and is not "
-                "pinned yet. An official source marked unavailable did not answer that corpus's pipeline; it may be "
+                "least every 45 minutes. `held_back` lists every corpus whose newest commit is not pinned yet; "
+                "`holds` gives each one's reason (HOLD_REASONS in tools/freshness.py) and the day it was first held. "
+                "An official source marked unavailable did not answer that corpus's pipeline; it may be "
                 "up for others.",
     }
     (root / 'data' / 'status.json').write_bytes((json.dumps(status, ensure_ascii=False, indent=1) + '\n').encode())

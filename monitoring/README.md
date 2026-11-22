@@ -22,11 +22,21 @@ and publishes the result below.
 
 ## What each pass does
 
-1. Finds every corpus with a newer commit and checks it (`tools/check_corpus.py`). A commit that fails is held back,
-   and the last good one stays pinned.
+1. Finds every corpus with a newer commit, makes sure the new commit follows the pinned one (read from a commits-only
+   clone of the corpus, so even the largest corpora get an answer) and checks it (`tools/check_corpus.py`). A commit
+   that fails is held back, and the last good one stays pinned. Every corpus not moved is listed in the table above
+   and in `holds` in [data/status.json](../data/status.json), with its reason and the day it was first held.
 2. Moves the pins forward, rewrites [data/freshness.tsv](../data/freshness.tsv), [data/status.json](../data/status.json) and
    these pages in the same commit, and verifies the history (`tools/verify.py`: pins only move forward).
 3. If no pin moved, it still refreshes the status within the hour, so an old timestamp always means a stall.
+
+## Each country's own trail
+
+This page watches the step from a country's repository to global-law. The step before it, reading the official source,
+is recorded by each country's own pipeline: every read, when, what was read and what was added, changed or removed.
+Czechia is the first to keep this trail: [czechia-law monitoring/](https://github.com/lexifina/czechia-law/tree/main/monitoring)
+(pages in Czech and English, a monthly log, `Kind: check` commits) and its records for programs,
+[data/checks/](https://github.com/lexifina/czechia-law/tree/main/data/checks) (JSON Lines, schema `lexifina-check/1`).
 
 ## Check it yourself
 
