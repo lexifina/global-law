@@ -3,12 +3,12 @@
 This page moved to [monitoring/](monitoring/), with a short film of how it works.
 
 <!-- status-summary -->
-**Updates: running**: last published 2026-11-22 03:57 UTC; status refreshed 2026-11-22 03:57 UTC.
+**Updates: running**: last published 2026-11-22 04:41 UTC; status refreshed 2026-11-22 04:41 UTC.
 
 | | |
 | --- | --- |
 | Last 24 hours | 48 commits: 1 corpus updates, 0 corpora added |
-| Last successful pass | 2026-11-22 03:57 UTC |
+| Last successful pass | 2026-11-22 04:41 UTC |
 | Held back by a check | `india-law` |
 | Official sources not answering | none |
 | Freshness | 603 of 991 corpora current, 361 stale, 16 unverified ([FRESHNESS.md](FRESHNESS.md)) |
