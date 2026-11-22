@@ -1,17 +1,128 @@
 {
  "schema": "global-law-status/1",
- "generated": "2026-11-22T18:15:34Z",
+ "generated": "2026-11-22T19:28:35Z",
  "updates": "running",
- "last_pass": "2026-11-22T18:15:34Z",
+ "last_pass": "2026-11-22T19:28:35Z",
  "last_pass_ok": true,
- "last_successful_pass": "2026-11-22T18:15:34Z",
- "last_published": "2026-11-22T18:15:34Z",
+ "last_successful_pass": "2026-11-22T19:28:35Z",
+ "last_published": "2026-11-22T19:28:35Z",
  "published_last_24h": {
-  "commits": 40,
+  "commits": 38,
   "corpora_moved": 0,
   "corpora_added": 0
  },
- "held_back": [],
+ "held_back": [
+  "austria-bundesverwaltungsgericht-caselaw",
+  "austria-justiz-caselaw",
+  "austria-landesverwaltungsgerichte-caselaw",
+  "austria-oberster-gerichtshof-caselaw",
+  "austria-verfassungsgerichtshof-caselaw",
+  "austria-verwaltungsgerichtshof-caselaw",
+  "bulgaria-law",
+  "china-law",
+  "czechia-law",
+  "france-law",
+  "germany-law",
+  "greece-law",
+  "india-law",
+  "italy-law",
+  "portugal-law",
+  "romania-law",
+  "turkey-law",
+  "united-states-law"
+ ],
+ "holds": [
+  {
+   "corpus": "austria-bundesverwaltungsgericht-caselaw",
+   "reason": "held-by-maintainers",
+   "since": "2026-11-07"
+  },
+  {
+   "corpus": "austria-justiz-caselaw",
+   "reason": "held-by-maintainers",
+   "since": "2026-11-07"
+  },
+  {
+   "corpus": "austria-landesverwaltungsgerichte-caselaw",
+   "reason": "held-by-maintainers",
+   "since": "2026-11-07"
+  },
+  {
+   "corpus": "austria-oberster-gerichtshof-caselaw",
+   "reason": "held-by-maintainers",
+   "since": "2026-11-07"
+  },
+  {
+   "corpus": "austria-verfassungsgerichtshof-caselaw",
+   "reason": "held-by-maintainers",
+   "since": "2026-11-07"
+  },
+  {
+   "corpus": "austria-verwaltungsgerichtshof-caselaw",
+   "reason": "held-by-maintainers",
+   "since": "2026-11-07"
+  },
+  {
+   "corpus": "bulgaria-law",
+   "reason": "check-running",
+   "since": "2026-11-22"
+  },
+  {
+   "corpus": "china-law",
+   "reason": "check-failed",
+   "since": "2026-11-22"
+  },
+  {
+   "corpus": "czechia-law",
+   "reason": "check-failed",
+   "since": "2026-11-22"
+  },
+  {
+   "corpus": "france-law",
+   "reason": "check-running",
+   "since": "2026-11-22"
+  },
+  {
+   "corpus": "germany-law",
+   "reason": "check-running",
+   "since": "2026-11-22"
+  },
+  {
+   "corpus": "greece-law",
+   "reason": "check-running",
+   "since": "2026-11-22"
+  },
+  {
+   "corpus": "india-law",
+   "reason": "check-running",
+   "since": "2026-11-22"
+  },
+  {
+   "corpus": "italy-law",
+   "reason": "check-running",
+   "since": "2026-11-22"
+  },
+  {
+   "corpus": "portugal-law",
+   "reason": "check-running",
+   "since": "2026-11-22"
+  },
+  {
+   "corpus": "romania-law",
+   "reason": "held-by-maintainers",
+   "since": "2026-11-04"
+  },
+  {
+   "corpus": "turkey-law",
+   "reason": "check-running",
+   "since": "2026-11-22"
+  },
+  {
+   "corpus": "united-states-law",
+   "reason": "not-fast-forward",
+   "since": "2026-11-22"
+  }
+ ],
  "freshness": {
   "current": 603,
   "pending-change": 11,
@@ -20,5 +131,5 @@
   "source-unavailable": 0
  },
  "official_sources_unavailable": [],
- "note": "As seen from Lexifina's pipeline. `updates` is running while the pointer loop completes a pass at least every 45 minutes. `held_back` lists corpora whose newest commit failed a check and is not pinned yet. An official source marked unavailable did not answer that corpus's pipeline; it may be up for others."
+ "note": "As seen from Lexifina's pipeline. `updates` is running while the pointer loop completes a pass at least every 45 minutes. `held_back` lists every corpus whose newest commit is not pinned yet; `holds` gives each one's reason (HOLD_REASONS in tools/freshness.py) and the day it was first held. An official source marked unavailable did not answer that corpus's pipeline; it may be up for others."
 }

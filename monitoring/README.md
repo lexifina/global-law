@@ -9,15 +9,15 @@ change as a commit dated the day it takes effect. Then, every 15 minutes, a pass
 and publishes the result below.
 
 <!-- status-summary -->
-**Updates: running**: last published 2026-11-11 20:11 UTC; status refreshed 2026-11-11 20:11 UTC.
+**Updates: running**: last published 2026-11-22 19:28 UTC; status refreshed 2026-11-22 19:28 UTC.
 
 | | |
 | --- | --- |
-| Last 24 hours | 692 commits: 106 corpus updates, 2 corpora added |
-| Last successful pass | 2026-11-11 20:11 UTC |
-| Held back by a check | `singapore-law`, `united-states-missouri-law` |
+| Last 24 hours | 38 commits: 0 corpus updates, 0 corpora added |
+| Last successful pass | 2026-11-22 19:28 UTC |
+| Not pinned yet | `romania-law` (held by the maintainers, since 2026-11-04), `austria-bundesverwaltungsgericht-caselaw` (held by the maintainers, since 2026-11-07), `austria-justiz-caselaw` (held by the maintainers, since 2026-11-07), `austria-landesverwaltungsgerichte-caselaw` (held by the maintainers, since 2026-11-07), `austria-oberster-gerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `austria-verfassungsgerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `austria-verwaltungsgerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `bulgaria-law` (its checks are still running, since 2026-11-22) and 10 more |
 | Official sources not answering | none |
-| Freshness | 798 of 982 corpora current, 168 stale, 14 unverified ([FRESHNESS.md](../FRESHNESS.md)) |
+| Freshness | 603 of 991 corpora current, 361 stale, 16 unverified ([FRESHNESS.md](../FRESHNESS.md)) |
 <!-- /status-summary -->
 
 ## What each pass does
