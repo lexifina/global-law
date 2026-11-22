@@ -1441,6 +1441,44 @@ class _CommitEvents:
     def __contains__(self, commit) -> bool:
         return self.get(commit) is not None
 
+    def span(self, commits, date: str) -> tuple:
+        """(how many, the newest, the oldest) of these commits' events that are dated changes (not documentation)
+        in force on or before `date`: of the newest day's the first met, of the oldest day's the last, as sorting
+        them newest first by day kept them. Read from the table's columns: an event is made for neither count."""
+        n, hi, lo, hi_e, lo_e = 0, None, None, None, None
+        if self._own:  # (commits added since the table was made: by their events)
+            get = self.get
+            for c in commits:
+                e = get(c)
+                if e is None or e.kind == 'documentation' or e.in_force > date:
+                    continue
+                n += 1
+                if hi is None or e.in_force > hi:
+                    hi, hi_e = e.in_force, e
+                if lo is None or e.in_force <= lo:
+                    lo, lo_e = e.in_force, e
+            return n, hi_e, lo_e
+        rows, find, where = self._rows, self._find, self._where
+        days, d_col, k_col = rows._pools[5], rows._cols[5], rows._cols[4]
+        wanted = [bool(d) and d <= date for d in days]
+        doc = {j for j, k in enumerate(rows._pools[4]) if k == 'documentation'}
+        hi_o = lo_o = -1
+        for c in commits:
+            o = find(c)
+            if o is None or not where[o]:
+                continue
+            d = d_col[o]
+            if not wanted[d] or k_col[o] in doc:
+                continue
+            n += 1
+            day = days[d]
+            if hi is None or day > hi:
+                hi, hi_o = day, o
+            if lo is None or day <= lo:
+                lo, lo_o = day, o
+        events = self._events
+        return (n, events[where[hi_o] - 1], events[where[lo_o] - 1]) if n else (0, None, None)
+
 
 def events_by_commit(corpus: str):
     """commit -> event for the events of a corpus's timeline (corpus_timeline), where the corpus's commits are read
@@ -6044,15 +6082,16 @@ def files_table_make(corpus: str) -> str:
 # six or seven strings for each (715 bytes a commit; 4.8 GB for the 6.76 million commits of Germany's federal acts, 59%
 # of what that body of law cost on 21 November 2026), and `pos`, a dict from each commit to its row. Here they are one
 # table beside the index (<index>.rw), mapped and read where it lies: the commit ids as 20 bytes each, in history
-# order, and the same ids' rows in id order with where each first byte (or two) begins among them (so a commit is
-# found in a few steps: `pos`, which a search of the record of changes asks for every commit it finds); the values of which a corpus
+# order, with a table of slots that says where each is (so a commit's row is found in a step or two: `pos`, which a
+# list of an act's folders and a search of the record of changes ask for every commit they meet: millions for
+# Germany's federal acts) and the same ids' rows in id order (for a commit given by its first digits); the values of which a corpus
 # has few (kind, in-force day, Kind as written, enacted, published) as numbers into short lists; the texts (law,
 # date written, subject) as UTF-8 one after another. A row is made when it is asked for and not kept. The corrections
 # (the tenth value, a dict for a few commits) are held as they were. Beside it the rest of the index's head
 # (<index>.hd): an index with table, head and files table is loaded without reading its commits at all. Made from the
 # index itself (rows_table_make), and checked row for row against it before it is given its name.
 ROWS_TABLE = FILES_TABLE
-_RW_MAGIC = b'GLR2'
+_RW_MAGIC = b'GLR3'
 _RW_NONE = b'\xff'
 _RW_TEXT = (1, 2, 3)        # law (the author), the date written, the subject: a text of its own for each commit
 _RW_POOL = (4, 5, 6, 7, 8)  # kind, in-force day, Kind as written, enacted, published: few different values
@@ -6074,7 +6113,7 @@ class _Rows:
 
     def __init__(self, path: Path | None = None, share: '_Rows | None' = None):
         if share is not None:
-            for k in ('_path', '_mm', '_n', '_fix', '_pools', '_c_at', '_perm', '_fan', '_wide', '_vi', '_cols', '_toff', '_tat', '_vpool'):
+            for k in ('_path', '_mm', '_n', '_fix', '_pools', '_c_at', '_perm', '_slots', '_mask', '_vi', '_cols', '_toff', '_tat', '_vpool'):
                 setattr(self, k, getattr(share, k))
             self._tail, self._over = list(share._tail), dict(share._over)
             return
@@ -6100,8 +6139,8 @@ class _Rows:
             part = view[at:at + 4 * count].cast('I')
             at += 4 * count + (-(4 * count) % 8)
             return part
-        self._wide = bool(meta['wide'])  # (the ids' first two bytes, not one, say where to look)
-        self._perm, self._fan, self._vi = take(n), take((65536 if self._wide else 256) + 1), take(n)
+        self._mask = meta['slots'] - 1  # (a power of two, at least twice the commits: a commit's slot is its first 32 bits)
+        self._perm, self._slots, self._vi = take(n), take(meta['slots']), take(n)
         self._cols = {k: take(n) for k in _RW_POOL}
         self._toff, self._tat = {}, {}
         for k in _RW_TEXT:
@@ -6267,27 +6306,18 @@ class _Rows:
         if not isinstance(commit, str) or len(commit) != 40:
             return None
         try:
-            want = bytes.fromhex(commit)
+            h = int(commit[:8], 16) & self._mask
         except ValueError:
             return None
-        if len(want) != 20 or commit != commit.lower():
-            return None  # (spaces, or upper case: no key of the dict this stands for)
-        mm, perm, c_at = self._mm, self._perm, self._c_at
-        first = (want[0] << 8 | want[1]) if self._wide else want[0]
-        lo, hi = self._fan[first], self._fan[first + 1]
-        while lo < hi:
-            mid = (lo + hi) >> 1
-            a = c_at + 20 * perm[mid]
-            if mm[a:a + 20] < want:
-                lo = mid + 1
-            else:
-                hi = mid
-        if lo < self._n:
-            o = perm[lo]
+        slots, mm, c_at, mask = self._slots, self._mm, self._c_at, self._mask
+        while True:
+            o = slots[h]
+            if not o:
+                return None
             a = c_at + 20 * o
-            if mm[a:a + 20] == want:
-                return o
-        return None
+            if mm[a - 20:a].hex() == commit:  # (the id itself: whatever else int() read as a number is not a commit)
+                return o - 1
+            h = (h + 1) & mask
 
     def prefix(self, start: str) -> int | None:
         """The first row, in history order, of a commit of the table whose id begins with `start`."""
@@ -6495,11 +6525,13 @@ def _rows_table_write(target: Path, rows: list, pos: dict) -> bool:
         view = bytes(ids)
         del ids
         perm = array('I', sorted(range(n), key=lambda i: view[20 * i:20 * i + 20]))
-        import bisect
-        wide = n >= 65536
-        firsts = [(view[20 * i] << 8 | view[20 * i + 1]) if wide else view[20 * i] for i in perm]
-        fan = array('I', (bisect.bisect_left(firsts, b) for b in range((65536 if wide else 256) + 1)))
-        del firsts
+        size = 1 << max(8, (2 * n).bit_length())  # slots: a power of two, over twice the commits
+        slots, mask = array('I', bytes(4 * size)), size - 1
+        for i in range(n):
+            h = int.from_bytes(view[20 * i:20 * i + 4], 'big') & mask
+            while slots[h]:
+                h = (h + 1) & mask
+            slots[h] = i + 1
 
         def enc(v):
             return _RW_NONE if v is None else v.encode('utf-8')
@@ -6515,7 +6547,7 @@ def _rows_table_write(target: Path, rows: list, pos: dict) -> bool:
             if at >= 0xFFFFFFF0:
                 return False
             offs[k], sizes[k] = off, at
-        meta = pickle.dumps({'v': 2, 'n': n, 'wide': wide, 'fix': fix, 'pools': {k: list(pools[k]) for k in _RW_POOL}, 'text': sizes},
+        meta = pickle.dumps({'v': 3, 'n': n, 'slots': size, 'fix': fix, 'pools': {k: list(pools[k]) for k in _RW_POOL}, 'text': sizes},
                             protocol=pickle.HIGHEST_PROTOCOL)
         target.parent.mkdir(parents=True, exist_ok=True)
         tmp = target.with_name(f'{target.name}.{os.getpid()}.{threading.get_ident()}.tmp')
@@ -6527,7 +6559,7 @@ def _rows_table_write(target: Path, rows: list, pos: dict) -> bool:
             pad(f, 12 + len(meta))
             f.write(view)
             pad(f, len(view))
-            for part in (perm, fan, vi, *(cols[k] for k in _RW_POOL)):
+            for part in (perm, slots, vi, *(cols[k] for k in _RW_POOL)):
                 f.write(part.tobytes())
                 pad(f, 4 * len(part))
             for k in _RW_TEXT:

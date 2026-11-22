@@ -6945,20 +6945,38 @@ def t_list_provisions(args: dict) -> tuple[str, dict]:
                                  for p in shown]}
 
 
+def _changes_span(by_commit, commits, date: str) -> tuple:
+    """(how many, the newest, the oldest) of these commits' events that are dated changes on or before `date`, by
+    in-force day (a corpus can append an older act after its tip): what sorting them newest first gave as its
+    length, first and last. One pass, each commit's event asked for once: where it is read through the corpus's
+    table of commits and not from a dict, three asks a commit and a sort made a list of Germany's federal acts
+    take 367 s where it had taken 80 (21 November 2026)."""
+    span = getattr(by_commit, 'span', None)
+    if span is not None:
+        return span(commits, date)
+    get, n, last, first = by_commit.get, 0, None, None
+    for c in commits:
+        e = get(c)
+        if e is None or e.kind == 'documentation' or e.in_force > date:
+            continue
+        n += 1
+        if last is None or e.in_force > last.in_force:  # (of one day's, the first met, as the sort kept it)
+            last = e
+        if first is None or e.in_force <= first.in_force:  # (and of the oldest day's, the last met)
+            first = e
+    return n, last, first
+
+
 def folder_span(corpus: str, date: str, inner: str) -> dict | None:
     by_commit = _by_commit(corpus)
-    # Newest first by in-force date: a corpus can append an older act after its tip.
-    dated = sorted((by_commit[c] for c in folder_commits(corpus, inner)
-                    if c in by_commit and by_commit[c].kind != 'documentation' and by_commit[c].in_force <= date),
-                   key=lambda e: e.in_force, reverse=True)
-    if not dated:
+    count, last, first = _changes_span(by_commit, folder_commits(corpus, inner), date)
+    if not count:
         return None
-    last, first = dated[0], dated[-1]
     start = (f'first version in the record {first.in_force} ({first.law})' if first.kind == 'baseline'
              else f'in the record from {first.in_force} ({first.law})')
-    tail = 'no change since' if len(dated) == 1 else f'last change {last.in_force} by {last.law}; {len(dated)} dated changes in the record'
+    tail = 'no change since' if count == 1 else f'last change {last.in_force} by {last.law}; {count} dated changes in the record'
     return {'first': {'law': first.law, 'in_force': first.in_force, 'kind': first.kind},
-            'last_change': {'law': last.law, 'in_force': last.in_force, 'kind': last.kind}, 'changes': len(dated),
+            'last_change': {'law': last.law, 'in_force': last.in_force, 'kind': last.kind}, 'changes': count,
             'summary': f'As a whole: {start}; {tail}.'}
 
 
@@ -7351,10 +7369,8 @@ def list_folders(corpus: str, sha: str, base: str, items: list, folders: list[st
                  or (folder_title(cwd, sha, where, bodies.get(where, '')) if f'{where}/title.md' in own_title else '')
                  or (heads.get(first, '') if first else ''))
         changes = changes_of[where]
-        dated = sorted((by_commit[c] for c in changes if c in by_commit and by_commit[c].kind != 'documentation'
-                        and by_commit[c].in_force <= date), key=lambda e: e.in_force, reverse=True)
-        last, first = (dated[0], dated[-1]) if dated else (None, None)
-        rows.append({'folder': f'{corpus}/{where}', 'title': title, 'files': len(mine), 'changes': len(dated),
+        count, last, first = _changes_span(by_commit, changes, date)
+        rows.append({'folder': f'{corpus}/{where}', 'title': title, 'files': len(mine), 'changes': count,
                      'first': first and {'law': first.law, 'in_force': first.in_force, 'kind': first.kind},
                      'last_change': last and {'law': last.law, 'in_force': last.in_force, 'kind': last.kind}})
     def when(r):
